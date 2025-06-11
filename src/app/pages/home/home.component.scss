@@ -1,1 +1,15 @@
-section { padding: 1rem; }
+// Styling the home page to match Figma design
+.home { padding: 20px; }
+.banner {
+  text-align: center;
+  padding: 50px;
+  background: #f5f5f5;
+  h1 { font-size: 2em; }
+  .shop-now { padding: 10px 20px; background: #ff6347; color: white; border: none; cursor: pointer; }
+}
+.best-sellers { margin: 20px 0; }
+.product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.product-card { text-align: center; }
+.product-card img { max-width: 100%; }
+.special-offer { text-align: center; margin: 20px 0; }
+.special-offer .shop-now { padding: 10px 20px; background: #ff6347; color: white; border: none; cursor: pointer; }

@@ -1,1 +1,11 @@
-header { background: #222; color: white; padding: 1rem; }
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background: #1a1a1a;
+    color: white;
+    .logo { font-size: 1.5em; }
+    .nav-links { display: flex; list-style: none; }
+    .nav-links li { margin-left: 20px; }
+    .nav-links a { color: white; text-decoration: none; }
+  }

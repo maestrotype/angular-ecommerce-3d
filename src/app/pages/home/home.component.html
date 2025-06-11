@@ -1,1 +1,29 @@
-<section><h2>🏠 Welcome to the 3D Store</h2><p>Here will be our awesome products.</p></section>
+<div class="home">
+  <section class="banner">
+    <h1>DISCOVER YOUR NEW STYLE</h1>
+    <p>Explore our latest interactive 3D collection.</p>
+    <button class="shop-now">SHOP NOW</button>
+  </section>
+  <section class="best-sellers">
+    <h2>Best Sellers</h2>
+    <div class="product-grid">
+      <div *ngFor="let product of bestSellers" class="product-card">
+        <img [src]="product.imageUrl" alt="{{ product.name }}" />
+        <h3>{{ product.name }}</h3>
+        <p>${{ product.price }}</p>
+      </div>
+    </div>
+  </section>
+  <section class="special-offer" *ngIf="specialOffer">
+    <h2>Special Offer</h2>
+    <div class="product-card">
+      <img [src]="specialOffer.imageUrl" alt="{{ specialOffer.name }}" />
+      <h3>{{ specialOffer.name }}</h3>
+      <p>
+        ${{ specialOffer.price }}
+        <span>({{ specialOffer.discount }}% off)</span>
+      </p>
+      <button class="shop-now">SHOP NOW</button>
+    </div>
+  </section>
+</div>
