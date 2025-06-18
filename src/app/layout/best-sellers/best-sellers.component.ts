@@ -37,6 +37,18 @@ export class BestSellersComponent implements OnInit {
       name: 'Running Shoes',
       price: 99.99,
       image: 'assets/images/bag-4.png'
+    },
+    {
+      id: 5,
+      name: 'Running Shoes',
+      price: 99.99,
+      image: 'assets/images/bag-5.png'
+    },
+    {
+      id: 6,
+      name: 'Running Shoes',
+      price: 99.99,
+      image: 'assets/images/bag.png'
     }
   ];
 

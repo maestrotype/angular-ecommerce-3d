@@ -1,0 +1,31 @@
+<div class="bag-3d-container">
+    <div class="bag-3d">
+        <!-- Main bag body -->
+        <div class="bag-body">
+            <!-- Quilted pattern overlay -->
+            <div class="quilted-pattern">
+                <div class="quilt-diamond" *ngFor="let item of quilDiamonds"></div>
+            </div>
+
+            <!-- Front flap -->
+            <div class="bag-flap">
+                <div class="lock-mechanism">
+                    <div class="lock-body"></div>
+                </div>
+            </div>
+
+            <!-- Side panels -->
+            <div class="bag-side bag-side-left"></div>
+            <div class="bag-side bag-side-right"></div>
+
+            <!-- Bottom -->
+            <div class="bag-bottom"></div>
+        </div>
+
+        <!-- Chain strap -->
+        <div class="chain-strap">
+            <div class="chain-link" *ngFor="let link of chainLinks; let i = index"
+                [style.transform]="'rotate(' + (i * 6) + 'deg)'" [style.animation-delay]="(i * 0.1) + 's'"></div>
+        </div>
+    </div>
+</div>
