@@ -1,0 +1,74 @@
+.brands {
+    padding: 60px 0;
+    background: #f8f9fa;
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 3rem;
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #333;
+        }
+    }
+
+    .brands-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 2rem;
+        align-items: center;
+    }
+
+    .brand-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+        opacity: 0.6;
+        transition: opacity 0.3s ease;
+
+        &:hover {
+            opacity: 1;
+        }
+
+        .brand-logo {
+            max-width: 120px;
+            max-height: 60px;
+            width: auto;
+            height: auto;
+            filter: grayscale(100%);
+            transition: filter 0.3s ease;
+        }
+
+        &:hover .brand-logo {
+            filter: grayscale(0%);
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .brands {
+        padding: 40px 0;
+
+        .container {
+            padding: 0 1rem;
+        }
+
+        .brands-grid {
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1rem;
+        }
+
+        .brand-item .brand-logo {
+            max-width: 80px;
+            max-height: 40px;
+        }
+    }
+}

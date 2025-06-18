@@ -1,0 +1,13 @@
+<section class="brands">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Trusted by Leading Brands</h2>
+        </div>
+
+        <div class="brands-grid">
+            <div class="brand-item" *ngFor="let brand of brands">
+                <img [src]="brand.logo" [alt]="brand.name" class="brand-logo">
+            </div>
+        </div>
+    </div>
+</section>
