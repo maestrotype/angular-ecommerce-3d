@@ -1,10 +1,10 @@
 .header {
   height: 80px;
+  width: 100%;
   display: flex;
   justify-content: space-around;
   background-color: #FFF;
   color: #000;
-  padding: 0 15px;
 
   .header-container {
     display: flex;
