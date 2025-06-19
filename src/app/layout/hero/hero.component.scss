@@ -247,6 +247,9 @@
         }
 
         .hero-text {
+            .badge {
+                display: none;
+            }
             .hero-title {
                 font-size: 2.5rem;
             }
