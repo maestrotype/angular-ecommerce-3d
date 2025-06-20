@@ -2,7 +2,6 @@
     <div class="container">
         <div class="hero-content">
             <div class="hero-text">
-                <!-- <app-bag-css3d></app-bag-css3d> -->
                 <div class="badge">NEW ARRIVAL</div>
                 <h1 class="hero-title">
                     DISCOVER YOUR<br>
@@ -29,7 +28,8 @@
             </div>
         </div>
     </div>
-    <!-- <app-realistic-bag-3d></app-realistic-bag-3d> -->
+    <!-- <app-bag3dFirst></app-bag3dFirst> -->
+    <app-three-d-viewer [modelPath]="'assets/models/bag2.glb'" [scale]="[9, 9, 9]" [position]="[0, 0, 0]"></app-three-d-viewer>
 
     <!-- Background decorative elements -->
     <div class="bg-decoration bg-decoration-1"></div>

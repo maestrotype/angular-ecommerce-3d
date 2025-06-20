@@ -12,11 +12,11 @@ import { BestSellersComponent } from './layout/best-sellers/best-sellers.compone
 import { BrandsComponent } from './layout/brands/brands.component';
 import { FooterComponent } from './layout/footer/footer.component';
 import { HomeComponent } from './pages/home/home.component';
-import { BagCSS3DComponent } from './components/3d-models/bag3d/BagCSS3D';
-import { RealisticBag3DComponent } from './components/realistic-bag-3d/realistic-bag-3d.component';
+import { Bag3dFirstComponent } from './components/3d-models/bag3dFirst/bag3dFirst.component';
+import { ThreeDViewerComponent } from './components/three-d-viewer/three-d-viewer.component';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, HeroComponent, BagCSS3DComponent, RealisticBag3DComponent,  CategoriesComponent, SpecialOfferComponent, BestSellersComponent, BrandsComponent, FooterComponent, HomeComponent],
+  declarations: [AppComponent, HeaderComponent, HeroComponent, CategoriesComponent, SpecialOfferComponent, BestSellersComponent, BrandsComponent, FooterComponent, HomeComponent, Bag3dFirstComponent, ThreeDViewerComponent],
   imports: [BrowserModule, RouterModule, AppRoutingModule],
   providers: [],
   bootstrap: [AppComponent]
