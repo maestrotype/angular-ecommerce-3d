@@ -14,11 +14,31 @@ export class ProductService {
   ]);
   products$ = this.productsSubject.asObservable();
 
+  private cartSubject = new BehaviorSubject<Product[]>([]);
+  cart$ = this.cartSubject.asObservable();
+
+  getProducts(): Product[] {
+    return this.productsSubject.value;
+  }
+
   getSpecialOffers(): Product[] {
     return this.productsSubject.value.filter(p => p.isSpecial);
   }
 
   getBestSellers(): Product[] {
     return this.productsSubject.value.slice(0, 4);
+  }
+
+  addToCart(product: Product) {
+    const currentCart = this.cartSubject.value;
+    this.cartSubject.next([...currentCart, product]);
+  }
+
+  getCart(): Product[] {
+    return this.cartSubject.value;
+  }
+
+  clearCart() {
+    this.cartSubject.next([]);
   }
 }

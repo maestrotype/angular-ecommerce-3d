@@ -1,38 +1,3 @@
-<!-- <div class="home">
-  <section class="banner" [@fadeInOut] *ngIf="currentSection === 'banner'">
-    <div class="banner-content">
-      <h1>DISCOVER YOUR NEW STYLE</h1>
-      <p>Explore our latest interactive 3D collection.</p>
-      <canvas #threeCanvas></canvas>
-      <button class="shop-now">SHOP NOW</button>
-    </div>
-  </section>
-  <section class="best-sellers" [@fadeInOut] *ngIf="currentSection === 'best-sellers'">
-    <h2>Best Sellers</h2>
-    <div class="product-grid">
-      <div *ngFor="let product of bestSellers" class="product-card">
-        <img [src]="product.imageUrl" alt="{{ product.name }}" />
-        <h3>{{ product.name }}</h3>
-        <p>${{ product.price }}</p>
-      </div>
-    </div>
-  </section>
-  <button (click)="changeSection('banner')">Show Banner</button>
-  <button (click)="changeSection('best-sellers')">Show Best Sellers</button>
-  <section class="special-offer" *ngIf="specialOffer">
-    <h2>Special Offer</h2>
-    <div class="product-card">
-      <img [src]="specialOffer.imageUrl" alt="{{ specialOffer.name }}" />
-      <h3>{{ specialOffer.name }}</h3>
-      <p>
-        ${{ specialOffer.price }}
-        <span>({{ specialOffer.discount }}% off)</span>
-      </p>
-      <button class="shop-now">SHOP NOW</button>
-    </div>
-  </section>
-</div> -->
-
 <app-hero></app-hero>
 <app-best-sellers></app-best-sellers>
 <app-categories></app-categories>   

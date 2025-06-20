@@ -1,0 +1,39 @@
+.shop {
+    .filters {
+        padding: 20px;
+        width: 20%;
+        float: left;
+    }
+
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+        padding: 20px;
+        width: 80%;
+        float: right;
+
+        .product-card {
+            border: 1px solid #eee;
+            padding: 10px;
+            text-align: center;
+
+            img {
+                max-width: 100%;
+            }
+
+            button {
+                padding: 5px 10px;
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+
+        .filters,
+        .product-grid {
+            width: 100%;
+            float: none;
+        }
+    }
+}

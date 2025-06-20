@@ -1,0 +1,22 @@
+<div class="shop">
+    <app-header></app-header>
+    <main>
+        <div class="filters">
+            <h3>Filters</h3>
+            <div>Category: <select>
+                    <option>Shoes</option>
+                    <option>Handbags</option>
+                    <option>Clothing</option>
+                </select></div>
+            <div>Price: <input type="range" min="0" max="200" value="100" /></div>
+        </div>
+        <div class="product-grid">
+            <div class="product-card" *ngFor="let product of products">
+                <img [src]="product.imageUrl" alt="{{ product.name }}" />
+                <p>{{ product.name }} - ${{ product.price }}</p>
+                <button (click)="addToCart(product)">Add to Cart</button>
+            </div>
+        </div>
+    </main>
+    <app-footer></app-footer>
+</div>
