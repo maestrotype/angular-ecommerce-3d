@@ -1,0 +1,128 @@
+<div class="catalog">
+    <!-- Header Section -->
+    <div class="catalog-header">
+      <div class="container">
+        <div class="header-content">
+          <span class="section-subtitle">PRODUCT CATALOG</span>
+          <h1 class="section-title">
+            DISCOVER YOUR<br />
+            <span class="highlight">PERFECT STYLE</span>
+          </h1>
+          <p class="section-description">
+            Explore our curated collection of premium products designed for the modern lifestyle.
+          </p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Filters Section -->
+    <div class="filters-section">
+      <div class="container">
+        <div class="filters-container">
+          <!-- Search -->
+          <div class="search-container">
+            <div class="search-input-wrapper">
+              <input 
+                type="text" 
+                placeholder="Search products..."
+                class="search-input"
+                [(ngModel)]="searchTerm"
+                (input)="onSearchChange()"
+              />
+              <i class="search-icon">🔍</i>
+            </div>
+          </div>
+          
+          <!-- Controls -->
+          <div class="controls-container">
+            <select 
+              class="filter-select"
+              [(ngModel)]="selectedCategory"
+              (change)="onCategoryChange()"
+            >
+              <option *ngFor="let category of categories" [value]="category.id">
+                {{ category.name }}
+              </option>
+            </select>
+            
+            <select 
+              class="filter-select"
+              [(ngModel)]="sortBy"
+              (change)="onSortChange()"
+            >
+              <option value="name">Sort by Name</option>
+              <option value="price">Sort by Price</option>
+              <option value="rating">Sort by Rating</option>
+            </select>
+            
+            <div class="view-toggle">
+              <button 
+                class="view-btn"
+                [class.active]="viewMode === 'grid'"
+                (click)="changeViewMode('grid')"
+              >
+                📋
+              </button>
+              <button 
+                class="view-btn"
+                [class.active]="viewMode === 'list'"
+                (click)="changeViewMode('list')"
+              >
+                📄
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Products Section -->
+    <div class="products-section">
+      <div class="container">
+        <div class="products-grid" [class.list-view]="viewMode === 'list'">
+          <div 
+            *ngFor="let product of filteredProducts" 
+            class="product-card"
+            [class.list-card]="viewMode === 'list'"
+          >
+            <div class="product-image">
+              <img [src]="product.image" [alt]="product.name" />
+              <div class="product-overlay">
+                <button class="quick-view-btn">
+                  Quick View
+                </button>
+              </div>
+            </div>
+            
+            <div class="product-info">
+              <h3 class="product-name">{{ product.name }}</h3>
+              <div class="product-meta">
+                <div class="product-rating">
+                  <span class="rating-star">⭐</span>
+                  <span class="rating-value">{{ product.rating }}</span>
+                </div>
+                <span class="product-category">{{ product.category }}</span>
+              </div>
+              <p *ngIf="viewMode === 'list'" class="product-description">
+                {{ product.description }}
+              </p>
+              <div class="product-footer">
+                <span class="product-price">${{ product.price }}</span>
+                <button class="add-to-cart-btn" (click)="addToCart(product)">
+                  🛒 Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- No Products Message -->
+        <div *ngIf="filteredProducts.length === 0" class="no-products">
+          <div class="no-products-content">
+            <p class="no-products-message">No products found matching your criteria.</p>
+            <p class="no-products-suggestion">Try adjusting your search or filters.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
