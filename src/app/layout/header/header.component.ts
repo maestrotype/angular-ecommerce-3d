@@ -16,4 +16,15 @@ export class HeaderComponent {
   closeMobileMenu() {
     this.isMobileMenuOpen = false;
   }
+
+  scrollToSection(sectionId: string): void {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+    this.closeMobileMenu();
+  }
 }
