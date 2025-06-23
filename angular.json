@@ -1,7 +1,6 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
-  "defaultProject": "angular-ecommerce-3d",
   "projects": {
     "angular-ecommerce-3d": {
       "projectType": "application",
@@ -54,6 +53,6 @@
     }
   },
   "cli": {
-    "analytics": "b044d9e8-a950-4eeb-b20f-5ef732b4b123"
+    "analytics": "61e54801-7182-41b4-a8f8-61da4091a6f7"
   }
 }
