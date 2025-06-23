@@ -88,11 +88,12 @@
             class="product-card"
             [class.list-card]="viewMode === 'list'"
             [class.special-offer]="product.isSpecial"
+            (click)="goToProductDetail(product.id)"
           >
             <div class="product-image">
-              <img [src]="product.image" [alt]="product.name" />
+              <img [src]="product.imageUrl" [alt]="product.name" />
               <div class="product-overlay">
-                <button class="quick-view-btn" (click)="quickView(product)">
+                <button class="quick-view-btn" (click)="quickView(product); $event.stopPropagation()">
                   Quick View
                 </button>
               </div>
@@ -115,7 +116,7 @@
               </p>
               <div class="product-footer">
                 <span class="product-price">${{ product.price }}</span>
-                <button class="add-to-cart-btn" (click)="addToCart(product)">
+                <button class="add-to-cart-btn" (click)="addToCart(product); $event.stopPropagation()">
                   🛒 Add to Cart
                 </button>
               </div>

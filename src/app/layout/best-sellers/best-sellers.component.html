@@ -6,13 +6,16 @@
         </div>
 
         <div class="products-grid">
-            <div class="product-card" *ngFor="let product of bestSellers">
+            <div class="product-card" *ngFor="let product of bestSellers" (click)="goToProductDetail(product.id)">
                 <div class="product-image">
-                    <img [src]="product.image" [alt]="product.name" />
+                    <img [src]="product.imageUrl" [alt]="product.name" />
                     <div class="product-overlay">
-                        <button class="quick-view-btn" (click)="quickView(product)">
+                        <button class="quick-view-btn" (click)="quickView(product); $event.stopPropagation()">
                             Quick View
                         </button>
+                    </div>
+                    <div *ngIf="product.isSpecial" class="special-badge">
+                        SPECIAL OFFER
                     </div>
                 </div>
 
@@ -20,6 +23,8 @@
                     <h3 class="product-name">{{ product.name }}</h3>
                     <div class="product-price">
                         <span class="current-price">${{ product.price }}</span>
+                        <span *ngIf="product.discount" class="original-price">${{ (product.price / (1 - product.discount
+                            / 100)) | number:'1.2-2' }}</span>
                     </div>
                 </div>
             </div>

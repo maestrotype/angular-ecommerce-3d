@@ -1,0 +1,128 @@
+<div class="product-detail" *ngIf="!loading && product">
+    <!-- Header -->
+    <div class="product-header">
+        <div class="container">
+            <button class="back-btn" (click)="goBack()">
+                ← Back to Shop
+            </button>
+            <nav class="breadcrumb">
+                <span>Home</span> / <span>Shop</span> / <span>{{ product.category }}</span> / <span class="current">{{
+                    product.name }}</span>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Product Content -->
+    <div class="product-content">
+        <div class="container">
+            <div class="product-grid">
+                <!-- Product Images -->
+                <div class="product-images">
+                    <div class="main-image">
+                        <img [src]="product.images?.[selectedImageIndex] || product.imageUrl" [alt]="product.name"
+                            class="main-product-image" />
+                        <div *ngIf="product.isSpecial" class="special-badge">
+                            SPECIAL OFFER
+                            <span *ngIf="product.discount" class="discount-text">-{{ product.discount }}%</span>
+                        </div>
+                    </div>
+
+                    <div class="image-thumbnails" *ngIf="product.images && product.images.length > 1">
+                        <div *ngFor="let image of product.images; let i = index" class="thumbnail"
+                            [class.active]="i === selectedImageIndex" (click)="selectImage(i)">
+                            <img [src]="image" [alt]="product.name + ' - view ' + (i + 1)" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="product-info">
+                    <h1 class="product-title">{{ product.name }}</h1>
+
+                    <div class="product-meta">
+                        <div class="rating" *ngIf="product.rating">
+                            <span class="stars">
+                                <span *ngFor="let star of [1,2,3,4,5]" class="star"
+                                    [class.filled]="star <= product.rating!">
+                                    ⭐
+                                </span>
+                            </span>
+                            <span class="rating-value">({{ product.rating }})</span>
+                        </div>
+                        <span class="category">{{ product.category }}</span>
+                    </div>
+
+                    <div class="price-section">
+                        <div class="price-container">
+                            <span class="current-price">${{ getDiscountedPrice() | number:'1.2-2' }}</span>
+                            <span *ngIf="product.discount" class="original-price">${{ product.price | number:'1.2-2'
+                                }}</span>
+                        </div>
+                        <div *ngIf="product.isSpecial" class="special-offer-text">
+                            Limited Time Offer!
+                        </div>
+                    </div>
+
+                    <div class="description">
+                        <p>{{ product.description }}</p>
+                    </div>
+
+                    <!-- Features -->
+                    <div class="features" *ngIf="product.features">
+                        <h3>Features:</h3>
+                        <ul>
+                            <li *ngFor="let feature of product.features">{{ feature }}</li>
+                        </ul>
+                    </div>
+
+                    <!-- Quantity and Add to Cart -->
+                    <div class="purchase-section">
+                        <div class="quantity-selector">
+                            <label>Quantity:</label>
+                            <div class="quantity-controls">
+                                <button class="quantity-btn" (click)="decrementQuantity()">-</button>
+                                <span class="quantity-value">{{ quantity }}</span>
+                                <button class="quantity-btn" (click)="incrementQuantity()">+</button>
+                            </div>
+                        </div>
+
+                        <button class="add-to-cart-btn" (click)="addToCart()">
+                            🛒 Add to Cart
+                        </button>
+                    </div>
+
+                    <!-- Specifications -->
+                    <div class="specifications" *ngIf="product.specifications">
+                        <h3>Specifications:</h3>
+                        <dl class="spec-list">
+                            <div *ngFor="let spec of product.specifications | keyvalue" class="spec-item">
+                                <dt>{{ spec.key }}:</dt>
+                                <dd>{{ spec.value }}</dd>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Loading State -->
+<div class="loading" *ngIf="loading">
+    <div class="container">
+        <div class="loading-content">
+            <p>Loading product details...</p>
+        </div>
+    </div>
+</div>
+
+<!-- Product Not Found -->
+<div class="not-found" *ngIf="!loading && !product">
+    <div class="container">
+        <div class="not-found-content">
+            <h2>Product Not Found</h2>
+            <p>The product you're looking for doesn't exist.</p>
+            <button class="back-btn" (click)="goBack()">Back to Shop</button>
+        </div>
+    </div>
+</div>
