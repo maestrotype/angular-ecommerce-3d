@@ -6,19 +6,179 @@ import { Product } from '../models';
 })
 export class ProductService {
   private productsSubject = new BehaviorSubject<Product[]>([
-    { id: 1, name: 'Women\'s Bag', price: 99.99, imageUrl: 'assets/images/bag.png', category: 'Shoes' },
-    { id: 2, name: 'Running Shoes', price: 99.99, imageUrl: 'assets/images/bag.png', category: 'Shoes' },
-    { id: 3, name: 'Running Shoes', price: 99.99, imageUrl: 'assets/images/bag.png', category: 'Shoes' },
-    { id: 4, name: 'Running Shoes', price: 99.99, imageUrl: 'assets/images/bag.png', category: 'Shoes' },
-    { id: 5, name: 'Women\'s Bag Side', price: 49.99, imageUrl: 'assets/images/bag.png', category: 'Handbags', discount: 30, isSpecial: true }
+    {
+      id: 1,
+      name: 'Quilted Chain Bag',
+      price: 299.99,
+      imageUrl: 'assets/images/bag.png',
+      category: 'handbags',
+      rating: 4.8,
+      description: 'Elegant quilted handbag with golden chain strap. Perfect for both casual and formal occasions.',
+      images: [
+        'assets/images/bag.png',
+        'assets/images/bag-detail-1.png',
+        'assets/images/bag-detail-2.png'
+      ],
+      features: [
+        'Premium quilted leather',
+        'Adjustable chain strap',
+        'Multiple compartments',
+        'Magnetic closure'
+      ],
+      specifications: {
+        'Material': 'Genuine Leather',
+        'Dimensions': '25cm x 15cm x 8cm',
+        'Weight': '0.8kg',
+        'Color': 'Classic Black'
+      }
+    },
+    {
+      id: 2,
+      name: 'Minimalist Tote',
+      price: 199.99,
+      imageUrl: 'assets/images/bag-1.png',
+      category: 'handbags',
+      rating: 4.5,
+      description: 'Clean and minimal design tote bag for everyday use',
+      images: [
+        'assets/images/bag-1.png',
+        'assets/images/bag-1-detail-1.png',
+        'assets/images/bag-1-detail-2.png'
+      ],
+      features: [
+        'Minimalist design',
+        'Spacious interior',
+        'Durable handles',
+        'Inner pocket'
+      ],
+      specifications: {
+        'Material': 'Canvas',
+        'Dimensions': '35cm x 30cm x 10cm',
+        'Weight': '0.6kg',
+        'Color': 'Beige'
+      }
+    },
+    {
+      id: 3,
+      name: 'Round Crossbody',
+      price: 149.99,
+      imageUrl: 'assets/images/bag-2.png',
+      category: 'handbags',
+      rating: 4.6,
+      description: 'Stylish round crossbody bag with adjustable strap',
+      images: [
+        'assets/images/bag-2.png',
+        'assets/images/bag-2-detail-1.png',
+        'assets/images/bag-2-detail-2.png'
+      ],
+      features: [
+        'Unique round design',
+        'Adjustable strap',
+        'Compact size',
+        'Zip closure'
+      ],
+      specifications: {
+        'Material': 'Synthetic Leather',
+        'Dimensions': '20cm x 20cm x 5cm',
+        'Weight': '0.4kg',
+        'Color': 'Black'
+      }
+    },
+    {
+      id: 4,
+      name: 'Designer Clutch',
+      price: 179.99,
+      imageUrl: 'assets/images/bag-3.png',
+      category: 'handbags',
+      rating: 4.7,
+      description: 'Premium designer clutch for special occasions',
+      images: [
+        'assets/images/bag-3.png',
+        'assets/images/bag-3-detail-1.png',
+        'assets/images/bag-3-detail-2.png'
+      ],
+      features: [
+        'Designer style',
+        'Premium materials',
+        'Elegant design',
+        'Perfect for events'
+      ],
+      specifications: {
+        'Material': 'Patent Leather',
+        'Dimensions': '30cm x 18cm x 3cm',
+        'Weight': '0.5kg',
+        'Color': 'Red'
+      }
+    },
+    {
+      id: 5,
+      name: 'Weekend Tote',
+      price: 129.99,
+      imageUrl: 'assets/images/bag-4.png',
+      category: 'handbags',
+      rating: 4.4,
+      description: 'Spacious weekend tote with multiple compartments',
+      isSpecial: true,
+      discount: 20,
+      images: [
+        'assets/images/bag-4.png',
+        'assets/images/bag-4-detail-1.png',
+        'assets/images/bag-4-detail-2.png'
+      ],
+      features: [
+        'Extra spacious',
+        'Multiple compartments',
+        'Weekend ready',
+        'Comfortable handles'
+      ],
+      specifications: {
+        'Material': 'Canvas & Leather',
+        'Dimensions': '40cm x 35cm x 15cm',
+        'Weight': '1.2kg',
+        'Color': 'Brown'
+      }
+    },
+    {
+      id: 6,
+      name: 'Classic Shoulder Bag',
+      price: 249.99,
+      imageUrl: 'assets/images/bag-5.png',
+      category: 'handbags',
+      rating: 4.9,
+      description: 'Timeless shoulder bag with premium leather',
+      images: [
+        'assets/images/bag-5.png',
+        'assets/images/bag-5-detail-1.png',
+        'assets/images/bag-5-detail-2.png'
+      ],
+      features: [
+        'Premium leather',
+        'Classic design',
+        'Adjustable strap',
+        'Multiple pockets'
+      ],
+      specifications: {
+        'Material': 'Premium Leather',
+        'Dimensions': '28cm x 22cm x 12cm',
+        'Weight': '0.9kg',
+        'Color': 'Black'
+      }
+    }
   ]);
+
   products$ = this.productsSubject.asObservable();
+
+  constructor() { }
 
   private cartSubject = new BehaviorSubject<Product[]>([]);
   cart$ = this.cartSubject.asObservable();
 
   getProducts(): Product[] {
     return this.productsSubject.value;
+  }
+
+  getProductById(id: number): Product | undefined {
+    return this.productsSubject.value.find(product => product.id === id);
   }
 
   getSpecialOffers(): Product[] {
