@@ -4,10 +4,10 @@
     
     <!-- Desktop Navigation -->
     <nav class="nav">
-      <a routerLink="/home">Home</a>
-      <a routerLink="/shop">Shop</a>
-      <a routerLink="/about">About</a>
-      <a routerLink="/contact">Contact</a>
+      <a (click)="scrollToSection('home')" routerLink="/home" class="nav-link">Home</a>
+      <a (click)="scrollToSection('shop')" routerLink="/home" class="nav-link">Shop</a>
+      <a (click)="scrollToSection('about')" routerLink="/home" class="nav-link">About</a>
+      <a (click)="scrollToSection('contact')" routerLink="/home" class="nav-link">Contact</a>
     </nav>
     
     <div class="user-actions">
@@ -75,5 +75,3 @@
     <a routerLink="/contact" (click)="closeMobileMenu()">Contact</a>
   </nav>
 </div>
-
-<router-outlet></router-outlet>

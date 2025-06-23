@@ -19,4 +19,14 @@ export class HomeComponent implements OnInit {
     this.bestSellers = this.productService.getBestSellers();
     this.specialOffer = this.productService.getSpecialOffers()[0];
   }
+
+  scrollToSection(sectionId: string): void {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  }
 }

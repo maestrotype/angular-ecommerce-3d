@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-hero',
@@ -7,11 +8,11 @@ import { Component } from '@angular/core';
 })
 export class HeroComponent {
 
-    constructor() { }
+    constructor(private router: Router) {}
 
     onShopNow(): void {
-        console.log('Shop Now clicked');
-        // Implement navigation to shop page
-        // this.router.navigate(['/shop']);
+        this.router.navigate(['/shop']).then(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
     }
 }
