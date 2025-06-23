@@ -35,8 +35,7 @@
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true,
-              "baseHref": "/angular-ecommerce-3d/"
+              "buildOptimizer": true
             }
           }
         },
@@ -55,6 +54,6 @@
     }
   },
   "cli": {
-    "analytics": "3c373502-8d06-4d41-903d-5427f57f3e3c"
+    "analytics": "b044d9e8-a950-4eeb-b20f-5ef732b4b123"
   }
 }
