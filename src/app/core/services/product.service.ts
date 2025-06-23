@@ -15,9 +15,10 @@ export class ProductService {
       rating: 4.8,
       description: 'Elegant quilted handbag with golden chain strap. Perfect for both casual and formal occasions.',
       images: [
-        'assets/images/bag.png',
-        'assets/images/bag-detail-1.png',
-        'assets/images/bag-detail-2.png'
+        'assets/images/bag-w/img1.png',
+        'assets/images/bag-w/img2.png',
+        'assets/images/bag-w/img3.png',
+        'assets/images/bag-w/img4.png',
       ],
       features: [
         'Premium quilted leather',
@@ -67,9 +68,10 @@ export class ProductService {
       rating: 4.6,
       description: 'Stylish round crossbody bag with adjustable strap',
       images: [
-        'assets/images/bag-2.png',
-        'assets/images/bag-2-detail-1.png',
-        'assets/images/bag-2-detail-2.png'
+        'assets/images/bag-g/img1.png',
+        'assets/images/bag-g/img2.png',
+        'assets/images/bag-g/img3.png',
+        'assets/images/bag-g/img4.png',
       ],
       features: [
         'Unique round design',
