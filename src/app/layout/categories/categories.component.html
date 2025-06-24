@@ -7,7 +7,7 @@
         <div class="categories-grid">
             <div class="category-card" *ngFor="let category of categories" (click)="navigateToCategory(category)">
                 <div class="category-icon">
-                    <img [src]="category.icon" [alt]="category.name">
+                    <img [src]="category.icon" [alt]="category.name" loading="lazy">
                 </div>
                 <h3 class="category-name">{{ category.name }}</h3>
             </div>
