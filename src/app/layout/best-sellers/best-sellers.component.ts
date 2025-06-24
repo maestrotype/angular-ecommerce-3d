@@ -26,6 +26,8 @@ export class BestSellersComponent implements OnInit {
     }
 
     goToProductDetail(productId: number): void {
-        this.router.navigate(['/product', productId]);
+        this.router.navigate(['/product', productId]).then(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
     }
 }

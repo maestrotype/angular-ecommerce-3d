@@ -11,12 +11,12 @@ import { CategoryService } from '../../core/services/category.service';
   styleUrls: ['./shop.component.scss']
 })
 export class ShopComponent implements OnInit {
-  
+
   searchTerm: string = '';
   selectedCategory: string = 'all';
   sortBy: string = 'name';
   viewMode: string = 'grid';
-  
+
   categories: Category[] = [];
   products: Product[] = [];
   filteredProducts: Product[] = [];
@@ -54,7 +54,7 @@ export class ShopComponent implements OnInit {
 
     // Filter by search term
     if (this.searchTerm) {
-      filtered = filtered.filter(product => 
+      filtered = filtered.filter(product =>
         product.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
         product.description.toLowerCase().includes(this.searchTerm.toLowerCase())
       );
@@ -82,7 +82,9 @@ export class ShopComponent implements OnInit {
   }
 
   goToProductDetail(productId: number): void {
-    this.router.navigate(['/product', productId]);
+    this.router.navigate(['/product', productId]).then(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   }
 
   addToCart(product: Product): void {
