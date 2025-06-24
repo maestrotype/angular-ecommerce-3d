@@ -60,10 +60,9 @@
   
       .filters-container {
         display: flex;
-        gap: 5rem;
         align-items: center;
         justify-content: space-between;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
   
         .search-container {
           flex: 1;
