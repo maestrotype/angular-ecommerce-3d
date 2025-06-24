@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 export class HeroComponent {
 
     constructor(private router: Router) {}
+    modelReady = false;
 
     onShopNow(): void {
         this.router.navigate(['/shop']).then(() => {

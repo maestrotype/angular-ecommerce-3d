@@ -1,4 +1,4 @@
-import { Component, Input, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
@@ -12,6 +12,7 @@ export class ThreeDViewerComponent implements AfterViewInit {
   @Input() modelPath!: string; // Input for model file path
   @Input() scale: [number, number, number] = [1, 1, 1]; // Default scale, can be overridden
   @Input() position: [number, number, number] = [0, 0, 0]; // Default position, can be overridden
+  @Output() modelLoaded = new EventEmitter<void>();
 
   private scene!: THREE.Scene;
   private camera!: THREE.PerspectiveCamera;
@@ -75,6 +76,7 @@ export class ThreeDViewerComponent implements AfterViewInit {
       this.camera.lookAt(this.model.position);
       this.scene.add(this.model);
       console.log('Model loaded successfully:', this.model);
+      this.modelLoaded.emit();
       this.animate(); // Start animation only after model is loaded
     }, undefined, (error) => {
       console.error('Error loading model:', error);

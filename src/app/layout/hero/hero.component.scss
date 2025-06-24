@@ -80,13 +80,9 @@
     }
 
     .hero-image {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        display: block;
         position: relative;
-        position: relative;
-
-        // Размытая тень за сумкой
+        bottom: 210px;
         &::before {
             content: '';
             position: absolute;
@@ -112,12 +108,17 @@
             &:hover .floating-product {
                 transform: rotateY(-6deg) scale(1.05);
             }
-
+            .wrap-model {
+                position: absolute;
+            }
             .floating-product {
-                position: relative;
+                position: absolute;
                 transform: rotateY(-12deg);
                 transition: transform 0.5s ease;
                 animation: float 3s ease-in-out infinite;
+                opacity: 1;
+                visibility: visible;
+                pointer-events: none;
 
                 .featured-product {
                     width: 100%;
@@ -161,6 +162,10 @@
                     }
                 }
             }
+            .floating-product.hidden {
+                opacity: 0;
+                visibility: hidden;
+              }
         }
     }
 
