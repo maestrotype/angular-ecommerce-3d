@@ -13,6 +13,7 @@ export class ProductDetailComponent implements OnInit {
   selectedImageIndex: number = 0;
   quantity: number = 1;
   loading: boolean = true;
+  activeTab: string = 'description';
 
   constructor(
     private route: ActivatedRoute,
@@ -29,6 +30,8 @@ export class ProductDetailComponent implements OnInit {
 
   private loadProduct(id: number): void {
     this.product = this.productService.getProductById(id);
+    console.log("product", this.product);
+    
     this.loading = false;
     
     if (!this.product) {
@@ -66,5 +69,9 @@ export class ProductDetailComponent implements OnInit {
       return this.product.price * (1 - this.product.discount / 100);
     }
     return this.product?.price || 0;
+  }
+
+  setActiveTab(tab: string): void {
+    this.activeTab = tab;
   }
 }
