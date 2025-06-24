@@ -32,15 +32,15 @@ export class Bag3dFirstComponent implements AfterViewInit {
     // Renderer with enhanced quality
     this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     this.renderer.setSize(container.clientWidth, container.clientHeight);
-    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.enabled = false;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Soft shadows for better quality
     container.appendChild(this.renderer.domElement);
 
     // Lighting setup for brighter scene
-    const ambientLight = new THREE.AmbientLight(0xffffff, 7); // Increased ambient light intensity
+    const ambientLight = new THREE.AmbientLight(0xffffff, 3); // Increased ambient light intensity
     this.scene.add(ambientLight);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 5); // Increased directional light intensity
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 2); // Increased directional light intensity
     directionalLight.position.set(5, 10, 7.5);
     directionalLight.castShadow = true;
     directionalLight.shadow.mapSize.width = 4096; // Higher shadow resolution
@@ -54,6 +54,7 @@ export class Bag3dFirstComponent implements AfterViewInit {
       this.model = gltf.scene;
       this.model.position.set(0, 0, 0);
       this.model.scale.set(9, 9, 9); // Scale as set by you
+      
       const box = new THREE.Box3().setFromObject(this.model);
       box.getCenter(this.model.position);
       this.model.position.multiplyScalar(-1);
@@ -77,7 +78,7 @@ export class Bag3dFirstComponent implements AfterViewInit {
   private animate() {
     requestAnimationFrame(() => this.animate());
     if (this.model) {
-      this.model.rotation.y += 0.01; // Rotate model
+      this.model.rotation.y += 0.005; // Rotate model
     }
     this.renderer.render(this.scene, this.camera);
   }
