@@ -18,9 +18,10 @@ import { Bag3dFirstComponent } from './components/3d-models/bag3dFirst/bag3dFirs
 import { ThreeDViewerComponent } from './components/three-d-viewer/three-d-viewer.component';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import { ContactsComponent } from './layout/contacts/contacts.component';
+import { AboutComponent } from './pages/about/about.component';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, HeroComponent, CategoriesComponent, SpecialOfferComponent, BestSellersComponent, BrandsComponent, ContactsComponent, FooterComponent, HomeComponent, ShopComponent, ProductDetailComponent, Bag3dFirstComponent, ThreeDViewerComponent],
+  declarations: [AppComponent, HeaderComponent, HeroComponent, CategoriesComponent, SpecialOfferComponent, BestSellersComponent, BrandsComponent, ContactsComponent, FooterComponent, HomeComponent, ShopComponent, AboutComponent, ProductDetailComponent, Bag3dFirstComponent, ThreeDViewerComponent],
   imports: [BrowserModule, FormsModule, RouterModule, AppRoutingModule],
   providers: [],
   bootstrap: [AppComponent]
