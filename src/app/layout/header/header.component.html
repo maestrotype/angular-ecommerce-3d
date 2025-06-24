@@ -69,9 +69,9 @@
   </div>
   
   <nav class="mobile-nav">
-    <a routerLink="/home" (click)="closeMobileMenu()">Home</a>
-    <a routerLink="/shop" (click)="closeMobileMenu()">Shop</a>
-    <a routerLink="/about" (click)="closeMobileMenu()">About</a>
-    <a routerLink="/contact" (click)="closeMobileMenu()">Contact</a>
+    <a routerLink="/home" (click)="scrollToSection('home')">Home</a>
+    <a routerLink="/home" (click)="scrollToSection('shop')">Shop</a>
+    <a routerLink="/home" (click)="scrollToSection('about')">About</a>
+    <a routerLink="/home" (click)="scrollToSection('contact')">Contact</a>
   </nav>
 </div>
