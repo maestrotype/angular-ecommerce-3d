@@ -374,14 +374,17 @@
         .filters-container {
           flex-direction: column;
           gap: 1rem;
+          align-items: baseline;
   
           .search-container {
-            min-width: 100%;
+            width: 320px;
           }
   
           .controls-container {
             width: 100%;
             justify-content: space-between;
+            flex-wrap: wrap;
+            flex-direction: row-reverse;
           }
         }
       }

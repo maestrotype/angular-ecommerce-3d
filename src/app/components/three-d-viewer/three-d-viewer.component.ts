@@ -17,11 +17,12 @@ export class ThreeDViewerComponent implements AfterViewInit {
   private camera!: THREE.PerspectiveCamera;
   private renderer!: THREE.WebGLRenderer;
   private model!: THREE.Object3D;
+  private lastFrameTime = 0;
+  private isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
   ngAfterViewInit() {
     this.initThree();
     this.loadModel();
-    this.animate();
   }
 
   private initThree() {
@@ -35,8 +36,9 @@ export class ThreeDViewerComponent implements AfterViewInit {
 
     // Renderer with enhanced quality
     this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); // Limit pixel ratio for performance
     this.renderer.setSize(container.clientWidth, container.clientHeight);
-    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.enabled = !this.isMobile;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     container.appendChild(this.renderer.domElement);
 
@@ -46,7 +48,7 @@ export class ThreeDViewerComponent implements AfterViewInit {
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 5);
     directionalLight.position.set(5, 10, 7.5);
-    directionalLight.castShadow = true;
+    directionalLight.castShadow = !this.isMobile;
     directionalLight.shadow.mapSize.width = 4096;
     directionalLight.shadow.mapSize.height = 4096;
     this.scene.add(directionalLight);
@@ -63,8 +65,8 @@ export class ThreeDViewerComponent implements AfterViewInit {
       this.model.position.multiplyScalar(-1);
       this.model.traverse((child) => {
         if (child instanceof THREE.Mesh) {
-          child.castShadow = true;
-          child.receiveShadow = true;
+          child.castShadow = !this.isMobile;
+          child.receiveShadow = !this.isMobile;
           if (child.material) {
             child.material.needsUpdate = true;
           }
@@ -73,16 +75,23 @@ export class ThreeDViewerComponent implements AfterViewInit {
       this.camera.lookAt(this.model.position);
       this.scene.add(this.model);
       console.log('Model loaded successfully:', this.model);
+      this.animate(); // Start animation only after model is loaded
     }, undefined, (error) => {
       console.error('Error loading model:', error);
     });
   }
 
-  private animate() {
-    requestAnimationFrame(() => this.animate());
-    if (this.model) {
-      this.model.rotation.y += 0.01;
+  private animate = () => {
+    requestAnimationFrame(this.animate);
+    const now = performance.now();
+    const delta = now - this.lastFrameTime;
+
+    if (delta > 33) { // ~30 FPS
+      this.lastFrameTime = now;
+      if (this.model) {
+        this.model.rotation.y += 0.01;
+      }
+      this.renderer.render(this.scene, this.camera);
     }
-    this.renderer.render(this.scene, this.camera);
-  }
+  };
 }

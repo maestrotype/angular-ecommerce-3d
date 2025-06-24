@@ -92,11 +92,11 @@
           >
             <div class="product-image">
               <img [src]="product.imageUrl" [alt]="product.name" />
-              <div class="product-overlay">
+              <!-- <div class="product-overlay">
                 <button class="quick-view-btn" (click)="quickView(product); $event.stopPropagation()">
                   Quick View
                 </button>
-              </div>
+              </div> -->
               <div *ngIf="product.isSpecial" class="special-badge">
                 SPECIAL OFFER
               </div>
