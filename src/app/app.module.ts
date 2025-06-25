@@ -19,9 +19,10 @@ import { ThreeDViewerComponent } from './components/three-d-viewer/three-d-viewe
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import { ContactsComponent } from './layout/contacts/contacts.component';
 import { AboutComponent } from './pages/about/about.component';
+import { IconComponent } from './shared/icon/icon.component';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, HeroComponent, CategoriesComponent, SpecialOfferComponent, BestSellersComponent, BrandsComponent, ContactsComponent, FooterComponent, HomeComponent, ShopComponent, AboutComponent, ProductDetailComponent, Bag3dFirstComponent, ThreeDViewerComponent],
+  declarations: [AppComponent, HeaderComponent, HeroComponent, CategoriesComponent, SpecialOfferComponent, BestSellersComponent, BrandsComponent, ContactsComponent, FooterComponent, HomeComponent, ShopComponent, AboutComponent, ProductDetailComponent, Bag3dFirstComponent, IconComponent, ThreeDViewerComponent],
   imports: [BrowserModule, FormsModule, RouterModule, AppRoutingModule],
   providers: [],
   bootstrap: [AppComponent]
