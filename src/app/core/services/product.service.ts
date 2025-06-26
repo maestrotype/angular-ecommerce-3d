@@ -195,6 +195,20 @@ export class ProductService {
     return this.productsSubject.value.slice(0, 4);
   }
 
+  searchProducts(searchTerm: string): Product[] {
+    const term = searchTerm.toLowerCase().trim();
+    if (!term) return [];
+
+    return this.productsSubject.value.filter(product => 
+      product.name.toLowerCase().includes(term) ||
+      (product.description && product.description.toLowerCase().includes(term)) ||
+      (product.category && product.category.toLowerCase().includes(term)) ||
+      (product.features && product.features.some(feature => 
+        feature.toLowerCase().includes(term)
+      ))
+    );
+  }
+
   addToCart(product: Product) {
     const currentCart = this.cartSubject.value;
     this.cartSubject.next([...currentCart, product]);

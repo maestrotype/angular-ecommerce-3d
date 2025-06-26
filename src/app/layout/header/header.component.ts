@@ -1,6 +1,7 @@
-
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
+import { ProductService } from '../../core/services/product.service';
+import { Product } from '../../core/models/Product';
 
 @Component({
   selector: 'app-header',
@@ -8,9 +9,17 @@ import { Router } from '@angular/router';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
+  @ViewChild('searchInput') searchInput!: ElementRef;
+  
   isMobileMenuOpen = false;
+  isSearchOpen = false;
+  searchTerm = '';
+  searchResults: Product[] = [];
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private productService: ProductService
+  ) { }
 
   toggleMobileMenu() {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
@@ -18,6 +27,57 @@ export class HeaderComponent {
 
   closeMobileMenu() {
     this.isMobileMenuOpen = false;
+  }
+
+  toggleSearch() {
+    this.isSearchOpen = !this.isSearchOpen;
+    if (this.isSearchOpen) {
+      setTimeout(() => {
+        this.searchInput?.nativeElement?.focus();
+      }, 100);
+    } else {
+      this.searchTerm = '';
+      this.searchResults = [];
+    }
+  }
+
+  onSearch() {
+    if (this.searchTerm.trim()) {
+      this.searchResults = this.productService.searchProducts(this.searchTerm);
+    } else {
+      this.searchResults = [];
+    }
+  }
+
+  onSearchBlur() {
+    // Задержка для обработки клика по результатам поиска
+    setTimeout(() => {
+      if (!this.searchTerm) {
+        this.isSearchOpen = false;
+        this.searchResults = [];
+      }
+    }, 200);
+  }
+
+  performSearch() {
+    if (this.searchTerm.trim()) {
+      this.router.navigate(['/shop'], { 
+        queryParams: { search: this.searchTerm } 
+      });
+      this.isSearchOpen = false;
+      this.closeMobileMenu();
+    }
+  }
+
+  goToProduct(productId: number) {
+    this.router.navigate(['/product', productId]);
+    this.isSearchOpen = false;
+    this.searchResults = [];
+    this.searchTerm = '';
+  }
+
+  viewAllResults() {
+    this.performSearch();
   }
 
   scrollToSection(sectionId: string): void {
