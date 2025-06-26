@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Product } from '../../core/models/Product';
 import { Category } from '../../core/models/Category';
 import { ProductService } from '../../core/services/product.service';
@@ -23,6 +23,7 @@ export class ShopComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private productService: ProductService,
     private categoryService: CategoryService
   ) { }
@@ -30,7 +31,12 @@ export class ShopComponent implements OnInit {
   ngOnInit(): void {
     this.categories = this.categoryService.getCategories();
     this.products = this.productService.getProducts();
-    this.filterProducts();
+    this.route.queryParams.subscribe(params => {
+      if (params['search']) {
+        this.searchTerm = params['search'];
+      }
+      this.filterProducts();
+    });
   }
 
   onSearchChange(): void {

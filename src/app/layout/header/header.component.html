@@ -1,77 +1,131 @@
-<header class="header backdrop-filter">
-  <div class="header-container">
-    <div class="logo">🛒 3D Store</div>
-    
-    <!-- Desktop Navigation -->
-    <nav class="nav">
-      <a (click)="scrollToSection('home')" class="nav-link">Home</a>
-      <a (click)="scrollToSection('shop')" routerLink="/home" class="nav-link">Shop</a>
-      <a (click)="scrollToSection('about')" routerLink="/home" class="nav-link">About</a>
-      <a (click)="scrollToSection('contact')" routerLink="/home" class="nav-link">Contact</a>
-    </nav>
-    
-    <div class="user-actions">
-      <span class="search-icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M21 21L16.66 16.66" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          <path
-            d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
-            stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </span>
-      <a routerLink="/cart" class="cart">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M8 22C8.55228 22 9 21.5523 9 21C9 20.4477 8.55228 20 8 20C7.44772 20 7 20.4477 7 21C7 21.5523 7.44772 22 8 22Z"
-            stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          <path
-            d="M19 22C19.5523 22 20 21.5523 20 21C20 20.4477 19.5523 20 19 20C18.4477 20 18 20.4477 18 21C18 21.5523 18.4477 22 19 22Z"
-            stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          <path
-            d="M2.05005 2.05H4.05005L6.71005 14.47C6.80763 14.9249 7.06072 15.3315 7.42576 15.6199C7.7908 15.9082 8.24495 16.0604 8.71005 16.05H18.49C18.9452 16.0493 19.3865 15.8933 19.7411 15.6078C20.0956 15.3224 20.3422 14.9245 20.4401 14.48L22.09 7.05H5.12005"
-            stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </a>
-      <span class="profile-icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M19 21V19C19 17.9391 18.5786 16.9217 17.8284 16.1716C17.0783 15.4214 16.0609 15 15 15H9C7.93913 15 6.92172 15.4214 6.17157 16.1716C5.42143 16.9217 5 17.9391 5 19V21"
-            stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          <path
-            d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z"
-            stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </span>
+<header class="header">
+    <div class="header-container">
+      <div class="logo">🛒 3D Store</div>
       
-      <!-- Mobile Hamburger Button -->
-      <button class="hamburger" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+      <!-- Desktop Navigation -->
+      <nav class="nav" [class.nav-compressed]="isSearchOpen">
+        <a (click)="scrollToSection('home')" class="nav-link">Home</a>
+        <a (click)="scrollToSection('shop')" routerLink="/home" class="nav-link">Shop</a>
+        <a (click)="scrollToSection('about')" routerLink="/home" class="nav-link">About</a>
+        <a (click)="scrollToSection('contact')" routerLink="/home" class="nav-link">Contact</a>
+      </nav>
+      
+      <!-- Desktop Search -->
+      <div class="desktop-search" [class.active]="isSearchOpen">
+        <input 
+          #searchInput
+          type="text" 
+          placeholder="Search products..."
+          class="search-input"
+          [(ngModel)]="searchTerm"
+          (input)="onSearch()"
+          (keyup.enter)="performSearch()"
+          (blur)="onSearchBlur()"
+        />
+      </div>
+      
+      <!-- Mobile Search -->
+      <div class="mobile-search">
+        <input 
+          type="text" 
+          placeholder="Search..."
+          class="mobile-search-input"
+          [(ngModel)]="searchTerm"
+          (input)="onSearch()"
+          (keyup.enter)="performSearch()"
+        />
+      </div>
+      
+      <div class="user-actions">
+        <span class="search-icon" (click)="toggleSearch()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 21L16.66 16.66" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+              d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
+              stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
+        <a routerLink="/cart" class="cart">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M8 22C8.55228 22 9 21.5523 9 21C9 20.4477 8.55228 20 8 20C7.44772 20 7 20.4477 7 21C7 21.5523 7.44772 22 8 22Z"
+              stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+              d="M19 22C19.5523 22 20 21.5523 20 21C20 20.4477 19.5523 20 19 20C18.4477 20 18 20.4477 18 21C18 21.5523 18.4477 22 19 22Z"
+              stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+              d="M2.05005 2.05H4.05005L6.71005 14.47C6.80763 14.9249 7.06072 15.3315 7.42576 15.6199C7.7908 15.9082 8.24495 16.0604 8.71005 16.05H18.49C18.9452 16.0493 19.3865 15.8933 19.7411 15.6078C20.0956 15.3224 20.3422 14.9245 20.4401 14.48L22.09 7.05H5.12005"
+              stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </a>
+        <span class="profile-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M19 21V19C19 17.9391 18.5786 16.9217 17.8284 16.1716C17.0783 15.4214 16.0609 15 15 15H9C7.93913 15 6.92172 15.4214 6.17157 16.1716C5.42143 16.9217 5 17.9391 5 19V21"
+              stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+              d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z"
+              stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
+        
+        <!-- Mobile Hamburger Button -->
+        <button class="hamburger" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+  
+  <!-- Search Results Dropdown -->
+  <div class="search-results" *ngIf="searchResults.length > 0 && searchTerm" [class.active]="isSearchOpen || searchTerm">
+    <div class="search-results-container">
+      <div class="search-results-header">
+        <span>Search Results ({{ searchResults.length }})</span>
+      </div>
+      <div class="search-results-list">
+        <div 
+          *ngFor="let product of searchResults.slice(0, 5)" 
+          class="search-result-item"
+          (click)="goToProduct(product.id)"
+        >
+          <img [src]="product.imageUrl" [alt]="product.name" class="result-image">
+          <div class="result-info">
+            <h4 class="result-name">{{ product.name }}</h4>
+            <p class="result-price">${{ product.price }}</p>
+            <span class="result-category">{{ product.category }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="search-results-footer" *ngIf="searchResults.length > 5">
+        <button class="view-all-btn" (click)="viewAllResults()">
+          View All Results ({{ searchResults.length }})
+        </button>
+      </div>
     </div>
   </div>
-</header>
-
-<!-- Mobile Menu Overlay -->
-<div class="mobile-menu-overlay" [class.active]="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
-
-<!-- Mobile Menu -->
-<div class="mobile-menu" [class.active]="isMobileMenuOpen">
-  <div class="mobile-menu-header">
-    <div class="logo">🛒 3D Store</div>
-    <button class="close-btn" (click)="closeMobileMenu()">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>
-  </div>
   
-  <nav class="mobile-nav">
-    <a routerLink="/home" (click)="scrollToSection('home')">Home</a>
-    <a routerLink="/home" (click)="scrollToSection('shop')">Shop</a>
-    <a routerLink="/home" (click)="scrollToSection('about')">About</a>
-    <a routerLink="/home" (click)="scrollToSection('contact')">Contact</a>
-  </nav>
-</div>
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay" [class.active]="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
+  
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" [class.active]="isMobileMenuOpen">
+    <div class="mobile-menu-header">
+      <div class="logo">🛒 3D Store</div>
+      <button class="close-btn" (click)="closeMobileMenu()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+    
+    <nav class="mobile-nav">
+      <a routerLink="/home" (click)="scrollToSection('home')">Home</a>
+      <a routerLink="/home" (click)="scrollToSection('shop')">Shop</a>
+      <a routerLink="/home" (click)="scrollToSection('about')">About</a>
+      <a routerLink="/home" (click)="scrollToSection('contact')">Contact</a>
+    </nav>
+  </div>
