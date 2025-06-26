@@ -4,8 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "ng serve",
-    "build": "ng build --configuration production --base-href /angular-ecommerce-3d/",
-    "postbuild": "cp static.json dist/angular-ecommerce-3d/"
+    "build": "ng build --configuration production --base-href /angular-ecommerce-3d/ && cp static.json dist/angular-ecommerce-3d/"
   },
   "dependencies": {
     "@angular/animations": "^17.3.0",
