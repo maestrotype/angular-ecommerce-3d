@@ -105,13 +105,13 @@
             >
                 Characteristics
             </button>
-            <button 
+            <!-- <button 
               class="tab-btn" 
               [class.active]="activeTab === 'reviews'"
               (click)="setActiveTab('reviews')"
             >
               Reviews (0)
-            </button>
+            </button> -->
             <button 
               class="tab-btn" 
               [class.active]="activeTab === 'delivery'"
@@ -149,7 +149,7 @@
             </div>
   
             <!-- Reviews Tab -->
-            <div class="tab-panel" *ngIf="activeTab === 'reviews'">
+            <!-- <div class="tab-panel" *ngIf="activeTab === 'reviews'">
               <div class="reviews-content">
                 <div class="no-reviews">
                   <h3>Customer Reviews</h3>
@@ -157,7 +157,7 @@
                   <button class="write-review-btn">Write a review</button>
                 </div>
               </div>
-            </div>
+            </div> -->
   
             <!-- Delivery Tab -->
             <div class="tab-panel" *ngIf="activeTab === 'delivery'">

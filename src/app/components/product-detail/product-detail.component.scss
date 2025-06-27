@@ -343,7 +343,7 @@
       border-bottom: 1px solid #dee2e6;
       
       @media (max-width: 768px) {
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
       }
       
       .tab-btn {
