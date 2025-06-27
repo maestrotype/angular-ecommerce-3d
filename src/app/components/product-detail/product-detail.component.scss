@@ -86,12 +86,14 @@
       padding: 2rem;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
       margin-bottom: 1rem;
+      overflow: hidden;
       
       .main-product-image {
         width: 100%;
         height: 400px;
         object-fit: contain;
         border-radius: 8px;
+        scale: 1.8;
         
         @media (max-width: 768px) {
           height: 300px;
