@@ -24,6 +24,7 @@
     "@angular/cli": "^17.3.0",
     "@angular/compiler-cli": "^17.3.0",
     "@types/three": "^0.158.0",
+    "angular-cli-ghpages": "^2.0.3",
     "typescript": "^5.2.2",
     "webpack": "^5.92.1"
   }
