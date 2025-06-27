@@ -1,0 +1,4 @@
+services:
+  - type: web
+    name: angular-ecommerce-3d
+    staticPublishPath: dist/angular-ecommerce-3d
