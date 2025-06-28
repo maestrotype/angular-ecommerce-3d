@@ -21,8 +21,15 @@ import { ContactsComponent } from './layout/contacts/contacts.component';
 import { AboutComponent } from './pages/about/about.component';
 import { IconComponent } from './shared/icon/icon.component';
 
+// Modal Components
+import { BaseModalComponent } from './shared/modal/base-modal.component';
+import { ImageModalComponent } from './shared/modal/image-modal/image-modal.component';
+import { CartModalComponent } from './shared/modal/cart-modal/cart-modal.component';
+import { AuthModalComponent } from './shared/modal/auth-modal/auth-modal.component';
+
+
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, HeroComponent, CategoriesComponent, SpecialOfferComponent, BestSellersComponent, BrandsComponent, ContactsComponent, FooterComponent, HomeComponent, ShopComponent, AboutComponent, ProductDetailComponent, Bag3dFirstComponent, IconComponent, ThreeDViewerComponent],
+  declarations: [AppComponent, HeaderComponent, HeroComponent, CategoriesComponent, SpecialOfferComponent, BestSellersComponent, BrandsComponent, ContactsComponent, FooterComponent, HomeComponent, ShopComponent, AboutComponent, ProductDetailComponent, BaseModalComponent, ImageModalComponent, CartModalComponent, AuthModalComponent, Bag3dFirstComponent, IconComponent, ThreeDViewerComponent],
   imports: [BrowserModule, FormsModule, RouterModule, AppRoutingModule],
   providers: [],
   bootstrap: [AppComponent]

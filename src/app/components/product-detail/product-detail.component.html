@@ -23,6 +23,7 @@
                 [src]="product.images?.[selectedImageIndex] || product.imageUrl" 
                 [alt]="product.name"
                 class="main-product-image"
+                (click)="openImageModal()"
               />
               <div *ngIf="product.isSpecial" class="special-badge">
                 SPECIAL OFFER

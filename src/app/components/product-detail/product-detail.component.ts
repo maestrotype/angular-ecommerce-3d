@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../core/services/product.service';
 import { Product } from '../../core/models/Product';
+import { ModalService } from '../../core/services/modal.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -18,7 +19,8 @@ export class ProductDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private productService: ProductService
+    private productService: ProductService,
+    private modalService: ModalService
   ) { }
 
   ngOnInit(): void {
@@ -43,6 +45,25 @@ export class ProductDetailComponent implements OnInit {
     this.selectedImageIndex = index;
   }
 
+  openImageModal(): void {
+    if (this.product && this.product.images) {
+      this.modalService.openModal({
+        id: 'product-image-modal',
+        type: 'image',
+        data: {
+          images: this.product.images,
+          currentIndex: this.selectedImageIndex,
+          productName: this.product.name
+        },
+        options: {
+          closeOnBackdrop: true,
+          closeOnEscape: true,
+          showCloseButton: true
+        }
+      });
+    }
+  }
+
   incrementQuantity(): void {
     this.quantity++;
   }
@@ -56,7 +77,17 @@ export class ProductDetailComponent implements OnInit {
   addToCart(): void {
     if (this.product) {
       this.productService.addToCart(this.product);
-      // Здесь можно добавить уведомление об успешном добавлении
+      // Открываем модальное окно корзины после добавления товара
+      this.modalService.openModal({
+        id: 'cart-modal',
+        type: 'cart',
+        data: null,
+        options: {
+          closeOnBackdrop: true,
+          closeOnEscape: true,
+          showCloseButton: true
+        }
+      });
     }
   }
 

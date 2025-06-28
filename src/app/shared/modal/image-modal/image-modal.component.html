@@ -1,0 +1,55 @@
+<div class="image-modal">
+    <!-- Header -->
+    <div class="image-modal-header">
+      <h2 class="product-name">{{ imageData.productName }}</h2>
+    </div>
+  
+    <!-- Main Image Container -->
+    <div class="main-image-container">
+      <img 
+        [src]="imageData.images[imageData.currentIndex]" 
+        [alt]="imageData.productName + ' - image ' + (imageData.currentIndex + 1)"
+        class="main-image"
+      />
+      
+      <!-- Navigation Arrows -->
+      <div class="navigation-arrows" *ngIf="imageData.images.length > 1">
+        <button 
+          class="nav-arrow nav-arrow-left" 
+          (click)="previousImage()"
+          aria-label="Previous image"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        
+        <button 
+          class="nav-arrow nav-arrow-right" 
+          (click)="nextImage()"
+          aria-label="Next image"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  
+    <!-- Thumbnails -->
+    <div class="thumbnails-container" *ngIf="imageData.images.length > 1">
+      <div class="thumbnails">
+        <button
+          *ngFor="let image of imageData.images; let i = index"
+          class="thumbnail"
+          [class.active]="i === imageData.currentIndex"
+          (click)="selectImage(i)"
+        >
+          <img [src]="image" [alt]="imageData.productName + ' thumbnail ' + (i + 1)" />
+        </button>
+      </div>
+      <div class="image-counter">
+        {{ imageData.currentIndex + 1 }} из {{ imageData.images.length }}
+      </div>
+    </div>
+  </div>
