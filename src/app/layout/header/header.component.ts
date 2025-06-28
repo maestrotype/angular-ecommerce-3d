@@ -81,18 +81,25 @@ export class HeaderComponent {
   }
 
   scrollToSection(sectionId: string): void {
-    if(sectionId == 'home') {
+    if (this.router.url !== '/home') {
       this.router.navigate(['/home']).then(() => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+        setTimeout(() => {
+          this.scrollToElement(sectionId);
+        }, 100);
+      });
+    } else {
+      this.scrollToElement(sectionId);
     }
-    const element = document.getElementById(sectionId);
+    this.closeMobileMenu();
+  }
+  
+  private scrollToElement(id: string): void {
+    const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ 
+      element.scrollIntoView({
         behavior: 'smooth',
         block: 'start'
       });
     }
-    this.closeMobileMenu();
-  }
+  }  
 }
