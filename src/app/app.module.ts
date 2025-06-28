@@ -26,10 +26,13 @@ import { BaseModalComponent } from './shared/modal/base-modal.component';
 import { ImageModalComponent } from './shared/modal/image-modal/image-modal.component';
 import { CartModalComponent } from './shared/modal/cart-modal/cart-modal.component';
 import { AuthModalComponent } from './shared/modal/auth-modal/auth-modal.component';
+import { ProductInfoComponent } from './components/product-detail/product-info/product-info.component';
+import { ProductTabsComponent } from './components/product-detail/product-tabs/product-tabs.component';
+import { ProductImagesComponent } from './components/product-detail/product-images/product-images.component';
 
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, HeroComponent, CategoriesComponent, SpecialOfferComponent, BestSellersComponent, BrandsComponent, ContactsComponent, FooterComponent, HomeComponent, ShopComponent, AboutComponent, ProductDetailComponent, BaseModalComponent, ImageModalComponent, CartModalComponent, AuthModalComponent, Bag3dFirstComponent, IconComponent, ThreeDViewerComponent],
+  declarations: [AppComponent, HeaderComponent, HeroComponent, CategoriesComponent, SpecialOfferComponent, BestSellersComponent, BrandsComponent, ContactsComponent, FooterComponent, HomeComponent, ShopComponent, AboutComponent, ProductDetailComponent, ProductImagesComponent, ProductInfoComponent, ProductTabsComponent, BaseModalComponent, ImageModalComponent, CartModalComponent, AuthModalComponent, Bag3dFirstComponent, IconComponent, ThreeDViewerComponent],
   imports: [BrowserModule, FormsModule, RouterModule, AppRoutingModule],
   providers: [],
   bootstrap: [AppComponent]

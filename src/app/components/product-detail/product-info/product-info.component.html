@@ -1,0 +1,43 @@
+<div class="product-info">
+    <h1 class="product-title">{{ product.name }}</h1>
+    
+    <div class="product-meta">
+      <div class="rating" *ngIf="product.rating">
+        <span class="stars">
+          <span *ngFor="let star of [1,2,3,4,5]" 
+                class="star" 
+                [class.filled]="star <= product.rating!">
+            ⭐
+          </span>
+        </span>
+        <span class="rating-value">({{ product.rating }})</span>
+      </div>
+      <span class="category">{{ product.category }}</span>
+    </div>
+  
+    <div class="price-section">
+      <div class="price-container">
+        <span class="current-price">${{ getDiscountedPrice() | number:'1.2-2' }}</span>
+        <span *ngIf="product.discount" class="original-price">${{ product.price | number:'1.2-2' }}</span>
+      </div>
+      <div *ngIf="product.isSpecial" class="special-offer-text">
+        Limited Time Offer!
+      </div>
+    </div>
+  
+    <!-- Quantity and Add to Cart -->
+    <div class="purchase-section">
+      <div class="quantity-selector">
+        <label>Quantity:</label>
+        <div class="quantity-controls">
+          <button class="quantity-btn" (click)="decrementQuantity()">-</button>
+          <span class="quantity-value">{{ quantity }}</span>
+          <button class="quantity-btn" (click)="incrementQuantity()">+</button>
+        </div>
+      </div>
+      
+      <button class="add-to-cart-btn" (click)="onAddToCart()">
+        🛒 Add to Cart
+      </button>
+    </div>
+  </div>

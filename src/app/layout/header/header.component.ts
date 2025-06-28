@@ -2,6 +2,7 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProductService } from '../../core/services/product.service';
 import { Product } from '../../core/models/Product';
+import { ModalService } from 'src/app/core/services/modal.service';
 
 @Component({
   selector: 'app-header',
@@ -18,7 +19,8 @@ export class HeaderComponent {
 
   constructor(
     private router: Router,
-    private productService: ProductService
+    private productService: ProductService,
+    private modalService: ModalService
   ) { }
 
   toggleMobileMenu() {
@@ -67,6 +69,32 @@ export class HeaderComponent {
       this.isSearchOpen = false;
       this.closeMobileMenu();
     }
+  }
+
+  openAuthModal(): void {
+    this.modalService.openModal({
+      id: 'auth-modal',
+      type: 'auth',
+      data: null,
+      options: {
+        closeOnBackdrop: true,
+        closeOnEscape: true,
+        showCloseButton: true
+      }
+    });
+  }
+
+  openCartModal(): void {
+    this.modalService.openModal({
+      id: 'cart-modal',
+      type: 'cart',
+      data: null,
+      options: {
+        closeOnBackdrop: true,
+        closeOnEscape: true,
+        showCloseButton: true
+      }
+    });
   }
 
   goToProduct(productId: number) {

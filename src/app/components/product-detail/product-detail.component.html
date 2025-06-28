@@ -1,208 +1,59 @@
-
 <div class="product-detail" *ngIf="!loading && product">
-    <!-- Header -->
-    <div class="product-header">
-      <div class="container">
-        <button class="back-btn" (click)="goBack()">
-          ← Back to Shop
-        </button>
-        <nav class="breadcrumb">
-          <span>Home</span> / <span>Shop</span> / <span>{{ product.category }}</span> / <span class="current">{{ product.name }}</span>
-        </nav>
-      </div>
-    </div>
-  
-    <!-- Product Content -->
-    <div class="product-content">
-      <div class="container">
-        <div class="product-grid">
-          <!-- Product Images -->
-          <div class="product-images">
-            <div class="main-image">
-              <img 
-                [src]="product.images?.[selectedImageIndex] || product.imageUrl" 
-                [alt]="product.name"
-                class="main-product-image"
-                (click)="openImageModal()"
-              />
-              <div *ngIf="product.isSpecial" class="special-badge">
-                SPECIAL OFFER
-                <span *ngIf="product.discount" class="discount-text">-{{ product.discount }}%</span>
-              </div>
-            </div>
-            
-            <div class="image-thumbnails" *ngIf="product.images && product.images.length > 1">
-              <div 
-                *ngFor="let image of product.images; let i = index"
-                class="thumbnail"
-                [class.active]="i === selectedImageIndex"
-                (click)="selectImage(i)"
-              >
-                <img [src]="image" [alt]="product.name + ' - view ' + (i + 1)" />
-              </div>
-            </div>
-          </div>
-  
-          <!-- Product Info -->
-          <div class="product-info">
-            <h1 class="product-title">{{ product.name }}</h1>
-            
-            <div class="product-meta">
-              <div class="rating" *ngIf="product.rating">
-                <span class="stars">
-                  <span *ngFor="let star of [1,2,3,4,5]" 
-                        class="star" 
-                        [class.filled]="star <= product.rating!">
-                    ⭐
-                  </span>
-                </span>
-                <span class="rating-value">({{ product.rating }})</span>
-              </div>
-              <span class="category">{{ product.category }}</span>
-            </div>
-  
-            <div class="price-section">
-              <div class="price-container">
-                <span class="current-price">${{ getDiscountedPrice() | number:'1.2-2' }}</span>
-                <span *ngIf="product.discount" class="original-price">${{ product.price | number:'1.2-2' }}</span>
-              </div>
-              <div *ngIf="product.isSpecial" class="special-offer-text">
-                Limited Time Offer!
-              </div>
-            </div>
-  
-            <!-- Quantity and Add to Cart -->
-            <div class="purchase-section">
-              <div class="quantity-selector">
-                <label>Quantity:</label>
-                <div class="quantity-controls">
-                  <button class="quantity-btn" (click)="decrementQuantity()">-</button>
-                  <span class="quantity-value">{{ quantity }}</span>
-                  <button class="quantity-btn" (click)="incrementQuantity()">+</button>
-                </div>
-              </div>
-              
-              <button class="add-to-cart-btn" (click)="addToCart()">
-                🛒 Add to Cart
-              </button>
-            </div>
-          </div>
-        </div>
-  
-        <!-- Tabs Section -->
-        <div class="product-tabs">
-          <div class="tabs-nav">
-            <button 
-              class="tab-btn" 
-              [class.active]="activeTab === 'description'"
-              (click)="setActiveTab('description')"
-            >
-              Description
-            </button>
-            <button 
-              class="tab-btn" 
-              [class.active]="activeTab === 'specifications'"
-              (click)="setActiveTab('specifications')"
-            >
-                Characteristics
-            </button>
-            <!-- <button 
-              class="tab-btn" 
-              [class.active]="activeTab === 'reviews'"
-              (click)="setActiveTab('reviews')"
-            >
-              Reviews (0)
-            </button> -->
-            <button 
-              class="tab-btn" 
-              [class.active]="activeTab === 'delivery'"
-              (click)="setActiveTab('delivery')"
-            >
-                Delivery and payment
-            </button>
-          </div>
-  
-          <div class="tabs-content">
-            <!-- Description Tab -->
-            <div class="tab-panel" *ngIf="activeTab === 'description'">
-              <div class="description-content">
-                <p>{{ product.description }}</p>
-                <div class="features" *ngIf="product.features">
-                  <h3>Peculiarities:</h3>
-                  <ul>
-                    <li *ngFor="let feature of product.features">{{ feature }}</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-  
-            <!-- Specifications Tab -->
-            <div class="tab-panel" *ngIf="activeTab === 'specifications'">
-              <div class="specifications-content">
-                <h3>Technical specifications</h3>
-                <dl class="spec-list" *ngIf="product.specifications">
-                  <div *ngFor="let spec of product.specifications | keyvalue" class="spec-item">
-                    <dt>{{ spec.key }}:</dt>
-                    <dd>{{ spec.value }}</dd>
-                  </div>
-                </dl>
-              </div>
-            </div>
-  
-            <!-- Reviews Tab -->
-            <!-- <div class="tab-panel" *ngIf="activeTab === 'reviews'">
-              <div class="reviews-content">
-                <div class="no-reviews">
-                  <h3>Customer Reviews</h3>
-                  <p>There are no reviews for this product yet. Be the first!</p>
-                  <button class="write-review-btn">Write a review</button>
-                </div>
-              </div>
-            </div> -->
-  
-            <!-- Delivery Tab -->
-            <div class="tab-panel" *ngIf="activeTab === 'delivery'">
-              <div class="delivery-content">
-                <h3>Delivery and payment</h3>
-                <div class="delivery-info">
-                  <div class="delivery-option">
-                    <h4>🚚 Standard shipping</h4>
-                    <p>3-5 business days • Free from $50</p>
-                  </div>
-                  <div class="delivery-option">
-                    <h4>⚡ Express delivery</h4>
-                    <p>1-2 business days • $15</p>
-                  </div>
-                  <div class="payment-methods">
-                    <h4>💳 Payment methods</h4>
-                    <p>Visa, MasterCard, PayPal, Apple Pay</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Loading State -->
-  <div class="loading" *ngIf="loading">
+  <!-- Header -->
+  <div class="product-header">
     <div class="container">
-      <div class="loading-content">
-        <p>Loading product details...</p>
-      </div>
+      <button class="back-btn" (click)="goBack()">
+        ← Back to Shop
+      </button>
+      <nav class="breadcrumb">
+        <span>Home</span> / <span>Shop</span> / <span>{{ product.category }}</span> / <span class="current">{{ product.name }}</span>
+      </nav>
     </div>
   </div>
-  
-  <!-- Product Not Found -->
-  <div class="not-found" *ngIf="!loading && !product">
+
+  <!-- Product Content -->
+  <div class="product-content">
     <div class="container">
-      <div class="not-found-content">
-        <h2>Product Not Found</h2>
-        <p>The product you're looking for doesn't exist.</p>
-        <button class="back-btn" (click)="goBack()">Back to Shop</button>
+      <div class="product-grid">
+        <!-- Product Images Component -->
+        <app-product-images 
+          [product]="product"
+          [selectedImageIndex]="selectedImageIndex"
+          (imageSelected)="onImageSelected($event)"
+          (imageClicked)="onImageClicked()">
+        </app-product-images>
+
+        <!-- Product Info Component -->
+        <app-product-info 
+          [product]="product"
+          [quantity]="quantity"
+          (quantityChanged)="onQuantityChanged($event)"
+          (addToCart)="onAddToCart()">
+        </app-product-info>
       </div>
+
+      <!-- Product Tabs Component -->
+      <app-product-tabs [product]="product"></app-product-tabs>
     </div>
   </div>
-  
+</div>
+
+<!-- Loading State -->
+<div class="loading" *ngIf="loading">
+  <div class="container">
+    <div class="loading-content">
+      <p>Loading product details...</p>
+    </div>
+  </div>
+</div>
+
+<!-- Product Not Found -->
+<div class="not-found" *ngIf="!loading && !product">
+  <div class="container">
+    <div class="not-found-content">
+      <h2>Product Not Found</h2>
+      <p>The product you're looking for doesn't exist.</p>
+      <button class="back-btn" (click)="goBack()">Back to Shop</button>
+    </div>
+  </div>
+</div>

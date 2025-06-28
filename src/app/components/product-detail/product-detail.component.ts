@@ -14,7 +14,6 @@ export class ProductDetailComponent implements OnInit {
   selectedImageIndex: number = 0;
   quantity: number = 1;
   loading: boolean = true;
-  activeTab: string = 'description';
 
   constructor(
     private route: ActivatedRoute,
@@ -31,6 +30,7 @@ export class ProductDetailComponent implements OnInit {
   }
 
   private loadProduct(id: number): void {
+    // В реальном приложении здесь был бы HTTP запрос
     this.product = this.productService.getProductById(id);
     console.log("product", this.product);
     
@@ -41,11 +41,11 @@ export class ProductDetailComponent implements OnInit {
     }
   }
 
-  selectImage(index: number): void {
+  onImageSelected(index: number): void {
     this.selectedImageIndex = index;
   }
 
-  openImageModal(): void {
+  onImageClicked(): void {
     if (this.product && this.product.images) {
       this.modalService.openModal({
         id: 'product-image-modal',
@@ -64,17 +64,11 @@ export class ProductDetailComponent implements OnInit {
     }
   }
 
-  incrementQuantity(): void {
-    this.quantity++;
+  onQuantityChanged(newQuantity: number): void {
+    this.quantity = newQuantity;
   }
 
-  decrementQuantity(): void {
-    if (this.quantity > 1) {
-      this.quantity--;
-    }
-  }
-
-  addToCart(): void {
+  onAddToCart(): void {
     if (this.product) {
       this.productService.addToCart(this.product);
       // Открываем модальное окно корзины после добавления товара
@@ -93,16 +87,5 @@ export class ProductDetailComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(['/shop']);
-  }
-
-  getDiscountedPrice(): number {
-    if (this.product && this.product.discount) {
-      return this.product.price * (1 - this.product.discount / 100);
-    }
-    return this.product?.price || 0;
-  }
-
-  setActiveTab(tab: string): void {
-    this.activeTab = tab;
   }
 }
