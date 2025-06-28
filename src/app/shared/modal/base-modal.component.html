@@ -1,0 +1,46 @@
+<div class="modal-container" *ngFor="let modal of modalStack; trackBy: trackByModalId">
+    <div 
+      class="modal-backdrop" 
+      [class]="'modal-backdrop-' + modal.type"
+      (click)="onBackdropClick(modal)"
+    >
+      <div 
+        class="modal-content" 
+        [class]="'modal-content-' + modal.type + (modal.options?.customClass ? ' ' + modal.options.customClass : '')"
+        (click)="$event.stopPropagation()"
+      >
+        <!-- Close Button -->
+        <button 
+          *ngIf="modal.options?.showCloseButton" 
+          class="modal-close-btn"
+          (click)="closeModal(modal.id)"
+          aria-label="Close modal"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+  
+        <!-- Image Modal Content -->
+        <app-image-modal 
+          *ngIf="modal.type === 'image'" 
+          [config]="modal"
+          (close)="closeModal(modal.id)"
+        ></app-image-modal>
+  
+        <!-- Cart Modal Content -->
+        <app-cart-modal 
+          *ngIf="modal.type === 'cart'" 
+          [config]="modal"
+          (close)="closeModal(modal.id)"
+        ></app-cart-modal>
+  
+        <!-- Auth Modal Content -->
+        <app-auth-modal 
+          *ngIf="modal.type === 'auth'" 
+          [config]="modal"
+          (close)="closeModal(modal.id)"
+        ></app-auth-modal>
+      </div>
+    </div>
+  </div>

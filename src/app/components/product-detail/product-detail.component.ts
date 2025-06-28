@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../core/services/product.service';
 import { Product } from '../../core/models/Product';
+import { ModalService } from '../../core/services/modal.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -13,12 +14,12 @@ export class ProductDetailComponent implements OnInit {
   selectedImageIndex: number = 0;
   quantity: number = 1;
   loading: boolean = true;
-  activeTab: string = 'description';
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private productService: ProductService
+    private productService: ProductService,
+    private modalService: ModalService
   ) { }
 
   ngOnInit(): void {
@@ -29,6 +30,7 @@ export class ProductDetailComponent implements OnInit {
   }
 
   private loadProduct(id: number): void {
+    // В реальном приложении здесь был бы HTTP запрос
     this.product = this.productService.getProductById(id);
     console.log("product", this.product);
     
@@ -39,39 +41,51 @@ export class ProductDetailComponent implements OnInit {
     }
   }
 
-  selectImage(index: number): void {
+  onImageSelected(index: number): void {
     this.selectedImageIndex = index;
   }
 
-  incrementQuantity(): void {
-    this.quantity++;
-  }
-
-  decrementQuantity(): void {
-    if (this.quantity > 1) {
-      this.quantity--;
+  onImageClicked(): void {
+    if (this.product && this.product.images) {
+      this.modalService.openModal({
+        id: 'product-image-modal',
+        type: 'image',
+        data: {
+          images: this.product.images,
+          currentIndex: this.selectedImageIndex,
+          productName: this.product.name
+        },
+        options: {
+          closeOnBackdrop: true,
+          closeOnEscape: true,
+          showCloseButton: true
+        }
+      });
     }
   }
 
-  addToCart(): void {
+  onQuantityChanged(newQuantity: number): void {
+    this.quantity = newQuantity;
+  }
+
+  onAddToCart(): void {
     if (this.product) {
       this.productService.addToCart(this.product);
-      // Здесь можно добавить уведомление об успешном добавлении
+      // Открываем модальное окно корзины после добавления товара
+      this.modalService.openModal({
+        id: 'cart-modal',
+        type: 'cart',
+        data: null,
+        options: {
+          closeOnBackdrop: true,
+          closeOnEscape: true,
+          showCloseButton: true
+        }
+      });
     }
   }
 
   goBack(): void {
     this.router.navigate(['/shop']);
-  }
-
-  getDiscountedPrice(): number {
-    if (this.product && this.product.discount) {
-      return this.product.price * (1 - this.product.discount / 100);
-    }
-    return this.product?.price || 0;
-  }
-
-  setActiveTab(tab: string): void {
-    this.activeTab = tab;
   }
 }

@@ -1,0 +1,74 @@
+<div class="product-tabs">
+    <div class="tabs-nav">
+      <button 
+        class="tab-btn" 
+        [class.active]="activeTab === 'description'"
+        (click)="setActiveTab('description')"
+      >
+        Description
+      </button>
+      <button 
+        class="tab-btn" 
+        [class.active]="activeTab === 'specifications'"
+        (click)="setActiveTab('specifications')"
+      >
+        Characteristics
+      </button>
+      <button 
+        class="tab-btn" 
+        [class.active]="activeTab === 'delivery'"
+        (click)="setActiveTab('delivery')"
+      >
+        Delivery and payment
+      </button>
+    </div>
+  
+    <div class="tabs-content">
+      <!-- Description Tab -->
+      <div class="tab-panel" *ngIf="activeTab === 'description'">
+        <div class="description-content">
+          <p>{{ product.description }}</p>
+          <div class="features" *ngIf="product.features">
+            <h3>Peculiarities:</h3>
+            <ul>
+              <li *ngFor="let feature of product.features">{{ feature }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Specifications Tab -->
+      <div class="tab-panel" *ngIf="activeTab === 'specifications'">
+        <div class="specifications-content">
+          <h3>Technical specifications</h3>
+          <dl class="spec-list" *ngIf="product.specifications">
+            <div *ngFor="let spec of product.specifications | keyvalue" class="spec-item">
+              <dt>{{ spec.key }}:</dt>
+              <dd>{{ spec.value }}</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+  
+      <!-- Delivery Tab -->
+      <div class="tab-panel" *ngIf="activeTab === 'delivery'">
+        <div class="delivery-content">
+          <h3>Delivery and payment</h3>
+          <div class="delivery-info">
+            <div class="delivery-option">
+              <h4>🚚 Standard shipping</h4>
+              <p>3-5 business days • Free from $50</p>
+            </div>
+            <div class="delivery-option">
+              <h4>⚡ Express delivery</h4>
+              <p>1-2 business days • $15</p>
+            </div>
+            <div class="payment-methods">
+              <h4>💳 Payment methods</h4>
+              <p>Visa, MasterCard, PayPal, Apple Pay</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

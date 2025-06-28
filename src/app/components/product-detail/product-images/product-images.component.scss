@@ -1,0 +1,76 @@
+.product-images {
+    .main-image {
+      position: relative;
+      background: white;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      margin-bottom: 1rem;
+      overflow: hidden;
+      
+      .main-product-image {
+        width: 100%;
+        height: 400px;
+        object-fit: contain;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        
+        &:hover {
+          transform: scale(1.05);
+        }
+        
+        @media (max-width: 768px) {
+          height: 300px;
+        }
+      }
+      
+      .special-badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        text-align: center;
+        
+        .discount-text {
+          display: block;
+          font-size: 0.7rem;
+          margin-top: 0.2rem;
+        }
+      }
+    }
+    
+    .image-thumbnails {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      
+      .thumbnail {
+        width: 70px;
+        height: 70px;
+        border-radius: 8px;
+        overflow: hidden;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+        
+        &.active,
+        &:hover {
+          border-color: #ff6b6b;
+          transform: scale(1.05);
+        }
+        
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+      }
+    }
+  }

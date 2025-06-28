@@ -1,0 +1,25 @@
+<div class="product-images">
+    <div class="main-image">
+      <img 
+        [src]="product.images?.[selectedImageIndex] || product.imageUrl" 
+        [alt]="product.name"
+        class="main-product-image"
+        (click)="onImageClick()"
+      />
+      <div *ngIf="product.isSpecial" class="special-badge">
+        SPECIAL OFFER
+        <span *ngIf="product.discount" class="discount-text">-{{ product.discount }}%</span>
+      </div>
+    </div>
+    
+    <div class="image-thumbnails" *ngIf="product.images && product.images.length > 1">
+      <div 
+        *ngFor="let image of product.images; let i = index"
+        class="thumbnail"
+        [class.active]="i === selectedImageIndex"
+        (click)="selectImage(i)"
+      >
+        <img [src]="image" [alt]="product.name + ' - view ' + (i + 1)" />
+      </div>
+    </div>
+  </div>
