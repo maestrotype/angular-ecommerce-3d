@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Product } from '../../core/models/Product';
 import { Category } from '../../core/models/Category';
 import { ProductService } from '../../core/services/product.service';
 import { CategoryService } from '../../core/services/category.service';
+import { CartService } from '../../core/services/cart.service';
 
 @Component({
   selector: 'app-shop',
@@ -11,7 +12,8 @@ import { CategoryService } from '../../core/services/category.service';
   styleUrls: ['./shop.component.scss']
 })
 export class ShopComponent implements OnInit {
-
+  @Input() product!: Product;
+  @Input() quantity: number = 1;
   searchTerm: string = '';
   selectedCategory: string = 'all';
   sortBy: string = 'name';
@@ -25,6 +27,7 @@ export class ShopComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private productService: ProductService,
+    private cartService: CartService,
     private categoryService: CategoryService
   ) { }
 
@@ -94,8 +97,28 @@ export class ShopComponent implements OnInit {
   }
 
   addToCart(product: Product): void {
-    console.log('Added to cart:', product);
-    // Здесь будет логика добавления в корзину
+    const cartItem = {
+      id: this.product.id,
+      name: this.product.name,
+      price: this.getDiscountedPrice(),
+      image: this.product.imageUrl,
+      originalPrice: this.product.discount ? this.product.price : undefined,
+      discount: this.product.discount
+    };
+
+    for (let i = 0; i < this.quantity; i++) {
+      this.cartService.addToCart(cartItem);
+    }
+
+    // Show success message (you can integrate with a toast service)
+    alert(`Added ${this.quantity} ${this.product.name} to cart!`);
+  }
+
+  getDiscountedPrice(): number {
+    if (this.product && this.product.discount) {
+      return this.product.price * (1 - this.product.discount / 100);
+    }
+    return this.product?.price || 0;
   }
 
   quickView(product: Product): void {

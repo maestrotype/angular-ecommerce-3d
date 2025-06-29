@@ -57,6 +57,7 @@
               d="M2.05005 2.05H4.05005L6.71005 14.47C6.80763 14.9249 7.06072 15.3315 7.42576 15.6199C7.7908 15.9082 8.24495 16.0604 8.71005 16.05H18.49C18.9452 16.0493 19.3865 15.8933 19.7411 15.6078C20.0956 15.3224 20.3422 14.9245 20.4401 14.48L22.09 7.05H5.12005"
               stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
+          <span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span>
         </a>
         <span class="profile-icon" (click)="openAuthModal()">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

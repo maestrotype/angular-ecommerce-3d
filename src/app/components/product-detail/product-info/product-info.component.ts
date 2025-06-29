@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Product } from '../../../core/models/Product';
+import { CartService } from '../../../core/services/cart.service';
 
 @Component({
   selector: 'app-product-info',
@@ -11,6 +12,8 @@ export class ProductInfoComponent {
   @Input() quantity: number = 1;
   @Output() quantityChanged = new EventEmitter<number>();
   @Output() addToCart = new EventEmitter<void>();
+
+  constructor(private cartService: CartService) {}
 
   incrementQuantity(): void {
     this.quantity++;
@@ -25,7 +28,21 @@ export class ProductInfoComponent {
   }
 
   onAddToCart(): void {
-    this.addToCart.emit();
+    const cartItem = {
+      id: this.product.id,
+      name: this.product.name,
+      price: this.getDiscountedPrice(),
+      image: this.product.imageUrl,
+      originalPrice: this.product.discount ? this.product.price : undefined,
+      discount: this.product.discount
+    };
+
+    for (let i = 0; i < this.quantity; i++) {
+      this.cartService.addToCart(cartItem);
+    }
+
+    // Show success message (you can integrate with a toast service)
+    alert(`Added ${this.quantity} ${this.product.name} to cart!`);
   }
 
   getDiscountedPrice(): number {
