@@ -16,6 +16,7 @@ export class HeaderComponent {
   isSearchOpen = false;
   searchTerm = '';
   searchResults: Product[] = [];
+  cartCount = 0;
 
   constructor(
     private router: Router,
