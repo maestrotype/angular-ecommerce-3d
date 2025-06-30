@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { ModalService } from 'src/app/core/services/modal.service';
+import { Subscription } from 'rxjs';
+import { ModalService } from '../../core/services/modal.service';
+import { CartService } from '../../core/services/cart.service';
 
 @Component({
   selector: 'app-footer',
@@ -9,7 +11,22 @@ import { ModalService } from 'src/app/core/services/modal.service';
 
 
 export class FooterComponent {
-  constructor(private modalService: ModalService) {}
+  cartCount = 0;
+  private cartSubscription: Subscription = new Subscription();
+  constructor(
+    private modalService: ModalService,
+    private cartService: CartService
+    ) {}
+
+  ngOnInit(): void {
+    this.cartSubscription = this.cartService.getTotalCount().subscribe(
+      count => this.cartCount = count
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.cartSubscription.unsubscribe();
+  }
 
   openAuthModal(): void {
     this.modalService.openModal({

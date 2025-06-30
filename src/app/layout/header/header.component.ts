@@ -1,8 +1,10 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { CartService } from '../../core/services/cart.service';
 import { ProductService } from '../../core/services/product.service';
 import { Product } from '../../core/models/Product';
-import { ModalService } from 'src/app/core/services/modal.service';
+import { ModalService } from '../../core/services/modal.service';
 
 @Component({
   selector: 'app-header',
@@ -17,12 +19,24 @@ export class HeaderComponent {
   searchTerm = '';
   searchResults: Product[] = [];
   cartCount = 0;
+  private cartSubscription: Subscription = new Subscription();
 
   constructor(
     private router: Router,
     private productService: ProductService,
+    private cartService: CartService,
     private modalService: ModalService
   ) { }
+
+  ngOnInit(): void {
+    this.cartSubscription = this.cartService.getTotalCount().subscribe(
+      count => this.cartCount = count
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.cartSubscription.unsubscribe();
+  }
 
   toggleMobileMenu() {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;

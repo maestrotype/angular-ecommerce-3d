@@ -75,6 +75,7 @@
         <app-icon name="heart" stroke="#333" />
         <a (click)="openCartModal()" class="cart">
             <app-icon name="shopping-cart" stroke="#333" />
+            <span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span>
         </a>
         <span class="profile-icon" (click)="openAuthModal()">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
