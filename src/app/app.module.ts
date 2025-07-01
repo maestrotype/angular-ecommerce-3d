@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
@@ -35,7 +36,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, HeroComponent, CategoriesComponent, SpecialOfferComponent, BestSellersComponent, BrandsComponent, ContactsComponent, FooterComponent, HomeComponent, ShopComponent, AboutComponent, ProductDetailComponent, ProductImagesComponent, ProductInfoComponent, ProductTabsComponent, BaseModalComponent, ImageModalComponent, CartModalComponent, AuthModalComponent, Bag3dFirstComponent, IconComponent, ThreeDViewerComponent],
-  imports: [BrowserModule, BrowserAnimationsModule, FormsModule, RouterModule, AppRoutingModule],
+  imports: [BrowserModule, BrowserAnimationsModule, HttpClientModule, FormsModule, RouterModule, AppRoutingModule],
   providers: [
     provideAnimationsAsync()
   ],
