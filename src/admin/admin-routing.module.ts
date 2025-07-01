@@ -2,6 +2,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminLayoutComponent } from './layout/admin-layout.component';
+import { AdminLoginComponent } from './pages/login/admin-login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ProductListComponent } from './pages/products/product-list/product-list.component';
 import { ProductFormComponent } from './pages/products/product-form/product-form.component';
@@ -11,6 +12,10 @@ import { UserListComponent } from './pages/users/user-list/user-list.component';
 import { AdminAuthGuard } from './guards/admin-auth.guard';
 
 const routes: Routes = [
+  {
+    path: 'login',
+    component: AdminLoginComponent
+  },
   {
     path: '',
     component: AdminLayoutComponent,
@@ -25,6 +30,10 @@ const routes: Routes = [
       { path: 'orders', component: OrderListComponent },
       { path: 'users', component: UserListComponent }
     ]
+  },
+  {
+    path: '**',
+    redirectTo: 'dashboard'
   }
 ];
 

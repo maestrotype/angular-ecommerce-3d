@@ -1,8 +1,8 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
 
 export interface User {
   id: string;
@@ -36,10 +36,48 @@ export class AuthService {
   }
 
   login(credentials: LoginCredentials): Observable<AuthResponse> {
+     // Mock login for development - remove when backend is ready
+     if (credentials.email === 'admin@example.com' && credentials.password === 'admin123') {
+        const mockResponse: AuthResponse = {
+          user: {
+            id: '1',
+            email: credentials.email,
+            name: 'Admin User',
+            role: 'admin'
+          },
+          token: 'mock-jwt-token-' + Date.now(),
+          expiresIn: 3600
+        };
+        
+        this.setSession(mockResponse);
+        return of(mockResponse);
+      }
+      
+      // Real API call - fallback to mock on error
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials)
       .pipe(
         tap(response => {
           this.setSession(response);
+        }),
+        catchError(error => {
+          console.warn('API login failed, using mock auth:', error);
+          // Fallback to mock login
+          if (credentials.email === 'admin@example.com' && credentials.password === 'admin123') {
+            const mockResponse: AuthResponse = {
+              user: {
+                id: '1',
+                email: credentials.email,
+                name: 'Admin User',
+                role: 'admin'
+              },
+              token: 'mock-jwt-token-' + Date.now(),
+              expiresIn: 3600
+            };
+            
+            this.setSession(mockResponse);
+            return of(mockResponse);
+          }
+          throw error;
         })
       );
   }

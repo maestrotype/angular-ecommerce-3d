@@ -1,7 +1,6 @@
 .product-form-container {
   padding: 24px;
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 800px;
 }
 
 .header-section {
@@ -11,44 +10,16 @@
   margin-bottom: 24px;
 }
 
-.header-section h1 {
-  margin: 0;
-  color: #333;
-}
-
-.back-button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.form-card {
-  width: 100%;
-}
-
 .product-form {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-.form-section {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 20px;
-  background-color: #fafafa;
-}
-
-.form-section h3 {
-  margin: 0 0 16px 0;
-  color: #333;
-  font-weight: 500;
-}
-
 .form-row {
   display: flex;
   gap: 16px;
-  margin-bottom: 16px;
+  align-items: flex-start;
 }
 
 .full-width {
@@ -59,38 +30,38 @@
   flex: 1;
 }
 
-.feature-row {
+.spec-row {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 16px;
 }
 
-.feature-input {
+.spec-key {
   flex: 1;
 }
 
-.add-feature-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 8px;
+.spec-value {
+  flex: 2;
+}
+
+.no-specs {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  padding: 20px;
 }
 
 .form-actions {
   display: flex;
-  justify-content: flex-end;
   gap: 16px;
-  padding-top: 16px;
-  border-top: 1px solid #e0e0e0;
-}
-
-.cancel-btn {
-  min-width: 100px;
+  justify-content: flex-end;
+  padding-top: 24px;
 }
 
 .spinning {
   animation: spin 1s linear infinite;
+  margin-right: 8px;
 }
 
 @keyframes spin {
@@ -103,16 +74,6 @@
 }
 
 @media (max-width: 768px) {
-  .product-form-container {
-    padding: 16px;
-  }
-
-  .header-section {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 16px;
-  }
-
   .form-row {
     flex-direction: column;
   }
@@ -121,7 +82,13 @@
     width: 100%;
   }
 
-  .form-actions {
-    flex-direction: column-reverse;
+  .spec-row {
+    flex-direction: column;
+  }
+
+  .header-section {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
   }
 }

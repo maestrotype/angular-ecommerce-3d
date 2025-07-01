@@ -1,7 +1,6 @@
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -21,9 +20,12 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminLayoutComponent } from './layout/admin-layout.component';
+import { AdminLoginComponent } from './pages/login/admin-login.component';
 import { SidenavComponent } from './components/organisms/sidenav/sidenav.component';
 import { HeaderComponent } from './components/organisms/header/header.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
@@ -41,6 +43,7 @@ import { ActionButtonComponent } from './components/atoms/action-button/action-b
 @NgModule({
   declarations: [
     AdminLayoutComponent,
+    AdminLoginComponent,
     SidenavComponent,
     HeaderComponent,
     DashboardComponent,
@@ -55,7 +58,6 @@ import { ActionButtonComponent } from './components/atoms/action-button/action-b
   ],
   imports: [
     CommonModule,
-    FormsModule,
     ReactiveFormsModule,
     AdminRoutingModule,
     // Angular Material Modules
@@ -77,6 +79,9 @@ import { ActionButtonComponent } from './components/atoms/action-button/action-b
     MatChipsModule,
     MatMenuModule,
     MatBadgeModule,
+    MatChipsModule,
+    MatDividerModule,
+    MatTooltipModule
   ]
 })
 export class AdminModule { }
