@@ -1,0 +1,60 @@
+.sidenav-header {
+    padding: 20px 16px;
+    border-bottom: 1px solid #e0e0e0;
+    
+    h2 {
+      margin: 0;
+      color: #333;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+  }
+  
+  .sidenav-nav {
+    padding-top: 16px;
+    
+    a {
+      margin: 4px 8px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.04);
+      }
+      
+      &.active {
+        background-color: #3f51b5;
+        color: white;
+        
+        mat-icon {
+          color: white;
+        }
+      }
+    }
+  }
+  
+  .nav-badge {
+    background-color: #f44336;
+    color: white;
+    border-radius: 12px;
+    padding: 2px 8px;
+    font-size: 12px;
+    min-width: 20px;
+    text-align: center;
+  }
+  
+  .sidenav-footer {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    
+    button {
+      width: 100%;
+      justify-content: flex-start;
+      
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+  }
