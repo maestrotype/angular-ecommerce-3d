@@ -1,0 +1,15 @@
+
+<mat-sidenav-container class="admin-container">
+    <mat-sidenav #drawer class="admin-sidenav" fixedInViewport mode="side" opened>
+      <app-admin-sidenav></app-admin-sidenav>
+    </mat-sidenav>
+    
+    <mat-sidenav-content class="admin-content">
+      <app-admin-header (toggleSidenav)="drawer.toggle()"></app-admin-header>
+      
+      <main class="admin-main">
+        <router-outlet></router-outlet>
+      </main>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  

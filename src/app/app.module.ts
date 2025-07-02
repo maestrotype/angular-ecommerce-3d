@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
@@ -29,12 +31,15 @@ import { AuthModalComponent } from './shared/modal/auth-modal/auth-modal.compone
 import { ProductInfoComponent } from './components/product-detail/product-info/product-info.component';
 import { ProductTabsComponent } from './components/product-detail/product-tabs/product-tabs.component';
 import { ProductImagesComponent } from './components/product-detail/product-images/product-images.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, HeroComponent, CategoriesComponent, SpecialOfferComponent, BestSellersComponent, BrandsComponent, ContactsComponent, FooterComponent, HomeComponent, ShopComponent, AboutComponent, ProductDetailComponent, ProductImagesComponent, ProductInfoComponent, ProductTabsComponent, BaseModalComponent, ImageModalComponent, CartModalComponent, AuthModalComponent, Bag3dFirstComponent, IconComponent, ThreeDViewerComponent],
-  imports: [BrowserModule, FormsModule, RouterModule, AppRoutingModule],
-  providers: [],
+  imports: [BrowserModule, BrowserAnimationsModule, HttpClientModule, FormsModule, RouterModule, AppRoutingModule],
+  providers: [
+    provideAnimationsAsync()
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

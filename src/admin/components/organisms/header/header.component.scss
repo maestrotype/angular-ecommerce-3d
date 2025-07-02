@@ -1,0 +1,31 @@
+.admin-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .menu-button {
+    margin-right: 16px;
+  }
+  
+  .header-title {
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+  
+  .spacer {
+    flex: 1 1 auto;
+  }
+  
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  @media (max-width: 768px) {
+    .header-title {
+      font-size: 1.1rem;
+    }
+  }
