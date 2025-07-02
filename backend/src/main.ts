@@ -8,7 +8,7 @@ async function bootstrap() {
   
   // Enable CORS for Angular frontend
   app.enableCors({
-    origin: ['http://localhost:4200', 'http://localhost:5000'],
+    origin: ['http://localhost:4200', 'http://localhost:3002'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
@@ -25,7 +25,7 @@ async function bootstrap() {
   // Global prefix for API routes
   app.setGlobalPrefix('api');
 
-  const port = process.env.PORT || 5000;
+  const port = process.env.PORT || 3002;
   await app.listen(port);
   console.log(`Application is running on: http://localhost:${port}/api`);
 }
