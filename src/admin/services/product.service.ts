@@ -12,8 +12,8 @@ import {
   providedIn: "root",
 })
 export class ProductService {
-  private readonly PRIMARY_API = "http://localhost:3002/api";
-  private readonly FALLBACK_API =
+  private readonly FALLBACK_API = "http://localhost:3002/api";
+  private readonly PRIMARY_API =
     "https://angular-ecommerce-backend.onrender.com/api";
 
   constructor(private http: HttpClient) {}
