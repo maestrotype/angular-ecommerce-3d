@@ -1,75 +1,307 @@
 .product-form-container {
-    padding: 24px;
-    max-width: 800px;
+    padding: 0;
+    max-width: none;
+    margin: 0;
+    background-color: #1f2937; // Темно-серый фон вместо прозрачного
+    min-height: calc(100vh - 64px);
+    color: #ffffff;
   }
-
+  
   .header-section {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 24px;
+    margin-bottom: 32px;
+    padding: 24px 24px 0 24px;
+    border-bottom: 1px solid #333;
+    background-color: #1f2937; // Темно-серый фон
+    
+    h1 {
+      color: #ffffff;
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 600;
+    }
+    
+    .back-button {
+      background-color: #374151;
+      color: #ffffff;
+      border: 1px solid #4b5563;
+      
+      &:hover {
+        background-color: #4b5563;
+      }
+    }
   }
-
+  
   .product-form {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 32px;
+    padding: 0 24px;
+    background-color: #1f2937; // Темно-серый фон
   }
-
+  
+  .form-card {
+    background-color: #2d2d2d !important;
+    border: 1px solid #404040;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  .form-content {
+    padding: 24px !important;
+  }
+  
   .form-row {
     display: flex;
-    gap: 16px;
+    gap: 20px;
     align-items: flex-start;
+    margin-bottom: 20px;
   }
-
+  
   .full-width {
     width: 100%;
   }
-
+  
   .half-width {
     flex: 1;
   }
-
+  
   .spec-row {
     display: flex;
     gap: 16px;
     align-items: flex-start;
     margin-bottom: 16px;
   }
-
+  
   .spec-key {
     flex: 1;
   }
-
+  
   .spec-value {
     flex: 2;
   }
-
+  
   .no-specs {
     text-align: center;
-    color: #666;
+    color: #9ca3af;
     font-style: italic;
-    padding: 20px;
+    padding: 32px;
+    background-color: #374151;
+    border-radius: 8px;
+    border: 2px dashed #6b7280;
   }
-
+  
   .form-actions {
     display: flex;
     gap: 16px;
     justify-content: flex-end;
-    padding-top: 24px;
+    padding: 24px;
+    border-top: 1px solid #404040;
+    
+    .cancel-button {
+      background-color: #6b7280;
+      color: #ffffff;
+      border: 1px solid #9ca3af;
+      
+      &:hover {
+        background-color: #9ca3af;
+      }
+    }
+    
+    .submit-button {
+      background-color: #3b82f6 !important;
+      color: #ffffff !important;
+      
+      &:hover:not(:disabled) {
+        background-color: #2563eb !important;
+      }
+      
+      &:disabled {
+        background-color: #6b7280 !important;
+        cursor: not-allowed;
+      }
+    }
   }
-
+  
   .spinning {
     animation: spin 1s linear infinite;
     margin-right: 8px;
   }
-
+  
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
-
+  
+  .image-upload-section {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .image-upload-label {
+    font-size: 14px;
+    color: #e5e7eb;
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+  
+  .image-upload-area {
+    border: 2px dashed #6b7280;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    background-color: #374151;
+    min-height: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      border-color: #3b82f6;
+      background-color: #1f2937;
+    }
+  }
+  
+  .image-preview {
+    position: relative;
+    margin-bottom: 16px;
+  }
+  
+  .preview-image {
+    max-width: 120px;
+    max-height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    background-color: #2d2d2d;
+    border: 1px solid #4b5563;
+    padding: 4px;
+  }
+  
+  .remove-image {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #ef4444 !important;
+    color: #ffffff;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+    
+    &:hover {
+      background-color: #dc2626 !important;
+    }
+  }
+  
+  .upload-button {
+    margin-bottom: 12px;
+    border-color: #3b82f6 !important;
+    color: #3b82f6 !important;
+    background-color: transparent;
+    
+    &:hover:not(:disabled) {
+      background-color: #3b82f6 !important;
+      color: #ffffff !important;
+    }
+    
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+  
+  .upload-hint {
+    font-size: 12px;
+    color: #9ca3af;
+    margin: 0;
+  }
+  
+  .add-spec-button,
+  .remove-spec-button {
+    margin-top: 8px;
+  }
+  
+  // Material Design overrides for dark theme
+  ::ng-deep {
+    .mat-card-title {
+      color: #ffffff !important;
+      font-weight: 600;
+    }
+    
+    .mat-form-field {
+      .mat-form-field-label {
+        color: #e5e7eb !important;
+      }
+      
+      .mat-input-element {
+        color: #ffffff !important;
+      }
+      
+      .mat-form-field-outline {
+        color: #6b7280 !important;
+      }
+      
+      &.mat-focused {
+        .mat-form-field-outline-thick {
+          color: #3b82f6 !important;
+        }
+        
+        .mat-form-field-label {
+          color: #3b82f6 !important;
+        }
+      }
+    }
+    
+    .mat-select {
+      color: #ffffff !important;
+      
+      .mat-select-arrow {
+        color: #9ca3af !important;
+      }
+    }
+    
+    .mat-option {
+      background-color: #2d2d2d !important;
+      color: #ffffff !important;
+      
+      &:hover {
+        background-color: #374151 !important;
+      }
+      
+      &.mat-selected {
+        background-color: #3b82f6 !important;
+      }
+    }
+    
+    .mat-select-panel {
+      background-color: #2d2d2d !important;
+    }
+    
+    .mat-error {
+      color: #ef4444 !important;
+    }
+  }
+  
   @media (max-width: 768px) {
+    .product-form-container {
+      padding: 0;
+    }
+    
+    .product-form {
+      padding: 0 16px;
+    }
+    
     .form-row {
       flex-direction: column;
     }
@@ -86,5 +318,12 @@
       flex-direction: column;
       gap: 16px;
       align-items: stretch;
+      padding: 16px;
+    }
+    
+    .form-actions {
+      flex-direction: column;
+      padding: 16px;
     }
   }
+  

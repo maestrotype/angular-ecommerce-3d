@@ -29,10 +29,12 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
   
-  private apiUrl = 'http://localhost:3000/api/auth';
+//   private apiUrl = 'http://localhost:3002/api/auth';
+  private apiUrl = 'https://angular-ecommerce-backend.onrender.com/api/auth';
 
   constructor(private http: HttpClient) {
     this.checkExistingToken();
+    (window as any).authService = this;
   }
 
   login(credentials: LoginCredentials): Observable<AuthResponse> {
@@ -80,6 +82,22 @@ export class AuthService {
           throw error;
         })
       );
+  }
+
+  quickLogin(): void {
+    const mockResponse: AuthResponse = {
+      user: {
+        id: '1',
+        email: 'admin@example.com',
+        name: 'Admin User',
+        role: 'admin'
+      },
+      token: 'mock-jwt-token-' + Date.now(),
+      expiresIn: 3600
+    };
+    
+    this.setSession(mockResponse);
+    console.log('Quick login completed', 'Token:', mockResponse.token);
   }
 
   logout(): void {
