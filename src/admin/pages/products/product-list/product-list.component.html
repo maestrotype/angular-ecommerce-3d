@@ -45,16 +45,15 @@
         <td mat-cell *matCellDef="let product">
           <div class="image-container">
             <img
-              *ngIf="getImageUrl(product)"
+              *ngIf="hasValidImage(product)"
               [src]="getImageUrl(product)"
               [alt]="product.name"
               class="product-image"
               (error)="onImageError($event, product)"
             />
-            <div
-              class="no-image-placeholder"
-              [style.display]="getImageUrl(product) ? 'none' : 'flex'"
-            >
+            <div 
+              *ngIf="!hasValidImage(product)"
+              class="no-image-placeholder">
               <mat-icon>image</mat-icon>
               <span>No Image</span>
             </div>
