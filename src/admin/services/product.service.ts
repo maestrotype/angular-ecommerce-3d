@@ -133,18 +133,9 @@ export class ProductService {
   uploadImage(file: File): Observable<{ url: string }> {
     const formData = new FormData();
     formData.append("image", file);
-
-    // Try primary API first
-    return this.http
-      .post<{ url: string }>(`${this.PRIMARY_API}/products/upload`, formData)
-      .pipe(
-        catchError(() => {
-          // Fallback to secondary API
-          return this.http.post<{ url: string }>(
-            `${this.FALLBACK_API}/products/upload`,
-            formData
-          );
-        })
-      );
+    return this.http.post<{ url: string }>(
+      `${this.PRIMARY_API}/products/upload`,
+      formData
+    );
   }
 }

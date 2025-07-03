@@ -9,6 +9,7 @@ import {
   Query,
   UseInterceptors,
   UploadedFile,
+  BadRequestException
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { ProductsService } from "./products.service";
@@ -55,27 +56,33 @@ export class ProductsController {
   }
 
   @Post("upload")
-  @UseInterceptors(
-    FileInterceptor("image", {
-      storage: diskStorage({
-        destination: "./uploads",
-        filename: (req, file, callback) => {
-          const uniqueSuffix =
-            Date.now() + "-" + Math.round(Math.random() * 1e9);
-          const ext = extname(file.originalname);
-          const filename = `${file.fieldname}-${uniqueSuffix}${ext}`;
-          callback(null, filename);
-        },
-      }),
-    })
-  )
+  @UseInterceptors(FileInterceptor('image', {
+    storage: diskStorage({
+      destination: './uploads',
+      filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, file.fieldname + '-' + uniqueSuffix + extname(file.originalname));
+      },
+    }),
+    fileFilter: (req, file, cb) => {
+      if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+        return cb(new BadRequestException('Only image files are allowed!'), false);
+      }
+      cb(null, true);
+    },
+    limits: {
+      fileSize: 5 * 1024 * 1024, // 5MB limit
+    },
+  }))
   uploadImage(@UploadedFile() file: Express.Multer.File) {
-    const baseUrl =
-      process.env.NODE_ENV === "production"
-        ? "https://angular-ecommerce-backend.onrender.com"
-        : "http://localhost:3002";
+    if (!file) {
+      throw new BadRequestException('No file uploaded');
+    }
+    
+    // Return the full URL for the uploaded file
+    const baseUrl = process.env.BASE_URL || 'http://localhost:3002';
     return {
-      url: `${baseUrl}/uploads/${file.filename}`,
+      url: `${baseUrl}/uploads/${file.filename}`
     };
   }
 }

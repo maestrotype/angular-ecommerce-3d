@@ -119,36 +119,46 @@ export class ProductListComponent implements OnInit {
     return "stock-high";
   }
 
+  hasValidImage(product: Product): boolean {
+    return !!(
+      product.imageUrl &&
+      product.imageUrl.trim() !== "" &&
+      !product.imageUrl.includes("placeholder")
+    );
+  }
+
   getImageUrl(product: Product): string {
-    // Сначала проверяем imageUrl
-    if (product.imageUrl && product.imageUrl.trim() !== "") {
+    // Return the imageUrl directly if it exists and is not a placeholder
+    if (
+      product.imageUrl &&
+      product.imageUrl.trim() !== "" &&
+      !product.imageUrl.includes("placeholder")
+    ) {
       return product.imageUrl;
     }
 
-    // Потом проверяем массив images
     if (product.images && product.images.length > 0) {
       const firstImage = product.images[0];
-      if (firstImage && firstImage.trim() !== "") {
+      if (
+        firstImage &&
+        firstImage.trim() !== "" &&
+        !firstImage.includes("placeholder")
+      ) {
         return firstImage;
       }
     }
 
-    // Если нет изображения, возвращаем null для обработки в шаблоне
-    return null;
+    // Return empty string if no valid image found
+    return "";
   }
 
   onImageError(event: any, product: Product): void {
-    console.log(
-      "Image error for product:",
-      product.name,
-      "URL:",
-      event.target.src
-    );
-
-    event.target.style.display = "none";
-    const sibling = event.target.nextElementSibling as HTMLElement | null;
-    if (sibling) {
-      sibling.style.display = "flex";
+    console.log('Image error for product:', product.name, 'URL:', event.target.src);
+    // Hide the broken image and show placeholder
+    event.target.style.display = 'none';
+    const placeholderDiv = event.target.parentElement.querySelector('.no-image-placeholder');
+    if (placeholderDiv) {
+      placeholderDiv.style.display = 'flex';
     }
   }
 }

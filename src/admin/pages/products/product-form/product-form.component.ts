@@ -73,7 +73,7 @@ export class ProductFormComponent implements OnInit {
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (!file) return;
-
+  
     // Validate file type
     if (!file.type.match(/image\/(png|jpg|jpeg)/)) {
       this.snackBar.open("Please select a PNG or JPG image", "Close", {
@@ -82,7 +82,7 @@ export class ProductFormComponent implements OnInit {
       });
       return;
     }
-
+  
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       this.snackBar.open("File size must be less than 5MB", "Close", {
@@ -91,42 +91,45 @@ export class ProductFormComponent implements OnInit {
       });
       return;
     }
-
+  
     this.isUploading = true;
-
-    // Create preview
+  
+    // Preview (optional, не используется как imageUrl!)
     const reader = new FileReader();
     reader.onload = (e) => {
       this.selectedImageUrl = e.target?.result as string;
     };
     reader.readAsDataURL(file);
-
-    // Upload file
+  
+    // Upload
     this.productService.uploadImage(file).subscribe({
       next: (response) => {
-        this.productForm.patchValue({
-          imageUrl: response.url,
-        });
+        if (response.url && response.url.startsWith("http")) {
+          this.productForm.patchValue({
+            imageUrl: response.url,
+          });
+          this.snackBar.open("Image uploaded successfully", "Close", {
+            duration: 3000,
+            panelClass: ["success-snackbar"],
+          });
+        } else {
+          this.snackBar.open("Invalid image URL received from server", "Close", {
+            duration: 3000,
+            panelClass: ["error-snackbar"],
+          });
+        }
         this.isUploading = false;
-        this.snackBar.open("Image uploaded successfully", "Close", {
-          duration: 3000,
-          panelClass: ["success-snackbar"],
-        });
       },
       error: (err) => {
         console.error("Error uploading image:", err);
-        // Use local preview as fallback
-        this.productForm.patchValue({
-          imageUrl: this.selectedImageUrl,
-        });
         this.isUploading = false;
-        this.snackBar.open("Using local image preview", "Close", {
+        this.snackBar.open("Failed to upload image", "Close", {
           duration: 3000,
-          panelClass: ["warning-snackbar"],
+          panelClass: ["error-snackbar"],
         });
       },
     });
-  }
+  }  
 
   removeImage(): void {
     this.selectedImageUrl = null;
@@ -186,6 +189,21 @@ export class ProductFormComponent implements OnInit {
       this.markFormGroupTouched(this.productForm);
       this.snackBar.open(
         "Please fill in all required fields correctly",
+        "Close",
+        {
+          duration: 3000,
+          panelClass: ["error-snackbar"],
+        }
+      );
+      return;
+    }
+
+    if (
+      !this.productForm.value.imageUrl ||
+      !this.productForm.value.imageUrl.startsWith("http")
+    ) {
+      this.snackBar.open(
+        "Please upload a valid image before submitting",
         "Close",
         {
           duration: 3000,
