@@ -55,7 +55,7 @@ npm run build
 npm run start:prod
 ```
 
-The server will start on `http://localhost:3000` with API routes prefixed with `/api`.
+The server will start on `http://localhost:3002` with API routes prefixed with `/api`.
 
 ## API Endpoints
 

@@ -1,67 +1,45 @@
-
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Product } from 'src/shared/models/product.model';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { MatTableDataSource } from "@angular/material/table";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSort } from "@angular/material/sort";
+import { MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { Router } from "@angular/router";
+import { Product } from "../../../models/product.model";
+import { ProductService } from "../../../services/product.service";
 
 @Component({
-  selector: 'app-product-list',
-  templateUrl: 'product-list.component.html',
-  styleUrl: 'product-list.component.scss',
+  selector: "app-product-list",
+  templateUrl: "./product-list.component.html",
+  styleUrls: ["./product-list.component.scss"],
 })
 export class ProductListComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'name', 'category', 'price', 'stock', 'actions'];
-  dataSource = new MatTableDataSource<Product>();
-  
+  displayedColumns: string[] = [
+    "id",
+    "image",
+    "name",
+    "category",
+    "price",
+    "stock",
+    "actions",
+  ];
+  dataSource = new MatTableDataSource<Product>([]);
+  isLoading = false;
+  error: string | null = null;
+  allProducts: Product[] = [];
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-
-  // Mock data - will be replaced with service calls
-  products: Product[] = [
-    {
-      id: 1,
-      name: 'Samsung Galaxy S23',
-      category: 'Smartphones',
-      price: 899.99,
-      stock: 25,
-      description: 'Latest Samsung flagship smartphone',
-      specifications: { brand: 'Samsung', model: 'Galaxy S23' },
-      imageUrl: '/placeholder.jpg'
-    },
-    {
-      id: 2,
-      name: 'iPhone 15 Pro',
-      category: 'Smartphones',
-      price: 1199.99,
-      stock: 5,
-      description: 'Apple iPhone 15 Pro',
-      specifications: { brand: 'Apple', model: 'iPhone 15 Pro' },
-      imageUrl: '/placeholder.jpg'
-    },
-    {
-      id: 3,
-      name: 'MacBook Air M2',
-      category: 'Laptops',
-      price: 1299.99,
-      stock: 0,
-      description: 'Apple MacBook Air with M2 chip',
-      specifications: { brand: 'Apple', model: 'MacBook Air M2' },
-      imageUrl: '/placeholder.jpg'
-    }
-  ];
 
   constructor(
     private router: Router,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private productService: ProductService
   ) {}
 
   ngOnInit(): void {
-    this.dataSource.data = this.products;
+    this.loadProducts();
   }
 
   ngAfterViewInit(): void {
@@ -69,40 +47,108 @@ export class ProductListComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  addProduct(): void {
-    this.router.navigate(['/admin/products/new']);
-  }
+  loadProducts(): void {
+    this.isLoading = true;
+    this.error = null;
 
-  editProduct(productId: number): void {
-    this.router.navigate(['/admin/products/edit', productId]);
-  }
-
-  deleteProduct(product: Product): void {
-    if (confirm(`Are you sure you want to delete "${product.name}"?`)) {
-      // TODO: Implement actual delete logic with service
-      const index = this.products.findIndex(p => p.id === product.id);
-      if (index > -1) {
-        this.products.splice(index, 1);
-        this.dataSource.data = [...this.products];
-        this.snackBar.open('Product deleted successfully', 'Close', {
-          duration: 3000
+    this.productService.getAllProducts().subscribe({
+      next: (products) => {
+        console.log("Products loaded:", products);
+        this.allProducts = products;
+        this.dataSource.data = products;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error("Error loading products:", err);
+        this.error = "Failed to load products. Please try again.";
+        this.isLoading = false;
+        this.snackBar.open("Error loading products", "Close", {
+          duration: 5000,
         });
-      }
-    }
+      },
+    });
   }
 
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+  filterByCategory(event: any): void {
+    const category = event.value;
+    if (category) {
+      this.dataSource.data = this.allProducts.filter(
+        (p) => p.category === category
+      );
+    } else {
+      this.dataSource.data = this.allProducts;
     }
   }
 
-  getStockClass(stock: number): string {
-    if (stock === 0) return 'stock-low';
-    if (stock < 10) return 'stock-medium';
-    return 'stock-high';
+  addProduct(): void {
+    this.router.navigate(["/admin/products/new"]);
+  }
+
+  editProduct(product: Product): void {
+    this.router.navigate(["/admin/products/edit", product.id]);
+  }
+
+  deleteProduct(product: Product): void {
+    if (confirm(`Are you sure you want to delete "${product.name}"?`)) {
+      this.productService.deleteProduct(product.id).subscribe({
+        next: () => {
+          this.snackBar.open("Product deleted successfully", "Close", {
+            duration: 3000,
+          });
+          this.loadProducts();
+        },
+        error: (err) => {
+          console.error("Error deleting product:", err);
+          this.snackBar.open("Error deleting product", "Close", {
+            duration: 5000,
+          });
+        },
+      });
+    }
+  }
+
+  getStockClass(stock: number | undefined): string {
+    if (!stock) return "stock-low";
+    if (stock < 10) return "stock-low";
+    if (stock < 50) return "stock-medium";
+    return "stock-high";
+  }
+
+  getImageUrl(product: Product): string {
+    // Сначала проверяем imageUrl
+    if (product.imageUrl && product.imageUrl.trim() !== "") {
+      return product.imageUrl;
+    }
+
+    // Потом проверяем массив images
+    if (product.images && product.images.length > 0) {
+      const firstImage = product.images[0];
+      if (firstImage && firstImage.trim() !== "") {
+        return firstImage;
+      }
+    }
+
+    // Если нет изображения, возвращаем null для обработки в шаблоне
+    return null;
+  }
+
+  onImageError(event: any, product: Product): void {
+    console.log(
+      "Image error for product:",
+      product.name,
+      "URL:",
+      event.target.src
+    );
+
+    event.target.style.display = "none";
+    const sibling = event.target.nextElementSibling as HTMLElement | null;
+    if (sibling) {
+      sibling.style.display = "flex";
+    }
   }
 }
