@@ -277,7 +277,7 @@ export class ProductFormComponent implements OnInit {
   }
 
   updateProduct(id: number, productData: ProductUpdateRequest): void {
-    this.productService.updateProduct(id, { ...productData, id }).subscribe({
+    this.productService.updateProduct(id, productData).subscribe({
       next: (product) => {
         console.log("Product updated:", product);
         this.isLoading = false;
