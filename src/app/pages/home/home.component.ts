@@ -16,8 +16,20 @@ export class HomeComponent implements OnInit {
 
   // Initializing data on component load
   ngOnInit() {
-    this.bestSellers = this.productService.getBestSellers();
-    this.specialOffer = this.productService.getSpecialOffers()[0];
+    this.productService.getBestSellers().subscribe({
+      next: (products) => this.bestSellers = products,
+      error: (err) => {
+        console.error('Error loading best sellers:', err);
+        alert('Error loading best sellers.');
+      }
+    });
+    this.productService.getSpecialOffers().subscribe({
+      next: (products) => this.specialOffer = products[0],
+      error: (err) => {
+        console.error('Error loading special offers:', err);
+        alert('Error loading special offers.');
+      }
+    });
   }
 
   scrollToSection(sectionId: string): void {

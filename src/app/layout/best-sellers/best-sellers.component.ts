@@ -17,7 +17,13 @@ export class BestSellersComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.bestSellers = this.productService.getBestSellers();
+        this.productService.getBestSellers().subscribe({
+            next: (products) => this.bestSellers = products,
+            error: (err) => {
+              console.error('Error loading best sellers:', err);
+              alert('Error loading best sellers.');
+            }
+          });
     }
 
     quickView(product: Product): void {
