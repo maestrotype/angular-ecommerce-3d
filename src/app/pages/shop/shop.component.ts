@@ -35,9 +35,11 @@ export class ShopComponent implements OnInit {
     this.categories = this.categoryService.getCategories();
 
     this.productService.getProducts().subscribe({
-      next: (products) => this.products = products,
-      error: (err) => { console.log(err);
-       }
+      next: (products) => {
+        this.products = products;
+        this.filterProducts();
+      },
+      error: (err) => { console.log(err); }
     });
     
     this.route.queryParams.subscribe(params => {
