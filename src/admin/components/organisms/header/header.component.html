@@ -13,6 +13,9 @@
     <span class="spacer"></span>
     
     <div class="header-actions">
+      <button mat-icon-button [routerLink]="'/home'" matTooltip="Go to storefront">
+        <mat-icon>storefront</mat-icon>
+      </button>
       <button mat-icon-button [matMenuTriggerFor]="notificationMenu">
         <mat-icon [matBadge]="notificationCount" matBadgeColor="warn">notifications</mat-icon>
       </button>
