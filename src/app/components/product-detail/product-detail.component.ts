@@ -23,23 +23,34 @@ export class ProductDetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      const productId = +params['id'];
-      this.loadProduct(productId);
-    });
-  }
-
-  private loadProduct(id: number): void {
-    // В реальном приложении здесь был бы HTTP запрос
-    this.product = this.productService.getProductById(id);
-    console.log("product", this.product);
-    
-    this.loading = false;
-    
-    if (!this.product) {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    if (id) {
+      this.productService.getProductById(id).subscribe({
+        next: (product) => {
+          this.product = product;
+          this.loading = false;
+        },
+        error: () => {
+          this.loading = false;
+          this.router.navigate(['/shop']);
+        }
+      });
+    } else {
       this.router.navigate(['/shop']);
     }
   }
+
+  // private loadProduct(id: number): void {
+  //   // В реальном приложении здесь был бы HTTP запрос
+  //   this.product = this.productService.getProductById(id);
+  //   console.log("product", this.product);
+    
+  //   this.loading = false;
+    
+  //   if (!this.product) {
+  //     this.router.navigate(['/shop']);
+  //   }
+  // }
 
   onImageSelected(index: number): void {
     this.selectedImageIndex = index;

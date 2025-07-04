@@ -33,7 +33,13 @@ export class ShopComponent implements OnInit {
 
   ngOnInit(): void {
     this.categories = this.categoryService.getCategories();
-    this.products = this.productService.getProducts();
+
+    this.productService.getProducts().subscribe({
+      next: (products) => this.products = products,
+      error: (err) => { console.log(err);
+       }
+    });
+    
     this.route.queryParams.subscribe(params => {
       if (params['search']) {
         this.searchTerm = params['search'];
@@ -123,6 +129,5 @@ export class ShopComponent implements OnInit {
 
   quickView(product: Product): void {
     console.log('Quick view:', product);
-    // Здесь будет логика быстрого просмотра
   }
 }

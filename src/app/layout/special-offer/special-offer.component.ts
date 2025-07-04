@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Product } from 'src/app/core/models';
+import { ProductService } from 'src/app/core/services/product.service';
 
 @Component({
     selector: 'app-special-offer',
@@ -7,10 +9,18 @@ import { Router } from '@angular/router';
     styleUrls: ['./special-offer.component.scss']
 })
 export class SpecialOfferComponent implements OnInit {
+    specialOffers: Product[] = [];
+    constructor(private router: Router, private productService: ProductService) { }
 
-    constructor(private router: Router) { }
-
-    ngOnInit(): void { }
+    ngOnInit(): void { 
+        this.productService.getSpecialOffers().subscribe({
+            next: (products) => this.specialOffers = products,
+            error: (err) => {
+              console.error('Error loading special offers:', err);
+              alert('Error loading special offers.');
+            }
+          });
+    }
 
     onShopNow(): void {
         this.router.navigate(['/shop']).then(() => {

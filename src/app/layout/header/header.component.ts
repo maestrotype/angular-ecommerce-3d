@@ -60,7 +60,15 @@ export class HeaderComponent {
 
   onSearch() {
     if (this.searchTerm.trim()) {
-      this.searchResults = this.productService.searchProducts(this.searchTerm);
+      this.productService.searchProducts(this.searchTerm).subscribe({
+        next: (results) => {
+          this.searchResults = results;
+        },
+        error: (err) => {
+          console.error('Ошибка поиска товаров:', err);
+          this.searchResults = [];
+        }
+      });
     } else {
       this.searchResults = [];
     }

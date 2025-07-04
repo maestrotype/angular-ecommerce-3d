@@ -17,10 +17,11 @@ import { CreateProductDto } from "./dto/create-product.dto";
 import { UpdateProductDto } from "./dto/update-product.dto";
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import { storage } from '../config/multer-cloudinary.config';
 
 @Controller("products")
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(private readonly productsService: ProductsService) { }
 
   @Post()
   create(@Body() createProductDto: CreateProductDto) {
@@ -55,34 +56,12 @@ export class ProductsController {
     return this.productsService.remove(+id);
   }
 
-  @Post("upload")
-  @UseInterceptors(FileInterceptor('image', {
-    storage: diskStorage({
-      destination: './uploads',
-      filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.fieldname + '-' + uniqueSuffix + extname(file.originalname));
-      },
-    }),
-    fileFilter: (req, file, cb) => {
-      if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
-        return cb(new BadRequestException('Only image files are allowed!'), false);
-      }
-      cb(null, true);
-    },
-    limits: {
-      fileSize: 5 * 1024 * 1024, // 5MB limit
-    },
-  }))
-  uploadImage(@UploadedFile() file: Express.Multer.File) {
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('image', { storage }))
+  async uploadImage(@UploadedFile() file: Express.Multer.File) {
     if (!file) {
       throw new BadRequestException('No file uploaded');
     }
-    
-    // Return the full URL for the uploaded file
-    const baseUrl = process.env.BASE_URL || 'http://localhost:3002';
-    return {
-      url: `${baseUrl}/uploads/${file.filename}`
-    };
+    return { url: file.path };
   }
 }
