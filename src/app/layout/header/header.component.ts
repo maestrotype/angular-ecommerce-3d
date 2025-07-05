@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { CartService } from '../../core/services/cart.service';
 import { ProductService } from '../../core/services/product.service';
-import { Product } from '../../core/models/Product';
+import { Product } from 'src/shared/models/product.model';
 import { ModalService } from '../../core/services/modal.service';
 
 @Component({

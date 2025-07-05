@@ -1,7 +1,7 @@
 // Importing required dependencies and interfaces
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../core/services/product.service';
-import { Product } from '../../core/models';
+import { Product } from 'src/shared/models/product.model';
 
 @Component({
   selector: 'app-home',

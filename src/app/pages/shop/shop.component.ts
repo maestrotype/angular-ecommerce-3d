@@ -1,10 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Product } from '../../core/models/Product';
+import { Product } from 'src/shared/models/product.model';
 import { Category } from '../../core/models/Category';
 import { ProductService } from '../../core/services/product.service';
 import { CategoryService } from '../../core/services/category.service';
 import { CartService } from '../../core/services/cart.service';
+import { CartItem } from 'src/shared/models/cart-item.model';
 
 @Component({
   selector: 'app-shop',
@@ -105,28 +106,28 @@ export class ShopComponent implements OnInit {
   }
 
   addToCart(product: Product): void {
-    const cartItem = {
-      id: this.product.id,
-      name: this.product.name,
-      price: this.getDiscountedPrice(),
-      image: this.product.imageUrl,
-      originalPrice: this.product.discount ? this.product.price : undefined,
-      discount: this.product.discount
+    const cartItem: Omit<CartItem, 'quantity'> = {
+      productId: product.id,
+      name: product.name,
+      price: this.getDiscountedPrice(product),
+      imageUrl: product.imageUrl,
+      discount: product.discount,
+      features: product.features,
+      specifications: product.specifications,
     };
-
+  
     for (let i = 0; i < this.quantity; i++) {
       this.cartService.addToCart(cartItem);
     }
-
-    // Show success message (you can integrate with a toast service)
-    alert(`Added ${this.quantity} ${this.product.name} to cart!`);
+  
+    alert(`Added ${this.quantity} ${product.name} to cart!`);
   }
 
-  getDiscountedPrice(): number {
-    if (this.product && this.product.discount) {
-      return this.product.price * (1 - this.product.discount / 100);
+  getDiscountedPrice(product: Product): number {
+    if (product && product.discount) {
+      return product.price * (1 - product.discount / 100);
     }
-    return this.product?.price || 0;
+    return product?.price || 0;
   }
 
   quickView(product: Product): void {

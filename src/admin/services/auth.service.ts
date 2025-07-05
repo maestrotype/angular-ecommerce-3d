@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
+import { environment } from 'src/environments/environment.prod';
 
 export interface User {
   id: string;
@@ -30,7 +31,7 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
   
 //   private apiUrl = 'http://localhost:3002/api/auth';
-  private apiUrl = 'https://angular-ecommerce-backend.onrender.com/api/auth';
+  private apiUrl = environment.apiUrl + 'auth';
 
   constructor(private http: HttpClient) {
     this.checkExistingToken();
