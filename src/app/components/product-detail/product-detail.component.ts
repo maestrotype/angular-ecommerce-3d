@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../core/services/product.service';
-import { Product } from '../../core/models/Product';
 import { ModalService } from '../../core/services/modal.service';
+import { Product } from 'src/shared/models/product.model';
+import { CartService } from 'src/app/core/services/cart.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -19,6 +20,7 @@ export class ProductDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private productService: ProductService,
+    private cartService: CartService,
     private modalService: ModalService
   ) { }
 
@@ -39,18 +41,6 @@ export class ProductDetailComponent implements OnInit {
       this.router.navigate(['/shop']);
     }
   }
-
-  // private loadProduct(id: number): void {
-  //   // В реальном приложении здесь был бы HTTP запрос
-  //   this.product = this.productService.getProductById(id);
-  //   console.log("product", this.product);
-    
-  //   this.loading = false;
-    
-  //   if (!this.product) {
-  //     this.router.navigate(['/shop']);
-  //   }
-  // }
 
   onImageSelected(index: number): void {
     this.selectedImageIndex = index;
@@ -81,8 +71,14 @@ export class ProductDetailComponent implements OnInit {
 
   onAddToCart(): void {
     if (this.product) {
-      this.productService.addToCart(this.product);
-      // Открываем модальное окно корзины после добавления товара
+      const cartItem = {
+        productId: this.product.id,
+        name: this.product.name,
+        price: this.product.price,
+        imageUrl: this.product.imageUrl,
+        discount: this.product.discount
+      };
+      this.cartService.addToCart(cartItem);
       this.modalService.openModal({
         id: 'cart-modal',
         type: 'cart',

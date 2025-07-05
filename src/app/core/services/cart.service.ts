@@ -1,16 +1,12 @@
+
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-export interface CartItem {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-  image: string;
-  originalPrice?: number;
-  discount?: number;
-}
+import { HttpClient } from '@angular/common/http';
+import { Order } from 'src/shared/models/order.model';
+import { CreateOrderRequest } from 'src/shared/models/create-order-request.model';
+import { CartItem } from 'src/shared/models/cart-item.model';
+import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
@@ -18,15 +14,16 @@ export interface CartItem {
 export class CartService {
   private cartItemsSubject = new BehaviorSubject<CartItem[]>([]);
   public cartItems$ = this.cartItemsSubject.asObservable();
+  private apiUrl = environment.apiUrl + '/orders';
 
-  constructor() {
+  constructor(private http: HttpClient) {
     // Load cart from localStorage on service initialization
     this.loadCartFromStorage();
   }
 
   addToCart(item: Omit<CartItem, 'quantity'>): void {
     const currentItems = this.cartItemsSubject.value;
-    const existingItem = currentItems.find(cartItem => cartItem.id === item.id);
+    const existingItem = currentItems.find(cartItem => cartItem.productId === item.productId);
     
     if (existingItem) {
       existingItem.quantity += 1;
@@ -39,13 +36,13 @@ export class CartService {
 
   removeFromCart(itemId: number): void {
     const currentItems = this.cartItemsSubject.value;
-    const updatedItems = currentItems.filter(item => item.id !== itemId);
+    const updatedItems = currentItems.filter(item => item.productId !== itemId);
     this.updateCart(updatedItems);
   }
 
   updateQuantity(itemId: number, quantity: number): void {
     const currentItems = this.cartItemsSubject.value;
-    const item = currentItems.find(cartItem => cartItem.id === itemId);
+    const item = currentItems.find(cartItem => cartItem.productId === itemId);
     
     if (item) {
       if (quantity <= 0) {
@@ -75,6 +72,10 @@ export class CartService {
 
   clearCart(): void {
     this.updateCart([]);
+  }
+
+  createOrder(orderData: CreateOrderRequest): Observable<Order> {
+    return this.http.post<Order>(this.apiUrl, orderData);
   }
 
   private updateCart(items: CartItem[]): void {

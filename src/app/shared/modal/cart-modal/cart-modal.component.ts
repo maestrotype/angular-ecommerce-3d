@@ -1,8 +1,9 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ModalConfig } from '../../../core/services/modal.service';
-import { CartService, CartItem } from '../../../core/services/cart.service';
+import { CartService } from '../../../core/services/cart.service';
 import { ModalService } from '../../../core/services/modal.service';
+import { CartItem } from 'src/shared/models/cart-item.model';
 
 @Component({
   selector: 'app-cart-modal',
@@ -38,34 +39,20 @@ export class CartModalComponent {
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
-// Заглушка для корзины
-//   cartItems = [
-//     {
-//       id: 1,
-//       name: 'Premium Wireless Headphones',
-//       price: 299.99,
-//       quantity: 1,
-//       image: '/assets/images/bag2/img1.png'
-//     }
-//   ];
-
-//   get totalPrice(): number {
-//     return this.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-//   }
 
   onClose(): void {
     this.close.emit();
   }
 
   updateQuantity(itemId: number, change: number): void {
-    const item = this.cartItems.find(i => i.id === itemId);
+    const item = this.cartItems.find(i => i.productId === itemId);
     if (item) {
       item.quantity = Math.max(1, item.quantity + change);
     }
   }
 
   removeItem(itemId: number): void {
-    this.cartItems = this.cartItems.filter(item => item.id !== itemId);
+    this.cartService.removeFromCart(itemId);
   }
 
   checkout(): void {

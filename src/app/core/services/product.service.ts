@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, of } from 'rxjs';
-import { Product } from '../models';
+import { Product } from 'src/shared/models/product.model';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -31,18 +32,5 @@ export class ProductService {
 
   searchProducts(searchTerm: string): Observable<Product[]> {
     return this.http.get<Product[]>(`${this.API_URL}/products?search=${encodeURIComponent(searchTerm)}`);
-  }
-
-  addToCart(product: Product) {
-    const currentCart = this.cartSubject.value;
-    this.cartSubject.next([...currentCart, product]);
-  }
-
-  getCart(): Product[] {
-    return this.cartSubject.value;
-  }
-
-  clearCart() {
-    this.cartSubject.next([]);
   }
 }
