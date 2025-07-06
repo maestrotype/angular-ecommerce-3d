@@ -4,6 +4,7 @@ import { ModalConfig } from '../../../core/services/modal.service';
 import { CartService } from '../../../core/services/cart.service';
 import { ModalService } from '../../../core/services/modal.service';
 import { CartItem } from 'src/shared/models/cart-item.model';
+import { CreateOrderRequest } from 'src/shared/models/create-order-request.model';
 
 @Component({
   selector: 'app-cart-modal',
@@ -20,7 +21,7 @@ export class CartModalComponent {
   constructor(
     private cartService: CartService,
     private modalService: ModalService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.subscriptions.add(
@@ -56,8 +57,27 @@ export class CartModalComponent {
   }
 
   checkout(): void {
-    // Order logic
-    console.log('Checkout:', this.cartItems);
-    this.onClose();
+    const orderData: CreateOrderRequest = {
+      totalAmount: this.totalPrice,
+      customerName: 'test',
+      customerEmail: 'test@test.com',
+      items: this.cartItems.map(item => ({
+        productId: item.productId,
+        name: item.name,
+        price: Number(item.price),
+        quantity: item.quantity,
+        imageUrl: item.imageUrl
+      }))
+    };
+    this.cartService.createOrder(orderData).subscribe({
+      next: (order) => {
+        alert('Order created successfully');
+        this.cartService.clearCart();
+        this.onClose();
+      },
+      error: (err) => {
+        alert('Error creating order');
+      }
+    });
   }
 }

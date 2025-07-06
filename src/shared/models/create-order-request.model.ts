@@ -1,8 +1,16 @@
 import { CartItem } from './cart-item.model';
+import { OrderItem } from './order-item.model';
 
 export interface CreateOrderRequest {
-  items: CartItem[];
-  totalPrice: number;
-  userId?: number;
-  // + any fields that are needed to create an order (e.g. address, contacts)
-}
+    customerName: string;
+    customerEmail: string;
+    items: {
+      productId: number;
+      name: string;
+      price: number;
+      quantity: number;
+      imageUrl: string;
+    }[];
+    totalAmount: number; // <-- only this, not totalPrice
+    // ...other optional fields
+  }
