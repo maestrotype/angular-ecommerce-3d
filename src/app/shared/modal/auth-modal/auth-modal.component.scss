@@ -112,6 +112,12 @@
       }
     }
   }
+  .error-message {
+    color: #ff6b6b;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-size: 0.95rem;
+  }
   
   @media (max-width: 768px) {
     .auth-modal {

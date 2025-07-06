@@ -45,9 +45,10 @@
           />
         </div>
   
-        <button type="submit" class="auth-submit-btn">
-          Login
+        <button type="submit" class="auth-submit-btn" [disabled]="loading">
+          {{ loading ? 'Вход...' : 'Login' }}
         </button>
+        <div *ngIf="error" class="error-message">{{ error }}</div>
   
         <div class="auth-links">
           <a href="#" class="forgot-password-link">Forgot password?</a>
@@ -104,9 +105,10 @@
           />
         </div>
   
-        <button type="submit" class="auth-submit-btn">
-          Register
+        <button type="submit" class="auth-submit-btn" [disabled]="loading">
+          {{ loading ? 'Регистрация...' : 'Register' }}
         </button>
+        <div *ngIf="error" class="error-message">{{ error }}</div>
       </form>
     </div>
   </div>
