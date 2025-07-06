@@ -7,6 +7,7 @@ import * as bcrypt from 'bcryptjs';
 import { User, UserRole } from './entities/user.entity';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -72,4 +73,17 @@ export class AuthService {
 
     return await this.userRepository.save(adminUser);
   }
+
+  async findAll(): Promise<User[]> {
+    return await this.userRepository.find();
+  }
+
+  async updateUser(id: number, dto: UpdateUserDto): Promise<User> {
+    await this.userRepository.update(id, dto);
+    return await this.findById(id);
+  }
+
+  async removeUser(id: number): Promise<void> {
+    await this.userRepository.delete(id);
+  }     
 }
