@@ -30,7 +30,7 @@ export class Order {
     name: string;
     price: number;
     quantity: number;
-    image: string;
+    imageUrl: string;
   }[];
 
   @Column('decimal', { precision: 10, scale: 2 })
