@@ -1,7 +1,7 @@
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
@@ -34,7 +34,7 @@ import { ProductFormComponent } from './pages/products/product-form/product-form
 import { CategoryListComponent } from './pages/categories/category-list/category-list.component';
 import { OrderListComponent } from './pages/orders/order-list/order-list.component';
 import { UserListComponent } from './pages/users/user-list/user-list.component';
-
+import { UserEditDialogComponent } from './pages/users/user-edit-dialog/user-edit-dialog.component';
 // Shared Components
 import { DataTableComponent } from './components/molecules/data-table/data-table.component';
 import { FormFieldComponent } from './components/atoms/form-field/form-field.component';
@@ -52,6 +52,7 @@ import { ActionButtonComponent } from './components/atoms/action-button/action-b
     CategoryListComponent,
     OrderListComponent,
     UserListComponent,
+    UserEditDialogComponent,
     DataTableComponent,
     FormFieldComponent,
     ActionButtonComponent
@@ -59,6 +60,7 @@ import { ActionButtonComponent } from './components/atoms/action-button/action-b
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     AdminRoutingModule,
     // Angular Material Modules
     MatToolbarModule,

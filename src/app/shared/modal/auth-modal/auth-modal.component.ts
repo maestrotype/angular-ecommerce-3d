@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { ModalConfig } from '../../../core/services/modal.service';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { ModalConfig } from '../../../core/services/modal.service';
+
 
 @Component({
   selector: 'app-auth-modal',

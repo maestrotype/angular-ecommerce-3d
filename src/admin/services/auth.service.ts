@@ -3,26 +3,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
+import { User, AuthResponse, LoginCredentials, RegisterCredentials } from '../../shared/models/user.model';
 import { environment } from 'src/environments/environment.prod';
-
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-  role: 'admin' | 'user';
-}
-
-export interface LoginCredentials {
-  email: string;
-  password: string;
-}
-
-export interface AuthResponse {
-  user: User;
-  token: string;
-  expiresIn: number;
-}
-
 @Injectable({
   providedIn: 'root'
 })
@@ -30,7 +12,6 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
   
-//   private apiUrl = 'http://localhost:3002/api/auth';
   private apiUrl = environment.apiUrl + 'auth';
 
   constructor(private http: HttpClient) {
@@ -43,10 +24,11 @@ export class AuthService {
      if (credentials.email === 'admin@example.com' && credentials.password === 'admin123') {
         const mockResponse: AuthResponse = {
           user: {
-            id: '1',
+            id: 1,
             email: credentials.email,
             name: 'Admin User',
-            role: 'admin'
+            role: 'admin',
+            status: 'active'
           },
           token: 'mock-jwt-token-' + Date.now(),
           expiresIn: 3600
@@ -68,10 +50,11 @@ export class AuthService {
           if (credentials.email === 'admin@example.com' && credentials.password === 'admin123') {
             const mockResponse: AuthResponse = {
               user: {
-                id: '1',
+                id: 1,
                 email: credentials.email,
                 name: 'Admin User',
-                role: 'admin'
+                role: 'admin',
+                status: 'active'
               },
               token: 'mock-jwt-token-' + Date.now(),
               expiresIn: 3600
@@ -85,10 +68,25 @@ export class AuthService {
       );
   }
 
+  register(name: string, email: string, password: string): Observable<AuthResponse> {
+    const credentials: RegisterCredentials = { name, email, password };
+    
+    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, credentials)
+      .pipe(
+        tap(response => {
+          this.setSession(response);
+        }),
+        catchError(error => {
+          console.warn('API registration failed:', error);
+          throw error;
+        })
+      );
+  }
+
   quickLogin(): void {
     const mockResponse: AuthResponse = {
       user: {
-        id: '1',
+        id: 1,
         email: 'admin@example.com',
         name: 'Admin User',
         role: 'admin'

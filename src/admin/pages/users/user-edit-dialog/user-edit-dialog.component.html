@@ -1,0 +1,58 @@
+<h2 mat-dialog-title>Edit User</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="userForm" class="user-form">
+    
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" placeholder="Enter user name">
+      <mat-error *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched">
+        {{ getFieldError('name') }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" placeholder="Enter email address">
+      <mat-error *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched">
+        {{ getFieldError('email') }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Phone</mat-label>
+      <input matInput formControlName="phone" placeholder="Enter phone number">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Role</mat-label>
+      <mat-select formControlName="role">
+        <mat-option value="user">User</mat-option>
+        <mat-option value="admin">Admin</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option value="active">Active</mat-option>
+        <mat-option value="blocked">Blocked</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" [disabled]="isLoading">
+    Cancel
+  </button>
+  
+  <button mat-raised-button 
+          color="primary" 
+          (click)="onSubmit()" 
+          [disabled]="userForm.invalid || isLoading">
+    <mat-icon *ngIf="isLoading" class="spinning">refresh</mat-icon>
+    {{ isLoading ? 'Saving...' : 'Save Changes' }}
+  </button>
+</mat-dialog-actions>

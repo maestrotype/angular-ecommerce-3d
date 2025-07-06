@@ -1,0 +1,31 @@
+.user-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 400px;
+    padding: 16px 0;
+  }
+  
+  .full-width {
+    width: 100%;
+  }
+  
+  .spinning {
+    animation: spin 1s linear infinite;
+    margin-right: 8px;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  mat-dialog-content {
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  
+  mat-dialog-actions {
+    padding: 16px 0;
+    gap: 8px;
+  }
