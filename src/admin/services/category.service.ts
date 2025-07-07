@@ -1,0 +1,44 @@
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Observable, throwError } from "rxjs";
+import { catchError } from "rxjs/operators";
+import { Category } from "../models/category.model";
+import { environment } from 'src/environments/environment.prod';
+
+@Injectable({
+  providedIn: "root",
+})
+export class CategoryService {
+  private readonly API_URL = environment.apiUrl + "/categories";
+
+  constructor(private http: HttpClient) {}
+
+  getAllCategories(): Observable<Category[]> {
+    return this.http.get<Category[]>(this.API_URL)
+      .pipe(catchError(this.handleError));
+  }
+
+  getCategoryById(id: number): Observable<Category> {
+    return this.http.get<Category>(`${this.API_URL}/${id}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  createCategory(category: Partial<Category>): Observable<Category> {
+    return this.http.post<Category>(this.API_URL, category)
+      .pipe(catchError(this.handleError));
+  }
+
+  updateCategory(id: number, category: Partial<Category>): Observable<Category> {
+    return this.http.patch<Category>(`${this.API_URL}/${id}`, category)
+      .pipe(catchError(this.handleError));
+  }
+
+  deleteCategory(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/${id}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  private handleError(error: any) {
+    return throwError(() => error);
+  }
+} 
