@@ -1,4 +1,85 @@
-<div class="category-container">
-  <h1>Category Management</h1>
-  <p>Category management features coming soon...</p>
+<div class="category-list-container">
+  <div class="header-section">
+    <h1>Category Management</h1>
+    <button mat-raised-button color="primary" (click)="addCategory()">
+      <mat-icon>add</mat-icon>
+      Add Category
+    </button>
+  </div>
+
+  <div class="filter-section">
+    <mat-form-field appearance="outline">
+      <mat-label>Search categories</mat-label>
+      <input
+        matInput
+        (keyup)="applyFilter($event)"
+        placeholder="Search by name or description..."
+      />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
+
+  <div class="table-container" *ngIf="!isLoading">
+    <table mat-table [dataSource]="dataSource" matSort class="category-table">
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+        <td mat-cell *matCellDef="let category">{{ category.id }}</td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <td mat-cell *matCellDef="let category">{{ category.name }}</td>
+      </ng-container>
+
+      <!-- Description Column -->
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+        <td mat-cell *matCellDef="let category">{{ category.description }}</td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let category">
+          <button
+            mat-icon-button
+            color="primary"
+            (click)="editCategory(category)"
+            matTooltip="Edit"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="deleteCategory(category)"
+            matTooltip="Delete"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 20]"
+      showFirstLastButtons
+    ></mat-paginator>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Loading categories...</p>
+  </div>
+
+  <div *ngIf="error" class="error-container">
+    <mat-icon color="warn">error</mat-icon>
+    <p>{{ error }}</p>
+    <button mat-button color="primary" (click)="loadCategories()">Retry</button>
+  </div>
 </div>
