@@ -22,11 +22,9 @@
       <mat-label>Category</mat-label>
       <mat-select (selectionChange)="filterByCategory($event)">
         <mat-option value="">All Categories</mat-option>
-        <mat-option value="electronics">Electronics</mat-option>
+        <mat-option value="shoes">Shoes</mat-option>
+        <mat-option value="handbags">Handbags</mat-option>
         <mat-option value="clothing">Clothing</mat-option>
-        <mat-option value="books">Books</mat-option>
-        <mat-option value="home">Home & Garden</mat-option>
-        <mat-option value="sports">Sports & Outdoors</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
@@ -51,9 +49,7 @@
               class="product-image"
               (error)="onImageError($event, product)"
             />
-            <div 
-              *ngIf="!hasValidImage(product)"
-              class="no-image-placeholder">
+            <div *ngIf="!hasValidImage(product)" class="no-image-placeholder">
               <mat-icon>image</mat-icon>
               <span>No Image</span>
             </div>

@@ -32,11 +32,9 @@
           <mat-form-field appearance="outline" class="half-width">
             <mat-label>Category</mat-label>
             <mat-select formControlName="category">
-              <mat-option value="electronics">Electronics</mat-option>
+              <mat-option value="shoes">Shoes</mat-option>
+              <mat-option value="handbags">Handbags</mat-option>
               <mat-option value="clothing">Clothing</mat-option>
-              <mat-option value="books">Books</mat-option>
-              <mat-option value="home">Home & Garden</mat-option>
-              <mat-option value="sports">Sports & Outdoors</mat-option>
             </mat-select>
             <mat-error
               *ngIf="productForm.get('category')?.hasError('required')"
