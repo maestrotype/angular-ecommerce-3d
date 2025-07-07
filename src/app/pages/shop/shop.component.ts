@@ -1,11 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Product } from 'src/shared/models/product.model';
-import { Category } from '../../core/models/Category';
+
 import { ProductService } from '../../core/services/product.service';
 import { CategoryService } from '../../core/services/category.service';
 import { CartService } from '../../core/services/cart.service';
 import { CartItem } from 'src/shared/models/cart-item.model';
+import { Category } from 'src/shared/models/category.model';
 
 @Component({
   selector: 'app-shop',
