@@ -25,7 +25,7 @@ export class ProductService {
   }
 
   private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem("admin_token");
+    const token = localStorage.getItem("token");
     return new HttpHeaders({
       "Content-Type": "application/json",
       Authorization: token ? `Bearer ${token}` : "",
@@ -33,7 +33,7 @@ export class ProductService {
   }
 
   private getUploadHeaders(): HttpHeaders {
-    const token = localStorage.getItem("admin_token");
+    const token = localStorage.getItem("token");
     return new HttpHeaders({
       Authorization: token ? `Bearer ${token}` : "",
     });

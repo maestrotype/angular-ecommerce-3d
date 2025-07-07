@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
@@ -12,7 +11,7 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
   
-  private apiUrl = environment.apiUrl + 'auth';
+  private apiUrl = environment.apiUrl + '/auth';
 
   constructor(private http: HttpClient) {
     this.checkExistingToken();
@@ -20,49 +19,13 @@ export class AuthService {
   }
 
   login(credentials: LoginCredentials): Observable<AuthResponse> {
-     // Mock login for development - remove when backend is ready
-     if (credentials.email === 'admin@example.com' && credentials.password === 'admin123') {
-        const mockResponse: AuthResponse = {
-          user: {
-            id: 1,
-            email: credentials.email,
-            name: 'Admin User',
-            role: 'admin',
-            status: 'active'
-          },
-          token: 'mock-jwt-token-' + Date.now(),
-          expiresIn: 3600
-        };
-        
-        this.setSession(mockResponse);
-        return of(mockResponse);
-      }
-      
-      // Real API call - fallback to mock on error
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials)
       .pipe(
         tap(response => {
           this.setSession(response);
         }),
         catchError(error => {
-          console.warn('API login failed, using mock auth:', error);
-          // Fallback to mock login
-          if (credentials.email === 'admin@example.com' && credentials.password === 'admin123') {
-            const mockResponse: AuthResponse = {
-              user: {
-                id: 1,
-                email: credentials.email,
-                name: 'Admin User',
-                role: 'admin',
-                status: 'active'
-              },
-              token: 'mock-jwt-token-' + Date.now(),
-              expiresIn: 3600
-            };
-            
-            this.setSession(mockResponse);
-            return of(mockResponse);
-          }
+          console.warn('API login failed:', error);
           throw error;
         })
       );
@@ -70,7 +33,6 @@ export class AuthService {
 
   register(name: string, email: string, password: string): Observable<AuthResponse> {
     const credentials: RegisterCredentials = { name, email, password };
-    
     return this.http.post<AuthResponse>(`${this.apiUrl}/register`, credentials)
       .pipe(
         tap(response => {
@@ -83,37 +45,19 @@ export class AuthService {
       );
   }
 
-  quickLogin(): void {
-    const mockResponse: AuthResponse = {
-      user: {
-        id: 1,
-        email: 'admin@example.com',
-        name: 'Admin User',
-        role: 'admin'
-      },
-      token: 'mock-jwt-token-' + Date.now(),
-      expiresIn: 3600
-    };
-    
-    this.setSession(mockResponse);
-    console.log('Quick login completed', 'Token:', mockResponse.token);
-  }
-
   logout(): void {
-    localStorage.removeItem('admin_token');
-    localStorage.removeItem('admin_user');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     localStorage.removeItem('token_expiry');
     this.currentUserSubject.next(null);
   }
 
   isAuthenticated(): boolean {
-    const token = localStorage.getItem('admin_token');
+    const token = localStorage.getItem('token');
     const expiry = localStorage.getItem('token_expiry');
-    
     if (!token || !expiry) {
       return false;
     }
-    
     return new Date().getTime() < parseInt(expiry);
   }
 
@@ -127,22 +71,20 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    return localStorage.getItem('admin_token');
+    return localStorage.getItem('token');
   }
 
   private setSession(authResult: AuthResponse): void {
     const expiresAt = new Date().getTime() + (authResult.expiresIn * 1000);
-    
-    localStorage.setItem('admin_token', authResult.token);
-    localStorage.setItem('admin_user', JSON.stringify(authResult.user));
+    localStorage.setItem('token', authResult.token);
+    localStorage.setItem('user', JSON.stringify(authResult.user));
     localStorage.setItem('token_expiry', expiresAt.toString());
-    
     this.currentUserSubject.next(authResult.user);
   }
 
   private checkExistingToken(): void {
     if (this.isAuthenticated()) {
-      const userStr = localStorage.getItem('admin_user');
+      const userStr = localStorage.getItem('user');
       if (userStr) {
         const user = JSON.parse(userStr) as User;
         this.currentUserSubject.next(user);
