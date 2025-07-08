@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { AuthService } from "../../../services/auth.service";
+import { OrderService } from "../../../services/order.service";
 
 interface NavItem {
   label: string;
@@ -23,12 +24,29 @@ export class SidenavComponent {
       label: "Orders",
       route: "/admin/orders",
       icon: "shopping_cart",
-      badge: 5,
+      badge: 0,
     },
     { label: "Users", route: "/admin/users", icon: "people" },
   ];
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private orderService: OrderService
+  ) {}
+
+  ngOnInit(): void {
+    this.loadPendingOrdersCount();
+  }
+
+  loadPendingOrdersCount(): void {
+    this.orderService.getPendingOrdersCount().subscribe(count => {
+      const ordersNav = this.navItems.find(item => item.label === "Orders");
+      if (ordersNav) {
+        ordersNav.badge = count;
+      }
+    });
+  }
 
   logout(): void {
     this.authService.logout();

@@ -1,13 +1,19 @@
 <div class="dashboard-container">
   <h1>Admin Dashboard</h1>
-  <div class="stats-grid">
+  
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading dashboard data...</p>
+  </div>
+
+  <div class="stats-grid" *ngIf="!isLoading">
     <mat-card class="stat-card">
       <mat-card-content>
         <div class="stat-content">
           <mat-icon class="stat-icon products">inventory</mat-icon>
           <div class="stat-info">
             <h3>Products</h3>
-            <p class="stat-number">1,234</p>
+            <p class="stat-number">{{ formatNumber(stats.products) }}</p>
           </div>
         </div>
       </mat-card-content>
@@ -19,7 +25,7 @@
           <mat-icon class="stat-icon orders">shopping_cart</mat-icon>
           <div class="stat-info">
             <h3>Orders</h3>
-            <p class="stat-number">567</p>
+            <p class="stat-number">{{ formatNumber(stats.orders) }}</p>
           </div>
         </div>
       </mat-card-content>
@@ -31,7 +37,7 @@
           <mat-icon class="stat-icon users">people</mat-icon>
           <div class="stat-info">
             <h3>Users</h3>
-            <p class="stat-number">890</p>
+            <p class="stat-number">{{ formatNumber(stats.users) }}</p>
           </div>
         </div>
       </mat-card-content>
@@ -43,7 +49,7 @@
           <mat-icon class="stat-icon revenue">attach_money</mat-icon>
           <div class="stat-info">
             <h3>Revenue</h3>
-            <p class="stat-number">$45,678</p>
+            <p class="stat-number">{{ formatCurrency(stats.revenue) }}</p>
           </div>
         </div>
       </mat-card-content>

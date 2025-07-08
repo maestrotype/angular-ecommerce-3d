@@ -15,7 +15,7 @@ import { AdminGuard } from './guards/admin.guard';
 import { JwtStrategy } from './guards/jwt-auth.guard';
 
 @Controller('users')
-@UseGuards(JwtStrategy, AdminGuard)
+// @UseGuards(JwtStrategy, AdminGuard)
 export class UserController {
     constructor(private readonly authService: AuthService) { }
 
