@@ -1,8 +1,9 @@
+
 .admin-header {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .header-title {
@@ -28,6 +29,10 @@
 .notification-menu {
   width: 380px;
   max-width: 90vw;
+  background: #2d2d2d;
+  color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .notification-header {
@@ -35,22 +40,33 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px;
-  background-color: #f5f5f5;
+  background-color: #3d3d3d;
+  border-radius: 8px 8px 0 0;
   
   .notification-title {
     font-weight: 600;
     font-size: 16px;
+    color: white;
   }
   
   .mark-all-read {
     font-size: 12px;
-    color: #1976d2;
+    color: #4CAF50;
+    background: transparent;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    
+    &:hover {
+      background: rgba(76, 175, 80, 0.1);
+    }
   }
 }
 
 .notification-list {
   max-height: 400px;
   overflow-y: auto;
+  background: #2d2d2d;
 }
 
 .notification-item {
@@ -59,13 +75,18 @@
   min-height: auto;
   line-height: normal;
   white-space: normal;
+  background: transparent;
+  border: none;
+  color: white;
+  text-align: left;
   
   &.unread {
-    background-color: #e3f2fd;
+    background-color: rgba(33, 150, 243, 0.1);
+    border-left: 3px solid #2196F3;
   }
   
   &:hover {
-    background-color: rgba(0, 0, 0, 0.04);
+    background-color: rgba(255, 255, 255, 0.05);
   }
 }
 
@@ -84,6 +105,7 @@
     font-size: 20px;
     width: 20px;
     height: 20px;
+    color: #9E9E9E;
   }
 }
 
@@ -95,19 +117,19 @@
     font-weight: 600;
     font-size: 14px;
     margin-bottom: 4px;
-    color: #333;
+    color: white;
   }
   
   .notification-message {
     font-size: 12px;
-    color: #666;
+    color: #B0B0B0;
     line-height: 1.4;
     margin-bottom: 4px;
   }
   
   .notification-time {
     font-size: 11px;
-    color: #999;
+    color: #757575;
   }
 }
 
@@ -117,7 +139,7 @@
   .unread-dot {
     width: 8px;
     height: 8px;
-    background-color: #1976d2;
+    background-color: #2196F3;
     border-radius: 50%;
     margin-top: 4px;
   }
@@ -128,17 +150,20 @@
   flex-direction: column;
   align-items: center;
   padding: 32px 16px;
-  color: #999;
+  color: #9E9E9E;
+  background: #2d2d2d;
   
   mat-icon {
     font-size: 48px;
     width: 48px;
     height: 48px;
     margin-bottom: 8px;
+    color: #757575;
   }
   
   span {
     font-size: 14px;
+    color: #B0B0B0;
   }
 }
 

@@ -2,7 +2,7 @@
 import { Component, EventEmitter, Output, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, switchMap } from 'rxjs/operators';
 import { AuthService } from '../../../services/auth.service';
 import { NotificationService, Notification } from '../../../services/notification.service';
 
@@ -25,15 +25,30 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Подписываемся на уведомления
+    // Загружаем уведомления при инициализации
+    this.notificationService.loadNotifications()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(notifications => {
+        this.notifications = notifications.slice(0, 5);
+        this.notificationService.updateNotifications(notifications);
+      });
+
+    // Подписываемся на изменения уведомлений
     this.notificationService.notifications$
       .pipe(takeUntil(this.destroy$))
       .subscribe(notifications => {
-        this.notifications = notifications.slice(0, 5); // Показываем только последние 5
+        this.notifications = notifications.slice(0, 5);
       });
 
     // Подписываемся на количество непрочитанных
     this.notificationService.unreadCount$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(count => {
+        this.unreadCount = count;
+      });
+
+    // Получаем актуальное количество непрочитанных с сервера
+    this.notificationService.getUnreadCount()
       .pipe(takeUntil(this.destroy$))
       .subscribe(count => {
         this.unreadCount = count;
@@ -47,7 +62,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onNotificationClick(notification: Notification): void {
     if (notification.status === 'unread') {
-      this.notificationService.markAsRead(notification.id).subscribe();
+      this.notificationService.markAsRead(notification.id).pipe(
+        switchMap(() => this.notificationService.loadNotifications())
+      ).subscribe(notifications => {
+        this.notificationService.updateNotifications(notifications);
+      });
     }
 
     // Навигация в зависимости от типа уведомления
@@ -66,7 +85,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   markAllAsRead(): void {
-    this.notificationService.markAllAsRead().subscribe();
+    this.notificationService.markAllAsRead().pipe(
+      switchMap(() => this.notificationService.loadNotifications())
+    ).subscribe(notifications => {
+      this.notificationService.updateNotifications(notifications);
+    });
   }
 
   getNotificationIcon(type: string): string {
@@ -95,3 +118,4 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.router.navigate(['/admin/login']);
   }
 }
+
