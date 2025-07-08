@@ -13,13 +13,14 @@
     <span class="spacer"></span>
     
     <div class="header-actions">
-      <button mat-icon-button [routerLink]="'/home'" matTooltip="Go to storefront">
-        <mat-icon>storefront</mat-icon>
-      </button>
-      <button mat-icon-button [matMenuTriggerFor]="notificationMenu">
-        <mat-icon [matBadge]="notificationCount" matBadgeColor="warn">notifications</mat-icon>
+      <!-- Notifications -->
+      <button mat-icon-button [matMenuTriggerFor]="notificationMenu" class="notification-button">
+        <mat-icon [matBadge]="unreadCount > 0 ? unreadCount : null" matBadgeColor="warn" matBadgeSize="small">
+          notifications
+        </mat-icon>
       </button>
       
+      <!-- User Menu -->
       <button mat-icon-button [matMenuTriggerFor]="userMenu">
         <mat-icon>account_circle</mat-icon>
       </button>
@@ -27,15 +28,48 @@
   </mat-toolbar>
   
   <!-- Notification Menu -->
-  <mat-menu #notificationMenu="matMenu">
-    <button mat-menu-item>
-      <mat-icon>mail</mat-icon>
-      <span>New order received</span>
-    </button>
-    <button mat-menu-item>
-      <mat-icon>inventory</mat-icon>
-      <span>Low stock alert</span>
-    </button>
+  <mat-menu #notificationMenu="matMenu" class="notification-menu">
+    <div class="notification-header">
+      <span class="notification-title">Notifications</span>
+      <button mat-button class="mark-all-read" (click)="markAllAsRead()" *ngIf="unreadCount > 0">
+        Mark all as read
+      </button>
+    </div>
+    
+    <mat-divider></mat-divider>
+    
+    <div class="notification-list" *ngIf="notifications.length > 0; else noNotifications">
+      <button 
+        mat-menu-item 
+        class="notification-item"
+        [class.unread]="notification.status === 'unread'"
+        (click)="onNotificationClick(notification)"
+        *ngFor="let notification of notifications"
+      >
+        <div class="notification-content">
+          <div class="notification-icon">
+            <mat-icon [color]="getNotificationColor(notification.type)">
+              {{ getNotificationIcon(notification.type) }}
+            </mat-icon>
+          </div>
+          <div class="notification-text">
+            <div class="notification-title">{{ notification.title }}</div>
+            <div class="notification-message">{{ notification.message }}</div>
+            <div class="notification-time">{{ getRelativeTime(notification.createdAt) }}</div>
+          </div>
+          <div class="notification-status" *ngIf="notification.status === 'unread'">
+            <div class="unread-dot"></div>
+          </div>
+        </div>
+      </button>
+    </div>
+    
+    <ng-template #noNotifications>
+      <div class="no-notifications">
+        <mat-icon>notifications_none</mat-icon>
+        <span>No notifications</span>
+      </div>
+    </ng-template>
   </mat-menu>
   
   <!-- User Menu -->

@@ -40,6 +40,10 @@ import { FormFieldComponent } from './components/atoms/form-field/form-field.com
 import { ActionButtonComponent } from './components/atoms/action-button/action-button.component';
 import { CategoryFormComponent } from './pages/categories/category-form/category-form.component';
 
+// Services
+import { NotificationService } from './services/notification.service';
+import { DashboardService } from './services/dashboard.service';
+
 @NgModule({
   declarations: [
     AdminLayoutComponent,
@@ -85,6 +89,10 @@ import { CategoryFormComponent } from './pages/categories/category-form/category
     MatChipsModule,
     MatDividerModule,
     MatTooltipModule
+  ],
+  providers: [
+    NotificationService,
+    DashboardService
   ]
 })
 export class AdminModule { }

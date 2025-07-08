@@ -5,17 +5,26 @@ import { Repository } from 'typeorm';
 import { Order, OrderStatus } from './entities/order.entity';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { NotificationsService } from '../notifications/notifications.service';
 
 @Injectable()
 export class OrdersService {
   constructor(
     @InjectRepository(Order)
     private orderRepository: Repository<Order>,
+    private notificationsService: NotificationsService,
   ) {}
 
   async create(createOrderDto: CreateOrderDto): Promise<Order> {
     const order = this.orderRepository.create(createOrderDto);
-    return await this.orderRepository.save(order);
+    const savedOrder = await this.orderRepository.save(order);
+    
+    await this.notificationsService.createOrderNotification(
+      savedOrder.id,
+      savedOrder.customerName
+    );
+    
+    return savedOrder;
   }
 
   async findAll(): Promise<Order[]> {
@@ -34,8 +43,20 @@ export class OrdersService {
 
   async update(id: number, updateOrderDto: UpdateOrderDto): Promise<Order> {
     const order = await this.findOne(id);
+    const oldStatus = order.status;
     Object.assign(order, updateOrderDto);
-    return await this.orderRepository.save(order);
+    const updatedOrder = await this.orderRepository.save(order);
+    
+    if (oldStatus !== updateOrderDto.status && updateOrderDto.status) {
+      await this.notificationsService.create({
+        type: 'order_updated' as any,
+        title: 'Order Status Updated',
+        message: `Order #${id} status changed from ${oldStatus} to ${updateOrderDto.status}`,
+        data: { orderId: id, oldStatus, newStatus: updateOrderDto.status }
+      });
+    }
+    
+    return updatedOrder;
   }
 
   async getOrderStats() {
