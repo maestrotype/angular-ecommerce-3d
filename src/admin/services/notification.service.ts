@@ -1,6 +1,7 @@
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, interval, of } from 'rxjs';
+import { BehaviorSubject, Observable, interval, map } from 'rxjs';
 import { switchMap, catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment.prod';
 
@@ -27,73 +28,35 @@ export class NotificationService {
 
   constructor(private http: HttpClient) {
     this.startPolling();
+    this.loadNotifications();
   }
 
   private startPolling(): void {
-    // Поллинг каждые 30 секунд для получения новых уведомлений
-    interval(30000).pipe(
+    // Поллинг каждые 10 секунд для получения новых уведомлений
+    interval(10000).pipe(
       switchMap(() => this.loadNotifications()),
       catchError(error => {
         console.error('Error polling notifications:', error);
-        return of([]);
+        return [];
       })
     ).subscribe();
-
-    // Загружаем уведомления при инициализации
-    this.loadNotifications().subscribe();
   }
 
   loadNotifications(): Observable<Notification[]> {
     return this.http.get<Notification[]>(this.apiUrl).pipe(
       catchError(error => {
-        console.warn('API notifications failed, using mock data:', error);
-        return this.getMockNotifications();
+        console.error('Failed to load notifications:', error);
+        return [];
       })
     );
   }
 
-  private getMockNotifications(): Observable<Notification[]> {
-    const mockNotifications: Notification[] = [
-      {
-        id: 1,
-        type: 'order_created',
-        title: 'New order received',
-        message: 'Order #123 from John Doe has been received',
-        status: 'unread',
-        createdAt: new Date(),
-        data: { orderId: 123, customerName: 'John Doe' }
-      },
-      {
-        id: 2,
-        type: 'low_stock',
-        title: 'Low stock alert',
-        message: 'Product "Gaming Headset" is running low on stock (3 remaining)',
-        status: 'unread',
-        createdAt: new Date(Date.now() - 1000 * 60 * 30),
-        data: { productName: 'Gaming Headset', stock: 3 }
-      },
-      {
-        id: 3,
-        type: 'new_user',
-        title: 'New user registration',
-        message: 'Jane Smith (jane@example.com) has registered',
-        status: 'read',
-        createdAt: new Date(Date.now() - 1000 * 60 * 60),
-        data: { userName: 'Jane Smith', userEmail: 'jane@example.com' }
-      }
-    ];
-
-    this.notificationsSubject.next(mockNotifications);
-    this.unreadCountSubject.next(mockNotifications.filter(n => n.status === 'unread').length);
-    
-    return of(mockNotifications);
-  }
-
-  getUnreadCount(): Observable<{ count: number }> {
+  getUnreadCount(): Observable<number> {
     return this.http.get<{ count: number }>(`${this.apiUrl}/unread/count`).pipe(
-      catchError(() => {
-        const count = this.notificationsSubject.value.filter(n => n.status === 'unread').length;
-        return of({ count });
+      map(res => res.count),
+      catchError(error => {
+        console.error('Failed to get unread count:', error);
+        return [0];
       })
     );
   }
@@ -101,35 +64,47 @@ export class NotificationService {
   markAsRead(id: number): Observable<Notification> {
     return this.http.patch<Notification>(`${this.apiUrl}/${id}/read`, {}).pipe(
       catchError(error => {
-        console.warn('Mark as read failed, updating locally:', error);
-        const notifications = this.notificationsSubject.value;
-        const notification = notifications.find(n => n.id === id);
-        if (notification) {
-          notification.status = 'read';
-          this.notificationsSubject.next([...notifications]);
-          this.updateUnreadCount();
-          return of(notification);
-        }
+        console.error('Failed to mark as read:', error);
+        // Обновляем локально при ошибке
+        this.updateLocalNotificationStatus(id, 'read');
         throw error;
       })
     );
   }
 
-  markAllAsRead(): Observable<void> {
-    return this.http.patch<void>(`${this.apiUrl}/read-all`, {}).pipe(
+  markAllAsRead(): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/read-all`, {}).pipe(
       catchError(error => {
-        console.warn('Mark all as read failed, updating locally:', error);
-        const notifications = this.notificationsSubject.value.map(n => ({ ...n, status: 'read' as const }));
-        this.notificationsSubject.next(notifications);
-        this.unreadCountSubject.next(0);
-        return of(undefined);
+        console.error('Failed to mark all as read:', error);
+        // Обновляем локально при ошибке
+        this.updateAllLocalNotificationsStatus('read');
+        throw error;
       })
     );
+  }
+
+  private updateLocalNotificationStatus(id: number, status: 'read' | 'unread'): void {
+    const notifications = this.notificationsSubject.value.map(n => 
+      n.id === id ? { ...n, status } : n
+    );
+    this.notificationsSubject.next(notifications);
+    this.updateUnreadCount();
+  }
+
+  private updateAllLocalNotificationsStatus(status: 'read' | 'unread'): void {
+    const notifications = this.notificationsSubject.value.map(n => ({ ...n, status }));
+    this.notificationsSubject.next(notifications);
+    this.updateUnreadCount();
   }
 
   private updateUnreadCount(): void {
     const count = this.notificationsSubject.value.filter(n => n.status === 'unread').length;
     this.unreadCountSubject.next(count);
+  }
+
+  updateNotifications(notifications: Notification[]): void {
+    this.notificationsSubject.next(notifications.slice(0, 10));
+    this.updateUnreadCount();
   }
 
   getNotificationIcon(type: string): string {

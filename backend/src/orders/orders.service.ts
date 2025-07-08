@@ -1,8 +1,7 @@
-
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Order, OrderStatus } from './entities/order.entity';
+import { Order } from './entities/order.entity';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { NotificationsService } from '../notifications/notifications.service';
@@ -20,8 +19,8 @@ export class OrdersService {
     const savedOrder = await this.orderRepository.save(order);
     
     await this.notificationsService.createOrderNotification(
-      savedOrder.id,
-      savedOrder.customerName
+      savedOrder.id, 
+      createOrderDto.customerName
     );
     
     return savedOrder;
@@ -43,34 +42,36 @@ export class OrdersService {
 
   async update(id: number, updateOrderDto: UpdateOrderDto): Promise<Order> {
     const order = await this.findOne(id);
-    const oldStatus = order.status;
-    Object.assign(order, updateOrderDto);
-    const updatedOrder = await this.orderRepository.save(order);
     
-    if (oldStatus !== updateOrderDto.status && updateOrderDto.status) {
+    // Если статус изменился, создаем уведомление
+    if (updateOrderDto.status && updateOrderDto.status !== order.status) {
       await this.notificationsService.create({
         type: 'order_updated' as any,
         title: 'Order Status Updated',
-        message: `Order #${id} status changed from ${oldStatus} to ${updateOrderDto.status}`,
-        data: { orderId: id, oldStatus, newStatus: updateOrderDto.status }
+        message: `Order #${id} status changed to ${updateOrderDto.status}`,
+        data: { orderId: id, newStatus: updateOrderDto.status, oldStatus: order.status }
       });
     }
     
-    return updatedOrder;
+    Object.assign(order, updateOrderDto);
+    return await this.orderRepository.save(order);
   }
 
-  async getOrderStats() {
-    const total = await this.orderRepository.count();
-    const pending = await this.orderRepository.count({ 
-      where: { status: OrderStatus.PENDING } 
-    });
-    const confirmed = await this.orderRepository.count({ 
-      where: { status: OrderStatus.CONFIRMED } 
-    });
-    const shipped = await this.orderRepository.count({ 
-      where: { status: OrderStatus.SHIPPED } 
-    });
+  async remove(id: number): Promise<void> {
+    const order = await this.findOne(id);
+    await this.orderRepository.remove(order);
+  }
 
-    return { total, pending, confirmed, shipped };
+  async getStats() {
+    const totalOrders = await this.orderRepository.count();
+    const totalRevenue = await this.orderRepository
+      .createQueryBuilder('order')
+      .select('SUM(order.totalAmount)', 'sum')
+      .getRawOne();
+
+    return {
+      totalOrders,
+      totalRevenue: parseFloat(totalRevenue.sum) || 0,
+    };
   }
 }
