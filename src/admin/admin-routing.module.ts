@@ -10,6 +10,7 @@ import { CategoryListComponent } from './pages/categories/category-list/category
 import { OrderListComponent } from './pages/orders/order-list/order-list.component';
 import { UserListComponent } from './pages/users/user-list/user-list.component';
 import { AdminAuthGuard } from './guards/admin-auth.guard';
+import { CategoryFormComponent } from './pages/categories/category-form/category-form.component';
 
 const routes: Routes = [
   {
@@ -27,6 +28,14 @@ const routes: Routes = [
       { path: 'products/new', component: ProductFormComponent },
       { path: 'products/edit/:id', component: ProductFormComponent },
       { path: 'categories', component: CategoryListComponent },
+      {
+        path: 'categories/new',
+        component: CategoryFormComponent,
+      },
+      {
+        path: 'categories/edit/:id',
+        component: CategoryFormComponent,
+      },
       { path: 'orders', component: OrderListComponent },
       { path: 'users', component: UserListComponent }
     ]

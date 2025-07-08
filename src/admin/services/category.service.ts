@@ -39,6 +39,12 @@ export class CategoryService {
   }
 
   private handleError(error: any) {
-    return throwError(() => error);
+    let message = 'Unknown error';
+    if (error.error?.message) {
+      message = error.error.message;
+    } else if (error.message) {
+      message = error.message;
+    }
+    return throwError(() => ({ ...error, friendlyMessage: message }));
   }
 } 

@@ -6,7 +6,9 @@
     background-color: var(--mat-sidenav-content-background-color);
     padding: 20px;
   }
-
+  .mat-mdc-card-title {
+    color: var(--mat-card-subtitle-text-color);
+  }
   .login-card {
     width: 100%;
     max-width: 400px;

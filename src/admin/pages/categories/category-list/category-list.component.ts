@@ -5,8 +5,9 @@ import { MatSort } from "@angular/material/sort";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
-import { Category } from "../../../models/category.model";
-import { CategoryService } from "../../../services/category.service";
+import { Category } from "src/shared/models/category.model";
+import { CategoryService } from "src/app/core/services/category.service";
+
 
 @Component({
   selector: "app-category-list",
