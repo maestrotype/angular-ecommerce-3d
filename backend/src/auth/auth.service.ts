@@ -78,19 +78,14 @@ export class AuthService {
     return await this.userRepository.find();
   }
 
-  async findAllPaginated(page = 1, limit = 10) {
+  async findAllPaginated(page: number = 1, limit: number = 10) {
     const [users, total] = await this.userRepository.findAndCount({
-      skip: (page - 1) * limit,
-      take: limit,
-      order: { createdAt: 'DESC' }
+        skip: (page - 1) * limit,
+        take: limit,
+        order: { id: 'ASC' }
     });
-    return {
-      data: users,
-      total,
-      page,
-      limit
-    };
-  }
+    return { users, total };
+}
 
   async updateUser(id: number, dto: UpdateUserDto): Promise<User> {
     await this.userRepository.update(id, dto);

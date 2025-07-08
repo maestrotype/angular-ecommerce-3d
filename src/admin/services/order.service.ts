@@ -1,6 +1,9 @@
 
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export interface OrderItem {
   productId: number;
@@ -30,6 +33,8 @@ export interface Order {
 export class OrderService {
   private apiUrl = environment.apiUrl + '/orders';
 
+  constructor(private http: HttpClient) {}
+
   async getOrders(): Promise<Order[]> {
     const response = await fetch(this.apiUrl);
     
@@ -48,6 +53,12 @@ export class OrderService {
     }
 
     return await response.json();
+  }
+
+  getPendingOrdersCount(): Observable<number> {
+    return this.http.get<{ total: number }>(`${this.apiUrl}?status=Pending`).pipe(
+      map(res => res.total)
+    );
   }
 
   async updateOrderStatus(id: number, status: string, notes?: string): Promise<Order> {

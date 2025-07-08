@@ -33,6 +33,7 @@
 }
 
 .table-container {
+  overflow-x: scroll;
   .users-table {
     width: 100%;
     
@@ -108,6 +109,6 @@
   }
   
   .table-container {
-    overflow-x: auto;
+    overflow-x: scroll;
   }
 }
