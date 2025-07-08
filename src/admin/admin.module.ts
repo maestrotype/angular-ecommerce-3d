@@ -1,4 +1,3 @@
-
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -39,6 +38,7 @@ import { UserEditDialogComponent } from './pages/users/user-edit-dialog/user-edi
 import { DataTableComponent } from './components/molecules/data-table/data-table.component';
 import { FormFieldComponent } from './components/atoms/form-field/form-field.component';
 import { ActionButtonComponent } from './components/atoms/action-button/action-button.component';
+import { CategoryFormComponent } from './pages/categories/category-form/category-form.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +50,7 @@ import { ActionButtonComponent } from './components/atoms/action-button/action-b
     ProductListComponent,
     ProductFormComponent,
     CategoryListComponent,
+    CategoryFormComponent,
     OrderListComponent,
     UserListComponent,
     UserEditDialogComponent,

@@ -5,6 +5,7 @@ import { TypeOrmOptionsFactory, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { Product } from '../products/entities/product.entity';
 import { User } from '../auth/entities/user.entity';
 import { Order } from '../orders/entities/order.entity';
+import { Category } from '../categories/entities/category.entity';
 
 @Injectable()
 export class DatabaseConfig implements TypeOrmOptionsFactory {
@@ -18,7 +19,7 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
       username: this.configService.get('DATABASE_USERNAME'),
       password: this.configService.get('DATABASE_PASSWORD'),
       database: this.configService.get('DATABASE_NAME'),
-      entities: [Product, Order, User],
+      entities: [Category, Product, Order, User],
       synchronize: this.configService.get('NODE_ENV') === 'development',
       logging: this.configService.get('NODE_ENV') === 'development',
       ssl: this.configService.get('NODE_ENV') === 'production' ? { rejectUnauthorized: false } : false,

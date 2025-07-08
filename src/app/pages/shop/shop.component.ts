@@ -34,7 +34,9 @@ export class ShopComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.categories = this.categoryService.getCategories();
+    this.categoryService.getAllCategories().subscribe(categories => {
+      this.categories = categories;
+    });
 
     this.productService.getProducts().subscribe({
       next: (products) => {
