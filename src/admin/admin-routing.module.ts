@@ -11,6 +11,8 @@ import { OrderListComponent } from './pages/orders/order-list/order-list.compone
 import { UserListComponent } from './pages/users/user-list/user-list.component';
 import { AdminAuthGuard } from './guards/admin-auth.guard';
 import { CategoryFormComponent } from './pages/categories/category-form/category-form.component';
+import { MessageListComponent } from './pages/messages/message-list/message-list.component';
+import { SectionListComponent } from './pages/sections/section-list/section-list.component';
 
 const routes: Routes = [
   {
@@ -38,6 +40,8 @@ const routes: Routes = [
       },
       { path: 'orders', component: OrderListComponent },
       { path: 'users', component: UserListComponent },
+      { path: 'messages', component: MessageListComponent },
+      { path: 'sections', component: SectionListComponent },
       { 
         path: 'profile', 
         loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfileModule)

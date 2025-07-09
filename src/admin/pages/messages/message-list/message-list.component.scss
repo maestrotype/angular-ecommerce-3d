@@ -1,0 +1,70 @@
+
+.message-list-container {
+    padding: 24px;
+  }
+  
+  .header {
+    margin-bottom: 24px;
+    
+    h2 {
+      margin: 0;
+      color: #333;
+      font-weight: 500;
+    }
+  }
+  
+  .filters {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    align-items: flex-end;
+    
+    .search-field {
+      flex: 1;
+      max-width: 400px;
+    }
+    
+    .status-filter {
+      min-width: 150px;
+    }
+  }
+  
+  .table-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  .messages-table {
+    width: 100%;
+    
+    .mat-column-actions {
+      width: 200px;
+      text-align: center;
+    }
+  }
+  
+  .loading, .no-data {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 48px;
+    
+    p {
+      color: #666;
+      font-size: 16px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .filters {
+      flex-direction: column;
+      align-items: stretch;
+      
+      .search-field {
+        max-width: none;
+      }
+    }
+  }
+  

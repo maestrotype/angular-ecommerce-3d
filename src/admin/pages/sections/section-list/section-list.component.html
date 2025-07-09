@@ -1,0 +1,76 @@
+
+<div class="section-list-container">
+    <div class="header">
+      <h2>Main Page Sections</h2>
+      <button mat-raised-button color="primary" (click)="addSection()">
+        <mat-icon>add</mat-icon>
+        Add Section
+      </button>
+    </div>
+  
+    <div class="table-container">
+      <table mat-table [dataSource]="sections" class="sections-table" 
+             cdkDropList (cdkDropListDropped)="drop($event)">
+        
+        <ng-container matColumnDef="order">
+          <th mat-header-cell *matHeaderCellDef>Order</th>
+          <td mat-cell *matCellDef="let section">
+            <div class="drag-handle" cdkDragHandle>
+              <mat-icon>drag_indicator</mat-icon>
+              {{ section.order }}
+            </div>
+          </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>Title</th>
+          <td mat-cell *matCellDef="let section">{{ section.title }}</td>
+        </ng-container>
+  
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef>Type</th>
+          <td mat-cell *matCellDef="let section">
+            <mat-chip selected>{{ section.type | titlecase }}</mat-chip>
+          </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="isActive">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let section">
+            <mat-slide-toggle [checked]="section.isActive" 
+                              (change)="toggleSection(section)">
+            </mat-slide-toggle>
+          </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell *matHeaderCellDef>Created</th>
+          <td mat-cell *matCellDef="let section">{{ section.createdAt | date:'short' }}</td>
+        </ng-container>
+  
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let section">
+            <button mat-icon-button color="primary" (click)="editSection(section)" matTooltip="Edit">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteSection(section)" matTooltip="Delete">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+  
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag></tr>
+      </table>
+  
+      <div *ngIf="loading" class="loading">
+        <mat-spinner></mat-spinner>
+      </div>
+  
+      <div *ngIf="!loading && sections.length === 0" class="no-data">
+        <p>No sections found. Click "Add Section" to create your first section.</p>
+      </div>
+    </div>
+  </div>
+  

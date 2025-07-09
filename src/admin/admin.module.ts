@@ -34,6 +34,10 @@ import { CategoryListComponent } from './pages/categories/category-list/category
 import { OrderListComponent } from './pages/orders/order-list/order-list.component';
 import { UserListComponent } from './pages/users/user-list/user-list.component';
 import { UserEditDialogComponent } from './pages/users/user-edit-dialog/user-edit-dialog.component';
+import { MessageListComponent } from './pages/messages/message-list/message-list.component';
+import { MessageDetailComponent } from './pages/messages/message-detail/message-detail.component';
+import { SectionListComponent } from './pages/sections/section-list/section-list.component';
+import { SectionFormComponent } from './pages/sections/section-form/section-form.component';
 // Shared Components
 import { DataTableComponent } from './components/molecules/data-table/data-table.component';
 import { FormFieldComponent } from './components/atoms/form-field/form-field.component';
@@ -43,6 +47,8 @@ import { CategoryFormComponent } from './pages/categories/category-form/category
 // Services
 import { NotificationService } from './services/notification.service';
 import { DashboardService } from './services/dashboard.service';
+import { MessageService } from './services/message.service';
+import { SectionService } from './services/section.service';
 
 @NgModule({
   declarations: [
@@ -56,6 +62,11 @@ import { DashboardService } from './services/dashboard.service';
     CategoryListComponent,
     CategoryFormComponent,
     OrderListComponent,
+    MessageListComponent,
+    MessageDetailComponent,
+    SectionListComponent,
+    SectionFormComponent,
+    
     UserListComponent,
     UserEditDialogComponent,
     DataTableComponent,
@@ -92,7 +103,9 @@ import { DashboardService } from './services/dashboard.service';
   ],
   providers: [
     NotificationService,
-    DashboardService
+    DashboardService,
+    MessageService,
+    SectionService
   ]
 })
 export class AdminModule { }
