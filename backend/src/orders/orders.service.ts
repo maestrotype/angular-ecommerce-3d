@@ -41,6 +41,12 @@ export class OrdersService {
     return savedOrder;
   }
 
+  async getOrderStats() {
+    const totalOrders = await this.orderRepository.count();
+    
+    return { totalOrders };
+  }
+
   async findAll(): Promise<Order[]> {
     return await this.orderRepository.find({
       order: { createdAt: 'DESC' }
