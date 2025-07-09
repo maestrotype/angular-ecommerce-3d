@@ -19,7 +19,7 @@ export interface Notification {
   providedIn: 'root'
 })
 export class NotificationService {
-  private apiUrl = environment.apiUrl + 'notifications';
+  private apiUrl = environment.apiUrl + '/notifications';
   private notificationsSubject = new BehaviorSubject<Notification[]>([]);
   private unreadCountSubject = new BehaviorSubject<number>(0);
   
