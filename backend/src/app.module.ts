@@ -7,6 +7,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { AuthModule } from './auth/auth.module';
 import { OrdersModule } from './orders/orders.module';
 import { DatabaseConfig } from './config/database.config';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { DatabaseConfig } from './config/database.config';
     ProductsModule,
     AuthModule,
     OrdersModule,
+    NotificationsModule
   ],
 })
 export class AppModule {}
