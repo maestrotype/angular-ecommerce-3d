@@ -51,9 +51,8 @@ export class UserEditDialogComponent implements OnInit {
       if (this.isNewUser) {
         const createRequest = {
           ...formValue,
-          password: 'defaultPassword123' // В реальном приложении это должно генерироваться или задаваться пользователем
+          password: 'defaultPassword123' // In real app, generate or ask user
         };
-        
         this.userService.createUser(createRequest).subscribe({
           next: (user) => {
             this.snackBar.open('User created successfully', 'Close', { duration: 3000 });
@@ -65,12 +64,16 @@ export class UserEditDialogComponent implements OnInit {
           }
         });
       } else {
-        const updateRequest: UpdateUserRequest = {
+        // Only allow 'active' or 'inactive' for status
+        let status: 'active' | 'inactive' = 'active';
+        if (formValue.status === 'inactive') status = 'inactive';
+        // fallback to 'active' if not valid
+        const updateRequest: Partial<User> = {
           id: this.data.user!.id,
-          ...formValue
+          ...formValue,
+          status
         };
-
-        this.userService.updateUser(updateRequest).subscribe({
+        this.userService.updateUser(updateRequest.id, updateRequest).subscribe({
           next: (user) => {
             this.snackBar.open('User updated successfully', 'Close', { duration: 3000 });
             this.dialogRef.close(user);

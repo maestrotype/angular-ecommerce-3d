@@ -85,7 +85,7 @@ export class UserListComponent implements OnInit {
   }
 
   toggleUserStatus(user: User): void {
-    const isBlocked = user.status === 'blocked';
+    const isBlocked = user.status === 'inactive';
     const operation = isBlocked ? this.userService.unblockUser(user.id) : this.userService.blockUser(user.id);
 
     operation.subscribe({

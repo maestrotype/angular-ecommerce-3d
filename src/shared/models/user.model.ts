@@ -3,13 +3,16 @@ export interface User {
   email: string;
   name: string;
   role: 'admin' | 'user';
-  status?: string;
+  status: 'active' | 'inactive';
   phone?: string;
   avatar?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
-
+export interface UserResponse {
+  users: User[];
+  total: number;
+}
 export interface CreateUserRequest {
   email: string;
   name: string;
