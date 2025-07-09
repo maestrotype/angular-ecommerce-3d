@@ -12,10 +12,10 @@ import {
 import { AuthService } from './auth.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AdminGuard } from './guards/admin.guard';
-import { JwtStrategy } from './guards/jwt-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('users')
-// @UseGuards(JwtStrategy, AdminGuard)
+// @UseGuards(JwtAuthGuard, AdminGuard)
 export class UserController {
     constructor(private readonly authService: AuthService) { }
 

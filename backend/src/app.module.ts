@@ -8,7 +8,8 @@ import { AuthModule } from './auth/auth.module';
 import { OrdersModule } from './orders/orders.module';
 import { DatabaseConfig } from './config/database.config';
 import { NotificationsModule } from './notifications/notifications.module';
-
+import { MessagesModule } from './messages/messages.module';
+import { SectionsModule } from './sections/sections.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -22,6 +23,8 @@ import { NotificationsModule } from './notifications/notifications.module';
     ProductsModule,
     AuthModule,
     OrdersModule,
+    MessagesModule,
+    SectionsModule,
     NotificationsModule
   ],
 })

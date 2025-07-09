@@ -1,0 +1,53 @@
+
+<div class="section-form-container">
+    <h2 mat-dialog-title>{{ isEditMode ? 'Edit' : 'Add' }} Section</h2>
+  
+    <form [formGroup]="sectionForm" (ngSubmit)="onSubmit()" mat-dialog-content>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Section Type</mat-label>
+        <mat-select formControlName="type">
+          <mat-option *ngFor="let type of sectionTypes" [value]="type.value">
+            {{ type.label }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="sectionForm.get('type')?.hasError('required')">
+          Section type is required
+        </mat-error>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title" placeholder="Enter section title">
+        <mat-error *ngIf="sectionForm.get('title')?.hasError('required')">
+          Title is required
+        </mat-error>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Content</mat-label>
+        <textarea matInput 
+                  formControlName="content" 
+                  rows="4" 
+                  placeholder="Enter section content"></textarea>
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Image URL</mat-label>
+        <input matInput formControlName="imageUrl" placeholder="Enter image URL">
+      </mat-form-field>
+  
+      <mat-slide-toggle formControlName="isActive" class="active-toggle">
+        Section Active
+      </mat-slide-toggle>
+    </form>
+  
+    <div mat-dialog-actions class="actions">
+      <button mat-button (click)="onCancel()" [disabled]="loading">Cancel</button>
+      <button mat-raised-button color="primary" (click)="onSubmit()" 
+              [disabled]="sectionForm.invalid || loading">
+        <mat-icon *ngIf="loading">hourglass_empty</mat-icon>
+        {{ loading ? 'Saving...' : (isEditMode ? 'Update' : 'Create') }}
+      </button>
+    </div>
+  </div>
+  

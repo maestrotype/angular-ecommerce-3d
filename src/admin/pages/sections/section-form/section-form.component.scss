@@ -1,0 +1,33 @@
+
+.section-form-container {
+    min-width: 500px;
+  
+    h2 {
+      margin: 0 0 24px 0;
+      color: #999;
+    }
+  
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+  
+      .full-width {
+        width: 100%;
+      }
+  
+      .active-toggle {
+        margin: 16px 0;
+      }
+    }
+  
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      padding-top: 16px;
+      border-top: 1px solid #e0e0e0;
+      margin-top: 24px;
+    }
+  }
+  

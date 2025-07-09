@@ -1,0 +1,80 @@
+
+<div class="message-detail-container">
+    <div class="header">
+      <h2 mat-dialog-title>Message Details</h2>
+      <button mat-icon-button (click)="onClose()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  
+    <div mat-dialog-content class="content">
+      <div class="message-info">
+        <div class="info-row">
+          <strong>From:</strong> {{ message.senderName }} ({{ message.senderEmail }})
+        </div>
+        <div class="info-row">
+          <strong>Subject:</strong> {{ message.subject }}
+        </div>
+        <div class="info-row">
+          <strong>Status:</strong>
+          <mat-chip [color]="getStatusColor(message.status)" selected>
+            {{ message.status | titlecase }}
+          </mat-chip>
+        </div>
+        <div class="info-row">
+          <strong>Date:</strong> {{ message.createdAt | date:'full' }}
+        </div>
+      </div>
+  
+      <div class="message-content">
+        <h4>Message:</h4>
+        <div class="content-text">{{ message.message }}</div>
+      </div>
+  
+      <div *ngIf="message.adminReply" class="admin-reply">
+        <h4>Admin Reply:</h4>
+        <div class="reply-text">{{ message.adminReply }}</div>
+        <div class="reply-date">
+          <small>Replied on: {{ message.repliedAt | date:'full' }}</small>
+        </div>
+      </div>
+  
+      <div *ngIf="showReplyForm" class="reply-form">
+        <h4>Send Reply:</h4>
+        <form [formGroup]="replyForm" (ngSubmit)="onReplySubmit()">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Reply Message</mat-label>
+            <textarea matInput
+                      formControlName="reply"
+                      rows="6"
+                      placeholder="Enter your reply here..."></textarea>
+            <mat-error *ngIf="replyForm.get('reply')?.hasError('required')">
+              Reply is required
+            </mat-error>
+            <mat-error *ngIf="replyForm.get('reply')?.hasError('maxlength')">
+              Reply cannot exceed 2000 characters
+            </mat-error>
+          </mat-form-field>
+  
+          <div class="reply-actions">
+            <button mat-button type="button" (click)="toggleReplyForm()">Cancel</button>
+            <button mat-raised-button color="primary" type="submit" 
+                    [disabled]="replyForm.invalid || loading">
+              <mat-icon *ngIf="loading">hourglass_empty</mat-icon>
+              {{ loading ? 'Sending...' : 'Send Reply' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  
+    <div mat-dialog-actions class="actions">
+      <button mat-button (click)="onClose()">Close</button>
+      <button mat-raised-button color="primary" (click)="toggleReplyForm()" 
+              *ngIf="!showReplyForm && !message.adminReply">
+        <mat-icon>reply</mat-icon>
+        Reply
+      </button>
+    </div>
+  </div>
+  

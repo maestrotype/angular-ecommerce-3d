@@ -27,6 +27,8 @@ export class SidenavComponent {
       badge: 0,
     },
     { label: "Users", route: "/admin/users", icon: "people" },
+    { label: "Messages", route: "/admin/messages", icon: "email" },
+    { label: "Page Sections", route: "/admin/sections", icon: "view_module" },
   ];
 
   constructor(
