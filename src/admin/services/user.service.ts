@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { User, CreateUserRequest, UpdateUserRequest } from '../../shared/models/user.model';
+import { catchError } from 'rxjs/operators';
+import { User, UserResponse, CreateUserRequest, UpdateUserRequest } from '../../shared/models/user.model';
 import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
@@ -25,30 +26,48 @@ export class UserService {
   }
 
   getUserById(id: number): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/${id}`);
+    return this.http.get<User>(`${this.apiUrl}/${id}`).pipe(
+      catchError(error => {
+        console.error('Failed to fetch user:', error);
+        throw error;
+      })
+    );
   }
 
-  createUser(userData: CreateUserRequest): Observable<User> {
-    return this.http.post<User>(this.apiUrl, userData);
+  createUser(userData: Partial<User>): Observable<User> {
+    return this.http.post<User>(this.apiUrl, userData).pipe(
+      catchError(error => {
+        console.error('Failed to create user:', error);
+        throw error;
+      })
+    );
   }
 
-  updateUser(userData: UpdateUserRequest): Observable<User> {
-    return this.http.put<User>(`${this.apiUrl}/${userData.id}`, userData);
-  }
-
-  deleteUser(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  updateUser(id: number, userData: Partial<User>): Observable<User> {
+    return this.http.patch<User>(`${this.apiUrl}/${id}`, userData).pipe(
+      catchError(error => {
+        console.error('Failed to update user:', error);
+        throw error;
+      })
+    );
   }
 
   blockUser(id: number): Observable<User> {
-    return this.http.patch<User>(`${this.apiUrl}/${id}/block`, {});
+    return this.updateUser(id, { status: 'inactive' });
   }
-
+  
   unblockUser(id: number): Observable<User> {
-    return this.http.patch<User>(`${this.apiUrl}/${id}/unblock`, {});
+    return this.updateUser(id, { status: 'active' });
   }
 
   changeUserRole(id: number, role: 'admin' | 'user'): Observable<User> {
-    return this.http.patch<User>(`${this.apiUrl}/${id}/role`, { role });
+    return this.updateUser(id, { role });
   }
+
+  deleteUser(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
+    catchError(error => {
+      console.error('Failed to delete user:', error);
+      throw error;
+    }))}
 }

@@ -1,8 +1,8 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, interval, map } from 'rxjs';
-import { switchMap, catchError } from 'rxjs/operators';
+import { BehaviorSubject, Observable, interval } from 'rxjs';
+import { switchMap, catchError, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment.prod';
 
 export interface Notification {
@@ -28,11 +28,10 @@ export class NotificationService {
 
   constructor(private http: HttpClient) {
     this.startPolling();
-    this.loadNotifications();
+    this.loadNotifications().subscribe();
   }
 
   private startPolling(): void {
-    // Поллинг каждые 10 секунд для получения новых уведомлений
     interval(10000).pipe(
       switchMap(() => this.loadNotifications()),
       catchError(error => {
@@ -65,7 +64,6 @@ export class NotificationService {
     return this.http.patch<Notification>(`${this.apiUrl}/${id}/read`, {}).pipe(
       catchError(error => {
         console.error('Failed to mark as read:', error);
-        // Обновляем локально при ошибке
         this.updateLocalNotificationStatus(id, 'read');
         throw error;
       })
@@ -76,7 +74,6 @@ export class NotificationService {
     return this.http.patch(`${this.apiUrl}/read-all`, {}).pipe(
       catchError(error => {
         console.error('Failed to mark all as read:', error);
-        // Обновляем локально при ошибке
         this.updateAllLocalNotificationsStatus('read');
         throw error;
       })

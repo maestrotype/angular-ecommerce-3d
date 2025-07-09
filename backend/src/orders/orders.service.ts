@@ -5,19 +5,34 @@ import { Order } from './entities/order.entity';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { NotificationsService } from '../notifications/notifications.service';
-
+import { ProductsService } from '../products/products.service';
 @Injectable()
 export class OrdersService {
   constructor(
     @InjectRepository(Order)
     private orderRepository: Repository<Order>,
     private notificationsService: NotificationsService,
+    private productsService: ProductsService,
   ) {}
 
   async create(createOrderDto: CreateOrderDto): Promise<Order> {
     const order = this.orderRepository.create(createOrderDto);
     const savedOrder = await this.orderRepository.save(order);
     
+    // Decrease stock for each item in the order
+    if (createOrderDto.items && Array.isArray(createOrderDto.items)) {
+      for (const item of createOrderDto.items) {
+        if (item.productId && item.quantity) {
+          try {
+            await this.productsService.decreaseStock(item.productId, item.quantity);
+          } catch (error) {
+            console.error(`Failed to decrease stock for product ${item.productId}:`, error);
+          }
+        }
+      }
+    }
+    
+    // Create notification for new order
     await this.notificationsService.createOrderNotification(
       savedOrder.id, 
       createOrderDto.customerName
@@ -43,7 +58,7 @@ export class OrdersService {
   async update(id: number, updateOrderDto: UpdateOrderDto): Promise<Order> {
     const order = await this.findOne(id);
     
-    // Если статус изменился, создаем уведомление
+    // If status changed, create notification
     if (updateOrderDto.status && updateOrderDto.status !== order.status) {
       await this.notificationsService.create({
         type: 'order_updated' as any,

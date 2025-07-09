@@ -8,13 +8,14 @@ import { User, UserRole } from './entities/user.entity';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-
+import { NotificationsService } from '../notifications/notifications.service';
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private jwtService: JwtService,
+    private notificationsService: NotificationsService,
   ) {}
 
   async register(registerDto: RegisterDto): Promise<User> {
@@ -23,7 +24,15 @@ export class AuthService {
       ...registerDto,
       password: hashedPassword,
     });
-    return await this.userRepository.save(user);
+    const savedUser = await this.userRepository.save(user);
+    
+    // Create notification for new user registration
+    await this.notificationsService.createNewUserNotification(
+      savedUser.name,
+      savedUser.email
+    );
+    
+    return savedUser;
   }
 
   async login(loginDto: LoginDto) {
