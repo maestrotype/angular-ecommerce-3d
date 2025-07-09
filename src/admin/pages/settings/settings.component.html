@@ -1,0 +1,219 @@
+<div class="settings-container">
+    <div class="settings-header">
+      <h1 class="page-title">Settings</h1>
+      <p class="page-subtitle">Configure your application settings</p>
+    </div>
+  
+    <div class="settings-content">
+      <!-- General Settings Card -->
+      <mat-card class="settings-card">
+        <mat-card-header>
+          <mat-card-title>General Settings</mat-card-title>
+          <mat-card-subtitle>Basic application configuration</mat-card-subtitle>
+        </mat-card-header>
+        
+        <mat-card-content>
+          <form [formGroup]="generalForm" (ngSubmit)="onSaveGeneral()" class="settings-form">
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Site Name</mat-label>
+                <input matInput formControlName="siteName" placeholder="Enter site name">
+                <mat-icon matSuffix>business</mat-icon>
+                <mat-error *ngIf="generalForm.get('siteName')?.hasError('required')">
+                  Site name is required
+                </mat-error>
+              </mat-form-field>
+            </div>
+  
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Site Description</mat-label>
+                <textarea matInput formControlName="siteDescription" rows="3" 
+                          placeholder="Enter site description"></textarea>
+                <mat-icon matSuffix>description</mat-icon>
+              </mat-form-field>
+            </div>
+  
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Currency</mat-label>
+                <mat-select formControlName="currency">
+                  <mat-option value="USD">USD - US Dollar</mat-option>
+                  <mat-option value="EUR">EUR - Euro</mat-option>
+                  <mat-option value="GBP">GBP - British Pound</mat-option>
+                  <mat-option value="JPY">JPY - Japanese Yen</mat-option>
+                </mat-select>
+                <mat-icon matSuffix>attach_money</mat-icon>
+              </mat-form-field>
+  
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Timezone</mat-label>
+                <mat-select formControlName="timezone">
+                  <mat-option value="UTC">UTC</mat-option>
+                  <mat-option value="EST">EST - Eastern Time</mat-option>
+                  <mat-option value="PST">PST - Pacific Time</mat-option>
+                  <mat-option value="GMT">GMT - Greenwich Mean Time</mat-option>
+                </mat-select>
+                <mat-icon matSuffix>schedule</mat-icon>
+              </mat-form-field>
+            </div>
+  
+            <div class="form-actions">
+              <button mat-raised-button color="primary" type="submit" 
+                      [disabled]="generalForm.invalid || isLoading">
+                <mat-icon>save</mat-icon>
+                {{ isLoading ? 'Saving...' : 'Save General Settings' }}
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+  
+      <!-- Notification Settings Card -->
+      <mat-card class="settings-card">
+        <mat-card-header>
+          <mat-card-title>Notification Settings</mat-card-title>
+          <mat-card-subtitle>Configure notification preferences</mat-card-subtitle>
+        </mat-card-header>
+        
+        <mat-card-content>
+          <form [formGroup]="notificationForm" (ngSubmit)="onSaveNotifications()" class="settings-form">
+            <div class="toggle-group">
+              <div class="toggle-item">
+                <mat-slide-toggle formControlName="emailNotifications">
+                  Email Notifications
+                </mat-slide-toggle>
+                <p class="toggle-description">Receive notifications via email</p>
+              </div>
+  
+              <mat-divider></mat-divider>
+  
+              <div class="toggle-item">
+                <mat-slide-toggle formControlName="orderNotifications">
+                  Order Notifications
+                </mat-slide-toggle>
+                <p class="toggle-description">Get notified about new orders and status changes</p>
+              </div>
+  
+              <mat-divider></mat-divider>
+  
+              <div class="toggle-item">
+                <mat-slide-toggle formControlName="stockAlerts">
+                  Stock Alerts
+                </mat-slide-toggle>
+                <p class="toggle-description">Receive alerts when products are low in stock</p>
+              </div>
+  
+              <mat-divider></mat-divider>
+  
+              <div class="toggle-item">
+                <mat-slide-toggle formControlName="userRegistrations">
+                  User Registrations
+                </mat-slide-toggle>
+                <p class="toggle-description">Get notified when new users register</p>
+              </div>
+  
+              <mat-divider></mat-divider>
+  
+              <div class="toggle-item">
+                <mat-slide-toggle formControlName="systemUpdates">
+                  System Updates
+                </mat-slide-toggle>
+                <p class="toggle-description">Receive notifications about system updates</p>
+              </div>
+            </div>
+  
+            <div class="form-actions">
+              <button mat-raised-button color="primary" type="submit" [disabled]="isLoading">
+                <mat-icon>notifications</mat-icon>
+                {{ isLoading ? 'Saving...' : 'Save Notification Settings' }}
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+  
+      <!-- Security Settings Card -->
+      <mat-card class="settings-card">
+        <mat-card-header>
+          <mat-card-title>Security Settings</mat-card-title>
+          <mat-card-subtitle>Configure security and authentication</mat-card-subtitle>
+        </mat-card-header>
+        
+        <mat-card-content>
+          <form [formGroup]="securityForm" (ngSubmit)="onSaveSecurity()" class="settings-form">
+            <div class="toggle-group">
+              <div class="toggle-item">
+                <mat-slide-toggle formControlName="twoFactorAuth">
+                  Two-Factor Authentication
+                </mat-slide-toggle>
+                <p class="toggle-description">Enable two-factor authentication for enhanced security</p>
+              </div>
+            </div>
+  
+            <mat-divider></mat-divider>
+  
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Session Timeout (minutes)</mat-label>
+                <input matInput formControlName="sessionTimeout" type="number" 
+                       placeholder="Enter session timeout">
+                <mat-icon matSuffix>timer</mat-icon>
+                <mat-error *ngIf="securityForm.get('sessionTimeout')?.hasError('required')">
+                  Session timeout is required
+                </mat-error>
+                <mat-error *ngIf="securityForm.get('sessionTimeout')?.hasError('min')">
+                  Minimum value is 5 minutes
+                </mat-error>
+                <mat-error *ngIf="securityForm.get('sessionTimeout')?.hasError('max')">
+                  Maximum value is 120 minutes
+                </mat-error>
+              </mat-form-field>
+  
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Password Expiry (days)</mat-label>
+                <input matInput formControlName="passwordExpiry" type="number" 
+                       placeholder="Enter password expiry">
+                <mat-icon matSuffix>password</mat-icon>
+                <mat-error *ngIf="securityForm.get('passwordExpiry')?.hasError('required')">
+                  Password expiry is required
+                </mat-error>
+                <mat-error *ngIf="securityForm.get('passwordExpiry')?.hasError('min')">
+                  Minimum value is 30 days
+                </mat-error>
+                <mat-error *ngIf="securityForm.get('passwordExpiry')?.hasError('max')">
+                  Maximum value is 365 days
+                </mat-error>
+              </mat-form-field>
+            </div>
+  
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Max Login Attempts</mat-label>
+                <input matInput formControlName="maxLoginAttempts" type="number" 
+                       placeholder="Enter max login attempts">
+                <mat-icon matSuffix>security</mat-icon>
+                <mat-error *ngIf="securityForm.get('maxLoginAttempts')?.hasError('required')">
+                  Max login attempts is required
+                </mat-error>
+                <mat-error *ngIf="securityForm.get('maxLoginAttempts')?.hasError('min')">
+                  Minimum value is 3 attempts
+                </mat-error>
+                <mat-error *ngIf="securityForm.get('maxLoginAttempts')?.hasError('max')">
+                  Maximum value is 10 attempts
+                </mat-error>
+              </mat-form-field>
+            </div>
+  
+            <div class="form-actions">
+              <button mat-raised-button color="primary" type="submit" 
+                      [disabled]="securityForm.invalid || isLoading">
+                <mat-icon>security</mat-icon>
+                {{ isLoading ? 'Saving...' : 'Save Security Settings' }}
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>

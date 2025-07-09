@@ -37,7 +37,15 @@ const routes: Routes = [
         component: CategoryFormComponent,
       },
       { path: 'orders', component: OrderListComponent },
-      { path: 'users', component: UserListComponent }
+      { path: 'users', component: UserListComponent },
+      { 
+        path: 'profile', 
+        loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfileModule)
+      },
+      { 
+        path: 'settings', 
+        loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsModule)
+      }
     ]
   },
   {
