@@ -25,7 +25,7 @@
           display: block;
           font-size: 14px;
           font-weight: 500;
-          color: #333;
+          color: #ababab;
           margin-bottom: 8px;
         }
   
@@ -36,11 +36,11 @@
           text-align: center;
           position: relative;
           transition: all 0.3s ease;
-          background: #fafafa;
+          background: #555;
   
           &:hover {
             border-color: #2196f3;
-            background: #f5f5f5;
+            background: #444;
           }
   
           &.has-image {
@@ -60,7 +60,7 @@
   
             p {
               margin: 0 0 8px 0;
-              color: #666;
+              color: #aaa;
               font-size: 16px;
             }
   

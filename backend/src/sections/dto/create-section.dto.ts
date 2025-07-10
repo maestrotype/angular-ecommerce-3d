@@ -2,8 +2,8 @@
 import { IsEnum, IsNotEmpty, IsString, IsOptional, IsBoolean, IsNumber, IsObject } from 'class-validator';
 
 export class CreateSectionDto {
-  @IsEnum(['hero', 'about', 'contact', 'promo', 'features', 'testimonials'])
-  type: 'hero' | 'about' | 'contact' | 'promo' | 'features' | 'testimonials';
+  @IsString()
+  type: string;
 
   @IsNotEmpty()
   @IsString()

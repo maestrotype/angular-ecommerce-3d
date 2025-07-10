@@ -1,4 +1,3 @@
-
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('sections')
@@ -6,8 +5,8 @@ export class Section {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  type: 'hero' | 'about' | 'contact' | 'promo' | 'features' | 'testimonials';
+  @Column({ type: 'varchar' })
+  type: string; // 'hero', 'about', etc.
 
   @Column()
   title: string;
