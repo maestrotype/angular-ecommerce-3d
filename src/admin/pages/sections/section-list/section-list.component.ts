@@ -1,11 +1,14 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { SectionService } from '../../../services/section.service';
-import { Section, ReorderSectionsDto } from '../../../models/section.model';
 import { SectionFormComponent } from '../section-form/section-form.component';
+import { Section } from '../../../models/section.model';
 
 @Component({
   selector: 'app-section-list',
@@ -13,10 +16,12 @@ import { SectionFormComponent } from '../section-form/section-form.component';
   styleUrls: ['./section-list.component.scss']
 })
 export class SectionListComponent implements OnInit {
-  sections: Section[] = [];
+  displayedColumns: string[] = ['order', 'type', 'title', 'isActive', 'createdAt', 'actions'];
+  dataSource = new MatTableDataSource<Section>();
   loading = false;
 
-  displayedColumns: string[] = ['order', 'title', 'type', 'isActive', 'createdAt', 'actions'];
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private sectionService: SectionService,
@@ -28,16 +33,20 @@ export class SectionListComponent implements OnInit {
     this.loadSections();
   }
 
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
   loadSections(): void {
     this.loading = true;
     this.sectionService.getSections().subscribe({
       next: (sections) => {
-        this.sections = sections;
+        this.dataSource.data = sections;
         this.loading = false;
       },
       error: (error) => {
         console.error('Error loading sections:', error);
-        this.snackBar.open('Error loading sections', 'Close', { duration: 3000 });
         this.loading = false;
       }
     });
@@ -46,7 +55,7 @@ export class SectionListComponent implements OnInit {
   addSection(): void {
     const dialogRef = this.dialog.open(SectionFormComponent, {
       width: '600px',
-      data: { section: null }
+      data: {}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -72,16 +81,12 @@ export class SectionListComponent implements OnInit {
   toggleSection(section: Section): void {
     this.sectionService.toggleSection(section.id).subscribe({
       next: () => {
-        this.snackBar.open(
-          `Section ${section.isActive ? 'disabled' : 'enabled'}`, 
-          'Close', 
-          { duration: 3000 }
-        );
+        this.snackBar.open(`Section ${section.isActive ? 'deactivated' : 'activated'}`, 'Close', { duration: 3000 });
         this.loadSections();
       },
       error: (error) => {
-        console.error('Error toggling section:', error);
         this.snackBar.open('Error updating section', 'Close', { duration: 3000 });
+        console.error('Error toggling section:', error);
       }
     });
   }
@@ -90,33 +95,32 @@ export class SectionListComponent implements OnInit {
     if (confirm('Are you sure you want to delete this section?')) {
       this.sectionService.deleteSection(section.id).subscribe({
         next: () => {
-          this.snackBar.open('Section deleted', 'Close', { duration: 3000 });
+          this.snackBar.open('Section deleted successfully', 'Close', { duration: 3000 });
           this.loadSections();
         },
         error: (error) => {
-          console.error('Error deleting section:', error);
           this.snackBar.open('Error deleting section', 'Close', { duration: 3000 });
+          console.error('Error deleting section:', error);
         }
       });
     }
   }
 
   drop(event: CdkDragDrop<Section[]>): void {
-    moveItemInArray(this.sections, event.previousIndex, event.currentIndex);
+    const data = [...this.dataSource.data];
+    moveItemInArray(data, event.previousIndex, event.currentIndex);
     
-    const reorderDto: ReorderSectionsDto = {
-      sectionIds: this.sections.map(section => section.id)
-    };
-
-    this.sectionService.reorderSections(reorderDto).subscribe({
-      next: (updatedSections) => {
-        this.sections = updatedSections;
-        this.snackBar.open('Sections reordered', 'Close', { duration: 3000 });
+    const sectionIds = data.map((section, index) => section.id);
+    
+    this.sectionService.reorderSections(sectionIds).subscribe({
+      next: (sections) => {
+        this.dataSource.data = sections;
+        this.snackBar.open('Sections reordered successfully', 'Close', { duration: 3000 });
       },
       error: (error) => {
-        console.error('Error reordering sections:', error);
         this.snackBar.open('Error reordering sections', 'Close', { duration: 3000 });
-        this.loadSections(); // Reload to reset order
+        console.error('Error reordering sections:', error);
+        this.loadSections();
       }
     });
   }

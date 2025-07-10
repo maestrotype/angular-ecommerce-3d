@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -41,7 +40,13 @@ export class SectionService {
     return this.http.patch<Section>(`${this.apiUrl}/${id}/toggle`, {});
   }
 
-  reorderSections(reorderDto: ReorderSectionsDto): Observable<Section[]> {
-    return this.http.post<Section[]>(`${this.apiUrl}/reorder`, reorderDto);
+  reorderSections(sectionIds: number[]): Observable<Section[]> {
+    return this.http.post<Section[]>(`${this.apiUrl}/reorder`, { sectionIds });
+  }
+
+  uploadImage(file: File): Observable<{url: string}> {
+    const formData = new FormData();
+    formData.append('image', file);
+    return this.http.post<{url: string}>(`${environment.apiUrl}/uploads/sections`, formData);
   }
 }

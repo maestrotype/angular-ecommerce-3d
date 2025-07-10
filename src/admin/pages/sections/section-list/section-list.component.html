@@ -9,7 +9,7 @@
     </div>
   
     <div class="table-container">
-      <table mat-table [dataSource]="sections" class="sections-table" 
+      <table mat-table [dataSource]="dataSource" class="sections-table" 
              cdkDropList (cdkDropListDropped)="drop($event)">
         
         <ng-container matColumnDef="order">
@@ -68,7 +68,7 @@
         <mat-spinner></mat-spinner>
       </div>
   
-      <div *ngIf="!loading && sections.length === 0" class="no-data">
+      <div *ngIf="!loading && dataSource.data.length === 0" class="no-data">
         <p>No sections found. Click "Add Section" to create your first section.</p>
       </div>
     </div>

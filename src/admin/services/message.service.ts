@@ -1,6 +1,5 @@
-
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Message, CreateMessageDto, UpdateMessageDto, ReplyMessageDto } from '../models/message.model';
 import { environment } from '../../environments/environment.prod';
@@ -13,12 +12,8 @@ export class MessageService {
 
   constructor(private http: HttpClient) {}
 
-  getMessages(status?: string, search?: string): Observable<Message[]> {
-    let params = new HttpParams();
-    if (status) params = params.set('status', status);
-    if (search) params = params.set('search', search);
-    
-    return this.http.get<Message[]>(this.apiUrl, { params });
+  getMessages(): Observable<Message[]> {
+    return this.http.get<Message[]>(this.apiUrl);
   }
 
   getMessage(id: number): Observable<Message> {
@@ -33,19 +28,19 @@ export class MessageService {
     return this.http.patch<Message>(`${this.apiUrl}/${id}`, message);
   }
 
-  replyToMessage(id: number, reply: ReplyMessageDto): Observable<Message> {
-    return this.http.post<Message>(`${this.apiUrl}/${id}/reply`, reply);
+  deleteMessage(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
   markAsRead(id: number): Observable<Message> {
-    return this.http.patch<Message>(`${this.apiUrl}/${id}/mark-read`, {});
+    return this.http.patch<Message>(`${this.apiUrl}/${id}/read`, {});
   }
 
   markAsArchived(id: number): Observable<Message> {
     return this.http.patch<Message>(`${this.apiUrl}/${id}/archive`, {});
   }
 
-  deleteMessage(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  replyToMessage(id: number, reply: ReplyMessageDto): Observable<Message> {
+    return this.http.post<Message>(`${this.apiUrl}/${id}/reply`, reply);
   }
 }
