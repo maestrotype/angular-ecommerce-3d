@@ -46,8 +46,15 @@ export class SectionListComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading sections:', error);
         this.loading = false;
+        this.snackBar.open(
+          error?.status === 500
+            ? 'Server error: please check backend logs or try again later.'
+            : 'Error loading sections',
+          'Close',
+          { duration: 5000 }
+        );
+        console.error('Error loading sections:', error);
       }
     });
   }
