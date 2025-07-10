@@ -8,6 +8,11 @@ import { CartService } from '../../core/services/cart.service';
 import { CartItem } from 'src/shared/models/cart-item.model';
 import { Category } from 'src/shared/models/category.model';
 
+interface DropdownOption {
+  value: string;
+  label: string;
+}
+
 @Component({
   selector: 'app-shop',
   templateUrl: './shop.component.html',
@@ -25,6 +30,14 @@ export class ShopComponent implements OnInit {
   products: Product[] = [];
   filteredProducts: Product[] = [];
 
+  // Dropdown options
+  categoryOptions: DropdownOption[] = [];
+  sortOptions: DropdownOption[] = [
+    { value: 'name', label: 'Sort by Name' },
+    { value: 'price', label: 'Sort by Price' },
+    { value: 'rating', label: 'Sort by Rating' }
+  ];
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -36,6 +49,10 @@ export class ShopComponent implements OnInit {
   ngOnInit(): void {
     this.categoryService.getAllCategories().subscribe(categories => {
       this.categories = categories;
+      this.categoryOptions = [
+        { value: 'all', label: 'All categories' },
+        ...categories.map(cat => ({ value: cat.name, label: cat.name }))
+      ];
     });
 
     this.productService.getProducts().subscribe({
@@ -58,11 +75,13 @@ export class ShopComponent implements OnInit {
     this.filterProducts();
   }
 
-  onCategoryChange(): void {
+  onCategoryChange(value: string): void {
+    this.selectedCategory = value;
     this.filterProducts();
   }
 
-  onSortChange(): void {
+  onSortChange(value: string): void {
+    this.sortBy = value;
     this.filterProducts();
   }
 

@@ -15,6 +15,8 @@ export class SectionFormComponent {
   sectionForm: FormGroup;
   isEditMode: boolean;
   loading = false;
+  imageFile: File | null = null;
+  imagePreview: string | ArrayBuffer | null = null;
 
   sectionTypes = [
     { value: 'hero', label: 'Hero Section' },
@@ -38,7 +40,7 @@ export class SectionFormComponent {
 
   private createForm(): FormGroup {
     const section = this.data?.section;
-    
+
     return this.fb.group({
       type: [section?.type || 'hero', Validators.required],
       title: [section?.title || '', Validators.required],
@@ -48,11 +50,23 @@ export class SectionFormComponent {
     });
   }
 
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      this.imageFile = input.files[0];
+  
+      // For preview
+      const reader = new FileReader();
+      reader.onload = e => this.imagePreview = reader.result;
+      reader.readAsDataURL(this.imageFile);
+    }
+  }
+
   onSubmit(): void {
     if (this.sectionForm.valid) {
       this.loading = true;
       const formData = this.sectionForm.value;
-      
+
       if (this.isEditMode && this.data.section?.id) {
         const updateData: UpdateSectionDto = formData;
         this.sectionService.updateSection(this.data.section.id, updateData).subscribe({

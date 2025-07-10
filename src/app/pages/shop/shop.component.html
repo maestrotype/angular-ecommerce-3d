@@ -24,26 +24,19 @@
         <div class="filters-container">
           <!-- Controls -->
           <div class="controls-container">
-            <select 
-              class="filter-select"
-              [(ngModel)]="selectedCategory"
-              (change)="onCategoryChange()"
-            >
-            <option value="all">All categories</option>
-              <option *ngFor="let category of categories" [value]="category.id">
-                {{ category.name }}
-              </option>
-            </select>
-            
-            <select 
-              class="filter-select"
-              [(ngModel)]="sortBy"
-              (change)="onSortChange()"
-            >
-              <option value="name">Sort by Name</option>
-              <option value="price">Sort by Price</option>
-              <option value="rating">Sort by Rating</option>
-            </select>
+            <app-custom-dropdown
+            [options]="categoryOptions"
+            [selectedValue]="selectedCategory"
+            placeholder="All categories"
+            (valueChange)="onCategoryChange($event)"
+          ></app-custom-dropdown>
+          
+          <app-custom-dropdown
+            [options]="sortOptions"
+            [selectedValue]="sortBy"
+            placeholder="Sort by Name"
+            (valueChange)="onSortChange($event)"
+          ></app-custom-dropdown>
             
             <div class="view-toggle">
               <button 

@@ -31,10 +31,13 @@
                   placeholder="Enter section content"></textarea>
       </mat-form-field>
   
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Image URL</mat-label>
-        <input matInput formControlName="imageUrl" placeholder="Enter image URL">
-      </mat-form-field>
+      <div class="full-width">
+        <label for="imageUpload">Image</label>
+        <input type="file" id="imageUpload" (change)="onFileSelected($event)" accept="image/*">
+        <div *ngIf="imagePreview">
+          <img [src]="imagePreview" alt="Preview" style="max-width: 100%; margin-top: 10px;">
+        </div>
+      </div>
   
       <mat-slide-toggle formControlName="isActive" class="active-toggle">
         Section Active
