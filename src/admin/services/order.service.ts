@@ -4,28 +4,7 @@ import { environment } from 'src/environments/environment.prod';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-export interface OrderItem {
-  productId: number;
-  name: string;
-  price: number;
-  quantity: number;
-  image: string;
-}
-
-export interface Order {
-  id: number;
-  customerName: string;
-  customerEmail: string;
-  customerPhone?: string;
-  items: OrderItem[];
-  totalAmount: number;
-  status: string;
-  shippingAddress?: string;
-  notes?: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { Order } from '../models/order.model';
 
 @Injectable({
   providedIn: 'root'
