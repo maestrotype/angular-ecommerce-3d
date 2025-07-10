@@ -17,6 +17,7 @@ export class SectionFormComponent {
   loading = false;
   imageFile: File | null = null;
   imagePreview: string | ArrayBuffer | null = null;
+  uploadingImage = false;
 
   sectionTypes = [
     { value: 'hero', label: 'Hero Section' },
@@ -36,6 +37,10 @@ export class SectionFormComponent {
   ) {
     this.isEditMode = !!data?.section;
     this.sectionForm = this.createForm();
+
+    if (this.isEditMode && this.data.section?.imageUrl) {
+      this.imagePreview = this.data.section.imageUrl;
+    }
   }
 
   private createForm(): FormGroup {
@@ -53,46 +58,94 @@ export class SectionFormComponent {
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
-      this.imageFile = input.files[0];
-  
-      // For preview
+      const file = input.files[0];
+      
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        this.snackBar.open('Please select a valid image file', 'Close', { duration: 3000 });
+        return;
+      }
+      
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        this.snackBar.open('Image size must be less than 5MB', 'Close', { duration: 3000 });
+        return;
+      }
+
+      this.imageFile = file;
+
+      // Show preview
       const reader = new FileReader();
       reader.onload = e => this.imagePreview = reader.result;
       reader.readAsDataURL(this.imageFile);
     }
   }
 
-  onSubmit(): void {
+  removeImage(): void {
+    this.imageFile = null;
+    this.imagePreview = null;
+    this.sectionForm.patchValue({ imageUrl: '' });
+  }
+
+  private async uploadImageIfSelected(): Promise<string | null> {
+    if (!this.imageFile) {
+      return this.sectionForm.value.imageUrl || null;
+    }
+
+    this.uploadingImage = true;
+    try {
+      const response = await this.sectionService.uploadImage(this.imageFile).toPromise();
+      this.uploadingImage = false;
+      return response?.url || null;
+    } catch (error) {
+      this.uploadingImage = false;
+      this.snackBar.open('Error uploading image', 'Close', { duration: 3000 });
+      throw error;
+    }
+  }
+
+  async onSubmit(): Promise<void> {
     if (this.sectionForm.valid) {
       this.loading = true;
-      const formData = this.sectionForm.value;
+      
+      try {
+        // Upload image first if selected
+        const imageUrl = await this.uploadImageIfSelected();
+        
+        const formData = {
+          ...this.sectionForm.value,
+          imageUrl: imageUrl || this.sectionForm.value.imageUrl
+        };
 
-      if (this.isEditMode && this.data.section?.id) {
-        const updateData: UpdateSectionDto = formData;
-        this.sectionService.updateSection(this.data.section.id, updateData).subscribe({
-          next: (updatedSection) => {
-            this.snackBar.open('Section updated successfully', 'Close', { duration: 3000 });
-            this.dialogRef.close(updatedSection);
-          },
-          error: (error) => {
-            this.snackBar.open('Error updating section', 'Close', { duration: 3000 });
-            console.error('Error updating section:', error);
-            this.loading = false;
-          }
-        });
-      } else {
-        const createData: CreateSectionDto = formData;
-        this.sectionService.createSection(createData).subscribe({
-          next: (newSection) => {
-            this.snackBar.open('Section created successfully', 'Close', { duration: 3000 });
-            this.dialogRef.close(newSection);
-          },
-          error: (error) => {
-            this.snackBar.open('Error creating section', 'Close', { duration: 3000 });
-            console.error('Error creating section:', error);
-            this.loading = false;
-          }
-        });
+        if (this.isEditMode && this.data.section?.id) {
+          const updateData: UpdateSectionDto = formData;
+          this.sectionService.updateSection(this.data.section.id, updateData).subscribe({
+            next: (updatedSection) => {
+              this.snackBar.open('Section updated successfully', 'Close', { duration: 3000 });
+              this.dialogRef.close(updatedSection);
+            },
+            error: (error) => {
+              this.snackBar.open('Error updating section', 'Close', { duration: 3000 });
+              console.error('Error updating section:', error);
+              this.loading = false;
+            }
+          });
+        } else {
+          const createData: CreateSectionDto = formData;
+          this.sectionService.createSection(createData).subscribe({
+            next: (newSection) => {
+              this.snackBar.open('Section created successfully', 'Close', { duration: 3000 });
+              this.dialogRef.close(newSection);
+            },
+            error: (error) => {
+              this.snackBar.open('Error creating section', 'Close', { duration: 3000 });
+              console.error('Error creating section:', error);
+              this.loading = false;
+            }
+          });
+        }
+      } catch (error) {
+        this.loading = false;
       }
     }
   }

@@ -32,7 +32,7 @@ export class MessageListComponent implements OnInit {
 
   loadMessages(): void {
     this.loading = true;
-    this.messageService.getMessages(this.statusFilter, this.searchTerm).subscribe({
+    this.messageService.getMessages().subscribe({
       next: (messages) => {
         this.messages = messages;
         this.filteredMessages = messages;

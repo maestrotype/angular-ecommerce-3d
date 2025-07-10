@@ -31,13 +31,48 @@
                   placeholder="Enter section content"></textarea>
       </mat-form-field>
   
-      <div class="full-width">
-        <label for="imageUpload">Image</label>
-        <input type="file" id="imageUpload" (change)="onFileSelected($event)" accept="image/*">
-        <div *ngIf="imagePreview">
-          <img [src]="imagePreview" alt="Preview" style="max-width: 100%; margin-top: 10px;">
+      <!-- Image Upload Section -->
+    <div class="image-upload-section full-width">
+      <label class="upload-label">Section Image</label>
+      
+      <div class="upload-area" [class.has-image]="imagePreview">
+        <div *ngIf="!imagePreview" class="upload-placeholder">
+          <mat-icon>cloud_upload</mat-icon>
+          <p>Click to upload or drag image here</p>
+          <small>Maximum file size: 5MB | Formats: JPG, PNG, GIF</small>
         </div>
+        
+        <div *ngIf="imagePreview" class="image-preview">
+          <img [src]="imagePreview" alt="Section image preview" />
+          <div class="image-overlay">
+            <button type="button" mat-icon-button (click)="removeImage()" class="remove-btn">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+        
+        <input 
+          type="file" 
+          #fileInput
+          (change)="onFileSelected($event)" 
+          accept="image/*"
+          class="file-input"
+          [disabled]="uploadingImage"
+        />
+        
+        <button 
+          type="button" 
+          mat-stroked-button 
+          (click)="fileInput.click()"
+          [disabled]="uploadingImage"
+          class="upload-btn"
+        >
+          <mat-icon *ngIf="!uploadingImage">add_photo_alternate</mat-icon>
+          <mat-icon *ngIf="uploadingImage" class="spinning">hourglass_empty</mat-icon>
+          {{ uploadingImage ? 'Uploading...' : (imagePreview ? 'Change Image' : 'Select Image') }}
+        </button>
       </div>
+    </div>
   
       <mat-slide-toggle formControlName="isActive" class="active-toggle">
         Section Active
@@ -45,9 +80,9 @@
     </form>
   
     <div mat-dialog-actions class="actions">
-      <button mat-button (click)="onCancel()" [disabled]="loading">Cancel</button>
+      <button mat-button (click)="onCancel()" [disabled]="loading || uploadingImage">Cancel</button>
       <button mat-raised-button color="primary" (click)="onSubmit()" 
-              [disabled]="sectionForm.invalid || loading">
+              [disabled]="sectionForm.invalid || loading || uploadingImage">
         <mat-icon *ngIf="loading">hourglass_empty</mat-icon>
         {{ loading ? 'Saving...' : (isEditMode ? 'Update' : 'Create') }}
       </button>

@@ -21,7 +21,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
-
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminLayoutComponent } from './layout/admin-layout.component';
 import { AdminLoginComponent } from './pages/login/admin-login.component';
@@ -99,7 +100,9 @@ import { SectionService } from './services/section.service';
     MatBadgeModule,
     MatChipsModule,
     MatDividerModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSlideToggleModule,
+    DragDropModule
   ],
   providers: [
     NotificationService,
