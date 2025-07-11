@@ -67,7 +67,7 @@ export class UploadsController {
         callback(null, true);
       },
       limits: {
-        fileSize: 20 * 1024 * 1024, // 20MB
+        fileSize: 50 * 1024 * 1024, // 50MB
       },
     })
   )
