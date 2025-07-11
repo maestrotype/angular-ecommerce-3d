@@ -49,4 +49,13 @@ export class SectionService {
     formData.append('image', file);
     return this.http.post<{url: string}>(`${environment.apiUrl}/uploads/sections`, formData);
   }
+
+  upload3dModel(file: File): Observable<{ url: string }> {
+    const formData = new FormData();
+    formData.append('model', file);
+    return this.http.post<{ url: string }>(
+      `${environment.apiUrl}/uploads/sections-3d`,
+      formData
+    );
+  }
 }
