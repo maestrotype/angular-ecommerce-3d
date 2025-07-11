@@ -7,5 +7,5 @@ import { Section } from 'src/shared/models/section.model';
   styleUrls: ['./about.component.scss']
 })
 export class AboutComponent {
-  @Input() data!: Section;
+  @Input() data?: Section;
 }

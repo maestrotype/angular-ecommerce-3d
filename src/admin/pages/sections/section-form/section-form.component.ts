@@ -177,16 +177,18 @@ export class SectionFormComponent {
   async onSubmit(): Promise<void> {
     if (this.sectionForm.valid) {
       this.loading = true;
-      
       try {
         // Upload image first if selected
         const imageUrl = await this.uploadImageIfSelected();
-        
+        // Upload 3D model if selected
+        const model3dUrl = await this.upload3dIfSelected();
+  
         const formData = {
           ...this.sectionForm.value,
-          imageUrl: imageUrl || this.sectionForm.value.imageUrl
+          imageUrl: imageUrl || this.sectionForm.value.imageUrl,
+          model3dUrl: model3dUrl || this.sectionForm.value.model3dUrl
         };
-
+  
         if (this.isEditMode && this.data.section?.id) {
           const updateData: UpdateSectionDto = formData;
           this.sectionService.updateSection(this.data.section.id, updateData).subscribe({

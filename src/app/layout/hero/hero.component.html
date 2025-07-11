@@ -4,11 +4,14 @@
       <div class="hero-text">
         <div class="badge">NEW ARRIVAL</div>
         <h1 class="hero-title">
-          {{ data?.title || 'DISCOVER YOUR' }}<br />
-          <span class="highlight">{{ data?.content || 'NEW STYLE' }}</span>
+          {{ data?.title || "DISCOVER YOUR" }}<br />
+          <span class="highlight">{{ data?.content || "NEW STYLE" }}</span>
         </h1>
         <p class="hero-subtitle">
-          {{ data?.settings?.subtitle || 'Explore our latest interactive 3D collection.' }}
+          {{
+            data?.settings?.subtitle ||
+              "Explore our latest interactive 3D collection."
+          }}
         </p>
       </div>
 
@@ -27,6 +30,12 @@
             <div class="decoration decoration-3"></div>
           </div>
           <div class="wrap-model">
+            <app-three-d-viewer
+              *ngIf="data?.show3d && data?.model3dUrl"
+              [modelPath]="data?.model3dUrl"
+              [scale]="[9, 9, 9]"
+              [position]="[0, 0, 0]"
+            ></app-three-d-viewer>
             <!-- <app-three-d-viewer
               [modelPath]="'assets/models/bag/bag2.glb'"
               [scale]="[9, 9, 9]"
