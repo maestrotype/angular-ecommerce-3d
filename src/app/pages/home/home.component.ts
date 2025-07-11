@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../core/services/product.service';
 import { Product } from 'src/shared/models/product.model';
 import { SectionService } from 'src/admin/services/section.service';
+import { Section } from 'src/shared/models/section.model';
 
 @Component({
   selector: 'app-home',

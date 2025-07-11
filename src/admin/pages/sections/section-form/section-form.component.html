@@ -35,15 +35,15 @@
     <div class="image-upload-section full-width">
       <label class="upload-label">Section Image</label>
       
-      <div class="upload-area" [class.has-image]="imagePreview">
-        <div *ngIf="!imagePreview" class="upload-placeholder">
+      <div class="upload-area" [class.has-image]="imagePreview || sectionForm.value.imageUrl">
+        <div *ngIf="!(imagePreview || sectionForm.value.imageUrl)" class="upload-placeholder">
           <mat-icon>cloud_upload</mat-icon>
           <p>Click to upload or drag image here</p>
           <small>Maximum file size: 5MB | Formats: JPG, PNG, GIF</small>
         </div>
         
-        <div *ngIf="imagePreview" class="image-preview">
-          <img [src]="imagePreview" alt="Section image preview" />
+        <div *ngIf="imagePreview || sectionForm.value.imageUrl" class="image-preview">
+          <img [src]="imagePreview || sectionForm.value.imageUrl" alt="Section image preview" />
           <div class="image-overlay">
             <button type="button" mat-icon-button (click)="removeImage()" class="remove-btn">
               <mat-icon>delete</mat-icon>
