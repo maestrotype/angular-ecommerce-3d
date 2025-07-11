@@ -10,9 +10,14 @@ async function bootstrap() {
 
   // Ensure /uploads exists
   const uploadPath = join(__dirname, "..", "uploads");
+  const upload3dPath = join(uploadPath, "sections-3d");
   if (!existsSync(uploadPath)) {
     mkdirSync(uploadPath);
     console.log("Created /uploads folder");
+  }
+  if (!existsSync(upload3dPath)) {
+    mkdirSync(upload3dPath);
+    console.log("Created /uploads/sections-3d folder");
   }
 
   // Enable CORS for Angular frontend - including GitHub Pages
