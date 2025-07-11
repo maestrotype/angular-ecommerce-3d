@@ -26,6 +26,12 @@ export class Section {
   @Column('json', { nullable: true })
   settings: Record<string, any>;
 
+  @Column({ nullable: true })
+  model3dUrl: string;
+
+  @Column({ default: false })
+  show3d: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 

@@ -1,4 +1,8 @@
 <div class="wrap-model">
-    <app-three-d-viewer [modelPath]="'assets/models/bag/bag1.glb'" [scale]="[9, 9, 9]"
-        [position]="[0, 0, 0]"></app-three-d-viewer>
+    <app-three-d-viewer
+    *ngIf="section.show3d && section.model3dUrl"
+    [modelPath]="section.model3dUrl"
+    [scale]="[9,9,9]"
+    [position]="[0,0,0]"
+  ></app-three-d-viewer>
 </div>

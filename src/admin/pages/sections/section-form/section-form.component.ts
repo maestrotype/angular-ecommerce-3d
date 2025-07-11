@@ -19,6 +19,13 @@ export class SectionFormComponent {
   imagePreview: string | ArrayBuffer | null = null;
   uploadingImage = false;
 
+  // 3D model
+  model3dFile: File | null = null;
+  model3dUrl: string | null = null;
+  model3dFileName: string | null = null;
+  uploading3d = false;
+
+
   sectionTypes = [
     { value: 'hero', label: 'Hero Section' },
     { value: 'about', label: 'About Section' },
@@ -45,6 +52,11 @@ export class SectionFormComponent {
     } else {
       this.imagePreview = null;
     }
+    // 3D
+    if (this.isEditMode && this.data.section?.model3dUrl) {
+      this.model3dUrl = this.data.section.model3dUrl;
+      this.model3dFileName = this.model3dUrl.split('/').pop() || null;
+    }
   }
 
   private createForm(): FormGroup {
@@ -55,7 +67,9 @@ export class SectionFormComponent {
       title: [section?.title || '', Validators.required],
       content: [section?.content || ''],
       imageUrl: [section?.imageUrl || ''],
-      isActive: [section?.isActive ?? true]
+      isActive: [section?.isActive ?? true],
+      model3dUrl: [section?.model3dUrl || ''],
+      show3d: [section?.show3d ?? false]
     });
   }
 
@@ -113,6 +127,49 @@ export class SectionFormComponent {
     } catch (error) {
       this.uploadingImage = false;
       this.snackBar.open('Error uploading image', 'Close', { duration: 3000 });
+      throw error;
+    }
+  }
+
+  on3dFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      if (!file.name.endsWith('.glb')) {
+        this.snackBar.open('Please select a .glb file', 'Close', { duration: 3000 });
+        return;
+      }
+      this.model3dFile = file;
+      this.model3dFileName = file.name;
+      this.sectionForm.patchValue({ model3dUrl: '' });
+    }
+  }
+
+  remove3dModel(): void {
+    this.model3dFile = null;
+    this.model3dUrl = null;
+    this.model3dFileName = null;
+    this.sectionForm.patchValue({ model3dUrl: '' });
+  }
+
+  async upload3dIfSelected(): Promise<string | null> {
+    if (!this.model3dFile) {
+      return this.sectionForm.value.model3dUrl || null;
+    }
+    this.uploading3d = true;
+    try {
+      const response = await this.sectionService.upload3dModel(this.model3dFile).toPromise();
+      this.uploading3d = false;
+      if (response?.url) {
+        this.sectionForm.patchValue({ model3dUrl: response.url });
+        this.model3dUrl = response.url;
+        this.model3dFileName = response.url.split('/').pop() || null;
+        return response.url;
+      }
+      return null;
+    } catch (error) {
+      this.uploading3d = false;
+      this.snackBar.open('Error uploading 3D model', 'Close', { duration: 3000 });
       throw error;
     }
   }

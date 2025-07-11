@@ -10,7 +10,7 @@ import { DatabaseConfig } from './config/database.config';
 import { NotificationsModule } from './notifications/notifications.module';
 import { MessagesModule } from './messages/messages.module';
 import { SectionsModule } from './sections/sections.module';
-import { UploadsModule } from './uploads/uploads.module';
+import { UploadsModule } from './upload-module/uploads.module';
 // import { ServeStaticModule } from '@nestjs/serve-static';
 // import { join } from 'path';
 @Module({

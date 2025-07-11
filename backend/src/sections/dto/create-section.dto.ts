@@ -18,6 +18,14 @@ export class CreateSectionDto {
   imageUrl?: string;
 
   @IsOptional()
+  @IsString()
+  model3dUrl?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  show3d?: boolean;
+
+  @IsOptional()
   @IsNumber()
   order?: number;
 
