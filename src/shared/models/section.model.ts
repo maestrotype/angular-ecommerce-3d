@@ -7,4 +7,6 @@ export interface Section {
   order: number;
   isActive: boolean;
   settings?: any;
+  model3dUrl?: string;
+  show3d?: boolean;
 }
