@@ -7,14 +7,13 @@ import {
   ProductCreateRequest,
   ProductUpdateRequest,
 } from "../models/product.model";
-import { environment } from "src/environments/environment";
+import { environment } from "src/environments/environment.prod";
 
 @Injectable({
   providedIn: "root",
 })
 export class ProductService {
   private readonly API_URL = environment.apiUrl;
-  private readonly FALLBACK_API = environment.fallbackApiUrl;
 
   constructor(private http: HttpClient) {}
 
@@ -64,19 +63,19 @@ export class ProductService {
 
   getAllProducts(): Observable<Product[]> {
     return this.http
-      .get<Product[]>(`${this.FALLBACK_API}/products`)
+      .get<Product[]>(`${this.API_URL}/products`)
       .pipe(catchError(() => this.fallback<Product[]>("/products", "GET")));
   }
 
   getProductById(id: number): Observable<Product> {
     return this.http
-      .get<Product>(`${this.FALLBACK_API}/products/${id}`)
+      .get<Product>(`${this.API_URL}/products/${id}`)
       .pipe(catchError(() => this.fallback<Product>(`/products/${id}`, "GET")));
   }
 
   getProductsByCategory(category: string): Observable<Product[]> {
     return this.http
-      .get<Product[]>(`${this.FALLBACK_API}/products?category=${category}`)
+      .get<Product[]>(`${this.API_URL}/products?category=${category}`)
       .pipe(
         catchError(() =>
           this.fallback<Product[]>(`/products?category=${category}`, "GET")
@@ -86,7 +85,7 @@ export class ProductService {
 
   getFeaturedProducts(): Observable<Product[]> {
     return this.http
-      .get<Product[]>(`${this.FALLBACK_API}/products/featured`)
+      .get<Product[]>(`${this.API_URL}/products/featured`)
       .pipe(
         catchError(() => this.fallback<Product[]>("/products/featured", "GET"))
       );
@@ -95,7 +94,7 @@ export class ProductService {
   createProduct(product: ProductCreateRequest): Observable<Product> {
     const headers = this.getHeaders();
     return this.http
-      .post<Product>(`${this.FALLBACK_API}/products`, product, { headers })
+      .post<Product>(`${this.API_URL}/products`, product, { headers })
       .pipe(
         catchError(() =>
           this.fallback<Product>("/products", "POST", product, headers)
@@ -109,7 +108,7 @@ export class ProductService {
   ): Observable<Product> {
     const headers = this.getHeaders();
     return this.http
-      .patch<Product>(`${this.FALLBACK_API}/products/${id}`, product, {
+      .patch<Product>(`${this.API_URL}/products/${id}`, product, {
         headers,
       })
       .pipe(
@@ -122,7 +121,7 @@ export class ProductService {
   deleteProduct(id: number): Observable<void> {
     const headers = this.getHeaders();
     return this.http
-      .delete<void>(`${this.FALLBACK_API}/products/${id}`, { headers })
+      .delete<void>(`${this.API_URL}/products/${id}`, { headers })
       .pipe(
         catchError(() =>
           this.fallback<void>(`/products/${id}`, "DELETE", null, headers)
@@ -134,7 +133,7 @@ export class ProductService {
     const formData = new FormData();
     formData.append("image", file);
     return this.http.post<{ url: string }>(
-      `${this.FALLBACK_API}/products/upload`,
+      `${this.API_URL}/products/upload`,
       formData
     );
   }
