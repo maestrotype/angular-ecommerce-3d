@@ -37,9 +37,13 @@ export class SectionFormComponent {
   ) {
     this.isEditMode = !!data?.section;
     this.sectionForm = this.createForm();
-
+    
     if (this.isEditMode && this.data.section?.imageUrl) {
       this.imagePreview = this.data.section.imageUrl;
+    } else if (this.sectionForm.value.imageUrl) {
+      this.imagePreview = this.sectionForm.value.imageUrl;
+    } else {
+      this.imagePreview = null;
     }
   }
 
@@ -73,11 +77,12 @@ export class SectionFormComponent {
       }
 
       this.imageFile = file;
-
-      // Show preview
+      // Show preview (dataURL)
       const reader = new FileReader();
       reader.onload = e => this.imagePreview = reader.result;
       reader.readAsDataURL(this.imageFile);
+      // Сбросить imageUrl в форме, чтобы не было конфликта
+      this.sectionForm.patchValue({ imageUrl: '' });
     }
   }
 
@@ -89,6 +94,7 @@ export class SectionFormComponent {
 
   private async uploadImageIfSelected(): Promise<string | null> {
     if (!this.imageFile) {
+      // Если не выбран новый файл, используем url из формы
       return this.sectionForm.value.imageUrl || null;
     }
 
@@ -96,7 +102,14 @@ export class SectionFormComponent {
     try {
       const response = await this.sectionService.uploadImage(this.imageFile).toPromise();
       this.uploadingImage = false;
-      return response?.url || null;
+      if (response?.url) {
+        const baseUrl = 'https://angular-ecommerce-backend.onrender.com';
+        const imageUrl = response.url.startsWith('http') ? response.url : baseUrl + response.url;
+        this.sectionForm.patchValue({ imageUrl });
+        this.imagePreview = imageUrl;
+        return imageUrl;
+      }
+      return null;
     } catch (error) {
       this.uploadingImage = false;
       this.snackBar.open('Error uploading image', 'Close', { duration: 3000 });

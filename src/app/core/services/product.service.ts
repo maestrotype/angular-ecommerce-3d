@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { Product } from 'src/shared/models/product.model';
+import { environment } from "src/environments/environment.prod";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-  private readonly API_URL = 'https://angular-ecommerce-backend.onrender.com/api';
+  private readonly API_URL = environment.apiUrl;
   
   private cartSubject = new BehaviorSubject<Product[]>([]);
   cart$ = this.cartSubject.asObservable();

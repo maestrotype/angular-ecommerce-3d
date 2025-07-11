@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { Section } from 'src/shared/models/section.model';
 
 @Component({
     selector: 'app-hero',

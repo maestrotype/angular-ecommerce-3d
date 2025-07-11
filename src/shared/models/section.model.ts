@@ -1,4 +1,4 @@
-interface Section {
+export interface Section {
   id: number;
   type: string; // 'hero', 'about', 'promo', ...
   title: string;
