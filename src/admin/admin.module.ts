@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -51,6 +54,9 @@ import { DashboardService } from './services/dashboard.service';
 import { MessageService } from './services/message.service';
 import { SectionService } from './services/section.service';
 
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
+}
 @NgModule({
   declarations: [
     AdminLayoutComponent,
@@ -67,7 +73,7 @@ import { SectionService } from './services/section.service';
     MessageDetailComponent,
     SectionListComponent,
     SectionFormComponent,
-    
+
     UserListComponent,
     UserEditDialogComponent,
     DataTableComponent,
@@ -102,7 +108,15 @@ import { SectionService } from './services/section.service';
     MatDividerModule,
     MatTooltipModule,
     MatSlideToggleModule,
-    DragDropModule
+    DragDropModule,
+    HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
   ],
   providers: [
     NotificationService,

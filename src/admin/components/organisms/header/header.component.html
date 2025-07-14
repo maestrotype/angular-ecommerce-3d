@@ -34,7 +34,7 @@
   <!-- Notification Menu -->
   <mat-menu #notificationMenu="matMenu" class="notification-menu">
     <div class="notification-header">
-      <span class="notification-title">Notifications</span>
+      <span class="notification-title">{{ 'NOTIFICATIONS' | translate }}</span>
       <button mat-button class="mark-all-read" (click)="markAllAsRead()" *ngIf="unreadCount > 0">
         Mark all as read
       </button>

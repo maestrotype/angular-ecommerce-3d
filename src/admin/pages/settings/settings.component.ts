@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SettingsService } from '../../services/settings.service';
-
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
@@ -17,7 +17,8 @@ export class SettingsComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private settingsService: SettingsService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) {
     this.generalForm = this.fb.group({
       siteName: ['E-Commerce Admin', Validators.required],
@@ -41,10 +42,20 @@ export class SettingsComponent implements OnInit {
       passwordExpiry: [90, [Validators.required, Validators.min(30), Validators.max(365)]],
       maxLoginAttempts: [5, [Validators.required, Validators.min(3), Validators.max(10)]]
     });
+
+    const savedLang = localStorage.getItem('adminLang') || 'en';
+    this.translate.setDefaultLang(savedLang);
+    this.translate.use(savedLang);
+    this.generalForm.get('language')?.setValue(savedLang);
   }
 
   ngOnInit(): void {
     this.loadSettings();
+  }
+
+  onLanguageChange(lang: string) {
+    this.translate.use(lang);
+    localStorage.setItem('adminLang', lang);
   }
 
   loadSettings(): void {

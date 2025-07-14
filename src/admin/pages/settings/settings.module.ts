@@ -10,6 +10,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { TranslateModule } from '@ngx-translate/core';
 
 import { SettingsRoutingModule } from './settings-routing.module';
 import { SettingsComponent } from './settings.component';
@@ -31,7 +32,8 @@ import { SettingsService } from '../../services/settings.service';
     MatSlideToggleModule,
     MatSelectModule,
     MatDividerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    TranslateModule
   ],
   providers: [
     SettingsService

@@ -1,9 +1,9 @@
 <div class="dashboard-container">
-  <h1>Admin Dashboard</h1>
+  <h1>{{ 'ADMIN_DASHBOARD' | translate }}</h1>
   
   <div class="loading-container" *ngIf="isLoading">
     <mat-spinner diameter="40"></mat-spinner>
-    <p>Loading dashboard data...</p>
+    <p>{{ 'LOADING_DASHBOARD_DATA' | translate }}</p>
   </div>
 
   <div class="stats-grid" *ngIf="!isLoading">
@@ -12,7 +12,7 @@
         <div class="stat-content">
           <mat-icon class="stat-icon products">inventory</mat-icon>
           <div class="stat-info">
-            <h3>Products</h3>
+            <h3>{{ 'PRODUCTS' | translate }}</h3>
             <p class="stat-number">{{ formatNumber(stats.products) }}</p>
           </div>
         </div>
@@ -24,7 +24,7 @@
         <div class="stat-content">
           <mat-icon class="stat-icon orders">shopping_cart</mat-icon>
           <div class="stat-info">
-            <h3>Orders</h3>
+            <h3>{{ 'ORDERS' | translate }}</h3>
             <p class="stat-number">{{ formatNumber(stats.orders) }}</p>
           </div>
         </div>
@@ -36,7 +36,7 @@
         <div class="stat-content">
           <mat-icon class="stat-icon users">people</mat-icon>
           <div class="stat-info">
-            <h3>Users</h3>
+            <h3>{{ 'USERS' | translate }}</h3>
             <p class="stat-number">{{ formatNumber(stats.users) }}</p>
           </div>
         </div>
@@ -48,7 +48,7 @@
         <div class="stat-content">
           <mat-icon class="stat-icon revenue">attach_money</mat-icon>
           <div class="stat-info">
-            <h3>Revenue</h3>
+            <h3>{{ 'REVENUE' | translate }}</h3>
             <p class="stat-number">{{ formatCurrency(stats.revenue) }}</p>
           </div>
         </div>
