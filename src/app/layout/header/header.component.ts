@@ -120,6 +120,16 @@ export class HeaderComponent {
     });
   }
 
+  goHome() {
+    if (this.router.url === '/home') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      this.router.navigate(['/home']).then(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  }
+
   goToProduct(productId: number) {
     this.router.navigate(['/product', productId]);
     this.isSearchOpen = false;
