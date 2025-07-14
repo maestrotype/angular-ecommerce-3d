@@ -1,219 +1,231 @@
 <div class="settings-container">
-    <div class="settings-header">
-      <h1 class="page-title">Settings</h1>
-      <p class="page-subtitle">Configure your application settings</p>
-    </div>
-  
-    <div class="settings-content">
-      <!-- General Settings Card -->
-      <mat-card class="settings-card">
-        <mat-card-header>
-          <mat-card-title>General Settings</mat-card-title>
-          <mat-card-subtitle>Basic application configuration</mat-card-subtitle>
-        </mat-card-header>
-        
-        <mat-card-content>
-          <form [formGroup]="generalForm" (ngSubmit)="onSaveGeneral()" class="settings-form">
-            <div class="form-row">
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Site Name</mat-label>
-                <input matInput formControlName="siteName" placeholder="Enter site name">
-                <mat-icon matSuffix>business</mat-icon>
-                <mat-error *ngIf="generalForm.get('siteName')?.hasError('required')">
-                  Site name is required
-                </mat-error>
-              </mat-form-field>
-            </div>
-  
-            <div class="form-row">
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Site Description</mat-label>
-                <textarea matInput formControlName="siteDescription" rows="3" 
-                          placeholder="Enter site description"></textarea>
-                <mat-icon matSuffix>description</mat-icon>
-              </mat-form-field>
-            </div>
-  
-            <div class="form-row">
-              <mat-form-field appearance="outline" class="half-width">
-                <mat-label>Currency</mat-label>
-                <mat-select formControlName="currency">
-                  <mat-option value="USD">USD - US Dollar</mat-option>
-                  <mat-option value="EUR">EUR - Euro</mat-option>
-                  <mat-option value="GBP">GBP - British Pound</mat-option>
-                  <mat-option value="JPY">JPY - Japanese Yen</mat-option>
-                </mat-select>
-                <mat-icon matSuffix>attach_money</mat-icon>
-              </mat-form-field>
-  
-              <mat-form-field appearance="outline" class="half-width">
-                <mat-label>Timezone</mat-label>
-                <mat-select formControlName="timezone">
-                  <mat-option value="UTC">UTC</mat-option>
-                  <mat-option value="EST">EST - Eastern Time</mat-option>
-                  <mat-option value="PST">PST - Pacific Time</mat-option>
-                  <mat-option value="GMT">GMT - Greenwich Mean Time</mat-option>
-                </mat-select>
-                <mat-icon matSuffix>schedule</mat-icon>
-              </mat-form-field>
-            </div>
-  
-            <div class="form-actions">
-              <button mat-raised-button color="primary" type="submit" 
-                      [disabled]="generalForm.invalid || isLoading">
-                <mat-icon>save</mat-icon>
-                {{ isLoading ? 'Saving...' : 'Save General Settings' }}
-              </button>
-            </div>
-          </form>
-        </mat-card-content>
-      </mat-card>
-  
-      <!-- Notification Settings Card -->
-      <mat-card class="settings-card">
-        <mat-card-header>
-          <mat-card-title>Notification Settings</mat-card-title>
-          <mat-card-subtitle>Configure notification preferences</mat-card-subtitle>
-        </mat-card-header>
-        
-        <mat-card-content>
-          <form [formGroup]="notificationForm" (ngSubmit)="onSaveNotifications()" class="settings-form">
-            <div class="toggle-group">
-              <div class="toggle-item">
-                <mat-slide-toggle formControlName="emailNotifications">
-                  Email Notifications
-                </mat-slide-toggle>
-                <p class="toggle-description">Receive notifications via email</p>
-              </div>
-  
-              <mat-divider></mat-divider>
-  
-              <div class="toggle-item">
-                <mat-slide-toggle formControlName="orderNotifications">
-                  Order Notifications
-                </mat-slide-toggle>
-                <p class="toggle-description">Get notified about new orders and status changes</p>
-              </div>
-  
-              <mat-divider></mat-divider>
-  
-              <div class="toggle-item">
-                <mat-slide-toggle formControlName="stockAlerts">
-                  Stock Alerts
-                </mat-slide-toggle>
-                <p class="toggle-description">Receive alerts when products are low in stock</p>
-              </div>
-  
-              <mat-divider></mat-divider>
-  
-              <div class="toggle-item">
-                <mat-slide-toggle formControlName="userRegistrations">
-                  User Registrations
-                </mat-slide-toggle>
-                <p class="toggle-description">Get notified when new users register</p>
-              </div>
-  
-              <mat-divider></mat-divider>
-  
-              <div class="toggle-item">
-                <mat-slide-toggle formControlName="systemUpdates">
-                  System Updates
-                </mat-slide-toggle>
-                <p class="toggle-description">Receive notifications about system updates</p>
-              </div>
-            </div>
-  
-            <div class="form-actions">
-              <button mat-raised-button color="primary" type="submit" [disabled]="isLoading">
-                <mat-icon>notifications</mat-icon>
-                {{ isLoading ? 'Saving...' : 'Save Notification Settings' }}
-              </button>
-            </div>
-          </form>
-        </mat-card-content>
-      </mat-card>
-  
-      <!-- Security Settings Card -->
-      <mat-card class="settings-card">
-        <mat-card-header>
-          <mat-card-title>Security Settings</mat-card-title>
-          <mat-card-subtitle>Configure security and authentication</mat-card-subtitle>
-        </mat-card-header>
-        
-        <mat-card-content>
-          <form [formGroup]="securityForm" (ngSubmit)="onSaveSecurity()" class="settings-form">
-            <div class="toggle-group">
-              <div class="toggle-item">
-                <mat-slide-toggle formControlName="twoFactorAuth">
-                  Two-Factor Authentication
-                </mat-slide-toggle>
-                <p class="toggle-description">Enable two-factor authentication for enhanced security</p>
-              </div>
-            </div>
-  
-            <mat-divider></mat-divider>
-  
-            <div class="form-row">
-              <mat-form-field appearance="outline" class="half-width">
-                <mat-label>Session Timeout (minutes)</mat-label>
-                <input matInput formControlName="sessionTimeout" type="number" 
-                       placeholder="Enter session timeout">
-                <mat-icon matSuffix>timer</mat-icon>
-                <mat-error *ngIf="securityForm.get('sessionTimeout')?.hasError('required')">
-                  Session timeout is required
-                </mat-error>
-                <mat-error *ngIf="securityForm.get('sessionTimeout')?.hasError('min')">
-                  Minimum value is 5 minutes
-                </mat-error>
-                <mat-error *ngIf="securityForm.get('sessionTimeout')?.hasError('max')">
-                  Maximum value is 120 minutes
-                </mat-error>
-              </mat-form-field>
-  
-              <mat-form-field appearance="outline" class="half-width">
-                <mat-label>Password Expiry (days)</mat-label>
-                <input matInput formControlName="passwordExpiry" type="number" 
-                       placeholder="Enter password expiry">
-                <mat-icon matSuffix>password</mat-icon>
-                <mat-error *ngIf="securityForm.get('passwordExpiry')?.hasError('required')">
-                  Password expiry is required
-                </mat-error>
-                <mat-error *ngIf="securityForm.get('passwordExpiry')?.hasError('min')">
-                  Minimum value is 30 days
-                </mat-error>
-                <mat-error *ngIf="securityForm.get('passwordExpiry')?.hasError('max')">
-                  Maximum value is 365 days
-                </mat-error>
-              </mat-form-field>
-            </div>
-  
-            <div class="form-row">
-              <mat-form-field appearance="outline" class="half-width">
-                <mat-label>Max Login Attempts</mat-label>
-                <input matInput formControlName="maxLoginAttempts" type="number" 
-                       placeholder="Enter max login attempts">
-                <mat-icon matSuffix>security</mat-icon>
-                <mat-error *ngIf="securityForm.get('maxLoginAttempts')?.hasError('required')">
-                  Max login attempts is required
-                </mat-error>
-                <mat-error *ngIf="securityForm.get('maxLoginAttempts')?.hasError('min')">
-                  Minimum value is 3 attempts
-                </mat-error>
-                <mat-error *ngIf="securityForm.get('maxLoginAttempts')?.hasError('max')">
-                  Maximum value is 10 attempts
-                </mat-error>
-              </mat-form-field>
-            </div>
-  
-            <div class="form-actions">
-              <button mat-raised-button color="primary" type="submit" 
-                      [disabled]="securityForm.invalid || isLoading">
-                <mat-icon>security</mat-icon>
-                {{ isLoading ? 'Saving...' : 'Save Security Settings' }}
-              </button>
-            </div>
-          </form>
-        </mat-card-content>
-      </mat-card>
-    </div>
+  <div class="settings-header">
+    <h1 class="page-title">{{ 'SETTINGS' | translate }}</h1>
+    <p class="page-subtitle">{{ 'CONFIGURE_SETTINGS' | translate }}</p>
   </div>
+
+  <div class="settings-content">
+    <!-- General Settings Card -->
+    <mat-card class="settings-card">
+      <mat-card-header>
+        <mat-card-title>{{ 'GENERAL_SETTINGS' | translate }}</mat-card-title>
+        <mat-card-subtitle>Basic application configuration</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="generalForm" (ngSubmit)="onSaveGeneral()" class="settings-form">
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'SITE_NAME' | translate }}</mat-label>
+              <input matInput formControlName="siteName" placeholder="Enter site name">
+              <mat-icon matSuffix>business</mat-icon>
+              <mat-error *ngIf="generalForm.get('siteName')?.hasError('required')">
+                Site name is required
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'SITE_DESCRIPTION' | translate }}</mat-label>
+              <textarea matInput formControlName="siteDescription" rows="3"
+                placeholder="Enter site description"></textarea>
+              <mat-icon matSuffix>description</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>{{ 'CURRENCY' | translate }}</mat-label>
+              <mat-select formControlName="currency">
+                <mat-option value="USD">USD - {{ 'USD' | translate }}</mat-option>
+                <mat-option value="EUR">USD - {{ 'USD' | translate }}</mat-option>
+                <mat-option value="GBP">GBP - British Pound</mat-option>
+                <mat-option value="JPY">JPY - Japanese Yen</mat-option>
+              </mat-select>
+              <mat-icon matSuffix>attach_money</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>{{ 'TIMEZONE' | translate }}</mat-label>
+              <mat-select formControlName="timezone">
+                <mat-option value="UTC">UTC</mat-option>
+                <mat-option value="EST">EST - {{ 'EST' | translate }}</mat-option>
+                <mat-option value="PST">PST - {{ 'PST' | translate }}</mat-option>
+                <mat-option value="GMT">GMT - {{ 'GMT' | translate }}</mat-option>
+              </mat-select>
+              <mat-icon matSuffix>schedule</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="form-actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="generalForm.invalid || isLoading">
+              <mat-icon>save</mat-icon>
+              {{ isLoading ? ('SAVING' | translate) : ('SAVE_GENERAL_SETTINGS' | translate) }}
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="translate-card">
+      <mat-card-header>
+        <mat-card-title>{{ 'LANGUAGE_SETTINGS' | translate }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>{{ 'LANGUAGE' | translate }}</mat-label>
+          <mat-select formControlName="language" (selectionChange)="onLanguageChange($event.value)">
+            <mat-option value="en">English</mat-option>
+            <mat-option value="ru">Русский</mat-option>
+            <mat-option value="ua">Українська</mat-option>
+          </mat-select>
+          <mat-icon matSuffix>language</mat-icon>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Notification Settings Card -->
+    <mat-card class="settings-card">
+      <mat-card-header>
+        <mat-card-title>{{ 'NOTIFICATION_SETTINGS' | translate }}</mat-card-title>
+        <mat-card-subtitle>{{ 'NOTIFICATION_SETTINGS' | translate }}Configure notification preferences</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="notificationForm" (ngSubmit)="onSaveNotifications()" class="settings-form">
+          <div class="toggle-group">
+            <div class="toggle-item">
+              <mat-slide-toggle formControlName="emailNotifications">
+                {{ 'EMAIL_NOTIFICATIONS' | translate }}
+              </mat-slide-toggle>
+              <p class="toggle-description">{{ 'RECEIVE_EMAIL_NOTIFICATIONS' | translate }}</p>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div class="toggle-item">
+              <mat-slide-toggle formControlName="orderNotifications">
+                {{ 'ORDER_NOTIFICATIONS' | translate }}
+              </mat-slide-toggle>
+              <p class="toggle-description">{{ 'ORDER_NOTIFICATIONS_DESC' | translate }}</p>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div class="toggle-item">
+              <mat-slide-toggle formControlName="stockAlerts">
+                {{ 'STOCK_ALERTS' | translate }}
+              </mat-slide-toggle>
+              <p class="toggle-description">{{ 'STOCK_ALERTS_DESC' | translate }}</p>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div class="toggle-item">
+              <mat-slide-toggle formControlName="userRegistrations">
+                {{ 'USER_REGISTRATIONS' | translate }}
+              </mat-slide-toggle>
+              <p class="toggle-description">{{ 'USER_REGISTRATIONS_DESC' | translate }}</p>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div class="toggle-item">
+              <mat-slide-toggle formControlName="systemUpdates">
+                {{ 'SYSTEM_UPDATES' | translate }}
+              </mat-slide-toggle>
+              <p class="toggle-description">{{ 'SYSTEM_UPDATES_DESC' | translate }}</p>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="isLoading">
+              <mat-icon>notifications</mat-icon>
+              {{ isLoading ? ('SAVING' | translate) : ('SAVE_NOTIFICATION_SETTINGS' | translate) }}
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Security Settings Card -->
+    <mat-card class="settings-card">
+      <mat-card-header>
+        <mat-card-title>{{ 'SECURITY_SETTINGS' | translate }}</mat-card-title>
+        <mat-card-subtitle>{{ 'SECURITY_SETTINGS_DESC' | translate }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="securityForm" (ngSubmit)="onSaveSecurity()" class="settings-form">
+          <div class="toggle-group">
+            <div class="toggle-item">
+              <mat-slide-toggle formControlName="twoFactorAuth">
+                {{ 'TWO_FACTOR_AUTH' | translate }}
+              </mat-slide-toggle>
+              <p class="toggle-description">{{ 'TWO_FACTOR_AUTH_DESC' | translate }}</p>
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label> {{ 'SESSION_TIMEOUT' | translate }}</mat-label>
+              <input matInput formControlName="sessionTimeout" type="number" placeholder="Enter session timeout">
+              <mat-icon matSuffix>timer</mat-icon>
+              <mat-error *ngIf="securityForm.get('sessionTimeout')?.hasError('required')">
+                {{ 'SESSION_TIMEOUT_REQUIRED' | translate }}
+              </mat-error>
+              <mat-error *ngIf="securityForm.get('sessionTimeout')?.hasError('min')">
+                {{ 'MIN_SESSION_TIMEOUT' | translate }}
+              </mat-error>
+              <mat-error *ngIf="securityForm.get('sessionTimeout')?.hasError('max')">
+                {{ 'MAX_SESSION_TIMEOUT' | translate }}
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>{{ 'PASSWORD_EXPIRY' | translate }}</mat-label>
+              <input matInput formControlName="passwordExpiry" type="number" placeholder="Enter password expiry">
+              <mat-icon matSuffix>password</mat-icon>
+              <mat-error *ngIf="securityForm.get('passwordExpiry')?.hasError('required')">
+                {{ 'PASSWORD_EXPIRY_REQUIRED' | translate }}
+              </mat-error>
+              <mat-error *ngIf="securityForm.get('passwordExpiry')?.hasError('min')">
+                {{ 'MIN_PASSWORD_EXPIRY' | translate }}
+              </mat-error>
+              <mat-error *ngIf="securityForm.get('passwordExpiry')?.hasError('max')">
+                {{ 'MAX_PASSWORD_EXPIRY' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>{{ 'MAX_LOGIN_ATTEMPTS' | translate }}</mat-label>
+              <input matInput formControlName="maxLoginAttempts" type="number" placeholder="Enter max login attempts">
+              <mat-icon matSuffix>security</mat-icon>
+              <mat-error *ngIf="securityForm.get('maxLoginAttempts')?.hasError('required')">
+                {{ 'MAX_LOGIN_ATTEMPTS_REQUIRED' | translate }}
+              </mat-error>
+              <mat-error *ngIf="securityForm.get('maxLoginAttempts')?.hasError('min')">
+                {{ 'MIN_LOGIN_ATTEMPTS' | translate }}
+              </mat-error>
+              <mat-error *ngIf="securityForm.get('maxLoginAttempts')?.hasError('max')">
+                {{ 'MAX_LOGIN_ATTEMPTS_ERROR' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="securityForm.invalid || isLoading">
+              <mat-icon>security</mat-icon>
+              {{ isLoading ? ('SAVING' | translate) : ('SAVE_SECURITY_SETTINGS' | translate) }}
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

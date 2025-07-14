@@ -17,18 +17,18 @@ interface NavItem {
 })
 export class SidenavComponent {
   navItems: NavItem[] = [
-    { label: "Dashboard", route: "/admin/dashboard", icon: "dashboard" },
-    { label: "Products", route: "/admin/products", icon: "inventory" },
-    { label: "Categories", route: "/admin/categories", icon: "category" },
+    { label: "DASHBOARD", route: "/admin/dashboard", icon: "dashboard" },
+    { label: "PRODUCTS", route: "/admin/products", icon: "inventory" },
+    { label: "CATEGORIES", route: "/admin/categories", icon: "category" },
     {
-      label: "Orders",
+      label: "ORDERS",
       route: "/admin/orders",
       icon: "shopping_cart",
       badge: 0,
     },
-    { label: "Users", route: "/admin/users", icon: "people" },
-    { label: "Messages", route: "/admin/messages", icon: "email" },
-    { label: "Page Sections", route: "/admin/sections", icon: "view_module" },
+    { label: "USERS", route: "/admin/users", icon: "people" },
+    { label: "MESSAGES", route: "/admin/messages", icon: "email" },
+    { label: "PAGE_SECTIONS", route: "/admin/sections", icon: "view_module" },
   ];
 
   constructor(
@@ -43,7 +43,7 @@ export class SidenavComponent {
 
   loadPendingOrdersCount(): void {
     this.orderService.getPendingOrdersCount().subscribe(count => {
-      const ordersNav = this.navItems.find(item => item.label === "Orders");
+      const ordersNav = this.navItems.find(item => item.label === "ORDERS");
       if (ordersNav) {
         ordersNav.badge = count;
       }
