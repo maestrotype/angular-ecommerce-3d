@@ -14,24 +14,12 @@ export class OrderService {
 
   constructor(private http: HttpClient) {}
 
-  async getOrders(): Promise<Order[]> {
-    const response = await fetch(this.apiUrl);
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch orders');
-    }
-
-    return await response.json();
+  getOrders(): Observable<Order[]> {
+    return this.http.get<Order[]>(this.apiUrl);
   }
 
-  async getOrder(id: number): Promise<Order> {
-    const response = await fetch(`${this.apiUrl}/${id}`);
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch order');
-    }
-
-    return await response.json();
+  getOrder(id: number): Observable<Order> {
+    return this.http.get<Order>(`${this.apiUrl}/${id}`);
   }
 
   getPendingOrdersCount(): Observable<number> {
@@ -40,29 +28,11 @@ export class OrderService {
     );
   }
 
-  async updateOrderStatus(id: number, status: string, notes?: string): Promise<Order> {
-    const response = await fetch(`${this.apiUrl}/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ status, notes }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to update order');
-    }
-
-    return await response.json();
+  updateOrderStatus(id: number, status: string, notes?: string): Observable<Order> {
+    return this.http.patch<Order>(`${this.apiUrl}/${id}`, { status, notes });
   }
 
-  async getOrderStats() {
-    const response = await fetch(`${this.apiUrl}/stats`);
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch order stats');
-    }
-
-    return await response.json();
+  getOrderStats(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/stats`);
   }
 }

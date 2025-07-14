@@ -13,28 +13,11 @@ const routes: Routes = [
   // { path: 'contact', component: ContactComponent },
   { path: "product/:id", component: ProductDetailComponent },
   { path: "", redirectTo: "/home", pathMatch: "full" },
-
   {
     path: 'admin',
     loadChildren: () => import('../admin/admin.module').then(m => m.AdminModule)
   },
-  // Admin (lazy-load)
-  // {
-  //   path: "admin",
-  //   loadChildren: () =>
-  //     import("../admin/admin.module").then((m) => m.AdminModule),
-  // },
-  {
-    path: '',
-    redirectTo: '/',
-    pathMatch: 'full'
-  },
-  {
-    path: '**',
-    redirectTo: '/'
-  }
-  // { path: "", redirectTo: "/home", pathMatch: "full" },
-  // { path: "**", redirectTo: "/home" }, // fallback
+  { path: "**", redirectTo: "/home" }
 ];
 
 @NgModule({

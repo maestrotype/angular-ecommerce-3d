@@ -59,8 +59,9 @@ export class OrderListComponent implements OnInit {
     this.error = null;
 
     try {
-      const orders = await this.orderService.getOrders();
-      this.dataSource.data = orders;
+      this.orderService.getOrders().subscribe(orders => {
+        this.dataSource.data = orders;
+      });
     } catch (error) {
       console.error('Error loading orders:', error);
       this.error = 'Failed to load orders';
