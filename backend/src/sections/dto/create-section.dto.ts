@@ -26,6 +26,10 @@ export class CreateSectionDto {
   show3d?: boolean;
 
   @IsOptional()
+  @IsBoolean()
+  showImage?: boolean;
+
+  @IsOptional()
   @IsNumber()
   order?: number;
 
