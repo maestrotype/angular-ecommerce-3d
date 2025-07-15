@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment.prod";
+import { ApiResponse } from 'src/shared/models/api-response.model';
 
 export interface ProfileUpdateRequest {
   name: string;
@@ -23,11 +24,11 @@ export class ProfileService {
 
   constructor(private http: HttpClient) {}
 
-  updateProfile(profileData: ProfileUpdateRequest): Observable<any> {
-    return this.http.put(`${this.apiUrl}/update`, profileData);
+  updateProfile(profileData: ProfileUpdateRequest): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(`${this.apiUrl}/update`, profileData);
   }
 
-  changePassword(passwordData: PasswordChangeRequest): Observable<any> {
-    return this.http.put(`${this.apiUrl}/change-password`, passwordData);
+  changePassword(passwordData: PasswordChangeRequest): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(`${this.apiUrl}/change-password`, passwordData);
   }
 }
