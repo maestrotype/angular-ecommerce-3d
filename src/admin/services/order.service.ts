@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Order } from '../models/order.model';
+import { OrderStats } from 'src/shared/models/order-stats.model';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +33,7 @@ export class OrderService {
     return this.http.patch<Order>(`${this.apiUrl}/${id}`, { status, notes });
   }
 
-  getOrderStats(): Observable<any> {
+  getOrderStats(): Observable<OrderStats> {
     return this.http.get<any>(`${this.apiUrl}/stats`);
   }
 }

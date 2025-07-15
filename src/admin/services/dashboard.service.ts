@@ -3,6 +3,8 @@ import { HttpClient } from "@angular/common/http";
 import { Observable, forkJoin, of } from "rxjs";
 import { catchError, map } from "rxjs/operators";
 import { environment } from "src/environments/environment.prod";
+import { Product } from 'src/shared/models/product.model';
+import { Order } from 'src/shared/models/order.model';
 
 export interface DashboardStats {
   products: number;
@@ -39,14 +41,14 @@ export class DashboardService {
   }
 
   private getProductsCount(): Observable<number> {
-    return this.http.get<any[]>(`${this.apiUrl}/products`).pipe(
+    return this.http.get<Product[]>(`${this.apiUrl}/products`).pipe(
       map((products) => products.length),
       catchError(() => of(1234))
     );
   }
 
   private getOrdersCount(): Observable<number> {
-    return this.http.get<any[]>(`${this.apiUrl}/orders`).pipe(
+    return this.http.get<Product[]>(`${this.apiUrl}/orders`).pipe(
       map((orders) => orders.length),
       catchError(() => of(567))
     );
@@ -54,7 +56,7 @@ export class DashboardService {
 
   private getUsersCount(): Observable<number> {
     return this.http
-      .get<{ users: any[]; total: number }>(`${this.apiUrl}/users`)
+      .get<{ users: Product[]; total: number }>(`${this.apiUrl}/users`)
       .pipe(
         map((response) => response.total || response.users.length),
         catchError(() => of(890))
@@ -62,11 +64,9 @@ export class DashboardService {
   }
 
   private getRevenue(): Observable<number> {
-    return this.http.get<any[]>(`${this.apiUrl}/orders`).pipe(
+    return this.http.get<Order[]>(`${this.apiUrl}/orders`).pipe(
       map((orders) => {
-        return orders.reduce((total, order) => {
-          return total + (order.totalAmount || 0);
-        }, 0);
+        return orders.reduce((total, order) => total + (order.totalAmount || 0), 0);
       }),
       catchError(() => of(45678))
     );

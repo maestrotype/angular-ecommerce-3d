@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable, of } from "rxjs";
 import { environment } from "src/environments/environment.prod";
+import { ApiResponse } from 'src/shared/models/api-response.model';
 
 export interface GeneralSettings {
   siteName: string;
@@ -66,15 +67,15 @@ export class SettingsService {
     });
   }
 
-  updateGeneralSettings(settings: GeneralSettings): Observable<any> {
-    return this.http.put(`${this.apiUrl}/general`, settings);
+  updateGeneralSettings(settings: GeneralSettings): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(`${this.apiUrl}/general`, settings);
   }
 
-  updateNotificationSettings(settings: NotificationSettings): Observable<any> {
-    return this.http.put(`${this.apiUrl}/notifications`, settings);
+  updateNotificationSettings(settings: NotificationSettings): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(`${this.apiUrl}/notifications`, settings);
   }
 
-  updateSecuritySettings(settings: SecuritySettings): Observable<any> {
-    return this.http.put(`${this.apiUrl}/security`, settings);
+  updateSecuritySettings(settings: SecuritySettings): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(`${this.apiUrl}/security`, settings);
   }
 }
