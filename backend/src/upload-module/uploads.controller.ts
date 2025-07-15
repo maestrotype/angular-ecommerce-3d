@@ -7,8 +7,12 @@ import {
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
-import { extname } from "path";
 import { v4 as uuidv4 } from "uuid";
+import { execSync } from "child_process";
+import { unlinkSync, statSync } from "fs";
+import * as os from "os";
+import { v2 as cloudinary } from "cloudinary";
+import "../config/cloudinary.config"; // важно для инициализации
 
 @Controller("uploads")
 export class UploadsController {
@@ -16,11 +20,10 @@ export class UploadsController {
   @UseInterceptors(
     FileInterceptor("image", {
       storage: diskStorage({
-        destination: "./uploads/sections",
+        destination: os.tmpdir(),
         filename: (req, file, callback) => {
           const uniqueSuffix = uuidv4();
-          const ext = extname(file.originalname);
-          callback(null, `section-${uniqueSuffix}${ext}`);
+          callback(null, `section-${uniqueSuffix}`);
         },
       }),
       fileFilter: (req, file, callback) => {
@@ -37,28 +40,38 @@ export class UploadsController {
       },
     })
   )
-  uploadSectionImage(@UploadedFile() file: Express.Multer.File) {
+  async uploadSectionImage(@UploadedFile() file: Express.Multer.File) {
     if (!file) {
       throw new BadRequestException("No file uploaded");
     }
-
-    return {
-      url: `/uploads/sections/${file.filename}`,
-    };
+    try {
+      const result = await cloudinary.uploader.upload(file.path, {
+        folder: 'sections',
+        use_filename: true,
+        unique_filename: false,
+        overwrite: true,
+      });
+      unlinkSync(file.path);
+      return { url: result.secure_url };
+    } catch (e) {
+      throw new BadRequestException('Cloudinary image upload failed');
+    }
   }
 
   @Post("sections-3d")
   @UseInterceptors(
     FileInterceptor("model", {
       storage: diskStorage({
-        destination: "./uploads/sections-3d",
+        destination: os.tmpdir(),
         filename: (req, file, callback) => {
           const uniqueSuffix = uuidv4();
-          callback(null, `section3d-${uniqueSuffix}.glb`);
+          callback(null, `section3d-upload-${uniqueSuffix}.glb`);
         },
       }),
       fileFilter: (req, file, callback) => {
-        if (!file.originalname.match(/\\.glb$/)) {
+        const isGlb = file.originalname.toLowerCase().endsWith('.glb');
+        if (!isGlb) {
+          console.error("File rejected: not a .glb", file.originalname);
           return callback(
             new BadRequestException("Only .glb files are allowed!"),
             false
@@ -71,12 +84,42 @@ export class UploadsController {
       },
     })
   )
-  uploadSection3dModel(@UploadedFile() file: Express.Multer.File) {
-    if (!file) {
-      throw new BadRequestException("No file uploaded");
+  async uploadSection3dModel(@UploadedFile() file: Express.Multer.File) {
+    if (!file) throw new BadRequestException("No file uploaded");
+  
+    const inputPath = file.path;
+    const outputPath = inputPath.replace(".glb", "-optimized.glb");
+  
+    try {
+      console.log("Optimizing 3D model...");
+  
+      execSync(
+        `npx gltf-transform optimize "${inputPath}" "${outputPath}" --weld --simplify --prune --texture-compress webp`,
+        { stdio: "inherit" }
+      );
+  
+      const { size } = statSync(outputPath);
+      if (size > 10 * 1024 * 1024) {
+        throw new BadRequestException(
+          `Optimized file is too large: ${(size / 1024 / 1024).toFixed(2)}MB`
+        );
+      }
+  
+      const result = await cloudinary.uploader.upload(outputPath, {
+        resource_type: "raw",
+        folder: "sections-3d",
+        use_filename: true,
+        unique_filename: false,
+        overwrite: true,
+      });
+  
+      unlinkSync(inputPath);
+      unlinkSync(outputPath);
+  
+      return { url: result.secure_url };
+    } catch (e) {
+      console.error("Error during optimization or upload:", e);
+      throw new BadRequestException("3D model optimization or upload failed");
     }
-    return {
-      url: `/uploads/sections-3d/${file.filename}`,
-    };
   }
-}
+}  

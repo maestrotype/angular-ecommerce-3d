@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 
 @Component({
   selector: 'app-three-d-viewer',
@@ -57,6 +58,7 @@ export class ThreeDViewerComponent implements AfterViewInit {
 
   private loadModel() {
     const loader = new GLTFLoader();
+    loader.setMeshoptDecoder(MeshoptDecoder);
     loader.load(this.modelPath, (gltf) => {
       this.model = gltf.scene;
       this.model.position.set(this.position[0], this.position[1], this.position[2]);
