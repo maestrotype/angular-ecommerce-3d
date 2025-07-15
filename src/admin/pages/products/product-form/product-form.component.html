@@ -1,121 +1,86 @@
 <div class="product-form-container">
   <div class="header-section">
-    <h1>{{ isEditMode ? "Edit Product" : "Add New Product" }}</h1>
+    <h1>{{ isEditMode ? ('EDIT_PRODUCT' | translate) : ('ADD_PRODUCT' | translate) }}</h1>
     <button mat-button (click)="goBack()" class="back-button">
       <mat-icon>arrow_back</mat-icon>
-      Back to Products
+      {{ 'BACK_TO_PRODUCTS' | translate }}
     </button>
   </div>
 
   <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
     <mat-card class="form-card">
       <mat-card-header>
-        <mat-card-title>Basic Information</mat-card-title>
+        <mat-card-title>{{ 'BASIC_INFO' | translate }}</mat-card-title>
       </mat-card-header>
 
       <mat-card-content class="form-content">
         <div class="form-row">
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Product Name</mat-label>
-            <input
-              matInput
-              formControlName="name"
-              placeholder="Enter product name"
-            />
+            <mat-label>{{ 'PRODUCT_NAME' | translate }}</mat-label>
+            <input matInput formControlName="name" [placeholder]="'PRODUCT_NAME_PLACEHOLDER' | translate" />
             <mat-error *ngIf="productForm.get('name')?.hasError('required')">
-              Product name is required
+              {{ 'PRODUCT_NAME_REQUIRED' | translate }}
             </mat-error>
           </mat-form-field>
         </div>
 
         <div class="form-row">
           <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Category</mat-label>
+            <mat-label>{{ 'CATEGORY' | translate }}</mat-label>
             <mat-select formControlName="category">
-              <mat-option value="shoes">Shoes</mat-option>
-              <mat-option value="handbags">Handbags</mat-option>
-              <mat-option value="clothing">Clothing</mat-option>
+              <mat-option value="shoes">{{ 'SHOES' | translate }}</mat-option>
+              <mat-option value="handbags">{{ 'HANDBAGS' | translate }}</mat-option>
+              <mat-option value="clothing">{{ 'CLOTHING' | translate }}</mat-option>
             </mat-select>
-            <mat-error
-              *ngIf="productForm.get('category')?.hasError('required')"
-            >
-              Category is required
+            <mat-error *ngIf="productForm.get('category')?.hasError('required')">
+              {{ 'CATEGORY_REQUIRED' | translate }}
             </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Price</mat-label>
-            <input
-              matInput
-              type="number"
-              formControlName="price"
-              placeholder="0.00"
-              step="0.01"
-            />
+            <mat-label>{{ 'PRICE' | translate }}</mat-label>
+            <input matInput type="number" formControlName="price" [placeholder]="'PRICE_PLACEHOLDER' | translate"
+              step="0.01" />
             <span matPrefix>$&nbsp;</span>
             <mat-error *ngIf="productForm.get('price')?.hasError('required')">
-              Price is required
+              {{ 'PRICE_REQUIRED' | translate }}
             </mat-error>
             <mat-error *ngIf="productForm.get('price')?.hasError('min')">
-              Price must be greater than 0
+              {{ 'PRICE_MIN' | translate }}
             </mat-error>
           </mat-form-field>
         </div>
 
         <div class="form-row">
           <mat-form-field appearance="outline" class="half-width">
-            <mat-label>Stock Quantity</mat-label>
-            <input
-              matInput
-              type="number"
-              formControlName="stock"
-              placeholder="0"
-              min="0"
-            />
+            <mat-label>{{ 'STOCK_QUANTITY' | translate }}</mat-label>
+            <input matInput type="number" formControlName="stock" [placeholder]="'STOCK_PLACEHOLDER' | translate"
+              min="0" />
             <mat-error *ngIf="productForm.get('stock')?.hasError('required')">
-              Stock quantity is required
+              {{ 'STOCK_REQUIRED' | translate }}
             </mat-error>
             <mat-error *ngIf="productForm.get('stock')?.hasError('min')">
-              Stock must be 0 or greater
+              {{ 'STOCK_MIN' | translate }}
             </mat-error>
           </mat-form-field>
 
           <div class="half-width image-upload-section">
-            <label class="image-upload-label">Product Image</label>
+            <label class="image-upload-label">{{ 'PRODUCT_IMAGE' | translate }}</label>
             <div class="image-upload-area">
-              <input
-                type="file"
-                #fileInput
-                (change)="onFileSelected($event)"
-                accept="image/png,image/jpeg,image/jpg"
-                style="display: none"
-              />
+              <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/png,image/jpeg,image/jpg"
+                style="display: none" />
 
               <div class="image-preview" *ngIf="selectedImageUrl">
-                <img
-                  [src]="selectedImageUrl"
-                  alt="Preview"
-                  class="preview-image"
-                />
-                <button
-                  mat-icon-button
-                  type="button"
-                  (click)="removeImage()"
-                  class="remove-image"
-                >
+                <img [src]="selectedImageUrl" alt="Preview" class="preview-image" />
+                <button mat-icon-button type="button" (click)="removeImage()" class="remove-image">
                   <mat-icon>close</mat-icon>
                 </button>
               </div>
 
-              <button
-                mat-stroked-button
-                type="button"
-                (click)="fileInput.click()"
-                [disabled]="isUploading"
-                class="upload-button"
-              >
+              <button mat-stroked-button type="button" (click)="fileInput.click()" [disabled]="isUploading"
+                class="upload-button">
                 <mat-icon>cloud_upload</mat-icon>
-                {{ isUploading ? "Uploading..." : "Upload Image" }}
+                {{ isUploading ? ('UPLOADING' | translate) : ('UPLOAD_IMAGE' | translate) }}
               </button>
 
               <p class="upload-hint">PNG, JPG files only</p>
@@ -125,17 +90,11 @@
 
         <div class="form-row">
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Description</mat-label>
-            <textarea
-              matInput
-              formControlName="description"
-              rows="4"
-              placeholder="Enter product description"
-            ></textarea>
-            <mat-error
-              *ngIf="productForm.get('description')?.hasError('required')"
-            >
-              Description is required
+            <mat-label>{{ 'DESCRIPTION' | translate }}</mat-label>
+            <textarea matInput formControlName="description" rows="4"
+              [placeholder]="'DESCRIPTION_PLACEHOLDER' | translate"></textarea>
+            <mat-error *ngIf="productForm.get('description')?.hasError('required')">
+              {{ 'DESCRIPTION_REQUIRED' | translate }}
             </mat-error>
           </mat-form-field>
         </div>
@@ -144,51 +103,28 @@
 
     <mat-card class="form-card">
       <mat-card-header>
-        <mat-card-title>Specifications</mat-card-title>
-        <button
-          mat-icon-button
-          type="button"
-          (click)="addSpecification()"
-          matTooltip="Add Specification"
-          class="add-spec-button"
-        >
+        <mat-card-title>{{ 'SPECIFICATIONS' | translate }}</mat-card-title>
+        <button mat-icon-button type="button" (click)="addSpecification()" [matTooltip]="'ADD_SPECIFICATION' | translate"
+          class="add-spec-button">
           <mat-icon>add</mat-icon>
         </button>
       </mat-card-header>
 
       <mat-card-content class="form-content">
         <div formArrayName="specifications">
-          <div
-            *ngFor="let spec of specificationsArray.controls; let i = index"
-            [formGroupName]="i"
-            class="spec-row"
-          >
+          <div *ngFor="let spec of specificationsArray.controls; let i = index" [formGroupName]="i" class="spec-row">
             <mat-form-field appearance="outline" class="spec-key">
-              <mat-label>Key</mat-label>
-              <input
-                matInput
-                formControlName="key"
-                placeholder="e.g., Brand, Color"
-              />
+              <mat-label>{{ 'KEY' | translate }}</mat-label>
+              <input matInput formControlName="key" [placeholder]="'KEY_PLACEHOLDER' | translate" />
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="spec-value">
-              <mat-label>Value</mat-label>
-              <input
-                matInput
-                formControlName="value"
-                placeholder="e.g., Nike, Red"
-              />
+              <mat-label>{{ 'VALUE' | translate }}</mat-label>
+              <input matInput formControlName="value" placeholder="e.g., Nike, Red" />
             </mat-form-field>
 
-            <button
-              mat-icon-button
-              type="button"
-              color="warn"
-              (click)="removeSpecification(i)"
-              matTooltip="Remove"
-              class="remove-spec-button"
-            >
+            <button mat-icon-button type="button" color="warn" (click)="removeSpecification(i)" [matTooltip]="'REMOVE' | translate"
+              class="remove-spec-button">
               <mat-icon>delete</mat-icon>
             </button>
           </div>
@@ -196,7 +132,7 @@
 
         <div *ngIf="specificationsArray.length === 0" class="no-specs">
           <p>
-            No specifications added. Click the + button to add specifications.
+            {{ 'NO_SPECS' | translate }}
           </p>
         </div>
       </mat-card-content>
@@ -204,22 +140,17 @@
 
     <div class="form-actions">
       <button mat-button type="button" (click)="goBack()" class="cancel-button">
-        Cancel
+        {{ 'CANCEL' | translate }}
       </button>
-      <button
-        mat-raised-button
-        color="primary"
-        type="submit"
-        [disabled]="productForm.invalid || isLoading"
-        class="submit-button"
-      >
+      <button mat-raised-button color="primary" type="submit" [disabled]="productForm.invalid || isLoading"
+        class="submit-button">
         <mat-icon *ngIf="isLoading" class="spinning">refresh</mat-icon>
         {{
           isLoading
-            ? "Saving..."
+            ? ('SAVING' | translate)
             : isEditMode
-            ? "Update Product"
-            : "Create Product"
+            ? ('UPDATE_PRODUCT' | translate)
+            : ('CREATE_PRODUCT' | translate)
         }}
       </button>
     </div>
