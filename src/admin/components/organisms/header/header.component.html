@@ -13,7 +13,7 @@
     <span class="spacer"></span>
     
     <div class="header-actions">
-      <button mat-icon-button [routerLink]="'/home'" matTooltip="Go to storefront">
+      <button mat-icon-button [routerLink]="'/home'" [matTooltip]="'GO_TO_STOREFRONT' | translate">
         <mat-icon>storefront</mat-icon>
       </button>
       <!-- Notifications -->
@@ -71,7 +71,7 @@
     <ng-template #noNotifications>
       <div class="no-notifications">
         <mat-icon>notifications_none</mat-icon>
-        <span>No notifications</span>
+        <span>{{ 'NO_NOTIFICATIONS' | translate }}</span>
       </div>
     </ng-template>
   </mat-menu>
@@ -80,15 +80,15 @@
   <mat-menu #userMenu="matMenu">
     <button mat-menu-item routerLink="/admin/profile">
       <mat-icon>person</mat-icon>
-      <span>Profile</span>
+      <span>{{ 'PROFILE' | translate }}</span>
     </button>
     <button mat-menu-item routerLink="/admin/settings">
       <mat-icon>settings</mat-icon>
-      <span>Settings</span>
+      <span>{{ 'SETTINGS' | translate }}</span>
     </button>
     <mat-divider></mat-divider>
     <button mat-menu-item (click)="logout()">
       <mat-icon>logout</mat-icon>
-      <span>Logout</span>
+      <span>{{ 'LOGOUT' | translate }}</span>
     </button>
   </mat-menu>
