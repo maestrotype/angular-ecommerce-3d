@@ -1,15 +1,15 @@
 <div class="product-list-container">
   <div class="header-section">
-    <h1>Product Management</h1>
+    <h1>{{ 'PRODUCT_MANAGEMENT' | translate }}</h1>
     <button mat-raised-button color="primary" (click)="addProduct()">
       <mat-icon>add</mat-icon>
-      Add Product
+      {{ 'ADD_PRODUCT' | translate }}
     </button>
   </div>
 
   <div class="filter-section">
     <mat-form-field appearance="outline">
-      <mat-label>Search products</mat-label>
+      <mat-label>{{ 'SEARCH_PRODUCTS' | translate }}</mat-label>
       <input
         matInput
         (keyup)="applyFilter($event)"
@@ -19,12 +19,12 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Category</mat-label>
+      <mat-label>{{ 'CATEGORY' | translate }}</mat-label>
       <mat-select (selectionChange)="filterByCategory($event)">
-        <mat-option value="">All Categories</mat-option>
-        <mat-option value="shoes">Shoes</mat-option>
-        <mat-option value="handbags">Handbags</mat-option>
-        <mat-option value="clothing">Clothing</mat-option>
+        <mat-option value="">{{ 'CATEGORIES_ALL' | translate }}</mat-option>
+        <mat-option value="shoes">{{ 'SHOES' | translate }}</mat-option>
+        <mat-option value="handbags">{{ 'HANDBAGS' | translate }}</mat-option>
+        <mat-option value="clothing">{{ 'CLOTHING' | translate }}</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
@@ -39,7 +39,7 @@
 
       <!-- Image Column -->
       <ng-container matColumnDef="image">
-        <th mat-header-cell *matHeaderCellDef>Image</th>
+        <th mat-header-cell *matHeaderCellDef>{{ 'IMAGE' | translate}}</th>
         <td mat-cell *matCellDef="let product">
           <div class="image-container">
             <img
@@ -51,7 +51,7 @@
             />
             <div *ngIf="!hasValidImage(product)" class="no-image-placeholder">
               <mat-icon>image</mat-icon>
-              <span>No Image</span>
+              <span>{{ 'NO_IMAGE' | translate}}</span>
             </div>
           </div>
         </td>
@@ -59,13 +59,13 @@
 
       <!-- Name Column -->
       <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'NAME' | translate}}</th>
         <td mat-cell *matCellDef="let product">{{ product.name }}</td>
       </ng-container>
 
       <!-- Category Column -->
       <ng-container matColumnDef="category">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Category</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'CATEGORY' | translate}}</th>
         <td mat-cell *matCellDef="let product">
           <mat-chip>{{ product.category }}</mat-chip>
         </td>
@@ -73,7 +73,7 @@
 
       <!-- Price Column -->
       <ng-container matColumnDef="price">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Price</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'PRICE' | translate}}</th>
         <td mat-cell *matCellDef="let product">
           ${{ product.price | number : "1.2-2" }}
         </td>
@@ -81,7 +81,7 @@
 
       <!-- Stock Column -->
       <ng-container matColumnDef="stock">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Stock</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'STOCK' | translate}}</th>
         <td mat-cell *matCellDef="let product">
           <span [class]="getStockClass(product.stock)">{{
             product.stock
@@ -91,7 +91,7 @@
 
       <!-- Actions Column -->
       <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <th mat-header-cell *matHeaderCellDef>{{ 'ACTIONS' | translate}}</th>
         <td mat-cell *matCellDef="let product">
           <button
             mat-icon-button
@@ -124,12 +124,12 @@
 
   <div *ngIf="isLoading" class="loading-container">
     <mat-spinner></mat-spinner>
-    <p>Loading products...</p>
+    <p>{{ 'LOADING_PRODUCTS' | translate}}</p>
   </div>
 
   <div *ngIf="error" class="error-container">
     <mat-icon color="warn">error</mat-icon>
     <p>{{ error }}</p>
-    <button mat-button color="primary" (click)="loadProducts()">Retry</button>
+    <button mat-button color="primary" (click)="loadProducts()">{{ 'RETRY' | translate}}</button>
   </div>
 </div>
