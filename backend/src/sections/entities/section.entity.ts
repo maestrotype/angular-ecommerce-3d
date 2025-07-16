@@ -32,6 +32,9 @@ export class Section {
   @Column({ default: false })
   show3d: boolean;
 
+  @Column({ default: true })
+  showImage: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 

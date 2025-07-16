@@ -19,7 +19,8 @@
         <div class="product-showcase">
           <div class="floating-product" [class.hidden]="modelReady">
             <img
-              [src]="data?.imageUrl || 'assets/images/bag2/img1.png'"
+              *ngIf="data?.showImage && data?.imageUrl"
+              [src]="data?.imageUrl"
               alt="Featured Handbag"
               class="featured-product"
               loading="lazy"
@@ -36,13 +37,6 @@
               [scale]="[9, 9, 9]"
               [position]="[0, 0, 0]"
             ></app-three-d-viewer>
-            <!-- <app-three-d-viewer
-              [modelPath]="'assets/models/bag/bag2.glb'"
-              [scale]="[9, 9, 9]"
-              [position]="[0, 0, 0]"
-              (modelLoaded)="modelReady = true"
-            >
-            </app-three-d-viewer> -->
           </div>
         </div>
       </div>

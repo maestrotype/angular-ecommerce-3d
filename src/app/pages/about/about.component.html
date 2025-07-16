@@ -16,6 +16,7 @@
         <div class="product-showcase">
           <div class="floating-product">
             <img
+              *ngIf="data?.showImage && data?.imageUrl"
               [src]="data?.imageUrl"
               alt="Featured Handbag"
               class="featured-product"

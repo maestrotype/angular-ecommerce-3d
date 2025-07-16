@@ -9,4 +9,5 @@ export interface Section {
   settings?: any;
   model3dUrl?: string;
   show3d?: boolean;
+  showImage?: boolean;
 }

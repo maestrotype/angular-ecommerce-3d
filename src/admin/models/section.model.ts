@@ -12,6 +12,7 @@ export interface Section {
   updatedAt: Date;
   model3dUrl?: string;
   show3d?: boolean;
+  showImage?: boolean;
 }
 
 export interface CreateSectionDto {

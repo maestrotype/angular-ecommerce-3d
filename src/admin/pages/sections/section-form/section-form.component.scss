@@ -84,6 +84,7 @@
   
             .image-overlay {
               position: absolute;
+              z-index: 999;
               top: 8px;
               right: 8px;
               background: rgba(0, 0, 0, 0.7);

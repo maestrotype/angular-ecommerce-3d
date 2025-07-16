@@ -1,6 +1,8 @@
 
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { forkJoin, of } from 'rxjs';
+import { switchMap, catchError, finalize } from 'rxjs/operators';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SectionService } from '../../../services/section.service';
@@ -69,7 +71,8 @@ export class SectionFormComponent {
       imageUrl: [section?.imageUrl || ''],
       isActive: [section?.isActive ?? true],
       model3dUrl: [section?.model3dUrl || ''],
-      show3d: [section?.show3d ?? false]
+      show3d: [section?.show3d ?? false],
+      showImage: [section?.showImage ?? true],
     });
   }
 
@@ -95,12 +98,15 @@ export class SectionFormComponent {
       const reader = new FileReader();
       reader.onload = e => this.imagePreview = reader.result;
       reader.readAsDataURL(this.imageFile);
-      // Сбросить imageUrl в форме, чтобы не было конфликта
       this.sectionForm.patchValue({ imageUrl: '' });
     }
   }
 
-  removeImage(): void {
+  removeImage(event?: MouseEvent): void {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
     this.imageFile = null;
     this.imagePreview = null;
     this.sectionForm.patchValue({ imageUrl: '' });
@@ -108,7 +114,6 @@ export class SectionFormComponent {
 
   private async uploadImageIfSelected(): Promise<string | null> {
     if (!this.imageFile) {
-      // Если не выбран новый файл, используем url из формы
       return this.sectionForm.value.imageUrl || null;
     }
 
@@ -174,52 +179,43 @@ export class SectionFormComponent {
     }
   }
 
-  async onSubmit(): Promise<void> {
-    if (this.sectionForm.valid) {
-      this.loading = true;
-      try {
-        // Upload image first if selected
-        const imageUrl = await this.uploadImageIfSelected();
-        // Upload 3D model if selected
-        const model3dUrl = await this.upload3dIfSelected();
+  onSubmit(): void {
+    if (this.sectionForm.invalid) return;
   
+    this.loading = true;
+  
+    forkJoin({
+      imageUrl: this.uploadImageIfSelected(),
+      model3dUrl: this.upload3dIfSelected()
+    }).pipe(
+      switchMap(({ imageUrl, model3dUrl }) => {
         const formData = {
           ...this.sectionForm.value,
-          imageUrl: imageUrl || this.sectionForm.value.imageUrl,
-          model3dUrl: model3dUrl || this.sectionForm.value.model3dUrl
+          imageUrl: imageUrl || '',
+          model3dUrl: model3dUrl || ''
         };
   
         if (this.isEditMode && this.data.section?.id) {
-          const updateData: UpdateSectionDto = formData;
-          this.sectionService.updateSection(this.data.section.id, updateData).subscribe({
-            next: (updatedSection) => {
-              this.snackBar.open('Section updated successfully', 'Close', { duration: 3000 });
-              this.dialogRef.close(updatedSection);
-            },
-            error: (error) => {
-              this.snackBar.open('Error updating section', 'Close', { duration: 3000 });
-              console.error('Error updating section:', error);
-              this.loading = false;
-            }
-          });
+          return this.sectionService.updateSection(this.data.section.id, formData);
         } else {
-          const createData: CreateSectionDto = formData;
-          this.sectionService.createSection(createData).subscribe({
-            next: (newSection) => {
-              this.snackBar.open('Section created successfully', 'Close', { duration: 3000 });
-              this.dialogRef.close(newSection);
-            },
-            error: (error) => {
-              this.snackBar.open('Error creating section', 'Close', { duration: 3000 });
-              console.error('Error creating section:', error);
-              this.loading = false;
-            }
-          });
+          return this.sectionService.createSection(formData);
         }
-      } catch (error) {
-        this.loading = false;
+      }),
+      finalize(() => this.loading = false),
+      catchError(error => {
+        this.snackBar.open('Error saving section', 'Close', { duration: 3000 });
+        return of(null);
+      })
+    ).subscribe(result => {
+      if (result) {
+        this.snackBar.open(
+          this.isEditMode ? 'Section updated successfully' : 'Section created successfully',
+          'Close',
+          { duration: 3000 }
+        );
+        this.dialogRef.close(result);
       }
-    }
+    });
   }
 
   onCancel(): void {
