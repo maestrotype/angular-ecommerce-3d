@@ -71,7 +71,8 @@ export class SectionFormComponent {
       imageUrl: [section?.imageUrl || ''],
       isActive: [section?.isActive ?? true],
       model3dUrl: [section?.model3dUrl || ''],
-      show3d: [section?.show3d ?? false]
+      show3d: [section?.show3d ?? false],
+      showImage: [section?.showImage ?? true],
     });
   }
 
@@ -97,7 +98,6 @@ export class SectionFormComponent {
       const reader = new FileReader();
       reader.onload = e => this.imagePreview = reader.result;
       reader.readAsDataURL(this.imageFile);
-      // Сбросить imageUrl в форме, чтобы не было конфликта
       this.sectionForm.patchValue({ imageUrl: '' });
     }
   }
@@ -114,7 +114,6 @@ export class SectionFormComponent {
 
   private async uploadImageIfSelected(): Promise<string | null> {
     if (!this.imageFile) {
-      // Если не выбран новый файл, используем url из формы
       return this.sectionForm.value.imageUrl || null;
     }
 
