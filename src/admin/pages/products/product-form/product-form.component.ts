@@ -21,6 +21,7 @@ export class ProductFormComponent implements OnInit {
   isUploading = false;
   productId: number | null = null;
   selectedImageUrl: string | null = null;
+  imageUrls: string[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -70,72 +71,28 @@ export class ProductFormComponent implements OnInit {
     this.specificationsArray.removeAt(index);
   }
 
-  onFileSelected(event: any): void {
-    const file = event.target.files[0];
-    if (!file) return;
+  onFilesSelected(event: any): void {
+    const files: FileList = event.target.files;
+    if (!files || files.length === 0) return;
   
-    // Validate file type
-    if (!file.type.match(/image\/(png|jpg|jpeg)/)) {
-      this.snackBar.open("Please select a PNG or JPG image", "Close", {
-        duration: 3000,
-        panelClass: ["error-snackbar"],
+    Array.from(files).forEach(file => {
+      if (!file.type.match(/image\/(png|jpg|jpeg)/) || file.size > 5 * 1024 * 1024) return;
+
+      this.isUploading = true;
+      this.productService.uploadImage(file).subscribe({
+        next: (response) => {
+          if (response.url) {
+            this.imageUrls.push(response.url);
+          }
+          this.isUploading = false;
+        },
+        error: () => { this.isUploading = false; }
       });
-      return;
-    }
-  
-    // Validate file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      this.snackBar.open("File size must be less than 5MB", "Close", {
-        duration: 3000,
-        panelClass: ["error-snackbar"],
-      });
-      return;
-    }
-  
-    this.isUploading = true;
-  
-    // Preview (optional, не используется как imageUrl!)
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      this.selectedImageUrl = e.target?.result as string;
-    };
-    reader.readAsDataURL(file);
-  
-    // Upload
-    this.productService.uploadImage(file).subscribe({
-      next: (response) => {
-        if (response.url && response.url.startsWith("http")) {
-          this.productForm.patchValue({
-            imageUrl: response.url,
-          });
-          this.snackBar.open("Image uploaded successfully", "Close", {
-            duration: 3000,
-            panelClass: ["success-snackbar"],
-          });
-        } else {
-          this.snackBar.open("Invalid image URL received from server", "Close", {
-            duration: 3000,
-            panelClass: ["error-snackbar"],
-          });
-        }
-        this.isUploading = false;
-      },
-      error: (err) => {
-        console.error("Error uploading image:", err);
-        this.isUploading = false;
-        this.snackBar.open("Failed to upload image", "Close", {
-          duration: 3000,
-          panelClass: ["error-snackbar"],
-        });
-      },
     });
   }  
 
-  removeImage(): void {
-    this.selectedImageUrl = null;
-    this.productForm.patchValue({
-      imageUrl: "",
-    });
+  removeImageAt(index: number): void {
+    this.imageUrls.splice(index, 1);
   }
 
   loadProduct(id: number): void {
@@ -197,13 +154,10 @@ export class ProductFormComponent implements OnInit {
       );
       return;
     }
-
-    if (
-      !this.productForm.value.imageUrl ||
-      !this.productForm.value.imageUrl.startsWith("http")
-    ) {
+  
+    if (!this.imageUrls.length) {
       this.snackBar.open(
-        "Please upload a valid image before submitting",
+        "Please upload at least one image before submitting",
         "Close",
         {
           duration: 3000,
@@ -212,25 +166,26 @@ export class ProductFormComponent implements OnInit {
       );
       return;
     }
-
+  
     this.isLoading = true;
     const formValue = this.productForm.value;
-
-    // Convert specifications array to object
+  
     const specifications: { [key: string]: string } = {};
     formValue.specifications.forEach((spec: any) => {
       if (spec.key && spec.value) {
         specifications[spec.key] = spec.value;
       }
     });
-
+  
     const productData = {
       ...formValue,
+      imageUrl: this.imageUrls[0],
+      images: this.imageUrls,
       specifications,
     };
-
+  
     console.log("Submitting product data:", productData);
-
+  
     if (this.isEditMode && this.productId) {
       this.updateProduct(this.productId, productData);
     } else {
