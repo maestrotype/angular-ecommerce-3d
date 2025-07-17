@@ -1,61 +1,51 @@
 <div class="category-form-container">
-    <div class="header-section">
-      <h1>{{ isEditMode ? "Edit Category" : "Add New Category" }}</h1>
-      <button mat-button (click)="goBack()" class="back-button">
-        <mat-icon>arrow_back</mat-icon>
-        Back to Categories
+  <div class="header-section">
+    <h1>{{ isEditMode ? ('EDIT_CATEGORY' | translate) : ('ADD_CATEGORY' | translate) }}</h1>
+    <button mat-button (click)="goBack()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+      {{ 'BACK_TO_CATEGORIES' | translate }}
+    </button>
+  </div>
+
+  <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" class="category-form">
+    <mat-card class="form-card">
+      <mat-card-header>
+        <mat-card-title>{{ 'CATEGORY_INFO' | translate }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="form-content">
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'CATEGORY_NAME' | translate }}</mat-label>
+            <input matInput formControlName="name" placeholder="Enter category name" />
+            <mat-error *ngIf="categoryForm.get('name')?.hasError('required')">
+              {{ 'CATEGORY_NAME_REQUIRED' | translate }}
+            </mat-error>
+            <mat-error *ngIf="categoryForm.get('name')?.hasError('minlength')">
+              {{ 'CATEGORY_NAME_MINLENGTH' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'DESCRIPTION' | translate }}</mat-label>
+            <textarea matInput formControlName="description" rows="3"
+              placeholder="Enter category description"></textarea>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <div class="form-actions">
+      <button mat-button type="button" (click)="goBack()" class="cancel-button">
+        Cancel
+      </button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="categoryForm.invalid || isLoading"
+        class="submit-button">
+        <mat-icon *ngIf="isLoading" class="spinning">refresh</mat-icon>
+        {{ isLoading
+        ? (isEditMode ? ('SAVING' | translate) : ('CREATING' | translate))
+        : (isEditMode ? ('UPDATE_CATEGORY' | translate) : ('CREATE_CATEGORY' | translate))
+        }}
       </button>
     </div>
-  
-    <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" class="category-form">
-      <mat-card class="form-card">
-        <mat-card-header>
-          <mat-card-title>Category Information</mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="form-content">
-          <div class="form-row">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Category Name</mat-label>
-              <input
-                matInput
-                formControlName="name"
-                placeholder="Enter category name"
-              />
-              <mat-error *ngIf="categoryForm.get('name')?.hasError('required')">
-                Category name is required
-              </mat-error>
-              <mat-error *ngIf="categoryForm.get('name')?.hasError('minlength')">
-                Name must be at least 2 characters
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div class="form-row">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Description</mat-label>
-              <textarea
-                matInput
-                formControlName="description"
-                rows="3"
-                placeholder="Enter category description"
-              ></textarea>
-            </mat-form-field>
-          </div>
-        </mat-card-content>
-      </mat-card>
-      <div class="form-actions">
-        <button mat-button type="button" (click)="goBack()" class="cancel-button">
-          Cancel
-        </button>
-        <button
-          mat-raised-button
-          color="primary"
-          type="submit"
-          [disabled]="categoryForm.invalid || isLoading"
-          class="submit-button"
-        >
-          <mat-icon *ngIf="isLoading" class="spinning">refresh</mat-icon>
-          {{ isLoading ? (isEditMode ? "Saving..." : "Creating...") : (isEditMode ? "Update Category" : "Create Category") }}
-        </button>
-      </div>
-    </form>
-  </div>
+  </form>
+</div>

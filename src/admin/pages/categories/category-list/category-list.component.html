@@ -1,15 +1,15 @@
 <div class="category-list-container">
   <div class="header-section">
-    <h1>Category Management</h1>
+    <h1>{{ 'CATEGORY_MANAGEMENT' | translate }}</h1>
     <button mat-raised-button color="primary" (click)="addCategory()">
       <mat-icon>add</mat-icon>
-      Add Category
+      {{ 'ADD_CATEGORY' | translate }}
     </button>
   </div>
 
   <div class="filter-section">
     <mat-form-field appearance="outline">
-      <mat-label>Search categories</mat-label>
+      <mat-label>{{ 'SEARCH_CATEGORIES' | translate }}</mat-label>
       <input
         matInput
         (keyup)="applyFilter($event)"
@@ -29,19 +29,19 @@
 
       <!-- Name Column -->
       <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'NAME' | translate }}</th>
         <td mat-cell *matCellDef="let category">{{ category.name }}</td>
       </ng-container>
 
       <!-- Description Column -->
       <ng-container matColumnDef="description">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'DESCRIPTION' | translate }}</th>
         <td mat-cell *matCellDef="let category">{{ category.description }}</td>
       </ng-container>
 
       <!-- Actions Column -->
       <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <th mat-header-cell *matHeaderCellDef>{{ 'ACTIONS' | translate }}</th>
         <td mat-cell *matCellDef="let category">
           <button
             mat-icon-button
@@ -74,12 +74,12 @@
 
   <div *ngIf="isLoading" class="loading-container">
     <mat-spinner></mat-spinner>
-    <p>Loading categories...</p>
+    <p>{{ 'LOADING_CATEGORIES' | translate }}</p>
   </div>
 
   <div *ngIf="error" class="error-container">
     <mat-icon color="warn">error</mat-icon>
     <p>{{ error }}</p>
-    <button mat-button color="primary" (click)="loadCategories()">Retry</button>
+    <button mat-button color="primary" (click)="loadCategories()">{{ 'RETRY' | translate }}</button>
   </div>
 </div>

@@ -164,5 +164,15 @@
   "CANCELLED": "Скасовано",
   "VIEW_DETAILS": "Переглянути деталі",
   "LOADING_ORDERS": "Завантаження замовлень...",
-  "ERROR_LOADING_ORDERS": "Помилка завантаження замовлень"
+  "ERROR_LOADING_ORDERS": "Помилка завантаження замовлень",
+  "CATEGORY_MANAGEMENT": "Управління категоріями",
+  "SEARCH_CATEGORIES": "Пошук категорій",
+  "SEARCH_CATEGORIES_PLACEHOLDER": "Пошук за назвою або описом...",
+  "LOADING_CATEGORIES": "Завантаження категорій...",
+  "ERROR_LOADING_CATEGORIES": "Помилка завантаження категорій",
+  "EDIT_CATEGORY_TOOLTIP": "Редагувати",
+  "DELETE_CATEGORY_TOOLTIP": "Видалити",
+  "BACK_TO_CATEGORIES": "Назад до категорій",
+  "CATEGORY_INFO": "Інформація про категорію",
+  "CREATE_CATEGORY": "Створити категорію"
 }
