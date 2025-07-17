@@ -166,5 +166,15 @@
   "CANCELLED": "Cancelled",
   "VIEW_DETAILS": "View Details",
   "LOADING_ORDERS": "Loading orders...",
-  "ERROR_LOADING_ORDERS": "Error loading orders"
+  "ERROR_LOADING_ORDERS": "Error loading orders",
+  "CATEGORY_MANAGEMENT": "Category Management",
+  "SEARCH_CATEGORIES": "Search categories",
+  "SEARCH_CATEGORIES_PLACEHOLDER": "Search by name or description...",
+  "LOADING_CATEGORIES": "Loading categories...",
+  "ERROR_LOADING_CATEGORIES": "Error loading categories",
+  "EDIT_CATEGORY_TOOLTIP": "Edit",
+  "DELETE_CATEGORY_TOOLTIP": "Delete",
+  "BACK_TO_CATEGORIES": "Back to Categories",
+  "CATEGORY_INFO": "Category Information",
+  "CREATE_CATEGORY": "Create Category"
 }
