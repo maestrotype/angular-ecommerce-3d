@@ -22,6 +22,7 @@
           (imageSelected)="onImageSelected($event)"
           (imageClicked)="onImageClicked()">
         </app-product-images>
+        <app-three-d-viewer *ngIf="product.model3dUrl" [modelPath]="product.model3dUrl"></app-three-d-viewer>
 
         <!-- Product Info Component -->
         <app-product-info 
