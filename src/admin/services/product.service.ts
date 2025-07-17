@@ -137,4 +137,13 @@ export class ProductService {
       formData
     );
   }
+
+  upload3dModel(file: File): Observable<{ url: string }> {
+    const formData = new FormData();
+    formData.append('model', file);
+    return this.http.post<{ url: string }>(
+      `${this.API_URL}/products/upload-3d`,
+      formData
+    );
+  }
 }

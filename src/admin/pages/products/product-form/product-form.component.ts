@@ -22,6 +22,10 @@ export class ProductFormComponent implements OnInit {
   productId: number | null = null;
   selectedImageUrl: string | null = null;
   imageUrls: string[] = [];
+  model3dFile: File | null = null;
+  model3dUrl: string | null = null;
+  isUploading3d = false;
+  dragging3d = false;
 
   constructor(
     private fb: FormBuilder,
@@ -74,7 +78,7 @@ export class ProductFormComponent implements OnInit {
   onFilesSelected(event: any): void {
     const files: FileList = event.target.files;
     if (!files || files.length === 0) return;
-  
+
     Array.from(files).forEach(file => {
       if (!file.type.match(/image\/(png|jpg|jpeg)/) || file.size > 5 * 1024 * 1024) return;
 
@@ -89,10 +93,43 @@ export class ProductFormComponent implements OnInit {
         error: () => { this.isUploading = false; }
       });
     });
-  }  
+  }
 
   removeImageAt(index: number): void {
     this.imageUrls.splice(index, 1);
+  }
+
+  on3dFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (!file || !file.name.endsWith('.glb')) return;
+    this.isUploading3d = true;
+    this.productService.upload3dModel(file).subscribe({
+      next: (res) => {
+        this.model3dUrl = res.url;
+        this.isUploading3d = false;
+      },
+      error: () => { this.isUploading3d = false; }
+    });
+  }
+
+  on3dDragOver(event: DragEvent) {
+    event.preventDefault();
+    this.dragging3d = true;
+  }
+  on3dDragLeave(event: DragEvent) {
+    event.preventDefault();
+    this.dragging3d = false;
+  }
+  on3dDrop(event: DragEvent) {
+    event.preventDefault();
+    this.dragging3d = false;
+    if (event.dataTransfer?.files?.length) {
+      this.on3dFileSelected({ target: { files: event.dataTransfer.files } });
+    }
+  }
+  remove3dModel() {
+    this.model3dUrl = null;
+    this.model3dFile = null;
   }
 
   loadProduct(id: number): void {
@@ -154,7 +191,7 @@ export class ProductFormComponent implements OnInit {
       );
       return;
     }
-  
+
     if (!this.imageUrls.length) {
       this.snackBar.open(
         "Please upload at least one image before submitting",
@@ -166,26 +203,27 @@ export class ProductFormComponent implements OnInit {
       );
       return;
     }
-  
+
     this.isLoading = true;
     const formValue = this.productForm.value;
-  
+
     const specifications: { [key: string]: string } = {};
     formValue.specifications.forEach((spec: any) => {
       if (spec.key && spec.value) {
         specifications[spec.key] = spec.value;
       }
     });
-  
+
     const productData = {
       ...formValue,
       imageUrl: this.imageUrls[0],
       images: this.imageUrls,
       specifications,
+      model3dUrl: this.model3dUrl,
     };
-  
+
     console.log("Submitting product data:", productData);
-  
+
     if (this.isEditMode && this.productId) {
       this.updateProduct(this.productId, productData);
     } else {

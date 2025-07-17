@@ -54,6 +54,9 @@ export class Product {
   @CreateDateColumn()
   createdAt: Date;
 
+  @Column({ nullable: true })
+  model3dUrl?: string;
+
   @UpdateDateColumn()
   updatedAt: Date;
 }
