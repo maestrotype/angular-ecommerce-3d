@@ -164,5 +164,15 @@
   "CANCELLED": "Отменен",
   "VIEW_DETAILS": "Просмотреть детали",
   "LOADING_ORDERS": "Загрузка заказов...",
-  "ERROR_LOADING_ORDERS": "Ошибка загрузки заказов"
+  "ERROR_LOADING_ORDERS": "Ошибка загрузки заказов",
+  "CATEGORY_MANAGEMENT": "Управление категориями",
+  "SEARCH_CATEGORIES": "Поиск категорий",
+  "SEARCH_CATEGORIES_PLACEHOLDER": "Поиск по названию или описанию...",
+  "LOADING_CATEGORIES": "Загрузка категорий...",
+  "ERROR_LOADING_CATEGORIES": "Ошибка загрузки категорий",
+  "EDIT_CATEGORY_TOOLTIP": "Редактировать",
+  "DELETE_CATEGORY_TOOLTIP": "Удалить",
+  "BACK_TO_CATEGORIES": "Назад к категориям",
+  "CATEGORY_INFO": "Информация о категории",
+  "CREATE_CATEGORY": "Создать категорию"
 }
