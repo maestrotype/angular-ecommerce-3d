@@ -161,6 +161,16 @@ export class ProductFormComponent implements OnInit {
       description: product.description,
     });
 
+    if (product.images && product.images.length > 0) {
+      this.imageUrls = [...product.images];
+    } else if (product.imageUrl) {
+      this.imageUrls = [product.imageUrl];
+    } else {
+      this.imageUrls = [];
+    }
+
+    this.model3dUrl = product.model3dUrl || null;
+
     // Clear existing specifications
     while (this.specificationsArray.length !== 0) {
       this.specificationsArray.removeAt(0);
