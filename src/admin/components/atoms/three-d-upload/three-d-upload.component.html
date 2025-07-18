@@ -1,0 +1,8 @@
+<div class="three-d-upload">
+    <input type="file" accept=".glb" (change)="onFileSelected($event)" [disabled]="uploading" />
+    <div *ngIf="model3dUrl">
+        <span>{{ model3dUrl.split('/').pop() }}</span>
+        <button type="button" (click)="removeModel()">Remove</button>
+    </div>
+    <div *ngIf="uploading">Uploading...</div>
+</div>

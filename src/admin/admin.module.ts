@@ -53,6 +53,7 @@ import { NotificationService } from './services/notification.service';
 import { DashboardService } from './services/dashboard.service';
 import { MessageService } from './services/message.service';
 import { SectionService } from './services/section.service';
+import { ThreeDUploadComponent } from './components/atoms/three-d-upload/three-d-upload.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
@@ -78,6 +79,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     UserEditDialogComponent,
     DataTableComponent,
     FormFieldComponent,
+    ThreeDUploadComponent,
     ActionButtonComponent
   ],
   imports: [

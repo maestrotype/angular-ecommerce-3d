@@ -88,7 +88,7 @@
           </div>
         </div>
 
-        <mat-card class="form-card">
+        <!-- <mat-card class="form-card">
           <mat-card-header>
             <mat-card-title>
               <mat-icon>view_in_ar</mat-icon>
@@ -115,7 +115,10 @@
               </div>
             </div>
           </mat-card-content>
-        </mat-card>
+        </mat-card> -->
+
+        <app-three-d-upload [type]="'product'" [(model3dUrl)]="model3dUrl">
+        </app-three-d-upload>
 
         <div class="form-row">
           <mat-form-field appearance="outline" class="full-width">

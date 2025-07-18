@@ -1,47 +1,43 @@
-
 <div class="section-form-container">
-    <h2 mat-dialog-title>{{ isEditMode ? 'Edit' : 'Add' }} Section</h2>
-  
-    <form [formGroup]="sectionForm" (ngSubmit)="onSubmit()" mat-dialog-content>
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Section Type</mat-label>
-        <mat-select formControlName="type">
-          <mat-option *ngFor="let type of sectionTypes" [value]="type.value">
-            {{ type.label }}
-          </mat-option>
-        </mat-select>
-        <mat-error *ngIf="sectionForm.get('type')?.hasError('required')">
-          Section type is required
-        </mat-error>
-      </mat-form-field>
-  
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Title</mat-label>
-        <input matInput formControlName="title" placeholder="Enter section title">
-        <mat-error *ngIf="sectionForm.get('title')?.hasError('required')">
-          Title is required
-        </mat-error>
-      </mat-form-field>
-  
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Content</mat-label>
-        <textarea matInput 
-                  formControlName="content" 
-                  rows="4" 
-                  placeholder="Enter section content"></textarea>
-      </mat-form-field>
-  
-      <!-- Image Upload Section -->
+  <h2 mat-dialog-title>{{ isEditMode ? 'Edit' : 'Add' }} Section</h2>
+
+  <form [formGroup]="sectionForm" (ngSubmit)="onSubmit()" mat-dialog-content>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Section Type</mat-label>
+      <mat-select formControlName="type">
+        <mat-option *ngFor="let type of sectionTypes" [value]="type.value">
+          {{ type.label }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="sectionForm.get('type')?.hasError('required')">
+        Section type is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" placeholder="Enter section title">
+      <mat-error *ngIf="sectionForm.get('title')?.hasError('required')">
+        Title is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Content</mat-label>
+      <textarea matInput formControlName="content" rows="4" placeholder="Enter section content"></textarea>
+    </mat-form-field>
+
+    <!-- Image Upload Section -->
     <div class="image-upload-section full-width">
       <label class="upload-label">Section Image</label>
-      
+
       <div class="upload-area" [class.has-image]="imagePreview || sectionForm.value.imageUrl">
         <div *ngIf="!(imagePreview || sectionForm.value.imageUrl)" class="upload-placeholder">
           <mat-icon>cloud_upload</mat-icon>
           <p>Click to upload or drag image here</p>
           <small>Maximum file size: 5MB | Formats: JPG, PNG, GIF</small>
         </div>
-        
+
         <div *ngIf="imagePreview || sectionForm.value.imageUrl" class="image-preview">
           <img [src]="imagePreview || sectionForm.value.imageUrl" alt="Section image preview" />
           <div class="image-overlay">
@@ -50,23 +46,12 @@
             </button>
           </div>
         </div>
-        
-        <input 
-          type="file" 
-          #fileInput
-          (change)="onFileSelected($event)" 
-          accept="image/*"
-          class="file-input"
-          [disabled]="uploadingImage"
-        />
-        
-        <button 
-          type="button" 
-          mat-stroked-button 
-          (click)="fileInput.click()"
-          [disabled]="uploadingImage"
-          class="upload-btn"
-        >
+
+        <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" class="file-input"
+          [disabled]="uploadingImage" />
+
+        <button type="button" mat-stroked-button (click)="fileInput.click()" [disabled]="uploadingImage"
+          class="upload-btn">
           <mat-icon *ngIf="!uploadingImage">add_photo_alternate</mat-icon>
           <mat-icon *ngIf="uploadingImage" class="spinning">hourglass_empty</mat-icon>
           {{ uploadingImage ? 'Uploading...' : (imagePreview ? 'Change Image' : 'Select Image') }}
@@ -78,58 +63,24 @@
       Show Image
     </mat-slide-toggle>
 
-    <div class="model3d-upload-section full-width">
-      <label class="upload-label">3D Model (.glb)</label>
-      <div class="upload-area" [class.has-file]="model3dFile || model3dUrl">
-        <div *ngIf="!(model3dFile || model3dUrl)" class="upload-placeholder">
-          <mat-icon>cloud_upload</mat-icon>
-          <p>Click to upload or drag 3D model here</p>
-          <small>Only .glb files, max 20MB</small>
-        </div>
-        <div *ngIf="model3dFile || model3dUrl" class="model3d-preview">
-          <mat-icon>view_in_ar</mat-icon>
-          <span>{{ model3dFileName || (model3dUrl ? model3dUrl.split('/').pop() : '') }}</span>
-          <button type="button" mat-icon-button (click)="remove3dModel()" class="remove-btn">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </div>
-        <input
-          type="file"
-          #file3dInput
-          (change)="on3dFileSelected($event)"
-          accept=".glb"
-          class="file-input"
-          [disabled]="uploading3d"
-        />
-        <button
-          type="button"
-          mat-stroked-button
-          (click)="file3dInput.click()"
-          [disabled]="uploading3d"
-          class="upload-btn"
-        >
-          <mat-icon *ngIf="!uploading3d">add</mat-icon>
-          <mat-icon *ngIf="uploading3d" class="spinning">hourglass_empty</mat-icon>
-          {{ uploading3d ? 'Uploading...' : (model3dFile || model3dUrl ? 'Change 3D Model' : 'Select 3D Model') }}
-        </button>
-      </div>
-    </div>
+    <app-three-d-upload [type]="'product'" [(model3dUrl)]="model3dUrl">
+    </app-three-d-upload>
+
     <mat-slide-toggle formControlName="show3d" class="active-toggle">
       Show 3D Model
     </mat-slide-toggle>
-  
-      <mat-slide-toggle formControlName="isActive" class="active-toggle">
-        Section Active
-      </mat-slide-toggle>
-    </form>
-  
-    <div mat-dialog-actions class="actions">
-      <button mat-button (click)="onCancel()" [disabled]="loading || uploadingImage">Cancel</button>
-      <button mat-raised-button color="primary" (click)="onSubmit()" 
-              [disabled]="sectionForm.invalid || loading || uploadingImage">
-        <mat-icon *ngIf="loading">hourglass_empty</mat-icon>
-        {{ loading ? 'Saving...' : (isEditMode ? 'Update' : 'Create') }}
-      </button>
-    </div>
+
+    <mat-slide-toggle formControlName="isActive" class="active-toggle">
+      Section Active
+    </mat-slide-toggle>
+  </form>
+
+  <div mat-dialog-actions class="actions">
+    <button mat-button (click)="onCancel()" [disabled]="loading || uploadingImage">Cancel</button>
+    <button mat-raised-button color="primary" (click)="onSubmit()"
+      [disabled]="sectionForm.invalid || loading || uploadingImage">
+      <mat-icon *ngIf="loading">hourglass_empty</mat-icon>
+      {{ loading ? 'Saving...' : (isEditMode ? 'Update' : 'Create') }}
+    </button>
   </div>
-  
+</div>
