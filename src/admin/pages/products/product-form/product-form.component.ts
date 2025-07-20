@@ -79,8 +79,12 @@ export class ProductFormComponent implements OnInit {
     const files: FileList = event.target.files;
     if (!files || files.length === 0) return;
 
-    Array.from(files).forEach(file => {
-      if (!file.type.match(/image\/(png|jpg|jpeg)/) || file.size > 5 * 1024 * 1024) return;
+    Array.from(files).forEach((file) => {
+      if (
+        !file.type.match(/image\/(png|jpg|jpeg)/) ||
+        file.size > 5 * 1024 * 1024
+      )
+        return;
 
       this.isUploading = true;
       this.productService.uploadImage(file).subscribe({
@@ -90,7 +94,9 @@ export class ProductFormComponent implements OnInit {
           }
           this.isUploading = false;
         },
-        error: () => { this.isUploading = false; }
+        error: () => {
+          this.isUploading = false;
+        },
       });
     });
   }
@@ -101,14 +107,19 @@ export class ProductFormComponent implements OnInit {
 
   on3dFileSelected(event: any): void {
     const file = event.target.files[0];
-    if (!file || !file.name.endsWith('.glb')) return;
+    if (!file || !file.name.endsWith(".glb")) return;
     this.isUploading3d = true;
     this.productService.upload3dModel(file).subscribe({
       next: (res) => {
-        this.model3dUrl = res.url;
+        const baseUrl = "https://angular-ecommerce-backend.onrender.com";
+        this.model3dUrl = res.url.startsWith("http")
+          ? res.url
+          : baseUrl + res.url;
         this.isUploading3d = false;
       },
-      error: () => { this.isUploading3d = false; }
+      error: () => {
+        this.isUploading3d = false;
+      },
     });
   }
 
