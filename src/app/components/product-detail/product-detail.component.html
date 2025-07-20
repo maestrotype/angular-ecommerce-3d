@@ -15,19 +15,48 @@
   <div class="product-content">
     <div class="container">
       <div class="product-grid">
-        <!-- Product Images Component -->
-        <app-product-images 
-          [product]="product"
-          [selectedImageIndex]="selectedImageIndex"
-          (imageSelected)="onImageSelected($event)"
-          (imageClicked)="onImageClicked()">
-        </app-product-images>
-        <app-three-d-viewer
-          *ngIf="product?.model3dUrl"
-          [modelPath]="product.model3dUrl"
-          [scale]="[9, 9, 9]"
-          [position]="[0, 0, 0]"
-        ></app-three-d-viewer>
+        <div class="product-detail-main">
+          <div class="main-view">
+            <img
+              *ngIf="selectedType === 'image' && product?.images?.length"
+              [src]="product.images[selectedImageIndex]"
+              (click)="onImageClicked()"
+              alt="Product image"
+              class="main-image"
+            />
+            <app-three-d-viewer
+              *ngIf="selectedType === '3d' && product?.model3dUrl"
+              [modelPath]="product.model3dUrl"
+              class="main-3d-viewer"
+              [previewOnly]="false"
+              [scale]="[9, 9, 9]"
+              [position]="[0, 0, 0]"
+            ></app-three-d-viewer>
+          </div>
+
+          <div class="thumbnails">
+            <img
+              *ngFor="let img of product?.images; let i = index"
+              [src]="img"
+              [class.selected]="
+                selectedType === 'image' && selectedImageIndex === i
+              "
+              (click)="onThumbnailSelected('image', i)"
+              alt="Product thumbnail"
+              class="thumb-image"
+            />
+            <app-three-d-viewer
+              *ngIf="product?.model3dUrl"
+              [modelPath]="product.model3dUrl"
+              class="thumb-3d"
+              [class.selected]="selectedType === '3d'"
+              (click)="onThumbnailSelected('3d')"
+              [previewOnly]="true"
+              [scale]="[9, 9, 9]"
+              [position]="[0, 0, 0]"
+            ></app-three-d-viewer>
+          </div>
+        </div>
 
         <!-- Product Info Component -->
         <app-product-info
