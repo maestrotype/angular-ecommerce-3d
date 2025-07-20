@@ -47,6 +47,7 @@ import { DataTableComponent } from './components/molecules/data-table/data-table
 import { FormFieldComponent } from './components/atoms/form-field/form-field.component';
 import { ActionButtonComponent } from './components/atoms/action-button/action-button.component';
 import { CategoryFormComponent } from './pages/categories/category-form/category-form.component';
+import { ConfirmDialogComponent } from './components/atoms/confirm-dialog/confirm-dialog.component';
 
 // Services
 import { NotificationService } from './services/notification.service';
@@ -80,7 +81,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     DataTableComponent,
     FormFieldComponent,
     ThreeDUploadComponent,
-    ActionButtonComponent
+    ActionButtonComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     CommonModule,

@@ -2,12 +2,14 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators, FormArray } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatDialog } from '@angular/material/dialog';
 import {
   Product,
   ProductCreateRequest,
   ProductUpdateRequest,
 } from "../../../models/product.model";
 import { ProductService } from "../../../services/product.service";
+import { ConfirmDialogComponent } from '../../../components/atoms/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: "app-product-form",
@@ -32,7 +34,8 @@ export class ProductFormComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
-    private productService: ProductService
+    private productService: ProductService,
+    private dialog: MatDialog
   ) {
     this.productForm = this.createForm();
   }
@@ -160,13 +163,11 @@ export class ProductFormComponent implements OnInit {
       imageUrl: product.imageUrl,
       description: product.description,
     });
-
-    // Clear existing specifications
+    this.imageUrls = product.images && product.images.length ? [...product.images] : product.imageUrl ? [product.imageUrl] : [];
+    this.model3dUrl = product.model3dUrl || null;
     while (this.specificationsArray.length !== 0) {
       this.specificationsArray.removeAt(0);
     }
-
-    // Populate specifications
     if (product.specifications) {
       Object.entries(product.specifications).forEach(([key, value]) => {
         const specGroup = this.fb.group({
@@ -191,39 +192,42 @@ export class ProductFormComponent implements OnInit {
       );
       return;
     }
-
     if (!this.imageUrls.length) {
-      this.snackBar.open(
-        "Please upload at least one image before submitting",
-        "Close",
-        {
-          duration: 3000,
-          panelClass: ["error-snackbar"],
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        data: {
+          title: 'No Images Uploaded',
+          message: 'You have not uploaded any images. Do you want to save the product without images?',
+          confirmText: 'Yes, Save',
+          cancelText: 'No, Cancel'
         }
-      );
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === true) {
+          this.saveProduct();
+        } else {
+          this.snackBar.open('Product not saved. Please upload at least one image.', 'Close', { duration: 3000 });
+        }
+      });
       return;
     }
-
+    this.saveProduct();
+  }
+  saveProduct(): void {
     this.isLoading = true;
     const formValue = this.productForm.value;
-
     const specifications: { [key: string]: string } = {};
     formValue.specifications.forEach((spec: any) => {
       if (spec.key && spec.value) {
         specifications[spec.key] = spec.value;
       }
     });
-
     const productData = {
       ...formValue,
-      imageUrl: this.imageUrls[0],
+      imageUrl: this.imageUrls[0] || '',
       images: this.imageUrls,
       specifications,
       model3dUrl: this.model3dUrl,
     };
-
-    console.log("Submitting product data:", productData);
-
     if (this.isEditMode && this.productId) {
       this.updateProduct(this.productId, productData);
     } else {
