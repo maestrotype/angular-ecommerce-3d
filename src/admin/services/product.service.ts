@@ -142,7 +142,7 @@ export class ProductService {
     const formData = new FormData();
     formData.append('model', file);
     return this.http.post<{ url: string }>(
-      `${this.API_URL}/products/upload-3d`,
+      `${this.API_URL}/uploads/products-3d`,
       formData
     );
   }

@@ -2,11 +2,11 @@
   <!-- Header -->
   <div class="product-header">
     <div class="container">
-      <button class="back-btn" (click)="goBack()">
-        ← Back to Shop
-      </button>
+      <button class="back-btn" (click)="goBack()">← Back to Shop</button>
       <nav class="breadcrumb">
-        <span>Home</span> / <span>Shop</span> / <span>{{ product.category }}</span> / <span class="current">{{ product.name }}</span>
+        <span>Home</span> / <span>Shop</span> /
+        <span>{{ product.category }}</span> /
+        <span class="current">{{ product.name }}</span>
       </nav>
     </div>
   </div>
@@ -22,14 +22,20 @@
           (imageSelected)="onImageSelected($event)"
           (imageClicked)="onImageClicked()">
         </app-product-images>
-        <app-three-d-viewer *ngIf="product.model3dUrl" [modelPath]="product.model3dUrl"></app-three-d-viewer>
+        <app-three-d-viewer
+          *ngIf="product?.model3dUrl"
+          [modelPath]="product.model3dUrl"
+          [scale]="[9, 9, 9]"
+          [position]="[0, 0, 0]"
+        ></app-three-d-viewer>
 
         <!-- Product Info Component -->
-        <app-product-info 
+        <app-product-info
           [product]="product"
           [quantity]="quantity"
           (quantityChanged)="onQuantityChanged($event)"
-          (addToCart)="onAddToCart()">
+          (addToCart)="onAddToCart()"
+        >
         </app-product-info>
       </div>
 
