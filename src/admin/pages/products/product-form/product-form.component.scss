@@ -2,7 +2,7 @@
     padding: 0;
     max-width: none;
     margin: 0;
-    background-color: #1f2937; // Темно-серый фон вместо прозрачного
+    background-color: #1f2937;
     min-height: calc(100vh - 64px);
     color: #ffffff;
   }
@@ -14,7 +14,7 @@
     margin-bottom: 32px;
     padding: 24px 24px 0 24px;
     border-bottom: 1px solid #333;
-    background-color: #1f2937; // Темно-серый фон
+    background-color: #1f2937;
     
     h1 {
       color: #ffffff;
@@ -39,7 +39,7 @@
     flex-direction: column;
     gap: 32px;
     padding: 0 24px;
-    background-color: #1f2937; // Темно-серый фон
+    background-color: #1f2937;
   }
   
   .form-card {
@@ -58,6 +58,7 @@
     gap: 20px;
     align-items: flex-start;
     margin-bottom: 20px;
+    margin-top: 12px;
   }
   
   .full-width {
@@ -291,6 +292,34 @@
     
     .mat-error {
       color: #ef4444 !important;
+    }
+  }
+
+  .model3d-upload-area {
+    border: 2px dashed #90caf9;
+    padding: 1rem;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    &.dragging {
+      background: #e3f2fd;
+      border-color: #1976d2;
+    }
+    .model3d-preview {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      app-three-d-viewer {
+        width: 120px;
+        height: 120px;
+        display: inline-block;
+      }
+    }
+    .model3d-placeholder {
+      color: #888;
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
     }
   }
   

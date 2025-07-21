@@ -64,4 +64,22 @@ export class ProductsController {
     }
     return { url: file.path };
   }
+
+  @Post('upload-3d')
+  @UseInterceptors(FileInterceptor('model', {
+    storage: diskStorage({
+      destination: './uploads/products-3d',
+      filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+        cb(null, `product3d-${uniqueSuffix}.glb`);
+      }
+    })
+  }))
+  async upload3dModel(@UploadedFile() file: Express.Multer.File) {
+    if (!file) {
+      throw new BadRequestException('No file uploaded');
+    }
+
+    return { url: `/uploads/products-3d/${file.filename}` };
+  }
 }

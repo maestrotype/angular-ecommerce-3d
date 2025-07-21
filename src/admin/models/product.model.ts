@@ -12,6 +12,7 @@ export interface Product {
     specifications: { [key: string]: string };
     images?: string[];
     imageUrl: string;
+    model3dUrl?: string;
     stock?: number;
     createdAt?: Date;
     updatedAt?: Date;

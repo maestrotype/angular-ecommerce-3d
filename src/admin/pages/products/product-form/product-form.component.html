@@ -67,26 +67,55 @@
           <div class="half-width image-upload-section">
             <label class="image-upload-label">{{ 'PRODUCT_IMAGE' | translate }}</label>
             <div class="image-upload-area">
-              <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/png,image/jpeg,image/jpg"
-                style="display: none" />
+              <input type="file" #fileInput (change)="onFilesSelected($event)" accept="image/png,image/jpeg,image/jpg"
+                multiple style="display: none" />
 
-              <div class="image-preview" *ngIf="selectedImageUrl">
-                <img [src]="selectedImageUrl" alt="Preview" class="preview-image" />
-                <button mat-icon-button type="button" (click)="removeImage()" class="remove-image">
-                  <mat-icon>close</mat-icon>
-                </button>
+              <div class="image-previews">
+                <div *ngFor="let url of imageUrls; let i = index" class="image-preview">
+                  <img [src]="url" alt="Preview" class="preview-image" />
+                  <button mat-icon-button type="button" (click)="removeImageAt(i)">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
               </div>
 
-              <button mat-stroked-button type="button" (click)="fileInput.click()" [disabled]="isUploading"
-                class="upload-button">
+              <button mat-stroked-button type="button" (click)="fileInput.click()" [disabled]="isUploading">
                 <mat-icon>cloud_upload</mat-icon>
-                {{ isUploading ? ('UPLOADING' | translate) : ('UPLOAD_IMAGE' | translate) }}
+                {{ isUploading ? 'Uploading...' : 'Upload Images' }}
               </button>
-
-              <p class="upload-hint">PNG, JPG files only</p>
+              <p class="upload-hint">PNG, JPG files only. Multiple files allowed.</p>
             </div>
           </div>
         </div>
+
+        <mat-card class="form-card">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>view_in_ar</mat-icon>
+              3D Model (.glb)
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="model3d-upload-area" (drop)="on3dDrop($event)" (dragover)="on3dDragOver($event)"
+              (dragleave)="on3dDragLeave($event)" [class.dragging]="dragging3d">
+              <input type="file" #file3dInput (change)="on3dFileSelected($event)" accept=".glb" style="display: none" />
+              <button mat-stroked-button type="button" (click)="file3dInput.click()" [disabled]="isUploading3d">
+                <mat-icon>cloud_upload</mat-icon>
+                {{ isUploading3d ? 'Uploading...' : 'Upload 3D Model' }}
+              </button>
+              <div *ngIf="model3dUrl" class="model3d-preview">
+                <span>{{ model3dUrl.split('/').pop() }}</span>
+                <button mat-icon-button type="button" (click)="remove3dModel()">
+                  <mat-icon>delete</mat-icon>
+                </button>
+                <app-three-d-viewer [modelPath]="model3dUrl"></app-three-d-viewer>
+              </div>
+              <div *ngIf="!model3dUrl" class="model3d-placeholder">
+                <p>Drag & drop .glb file here or click to upload</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
 
         <div class="form-row">
           <mat-form-field appearance="outline" class="full-width">
@@ -104,8 +133,8 @@
     <mat-card class="form-card">
       <mat-card-header>
         <mat-card-title>{{ 'SPECIFICATIONS' | translate }}</mat-card-title>
-        <button mat-icon-button type="button" (click)="addSpecification()" [matTooltip]="'ADD_SPECIFICATION' | translate"
-          class="add-spec-button">
+        <button mat-icon-button type="button" (click)="addSpecification()"
+          [matTooltip]="'ADD_SPECIFICATION' | translate" class="add-spec-button">
           <mat-icon>add</mat-icon>
         </button>
       </mat-card-header>
@@ -123,8 +152,8 @@
               <input matInput formControlName="value" placeholder="e.g., Nike, Red" />
             </mat-form-field>
 
-            <button mat-icon-button type="button" color="warn" (click)="removeSpecification(i)" [matTooltip]="'REMOVE' | translate"
-              class="remove-spec-button">
+            <button mat-icon-button type="button" color="warn" (click)="removeSpecification(i)"
+              [matTooltip]="'REMOVE' | translate" class="remove-spec-button">
               <mat-icon>delete</mat-icon>
             </button>
           </div>
@@ -146,11 +175,11 @@
         class="submit-button">
         <mat-icon *ngIf="isLoading" class="spinning">refresh</mat-icon>
         {{
-          isLoading
-            ? ('SAVING' | translate)
-            : isEditMode
-            ? ('UPDATE_PRODUCT' | translate)
-            : ('CREATE_PRODUCT' | translate)
+        isLoading
+        ? ('SAVING' | translate)
+        : isEditMode
+        ? ('UPDATE_PRODUCT' | translate)
+        : ('CREATE_PRODUCT' | translate)
         }}
       </button>
     </div>

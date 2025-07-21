@@ -12,6 +12,7 @@ import { CartService } from 'src/app/core/services/cart.service';
 })
 export class ProductDetailComponent implements OnInit {
   product: Product | undefined;
+  selectedType: 'image' | '3d' = 'image';
   selectedImageIndex: number = 0;
   quantity: number = 1;
   loading: boolean = true;
@@ -39,6 +40,13 @@ export class ProductDetailComponent implements OnInit {
       });
     } else {
       this.router.navigate(['/shop']);
+    }
+  }
+
+  onThumbnailSelected(type: 'image' | '3d', index?: number): void {
+    this.selectedType = type;
+    if (type === 'image' && index !== undefined) {
+      this.selectedImageIndex = index;
     }
   }
 

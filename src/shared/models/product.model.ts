@@ -9,6 +9,7 @@ export interface Product {
     rating?: number;
     description?: string;
     images?: string[];
+    model3dUrl?: string;
     features?: string[];
     stock?: number;
     specifications?: { [key: string]: string };
