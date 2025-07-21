@@ -60,6 +60,15 @@ async function bootstrap() {
   app.setGlobalPrefix("api");
 
   const port = process.env.PORT || 3002;
+  setInterval(() => {
+    const used = process.memoryUsage();
+    console.log('Memory usage:', {
+      rss: (used.rss / 1024 / 1024).toFixed(2) + ' MB',
+      heapTotal: (used.heapTotal / 1024 / 1024).toFixed(2) + ' MB',
+      heapUsed: (used.heapUsed / 1024 / 1024).toFixed(2) + ' MB',
+      external: (used.external / 1024 / 1024).toFixed(2) + ' MB',
+    });
+  }, 60000);
   await app.listen(port);
   console.log(`Application is running on: http://localhost:${port}/api`);
 }
