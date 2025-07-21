@@ -12,7 +12,24 @@ import { execSync } from "child_process";
 import { unlinkSync, statSync } from "fs";
 import * as os from "os";
 import { v2 as cloudinary } from "cloudinary";
-import "../config/cloudinary.config"; // важно для инициализации
+import "../config/cloudinary.config";
+import { spawn } from 'child_process';
+
+function optimizeGLB(inputPath: string, outputPath: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const proc = spawn('npx', [
+      'gltf-transform', 'optimize',
+      inputPath, outputPath,
+      '--weld', '--simplify', '--prune', '--texture-compress', 'webp'
+    ], { stdio: 'inherit' });
+
+    proc.on('close', (code) => {
+      if (code === 0) resolve();
+      else reject(new Error('gltf-transform failed with code ' + code));
+    });
+    proc.on('error', reject);
+  });
+}
 
 @Controller("uploads")
 export class UploadsController {
@@ -92,19 +109,13 @@ export class UploadsController {
 
     try {
       console.log("Optimizing 3D model...");
-
-      execSync(
-        `npx gltf-transform optimize "${inputPath}" "${outputPath}" --weld --simplify --prune --texture-compress webp`,
-        { stdio: "inherit" }
-      );
-
+      await optimizeGLB(inputPath, outputPath);
       const { size } = statSync(outputPath);
       if (size > 10 * 1024 * 1024) {
         throw new BadRequestException(
           `Optimized file is too large: ${(size / 1024 / 1024).toFixed(2)}MB`
         );
       }
-
       const result = await cloudinary.uploader.upload(outputPath, {
         resource_type: "raw",
         folder: "sections-3d",
@@ -112,10 +123,8 @@ export class UploadsController {
         unique_filename: false,
         overwrite: true,
       });
-
       unlinkSync(inputPath);
       unlinkSync(outputPath);
-
       return { url: result.secure_url };
     } catch (e) {
       console.error("Error during optimization or upload:", e);
@@ -153,10 +162,7 @@ export class UploadsController {
     const inputPath = file.path;
     const outputPath = inputPath.replace(".glb", "-optimized.glb");
     try {
-      execSync(
-        `npx gltf-transform optimize "${inputPath}" "${outputPath}" --weld --simplify --prune --texture-compress webp`,
-        { stdio: "inherit" }
-      );
+      await optimizeGLB(inputPath, outputPath);
       const { size } = statSync(outputPath);
       if (size > 10 * 1024 * 1024) {
         throw new BadRequestException(
