@@ -31,6 +31,7 @@ async function bootstrap() {
     origin: [
       "http://localhost:4200",
       "http://localhost:3002",
+      "https://angular-ecommerce-3d-production.up.railway.app",
       "https://maestrotype.github.io", // GitHub Pages domain
       /^https:\/\/.*\.github\.io$/, // Allow any GitHub Pages subdomain
       /^https:\/\/.*\.netlify\.app$/, // Allow Netlify if needed
