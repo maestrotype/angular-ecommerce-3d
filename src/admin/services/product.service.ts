@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
+import { map } from 'rxjs/operators';
 import {
   Product,
   ProductCreateRequest,
@@ -144,6 +145,15 @@ export class ProductService {
     return this.http.post<{ url: string }>(
       `${this.API_URL}/uploads/products-3d`,
       formData
+    ).pipe(
+      map(res => {
+        if (res.url && !res.url.startsWith('http')) {
+          // Remove /api if present
+          const apiBase = this.API_URL.replace(/\/api$/, '');
+          return { url: apiBase + res.url };
+        }
+        return res;
+      })
     );
   }
 }

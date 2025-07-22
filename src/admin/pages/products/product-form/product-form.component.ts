@@ -111,10 +111,7 @@ export class ProductFormComponent implements OnInit {
     this.isUploading3d = true;
     this.productService.upload3dModel(file).subscribe({
       next: (res) => {
-        const baseUrl = "https://angular-ecommerce-backend.onrender.com";
-        this.model3dUrl = res.url.startsWith("http")
-          ? res.url
-          : baseUrl + res.url;
+        this.model3dUrl = res.url;
         this.isUploading3d = false;
       },
       error: () => {
