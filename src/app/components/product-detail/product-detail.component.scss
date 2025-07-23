@@ -11,7 +11,7 @@
   height: 60px;
   display: flex;
   justify-content: space-between;
-  
+
   .container {
     max-width: 1200px;
     width: 100%;
@@ -26,7 +26,7 @@
       flex-wrap: nowrap;
     }
   }
-  
+
   .back-btn {
     background: #ff6b6b;
     color: white;
@@ -36,17 +36,17 @@
     cursor: pointer;
     font-weight: 500;
     transition: all 0.3s ease;
-    
+
     &:hover {
       background: #ff5252;
       transform: translateY(-2px);
     }
   }
-  
+
   .breadcrumb {
     color: #666;
     font-size: 0.9rem;
-    
+
     .current {
       color: #333;
       font-weight: 500;
@@ -56,7 +56,7 @@
 
 .product-content {
   padding: 2rem 0;
-  
+
   .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -65,47 +65,49 @@
 }
 
 .product-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
   align-items: start;
   margin-bottom: 3rem;
-  
+
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
 }
 
-.loading, .not-found {
+.loading,
+.not-found {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  
+
   .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 1rem;
     text-align: center;
   }
-  
-  .loading-content, .not-found-content {
+
+  .loading-content,
+  .not-found-content {
     background: rgba(255, 255, 255, 0.9);
     padding: 3rem;
     border-radius: 16px;
     backdrop-filter: blur(10px);
-    
+
     h2 {
       color: #333;
       margin-bottom: 1rem;
     }
-    
+
     p {
       color: #666;
       margin-bottom: 2rem;
     }
-    
+
     .back-btn {
       background: #ff6b6b;
       color: white;
@@ -115,7 +117,7 @@
       cursor: pointer;
       font-weight: 500;
       transition: all 0.3s ease;
-      
+
       &:hover {
         background: #ff5252;
         transform: translateY(-2px);
@@ -139,7 +141,8 @@
   margin-bottom: 16px;
 }
 
-.main-image, .main-3d-viewer {
+.main-image,
+.main-3d-viewer {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -151,7 +154,8 @@
   margin-bottom: 16px;
 }
 
-.thumb-image, .thumb-3d {
+.thumb-image,
+.thumb-3d {
   width: 64px;
   height: 64px;
   object-fit: contain;
@@ -161,7 +165,8 @@
   background: #fff;
 }
 
-.thumb-image.selected, .thumb-3d.selected {
+.thumb-image.selected,
+.thumb-3d.selected {
   border-color: #f44336;
 }
 
