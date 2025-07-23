@@ -27,10 +27,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { AdminRoutingModule } from './admin-routing.module';
-import { AdminLayoutComponent } from './layout/admin-layout.component';
+import { AdminLayoutComponent } from './components/layout/admin-layout/admin-layout.component';
 import { AdminLoginComponent } from './pages/login/admin-login.component';
-import { SidenavComponent } from './components/organisms/sidenav/sidenav.component';
-import { HeaderComponent } from './components/organisms/header/header.component';
+import { SidenavComponent } from './components/layout/sidenav/sidenav.component';
+import { HeaderComponent } from './components/layout/header/header.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ProductListComponent } from './pages/products/product-list/product-list.component';
 import { ProductFormComponent } from './pages/products/product-form/product-form.component';
@@ -43,9 +43,9 @@ import { MessageDetailComponent } from './pages/messages/message-detail/message-
 import { SectionListComponent } from './pages/sections/section-list/section-list.component';
 import { SectionFormComponent } from './pages/sections/section-form/section-form.component';
 // Shared Components
-import { DataTableComponent } from './components/molecules/data-table/data-table.component';
-import { FormFieldComponent } from './components/atoms/form-field/form-field.component';
-import { ActionButtonComponent } from './components/atoms/action-button/action-button.component';
+import { DataTableComponent } from './components/blocks/data-table/data-table.component';
+import { FormFieldComponent } from './components/ui/form-field/form-field.component';
+import { ActionButtonComponent } from './components/ui/action-button/action-button.component';
 import { CategoryFormComponent } from './pages/categories/category-form/category-form.component';
 
 // Services
