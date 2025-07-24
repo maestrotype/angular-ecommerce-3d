@@ -1,12 +1,3 @@
-<app-hero></app-hero>
-<app-best-sellers></app-best-sellers>
-<app-categories></app-categories>
-<app-special-offer></app-special-offer>
-<app-brands></app-brands>
-<app-contacts></app-contacts>
-
 <ng-container *ngFor="let section of sections">
-  <app-hero *ngIf="section.type === 'hero'" [data]="section"></app-hero>
-  <app-about *ngIf="section.type === 'about'" [data]="section"></app-about>
-  <app-promo *ngIf="section.type === 'promo'" [data]="section"></app-promo>
+  <app-section-renderer [section]="section"></app-section-renderer>
 </ng-container>

@@ -56,14 +56,14 @@
             display: inline-block;
             color: #FFF;
             border-radius: 20px;
-            font-size: 5rem;
+            font-size: 12rem;
             font-weight: 600;
             letter-spacing: 0.05em;
             backdrop-filter: blur(10px);
             filter: blur(2px);
             position: absolute;
             right: 6rem;
-            top: 19%;
+            top: 36rem;
             transform: rotate(-22deg);
             text-shadow: 6px 5px 22px rgba(0, 0, 0, 0.2);
         }
@@ -133,10 +133,9 @@
 
                 .featured-product {
                     width: 100%;
-                    max-width: 500px;
                     height: 600px;
                     filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15));
-                    object-fit: none;
+                    object-fit: contain;
                 }
 
                 .decoration {

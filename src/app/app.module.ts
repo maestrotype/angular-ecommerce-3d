@@ -35,10 +35,11 @@ import { ProductTabsComponent } from './components/product-detail/product-tabs/p
 import { ProductImagesComponent } from './components/product-detail/product-images/product-images.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { CustomDropdownComponent } from './shared/custom-dropdown/custom-dropdown.component';
+import { SectionRendererComponent } from './components/section-renderer/section-renderer.component';
 
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, HeroComponent, CategoriesComponent, CustomDropdownComponent, SpecialOfferComponent, BestSellersComponent, BrandsComponent, ContactsComponent, FooterComponent, HomeComponent, ShopComponent, AboutComponent, ProductDetailComponent, ProductImagesComponent, ProductInfoComponent, ProductTabsComponent, BaseModalComponent, ImageModalComponent, CartModalComponent, AuthModalComponent, Bag3dFirstComponent, IconComponent, ThreeDViewerComponent],
+  declarations: [AppComponent, HeaderComponent, HeroComponent, CategoriesComponent, CustomDropdownComponent, SpecialOfferComponent, BestSellersComponent, BrandsComponent, ContactsComponent, FooterComponent, HomeComponent, ShopComponent, AboutComponent, ProductDetailComponent, ProductImagesComponent, ProductInfoComponent, ProductTabsComponent, BaseModalComponent, ImageModalComponent, CartModalComponent, AuthModalComponent, Bag3dFirstComponent, IconComponent, ThreeDViewerComponent, SectionRendererComponent],
   imports: [BrowserModule, BrowserAnimationsModule, HttpClientModule, FormsModule, RouterModule, AppRoutingModule],
   providers: [
     provideAnimationsAsync(),
