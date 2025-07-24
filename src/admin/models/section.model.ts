@@ -1,8 +1,9 @@
 
 export interface Section {
   id: number;
-  type: 'hero' | 'about' | 'contact' | 'promo' | 'features' | 'testimonials';
+  type: 'hero' | 'best-sellers' | 'categories' | 'special-offer' | 'brands' | 'contacts' | 'about';
   title: string;
+  subtitle: string;
   content?: string;
   imageUrl?: string;
   order: number;
@@ -14,9 +15,8 @@ export interface Section {
   show3d?: boolean;
   showImage?: boolean;
 }
-
 export interface CreateSectionDto {
-  type: 'hero' | 'about' | 'contact' | 'promo' | 'features' | 'testimonials';
+  type: 'hero' | 'best-sellers' | 'categories' | 'special-offer' | 'brands' | 'contacts' | 'about';
   title: string;
   content?: string;
   imageUrl?: string;

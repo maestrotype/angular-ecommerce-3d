@@ -2,6 +2,7 @@ export interface Section {
   id: number;
   type: string; // 'hero', 'about', 'promo', ...
   title: string;
+  subtitle?: string;
   content?: string;
   imageUrl?: string;
   order: number;

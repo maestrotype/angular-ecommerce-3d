@@ -68,6 +68,7 @@ export class SectionFormComponent {
     return this.fb.group({
       type: [section?.type || 'hero', Validators.required],
       title: [section?.title || '', Validators.required],
+      subtitle: [section?.subtitle || ''],
       content: [section?.content || ''],
       imageUrl: [section?.imageUrl || ''],
       isActive: [section?.isActive ?? true],

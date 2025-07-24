@@ -11,6 +11,9 @@ export class Section {
   @Column()
   title: string;
 
+  @Column()
+  subtitle: string;
+
   @Column('text', { nullable: true })
   content: string;
 

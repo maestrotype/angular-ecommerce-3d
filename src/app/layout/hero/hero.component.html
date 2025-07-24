@@ -5,11 +5,11 @@
         <div class="badge">NEW ARRIVAL</div>
         <h1 class="hero-title">
           {{ data?.title || "DISCOVER YOUR" }}<br />
-          <span class="highlight">{{ data?.content || "NEW STYLE" }}</span>
+          <span class="highlight">{{ data?.subtitle || "NEW STYLE" }}</span>
         </h1>
         <p class="hero-subtitle">
           {{
-            data?.settings?.subtitle ||
+            data?.content ||
               "Explore our latest interactive 3D collection."
           }}
         </p>
