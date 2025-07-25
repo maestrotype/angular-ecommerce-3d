@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Product } from 'src/shared/models/product.model';
 import { ProductService } from '../../core/services/product.service';
+import { Section } from 'src/shared/models/section.model';
 
 @Component({
     selector: 'app-best-sellers',
@@ -9,6 +10,7 @@ import { ProductService } from '../../core/services/product.service';
     styleUrls: ['./best-sellers.component.scss']
 })
 export class BestSellersComponent implements OnInit {
+    @Input() data!: Section;
     bestSellers: Product[] = [];
 
     constructor(
