@@ -6,12 +6,12 @@
                     SALE<br>
                     <span class="discount">30%</span>
                 </div>
-                <img src="assets/images/bag-5.png" alt="Special Offer Bag" class="product-image" loading="lazy">
+                <img [src]="data?.imageUrl" alt="Special Offer Bag" class="product-image" loading="lazy">
             </div>
 
             <div class="offer-text">
-                <h2 class="offer-title">Special Offer</h2>
-                <p class="offer-subtitle">Only this week: Up to 40% off</p>
+                <h2 class="offer-title">{{ data?.title || "Special Offer" }}</h2>
+                <p class="offer-subtitle">{{ data?.subtitle || "Only this week: Up to 40% off" }}</p>
                 <button class="shop-button" (click)="onShopNow()">
                     SHOP NOW
                 </button>

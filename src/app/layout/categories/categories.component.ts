@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { Section } from 'src/shared/models/section.model';
 
 interface Category {
     id: number;
@@ -14,6 +15,7 @@ interface Category {
     styleUrls: ['./categories.component.scss']
 })
 export class CategoriesComponent implements OnInit {
+    @Input() data!: Section;
     categories: Category[] = [
         {
             id: 1,

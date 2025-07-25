@@ -1,7 +1,7 @@
 
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminLayoutComponent } from './layout/admin-layout.component';
+import { AdminLayoutComponent } from './components/layout/admin-layout/admin-layout.component';
 import { AdminLoginComponent } from './pages/login/admin-login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ProductListComponent } from './pages/products/product-list/product-list.component';

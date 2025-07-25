@@ -30,11 +30,13 @@ export class SectionFormComponent {
 
   sectionTypes = [
     { value: 'hero', label: 'Hero Section' },
-    { value: 'about', label: 'About Section' },
-    { value: 'contact', label: 'Contact Section' },
-    { value: 'promo', label: 'Promo Section' },
-    { value: 'features', label: 'Features Section' },
-    { value: 'testimonials', label: 'Testimonials Section' }
+    { value: 'hero-glass', label: 'Hero Glass Section' },
+    { value: 'best-sellers', label: 'Best Sellers Section' },
+    { value: 'categories', label: 'Categories Section' },
+    { value: 'special-offer', label: 'Special Offer Section' },
+    { value: 'brands', label: 'Brands Section' },
+    { value: 'contacts', label: 'Contacts Section' },
+    { value: 'about', label: 'About Section' }
   ];
 
   constructor(
@@ -67,6 +69,7 @@ export class SectionFormComponent {
     return this.fb.group({
       type: [section?.type || 'hero', Validators.required],
       title: [section?.title || '', Validators.required],
+      subtitle: [section?.subtitle || ''],
       content: [section?.content || ''],
       imageUrl: [section?.imageUrl || ''],
       isActive: [section?.isActive ?? true],

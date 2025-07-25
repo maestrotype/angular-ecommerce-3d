@@ -23,6 +23,14 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ 'SUBTITLE' | translate }}</mat-label>
+      <input matInput formControlName="subtitle" placeholder="Enter section subtitle">
+      <mat-error *ngIf="sectionForm.get('subtitle')?.hasError('required')">
+        {{ 'SUBTITLE_REQUIRED' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
       <mat-label>{{ 'CONTENT' | translate }}</mat-label>
       <textarea matInput formControlName="content" rows="4" placeholder="Enter section content"></textarea>
     </mat-form-field>

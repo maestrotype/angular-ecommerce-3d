@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Product } from 'src/shared/models/product.model';
 import { ProductService } from 'src/app/core/services/product.service';
+import { Section } from 'src/shared/models/section.model';
 
 @Component({
     selector: 'app-special-offer',
@@ -9,6 +10,7 @@ import { ProductService } from 'src/app/core/services/product.service';
     styleUrls: ['./special-offer.component.scss']
 })
 export class SpecialOfferComponent implements OnInit {
+    @Input() data!: Section;
     specialOffers: Product[] = [];
     constructor(private router: Router, private productService: ProductService) { }
 

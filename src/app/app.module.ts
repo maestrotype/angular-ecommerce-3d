@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HeaderComponent } from './layout/header/header.component';
 import { HeroComponent } from './layout/hero/hero.component';
+import { HeroGlassComponent } from './layout/hero-glass/hero-glass.component';
 import { CategoriesComponent } from './layout/categories/categories.component';
 import { SpecialOfferComponent } from './layout/special-offer/special-offer.component';
 import { BestSellersComponent } from './layout/best-sellers/best-sellers.component';
@@ -35,10 +36,11 @@ import { ProductTabsComponent } from './components/product-detail/product-tabs/p
 import { ProductImagesComponent } from './components/product-detail/product-images/product-images.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { CustomDropdownComponent } from './shared/custom-dropdown/custom-dropdown.component';
+import { SectionRendererComponent } from './components/section-renderer/section-renderer.component';
 
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, HeroComponent, CategoriesComponent, CustomDropdownComponent, SpecialOfferComponent, BestSellersComponent, BrandsComponent, ContactsComponent, FooterComponent, HomeComponent, ShopComponent, AboutComponent, ProductDetailComponent, ProductImagesComponent, ProductInfoComponent, ProductTabsComponent, BaseModalComponent, ImageModalComponent, CartModalComponent, AuthModalComponent, Bag3dFirstComponent, IconComponent, ThreeDViewerComponent],
+  declarations: [AppComponent, HeaderComponent, HeroComponent, HeroGlassComponent, CategoriesComponent, CustomDropdownComponent, SpecialOfferComponent, BestSellersComponent, BrandsComponent, ContactsComponent, FooterComponent, HomeComponent, ShopComponent, AboutComponent, ProductDetailComponent, ProductImagesComponent, ProductInfoComponent, ProductTabsComponent, BaseModalComponent, ImageModalComponent, CartModalComponent, AuthModalComponent, Bag3dFirstComponent, IconComponent, ThreeDViewerComponent, SectionRendererComponent],
   imports: [BrowserModule, BrowserAnimationsModule, HttpClientModule, FormsModule, RouterModule, AppRoutingModule],
   providers: [
     provideAnimationsAsync(),
