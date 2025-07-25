@@ -9,6 +9,7 @@ import {
   } from '@angular/core';
   
   import { HeroComponent } from '../../layout/hero/hero.component';
+  import { HeroGlassComponent } from '../../layout/hero-glass/hero-glass.component';
   import { BestSellersComponent } from '../../layout/best-sellers/best-sellers.component';
   import { CategoriesComponent } from '../../layout/categories/categories.component';
   import { SpecialOfferComponent } from '../../layout/special-offer/special-offer.component';
@@ -18,6 +19,7 @@ import {
   
   const sectionComponentMap: { [key: string]: Type<any> } = {
     hero: HeroComponent,
+    'hero-glass': HeroGlassComponent,
     'best-sellers': BestSellersComponent,
     categories: CategoriesComponent,
     'special-offer': SpecialOfferComponent,

@@ -30,6 +30,7 @@ export class SectionFormComponent {
 
   sectionTypes = [
     { value: 'hero', label: 'Hero Section' },
+    { value: 'hero-glass', label: 'Hero Glass Section' },
     { value: 'best-sellers', label: 'Best Sellers Section' },
     { value: 'categories', label: 'Categories Section' },
     { value: 'special-offer', label: 'Special Offer Section' },

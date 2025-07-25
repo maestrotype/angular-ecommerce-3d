@@ -1,0 +1,67 @@
+<section class="hero" id="hero-glass">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-text">
+          <div class="badge">NEW ARRIVAL</div>
+          <h1 class="hero-title">
+            {{ data?.title || "DISCOVER YOUR" }}<br />
+            <span class="highlight">{{ data?.subtitle || "NEW STYLE" }}</span>
+          </h1>
+          <p class="hero-subtitle">
+            {{
+              data?.content ||
+                "Explore our latest interactive 3D collection."
+            }}
+          </p>
+        </div>
+  
+        <div class="hero-image">
+          <div class="product-showcase">
+            <div class="floating-product" [class.hidden]="modelReady">
+              <img
+                *ngIf="data?.showImage && data?.imageUrl"
+                [src]="data?.imageUrl"
+                alt="Featured Handbag"
+                class="featured-product"
+                loading="lazy"
+              />
+              <!-- Enhanced decorative elements -->
+              <div class="decoration decoration-1"></div>
+              <div class="decoration decoration-2"></div>
+              <div class="decoration decoration-3"></div>
+              
+              <!-- New glass particles -->
+              <div class="glass-particle particle-1"></div>
+              <div class="glass-particle particle-2"></div>
+              <div class="glass-particle particle-3"></div>
+              <div class="glass-particle particle-4"></div>
+            </div>
+            <div class="wrap-model">
+              <app-three-d-viewer
+                *ngIf="data?.show3d && data?.model3dUrl"
+                [modelPath]="data?.model3dUrl"
+                [scale]="[9, 9, 9]"
+                [position]="[0, 0, 0]"
+              ></app-three-d-viewer>
+            </div>
+          </div>
+        </div>
+        <div class="wrap-btn">
+          <button class="cta-button" (click)="onShopNow()">SHOP NOW</button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Enhanced background decorative elements -->
+    <div class="bg-decoration bg-decoration-1"></div>
+    <div class="bg-decoration bg-decoration-2"></div>
+    
+    <!-- New glassmorphism color sprays -->
+    <div class="color-spray bag-spray"></div>
+    <div class="color-spray text-spray"></div>
+    
+    <!-- Additional glass orbs -->
+    <div class="glass-orb orb-1"></div>
+    <div class="glass-orb orb-2"></div>
+    <div class="glass-orb orb-3"></div>
+  </section>
