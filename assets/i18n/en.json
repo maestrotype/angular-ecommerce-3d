@@ -196,6 +196,7 @@
   "NO_SECTIONS_FOUND": "No sections found. Click \"Add Section\" to create your first section.",
   "TYPE": "Type",
   "TITLE": "Title",
+  "SUBTITLE": "Subtitle",
   "ADD_SECTION": "Add Section",
   "MAIN_PAGE_SECTIONS": "Main Page Sections",
   "HERO": "Hero",
