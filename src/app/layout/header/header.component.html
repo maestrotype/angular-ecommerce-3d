@@ -1,124 +1,131 @@
 <header class="header">
-    <div class="header-container">
-      <div class="logo">🛒 3D Store</div>
-      
-      <!-- Desktop Navigation -->
-      <nav class="nav" [class.nav-compressed]="isSearchOpen">
-        <a (click)="goHome()" routerLink="/home" class="nav-link">Home</a>
-        <a (click)="scrollToSection('shop')" routerLink="/home" class="nav-link">Shop</a>
-        <a (click)="scrollToSection('about')" routerLink="/home" class="nav-link">About</a>
-        <a (click)="scrollToSection('contact')" routerLink="/home" class="nav-link">Contact</a>
-        <a routerLink="/admin" class="nav-link">Admin Panel</a>
-      </nav>
-      
-      <!-- Desktop Search -->
-      <div class="desktop-search" [class.active]="isSearchOpen">
-        <input 
-          #searchInput
-          type="text" 
-          placeholder="Search products..."
-          class="search-input"
-          [(ngModel)]="searchTerm"
-          (input)="onSearch()"
-          (keyup.enter)="performSearch()"
-          (blur)="onSearchBlur()"
-        />
-      </div>
-      
-      <!-- Mobile Search -->
-      <div class="mobile-search">
-        <input 
-          type="text" 
-          placeholder="Search..."
-          class="mobile-search-input"
-          [(ngModel)]="searchTerm"
-          (input)="onSearch()"
-          (keyup.enter)="performSearch()"
-        />
-      </div>
-      
-      <div class="user-actions">
-        <span class="search-icon" (click)="toggleSearch()">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M21 21L16.66 16.66" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            <path
-              d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
-              stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </span>
-        <a class="cart" (click)="openCartModal()">
-          <app-icon name="shopping-cart" stroke="#333" />
-          <span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span>
-        </a>
-        <span class="profile-icon" (click)="openAuthModal()">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M19 21V19C19 17.9391 18.5786 16.9217 17.8284 16.1716C17.0783 15.4214 16.0609 15 15 15H9C7.93913 15 6.92172 15.4214 6.17157 16.1716C5.42143 16.9217 5 17.9391 5 19V21"
-              stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-            <path
-              d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z"
-              stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </span>
-        
-        <!-- Mobile Hamburger Button -->
-        <button class="hamburger" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-      </div>
-    </div>
-  </header>
-  
-  <!-- Search Results Dropdown -->
-  <div class="search-results" *ngIf="searchResults.length > 0 && searchTerm" [class.active]="isSearchOpen || searchTerm">
-    <div class="search-results-container">
-      <div class="search-results-header">
-        <span>Search Results ({{ searchResults.length }})</span>
-      </div>
-      <div class="search-results-list">
-        <div 
-          *ngFor="let product of searchResults.slice(0, 5)" 
-          class="search-result-item"
-          (click)="goToProduct(product.id)"
-        >
-          <img [src]="product.imageUrl" [alt]="product.name" class="result-image">
-          <div class="result-info">
-            <h4 class="result-name">{{ product.name }}</h4>
-            <p class="result-price">${{ product.price }}</p>
-            <span class="result-category">{{ product.category }}</span>
-          </div>
-        </div>
-      </div>
-      <div class="search-results-footer" *ngIf="searchResults.length > 5">
-        <button class="view-all-btn" (click)="viewAllResults()">
-          View All Results ({{ searchResults.length }})
-        </button>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Mobile Menu Overlay -->
-  <div class="mobile-menu-overlay" [class.active]="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
-  
-  <!-- Mobile Menu -->
-  <div class="mobile-menu" [class.active]="isMobileMenuOpen">
-    <div class="mobile-menu-header">
-      <div class="logo">🛒 3D Store</div>
-      <button class="close-btn" (click)="closeMobileMenu()">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
+  <div class="header-container">
+    <div class="logo">
+      <img *ngIf="logoUrl" [src]="logoUrl" alt="Logo" class="logo-image">
+      <span *ngIf="!logoUrl">🛒 3D Store</span>
     </div>
     
-    <nav class="mobile-nav">
-      <a routerLink="/home" (click)="goHome()">Home</a>
-      <a routerLink="/home" (click)="scrollToSection('shop')">Shop</a>
-      <a routerLink="/home" (click)="scrollToSection('about')">About</a>
-      <a routerLink="/home" (click)="scrollToSection('contact')">Contact</a>
-      <a routerLink="/admin" class="nav-link">Admin Panel</a>
+    <!-- Desktop Navigation -->
+    <nav class="nav" [class.nav-compressed]="isSearchOpen">
+      <a *ngFor="let item of menuItems" 
+         (click)="navigateToUrl(item.url)" 
+         class="nav-link"
+         [class.hidden]="!canAccessMenuItem(item)">
+        {{ item.title }}
+      </a>
     </nav>
+    
+    <!-- Desktop Search -->
+    <div class="desktop-search" [class.active]="isSearchOpen" *ngIf="showSearch">
+      <input 
+        #searchInput
+        type="text" 
+        placeholder="Search products..."
+        class="search-input"
+        [(ngModel)]="searchTerm"
+        (input)="onSearch()"
+        (keyup.enter)="performSearch()"
+        (blur)="onSearchBlur()"
+      />
+    </div>
+    
+    <!-- Mobile Search -->
+    <div class="mobile-search" *ngIf="showSearch">
+      <input 
+        type="text" 
+        placeholder="Search..."
+        class="mobile-search-input"
+        [(ngModel)]="searchTerm"
+        (input)="onSearch()"
+        (keyup.enter)="performSearch()"
+      />
+    </div>
+    
+    <div class="user-actions">
+      <span class="search-icon" (click)="toggleSearch()" *ngIf="showSearch">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M21 21L16.66 16.66" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path
+            d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
+            stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+      <a class="cart" (click)="openCartModal()" *ngIf="showCart">
+        <app-icon name="shopping-cart" stroke="#333" />
+        <span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span>
+      </a>
+      <span class="profile-icon" (click)="openAuthModal()" *ngIf="showProfile">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M19 21V19C19 17.9391 18.5786 16.9217 17.8284 16.1716C17.0783 15.4214 16.0609 15 15 15H9C7.93913 15 6.92172 15.4214 6.17157 16.1716C5.42143 16.9217 5 17.9391 5 19V21"
+            stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path
+            d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z"
+            stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+      
+      <!-- Mobile Hamburger Button -->
+      <button class="hamburger" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
   </div>
+</header>
+
+<!-- Search Results Dropdown -->
+<div class="search-results" *ngIf="searchResults.length > 0 && searchTerm" [class.active]="isSearchOpen || searchTerm">
+  <div class="search-results-container">
+    <div class="search-results-header">
+      <span>Search Results ({{ searchResults.length }})</span>
+    </div>
+    <div class="search-results-list">
+      <div 
+        *ngFor="let product of searchResults.slice(0, 5)" 
+        class="search-result-item"
+        (click)="goToProduct(product.id)"
+      >
+        <img [src]="product.imageUrl" [alt]="product.name" class="result-image">
+        <div class="result-info">
+          <h4 class="result-name">{{ product.name }}</h4>
+          <p class="result-price">${{ product.price }}</p>
+          <span class="result-category">{{ product.category }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="search-results-footer" *ngIf="searchResults.length > 5">
+      <button class="view-all-btn" (click)="viewAllResults()">
+        View All Results ({{ searchResults.length }})
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile Menu Overlay -->
+<div class="mobile-menu-overlay" [class.active]="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" [class.active]="isMobileMenuOpen">
+  <div class="mobile-menu-header">
+    <div class="logo">
+      <img *ngIf="logoUrl" [src]="logoUrl" alt="Logo" class="logo-image">
+      <span *ngIf="!logoUrl">🛒 3D Store</span>
+    </div>
+    <button class="close-btn" (click)="closeMobileMenu()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+  
+  <nav class="mobile-nav">
+    <a *ngFor="let item of menuItems" 
+       (click)="navigateToUrl(item.url)"
+       [class.hidden]="!canAccessMenuItem(item)">
+      {{ item.title }}
+    </a>
+  </nav>
+</div>

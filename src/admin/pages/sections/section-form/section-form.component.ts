@@ -7,6 +7,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SectionService } from '../../../services/section.service';
 import { Section, CreateSectionDto, UpdateSectionDto, MenuItem } from '../../../models/section.model';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-section-form',
@@ -17,12 +18,7 @@ export class SectionFormComponent {
   sectionForm: FormGroup;
   isEditMode: boolean;
   loading = false;
-  imageFile: File | null = null;
-  imagePreview: string | ArrayBuffer | null = null;
   uploadingImage = false;
-
-  logoFile: File | null = null;
-  logoPreview: string | ArrayBuffer | null = null;
   uploadingLogo = false;
 
   model3dFile: File | null = null;
@@ -48,32 +44,30 @@ export class SectionFormComponent {
     { value: 'closed', label: 'HEADER_MENU_ACCESS_CLOSED' }
   ];
 
+  availableSections: Section[] = [];
+
   constructor(
     private fb: FormBuilder,
     private sectionService: SectionService,
     private snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<SectionFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { section?: Section }
+    @Inject(MAT_DIALOG_DATA) public data: { section: Section | null }
   ) {
-    this.isEditMode = !!data?.section;
+    this.isEditMode = !!data.section;
     this.sectionForm = this.createForm();
-
-    if (this.isEditMode && this.data.section?.imageUrl) {
-      this.imagePreview = this.data.section.imageUrl;
-    } else if (this.sectionForm.value.imageUrl) {
-      this.imagePreview = this.sectionForm.value.imageUrl;
-    } else {
-      this.imagePreview = null;
-    }
-
-    if (this.isEditMode && this.data.section?.settings?.logoUrl) {
-      this.logoPreview = this.data.section.settings.logoUrl;
-    }
 
     if (this.isEditMode && this.data.section?.model3dUrl) {
       this.model3dUrl = this.data.section.model3dUrl;
-      this.model3dFileName = this.model3dUrl.split('/').pop() || null;
+      this.model3dFileName = this.data.section.model3dUrl.split('/').pop() || null;
     }
+
+    this.loadAvailableSections();
+  }
+
+  private loadAvailableSections(): void {
+    this.sectionService.getSections().subscribe(sections => {
+      this.availableSections = sections.filter(s => s.type !== 'header');
+    });
   }
 
   private createForm(): FormGroup {
@@ -100,7 +94,8 @@ export class SectionFormComponent {
             title: [item.title, Validators.required],
             url: [item.url, Validators.required],
             access: [item.access || 'all', Validators.required],
-            isActive: [item.isActive ?? true]
+            isActive: [item.isActive ?? true],
+            sectionId: [item['sectionId'] || null]
           })
         )
       )
@@ -117,7 +112,8 @@ export class SectionFormComponent {
         title: ['', Validators.required],
         url: ['', Validators.required],
         access: ['all', Validators.required],
-        isActive: [true]
+        isActive: [true],
+        sectionId: [null]
       })
     );
   }
@@ -126,139 +122,102 @@ export class SectionFormComponent {
     this.menu.removeAt(index);
   }
 
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      const file = input.files[0];
+  dropMenuItem(event: CdkDragDrop<FormArray>) {
+    if (event.previousIndex === event.currentIndex) return;
+    const menuArray = this.menu;
+    const item = menuArray.at(event.previousIndex);
+    menuArray.removeAt(event.previousIndex);
+    menuArray.insert(event.currentIndex, item);
+  }
 
-      if (!file.type.startsWith('image/')) {
-        this.snackBar.open('Please select a valid image file', 'Close', { duration: 3000 });
-        return;
+  onSectionSelect(index: number, sectionId: number | null) {
+    const menuItem = this.menu.at(index);
+    if (sectionId) {
+      const section = this.availableSections.find(s => s.id === sectionId);
+      if (section) {
+        menuItem.patchValue({ url: `#${section.type}`, sectionId });
       }
-
-      if (file.size > 5 * 1024 * 1024) {
-        this.snackBar.open('Image size must be less than 5MB', 'Close', { duration: 3000 });
-        return;
-      }
-
-      this.imageFile = file;
-      const reader = new FileReader();
-      reader.onload = e => this.imagePreview = reader.result;
-      reader.readAsDataURL(this.imageFile);
-      this.sectionForm.patchValue({ imageUrl: '' });
+    } else {
+      menuItem.patchValue({ sectionId: null });
     }
   }
 
-  onLogoSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files[0]) {
-      const file = input.files[0];
-
-      const validTypes = ['image/svg+xml', 'image/png', 'image/jpeg', 'image/jpg'];
-      if (!validTypes.includes(file.type)) {
-        this.snackBar.open('Please select a valid image file (SVG, PNG, JPG)', 'Close', { duration: 3000 });
-        return;
-      }
-
-      if (file.size > 5 * 1024 * 1024) {
-        this.snackBar.open('Image size must be less than 5MB', 'Close', { duration: 3000 });
-        return;
-      }
-
-      this.logoFile = file;
-      const reader = new FileReader();
-      reader.onload = e => this.logoPreview = reader.result;
-      reader.readAsDataURL(this.logoFile);
-      this.sectionForm.patchValue({ logoUrl: '' });
-    }
-  }
-
-  removeImage(event?: MouseEvent): void {
-    if (event) {
-      event.stopPropagation();
-    }
-    this.imageFile = null;
-    this.imagePreview = null;
-    this.sectionForm.patchValue({ imageUrl: '' });
-  }
-
-  removeLogo(event?: MouseEvent): void {
-    if (event) {
-      event.stopPropagation();
-    }
-    this.logoFile = null;
-    this.logoPreview = null;
-    this.sectionForm.patchValue({ logoUrl: '' });
-  }
-
-  private async uploadImageIfSelected(): Promise<string | null> {
-    if (!this.imageFile) {
-      return this.sectionForm.value.imageUrl || null;
-    }
+  onImageFileSelected(file: File): void {
     this.uploadingImage = true;
-    try {
-      const response = await this.sectionService.uploadImage(this.imageFile).toPromise();
-      this.uploadingImage = false;
-      if (response?.url) {
-        const baseUrl = window.location.origin;
-        const imageUrl = response.url.startsWith('http') ? response.url : baseUrl + response.url;
-        this.sectionForm.patchValue({ imageUrl });
-        this.imagePreview = imageUrl;
-        return imageUrl;
+    this.sectionService.uploadImage(file).subscribe({
+      next: (response) => {
+        if (response?.url) {
+          const baseUrl = window.location.origin;
+          const imageUrl = response.url.startsWith('http') ? response.url : baseUrl + response.url;
+          this.sectionForm.patchValue({ imageUrl });
+        }
+        this.uploadingImage = false;
+      },
+      error: (error) => {
+        this.uploadingImage = false;
+        this.snackBar.open('Error uploading image', 'Close', { duration: 3000 });
       }
-      return null;
-    } catch (error) {
-      this.uploadingImage = false;
-      this.snackBar.open('Error uploading image', 'Close', { duration: 3000 });
-      throw error;
-    }
+    });
   }
 
-  private async uploadLogoIfSelected(): Promise<string | null> {
-    if (!this.logoFile) {
-      return this.sectionForm.value.logoUrl || null;
-    }
+  onImageUploaded(url: string): void {
+    this.sectionForm.patchValue({ imageUrl: url });
+  }
+
+  onLogoFileSelected(file: File): void {
     this.uploadingLogo = true;
-    try {
-      const response = await this.sectionService.uploadImage(this.logoFile).toPromise();
-      this.uploadingLogo = false;
-      if (response?.url) {
-        const baseUrl = window.location.origin;
-        const logoUrl = response.url.startsWith('http') ? response.url : baseUrl + response.url;
-        this.sectionForm.patchValue({ logoUrl });
-        this.logoPreview = logoUrl;
-        return logoUrl;
+    this.sectionService.uploadImage(file).subscribe({
+      next: (response) => {
+        if (response?.url) {
+          const baseUrl = window.location.origin;
+          const logoUrl = response.url.startsWith('http') ? response.url : baseUrl + response.url;
+          this.sectionForm.patchValue({ logoUrl });
+        }
+        this.uploadingLogo = false;
+      },
+      error: (error) => {
+        this.uploadingLogo = false;
+        this.snackBar.open('Error uploading logo', 'Close', { duration: 3000 });
       }
-      return null;
-    } catch (error) {
-      this.uploadingLogo = false;
-      this.snackBar.open('Error uploading logo', 'Close', { duration: 3000 });
-      throw error;
-    }
+    });
+  }
+
+  onLogoUploaded(url: string): void {
+    this.sectionForm.patchValue({ logoUrl: url });
   }
 
   on3dFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
-      if (!file.name.endsWith('.glb')) {
-        this.snackBar.open('Please select a .glb file', 'Close', { duration: 3000 });
+
+      if (!file.name.toLowerCase().endsWith('.glb')) {
+        this.snackBar.open('Please select a valid .glb 3D model file', 'Close', { duration: 3000 });
         return;
       }
+
+      if (file.size > 50 * 1024 * 1024) {
+        this.snackBar.open('3D model size must be less than 50MB', 'Close', { duration: 3000 });
+        return;
+      }
+
       this.model3dFile = file;
       this.model3dFileName = file.name;
       this.sectionForm.patchValue({ model3dUrl: '' });
     }
   }
 
-  remove3dModel(): void {
+  remove3dModel(event?: MouseEvent): void {
+    if (event) {
+      event.stopPropagation();
+    }
     this.model3dFile = null;
     this.model3dUrl = null;
     this.model3dFileName = null;
     this.sectionForm.patchValue({ model3dUrl: '' });
   }
 
-  async upload3dIfSelected(): Promise<string | null> {
+  private async upload3dIfSelected(): Promise<string | null> {
     if (!this.model3dFile) {
       return this.sectionForm.value.model3dUrl || null;
     }
@@ -267,10 +226,10 @@ export class SectionFormComponent {
       const response = await this.sectionService.upload3dModel(this.model3dFile).toPromise();
       this.uploading3d = false;
       if (response?.url) {
-        this.sectionForm.patchValue({ model3dUrl: response.url });
-        this.model3dUrl = response.url;
-        this.model3dFileName = response.url.split('/').pop() || null;
-        return response.url;
+        const baseUrl = window.location.origin;
+        const model3dUrl = response.url.startsWith('http') ? response.url : baseUrl + response.url;
+        this.sectionForm.patchValue({ model3dUrl });
+        return model3dUrl;
       }
       return null;
     } catch (error) {
@@ -285,63 +244,65 @@ export class SectionFormComponent {
 
     this.loading = true;
 
-    forkJoin({
-      imageUrl: this.uploadImageIfSelected(),
-      logoUrl: this.uploadLogoIfSelected(),
-      model3dUrl: this.upload3dIfSelected()
-    }).pipe(
-      switchMap(({ imageUrl, logoUrl, model3dUrl }) => {
-        const formValue = this.sectionForm.value;
-        
-        let formData: any;
-        
-        if (formValue.type === 'header') {
-          formData = {
-            type: formValue.type,
-            title: formValue.title || 'Header',
-            subtitle: formValue.subtitle || '',
-            content: formValue.content || '',
-            imageUrl: imageUrl || '',
-            isActive: formValue.isActive,
-            model3dUrl: model3dUrl || '',
-            show3d: formValue.show3d || false,
-            showImage: formValue.showImage || true,
-            settings: {
-              logoUrl: logoUrl || '',
-              showSearch: formValue.showSearch ?? true,
-              showCart: formValue.showCart ?? true,
-              showProfile: formValue.showProfile ?? true,
-              menu: formValue.menu || []
-            }
-          };
-        } else {
-          formData = {
-            ...formValue,
-            imageUrl: imageUrl || '',
-            model3dUrl: model3dUrl || ''
-          };
-        }
+    this.upload3dIfSelected().then(model3dUrl => {
+      const formValue = this.sectionForm.value;
 
-        if (this.isEditMode && this.data.section?.id) {
-          return this.sectionService.updateSection(this.data.section.id, formData);
-        } else {
-          return this.sectionService.createSection(formData);
-        }
-      }),
-      finalize(() => this.loading = false),
-      catchError(error => {
-        this.snackBar.open('Error saving section', 'Close', { duration: 3000 });
-        return of(null);
-      })
-    ).subscribe(result => {
-      if (result) {
-        this.snackBar.open(
-          this.isEditMode ? 'Section updated successfully' : 'Section created successfully',
-          'Close',
-          { duration: 3000 }
-        );
-        this.dialogRef.close(result);
+      let formData: any;
+
+      if (formValue.type === 'header') {
+        formData = {
+          type: formValue.type,
+          title: formValue.title || 'Header',
+          subtitle: formValue.subtitle || '',
+          content: formValue.content || '',
+          imageUrl: formValue.imageUrl || '',
+          isActive: formValue.isActive,
+          model3dUrl: model3dUrl || '',
+          show3d: formValue.show3d || false,
+          showImage: formValue.showImage || true,
+          settings: {
+            logoUrl: formValue.logoUrl || '',
+            showSearch: formValue.showSearch ?? true,
+            showCart: formValue.showCart ?? true,
+            showProfile: formValue.showProfile ?? true,
+            menu: formValue.menu || []
+          }
+        };
+      } else {
+        formData = {
+          ...formValue,
+          model3dUrl: model3dUrl || ''
+        };
       }
+
+      if (this.isEditMode && this.data.section?.id) {
+        this.sectionService.updateSection(this.data.section.id, formData).subscribe({
+          next: (result) => {
+            this.loading = false;
+            this.snackBar.open('Section updated successfully', 'Close', { duration: 3000 });
+            
+          },
+          error: (error) => {
+            this.loading = false;
+            this.snackBar.open('Error updating section', 'Close', { duration: 3000 });
+          }
+        });
+      } else {
+        this.sectionService.createSection(formData).subscribe({
+          next: (result) => {
+            this.loading = false;
+            this.snackBar.open('Section created successfully', 'Close', { duration: 3000 });
+            
+          },
+          error: (error) => {
+            this.loading = false;
+            this.snackBar.open('Error creating section', 'Close', { duration: 3000 });
+          }
+        });
+      }
+    }).catch(error => {
+      this.loading = false;
+      this.snackBar.open('Error saving section', 'Close', { duration: 3000 });
     });
   }
 
