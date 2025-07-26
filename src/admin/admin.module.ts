@@ -47,6 +47,7 @@ import { DataTableComponent } from './components/blocks/data-table/data-table.co
 import { FormFieldComponent } from './components/ui/form-field/form-field.component';
 import { ActionButtonComponent } from './components/ui/action-button/action-button.component';
 import { CategoryFormComponent } from './pages/categories/category-form/category-form.component';
+import { ImageUploadComponent } from './components/ui/image-upload/image-upload.component';
 
 // Services
 import { NotificationService } from './services/notification.service';
@@ -78,7 +79,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     UserEditDialogComponent,
     DataTableComponent,
     FormFieldComponent,
-    ActionButtonComponent
+    ActionButtonComponent,
+    ImageUploadComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,47 @@
+<div class="image-upload-container">
+  <label *ngIf="label" class="upload-label">{{ label }}</label>
+  
+  <div class="upload-area" 
+       [class.has-image]="imagePreview"
+       [class.uploading]="uploading"
+       [class.disabled]="disabled"
+       (drop)="onDrop($event)"
+       (dragover)="onDragOver($event)">
+    
+    <input type="file" 
+           #fileInput 
+           (change)="onFileSelected($event)" 
+           [accept]="accept" 
+           class="file-input" 
+           [disabled]="disabled || uploading" />
+    
+    <div *ngIf="!imagePreview" class="upload-placeholder">
+      <mat-icon>cloud_upload</mat-icon>
+      <p>{{ placeholder || 'Drag & drop image here or click to upload' }}</p>
+      <small>SVG, PNG, JPG files only. Max {{ maxSize / 1024 / 1024 }}MB</small>
+    </div>
+    
+    <div *ngIf="imagePreview" class="image-preview">
+      <img [src]="imagePreview" alt="Preview" />
+      <div class="image-overlay">
+        <button type="button" 
+                mat-icon-button 
+                (click)="removeImage()" 
+                class="remove-btn"
+                [disabled]="disabled || uploading">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+    
+    <button type="button" 
+            mat-stroked-button 
+            (click)="fileInput.click()" 
+            [disabled]="disabled || uploading" 
+            class="upload-btn">
+      <mat-icon *ngIf="!uploading">add_photo_alternate</mat-icon>
+      <mat-icon *ngIf="uploading" class="spinning">hourglass_empty</mat-icon>
+      {{ uploading ? 'Uploading...' : (imagePreview ? 'Change Image' : 'Select Image') }}
+    </button>
+  </div>
+</div> 

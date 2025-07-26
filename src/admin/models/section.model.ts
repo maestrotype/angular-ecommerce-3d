@@ -1,31 +1,61 @@
 
+export interface MenuItem {
+  title: string;
+  url: string;
+  access: 'all' | 'admin' | 'closed';
+  isActive: boolean;
+}
+
+export interface HeaderSettings {
+  logoUrl?: string;
+  showSearch?: boolean;
+  showCart?: boolean;
+  showProfile?: boolean;
+  menu?: MenuItem[];
+}
+
 export interface Section {
   id: number;
-  type: 'hero' | 'best-sellers' | 'categories' | 'special-offer' | 'brands' | 'contacts' | 'about';
+  type: string;
   title: string;
   subtitle: string;
   content?: string;
   imageUrl?: string;
   order: number;
   isActive: boolean;
-  settings?: Record<string, any>;
+  settings?: HeaderSettings | Record<string, any>;
+  model3dUrl?: string;
+  show3d: boolean;
+  showImage: boolean;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface CreateSectionDto {
+  type: string;
+  title: string;
+  subtitle?: string;
+  content?: string;
+  imageUrl?: string;
+  isActive?: boolean;
+  settings?: HeaderSettings | Record<string, any>;
   model3dUrl?: string;
   show3d?: boolean;
   showImage?: boolean;
 }
-export interface CreateSectionDto {
-  type: 'hero' | 'best-sellers' | 'categories' | 'special-offer' | 'brands' | 'contacts' | 'about';
-  title: string;
+
+export interface UpdateSectionDto {
+  type?: string;
+  title?: string;
+  subtitle?: string;
   content?: string;
   imageUrl?: string;
-  order?: number;
   isActive?: boolean;
-  settings?: Record<string, any>;
+  settings?: HeaderSettings | Record<string, any>;
+  model3dUrl?: string;
+  show3d?: boolean;
+  showImage?: boolean;
 }
-
-export interface UpdateSectionDto extends Partial<CreateSectionDto> { }
 
 export interface ReorderSectionsDto {
   sectionIds: number[];
