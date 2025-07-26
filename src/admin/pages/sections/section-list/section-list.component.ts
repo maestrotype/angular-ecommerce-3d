@@ -61,7 +61,7 @@ export class SectionListComponent implements OnInit {
 
   addSection(): void {
     const dialogRef = this.dialog.open(SectionFormComponent, {
-      width: '600px',
+      panelClass: 'section-dialog-panel',
       data: {}
     });
 
@@ -74,7 +74,7 @@ export class SectionListComponent implements OnInit {
 
   editSection(section: Section): void {
     const dialogRef = this.dialog.open(SectionFormComponent, {
-      width: '600px',
+      panelClass: 'section-dialog-panel',
       data: { section }
     });
 
