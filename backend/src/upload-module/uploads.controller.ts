@@ -44,9 +44,9 @@ export class UploadsController {
         },
       }),
       fileFilter: (req, file, callback) => {
-        if (!file.mimetype.match(/\/(jpg|jpeg|png|gif)$/)) {
+        if (!file.mimetype.match(/\/(jpg|jpeg|png|gif|svg\+xml)$/)) {
           return callback(
-            new BadRequestException("Only image files are allowed!"),
+            new BadRequestException("Only image files (JPG, PNG, GIF, SVG) are allowed!"),
             false
           );
         }
