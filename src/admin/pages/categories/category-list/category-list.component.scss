@@ -19,6 +19,12 @@
     font-size: 2rem;
     font-weight: 600;
   }
+
+  .add-button {
+    .button-text {
+      margin-left: 8px;
+    }
+  }
 }
 
 .filter-section {
@@ -28,7 +34,7 @@
   padding: 0 24px;
   background-color: #1f2937;
 
-  mat-form-field {
+  .search-field {
     min-width: 200px;
   }
 }
@@ -38,7 +44,7 @@
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.3);
   border: 1px solid #404040;
-  overflow: scroll;
+  overflow: hidden;
   margin: 0 24px;
 }
 
@@ -66,6 +72,88 @@
   }
 }
 
+// Mobile card styles
+.mobile-view {
+  display: none;
+}
+
+.categories-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+
+.category-card {
+  background: #2d2d2d;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  padding: 16px;
+  border: 1px solid #404040;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+
+    .category-id {
+      font-weight: 600;
+      color: #3b82f6;
+      font-size: 14px;
+    }
+  }
+
+  .card-content {
+    .category-name {
+      margin-bottom: 8px;
+
+      h3 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+        color: #ffffff;
+        line-height: 1.4;
+      }
+    }
+
+    .category-description {
+      p {
+        margin: 0;
+        color: #9ca3af;
+        font-size: 14px;
+        line-height: 1.4;
+      }
+    }
+  }
+
+  .card-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #404040;
+
+    .action-button {
+      width: 36px;
+      height: 36px;
+      line-height: 36px;
+
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+}
+
 .loading-container, .error-container {
   display: flex;
   flex-direction: column;
@@ -88,10 +176,77 @@
   color: #ef4444;
 }
 
-@media (max-width: 768px) {
+// Galaxy Z Fold 5/6 unfolded (690px) - use desktop format with compact table
+@media (min-width: 690px) and (max-width: 768px) {
+  .category-list-container {
+    padding: 0;
+  }
+
+  .header-section {
+    padding: 16px 16px 0 16px;
+
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    .add-button {
+      width: auto;
+      
+      .button-text {
+        display: inline;
+      }
+    }
+  }
+
   .filter-section {
-    flex-direction: column;
     padding: 0 16px;
+
+    .search-field {
+      min-width: 150px;
+      max-width: 300px;
+    }
+  }
+
+  .desktop-view {
+    display: block !important;
+  }
+
+  .mobile-view {
+    display: none !important;
+  }
+
+  // Compact table for Galaxy Z Fold
+  .category-table {
+    th, td {
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+
+    .mat-column-id {
+      width: 60px;
+    }
+
+    .mat-column-name {
+      width: 120px;
+    }
+
+    .mat-column-description {
+      width: 200px;
+    }
+
+    .mat-column-actions {
+      width: 80px;
+    }
+  }
+
+  .table-container {
+    margin: 0 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .category-list-container {
+    padding: 0;
   }
 
   .header-section {
@@ -99,14 +254,67 @@
     gap: 16px;
     align-items: stretch;
     padding: 16px;
+
+    h1 {
+      text-align: center;
+      font-size: 1.5rem;
+    }
+
+    .add-button {
+      width: 100%;
+      
+      .button-text {
+        display: inline;
+      }
+    }
   }
 
-  .category-list-container {
-    padding: 0;
+  .filter-section {
+    flex-direction: column;
+    gap: 12px;
+    padding: 0 16px;
+    align-items: stretch;
+
+    .search-field {
+      min-width: none;
+    }
+  }
+
+  .desktop-view {
+    display: none;
+  }
+
+  .mobile-view {
+    display: block;
+  }
+
+  .categories-grid {
+    grid-template-columns: 1fr;
+    padding: 0 16px;
   }
 
   .table-container {
-    overflow-x: auto;
     margin: 0 16px;
+  }
+
+  .loading-container,
+  .error-container {
+    margin: 0 16px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .categories-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+}
+
+@media (min-width: 1025px) {
+  .mobile-view {
+    display: none;
+  }
+
+  .desktop-view {
+    display: block;
   }
 }

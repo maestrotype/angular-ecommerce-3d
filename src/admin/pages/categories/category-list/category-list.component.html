@@ -1,14 +1,14 @@
 <div class="category-list-container">
   <div class="header-section">
     <h1>{{ 'CATEGORY_MANAGEMENT' | translate }}</h1>
-    <button mat-raised-button color="primary" (click)="addCategory()">
+    <button mat-raised-button color="primary" (click)="addCategory()" class="add-button">
       <mat-icon>add</mat-icon>
-      {{ 'ADD_CATEGORY' | translate }}
+      <span class="button-text">{{ 'ADD_CATEGORY' | translate }}</span>
     </button>
   </div>
 
   <div class="filter-section">
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="search-field">
       <mat-label>{{ 'SEARCH_CATEGORIES' | translate }}</mat-label>
       <input
         matInput
@@ -19,7 +19,8 @@
     </mat-form-field>
   </div>
 
-  <div class="table-container" *ngIf="!isLoading">
+  <!-- Desktop Table View -->
+  <div class="table-container desktop-view" *ngIf="!isLoading">
     <table mat-table [dataSource]="dataSource" matSort class="category-table">
       <!-- ID Column -->
       <ng-container matColumnDef="id">
@@ -70,6 +71,38 @@
       [pageSizeOptions]="[5, 10, 20]"
       showFirstLastButtons
     ></mat-paginator>
+  </div>
+
+  <!-- Mobile Card View -->
+  <div class="mobile-view" *ngIf="!isLoading">
+    <div class="categories-grid">
+      <div *ngFor="let category of dataSource.data" class="category-card">
+        <div class="card-header">
+          <div class="category-id">#{{ category.id }}</div>
+        </div>
+        
+        <div class="card-content">
+          <div class="category-name">
+            <h3>{{ category.name }}</h3>
+          </div>
+          
+          <div class="category-description">
+            <p>{{ category.description }}</p>
+          </div>
+        </div>
+        
+        <div class="card-actions">
+          <button mat-icon-button color="primary" (click)="editCategory(category)" 
+                  class="action-button">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteCategory(category)" 
+                  class="action-button">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div *ngIf="isLoading" class="loading-container">

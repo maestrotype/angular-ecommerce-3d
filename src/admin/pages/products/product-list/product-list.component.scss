@@ -290,6 +290,98 @@
     }
   }
 
+  // Galaxy Z Fold 5/6 unfolded (690px) - use desktop format with compact table
+  @media (min-width: 690px) and (max-width: 768px) {
+    .product-list-container {
+      padding: 0;
+    }
+
+    .header-section {
+      flex-direction: row;
+      gap: 1rem;
+      align-items: flex-start;
+      padding: 16px 16px 0 16px;
+
+      h1 {
+        text-align: left;
+        font-size: 1.5rem;
+      }
+
+      .add-button {
+        width: auto;
+        
+        .button-text {
+          display: inline;
+        }
+      }
+    }
+
+    .filter-section {
+      flex-direction: row;
+      gap: 12px;
+      padding: 0 16px;
+      align-items: center;
+
+      .search-field {
+        min-width: 150px;
+        max-width: 300px;
+      }
+    }
+
+    .desktop-view {
+      display: block !important;
+    }
+
+    .mobile-view {
+      display: none !important;
+    }
+
+    // Compact table for Galaxy Z Fold
+    .products-table {
+      th, td {
+        padding: 8px 12px;
+        font-size: 13px;
+      }
+
+      .mat-column-id {
+        width: 60px;
+      }
+
+      .mat-column-image {
+        width: 80px;
+      }
+
+      .mat-column-name {
+        width: 120px;
+      }
+
+      .mat-column-category {
+        width: 100px;
+      }
+
+      .mat-column-price {
+        width: 80px;
+      }
+
+      .mat-column-stock {
+        width: 80px;
+      }
+
+      .mat-column-actions {
+        width: 80px;
+      }
+    }
+
+    .products-grid {
+      grid-template-columns: 1fr;
+      padding: 0 16px;
+    }
+
+    .table-container {
+      margin: 0 16px;
+    }
+  }
+
   // Responsive Design
   @media (max-width: 768px) {
     .product-list-container {

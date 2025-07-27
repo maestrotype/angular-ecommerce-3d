@@ -460,3 +460,97 @@
     }
   }
 }
+
+  // Galaxy Z Fold 5/6 unfolded (690px) - use desktop format with compact table
+  @media (min-width: 690px) and (max-width: 768px) {
+    .order-list-container {
+      padding: 0;
+    }
+
+    .header-section {
+      flex-direction: row;
+      gap: 1rem;
+      align-items: flex-start;
+      padding: 16px 16px 0 16px;
+
+      h1 {
+        text-align: left;
+        font-size: 1.5rem;
+      }
+
+      .stats-cards {
+        justify-content: flex-end;
+      }
+    }
+
+    .filter-section {
+      flex-direction: row;
+      gap: 12px;
+      padding: 0 16px;
+      align-items: center;
+
+      .search-field {
+        min-width: 150px;
+        max-width: 300px;
+      }
+    }
+
+    .desktop-view {
+      display: block;
+    }
+
+    .mobile-view {
+      display: none;
+    }
+
+    // Compact table for Galaxy Z Fold
+    .order-table {
+      th, td {
+        padding: 6px 8px;
+        font-size: 12px;
+      }
+
+      .mat-column-orderNumber {
+        width: 60px;
+      }
+
+      .mat-column-customer {
+        width: 120px;
+      }
+
+      .mat-column-items {
+        width: 100px;
+      }
+
+      .mat-column-total {
+        width: 60px;
+      }
+
+      .mat-column-status {
+        width: 80px;
+      }
+
+      .mat-column-actions {
+        width: 60px;
+      }
+
+      // Hide less important columns on small screens
+      .mat-column-date {
+        display: none;
+      }
+    }
+
+    .orders-grid {
+      grid-template-columns: 1fr;
+      padding: 0 16px;
+    }
+
+    .table-container {
+      margin: 0 16px;
+    }
+
+    .loading-container,
+    .error-container {
+      margin: 0 16px;
+    }
+  }

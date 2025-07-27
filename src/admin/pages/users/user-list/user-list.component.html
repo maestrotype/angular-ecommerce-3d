@@ -5,136 +5,136 @@
   </div>
 
   <div class="filter-section">
-    <mat-form-field appearance="outline" class="search-field">
-      <mat-label>{{ 'SEARCH_USERS' | translate}}</mat-label>
-      <input matInput 
-             [(ngModel)]="searchTerm" 
-             (keyup.enter)="onSearch()"
-             placeholder="Search by name or email">
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
-    
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>{{ 'SEARCH_USERS' | translate}}</mat-label>
+          <input matInput 
+                 [(ngModel)]="searchTerm" 
+                 (keyup.enter)="onSearch()"
+                 placeholder="Search by name or email">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+        
     <button mat-raised-button color="primary" (click)="onSearch()" class="search-button">
-      <mat-icon>search</mat-icon>
+          <mat-icon>search</mat-icon>
       <span class="button-text">{{ 'SEARCH' | translate}}</span>
-    </button>
-    
+        </button>
+        
     <button mat-button (click)="clearSearch()" *ngIf="searchTerm" class="clear-button">
-      <mat-icon>clear</mat-icon>
+          <mat-icon>clear</mat-icon>
       <span class="button-text">{{ 'CLEAR' | translate}}</span>
-    </button>
-  </div>
+        </button>
+      </div>
 
-  <div class="loading-container" *ngIf="isLoading">
-    <mat-spinner diameter="50"></mat-spinner>
+      <div class="loading-container" *ngIf="isLoading">
+        <mat-spinner diameter="50"></mat-spinner>
     <p>{{ 'LOADING_USERS' | translate}}</p>
-  </div>
+      </div>
 
   <div class="table-container desktop-view" *ngIf="!isLoading">
-    <table mat-table [dataSource]="dataSource" matSort class="users-table">
-      
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-        <td mat-cell *matCellDef="let user">{{ user.id }}</td>
-      </ng-container>
+        <table mat-table [dataSource]="dataSource" matSort class="users-table">
+          
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+            <td mat-cell *matCellDef="let user">{{ user.id }}</td>
+          </ng-container>
 
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'NAME' | translate}}</th>
-        <td mat-cell *matCellDef="let user">
-          <div class="user-info">
-            <div class="user-avatar">
-              <mat-icon>person</mat-icon>
-            </div>
-            <div>
-              <div class="user-name">{{ user.name }}</div>
-              <div class="user-phone" *ngIf="user.phone">{{ user.phone }}</div>
-            </div>
-          </div>
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'NAME' | translate}}</th>
+            <td mat-cell *matCellDef="let user">
+              <div class="user-info">
+                <div class="user-avatar">
+                  <mat-icon>person</mat-icon>
+                </div>
+                <div>
+                  <div class="user-name">{{ user.name }}</div>
+                  <div class="user-phone" *ngIf="user.phone">{{ user.phone }}</div>
+                </div>
+              </div>
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'EMAIL' | translate}}</th>
-        <td mat-cell *matCellDef="let user">{{ user.email }}</td>
-      </ng-container>
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'EMAIL' | translate}}</th>
+            <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+          </ng-container>
 
-      <ng-container matColumnDef="role">
-        <th mat-header-cell *matHeaderCellDef>{{ 'ROLE' | translate}}</th>
-        <td mat-cell *matCellDef="let user">
-          <mat-chip [color]="getRoleColor(user.role)" selected>
-            {{ user.role | titlecase }}
-          </mat-chip>
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="role">
+            <th mat-header-cell *matHeaderCellDef>{{ 'ROLE' | translate}}</th>
+            <td mat-cell *matCellDef="let user">
+              <mat-chip [color]="getRoleColor(user.role)" selected>
+                {{ user.role | titlecase }}
+              </mat-chip>
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef>{{ 'STATUS' | translate}}</th>
-        <td mat-cell *matCellDef="let user">
-          <mat-chip [color]="getStatusColor(user.status || 'active')" selected>
-            {{ (user.status || 'active') | titlecase }}
-          </mat-chip>
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>{{ 'STATUS' | translate}}</th>
+            <td mat-cell *matCellDef="let user">
+              <mat-chip [color]="getStatusColor(user.status || 'active')" selected>
+                {{ (user.status || 'active') | titlecase }}
+              </mat-chip>
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="createdAt">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'CREATED' | translate}}</th>
-        <td mat-cell *matCellDef="let user">
-          {{ user.createdAt | date:'short' }}
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="createdAt">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'CREATED' | translate}}</th>
+            <td mat-cell *matCellDef="let user">
+              {{ user.createdAt | date:'short' }}
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>{{ 'ACTIONS' | translate}}</th>
-        <td mat-cell *matCellDef="let user">
-          <div class="action-buttons">
-            <button mat-icon-button 
-                    matTooltip="Edit user"
-                    (click)="editUser(user)">
-              <mat-icon>edit</mat-icon>
-            </button>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>{{ 'ACTIONS' | translate}}</th>
+            <td mat-cell *matCellDef="let user">
+              <div class="action-buttons">
+                <button mat-icon-button 
+                        matTooltip="Edit user"
+                        (click)="editUser(user)">
+                  <mat-icon>edit</mat-icon>
+                </button>
 
-            <button mat-icon-button 
-                    matTooltip="Change role"
-                    [color]="user.role === 'admin' ? 'warn' : 'primary'"
-                    (click)="changeUserRole(user)">
-              <mat-icon>{{ user.role === 'admin' ? 'person_remove' : 'admin_panel_settings' }}</mat-icon>
-            </button>
+                <button mat-icon-button 
+                        matTooltip="Change role"
+                        [color]="user.role === 'admin' ? 'warn' : 'primary'"
+                        (click)="changeUserRole(user)">
+                  <mat-icon>{{ user.role === 'admin' ? 'person_remove' : 'admin_panel_settings' }}</mat-icon>
+                </button>
 
-            <button mat-icon-button 
-                    [matTooltip]="(user.status === 'blocked') ? 'Unblock user' : 'Block user'"
-                    [color]="(user.status === 'blocked') ? 'primary' : 'warn'"
-                    (click)="toggleUserStatus(user)">
-              <mat-icon>{{ (user.status === 'blocked') ? 'lock_open' : 'block' }}</mat-icon>
-            </button>
+                <button mat-icon-button 
+                        [matTooltip]="(user.status === 'blocked') ? 'Unblock user' : 'Block user'"
+                        [color]="(user.status === 'blocked') ? 'primary' : 'warn'"
+                        (click)="toggleUserStatus(user)">
+                  <mat-icon>{{ (user.status === 'blocked') ? 'lock_open' : 'block' }}</mat-icon>
+                </button>
 
-            <button mat-icon-button 
-                    matTooltip="Delete user"
-                    color="warn"
-                    (click)="deleteUser(user)">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
-        </td>
-      </ng-container>
+                <button mat-icon-button 
+                        matTooltip="Delete user"
+                        color="warn"
+                        (click)="deleteUser(user)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
 
-    <div class="no-data" *ngIf="dataSource.data.length === 0">
-      <mat-icon>person_off</mat-icon>
-      <h3>{{ 'NO_USERS_FOUND' | translate}}</h3>
-      <p>{{ searchTerm ? ('TRY_ADJUSTING_SEARCH' | translate) : ('NO_USERS_AVAILABLE' | translate) }}</p>
-    </div>
+        <div class="no-data" *ngIf="dataSource.data.length === 0">
+          <mat-icon>person_off</mat-icon>
+          <h3>{{ 'NO_USERS_FOUND' | translate}}</h3>
+          <p>{{ searchTerm ? ('TRY_ADJUSTING_SEARCH' | translate) : ('NO_USERS_AVAILABLE' | translate) }}</p>
+        </div>
 
-    <mat-paginator 
-      [length]="totalUsers"
-      [pageSize]="pageSize"
-      [pageSizeOptions]="[5, 10, 25, 50]"
-      (page)="onPageChange($event)"
-      showFirstLastButtons>
-    </mat-paginator>
-  </div>
+        <mat-paginator 
+          [length]="totalUsers"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="[5, 10, 25, 50]"
+          (page)="onPageChange($event)"
+          showFirstLastButtons>
+        </mat-paginator>
+      </div>
 
   <div class="mobile-view" *ngIf="!isLoading">
     <div class="users-grid">

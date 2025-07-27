@@ -232,6 +232,69 @@
     }
   }
 
+  // Galaxy Z Fold 5/6 unfolded (690px) - use desktop format with compact table
+  @media (min-width: 690px) and (max-width: 768px) {
+    .section-list-container {
+      padding: 16px;
+    }
+
+    .header {
+      flex-direction: row;
+      gap: 0;
+      align-items: center;
+
+      h2 {
+        text-align: left;
+        font-size: 1.25rem;
+      }
+
+      .add-button {
+        width: auto;
+        
+        .button-text {
+          display: inline;
+        }
+      }
+    }
+
+    .desktop-view {
+      display: block !important;
+    }
+
+    .mobile-view {
+      display: none !important;
+    }
+
+    // Compact table for Galaxy Z Fold
+    .sections-table {
+      th, td {
+        padding: 8px 12px;
+        font-size: 13px;
+      }
+
+      .mat-column-order {
+        width: 60px;
+      }
+
+      .mat-column-isActive {
+        width: 80px;
+      }
+
+      .mat-column-actions {
+        width: 100px;
+      }
+
+      // Hide less important columns on small screens
+      .mat-column-createdAt {
+        display: none;
+      }
+    }
+
+    .sections-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
   @media (max-width: 768px) {
     .section-list-container {
       padding: 16px;
