@@ -1,14 +1,46 @@
 <header class="header">
   <div class="header-container">
     <div class="logo">
-      <img *ngIf="logoUrl" [src]="logoUrl" alt="Logo" class="logo-image">
-      <span *ngIf="!logoUrl">🛒 3D Store</span>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+        <defs>
+          <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
+          </linearGradient>
+          <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#6B7280;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#374151;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        
+        <!-- 3D cube icon -->
+        <g transform="translate(10,15)">
+          <!-- Front face -->
+          <polygon points="0,15 15,0 30,15 15,30" fill="url(#gradient1)" opacity="0.9"/>
+          <!-- Right face -->
+          <polygon points="15,0 30,15 30,30 15,15" fill="url(#gradient1)" opacity="0.7"/>
+          <!-- Top face -->
+          <polygon points="0,15 15,0 15,15 0,30" fill="url(#gradient1)" opacity="0.5"/>
+        </g>
+        
+        <!-- Text "3D" -->
+        <text x="55" y="25" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="url(#gradient2)">3D</text>
+        
+        <!-- Text "Store" -->
+        <text x="55" y="45" font-family="Arial, sans-serif" font-size="18" font-weight="normal" fill="url(#gradient2)" letter-spacing="1px">Store</text>
+        
+        <!-- Subtle geometric accent -->
+        <circle cx="180" cy="20" r="3" fill="#3B82F6" opacity="0.6"/>
+        <circle cx="190" cy="30" r="2" fill="#6B7280" opacity="0.4"/>
+      </svg>
+      <!-- <img *ngIf="logoUrl" [src]="logoUrl" alt="Logo" class="logo-image">
+      <span *ngIf="!logoUrl">🛒 3D Store</span> -->
     </div>
     
     <!-- Desktop Navigation -->
     <nav class="nav" [class.nav-compressed]="isSearchOpen">
       <a *ngFor="let item of menuItems" 
-         (click)="navigateToUrl(item.url)" 
+         (click)="handleMenuClick(item)" 
          class="nav-link"
          [class.hidden]="!canAccessMenuItem(item)">
         {{ item.title }}
@@ -25,13 +57,13 @@
         [(ngModel)]="searchTerm"
         (input)="onSearch()"
         (keyup.enter)="performSearch()"
-        (blur)="onSearchBlur()"
       />
     </div>
     
     <!-- Mobile Search -->
     <div class="mobile-search" *ngIf="showSearch">
       <input 
+        #mobileSearchInput
         type="text" 
         placeholder="Search..."
         class="mobile-search-input"
@@ -42,7 +74,7 @@
     </div>
     
     <div class="user-actions">
-      <span class="search-icon" (click)="toggleSearch()" *ngIf="showSearch">
+      <span class="search-icon" (click)="toggleSearch()" *ngIf="showSearch && !isMobile">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M21 21L16.66 16.66" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           <path
@@ -50,11 +82,11 @@
             stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </span>
-      <a class="cart" (click)="openCartModal()" *ngIf="showCart">
+      <a class="cart" (click)="openCartModal()" *ngIf="showCart && !isMobile">
         <app-icon name="shopping-cart" stroke="#333" />
         <span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span>
       </a>
-      <span class="profile-icon" (click)="openAuthModal()" *ngIf="showProfile">
+      <span class="profile-icon" (click)="openAuthModal()" *ngIf="showProfile && !isMobile">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M19 21V19C19 17.9391 18.5786 16.9217 17.8284 16.1716C17.0783 15.4214 16.0609 15 15 15H9C7.93913 15 6.92172 15.4214 6.17157 16.1716C5.42143 16.9217 5 17.9391 5 19V21"
@@ -76,7 +108,7 @@
 </header>
 
 <!-- Search Results Dropdown -->
-<div class="search-results" *ngIf="searchResults.length > 0 && searchTerm" [class.active]="isSearchOpen || searchTerm">
+<div class="search-results" *ngIf="searchResults.length > 0 && searchTerm" [class.active]="isSearchOpen || searchTerm" (click)="$event.stopPropagation()">
   <div class="search-results-container">
     <div class="search-results-header">
       <span>Search Results ({{ searchResults.length }})</span>
@@ -123,7 +155,7 @@
   
   <nav class="mobile-nav">
     <a *ngFor="let item of menuItems" 
-       (click)="navigateToUrl(item.url)"
+       (click)="handleMenuClick(item)"
        [class.hidden]="!canAccessMenuItem(item)">
       {{ item.title }}
     </a>
