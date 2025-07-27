@@ -225,5 +225,19 @@
   "CONTENT_PLACEHOLDER": "Enter section content",
   "CHANGE_IMAGE": "Change Image",
   "CHANGE_3D_MODEL": "Change 3D Model",
-  "UPDATE": "Update"
+  "UPDATE": "Update",
+  "SUBTITLE_REQUIRED": "Subtitle is required",
+  "HEADER_LOGO_URL": "Logo",
+  "HEADER_MENU": "Menu Items",
+  "HEADER_MENU_TITLE": "Menu Title",
+  "HEADER_MENU_URL": "Menu URL",
+  "HEADER_MENU_ADD": "Add Menu Item",
+  "HEADER_SHOW_SEARCH": "Show Search",
+  "HEADER_SHOW_CART": "Show Cart",
+  "HEADER_SHOW_PROFILE": "Show Profile",
+  "HEADER_MENU_ACCESS": "Access Level",
+  "HEADER_MENU_ACTIVE": "Active",
+  "HEADER_MENU_ACCESS_ALL": "All Users",
+  "HEADER_MENU_ACCESS_ADMIN": "Admin Only",
+  "HEADER_MENU_ACCESS_CLOSED": "Closed"
 }
