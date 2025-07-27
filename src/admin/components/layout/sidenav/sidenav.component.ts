@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, Output, EventEmitter } from "@angular/core";
 import { Router } from "@angular/router";
 import { AuthService } from "../../../services/auth.service";
 import { OrderService } from "../../../services/order.service";
@@ -16,6 +16,8 @@ interface NavItem {
   styleUrls: ["./sidenav.component.scss"],
 })
 export class SidenavComponent {
+  @Output() closeSidenav = new EventEmitter<void>();
+
   navItems: NavItem[] = [
     { label: "DASHBOARD", route: "/admin/dashboard", icon: "dashboard" },
     { label: "PRODUCTS", route: "/admin/products", icon: "inventory" },
@@ -48,6 +50,12 @@ export class SidenavComponent {
         ordersNav.badge = count;
       }
     });
+  }
+
+  onNavItemClick(): void {
+    if (window.innerWidth <= 768) {
+      this.closeSidenav.emit();
+    }
   }
 
   logout(): void {

@@ -269,8 +269,9 @@ export class SectionFormComponent {
           }
         };
       } else {
+        const { logoUrl, showSearch, showCart, showProfile, menu, ...sectionData } = formValue;
         formData = {
-          ...formValue,
+          ...sectionData,
           model3dUrl: model3dUrl || ''
         };
       }

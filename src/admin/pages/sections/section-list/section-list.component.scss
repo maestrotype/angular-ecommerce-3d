@@ -1,6 +1,9 @@
 
 .section-list-container {
     padding: 24px;
+    background-color: #1f2937;
+    min-height: calc(100vh - 64px);
+    color: #ffffff;
   }
   
   .header {
@@ -11,20 +14,48 @@
     
     h2 {
       margin: 0;
-      color: #333;
+      color: #ffffff;
       font-weight: 500;
+      font-size: 1.5rem;
+    }
+
+    .add-button {
+      .button-text {
+        margin-left: 8px;
+      }
     }
   }
   
   .table-container {
-    background: white;
+    background: #2d2d2d;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    border: 1px solid #404040;
     overflow: hidden;
   }
   
   .sections-table {
     width: 100%;
+    background-color: #2d2d2d;
+    
+    th {
+      background-color: #374151 !important;
+      color: #ffffff !important;
+      font-weight: 600;
+      padding: 16px;
+      border-bottom: 1px solid #4b5563;
+    }
+    
+    td {
+      background-color: #2d2d2d !important;
+      color: #ffffff !important;
+      padding: 16px;
+      border-bottom: 1px solid #404040;
+    }
+    
+    tr:hover td {
+      background-color: #374151 !important;
+    }
     
     .mat-column-actions {
       width: 120px;
@@ -79,8 +110,218 @@
     padding: 48px;
     
     p {
-      color: #666;
+      color: #ffffff;
       font-size: 16px;
+    }
+  }
+
+  .mobile-view {
+    display: none;
+  }
+
+  .sections-grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: 1fr;
+  }
+
+  .section-card {
+    background: #2d2d2d;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    padding: 16px;
+    border: 1px solid #404040;
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+
+      .drag-handle {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: grab;
+        
+        &:active {
+          cursor: grabbing;
+        }
+        
+        mat-icon {
+          color: #9ca3af;
+          font-size: 20px;
+        }
+
+        .order-number {
+          font-weight: 600;
+          color: #ffffff;
+          font-size: 14px;
+        }
+      }
+
+      .status-toggle {
+        margin-left: auto;
+      }
+    }
+
+    .card-content {
+      .section-title {
+        margin-bottom: 8px;
+
+        h3 {
+          margin: 0;
+          font-size: 16px;
+          font-weight: 600;
+          color: #ffffff;
+          line-height: 1.4;
+        }
+      }
+
+      .section-type {
+        margin-bottom: 8px;
+
+        mat-chip {
+          font-size: 12px;
+          height: 24px;
+          background-color: #3b82f6 !important;
+          color: #ffffff !important;
+        }
+      }
+
+      .section-date {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        color: #9ca3af;
+        font-size: 12px;
+
+        mat-icon {
+          font-size: 16px;
+          width: 16px;
+          height: 16px;
+        }
+      }
+    }
+
+    .card-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #404040;
+
+      .action-button {
+        width: 36px;
+        height: 36px;
+        line-height: 36px;
+
+        mat-icon {
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .section-list-container {
+      padding: 16px;
+    }
+
+    .header {
+      flex-direction: column;
+      gap: 16px;
+      align-items: stretch;
+
+      h2 {
+        text-align: center;
+        font-size: 1.25rem;
+      }
+
+      .add-button {
+        width: 100%;
+        
+        .button-text {
+          display: inline;
+        }
+      }
+    }
+
+    .desktop-view {
+      display: none;
+    }
+
+    .mobile-view {
+      display: block;
+    }
+
+    .sections-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .sections-grid {
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+  }
+
+  @media (min-width: 1025px) {
+    .mobile-view {
+      display: none;
+    }
+
+    .desktop-view {
+      display: block;
+    }
+  }
+
+  ::ng-deep {
+    .mat-chip {
+      background-color: #3b82f6 !important;
+      color: #ffffff !important;
+    }
+    
+    .mat-icon-button {
+      color: #ffffff !important;
+      
+      &.mat-button-disabled {
+        color: #6b7280 !important;
+      }
+    }
+    
+    .mat-raised-button.mat-primary {
+      background-color: #3b82f6 !important;
+      color: #ffffff !important;
+    }
+    
+    .mat-slide-toggle {
+      .mat-slide-toggle-bar {
+        background-color: #4b5563 !important;
+      }
+      
+      .mat-slide-toggle-thumb {
+        background-color: #9ca3af !important;
+      }
+      
+      &.mat-checked {
+        .mat-slide-toggle-bar {
+          background-color: #3b82f6 !important;
+        }
+        
+        .mat-slide-toggle-thumb {
+          background-color: #ffffff !important;
+        }
+      }
     }
   }
   
