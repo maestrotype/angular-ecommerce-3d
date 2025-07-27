@@ -14,12 +14,14 @@ import { ModalService } from '../../core/services/modal.service';
 })
 export class HeaderComponent implements OnInit {
   @ViewChild('searchInput') searchInput!: ElementRef;
+  @ViewChild('mobileSearchInput') mobileSearchInput!: ElementRef;
   
   isMobileMenuOpen = false;
   isSearchOpen = false;
   searchTerm = '';
-  searchResults: Product[] = [];
+  searchResults: any[] = [];
   cartCount = 0;
+  isMobile = false;
   private cartSubscription: Subscription = new Subscription();
 
   // Header customization
@@ -39,16 +41,38 @@ export class HeaderComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.cartSubscription = this.cartService.getTotalCount().subscribe(
-      count => this.cartCount = count
-    );
-
-    // Load header customization
     this.loadHeaderCustomization();
+    this.loadCartCount();
+    this.checkScreenSize();
+    
+    this.searchTerm = '';
+    this.searchResults = [];
+    
+    document.addEventListener('click', this.onDocumentClick.bind(this));
+    
+    window.addEventListener('resize', this.checkScreenSize.bind(this));
   }
 
   ngOnDestroy(): void {
     this.cartSubscription.unsubscribe();
+    document.removeEventListener('click', this.onDocumentClick.bind(this));
+    window.removeEventListener('resize', this.checkScreenSize.bind(this));
+  }
+
+  private checkScreenSize(): void {
+    this.isMobile = window.innerWidth <= 768;
+  }
+
+  private onDocumentClick(event: MouseEvent): void {
+    const searchIcon = (event.target as Element).closest('.search-icon');
+    const searchInput = (event.target as Element).closest('.desktop-search, .mobile-search');
+    const searchResults = (event.target as Element).closest('.search-results');
+    
+    if (!searchIcon && !searchInput && !searchResults) {
+      this.isSearchOpen = false;
+      this.searchTerm = '';
+      this.searchResults = [];
+    }
   }
 
   private loadHeaderCustomization(): void {
@@ -69,6 +93,12 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  private loadCartCount(): void {
+    this.cartSubscription = this.cartService.getTotalCount().subscribe(
+      count => this.cartCount = count
+    );
+  }
+
   toggleMobileMenu() {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
@@ -78,11 +108,14 @@ export class HeaderComponent implements OnInit {
   }
 
   toggleSearch() {
-    this.isSearchOpen = !this.isSearchOpen;
-    if (this.isSearchOpen) {
-      setTimeout(() => {
-        this.searchInput?.nativeElement?.focus();
-      }, 100);
+    // На мобильных устройствах поиск всегда видим, не переключаем
+    if (!this.isMobile) {
+      this.isSearchOpen = !this.isSearchOpen;
+      if (this.isSearchOpen) {
+        setTimeout(() => {
+          this.searchInput?.nativeElement?.focus();
+        }, 100);
+      }
     }
   }
 
@@ -102,19 +135,12 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  onSearchBlur() {
-    setTimeout(() => {
-      this.isSearchOpen = false;
-    }, 200);
-  }
-
   performSearch() {
     if (this.searchTerm.trim()) {
-      this.router.navigate(['/shop'], { 
-        queryParams: { search: this.searchTerm } 
-      });
+      this.router.navigate(['/shop'], { queryParams: { search: this.searchTerm } });
       this.isSearchOpen = false;
-      this.closeMobileMenu();
+      this.searchTerm = '';
+      this.searchResults = [];
     }
   }
 
@@ -145,19 +171,24 @@ export class HeaderComponent implements OnInit {
   }
 
   viewAllResults() {
-    this.performSearch();
+    this.router.navigate(['/shop'], { queryParams: { search: this.searchTerm } });
+    this.isSearchOpen = false;
+    this.searchTerm = '';
+    this.searchResults = [];
   }
 
   goToProduct(productId: number) {
     this.router.navigate(['/product', productId]);
     this.isSearchOpen = false;
-    this.searchResults = [];
     this.searchTerm = '';
+    this.searchResults = [];
   }
 
   goHome() {
     this.router.navigate(['/home']);
-    this.closeMobileMenu();
+    this.isSearchOpen = false;
+    this.searchTerm = '';
+    this.searchResults = [];
   }
 
   scrollToSection(sectionId: string): void {
@@ -165,10 +196,12 @@ export class HeaderComponent implements OnInit {
       this.router.navigate(['/home']).then(() => {
         setTimeout(() => {
           this.scrollToElement(sectionId);
-        }, 100);
+        }, 300);
       });
     } else {
-      this.scrollToElement(sectionId);
+      setTimeout(() => {
+        this.scrollToElement(sectionId);
+      }, 100);
     }
     this.closeMobileMenu();
   }
@@ -176,23 +209,28 @@ export class HeaderComponent implements OnInit {
   private scrollToElement(elementId: string): void {
     const element = document.getElementById(elementId);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const headerHeight = 80; // Высота фиксированного хедера
+      const elementPosition = element.offsetTop - headerHeight;
+      
+      window.scrollTo({
+        top: elementPosition,
+        behavior: 'smooth'
+      });
+    } else {
+      console.warn(`Element with id '${elementId}' not found`);
     }
   }
 
   navigateToUrl(url: string): void {
-    if (url.startsWith('#')) {
-      // Internal anchor link
-      const sectionId = url.substring(1);
-      this.scrollToSection(sectionId);
-    } else if (url.startsWith('/')) {
-      // Internal route
-      this.router.navigate([url]);
-      this.closeMobileMenu();
-    } else {
-      // External link
+    if (url.startsWith('http')) {
       window.open(url, '_blank');
+    } else {
+      this.router.navigate([url]);
     }
+    this.closeMobileMenu();
+    this.isSearchOpen = false;
+    this.searchTerm = '';
+    this.searchResults = [];
   }
 
   canAccessMenuItem(menuItem: MenuItem): boolean {
@@ -200,5 +238,23 @@ export class HeaderComponent implements OnInit {
     // In a real app, you'd get this from auth service
     const userRole = 'user'; // This should come from auth service
     return this.headerService.canAccessMenuItem(menuItem, userRole);
+  }
+
+  handleMenuClick(menuItem: MenuItem): void {
+    if (menuItem.url.startsWith('#')) {
+      // Internal anchor link - scroll to section
+      const sectionId = menuItem.url.substring(1);
+      this.scrollToSection(sectionId);
+    } else if (menuItem.url.startsWith('/')) {
+      // Internal route
+      this.router.navigate([menuItem.url]);
+      this.closeMobileMenu();
+      this.isSearchOpen = false;
+      this.searchTerm = '';
+      this.searchResults = [];
+    } else {
+      // External link
+      window.open(menuItem.url, '_blank');
+    }
   }
 }

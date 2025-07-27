@@ -21,13 +21,14 @@
         </mat-select>
       </mat-form-field>
   
-      <button mat-raised-button color="primary" (click)="onSearch()">
+      <button mat-raised-button color="primary" (click)="onSearch()" class="search-button">
         <mat-icon>search</mat-icon>
-        {{ 'SEARCH' | translate}}
+        <span class="button-text">{{ 'SEARCH' | translate}}</span>
       </button>
     </div>
   
-    <div class="table-container">
+    <!-- Desktop Table View -->
+    <div class="table-container desktop-view">
       <table mat-table [dataSource]="filteredMessages" class="messages-table">
         <ng-container matColumnDef="senderName">
           <th mat-header-cell *matHeaderCellDef>{{ 'SENDER_NAME' | translate}}</th>
@@ -81,14 +82,61 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
-  
-      <div *ngIf="loading" class="loading">
-        <mat-spinner></mat-spinner>
+    </div>
+
+    <!-- Mobile Card View -->
+    <div class="mobile-view">
+      <div class="messages-grid">
+        <div *ngFor="let message of filteredMessages" class="message-card">
+          <div class="card-header">
+            <div class="sender-info">
+              <h3>{{ message.senderName }}</h3>
+              <p class="email">{{ message.senderEmail }}</p>
+            </div>
+            <mat-chip [color]="getStatusColor(message.status)" selected class="status-chip">
+              {{ message.status | titlecase }}
+            </mat-chip>
+          </div>
+
+          <div class="card-content">
+            <div class="subject">
+              <h4>{{ message.subject }}</h4>
+            </div>
+            
+            <div class="date">
+              <mat-icon>schedule</mat-icon>
+              <span>{{ message.createdAt | date:'short' }}</span>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button mat-icon-button color="primary" (click)="viewMessage(message)" 
+                    class="action-button">
+              <mat-icon>visibility</mat-icon>
+            </button>
+            <button mat-icon-button color="accent" (click)="markAsRead(message)" 
+                    *ngIf="message.status === 'new'" class="action-button">
+              <mat-icon>mark_email_read</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="markAsArchived(message)" 
+                    *ngIf="message.status !== 'archived'" class="action-button">
+              <mat-icon>archive</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteMessage(message)" 
+                    class="action-button">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
       </div>
+    </div>
   
-      <div *ngIf="!loading && filteredMessages.length === 0" class="no-data">
-        <p>{{ 'NO_MESSAGES' | translate}}</p>
-      </div>
+    <div *ngIf="loading" class="loading">
+      <mat-spinner></mat-spinner>
+    </div>
+  
+    <div *ngIf="!loading && filteredMessages.length === 0" class="no-data">
+      <p>{{ 'NO_MESSAGES' | translate}}</p>
     </div>
   </div>
   

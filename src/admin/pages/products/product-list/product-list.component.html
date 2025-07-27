@@ -1,14 +1,14 @@
 <div class="product-list-container">
   <div class="header-section">
     <h1>{{ 'PRODUCT_MANAGEMENT' | translate }}</h1>
-    <button mat-raised-button color="primary" (click)="addProduct()">
+    <button mat-raised-button color="primary" (click)="addProduct()" class="add-button">
       <mat-icon>add</mat-icon>
-      {{ 'ADD_PRODUCT' | translate }}
+      <span class="button-text">{{ 'ADD_PRODUCT' | translate }}</span>
     </button>
   </div>
 
   <div class="filter-section">
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="search-field">
       <mat-label>{{ 'SEARCH_PRODUCTS' | translate }}</mat-label>
       <input
         matInput
@@ -18,7 +18,7 @@
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
 
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="category-filter">
       <mat-label>{{ 'CATEGORY' | translate }}</mat-label>
       <mat-select (selectionChange)="filterByCategory($event)">
         <mat-option value="">{{ 'CATEGORIES_ALL' | translate }}</mat-option>
@@ -29,7 +29,8 @@
     </mat-form-field>
   </div>
 
-  <div class="table-container" *ngIf="!isLoading">
+  <!-- Desktop Table View -->
+  <div class="table-container desktop-view" *ngIf="!isLoading">
     <table mat-table [dataSource]="dataSource" matSort class="product-table">
       <!-- ID Column -->
       <ng-container matColumnDef="id">
@@ -113,13 +114,76 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 
     <mat-paginator
       [pageSizeOptions]="[5, 10, 20]"
       showFirstLastButtons
     ></mat-paginator>
+  </div>
+
+  <!-- Mobile Card View -->
+  <div class="mobile-view" *ngIf="!isLoading">
+    <div class="products-grid">
+      <div *ngFor="let product of dataSource.data" class="product-card">
+        <div class="card-header">
+          <div class="product-image">
+            <img
+              *ngIf="hasValidImage(product)"
+              [src]="getImageUrl(product)"
+              [alt]="product.name"
+              class="product-image"
+              (error)="onImageError($event, product)"
+            />
+            <div *ngIf="!hasValidImage(product)" class="no-image-placeholder">
+              <mat-icon>image</mat-icon>
+              <span>{{ 'NO_IMAGE' | translate}}</span>
+            </div>
+          </div>
+          <div class="product-id">#{{ product.id }}</div>
+        </div>
+
+        <div class="card-content">
+          <div class="product-name">
+            <h3>{{ product.name }}</h3>
+          </div>
+          
+          <div class="product-category">
+            <mat-chip>{{ product.category }}</mat-chip>
+          </div>
+          
+          <div class="product-price">
+            <span class="price">${{ product.price | number : "1.2-2" }}</span>
+          </div>
+          
+          <div class="product-stock">
+            <span [class]="getStockClass(product.stock)">
+              {{ 'STOCK' | translate}}: {{ product.stock }}
+            </span>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <button
+            mat-icon-button
+            color="primary"
+            (click)="editProduct(product)"
+            class="action-button"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="deleteProduct(product)"
+            class="action-button"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div *ngIf="isLoading" class="loading-container">

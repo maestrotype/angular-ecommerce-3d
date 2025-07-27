@@ -2,13 +2,14 @@
 <div class="section-list-container">
     <div class="header">
       <h2>{{ 'MAIN_PAGE_SECTIONS' | translate }}</h2>
-      <button mat-raised-button color="primary" (click)="addSection()">
+      <button mat-raised-button color="primary" (click)="addSection()" class="add-button">
         <mat-icon>add</mat-icon>
-        {{ 'ADD_SECTION' | translate }}
+        <span class="button-text">{{ 'ADD_SECTION' | translate }}</span>
       </button>
     </div>
   
-    <div class="table-container">
+    <!-- Desktop Table View -->
+    <div class="table-container desktop-view">
       <table mat-table [dataSource]="dataSource" class="sections-table" 
              cdkDropList (cdkDropListDropped)="drop($event)">
         
@@ -63,14 +64,60 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag></tr>
       </table>
-  
-      <div *ngIf="loading" class="loading">
-        <mat-spinner></mat-spinner>
+    </div>
+
+    <!-- Mobile Card View -->
+    <div class="mobile-view">
+      <div class="sections-grid" cdkDropList (cdkDropListDropped)="drop($event)">
+        <div *ngFor="let section of dataSource.data; let i = index" 
+             class="section-card" cdkDrag>
+          
+          <div class="card-header">
+            <div class="drag-handle" cdkDragHandle>
+              <mat-icon>drag_indicator</mat-icon>
+              <span class="order-number">{{ section.order }}</span>
+            </div>
+            <mat-slide-toggle [checked]="section.isActive" 
+                              (change)="toggleSection(section)"
+                              class="status-toggle">
+            </mat-slide-toggle>
+          </div>
+
+          <div class="card-content">
+            <div class="section-title">
+              <h3>{{ section.title }}</h3>
+            </div>
+            
+            <div class="section-type">
+              <mat-chip selected>{{ section.type | titlecase }}</mat-chip>
+            </div>
+            
+            <div class="section-date">
+              <mat-icon>schedule</mat-icon>
+              <span>{{ section.createdAt | date:'short' }}</span>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button mat-icon-button color="primary" (click)="editSection(section)" 
+                    class="action-button">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteSection(section)" 
+                    class="action-button">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
       </div>
+    </div>
   
-      <div *ngIf="!loading && dataSource.data.length === 0" class="no-data">
-        <p>{{ 'NO_SECTIONS_FOUND' | translate }}</p>
-      </div>
+    <div *ngIf="loading" class="loading">
+      <mat-spinner></mat-spinner>
+    </div>
+  
+    <div *ngIf="!loading && dataSource.data.length === 0" class="no-data">
+      <p>{{ 'NO_SECTIONS_FOUND' | translate }}</p>
     </div>
   </div>
   

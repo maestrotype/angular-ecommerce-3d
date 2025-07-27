@@ -5,6 +5,8 @@
   
   .admin-sidenav {
     width: 260px;
+    background-color: #424242;
+    border-right: none;
   }
   
   .admin-content {
@@ -17,15 +19,33 @@
     padding: 24px;
     background-color: var(--mat-sidenav-content-background-color);
     min-height: calc(100vh - 64px);
+    overflow-x: auto;
   }
   
   @media (max-width: 768px) {
     .admin-sidenav {
-      width: 240px;
+      width: 280px;
+      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
     }
     
     .admin-main {
       padding: 16px;
+      min-height: calc(100vh - 56px); // Smaller header on mobile
+    }
+
+    // Ensure content doesn't get pushed by overlay sidenav
+    .admin-content {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .admin-sidenav {
+      width: 100%;
+    }
+    
+    .admin-main {
+      padding: 12px;
     }
   }
   
