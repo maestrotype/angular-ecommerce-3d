@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="200" height="60">
+  <defs>
+    <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6B7280;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#374151;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 3D cube icon -->
+  <g transform="translate(10,15)">
+    <!-- Front face -->
+    <polygon points="0,15 15,0 30,15 15,30" fill="url(#gradient1)" opacity="0.9"/>
+    <!-- Right face -->
+    <polygon points="15,0 30,15 30,30 15,15" fill="url(#gradient1)" opacity="0.7"/>
+    <!-- Top face -->
+    <polygon points="0,15 15,0 15,15 0,30" fill="url(#gradient1)" opacity="0.5"/>
+  </g>
+  
+  <!-- Text "3D" -->
+  <text x="55" y="25" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="url(#gradient2)">3D</text>
+  
+  <!-- Text "Store" -->
+  <text x="55" y="45" font-family="Arial, sans-serif" font-size="18" font-weight="normal" fill="url(#gradient2)" letter-spacing="1px">Store</text>
+  
+  <!-- Subtle geometric accent -->
+  <circle cx="140" cy="20" r="3" fill="#3B82F6" opacity="0.6"/>
+  <circle cx="150" cy="30" r="2" fill="#6B7280" opacity="0.4"/>
+</svg>
