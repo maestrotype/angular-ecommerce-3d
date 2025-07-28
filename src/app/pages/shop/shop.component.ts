@@ -5,6 +5,7 @@ import { Product } from 'src/shared/models/product.model';
 import { ProductService } from '../../core/services/product.service';
 import { CategoryService } from '../../core/services/category.service';
 import { CartService } from '../../core/services/cart.service';
+import { FavoritesService } from '../../core/services/favorites.service';
 import { CartItem } from 'src/shared/models/cart-item.model';
 import { Category } from 'src/shared/models/category.model';
 
@@ -30,6 +31,12 @@ export class ShopComponent implements OnInit {
   products: Product[] = [];
   filteredProducts: Product[] = [];
 
+  // Pagination
+  currentPage: number = 1;
+  pageSize: number = 8;
+  totalPages: number = 1;
+  paginatedProducts: Product[] = [];
+
   // Dropdown options
   categoryOptions: DropdownOption[] = [];
   sortOptions: DropdownOption[] = [
@@ -43,6 +50,7 @@ export class ShopComponent implements OnInit {
     private route: ActivatedRoute,
     private productService: ProductService,
     private cartService: CartService,
+    private favoritesService: FavoritesService,
     private categoryService: CategoryService
   ) { }
 
@@ -77,11 +85,13 @@ export class ShopComponent implements OnInit {
 
   onCategoryChange(value: string): void {
     this.selectedCategory = value;
+    this.currentPage = 1;
     this.filterProducts();
   }
 
   onSortChange(value: string): void {
     this.sortBy = value;
+    this.currentPage = 1;
     this.filterProducts();
   }
 
@@ -119,6 +129,51 @@ export class ShopComponent implements OnInit {
     }
 
     this.filteredProducts = filtered;
+    this.totalPages = Math.max(1, Math.ceil(filtered.length / this.pageSize));
+    this.currentPage = Math.min(this.currentPage, this.totalPages);
+    this.paginateProducts();
+  }
+
+  paginateProducts(): void {
+    const start = (this.currentPage - 1) * this.pageSize;
+    const end = start + this.pageSize;
+    this.paginatedProducts = this.filteredProducts.slice(start, end);
+  }
+
+  goToPage(page: number): void {
+    console.log('goToPage called with:', page, 'totalPages:', this.totalPages);
+    if (page < 1 || page > this.totalPages) {
+      console.log('Invalid page number');
+      return;
+    }
+    this.currentPage = page;
+    this.paginateProducts();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    console.log('Current page set to:', this.currentPage);
+  }
+
+  nextPage(): void {
+    console.log('nextPage called, currentPage:', this.currentPage, 'totalPages:', this.totalPages);
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.paginateProducts();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      console.log('Moved to next page:', this.currentPage);
+    } else {
+      console.log('Already on last page');
+    }
+  }
+
+  prevPage(): void {
+    console.log('prevPage called, currentPage:', this.currentPage);
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.paginateProducts();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      console.log('Moved to previous page:', this.currentPage);
+    } else {
+      console.log('Already on first page');
+    }
   }
 
   goToProductDetail(productId: number): void {
@@ -154,5 +209,14 @@ export class ShopComponent implements OnInit {
 
   quickView(product: Product): void {
     console.log('Quick view:', product);
+  }
+
+  /**
+   * Handle favorite toggle events
+   */
+  onFavoriteToggled(event: { product: Product; isFavorite: boolean }): void {
+    // The FavoritesService already handles the toggle logic
+    // This method can be used for additional UI feedback if needed
+    console.log(`${event.product.name} ${event.isFavorite ? 'added to' : 'removed from'} favorites`);
   }
 }

@@ -72,7 +72,10 @@
       </div>
     </div>
     <div class="footer-mobile">
-        <app-icon name="heart" stroke="#333" />
+        <a (click)="openFavoritesPage()" class="favorites-link">
+            <app-icon name="heart" stroke="#333" />
+            <span class="favorites-count" *ngIf="favoritesCount > 0">{{ favoritesCount }}</span>
+        </a>
         <a (click)="openCartModal()" class="cart">
             <app-icon name="shopping-cart" stroke="#333" />
             <span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span>

@@ -13,4 +13,5 @@ export interface Product {
     features?: string[];
     stock?: number;
     specifications?: { [key: string]: string };
+    isFavorite?: boolean; // track if product is in user's favorites
   }

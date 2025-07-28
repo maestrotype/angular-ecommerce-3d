@@ -82,6 +82,12 @@
             stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </span>
+      
+      <a class="favorites" (click)="openFavoritesPage()" *ngIf="!isMobile">
+        <app-icon name="heart" stroke="#333" />
+        <span class="favorites-count" *ngIf="favoritesCount > 0">{{ favoritesCount }}</span>
+      </a>
+      
       <a class="cart" (click)="openCartModal()" *ngIf="showCart && !isMobile">
         <app-icon name="shopping-cart" stroke="#333" />
         <span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span>

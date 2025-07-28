@@ -38,9 +38,42 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { CustomDropdownComponent } from './shared/custom-dropdown/custom-dropdown.component';
 import { SectionRendererComponent } from './components/section-renderer/section-renderer.component';
 
+// Favorites Components
+import { FavoriteButtonComponent } from './shared/favorite-button/favorite-button.component';
+import { FavoritesComponent } from './pages/favorites/favorites.component';
+
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, HeroComponent, HeroGlassComponent, CategoriesComponent, CustomDropdownComponent, SpecialOfferComponent, BestSellersComponent, BrandsComponent, ContactsComponent, FooterComponent, HomeComponent, ShopComponent, AboutComponent, ProductDetailComponent, ProductImagesComponent, ProductInfoComponent, ProductTabsComponent, BaseModalComponent, ImageModalComponent, CartModalComponent, AuthModalComponent, Bag3dFirstComponent, IconComponent, ThreeDViewerComponent, SectionRendererComponent],
+  declarations: [
+    AppComponent, 
+    HeaderComponent, 
+    HeroComponent, 
+    HeroGlassComponent, 
+    CategoriesComponent, 
+    CustomDropdownComponent, 
+    SpecialOfferComponent, 
+    BestSellersComponent, 
+    BrandsComponent, 
+    ContactsComponent, 
+    FooterComponent, 
+    HomeComponent, 
+    ShopComponent, 
+    AboutComponent, 
+    ProductDetailComponent, 
+    ProductImagesComponent, 
+    ProductInfoComponent, 
+    ProductTabsComponent, 
+    BaseModalComponent, 
+    ImageModalComponent, 
+    CartModalComponent, 
+    AuthModalComponent, 
+    Bag3dFirstComponent, 
+    IconComponent, 
+    ThreeDViewerComponent, 
+    SectionRendererComponent,
+    FavoriteButtonComponent,
+    FavoritesComponent
+  ],
   imports: [BrowserModule, BrowserAnimationsModule, HttpClientModule, FormsModule, RouterModule, AppRoutingModule],
   providers: [
     provideAnimationsAsync(),
