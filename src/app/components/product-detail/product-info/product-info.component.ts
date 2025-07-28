@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Product } from 'src/shared/models/product.model';
 import { CartService } from '../../../core/services/cart.service';
+import { FavoritesService } from '../../../core/services/favorites.service';
 
 @Component({
   selector: 'app-product-info',
@@ -13,7 +14,10 @@ export class ProductInfoComponent {
   @Output() quantityChanged = new EventEmitter<number>();
   @Output() addToCart = new EventEmitter<void>();
 
-  constructor(private cartService: CartService) { }
+  constructor(
+    private cartService: CartService,
+    private favoritesService: FavoritesService
+  ) { }
 
   incrementQuantity(): void {
     this.quantity++;
@@ -49,5 +53,14 @@ export class ProductInfoComponent {
       return this.product.price * (1 - this.product.discount / 100);
     }
     return this.product?.price || 0;
+  }
+
+  /**
+   * Handle favorite toggle events
+   */
+  onFavoriteToggled(event: { product: Product; isFavorite: boolean }): void {
+    // The FavoritesService already handles the toggle logic
+    // This method can be used for additional UI feedback if needed
+    console.log(`${event.product.name} ${event.isFavorite ? 'added to' : 'removed from'} favorites`);
   }
 }

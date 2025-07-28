@@ -245,7 +245,8 @@
 
     .search-icon,
     .profile-icon,
-    .cart {
+    .cart,
+    .favorites {
       font-size: 1.2em;
       cursor: pointer;
       padding: 0.75rem;
@@ -299,66 +300,61 @@
       }
     }
 
-    .cart {
-      position: relative;
+    .cart-count,
+    .favorites-count {
+      position: absolute;
+      top: 0.25rem;
+      right: 0.25rem;
+      background: #ff6b6b;
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      min-width: 20px;
+      line-height: 1;
+    }
+  }
 
-      .cart-count {
-        position: absolute;
-        top: -5px;
-        right: -5px;
-        background: #ff4757;
-        color: white;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        font-size: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+
+    span {
+      width: 25px;
+      height: 3px;
+      background: #333;
+      margin: 3px 0;
+      transition: all 0.3s ease;
+      border-radius: 2px;
+    }
+
+    &.active {
+      span:nth-child(1) {
+        transform: rotate(-45deg) translate(-5px, 6px);
+      }
+
+      span:nth-child(2) {
+        opacity: 0;
+      }
+
+      span:nth-child(3) {
+        transform: rotate(45deg) translate(-5px, -6px);
       }
     }
 
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 8px;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-
-      span {
-        width: 25px;
-        height: 3px;
-        background: #333;
-        margin: 3px 0;
-        transition: all 0.3s ease;
-        border-radius: 2px;
-      }
-
-      &.active {
-        span:nth-child(1) {
-          transform: rotate(-45deg) translate(-5px, 6px);
-        }
-
-        span:nth-child(2) {
-          opacity: 0;
-        }
-
-        span:nth-child(3) {
-          transform: rotate(45deg) translate(-5px, -6px);
-        }
-      }
-
-      &:hover {
-        background: rgba(0, 0, 0, 0.1);
-      }
+    &:hover {
+      background: rgba(0, 0, 0, 0.1);
     }
   }
 }

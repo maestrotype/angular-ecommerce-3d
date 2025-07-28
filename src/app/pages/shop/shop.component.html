@@ -64,7 +64,7 @@
       <div class="container">
         <div class="products-grid" [class.list-view]="viewMode === 'list'">
           <div 
-            *ngFor="let product of filteredProducts" 
+            *ngFor="let product of paginatedProducts" 
             class="product-card"
             [class.list-card]="viewMode === 'list'"
             [class.special-offer]="product.isSpecial"
@@ -72,11 +72,13 @@
           >
             <div class="product-image">
               <img [src]="product.imageUrl" [alt]="product.name" />
-              <!-- <div class="product-overlay">
-                <button class="quick-view-btn" (click)="quickView(product); $event.stopPropagation()">
-                  Quick View
-                </button>
-              </div> -->
+              <div class="product-overlay">
+                <app-favorite-button 
+                  [product]="product" 
+                  size="small"
+                  (favoriteToggled)="onFavoriteToggled($event)"
+                ></app-favorite-button>
+              </div>
               <div *ngIf="product.isSpecial" class="special-badge">
                 SPECIAL OFFER
               </div>
@@ -102,6 +104,40 @@
               </div>
             </div>
           </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" *ngIf="totalPages > 1">
+          <button 
+            type="button"
+            class="page-btn" 
+            (click)="prevPage()" 
+            [disabled]="currentPage === 1"
+            [attr.aria-label]="'Previous page'"
+          >
+            &laquo;
+          </button>
+          
+          <button 
+            type="button"
+            class="page-btn" 
+            *ngFor="let page of [].constructor(totalPages); let i = index" 
+            [class.active]="currentPage === (i+1)"
+            (click)="goToPage(i+1)"
+            [attr.aria-label]="'Go to page ' + (i+1)"
+          >
+            {{ i+1 }}
+          </button>
+          
+          <button 
+            type="button"
+            class="page-btn" 
+            (click)="nextPage()" 
+            [disabled]="currentPage === totalPages"
+            [attr.aria-label]="'Next page'"
+          >
+            &raquo;
+          </button>
         </div>
   
         <!-- No Products Message -->

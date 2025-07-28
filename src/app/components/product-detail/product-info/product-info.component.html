@@ -24,6 +24,16 @@
         Limited Time Offer!
       </div>
     </div>
+
+    <!-- Favorite Button -->
+    <div class="favorite-section">
+      <app-favorite-button 
+        [product]="product" 
+        size="medium"
+        [showText]="true"
+        (favoriteToggled)="onFavoriteToggled($event)"
+      ></app-favorite-button>
+    </div>
   
     <!-- Quantity and Add to Cart -->
     <div class="purchase-section">

@@ -2,6 +2,7 @@ import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { CartService } from '../../core/services/cart.service';
+import { FavoritesService } from '../../core/services/favorites.service';
 import { ProductService } from '../../core/services/product.service';
 import { HeaderService, MenuItem, HeaderSettings } from '../../core/services/header.service';
 import { Product } from 'src/shared/models/product.model';
@@ -21,8 +22,10 @@ export class HeaderComponent implements OnInit {
   searchTerm = '';
   searchResults: any[] = [];
   cartCount = 0;
+  favoritesCount = 0;
   isMobile = false;
   private cartSubscription: Subscription = new Subscription();
+  private favoritesSubscription: Subscription = new Subscription();
 
   // Header customization
   headerSettings: HeaderSettings | null = null;
@@ -36,6 +39,7 @@ export class HeaderComponent implements OnInit {
     private router: Router,
     private productService: ProductService,
     private cartService: CartService,
+    private favoritesService: FavoritesService,
     private headerService: HeaderService,
     private modalService: ModalService
   ) { }
@@ -43,6 +47,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.loadHeaderCustomization();
     this.loadCartCount();
+    this.loadFavoritesCount();
     this.checkScreenSize();
     
     this.searchTerm = '';
@@ -55,6 +60,7 @@ export class HeaderComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.cartSubscription.unsubscribe();
+    this.favoritesSubscription.unsubscribe();
     document.removeEventListener('click', this.onDocumentClick.bind(this));
     window.removeEventListener('resize', this.checkScreenSize.bind(this));
   }
@@ -99,6 +105,12 @@ export class HeaderComponent implements OnInit {
     );
   }
 
+  private loadFavoritesCount(): void {
+    this.favoritesSubscription = this.favoritesService.favoritesCount$.subscribe(
+      count => this.favoritesCount = count
+    );
+  }
+
   toggleMobileMenu() {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
@@ -108,22 +120,21 @@ export class HeaderComponent implements OnInit {
   }
 
   toggleSearch() {
-    // На мобильных устройствах поиск всегда видим, не переключаем
-    if (!this.isMobile) {
-      this.isSearchOpen = !this.isSearchOpen;
-      if (this.isSearchOpen) {
-        setTimeout(() => {
-          this.searchInput?.nativeElement?.focus();
-        }, 100);
-      }
+    this.isSearchOpen = !this.isSearchOpen;
+    if (this.isSearchOpen) {
+      setTimeout(() => {
+        if (this.searchInput) {
+          this.searchInput.nativeElement.focus();
+        }
+      }, 100);
     }
   }
 
   onSearch() {
-    if (this.searchTerm.trim().length >= 2) {
+    if (this.searchTerm.trim().length > 2) {
       this.productService.searchProducts(this.searchTerm).subscribe({
-        next: (products) => {
-          this.searchResults = products;
+        next: (results) => {
+          this.searchResults = results;
         },
         error: (error) => {
           console.error('Search error:', error);
@@ -168,6 +179,10 @@ export class HeaderComponent implements OnInit {
         showCloseButton: true
       }
     });
+  }
+
+  openFavoritesPage(): void {
+    this.router.navigate(['/favorites']);
   }
 
   viewAllResults() {
