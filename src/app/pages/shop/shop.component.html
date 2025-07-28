@@ -25,29 +25,31 @@
           <!-- Controls -->
           <div class="controls-container">
             <app-custom-dropdown
-            [options]="categoryOptions"
-            [selectedValue]="selectedCategory"
-            placeholder="All categories"
-            (valueChange)="onCategoryChange($event)"
-          ></app-custom-dropdown>
-          
-          <app-custom-dropdown
-            [options]="sortOptions"
-            [selectedValue]="sortBy"
-            placeholder="Sort by Name"
-            (valueChange)="onSortChange($event)"
-          ></app-custom-dropdown>
+              class="glass-theme"
+              [options]="categoryOptions"
+              [selectedValue]="selectedCategory"
+              placeholder="All categories"
+              (valueChange)="onCategoryChange($event)"
+            ></app-custom-dropdown>
+            
+            <app-custom-dropdown
+              class="glass-theme"
+              [options]="sortOptions"
+              [selectedValue]="sortBy"
+              placeholder="Sort by Name"
+              (valueChange)="onSortChange($event)"
+            ></app-custom-dropdown>
             
             <div class="view-toggle">
               <button 
-                class="view-btn"
+                class="view-btn glass-theme"
                 [class.active]="viewMode === 'grid'"
                 (click)="changeViewMode('grid')"
               >
                 📋
               </button>
               <button 
-                class="view-btn"
+                class="view-btn glass-theme"
                 [class.active]="viewMode === 'list'"
                 (click)="changeViewMode('list')"
               >
@@ -98,9 +100,13 @@
               </p>
               <div class="product-footer">
                 <span class="product-price">${{ product.price }}</span>
-                <button class="add-to-cart-btn" (click)="addToCart(product); $event.stopPropagation()">
+                <app-base-button 
+                  type="glass" 
+                  size="small"
+                  (clicked)="addToCart(product); $event.stopPropagation()"
+                >
                   🛒 Add to Cart
-                </button>
+                </app-base-button>
               </div>
             </div>
           </div>

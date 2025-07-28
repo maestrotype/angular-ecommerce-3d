@@ -1,0 +1,50 @@
+<div [class]="cardClasses" (click)="onProductClick()">
+  <div class="product-image">
+    <img [src]="product.imageUrl" [alt]="product.name" />
+    
+    <div class="product-overlay">
+      <app-favorite-button 
+        *ngIf="showFavorite"
+        [product]="product" 
+        size="small"
+        (favoriteToggled)="onFavoriteToggle($event)"
+      ></app-favorite-button>
+    </div>
+    
+    <div *ngIf="product.isSpecial" class="special-badge">
+      SPECIAL OFFER
+    </div>
+  </div>
+  
+  <div class="product-info">
+    <h3 class="product-name">{{ product.name }}</h3>
+    
+    <div class="product-meta">
+      <div class="product-rating" *ngIf="product.rating">
+        <span class="rating-star">⭐</span>
+        <span class="rating-value">{{ product.rating }}</span>
+      </div>
+      <span class="product-category">{{ product.category }}</span>
+    </div>
+    
+    <p *ngIf="layout === 'list' && product.description" class="product-description">
+      {{ product.description }}
+    </p>
+    
+    <div class="product-footer">
+      <div class="product-price">
+        <span class="current-price">${{ getDiscountedPrice() | number:'1.2-2' }}</span>
+        <span *ngIf="product.discount" class="original-price">${{ product.price | number:'1.2-2' }}</span>
+      </div>
+      
+      <app-base-button 
+        *ngIf="showAddToCart"
+        type="glass" 
+        size="small"
+        (clicked)="onAddToCart($event)"
+      >
+        🛒 Add to Cart
+      </app-base-button>
+    </div>
+  </div>
+</div> 

@@ -1,0 +1,26 @@
+<div class="theme-selector">
+  <h3 class="theme-selector__title">Choose Theme</h3>
+  
+  <div class="theme-selector__options">
+    <div 
+      *ngFor="let theme of themes" 
+      class="theme-option"
+      [class.active]="currentTheme?.id === theme.id"
+      (click)="selectTheme(theme.id)"
+    >
+      <div 
+        class="theme-option__preview" 
+        [ngStyle]="getThemePreviewStyle(theme)"
+      ></div>
+      
+      <div class="theme-option__info">
+        <span class="theme-option__name">{{ theme.name }}</span>
+        <p class="theme-option__description">{{ theme.description }}</p>
+      </div>
+      
+      <div class="theme-option__check" *ngIf="currentTheme?.id === theme.id">
+        ✓
+      </div>
+    </div>
+  </div>
+</div> 

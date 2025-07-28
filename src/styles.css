@@ -1,3 +1,115 @@
+/* CSS Custom Properties for Theming */
+:root {
+  /* Default theme variables - will be overridden by ThemeService */
+  --color-primary: #667eea;
+  --color-secondary: #764ba2;
+  --color-accent: #f093fb;
+  --color-background: #f5f7fa;
+  --color-surface: #ffffff;
+  --color-text-primary: #333333;
+  --color-text-secondary: #666666;
+  --color-text-accent: #667eea;
+  --color-buttons-primary: #667eea;
+  --color-buttons-secondary: #6c757d;
+  --color-buttons-glass: rgba(255, 255, 255, 0.3);
+  --color-buttons-glassHover: rgba(255, 255, 255, 0.5);
+  --color-cards-background: #ffffff;
+  --color-cards-border: rgba(0, 0, 0, 0.1);
+  --color-cards-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  
+  --layout-container-maxWidth: 1200px;
+  --layout-container-padding: 0 20px;
+  --layout-grid-columns-desktop: 4;
+  --layout-grid-columns-tablet: 3;
+  --layout-grid-columns-mobile: 2;
+  --layout-grid-gap: 1rem;
+  --layout-cards-borderRadius: 12px;
+  --layout-cards-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --layout-cards-padding: 1rem;
+  
+  --component-buttons-borderRadius: 8px;
+  --component-buttons-fontSize: 0.9rem;
+  --component-buttons-fontWeight: 600;
+  --component-buttons-padding: 12px 24px;
+  --component-buttons-glassOpacity: 0.3;
+  --component-productCards-imageHeight: 200px;
+  --component-productCards-infoPadding: 1rem;
+  --component-productCards-overlayOpacity: 0.8;
+}
+
+/* Glass Theme Styles */
+.glass-theme {
+  background: var(--color-buttons-glass) !important;
+  border: 1px solid var(--color-cards-border) !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.3s ease !important;
+}
+
+.glass-theme:hover {
+  background: var(--color-buttons-glassHover) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Glass theme for CustomDropdown */
+.glass-theme.custom-dropdown .dropdown-trigger {
+  background: var(--color-buttons-glass) !important;
+  border: 1px solid var(--color-cards-border) !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.glass-theme.custom-dropdown .dropdown-trigger:hover {
+  background: var(--color-buttons-glassHover) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+}
+
+.glass-theme.custom-dropdown.open .dropdown-trigger {
+  background: var(--color-buttons-glassHover) !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Glass theme for view buttons */
+.glass-theme.view-btn {
+  background: var(--color-buttons-glass) !important;
+  border: 1px solid var(--color-cards-border) !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.glass-theme.view-btn:hover {
+  background: var(--color-buttons-glassHover) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+}
+
+.glass-theme.view-btn.active {
+  background: var(--color-primary) !important;
+  color: white !important;
+  border-color: var(--color-primary) !important;
+}
+
+/* Apply glass theme to product cards when liquid glass theme is active */
+[data-theme="liquid-glass"] .product-card {
+  background: var(--color-cards-background) !important;
+  border: 1px solid var(--color-cards-border) !important;
+  box-shadow: var(--color-cards-shadow) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+[data-theme="liquid-glass"] .product-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+@import './styles/_grid.scss';
+@import './styles/_buttons.scss';
+@import './styles/_cards.scss';
+
 /* body { margin: 0; font-family: Arial, sans-serif; background: #fff;} */
 
 .backdrop-filter {
