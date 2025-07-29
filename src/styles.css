@@ -52,6 +52,90 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
 }
 
+/* Theme-aware price styling */
+.theme-price {
+  color: var(--color-accent) !important;
+}
+
+/* Cart modal specific glass theme styles */
+.glass-theme.quantity-btn {
+  background: var(--color-buttons-glass) !important;
+  border: 1px solid var(--color-cards-border) !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  border-radius: 4px !important;
+  width: 32px !important;
+  height: 32px !important;
+  cursor: pointer !important;
+  font-weight: bold !important;
+  transition: all 0.2s ease !important;
+  color: var(--color-text-primary) !important;
+}
+
+.glass-theme.quantity-btn:hover {
+  background: var(--color-buttons-glassHover) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+}
+
+.glass-theme.remove-btn {
+  background: var(--color-buttons-glass) !important;
+  border: 1px solid var(--color-cards-border) !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  color: var(--color-accent) !important;
+  cursor: pointer !important;
+  padding: 0.5rem !important;
+  border-radius: 4px !important;
+  transition: all 0.2s ease !important;
+}
+
+.glass-theme.remove-btn:hover {
+  background: var(--color-buttons-glassHover) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+}
+
+.glass-theme.continue-shopping-btn,
+.glass-theme.continue-btn {
+  background: var(--color-buttons-glass) !important;
+  border: 1px solid var(--color-cards-border) !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  color: var(--color-text-primary) !important;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.glass-theme.continue-shopping-btn:hover,
+.glass-theme.continue-btn:hover {
+  background: var(--color-buttons-glassHover) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+}
+
+.glass-theme.checkout-btn {
+  background: var(--color-accent) !important;
+  border: 1px solid var(--color-accent) !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  color: white !important;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.glass-theme.checkout-btn:hover {
+  background: var(--color-accent) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+}
+
 /* Glass theme for CustomDropdown */
 .glass-theme.custom-dropdown .dropdown-trigger {
   background: var(--color-buttons-glass) !important;
@@ -163,12 +247,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 .section-dialog-panel {
-  max-width: 100vw !important;
-  width: 100vw !important;
-  min-width: 0 !important;
+  max-width: 99vw;
+  width: 99vw;
+  min-width: 1600px;
   box-sizing: border-box;
-  padding: 0 !important;
-  overflow: visible !important;
+  padding: 0;
+  overflow: visible;
 }
 
 .section-dialog-panel .section-form-container,
@@ -179,14 +263,19 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .section-dialog-panel .mat-form-field,
 .section-dialog-panel .mat-select,
 .section-dialog-panel .mat-input-element {
-  width: 100% !important;
-  min-width: 0 !important;
-  max-width: 1600px !important;
-  box-sizing: border-box !important;
+  width: 100%;
+  min-width: 0;
+  max-width: 2400px;
+  box-sizing: border-box;
+}
+
+/* Исправляем конкретный класс, который показан в DevTools */
+.mat-mdc-dialog-container .mdc-dialog_container {
+  width: 600px;
 }
 
 .section-dialog-panel .section-form-container {
-  max-width: 1600px;
+  max-width: 600px;
   margin: 0 auto;
   padding: 0 32px 32px 32px;
   background: transparent;
@@ -194,8 +283,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 @media (min-width: 1600px) {
   .section-dialog-panel .section-form-container {
-    width: 1400px;
-    max-width: 1600px;
+    width: 600px;
+    max-width: 600px;
   }
 }
 

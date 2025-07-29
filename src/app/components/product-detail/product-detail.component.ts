@@ -103,4 +103,20 @@ export class ProductDetailComponent implements OnInit {
   goBack(): void {
     this.router.navigate(['/shop']);
   }
+
+  navigateToHome(): void {
+    this.router.navigate(['/home']);
+  }
+
+  navigateToShop(): void {
+    this.router.navigate(['/shop']);
+  }
+
+  navigateToCategory(): void {
+    if (this.product) {
+      this.router.navigate(['/shop'], { 
+        queryParams: { category: this.product.category } 
+      });
+    }
+  }
 }

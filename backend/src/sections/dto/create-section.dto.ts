@@ -9,9 +9,9 @@ export class CreateSectionDto {
   @IsString()
   title: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  subtitle: string;
+  subtitle?: string;
 
   @IsOptional()
   @IsString()

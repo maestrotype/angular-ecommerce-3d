@@ -72,9 +72,15 @@ export class SectionFormComponent {
 
   private createForm(): FormGroup {
     const section = this.data?.section;
+    
+    // Map database type to display type
+    let displayType = section?.type || 'hero';
+    if (section?.type === 'categories') {
+      displayType = 'categories'; // Use the value from sectionTypes
+    }
 
     return this.fb.group({
-      type: [section?.type || 'hero', Validators.required],
+      type: [displayType, Validators.required],
       title: [section?.title || '', Validators.required],
       subtitle: [section?.subtitle || ''],
       content: [section?.content || ''],
@@ -98,6 +104,16 @@ export class SectionFormComponent {
             sectionId: [item['sectionId'] || null]
           })
         )
+      ),
+      categories: this.fb.array(
+        (section?.settings?.categories || []).map((category: any) =>
+          this.fb.group({
+            name: [category.name, Validators.required],
+            slug: [category.slug, Validators.required],
+            icon: [category.icon],
+            isActive: [category.isActive ?? true]
+          })
+        )
       )
     });
   }
@@ -106,28 +122,43 @@ export class SectionFormComponent {
     return this.sectionForm.get('menu') as FormArray;
   }
 
+  get categories(): FormArray {
+    return this.sectionForm.get('categories') as FormArray;
+  }
+
   addMenuItem() {
-    this.menu.push(
-      this.fb.group({
-        title: ['', Validators.required],
-        url: ['', Validators.required],
-        access: ['all', Validators.required],
-        isActive: [true],
-        sectionId: [null]
-      })
-    );
+    this.menu.push(this.fb.group({
+      title: ['', Validators.required],
+      url: ['', Validators.required],
+      access: ['all', Validators.required],
+      isActive: [true],
+      sectionId: [null]
+    }));
+  }
+
+  addCategory() {
+    this.categories.push(this.fb.group({
+      name: ['', Validators.required],
+      slug: ['', Validators.required],
+      icon: [''],
+      isActive: [true]
+    }));
   }
 
   removeMenuItem(index: number) {
     this.menu.removeAt(index);
   }
 
+  removeCategory(index: number) {
+    this.categories.removeAt(index);
+  }
+
   dropMenuItem(event: CdkDragDrop<FormArray>) {
-    if (event.previousIndex === event.currentIndex) return;
-    const menuArray = this.menu;
-    const item = menuArray.at(event.previousIndex);
-    menuArray.removeAt(event.previousIndex);
-    menuArray.insert(event.currentIndex, item);
+    moveItemInArray(this.menu.controls, event.previousIndex, event.currentIndex);
+  }
+
+  dropCategory(event: CdkDragDrop<FormArray>) {
+    moveItemInArray(this.categories.controls, event.previousIndex, event.currentIndex);
   }
 
   onSectionSelect(index: number, sectionId: number | null) {
@@ -184,6 +215,39 @@ export class SectionFormComponent {
 
   onLogoUploaded(url: string): void {
     this.sectionForm.patchValue({ logoUrl: url });
+    this.uploadingLogo = false;
+  }
+
+  onCategoryIconSelected(event: Event, index: number): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.uploadCategoryIcon(file, index);
+    }
+  }
+
+  removeCategoryIcon(index: number): void {
+    this.categories.at(index).patchValue({ icon: '' });
+  }
+
+  selectCategoryIcon(index: number): void {
+    // Создаем временный input элемент для выбора файла
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = (event: Event) => {
+      const file = (event.target as HTMLInputElement).files?.[0];
+      if (file) {
+        this.uploadCategoryIcon(file, index);
+      }
+    };
+    input.click();
+  }
+
+  private async uploadCategoryIcon(file: File, index: number): Promise<void> {
+    // Здесь должна быть логика загрузки иконки
+    // Пока что просто создаем URL для демонстрации
+    const url = URL.createObjectURL(file);
+    this.categories.at(index).patchValue({ icon: url });
   }
 
   on3dFileSelected(event: Event): void {
@@ -265,11 +329,28 @@ export class SectionFormComponent {
             showSearch: formValue.showSearch ?? true,
             showCart: formValue.showCart ?? true,
             showProfile: formValue.showProfile ?? true,
-            menu: formValue.menu || []
+            menu: formValue.menu || [],
+            categories: formValue.categories || []
+          }
+        };
+      } else if (formValue.type === 'categories') {
+        // Special handling for categories section
+        formData = {
+          type: 'categories', // Always use 'categories' for database
+          title: formValue.title || 'Categories',
+          subtitle: formValue.subtitle || '',
+          content: formValue.content || '',
+          imageUrl: formValue.imageUrl || '',
+          isActive: formValue.isActive,
+          model3dUrl: model3dUrl || '',
+          show3d: formValue.show3d || false,
+          showImage: formValue.showImage || true,
+          settings: {
+            categories: formValue.categories || []
           }
         };
       } else {
-        const { logoUrl, showSearch, showCart, showProfile, menu, ...sectionData } = formValue;
+        const { logoUrl, showSearch, showCart, showProfile, menu, categories, ...sectionData } = formValue;
         formData = {
           ...sectionData,
           model3dUrl: model3dUrl || ''
@@ -281,10 +362,11 @@ export class SectionFormComponent {
           next: (result) => {
             this.loading = false;
             this.snackBar.open('Section updated successfully', 'Close', { duration: 3000 });
-            
+            this.dialogRef.close(result);
           },
           error: (error) => {
             this.loading = false;
+            console.error('Error updating section:', error);
             this.snackBar.open('Error updating section', 'Close', { duration: 3000 });
           }
         });
@@ -293,17 +375,19 @@ export class SectionFormComponent {
           next: (result) => {
             this.loading = false;
             this.snackBar.open('Section created successfully', 'Close', { duration: 3000 });
-            
+            this.dialogRef.close(result);
           },
           error: (error) => {
             this.loading = false;
+            console.error('Error creating section:', error);
             this.snackBar.open('Error creating section', 'Close', { duration: 3000 });
           }
         });
       }
     }).catch(error => {
       this.loading = false;
-      this.snackBar.open('Error saving section', 'Close', { duration: 3000 });
+      console.error('Error in upload process:', error);
+      this.snackBar.open('Error processing section', 'Close', { duration: 3000 });
     });
   }
 

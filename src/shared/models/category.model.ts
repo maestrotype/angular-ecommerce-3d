@@ -1,5 +1,10 @@
 export interface Category {
     id: string;
     name: string;
-    iconUrl?: string;     // URL to the category icon (from Figma design)
-  }
+    slug: string;
+    icon?: string;
+    description?: string;
+    isActive?: boolean;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
