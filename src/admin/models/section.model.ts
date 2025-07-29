@@ -6,12 +6,21 @@ export interface MenuItem {
   isActive: boolean;
 }
 
+export interface CategoryItem {
+  name: string;
+  slug: string;
+  icon: string;
+  isActive: boolean;
+}
+
 export interface HeaderSettings {
   logoUrl?: string;
   showSearch?: boolean;
   showCart?: boolean;
   showProfile?: boolean;
   menu?: MenuItem[];
+  categories?: CategoryItem[];
+  selectedCategories?: number[];
 }
 
 export interface Section {

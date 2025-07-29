@@ -1,3 +1,199 @@
+/* CSS Custom Properties for Theming */
+:root {
+  /* Default theme variables - will be overridden by ThemeService */
+  --color-primary: #667eea;
+  --color-secondary: #764ba2;
+  --color-accent: #f093fb;
+  --color-background: #f5f7fa;
+  --color-surface: #ffffff;
+  --color-text-primary: #333333;
+  --color-text-secondary: #666666;
+  --color-text-accent: #667eea;
+  --color-buttons-primary: #667eea;
+  --color-buttons-secondary: #6c757d;
+  --color-buttons-glass: rgba(255, 255, 255, 0.3);
+  --color-buttons-glassHover: rgba(255, 255, 255, 0.5);
+  --color-cards-background: #ffffff;
+  --color-cards-border: rgba(0, 0, 0, 0.1);
+  --color-cards-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  
+  --layout-container-maxWidth: 1200px;
+  --layout-container-padding: 0 20px;
+  --layout-grid-columns-desktop: 4;
+  --layout-grid-columns-tablet: 3;
+  --layout-grid-columns-mobile: 2;
+  --layout-grid-gap: 1rem;
+  --layout-cards-borderRadius: 12px;
+  --layout-cards-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --layout-cards-padding: 1rem;
+  
+  --component-buttons-borderRadius: 8px;
+  --component-buttons-fontSize: 0.9rem;
+  --component-buttons-fontWeight: 600;
+  --component-buttons-padding: 12px 24px;
+  --component-buttons-glassOpacity: 0.3;
+  --component-productCards-imageHeight: 200px;
+  --component-productCards-infoPadding: 1rem;
+  --component-productCards-overlayOpacity: 0.8;
+}
+
+/* Glass Theme Styles */
+.glass-theme {
+  background: var(--color-buttons-glass) !important;
+  border: 1px solid var(--color-cards-border) !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.3s ease !important;
+}
+
+.glass-theme:hover {
+  background: var(--color-buttons-glassHover) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Theme-aware price styling */
+.theme-price {
+  color: var(--color-accent) !important;
+}
+
+/* Cart modal specific glass theme styles */
+.glass-theme.quantity-btn {
+  background: var(--color-buttons-glass) !important;
+  border: 1px solid var(--color-cards-border) !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  border-radius: 4px !important;
+  width: 32px !important;
+  height: 32px !important;
+  cursor: pointer !important;
+  font-weight: bold !important;
+  transition: all 0.2s ease !important;
+  color: var(--color-text-primary) !important;
+}
+
+.glass-theme.quantity-btn:hover {
+  background: var(--color-buttons-glassHover) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+}
+
+.glass-theme.remove-btn {
+  background: var(--color-buttons-glass) !important;
+  border: 1px solid var(--color-cards-border) !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  color: var(--color-accent) !important;
+  cursor: pointer !important;
+  padding: 0.5rem !important;
+  border-radius: 4px !important;
+  transition: all 0.2s ease !important;
+}
+
+.glass-theme.remove-btn:hover {
+  background: var(--color-buttons-glassHover) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+}
+
+.glass-theme.continue-shopping-btn,
+.glass-theme.continue-btn {
+  background: var(--color-buttons-glass) !important;
+  border: 1px solid var(--color-cards-border) !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  color: var(--color-text-primary) !important;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.glass-theme.continue-shopping-btn:hover,
+.glass-theme.continue-btn:hover {
+  background: var(--color-buttons-glassHover) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+}
+
+.glass-theme.checkout-btn {
+  background: var(--color-accent) !important;
+  border: 1px solid var(--color-accent) !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  color: white !important;
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.glass-theme.checkout-btn:hover {
+  background: var(--color-accent) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Glass theme for CustomDropdown */
+.glass-theme.custom-dropdown .dropdown-trigger {
+  background: var(--color-buttons-glass) !important;
+  border: 1px solid var(--color-cards-border) !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.glass-theme.custom-dropdown .dropdown-trigger:hover {
+  background: var(--color-buttons-glassHover) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+}
+
+.glass-theme.custom-dropdown.open .dropdown-trigger {
+  background: var(--color-buttons-glassHover) !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Glass theme for view buttons */
+.glass-theme.view-btn {
+  background: var(--color-buttons-glass) !important;
+  border: 1px solid var(--color-cards-border) !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.glass-theme.view-btn:hover {
+  background: var(--color-buttons-glassHover) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+}
+
+.glass-theme.view-btn.active {
+  background: var(--color-primary) !important;
+  color: white !important;
+  border-color: var(--color-primary) !important;
+}
+
+/* Apply glass theme to product cards when liquid glass theme is active */
+[data-theme="liquid-glass"] .product-card {
+  background: var(--color-cards-background) !important;
+  border: 1px solid var(--color-cards-border) !important;
+  box-shadow: var(--color-cards-shadow) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+[data-theme="liquid-glass"] .product-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+@import './styles/_grid.scss';
+@import './styles/_buttons.scss';
+@import './styles/_cards.scss';
+
 /* body { margin: 0; font-family: Arial, sans-serif; background: #fff;} */
 
 .backdrop-filter {
@@ -51,12 +247,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 .section-dialog-panel {
-  max-width: 100vw !important;
-  width: 100vw !important;
-  min-width: 0 !important;
+  max-width: 99vw;
+  width: 99vw;
+  min-width: 1600px;
   box-sizing: border-box;
-  padding: 0 !important;
-  overflow: visible !important;
+  padding: 0;
+  overflow: visible;
 }
 
 .section-dialog-panel .section-form-container,
@@ -67,14 +263,19 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .section-dialog-panel .mat-form-field,
 .section-dialog-panel .mat-select,
 .section-dialog-panel .mat-input-element {
-  width: 100% !important;
-  min-width: 0 !important;
-  max-width: 1600px !important;
-  box-sizing: border-box !important;
+  width: 100%;
+  min-width: 0;
+  max-width: 2400px;
+  box-sizing: border-box;
+}
+
+/* Исправляем конкретный класс, который показан в DevTools */
+.mat-mdc-dialog-container .mdc-dialog_container {
+  width: 600px;
 }
 
 .section-dialog-panel .section-form-container {
-  max-width: 1600px;
+  max-width: 600px;
   margin: 0 auto;
   padding: 0 32px 32px 32px;
   background: transparent;
@@ -82,8 +283,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 @media (min-width: 1600px) {
   .section-dialog-panel .section-form-container {
-    width: 1400px;
-    max-width: 1600px;
+    width: 600px;
+    max-width: 600px;
   }
 }
 

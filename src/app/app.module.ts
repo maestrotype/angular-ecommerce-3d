@@ -39,8 +39,13 @@ import { CustomDropdownComponent } from './shared/custom-dropdown/custom-dropdow
 import { SectionRendererComponent } from './components/section-renderer/section-renderer.component';
 
 // Favorites Components
-import { FavoriteButtonComponent } from './shared/favorite-button/favorite-button.component';
 import { FavoritesComponent } from './pages/favorites/favorites.component';
+
+// Shared Module
+import { SharedModule } from './shared/shared.module';
+
+// Services
+import { ThemeService } from './core/themes/theme.service';
 
 
 @NgModule({
@@ -71,13 +76,21 @@ import { FavoritesComponent } from './pages/favorites/favorites.component';
     IconComponent, 
     ThreeDViewerComponent, 
     SectionRendererComponent,
-    FavoriteButtonComponent,
     FavoritesComponent
   ],
-  imports: [BrowserModule, BrowserAnimationsModule, HttpClientModule, FormsModule, RouterModule, AppRoutingModule],
+  imports: [
+    BrowserModule, 
+    BrowserAnimationsModule, 
+    HttpClientModule, 
+    FormsModule, 
+    RouterModule, 
+    AppRoutingModule,
+    SharedModule
+  ],
   providers: [
     provideAnimationsAsync(),
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    ThemeService
   ],
   bootstrap: [AppComponent]
 })

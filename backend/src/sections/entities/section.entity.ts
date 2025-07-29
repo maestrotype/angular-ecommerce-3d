@@ -11,7 +11,7 @@ export class Section {
   @Column()
   title: string;
 
-  @Column({ type: 'varchar', default: '', nullable: false})
+  @Column({ type: 'varchar', default: '', nullable: true })
   subtitle: string;
 
   @Column('text', { nullable: true })

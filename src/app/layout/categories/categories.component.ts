@@ -2,11 +2,12 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Section } from 'src/shared/models/section.model';
 
-interface Category {
-    id: number;
+interface CategoryDisplay {
+    id?: number;
     name: string;
     icon: string;
     slug: string;
+    isActive?: boolean;
 }
 
 @Component({
@@ -16,32 +17,52 @@ interface Category {
 })
 export class CategoriesComponent implements OnInit {
     @Input() data!: Section;
-    categories: Category[] = [
-        {
-            id: 1,
-            name: 'Shoes',
-            icon: 'assets/icons/shoes.svg',
-            slug: 'shoes'
-        },
-        {
-            id: 2,
-            name: 'Handbags',
-            icon: 'assets/icons/handbags.svg',
-            slug: 'handbags'
-        },
-        {
-            id: 3,
-            name: 'Clothing',
-            icon: 'assets/icons/clothing.svg',
-            slug: 'clothing'
-        }
-    ];
+    categories: CategoryDisplay[] = [];
 
     constructor(private router: Router) { }
 
-    ngOnInit(): void { }
+    ngOnInit(): void {
+        this.loadCategories();
+    }
 
-    navigateToCategory(category: Category): void {
-        this.router.navigate(['/shop', category.slug]);
+    private loadCategories(): void {
+        if (this.data?.settings?.categories && this.data.settings.categories.length > 0) {
+            this.categories = this.data.settings.categories
+                .filter(cat => cat.isActive !== false)
+                .map((cat, index) => ({
+                    id: index + 1,
+                    name: cat.name,
+                    icon: cat.icon || 'assets/icons/default-category.svg',
+                    slug: cat.slug,
+                    isActive: cat.isActive
+                }));
+        } else {
+            this.categories = [
+                {
+                    id: 1,
+                    name: 'Shoes',
+                    icon: 'assets/icons/shoes.svg',
+                    slug: 'shoes'
+                },
+                {
+                    id: 2,
+                    name: 'Handbags',
+                    icon: 'assets/icons/handbags.svg',
+                    slug: 'handbags'
+                },
+                {
+                    id: 3,
+                    name: 'Clothing',
+                    icon: 'assets/icons/clothing.svg',
+                    slug: 'clothing'
+                }
+            ];
+        }
+    }
+
+    navigateToCategory(category: CategoryDisplay): void {
+        this.router.navigate(['/shop'], { 
+            queryParams: { category: category.slug } 
+        });
     }
 }

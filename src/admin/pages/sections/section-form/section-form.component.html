@@ -98,51 +98,114 @@
           {{ 'SUBTITLE_REQUIRED' | translate }}
         </mat-error>
       </mat-form-field>
-      <mat-form-field appearance="outline" class="full-width">
+      
+      <!-- Content field only for non-categories sections -->
+      <mat-form-field *ngIf="sectionForm.get('type').value !== 'categories'" appearance="outline" class="full-width">
         <mat-label>{{ 'CONTENT' | translate }}</mat-label>
         <textarea matInput formControlName="content" rows="4" placeholder="Enter section content"></textarea>
       </mat-form-field>
       
-      <app-image-upload
-        [label]="'SECTION_IMAGE' | translate"
-        [placeholder]="'UPLOAD_IMAGE_HINT' | translate"
-        formControlName="imageUrl"
-        (fileSelected)="onImageFileSelected($event)"
-        (fileUploaded)="onImageUploaded($event)"
-        [disabled]="uploadingImage">
-      </app-image-upload>
-      
-      <mat-slide-toggle formControlName="showImage">{{ 'SHOW_IMAGE' | translate }}</mat-slide-toggle>
-      
-      <div class="model3d-upload-section full-width">
-        <label class="upload-label">3D Model (.glb)</label>
-        <div class="upload-area" [class.has-file]="model3dFile || model3dUrl">
-          <div *ngIf="!(model3dFile || model3dUrl)" class="upload-placeholder">
-            <mat-icon>cloud_upload</mat-icon>
-            <p>{{ 'UPLOAD_3D_HINT' | translate }}</p>
-            <small>{{ 'MODEL_3D_SIZE_HINT' | translate }}</small>
+      <!-- Categories Section Special Block -->
+      <ng-container *ngIf="sectionForm.get('type').value === 'categories'">
+        <div class="categories-block">
+          <label class="categories-label">{{ 'CATEGORIES' | translate }}</label>
+          <div formArrayName="categories" cdkDropList (cdkDropListDropped)="dropCategory($event)" class="categories-list">
+            <div *ngFor="let category of categories.controls; let i = index" [formGroupName]="i" class="category-item-block" cdkDrag>
+              <div class="drag-handle" cdkDragHandle>
+                <mat-icon>drag_indicator</mat-icon>
+              </div>
+              <div class="category-item-content">
+                <mat-form-field appearance="outline" class="category-name-field">
+                  <mat-label>{{ 'CATEGORY_NAME' | translate }}</mat-label>
+                  <input matInput formControlName="name">
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="category-slug-field">
+                  <mat-label>{{ 'CATEGORY_SLUG' | translate }}</mat-label>
+                  <input matInput formControlName="slug" placeholder="shoes, handbags, clothing">
+                </mat-form-field>
+                <div class="category-icon-upload">
+                  <label class="category-icon-label">{{ 'CATEGORY_ICON' | translate }}</label>
+                  <div class="icon-upload-area" [class.has-icon]="category.get('icon')?.value">
+                    <div *ngIf="!category.get('icon')?.value" class="icon-placeholder">
+                      <mat-icon>image</mat-icon>
+                      <p>{{ 'UPLOAD_ICON_HINT' | translate }}</p>
+                    </div>
+                    <div *ngIf="category.get('icon')?.value" class="icon-preview">
+                      <img [src]="category.get('icon')?.value" [alt]="category.get('name')?.value" class="icon-preview-img">
+                      <button type="button" mat-icon-button (click)="removeCategoryIcon(i)" class="remove-btn">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+                    <input type="file" (change)="onCategoryIconSelected($event, i)" accept="image/*" class="file-input" />
+                    <button type="button" mat-stroked-button (click)="selectCategoryIcon(i)" class="upload-btn">
+                      <mat-icon>add</mat-icon>
+                      {{ category.get('icon')?.value ? ('CHANGE_ICON' | translate) : ('SELECT_ICON' | translate) }}
+                    </button>
+                  </div>
+                </div>
+                <div class="category-controls">
+                  <mat-slide-toggle formControlName="isActive" class="category-active-toggle">
+                    <span class="mobile-only">Активна</span>
+                    <span class="desktop-only">{{ 'CATEGORY_ACTIVE' | translate }}</span>
+                  </mat-slide-toggle>
+                  <button mat-icon-button color="warn" type="button" (click)="removeCategory(i)" class="delete-btn" matTooltip="Удалить">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <mat-divider *ngFor="let category of categories.controls; let i = index" [class.hidden]="i === categories.length - 1"></mat-divider>
           </div>
-          <div *ngIf="model3dFile || model3dUrl" class="model3d-preview">
-            <mat-icon>view_in_ar</mat-icon>
-            <span>{{ model3dFileName || (model3dUrl ? model3dUrl.split('/').pop() : '') }}</span>
-            <button type="button" mat-icon-button (click)="remove3dModel()" class="remove-btn">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
-          <input type="file" #file3dInput (change)="on3dFileSelected($event)" accept=".glb" class="file-input" [disabled]="uploading3d" />
-          <button type="button" mat-stroked-button (click)="file3dInput.click()" [disabled]="uploading3d" class="upload-btn">
-            <mat-icon *ngIf="!uploading3d">add</mat-icon>
-            <mat-icon *ngIf="uploading3d" class="spinning">hourglass_empty</mat-icon>
-            {{ uploading3d
-            ? ('UPLOADING' | translate)
-            : (model3dFile || model3dUrl
-            ? ('CHANGE_3D_MODEL' | translate)
-            : ('SELECT_3D_MODEL' | translate))
-            }}
+          <button mat-stroked-button type="button" (click)="addCategory()" class="add-category-btn">
+            <mat-icon>add</mat-icon> {{ 'ADD_CATEGORY' | translate }}
           </button>
         </div>
-      </div>
-      <mat-slide-toggle formControlName="show3d" class="active-toggle">{{ 'SHOW_3D_MODEL' | translate }}</mat-slide-toggle>
+      </ng-container>
+      
+      <!-- Image upload only for non-categories sections -->
+      <ng-container *ngIf="sectionForm.get('type').value !== 'categories'">
+        <app-image-upload
+          [label]="'SECTION_IMAGE' | translate"
+          [placeholder]="'UPLOAD_IMAGE_HINT' | translate"
+          formControlName="imageUrl"
+          (fileSelected)="onImageFileSelected($event)"
+          (fileUploaded)="onImageUploaded($event)"
+          [disabled]="uploadingImage">
+        </app-image-upload>
+        
+        <mat-slide-toggle formControlName="showImage">{{ 'SHOW_IMAGE' | translate }}</mat-slide-toggle>
+        
+        <div class="model3d-upload-section full-width">
+          <label class="upload-label">3D Model (.glb)</label>
+          <div class="upload-area" [class.has-file]="model3dFile || model3dUrl">
+            <div *ngIf="!(model3dFile || model3dUrl)" class="upload-placeholder">
+              <mat-icon>cloud_upload</mat-icon>
+              <p>{{ 'UPLOAD_3D_HINT' | translate }}</p>
+              <small>{{ 'MODEL_3D_SIZE_HINT' | translate }}</small>
+            </div>
+            <div *ngIf="model3dFile || model3dUrl" class="model3d-preview">
+              <mat-icon>view_in_ar</mat-icon>
+              <span>{{ model3dFileName || (model3dUrl ? model3dUrl.split('/').pop() : '') }}</span>
+              <button type="button" mat-icon-button (click)="remove3dModel()" class="remove-btn">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+            <input type="file" #file3dInput (change)="on3dFileSelected($event)" accept=".glb" class="file-input" [disabled]="uploading3d" />
+            <button type="button" mat-stroked-button (click)="file3dInput.click()" [disabled]="uploading3d" class="upload-btn">
+              <mat-icon *ngIf="!uploading3d">add</mat-icon>
+              <mat-icon *ngIf="uploading3d" class="spinning">hourglass_empty</mat-icon>
+              {{ uploading3d
+              ? ('UPLOADING' | translate)
+              : (model3dFile || model3dUrl
+              ? ('CHANGE_3D_MODEL' | translate)
+              : ('SELECT_3D_MODEL' | translate))
+              }}
+            </button>
+          </div>
+        </div>
+        <mat-slide-toggle formControlName="show3d" class="active-toggle">{{ 'SHOW_3D_MODEL' | translate }}</mat-slide-toggle>
+      </ng-container>
+      
       <mat-slide-toggle formControlName="isActive" class="active-toggle">{{ 'SECTION_ACTIVE' | translate }}</mat-slide-toggle>
     </ng-container>
   </form>

@@ -1,0 +1,51 @@
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Product } from 'src/shared/models/product.model';
+
+@Component({
+  selector: 'app-product-card',
+  templateUrl: './product-card.component.html',
+  styleUrls: ['./product-card.component.scss']
+})
+export class ProductCardComponent {
+  @Input() product!: Product;
+  @Input() showFavorite = true;
+  @Input() showAddToCart = true;
+  @Input() layout: 'grid' | 'list' = 'grid';
+  @Output() productClick = new EventEmitter<Product>();
+  @Output() favoriteToggle = new EventEmitter<{ product: Product; isFavorite: boolean }>();
+  @Output() addToCart = new EventEmitter<Product>();
+
+  onProductClick(): void {
+    this.productClick.emit(this.product);
+  }
+
+  onFavoriteToggle(event: { product: Product; isFavorite: boolean }): void {
+    this.favoriteToggle.emit(event);
+  }
+
+  onAddToCart(event: Event): void {
+    event.stopPropagation();
+    this.addToCart.emit(this.product);
+  }
+
+  getDiscountedPrice(): number {
+    if (this.product.discount) {
+      return this.product.price * (1 - this.product.discount / 100);
+    }
+    return this.product.price;
+  }
+
+  get cardClasses(): string {
+    const classes = ['product-card'];
+    
+    if (this.layout === 'list') {
+      classes.push('list-card');
+    }
+    
+    if (this.product.isSpecial) {
+      classes.push('special-offer');
+    }
+    
+    return classes.join(' ');
+  }
+} 

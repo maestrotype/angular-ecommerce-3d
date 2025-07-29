@@ -2,10 +2,11 @@
   <!-- Header -->
   <div class="product-header">
     <div class="container">
-      <button class="back-btn" (click)="goBack()">← Back to Shop</button>
+      <button class="back-btn glass-theme" (click)="goBack()">← Back to Shop</button>
       <nav class="breadcrumb">
-        <span>Home</span> / <span>Shop</span> /
-        <span>{{ product.category }}</span> /
+        <a class="breadcrumb-link" (click)="navigateToHome()">Home</a> / 
+        <a class="breadcrumb-link" (click)="navigateToShop()">Shop</a> /
+        <a class="breadcrumb-link" (click)="navigateToCategory()">{{ product.category }}</a> /
         <span class="current">{{ product.name }}</span>
       </nav>
     </div>
@@ -89,7 +90,7 @@
     <div class="not-found-content">
       <h2>Product Not Found</h2>
       <p>The product you're looking for doesn't exist.</p>
-      <button class="back-btn" (click)="goBack()">Back to Shop</button>
+      <button class="back-btn glass-theme" (click)="goBack()">Back to Shop</button>
     </div>
   </div>
 </div>

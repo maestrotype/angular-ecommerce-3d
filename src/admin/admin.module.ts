@@ -48,6 +48,7 @@ import { FormFieldComponent } from './components/ui/form-field/form-field.compon
 import { ActionButtonComponent } from './components/ui/action-button/action-button.component';
 import { CategoryFormComponent } from './pages/categories/category-form/category-form.component';
 import { ImageUploadComponent } from './components/ui/image-upload/image-upload.component';
+import { SharedModule } from '../app/shared/shared.module';
 
 // Services
 import { NotificationService } from './services/notification.service';
@@ -80,7 +81,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     DataTableComponent,
     FormFieldComponent,
     ActionButtonComponent,
-    ImageUploadComponent
+    ImageUploadComponent,
   ],
   imports: [
     CommonModule,
@@ -119,6 +120,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
+    SharedModule,
   ],
   providers: [
     NotificationService,

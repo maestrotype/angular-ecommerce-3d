@@ -15,10 +15,12 @@ import { TranslateModule } from '@ngx-translate/core';
 import { SettingsRoutingModule } from './settings-routing.module';
 import { SettingsComponent } from './settings.component';
 import { SettingsService } from '../../services/settings.service';
+import { ThemeSelectorComponent } from '../../../app/shared/ui/theme-selector/theme-selector.component';
 
 @NgModule({
   declarations: [
-    SettingsComponent
+    SettingsComponent,
+    ThemeSelectorComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,24 @@
+<button 
+  [class]="buttonClasses"
+  [disabled]="disabled || loading"
+  (click)="onClick()"
+  type="button"
+>
+  <div class="btn-content" [class.loading]="loading">
+    <span *ngIf="icon && iconPosition === 'left'" class="btn-icon btn-icon-left">
+      {{ icon }}
+    </span>
+    
+    <span class="btn-text">
+      <ng-content></ng-content>
+    </span>
+    
+    <span *ngIf="icon && iconPosition === 'right'" class="btn-icon btn-icon-right">
+      {{ icon }}
+    </span>
+    
+    <div *ngIf="loading" class="btn-spinner">
+      <div class="spinner"></div>
+    </div>
+  </div>
+</button> 

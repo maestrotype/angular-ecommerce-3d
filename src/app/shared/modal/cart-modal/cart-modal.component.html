@@ -1,13 +1,13 @@
 <div class="cart-modal">
     <div class="cart-header">
-      <h2>Корзина</h2>
+      <h2>Cart</h2>
     </div>
   
     <div class="cart-content">
       <div *ngIf="cartItems.length === 0" class="empty-cart">
-        <p>Ваша корзина пуста</p>
-        <button class="continue-shopping-btn" (click)="onClose()">
-          Продолжить покупки
+        <p>Your cart is empty</p>
+        <button class="continue-shopping-btn glass-theme" (click)="onClose()">
+          Continue Shopping
         </button>
       </div>
   
@@ -19,16 +19,16 @@
           
           <div class="item-details">
             <h3 class="item-name">{{ item.name }}</h3>
-            <p class="item-price">${{ item.price | number:'1.2-2' }}</p>
+            <p class="item-price theme-price">${{ item.price | number:'1.2-2' }}</p>
             
             <div class="quantity-controls">
-              <button (click)="updateQuantity(item.productId, -1)">-</button>
+              <button class="quantity-btn glass-theme" (click)="updateQuantity(item.productId, -1)">-</button>
               <span>{{ item.quantity }}</span>
-              <button (click)="updateQuantity(item.productId, 1)">+</button>
+              <button class="quantity-btn glass-theme" (click)="updateQuantity(item.productId, 1)">+</button>
             </div>
           </div>
           
-          <button class="remove-btn" (click)="removeItem(item.productId)">
+          <button class="remove-btn glass-theme" (click)="removeItem(item.productId)">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2"/>
             </svg>
@@ -40,15 +40,15 @@
     <div *ngIf="cartItems.length > 0" class="cart-footer">
       <div class="total-section">
         <div class="total-price">
-          <strong>Итого: ${{ totalPrice | number:'1.2-2' }}</strong>
+          <strong class="theme-price">Total: ${{ totalPrice | number:'1.2-2' }}</strong>
         </div>
         
         <div class="checkout-actions">
-          <button class="continue-btn" (click)="onClose()">
-            Продолжить покупки
+          <button class="continue-btn glass-theme" (click)="onClose()">
+            Continue Shopping
           </button>
-          <button class="checkout-btn" (click)="checkout()">
-            Оформить заказ
+          <button class="checkout-btn glass-theme" (click)="checkout()">
+            Place Order
           </button>
         </div>
       </div>

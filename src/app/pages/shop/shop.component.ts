@@ -75,6 +75,9 @@ export class ShopComponent implements OnInit {
       if (params['search']) {
         this.searchTerm = params['search'];
       }
+      if (params['category']) {
+        this.selectedCategory = params['category'];
+      }
       this.filterProducts();
     });
   }
