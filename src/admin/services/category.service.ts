@@ -18,7 +18,7 @@ export class CategoryService {
       .pipe(catchError(this.handleError));
   }
 
-  getCategoryById(id: number): Observable<Category> {
+  getCategoryById(id: string): Observable<Category> {
     return this.http.get<Category>(`${this.API_URL}/${id}`)
       .pipe(catchError(this.handleError));
   }
@@ -28,12 +28,12 @@ export class CategoryService {
       .pipe(catchError(this.handleError));
   }
 
-  updateCategory(id: number, category: Partial<Category>): Observable<Category> {
+  updateCategory(id: string, category: Partial<Category>): Observable<Category> {
     return this.http.patch<Category>(`${this.API_URL}/${id}`, category)
       .pipe(catchError(this.handleError));
   }
 
-  deleteCategory(id: number): Observable<void> {
+  deleteCategory(id: string): Observable<void> {
     return this.http.delete<void>(`${this.API_URL}/${id}`)
       .pipe(catchError(this.handleError));
   }

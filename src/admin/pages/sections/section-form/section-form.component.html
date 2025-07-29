@@ -123,26 +123,14 @@
                   <mat-label>{{ 'CATEGORY_SLUG' | translate }}</mat-label>
                   <input matInput formControlName="slug" placeholder="shoes, handbags, clothing">
                 </mat-form-field>
-                <div class="category-icon-upload">
-                  <label class="category-icon-label">{{ 'CATEGORY_ICON' | translate }}</label>
-                  <div class="icon-upload-area" [class.has-icon]="category.get('icon')?.value">
-                    <div *ngIf="!category.get('icon')?.value" class="icon-placeholder">
-                      <mat-icon>image</mat-icon>
-                      <p>{{ 'UPLOAD_ICON_HINT' | translate }}</p>
-                    </div>
-                    <div *ngIf="category.get('icon')?.value" class="icon-preview">
-                      <img [src]="category.get('icon')?.value" [alt]="category.get('name')?.value" class="icon-preview-img">
-                      <button type="button" mat-icon-button (click)="removeCategoryIcon(i)" class="remove-btn">
-                        <mat-icon>delete</mat-icon>
-                      </button>
-                    </div>
-                    <input type="file" (change)="onCategoryIconSelected($event, i)" accept="image/*" class="file-input" />
-                    <button type="button" mat-stroked-button (click)="selectCategoryIcon(i)" class="upload-btn">
-                      <mat-icon>add</mat-icon>
-                      {{ category.get('icon')?.value ? ('CHANGE_ICON' | translate) : ('SELECT_ICON' | translate) }}
-                    </button>
-                  </div>
-                </div>
+                <app-image-upload
+                  [label]="'CATEGORY_ICON' | translate"
+                  [placeholder]="'UPLOAD_ICON_HINT' | translate"
+                  [formControlName]="'icon'"
+                  (fileSelected)="onCategoryIconSelected($event, i)"
+                  (fileUploaded)="onCategoryIconUploaded($event, i)"
+                  [disabled]="uploadingCategoryIcon">
+                </app-image-upload>
                 <div class="category-controls">
                   <mat-slide-toggle formControlName="isActive" class="category-active-toggle">
                     <span class="mobile-only">Активна</span>

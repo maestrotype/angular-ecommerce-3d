@@ -14,7 +14,7 @@ export class CategoryFormComponent implements OnInit {
   categoryForm: FormGroup;
   isEditMode = false;
   isLoading = false;
-  categoryId: number | null = null;
+  categoryId: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -32,14 +32,14 @@ export class CategoryFormComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       if (params["id"]) {
-        this.categoryId = +params["id"];
+        this.categoryId = params["id"];
         this.isEditMode = true;
         this.loadCategory(this.categoryId);
       }
     });
   }
 
-  loadCategory(id: number): void {
+  loadCategory(id: string): void {
     this.isLoading = true;
     this.categoryService.getCategoryById(id).subscribe({
       next: (category) => {

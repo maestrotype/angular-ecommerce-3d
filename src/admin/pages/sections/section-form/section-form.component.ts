@@ -20,6 +20,7 @@ export class SectionFormComponent {
   loading = false;
   uploadingImage = false;
   uploadingLogo = false;
+  uploadingCategoryIcon = false;
 
   model3dFile: File | null = null;
   model3dUrl: string | null = null;
@@ -218,34 +219,31 @@ export class SectionFormComponent {
     this.uploadingLogo = false;
   }
 
-  onCategoryIconSelected(event: Event, index: number): void {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) {
-      this.uploadCategoryIcon(file, index);
-    }
+  onCategoryIconSelected(file: File, index: number): void {
+    this.uploadingCategoryIcon = true;
+    this.sectionService.uploadImage(file).subscribe({
+      next: (response) => {
+        if (response?.url) {
+          const baseUrl = window.location.origin;
+          const iconUrl = response.url.startsWith('http') ? response.url : baseUrl + response.url;
+          this.categories.at(index).patchValue({ icon: iconUrl });
+        }
+        this.uploadingCategoryIcon = false;
+      },
+      error: (error) => {
+        console.error('Error uploading category icon:', error);
+        this.snackBar.open('Error uploading category icon', 'Close', { duration: 3000 });
+        this.uploadingCategoryIcon = false;
+      }
+    });
+  }
+
+  onCategoryIconUploaded(url: string, index: number): void {
+    this.categories.at(index).patchValue({ icon: url });
   }
 
   removeCategoryIcon(index: number): void {
     this.categories.at(index).patchValue({ icon: '' });
-  }
-
-  selectCategoryIcon(index: number): void {
-    // Создаем временный input элемент для выбора файла
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = (event: Event) => {
-      const file = (event.target as HTMLInputElement).files?.[0];
-      if (file) {
-        this.uploadCategoryIcon(file, index);
-      }
-    };
-    input.click();
-  }
-
-  private uploadCategoryIcon(file: File, index: number): void {
-    const url = URL.createObjectURL(file);
-    this.categories.at(index).patchValue({ icon: url });
   }
 
   on3dFileSelected(event: Event): void {

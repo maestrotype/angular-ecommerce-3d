@@ -8,6 +8,8 @@ import {
   ProductUpdateRequest,
 } from "../../../models/product.model";
 import { ProductService } from "../../../services/product.service";
+import { CategoryService } from "../../../services/category.service";
+import { Category } from "../../../models/category.model";
 
 @Component({
   selector: "app-product-form",
@@ -26,18 +28,21 @@ export class ProductFormComponent implements OnInit {
   model3dUrl: string | null = null;
   isUploading3d = false;
   dragging3d = false;
+  categories: Category[] = [];
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
-    private productService: ProductService
+    private productService: ProductService,
+    private categoryService: CategoryService
   ) {
     this.productForm = this.createForm();
   }
 
   ngOnInit(): void {
+    this.loadCategories();
     this.route.params.subscribe((params) => {
       if (params["id"]) {
         this.productId = +params["id"];
@@ -61,6 +66,22 @@ export class ProductFormComponent implements OnInit {
 
   get specificationsArray(): FormArray {
     return this.productForm.get("specifications") as FormArray;
+  }
+
+  private loadCategories(): void {
+    this.categoryService.getAllCategories().subscribe({
+      next: (categories) => {
+        this.categories = categories;
+      },
+      error: (error) => {
+        console.error('Error loading categories:', error);
+        this.snackBar.open('Error loading categories', 'Close', { duration: 3000 });
+      }
+    });
+  }
+
+  getCategoryValue(category: Category): string {
+    return category.slug || category.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
   }
 
   addSpecification(): void {
