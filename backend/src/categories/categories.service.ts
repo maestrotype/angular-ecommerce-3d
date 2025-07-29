@@ -23,12 +23,23 @@ export class CategoriesService {
   }
 
   async create(dto: CreateCategoryDto): Promise<Category> {
+    // Generate slug from name if not provided
+    if (!dto.slug) {
+      dto.slug = dto.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+    }
+    
     const category = this.categoryRepository.create(dto);
     return this.categoryRepository.save(category);
   }
 
   async update(id: string, dto: UpdateCategoryDto): Promise<Category> {
     const category = await this.findOne(id);
+    
+    // Generate slug from name if not provided
+    if (dto.name && !dto.slug) {
+      dto.slug = dto.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+    }
+    
     Object.assign(category, dto);
     return this.categoryRepository.save(category);
   }

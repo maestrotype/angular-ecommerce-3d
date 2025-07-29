@@ -6,7 +6,7 @@ interface CategoryDisplay {
     id?: number;
     name: string;
     icon: string;
-    slug: string;
+    slug?: string;
     isActive?: boolean;
 }
 
@@ -33,7 +33,7 @@ export class CategoriesComponent implements OnInit {
                     id: index + 1,
                     name: cat.name,
                     icon: cat.icon || 'assets/icons/default-category.svg',
-                    slug: cat.slug,
+                    slug: cat.slug || cat.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
                     isActive: cat.isActive
                 }));
         } else {
@@ -61,8 +61,9 @@ export class CategoriesComponent implements OnInit {
     }
 
     navigateToCategory(category: CategoryDisplay): void {
+        const slug = category.slug || category.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
         this.router.navigate(['/shop'], { 
-            queryParams: { category: category.slug } 
+            queryParams: { category: slug } 
         });
     }
 }

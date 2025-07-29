@@ -54,21 +54,22 @@ export class OrderListComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  async loadOrders(): Promise<void> {
+  loadOrders(): void {
     this.isLoading = true;
     this.error = null;
 
-    try {
-      this.orderService.getOrders().subscribe(orders => {
+    this.orderService.getOrders().subscribe({
+      next: (orders) => {
         this.dataSource.data = orders;
-      });
-    } catch (error) {
-      console.error('Error loading orders:', error);
-      this.error = 'Failed to load orders';
-      this.snackBar.open('Error loading orders', 'Close', { duration: 3000 });
-    } finally {
-      this.isLoading = false;
-    }
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading orders:', error);
+        this.error = 'Failed to load orders';
+        this.snackBar.open('Error loading orders', 'Close', { duration: 3000 });
+        this.isLoading = false;
+      }
+    });
   }
 
   applyFilter(event: Event): void {
@@ -105,15 +106,17 @@ export class OrderListComponent implements OnInit {
     return `${itemNames} - ${totalItems} items`;
   }
 
-  async updateOrderStatus(order: Order, newStatus: string): Promise<void> {
-    try {
-      await this.orderService.updateOrderStatus(order.id, newStatus);
-      this.snackBar.open('Order status updated successfully', 'Close', { duration: 3000 });
-      await this.loadOrders();
-    } catch (error) {
-      console.error('Error updating order status:', error);
-      this.snackBar.open('Error updating order status', 'Close', { duration: 3000 });
-    }
+  updateOrderStatus(order: Order, newStatus: string): void {
+    this.orderService.updateOrderStatus(order.id, newStatus).subscribe({
+      next: () => {
+        this.snackBar.open('Order status updated successfully', 'Close', { duration: 3000 });
+        this.loadOrders();
+      },
+      error: (error) => {
+        console.error('Error updating order status:', error);
+        this.snackBar.open('Error updating order status', 'Close', { duration: 3000 });
+      }
+    });
   }
 
   viewOrderDetails(order: Order): void {
