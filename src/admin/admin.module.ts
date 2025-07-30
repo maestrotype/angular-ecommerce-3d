@@ -51,7 +51,6 @@ import { ImageUploadComponent } from './components/ui/image-upload/image-upload.
 import { ImageProcessorComponent } from './components/ui/image-processor/image-processor.component';
 import { ImageProcessorDemoComponent } from './pages/image-processor-demo/image-processor-demo.component';
 import { ErrorDialogComponent } from './components/error-dialog/error-dialog.component';
-import { SharedModule } from '../app/shared/shared.module';
 
 
 
@@ -129,7 +128,6 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
-    SharedModule,
   ],
   providers: [
     NotificationService,

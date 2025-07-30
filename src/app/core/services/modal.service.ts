@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { NotificationData } from '../../shared/modal/notification-modal/notification-modal.component';
 
 export interface ModalConfig {
   id: string;
-  type: 'image' | 'cart' | 'auth' | 'custom';
+  type: 'image' | 'cart' | 'auth' | 'notification' | 'custom';
   data?: any;
   options?: {
     closeOnBackdrop?: boolean;
@@ -33,6 +34,62 @@ export class ModalService {
     
     this.modalStack.push(config);
     this.modalStackSubject.next([...this.modalStack]);
+  }
+
+  // Convenience method for opening notification modals
+  openNotification(notificationData: NotificationData): void {
+    const config: ModalConfig = {
+      id: `notification-${Date.now()}`,
+      type: 'notification',
+      data: notificationData,
+      options: {
+        closeOnBackdrop: true,
+        closeOnEscape: true,
+        showCloseButton: false // We have our own close button
+      }
+    };
+    
+    this.openModal(config);
+  }
+
+  // Convenience methods for different notification types
+  showSuccess(title: string, message: string, theme?: 'admin' | 'storefront'): void {
+    this.openNotification({
+      title,
+      message,
+      type: 'success',
+      theme
+    });
+  }
+
+  showError(title: string, message: string, details?: string, theme?: 'admin' | 'storefront'): void {
+    this.openNotification({
+      title,
+      message,
+      details,
+      type: 'error',
+      theme
+    });
+  }
+
+  showWarning(title: string, message: string, details?: string, theme?: 'admin' | 'storefront'): void {
+    this.openNotification({
+      title,
+      message,
+      details,
+      type: 'warning',
+      theme
+    });
+  }
+
+  showInfo(title: string, message: string, details?: string, theme?: 'admin' | 'storefront'): void {
+    this.openNotification({
+      title,
+      message,
+      details,
+      type: 'info',
+      theme
+    });
   }
 
   closeModal(id?: string): void {

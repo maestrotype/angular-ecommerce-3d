@@ -71,12 +71,12 @@ export class CartModalComponent {
     };
     this.cartService.createOrder(orderData).subscribe({
       next: (order) => {
-        alert('Order created successfully');
+        this.modalService.showSuccess('Success', 'Order created successfully', 'storefront');
         this.cartService.clearCart();
         this.onClose();
       },
       error: (err) => {
-        alert('Error creating order');
+        this.modalService.showError('Error', 'Failed to create order', err.message, 'storefront');
       }
     });
   }

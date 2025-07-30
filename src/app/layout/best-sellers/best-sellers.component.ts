@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Product } from 'src/shared/models/product.model';
 import { ProductService } from '../../core/services/product.service';
 import { Section } from 'src/shared/models/section.model';
+import { ModalService } from '../../core/services/modal.service';
 
 @Component({
     selector: 'app-best-sellers',
@@ -15,7 +16,8 @@ export class BestSellersComponent implements OnInit {
 
     constructor(
         private router: Router,
-        private productService: ProductService
+        private productService: ProductService,
+        private modalService: ModalService
     ) { }
 
     ngOnInit(): void {
@@ -23,7 +25,7 @@ export class BestSellersComponent implements OnInit {
             next: (products) => this.bestSellers = products,
             error: (err) => {
               console.error('Error loading best sellers:', err);
-              alert('Error loading best sellers.');
+              this.modalService.showError('Error', 'Failed to load best sellers', err.message, 'storefront');
             }
           });
     }

@@ -6,6 +6,9 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { SharedModule } from './shared/shared.module';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -41,8 +44,9 @@ import { SectionRendererComponent } from './components/section-renderer/section-
 // Favorites Components
 import { FavoritesComponent } from './pages/favorites/favorites.component';
 
-// Shared Module
-import { SharedModule } from './shared/shared.module';
+// Modal Components
+import { NotificationModalComponent } from './shared/modal/notification-modal/notification-modal.component';
+import { FavoriteButtonComponent } from './shared/favorite-button/favorite-button.component';
 
 // Services
 import { ThemeService } from './core/themes/theme.service';
@@ -76,15 +80,19 @@ import { ThemeService } from './core/themes/theme.service';
     IconComponent, 
     ThreeDViewerComponent, 
     SectionRendererComponent,
-    FavoritesComponent
+    FavoritesComponent,
+    NotificationModalComponent,
+    FavoriteButtonComponent
   ],
-  imports: [
+      imports: [
     BrowserModule, 
     BrowserAnimationsModule, 
     HttpClientModule, 
     FormsModule, 
     RouterModule, 
     AppRoutingModule,
+    MatIconModule,
+    MatButtonModule,
     SharedModule
   ],
   providers: [

@@ -19,7 +19,7 @@ export class SpecialOfferComponent implements OnInit {
             next: (products) => this.specialOffers = products,
             error: (err) => {
               console.error('Error loading special offers:', err);
-              alert('Error loading special offers.');
+              // Error handling is now done in the service with fallback data
             }
           });
     }

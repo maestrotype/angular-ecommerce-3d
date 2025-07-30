@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../components/error-dialog/error-dialog.component';
+import { ModalService } from '../../app/core/services/modal.service';
 
 export interface ErrorInfo {
   title: string;
@@ -19,143 +20,85 @@ export class ErrorHandlerService {
 
   constructor(
     private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private modalService: ModalService
   ) {}
 
   showError(error: ErrorInfo): void {
-    this.showSnackBar(error);
+    this.modalService.showError(error.title, error.message, error.details, 'admin');
   }
 
   showErrorWithDialog(error: ErrorInfo): void {
-    this.dialog.open(ErrorDialogComponent, {
-      width: '500px',
-      data: error,
-      disableClose: false
-    });
+    this.modalService.showError(error.title, error.message, error.details, 'admin');
   }
 
   showImageProcessingError(error: any): void {
-    let errorInfo: ErrorInfo;
+    let title = 'Processing error';
+    let message = 'Failed to process image. Try again or contact administrator.';
+    let details = error.message || 'Unknown error';
 
     if (error.status === 413) {
-      errorInfo = {
-        title: 'File too large',
-        message: 'File size exceeds the allowed limit (10MB). Please select a smaller file.',
-        type: 'error',
-        action: 'OK'
-      };
+      title = 'File too large';
+      message = 'File size exceeds the allowed limit (10MB). Please select a smaller file.';
+      details = undefined;
     } else if (error.status === 415) {
-      errorInfo = {
-        title: 'Unsupported format',
-        message: 'File format is not supported. Use JPG, PNG or WEBP files.',
-        type: 'error',
-        action: 'OK'
-      };
+      title = 'Unsupported format';
+      message = 'File format is not supported. Use JPG, PNG or WEBP files.';
+      details = undefined;
     } else if (error.status === 401) {
-      errorInfo = {
-        title: 'Authorization error',
-        message: 'Failed to authorize with background removal service. Check API settings.',
-        type: 'error',
-        action: 'Configure API'
-      };
+      title = 'Authorization error';
+      message = 'Failed to authorize with background removal service. Check API settings.';
+      details = undefined;
     } else if (error.status === 429) {
-      errorInfo = {
-        title: 'Rate limit exceeded',
-        message: 'Rate limit exceeded for background removal service. Try again later.',
-        type: 'warning',
-        action: 'Try later'
-      };
+      title = 'Rate limit exceeded';
+      message = 'Rate limit exceeded for background removal service. Try again later.';
+      details = undefined;
     } else if (error.status === 500) {
-      errorInfo = {
-        title: 'Server error',
-        message: 'Internal server error occurred while processing image.',
-        type: 'error',
-        action: 'Retry'
-      };
-    } else {
-      errorInfo = {
-        title: 'Processing error',
-        message: 'Failed to process image. Try again or contact administrator.',
-        details: error.message || 'Unknown error',
-        type: 'error',
-        action: 'Retry'
-      };
+      title = 'Server error';
+      message = 'Internal server error occurred while processing image.';
+      details = undefined;
     }
 
-    this.showErrorWithDialog(errorInfo);
+    this.modalService.showError(title, message, details, 'admin');
   }
 
   showDatabaseError(error: any): void {
-    const errorInfo: ErrorInfo = {
-      title: 'Database error',
-      message: 'Failed to perform database operation.',
-      details: error.message || 'Unknown database error',
-      type: 'error',
-      action: 'Retry'
-    };
-
-    this.showErrorWithDialog(errorInfo);
+    this.modalService.showError(
+      'Database error',
+      'Failed to perform database operation.',
+      error.message || 'Unknown database error',
+      'admin'
+    );
   }
 
   showNetworkError(error: any): void {
-    const errorInfo: ErrorInfo = {
-      title: 'Network error',
-      message: 'Failed to connect to server. Check internet connection.',
-      details: error.message || 'Network error',
-      type: 'error',
-      action: 'Retry'
-    };
-
-    this.showErrorWithDialog(errorInfo);
+    this.modalService.showError(
+      'Network error',
+      'Failed to connect to server. Check internet connection.',
+      error.message || 'Network error',
+      'admin'
+    );
   }
 
   showValidationError(errors: string[]): void {
-    const errorInfo: ErrorInfo = {
-      title: 'Validation error',
-      message: 'Please fix the following errors:',
-      details: errors.join('\n'),
-      type: 'warning',
-      action: 'Fix'
-    };
-
-    this.showErrorWithDialog(errorInfo);
+    this.modalService.showWarning(
+      'Validation error',
+      'Please fix the following errors:',
+      errors.join('\n'),
+      'admin'
+    );
   }
 
   showSuccess(message: string): void {
-    this.showSnackBar({
-      title: 'Success',
-      message,
-      type: 'success'
-    });
-  }
-
-  showInfo(message: string): void {
-    this.showSnackBar({
-      title: 'Information',
-      message,
-      type: 'info'
-    });
+    this.modalService.showSuccess('Success', message, 'admin');
   }
 
   showWarning(message: string): void {
-    this.showSnackBar({
-      title: 'Warning',
-      message,
-      type: 'warning'
-    });
+    this.modalService.showWarning('Warning', message, undefined, 'admin');
   }
 
-  private showSnackBar(error: ErrorInfo): void {
-    const duration = error.type === 'success' ? 3000 : 5000;
-    
-    this.snackBar.open(
-      `${error.title}: ${error.message}`,
-      error.action || 'Закрыть',
-      {
-        duration,
-        panelClass: [`admin-snackbar-${error.type}`]
-      }
-    );
+  showInfo(message: string): void {
+    this.modalService.showInfo('Information', message, undefined, 'admin');
   }
 
   handleGlobalError(error: any): void {
@@ -164,21 +107,19 @@ export class ErrorHandlerService {
     if (error.status === 0) {
       this.showNetworkError(error);
     } else if (error.status >= 500) {
-      this.showErrorWithDialog({
-        title: 'Server error',
-        message: 'Server error occurred. Try again later.',
-        details: error.message,
-        type: 'error',
-        action: 'Retry'
-      });
+      this.modalService.showError(
+        'Server error',
+        'Server error occurred. Try again later.',
+        error.message,
+        'admin'
+      );
     } else {
-      this.showErrorWithDialog({
-        title: 'Error',
-        message: 'An unexpected error occurred.',
-        details: error.message,
-        type: 'error',
-        action: 'Close'
-      });
+      this.modalService.showError(
+        'Error',
+        'An unexpected error occurred.',
+        error.message,
+        'admin'
+      );
     }
   }
 } 

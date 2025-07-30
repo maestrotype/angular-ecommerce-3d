@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
       next: (products) => this.bestSellers = products,
       error: (err) => {
         console.error('Error loading best sellers:', err);
-        alert('Error loading best sellers.');
+        // Error handling is now done in the service with fallback data
       }
     });
 
@@ -35,7 +35,7 @@ export class HomeComponent implements OnInit {
       next: (products) => this.specialOffer = products[0],
       error: (err) => {
         console.error('Error loading special offers:', err);
-        alert('Error loading special offers.');
+        // Error handling is now done in the service with fallback data
       }
     });
   }
