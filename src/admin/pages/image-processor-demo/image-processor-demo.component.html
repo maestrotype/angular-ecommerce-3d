@@ -1,0 +1,57 @@
+<div class="demo-container">
+  <div class="demo-header">
+    <h1>🖼️ Image Processing Demo</h1>
+    <p>Upload JPG images and automatically convert them to PNG with transparent background</p>
+  </div>
+
+  <div class="demo-content">
+    <div class="options-panel">
+      <h3>Processing Options</h3>
+      <div class="options-grid">
+        <mat-slide-toggle
+          [(ngModel)]="processingOptions.removeBackground"
+          (change)="updateProcessingOptions()"
+          color="primary">
+          <strong>Remove Background</strong>
+          <p>Automatically remove background using AI</p>
+        </mat-slide-toggle>
+        
+        <mat-slide-toggle
+          [(ngModel)]="processingOptions.optimize"
+          (change)="updateProcessingOptions()"
+          color="primary">
+          <strong>Optimize Image</strong>
+          <p>Resize and compress for web use</p>
+        </mat-slide-toggle>
+      </div>
+    </div>
+
+    <div class="processor-section">
+      <app-image-processor
+        label="Upload Product Image"
+        placeholder="Drop your JPG image here"
+        [control]="imageControl"
+        [processingOptions]="processingOptions"
+        (fileProcessed)="onFileProcessed($event)"
+        (processingError)="onProcessingError($event)">
+      </app-image-processor>
+    </div>
+
+    <div class="results-section" *ngIf="processedResults.length > 0">
+      <h3>Processing History</h3>
+      <div class="results-grid">
+        <div class="result-card" *ngFor="let result of processedResults; let i = index">
+          <div class="result-image">
+            <img [src]="result.url" [alt]="'Processed image ' + (i + 1)" />
+          </div>
+          <div class="result-info">
+            <p><strong>Format:</strong> {{ result.format }}</p>
+            <p><strong>Original:</strong> {{ result.originalFormat }}</p>
+            <p><strong>Size:</strong> {{ (result.size / 1024).toFixed(1) }} KB</p>
+            <p><strong>Status:</strong> ✅ Processed</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

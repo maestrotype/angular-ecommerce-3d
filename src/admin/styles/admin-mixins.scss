@@ -1,0 +1,238 @@
+// Admin Panel Mixins
+
+// Card Styles
+@mixin admin-card {
+  background: var(--admin-bg-card);
+  border: 1px solid var(--admin-border-primary);
+  border-radius: var(--admin-radius-md);
+  box-shadow: 0 2px 4px var(--admin-shadow-light);
+  padding: var(--admin-spacing-lg);
+  margin-bottom: var(--admin-spacing-lg);
+}
+
+@mixin admin-card-hover {
+  box-shadow: 0 4px 8px var(--admin-shadow-medium);
+  border-color: var(--admin-border-focus);
+  transition: all 0.3s ease;
+}
+
+// Button Styles
+@mixin admin-button-primary {
+  background: var(--admin-primary);
+  color: var(--admin-text-inverse);
+  border: none;
+  border-radius: var(--admin-radius-sm);
+  padding: var(--admin-spacing-sm) var(--admin-spacing-lg);
+  font-size: var(--admin-font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: var(--admin-primary-dark);
+    box-shadow: 0 2px 4px var(--admin-shadow-medium);
+  }
+  
+  &:disabled {
+    background: var(--admin-surface-disabled);
+    color: var(--admin-text-disabled);
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+}
+
+@mixin admin-button-secondary {
+  background: var(--admin-surface);
+  color: var(--admin-text-primary);
+  border: 1px solid var(--admin-border-primary);
+  border-radius: var(--admin-radius-sm);
+  padding: var(--admin-spacing-sm) var(--admin-spacing-lg);
+  font-size: var(--admin-font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: var(--admin-surface-hover);
+    border-color: var(--admin-border-focus);
+  }
+  
+  &:disabled {
+    background: var(--admin-surface-disabled);
+    color: var(--admin-text-disabled);
+    cursor: not-allowed;
+  }
+}
+
+@mixin admin-button-danger {
+  background: var(--admin-error);
+  color: var(--admin-text-inverse);
+  border: none;
+  border-radius: var(--admin-radius-sm);
+  padding: var(--admin-spacing-sm) var(--admin-spacing-lg);
+  font-size: var(--admin-font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: var(--admin-error-dark);
+    box-shadow: 0 2px 4px var(--admin-shadow-medium);
+  }
+}
+
+// Form Styles
+@mixin admin-form-field {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border-primary);
+  border-radius: var(--admin-radius-sm);
+  padding: var(--admin-spacing-sm) var(--admin-spacing-md);
+  font-size: var(--admin-font-size-sm);
+  color: var(--admin-text-primary);
+  transition: all 0.3s ease;
+  
+  &:focus {
+    outline: none;
+    border-color: var(--admin-border-focus);
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+  }
+  
+  &:disabled {
+    background: var(--admin-surface-disabled);
+    color: var(--admin-text-disabled);
+    cursor: not-allowed;
+  }
+}
+
+@mixin admin-form-label {
+  color: var(--admin-text-primary);
+  font-size: var(--admin-font-size-sm);
+  font-weight: 500;
+  margin-bottom: var(--admin-spacing-xs);
+  display: block;
+}
+
+// Status Styles
+@mixin admin-status-success {
+  color: var(--admin-success);
+  background: rgba(76, 175, 80, 0.1);
+  border: 1px solid var(--admin-border-success);
+}
+
+@mixin admin-status-warning {
+  color: var(--admin-warning);
+  background: rgba(255, 152, 0, 0.1);
+  border: 1px solid var(--admin-border-warning);
+}
+
+@mixin admin-status-error {
+  color: var(--admin-error);
+  background: rgba(244, 67, 54, 0.1);
+  border: 1px solid var(--admin-border-error);
+}
+
+@mixin admin-status-info {
+  color: var(--admin-info);
+  background: rgba(33, 150, 243, 0.1);
+  border: 1px solid var(--admin-info);
+}
+
+// Layout Styles
+@mixin admin-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--admin-spacing-lg);
+}
+
+@mixin admin-row {
+  display: flex;
+  gap: var(--admin-spacing-lg);
+  margin-bottom: var(--admin-spacing-lg);
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: var(--admin-spacing-md);
+  }
+}
+
+@mixin admin-col($width: 1) {
+  flex: $width;
+  min-width: 0;
+}
+
+// Typography
+@mixin admin-heading($level: 1) {
+  color: var(--admin-text-primary);
+  font-weight: 500;
+  margin-bottom: var(--admin-spacing-md);
+  
+  @if $level == 1 {
+    font-size: var(--admin-font-size-xxl);
+  } @else if $level == 2 {
+    font-size: var(--admin-font-size-xl);
+  } @else if $level == 3 {
+    font-size: var(--admin-font-size-lg);
+  } @else if $level == 4 {
+    font-size: var(--admin-font-size-md);
+  } @else {
+    font-size: var(--admin-font-size-sm);
+  }
+}
+
+@mixin admin-text {
+  color: var(--admin-text-primary);
+  font-size: var(--admin-font-size-sm);
+  line-height: 1.5;
+}
+
+@mixin admin-text-secondary {
+  color: var(--admin-text-secondary);
+  font-size: var(--admin-font-size-sm);
+  line-height: 1.5;
+}
+
+// Animation
+@mixin admin-fade-in {
+  animation: adminFadeIn 0.3s ease-in-out;
+}
+
+@mixin admin-slide-in {
+  animation: adminSlideIn 0.3s ease-out;
+}
+
+@keyframes adminFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes adminSlideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// Responsive
+@mixin admin-responsive($breakpoint) {
+  @if $breakpoint == mobile {
+    @media (max-width: 768px) {
+      @content;
+    }
+  } @else if $breakpoint == tablet {
+    @media (max-width: 1024px) {
+      @content;
+    }
+  } @else if $breakpoint == desktop {
+    @media (min-width: 1025px) {
+      @content;
+    }
+  }
+} 

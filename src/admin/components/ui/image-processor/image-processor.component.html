@@ -1,0 +1,97 @@
+<div class="image-processor">
+  <div class="upload-section">
+    <label class="upload-label">{{ label }}</label>
+    
+    <div class="file-input-container" [class.processing]="isProcessing">
+      <input
+        type="file"
+        #fileInput
+        (change)="onFileSelected($event)"
+        accept="image/*"
+        [disabled]="isProcessing"
+        class="file-input"
+      />
+      
+      <div class="upload-area" (click)="fileInput.click()">
+        <mat-icon class="upload-icon">cloud_upload</mat-icon>
+        <p class="upload-text">{{ placeholder }}</p>
+        <p class="upload-hint">JPG, PNG, WEBP up to 10MB</p>
+      </div>
+    </div>
+
+    <div class="processing-options" *ngIf="selectedFile">
+      <mat-slide-toggle
+        [(ngModel)]="processingOptions.removeBackground"
+        [disabled]="isProcessing"
+        color="primary">
+        Remove Background
+      </mat-slide-toggle>
+      
+      <mat-slide-toggle
+        [(ngModel)]="processingOptions.optimize"
+        [disabled]="isProcessing"
+        color="primary">
+        Optimize Image
+      </mat-slide-toggle>
+    </div>
+  </div>
+
+  <div class="preview-section" *ngIf="selectedFile">
+    <div class="preview-container">
+      <div class="original-preview">
+        <h4>Original</h4>
+        <div class="image-container">
+          <img [src]="previewUrl" [alt]="selectedFile.name" />
+        </div>
+        <div class="file-info">
+          <p><strong>Name:</strong> {{ selectedFile.name }}</p>
+          <p><strong>Size:</strong> {{ getFileSize(selectedFile.size) }}</p>
+          <p><strong>Type:</strong> {{ selectedFile.type }}</p>
+        </div>
+      </div>
+
+      <div class="processed-preview" *ngIf="processedUrl">
+        <h4>Processed (PNG)</h4>
+        <div class="image-container">
+          <img [src]="processedUrl" [alt]="selectedFile.name + ' (processed)'" />
+        </div>
+        <div class="file-info">
+          <p><strong>Format:</strong> PNG (transparent background)</p>
+          <p><strong>Status:</strong> ✅ Processed</p>
+        </div>
+      </div>
+
+      <div class="processing-preview" *ngIf="isProcessing">
+        <h4>Processing...</h4>
+        <div class="loading-container">
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Removing background and converting to PNG...</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button
+        mat-raised-button
+        color="warn"
+        (click)="removeImage()"
+        [disabled]="isProcessing">
+        <mat-icon>delete</mat-icon>
+        Remove
+      </button>
+      
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="processImage()"
+        [disabled]="isProcessing || !selectedFile">
+        <mat-icon>refresh</mat-icon>
+        Reprocess
+      </button>
+    </div>
+  </div>
+
+          <div class="error-message" *ngIf="control?.errors && control.touched">
+          <mat-error>{{ control.errors | json }}</mat-error>
+        </div>
+</div> 

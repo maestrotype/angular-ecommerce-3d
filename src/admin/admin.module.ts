@@ -48,13 +48,19 @@ import { FormFieldComponent } from './components/ui/form-field/form-field.compon
 import { ActionButtonComponent } from './components/ui/action-button/action-button.component';
 import { CategoryFormComponent } from './pages/categories/category-form/category-form.component';
 import { ImageUploadComponent } from './components/ui/image-upload/image-upload.component';
+import { ImageProcessorComponent } from './components/ui/image-processor/image-processor.component';
+import { ImageProcessorDemoComponent } from './pages/image-processor-demo/image-processor-demo.component';
+import { ErrorDialogComponent } from './components/error-dialog/error-dialog.component';
 import { SharedModule } from '../app/shared/shared.module';
+
+
 
 // Services
 import { NotificationService } from './services/notification.service';
 import { DashboardService } from './services/dashboard.service';
 import { MessageService } from './services/message.service';
 import { SectionService } from './services/section.service';
+import { ErrorHandlerService } from './services/error-handler.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -82,6 +88,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormFieldComponent,
     ActionButtonComponent,
     ImageUploadComponent,
+    ImageProcessorComponent,
+    ImageProcessorDemoComponent,
+    ErrorDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -126,7 +135,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     NotificationService,
     DashboardService,
     MessageService,
-    SectionService
+    SectionService,
+    ErrorHandlerService
   ]
 })
 export class AdminModule { }

@@ -1,0 +1,206 @@
+@import '../../../styles/admin-variables.scss';
+@import '../../../styles/admin-mixins.scss';
+
+.image-processor {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  @include admin-card;
+}
+
+.upload-section {
+  margin-bottom: var(--admin-spacing-lg);
+}
+
+.upload-label {
+  @include admin-form-label;
+}
+
+.file-input-container {
+  position: relative;
+  border: 2px dashed var(--admin-border-primary);
+  border-radius: var(--admin-radius-md);
+  padding: var(--admin-spacing-xl);
+  text-align: center;
+  transition: all 0.3s ease;
+  background: var(--admin-bg-tertiary);
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--admin-border-focus);
+    background: var(--admin-surface-hover);
+  }
+
+  &.processing {
+    border-color: var(--admin-warning);
+    background: rgba(255, 152, 0, 0.1);
+    cursor: not-allowed;
+  }
+}
+
+.file-input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.upload-area {
+  pointer-events: none;
+}
+
+.upload-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  color: var(--admin-text-secondary);
+  margin-bottom: var(--admin-spacing-md);
+}
+
+.upload-text {
+  font-size: var(--admin-font-size-lg);
+  font-weight: 500;
+  margin: 0 0 var(--admin-spacing-sm) 0;
+  color: var(--admin-text-primary);
+}
+
+.upload-hint {
+  font-size: var(--admin-font-size-sm);
+  color: var(--admin-text-secondary);
+  margin: 0;
+}
+
+.processing-options {
+  margin-top: var(--admin-spacing-md);
+  display: flex;
+  gap: var(--admin-spacing-lg);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.preview-section {
+  margin-top: var(--admin-spacing-lg);
+}
+
+.preview-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--admin-spacing-lg);
+  margin-bottom: var(--admin-spacing-lg);
+
+  @include admin-responsive(mobile) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.original-preview,
+.processed-preview,
+.processing-preview {
+  @include admin-card;
+  text-align: center;
+
+  h4 {
+    @include admin-heading(4);
+    margin: 0 0 var(--admin-spacing-md) 0;
+  }
+}
+
+.image-container {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--admin-bg-tertiary);
+  border-radius: var(--admin-radius-sm);
+  margin-bottom: var(--admin-spacing-md);
+  overflow: hidden;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: var(--admin-radius-sm);
+  }
+}
+
+.file-info {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border-primary);
+  border-radius: var(--admin-radius-sm);
+  padding: var(--admin-spacing-sm);
+
+  p {
+    @include admin-text-secondary;
+    margin: var(--admin-spacing-xs) 0;
+    
+    strong {
+      color: var(--admin-text-primary);
+    }
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--admin-spacing-md);
+  padding: var(--admin-spacing-lg);
+
+  p {
+    @include admin-text-secondary;
+    margin: 0;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: var(--admin-spacing-sm);
+  justify-content: center;
+  flex-wrap: wrap;
+
+  button {
+    @include admin-button-primary;
+    
+    &[color="warn"] {
+      @include admin-button-danger;
+    }
+  }
+}
+
+.error-message {
+  margin-top: var(--admin-spacing-md);
+  padding: var(--admin-spacing-sm);
+  @include admin-status-error;
+  border-radius: var(--admin-radius-sm);
+}
+
+// Responsive
+@include admin-responsive(mobile) {
+  .image-processor {
+    padding: var(--admin-spacing-md);
+  }
+  
+  .file-input-container {
+    padding: var(--admin-spacing-lg);
+  }
+  
+  .upload-icon {
+    font-size: 36px;
+    width: 36px;
+    height: 36px;
+  }
+  
+  .upload-text {
+    font-size: var(--admin-font-size-md);
+  }
+  
+  .actions {
+    flex-direction: column;
+    
+    button {
+      width: 100%;
+    }
+  }
+} 
