@@ -14,18 +14,17 @@
       </mat-card-header>
 
       <mat-card-content class="form-content">
-        <div class="form-row">
-          <mat-form-field appearance="outline" class="full-width">
+        <!-- Basic Information Grid -->
+        <div class="form-grid">
+          <mat-form-field appearance="outline" class="form-field">
             <mat-label>{{ 'PRODUCT_NAME' | translate }}</mat-label>
             <input matInput formControlName="name" [placeholder]="'PRODUCT_NAME_PLACEHOLDER' | translate" />
             <mat-error *ngIf="productForm.get('name')?.hasError('required')">
               {{ 'PRODUCT_NAME_REQUIRED' | translate }}
             </mat-error>
           </mat-form-field>
-        </div>
 
-        <div class="form-row">
-          <mat-form-field appearance="outline" class="half-width">
+          <mat-form-field appearance="outline" class="form-field">
             <mat-label>{{ 'CATEGORY' | translate }}</mat-label>
             <mat-select formControlName="category">
               <mat-option *ngFor="let category of categories" [value]="getCategoryValue(category)">
@@ -37,7 +36,7 @@
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="half-width">
+          <mat-form-field appearance="outline" class="form-field">
             <mat-label>{{ 'PRICE' | translate }}</mat-label>
             <input matInput type="number" formControlName="price" [placeholder]="'PRICE_PLACEHOLDER' | translate"
               step="0.01" />
@@ -49,10 +48,8 @@
               {{ 'PRICE_MIN' | translate }}
             </mat-error>
           </mat-form-field>
-        </div>
 
-        <div class="form-row">
-          <mat-form-field appearance="outline" class="half-width">
+          <mat-form-field appearance="outline" class="form-field">
             <mat-label>{{ 'STOCK_QUANTITY' | translate }}</mat-label>
             <input matInput type="number" formControlName="stock" [placeholder]="'STOCK_PLACEHOLDER' | translate"
               min="0" />
@@ -63,27 +60,64 @@
               {{ 'STOCK_MIN' | translate }}
             </mat-error>
           </mat-form-field>
+        </div>
 
-          <div class="half-width image-upload-section">
-            <label class="image-upload-label">{{ 'PRODUCT_IMAGE' | translate }}</label>
-            <div class="image-upload-area">
+        <!-- Image Upload Section Grid -->
+        <div class="image-upload-grid">
+          <div class="upload-section">
+            <label class="section-label">{{ 'PRODUCT_IMAGE' | translate }}</label>
+            
+            <!-- Upload Area -->
+            <div class="upload-area">
               <input type="file" #fileInput (change)="onFilesSelected($event)" accept="image/png,image/jpeg,image/jpg"
                 multiple style="display: none" />
-
-              <div class="image-previews">
-                <div *ngFor="let url of imageUrls; let i = index" class="image-preview">
-                  <img [src]="url" alt="Preview" class="preview-image" />
-                  <button mat-icon-button type="button" (click)="removeImageAt(i)">
-                    <mat-icon>close</mat-icon>
+              
+              <div class="drop-zone" (click)="fileInput.click()" (dragover)="onDragOver($event)" (drop)="onDrop($event)">
+                <div class="upload-content">
+                  <mat-icon class="upload-icon">cloud_upload</mat-icon>
+                  <h3>Upload Images</h3>
+                  <p>PNG, JPG files only. Multiple files allowed.</p>
+                  <button type="button" class="upload-button" mat-stroked-button [disabled]="isUploading">
+                    <mat-icon>add_photo_alternate</mat-icon>
+                    {{ isUploading ? 'Uploading...' : 'Upload Images' }}
                   </button>
                 </div>
               </div>
+            </div>
+          </div>
 
-              <button mat-stroked-button type="button" (click)="fileInput.click()" [disabled]="isUploading">
-                <mat-icon>cloud_upload</mat-icon>
-                {{ isUploading ? 'Uploading...' : 'Upload Images' }}
-              </button>
-              <p class="upload-hint">PNG, JPG files only. Multiple files allowed.</p>
+          <div class="preview-section">
+            <!-- Image Preview Grid -->
+            <div class="image-preview-grid" *ngIf="imageUrls.length > 0">
+              <div class="preview-item" *ngFor="let imageUrl of imageUrls; let i = index">
+                <div class="preview-container">
+                  <img [src]="imageUrl" [alt]="'Product image ' + (i + 1)" />
+                  <div class="preview-overlay">
+                    <button type="button" class="remove-btn" (click)="removeImageAt(i)" mat-icon-button>
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Processing Options -->
+            <div class="processing-options">
+              <div class="options-grid">
+                <mat-slide-toggle 
+                  [(ngModel)]="imageProcessingOptions.removeBackground"
+                  [ngModelOptions]="{standalone: true}"
+                  color="primary">
+                  Remove Background
+                </mat-slide-toggle>
+                
+                <mat-slide-toggle 
+                  [(ngModel)]="imageProcessingOptions.optimize"
+                  [ngModelOptions]="{standalone: true}"
+                  color="primary">
+                  Optimize Image
+                </mat-slide-toggle>
+              </div>
             </div>
           </div>
         </div>

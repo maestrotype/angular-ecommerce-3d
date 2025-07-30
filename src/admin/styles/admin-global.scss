@@ -1,0 +1,387 @@
+@import './admin-variables.scss';
+@import './admin-mixins.scss';
+
+// Global Admin Styles
+
+// Snackbar Styles
+.admin-snackbar-success {
+  background: var(--admin-success) !important;
+  color: var(--admin-text-inverse) !important;
+  
+  .mat-simple-snackbar-action {
+    color: var(--admin-text-inverse) !important;
+  }
+}
+
+.admin-snackbar-error {
+  background: var(--admin-error) !important;
+  color: var(--admin-text-inverse) !important;
+  
+  .mat-simple-snackbar-action {
+    color: var(--admin-text-inverse) !important;
+  }
+}
+
+.admin-snackbar-warning {
+  background: var(--admin-warning) !important;
+  color: var(--admin-text-inverse) !important;
+  
+  .mat-simple-snackbar-action {
+    color: var(--admin-text-inverse) !important;
+  }
+}
+
+.admin-snackbar-info {
+  background: var(--admin-info) !important;
+  color: var(--admin-text-inverse) !important;
+  
+  .mat-simple-snackbar-action {
+    color: var(--admin-text-inverse) !important;
+  }
+}
+
+// Dialog Styles
+.mat-mdc-dialog-container {
+  .mdc-dialog__surface {
+    background: var(--admin-bg-card) !important;
+    border-radius: var(--admin-radius-md) !important;
+  }
+}
+
+// Form Field Styles
+.mat-mdc-form-field {
+  .mat-mdc-form-field-flex {
+    background: var(--admin-surface) !important;
+  }
+  
+  .mat-mdc-text-field-wrapper {
+    background: var(--admin-surface) !important;
+  }
+  
+  .mat-mdc-form-field-focus-overlay {
+    background: var(--admin-surface) !important;
+  }
+  
+  .mat-mdc-form-field-label {
+    color: var(--admin-text-secondary) !important;
+  }
+  
+  .mat-mdc-input-element {
+    color: var(--admin-text-primary) !important;
+  }
+  
+  .mat-mdc-form-field-underline {
+    background: var(--admin-border-primary) !important;
+  }
+  
+  &.mat-focused {
+    .mat-mdc-form-field-underline {
+      background: var(--admin-border-focus) !important;
+    }
+    
+    .mat-mdc-form-field-label {
+      color: var(--admin-border-focus) !important;
+    }
+  }
+}
+
+// Button Styles
+.mat-mdc-raised-button {
+  &.mat-primary {
+    background: var(--admin-primary) !important;
+    color: var(--admin-text-inverse) !important;
+    
+    &:hover {
+      background: var(--admin-primary-dark) !important;
+    }
+    
+    &:disabled {
+      background: var(--admin-surface-disabled) !important;
+      color: var(--admin-text-disabled) !important;
+    }
+  }
+  
+  &.mat-warn {
+    background: var(--admin-error) !important;
+    color: var(--admin-text-inverse) !important;
+    
+    &:hover {
+      background: var(--admin-error-dark) !important;
+    }
+  }
+  
+  &.mat-accent {
+    background: var(--admin-secondary) !important;
+    color: var(--admin-text-inverse) !important;
+    
+    &:hover {
+      background: var(--admin-secondary-dark) !important;
+    }
+  }
+}
+
+.mat-mdc-stroked-button {
+  border-color: var(--admin-border-primary) !important;
+  color: var(--admin-text-primary) !important;
+  
+  &:hover {
+    background: var(--admin-surface-hover) !important;
+    border-color: var(--admin-border-focus) !important;
+  }
+  
+  &:disabled {
+    border-color: var(--admin-border-primary) !important;
+    color: var(--admin-text-disabled) !important;
+  }
+}
+
+// Card Styles
+.mat-mdc-card {
+  background: var(--admin-bg-card) !important;
+  border: 1px solid var(--admin-border-primary) !important;
+  border-radius: var(--admin-radius-md) !important;
+  box-shadow: 0 2px 4px var(--admin-shadow-light) !important;
+  
+  .mat-mdc-card-header {
+    background: var(--admin-bg-tertiary) !important;
+    border-bottom: 1px solid var(--admin-border-primary) !important;
+    
+    .mat-mdc-card-title {
+      color: var(--admin-text-primary) !important;
+    }
+    
+    .mat-mdc-card-subtitle {
+      color: var(--admin-text-secondary) !important;
+    }
+  }
+  
+  .mat-mdc-card-content {
+    color: var(--admin-text-primary) !important;
+  }
+}
+
+// Table Styles
+.mat-mdc-table {
+  background: var(--admin-surface) !important;
+  
+  .mat-mdc-header-row {
+    background: var(--admin-bg-tertiary) !important;
+    
+    .mat-mdc-header-cell {
+      color: var(--admin-text-primary) !important;
+      font-weight: 500 !important;
+    }
+  }
+  
+  .mat-mdc-row {
+    &:hover {
+      background: var(--admin-surface-hover) !important;
+    }
+    
+    .mat-mdc-cell {
+      color: var(--admin-text-primary) !important;
+    }
+  }
+}
+
+// Paginator Styles
+.mat-mdc-paginator {
+  background: var(--admin-surface) !important;
+  border-top: 1px solid var(--admin-border-primary) !important;
+  
+  .mat-mdc-paginator-navigation-previous,
+  .mat-mdc-paginator-navigation-next,
+  .mat-mdc-paginator-navigation-first,
+  .mat-mdc-paginator-navigation-last {
+    color: var(--admin-text-primary) !important;
+    
+    &:disabled {
+      color: var(--admin-text-disabled) !important;
+    }
+  }
+  
+  .mat-mdc-paginator-range-label {
+    color: var(--admin-text-secondary) !important;
+  }
+}
+
+// Select Styles
+.mat-mdc-select {
+  color: var(--admin-text-primary) !important;
+}
+
+.mat-mdc-select-panel {
+  background: var(--admin-surface) !important;
+  border: 1px solid var(--admin-border-primary) !important;
+  
+  .mat-mdc-option {
+    color: var(--admin-text-primary) !important;
+    
+    &:hover {
+      background: var(--admin-surface-hover) !important;
+    }
+    
+    &.mat-mdc-option-active {
+      background: var(--admin-surface-active) !important;
+    }
+  }
+}
+
+// Checkbox Styles
+.mat-mdc-checkbox {
+  .mat-mdc-checkbox-frame {
+    border-color: var(--admin-border-primary) !important;
+  }
+  
+  .mat-mdc-checkbox-checkmark {
+    color: var(--admin-text-inverse) !important;
+  }
+  
+  &.mat-mdc-checkbox-checked {
+    .mat-mdc-checkbox-frame {
+      background: var(--admin-primary) !important;
+      border-color: var(--admin-primary) !important;
+    }
+  }
+}
+
+// Radio Button Styles
+.mat-mdc-radio-button {
+  .mat-mdc-radio-outer-circle {
+    border-color: var(--admin-border-primary) !important;
+  }
+  
+  .mat-mdc-radio-inner-circle {
+    background: var(--admin-primary) !important;
+  }
+  
+  &.mat-mdc-radio-checked {
+    .mat-mdc-radio-outer-circle {
+      border-color: var(--admin-primary) !important;
+    }
+  }
+}
+
+// Slide Toggle Styles
+.mat-mdc-slide-toggle {
+  .mat-mdc-slide-toggle-bar {
+    background: var(--admin-border-primary) !important;
+  }
+  
+  .mat-mdc-slide-toggle-thumb {
+    background: var(--admin-surface) !important;
+  }
+  
+  &.mat-mdc-slide-toggle-checked {
+    .mat-mdc-slide-toggle-bar {
+      background: var(--admin-primary) !important;
+    }
+    
+    .mat-mdc-slide-toggle-thumb {
+      background: var(--admin-primary) !important;
+    }
+  }
+}
+
+// Progress Bar Styles
+.mat-mdc-progress-bar {
+  .mat-mdc-progress-bar-fill::after {
+    background: var(--admin-primary) !important;
+  }
+  
+  .mat-mdc-progress-bar-buffer {
+    background: var(--admin-border-primary) !important;
+  }
+}
+
+// Spinner Styles
+.mat-mdc-progress-spinner {
+  circle {
+    stroke: var(--admin-primary) !important;
+  }
+}
+
+// Tooltip Styles
+.mat-mdc-tooltip {
+  background: var(--admin-bg-card) !important;
+  color: var(--admin-text-primary) !important;
+  border: 1px solid var(--admin-border-primary) !important;
+}
+
+// Menu Styles
+.mat-mdc-menu-panel {
+  background: var(--admin-surface) !important;
+  border: 1px solid var(--admin-border-primary) !important;
+  
+  .mat-mdc-menu-item {
+    color: var(--admin-text-primary) !important;
+    
+    &:hover {
+      background: var(--admin-surface-hover) !important;
+    }
+    
+    &.mat-mdc-menu-item-highlighted {
+      background: var(--admin-surface-active) !important;
+    }
+  }
+}
+
+// Chip Styles
+.mat-mdc-chip {
+  background: var(--admin-bg-tertiary) !important;
+  color: var(--admin-text-primary) !important;
+  border: 1px solid var(--admin-border-primary) !important;
+  
+  .mat-mdc-chip-remove {
+    color: var(--admin-text-secondary) !important;
+    
+    &:hover {
+      color: var(--admin-error) !important;
+    }
+  }
+}
+
+// Badge Styles
+.mat-mdc-badge {
+  .mat-mdc-badge-content {
+    background: var(--admin-error) !important;
+    color: var(--admin-text-inverse) !important;
+  }
+}
+
+// Divider Styles
+.mat-mdc-divider {
+  border-color: var(--admin-border-primary) !important;
+}
+
+// List Styles
+.mat-mdc-list {
+  background: var(--admin-surface) !important;
+  
+  .mat-mdc-list-item {
+    color: var(--admin-text-primary) !important;
+    
+    &:hover {
+      background: var(--admin-surface-hover) !important;
+    }
+  }
+}
+
+// Expansion Panel Styles
+.mat-mdc-expansion-panel {
+  background: var(--admin-surface) !important;
+  border: 1px solid var(--admin-border-primary) !important;
+  
+  .mat-mdc-expansion-panel-header {
+    background: var(--admin-bg-tertiary) !important;
+    color: var(--admin-text-primary) !important;
+    
+    &:hover {
+      background: var(--admin-surface-hover) !important;
+    }
+  }
+  
+  .mat-mdc-expansion-panel-content {
+    color: var(--admin-text-primary) !important;
+  }
+} 

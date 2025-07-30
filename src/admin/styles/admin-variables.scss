@@ -1,0 +1,144 @@
+// Admin Panel Color Variables
+:root {
+  // Primary Colors
+  --admin-primary: #1976d2;
+  --admin-primary-light: #42a5f5;
+  --admin-primary-dark: #1565c0;
+  
+  // Secondary Colors
+  --admin-secondary: #dc004e;
+  --admin-secondary-light: #ff5983;
+  --admin-secondary-dark: #9a0036;
+  
+  // Background Colors
+  --admin-bg-primary: #fafafa;
+  --admin-bg-secondary: #ffffff;
+  --admin-bg-tertiary: #f5f5f5;
+  --admin-bg-card: #ffffff;
+  --admin-bg-overlay: rgba(0, 0, 0, 0.5);
+  
+  // Surface Colors
+  --admin-surface: #ffffff;
+  --admin-surface-hover: #f5f5f5;
+  --admin-surface-active: #e3f2fd;
+  --admin-surface-disabled: #f5f5f5;
+  
+  // Text Colors
+  --admin-text-primary: rgba(0, 0, 0, 0.87);
+  --admin-text-secondary: rgba(0, 0, 0, 0.6);
+  --admin-text-disabled: rgba(0, 0, 0, 0.38);
+  --admin-text-inverse: #ffffff;
+  
+  // Border Colors
+  --admin-border-primary: #e0e0e0;
+  --admin-border-secondary: #bdbdbd;
+  --admin-border-focus: #1976d2;
+  --admin-border-error: #f44336;
+  --admin-border-success: #4caf50;
+  --admin-border-warning: #ff9800;
+  
+  // Status Colors
+  --admin-success: #4caf50;
+  --admin-success-light: #81c784;
+  --admin-success-dark: #388e3c;
+  
+  --admin-warning: #ff9800;
+  --admin-warning-light: #ffb74d;
+  --admin-warning-dark: #f57c00;
+  
+  --admin-error: #f44336;
+  --admin-error-light: #e57373;
+  --admin-error-dark: #d32f2f;
+  
+  --admin-info: #2196f3;
+  --admin-info-light: #64b5f6;
+  --admin-info-dark: #1976d2;
+  
+  // Shadow Colors
+  --admin-shadow-light: rgba(0, 0, 0, 0.12);
+  --admin-shadow-medium: rgba(0, 0, 0, 0.16);
+  --admin-shadow-heavy: rgba(0, 0, 0, 0.24);
+  
+  // Spacing
+  --admin-spacing-xs: 4px;
+  --admin-spacing-sm: 8px;
+  --admin-spacing-md: 16px;
+  --admin-spacing-lg: 24px;
+  --admin-spacing-xl: 32px;
+  --admin-spacing-xxl: 48px;
+  
+  // Border Radius
+  --admin-radius-sm: 4px;
+  --admin-radius-md: 8px;
+  --admin-radius-lg: 12px;
+  --admin-radius-xl: 16px;
+  
+  // Typography
+  --admin-font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+  --admin-font-size-xs: 12px;
+  --admin-font-size-sm: 14px;
+  --admin-font-size-md: 16px;
+  --admin-font-size-lg: 18px;
+  --admin-font-size-xl: 20px;
+  --admin-font-size-xxl: 24px;
+  
+  // Z-Index
+  --admin-z-dropdown: 1000;
+  --admin-z-sticky: 1020;
+  --admin-z-fixed: 1030;
+  --admin-z-modal-backdrop: 1040;
+  --admin-z-modal: 1050;
+  --admin-z-popover: 1060;
+  --admin-z-tooltip: 1070;
+  --admin-z-toast: 1080;
+}
+
+// Dark Theme Variables
+[data-theme="dark"] {
+  --admin-bg-primary: #121212;
+  --admin-bg-secondary: #1e1e1e;
+  --admin-bg-tertiary: #2d2d2d;
+  --admin-bg-card: #1e1e1e;
+  --admin-bg-overlay: rgba(0, 0, 0, 0.7);
+  
+  --admin-surface: #1e1e1e;
+  --admin-surface-hover: #2d2d2d;
+  --admin-surface-active: #1a237e;
+  --admin-surface-disabled: #2d2d2d;
+  
+  --admin-text-primary: rgba(255, 255, 255, 0.87);
+  --admin-text-secondary: rgba(255, 255, 255, 0.6);
+  --admin-text-disabled: rgba(255, 255, 255, 0.38);
+  
+  --admin-border-primary: #424242;
+  --admin-border-secondary: #616161;
+  
+  --admin-shadow-light: rgba(0, 0, 0, 0.3);
+  --admin-shadow-medium: rgba(0, 0, 0, 0.4);
+  --admin-shadow-heavy: rgba(0, 0, 0, 0.5);
+}
+
+// Glass Theme Variables
+[data-theme="glass"] {
+  --admin-bg-primary: rgba(255, 255, 255, 0.1);
+  --admin-bg-secondary: rgba(255, 255, 255, 0.05);
+  --admin-bg-tertiary: rgba(255, 255, 255, 0.08);
+  --admin-bg-card: rgba(255, 255, 255, 0.1);
+  --admin-bg-overlay: rgba(0, 0, 0, 0.3);
+  
+  --admin-surface: rgba(255, 255, 255, 0.1);
+  --admin-surface-hover: rgba(255, 255, 255, 0.15);
+  --admin-surface-active: rgba(25, 118, 210, 0.2);
+  --admin-surface-disabled: rgba(255, 255, 255, 0.05);
+  
+  --admin-text-primary: rgba(255, 255, 255, 0.9);
+  --admin-text-secondary: rgba(255, 255, 255, 0.7);
+  --admin-text-disabled: rgba(255, 255, 255, 0.5);
+  
+  --admin-border-primary: rgba(255, 255, 255, 0.2);
+  --admin-border-secondary: rgba(255, 255, 255, 0.3);
+  
+  --admin-shadow-light: rgba(0, 0, 0, 0.1);
+  --admin-shadow-medium: rgba(0, 0, 0, 0.15);
+  --admin-shadow-heavy: rgba(0, 0, 0, 0.2);
+} 

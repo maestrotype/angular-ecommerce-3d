@@ -1,0 +1,133 @@
+@import '../../styles/admin-variables.scss';
+@import '../../styles/admin-mixins.scss';
+
+.error-dialog {
+  @include admin-card;
+  max-width: 500px;
+  margin: 0;
+  
+  .dialog-header {
+    display: flex;
+    align-items: center;
+    gap: var(--admin-spacing-md);
+    margin-bottom: var(--admin-spacing-lg);
+    position: relative;
+    
+    .icon-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--admin-bg-tertiary);
+      
+      mat-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+      }
+    }
+    
+    .dialog-title {
+      @include admin-heading(3);
+      margin: 0;
+      flex: 1;
+    }
+    
+    .close-button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      color: var(--admin-text-secondary);
+      
+      &:hover {
+        color: var(--admin-text-primary);
+        background: var(--admin-surface-hover);
+      }
+    }
+  }
+  
+  .dialog-content {
+    margin-bottom: var(--admin-spacing-lg);
+    
+    .dialog-message {
+      @include admin-text;
+      margin: 0 0 var(--admin-spacing-md) 0;
+      line-height: 1.6;
+    }
+    
+    .dialog-details {
+      background: var(--admin-bg-tertiary);
+      border: 1px solid var(--admin-border-primary);
+      border-radius: var(--admin-radius-sm);
+      padding: var(--admin-spacing-md);
+      
+      h4 {
+        @include admin-heading(4);
+        margin: 0 0 var(--admin-spacing-sm) 0;
+        color: var(--admin-text-secondary);
+      }
+      
+      .details-text {
+        @include admin-text-secondary;
+        margin: 0;
+        white-space: pre-wrap;
+        word-break: break-word;
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-size: var(--admin-font-size-xs);
+        line-height: 1.4;
+        background: var(--admin-surface);
+        padding: var(--admin-spacing-sm);
+        border-radius: var(--admin-radius-sm);
+        border: 1px solid var(--admin-border-secondary);
+      }
+    }
+  }
+  
+  .dialog-actions {
+    display: flex;
+    gap: var(--admin-spacing-sm);
+    justify-content: flex-end;
+    
+    .action-button {
+      @include admin-button-primary;
+      
+      &.primary {
+        background: var(--admin-error);
+        
+        &:hover {
+          background: var(--admin-error-dark);
+        }
+      }
+    }
+    
+    .close-dialog-button {
+      @include admin-button-secondary;
+    }
+  }
+}
+
+// Responsive
+@include admin-responsive(mobile) {
+  .error-dialog {
+    .dialog-header {
+      flex-direction: column;
+      text-align: center;
+      gap: var(--admin-spacing-sm);
+      
+      .close-button {
+        position: static;
+        align-self: flex-end;
+      }
+    }
+    
+    .dialog-actions {
+      flex-direction: column;
+      
+      button {
+        width: 100%;
+      }
+    }
+  }
+} 

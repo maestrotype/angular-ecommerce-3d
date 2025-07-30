@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators, FormArray } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { HttpClient } from "@angular/common/http";
 import {
   Product,
   ProductCreateRequest,
@@ -10,6 +10,9 @@ import {
 import { ProductService } from "../../../services/product.service";
 import { CategoryService } from "../../../services/category.service";
 import { Category } from "../../../models/category.model";
+import { ProcessingOptions, ProcessedImageResult } from "../../../components/ui/image-processor/image-processor.component";
+import { ErrorHandlerService } from "../../../services/error-handler.service";
+import { environment } from "src/environments/environment.prod";
 
 @Component({
   selector: "app-product-form",
@@ -29,14 +32,20 @@ export class ProductFormComponent implements OnInit {
   isUploading3d = false;
   dragging3d = false;
   categories: Category[] = [];
+  
+  imageProcessingOptions: ProcessingOptions = {
+    removeBackground: true,
+    optimize: true
+  };
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private snackBar: MatSnackBar,
     private productService: ProductService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private errorHandler: ErrorHandlerService,
+    private http: HttpClient
   ) {
     this.productForm = this.createForm();
   }
@@ -75,13 +84,136 @@ export class ProductFormComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading categories:', error);
-        this.snackBar.open('Error loading categories', 'Close', { duration: 3000 });
+        this.errorHandler.showError({
+          title: 'Error loading categories',
+          message: 'Failed to load categories list',
+          type: 'error'
+        });
       }
     });
   }
 
   getCategoryValue(category: Category): string {
     return category.slug || category.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      this.handleFiles(files);
+    }
+  }
+
+  private handleFiles(files: FileList): void {
+    const fileArray = Array.from(files);
+    const imageFiles = fileArray.filter(file => 
+      file.type.startsWith('image/') && 
+      ['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)
+    );
+
+    if (imageFiles.length === 0) {
+      this.errorHandler.showError({
+        title: 'Invalid file type',
+        message: 'Please select only JPG or PNG images',
+        type: 'warning'
+      });
+      return;
+    }
+
+    this.uploadImages(imageFiles);
+  }
+
+  private uploadImages(files: File[]): void {
+    this.isUploading = true;
+    
+    files.forEach(file => {
+      if (this.imageProcessingOptions.removeBackground || this.imageProcessingOptions.optimize) {
+        this.processAndUploadImage(file);
+      } else {
+        this.uploadImageDirectly(file);
+      }
+    });
+  }
+
+  private processAndUploadImage(file: File): void {
+    const formData = new FormData();
+    formData.append('image', file);
+    formData.append('removeBackground', this.imageProcessingOptions.removeBackground.toString());
+    formData.append('optimize', this.imageProcessingOptions.optimize.toString());
+
+    this.http.post<{ url: string; processed: boolean; format: string; size: number }>(`${environment.apiUrl}/uploads/process-image`, formData)
+      .subscribe({
+        next: (response) => {
+          this.imageUrls.push(response.url);
+          this.isUploading = false;
+          
+          if (response.processed) {
+            const processingDetails = [];
+            if (this.imageProcessingOptions.removeBackground) {
+              processingDetails.push('background removed');
+            }
+            if (this.imageProcessingOptions.optimize) {
+              processingDetails.push('optimized');
+            }
+            
+            this.errorHandler.showSuccess(`Image ${processingDetails.join(' and ')} successfully!`);
+          } else {
+            this.errorHandler.showSuccess('Image uploaded successfully!');
+          }
+        },
+        error: (error) => {
+          console.error('Image processing error:', error);
+          this.isUploading = false;
+          
+          let errorMessage = 'Failed to process image';
+          if (error.error?.message) {
+            errorMessage = error.error.message;
+          } else if (error.message) {
+            errorMessage = error.message;
+          }
+          
+          this.errorHandler.showError({
+            title: 'Image processing failed',
+            message: errorMessage,
+            type: 'error',
+            details: error.error?.details || error.stack
+          });
+          
+          // Fallback to direct upload
+          this.errorHandler.showInfo('Uploading original file without processing...');
+          this.uploadImageDirectly(file);
+        }
+      });
+  }
+
+  private uploadImageDirectly(file: File): void {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    this.http.post<{ url: string }>(`${environment.apiUrl}/uploads`, formData)
+      .subscribe({
+        next: (response) => {
+          this.imageUrls.push(response.url);
+          this.isUploading = false;
+        },
+        error: (error) => {
+          console.error('Upload error:', error);
+          this.isUploading = false;
+          this.errorHandler.showError({
+            title: 'Upload failed',
+            message: 'Failed to upload image',
+            type: 'error'
+          });
+        }
+      });
   }
 
   addSpecification(): void {
@@ -171,9 +303,10 @@ export class ProductFormComponent implements OnInit {
       },
       error: (err) => {
         console.error("Error loading product:", err);
-        this.snackBar.open("Error loading product", "Close", {
-          duration: 5000,
-          panelClass: ["error-snackbar"],
+        this.errorHandler.showError({
+          title: 'Error loading product',
+          message: 'Failed to load product data',
+          type: 'error'
         });
         this.isLoading = false;
       },
@@ -220,26 +353,20 @@ export class ProductFormComponent implements OnInit {
   onSubmit(): void {
     if (this.productForm.invalid) {
       this.markFormGroupTouched(this.productForm);
-      this.snackBar.open(
-        "Please fill in all required fields correctly",
-        "Close",
-        {
-          duration: 3000,
-          panelClass: ["error-snackbar"],
-        }
-      );
+      this.errorHandler.showError({
+        title: 'Validation error',
+        message: 'Please fill in all required fields correctly',
+        type: 'warning'
+      });
       return;
     }
 
     if (!this.imageUrls.length) {
-      this.snackBar.open(
-        "Please upload at least one image before submitting",
-        "Close",
-        {
-          duration: 3000,
-          panelClass: ["error-snackbar"],
-        }
-      );
+      this.errorHandler.showError({
+        title: 'Image required',
+        message: 'Please upload at least one image before submitting',
+        type: 'warning'
+      });
       return;
     }
 
@@ -287,23 +414,17 @@ export class ProductFormComponent implements OnInit {
       next: (product) => {
         console.log("Product created:", product);
         this.isLoading = false;
-        this.snackBar.open("Product created successfully!", "Close", {
-          duration: 3000,
-          panelClass: ["success-snackbar"],
-        });
+        this.errorHandler.showSuccess("Product created successfully!");
         this.router.navigate(["/admin/products"]);
       },
       error: (err) => {
         console.error("Error creating product:", err);
         this.isLoading = false;
-        this.snackBar.open(
-          "Error creating product: " + (err.error?.message || err.message),
-          "Close",
-          {
-            duration: 5000,
-            panelClass: ["error-snackbar"],
-          }
-        );
+        this.errorHandler.showError({
+          title: 'Error creating product',
+          message: err.error?.message || err.message,
+          type: 'error'
+        });
       },
     });
   }
@@ -313,23 +434,17 @@ export class ProductFormComponent implements OnInit {
       next: (product) => {
         console.log("Product updated:", product);
         this.isLoading = false;
-        this.snackBar.open("Product updated successfully!", "Close", {
-          duration: 3000,
-          panelClass: ["success-snackbar"],
-        });
+        this.errorHandler.showSuccess("Product updated successfully!");
         this.router.navigate(["/admin/products"]);
       },
       error: (err) => {
         console.error("Error updating product:", err);
         this.isLoading = false;
-        this.snackBar.open(
-          "Error updating product: " + (err.error?.message || err.message),
-          "Close",
-          {
-            duration: 5000,
-            panelClass: ["error-snackbar"],
-          }
-        );
+        this.errorHandler.showError({
+          title: 'Error updating product',
+          message: err.error?.message || err.message,
+          type: 'error'
+        });
       },
     });
   }
