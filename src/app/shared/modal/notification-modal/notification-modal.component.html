@@ -1,0 +1,36 @@
+<div class="notification-modal" [ngClass]="getModalClass()">
+  <div class="notification-header">
+    <div class="icon-container">
+      <mat-icon [style.color]="getIconColor()">{{ getIcon() }}</mat-icon>
+    </div>
+    <h2 class="notification-title">{{ notificationData.title }}</h2>
+    <button mat-icon-button class="close-button" (click)="onClose()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="notification-content">
+    <p class="notification-message">{{ notificationData.message }}</p>
+    <div class="notification-details" *ngIf="notificationData.details">
+      <h4>Details:</h4>
+      <pre class="details-text">{{ notificationData.details }}</pre>
+    </div>
+  </div>
+
+  <div class="notification-actions">
+    <button
+      mat-button
+      class="action-button"
+      [class.primary]="notificationData.type === 'error'"
+      (click)="onAction()"
+      *ngIf="notificationData.action">
+      {{ notificationData.action }}
+    </button>
+    <button
+      mat-button
+      class="close-notification-button"
+      (click)="onClose()">
+      Close
+    </button>
+  </div>
+</div> 

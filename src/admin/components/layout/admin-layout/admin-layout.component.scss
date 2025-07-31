@@ -1,6 +1,7 @@
 
 .admin-container {
     height: 100vh;
+    background-color: #424242 !important;
   }
   
   .admin-sidenav {
@@ -12,12 +13,13 @@
   .admin-content {
     display: flex;
     flex-direction: column;
+    background-color: #424242 !important;
   }
   
   .admin-main {
     flex: 1;
     padding: 24px;
-    background-color: var(--mat-sidenav-content-background-color);
+    background-color: #424242 !important;
     min-height: calc(100vh - 64px);
     overflow-x: auto;
   }

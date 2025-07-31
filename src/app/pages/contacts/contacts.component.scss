@@ -1,0 +1,146 @@
+.contact-section {
+  background: linear-gradient(135deg, 
+    rgba(248, 250, 252, 0.95) 0%, 
+    rgba(226, 232, 240, 0.9) 50%,
+    rgba(203, 213, 225, 0.95) 100%);
+  backdrop-filter: blur(20px);
+  padding: 4rem 2rem;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .contact-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    align-items: center;
+  }
+
+  .contact-info {
+    h2 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #1e293b;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      line-height: 1.2;
+    }
+    
+    p {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      color: #64748b;
+      line-height: 1.6;
+    }
+    
+    .contact-details {
+      .contact-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        font-size: 1.125rem;
+        color: #1e293b;
+        padding: 1rem 1.5rem;
+        background: rgba(255, 255, 255, 0.7);
+        border: 1px solid rgba(99, 102, 241, 0.1);
+        border-radius: 16px;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+        
+        &:hover {
+          background: rgba(99, 102, 241, 0.08);
+          box-shadow: 0 4px 16px rgba(99, 102, 241, 0.10);
+          border-color: #b3bcf6;
+          transform: translateY(-1px) scale(1.01);
+        }
+        
+        .icon {
+          width: 32px;
+          height: 32px;
+          flex-shrink: 0;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        
+        .icon-mail {
+          mask: url('data:image/svg+xml;utf8,<svg fill="white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 2v.01L12 13 4 6.01V6h16zm0 12H4V8.99l8 6.99 8-6.99V18z"/></svg>') no-repeat center/60% 60%;
+          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        }
+        
+        .icon-phone {
+          mask: url('data:image/svg+xml;utf8,<svg fill="white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.21c1.21.49 2.53.76 3.88.76a1 1 0 011 1V20a1 1 0 01-1 1C10.07 21 3 13.93 3 5a1 1 0 011-1h3.5a1 1 0 011 1c0 1.35.27 2.67.76 3.88a1 1 0 01-.21 1.11l-2.2 2.2z"/></svg>') no-repeat center/60% 60%;
+          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        }
+        
+        .icon-location {
+          mask: url('data:image/svg+xml;utf8,<svg fill="white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z"/></svg>') no-repeat center/60% 60%;
+          background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        }
+      }
+    }
+  }
+
+  .contact-form {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    padding: 2rem;
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-section {
+    padding: 2rem 1rem;
+    min-height: auto;
+    
+    .contact-content {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      
+      .contact-info {
+        h2 {
+          font-size: 2rem;
+          text-align: center;
+        }
+        
+        p {
+          text-align: center;
+          font-size: 1rem;
+        }
+        
+        .contact-details {
+          .contact-item {
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            
+            .icon {
+              width: 28px;
+              height: 28px;
+            }
+          }
+        }
+      }
+      
+      .contact-form {
+        padding: 1.5rem;
+        border-radius: 16px;
+      }
+    }
+  }
+} 
