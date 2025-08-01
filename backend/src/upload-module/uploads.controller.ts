@@ -218,8 +218,8 @@ export class UploadsController {
       const imageBuffer = readFileSync(file.path);
       let processedBuffer: Buffer;
       
-      const removeBackground = body.removeBackground === 'true' || body.removeBackground === true;
-      const optimize = body.optimize === 'true' || body.optimize === true;
+      const removeBackground = body.removeBackground === 'true' || body.removeBackground === true || body.removeBackground === '1';
+      const optimize = body.optimize === 'true' || body.optimize === true || body.optimize === '1';
       
       if (removeBackground) {
         processedBuffer = await this.imageProcessingService.processImageWithBackgroundRemoval(
