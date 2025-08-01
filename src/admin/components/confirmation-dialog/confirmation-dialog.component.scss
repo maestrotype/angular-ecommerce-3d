@@ -1,0 +1,68 @@
+.confirmation-dialog {
+  .mat-dialog-title {
+    margin: 0;
+    color: var(--admin-text-primary);
+    font-weight: 600;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: var(--admin-spacing-sm);
+
+    .dialog-icon {
+      font-size: 1.5rem;
+      width: 1.5rem;
+      height: 1.5rem;
+
+      &.danger {
+        color: var(--admin-error);
+      }
+
+      &.warning {
+        color: var(--admin-warning);
+      }
+
+      &.info {
+        color: var(--admin-primary);
+      }
+    }
+  }
+  
+  .mat-dialog-content {
+    margin: var(--admin-spacing-md) 0;
+    
+    p {
+      margin: 0;
+      color: var(--admin-text-secondary);
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+  }
+  
+  .mat-dialog-actions {
+    margin: 0;
+    padding: var(--admin-spacing-sm) 0;
+    gap: var(--admin-spacing-sm);
+    
+    button {
+      min-width: 80px;
+      
+      &[color="warn"] {
+        background-color: var(--admin-error);
+        color: white;
+        
+        &:hover {
+          background-color: var(--admin-error-hover);
+        }
+      }
+      
+      &[mat-button] {
+        color: var(--admin-text-secondary);
+        border: 1px solid var(--admin-border-secondary);
+        
+        &:hover {
+          background-color: var(--admin-bg-hover);
+        }
+      }
+    }
+  }
+} 

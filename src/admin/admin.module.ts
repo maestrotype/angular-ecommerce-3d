@@ -51,9 +51,8 @@ import { ImageUploadComponent } from './components/ui/image-upload/image-upload.
 import { ImageProcessorComponent } from './components/ui/image-processor/image-processor.component';
 import { ImageProcessorDemoComponent } from './pages/image-processor-demo/image-processor-demo.component';
 import { ErrorDialogComponent } from './components/error-dialog/error-dialog.component';
+import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { SharedModule } from '../app/shared/shared.module';
-
-
 
 // Services
 import { NotificationService } from './services/notification.service';
@@ -61,6 +60,7 @@ import { DashboardService } from './services/dashboard.service';
 import { MessageService } from './services/message.service';
 import { SectionService } from './services/section.service';
 import { ErrorHandlerService } from './services/error-handler.service';
+import { ConfirmationService } from './services/confirmation.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -91,6 +91,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ImageProcessorComponent,
     ImageProcessorDemoComponent,
     ErrorDialogComponent,
+    ConfirmationDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -136,7 +137,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     DashboardService,
     MessageService,
     SectionService,
-    ErrorHandlerService
+    ErrorHandlerService,
+    ConfirmationService
   ]
 })
 export class AdminModule { }

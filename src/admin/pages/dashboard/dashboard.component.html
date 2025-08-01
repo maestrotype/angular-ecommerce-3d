@@ -13,7 +13,7 @@
           <mat-icon class="stat-icon products">inventory</mat-icon>
           <div class="stat-info">
             <h3>{{ 'PRODUCTS' | translate }}</h3>
-            <p class="stat-number">{{ formatNumber(stats.products) }}</p>
+            <p class="stat-number">{{ formatNumber(dashboardData.products) }}</p>
           </div>
         </div>
       </mat-card-content>
@@ -25,7 +25,7 @@
           <mat-icon class="stat-icon orders">shopping_cart</mat-icon>
           <div class="stat-info">
             <h3>{{ 'ORDERS' | translate }}</h3>
-            <p class="stat-number">{{ formatNumber(stats.orders) }}</p>
+            <p class="stat-number">{{ formatNumber(dashboardData.orders) }}</p>
           </div>
         </div>
       </mat-card-content>
@@ -37,7 +37,7 @@
           <mat-icon class="stat-icon users">people</mat-icon>
           <div class="stat-info">
             <h3>{{ 'USERS' | translate }}</h3>
-            <p class="stat-number">{{ formatNumber(stats.users) }}</p>
+            <p class="stat-number">{{ formatNumber(dashboardData.users) }}</p>
           </div>
         </div>
       </mat-card-content>
@@ -49,10 +49,12 @@
           <mat-icon class="stat-icon revenue">attach_money</mat-icon>
           <div class="stat-info">
             <h3>{{ 'REVENUE' | translate }}</h3>
-            <p class="stat-number">{{ formatCurrency(stats.revenue) }}</p>
+            <p class="stat-number">{{ formatCurrency(dashboardData.revenue) }}</p>
           </div>
         </div>
       </mat-card-content>
     </mat-card>
   </div>
+
+
 </div>
