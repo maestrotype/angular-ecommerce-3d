@@ -31,4 +31,9 @@ export class CategoriesController {
   remove(@Param('id') id: string) {
     return this.categoriesService.remove(id);
   }
+
+  @Post('sync-with-sections')
+  syncWithSections() {
+    return this.categoriesService.syncWithSections();
+  }
 }

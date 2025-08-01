@@ -68,6 +68,7 @@ async function bootstrap() {
   app.setGlobalPrefix("api");
 
   const port = process.env.PORT || 3002;
+  
   setInterval(() => {
     const used = process.memoryUsage();
     console.log('Memory usage:', {

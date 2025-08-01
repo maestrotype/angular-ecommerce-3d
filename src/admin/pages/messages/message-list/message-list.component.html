@@ -16,8 +16,9 @@
         <mat-select [(value)]="statusFilter" (selectionChange)="onStatusFilterChange()">
           <mat-option value="all">{{ 'ALL' | translate}}</mat-option>
           <mat-option value="new">{{ 'NEW' | translate}}</mat-option>
-          <mat-option value="read">{{ 'READ' | translate}}</mat-option>
-          <mat-option value="archived">{{ 'ARCHIVED' | translate}}</mat-option>
+          <mat-option value="in_progress">{{ 'IN_PROGRESS' | translate}}</mat-option>
+          <mat-option value="answered">{{ 'ANSWERED' | translate}}</mat-option>
+          <mat-option value="closed">{{ 'CLOSED' | translate}}</mat-option>
         </mat-select>
       </mat-form-field>
   
@@ -70,7 +71,7 @@
               <mat-icon>mark_email_read</mat-icon>
             </button>
             <button mat-icon-button color="warn" (click)="markAsArchived(message)" 
-                    *ngIf="message.status !== 'archived'" matTooltip="Archive">
+                    *ngIf="message.status !== 'closed'" matTooltip="Archive">
               <mat-icon>archive</mat-icon>
             </button>
             <button mat-icon-button color="warn" (click)="deleteMessage(message)" matTooltip="Delete">
@@ -119,7 +120,7 @@
               <mat-icon>mark_email_read</mat-icon>
             </button>
             <button mat-icon-button color="warn" (click)="markAsArchived(message)" 
-                    *ngIf="message.status !== 'archived'" class="action-button">
+                    *ngIf="message.status !== 'closed'" class="action-button">
               <mat-icon>archive</mat-icon>
             </button>
             <button mat-icon-button color="warn" (click)="deleteMessage(message)" 

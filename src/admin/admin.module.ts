@@ -53,8 +53,6 @@ import { ImageProcessorDemoComponent } from './pages/image-processor-demo/image-
 import { ErrorDialogComponent } from './components/error-dialog/error-dialog.component';
 import { SharedModule } from '../app/shared/shared.module';
 
-
-
 // Services
 import { NotificationService } from './services/notification.service';
 import { DashboardService } from './services/dashboard.service';
@@ -65,6 +63,7 @@ import { ErrorHandlerService } from './services/error-handler.service';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
+
 @NgModule({
   declarations: [
     AdminLayoutComponent,
