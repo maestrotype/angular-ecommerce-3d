@@ -1,8 +1,15 @@
+import * as dotenv from 'dotenv';
+import { resolve } from 'path';
+import { existsSync, mkdirSync } from "fs";
+
+// Load environment variables from .env file
+const envPath = resolve(__dirname, '..', '.env');
+dotenv.config({ path: envPath });
+
 import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { ValidationPipe } from "@nestjs/common";
 import { AppModule } from "./app.module";
-import { existsSync, mkdirSync } from "fs";
 import { join } from "path";
 
 async function bootstrap() {

@@ -31,6 +31,7 @@ import { BaseModalComponent } from './shared/modal/base-modal.component';
 import { ImageModalComponent } from './shared/modal/image-modal/image-modal.component';
 import { CartModalComponent } from './shared/modal/cart-modal/cart-modal.component';
 import { AuthModalComponent } from './shared/modal/auth-modal/auth-modal.component';
+import { NotificationModalComponent } from './shared/modal/notification-modal/notification-modal.component';
 import { ProductInfoComponent } from './components/product-detail/product-info/product-info.component';
 import { ProductTabsComponent } from './components/product-detail/product-tabs/product-tabs.component';
 import { ProductImagesComponent } from './components/product-detail/product-images/product-images.component';
@@ -71,7 +72,8 @@ import { ThemeService } from './core/themes/theme.service';
     BaseModalComponent, 
     ImageModalComponent, 
     CartModalComponent, 
-    AuthModalComponent, 
+    AuthModalComponent,
+    NotificationModalComponent, 
     Bag3dFirstComponent, 
     IconComponent, 
     ThreeDViewerComponent, 

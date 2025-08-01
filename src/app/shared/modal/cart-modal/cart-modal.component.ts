@@ -3,6 +3,7 @@ import { Subscription } from 'rxjs';
 import { ModalConfig } from '../../../core/services/modal.service';
 import { CartService } from '../../../core/services/cart.service';
 import { ModalService } from '../../../core/services/modal.service';
+import { NotificationService } from '../../../core/services/notification.service';
 import { CartItem } from 'src/shared/models/cart-item.model';
 import { CreateOrderRequest } from 'src/shared/models/create-order-request.model';
 
@@ -20,7 +21,8 @@ export class CartModalComponent {
 
   constructor(
     private cartService: CartService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -71,12 +73,12 @@ export class CartModalComponent {
     };
     this.cartService.createOrder(orderData).subscribe({
       next: (order) => {
-        alert('Order created successfully');
+        this.notificationService.showSuccess('Order created successfully');
         this.cartService.clearCart();
         this.onClose();
       },
       error: (err) => {
-        alert('Error creating order');
+        this.notificationService.showError('Error creating order');
       }
     });
   }

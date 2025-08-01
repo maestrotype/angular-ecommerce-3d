@@ -6,6 +6,7 @@ import { ProductService } from '../../core/services/product.service';
 import { CategoryService } from '../../core/services/category.service';
 import { CartService } from '../../core/services/cart.service';
 import { FavoritesService } from '../../core/services/favorites.service';
+import { NotificationService } from '../../core/services/notification.service';
 import { CartItem } from 'src/shared/models/cart-item.model';
 import { Category } from 'src/shared/models/category.model';
 
@@ -51,7 +52,8 @@ export class ShopComponent implements OnInit {
     private productService: ProductService,
     private cartService: CartService,
     private favoritesService: FavoritesService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
@@ -200,7 +202,7 @@ export class ShopComponent implements OnInit {
       this.cartService.addToCart(cartItem);
     }
   
-    alert(`Added ${this.quantity} ${product.name} to cart!`);
+    this.notificationService.showSuccess(`Added ${this.quantity} ${product.name} to cart!`);
   }
 
   getDiscountedPrice(product: Product): number {

@@ -41,6 +41,12 @@
           [config]="modal"
           (close)="closeModal(modal.id)"
         ></app-auth-modal>
+
+        <!-- Notification Modal Content -->
+        <app-notification-modal 
+          *ngIf="modal.type === 'notification'" 
+          [config]="modal"
+        ></app-notification-modal>
       </div>
     </div>
   </div>

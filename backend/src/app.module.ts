@@ -18,6 +18,7 @@ import { UploadsModule } from './upload-module/uploads.module';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
+      cache: false,
     }),
     TypeOrmModule.forRootAsync({
       useClass: DatabaseConfig,
