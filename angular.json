@@ -19,10 +19,7 @@
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "@angular/material/prebuilt-themes/pink-bluegrey.css",
-              "src/styles.scss",
-              "src/admin/styles/admin-variables.scss",
-              "src/admin/styles/admin-mixins.scss",
-              "src/admin/styles/admin-global.scss"
+              "src/styles.scss"
             ],
             "scripts": []
           },

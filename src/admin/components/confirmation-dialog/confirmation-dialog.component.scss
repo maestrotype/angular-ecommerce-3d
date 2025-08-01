@@ -1,12 +1,12 @@
 .confirmation-dialog {
   .mat-dialog-title {
     margin: 0;
-    color: var(--admin-text-primary);
+    color: #212121;
     font-weight: 600;
     font-size: 1.25rem;
     display: flex;
     align-items: center;
-    gap: var(--admin-spacing-sm);
+    gap: 8px;
 
     .dialog-icon {
       font-size: 1.5rem;
@@ -14,25 +14,25 @@
       height: 1.5rem;
 
       &.danger {
-        color: var(--admin-error);
+        color: #f44336;
       }
 
       &.warning {
-        color: var(--admin-warning);
+        color: #ff9800;
       }
 
       &.info {
-        color: var(--admin-primary);
+        color: #1976d2;
       }
     }
   }
   
   .mat-dialog-content {
-    margin: var(--admin-spacing-md) 0;
+    margin: 16px 0;
     
     p {
       margin: 0;
-      color: var(--admin-text-secondary);
+      color: #757575;
       line-height: 1.6;
       font-size: 1rem;
     }
@@ -40,27 +40,27 @@
   
   .mat-dialog-actions {
     margin: 0;
-    padding: var(--admin-spacing-sm) 0;
-    gap: var(--admin-spacing-sm);
+    padding: 8px 0;
+    gap: 8px;
     
     button {
       min-width: 80px;
       
       &[color="warn"] {
-        background-color: var(--admin-error);
+        background-color: #f44336;
         color: white;
         
         &:hover {
-          background-color: var(--admin-error-hover);
+          background-color: #d32f2f;
         }
       }
       
       &[mat-button] {
-        color: var(--admin-text-secondary);
-        border: 1px solid var(--admin-border-secondary);
+        color: #757575;
+        border: 1px solid #f0f0f0;
         
         &:hover {
-          background-color: var(--admin-bg-hover);
+          background-color: #f5f5f5;
         }
       }
     }
