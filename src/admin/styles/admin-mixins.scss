@@ -1,0 +1,275 @@
+// Admin Panel Mixins
+
+// Button Mixins
+@mixin admin-button($variant: 'primary') {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--admin-spacing-sm);
+  padding: var(--admin-spacing-sm) var(--admin-spacing-md);
+  border: none;
+  border-radius: var(--admin-border-radius-md);
+  font-family: var(--admin-font-family);
+  font-size: var(--admin-font-size-sm);
+  font-weight: var(--admin-font-weight-medium);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--admin-transition-normal);
+  min-height: 40px;
+  
+  @if $variant == 'primary' {
+    background: var(--admin-primary);
+    color: var(--admin-text-inverse);
+    
+    &:hover {
+      background: var(--admin-primary-hover);
+      transform: translateY(-1px);
+      box-shadow: var(--admin-shadow-md);
+    }
+  } @else if $variant == 'secondary' {
+    background: transparent;
+    color: var(--admin-text-primary);
+    border: 1px solid var(--admin-border-primary);
+    
+    &:hover {
+      background: var(--admin-bg-hover);
+      border-color: var(--admin-border-focus);
+    }
+  } @else if $variant == 'success' {
+    background: var(--admin-success);
+    color: var(--admin-text-inverse);
+    
+    &:hover {
+      background: var(--admin-success-hover);
+    }
+  } @else if $variant == 'warning' {
+    background: var(--admin-warning);
+    color: var(--admin-text-inverse);
+    
+    &:hover {
+      background: var(--admin-warning-hover);
+    }
+  } @else if $variant == 'error' {
+    background: var(--admin-error);
+    color: var(--admin-text-inverse);
+    
+    &:hover {
+      background: var(--admin-error-hover);
+    }
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+// Card Mixins
+@mixin admin-card {
+  background: var(--admin-bg-card);
+  border: 1px solid var(--admin-border-primary);
+  border-radius: var(--admin-border-radius-lg);
+  box-shadow: var(--admin-shadow-sm);
+  transition: all var(--admin-transition-normal);
+  
+  &:hover {
+    box-shadow: var(--admin-shadow-md);
+  }
+}
+
+@mixin admin-card-hover {
+  transform: translateY(-2px);
+  box-shadow: var(--admin-shadow-lg);
+}
+
+// Form Mixins
+@mixin admin-form-field {
+  width: 100%;
+  padding: var(--admin-spacing-sm) var(--admin-spacing-md);
+  border: 1px solid var(--admin-border-primary);
+  border-radius: var(--admin-border-radius-md);
+  font-family: var(--admin-font-family);
+  font-size: var(--admin-font-size-sm);
+  background: var(--admin-bg-primary);
+  color: var(--admin-text-primary);
+  transition: all var(--admin-transition-normal);
+  
+  &:focus {
+    outline: none;
+    border-color: var(--admin-border-focus);
+    box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+  }
+  
+  &:disabled {
+    background: var(--admin-bg-secondary);
+    color: var(--admin-text-disabled);
+    cursor: not-allowed;
+  }
+}
+
+@mixin admin-form-label {
+  display: block;
+  margin-bottom: var(--admin-spacing-xs);
+  font-family: var(--admin-font-family);
+  font-size: var(--admin-font-size-sm);
+  font-weight: var(--admin-font-weight-medium);
+  color: var(--admin-text-primary);
+}
+
+// Layout Mixins
+@mixin admin-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--admin-spacing-md);
+}
+
+@mixin admin-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 calc(-1 * var(--admin-spacing-sm));
+}
+
+@mixin admin-col($columns: 1) {
+  flex: 0 0 calc(100% / 12 * #{$columns});
+  max-width: calc(100% / 12 * #{$columns});
+  padding: 0 var(--admin-spacing-sm);
+}
+
+// Typography Mixins
+@mixin admin-heading($level: 1) {
+  font-family: var(--admin-font-family);
+  font-weight: var(--admin-font-weight-bold);
+  color: var(--admin-text-primary);
+  margin: 0 0 var(--admin-spacing-md) 0;
+  
+  @if $level == 1 {
+    font-size: var(--admin-font-size-xxl);
+  } @else if $level == 2 {
+    font-size: var(--admin-font-size-xl);
+  } @else if $level == 3 {
+    font-size: var(--admin-font-size-lg);
+  } @else if $level == 4 {
+    font-size: var(--admin-font-size-md);
+  }
+}
+
+@mixin admin-text($size: 'md', $weight: 'normal') {
+  font-family: var(--admin-font-family);
+  font-size: var(--admin-font-size-#{$size});
+  font-weight: var(--admin-font-weight-#{$weight});
+  color: var(--admin-text-primary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+// Animation Mixins
+@mixin admin-fade-in {
+  animation: adminFadeIn var(--admin-transition-normal) ease-in-out;
+}
+
+@mixin admin-slide-in($direction: 'up') {
+  animation: adminSlideIn#{$direction} var(--admin-transition-normal) ease-out;
+}
+
+// Responsive Mixins
+@mixin admin-mobile {
+  @media (max-width: var(--admin-breakpoint-md)) {
+    @content;
+  }
+}
+
+@mixin admin-tablet {
+  @media (min-width: var(--admin-breakpoint-md)) and (max-width: var(--admin-breakpoint-lg)) {
+    @content;
+  }
+}
+
+@mixin admin-desktop {
+  @media (min-width: var(--admin-breakpoint-lg)) {
+    @content;
+  }
+}
+
+// Status Mixins
+@mixin admin-status($type: 'info') {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--admin-spacing-xs);
+  padding: var(--admin-spacing-xs) var(--admin-spacing-sm);
+  border-radius: var(--admin-border-radius-sm);
+  font-size: var(--admin-font-size-xs);
+  font-weight: var(--admin-font-weight-medium);
+  
+  @if $type == 'success' {
+    background: rgba(76, 175, 80, 0.1);
+    color: var(--admin-success);
+    border: 1px solid rgba(76, 175, 80, 0.2);
+  } @else if $type == 'warning' {
+    background: rgba(255, 152, 0, 0.1);
+    color: var(--admin-warning);
+    border: 1px solid rgba(255, 152, 0, 0.2);
+  } @else if $type == 'error' {
+    background: rgba(244, 67, 54, 0.1);
+    color: var(--admin-error);
+    border: 1px solid rgba(244, 67, 54, 0.2);
+  } @else {
+    background: rgba(33, 150, 243, 0.1);
+    color: var(--admin-info);
+    border: 1px solid rgba(33, 150, 243, 0.2);
+  }
+}
+
+// Keyframes
+@keyframes adminFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes adminSlideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes adminSlideInDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes adminSlideInLeft {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes adminSlideInRight {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+} 
