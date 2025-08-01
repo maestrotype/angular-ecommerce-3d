@@ -1,6 +1,6 @@
 <header class="header">
   <div class="header-container">
-    <div class="logo">
+    <div class="logo" (click)="goHome()" style="cursor: pointer;">
       <img *ngIf="logoUrl" [src]="logoUrl" alt="Logo" class="logo-image">
       <span *ngIf="!logoUrl">🛒 3D Store</span>
     </div>
@@ -115,10 +115,6 @@
 <!-- Mobile Menu -->
 <div class="mobile-menu" [class.active]="isMobileMenuOpen">
   <div class="mobile-menu-header">
-    <div class="logo">
-      <img *ngIf="logoUrl" [src]="logoUrl" alt="Logo" class="logo-image">
-      <span *ngIf="!logoUrl">🛒 3D Store</span>
-    </div>
     <button class="close-btn" (click)="closeMobileMenu()">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

@@ -1,311 +1,104 @@
-.notification-modal {
-  width: 100%;
-  max-width: 500px;
-  border-radius: var(--layout-cards-borderRadius, 12px);
-  overflow: hidden;
-  box-shadow: var(--layout-cards-shadow, 0 2px 8px rgba(0, 0, 0, 0.1));
+.notification-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: var(--color-surface);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--color-cards-border);
+  backdrop-filter: blur(10px);
+  min-width: 300px;
+  max-width: 400px;
+  position: relative;
+  animation: slideIn 0.3s ease-out;
+}
+
+.notification-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
   
-  // Storefront theme (default)
-  &.storefront-theme {
-    background: var(--color-surface, #ffffff);
-    color: var(--color-text-primary, #333333);
-    border: 1px solid var(--color-cards-border, rgba(0, 0, 0, 0.1));
-    
-    .notification-header {
-      background: linear-gradient(135deg, var(--color-primary, #667eea) 0%, var(--color-secondary, #764ba2) 100%);
-      color: white;
-      padding: 20px 24px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      
-      .icon-container {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        
-        mat-icon {
-          font-size: 20px;
-          width: 20px;
-          height: 20px;
-        }
-      }
-      
-      .notification-title {
-        margin: 0;
-        font-size: 18px;
-        font-weight: 600;
-        flex: 1;
-      }
-      
-      .close-button {
-        color: white;
-      }
-      
-      .close-button:hover {
-        background: rgba(255, 255, 255, 0.1);
-      }
-    }
-    
-    .notification-content {
-      padding: 24px;
-      
-      .notification-message {
-        margin: 0 0 16px 0;
-        font-size: 16px;
-        line-height: 1.5;
-        color: var(--color-text-primary, #333333);
-      }
-      
-      .notification-details {
-        background: var(--color-background, #f5f7fa);
-        border-radius: 8px;
-        padding: 16px;
-        margin-top: 16px;
-        
-        h4 {
-          margin: 0 0 8px 0;
-          font-size: 14px;
-          font-weight: 600;
-          color: var(--color-text-secondary, #666666);
-        }
-        
-        .details-text {
-          margin: 0;
-          font-size: 12px;
-          color: var(--color-text-secondary, #666666);
-          white-space: pre-wrap;
-          word-break: break-word;
-        }
-      }
-    }
-    
-    .notification-actions {
-      padding: 16px 24px;
-      display: flex;
-      gap: 12px;
-      justify-content: flex-end;
-      border-top: 1px solid var(--color-cards-border, rgba(0, 0, 0, 0.1));
-      
-      .action-button {
-        background: var(--color-buttons-primary, #667eea);
-        color: white;
-        border-radius: var(--component-buttons-borderRadius, 8px);
-        padding: var(--component-buttons-padding, 12px 24px);
-        font-weight: var(--component-buttons-fontWeight, 600);
-        font-size: var(--component-buttons-fontSize, 0.9rem);
-        border: none;
-        cursor: pointer;
-        transition: all 0.2s ease;
-      }
-      
-      .action-button:hover {
-        background: darken(#667eea, 10%);
-        transform: translateY(-1px);
-      }
-      
-      .action-button.primary {
-        background: var(--color-error, #dc3545);
-      }
-      
-      .action-button.primary:hover {
-        background: darken(#dc3545, 10%);
-      }
-      
-      .close-notification-button {
-        background: var(--color-buttons-secondary, #6c757d);
-        color: white;
-        border-radius: var(--component-buttons-borderRadius, 8px);
-        padding: var(--component-buttons-padding, 12px 24px);
-        font-weight: var(--component-buttons-fontWeight, 600);
-        font-size: var(--component-buttons-fontSize, 0.9rem);
-        border: none;
-        cursor: pointer;
-        transition: all 0.2s ease;
-      }
-      
-      .close-notification-button:hover {
-        background: darken(#6c757d, 10%);
-        transform: translateY(-1px);
-      }
-    }
-    
-    // Type-specific styling
-    &.error-type .notification-header {
-      background: linear-gradient(135deg, var(--color-error, #dc3545) 0%, darken(#dc3545, 10%) 100%);
-    }
-    
-    &.warning-type .notification-header {
-      background: linear-gradient(135deg, var(--color-warning, #ffc107) 0%, darken(#ffc107, 10%) 100%);
-    }
-    
-    &.info-type .notification-header {
-      background: linear-gradient(135deg, var(--color-info, #17a2b8) 0%, darken(#17a2b8, 10%) 100%);
-    }
-    
-    &.success-type .notification-header {
-      background: linear-gradient(135deg, var(--color-success, #28a745) 0%, darken(#28a745, 10%) 100%);
-    }
-  }
-  
-  // Admin theme
-  &.admin-theme {
-    background: var(--admin-bg-card, #2d2d2d);
-    color: var(--admin-text-primary, #ffffff);
-    border: 1px solid var(--admin-border-primary, #404040);
-    
-    .notification-header {
-      background: var(--admin-bg-secondary, #404040);
-      padding: 20px 24px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border-bottom: 1px solid var(--admin-border-primary, #404040);
-      
-      .icon-container {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: var(--admin-bg-primary, #2d2d2d);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        
-        mat-icon {
-          font-size: 20px;
-          width: 20px;
-          height: 20px;
-        }
-      }
-      
-      .notification-title {
-        margin: 0;
-        font-size: 18px;
-        font-weight: 600;
-        flex: 1;
-        color: var(--admin-text-primary, #ffffff);
-      }
-      
-      .close-button {
-        color: var(--admin-text-secondary, #cccccc);
-      }
-      
-      .close-button:hover {
-        background: var(--admin-bg-hover, #505050);
-      }
-    }
-    
-    .notification-content {
-      padding: 24px;
-      
-      .notification-message {
-        margin: 0 0 16px 0;
-        font-size: 16px;
-        line-height: 1.5;
-        color: var(--admin-text-primary, #ffffff);
-      }
-      
-      .notification-details {
-        background: var(--admin-bg-secondary, #404040);
-        border-radius: 8px;
-        padding: 16px;
-        margin-top: 16px;
-        border: 1px solid var(--admin-border-secondary, #505050);
-        
-        h4 {
-          margin: 0 0 8px 0;
-          font-size: 14px;
-          font-weight: 600;
-          color: var(--admin-text-secondary, #cccccc);
-        }
-        
-        .details-text {
-          margin: 0;
-          font-size: 12px;
-          color: var(--admin-text-secondary, #cccccc);
-          white-space: pre-wrap;
-          word-break: break-word;
-        }
-      }
-    }
-    
-    .notification-actions {
-      padding: 16px 24px;
-      display: flex;
-      gap: 12px;
-      justify-content: flex-end;
-      border-top: 1px solid var(--admin-border-primary, #404040);
-      
-      .action-button {
-        background: var(--admin-primary, #667eea);
-        color: white;
-        border-radius: 6px;
-        padding: 8px 16px;
-        font-weight: 500;
-        border: none;
-        cursor: pointer;
-        transition: all 0.2s ease;
-      }
-      
-      .action-button:hover {
-        background: darken(#667eea, 10%);
-      }
-      
-      .action-button.primary {
-        background: var(--admin-error, #f44336);
-      }
-      
-      .action-button.primary:hover {
-        background: darken(#f44336, 10%);
-      }
-      
-      .close-notification-button {
-        background: var(--admin-secondary, #6c757d);
-        color: white;
-        border-radius: 6px;
-        padding: 8px 16px;
-        font-weight: 500;
-        border: none;
-        cursor: pointer;
-        transition: all 0.2s ease;
-      }
-      
-      .close-notification-button:hover {
-        background: darken(#6c757d, 10%);
-      }
-    }
+  i {
+    font-size: 16px;
   }
 }
 
-// Responsive design
-@media (max-width: 768px) {
-  .notification-modal {
-    margin: 16px;
-    max-width: calc(100vw - 32px);
-    
-    .notification-header {
-      padding: 16px 20px;
-      
-      .notification-title {
-        font-size: 16px;
-      }
-    }
-    
-    .notification-content {
-      padding: 20px;
-    }
-    
-    .notification-actions {
-      padding: 12px 20px;
-      flex-direction: column;
-      
-      button {
-        width: 100%;
-      }
-    }
+.notification-message {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  line-height: 1.4;
+}
+
+.notification-close {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  color: var(--color-text-secondary);
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--color-text-primary);
   }
+  
+  i {
+    font-size: 14px;
+  }
+}
+
+// Type-specific styles
+.notification-modal.success {
+  .notification-icon {
+    background: rgba(76, 175, 80, 0.1);
+    color: #4caf50;
+  }
+}
+
+.notification-modal.error {
+  .notification-icon {
+    background: rgba(244, 67, 54, 0.1);
+    color: #f44336;
+  }
+}
+
+.notification-modal.warning {
+  .notification-icon {
+    background: rgba(255, 152, 0, 0.1);
+    color: #ff9800;
+  }
+}
+
+.notification-modal.info {
+  .notification-icon {
+    background: rgba(33, 150, 243, 0.1);
+    color: #2196f3;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+// Glass theme support
+.glass-theme .notification-content {
+  background: var(--color-buttons-glass);
+  border: 1px solid var(--color-cards-border);
+  backdrop-filter: blur(10px);
 } 

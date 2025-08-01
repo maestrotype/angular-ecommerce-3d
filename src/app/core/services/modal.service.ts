@@ -20,6 +20,7 @@ export interface ModalConfig {
     closeOnEscape?: boolean;
     showCloseButton?: boolean;
     customClass?: string;
+    autoClose?: number; // milliseconds
   };
 }
 

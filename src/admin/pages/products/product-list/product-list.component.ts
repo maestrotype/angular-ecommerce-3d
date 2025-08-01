@@ -7,6 +7,9 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { Product } from "../../../models/product.model";
 import { ProductService } from "../../../services/product.service";
+import { ConfirmationService } from "../../../services/confirmation.service";
+import { ErrorHandlerService } from "../../../services/error-handler.service";
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: "app-product-list",
@@ -35,7 +38,10 @@ export class ProductListComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private productService: ProductService
+    private productService: ProductService,
+    private confirmationService: ConfirmationService,
+    private errorHandler: ErrorHandlerService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -62,8 +68,10 @@ export class ProductListComponent implements OnInit {
         console.error("Error loading products:", err);
         this.error = "Failed to load products. Please try again.";
         this.isLoading = false;
-        this.snackBar.open("Error loading products", "Close", {
-          duration: 5000,
+        this.errorHandler.showError({
+          title: this.translate.instant('ERROR_LOADING'),
+          message: this.translate.instant('ERROR_LOADING_PRODUCTS'),
+          type: 'error'
         });
       },
     });
@@ -94,22 +102,23 @@ export class ProductListComponent implements OnInit {
   }
 
   deleteProduct(product: Product): void {
-    if (confirm(`Are you sure you want to delete "${product.name}"?`)) {
-      this.productService.deleteProduct(product.id).subscribe({
-        next: () => {
-          this.snackBar.open("Product deleted successfully", "Close", {
-            duration: 3000,
-          });
-          this.loadProducts();
-        },
-        error: (err) => {
-          console.error("Error deleting product:", err);
-          this.snackBar.open("Error deleting product", "Close", {
-            duration: 5000,
-          });
-        },
-      });
-    }
+    this.confirmationService.confirmDelete(product.name).subscribe(confirmed => {
+      if (confirmed) {
+        this.productService.deleteProduct(product.id).subscribe({
+          next: () => {
+            this.errorHandler.showSuccess(this.translate.instant('PRODUCT_DELETED_SUCCESS'));
+            this.loadProducts();
+          },
+          error: (error) => {
+            this.errorHandler.showError({
+              title: this.translate.instant('ERROR'),
+              message: this.translate.instant('ERROR_DELETING_PRODUCT'),
+              type: 'error'
+            });
+          },
+        });
+      }
+    });
   }
 
   getStockClass(stock: number | undefined): string {

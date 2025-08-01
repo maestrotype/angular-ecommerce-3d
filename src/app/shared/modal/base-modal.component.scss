@@ -33,6 +33,14 @@
         background: rgba(0, 0, 0, 0.6);
         backdrop-filter: blur(6px);
       }
+
+      &.modal-backdrop-notification {
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(4px);
+        align-items: flex-start;
+        justify-content: center;
+        padding-top: 2rem;
+      }
     }
   
     .modal-content {
@@ -63,6 +71,15 @@
       &.modal-content-auth {
         width: 100%;
         max-width: 400px;
+      }
+
+      &.modal-content-notification {
+        background: transparent;
+        box-shadow: none;
+        border-radius: 0;
+        max-width: none;
+        max-height: none;
+        overflow: visible;
       }
     }
   
