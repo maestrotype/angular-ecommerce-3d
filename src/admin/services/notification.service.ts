@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, interval } from 'rxjs';
 import { switchMap, catchError, map } from 'rxjs/operators';
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../environments/environment';
 
 export interface Notification {
   id: number;

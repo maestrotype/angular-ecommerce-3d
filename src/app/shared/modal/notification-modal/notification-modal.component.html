@@ -1,11 +1,11 @@
 <div class="notification-content">
   <div class="notification-icon">
-    <i [class]="iconClass"></i>
+    <mat-icon [style.color]="getIconColor()">{{ getIcon() }}</mat-icon>
   </div>
   <div class="notification-message">
     {{ notificationData.message }}
   </div>
   <button class="notification-close" (click)="$event.stopPropagation()">
-    <i class="fas fa-times"></i>
+    <mat-icon>close</mat-icon>
   </button>
 </div> 

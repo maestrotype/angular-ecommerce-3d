@@ -1,11 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ModalConfig } from '../../../core/services/modal.service';
-
-export interface NotificationData {
-  message: string;
-  type: 'success' | 'error' | 'warning' | 'info';
-  icon?: string;
-}
+import { ModalConfig, NotificationData } from '../../../core/services/modal.service';
 
 @Component({
   selector: 'app-notification-modal',
@@ -19,17 +13,31 @@ export class NotificationModalComponent {
     return this.config.data || { message: '', type: 'info' };
   }
 
-  get iconClass(): string {
+  getIcon(): string {
     switch (this.notificationData.type) {
       case 'success':
-        return 'fas fa-check-circle';
+        return 'check_circle';
       case 'error':
-        return 'fas fa-exclamation-circle';
+        return 'error';
       case 'warning':
-        return 'fas fa-exclamation-triangle';
+        return 'warning';
       case 'info':
       default:
-        return 'fas fa-info-circle';
+        return 'info';
+    }
+  }
+
+  getIconColor(): string {
+    switch (this.notificationData.type) {
+      case 'success':
+        return '#4caf50';
+      case 'error':
+        return '#f44336';
+      case 'warning':
+        return '#ff9800';
+      case 'info':
+      default:
+        return '#2196f3';
     }
   }
 

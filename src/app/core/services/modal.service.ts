@@ -14,6 +14,12 @@ export interface ModalConfig {
   };
 }
 
+export interface NotificationData {
+  type: 'success' | 'error' | 'warning' | 'info';
+  message: string;
+  title?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })

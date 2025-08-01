@@ -12,7 +12,7 @@ import { CategoryService } from "../../../services/category.service";
 import { Category } from "../../../models/category.model";
 import { ProcessingOptions, ProcessedImageResult } from "../../../components/ui/image-processor/image-processor.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { environment } from "src/environments/environment.prod";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-product-form",

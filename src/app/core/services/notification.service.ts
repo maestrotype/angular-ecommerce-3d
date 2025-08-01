@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ModalService } from './modal.service';
-import { NotificationData } from '../../shared/modal/notification-modal/notification-modal.component';
+import { ModalService, NotificationData } from './modal.service';
 
 @Injectable({
   providedIn: 'root'
