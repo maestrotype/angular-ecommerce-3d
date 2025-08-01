@@ -7,6 +7,9 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { Category } from "src/shared/models/category.model";
 import { CategoryService } from "src/app/core/services/category.service";
+import { ConfirmationService } from "../../../services/confirmation.service";
+import { ErrorHandlerService } from "../../../services/error-handler.service";
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -28,7 +31,10 @@ export class CategoryListComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private confirmationService: ConfirmationService,
+    private errorHandler: ErrorHandlerService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -53,8 +59,10 @@ export class CategoryListComponent implements OnInit {
       error: (err) => {
         this.error = "Failed to load categories. Please try again.";
         this.isLoading = false;
-        this.snackBar.open("Error loading categories", "Close", {
-          duration: 5000,
+        this.errorHandler.showError({
+          title: this.translate.instant('ERROR_LOADING'),
+          message: this.translate.instant('ERROR_LOADING_CATEGORIES'),
+          type: 'error'
         });
       },
     });
@@ -74,20 +82,22 @@ export class CategoryListComponent implements OnInit {
   }
 
   deleteCategory(category: Category): void {
-    if (confirm(`Are you sure you want to delete "${category.name}"?`)) {
-      this.categoryService.deleteCategory(category.id).subscribe({
-        next: () => {
-          this.snackBar.open("Category deleted successfully", "Close", {
-            duration: 3000,
-          });
-          this.loadCategories();
-        },
-        error: (err) => {
-          this.snackBar.open("Error deleting category", "Close", {
-            duration: 5000,
-          });
-        },
-      });
-    }
+    this.confirmationService.confirmDelete(category.name).subscribe(confirmed => {
+      if (confirmed) {
+        this.categoryService.deleteCategory(category.id).subscribe({
+          next: () => {
+            this.errorHandler.showSuccess(this.translate.instant('CATEGORY_DELETED_SUCCESS'));
+            this.loadCategories();
+          },
+          error: (err) => {
+            this.errorHandler.showError({
+              title: this.translate.instant('ERROR'),
+              message: this.translate.instant('ERROR_DELETING_CATEGORY'),
+              type: 'error'
+            });
+          },
+        });
+      }
+    });
   }
 }

@@ -1,52 +1,44 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { DashboardService, DashboardStats } from '../../services/dashboard.service';
+import { Component, OnInit } from '@angular/core';
+import { DashboardService } from '../../services/dashboard.service';
+import { ErrorHandlerService } from '../../services/error-handler.service';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<void>();
-  
-  stats: DashboardStats = {
-    products: 0,
-    orders: 0,
-    users: 0,
-    revenue: 0
-  };
-  
-  isLoading = true;
+export class DashboardComponent implements OnInit {
+  dashboardData: any = {};
+  isLoading = false;
 
-  constructor(private dashboardService: DashboardService) {}
+  constructor(
+    private dashboardService: DashboardService,
+    private errorHandler: ErrorHandlerService
+  ) {}
 
   ngOnInit(): void {
-    this.loadDashboardStats();
+    this.loadDashboardData();
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  private loadDashboardStats(): void {
+  loadDashboardData(): void {
     this.isLoading = true;
-    
-    this.dashboardService.getDashboardStats()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (stats) => {
-          this.stats = stats;
-          this.isLoading = false;
-        },
-        error: (error) => {
-          console.error('Error loading dashboard stats:', error);
-          this.isLoading = false;
-        }
-      });
+    this.dashboardService.getDashboardStats().subscribe({
+      next: (data) => {
+        this.dashboardData = data;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.errorHandler.showError({
+          title: 'Error',
+          message: 'Failed to load dashboard data',
+          type: 'error'
+        });
+        this.isLoading = false;
+      }
+    });
   }
+
+
 
   formatCurrency(amount: number): string {
     return new Intl.NumberFormat('en-US', {
