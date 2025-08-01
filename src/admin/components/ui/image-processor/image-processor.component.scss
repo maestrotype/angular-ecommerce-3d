@@ -13,13 +13,17 @@
 }
 
 .upload-label {
-  @include admin-form-label;
+  color: var(--admin-text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: var(--admin-spacing-xs);
+  display: block;
 }
 
 .file-input-container {
   position: relative;
   border: 2px dashed var(--admin-border-primary);
-  border-radius: var(--admin-radius-md);
+  border-radius: var(--admin-border-radius-md);
   padding: var(--admin-spacing-xl);
   text-align: center;
   transition: all 0.3s ease;
@@ -27,8 +31,8 @@
   cursor: pointer;
 
   &:hover {
-    border-color: var(--admin-border-focus);
-    background: var(--admin-surface-hover);
+    border-color: var(--admin-primary);
+    background: var(--admin-bg-secondary);
   }
 
   &.processing {
@@ -59,14 +63,14 @@
 }
 
 .upload-text {
-  font-size: var(--admin-font-size-lg);
+  font-size: 18px;
   font-weight: 500;
   margin: 0 0 var(--admin-spacing-sm) 0;
   color: var(--admin-text-primary);
 }
 
 .upload-hint {
-  font-size: var(--admin-font-size-sm);
+  font-size: 14px;
   color: var(--admin-text-secondary);
   margin: 0;
 }
@@ -89,7 +93,7 @@
   gap: var(--admin-spacing-lg);
   margin-bottom: var(--admin-spacing-lg);
 
-  @include admin-responsive(mobile) {
+  @include admin-mobile {
     grid-template-columns: 1fr;
   }
 }
@@ -101,7 +105,9 @@
   text-align: center;
 
   h4 {
-    @include admin-heading(4);
+    color: var(--admin-text-primary);
+    font-size: 16px;
+    font-weight: 500;
     margin: 0 0 var(--admin-spacing-md) 0;
   }
 }
@@ -113,7 +119,7 @@
   align-items: center;
   justify-content: center;
   background: var(--admin-bg-tertiary);
-  border-radius: var(--admin-radius-sm);
+  border-radius: var(--admin-border-radius-sm);
   margin-bottom: var(--admin-spacing-md);
   overflow: hidden;
 
@@ -121,19 +127,20 @@
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-    border-radius: var(--admin-radius-sm);
+    border-radius: var(--admin-border-radius-sm);
   }
 }
 
 .file-info {
-  background: var(--admin-surface);
+  background: var(--admin-bg-card);
   border: 1px solid var(--admin-border-primary);
-  border-radius: var(--admin-radius-sm);
+  border-radius: var(--admin-border-radius-sm);
   padding: var(--admin-spacing-sm);
 
   p {
-    @include admin-text-secondary;
+    color: var(--admin-text-secondary);
     margin: var(--admin-spacing-xs) 0;
+    font-size: 14px;
     
     strong {
       color: var(--admin-text-primary);
@@ -149,8 +156,9 @@
   padding: var(--admin-spacing-lg);
 
   p {
-    @include admin-text-secondary;
+    color: var(--admin-text-secondary);
     margin: 0;
+    font-size: 14px;
   }
 }
 
@@ -161,10 +169,14 @@
   flex-wrap: wrap;
 
   button {
-    @include admin-button-primary;
+    @include admin-button('primary');
     
     &[color="warn"] {
-      @include admin-button-danger;
+      background: var(--admin-error);
+      
+      &:hover {
+        background: #d32f2f;
+      }
     }
   }
 }
@@ -172,12 +184,14 @@
 .error-message {
   margin-top: var(--admin-spacing-md);
   padding: var(--admin-spacing-sm);
-  @include admin-status-error;
-  border-radius: var(--admin-radius-sm);
+  color: var(--admin-error);
+  background: rgba(244, 67, 54, 0.1);
+  border: 1px solid var(--admin-error);
+  border-radius: var(--admin-border-radius-sm);
 }
 
-// Responsive
-@include admin-responsive(mobile) {
+/* Responsive */
+@include admin-mobile {
   .image-processor {
     padding: var(--admin-spacing-md);
   }
@@ -193,7 +207,7 @@
   }
   
   .upload-text {
-    font-size: var(--admin-font-size-md);
+    font-size: 16px;
   }
   
   .actions {

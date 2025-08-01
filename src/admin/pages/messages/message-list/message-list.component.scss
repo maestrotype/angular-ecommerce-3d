@@ -1,222 +1,321 @@
 
 .message-list-container {
-    padding: 24px;
+  padding: 24px;
+  background-color: #1f2937;
+  min-height: calc(100vh - 64px);
+  color: #ffffff;
+}
+
+.header {
+  margin-bottom: 24px;
+  
+  h2 {
+    margin: 0;
+    color: #ffffff;
+    font-weight: 500;
+  }
+}
+
+.filters {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  align-items: flex-end;
+  
+  .search-field {
+    flex: 1;
+    max-width: 400px;
   }
   
-  .header {
-    margin-bottom: 24px;
-    
-    h2 {
-      margin: 0;
-      color: #333;
-      font-weight: 500;
+  .status-filter {
+    min-width: 150px;
+  }
+
+  .search-button {
+    .button-text {
+      margin-left: 8px;
     }
   }
+}
+
+.table-container {
+  background: #2d2d2d;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 1px solid #404040;
+  overflow: hidden;
+}
+
+.messages-table {
+  width: 100%;
   
-  .filters {
+  .mat-column-actions {
+    width: 200px;
+    text-align: center;
+  }
+}
+
+.loading, .no-data {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 48px;
+  
+  p {
+    color: #ffffff;
+    font-size: 16px;
+  }
+}
+
+// Mobile Card View Styles
+.mobile-view {
+  display: none;
+}
+
+.messages-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+
+.message-card {
+  background: #2d2d2d;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  padding: 16px;
+  border: 1px solid #404040;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .card-header {
     display: flex;
-    gap: 16px;
-    margin-bottom: 24px;
-    align-items: flex-end;
-    
-    .search-field {
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+
+    .sender-info {
       flex: 1;
-      max-width: 400px;
-    }
-    
-    .status-filter {
-      min-width: 150px;
+
+      h3 {
+        margin: 0 0 4px 0;
+        font-size: 16px;
+        font-weight: 600;
+        color: #ffffff;
+      }
+
+      .email {
+        margin: 0;
+        font-size: 14px;
+        color: #9ca3af;
+      }
     }
 
-    .search-button {
-      .button-text {
-        margin-left: 8px;
+    .status-chip {
+      margin-left: 12px;
+      font-size: 12px;
+      height: 24px;
+    }
+  }
+
+  .card-content {
+    .subject {
+      margin-bottom: 8px;
+
+      h4 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 500;
+        color: #ffffff;
+        line-height: 1.4;
+      }
+    }
+
+    .date {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: #9ca3af;
+      font-size: 12px;
+
+      mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
       }
     }
   }
-  
-  .table-container {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-  }
-  
-  .messages-table {
-    width: 100%;
-    
-    .mat-column-actions {
-      width: 200px;
-      text-align: center;
+
+  .card-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #404040;
+
+    .action-button {
+      width: 36px;
+      height: 36px;
+      line-height: 36px;
+
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
     }
   }
-  
-  .loading, .no-data {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 48px;
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .message-list-container {
+    padding: 16px;
+  }
+
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
     
-    p {
-      color: #666;
-      font-size: 16px;
+    .search-field {
+      max-width: none;
+    }
+
+    .search-button {
+      width: 100%;
+      
+      .button-text {
+        display: inline;
+      }
     }
   }
 
-  // Mobile Card View Styles
+  .desktop-view {
+    display: none;
+  }
+
+  .mobile-view {
+    display: block;
+  }
+
+  .messages-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .messages-grid {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  }
+}
+
+@media (min-width: 1025px) {
   .mobile-view {
     display: none;
   }
 
-  .messages-grid {
-    display: grid;
-    gap: 16px;
-    grid-template-columns: 1fr;
+  .desktop-view {
+    display: block;
   }
+}
 
-  .message-card {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    padding: 16px;
-    border: 1px solid #e0e0e0;
-    transition: all 0.3s ease;
-
-    &:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      transform: translateY(-2px);
+// Material Design overrides for dark theme
+::ng-deep {
+  .mat-form-field {
+    .mat-form-field-label {
+      color: #e5e7eb !important;
     }
-
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 12px;
-
-      .sender-info {
-        flex: 1;
-
-        h3 {
-          margin: 0 0 4px 0;
-          font-size: 16px;
-          font-weight: 600;
-          color: #333;
-        }
-
-        .email {
-          margin: 0;
-          font-size: 14px;
-          color: #666;
-        }
-      }
-
-      .status-chip {
-        margin-left: 12px;
-        font-size: 12px;
-        height: 24px;
-      }
+    
+    .mat-input-element {
+      color: #ffffff !important;
     }
-
-    .card-content {
-      .subject {
-        margin-bottom: 8px;
-
-        h4 {
-          margin: 0;
-          font-size: 14px;
-          font-weight: 500;
-          color: #333;
-          line-height: 1.4;
-        }
-      }
-
-      .date {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        color: #666;
-        font-size: 12px;
-
-        mat-icon {
-          font-size: 16px;
-          width: 16px;
-          height: 16px;
-        }
-      }
+    
+    .mat-form-field-outline {
+      color: #6b7280 !important;
     }
-
-    .card-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid #f0f0f0;
-
-      .action-button {
-        width: 36px;
-        height: 36px;
-        line-height: 36px;
-
-        mat-icon {
-          font-size: 18px;
-          width: 18px;
-          height: 18px;
-        }
+    
+    &.mat-focused {
+      .mat-form-field-outline-thick {
+        color: #3b82f6 !important;
       }
-    }
-  }
-
-  // Responsive Design
-  @media (max-width: 768px) {
-    .message-list-container {
-      padding: 16px;
-    }
-
-    .filters {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 12px;
       
-      .search-field {
-        max-width: none;
-      }
-
-      .search-button {
-        width: 100%;
-        
-        .button-text {
-          display: inline;
-        }
+      .mat-form-field-label {
+        color: #3b82f6 !important;
       }
     }
-
-    .desktop-view {
-      display: none;
-    }
-
-    .mobile-view {
-      display: block;
-    }
-
-    .messages-grid {
-      grid-template-columns: 1fr;
+  }
+  
+  .mat-select {
+    color: #ffffff !important;
+    
+    .mat-select-arrow {
+      color: #9ca3af !important;
     }
   }
-
-  @media (min-width: 769px) and (max-width: 1024px) {
-    .messages-grid {
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  
+  .mat-option {
+    background-color: #2d2d2d !important;
+    color: #ffffff !important;
+    
+    &:hover {
+      background-color: #374151 !important;
+    }
+    
+    &.mat-selected {
+      background-color: #3b82f6 !important;
     }
   }
-
-  @media (min-width: 1025px) {
-    .mobile-view {
-      display: none;
-    }
-
-    .desktop-view {
-      display: block;
+  
+  .mat-select-panel {
+    background-color: #2d2d2d !important;
+  }
+  
+  .mat-chip {
+    background-color: #3b82f6 !important;
+    color: #ffffff !important;
+  }
+  
+  .mat-icon-button {
+    color: #ffffff !important;
+    
+    &.mat-button-disabled {
+      color: #6b7280 !important;
     }
   }
+  
+  .mat-raised-button.mat-primary {
+    background-color: #3b82f6 !important;
+    color: #ffffff !important;
+  }
+  
+  .mat-table {
+    background-color: #2d2d2d !important;
+  }
+  
+  .mat-header-row {
+    background-color: #374151 !important;
+  }
+  
+  .mat-row {
+    background-color: #2d2d2d !important;
+    
+    &:hover {
+      background-color: #374151 !important;
+    }
+  }
+  
+  .mat-header-cell {
+    color: #ffffff !important;
+    font-weight: 600;
+  }
+  
+  .mat-cell {
+    color: #ffffff !important;
+  }
+}
   

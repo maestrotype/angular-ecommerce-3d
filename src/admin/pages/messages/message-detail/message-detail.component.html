@@ -31,11 +31,11 @@
         <div class="content-text">{{ message.message }}</div>
       </div>
   
-      <div *ngIf="message.adminReply" class="admin-reply">
+      <div *ngIf="message.adminResponse" class="admin-reply">
         <h4>Admin Reply:</h4>
-        <div class="reply-text">{{ message.adminReply }}</div>
+        <div class="reply-text">{{ message.adminResponse }}</div>
         <div class="reply-date">
-          <small>Replied on: {{ message.repliedAt | date:'full' }}</small>
+          <small>Replied on: {{ message.respondedAt | date:'full' }}</small>
         </div>
       </div>
   
@@ -71,7 +71,7 @@
     <div mat-dialog-actions class="actions">
       <button mat-button (click)="onClose()">Close</button>
       <button mat-raised-button color="primary" (click)="toggleReplyForm()" 
-              *ngIf="!showReplyForm && !message.adminReply">
+              *ngIf="!showReplyForm && !message.adminResponse">
         <mat-icon>reply</mat-icon>
         Reply
       </button>

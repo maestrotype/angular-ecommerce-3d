@@ -111,8 +111,9 @@ export class MessageListComponent implements OnInit {
   getStatusColor(status: string): string {
     switch (status) {
       case 'new': return 'accent';
-      case 'read': return 'primary';
-      case 'archived': return 'warn';
+      case 'in_progress': return 'primary';
+      case 'answered': return 'primary';
+      case 'closed': return 'warn';
       default: return '';
     }
   }

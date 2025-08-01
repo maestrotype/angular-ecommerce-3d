@@ -190,37 +190,9 @@
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
 }
 
-@import './styles/_liquid-glass-variables';
-@import './styles/_grid';
-@import './styles/_buttons';
-@import './styles/_cards';
-@import './styles/_liquid-glass';
-
-/* Fix for admin panel white block artifact */
-.admin-content {
-  background-color: #424242 !important;
-}
-
-.admin-main {
-  background-color: #424242 !important;
-}
-
-mat-sidenav-content {
-  background-color: #424242 !important;
-}
-
-.admin-container {
-  background-color: #424242 !important;
-}
-
-/* Ensure no white backgrounds in admin */
-.admin-content * {
-  background-color: inherit !important;
-}
-
-.admin-main * {
-  background-color: inherit !important;
-}
+@import './styles/_grid.scss';
+@import './styles/_buttons.scss';
+@import './styles/_cards.scss';
 
 /* body { margin: 0; font-family: Arial, sans-serif; background: #fff;} */
 

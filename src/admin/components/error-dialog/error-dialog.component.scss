@@ -26,11 +26,14 @@
         font-size: 24px;
         width: 24px;
         height: 24px;
+        color: var(--admin-error);
       }
     }
     
     .dialog-title {
-      @include admin-heading(3);
+      color: var(--admin-text-primary);
+      font-size: 18px;
+      font-weight: 600;
       margin: 0;
       flex: 1;
     }
@@ -43,7 +46,7 @@
       
       &:hover {
         color: var(--admin-text-primary);
-        background: var(--admin-surface-hover);
+        background: var(--admin-bg-secondary);
       }
     }
   }
@@ -52,7 +55,8 @@
     margin-bottom: var(--admin-spacing-lg);
     
     .dialog-message {
-      @include admin-text;
+      color: var(--admin-text-primary);
+      font-size: 14px;
       margin: 0 0 var(--admin-spacing-md) 0;
       line-height: 1.6;
     }
@@ -60,26 +64,27 @@
     .dialog-details {
       background: var(--admin-bg-tertiary);
       border: 1px solid var(--admin-border-primary);
-      border-radius: var(--admin-radius-sm);
+      border-radius: var(--admin-border-radius-sm);
       padding: var(--admin-spacing-md);
       
       h4 {
-        @include admin-heading(4);
-        margin: 0 0 var(--admin-spacing-sm) 0;
         color: var(--admin-text-secondary);
+        font-size: 14px;
+        font-weight: 500;
+        margin: 0 0 var(--admin-spacing-sm) 0;
       }
       
       .details-text {
-        @include admin-text-secondary;
+        color: var(--admin-text-secondary);
         margin: 0;
         white-space: pre-wrap;
         word-break: break-word;
         font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-        font-size: var(--admin-font-size-xs);
+        font-size: 12px;
         line-height: 1.4;
-        background: var(--admin-surface);
+        background: var(--admin-bg-card);
         padding: var(--admin-spacing-sm);
-        border-radius: var(--admin-radius-sm);
+        border-radius: var(--admin-border-radius-sm);
         border: 1px solid var(--admin-border-secondary);
       }
     }
@@ -91,25 +96,25 @@
     justify-content: flex-end;
     
     .action-button {
-      @include admin-button-primary;
+      @include admin-button('primary');
       
       &.primary {
         background: var(--admin-error);
         
         &:hover {
-          background: var(--admin-error-dark);
+          background: #d32f2f;
         }
       }
     }
     
     .close-dialog-button {
-      @include admin-button-secondary;
+      @include admin-button('secondary');
     }
   }
 }
 
-// Responsive
-@include admin-responsive(mobile) {
+/* Responsive */
+@include admin-mobile {
   .error-dialog {
     .dialog-header {
       flex-direction: column;

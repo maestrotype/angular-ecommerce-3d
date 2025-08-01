@@ -1,13 +1,12 @@
-<form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
+<form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
   <div class="form-group">
     <label for="senderName">Your Name</label>
     <input
       type="text"
       id="senderName"
       formControlName="senderName"
-      class="lg-input"
       [class.invalid]="isFieldInvalid('senderName')"
-      placeholder="Enter your name"
+      placeholder="Your Name"
     />
     <div class="error-message" *ngIf="isFieldInvalid('senderName')">
       {{ getErrorMessage('senderName') }}
@@ -20,9 +19,8 @@
       type="email"
       id="senderEmail"
       formControlName="senderEmail"
-      class="lg-input"
       [class.invalid]="isFieldInvalid('senderEmail')"
-      placeholder="Enter your email"
+      placeholder="Your Email"
     />
     <div class="error-message" *ngIf="isFieldInvalid('senderEmail')">
       {{ getErrorMessage('senderEmail') }}
@@ -35,9 +33,8 @@
       type="text"
       id="subject"
       formControlName="subject"
-      class="lg-input"
       [class.invalid]="isFieldInvalid('subject')"
-      placeholder="Enter subject"
+      placeholder="Subject"
     />
     <div class="error-message" *ngIf="isFieldInvalid('subject')">
       {{ getErrorMessage('subject') }}
@@ -49,9 +46,8 @@
     <textarea
       id="message"
       formControlName="message"
-      class="lg-input"
       [class.invalid]="isFieldInvalid('message')"
-      placeholder="Enter your message"
+      placeholder="Your Message"
       rows="5"
     ></textarea>
     <div class="error-message" *ngIf="isFieldInvalid('message')">
@@ -61,7 +57,7 @@
 
   <button 
     type="submit" 
-    class="submit-button lg-button-glass"
+    class="cta-button-glass"
     [disabled]="isSubmitting || contactForm.invalid"
   >
     <span *ngIf="!isSubmitting">SEND MESSAGE</span>
