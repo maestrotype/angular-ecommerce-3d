@@ -1,16 +1,19 @@
-@import '../../styles/admin-variables.scss';
-@import '../../styles/admin-mixins.scss';
+
 
 .error-dialog {
-  @include admin-card;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  transition: all 0.3s ease;
   max-width: 500px;
   margin: 0;
   
   .dialog-header {
     display: flex;
     align-items: center;
-    gap: var(--admin-spacing-md);
-    margin-bottom: var(--admin-spacing-lg);
+    gap: 16px;
+    margin-bottom: 24px;
     position: relative;
     
     .icon-container {
@@ -20,18 +23,18 @@
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      background: var(--admin-bg-tertiary);
+      background: #fafafa;
       
       mat-icon {
         font-size: 24px;
         width: 24px;
         height: 24px;
-        color: var(--admin-error);
+        color: #f44336;
       }
     }
     
     .dialog-title {
-      color: var(--admin-text-primary);
+      color: #212121;
       font-size: 18px;
       font-weight: 600;
       margin: 0;
@@ -42,84 +45,107 @@
       position: absolute;
       top: 0;
       right: 0;
-      color: var(--admin-text-secondary);
+      color: #757575;
       
       &:hover {
-        color: var(--admin-text-primary);
-        background: var(--admin-bg-secondary);
+        color: #212121;
+        background: #f5f5f5;
       }
     }
   }
   
   .dialog-content {
-    margin-bottom: var(--admin-spacing-lg);
+    margin-bottom: 24px;
     
     .dialog-message {
-      color: var(--admin-text-primary);
+      color: #212121;
       font-size: 14px;
-      margin: 0 0 var(--admin-spacing-md) 0;
+      margin: 0 0 16px 0;
       line-height: 1.6;
     }
     
     .dialog-details {
-      background: var(--admin-bg-tertiary);
-      border: 1px solid var(--admin-border-primary);
-      border-radius: var(--admin-border-radius-sm);
-      padding: var(--admin-spacing-md);
+      background: #fafafa;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      padding: 16px;
       
       h4 {
-        color: var(--admin-text-secondary);
+        color: #757575;
         font-size: 14px;
         font-weight: 500;
-        margin: 0 0 var(--admin-spacing-sm) 0;
+        margin: 0 0 8px 0;
       }
       
       .details-text {
-        color: var(--admin-text-secondary);
+        color: #757575;
         margin: 0;
         white-space: pre-wrap;
         word-break: break-word;
         font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
         font-size: 12px;
         line-height: 1.4;
-        background: var(--admin-bg-card);
-        padding: var(--admin-spacing-sm);
-        border-radius: var(--admin-border-radius-sm);
-        border: 1px solid var(--admin-border-secondary);
+        background: #ffffff;
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #f0f0f0;
       }
     }
   }
   
   .dialog-actions {
     display: flex;
-    gap: var(--admin-spacing-sm);
+    gap: 8px;
     justify-content: flex-end;
     
     .action-button {
-      @include admin-button('primary');
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-height: 40px;
       
       &.primary {
-        background: var(--admin-error);
+        background: #f44336;
+        color: white;
         
         &:hover {
           background: #d32f2f;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
       }
-    }
-    
-    .close-dialog-button {
-      @include admin-button('secondary');
+      
+      &.secondary {
+        background: transparent;
+        color: #212121;
+        border: 1px solid #e0e0e0;
+        
+        &:hover {
+          background: #f5f5f5;
+          border-color: #1976d2;
+        }
+      }
     }
   }
 }
 
 /* Responsive */
-@include admin-mobile {
+@media (max-width: 768px) {
   .error-dialog {
     .dialog-header {
       flex-direction: column;
       text-align: center;
-      gap: var(--admin-spacing-sm);
+      gap: 8px;
       
       .close-button {
         position: static;
