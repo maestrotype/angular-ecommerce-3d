@@ -4,8 +4,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -22,7 +24,8 @@ import { ShopComponent } from './pages/shop/shop.component';
 import { Bag3dFirstComponent } from './components/3d-models/bag3dFirst/bag3dFirst.component';
 import { ThreeDViewerComponent } from './components/three-d-viewer/three-d-viewer.component';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
-import { ContactsComponent } from './layout/contacts/contacts.component';
+import { ContactsComponent } from './pages/contacts/contacts.component';
+import { ContactFormComponent } from './shared/components/contact-form/contact-form.component';
 import { AboutComponent } from './pages/about/about.component';
 import { IconComponent } from './shared/icon/icon.component';
 
@@ -78,15 +81,19 @@ import { ThemeService } from './core/themes/theme.service';
     IconComponent, 
     ThreeDViewerComponent, 
     SectionRendererComponent,
-    FavoritesComponent
+    FavoritesComponent,
+    ContactFormComponent
   ],
-  imports: [
+      imports: [
     BrowserModule, 
     BrowserAnimationsModule, 
     HttpClientModule, 
     FormsModule, 
+    ReactiveFormsModule,
     RouterModule, 
     AppRoutingModule,
+    MatIconModule,
+    MatButtonModule,
     SharedModule
   ],
   providers: [

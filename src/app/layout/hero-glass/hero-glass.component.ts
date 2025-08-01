@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Section } from 'src/shared/models/section.model';
 
@@ -7,10 +7,14 @@ import { Section } from 'src/shared/models/section.model';
     templateUrl: './hero-glass.component.html',
     styleUrls: ['./hero-glass.component.scss']
 })
-export class HeroGlassComponent {
+export class HeroGlassComponent implements OnInit {
     @Input() data!: Section;
     constructor(private router: Router) {}
     modelReady = false;
+
+    ngOnInit(): void {
+        // Component initialized
+    }
 
     onShopNow(): void {
         this.router.navigate(['/shop']).then(() => {

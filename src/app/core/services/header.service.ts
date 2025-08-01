@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.prod';
+
 
 export interface MenuItem {
   title: string;
@@ -45,7 +46,7 @@ export class HeaderService {
       }),
       catchError(error => {
         console.error('Error fetching header section:', error);
-        return of(null);
+        return of(this.getDefaultHeaderSection());
       })
     );
   }
@@ -56,14 +57,14 @@ export class HeaderService {
         if (headerSection?.settings?.menu) {
           return headerSection.settings.menu.filter(item => item.isActive);
         }
-        return [];
+        return this.getDefaultMenuItems();
       })
     );
   }
 
   getHeaderSettings(): Observable<HeaderSettings | null> {
     return this.getHeaderSection().pipe(
-      map(headerSection => headerSection?.settings || null)
+      map(headerSection => headerSection?.settings || this.getDefaultHeaderSettings())
     );
   }
 
@@ -99,5 +100,59 @@ export class HeaderService {
       default:
         return true;
     }
+  }
+
+  private getDefaultHeaderSection(): HeaderSection {
+    return {
+      id: 1,
+      type: 'header',
+      title: 'Default Header',
+      isActive: true,
+      settings: this.getDefaultHeaderSettings()
+    };
+  }
+
+  private getDefaultHeaderSettings(): HeaderSettings {
+    return {
+      showSearch: true,
+      showCart: true,
+      showProfile: true,
+      menu: this.getDefaultMenuItems()
+    };
+  }
+
+  private getDefaultMenuItems(): MenuItem[] {
+    return [
+      {
+        title: 'Home',
+        url: '/home',
+        access: 'all',
+        isActive: true
+      },
+      {
+        title: 'Shop',
+        url: '/shop',
+        access: 'all',
+        isActive: true
+      },
+      {
+        title: 'About',
+        url: '/about',
+        access: 'all',
+        isActive: true
+      },
+      {
+        title: 'Contacts',
+        url: '/contacts',
+        access: 'all',
+        isActive: true
+      },
+      {
+        title: 'Admin Panel',
+        url: '/admin',
+        access: 'admin',
+        isActive: true
+      }
+    ];
   }
 } 

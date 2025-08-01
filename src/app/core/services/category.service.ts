@@ -11,21 +11,14 @@ import { environment } from 'src/environments/environment.prod';
 export class CategoryService {
   private readonly API_URL = environment.apiUrl + '/categories';
 
-  private fallbackCategories: Category[] = [
-    { id: 'all', name: 'All Categories', slug: 'all', icon: 'assets/icons/all.svg' },
-    { id: 'handbags', name: 'Handbags', slug: 'handbags', icon: 'assets/icons/handbags.svg' },
-    { id: 'shoes', name: 'Shoes', slug: 'shoes', icon: 'assets/icons/shoes.svg' },
-    { id: 'clothing', name: 'Clothing', slug: 'clothing', icon: 'assets/icons/clothing.svg'}
-  ];
-
   constructor(private http: HttpClient) {}
 
   getAllCategories(): Observable<Category[]> {
     return this.http.get<Category[]>(this.API_URL)
       .pipe(
         catchError(error => {
-          console.warn('Failed to fetch categories from API, using fallback:', error);
-          return of(this.fallbackCategories);
+          console.error('Failed to fetch categories from API:', error);
+          return throwError(() => error);
         })
       );
   }
@@ -47,6 +40,12 @@ export class CategoryService {
 
   deleteCategory(id: string): Observable<void> {
     return this.http.delete<void>(`${this.API_URL}/${id}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  // Sync categories with sections
+  syncCategoriesWithSections(): Observable<void> {
+    return this.http.post<void>(`${this.API_URL}/sync-with-sections`, {})
       .pipe(catchError(this.handleError));
   }
 

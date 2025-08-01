@@ -4,7 +4,7 @@ import { HomeComponent } from "./pages/home/home.component";
 import { ShopComponent } from "./pages/shop/shop.component";
 import { AboutComponent } from "./pages/about/about.component";
 import { FavoritesComponent } from "./pages/favorites/favorites.component";
-// import { ContactComponent } from './pages/contact/contact.component';
+import { ContactsComponent } from "./pages/contacts/contacts.component";
 import { ProductDetailComponent } from "./components/product-detail/product-detail.component";
 
 const routes: Routes = [
@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: "shop", component: ShopComponent },
   { path: "about", component: AboutComponent },
   { path: "favorites", component: FavoritesComponent },
-  // { path: 'contact', component: ContactComponent },
+  { path: "contacts", component: ContactsComponent },
   { path: "product/:id", component: ProductDetailComponent },
   { path: "", redirectTo: "/home", pathMatch: "full" },
   {

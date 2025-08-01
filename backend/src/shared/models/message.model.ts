@@ -1,15 +1,21 @@
-
 export interface Message {
   id: number;
   senderName: string;
   senderEmail: string;
   subject: string;
   message: string;
-  status: 'new' | 'in_progress' | 'answered' | 'closed';
-  adminResponse?: string;
-  respondedAt?: Date;
+  status: MessageStatus;
   createdAt: Date;
   updatedAt: Date;
+  adminResponse?: string;
+  respondedAt?: Date;
+}
+
+export enum MessageStatus {
+  NEW = 'new',
+  IN_PROGRESS = 'in_progress',
+  ANSWERED = 'answered',
+  CLOSED = 'closed'
 }
 
 export interface CreateMessageDto {
@@ -20,11 +26,13 @@ export interface CreateMessageDto {
 }
 
 export interface UpdateMessageDto {
-  status?: 'new' | 'in_progress' | 'answered' | 'closed';
+  status?: MessageStatus;
   adminResponse?: string;
 }
 
-export interface ReplyMessageDto {
-  reply: string;
-}
-  
+export interface MessageFilters {
+  status?: MessageStatus;
+  search?: string;
+  page?: number;
+  limit?: number;
+} 

@@ -1,73 +1,115 @@
 
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Message } from './entities/message.entity';
-import { CreateMessageDto } from './dto/create-message.dto';
-import { UpdateMessageDto } from './dto/update-message.dto';
-import { ReplyMessageDto } from './dto/reply-message.dto';
+import { Message, CreateMessageDto, UpdateMessageDto, MessageFilters, MessageStatus } from '../shared/models/message.model';
 
 @Injectable()
 export class MessagesService {
-  constructor(
-    @InjectRepository(Message)
-    private messageRepository: Repository<Message>,
-  ) {}
+  private messages: Message[] = [];
+  private nextId = 1;
 
-  async create(createMessageDto: CreateMessageDto): Promise<Message> {
-    const message = this.messageRepository.create(createMessageDto);
-    return await this.messageRepository.save(message);
+  async createMessage(createMessageDto: CreateMessageDto): Promise<Message> {
+    const message: Message = {
+      id: this.nextId++,
+      ...createMessageDto,
+      status: MessageStatus.NEW,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
+    this.messages.push(message);
+    return message;
   }
 
-  async findAll(status?: string, search?: string): Promise<Message[]> {
-    const query = this.messageRepository.createQueryBuilder('message');
+  async getAllMessages(filters: MessageFilters = {}): Promise<Message[]> {
+    let filteredMessages = [...this.messages];
 
-    if (status && status !== 'all') {
-      query.andWhere('message.status = :status', { status });
+    if (filters.status) {
+      filteredMessages = filteredMessages.filter(msg => msg.status === filters.status);
     }
 
-    if (search) {
-      query.andWhere(
-        '(message.senderName ILIKE :search OR message.senderEmail ILIKE :search OR message.subject ILIKE :search)',
-        { search: `%${search}%` }
+    if (filters.search) {
+      const searchTerm = filters.search.toLowerCase();
+      filteredMessages = filteredMessages.filter(msg =>
+        msg.senderName.toLowerCase().includes(searchTerm) ||
+        msg.senderEmail.toLowerCase().includes(searchTerm) ||
+        msg.subject.toLowerCase().includes(searchTerm) ||
+        msg.message.toLowerCase().includes(searchTerm)
       );
     }
 
-    return await query.orderBy('message.createdAt', 'DESC').getMany();
+    if (filters.page && filters.limit) {
+      const start = (filters.page - 1) * filters.limit;
+      const end = start + filters.limit;
+      filteredMessages = filteredMessages.slice(start, end);
+    }
+
+    return filteredMessages.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
-  async findOne(id: number): Promise<Message> {
-    const message = await this.messageRepository.findOne({ where: { id } });
+  async getMessageById(id: number): Promise<Message> {
+    const message = this.messages.find(msg => msg.id === id);
     if (!message) {
       throw new NotFoundException(`Message with ID ${id} not found`);
     }
     return message;
   }
 
-  async update(id: number, updateMessageDto: UpdateMessageDto): Promise<Message> {
-    const message = await this.findOne(id);
-    Object.assign(message, updateMessageDto);
-    return await this.messageRepository.save(message);
+  async updateMessage(id: number, updateMessageDto: UpdateMessageDto): Promise<Message> {
+    const messageIndex = this.messages.findIndex(msg => msg.id === id);
+    if (messageIndex === -1) {
+      throw new NotFoundException(`Message with ID ${id} not found`);
+    }
+
+    const message = this.messages[messageIndex];
+    
+    if (updateMessageDto.status) {
+      message.status = updateMessageDto.status;
+    }
+
+    if (updateMessageDto.adminResponse) {
+      message.adminResponse = updateMessageDto.adminResponse;
+      message.respondedAt = new Date();
+      if (message.status === MessageStatus.NEW || message.status === MessageStatus.IN_PROGRESS) {
+        message.status = MessageStatus.ANSWERED;
+      }
+    }
+
+    message.updatedAt = new Date();
+    this.messages[messageIndex] = message;
+
+    return message;
   }
 
-  async reply(id: number, replyMessageDto: ReplyMessageDto): Promise<Message> {
-    const message = await this.findOne(id);
-    message.adminReply = replyMessageDto.reply;
-    message.repliedAt = new Date();
-    message.status = 'read';
-    return await this.messageRepository.save(message);
+  async deleteMessage(id: number): Promise<void> {
+    const messageIndex = this.messages.findIndex(msg => msg.id === id);
+    if (messageIndex === -1) {
+      throw new NotFoundException(`Message with ID ${id} not found`);
+    }
+
+    this.messages.splice(messageIndex, 1);
   }
 
-  async remove(id: number): Promise<void> {
-    const message = await this.findOne(id);
-    await this.messageRepository.remove(message);
+  async getMessagesCount(filters: MessageFilters = {}): Promise<number> {
+    let filteredMessages = [...this.messages];
+
+    if (filters.status) {
+      filteredMessages = filteredMessages.filter(msg => msg.status === filters.status);
+    }
+
+    if (filters.search) {
+      const searchTerm = filters.search.toLowerCase();
+      filteredMessages = filteredMessages.filter(msg =>
+        msg.senderName.toLowerCase().includes(searchTerm) ||
+        msg.senderEmail.toLowerCase().includes(searchTerm) ||
+        msg.subject.toLowerCase().includes(searchTerm) ||
+        msg.message.toLowerCase().includes(searchTerm)
+      );
+    }
+
+    return filteredMessages.length;
   }
 
-  async markAsRead(id: number): Promise<Message> {
-    return await this.update(id, { status: 'read' });
-  }
-
-  async markAsArchived(id: number): Promise<Message> {
-    return await this.update(id, { status: 'archived' });
+  async getUnreadCount(): Promise<number> {
+    return this.messages.filter(msg => msg.status === MessageStatus.NEW).length;
   }
 }

@@ -1,6 +1,16 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
+export interface NotificationData {
+  title: string;
+  message: string;
+  details?: string;
+  type: 'error' | 'warning' | 'info' | 'success';
+  action?: string;
+  actionCallback?: () => void;
+  theme?: 'admin' | 'storefront';
+}
+
 export interface ModalConfig {
   id: string;
   type: 'image' | 'cart' | 'auth' | 'custom' | 'notification';
@@ -59,5 +69,58 @@ export class ModalService {
 
   getTopModal(): ModalConfig | null {
     return this.modalStack.length > 0 ? this.modalStack[this.modalStack.length - 1] : null;
+  }
+
+  openNotification(notificationData: NotificationData): void {
+    const config: ModalConfig = {
+      id: `notification-${Date.now()}`,
+      type: 'notification',
+      data: notificationData,
+      options: {
+        closeOnBackdrop: true,
+        closeOnEscape: true,
+        showCloseButton: true
+      }
+    };
+    this.openModal(config);
+  }
+
+  showSuccess(title: string, message: string, theme: 'admin' | 'storefront' = 'storefront'): void {
+    this.openNotification({
+      title,
+      message,
+      type: 'success',
+      theme
+    });
+  }
+
+  showError(title: string, message: string, details?: string, theme: 'admin' | 'storefront' = 'storefront'): void {
+    this.openNotification({
+      title,
+      message,
+      details,
+      type: 'error',
+      theme
+    });
+  }
+
+  showWarning(title: string, message: string, details?: string, theme: 'admin' | 'storefront' = 'storefront'): void {
+    this.openNotification({
+      title,
+      message,
+      details,
+      type: 'warning',
+      theme
+    });
+  }
+
+  showInfo(title: string, message: string, details?: string, theme: 'admin' | 'storefront' = 'storefront'): void {
+    this.openNotification({
+      title,
+      message,
+      details,
+      type: 'info',
+      theme
+    });
   }
 }

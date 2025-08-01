@@ -37,26 +37,7 @@ export class CategoriesComponent implements OnInit {
                     isActive: cat.isActive
                 }));
         } else {
-            this.categories = [
-                {
-                    id: 1,
-                    name: 'Shoes',
-                    icon: 'assets/icons/shoes.svg',
-                    slug: 'shoes'
-                },
-                {
-                    id: 2,
-                    name: 'Handbags',
-                    icon: 'assets/icons/handbags.svg',
-                    slug: 'handbags'
-                },
-                {
-                    id: 3,
-                    name: 'Clothing',
-                    icon: 'assets/icons/clothing.svg',
-                    slug: 'clothing'
-                }
-            ];
+            this.categories = [];
         }
     }
 

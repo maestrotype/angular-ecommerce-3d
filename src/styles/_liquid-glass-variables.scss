@@ -1,0 +1,77 @@
+/* Liquid Glass Theme - CSS Variables */
+:root {
+  /* Colors */
+  --lg-primary: #6366f1;
+  --lg-secondary: #0ea5e9;
+  --lg-accent: #8b5cf6;
+  --lg-success: #10b981;
+  --lg-warning: #f59e0b;
+  --lg-error: #ef4444;
+  
+  /* Text Colors */
+  --lg-text-primary: #334155;
+  --lg-text-secondary: #64748b;
+  --lg-text-muted: #94a3b8;
+  --lg-text-light: #f8fafc;
+  
+  /* Background Colors */
+  --lg-bg-primary: rgba(248, 250, 252, 0.85);
+  --lg-bg-secondary: rgba(226, 232, 240, 0.75);
+  --lg-bg-tertiary: rgba(203, 213, 225, 0.85);
+  --lg-bg-quaternary: rgba(186, 200, 216, 0.9);
+  
+  /* Glass Effects */
+  --lg-glass-bg: rgba(255, 255, 255, 0.35);
+  --lg-glass-border: rgba(255, 255, 255, 0.5);
+  --lg-glass-shadow: rgba(99, 102, 241, 0.08);
+  --lg-glass-blur: blur(12px) saturate(180%);
+  
+  /* Gradients */
+  --lg-gradient-primary: linear-gradient(135deg, var(--lg-primary) 0%, var(--lg-secondary) 100%);
+  --lg-gradient-bg: linear-gradient(135deg, 
+    var(--lg-bg-primary) 0%, 
+    var(--lg-bg-secondary) 30%,
+    var(--lg-bg-tertiary) 70%,
+    var(--lg-bg-quaternary) 100%);
+  --lg-gradient-overlay: linear-gradient(135deg, rgba(99,102,241,0.04) 0%, rgba(14,165,233,0.04) 100%);
+  
+  /* Spacing */
+  --lg-spacing-xs: 0.5rem;
+  --lg-spacing-sm: 1rem;
+  --lg-spacing-md: 1.5rem;
+  --lg-spacing-lg: 2rem;
+  --lg-spacing-xl: 3rem;
+  --lg-spacing-2xl: 4rem;
+  
+  /* Border Radius */
+  --lg-radius-sm: 8px;
+  --lg-radius-md: 12px;
+  --lg-radius-lg: 16px;
+  --lg-radius-xl: 20px;
+  
+  /* Shadows */
+  --lg-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --lg-shadow-md: 0 8px 32px var(--lg-glass-shadow);
+  --lg-shadow-lg: 0 15px 40px var(--lg-glass-shadow);
+  --lg-shadow-button: 0 8px 32px rgba(51,65,85,0.10), 0 1.5px 8px rgba(0,0,0,0.08);
+  
+  /* Transitions */
+  --lg-transition: all 0.3s ease;
+  --lg-transition-fast: all 0.2s ease;
+  
+  /* Typography */
+  --lg-font-size-xs: 0.8rem;
+  --lg-font-size-sm: 0.9rem;
+  --lg-font-size-base: 1rem;
+  --lg-font-size-lg: 1.1rem;
+  --lg-font-size-xl: 1.2rem;
+  --lg-font-size-2xl: 1.5rem;
+  --lg-font-size-3xl: 2rem;
+  --lg-font-size-4xl: 2.5rem;
+  
+  --lg-font-weight-normal: 400;
+  --lg-font-weight-medium: 500;
+  --lg-font-weight-semibold: 600;
+  --lg-font-weight-bold: 700;
+  --lg-font-weight-extrabold: 800;
+} 
