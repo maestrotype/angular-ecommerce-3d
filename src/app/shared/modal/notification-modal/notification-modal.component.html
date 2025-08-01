@@ -1,0 +1,11 @@
+<div class="notification-content">
+  <div class="notification-icon">
+    <i [class]="iconClass"></i>
+  </div>
+  <div class="notification-message">
+    {{ notificationData.message }}
+  </div>
+  <button class="notification-close" (click)="$event.stopPropagation()">
+    <i class="fas fa-times"></i>
+  </button>
+</div> 

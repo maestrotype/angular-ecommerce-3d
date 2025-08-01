@@ -213,23 +213,22 @@ export class UploadsController {
   )
   async processImageWithBackgroundRemoval(
     @UploadedFile() file: Express.Multer.File,
-    @Body() body: { removeBackground?: string | boolean; optimize?: string | boolean }
+    @Body() body: { removeBackground?: any; optimize?: any }
   ) {
     if (!file) {
       throw new BadRequestException("No file uploaded");
     }
 
-    if (!file.originalname || !this.imageProcessingService.validateImageFormat(file.originalname)) {
+    if (!file.originalname || !this.imageProcessingService?.validateImageFormat(file.originalname)) {
       throw new BadRequestException("Only image files (JPG, PNG, WEBP) are allowed!");
     }
 
     try {
       const imageBuffer = readFileSync(file.path);
-      
       let processedBuffer: Buffer;
       
-      const removeBackground = body.removeBackground === 'true' || body.removeBackground === true;
-      const optimize = body.optimize === 'true' || body.optimize === true;
+      const removeBackground = body.removeBackground === 'true' || body.removeBackground === true || body.removeBackground === '1';
+      const optimize = body.optimize === 'true' || body.optimize === true || body.optimize === '1';
       
       if (removeBackground) {
         processedBuffer = await this.imageProcessingService.processImageWithBackgroundRemoval(
@@ -277,17 +276,10 @@ export class UploadsController {
         try {
           unlinkSync(file.path);
         } catch (unlinkError) {
-          console.error('Failed to delete temp file:', unlinkError);
+          // Ignore cleanup errors
         }
       }
-      
-      let errorMessage = 'Image processing failed';
-      if (error.message) {
-        errorMessage = error.message;
-      }
-      
-      console.error('Image processing error:', error);
-      throw new BadRequestException(errorMessage);
+      throw new BadRequestException(error.message || 'Image processing failed');
     }
   }
 }  

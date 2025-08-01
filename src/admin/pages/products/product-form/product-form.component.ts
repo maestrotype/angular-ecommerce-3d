@@ -11,7 +11,7 @@ import { ProductService } from "../../../services/product.service";
 import { CategoryService } from "../../../services/category.service";
 import { Category } from "../../../models/category.model";
 import { ProcessingOptions, ProcessedImageResult } from "../../../components/ui/image-processor/image-processor.component";
-import { ErrorHandlerService } from "../../../services/error-handler.service";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { environment } from "src/environments/environment.prod";
 
 @Component({
@@ -44,7 +44,7 @@ export class ProductFormComponent implements OnInit {
     private route: ActivatedRoute,
     private productService: ProductService,
     private categoryService: CategoryService,
-    private errorHandler: ErrorHandlerService,
+    private snackBar: MatSnackBar,
     private http: HttpClient
   ) {
     this.productForm = this.createForm();
@@ -84,10 +84,8 @@ export class ProductFormComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading categories:', error);
-        this.errorHandler.showError({
-          title: 'Error loading categories',
-          message: 'Failed to load categories list',
-          type: 'error'
+        this.snackBar.open('Failed to load categories list', "Close", {
+          duration: 5000,
         });
       }
     });
@@ -120,10 +118,8 @@ export class ProductFormComponent implements OnInit {
     );
 
     if (imageFiles.length === 0) {
-      this.errorHandler.showError({
-        title: 'Invalid file type',
-        message: 'Please select only JPG or PNG images',
-        type: 'warning'
+      this.snackBar.open('Please select only JPG or PNG images', "Close", {
+        duration: 3000,
       });
       return;
     }
@@ -164,9 +160,13 @@ export class ProductFormComponent implements OnInit {
               processingDetails.push('optimized');
             }
             
-            this.errorHandler.showSuccess(`Image ${processingDetails.join(' and ')} successfully!`);
+            this.snackBar.open(`Image ${processingDetails.join(' and ')} successfully!`, "Close", {
+              duration: 3000,
+            });
           } else {
-            this.errorHandler.showSuccess('Image uploaded successfully!');
+            this.snackBar.open('Image uploaded successfully!', "Close", {
+              duration: 3000,
+            });
           }
         },
         error: (error) => {
@@ -180,15 +180,14 @@ export class ProductFormComponent implements OnInit {
             errorMessage = error.message;
           }
           
-          this.errorHandler.showError({
-            title: 'Image processing failed',
-            message: errorMessage,
-            type: 'error',
-            details: error.error?.details || error.stack
+          this.snackBar.open(errorMessage, "Close", {
+            duration: 5000,
           });
           
           // Fallback to direct upload
-          this.errorHandler.showInfo('Uploading original file without processing...');
+          this.snackBar.open('Uploading original file without processing...', "Close", {
+            duration: 3000,
+          });
           this.uploadImageDirectly(file);
         }
       });
@@ -207,10 +206,8 @@ export class ProductFormComponent implements OnInit {
         error: (error) => {
           console.error('Upload error:', error);
           this.isUploading = false;
-          this.errorHandler.showError({
-            title: 'Upload failed',
-            message: 'Failed to upload image',
-            type: 'error'
+          this.snackBar.open('Failed to upload image', "Close", {
+            duration: 5000,
           });
         }
       });
@@ -232,26 +229,19 @@ export class ProductFormComponent implements OnInit {
     const files: FileList = event.target.files;
     if (!files || files.length === 0) return;
 
-    Array.from(files).forEach((file) => {
-      if (
-        !file.type.match(/image\/(png|jpg|jpeg)/) ||
-        file.size > 5 * 1024 * 1024
-      )
-        return;
+    const imageFiles = Array.from(files).filter(file => 
+      file.type.match(/image\/(png|jpg|jpeg)/) && 
+      file.size <= 5 * 1024 * 1024
+    );
 
-      this.isUploading = true;
-      this.productService.uploadImage(file).subscribe({
-        next: (response) => {
-          if (response.url) {
-            this.imageUrls.push(response.url);
-          }
-          this.isUploading = false;
-        },
-        error: () => {
-          this.isUploading = false;
-        },
+    if (imageFiles.length === 0) {
+      this.snackBar.open('Please select only JPG or PNG images under 5MB', "Close", {
+        duration: 3000,
       });
-    });
+      return;
+    }
+
+    this.uploadImages(imageFiles);
   }
 
   removeImageAt(index: number): void {
@@ -303,10 +293,8 @@ export class ProductFormComponent implements OnInit {
       },
       error: (err) => {
         console.error("Error loading product:", err);
-        this.errorHandler.showError({
-          title: 'Error loading product',
-          message: 'Failed to load product data',
-          type: 'error'
+        this.snackBar.open('Failed to load product data', "Close", {
+          duration: 5000,
         });
         this.isLoading = false;
       },
@@ -353,19 +341,15 @@ export class ProductFormComponent implements OnInit {
   onSubmit(): void {
     if (this.productForm.invalid) {
       this.markFormGroupTouched(this.productForm);
-      this.errorHandler.showError({
-        title: 'Validation error',
-        message: 'Please fill in all required fields correctly',
-        type: 'warning'
+      this.snackBar.open("Please fill in all required fields correctly", "Close", {
+        duration: 3000,
       });
       return;
     }
 
     if (!this.imageUrls.length) {
-      this.errorHandler.showError({
-        title: 'Image required',
-        message: 'Please upload at least one image before submitting',
-        type: 'warning'
+      this.snackBar.open("Please upload at least one image before submitting", "Close", {
+        duration: 3000,
       });
       return;
     }
@@ -414,16 +398,16 @@ export class ProductFormComponent implements OnInit {
       next: (product) => {
         console.log("Product created:", product);
         this.isLoading = false;
-        this.errorHandler.showSuccess("Product created successfully!");
+        this.snackBar.open("Product created successfully!", "Close", {
+          duration: 3000,
+        });
         this.router.navigate(["/admin/products"]);
       },
       error: (err) => {
         console.error("Error creating product:", err);
         this.isLoading = false;
-        this.errorHandler.showError({
-          title: 'Error creating product',
-          message: err.error?.message || err.message,
-          type: 'error'
+        this.snackBar.open("Error creating product", "Close", {
+          duration: 5000,
         });
       },
     });
@@ -434,16 +418,16 @@ export class ProductFormComponent implements OnInit {
       next: (product) => {
         console.log("Product updated:", product);
         this.isLoading = false;
-        this.errorHandler.showSuccess("Product updated successfully!");
+        this.snackBar.open("Product updated successfully!", "Close", {
+          duration: 3000,
+        });
         this.router.navigate(["/admin/products"]);
       },
       error: (err) => {
         console.error("Error updating product:", err);
         this.isLoading = false;
-        this.errorHandler.showError({
-          title: 'Error updating product',
-          message: err.error?.message || err.message,
-          type: 'error'
+        this.snackBar.open("Error updating product", "Close", {
+          duration: 5000,
         });
       },
     });

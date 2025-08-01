@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Product } from 'src/shared/models/product.model';
 import { CartService } from '../../../core/services/cart.service';
 import { FavoritesService } from '../../../core/services/favorites.service';
+import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
   selector: 'app-product-info',
@@ -16,7 +17,8 @@ export class ProductInfoComponent {
 
   constructor(
     private cartService: CartService,
-    private favoritesService: FavoritesService
+    private favoritesService: FavoritesService,
+    private notificationService: NotificationService
   ) { }
 
   incrementQuantity(): void {
@@ -44,8 +46,8 @@ export class ProductInfoComponent {
       this.cartService.addToCart(cartItem);
     }
 
-    // Show success message (you can integrate with a toast service)
-    alert(`Added ${this.quantity} ${this.product.name} to cart!`);
+    // Show success message
+    this.notificationService.showSuccess(`Added ${this.quantity} ${this.product.name} to cart!`);
   }
 
   getDiscountedPrice(): number {

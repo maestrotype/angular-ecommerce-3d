@@ -319,3 +319,37 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     padding: 0 2px 8px 2px;
   }
 }
+
+/* Snackbar Styles */
+.success-snackbar {
+  background: #4caf50 !important;
+  color: white !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3) !important;
+}
+
+.success-snackbar .mat-simple-snackbar-action {
+  color: white !important;
+}
+
+.error-snackbar {
+  background: #f44336 !important;
+  color: white !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3) !important;
+}
+
+.error-snackbar .mat-simple-snackbar-action {
+  color: white !important;
+}
+
+.warning-snackbar {
+  background: #ff9800 !important;
+  color: white !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3) !important;
+}
+
+.warning-snackbar .mat-simple-snackbar-action {
+  color: white !important;
+}

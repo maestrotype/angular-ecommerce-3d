@@ -3,13 +3,14 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface ModalConfig {
   id: string;
-  type: 'image' | 'cart' | 'auth' | 'custom';
+  type: 'image' | 'cart' | 'auth' | 'custom' | 'notification';
   data?: any;
   options?: {
     closeOnBackdrop?: boolean;
     closeOnEscape?: boolean;
     showCloseButton?: boolean;
     customClass?: string;
+    autoClose?: number; // milliseconds
   };
 }
 

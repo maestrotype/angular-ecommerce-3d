@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as sharp from 'sharp';
 import axios from 'axios';
+import * as FormData from 'form-data';
 import { imageProcessingConfig } from '../config/image-processing.config';
 
 export interface ProcessedImageResult {
@@ -19,28 +20,36 @@ export class ImageProcessingService {
     originalFormat: string
   ): Promise<Buffer> {
     try {
-      if (!imageProcessingConfig.removeBgApiKey || imageProcessingConfig.removeBgApiKey === 'your_api_key_here') {
-        this.logger.warn('Remove.bg API key not configured or invalid, skipping background removal');
-        throw new Error('Remove.bg API key not configured. Please add valid REMOVE_BG_API_KEY to .env file');
+      if (!imageProcessingConfig.removeBgApiKey) {
+        this.logger.warn('Remove.bg API key not configured, processing image without background removal');
+        return await this.optimizeImage(imageBuffer);
       }
 
       const processedBuffer = await this.removeBackground(imageBuffer);
-      return this.convertToPng(processedBuffer);
+      const pngBuffer = await this.convertToPng(processedBuffer);
+      return pngBuffer;
     } catch (error) {
       this.logger.error('Error processing image with background removal:', error);
-      throw error;
+      return await this.optimizeImage(imageBuffer);
     }
   }
 
   private async removeBackground(imageBuffer: Buffer): Promise<Buffer> {
     try {
+      const formData = new FormData();
+      formData.append('image_file', imageBuffer, {
+        filename: 'image.jpg',
+        contentType: 'image/jpeg'
+      });
+      formData.append('size', 'auto');
+      
       const response = await axios.post(
         imageProcessingConfig.removeBgApiUrl,
-        imageBuffer,
+        formData,
         {
           headers: {
             'X-Api-Key': imageProcessingConfig.removeBgApiKey,
-            'Content-Type': 'application/octet-stream',
+            ...formData.getHeaders(),
           },
           responseType: 'arraybuffer',
         }
