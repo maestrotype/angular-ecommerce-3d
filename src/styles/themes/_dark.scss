@@ -1,0 +1,207 @@
+/* ==========================================================================
+   DARK THEME STYLES
+   Special styles for dark theme
+   ========================================================================== */
+
+[data-theme="dark"] {
+  /* Dark theme overrides */
+  background-color: #0f172a;
+  color: #f8fafc;
+  
+  /* Dark theme for demo sections */
+  .demo-section {
+    background: #1e293b;
+    border: 1px solid #475569;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  .button-demo {
+    background: #334155;
+    border: 1px solid #475569;
+  }
+  
+  /* Dark theme for color swatches */
+  .color-swatch {
+    background: #1e293b;
+    border: 1px solid #475569;
+    
+    .color-name {
+      color: #f8fafc;
+      text-shadow: none;
+    }
+  }
+  
+  /* Dark theme for headings */
+  h1, h2, h3, h4, h5, h6 {
+    color: #f8fafc;
+  }
+  
+  /* Dark theme for text */
+  p {
+    color: #cbd5e1;
+  }
+  
+  .text-secondary {
+    color: #94a3b8;
+  }
+
+  /* Auth modal dark styling */
+  .auth-modal {
+    background: #1e293b !important;
+    border: none !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+
+    .auth-header {
+      background: #1e293b !important;
+      border-bottom: 1px solid #475569;
+      padding: 0 !important;
+      border-radius: 8px 8px 0 0;
+      overflow: hidden;
+      display: block !important;
+
+      .auth-tabs {
+        display: flex !important;
+        width: 100% !important;
+        height: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+
+        .auth-tab {
+          flex: 1 !important;
+          background: #1e293b !important;
+          border: none !important;
+          padding: var(--spacing-md) !important;
+          cursor: pointer;
+          font-weight: var(--font-weight-medium);
+          color: #94a3b8 !important;
+          transition: all var(--transition-normal);
+          position: relative;
+          border-radius: 0 !important;
+          margin: 0 !important;
+
+          &:hover {
+            background: #475569 !important;
+            color: #f8fafc !important;
+          }
+
+          &.active {
+            color: #f8fafc !important;
+            background: #334155 !important;
+            border-radius: 8px 0 0 0 !important;
+            margin: 0 !important;
+
+            &::after {
+              display: none !important;
+            }
+          }
+
+          &:first-child.active {
+            border-radius: 8px 0 0 0 !important;
+            margin-right: 0 !important;
+          }
+
+          &:last-child.active {
+            border-radius: 0 8px 0 0 !important;
+            margin-left: 0 !important;
+          }
+        }
+      }
+    }
+
+    .auth-content {
+      background: #1e293b;
+      padding: var(--spacing-xl);
+    }
+
+    .auth-submit-btn {
+      background: var(--color-auth-button-primary);
+      color: var(--color-text-inverse);
+      border: none;
+      padding: var(--spacing-sm) var(--spacing-md);
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      margin-bottom: var(--spacing-md);
+
+      &:hover {
+        background: var(--color-auth-button-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px var(--color-auth-button-shadow);
+      }
+    }
+
+    .auth-content .auth-form .form-group input {
+      background: #334155;
+      border: 1px solid #475569;
+      color: #f8fafc;
+
+      &::placeholder {
+        color: #94a3b8;
+      }
+
+      &:focus {
+        border-color: var(--color-auth-button-primary);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+      }
+    }
+
+    .auth-content .auth-form .form-group label {
+      color: #f8fafc;
+      font-weight: 500;
+    }
+
+    .auth-content .auth-form .auth-links .forgot-password-link {
+      color: var(--color-auth-button-primary);
+    }
+
+    .auth-content .auth-form .error-message {
+      color: #e74c3c;
+    }
+  }
+
+  /* Special offer dark styling - using Hero Glass approach */
+  .special-offer {
+    background: linear-gradient(135deg, 
+      rgba(248, 250, 252, 0.85) 0%, 
+      rgba(226, 232, 240, 0.75) 30%,
+      rgba(203, 213, 225, 0.85) 70%,
+      rgba(186, 200, 216, 0.9) 100%) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+
+    .offer-title {
+      color: #1e293b !important;
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .offer-subtitle {
+      color: #64748b !important;
+    }
+
+    .shop-button {
+      background: rgba(255, 255, 255, 0.25) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.5) !important;
+      color: #334155 !important;
+      backdrop-filter: blur(12px) saturate(180%);
+      box-shadow: 0 8px 32px rgba(51, 65, 85, 0.10), 0 1.5px 8px rgba(0, 0, 0, 0.08) !important;
+
+      &:hover {
+        background: rgba(99, 102, 241, 0.18) !important;
+        color: #6366f1 !important;
+        box-shadow: 0 12px 40px rgba(99, 102, 241, 0.18) !important;
+        border-color: #6366f1 !important;
+      }
+    }
+
+    /* Remove the pink radial gradient overlay */
+    &::before {
+      display: none !important;
+    }
+  }
+} 

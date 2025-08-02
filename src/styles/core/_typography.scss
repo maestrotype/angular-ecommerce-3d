@@ -1,0 +1,203 @@
+/* ==========================================================================
+   TYPOGRAPHY STYLES
+   Comprehensive text utilities and typography classes
+   ========================================================================== */
+
+/* ==========================================================================
+   TEXT UTILITY CLASSES
+   ========================================================================== */
+
+/* Text sizes */
+.text-xs { font-size: var(--font-size-xs); }
+.text-sm { font-size: var(--font-size-sm); }
+.text-md { font-size: var(--font-size-md); }
+.text-lg { font-size: var(--font-size-lg); }
+.text-xl { font-size: var(--font-size-xl); }
+.text-xxl { font-size: var(--font-size-xxl); }
+.text-xxxl { font-size: var(--font-size-xxxl); }
+
+/* Font weights */
+.font-light { font-weight: var(--font-weight-light); }
+.font-normal { font-weight: var(--font-weight-normal); }
+.font-medium { font-weight: var(--font-weight-medium); }
+.font-semibold { font-weight: var(--font-weight-semibold); }
+.font-bold { font-weight: var(--font-weight-bold); }
+
+/* Text colors */
+.text-primary { color: var(--color-text-primary); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-tertiary { color: var(--color-text-tertiary); }
+.text-disabled { color: var(--color-text-disabled); }
+.text-inverse { color: var(--color-text-inverse); }
+.text-accent { color: var(--color-text-accent); }
+
+/* Semantic text colors */
+.text-success { color: var(--color-success); }
+.text-warning { color: var(--color-warning); }
+.text-error { color: var(--color-error); }
+.text-info { color: var(--color-info); }
+
+/* Line heights */
+.leading-tight { line-height: var(--line-height-tight); }
+.leading-normal { line-height: var(--line-height-normal); }
+.leading-relaxed { line-height: var(--line-height-relaxed); }
+.leading-loose { line-height: var(--line-height-loose); }
+
+/* Text alignment */
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-justify { text-align: justify; }
+
+/* Text decoration */
+.underline { text-decoration: underline; }
+.no-underline { text-decoration: none; }
+.line-through { text-decoration: line-through; }
+
+/* Text transform */
+.uppercase { text-transform: uppercase; }
+.lowercase { text-transform: lowercase; }
+.capitalize { text-transform: capitalize; }
+.normal-case { text-transform: none; }
+
+/* Text truncation */
+.truncate {
+  @include truncate;
+}
+
+.truncate-2 {
+  @include truncate-multiline(2);
+}
+
+.truncate-3 {
+  @include truncate-multiline(3);
+}
+
+/* ==========================================================================
+   HEADING UTILITY CLASSES
+   ========================================================================== */
+
+.heading-1 {
+  @include heading(1);
+}
+
+.heading-2 {
+  @include heading(2);
+}
+
+.heading-3 {
+  @include heading(3);
+}
+
+.heading-4 {
+  @include heading(4);
+}
+
+.heading-5 {
+  @include heading(5);
+}
+
+.heading-6 {
+  @include heading(6);
+}
+
+/* ==========================================================================
+   RESPONSIVE TYPOGRAPHY
+   ========================================================================== */
+
+@include mobile {
+  .text-xs-mobile { font-size: var(--font-size-xs); }
+  .text-sm-mobile { font-size: var(--font-size-sm); }
+  .text-md-mobile { font-size: var(--font-size-md); }
+  .text-lg-mobile { font-size: var(--font-size-lg); }
+  .text-xl-mobile { font-size: var(--font-size-xl); }
+  .text-xxl-mobile { font-size: var(--font-size-xxl); }
+  .text-xxxl-mobile { font-size: var(--font-size-xxxl); }
+}
+
+@include tablet {
+  .text-xs-tablet { font-size: var(--font-size-xs); }
+  .text-sm-tablet { font-size: var(--font-size-sm); }
+  .text-md-tablet { font-size: var(--font-size-md); }
+  .text-lg-tablet { font-size: var(--font-size-lg); }
+  .text-xl-tablet { font-size: var(--font-size-xl); }
+  .text-xxl-tablet { font-size: var(--font-size-xxl); }
+  .text-xxxl-tablet { font-size: var(--font-size-xxxl); }
+}
+
+@include desktop {
+  .text-xs-desktop { font-size: var(--font-size-xs); }
+  .text-sm-desktop { font-size: var(--font-size-sm); }
+  .text-md-desktop { font-size: var(--font-size-md); }
+  .text-lg-desktop { font-size: var(--font-size-lg); }
+  .text-xl-desktop { font-size: var(--font-size-xl); }
+  .text-xxl-desktop { font-size: var(--font-size-xxl); }
+  .text-xxxl-desktop { font-size: var(--font-size-xxxl); }
+}
+
+/* ==========================================================================
+   SPECIAL TYPOGRAPHY PATTERNS
+   ========================================================================== */
+
+/* Display text for hero sections */
+.display-text {
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  color: var(--color-text-primary);
+}
+
+/* Lead text for introductions */
+.lead-text {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-text-secondary);
+}
+
+/* Small text for captions and metadata */
+.small-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  line-height: var(--line-height-normal);
+}
+
+/* Monospace text for code and technical content */
+.mono-text {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  background: var(--color-bg-tertiary);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-secondary);
+}
+
+/* ==========================================================================
+   TEXT SPACING UTILITIES
+   ========================================================================== */
+
+/* Letter spacing */
+.tracking-tight { letter-spacing: -0.025em; }
+.tracking-normal { letter-spacing: 0; }
+.tracking-wide { letter-spacing: 0.025em; }
+.tracking-wider { letter-spacing: 0.05em; }
+.tracking-widest { letter-spacing: 0.1em; }
+
+/* Word spacing */
+.word-spacing-tight { word-spacing: -0.1em; }
+.word-spacing-normal { word-spacing: 0; }
+.word-spacing-wide { word-spacing: 0.1em; }
+
+/* ==========================================================================
+   TEXT SELECTION STYLES
+   ========================================================================== */
+
+::selection {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+::-moz-selection {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+} 

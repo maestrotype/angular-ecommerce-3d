@@ -1,0 +1,22 @@
+/* ==========================================================================
+   MAIN STYLES
+   Main entry point for the new design system
+   ========================================================================== */
+
+// Import core styles
+@import './core/index';
+
+// Import component styles
+@import './components/index';
+
+// Import theme styles
+@import './themes/index';
+
+// Import layout styles
+@import './layouts/index';
+
+// Import frontend specific styles
+@import './frontend/index';
+
+// Import admin specific styles
+@import './admin/index'; 
