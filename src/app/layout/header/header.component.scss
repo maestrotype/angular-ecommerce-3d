@@ -248,7 +248,8 @@
     .search-icon,
     .profile-icon,
     .cart,
-    .favorites {
+    .favorites,
+    .theme-toggle {
       font-size: 1.2em;
       cursor: pointer;
       padding: 0.75rem;
@@ -319,6 +320,46 @@
       font-weight: 600;
       min-width: 20px;
       line-height: 1;
+    }
+  }
+
+  .theme-switcher {
+    position: relative;
+    
+    .theme-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 8px;
+      background: white;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      min-width: 120px;
+      overflow: hidden;
+      
+      .theme-option {
+        display: block;
+        width: 100%;
+        padding: 8px 12px;
+        border: none;
+        background: none;
+        text-align: left;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 14px;
+        color: #333;
+        
+        &:hover {
+          background: rgba(0, 0, 0, 0.05);
+        }
+        
+        &.active {
+          background: #007AFF;
+          color: white;
+        }
+      }
     }
   }
 

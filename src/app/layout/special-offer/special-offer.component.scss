@@ -1,6 +1,6 @@
 .special-offer {
-    padding: 80px 0;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: var(--spacing-xxxl) 0;
+    background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-tertiary) 100%);
     position: relative;
     overflow: hidden;
 
@@ -16,9 +16,9 @@
     }
 
     .container {
-        max-width: 1200px;
+        max-width: var(--container-max-width);
         margin: 0 auto;
-        padding: 0 2rem;
+        padding: 0 var(--container-padding);
         position: relative;
         z-index: 2;
     }
@@ -26,7 +26,7 @@
     .offer-content {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 6rem;
+        gap: var(--spacing-xxl);
         align-items: center;
     }
 
@@ -35,7 +35,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 2rem;
+        padding: var(--spacing-xl);
 
         &::before {
             content: '';
@@ -49,26 +49,26 @@
 
         .sale-badge {
             position: absolute;
-            top: 1rem;
-            left: 1rem;
+            top: var(--spacing-md);
+            left: var(--spacing-md);
             background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-            color: #333;
-            padding: 1.2rem 1rem;
-            border-radius: 12px;
+            color: var(--color-text-primary);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-lg);
             text-align: center;
-            font-weight: 800;
-            font-size: 0.9rem;
+            font-weight: var(--font-weight-bold);
+            font-size: var(--font-size-sm);
             z-index: 3;
             box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
             transform: rotate(-5deg);
             animation: pulse 2s infinite;
 
             .discount {
-                font-size: 2rem;
+                font-size: var(--font-size-xxxl);
                 display: block;
-                font-weight: 900;
+                font-weight: var(--font-weight-bold);
                 line-height: 1;
-                margin-top: 0.2rem;
+                margin-top: var(--spacing-xs);
             }
         }
 
@@ -88,41 +88,41 @@
     }
 
     .offer-text {
-        padding: 2rem 0;
+        padding: var(--spacing-xl) 0;
 
         .offer-title {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: #2c3e50;
-            margin-bottom: 1.2rem;
-            line-height: 1.1;
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            font-size: var(--font-size-xxxl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-md);
+            line-height: var(--line-height-tight);
+            background: linear-gradient(135deg, var(--color-text-primary) 0%, var(--color-text-secondary) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .offer-subtitle {
-            font-size: 1.4rem;
-            color: #7f8c8d;
-            margin-bottom: 3rem;
-            line-height: 1.6;
-            font-weight: 500;
+            font-size: var(--font-size-lg);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-xxl);
+            line-height: var(--line-height-relaxed);
+            font-weight: var(--font-weight-medium);
         }
 
         .shop-button {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-            color: white;
+            background: var(--color-special-offer-button);
+            color: var(--color-text-inverse);
             border: none;
-            padding: 1.2rem 3rem;
-            font-size: 1.1rem;
-            font-weight: 700;
+            padding: var(--spacing-md) var(--spacing-xxl);
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-bold);
             letter-spacing: 0.1em;
             text-transform: uppercase;
             cursor: pointer;
-            transition: all 0.3s ease;
-            border-radius: 8px;
-            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
+            transition: all var(--transition-normal);
+            border-radius: var(--radius-md);
+            box-shadow: 0 6px 20px var(--color-special-offer-button-shadow);
             position: relative;
             overflow: hidden;
 
@@ -138,9 +138,9 @@
             }
 
             &:hover {
-                background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+                background: var(--color-special-offer-button-hover);
                 transform: translateY(-3px);
-                box-shadow: 0 10px 30px rgba(231, 76, 60, 0.4);
+                box-shadow: 0 10px 30px var(--color-special-offer-button-shadow);
 
                 &::before {
                     left: 100%;

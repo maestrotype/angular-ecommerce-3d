@@ -1,0 +1,205 @@
+/* ==========================================================================
+   CORE VARIABLES
+   Global CSS variables for the entire application
+   ========================================================================== */
+
+:root {
+  /* ==========================================================================
+     COLORS - Base color palette
+     ========================================================================== */
+  
+  /* Primary Colors */
+  --color-primary: #667eea;
+  --color-primary-light: #8b9df0;
+  --color-primary-dark: #4a5fd8;
+  --color-primary-hover: #5a6fd8;
+  
+  /* Secondary Colors */
+  --color-secondary: #764ba2;
+  --color-secondary-light: #9a6bb8;
+  --color-secondary-dark: #5d3a7f;
+  --color-secondary-hover: #6a4190;
+  
+  /* Accent Colors */
+  --color-accent: #f093fb;
+  --color-accent-light: #f4b0fc;
+  --color-accent-dark: #e66ff0;
+  --color-accent-hover: #ed7ff5;
+  
+  /* Semantic Colors */
+  --color-success: #4caf50;
+  --color-success-light: #66bb6a;
+  --color-success-dark: #388e3c;
+  --color-success-hover: #43a047;
+  
+  --color-warning: #ff9800;
+  --color-warning-light: #ffb74d;
+  --color-warning-dark: #f57c00;
+  --color-warning-hover: #ff8f00;
+  
+  --color-error: #f44336;
+  --color-error-light: #ef5350;
+  --color-error-dark: #d32f2f;
+  --color-error-hover: #e53935;
+  
+  --color-info: #2196f3;
+  --color-info-light: #42a5f5;
+  --color-info-dark: #1976d2;
+  --color-info-hover: #1e88e5;
+  
+  /* ==========================================================================
+     BACKGROUND COLORS
+     ========================================================================== */
+  
+  --color-bg-primary: #f5f7fa;
+  --color-bg-secondary: #ffffff;
+  --color-bg-tertiary: #fafafa;
+  --color-bg-hover: #e3f2fd;
+  --color-bg-overlay: rgba(0, 0, 0, 0.5);
+  
+  /* ==========================================================================
+     SURFACE COLORS
+     ========================================================================== */
+  
+  --color-surface-primary: #ffffff;
+  --color-surface-secondary: #f8f9fa;
+  --color-surface-tertiary: #e9ecef;
+  --color-surface-hover: #f1f3f4;
+  
+  /* ==========================================================================
+     TEXT COLORS
+     ========================================================================== */
+  
+  --color-text-primary: #333333;
+  --color-text-secondary: #666666;
+  --color-text-tertiary: #999999;
+  --color-text-disabled: #bdbdbd;
+  --color-text-inverse: #ffffff;
+  --color-text-accent: #667eea;
+  
+  /* ==========================================================================
+     BORDER COLORS
+     ========================================================================== */
+  
+  --color-border-primary: #e0e0e0;
+  --color-border-secondary: #f0f0f0;
+  --color-border-tertiary: #f5f5f5;
+  --color-border-focus: #1976d2;
+  
+  /* ==========================================================================
+     SHADOW COLORS
+     ========================================================================== */
+  
+  --color-shadow-light: rgba(0, 0, 0, 0.1);
+  --color-shadow-medium: rgba(0, 0, 0, 0.15);
+  --color-shadow-heavy: rgba(0, 0, 0, 0.25);
+  
+  /* ==========================================================================
+     TYPOGRAPHY
+     ========================================================================== */
+  
+  /* Font Families */
+  --font-family-primary: 'Roboto', 'Helvetica Neue', sans-serif;
+  --font-family-secondary: 'Inter', 'Segoe UI', sans-serif;
+  --font-family-mono: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  
+  /* Font Sizes */
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-md: 1rem;       /* 16px */
+  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-xl: 1.25rem;    /* 20px */
+  --font-size-xxl: 1.5rem;    /* 24px */
+  --font-size-xxxl: 2rem;     /* 32px */
+  
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* Line Heights */
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.4;
+  --line-height-relaxed: 1.6;
+  --line-height-loose: 1.8;
+  
+  /* ==========================================================================
+     SPACING
+     ========================================================================== */
+  
+  --spacing-xs: 0.25rem;   /* 4px */
+  --spacing-sm: 0.5rem;    /* 8px */
+  --spacing-md: 1rem;      /* 16px */
+  --spacing-lg: 1.5rem;    /* 24px */
+  --spacing-xl: 2rem;      /* 32px */
+  --spacing-xxl: 3rem;     /* 48px */
+  --spacing-xxxl: 4rem;    /* 64px */
+  
+  /* ==========================================================================
+     BORDER RADIUS
+     ========================================================================== */
+  
+  --radius-xs: 0.125rem;   /* 2px */
+  --radius-sm: 0.25rem;    /* 4px */
+  --radius-md: 0.5rem;     /* 8px */
+  --radius-lg: 0.75rem;    /* 12px */
+  --radius-xl: 1rem;       /* 16px */
+  --radius-xxl: 1.5rem;    /* 24px */
+  --radius-full: 9999px;
+  
+  /* ==========================================================================
+     SHADOWS
+     ========================================================================== */
+  
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+  --shadow-xxl: 0 25px 50px rgba(0, 0, 0, 0.25);
+  
+  /* ==========================================================================
+     Z-INDEX
+     ========================================================================== */
+  
+  --z-index-dropdown: 1000;
+  --z-index-sticky: 1020;
+  --z-index-fixed: 1030;
+  --z-index-modal-backdrop: 1040;
+  --z-index-modal: 1050;
+  --z-index-popover: 1060;
+  --z-index-tooltip: 1070;
+  --z-index-toast: 1080;
+  
+  /* ==========================================================================
+     TRANSITIONS
+     ========================================================================== */
+  
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  
+  /* ==========================================================================
+     BREAKPOINTS
+     ========================================================================== */
+  
+  --breakpoint-xs: 0;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-xxl: 1400px;
+  
+  /* ==========================================================================
+     LAYOUT
+     ========================================================================== */
+  
+  --container-max-width: 1200px;
+  --container-padding: 0 20px;
+  --grid-columns-desktop: 4;
+  --grid-columns-tablet: 3;
+  --grid-columns-mobile: 2;
+  --grid-gap: 1rem;
+} 

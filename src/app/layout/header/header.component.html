@@ -60,6 +60,25 @@
         <app-icon name="shopping-cart" stroke="#333" />
         <span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span>
       </a>
+      <!-- Theme Switcher -->
+      <div class="theme-switcher" *ngIf="!isMobile">
+        <button class="theme-toggle" (click)="toggleThemeMenu()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        
+        <div class="theme-menu" *ngIf="showThemeMenu">
+          <button 
+            *ngFor="let theme of themes"
+            class="theme-option"
+            [class.active]="currentTheme === theme.id"
+            (click)="changeTheme(theme.id)">
+            {{ theme.name }}
+          </button>
+        </div>
+      </div>
+      
       <span class="profile-icon" (click)="openAuthModal()" *ngIf="showProfile && !isMobile">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path

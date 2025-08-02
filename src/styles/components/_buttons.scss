@@ -1,0 +1,356 @@
+/* ==========================================================================
+   BUTTON COMPONENTS
+   Button styles using the new design system
+   ========================================================================== */
+
+/* ==========================================================================
+   BASE BUTTON CLASS
+   ========================================================================== */
+
+.btn {
+  @include button-base;
+  
+  /* Button sizes */
+  &.btn-sm {
+    @include button-size('sm');
+  }
+  
+  &.btn-lg {
+    @include button-size('lg');
+  }
+  
+  /* Button variants */
+  &.btn-primary {
+    @include button-variant('primary');
+  }
+  
+  &.btn-secondary {
+    @include button-variant('secondary');
+  }
+  
+  &.btn-success {
+    @include button-variant('success');
+  }
+  
+  &.btn-warning {
+    @include button-variant('warning');
+  }
+  
+  &.btn-error {
+    @include button-variant('error');
+  }
+  
+  &.btn-info {
+    @include button-variant('info');
+  }
+  
+  /* Outline variants */
+  &.btn-outline {
+    background: transparent;
+    border: 2px solid currentColor;
+    
+    &.btn-primary {
+      color: var(--color-primary);
+      border-color: var(--color-primary);
+      
+      &:hover:not(:disabled) {
+        background: var(--color-primary);
+        color: var(--color-text-inverse);
+      }
+    }
+    
+    &.btn-secondary {
+      color: var(--color-secondary);
+      border-color: var(--color-secondary);
+      
+      &:hover:not(:disabled) {
+        background: var(--color-secondary);
+        color: var(--color-text-inverse);
+      }
+    }
+    
+    &.btn-success {
+      color: var(--color-success);
+      border-color: var(--color-success);
+      
+      &:hover:not(:disabled) {
+        background: var(--color-success);
+        color: var(--color-text-inverse);
+      }
+    }
+    
+    &.btn-warning {
+      color: var(--color-warning);
+      border-color: var(--color-warning);
+      
+      &:hover:not(:disabled) {
+        background: var(--color-warning);
+        color: var(--color-text-inverse);
+      }
+    }
+    
+    &.btn-error {
+      color: var(--color-error);
+      border-color: var(--color-error);
+      
+      &:hover:not(:disabled) {
+        background: var(--color-error);
+        color: var(--color-text-inverse);
+      }
+    }
+    
+    &.btn-info {
+      color: var(--color-info);
+      border-color: var(--color-info);
+      
+      &:hover:not(:disabled) {
+        background: var(--color-info);
+        color: var(--color-text-inverse);
+      }
+    }
+  }
+  
+  /* Ghost variants */
+  &.btn-ghost {
+    background: transparent;
+    border: none;
+    
+    &.btn-primary {
+      color: var(--color-primary);
+      
+      &:hover:not(:disabled) {
+        background: rgba(102, 126, 234, 0.1);
+      }
+    }
+    
+    &.btn-secondary {
+      color: var(--color-secondary);
+      
+      &:hover:not(:disabled) {
+        background: rgba(118, 75, 162, 0.1);
+      }
+    }
+    
+    &.btn-success {
+      color: var(--color-success);
+      
+      &:hover:not(:disabled) {
+        background: rgba(76, 175, 80, 0.1);
+      }
+    }
+    
+    &.btn-warning {
+      color: var(--color-warning);
+      
+      &:hover:not(:disabled) {
+        background: rgba(255, 152, 0, 0.1);
+      }
+    }
+    
+    &.btn-error {
+      color: var(--color-error);
+      
+      &:hover:not(:disabled) {
+        background: rgba(244, 67, 54, 0.1);
+      }
+    }
+    
+    &.btn-info {
+      color: var(--color-info);
+      
+      &:hover:not(:disabled) {
+        background: rgba(33, 150, 243, 0.1);
+      }
+    }
+  }
+  
+  /* Glass effect */
+  &.btn-glass {
+    @include glass-effect;
+    color: var(--color-text-primary);
+    
+    &:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+  }
+  
+  /* Icon button */
+  &.btn-icon {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: var(--radius-full);
+    
+    &.btn-sm {
+      width: 32px;
+      height: 32px;
+    }
+    
+    &.btn-lg {
+      width: 48px;
+      height: 48px;
+    }
+    
+    .btn-icon-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
+  }
+  
+  /* Loading state */
+  &.btn-loading {
+    position: relative;
+    color: transparent;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 16px;
+      height: 16px;
+      margin: -8px 0 0 -8px;
+      border: 2px solid transparent;
+      border-top-color: currentColor;
+      border-radius: 50%;
+      animation: btn-spin 1s linear infinite;
+    }
+  }
+  
+  /* Full width */
+  &.btn-full {
+    width: 100%;
+  }
+  
+  /* Rounded */
+  &.btn-rounded {
+    border-radius: var(--radius-full);
+  }
+}
+
+/* ==========================================================================
+   BUTTON GROUPS
+   ========================================================================== */
+
+.btn-group {
+  display: inline-flex;
+  
+  .btn {
+    border-radius: 0;
+    
+    &:first-child {
+      border-top-left-radius: var(--radius-md);
+      border-bottom-left-radius: var(--radius-md);
+    }
+    
+    &:last-child {
+      border-top-right-radius: var(--radius-md);
+      border-bottom-right-radius: var(--radius-md);
+    }
+    
+    &:not(:last-child) {
+      border-right: none;
+    }
+  }
+  
+  &.btn-group-vertical {
+    flex-direction: column;
+    
+    .btn {
+      border-radius: 0;
+      
+      &:first-child {
+        border-top-left-radius: var(--radius-md);
+        border-top-right-radius: var(--radius-md);
+        border-bottom-left-radius: 0;
+      }
+      
+      &:last-child {
+        border-bottom-left-radius: var(--radius-md);
+        border-bottom-right-radius: var(--radius-md);
+        border-top-right-radius: 0;
+      }
+      
+      &:not(:last-child) {
+        border-bottom: none;
+      }
+    }
+  }
+}
+
+/* ==========================================================================
+   BUTTON ANIMATIONS
+   ========================================================================== */
+
+@keyframes btn-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE BUTTONS
+   ========================================================================== */
+
+@include mobile {
+  .btn {
+    &.btn-responsive {
+      width: 100%;
+      margin-bottom: var(--spacing-sm);
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+  
+  .btn-group {
+    &.btn-group-responsive {
+      flex-direction: column;
+      width: 100%;
+      
+      .btn {
+        border-radius: var(--radius-md) !important;
+        margin-bottom: var(--spacing-sm);
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}
+
+/* ==========================================================================
+   BUTTON UTILITY CLASSES
+   ========================================================================== */
+
+/* Quick button classes */
+.btn-primary { @extend .btn; @extend .btn-primary; }
+.btn-secondary { @extend .btn; @extend .btn-secondary; }
+.btn-success { @extend .btn; @extend .btn-success; }
+.btn-warning { @extend .btn; @extend .btn-warning; }
+.btn-error { @extend .btn; @extend .btn-error; }
+.btn-info { @extend .btn; @extend .btn-info; }
+
+.btn-outline-primary { @extend .btn; @extend .btn-outline; @extend .btn-primary; }
+.btn-outline-secondary { @extend .btn; @extend .btn-outline; @extend .btn-secondary; }
+.btn-outline-success { @extend .btn; @extend .btn-outline; @extend .btn-success; }
+.btn-outline-warning { @extend .btn; @extend .btn-outline; @extend .btn-warning; }
+.btn-outline-error { @extend .btn; @extend .btn-outline; @extend .btn-error; }
+.btn-outline-info { @extend .btn; @extend .btn-outline; @extend .btn-info; }
+
+.btn-ghost-primary { @extend .btn; @extend .btn-ghost; @extend .btn-primary; }
+.btn-ghost-secondary { @extend .btn; @extend .btn-ghost; @extend .btn-secondary; }
+.btn-ghost-success { @extend .btn; @extend .btn-ghost; @extend .btn-success; }
+.btn-ghost-warning { @extend .btn; @extend .btn-ghost; @extend .btn-warning; }
+.btn-ghost-error { @extend .btn; @extend .btn-ghost; @extend .btn-error; }
+.btn-ghost-info { @extend .btn; @extend .btn-ghost; @extend .btn-info; } 

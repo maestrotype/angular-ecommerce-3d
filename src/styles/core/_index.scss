@@ -1,0 +1,13 @@
+/* ==========================================================================
+   CORE STYLES INDEX
+   Main entry point for all core styles
+   ========================================================================== */
+
+// Import core variables and mixins
+@import './variables';
+@import './mixins';
+
+// Import base styles
+@import './base';
+@import './typography';
+@import './utilities'; 

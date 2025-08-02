@@ -1,0 +1,157 @@
+<div class="style-demo">
+  <div class="container">
+    <header class="demo-header">
+      <h1 class="heading-1">Design System Demo</h1>
+      <p class="lead-text">Testing the new design system with buttons and theme switching</p>
+    </header>
+
+    <!-- Theme Switcher -->
+    <section class="demo-section">
+      <h2 class="heading-2">Theme Switcher</h2>
+      <div class="theme-switcher">
+        <button 
+          *ngFor="let theme of themes"
+          class="btn btn-outline-primary"
+          [class.active]="currentTheme === theme.id"
+          (click)="changeTheme(theme.id)">
+          {{ theme.name }}
+        </button>
+      </div>
+      <p class="text-secondary mt-md">
+        Current theme: <strong>{{ currentTheme }}</strong>
+      </p>
+    </section>
+
+    <!-- Button Variants -->
+    <section class="demo-section">
+      <h2 class="heading-2">Button Variants</h2>
+      <div class="button-grid">
+        <div *ngFor="let variant of buttonVariants" class="button-demo">
+          <h3 class="heading-4">{{ variant | titlecase }}</h3>
+          <app-test-button 
+            [variant]="variant"
+            [text]="variant | titlecase">
+          </app-test-button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Button Sizes -->
+    <section class="demo-section">
+      <h2 class="heading-2">Button Sizes</h2>
+      <div class="button-grid">
+        <div *ngFor="let size of buttonSizes" class="button-demo">
+          <h3 class="heading-4">{{ size | uppercase }}</h3>
+          <app-test-button 
+            variant="primary"
+            [size]="size"
+            [text]="size | uppercase">
+          </app-test-button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Button Styles -->
+    <section class="demo-section">
+      <h2 class="heading-2">Button Styles</h2>
+      <div class="button-grid">
+        <div *ngFor="let style of buttonStyles" class="button-demo">
+          <h3 class="heading-4">{{ style | titlecase }}</h3>
+          <app-test-button 
+            variant="primary"
+            [style]="style"
+            [text]="style | titlecase">
+          </app-test-button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Button States -->
+    <section class="demo-section">
+      <h2 class="heading-2">Button States</h2>
+      <div class="button-grid">
+        <div class="button-demo">
+          <h3 class="heading-4">Normal</h3>
+          <app-test-button 
+            variant="primary"
+            text="Normal Button">
+          </app-test-button>
+        </div>
+        <div class="button-demo">
+          <h3 class="heading-4">Loading</h3>
+          <app-test-button 
+            variant="primary"
+            [loading]="true"
+            text="Loading">
+          </app-test-button>
+        </div>
+        <div class="button-demo">
+          <h3 class="heading-4">Disabled</h3>
+          <app-test-button 
+            variant="primary"
+            [disabled]="true"
+            text="Disabled">
+          </app-test-button>
+        </div>
+        <div class="button-demo">
+          <h3 class="heading-4">With Icon</h3>
+          <app-test-button 
+            variant="primary"
+            icon="favorite"
+            text="With Icon">
+          </app-test-button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Button Groups -->
+    <section class="demo-section">
+      <h2 class="heading-2">Button Groups</h2>
+      <div class="button-demo">
+        <h3 class="heading-4">Horizontal Group</h3>
+        <div class="btn-group">
+          <app-test-button variant="primary" text="Left"></app-test-button>
+          <app-test-button variant="primary" text="Middle"></app-test-button>
+          <app-test-button variant="primary" text="Right"></app-test-button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Typography -->
+    <section class="demo-section">
+      <h2 class="heading-2">Typography</h2>
+      <div class="typography-demo">
+        <h1 class="heading-1">Heading 1</h1>
+        <h2 class="heading-2">Heading 2</h2>
+        <h3 class="heading-3">Heading 3</h3>
+        <h4 class="heading-4">Heading 4</h4>
+        <h5 class="heading-5">Heading 5</h5>
+        <h6 class="heading-6">Heading 6</h6>
+        
+        <p class="lead-text">This is a lead paragraph with larger text and relaxed line height.</p>
+        <p>This is a regular paragraph with normal text styling.</p>
+        <p class="small-text">This is small text for captions and metadata.</p>
+        <p class="mono-text">This is monospace text for code and technical content.</p>
+      </div>
+    </section>
+
+    <!-- Colors -->
+    <section class="demo-section">
+      <h2 class="heading-2">Color Palette</h2>
+      <div class="color-grid">
+        <div class="color-swatch bg-primary">
+          <span class="color-name">Primary</span>
+        </div>
+        <div class="color-swatch bg-secondary">
+          <span class="color-name">Secondary</span>
+        </div>
+        <div class="color-swatch bg-tertiary">
+          <span class="color-name">Tertiary</span>
+        </div>
+        <div class="color-swatch bg-surface">
+          <span class="color-name">Surface</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</div> 

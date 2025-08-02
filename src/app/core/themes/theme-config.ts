@@ -1,12 +1,12 @@
 import { Theme } from './theme.model';
-import { liquidGlassTheme } from './themes/liquid-glass-theme';
-import { defaultTheme } from './themes/default-theme';
-import { modernTheme } from './themes/modern-theme';
+import { defaultThemeNew } from './themes/default-theme-new';
+import { darkTheme } from './themes/dark-theme';
+import { glassTheme } from './themes/glass-theme';
 
 export const AVAILABLE_THEMES: Theme[] = [
-  liquidGlassTheme,
-  defaultTheme,
-  modernTheme
+  defaultThemeNew,
+  darkTheme,
+  glassTheme
 ];
 
-export const DEFAULT_THEME_ID = 'liquid-glass'; 
+export const DEFAULT_THEME_ID = 'default'; 

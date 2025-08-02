@@ -1,0 +1,180 @@
+/* ==========================================================================
+   GLASS THEME STYLES
+   Special styles for glass morphism theme
+   ========================================================================== */
+
+[data-theme="glass"] {
+  /* Background gradient for glass theme */
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  
+  /* Glass effect for cards and surfaces */
+  .demo-section {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+  
+  .button-demo {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Glass effect for buttons */
+  .btn-glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    
+    &:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+  }
+  
+  /* Glass effect for color swatches */
+  .color-swatch {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    
+    .color-name {
+      color: #ffffff;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  /* Auth modal glass styling */
+  .auth-modal {
+    background: linear-gradient(135deg, 
+      rgba(248, 250, 252, 0.85) 0%, 
+      rgba(226, 232, 240, 0.75) 30%,
+      rgba(203, 213, 225, 0.85) 70%,
+      rgba(186, 200, 216, 0.9) 100%);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+    .auth-header {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .auth-content {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(15px);
+    }
+
+    .auth-submit-btn {
+      background: rgba(255, 255, 255, 0.25);
+      border: 1.5px solid rgba(255, 255, 255, 0.5);
+      color: #334155;
+      backdrop-filter: blur(12px) saturate(180%);
+      box-shadow: 0 8px 32px rgba(51, 65, 85, 0.10), 0 1.5px 8px rgba(0, 0, 0, 0.08);
+
+      &:hover {
+        background: rgba(99, 102, 241, 0.18);
+        color: #6366f1;
+        box-shadow: 0 12px 40px rgba(99, 102, 241, 0.18);
+        border-color: #6366f1;
+      }
+    }
+
+    .auth-content .auth-form .form-group input {
+      background: rgba(255, 255, 255, 0.15) !important;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      color: #1e293b !important;
+
+      &::placeholder {
+        color: rgba(30, 41, 59, 0.6) !important;
+      }
+
+      &:focus {
+        border-color: #6366f1 !important;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1) !important;
+      }
+    }
+
+    .auth-content .auth-form .form-group label {
+      color: #1e293b !important;
+      font-weight: 500;
+    }
+
+    .auth-header .auth-tabs .auth-tab {
+      color: #64748b !important;
+
+      &.active {
+        color: #6366f1 !important;
+        background: rgba(255, 255, 255, 0.2) !important;
+
+        &::after {
+          background: #6366f1 !important;
+        }
+      }
+
+      &:hover {
+        background: rgba(99, 102, 241, 0.1) !important;
+        color: #6366f1 !important;
+      }
+    }
+
+    .auth-content .auth-form .auth-links .forgot-password-link {
+      color: #6366f1 !important;
+    }
+
+    .auth-content .auth-form .error-message {
+      color: #e74c3c !important;
+    }
+  }
+
+  /* Special offer glass styling - using Hero Glass approach */
+  .special-offer {
+    background: linear-gradient(135deg, 
+      rgba(248, 250, 252, 0.85) 0%, 
+      rgba(226, 232, 240, 0.75) 30%,
+      rgba(203, 213, 225, 0.85) 70%,
+      rgba(186, 200, 216, 0.9) 100%) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+
+    .offer-title {
+      color: #1e293b !important;
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .offer-subtitle {
+      color: #64748b !important;
+    }
+
+    .shop-button {
+      background: rgba(255, 255, 255, 0.25) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.5) !important;
+      color: #334155 !important;
+      backdrop-filter: blur(12px) saturate(180%);
+      box-shadow: 0 8px 32px rgba(51, 65, 85, 0.10), 0 1.5px 8px rgba(0, 0, 0, 0.08) !important;
+
+      &:hover {
+        background: rgba(99, 102, 241, 0.18) !important;
+        color: #6366f1 !important;
+        box-shadow: 0 12px 40px rgba(99, 102, 241, 0.18) !important;
+        border-color: #6366f1 !important;
+      }
+    }
+
+    /* Remove the pink radial gradient overlay */
+    &::before {
+      display: none !important;
+    }
+  }
+} 

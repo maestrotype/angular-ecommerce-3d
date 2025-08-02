@@ -7,6 +7,8 @@ import { ProductService } from '../../core/services/product.service';
 import { HeaderService, MenuItem, HeaderSettings } from '../../core/services/header.service';
 import { Product } from 'src/shared/models/product.model';
 import { ModalService } from '../../core/services/modal.service';
+import { ThemeService } from '../../core/themes/theme.service';
+import { Theme } from '../../core/themes/theme.model';
 
 @Component({
   selector: 'app-header',
@@ -34,6 +36,11 @@ export class HeaderComponent implements OnInit {
   showCart = true;
   showProfile = true;
   logoUrl: string | null = null;
+  
+  // Theme switching
+  themes: Theme[] = [];
+  currentTheme = 'default';
+  showThemeMenu = false;
 
   constructor(
     private router: Router,
@@ -41,13 +48,15 @@ export class HeaderComponent implements OnInit {
     private cartService: CartService,
     private favoritesService: FavoritesService,
     private headerService: HeaderService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private themeService: ThemeService
   ) { }
 
   ngOnInit(): void {
     this.loadHeaderCustomization();
     this.loadCartCount();
     this.loadFavoritesCount();
+    this.loadThemes();
     this.checkScreenSize();
     
     this.searchTerm = '';
@@ -109,6 +118,21 @@ export class HeaderComponent implements OnInit {
     this.favoritesSubscription = this.favoritesService.favoritesCount$.subscribe(
       count => this.favoritesCount = count
     );
+  }
+  
+  private loadThemes(): void {
+    this.themes = this.themeService.getAllThemes();
+    this.currentTheme = this.themeService.getCurrentTheme().id;
+  }
+  
+  toggleThemeMenu(): void {
+    this.showThemeMenu = !this.showThemeMenu;
+  }
+  
+  changeTheme(themeId: string): void {
+    this.currentTheme = themeId;
+    this.themeService.setTheme(themeId);
+    this.showThemeMenu = false;
   }
 
   toggleMobileMenu() {

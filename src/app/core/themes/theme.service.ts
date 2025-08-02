@@ -60,63 +60,23 @@ export class ThemeService {
 
     // Apply colors
     Object.entries(theme.colors).forEach(([key, value]) => {
-      if (typeof value === 'object') {
-        Object.entries(value).forEach(([subKey, subValue]) => {
-          const cssVar = `--color-${key}-${subKey}`;
-          root.style.setProperty(cssVar, subValue.toString());
-          console.log(`Set ${cssVar} = ${subValue}`);
-        });
-      } else {
-        const cssVar = `--color-${key}`;
-        root.style.setProperty(cssVar, value.toString());
-        console.log(`Set ${cssVar} = ${value}`);
-      }
+      const cssVar = `--color-${key}`;
+      root.style.setProperty(cssVar, value.toString());
+      console.log(`Set ${cssVar} = ${value}`);
     });
 
     // Apply layout
     Object.entries(theme.layout).forEach(([key, value]) => {
-      if (typeof value === 'object') {
-        Object.entries(value).forEach(([subKey, subValue]) => {
-          if (typeof subValue === 'object') {
-            Object.entries(subValue).forEach(([subSubKey, subSubValue]) => {
-              const cssVar = `--layout-${key}-${subKey}-${subSubKey}`;
-              root.style.setProperty(cssVar, subSubValue.toString());
-              console.log(`Set ${cssVar} = ${subSubValue}`);
-            });
-          } else {
-            const cssVar = `--layout-${key}-${subKey}`;
-            root.style.setProperty(cssVar, subValue.toString());
-            console.log(`Set ${cssVar} = ${subValue}`);
-          }
-        });
-      } else {
-        const cssVar = `--layout-${key}`;
-        root.style.setProperty(cssVar, value.toString());
-        console.log(`Set ${cssVar} = ${value}`);
-      }
+      const cssVar = `--${key}`;
+      root.style.setProperty(cssVar, value.toString());
+      console.log(`Set ${cssVar} = ${value}`);
     });
 
     // Apply components
     Object.entries(theme.components).forEach(([key, value]) => {
-      if (typeof value === 'object') {
-        Object.entries(value).forEach(([subKey, subValue]) => {
-          if (typeof subValue === 'object') {
-            Object.entries(subValue).forEach(([subSubKey, subSubValue]) => {
-              const cssVar = `--component-${key}-${subKey}-${subSubKey}`;
-              root.style.setProperty(cssVar, subSubValue.toString());
-              console.log(`Set ${cssVar} = ${subSubValue}`);
-            });
-          } else {
-            const cssVar = `--component-${key}-${subKey}`;
-            root.style.setProperty(cssVar, subValue.toString());
-            console.log(`Set ${cssVar} = ${subValue}`);
-          }
-        });
-      } else {
-        const cssVar = `--component-${key}`;
-        root.style.setProperty(cssVar, value.toString());
-        console.log(`Set ${cssVar} = ${value}`);
-      }
+      const cssVar = `--${key}`;
+      root.style.setProperty(cssVar, value.toString());
+      console.log(`Set ${cssVar} = ${value}`);
     });
     
     console.log('Theme application completed');

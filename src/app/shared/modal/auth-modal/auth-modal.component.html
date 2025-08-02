@@ -46,7 +46,7 @@
         </div>
   
         <button type="submit" class="auth-submit-btn" [disabled]="loading">
-          {{ loading ? 'Вход...' : 'Login' }}
+          {{ loading ? 'Logging in...' : 'Login' }}
         </button>
         <div *ngIf="error" class="error-message">{{ error }}</div>
   
@@ -106,7 +106,7 @@
         </div>
   
         <button type="submit" class="auth-submit-btn" [disabled]="loading">
-          {{ loading ? 'Регистрация...' : 'Register' }}
+          {{ loading ? 'Registering...' : 'Register' }}
         </button>
         <div *ngIf="error" class="error-message">{{ error }}</div>
       </form>
