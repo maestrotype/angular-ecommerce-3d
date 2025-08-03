@@ -54,15 +54,15 @@ export class OrderDetailComponent implements OnInit {
   getStatusColor(status: string): string {
     switch (status.toLowerCase()) {
       case 'pending':
-        return 'var(--admin-order-detail-status-pending)';
+        return 'var(--admin-order-status-pending)';
       case 'processing':
-        return 'var(--admin-order-detail-status-processing)';
+        return 'var(--admin-order-status-processing)';
       case 'shipped':
-        return 'var(--admin-order-detail-status-shipped)';
+        return 'var(--admin-order-status-shipped)';
       case 'delivered':
-        return 'var(--admin-order-detail-status-delivered)';
+        return 'var(--admin-order-status-delivered)';
       case 'cancelled':
-        return 'var(--admin-order-detail-status-cancelled)';
+        return 'var(--admin-order-status-cancelled)';
       default:
         return 'var(--admin-order-detail-text-secondary)';
     }
