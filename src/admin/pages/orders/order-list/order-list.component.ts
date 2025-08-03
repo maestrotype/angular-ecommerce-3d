@@ -4,7 +4,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 import { OrderService } from '../../../services/order.service';
+import { OrderDetailComponent } from '../order-detail/order-detail.component';
 
 export interface Order {
   id: number;
@@ -42,7 +44,8 @@ export class OrderListComponent implements OnInit {
 
   constructor(
     private orderService: OrderService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -120,7 +123,18 @@ export class OrderListComponent implements OnInit {
   }
 
   viewOrderDetails(order: Order): void {
-    // Implement order details view
-    console.log('View order details:', order);
+    const dialogRef = this.dialog.open(OrderDetailComponent, {
+      width: '900px',
+      maxWidth: '95vw',
+      maxHeight: '90vh',
+      data: { orderId: order.id }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Refresh orders list if needed
+        this.loadOrders();
+      }
+    });
   }
 }

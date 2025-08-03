@@ -36,6 +36,7 @@ import { ProductListComponent } from './pages/products/product-list/product-list
 import { ProductFormComponent } from './pages/products/product-form/product-form.component';
 import { CategoryListComponent } from './pages/categories/category-list/category-list.component';
 import { OrderListComponent } from './pages/orders/order-list/order-list.component';
+import { OrderDetailComponent } from './pages/orders/order-detail/order-detail.component';
 import { UserListComponent } from './pages/users/user-list/user-list.component';
 import { UserEditDialogComponent } from './pages/users/user-edit-dialog/user-edit-dialog.component';
 import { MessageListComponent } from './pages/messages/message-list/message-list.component';
@@ -77,6 +78,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     CategoryListComponent,
     CategoryFormComponent,
     OrderListComponent,
+    OrderDetailComponent,
     MessageListComponent,
     MessageDetailComponent,
     SectionListComponent,
