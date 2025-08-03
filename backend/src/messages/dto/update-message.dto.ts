@@ -1,11 +1,10 @@
 
 import { IsString, IsOptional, IsEnum, MinLength, MaxLength } from 'class-validator';
-import { MessageStatus } from '../../shared/models/message.model';
 
 export class UpdateMessageDto {
   @IsOptional()
-  @IsEnum(MessageStatus)
-  status?: MessageStatus;
+  @IsEnum(['new', 'in_progress', 'answered', 'closed'])
+  status?: 'new' | 'in_progress' | 'answered' | 'closed';
 
   @IsOptional()
   @IsString()

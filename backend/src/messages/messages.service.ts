@@ -1,53 +1,52 @@
 
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Message, CreateMessageDto, UpdateMessageDto, MessageFilters, MessageStatus } from '../shared/models/message.model';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Message } from './entities/message.entity';
+import { CreateMessageDto } from './dto/create-message.dto';
+import { UpdateMessageDto } from './dto/update-message.dto';
 
 @Injectable()
 export class MessagesService {
-  private messages: Message[] = [];
-  private nextId = 1;
+  constructor(
+    @InjectRepository(Message)
+    private messageRepository: Repository<Message>
+  ) {}
 
   async createMessage(createMessageDto: CreateMessageDto): Promise<Message> {
-    const message: Message = {
-      id: this.nextId++,
+    const message = this.messageRepository.create({
       ...createMessageDto,
-      status: MessageStatus.NEW,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
-
-    this.messages.push(message);
-    return message;
+      status: 'new'
+    });
+    return await this.messageRepository.save(message);
   }
 
-  async getAllMessages(filters: MessageFilters = {}): Promise<Message[]> {
-    let filteredMessages = [...this.messages];
+  async getAllMessages(filters: any = {}): Promise<Message[]> {
+    const queryBuilder = this.messageRepository.createQueryBuilder('message');
 
     if (filters.status) {
-      filteredMessages = filteredMessages.filter(msg => msg.status === filters.status);
+      queryBuilder.andWhere('message.status = :status', { status: filters.status });
     }
 
     if (filters.search) {
-      const searchTerm = filters.search.toLowerCase();
-      filteredMessages = filteredMessages.filter(msg =>
-        msg.senderName.toLowerCase().includes(searchTerm) ||
-        msg.senderEmail.toLowerCase().includes(searchTerm) ||
-        msg.subject.toLowerCase().includes(searchTerm) ||
-        msg.message.toLowerCase().includes(searchTerm)
+      const searchTerm = `%${filters.search.toLowerCase()}%`;
+      queryBuilder.andWhere(
+        '(LOWER(message.senderName) LIKE :search OR LOWER(message.senderEmail) LIKE :search OR LOWER(message.subject) LIKE :search OR LOWER(message.message) LIKE :search)',
+        { search: searchTerm }
       );
     }
 
     if (filters.page && filters.limit) {
-      const start = (filters.page - 1) * filters.limit;
-      const end = start + filters.limit;
-      filteredMessages = filteredMessages.slice(start, end);
+      const skip = (filters.page - 1) * filters.limit;
+      queryBuilder.skip(skip).take(filters.limit);
     }
 
-    return filteredMessages.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    queryBuilder.orderBy('message.createdAt', 'DESC');
+    return await queryBuilder.getMany();
   }
 
   async getMessageById(id: number): Promise<Message> {
-    const message = this.messages.find(msg => msg.id === id);
+    const message = await this.messageRepository.findOne({ where: { id } });
     if (!message) {
       throw new NotFoundException(`Message with ID ${id} not found`);
     }
@@ -55,12 +54,7 @@ export class MessagesService {
   }
 
   async updateMessage(id: number, updateMessageDto: UpdateMessageDto): Promise<Message> {
-    const messageIndex = this.messages.findIndex(msg => msg.id === id);
-    if (messageIndex === -1) {
-      throw new NotFoundException(`Message with ID ${id} not found`);
-    }
-
-    const message = this.messages[messageIndex];
+    const message = await this.getMessageById(id);
     
     if (updateMessageDto.status) {
       message.status = updateMessageDto.status;
@@ -69,47 +63,38 @@ export class MessagesService {
     if (updateMessageDto.adminResponse) {
       message.adminResponse = updateMessageDto.adminResponse;
       message.respondedAt = new Date();
-      if (message.status === MessageStatus.NEW || message.status === MessageStatus.IN_PROGRESS) {
-        message.status = MessageStatus.ANSWERED;
+      if (message.status === 'new' || message.status === 'in_progress') {
+        message.status = 'answered';
       }
     }
 
-    message.updatedAt = new Date();
-    this.messages[messageIndex] = message;
-
-    return message;
+    return await this.messageRepository.save(message);
   }
 
   async deleteMessage(id: number): Promise<void> {
-    const messageIndex = this.messages.findIndex(msg => msg.id === id);
-    if (messageIndex === -1) {
-      throw new NotFoundException(`Message with ID ${id} not found`);
-    }
-
-    this.messages.splice(messageIndex, 1);
+    const message = await this.getMessageById(id);
+    await this.messageRepository.remove(message);
   }
 
-  async getMessagesCount(filters: MessageFilters = {}): Promise<number> {
-    let filteredMessages = [...this.messages];
+  async getMessagesCount(filters: any = {}): Promise<number> {
+    const queryBuilder = this.messageRepository.createQueryBuilder('message');
 
     if (filters.status) {
-      filteredMessages = filteredMessages.filter(msg => msg.status === filters.status);
+      queryBuilder.andWhere('message.status = :status', { status: filters.status });
     }
 
     if (filters.search) {
-      const searchTerm = filters.search.toLowerCase();
-      filteredMessages = filteredMessages.filter(msg =>
-        msg.senderName.toLowerCase().includes(searchTerm) ||
-        msg.senderEmail.toLowerCase().includes(searchTerm) ||
-        msg.subject.toLowerCase().includes(searchTerm) ||
-        msg.message.toLowerCase().includes(searchTerm)
+      const searchTerm = `%${filters.search.toLowerCase()}%`;
+      queryBuilder.andWhere(
+        '(LOWER(message.senderName) LIKE :search OR LOWER(message.senderEmail) LIKE :search OR LOWER(message.subject) LIKE :search OR LOWER(message.message) LIKE :search)',
+        { search: searchTerm }
       );
     }
 
-    return filteredMessages.length;
+    return await queryBuilder.getCount();
   }
 
   async getUnreadCount(): Promise<number> {
-    return this.messages.filter(msg => msg.status === MessageStatus.NEW).length;
+    return await this.messageRepository.count({ where: { status: 'new' } });
   }
 }
