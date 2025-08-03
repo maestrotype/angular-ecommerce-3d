@@ -1,0 +1,142 @@
+<div class="order-detail-container">
+  <!-- Header -->
+  <div class="header">
+    <h2>Order Details</h2>
+    <button mat-icon-button (click)="close()" class="close-button">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading order details...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error">
+    <mat-icon>error</mat-icon>
+    <p>{{ error }}</p>
+    <button mat-raised-button color="primary" (click)="loadOrderDetails()">
+      Retry
+    </button>
+  </div>
+
+  <!-- Order Details -->
+  <div *ngIf="order && !loading" class="order-content">
+    <!-- Order Info -->
+    <div class="order-info">
+      <div class="info-row">
+        <div class="info-item">
+          <label>Order ID:</label>
+          <span>#{{ order.id }}</span>
+        </div>
+        <div class="info-item">
+          <label>Date:</label>
+          <span>{{ order.createdAt | date:'medium' }}</span>
+        </div>
+        <div class="info-item">
+          <label>Status:</label>
+          <span class="status-badge" [style.background-color]="getStatusColor(order.status)">
+            {{ order.status }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Customer Info -->
+    <div class="customer-info">
+      <h3>Customer Information</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <label>Name:</label>
+          <span>{{ order.customerName }}</span>
+        </div>
+        <div class="info-item">
+          <label>Email:</label>
+          <span>{{ order.customerEmail }}</span>
+        </div>
+        <div class="info-item" *ngIf="order.phone">
+          <label>Phone:</label>
+          <span>{{ order.phone }}</span>
+        </div>
+        <div class="info-item" *ngIf="order.address">
+          <label>Address:</label>
+          <span>{{ order.address }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Items -->
+    <div class="order-items">
+      <h3>Order Items</h3>
+      <div class="items-table">
+        <div class="table-header">
+          <div class="col-product">Product</div>
+          <div class="col-price">Price</div>
+          <div class="col-quantity">Quantity</div>
+          <div class="col-total">Total</div>
+        </div>
+        <div class="table-row" *ngFor="let item of order.items">
+          <div class="col-product">
+            <div class="product-info">
+              <img *ngIf="item.image" [src]="item.image" [alt]="item.name" class="product-image">
+              <div class="product-details">
+                <div class="product-name">{{ item.name }}</div>
+                <div class="product-description" *ngIf="item.description">{{ item.description }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-price">${{ item.price | number:'1.2-2' }}</div>
+          <div class="col-quantity">{{ item.quantity }}</div>
+          <div class="col-total">${{ (item.price * item.quantity) | number:'1.2-2' }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="order-summary">
+      <div class="summary-row">
+        <span>Subtotal:</span>
+        <span>${{ getTotalPrice() | number:'1.2-2' }}</span>
+      </div>
+      <div class="summary-row" *ngIf="order.shipping">
+        <span>Shipping:</span>
+        <span>${{ order.shipping | number:'1.2-2' }}</span>
+      </div>
+      <div class="summary-row" *ngIf="order.tax">
+        <span>Tax:</span>
+        <span>${{ order.tax | number:'1.2-2' }}</span>
+      </div>
+      <div class="summary-row total">
+        <span>Total:</span>
+        <span>${{ order.total | number:'1.2-2' }}</span>
+      </div>
+    </div>
+
+    <!-- Status Update -->
+    <div class="status-update">
+      <h3>Update Status</h3>
+      <div class="status-controls">
+        <mat-form-field appearance="outline">
+          <mat-label>Order Status</mat-label>
+          <mat-select [(value)]="order.status" (selectionChange)="updateOrderStatus($event.value)">
+            <mat-option value="pending">Pending</mat-option>
+            <mat-option value="processing">Processing</mat-option>
+            <mat-option value="shipped">Shipped</mat-option>
+            <mat-option value="delivered">Delivered</mat-option>
+            <mat-option value="cancelled">Cancelled</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Notes -->
+    <div class="order-notes" *ngIf="order.notes">
+      <h3>Notes</h3>
+      <div class="notes-content">
+        {{ order.notes }}
+      </div>
+    </div>
+  </div>
+</div> 
