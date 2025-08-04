@@ -1,151 +1,120 @@
 # 🛍️ Angular E-commerce 3D Platform
 
-A modern e-commerce platform built with Angular, NestJS, and Three.js featuring 3D product visualization, image processing, and comprehensive admin panel.
+**Modern e-commerce platform with 3D product visualization, AI image processing, and comprehensive admin panel.**
 
-## ✨ Features
+## ✨ Key Features
 
 ### 🎨 **Storefront**
 - **3D Product Visualization** with Three.js
-- **Responsive Design** with glassmorphism effects
-- **Multi-language Support** (EN, RU, UA)
-- **Advanced Image Processing** with background removal
-- **Dynamic Theming System**
+- **Glassmorphism Design** with Liquid Glass system
+- **Responsive Design** (mobile-first approach)
+- **Contact Form** with backend integration
 - **Favorites/Wishlist** functionality
 - **Shopping Cart** with real-time updates
+- **Dynamic Theming** system
 
 ### 🔧 **Admin Panel**
-- **Modern UI System** with consistent design
-- **Image Processing** with AI background removal
 - **Product Management** with 3D model support
 - **Category Management** with dynamic icons
 - **Order Management** with status tracking
 - **User Management** with role-based access
+- **Message Management** for contact form
 - **Section Management** for homepage customization
-- **Error Handling** with beautiful dialogs
+- **Image Processing** with AI background removal
 
 ### 🖼️ **Image Processing**
 - **AI Background Removal** using Remove.bg API
 - **JPG to PNG Conversion** with transparency
-- **Image Optimization** for web use
 - **Drag & Drop** interface
 - **Before/After Preview**
-- **Batch Processing** support
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 - Node.js 18+
-- PostgreSQL
+- PostgreSQL (optional - in-memory storage available)
 - Remove.bg API key (for image processing)
 
 ### Installation
 
-1. **Clone the repository**
+1. **Install dependencies**
 ```bash
-git clone <repository-url>
-cd angular-ecommerce-3d
+npm install
+cd backend && npm install
 ```
 
-2. **Install dependencies**
+2. **Environment setup**
 ```bash
-# Frontend
-npm install
-
-# Backend
-cd backend
-npm install
-```
-
-3. **Environment setup**
-```bash
-# Backend .env
+# Copy and configure environment files
 cp backend/.env.example backend/.env
-# Add your database and API keys
 ```
 
-4. **Start development servers**
+3. **Start development servers**
 ```bash
 # Frontend (port 4200)
-ng serve
+npm start
 
 # Backend (port 3000)
-cd backend
-npm run start:dev
+cd backend && npm run start:dev
 ```
+
+4. **Access the application**
+- Frontend: http://localhost:4200
+- Admin Panel: http://localhost:4200/admin
+- Backend API: http://localhost:3000/api
 
 ## 📁 Project Structure
 
 ```
 angular-ecommerce-3d/
 ├── src/                    # Frontend (Angular)
-│   ├── admin/             # Admin panel
-│   │   ├── components/    # Reusable components
-│   │   ├── pages/         # Admin pages
-│   │   ├── services/      # Admin services
-│   │   └── styles/        # Admin UI system
+│   ├── admin/             # Admin panel components
 │   ├── app/               # Main application
 │   │   ├── components/    # Storefront components
 │   │   ├── core/          # Core services
 │   │   ├── layout/        # Layout components
-│   │   └── pages/         # Storefront pages
-│   └── shared/            # Shared models
+│   │   ├── pages/         # Storefront pages
+│   │   └── shared/        # Shared components
+│   └── styles/            # Global styles
 ├── backend/               # Backend (NestJS)
-│   ├── src/
-│   │   ├── auth/          # Authentication
-│   │   ├── categories/    # Category management
-│   │   ├── products/      # Product management
-│   │   ├── orders/        # Order management
-│   │   ├── sections/      # Section management
-│   │   ├── upload-module/ # File uploads
-│   │   └── services/      # Shared services
-│   └── uploads/           # Uploaded files
+│   ├── src/               # Backend modules
+│   └── uploads/           # File storage
 └── docs/                  # Documentation
 ```
 
-## 🎨 UI Systems
+## 🎨 Design System
 
-### **Storefront UI System**
-- **Glassmorphism Design** with backdrop filters
-- **Dynamic Theming** (Default, Glass, Modern)
-- **Responsive Grid** system
-- **Component Library** with consistent styling
+### **Liquid Glass System**
+- CSS variables for easy theming
+- Glassmorphism effects with backdrop filters
+- Responsive grid system
+- Component library with consistent styling
 
 ### **Admin UI System**
-- **Material Design** based components
-- **CSS Variables** for easy theming
-- **Mixins** for reusable styles
-- **Error Handling** with beautiful dialogs
+- Material Design based components
+- Dark theme with consistent styling
+- Error handling with beautiful dialogs
 
-## 🖼️ Image Processing
+## 🔧 Configuration
 
-### **Features**
-- **AI Background Removal** using Remove.bg
-- **Format Conversion** (JPG → PNG)
-- **Image Optimization** with Sharp
-- **Cloudinary Integration** for storage
+### Environment Variables
+```bash
+# Database
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_USERNAME=postgres
+DATABASE_PASSWORD=your_password
+DATABASE_NAME=ecommerce_db
 
-### **Usage**
-```typescript
-// In components
-<app-image-processor
-  [control]="imageControl"
-  [processingOptions]="options"
-  (fileProcessed)="onProcessed($event)">
-</app-image-processor>
-```
+# JWT
+JWT_SECRET=your-jwt-secret
+JWT_EXPIRES_IN=7d
 
-## 🔧 Error Handling
-
-### **Centralized Error Management**
-```typescript
-// Simple notifications
-this.errorHandler.showSuccess('Operation completed!');
-this.errorHandler.showError('An error occurred');
-
-// Specialized errors
-this.errorHandler.showImageProcessingError(error);
-this.errorHandler.showDatabaseError(error);
-this.errorHandler.showNetworkError(error);
+# APIs
+REMOVE_BG_API_KEY=your-remove-bg-key
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
 ```
 
 ## 📱 Responsive Design
@@ -154,13 +123,6 @@ this.errorHandler.showNetworkError(error);
 - **Breakpoint system** for all devices
 - **Touch-friendly** interfaces
 - **Performance optimized** for mobile
-
-## 🌐 Internationalization
-
-- **Multi-language** support (EN, RU, UA)
-- **Dynamic language** switching
-- **Localized** error messages
-- **RTL** support ready
 
 ## 🔒 Security
 
@@ -172,12 +134,12 @@ this.errorHandler.showNetworkError(error);
 
 ## 🚀 Deployment
 
-### **Frontend**
+### Frontend
 ```bash
 ng build --prod
 ```
 
-### **Backend**
+### Backend
 ```bash
 npm run build
 npm run start:prod
@@ -185,29 +147,22 @@ npm run start:prod
 
 ## 📚 Documentation
 
+- [Installation Guide](./INSTALLATION.md)
+- [Features Overview](./FEATURES.md)
 - [Admin UI System](./README_ADMIN_UI_SYSTEM.md)
 - [Image Processing](./README_IMAGE_PROCESSING.md)
-- [API Documentation](./docs/api.md)
+- [Backend API](./backend/README.md)
 
-## 🤝 Contributing
+## 🆘 Support
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+- Create an issue in the repository
+- Check the documentation
+- Review existing issues
 
 ## 📄 License
 
 This project is licensed under the MIT License.
 
-## 🆘 Support
-
-For support and questions:
-- Create an issue in the repository
-- Check the documentation
-- Review existing issues
-
 ---
 
-**🎉 Built with ❤️ using Angular, NestJS, and Three.js**
+**🎉 Built with Angular, NestJS, and Three.js**
