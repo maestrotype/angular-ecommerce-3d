@@ -114,7 +114,7 @@ label {
   @include admin-card;
   
   .mat-mdc-card-header {
-    background: var(--admin-bg-secondary);
+    background: var(--admin-bg-card);
     border-bottom: 1px solid var(--admin-border-primary);
     padding: var(--admin-spacing-md);
     
@@ -137,7 +137,7 @@ label {
   .mat-mdc-card-actions {
     padding: var(--admin-spacing-md);
     border-top: 1px solid var(--admin-border-primary);
-    background: var(--admin-bg-secondary);
+    background: var(--admin-bg-card);
   }
 }
 

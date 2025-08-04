@@ -98,25 +98,25 @@
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        background-color: #374151;
+        background-color: var(--admin-bg-secondary, #f5f5f5);
         display: flex;
         align-items: center;
         justify-content: center;
         
         mat-icon {
-          color: #9ca3af;
+          color: var(--admin-text-secondary, #757575);
         }
       }
       
       .user-name {
         font-weight: 500;
         margin-bottom: 2px;
-        color: #ffffff;
+        color: var(--admin-text-primary, #212121);
       }
       
       .user-phone {
         font-size: 12px;
-        color: #9ca3af;
+        color: var(--admin-text-secondary, #757575);
       }
     }
     
@@ -130,26 +130,26 @@
 .no-data {
   text-align: center;
   padding: 48px 24px;
-  color: #ffffff;
+  color: var(--admin-text-primary, #212121);
   
   mat-icon {
     font-size: 48px;
     width: 48px;
     height: 48px;
     margin-bottom: 16px;
-    color: #9ca3af;
+    color: var(--admin-text-secondary, #757575);
   }
   
   h3 {
     margin: 0 0 8px 0;
     font-weight: 500;
-    color: #ffffff;
+    color: var(--admin-text-primary, #212121);
   }
   
   p {
     margin: 0;
     opacity: 0.7;
-    color: #9ca3af;
+    color: var(--admin-text-secondary, #757575);
   }
 }
 
@@ -165,15 +165,15 @@
 }
 
 .user-card {
-  background: #2d2d2d;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  background: var(--admin-bg-card, #ffffff);
+  border-radius: var(--admin-border-radius-lg, 12px);
+  box-shadow: var(--admin-shadow-md, 0 4px 6px rgba(0, 0, 0, 0.1));
   padding: 16px;
-  border: 1px solid #404040;
+  border: 1px solid var(--admin-border-primary, #e0e0e0);
   transition: all 0.3s ease;
 
   &:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--admin-shadow-lg, 0 10px 15px rgba(0, 0, 0, 0.1));
     transform: translateY(-2px);
   }
 
@@ -187,13 +187,13 @@
       width: 60px;
       height: 60px;
       border-radius: 50%;
-      background-color: #374151;
+      background-color: var(--admin-bg-secondary, #f5f5f5);
       display: flex;
       align-items: center;
       justify-content: center;
       
       mat-icon {
-        color: #9ca3af;
+        color: var(--admin-text-secondary, #757575);
         font-size: 24px;
         width: 24px;
         height: 24px;
@@ -202,7 +202,7 @@
 
     .user-id {
       font-size: 12px;
-      color: #9ca3af;
+      color: var(--admin-text-secondary, #757575);
       font-weight: 500;
     }
   }
@@ -215,7 +215,7 @@
         margin: 0;
         font-size: 16px;
         font-weight: 600;
-        color: #ffffff;
+        color: var(--admin-text-primary, #212121);
         line-height: 1.4;
       }
     }
@@ -225,7 +225,7 @@
       align-items: center;
       gap: 8px;
       margin-bottom: 8px;
-      color: #9ca3af;
+      color: var(--admin-text-secondary, #757575);
       font-size: 14px;
 
       mat-icon {
@@ -251,7 +251,7 @@
       display: flex;
       align-items: center;
       gap: 4px;
-      color: #9ca3af;
+      color: var(--admin-text-secondary, #757575);
       font-size: 12px;
 
       mat-icon {
@@ -268,7 +268,7 @@
     gap: 8px;
     margin-top: 12px;
     padding-top: 12px;
-    border-top: 1px solid #404040;
+    border-top: 1px solid var(--admin-border-primary, #e0e0e0);
 
     .action-button {
       width: 36px;

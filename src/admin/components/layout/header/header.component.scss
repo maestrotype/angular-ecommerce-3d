@@ -119,19 +119,19 @@
     font-weight: 600;
     font-size: 14px;
     margin-bottom: 4px;
-    color: white;
+    color: var(--admin-text-primary, #212121);
   }
   
   .notification-message {
     font-size: 12px;
-    color: #B0B0B0;
+    color: var(--admin-text-secondary, #757575);
     line-height: 1.4;
     margin-bottom: 4px;
   }
   
   .notification-time {
     font-size: 11px;
-    color: #757575;
+    color: var(--admin-text-secondary, #757575);
   }
 }
 
@@ -152,20 +152,20 @@
   flex-direction: column;
   align-items: center;
   padding: 32px 16px;
-  color: #9E9E9E;
-  background: #2d2d2d;
+  color: var(--admin-text-secondary, #757575);
+  background: var(--admin-bg-card, #ffffff);
   
   mat-icon {
     font-size: 48px;
     width: 48px;
     height: 48px;
     margin-bottom: 8px;
-    color: #757575;
+    color: var(--admin-text-secondary, #757575);
   }
   
   span {
     font-size: 14px;
-    color: #B0B0B0;
+    color: var(--admin-text-secondary, #757575);
   }
 }
 
@@ -181,4 +181,29 @@
   .notification-item {
     padding: 10px 12px;
   }
+}
+
+// Material Design Menu Overrides
+.mat-mdc-menu-panel {
+  background-color: var(--admin-bg-card, #ffffff);
+  color: var(--admin-text-primary, #212121);
+  border: 1px solid var(--admin-border-primary, #e0e0e0);
+  border-radius: var(--admin-border-radius-md, 8px);
+  box-shadow: var(--admin-shadow-lg, 0 10px 15px rgba(0, 0, 0, 0.1));
+}
+
+.mat-mdc-menu-item {
+  color: var(--admin-text-primary, #212121);
+  
+  &:hover {
+    background-color: var(--admin-bg-hover, #e3f2fd);
+  }
+  
+  mat-icon {
+    color: var(--admin-text-primary, #212121);
+  }
+}
+
+.mat-mdc-divider {
+  border-color: var(--admin-border-primary, #e0e0e0);
 }
