@@ -394,69 +394,134 @@
   
   .mat-form-field {
     .mat-form-field-label {
-      color: #e5e7eb !important;
+      color: var(--admin-order-list-text-secondary);
     }
     
     .mat-input-element {
-      color: #ffffff !important;
+      color: var(--admin-order-list-text-primary);
     }
     
     .mat-form-field-outline {
-      color: #6b7280 !important;
+      color: var(--admin-order-list-border);
     }
     
     &.mat-focused {
       .mat-form-field-outline-thick {
-        color: #3b82f6 !important;
+        color: var(--admin-primary);
       }
       
       .mat-form-field-label {
-        color: #3b82f6 !important;
+        color: var(--admin-primary);
       }
     }
   }
   
   .mat-select {
-    color: #ffffff !important;
+    color: var(--admin-order-list-text-primary);
     
     .mat-select-arrow {
-      color: #9ca3af !important;
+      color: var(--admin-order-list-text-secondary);
     }
   }
   
   .mat-option {
-    background-color: #2d2d2d !important;
-    color: #ffffff !important;
+    background-color: var(--admin-order-list-card-bg);
+    color: var(--admin-order-list-text-primary);
     
     &:hover {
-      background-color: #374151 !important;
+      background-color: var(--admin-order-list-row-hover);
     }
     
     &.mat-selected {
-      background-color: #3b82f6 !important;
+      background-color: var(--admin-primary);
     }
   }
   
   .mat-select-panel {
-    background-color: #2d2d2d !important;
+    background-color: var(--admin-order-list-card-bg);
+  }
+
+  .mat-mdc-form-field {
+    .mat-mdc-form-field-label {
+      color: var(--admin-order-list-text-secondary);
+    }
+    
+    .mat-mdc-input-element {
+      color: var(--admin-order-list-text-primary);
+    }
+    
+    .mat-mdc-form-field-outline {
+      color: var(--admin-order-list-border);
+    }
+    
+    &.mat-focused {
+      .mat-mdc-form-field-outline-thick {
+        color: var(--admin-primary);
+      }
+      
+      .mat-mdc-form-field-label {
+        color: var(--admin-primary);
+      }
+    }
+  }
+
+  .status-select {
+    .mat-mdc-form-field-outline {
+      color: var(--admin-dropdown-border);
+    }
+    
+    .mat-mdc-form-field-outline-thick {
+      color: var(--admin-dropdown-border);
+    }
+    
+    &.mat-focused {
+      .mat-mdc-form-field-outline-thick {
+        color: var(--admin-dropdown-border-focus);
+      }
+    }
+  }
+  
+  .mat-mdc-select {
+    color: var(--admin-order-list-text-primary);
+    
+    .mat-mdc-select-arrow {
+      color: var(--admin-order-list-text-secondary);
+    }
+  }
+  
+  .mat-mdc-option {
+    background-color: var(--admin-order-list-card-bg);
+    color: var(--admin-order-list-text-primary);
+    
+    &:hover {
+      background-color: var(--admin-order-list-row-hover);
+    }
+    
+    &.mat-mdc-option-selected {
+      background-color: var(--admin-primary);
+    }
+  }
+  
+  .mat-mdc-select-panel {
+    background-color: var(--admin-order-list-card-bg);
   }
   
   .mat-paginator {
-    background-color: #2d2d2d !important;
-    color: #ffffff !important;
-    border-top: 1px solid #404040;
+    background-color: var(--admin-order-list-pagination-bg);
+    color: var(--admin-order-list-text-primary);
+    border-top: 1px solid var(--admin-order-list-pagination-border);
     
     .mat-paginator-page-size-label,
     .mat-paginator-range-label {
-      color: #ffffff !important;
+      color: var(--admin-order-list-text-primary);
     }
     
     .mat-icon-button {
-      color: #ffffff !important;
+      color: var(--admin-order-list-text-primary);
     }
     
     .mat-select {
-      color: #ffffff !important;
+      color: var(--admin-order-list-text-primary);
     }
   }
 }

@@ -241,61 +241,227 @@
   line-height: 1.5;
 }
 
-// Material Design overrides for dark theme
 ::ng-deep {
   .mat-dialog-container {
-    background-color: #1f2937 !important;
-    color: #ffffff !important;
+    background-color: var(--admin-order-detail-bg);
+    color: var(--admin-order-detail-text-primary);
   }
 
   .mat-form-field {
     .mat-form-field-label {
-      color: #e5e7eb !important;
+      color: var(--admin-order-detail-text-secondary);
     }
     .mat-input-element {
-      color: #ffffff !important;
+      color: var(--admin-order-detail-text-primary);
     }
     .mat-form-field-outline {
-      color: #6b7280 !important;
+      color: var(--admin-order-detail-border);
     }
     &.mat-focused {
       .mat-form-field-outline-thick {
-        color: #3b82f6 !important;
+        color: var(--admin-primary);
       }
       .mat-form-field-label {
-        color: #3b82f6 !important;
+        color: var(--admin-primary);
       }
     }
   }
 
   .mat-select {
-    color: #ffffff !important;
+    color: var(--admin-order-detail-text-primary);
     .mat-select-arrow {
-      color: #9ca3af !important;
+      color: var(--admin-order-detail-text-secondary);
     }
   }
 
   .mat-option {
-    background-color: #2d2d2d !important;
-    color: #ffffff !important;
+    background-color: var(--admin-order-detail-card-bg);
+    color: var(--admin-order-detail-text-primary);
     &:hover {
-      background-color: #374151 !important;
+      background-color: var(--admin-order-detail-header-bg);
     }
     &.mat-selected {
-      background-color: #3b82f6 !important;
+      background-color: var(--admin-primary);
     }
   }
 
   .mat-select-panel {
-    background-color: #2d2d2d !important;
+    background-color: var(--admin-order-detail-card-bg);
   }
 
   .mat-raised-button.mat-primary {
-    background-color: #3b82f6 !important;
-    color: #ffffff !important;
+    background-color: var(--admin-primary);
+    color: var(--admin-text-inverse);
   }
 
   .mat-icon-button {
-    color: #ffffff !important;
+    color: var(--admin-order-detail-text-primary);
+  }
+
+  .mat-mdc-form-field {
+    .mat-mdc-form-field-label {
+      color: var(--admin-order-detail-text-secondary);
+    }
+    .mat-mdc-input-element {
+      color: var(--admin-order-detail-text-primary);
+    }
+    .mat-mdc-form-field-outline {
+      color: var(--admin-order-detail-border);
+    }
+    &.mat-focused {
+      .mat-mdc-form-field-outline-thick {
+        color: var(--admin-primary);
+      }
+      .mat-mdc-form-field-label {
+        color: var(--admin-primary);
+      }
+    }
+  }
+
+  [data-theme="light"] & {
+    .mat-mdc-form-field.mat-mdc-form-field-appearance-outline {
+      .mat-mdc-form-field-outline {
+        color: var(--admin-dropdown-border);
+      }
+      
+      .mat-mdc-form-field-outline-thick {
+        color: var(--admin-dropdown-border);
+      }
+      
+      &.mat-focused {
+        .mat-mdc-form-field-outline-thick {
+          color: var(--admin-dropdown-border-focus);
+        }
+      }
+    }
+  }
+
+  .mat-mdc-select {
+    color: var(--admin-order-detail-text-primary);
+    .mat-mdc-select-arrow {
+      color: var(--admin-order-detail-text-secondary);
+    }
+  }
+
+  .mat-mdc-option {
+    background-color: var(--admin-order-detail-card-bg);
+    color: var(--admin-order-detail-text-primary);
+    &:hover {
+      background-color: var(--admin-order-detail-header-bg);
+    }
+    &.mat-mdc-option-selected {
+      background-color: var(--admin-primary);
+    }
+  }
+
+  .mat-mdc-select-panel {
+    background-color: var(--admin-order-detail-card-bg);
+  }
+
+  .cdk-overlay-pane .mat-mdc-select-panel {
+    background-color: var(--admin-order-detail-card-bg);
+    border: 1px solid var(--admin-order-detail-border);
+    box-shadow: var(--admin-shadow-lg);
+  }
+
+  .cdk-overlay-pane .mat-mdc-option {
+    background-color: var(--admin-order-detail-card-bg);
+    color: var(--admin-order-detail-text-primary);
+    
+    &:hover {
+      background-color: var(--admin-order-detail-header-bg);
+    }
+    
+    &.mat-mdc-option-selected {
+      background-color: var(--admin-primary);
+      color: var(--admin-text-inverse);
+    }
+  }
+
+  .cdk-overlay-pane .mat-mdc-option .mdc-list-item__primary-text {
+    color: inherit;
+  }
+
+  .order-summary .summary-row.total span {
+    color: var(--admin-order-detail-total-color);
+    font-weight: var(--admin-font-weight-bold);
+    font-size: var(--admin-font-size-lg);
+    text-shadow: none;
+    background: none;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .order-summary .summary-row.total span:last-child {
+    color: var(--admin-order-detail-total-color);
+    font-weight: var(--admin-font-weight-bold);
+    font-size: var(--admin-font-size-lg);
+    text-shadow: none;
+    background: none;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .order-summary .summary-row span {
+    color: var(--admin-order-detail-text-primary);
+  }
+
+  .status-update h3 {
+    color: var(--admin-order-detail-text-primary);
+  }
+
+  .order-info .info-item label,
+  .customer-info .info-item label {
+    color: var(--admin-order-detail-text-label);
+  }
+
+  .order-info .info-item span,
+  .customer-info .info-item span {
+    color: var(--admin-order-detail-text-primary);
+  }
+
+  .items-table .table-header {
+    color: var(--admin-order-detail-text-secondary);
+  }
+
+  .items-table .table-row .col-product .product-name {
+    color: var(--admin-order-detail-text-primary);
+  }
+
+  .items-table .table-row .col-product .product-description {
+    color: var(--admin-order-detail-text-secondary);
+  }
+
+  .items-table .table-row .col-price,
+  .items-table .table-row .col-quantity {
+    color: var(--admin-order-detail-text-primary);
+  }
+
+  .items-table .table-row .col-total {
+    color: var(--admin-order-detail-price-color);
+  }
+
+  .order-detail-container * {
+    color: inherit;
+  }
+
+  .order-detail-container h2,
+  .order-detail-container h3 {
+    color: var(--admin-order-detail-text-primary);
+  }
+
+  .order-detail-container p,
+  .order-detail-container span,
+  .order-detail-container div {
+    color: var(--admin-order-detail-text-primary);
+  }
+
+  .order-detail-container label {
+    color: var(--admin-order-detail-text-label);
+  }
+
+  .status-badge {
+    color: var(--admin-order-detail-text-primary);
+    background-color: var(--admin-order-detail-header-bg);
   }
 } 

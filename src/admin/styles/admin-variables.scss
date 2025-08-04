@@ -108,11 +108,11 @@
   --admin-order-detail-text-primary: #212121;
   --admin-order-detail-text-secondary: #757575;
   --admin-order-detail-text-label: #9e9e9e;
-  --admin-order-detail-price-color: #4caf50;
-  --admin-order-detail-total-color: #4caf50;
+  --admin-order-detail-price-color: #2e7d32;
+  --admin-order-detail-total-color: #2e7d32;
   
   // Order List Specific
-  --admin-order-list-bg: #ffffff;
+  --admin-order-list-bg: #f5f5f5;
   --admin-order-list-card-bg: #ffffff;
   --admin-order-list-border: #e0e0e0;
   --admin-order-list-text-primary: #212121;
@@ -158,6 +158,78 @@
   --admin-border-primary: #404040;
   --admin-border-secondary: #333333;
   
+  // Common Order Status Colors (shared between list and detail)
+  --admin-order-status-pending: #ff9800;
+  --admin-order-status-processing: #2196f3;
+  --admin-order-status-shipped: #4caf50;
+  --admin-order-status-delivered: #4caf50;
+  --admin-order-status-cancelled: #f44336;
+}
+
+// Light Theme Variables
+[data-theme="light"] {
+  --admin-bg-primary: #f5f5f5;
+  --admin-bg-secondary: #ffffff;
+  --admin-bg-tertiary: #fafafa;
+  --admin-bg-card: #ffffff;
+  --admin-bg-hover: #e3f2fd;
+  
+  --admin-text-primary: #212121;
+  --admin-text-secondary: #757575;
+  --admin-text-disabled: #bdbdbd;
+  
+  --admin-border-primary: #e0e0e0;
+  --admin-border-secondary: #f0f0f0;
+  
+  // Dropdown specific borders for light theme
+  --admin-dropdown-border: #666666;
+  --admin-dropdown-border-focus: #1976d2;
+  
+  // Order Details Light Theme
+  --admin-order-detail-bg: #ffffff;
+  --admin-order-detail-header-bg: #f5f5f5;
+  --admin-order-detail-card-bg: #ffffff;
+  --admin-order-detail-border: #e0e0e0;
+  --admin-order-detail-text-primary: #212121;
+  --admin-order-detail-text-secondary: #757575;
+  --admin-order-detail-text-label: #9e9e9e;
+  --admin-order-detail-price-color: #2e7d32;
+  --admin-order-detail-total-color: #2e7d32;
+  
+  // Order List Light Theme
+  --admin-order-list-bg: #f5f5f5;
+  --admin-order-list-card-bg: #ffffff;
+  --admin-order-list-border: #e0e0e0;
+  --admin-order-list-text-primary: #212121;
+  --admin-order-list-text-secondary: #757575;
+  --admin-order-list-text-label: #9e9e9e;
+  --admin-order-list-header-bg: #f5f5f5;
+  --admin-order-list-row-hover: #f5f5f5;
+  --admin-order-list-pagination-bg: #ffffff;
+  --admin-order-list-pagination-border: #e0e0e0;
+  
+  // Common Order Status Colors (shared between list and detail)
+  --admin-order-status-pending: #ff9800;
+  --admin-order-status-processing: #2196f3;
+  --admin-order-status-shipped: #4caf50;
+  --admin-order-status-delivered: #4caf50;
+  --admin-order-status-cancelled: #f44336;
+}
+
+// Glass Theme Variables
+[data-theme="glass"] {
+  --admin-bg-primary: rgba(255, 255, 255, 0.1);
+  --admin-bg-secondary: rgba(255, 255, 255, 0.05);
+  --admin-bg-tertiary: rgba(255, 255, 255, 0.02);
+  --admin-bg-card: rgba(255, 255, 255, 0.1);
+  --admin-bg-hover: rgba(255, 255, 255, 0.15);
+  
+  --admin-border-primary: rgba(255, 255, 255, 0.2);
+  --admin-border-secondary: rgba(255, 255, 255, 0.1);
+}
+
+// Dark Theme Variables
+[data-theme="dark"] {
   // Order Details Dark Theme
   --admin-order-detail-bg: #1f2937;
   --admin-order-detail-header-bg: #374151;
@@ -180,23 +252,332 @@
   --admin-order-list-row-hover: #374151;
   --admin-order-list-pagination-bg: #2d2d2d;
   --admin-order-list-pagination-border: #404040;
-  
-  // Common Order Status Colors (shared between list and detail)
-  --admin-order-status-pending: #ff9800;
-  --admin-order-status-processing: #2196f3;
-  --admin-order-status-shipped: #4caf50;
-  --admin-order-status-delivered: #4caf50;
-  --admin-order-status-cancelled: #f44336;
+
+  // Global Material Design Overrides for Dark Theme
+  // Mat Dialog
+  .mat-dialog-container {
+    background-color: var(--admin-order-detail-bg);
+    color: var(--admin-order-detail-text-primary);
+  }
+
+  // Mat Dialog Backdrop
+  .cdk-overlay-backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  // Mat Dialog Panel
+  .mat-dialog-panel {
+    background-color: var(--admin-order-detail-bg);
+  }
+
+  // Mat Form Field
+  .mat-form-field {
+    .mat-form-field-label {
+      color: var(--admin-order-detail-text-secondary);
+    }
+    
+    .mat-input-element {
+      color: var(--admin-order-detail-text-primary);
+    }
+    
+    .mat-form-field-outline {
+      color: var(--admin-order-detail-border);
+    }
+    
+    &.mat-focused {
+      .mat-form-field-outline-thick {
+        color: var(--admin-primary);
+      }
+      
+      .mat-form-field-label {
+        color: var(--admin-primary);
+      }
+    }
+  }
+
+  // Mat Select
+  .mat-select {
+    color: var(--admin-order-detail-text-primary);
+    
+    .mat-select-arrow {
+      color: var(--admin-order-detail-text-secondary);
+    }
+  }
+
+  // Mat Option
+  .mat-option {
+    background-color: var(--admin-order-detail-card-bg);
+    color: var(--admin-order-detail-text-primary);
+    
+    &:hover {
+      background-color: var(--admin-order-detail-header-bg);
+    }
+    
+    &.mat-selected {
+      background-color: var(--admin-primary);
+    }
+  }
+
+  // Mat Select Panel
+  .mat-select-panel {
+    background-color: var(--admin-order-detail-card-bg);
+  }
+
+  // Mat Button
+  .mat-raised-button.mat-primary {
+    background-color: var(--admin-primary);
+    color: var(--admin-text-inverse);
+  }
+
+  // Mat Icon Button
+  .mat-icon-button {
+    color: var(--admin-order-detail-text-primary);
+    
+    &.mat-button-disabled {
+      color: var(--admin-order-detail-text-disabled);
+    }
+  }
+
+  // Additional fixes for dark theme consistency
+  .mat-mdc-form-field {
+    .mat-mdc-form-field-label {
+      color: var(--admin-order-detail-text-secondary);
+    }
+    
+    .mat-mdc-input-element {
+      color: var(--admin-order-detail-text-primary);
+    }
+    
+    .mat-mdc-form-field-outline {
+      color: var(--admin-order-detail-border);
+    }
+    
+    &.mat-focused {
+      .mat-mdc-form-field-outline-thick {
+        color: var(--admin-primary);
+      }
+      
+      .mat-mdc-form-field-label {
+        color: var(--admin-primary);
+      }
+    }
+  }
+
+  .mat-mdc-select {
+    color: var(--admin-order-detail-text-primary);
+    
+    .mat-mdc-select-arrow {
+      color: var(--admin-order-detail-text-secondary);
+    }
+  }
+
+  .mat-mdc-option {
+    background-color: var(--admin-order-detail-card-bg);
+    color: var(--admin-order-detail-text-primary);
+    
+    &:hover {
+      background-color: var(--admin-order-detail-header-bg);
+    }
+    
+    &.mat-mdc-option-selected {
+      background-color: var(--admin-primary);
+    }
+  }
+
+  .mat-mdc-select-panel {
+    background-color: var(--admin-order-detail-card-bg);
+  }
+
+  // Fix for total amount visibility
+  .order-summary .summary-row.total span {
+    color: var(--admin-order-detail-total-color);
+    font-weight: var(--admin-font-weight-bold);
+  }
+
+  // Fix for status update section
+  .status-update h3 {
+    color: var(--admin-order-detail-text-primary);
+  }
+
+  // Fix for form field appearance
+  .mat-mdc-form-field.mat-mdc-form-field-appearance-outline {
+    .mat-mdc-form-field-outline {
+      color: var(--admin-order-detail-border);
+    }
+    
+    .mat-mdc-form-field-outline-thick {
+      color: var(--admin-order-detail-border);
+    }
+    
+    &.mat-focused {
+      .mat-mdc-form-field-outline-thick {
+        color: var(--admin-primary);
+      }
+    }
+  }
 }
 
-// Glass Theme Variables
-[data-theme="glass"] {
-  --admin-bg-primary: rgba(255, 255, 255, 0.1);
-  --admin-bg-secondary: rgba(255, 255, 255, 0.05);
-  --admin-bg-tertiary: rgba(255, 255, 255, 0.02);
-  --admin-bg-card: rgba(255, 255, 255, 0.1);
-  --admin-bg-hover: rgba(255, 255, 255, 0.15);
-  
-  --admin-border-primary: rgba(255, 255, 255, 0.2);
-  --admin-border-secondary: rgba(255, 255, 255, 0.1);
+// Global Material Design Overrides for Light Theme
+[data-theme="light"] {
+  // Mat Dialog
+  .mat-dialog-container {
+    background-color: var(--admin-order-detail-bg);
+    color: var(--admin-order-detail-text-primary);
+  }
+
+  // Mat Dialog Backdrop
+  .cdk-overlay-backdrop {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
+
+  // Mat Dialog Panel
+  .mat-dialog-panel {
+    background-color: var(--admin-order-detail-bg);
+  }
+
+  // Mat Form Field
+  .mat-form-field {
+    .mat-form-field-label {
+      color: var(--admin-order-detail-text-secondary);
+    }
+    
+    .mat-input-element {
+      color: var(--admin-order-detail-text-primary);
+    }
+    
+    .mat-form-field-outline {
+      color: var(--admin-order-detail-border);
+    }
+    
+    &.mat-focused {
+      .mat-form-field-outline-thick {
+        color: var(--admin-primary);
+      }
+      
+      .mat-form-field-label {
+        color: var(--admin-primary);
+      }
+    }
+  }
+
+  // Mat Select
+  .mat-select {
+    color: var(--admin-order-detail-text-primary);
+    
+    .mat-select-arrow {
+      color: var(--admin-order-detail-text-secondary);
+    }
+  }
+
+  // Mat Option
+  .mat-option {
+    background-color: var(--admin-order-detail-card-bg);
+    color: var(--admin-order-detail-text-primary);
+    
+    &:hover {
+      background-color: var(--admin-order-detail-header-bg);
+    }
+    
+    &.mat-selected {
+      background-color: var(--admin-primary);
+    }
+  }
+
+  // Mat Select Panel
+  .mat-select-panel {
+    background-color: var(--admin-order-detail-card-bg);
+  }
+
+  // Mat Button
+  .mat-raised-button.mat-primary {
+    background-color: var(--admin-primary);
+    color: var(--admin-text-inverse);
+  }
+
+  // Mat Icon Button
+  .mat-icon-button {
+    color: var(--admin-order-detail-text-primary);
+    
+    &.mat-button-disabled {
+      color: var(--admin-order-detail-text-disabled);
+    }
+  }
+
+  // Additional fixes for light theme visibility
+  .mat-mdc-form-field {
+    .mat-mdc-form-field-label {
+      color: var(--admin-order-detail-text-secondary);
+    }
+    
+    .mat-mdc-input-element {
+      color: var(--admin-order-detail-text-primary);
+    }
+    
+    .mat-mdc-form-field-outline {
+      color: var(--admin-order-detail-border);
+    }
+    
+    &.mat-focused {
+      .mat-mdc-form-field-outline-thick {
+        color: var(--admin-primary);
+      }
+      
+      .mat-mdc-form-field-label {
+        color: var(--admin-primary);
+      }
+    }
+  }
+
+  .mat-mdc-select {
+    color: var(--admin-order-detail-text-primary);
+    
+    .mat-mdc-select-arrow {
+      color: var(--admin-order-detail-text-secondary);
+    }
+  }
+
+  .mat-mdc-option {
+    background-color: var(--admin-order-detail-card-bg);
+    color: var(--admin-order-detail-text-primary);
+    
+    &:hover {
+      background-color: var(--admin-order-detail-header-bg);
+    }
+    
+    &.mat-mdc-option-selected {
+      background-color: var(--admin-primary);
+    }
+  }
+
+  .mat-mdc-select-panel {
+    background-color: var(--admin-order-detail-card-bg);
+  }
+
+  // Fix for total amount visibility
+  .order-summary .summary-row.total span {
+    color: var(--admin-order-detail-total-color);
+    font-weight: var(--admin-font-weight-bold);
+  }
+
+  // Fix for status update section
+  .status-update h3 {
+    color: var(--admin-order-detail-text-primary);
+  }
+
+  // Fix for form field appearance
+  .mat-mdc-form-field.mat-mdc-form-field-appearance-outline {
+    .mat-mdc-form-field-outline {
+      color: var(--admin-order-detail-border);
+    }
+    
+    .mat-mdc-form-field-outline-thick {
+      color: var(--admin-order-detail-border);
+    }
+    
+    &.mat-focused {
+      .mat-mdc-form-field-outline-thick {
+        color: var(--admin-primary);
+      }
+    }
+  }
 } 

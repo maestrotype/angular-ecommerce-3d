@@ -1,0 +1,153 @@
+// Global Material Design Dropdown Overrides
+
+// Dark Theme Dropdown Styles
+[data-theme="dark"] {
+  .cdk-overlay-pane .mat-mdc-select-panel {
+    background-color: #2d2d2d;
+    border: 1px solid #404040;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  .cdk-overlay-pane .mat-mdc-option {
+    background-color: #2d2d2d;
+    color: #ffffff;
+
+    &:hover {
+      background-color: #374151;
+    }
+
+    &.mat-mdc-option-selected {
+      background-color: #1976d2;
+      color: #ffffff;
+    }
+  }
+
+  .cdk-overlay-pane .mat-mdc-option .mdc-list-item__primary-text {
+    color: inherit;
+  }
+
+  .mat-mdc-form-field.mat-mdc-form-field-appearance-outline {
+    .mat-mdc-form-field-outline {
+      color: var(--admin-border-primary);
+    }
+
+    .mat-mdc-form-field-outline-thick {
+      color: var(--admin-border-primary);
+    }
+
+    &.mat-focused {
+      .mat-mdc-form-field-outline-thick {
+        color: var(--admin-primary);
+      }
+    }
+  }
+
+  .mat-mdc-select {
+    color: var(--admin-text-primary);
+
+    .mat-mdc-select-arrow {
+      color: var(--admin-text-secondary);
+    }
+  }
+}
+
+// Light Theme Dropdown Styles
+[data-theme="light"] {
+  .cdk-overlay-pane .mat-mdc-select-panel {
+    background-color: #ffffff;
+    border: 1px solid var(--admin-dropdown-border);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .cdk-overlay-pane .mat-mdc-option {
+    background-color: #ffffff;
+    color: var(--admin-text-primary);
+
+    &:hover {
+      background-color: #f5f5f5;
+    }
+
+    &.mat-mdc-option-selected {
+      background-color: var(--admin-primary);
+      color: #ffffff;
+    }
+  }
+
+  .cdk-overlay-pane .mat-mdc-option .mdc-list-item__primary-text {
+    color: inherit;
+  }
+
+  .mat-mdc-form-field.mat-mdc-form-field-appearance-outline {
+    .mat-mdc-form-field-outline {
+      color: var(--admin-dropdown-border);
+    }
+
+    .mat-mdc-form-field-outline-thick {
+      color: var(--admin-dropdown-border);
+    }
+
+    &.mat-focused {
+      .mat-mdc-form-field-outline-thick {
+        color: var(--admin-dropdown-border-focus);
+      }
+    }
+  }
+
+  .mat-mdc-select {
+    color: var(--admin-text-primary);
+
+    .mat-mdc-select-arrow {
+      color: var(--admin-text-secondary);
+    }
+  }
+}
+
+// Default styles (when no theme is set)
+.cdk-overlay-pane .mat-mdc-select-panel {
+  background-color: #ffffff;
+  border: 1px solid var(--admin-dropdown-border);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.cdk-overlay-pane .mat-mdc-option {
+  background-color: #ffffff;
+  color: var(--admin-text-primary);
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+
+  &.mat-mdc-option-selected {
+    background-color: var(--admin-primary);
+    color: #ffffff;
+  }
+}
+
+.cdk-overlay-pane .mat-mdc-option .mdc-list-item__primary-text {
+  color: inherit;
+}
+
+// Default form field styles
+.mat-mdc-form-field.mat-mdc-form-field-appearance-outline {
+  .mat-mdc-form-field-outline {
+    color: var(--admin-dropdown-border);
+  }
+
+  .mat-mdc-form-field-outline-thick {
+    color: var(--admin-dropdown-border);
+  }
+
+  &.mat-focused {
+    .mat-mdc-form-field-outline-thick {
+      color: var(--admin-dropdown-border-focus);
+    }
+  }
+}
+
+.mat-mdc-select {
+  color: var(--admin-text-primary);
+
+  .mat-mdc-select-arrow {
+    color: var(--admin-text-secondary);
+  }
+} 

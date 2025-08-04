@@ -56,13 +56,13 @@
           <label>Email:</label>
           <span>{{ order.customerEmail }}</span>
         </div>
-        <div class="info-item" *ngIf="order.phone">
+        <div class="info-item" *ngIf="order.customerPhone">
           <label>Phone:</label>
-          <span>{{ order.phone }}</span>
+          <span>{{ order.customerPhone }}</span>
         </div>
-        <div class="info-item" *ngIf="order.address">
+        <div class="info-item" *ngIf="order.shippingAddress">
           <label>Address:</label>
-          <span>{{ order.address }}</span>
+          <span>{{ order.shippingAddress }}</span>
         </div>
       </div>
     </div>
@@ -110,7 +110,7 @@
       </div>
       <div class="summary-row total">
         <span>Total:</span>
-        <span>${{ order.total | number:'1.2-2' }}</span>
+        <span>${{ (order.totalAmount || getTotalPrice()) | number:'1.2-2' }}</span>
       </div>
     </div>
 

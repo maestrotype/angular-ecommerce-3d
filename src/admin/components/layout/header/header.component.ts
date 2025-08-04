@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 import { takeUntil, switchMap } from 'rxjs/operators';
 import { AuthService } from '../../../services/auth.service';
 import { NotificationService, Notification } from '../../../services/notification.service';
+import { ThemeService } from '../../../services/theme.service';
 
 @Component({
   selector: 'app-admin-header',
@@ -21,11 +22,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private themeService: ThemeService
   ) {}
 
   ngOnInit(): void {
-    // Загружаем уведомления при инициализации
     this.notificationService.loadNotifications()
       .pipe(takeUntil(this.destroy$))
       .subscribe(notifications => {
@@ -33,21 +34,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.notificationService.updateNotifications(notifications);
       });
 
-    // Подписываемся на изменения уведомлений
     this.notificationService.notifications$
       .pipe(takeUntil(this.destroy$))
       .subscribe(notifications => {
         this.notifications = notifications.slice(0, 5);
       });
 
-    // Подписываемся на количество непрочитанных
     this.notificationService.unreadCount$
       .pipe(takeUntil(this.destroy$))
       .subscribe(count => {
         this.unreadCount = count;
       });
 
-    // Получаем актуальное количество непрочитанных с сервера
     this.notificationService.getUnreadCount()
       .pipe(takeUntil(this.destroy$))
       .subscribe(count => {
@@ -116,6 +114,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/admin/login']);
+  }
+
+  toggleTheme(): void {
+    this.themeService.toggleTheme();
+  }
+
+  getThemeIcon(): string {
+    return this.themeService.isDarkTheme() ? 'light_mode' : 'dark_mode';
+  }
+
+  getThemeTooltip(): string {
+    return this.themeService.isDarkTheme() ? 'Switch to Light Theme' : 'Switch to Dark Theme';
   }
 }
 

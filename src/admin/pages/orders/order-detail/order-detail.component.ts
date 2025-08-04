@@ -29,6 +29,9 @@ export class OrderDetailComponent implements OnInit {
       next: (order) => {
         this.order = order;
         this.loading = false;
+        console.log('Order loaded:', order);
+        console.log('Total amount:', order.totalAmount);
+        console.log('Items:', order.items);
       },
       error: (error) => {
         this.error = 'Failed to load order details';
