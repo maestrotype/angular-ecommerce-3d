@@ -64,6 +64,11 @@ export const defaultThemeNew: Theme = {
     'text-disabled': '#bdbdbd',
     'text-inverse': '#ffffff',
     'text-accent': '#667eea',
+    'text-button': '#333333',
+    'text-quantity': '#333333',
+    'text-remove': '#dc3545',
+    'text-add-to-cart': '#ffffff',
+    'text-filter': '#333333',
     
     // Border Colors
     'border-primary': '#e0e0e0',

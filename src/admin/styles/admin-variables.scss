@@ -230,6 +230,32 @@
 
 // Dark Theme Variables
 [data-theme="dark"] {
+  // Global Dark Theme Variables
+  --admin-bg-primary: #1f2937;
+  --admin-bg-secondary: #2d2d2d;
+  --admin-bg-tertiary: #374151;
+  --admin-bg-card: #2d2d2d;
+  --admin-bg-hover: #374151;
+  
+  --admin-border-primary: #404040;
+  --admin-border-secondary: #4b5563;
+  
+  --admin-text-primary: #ffffff;
+  --admin-text-secondary: #9ca3af;
+  --admin-text-disabled: #6b7280;
+  --admin-text-inverse: #ffffff;
+  
+  --admin-primary: #e91e63;
+  --admin-primary-hover: #c2185b;
+  
+  --admin-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --admin-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --admin-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.3);
+  
+  --admin-border-radius-sm: 4px;
+  --admin-border-radius-md: 8px;
+  --admin-border-radius-lg: 12px;
+  
   // Order Details Dark Theme
   --admin-order-detail-bg: #1f2937;
   --admin-order-detail-header-bg: #374151;

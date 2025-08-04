@@ -3,7 +3,9 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--admin-shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.12));
+  background-color: var(--admin-bg-card, #ffffff);
+  color: var(--admin-text-primary, #212121);
 }
 
 .header-title {
@@ -29,10 +31,10 @@
 .notification-menu {
   width: 380px;
   max-width: 90vw;
-  background: #2d2d2d;
-  color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  background: var(--admin-bg-card, #ffffff);
+  color: var(--admin-text-primary, #212121);
+  border-radius: var(--admin-border-radius-md, 8px);
+  box-shadow: var(--admin-shadow-lg, 0 10px 15px rgba(0, 0, 0, 0.1));
 }
 
 .notification-header {
@@ -40,13 +42,13 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px;
-  background-color: #3d3d3d;
-  border-radius: 8px 8px 0 0;
+  background-color: var(--admin-bg-secondary, #f5f5f5);
+  border-radius: var(--admin-border-radius-md, 8px) var(--admin-border-radius-md, 8px) 0 0;
   
   .notification-title {
     font-weight: 600;
     font-size: 16px;
-    color: white;
+    color: var(--admin-text-primary, #212121);
   }
   
   .mark-all-read {
@@ -66,7 +68,7 @@
 .notification-list {
   max-height: 400px;
   overflow-y: auto;
-  background: #2d2d2d;
+  background: var(--admin-bg-card, #ffffff);
 }
 
 .notification-item {
@@ -77,7 +79,7 @@
   white-space: normal;
   background: transparent;
   border: none;
-  color: white;
+  color: var(--admin-text-primary, #212121);
   text-align: left;
   
   &.unread {
@@ -86,7 +88,7 @@
   }
   
   &:hover {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: var(--admin-bg-hover, #e3f2fd);
   }
 }
 

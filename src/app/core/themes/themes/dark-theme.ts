@@ -58,12 +58,17 @@ export const darkTheme: Theme = {
     'surface-hover': '#3b82f6',
     
     // Text Colors
-    'text-primary': '#f8fafc',
-    'text-secondary': '#cbd5e1',
+    'text-primary': '#333333',
+    'text-secondary': '#666666',
     'text-tertiary': '#94a3b8',
     'text-disabled': '#64748b',
     'text-inverse': '#0f172a',
     'text-accent': '#4f46e5',
+    'text-button': '#333333',
+    'text-quantity': '#333333',
+    'text-remove': '#dc3545',
+    'text-add-to-cart': '#ffffff',
+    'text-filter': '#333333',
     
     // Border Colors
     'border-primary': '#475569',

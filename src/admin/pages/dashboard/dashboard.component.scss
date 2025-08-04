@@ -4,7 +4,7 @@
 
 .dashboard-container h1 {
   margin-bottom: 24px;
-  color: #333;
+  color: var(--admin-text-primary, #212121);
   font-size: 28px;
   font-weight: 500;
 }
@@ -18,7 +18,7 @@
   
   p {
     margin-top: 16px;
-    color: #666;
+    color: var(--admin-text-secondary, #757575);
     font-size: 16px;
   }
 }
@@ -31,11 +31,15 @@
 
 .stat-card {
   height: 120px;
+  background-color: var(--admin-bg-card, #ffffff);
+  border: 1px solid var(--admin-border-primary, #e0e0e0);
+  border-radius: var(--admin-border-radius-md, 8px);
+  box-shadow: var(--admin-shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.12));
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--admin-shadow-md, 0 4px 6px rgba(0, 0, 0, 0.1));
   }
 }
 
@@ -62,7 +66,7 @@
   
   h3 {
     margin: 0 0 8px 0;
-    color: #666;
+    color: var(--admin-text-secondary, #757575);
     font-size: 14px;
     font-weight: 500;
     text-transform: uppercase;
@@ -74,7 +78,7 @@
   margin: 0;
   font-size: 24px;
   font-weight: bold;
-  color: #999;
+  color: var(--admin-text-primary, #212121);
 }
 
 @media (max-width: 768px) {

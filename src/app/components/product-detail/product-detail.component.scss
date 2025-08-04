@@ -23,7 +23,7 @@
 
   .back-btn {
     background: var(--color-buttons-glass, #f8f9fa);
-    color: var(--color-text-primary, #333);
+    color: var(--color-text-button, #333);
     border: 1px solid var(--color-cards-border, #dee2e6);
     padding: 0.5rem 1rem;
     border-radius: 6px;
@@ -35,7 +35,7 @@
 
     &:hover {
       background: var(--color-buttons-glassHover, #e9ecef);
-      color: var(--color-text-primary, #495057);
+      color: var(--color-text-button, #495057);
       transform: translateY(-1px);
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }

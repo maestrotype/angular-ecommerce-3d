@@ -426,4 +426,37 @@ label {
       font-size: var(--admin-font-size-xs);
     }
   }
+}
+
+// Material Design Toolbar Overrides
+.mat-mdc-toolbar {
+  background-color: var(--admin-bg-card, #ffffff);
+  color: var(--admin-text-primary, #212121);
+  border-bottom: 1px solid var(--admin-border-primary, #e0e0e0);
+  
+  &.mat-primary {
+    background-color: var(--admin-bg-card, #ffffff);
+    color: var(--admin-text-primary, #212121);
+  }
+  
+  .mat-mdc-button {
+    color: var(--admin-text-primary, #212121);
+    
+    &:hover {
+      background-color: var(--admin-bg-hover, #e3f2fd);
+    }
+  }
+  
+  .mat-icon {
+    color: var(--admin-text-primary, #212121);
+  }
+}
+
+// Material Design Card Overrides
+.mat-mdc-card {
+  background-color: var(--admin-bg-card, #ffffff);
+  color: var(--admin-text-primary, #212121);
+  border: 1px solid var(--admin-border-primary, #e0e0e0);
+  border-radius: var(--admin-border-radius-md, 8px);
+  box-shadow: var(--admin-shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.12));
 } 

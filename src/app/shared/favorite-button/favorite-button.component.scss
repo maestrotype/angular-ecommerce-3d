@@ -75,17 +75,17 @@
   
   // Active state (favorited)
   &--active {
-    background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
-    border-color: #ff6b6b;
-    color: white;
+    background: rgba(255, 255, 255, 0.9);
+    border-color: #dc3545;
+    color: #333;
     
     .favorite-button__heart {
-      fill: white;
-      stroke: white;
+      fill: #dc3545;
+      stroke: #dc3545;
     }
     
     &:hover {
-      background: linear-gradient(135deg, #ff5252, #ff7676);
+      background: rgba(255, 255, 255, 0.95);
       transform: translateY(-2px) scale(1.05);
     }
   }
@@ -126,7 +126,7 @@
   transition: color 0.3s ease;
   
   .favorite-button--active & {
-    color: white;
+    color: #333;
   }
 }
 

@@ -1,10 +1,10 @@
 .sidenav-header {
   padding: 20px 16px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--admin-border-primary, #e0e0e0);
 
   h2 {
     margin: 0;
-    color: #e0e0e0;
+    color: var(--admin-text-primary, #212121);
     font-size: 1.5rem;
     font-weight: 600;
   }
@@ -17,17 +17,30 @@
     margin: 4px 8px;
     border-radius: 8px;
     transition: all 0.2s ease;
+    color: var(--admin-text-primary, #212121);
+
+    mat-icon {
+      color: var(--admin-text-primary, #212121);
+    }
+
+    span[matListItemTitle] {
+      color: var(--admin-text-primary, #212121);
+    }
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.04);
+      background-color: var(--admin-bg-hover, #e3f2fd);
     }
 
     &.active {
-      background-color: #3f51b5;
-      color: white;
+      background-color: var(--admin-primary, #1976d2);
+      color: var(--admin-text-inverse, #ffffff);
 
       mat-icon {
-        color: white;
+        color: var(--admin-text-inverse, #ffffff);
+      }
+
+      span[matListItemTitle] {
+        color: var(--admin-text-inverse, #ffffff);
       }
     }
   }
@@ -52,9 +65,11 @@
   button {
     width: 100%;
     justify-content: flex-start;
+    color: var(--admin-text-primary, #212121);
 
     mat-icon {
       margin-right: 8px;
+      color: var(--admin-text-primary, #212121);
     }
   }
 }

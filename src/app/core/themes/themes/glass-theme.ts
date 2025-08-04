@@ -58,12 +58,17 @@ export const glassTheme: Theme = {
     'surface-hover': 'rgba(255, 255, 255, 0.15)',
     
     // Text Colors
-    'text-primary': '#ffffff',
-    'text-secondary': 'rgba(255, 255, 255, 0.8)',
+    'text-primary': '#333333',
+    'text-secondary': '#666666',
     'text-tertiary': 'rgba(255, 255, 255, 0.6)',
     'text-disabled': 'rgba(255, 255, 255, 0.4)',
     'text-inverse': '#333333',
     'text-accent': '#667eea',
+    'text-button': '#333333',
+    'text-quantity': '#333333',
+    'text-remove': '#dc3545',
+    'text-add-to-cart': '#ffffff',
+    'text-filter': '#333333',
     
     // Border Colors
     'border-primary': 'rgba(255, 255, 255, 0.2)',

@@ -79,31 +79,31 @@
           border-radius: 0 !important;
           margin: 0 !important;
 
-          &:hover {
-            background: #475569 !important;
-            color: #f8fafc !important;
-          }
-
-          &.active {
-            color: #f8fafc !important;
-            background: #334155 !important;
-            border-radius: 8px 0 0 0 !important;
-            margin: 0 !important;
-
-            &::after {
-              display: none !important;
+                      &:hover {
+              background: #475569;
+              color: #f8fafc;
             }
-          }
-
-          &:first-child.active {
-            border-radius: 8px 0 0 0 !important;
-            margin-right: 0 !important;
-          }
-
-          &:last-child.active {
-            border-radius: 0 8px 0 0 !important;
-            margin-left: 0 !important;
-          }
+  
+            &.active {
+              color: #f8fafc;
+              background: #334155;
+              border-radius: 8px 0 0 0;
+              margin: 0;
+  
+              &::after {
+                display: none;
+              }
+            }
+  
+            &:first-child.active {
+              border-radius: 8px 0 0 0;
+              margin-right: 0;
+            }
+  
+            &:last-child.active {
+              border-radius: 0 8px 0 0;
+              margin-left: 0;
+            }
         }
       }
     }
@@ -167,13 +167,13 @@
       rgba(248, 250, 252, 0.85) 0%, 
       rgba(226, 232, 240, 0.75) 30%,
       rgba(203, 213, 225, 0.85) 70%,
-      rgba(186, 200, 216, 0.9) 100%) !important;
-    backdrop-filter: blur(20px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+      rgba(186, 200, 216, 0.9) 100%);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 
     .offer-title {
-      color: #1e293b !important;
+      color: #1e293b;
       background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -181,27 +181,27 @@
     }
 
     .offer-subtitle {
-      color: #64748b !important;
+      color: #64748b;
     }
 
     .shop-button {
-      background: rgba(255, 255, 255, 0.25) !important;
-      border: 1.5px solid rgba(255, 255, 255, 0.5) !important;
-      color: #334155 !important;
+      background: rgba(255, 255, 255, 0.25);
+      border: 1.5px solid rgba(255, 255, 255, 0.5);
+      color: #334155;
       backdrop-filter: blur(12px) saturate(180%);
-      box-shadow: 0 8px 32px rgba(51, 65, 85, 0.10), 0 1.5px 8px rgba(0, 0, 0, 0.08) !important;
+      box-shadow: 0 8px 32px rgba(51, 65, 85, 0.10), 0 1.5px 8px rgba(0, 0, 0, 0.08);
 
       &:hover {
-        background: rgba(99, 102, 241, 0.18) !important;
-        color: #6366f1 !important;
-        box-shadow: 0 12px 40px rgba(99, 102, 241, 0.18) !important;
-        border-color: #6366f1 !important;
+        background: rgba(99, 102, 241, 0.18);
+        color: #6366f1;
+        box-shadow: 0 12px 40px rgba(99, 102, 241, 0.18);
+        border-color: #6366f1;
       }
     }
 
     /* Remove the pink radial gradient overlay */
     &::before {
-      display: none !important;
+      display: none;
     }
   }
 } 

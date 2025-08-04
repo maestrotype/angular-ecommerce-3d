@@ -52,12 +52,17 @@ export interface ThemeColors {
   'surface-hover': string;
   
   // Text Colors
-  'text-primary': string;
-  'text-secondary': string;
-  'text-tertiary': string;
-  'text-disabled': string;
-  'text-inverse': string;
-  'text-accent': string;
+      'text-primary': string;
+    'text-secondary': string;
+    'text-tertiary': string;
+    'text-disabled': string;
+    'text-inverse': string;
+    'text-accent': string;
+    'text-button': string;
+    'text-quantity': string;
+    'text-remove': string;
+    'text-add-to-cart': string;
+    'text-filter': string;
   
   // Border Colors
   'border-primary': string;
