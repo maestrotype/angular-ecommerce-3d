@@ -19,13 +19,13 @@ export class Message {
   message: string;
 
   @Column({ default: 'new' })
-  status: 'new' | 'read' | 'archived';
+  status: 'new' | 'in_progress' | 'answered' | 'closed';
 
   @Column({ nullable: true })
-  adminReply: string;
+  adminResponse: string;
 
   @Column({ nullable: true })
-  repliedAt: Date;
+  respondedAt: Date;
 
   @CreateDateColumn()
   createdAt: Date;

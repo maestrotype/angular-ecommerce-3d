@@ -1,7 +1,6 @@
 
 import { Controller, Get, Post, Put, Delete, Body, Param, Query, ParseIntPipe, UsePipes, ValidationPipe } from '@nestjs/common';
 import { MessagesService } from './messages.service';
-import { MessageFilters, MessageStatus } from '../shared/models/message.model';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import { ApiResponse, PaginatedResponse } from '../shared/models/api-response.model';
@@ -23,14 +22,14 @@ export class MessagesController {
 
   @Get()
   async getAllMessages(
-    @Query('status') status?: MessageStatus,
+    @Query('status') status?: string,
     @Query('search') search?: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string
   ): Promise<PaginatedResponse<any>> {
     const pageNum = page ? parseInt(page) : 1;
     const limitNum = limit ? parseInt(limit) : 10;
-    const filters: MessageFilters = { status, search, page: pageNum, limit: limitNum };
+    const filters: any = { status, search, page: pageNum, limit: limitNum };
     const messages = await this.messagesService.getAllMessages(filters);
     const count = await this.messagesService.getMessagesCount(filters);
     const totalPages = Math.ceil(count / limitNum);
@@ -46,10 +45,10 @@ export class MessagesController {
 
   @Get('count')
   async getMessagesCount(
-    @Query('status') status?: MessageStatus,
+    @Query('status') status?: string,
     @Query('search') search?: string
   ): Promise<ApiResponse> {
-    const filters: MessageFilters = { status, search };
+    const filters: any = { status, search };
     const count = await this.messagesService.getMessagesCount(filters);
     return {
       success: true,
