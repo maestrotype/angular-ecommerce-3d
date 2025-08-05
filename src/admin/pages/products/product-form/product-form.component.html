@@ -186,7 +186,7 @@
               <input matInput formControlName="value" placeholder="e.g., Nike, Red" />
             </mat-form-field>
 
-            <button mat-icon-button type="button" color="warn" (click)="removeSpecification(i)"
+            <button mat-icon-button type="button" (click)="removeSpecification(i)"
               [matTooltip]="'REMOVE' | translate" class="remove-spec-button">
               <mat-icon>delete</mat-icon>
             </button>
@@ -205,7 +205,7 @@
       <button mat-button type="button" (click)="goBack()" class="cancel-button">
         {{ 'CANCEL' | translate }}
       </button>
-      <button mat-raised-button color="primary" type="submit" [disabled]="productForm.invalid || isLoading"
+      <button mat-raised-button type="submit" [disabled]="productForm.invalid || isLoading"
         class="submit-button">
         <mat-icon *ngIf="isLoading" class="spinning">refresh</mat-icon>
         {{

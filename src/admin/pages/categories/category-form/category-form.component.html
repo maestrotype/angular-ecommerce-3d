@@ -38,13 +38,10 @@
       <button mat-button type="button" (click)="goBack()" class="cancel-button">
         Cancel
       </button>
-      <button mat-raised-button color="primary" type="submit" [disabled]="categoryForm.invalid || isLoading"
+      <button mat-raised-button type="submit" [disabled]="categoryForm.invalid || isLoading"
         class="submit-button">
         <mat-icon *ngIf="isLoading" class="spinning">refresh</mat-icon>
-        {{ isLoading
-        ? (isEditMode ? ('SAVING' | translate) : ('CREATING' | translate))
-        : (isEditMode ? ('UPDATE_CATEGORY' | translate) : ('CREATE_CATEGORY' | translate))
-        }}
+        {{ isLoading ? ('SAVING' | translate) : (isEditMode ? ('UPDATE_CATEGORY' | translate) : ('CREATE_CATEGORY' | translate)) }}
       </button>
     </div>
   </form>

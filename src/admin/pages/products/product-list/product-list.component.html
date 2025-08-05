@@ -1,7 +1,7 @@
 <div class="product-list-container">
   <div class="header-section">
     <h1>{{ 'PRODUCT_MANAGEMENT' | translate }}</h1>
-    <button mat-raised-button color="primary" (click)="addProduct()" class="add-button">
+    <button mat-raised-button (click)="addProduct()" class="add-button">
       <mat-icon>add</mat-icon>
       <span class="button-text">{{ 'ADD_PRODUCT' | translate }}</span>
     </button>
@@ -96,7 +96,6 @@
         <td mat-cell *matCellDef="let product">
           <button
             mat-icon-button
-            color="primary"
             (click)="editProduct(product)"
             matTooltip="Edit"
           >
@@ -104,7 +103,6 @@
           </button>
           <button
             mat-icon-button
-            color="warn"
             (click)="deleteProduct(product)"
             matTooltip="Delete"
           >
@@ -167,7 +165,6 @@
         <div class="card-actions">
           <button
             mat-icon-button
-            color="primary"
             (click)="editProduct(product)"
             class="action-button"
           >
@@ -175,7 +172,6 @@
           </button>
           <button
             mat-icon-button
-            color="warn"
             (click)="deleteProduct(product)"
             class="action-button"
           >

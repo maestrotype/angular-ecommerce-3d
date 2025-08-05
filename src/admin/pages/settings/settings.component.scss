@@ -31,6 +31,11 @@
   box-shadow: var(--admin-shadow-md, 0 4px 6px rgba(0, 0, 0, 0.1));
   border-radius: var(--admin-border-radius-md, 8px);
   
+  // Override Material Design card styles
+  --mdc-elevated-card-container-color: var(--admin-bg-card, #ffffff);
+  --mdc-elevated-card-container-elevation: 0;
+  --mdc-elevated-card-container-shadow-color: transparent;
+  
   mat-card-header {
     margin-bottom: 16px;
     
@@ -111,6 +116,15 @@
 
 mat-form-field {
   width: 100%;
+  
+  // Override Material Design form field styles
+  --mdc-filled-text-field-container-color: var(--admin-bg-card, #ffffff);
+  --mdc-filled-text-field-label-text-color: var(--admin-text-secondary, #757575);
+  --mdc-filled-text-field-input-text-color: var(--admin-text-primary, #212121);
+  --mdc-filled-text-field-caret-color: var(--admin-primary, #1976d2);
+  --mdc-filled-text-field-focus-active-indicator-color: var(--admin-primary, #1976d2);
+  --mdc-filled-text-field-hover-active-indicator-color: var(--admin-border-primary, #e0e0e0);
+  --mdc-filled-text-field-active-indicator-color: var(--admin-border-primary, #e0e0e0);
   
   .mat-mdc-form-field-subscript-wrapper {
     margin-top: 4px;

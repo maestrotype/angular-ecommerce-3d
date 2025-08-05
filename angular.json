@@ -18,9 +18,13 @@
             "tsConfig": "tsconfig.app.json",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
-              "@angular/material/prebuilt-themes/pink-bluegrey.css",
               "src/styles.scss",
-              "src/styles/main.scss"
+              "src/styles/main.scss",
+              "src/admin/styles/admin-variables.scss",
+              "src/admin/styles/admin-material-overrides.scss",
+              "src/admin/styles/admin-material-theme.scss",
+              "src/admin/styles/admin-global.scss",
+              "src/admin/styles/admin-dropdown-overrides.scss"
             ],
             "scripts": []
           },

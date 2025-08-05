@@ -169,6 +169,14 @@
   }
 }
 
+.mat-mdc-menu-panel {
+  background-color: var(--admin-bg-card, #ffffff);
+  color: var(--admin-text-primary, #212121);
+  border: 1px solid var(--admin-border-primary, #e0e0e0);
+  border-radius: var(--admin-border-radius-md, 8px);
+  box-shadow: var(--admin-shadow-lg, 0 10px 15px rgba(0, 0, 0, 0.1));
+}
+
 @media (max-width: 768px) {
   .notification-menu {
     width: 320px;

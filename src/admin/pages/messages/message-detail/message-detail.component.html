@@ -58,7 +58,7 @@
   
           <div class="reply-actions">
             <button mat-button type="button" (click)="toggleReplyForm()">Cancel</button>
-            <button mat-raised-button color="primary" type="submit" 
+            <button mat-raised-button type="submit" 
                     [disabled]="replyForm.invalid || loading">
               <mat-icon *ngIf="loading">hourglass_empty</mat-icon>
               {{ loading ? 'Sending...' : 'Send Reply' }}
@@ -70,7 +70,7 @@
   
     <div mat-dialog-actions class="actions">
       <button mat-button (click)="onClose()">Close</button>
-      <button mat-raised-button color="primary" (click)="toggleReplyForm()" 
+      <button mat-raised-button (click)="toggleReplyForm()" 
               *ngIf="!showReplyForm && !message.adminResponse">
         <mat-icon>reply</mat-icon>
         Reply

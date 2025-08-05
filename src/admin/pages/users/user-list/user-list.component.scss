@@ -443,70 +443,71 @@
 
 ::ng-deep {
   .mat-chip {
-    background-color: #3b82f6 !important;
-    color: #ffffff !important;
+    background-color: var(--admin-primary, #1976d2);
+    color: var(--admin-text-inverse, #ffffff);
   }
   
   .mat-icon-button {
-    color: #ffffff !important;
+    color: var(--admin-text-primary, #212121);
     
     &.mat-button-disabled {
-      color: #6b7280 !important;
+      color: var(--admin-text-disabled, #757575);
     }
   }
   
   .mat-raised-button.mat-primary {
-    background-color: #3b82f6 !important;
-    color: #ffffff !important;
+    background-color: var(--admin-primary, #1976d2);
+    color: var(--admin-text-inverse, #ffffff);
   }
   
   .mat-form-field {
     .mat-form-field-label {
-      color: #e5e7eb !important;
+      color: var(--admin-text-secondary, #757575);
     }
     
     .mat-input-element {
-      color: #ffffff !important;
+      color: var(--admin-text-primary, #212121);
     }
     
     .mat-form-field-outline {
-      color: #6b7280 !important;
+      color: var(--admin-border-primary, #e0e0e0);
     }
     
     &.mat-focused {
       .mat-form-field-outline-thick {
-        color: #3b82f6 !important;
+        color: var(--admin-primary, #1976d2);
       }
       
       .mat-form-field-label {
-        color: #3b82f6 !important;
+        color: var(--admin-primary, #1976d2);
       }
     }
   }
   
   .mat-select {
-    color: #ffffff !important;
+    color: var(--admin-text-primary, #212121);
     
     .mat-select-arrow {
-      color: #9ca3af !important;
+      color: var(--admin-text-secondary, #757575);
     }
   }
   
   .mat-option {
-    background-color: #2d2d2d !important;
-    color: #ffffff !important;
+    background-color: var(--admin-bg-card, #ffffff);
+    color: var(--admin-text-primary, #212121);
     
     &:hover {
-      background-color: #374151 !important;
+      background-color: var(--admin-bg-hover, #e3f2fd);
     }
     
     &.mat-selected {
-      background-color: #3b82f6 !important;
+      background-color: var(--admin-primary, #1976d2);
+      color: var(--admin-text-inverse, #ffffff);
     }
   }
   
   .mat-select-panel {
-    background-color: #2d2d2d !important;
+    background-color: var(--admin-bg-card, #ffffff);
   }
   
   .mat-paginator {

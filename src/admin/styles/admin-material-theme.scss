@@ -1,0 +1,47 @@
+@use '@angular/material' as mat;
+
+// Include the common styles for Angular Material
+@include mat.core();
+
+// Define the light theme
+$admin-light-primary: mat.define-palette(mat.$indigo-palette);
+$admin-light-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$admin-light-warn: mat.define-palette(mat.$red-palette);
+
+$admin-light-theme: mat.define-light-theme((
+  color: (
+    primary: $admin-light-primary,
+    accent: $admin-light-accent,
+    warn: $admin-light-warn,
+  ),
+  typography: mat.define-typography-config(),
+  density: 0,
+));
+
+// Define the dark theme
+$admin-dark-primary: mat.define-palette(mat.$pink-palette);
+$admin-dark-accent: mat.define-palette(mat.$blue-grey-palette, A200, A100, A400);
+$admin-dark-warn: mat.define-palette(mat.$red-palette);
+
+$admin-dark-theme: mat.define-dark-theme((
+  color: (
+    primary: $admin-dark-primary,
+    accent: $admin-dark-accent,
+    warn: $admin-dark-warn,
+  ),
+  typography: mat.define-typography-config(),
+  density: 0,
+));
+
+// Apply the light theme by default
+@include mat.all-component-themes($admin-light-theme);
+
+// Apply dark theme when data-theme="dark"
+[data-theme="dark"] {
+  @include mat.all-component-colors($admin-dark-theme);
+}
+
+// Apply light theme when data-theme="light"
+[data-theme="light"] {
+  @include mat.all-component-colors($admin-light-theme);
+} 

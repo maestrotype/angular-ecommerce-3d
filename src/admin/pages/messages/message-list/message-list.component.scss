@@ -281,7 +281,18 @@
   }
   
   .mat-icon-button {
-    color: var(--admin-text-primary, #212121);
+    color: var(--admin-text-secondary, #757575);
+    transition: color 0.2s ease;
+    
+    &:hover {
+      color: var(--admin-primary, #1976d2);
+      background: transparent;
+    }
+    
+    &:active {
+      color: var(--admin-primary-hover, #1565c0);
+      background: transparent;
+    }
     
     &.mat-button-disabled {
       color: var(--admin-text-disabled, #bdbdbd);

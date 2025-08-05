@@ -1,0 +1,182 @@
+// Material Design CSS Variables Overrides
+// This file overrides Material Design's own CSS variables
+
+// Light Theme Material Design Overrides
+[data-theme="light"] {
+  // Paginator variables
+  --mat-paginator-container-background-color: #ffffff;
+  --mat-paginator-container-text-color: #212121;
+  --mat-paginator-container-shape: 0;
+  
+  // Table variables
+  --mat-table-background-color: #ffffff;
+  --mat-table-header-background-color: #f5f5f5;
+  --mat-table-header-text-color: #212121;
+  --mat-table-row-background-color: #ffffff;
+  --mat-table-row-text-color: #212121;
+  --mat-table-row-hover-background-color: #e3f2fd;
+  
+  // Card variables
+  --mdc-elevated-card-container-color: #ffffff;
+  --mdc-elevated-card-container-elevation: 0;
+  --mdc-elevated-card-container-shadow-color: transparent;
+  
+  // Form field variables - Clean and minimal
+  --mdc-filled-text-field-container-color: #ffffff;
+  --mdc-filled-text-field-label-text-color: #757575;
+  --mdc-filled-text-field-input-text-color: #212121;
+  --mdc-filled-text-field-caret-color: #1976d2;
+  --mdc-filled-text-field-focus-active-indicator-color: #1976d2;
+  --mdc-filled-text-field-hover-active-indicator-color: #e0e0e0;
+  --mdc-filled-text-field-active-indicator-color: #e0e0e0;
+  
+  // Outlined form field variables
+  --mdc-outlined-text-field-outline-color: #e0e0e0;
+  --mdc-outlined-text-field-hover-outline-color: #1976d2;
+  --mdc-outlined-text-field-focus-outline-color: #1976d2;
+  --mdc-outlined-text-field-label-text-color: #757575;
+  --mdc-outlined-text-field-input-text-color: #212121;
+  
+  // Menu variables
+  --mat-menu-container-background-color: #ffffff;
+  --mat-menu-container-text-color: #212121;
+  --mat-menu-container-shape: 8px;
+  
+  // Select variables
+  --mat-select-panel-background-color: #ffffff;
+  --mat-select-panel-text-color: #212121;
+  
+  // Button variables
+  --mat-mdc-button-persistent-ripple-color: rgba(0, 0, 0, 0.12);
+  --mat-mdc-button-ripple-color: rgba(0, 0, 0, 0.12);
+  
+  // Icon button variables
+  --mat-mdc-icon-button-ripple-color: rgba(0, 0, 0, 0.12);
+  
+  // Chip variables
+  --mdc-chip-elevated-container-color: #e3f2fd;
+  --mdc-chip-elevated-label-text-color: #1976d2;
+  
+  // Divider variables
+  --mat-divider-color: #e0e0e0;
+}
+
+// Dark Theme Material Design Overrides
+[data-theme="dark"] {
+  // Paginator variables
+  --mat-paginator-container-background-color: #2d2d2d;
+  --mat-paginator-container-text-color: #ffffff;
+  --mat-paginator-container-shape: 0;
+  
+  // Table variables
+  --mat-table-background-color: #2d2d2d;
+  --mat-table-header-background-color: #374151;
+  --mat-table-header-text-color: #ffffff;
+  --mat-table-row-background-color: #2d2d2d;
+  --mat-table-row-text-color: #ffffff;
+  --mat-table-row-hover-background-color: #374151;
+  
+  // Card variables - Original dark theme
+  --mdc-elevated-card-container-color: #2d2d2d;
+  --mdc-elevated-card-container-elevation: 0;
+  --mdc-elevated-card-container-shadow-color: transparent;
+  
+  // Form field variables
+  --mdc-filled-text-field-container-color: #2d2d2d;
+  --mdc-filled-text-field-label-text-color: #9ca3af;
+  --mdc-filled-text-field-input-text-color: #ffffff;
+  --mdc-filled-text-field-caret-color: #e91e63;
+  --mdc-filled-text-field-focus-active-indicator-color: #e91e63;
+  --mdc-filled-text-field-hover-active-indicator-color: #404040;
+  --mdc-filled-text-field-active-indicator-color: #404040;
+  
+  // Outlined form field variables
+  --mdc-outlined-text-field-outline-color: #404040;
+  --mdc-outlined-text-field-hover-outline-color: #e91e63;
+  --mdc-outlined-text-field-focus-outline-color: #e91e63;
+  --mdc-outlined-text-field-label-text-color: #9ca3af;
+  --mdc-outlined-text-field-input-text-color: #ffffff;
+  
+  // Menu variables
+  --mat-menu-container-background-color: #2d2d2d;
+  --mat-menu-container-text-color: #ffffff;
+  --mat-menu-container-shape: 8px;
+  
+  // Select variables
+  --mat-select-panel-background-color: #2d2d2d;
+  --mat-select-panel-text-color: #ffffff;
+  
+  // Button variables
+  --mat-mdc-button-persistent-ripple-color: rgba(255, 255, 255, 0.12);
+  --mat-mdc-button-ripple-color: rgba(255, 255, 255, 0.12);
+  
+  // Icon button variables
+  --mat-mdc-icon-button-ripple-color: rgba(255, 255, 255, 0.12);
+  
+  // Chip variables
+  --mdc-chip-elevated-container-color: #374151;
+  --mdc-chip-elevated-label-text-color: #e91e63;
+  
+  // Divider variables
+  --mat-divider-color: #404040;
+}
+
+// Default theme (when no theme is set) - use light theme
+:root {
+  // Paginator variables
+  --mat-paginator-container-background-color: #ffffff;
+  --mat-paginator-container-text-color: #212121;
+  --mat-paginator-container-shape: 0;
+  
+  // Table variables
+  --mat-table-background-color: #ffffff;
+  --mat-table-header-background-color: #f5f5f5;
+  --mat-table-header-text-color: #212121;
+  --mat-table-row-background-color: #ffffff;
+  --mat-table-row-text-color: #212121;
+  --mat-table-row-hover-background-color: #e3f2fd;
+  
+  // Card variables
+  --mdc-elevated-card-container-color: #ffffff;
+  --mdc-elevated-card-container-elevation: 0;
+  --mdc-elevated-card-container-shadow-color: transparent;
+  
+  // Form field variables - Clean and minimal
+  --mdc-filled-text-field-container-color: #ffffff;
+  --mdc-filled-text-field-label-text-color: #757575;
+  --mdc-filled-text-field-input-text-color: #212121;
+  --mdc-filled-text-field-caret-color: #1976d2;
+  --mdc-filled-text-field-focus-active-indicator-color: #1976d2;
+  --mdc-filled-text-field-hover-active-indicator-color: #e0e0e0;
+  --mdc-filled-text-field-active-indicator-color: #e0e0e0;
+  
+  // Outlined form field variables
+  --mdc-outlined-text-field-outline-color: #e0e0e0;
+  --mdc-outlined-text-field-hover-outline-color: #1976d2;
+  --mdc-outlined-text-field-focus-outline-color: #1976d2;
+  --mdc-outlined-text-field-label-text-color: #757575;
+  --mdc-outlined-text-field-input-text-color: #212121;
+  
+  // Menu variables
+  --mat-menu-container-background-color: #ffffff;
+  --mat-menu-container-text-color: #212121;
+  --mat-menu-container-shape: 8px;
+  
+  // Select variables
+  --mat-select-panel-background-color: #ffffff;
+  --mat-select-panel-text-color: #212121;
+  
+  // Button variables
+  --mat-mdc-button-persistent-ripple-color: rgba(0, 0, 0, 0.12);
+  --mat-mdc-button-ripple-color: rgba(0, 0, 0, 0.12);
+  
+  // Icon button variables
+  --mat-mdc-icon-button-ripple-color: rgba(0, 0, 0, 0.12);
+  
+  // Chip variables
+  --mdc-chip-elevated-container-color: #e3f2fd;
+  --mdc-chip-elevated-label-text-color: #1976d2;
+  
+  // Divider variables
+  --mat-divider-color: #e0e0e0;
+} 

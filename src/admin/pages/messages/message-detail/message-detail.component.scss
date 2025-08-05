@@ -1,21 +1,21 @@
 
 .message-detail-container {
   max-width: 800px;
-  background-color: #1f2937;
-  color: #ffffff;
+  background-color: var(--admin-bg-card, #ffffff);
+  color: var(--admin-text-primary, #212121);
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #404040;
+  border-bottom: 1px solid var(--admin-border-primary, #e0e0e0);
   padding-bottom: 16px;
   margin-bottom: 24px;
 
   h2 {
     margin: 0;
-    color: #ffffff;
+    color: var(--admin-text-primary, #212121);
   }
 }
 
@@ -25,11 +25,11 @@
 }
 
 .message-info {
-  background: #2d2d2d;
+  background: var(--admin-bg-secondary, #f5f5f5);
   padding: 16px;
   border-radius: 8px;
   margin-bottom: 24px;
-  border: 1px solid #404040;
+  border: 1px solid var(--admin-border-primary, #e0e0e0);
 
   .info-row {
     margin-bottom: 12px;
@@ -43,7 +43,7 @@
 
     strong {
       min-width: 80px;
-      color: #9ca3af;
+      color: var(--admin-text-secondary, #757575);
     }
   }
 }
@@ -53,18 +53,18 @@
 
   h4 {
     margin: 0 0 12px 0;
-    color: #ffffff;
+    color: var(--admin-text-primary, #212121);
     font-weight: 500;
   }
 
   .content-text, .reply-text {
-    background: #374151;
+    background: var(--admin-bg-secondary, #f5f5f5);
     padding: 16px;
     border-radius: 8px;
-    border: 1px solid #404040;
+    border: 1px solid var(--admin-border-primary, #e0e0e0);
     white-space: pre-wrap;
     line-height: 1.6;
-    color: #ffffff;
+    color: var(--admin-text-primary, #212121);
   }
 
   .reply-date {
@@ -72,24 +72,24 @@
     text-align: right;
     
     small {
-      color: #9ca3af;
+      color: var(--admin-text-secondary, #757575);
     }
   }
 }
 
 .admin-reply .reply-text {
-  background: #1e3a8a;
-  border-color: #3b82f6;
+  background: var(--admin-bg-hover, #e3f2fd);
+  border-color: var(--admin-primary, #1976d2);
 }
 
 .reply-form {
   margin-top: 24px;
   padding-top: 24px;
-  border-top: 1px solid #404040;
+  border-top: 1px solid var(--admin-border-primary, #e0e0e0);
 
   h4 {
     margin: 0 0 16px 0;
-    color: #ffffff;
+    color: var(--admin-text-primary, #212121);
     font-weight: 500;
   }
 
@@ -110,61 +110,7 @@
   justify-content: flex-end;
   gap: 12px;
   padding-top: 16px;
-  border-top: 1px solid #404040;
+  border-top: 1px solid var(--admin-border-primary, #e0e0e0);
   margin-top: 24px;
-}
-
-// Material Design overrides for dark theme
-::ng-deep {
-  .mat-dialog-container {
-    background-color: #1f2937 !important;
-    color: #ffffff !important;
-  }
-  
-  .mat-dialog-title {
-    color: #ffffff !important;
-  }
-  
-  .mat-dialog-content {
-    color: #ffffff !important;
-  }
-  
-  .mat-form-field {
-    .mat-form-field-label {
-      color: #e5e7eb !important;
-    }
-    
-    .mat-input-element {
-      color: #ffffff !important;
-    }
-    
-    .mat-form-field-outline {
-      color: #6b7280 !important;
-    }
-    
-    &.mat-focused {
-      .mat-form-field-outline-thick {
-        color: #3b82f6 !important;
-      }
-      
-      .mat-form-field-label {
-        color: #3b82f6 !important;
-      }
-    }
-  }
-  
-  .mat-chip {
-    background-color: #3b82f6 !important;
-    color: #ffffff !important;
-  }
-  
-  .mat-button {
-    color: #ffffff !important;
-  }
-  
-  .mat-raised-button.mat-primary {
-    background-color: #3b82f6 !important;
-    color: #ffffff !important;
-  }
 }
   

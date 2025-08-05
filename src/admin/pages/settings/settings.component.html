@@ -59,7 +59,7 @@
           </div>
 
           <div class="form-actions">
-            <button mat-raised-button color="primary" type="submit" [disabled]="generalForm.invalid || isLoading">
+            <button mat-raised-button type="submit" [disabled]="generalForm.invalid || isLoading">
               <mat-icon>save</mat-icon>
               {{ isLoading ? ('SAVING' | translate) : ('SAVE_GENERAL_SETTINGS' | translate) }}
             </button>
@@ -151,7 +151,7 @@
           </div>
 
           <div class="form-actions">
-            <button mat-raised-button color="primary" type="submit" [disabled]="isLoading">
+            <button mat-raised-button type="submit" [disabled]="isLoading">
               <mat-icon>notifications</mat-icon>
               {{ isLoading ? ('SAVING' | translate) : ('SAVE_NOTIFICATION_SETTINGS' | translate) }}
             </button>
@@ -230,7 +230,7 @@
           </div>
 
           <div class="form-actions">
-            <button mat-raised-button color="primary" type="submit" [disabled]="securityForm.invalid || isLoading">
+            <button mat-raised-button type="submit" [disabled]="securityForm.invalid || isLoading">
               <mat-icon>security</mat-icon>
               {{ isLoading ? ('SAVING' | translate) : ('SAVE_SECURITY_SETTINGS' | translate) }}
             </button>

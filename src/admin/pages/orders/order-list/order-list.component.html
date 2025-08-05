@@ -81,7 +81,7 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>{{ 'ACTIONS' | translate}}</th>
         <td mat-cell *matCellDef="let order">
-          <button mat-icon-button color="primary" (click)="viewOrderDetails(order)" matTooltip="View Details">
+          <button mat-icon-button (click)="viewOrderDetails(order)" matTooltip="View Details">
             <mat-icon>visibility</mat-icon>
           </button>
         </td>
@@ -144,7 +144,7 @@
         </div>
 
         <div class="card-actions">
-          <button mat-icon-button color="primary" (click)="viewOrderDetails(order)" 
+          <button mat-icon-button (click)="viewOrderDetails(order)" 
                   class="action-button">
             <mat-icon>visibility</mat-icon>
           </button>

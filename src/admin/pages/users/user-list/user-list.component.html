@@ -14,7 +14,7 @@
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
         
-    <button mat-raised-button color="primary" (click)="onSearch()" class="search-button">
+    <button mat-raised-button (click)="onSearch()" class="search-button">
           <mat-icon>search</mat-icon>
       <span class="button-text">{{ 'SEARCH' | translate}}</span>
         </button>
@@ -95,23 +95,14 @@
 
                 <button mat-icon-button 
                         matTooltip="Change role"
-                        [color]="user.role === 'admin' ? 'warn' : 'primary'"
                         (click)="changeUserRole(user)">
                   <mat-icon>{{ user.role === 'admin' ? 'person_remove' : 'admin_panel_settings' }}</mat-icon>
                 </button>
 
                 <button mat-icon-button 
-                        [matTooltip]="(user.status === 'blocked') ? 'Unblock user' : 'Block user'"
-                        [color]="(user.status === 'blocked') ? 'primary' : 'warn'"
-                        (click)="toggleUserStatus(user)">
-                  <mat-icon>{{ (user.status === 'blocked') ? 'lock_open' : 'block' }}</mat-icon>
-                </button>
-
-                <button mat-icon-button 
-                        matTooltip="Delete user"
-                        color="warn"
-                        (click)="deleteUser(user)">
-                  <mat-icon>delete</mat-icon>
+                        matTooltip="Disable user"
+                        (click)="disableUser(user)">
+                  <mat-icon>block</mat-icon>
                 </button>
               </div>
             </td>

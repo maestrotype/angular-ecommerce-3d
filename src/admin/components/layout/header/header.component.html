@@ -23,7 +23,7 @@
       </button>
       <!-- Notifications -->
       <button mat-icon-button [matMenuTriggerFor]="notificationMenu" class="notification-button">
-        <mat-icon [matBadge]="unreadCount > 0 ? unreadCount : null" matBadgeColor="warn" matBadgeSize="small">
+        <mat-icon [matBadge]="unreadCount > 0 ? unreadCount : null" matBadgeSize="small">
           notifications
         </mat-icon>
       </button>
@@ -57,7 +57,7 @@
       >
         <div class="notification-content">
           <div class="notification-icon">
-            <mat-icon [color]="getNotificationColor(notification.type)">
+            <mat-icon>
               {{ getNotificationIcon(notification.type) }}
             </mat-icon>
           </div>

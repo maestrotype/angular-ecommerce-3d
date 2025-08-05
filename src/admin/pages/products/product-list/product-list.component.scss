@@ -549,20 +549,20 @@
     }
     
     .mat-row {
-      background-color: #2d2d2d !important;
+      background-color: var(--admin-bg-card, #ffffff);
       
       &:hover {
-        background-color: #374151 !important;
+        background-color: var(--admin-bg-hover, #e3f2fd);
       }
     }
     
     .mat-header-cell {
-      color: #ffffff !important;
+      color: var(--admin-text-primary, #212121);
       font-weight: 600;
     }
     
     .mat-cell {
-      color: #ffffff !important;
+      color: var(--admin-text-primary, #212121);
     }
   }
   

@@ -62,7 +62,7 @@
                               <span class="mobile-only">Активен</span>
                               <span class="desktop-only">{{ 'HEADER_MENU_ACTIVE' | translate }}</span>
                             </mat-slide-toggle>
-                            <button mat-icon-button color="warn" type="button" (click)="removeMenuItem(i)" class="delete-btn" matTooltip="Удалить">
+                            <button mat-icon-button type="button" (click)="removeMenuItem(i)" class="delete-btn" matTooltip="Удалить">
                               <mat-icon>delete</mat-icon>
                             </button>
                           </div>
@@ -136,7 +136,7 @@
                     <span class="mobile-only">Активна</span>
                     <span class="desktop-only">{{ 'CATEGORY_ACTIVE' | translate }}</span>
                   </mat-slide-toggle>
-                  <button mat-icon-button color="warn" type="button" (click)="removeCategory(i)" class="delete-btn" matTooltip="Удалить">
+                  <button mat-icon-button type="button" (click)="removeCategory(i)" class="delete-btn" matTooltip="Удалить">
                     <mat-icon>delete</mat-icon>
                   </button>
                 </div>
@@ -200,12 +200,9 @@
 
   <div mat-dialog-actions class="actions">
     <button mat-button (click)="onCancel()" [disabled]="loading || uploadingImage || uploadingLogo">{{ 'CANCEL' | translate }}</button>
-    <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="sectionForm.invalid || loading || uploadingImage || uploadingLogo">
-      <mat-icon *ngIf="loading">hourglass_empty</mat-icon>
-      {{ loading
-      ? ('SAVING' | translate)
-      : (isEditMode ? ('UPDATE' | translate) : ('CREATE' | translate))
-      }}
+    <button mat-raised-button (click)="onSubmit()" [disabled]="sectionForm.invalid || loading || uploadingImage || uploadingLogo">
+      <mat-icon *ngIf="loading" class="spinning">refresh</mat-icon>
+      {{ loading ? ('SAVING' | translate) : (isEditMode ? ('UPDATE_SECTION' | translate) : ('CREATE_SECTION' | translate)) }}
     </button>
   </div>
 </div>

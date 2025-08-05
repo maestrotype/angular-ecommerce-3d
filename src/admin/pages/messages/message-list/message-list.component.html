@@ -22,9 +22,9 @@
         </mat-select>
       </mat-form-field>
   
-      <button mat-raised-button color="primary" (click)="onSearch()" class="search-button">
+      <button mat-raised-button (click)="onSearch()" class="search-button">
         <mat-icon>search</mat-icon>
-        <span class="button-text">{{ 'SEARCH' | translate}}</span>
+        <span class="button-text">{{ 'SEARCH' | translate }}</span>
       </button>
     </div>
   
@@ -63,18 +63,18 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>{{ 'ACTIONS' | translate}}</th>
           <td mat-cell *matCellDef="let message">
-            <button mat-icon-button color="primary" (click)="viewMessage(message)" matTooltip="View Details">
+            <button mat-icon-button (click)="viewMessage(message)" matTooltip="View Details">
               <mat-icon>visibility</mat-icon>
             </button>
-            <button mat-icon-button color="accent" (click)="markAsRead(message)" 
-                    *ngIf="message.status === 'new'" matTooltip="Mark as Read">
-              <mat-icon>mark_email_read</mat-icon>
+            <button mat-icon-button (click)="markAsRead(message)"
+              [matTooltip]="message.status === 'read' ? 'Mark as unread' : 'Mark as read'">
+              <mat-icon>{{ message.status === 'read' ? 'mark_email_unread' : 'mark_email_read' }}</mat-icon>
             </button>
-            <button mat-icon-button color="warn" (click)="markAsArchived(message)" 
-                    *ngIf="message.status !== 'closed'" matTooltip="Archive">
-              <mat-icon>archive</mat-icon>
+            <button mat-icon-button (click)="markAsArchived(message)"
+              [matTooltip]="message.status === 'archived' ? 'Unarchive' : 'Archive'">
+              <mat-icon>{{ message.status === 'archived' ? 'unarchive' : 'archive' }}</mat-icon>
             </button>
-            <button mat-icon-button color="warn" (click)="deleteMessage(message)" matTooltip="Delete">
+            <button mat-icon-button (click)="deleteMessage(message)" matTooltip="Delete">
               <mat-icon>delete</mat-icon>
             </button>
           </td>
@@ -111,19 +111,19 @@
           </div>
 
           <div class="card-actions">
-            <button mat-icon-button color="primary" (click)="viewMessage(message)" 
+            <button mat-icon-button (click)="viewMessage(message)" 
                     class="action-button">
               <mat-icon>visibility</mat-icon>
             </button>
-            <button mat-icon-button color="accent" (click)="markAsRead(message)" 
+            <button mat-icon-button (click)="markAsRead(message)" 
                     *ngIf="message.status === 'new'" class="action-button">
               <mat-icon>mark_email_read</mat-icon>
             </button>
-            <button mat-icon-button color="warn" (click)="markAsArchived(message)" 
+            <button mat-icon-button (click)="markAsArchived(message)" 
                     *ngIf="message.status !== 'closed'" class="action-button">
               <mat-icon>archive</mat-icon>
             </button>
-            <button mat-icon-button color="warn" (click)="deleteMessage(message)" 
+            <button mat-icon-button (click)="deleteMessage(message)" 
                     class="action-button">
               <mat-icon>delete</mat-icon>
             </button>
