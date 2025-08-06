@@ -31,6 +31,8 @@ export class SidenavComponent {
     { label: "USERS", route: "/admin/users", icon: "people" },
     { label: "MESSAGES", route: "/admin/messages", icon: "email" },
     { label: "PAGE_SECTIONS", route: "/admin/sections", icon: "view_module" },
+    { label: "SEO", route: "/admin/seo", icon: "search" },
+    { label: "SETTINGS", route: "/admin/settings", icon: "settings" },
   ];
 
   constructor(

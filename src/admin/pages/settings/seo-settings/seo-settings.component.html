@@ -1,0 +1,281 @@
+<div class="seo-settings-container">
+  <div class="seo-settings-header">
+    <h1 class="page-title">SEO Settings</h1>
+    <p class="page-subtitle">Configure search engine optimization and social media settings</p>
+  </div>
+
+  <div class="seo-settings-content" *ngIf="!loading; else loadingTemplate">
+    <mat-tab-group [(selectedIndex)]="selectedTab" class="seo-tabs">
+      
+      <!-- Meta Tags Tab -->
+      <mat-tab label="Meta Tags">
+        <mat-card class="settings-card">
+          <mat-card-header>
+            <mat-card-title>Basic SEO Settings</mat-card-title>
+            <mat-card-subtitle>Configure basic meta tags for search engines</mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <form [formGroup]="seoForm" class="settings-form">
+              
+              <!-- Site Name -->
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Site Name</mat-label>
+                  <input matInput formControlName="siteName" placeholder="Enter site name">
+                  <mat-icon matSuffix>business</mat-icon>
+                  <mat-error *ngIf="isFieldValid('siteName')">
+                    {{ getFieldError('siteName') }}
+                  </mat-error>
+                  <mat-hint>{{ getCharacterCount('siteName') }}/{{ getMaxLength('siteName') }}</mat-hint>
+                </mat-form-field>
+              </div>
+
+              <!-- Site Description -->
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Site Description</mat-label>
+                  <textarea matInput formControlName="siteDescription" rows="3" 
+                    placeholder="Enter site description for search engines"></textarea>
+                  <mat-icon matSuffix>description</mat-icon>
+                  <mat-error *ngIf="isFieldValid('siteDescription')">
+                    {{ getFieldError('siteDescription') }}
+                  </mat-error>
+                  <mat-hint>{{ getCharacterCount('siteDescription') }}/{{ getMaxLength('siteDescription') }}</mat-hint>
+                </mat-form-field>
+              </div>
+
+              <!-- Site Keywords -->
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Keywords</mat-label>
+                  <input matInput formControlName="siteKeywords" 
+                    placeholder="Enter keywords separated by commas">
+                  <mat-icon matSuffix>tag</mat-icon>
+                  <mat-error *ngIf="isFieldValid('siteKeywords')">
+                    {{ getFieldError('siteKeywords') }}
+                  </mat-error>
+                  <mat-hint>{{ getCharacterCount('siteKeywords') }}/{{ getMaxLength('siteKeywords') }}</mat-hint>
+                </mat-form-field>
+              </div>
+
+              <!-- Site URL -->
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Site URL</mat-label>
+                  <input matInput formControlName="siteUrl" placeholder="https://example.com">
+                  <mat-icon matSuffix>link</mat-icon>
+                  <mat-error *ngIf="isFieldValid('siteUrl')">
+                    {{ getFieldError('siteUrl') }}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <!-- Default Language -->
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="half-width">
+                  <mat-label>Default Language</mat-label>
+                  <input matInput formControlName="defaultLanguage" placeholder="en">
+                  <mat-icon matSuffix>language</mat-icon>
+                  <mat-error *ngIf="isFieldValid('defaultLanguage')">
+                    {{ getFieldError('defaultLanguage') }}
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <!-- Enable Features -->
+              <div class="form-row checkbox-row">
+                <mat-checkbox formControlName="enableSitemap" color="primary">
+                  Enable Sitemap Generation
+                </mat-checkbox>
+                <mat-checkbox formControlName="enableStructuredData" color="primary">
+                  Enable Structured Data
+                </mat-checkbox>
+              </div>
+
+              <!-- Save Button -->
+              <div class="form-actions">
+                <button mat-raised-button color="primary" 
+                  (click)="onSaveSeoSettings()" 
+                  [disabled]="saving || seoForm.invalid">
+                  <mat-icon *ngIf="saving">hourglass_empty</mat-icon>
+                  <span>{{ saving ? 'Saving...' : 'Save SEO Settings' }}</span>
+                </button>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+
+      <!-- Open Graph Tab -->
+      <mat-tab label="Social Media">
+        <mat-card class="settings-card">
+          <mat-card-header>
+            <mat-card-title>Open Graph & Social Media</mat-card-title>
+            <mat-card-subtitle>Configure social media sharing settings</mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <form [formGroup]="seoForm" class="settings-form">
+              
+              <!-- Default OG Image -->
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Default OG Image URL</mat-label>
+                  <input matInput formControlName="defaultOgImage" 
+                    placeholder="https://example.com/og-image.jpg">
+                  <mat-icon matSuffix>image</mat-icon>
+                </mat-form-field>
+              </div>
+
+              <!-- OG Site Name -->
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>OG Site Name</mat-label>
+                  <input matInput formControlName="ogSiteName" 
+                    placeholder="Enter site name for social media">
+                  <mat-icon matSuffix>share</mat-icon>
+                  <mat-error *ngIf="isFieldValid('ogSiteName')">
+                    {{ getFieldError('ogSiteName') }}
+                  </mat-error>
+                  <mat-hint>{{ getCharacterCount('ogSiteName') }}/{{ getMaxLength('ogSiteName') }}</mat-hint>
+                </mat-form-field>
+              </div>
+
+              <!-- Twitter Handle -->
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="half-width">
+                  <mat-label>Twitter Handle</mat-label>
+                  <input matInput formControlName="twitterHandle" 
+                    placeholder="@username">
+                  <mat-icon matSuffix>twitter</mat-icon>
+                  <mat-error *ngIf="isFieldValid('twitterHandle')">
+                    {{ getFieldError('twitterHandle') }}
+                  </mat-error>
+                  <mat-hint>{{ getCharacterCount('twitterHandle') }}/{{ getMaxLength('twitterHandle') }}</mat-hint>
+                </mat-form-field>
+              </div>
+
+              <!-- Social Media Preview -->
+              <div class="form-row">
+                <div class="og-preview">
+                  <h3>Social Media Preview</h3>
+                  <div class="og-card">
+                    <img [src]="seoForm.get('defaultOgImage')?.value || '/assets/images/og-default.jpg'"
+                         alt="OG Image" class="og-image">
+                    <div class="og-content">
+                      <h4>{{ seoForm.get('ogSiteName')?.value || 'Site Name' }}</h4>
+                      <p>{{ seoForm.get('siteDescription')?.value || 'Site description' }}</p>
+                      <span class="og-url">{{ seoForm.get('siteUrl')?.value || 'https://example.com' }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+
+      <!-- Analytics Tab -->
+      <mat-tab label="Analytics">
+        <mat-card class="settings-card">
+          <mat-card-header>
+            <mat-card-title>Analytics & Verification</mat-card-title>
+            <mat-card-subtitle>Configure analytics and search console verification</mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <form [formGroup]="seoForm" class="settings-form">
+              
+              <!-- Google Analytics -->
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Google Analytics ID</mat-label>
+                  <input matInput formControlName="googleAnalyticsId" 
+                    placeholder="G-XXXXXXXXXX or UA-XXXXXXXXX-X">
+                  <mat-icon matSuffix>analytics</mat-icon>
+                </mat-form-field>
+              </div>
+
+              <!-- Google Search Console -->
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Google Search Console Verification</mat-label>
+                  <input matInput formControlName="googleSearchConsole" 
+                    placeholder="Enter verification code">
+                  <mat-icon matSuffix>search</mat-icon>
+                </mat-form-field>
+              </div>
+
+              <!-- Bing Webmaster Tools -->
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Bing Webmaster Tools Verification</mat-label>
+                  <input matInput formControlName="bingWebmasterTools" 
+                    placeholder="Enter verification code">
+                  <mat-icon matSuffix>verified</mat-icon>
+                </mat-form-field>
+              </div>
+
+              <!-- Generate Sitemap Button -->
+              <div class="form-actions">
+                <button mat-raised-button color="accent" 
+                  (click)="onGenerateSitemap()">
+                  <mat-icon>map</mat-icon>
+                  Generate Sitemap
+                </button>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+
+      <!-- Advanced Tab -->
+      <mat-tab label="Advanced">
+        <mat-card class="settings-card">
+          <mat-card-header>
+            <mat-card-title>Advanced SEO Settings</mat-card-title>
+            <mat-card-subtitle>Configure robots.txt and advanced settings</mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content>
+            <form [formGroup]="robotsTxtForm" class="settings-form">
+              
+              <!-- Robots.txt Content -->
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Robots.txt Content</mat-label>
+                  <textarea matInput formControlName="robotsTxtContent" rows="10" 
+                    placeholder="User-agent: *&#10;Allow: /&#10;&#10;Sitemap: https://example.com/sitemap.xml"></textarea>
+                  <mat-icon matSuffix>code</mat-icon>
+                  <mat-error *ngIf="robotsTxtForm.get('robotsTxtContent')?.invalid && robotsTxtForm.get('robotsTxtContent')?.touched">
+                    Robots.txt content is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <!-- Save Robots.txt Button -->
+              <div class="form-actions">
+                <button mat-raised-button color="primary" 
+                  (click)="onSaveRobotsTxt()" 
+                  [disabled]="robotsTxtForm.invalid">
+                  <mat-icon>save</mat-icon>
+                  Save Robots.txt
+                </button>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+
+    </mat-tab-group>
+  </div>
+
+  <!-- Loading Template -->
+  <ng-template #loadingTemplate>
+    <div class="loading-container">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Loading SEO settings...</p>
+    </div>
+  </ng-template>
+</div> 

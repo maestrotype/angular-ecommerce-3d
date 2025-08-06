@@ -11,6 +11,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { MessagesModule } from './messages/messages.module';
 import { SectionsModule } from './sections/sections.module';
 import { UploadsModule } from './upload-module/uploads.module';
+import { SeoModule } from './seo/seo.module';
 // import { ServeStaticModule } from '@nestjs/serve-static';
 // import { join } from 'path';
 @Module({
@@ -30,7 +31,8 @@ import { UploadsModule } from './upload-module/uploads.module';
     MessagesModule,
     SectionsModule,
     NotificationsModule,
-    UploadsModule
+    UploadsModule,
+    SeoModule
   ],
 })
 export class AppModule {}
