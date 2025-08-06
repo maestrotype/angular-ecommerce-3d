@@ -9,6 +9,22 @@
   --admin-bg-sidebar: #424242;     // Sidebar background (from admin-layout)
   --admin-bg-notification: #3d3d3d; // Notification header background (from header)
   
+  // Orders Page Specific Colors (from original screenshots)
+  --admin-orders-bg-main: #2E3136;        // Orders page main background (dark gray)
+  --admin-orders-bg-card: #3A3F44;        // Orders table and widget background (lighter gray)
+  --admin-orders-bg-header: #3A3F44;      // Orders table header background (lighter gray)
+  --admin-orders-bg-row: #2E3136;         // Orders table row background (dark gray)
+  --admin-orders-bg-hover: #3A3F44;       // Orders table hover background (lighter gray)
+  --admin-orders-active-sidebar: #533483; // Active sidebar item (purple)
+  --admin-orders-action-icon: #e91e63;    // Action button (pink)
+  
+  // Modal Colors (from original screenshots)
+  --admin-modal-bg: #2d2d2d;              // Modal background (dark gray)
+  --admin-modal-border: #404040;          // Modal borders (gray)
+  --admin-modal-text-primary: #ffffff;    // Modal primary text (white)
+  --admin-modal-text-secondary: #9ca3af;  // Modal secondary text (gray)
+  --admin-modal-money: #4CAF50;           // Modal money color (green)
+  
   // Text Colors (from actual files)
   --admin-text-primary: #ffffff;   // Main white text (from all components)
   --admin-text-secondary: #9ca3af; // Secondary gray text (from user-list, products)
