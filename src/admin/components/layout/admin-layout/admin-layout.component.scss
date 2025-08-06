@@ -1,64 +1,64 @@
 
 .admin-container {
-    height: 100vh;
-  }
-  
+  height: 100vh;
+}
+
+.admin-sidenav {
+  width: var(--admin-sidebar-width, 260px);
+  background-color: var(--admin-bg-sidebar, #424242);
+  border-right: none;
+}
+
+.admin-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-main {
+  flex: 1;
+  padding: var(--admin-content-padding, 24px);
+  background-color: var(--admin-bg-main, #1f2937);
+  min-height: calc(100vh - var(--admin-header-height, 64px));
+  overflow-x: auto;
+}
+
+// Galaxy Z Fold 5/6 unfolded (690px) - use desktop format
+@media (min-width: 690px) and (max-width: 768px) {
   .admin-sidenav {
-    width: 260px;
-    background-color: #424242;
-    border-right: none;
+    width: 240px;
+    box-shadow: none;
   }
-  
-  .admin-content {
-    display: flex;
-    flex-direction: column;
-  }
-  
+
   .admin-main {
-    flex: 1;
-    padding: 24px;
-    background-color: var(--mat-sidenav-content-background-color);
-    min-height: calc(100vh - 64px);
-    overflow-x: auto;
+    padding: var(--admin-spacing-md, 16px);
+    min-height: calc(100vh - var(--admin-header-height, 64px));
   }
-  
-  // Galaxy Z Fold 5/6 unfolded (690px) - use desktop format
-  @media (min-width: 690px) and (max-width: 768px) {
-    .admin-sidenav {
-      width: 240px;
-      box-shadow: none;
-    }
-    
-    .admin-main {
-      padding: 16px;
-      min-height: calc(100vh - 64px);
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .admin-sidenav {
-      width: 280px;
-      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
-    }
-    
-    .admin-main {
-      padding: 16px;
-      min-height: calc(100vh - 56px); // Smaller header on mobile
-    }
+}
 
-    // Ensure content doesn't get pushed by overlay sidenav
-    .admin-content {
-      width: 100%;
-    }
+@media (max-width: 768px) {
+  .admin-sidenav {
+    width: var(--admin-sidebar-width-mobile, 280px);
+    box-shadow: 2px 0 8px var(--admin-shadow-sm, rgba(0, 0, 0, 0.3));
   }
 
-  @media (max-width: 480px) {
-    .admin-sidenav {
-      width: 100%;
-    }
-    
-    .admin-main {
-      padding: 12px;
-    }
+  .admin-main {
+    padding: var(--admin-spacing-md, 16px);
+    min-height: calc(100vh - 56px); // Smaller header on mobile
   }
+
+  // Ensure content doesn't get pushed by overlay sidenav
+  .admin-content {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-sidenav {
+    width: 100%;
+  }
+
+  .admin-main {
+    padding: 12px;
+  }
+}
   

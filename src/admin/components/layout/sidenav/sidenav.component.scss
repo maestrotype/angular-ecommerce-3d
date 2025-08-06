@@ -1,60 +1,60 @@
 .sidenav-header {
   padding: 20px 16px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--admin-border-light, #e0e0e0);
 
   h2 {
     margin: 0;
-    color: #e0e0e0;
+    color: var(--admin-text-light, #e0e0e0);
     font-size: 1.5rem;
-    font-weight: 600;
+    font-weight: var(--admin-font-weight-semibold, 600);
   }
 }
 
 .sidenav-nav {
-  padding-top: 16px;
+  padding-top: var(--admin-spacing-md, 16px);
 
   a {
     margin: 4px 8px;
-    border-radius: 8px;
-    transition: all 0.2s ease;
+    border-radius: var(--admin-border-radius-md, 8px);
+    transition: all var(--admin-transition-fast, 0.2s ease);
 
     &:hover {
       background-color: rgba(0, 0, 0, 0.04);
     }
 
     &.active {
-      background-color: #3f51b5;
-      color: white;
+      background-color: var(--admin-accent-indigo, #3f51b5);
+      color: var(--admin-text-primary, #ffffff);
 
       mat-icon {
-        color: white;
+        color: var(--admin-text-primary, #ffffff);
       }
     }
   }
 }
 
 .nav-badge {
-  background-color: #f44336;
-  color: white;
+  background-color: var(--admin-accent-red, #f44336);
+  color: var(--admin-text-primary, #ffffff);
   border-radius: 12px;
   padding: 2px 8px;
-  font-size: 12px;
+  font-size: var(--admin-font-size-sm, 12px);
   min-width: 20px;
   text-align: center;
 }
 
 .sidenav-footer {
   position: absolute;
-  bottom: 16px;
-  left: 16px;
-  right: 16px;
+  bottom: var(--admin-spacing-md, 16px);
+  left: var(--admin-spacing-md, 16px);
+  right: var(--admin-spacing-md, 16px);
 
   button {
     width: 100%;
     justify-content: flex-start;
 
     mat-icon {
-      margin-right: 8px;
+      margin-right: var(--admin-spacing-sm, 8px);
     }
   }
 }
