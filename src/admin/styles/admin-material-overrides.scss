@@ -1,0 +1,1128 @@
+// Material Design Overrides for Admin Panel
+// Dark Theme Overrides
+[data-theme="dark"] {
+  // Toolbar
+  .mat-toolbar {
+    background-color: var(--admin-bg-header);
+    color: var(--admin-text-primary);
+    
+    .mat-toolbar-row {
+      background-color: var(--admin-bg-header);
+      color: var(--admin-text-primary);
+    }
+    
+    .mat-toolbar-single-row {
+      background-color: var(--admin-bg-header);
+      color: var(--admin-text-primary);
+    }
+  }
+  
+  // Sidenav
+  .mat-sidenav {
+    background-color: var(--admin-bg-sidebar);
+    color: var(--admin-text-primary);
+    
+    .sidenav-header h2 {
+      color: var(--admin-text-primary);
+    }
+    
+    .sidenav-nav {
+      .mat-nav-list {
+        background-color: var(--admin-bg-sidebar);
+        
+        .mat-list-item {
+          color: var(--admin-text-primary);
+          
+          &:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+          }
+          
+          &.active {
+            background-color: var(--admin-accent-indigo);
+            color: var(--admin-text-primary);
+            
+            mat-icon {
+              color: var(--admin-text-primary);
+            }
+            
+            .mat-list-item-title {
+              color: var(--admin-text-primary);
+            }
+          }
+          
+          mat-icon {
+            color: var(--admin-text-primary);
+          }
+          
+          .mat-list-item-title {
+            color: var(--admin-text-primary);
+          }
+          
+          .mat-list-item-meta {
+            color: var(--admin-text-primary);
+          }
+        }
+      }
+    }
+    
+    .sidenav-footer button {
+      color: var(--admin-accent-red);
+      
+      mat-icon {
+        color: var(--admin-accent-red);
+      }
+    }
+  }
+  
+  // Material Design List Overrides - More Specific
+  .mat-nav-list {
+    background-color: var(--admin-bg-sidebar);
+    
+    .mat-list-item {
+      color: var(--admin-text-primary);
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+      
+      &.active {
+        background-color: var(--admin-accent-indigo);
+        color: var(--admin-text-primary);
+        
+        mat-icon {
+          color: var(--admin-text-primary);
+        }
+        
+        .mat-list-item-title {
+          color: var(--admin-text-primary);
+        }
+      }
+      
+      mat-icon {
+        color: var(--admin-text-primary);
+      }
+      
+      .mat-list-item-title {
+        color: var(--admin-text-primary);
+      }
+      
+      .mat-list-item-meta {
+        color: var(--admin-text-primary);
+      }
+    }
+  }
+  
+  // Even More Specific List Overrides
+  .mat-list-base {
+    .mat-list-item {
+      color: var(--admin-text-primary);
+      
+      .mat-list-item-content {
+        color: var(--admin-text-primary);
+        
+        .mat-list-text {
+          color: var(--admin-text-primary);
+        }
+      }
+      
+      mat-icon {
+        color: var(--admin-text-primary);
+      }
+    }
+  }
+  
+  // Most Specific List Overrides
+  .mat-sidenav .mat-nav-list .mat-list-base .mat-list-item .mat-list-item-content .mat-list-text {
+    color: var(--admin-text-primary);
+  }
+  
+  .mat-sidenav .mat-nav-list .mat-list-base .mat-list-item .mat-list-item-content mat-icon {
+    color: var(--admin-text-primary);
+  }
+  
+  // Dashboard Cards - Fix dark blocks
+  .dashboard-container {
+    .stat-card {
+      background-color: var(--admin-bg-card);
+      color: var(--admin-text-primary);
+      border: 1px solid var(--admin-border-primary);
+      
+      .stat-info h3 {
+        color: var(--admin-text-secondary);
+      }
+      
+      .stat-number {
+        color: var(--admin-text-primary);
+      }
+    }
+  }
+  
+  // Settings Cards - Fix dark blocks
+  .settings-container {
+    .mat-card {
+      background-color: var(--admin-bg-card);
+      color: var(--admin-text-primary);
+      border: 1px solid var(--admin-border-primary);
+      
+      .mat-card-title {
+        color: var(--admin-text-primary);
+      }
+      
+      .mat-card-subtitle {
+        color: var(--admin-text-secondary);
+      }
+    }
+  }
+  
+  // Search Fields - Fix visibility
+  .search-container {
+    .mat-form-field {
+      .mat-form-field-label {
+        color: var(--admin-text-secondary);
+      }
+      
+      .mat-input-element {
+        color: var(--admin-text-primary);
+        
+        &::placeholder {
+          color: var(--admin-text-secondary);
+        }
+      }
+      
+      .mat-form-field-outline {
+        color: var(--admin-border-primary);
+      }
+    }
+  }
+  
+  // Table Containers - Fix dark blocks
+  .table-container {
+    background-color: var(--admin-bg-card);
+    border: 1px solid var(--admin-border-primary);
+    
+    .mat-table {
+      background-color: var(--admin-bg-card);
+      color: var(--admin-text-primary);
+      
+      .mat-header-row {
+        background-color: var(--admin-bg-header);
+        
+        .mat-header-cell {
+          color: var(--admin-text-primary);
+        }
+      }
+      
+      .mat-row {
+        background-color: var(--admin-bg-card);
+        color: var(--admin-text-primary);
+        
+        &:hover {
+          background-color: var(--admin-bg-header);
+        }
+        
+        .mat-cell {
+          color: var(--admin-text-primary);
+        }
+      }
+    }
+  }
+  
+  // Pagination - Fix dark pagination
+  .mat-paginator {
+    background-color: var(--admin-bg-card);
+    color: var(--admin-text-primary);
+    border-top: 1px solid var(--admin-border-primary);
+    
+    .mat-paginator-page-size-label {
+      color: var(--admin-text-primary);
+    }
+    
+    .mat-paginator-range-label {
+      color: var(--admin-text-primary);
+    }
+    
+    .mat-paginator-navigation-previous,
+    .mat-paginator-navigation-next,
+    .mat-paginator-navigation-first,
+    .mat-paginator-navigation-last {
+      color: var(--admin-text-primary);
+      
+      &:disabled {
+        color: var(--admin-text-secondary);
+      }
+    }
+    
+    .mat-select-value {
+      color: var(--admin-text-primary);
+    }
+    
+    .mat-select-arrow {
+      color: var(--admin-text-secondary);
+    }
+  }
+  
+  // Notification Menu
+  .notification-menu {
+    width: 380px;
+    max-width: 90vw;
+    background: var(--admin-bg-card);
+    color: var(--admin-text-primary);
+    border-radius: var(--admin-border-radius-md);
+    box-shadow: var(--admin-shadow-lg);
+    
+    .notification-header {
+      background-color: var(--admin-bg-notification);
+      border-radius: var(--admin-border-radius-md) var(--admin-border-radius-md) 0 0;
+      border-bottom: 1px solid var(--admin-border-primary);
+      
+      .notification-title {
+        color: var(--admin-text-primary);
+      }
+      
+      .mark-all-read {
+        color: var(--admin-accent-green);
+        background: transparent;
+        border: none;
+        
+        &:hover {
+          background: rgba(76, 175, 80, 0.1);
+        }
+      }
+    }
+    
+    .notification-list {
+      background: var(--admin-bg-card);
+      
+      .notification-item {
+        background: transparent;
+        border: none;
+        color: var(--admin-text-primary);
+        text-align: left;
+        border-bottom: 1px solid var(--admin-border-secondary);
+        
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        &.unread {
+          background-color: rgba(33, 150, 243, 0.1);
+          border-left: 3px solid var(--admin-accent-blue-light);
+        }
+        
+        .notification-content {
+          .notification-icon mat-icon {
+            color: #9E9E9E;
+          }
+          
+          .notification-text {
+            .notification-title {
+              color: var(--admin-text-primary);
+            }
+            
+            .notification-message {
+              color: #B0B0B0;
+            }
+            
+            .notification-time {
+              color: #757575;
+            }
+          }
+          
+          .notification-status .unread-dot {
+            background-color: var(--admin-accent-blue-light);
+          }
+        }
+      }
+    }
+    
+    .no-notifications {
+      color: #9E9E9E;
+      background: var(--admin-bg-card);
+      
+      mat-icon {
+        color: #757575;
+      }
+      
+      span {
+        color: #B0B0B0;
+      }
+    }
+  }
+  
+  // Form Fields
+  .mat-form-field {
+    .mat-form-field-label {
+      color: var(--admin-mat-label);
+    }
+    
+    .mat-input-element {
+      color: var(--admin-text-primary);
+      
+      &::placeholder {
+        color: var(--admin-text-secondary);
+      }
+    }
+    
+    .mat-form-field-outline {
+      color: var(--admin-mat-outline);
+    }
+    
+    &.mat-focused {
+      .mat-form-field-outline-thick {
+        color: var(--admin-accent-blue);
+      }
+      
+      .mat-form-field-label {
+        color: var(--admin-accent-blue);
+      }
+    }
+    
+    &.mat-form-field-invalid {
+      .mat-form-field-outline {
+        color: var(--admin-accent-red);
+      }
+    }
+  }
+  
+  // Select Dropdowns
+  .mat-select {
+    color: var(--admin-text-primary);
+    
+    .mat-select-arrow {
+      color: var(--admin-text-secondary);
+    }
+  }
+  
+  .mat-select-panel {
+    background-color: var(--admin-bg-card);
+    border: 1px solid var(--admin-border-primary);
+  }
+  
+  .mat-option {
+    background-color: var(--admin-bg-card);
+    color: var(--admin-text-primary);
+    
+    &:hover {
+      background-color: var(--admin-bg-header);
+    }
+    
+    &.mat-selected {
+      background-color: var(--admin-accent-blue);
+      color: var(--admin-text-primary);
+      
+      mat-icon {
+        color: var(--admin-text-primary);
+      }
+      
+      .mat-list-item-title {
+        color: var(--admin-text-primary);
+      }
+    }
+  }
+  
+  // Cards
+  .mat-card {
+    background-color: var(--admin-bg-card);
+    color: var(--admin-text-primary);
+    border: 1px solid var(--admin-border-primary);
+  }
+  
+  .mat-card-title {
+    color: var(--admin-text-primary);
+  }
+  
+  .mat-card-subtitle {
+    color: var(--admin-text-secondary);
+  }
+  
+  // Buttons
+  .mat-button,
+  .mat-raised-button,
+  .mat-stroked-button,
+  .mat-flat-button {
+    &.mat-primary {
+      background-color: var(--admin-accent-blue);
+      color: var(--admin-text-primary);
+    }
+    
+    &.mat-accent {
+      background-color: var(--admin-accent-green);
+      color: var(--admin-text-primary);
+    }
+    
+    &.mat-warn {
+      background-color: var(--admin-accent-red);
+      color: var(--admin-text-primary);
+    }
+  }
+  
+  // List
+  .mat-list-item {
+    color: var(--admin-text-primary);
+    
+    &:hover {
+      background-color: var(--admin-bg-header);
+    }
+    
+    &.mat-list-item-active {
+      background-color: var(--admin-accent-indigo);
+    }
+  }
+  
+  // Menu
+  .mat-menu-panel {
+    background-color: var(--admin-bg-card);
+    border: 1px solid var(--admin-border-primary);
+  }
+  
+  .mat-menu-item {
+    color: var(--admin-text-primary);
+    
+    &:hover {
+      background-color: var(--admin-bg-header);
+    }
+  }
+  
+  // Dialog
+  .mat-dialog-container {
+    background-color: var(--admin-bg-card);
+    color: var(--admin-text-primary);
+    border: 1px solid var(--admin-border-primary);
+  }
+  
+  // Table
+  .mat-table {
+    background-color: var(--admin-bg-card);
+    color: var(--admin-text-primary);
+  }
+  
+  .mat-header-row {
+    background-color: var(--admin-bg-header);
+  }
+  
+  .mat-row {
+    background-color: var(--admin-bg-card);
+    
+    &:hover {
+      background-color: var(--admin-bg-header);
+    }
+  }
+  
+  // Slide Toggle
+  .mat-slide-toggle {
+    .mat-slide-toggle-label {
+      color: var(--admin-text-primary);
+    }
+  }
+  
+  // Chip
+  .mat-chip {
+    background-color: var(--admin-bg-header);
+    color: var(--admin-text-primary);
+  }
+  
+  // Divider
+  .mat-divider {
+    border-color: var(--admin-border-primary);
+  }
+  
+  // Error Messages
+  .mat-error {
+    color: var(--admin-accent-red);
+  }
+  
+  // Disabled States
+  .mat-form-field.mat-form-field-disabled {
+    .mat-form-field-label {
+      color: var(--admin-mat-disabled);
+    }
+    
+    .mat-input-element {
+      color: var(--admin-mat-disabled);
+    }
+  }
+  
+  .mat-button[disabled],
+  .mat-raised-button[disabled],
+  .mat-stroked-button[disabled],
+  .mat-flat-button[disabled] {
+    background-color: var(--admin-mat-disabled);
+    color: var(--admin-text-secondary);
+  }
+}
+
+// Light Theme Overrides
+[data-theme="light"] {
+  // Toolbar
+  .mat-toolbar {
+    background-color: var(--admin-bg-header);
+    color: var(--admin-text-primary);
+    border-bottom: 1px solid var(--admin-border-primary);
+    
+    .mat-toolbar-row {
+      background-color: var(--admin-bg-header);
+      color: var(--admin-text-primary);
+    }
+    
+    .mat-toolbar-single-row {
+      background-color: var(--admin-bg-header);
+      color: var(--admin-text-primary);
+    }
+  }
+  
+  // Sidenav
+  .mat-sidenav {
+    background-color: var(--admin-bg-sidebar);
+    color: var(--admin-text-primary);
+    border-right: 1px solid var(--admin-border-primary);
+    
+    .sidenav-header h2 {
+      color: var(--admin-text-primary);
+    }
+    
+    .sidenav-nav {
+      .mat-nav-list {
+        background-color: var(--admin-bg-sidebar);
+        
+        .mat-list-item {
+          color: var(--admin-text-primary);
+          
+          &:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+          }
+          
+          &.active {
+            background-color: var(--admin-accent-blue);
+            color: #ffffff;
+            
+            mat-icon {
+              color: #ffffff;
+            }
+            
+            .mat-list-item-title {
+              color: #ffffff;
+            }
+          }
+          
+          mat-icon {
+            color: var(--admin-text-primary);
+          }
+          
+          .mat-list-item-title {
+            color: var(--admin-text-primary);
+          }
+          
+          .mat-list-item-meta {
+            color: var(--admin-text-primary);
+          }
+        }
+      }
+    }
+    
+    .sidenav-footer button {
+      color: var(--admin-accent-red);
+      
+      mat-icon {
+        color: var(--admin-accent-red);
+      }
+    }
+  }
+  
+  // Material Design List Overrides - More Specific
+  .mat-nav-list {
+    background-color: var(--admin-bg-sidebar);
+    
+    .mat-list-item {
+      color: var(--admin-text-primary);
+      
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+      
+      &.active {
+        background-color: var(--admin-accent-blue);
+        color: #ffffff;
+        
+        mat-icon {
+          color: #ffffff;
+        }
+        
+        .mat-list-item-title {
+          color: #ffffff;
+        }
+      }
+      
+      mat-icon {
+        color: var(--admin-text-primary);
+      }
+      
+      .mat-list-item-title {
+        color: var(--admin-text-primary);
+      }
+      
+      .mat-list-item-meta {
+        color: var(--admin-text-primary);
+      }
+    }
+  }
+  
+  // Even More Specific List Overrides
+  .mat-list-base {
+    .mat-list-item {
+      color: var(--admin-text-primary);
+      
+      .mat-list-item-content {
+        color: var(--admin-text-primary);
+        
+        .mat-list-text {
+          color: var(--admin-text-primary);
+        }
+      }
+      
+      mat-icon {
+        color: var(--admin-text-primary);
+      }
+    }
+  }
+  
+  // Most Specific List Overrides
+  .mat-sidenav .mat-nav-list .mat-list-base .mat-list-item .mat-list-item-content .mat-list-text {
+    color: var(--admin-text-primary);
+  }
+  
+  .mat-sidenav .mat-nav-list .mat-list-base .mat-list-item .mat-list-item-content mat-icon {
+    color: var(--admin-text-primary);
+  }
+  
+  // Dashboard Cards - Fix light theme
+  .dashboard-container {
+    .stat-card {
+      background-color: var(--admin-bg-card);
+      color: var(--admin-text-primary);
+      border: 1px solid var(--admin-border-primary);
+      
+      .stat-info h3 {
+        color: var(--admin-text-secondary);
+      }
+      
+      .stat-number {
+        color: var(--admin-text-primary);
+      }
+    }
+  }
+  
+  // Settings Cards - Fix light theme
+  .settings-container {
+    .mat-card {
+      background-color: var(--admin-bg-card);
+      color: var(--admin-text-primary);
+      border: 1px solid var(--admin-border-primary);
+      
+      .mat-card-title {
+        color: var(--admin-text-primary);
+      }
+      
+      .mat-card-subtitle {
+        color: var(--admin-text-secondary);
+      }
+    }
+  }
+  
+  // Search Fields - Fix visibility
+  .search-container {
+    .mat-form-field {
+      .mat-form-field-label {
+        color: var(--admin-text-secondary);
+      }
+      
+      .mat-input-element {
+        color: var(--admin-text-primary);
+        
+        &::placeholder {
+          color: var(--admin-text-secondary);
+        }
+      }
+      
+      .mat-form-field-outline {
+        color: var(--admin-border-primary);
+      }
+    }
+  }
+  
+  // Table Containers - Fix light theme
+  .table-container {
+    background-color: var(--admin-bg-card);
+    border: 1px solid var(--admin-border-primary);
+    
+    .mat-table {
+      background-color: var(--admin-bg-card);
+      color: var(--admin-text-primary);
+      
+      .mat-header-row {
+        background-color: var(--admin-bg-header);
+        
+        .mat-header-cell {
+          color: var(--admin-text-primary);
+        }
+      }
+      
+      .mat-row {
+        background-color: var(--admin-bg-card);
+        color: var(--admin-text-primary);
+        
+        &:hover {
+          background-color: var(--admin-bg-header);
+        }
+        
+        .mat-cell {
+          color: var(--admin-text-primary);
+        }
+      }
+    }
+  }
+  
+  // Pagination - Fix light theme
+  .mat-paginator {
+    background-color: var(--admin-bg-card);
+    color: var(--admin-text-primary);
+    border-top: 1px solid var(--admin-border-primary);
+    
+    .mat-paginator-page-size-label {
+      color: var(--admin-text-primary);
+    }
+    
+    .mat-paginator-range-label {
+      color: var(--admin-text-primary);
+    }
+    
+    .mat-paginator-navigation-previous,
+    .mat-paginator-navigation-next,
+    .mat-paginator-navigation-first,
+    .mat-paginator-navigation-last {
+      color: var(--admin-text-primary);
+      
+      &:disabled {
+        color: var(--admin-text-secondary);
+      }
+    }
+    
+    .mat-select-value {
+      color: var(--admin-text-primary);
+    }
+    
+    .mat-select-arrow {
+      color: var(--admin-text-secondary);
+    }
+  }
+  
+  // Notification Menu
+  .notification-menu {
+    width: 380px;
+    max-width: 90vw;
+    background: var(--admin-bg-card);
+    color: var(--admin-text-primary);
+    border-radius: var(--admin-border-radius-md);
+    box-shadow: var(--admin-shadow-lg);
+    
+    .notification-header {
+      background-color: var(--admin-bg-notification);
+      border-radius: var(--admin-border-radius-md) var(--admin-border-radius-md) 0 0;
+      border-bottom: 1px solid var(--admin-border-primary);
+      
+      .notification-title {
+        color: var(--admin-text-primary);
+      }
+      
+      .mark-all-read {
+        color: var(--admin-accent-green);
+        background: transparent;
+        border: none;
+        
+        &:hover {
+          background: rgba(16, 185, 129, 0.1);
+        }
+      }
+    }
+    
+    .notification-list {
+      background: var(--admin-bg-card);
+      
+      .notification-item {
+        background: transparent;
+        border: none;
+        color: var(--admin-text-primary);
+        text-align: left;
+        border-bottom: 1px solid var(--admin-border-secondary);
+        
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        &.unread {
+          background-color: rgba(59, 130, 246, 0.1);
+          border-left: 3px solid var(--admin-accent-blue);
+        }
+        
+        .notification-content {
+          .notification-icon mat-icon {
+            color: #6b7280;
+          }
+          
+          .notification-text {
+            .notification-title {
+              color: var(--admin-text-primary);
+            }
+            
+            .notification-message {
+              color: #64748b;
+            }
+            
+            .notification-time {
+              color: #94a3b8;
+            }
+          }
+          
+          .notification-status .unread-dot {
+            background-color: var(--admin-accent-blue);
+          }
+        }
+      }
+    }
+    
+    .no-notifications {
+      color: #6b7280;
+      background: var(--admin-bg-card);
+      
+      mat-icon {
+        color: #9ca3af;
+      }
+      
+      span {
+        color: #64748b;
+      }
+    }
+  }
+  
+  // Form Fields
+  .mat-form-field {
+    .mat-form-field-label {
+      color: var(--admin-mat-label);
+    }
+    
+    .mat-input-element {
+      color: var(--admin-text-primary);
+      
+      &::placeholder {
+        color: var(--admin-text-secondary);
+      }
+    }
+    
+    .mat-form-field-outline {
+      color: var(--admin-mat-outline);
+    }
+    
+    &.mat-focused {
+      .mat-form-field-outline-thick {
+        color: var(--admin-accent-blue);
+      }
+      
+      .mat-form-field-label {
+        color: var(--admin-accent-blue);
+      }
+    }
+    
+    &.mat-form-field-invalid {
+      .mat-form-field-outline {
+        color: var(--admin-accent-red);
+      }
+    }
+  }
+  
+  // Select Dropdowns
+  .mat-select {
+    color: var(--admin-text-primary);
+    
+    .mat-select-arrow {
+      color: var(--admin-text-secondary);
+    }
+  }
+  
+  .mat-select-panel {
+    background-color: var(--admin-bg-card);
+    border: 1px solid var(--admin-border-primary);
+    box-shadow: var(--admin-shadow-lg);
+  }
+  
+  .mat-option {
+    background-color: var(--admin-bg-card);
+    color: var(--admin-text-primary);
+    
+    &:hover {
+      background-color: var(--admin-bg-header);
+    }
+    
+    &.mat-selected {
+      background-color: var(--admin-accent-blue);
+      color: #ffffff;
+    }
+  }
+  
+  // Status Dropdowns - Specific styling for light theme
+  .status-select {
+    .mat-form-field {
+      background-color: var(--admin-bg-search);
+      border-radius: var(--admin-border-radius-md);
+      
+      .mat-form-field-label {
+        color: var(--admin-text-secondary);
+      }
+      
+      .mat-select-value {
+        color: var(--admin-text-primary);
+        background-color: var(--admin-bg-search);
+      }
+      
+      .mat-form-field-outline {
+        color: var(--admin-border-search);
+      }
+      
+      .mat-form-field-wrapper {
+        background-color: var(--admin-bg-search);
+      }
+    }
+  }
+  
+  // Cards
+  .mat-card {
+    background-color: var(--admin-bg-card);
+    color: var(--admin-text-primary);
+    border: 1px solid var(--admin-border-primary);
+    box-shadow: var(--admin-shadow-sm);
+  }
+  
+  .mat-card-title {
+    color: var(--admin-text-primary);
+  }
+  
+  .mat-card-subtitle {
+    color: var(--admin-text-secondary);
+  }
+  
+  // Buttons
+  .mat-button,
+  .mat-raised-button,
+  .mat-stroked-button,
+  .mat-flat-button {
+    &.mat-primary {
+      background-color: var(--admin-accent-blue);
+      color: #ffffff;
+    }
+    
+    &.mat-accent {
+      background-color: var(--admin-accent-green);
+      color: #ffffff;
+    }
+    
+    &.mat-warn {
+      background-color: var(--admin-accent-red);
+      color: #ffffff;
+    }
+  }
+  
+  // List
+  .mat-list-item {
+    color: var(--admin-text-primary);
+    
+    &:hover {
+      background-color: var(--admin-bg-header);
+    }
+    
+    &.mat-list-item-active {
+      background-color: var(--admin-accent-blue);
+      color: #ffffff;
+    }
+  }
+  
+  // Menu
+  .mat-menu-panel {
+    background-color: var(--admin-bg-card);
+    border: 1px solid var(--admin-border-primary);
+    box-shadow: var(--admin-shadow-lg);
+  }
+  
+  .mat-menu-item {
+    color: var(--admin-text-primary);
+    
+    &:hover {
+      background-color: var(--admin-bg-header);
+    }
+  }
+  
+  // Dialog
+  .mat-dialog-container {
+    background-color: var(--admin-bg-card);
+    color: var(--admin-text-primary);
+    border: 1px solid var(--admin-border-primary);
+    box-shadow: var(--admin-shadow-xl);
+  }
+  
+  // Table
+  .mat-table {
+    background-color: var(--admin-bg-card);
+    color: var(--admin-text-primary);
+  }
+  
+  .mat-header-row {
+    background-color: var(--admin-bg-header);
+  }
+  
+  .mat-row {
+    background-color: var(--admin-bg-card);
+    
+    &:hover {
+      background-color: var(--admin-bg-header);
+    }
+  }
+  
+  // Slide Toggle
+  .mat-slide-toggle {
+    .mat-slide-toggle-label {
+      color: var(--admin-text-primary);
+    }
+  }
+  
+  // Chip
+  .mat-chip {
+    background-color: var(--admin-bg-header);
+    color: var(--admin-text-primary);
+  }
+  
+  // Divider
+  .mat-divider {
+    border-color: var(--admin-border-primary);
+  }
+  
+  // Error Messages
+  .mat-error {
+    color: var(--admin-accent-red);
+  }
+  
+  // Disabled States
+  .mat-form-field.mat-form-field-disabled {
+    .mat-form-field-label {
+      color: var(--admin-mat-disabled);
+    }
+    
+    .mat-input-element {
+      color: var(--admin-mat-disabled);
+    }
+  }
+  
+  .mat-button[disabled],
+  .mat-raised-button[disabled],
+  .mat-stroked-button[disabled],
+  .mat-flat-button[disabled] {
+    background-color: var(--admin-mat-disabled);
+    color: var(--admin-text-secondary);
+  }
+} 

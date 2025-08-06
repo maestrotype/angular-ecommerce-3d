@@ -1,8 +1,8 @@
 .user-list-container {
   padding: 0;
-  background-color: #1f2937;
+  background-color: var(--admin-bg-main, #1f2937);
   min-height: calc(100vh - 64px);
-  color: #ffffff;
+  color: var(--admin-text-primary, #ffffff);
 }
 
 .header-section {
@@ -12,14 +12,14 @@
   padding: 24px 24px 0 24px;
   
   h1 {
-    color: #ffffff;
+    color: var(--admin-text-primary, #ffffff);
     margin: 0 0 8px 0;
     font-size: 2rem;
     font-weight: 600;
   }
   
   .subtitle {
-    color: #9ca3af;
+    color: var(--admin-text-secondary, #9ca3af);
     margin: 0;
     font-size: 1rem;
   }
@@ -51,7 +51,7 @@
   justify-content: center;
   padding: 48px 24px;
   text-align: center;
-  color: #ffffff;
+  color: var(--admin-text-primary, #ffffff);
   
   mat-spinner {
     margin-bottom: 16px;
@@ -59,34 +59,34 @@
 }
 
 .table-container {
-  background: #2d2d2d;
+  background: var(--admin-bg-card, #2d2d2d);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  border: 1px solid #404040;
+  border: 1px solid var(--admin-border-primary, #404040);
   overflow: hidden;
   margin: 0 24px;
   
   .users-table {
     width: 100%;
-    background-color: #2d2d2d;
+    background-color: var(--admin-bg-card, #2d2d2d);
     
     th {
-      background-color: #374151 !important;
-      color: #ffffff !important;
+      background-color: var(--admin-bg-header, #374151) !important;
+      color: var(--admin-text-primary, #ffffff) !important;
       font-weight: 600;
       padding: 16px;
-      border-bottom: 1px solid #4b5563;
+      border-bottom: 1px solid var(--admin-border-secondary, #4b5563);
     }
     
     td {
-      background-color: #2d2d2d !important;
-      color: #ffffff !important;
+      background-color: var(--admin-bg-card, #2d2d2d) !important;
+      color: var(--admin-text-primary, #ffffff) !important;
       padding: 16px;
-      border-bottom: 1px solid #404040;
+      border-bottom: 1px solid var(--admin-border-primary, #404040);
     }
     
     tr:hover td {
-      background-color: #374151 !important;
+      background-color: var(--admin-bg-header, #374151) !important;
     }
     
     .user-info {

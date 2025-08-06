@@ -119,4 +119,67 @@
   --admin-breakpoint-lg: 992px;
   --admin-breakpoint-xl: 1200px;
   --admin-breakpoint-xxl: 1400px;
+}
+
+// Light Theme Variables
+[data-theme="light"] {
+  // Main Background Colors - Light Theme
+  --admin-bg-main: #f8fafc;        // Light gray background
+  --admin-bg-card: #ffffff;        // White card background
+  --admin-bg-header: #f1f5f9;      // Light gray header background
+  --admin-bg-sidebar: #ffffff;     // White sidebar background
+  --admin-bg-notification: #ffffff; // White notification background
+  
+  // Orders Page Specific Colors - Light Theme
+  --admin-orders-bg-main: #f8fafc;        // Light gray main background
+  --admin-orders-bg-card: #ffffff;        // White card background
+  --admin-orders-bg-header: #f1f5f9;      // Light gray header background
+  --admin-orders-bg-row: #ffffff;         // White row background
+  --admin-orders-bg-hover: #f1f5f9;       // Light gray hover background
+  --admin-orders-active-sidebar: #3b82f6; // Blue active sidebar item
+  --admin-orders-action-icon: #e91e63;    // Pink action button (same as dark)
+  
+  // Modal Colors - Light Theme
+  --admin-modal-bg: #ffffff;              // White modal background
+  --admin-modal-border: #e2e8f0;          // Light gray modal borders
+  --admin-modal-text-primary: #1e293b;    // Dark text for light theme
+  --admin-modal-text-secondary: #64748b;  // Medium gray text
+  --admin-modal-money: #059669;           // Darker green for light theme
+  
+  // Text Colors - Light Theme
+  --admin-text-primary: #1e293b;   // Dark text for light theme
+  --admin-text-secondary: #64748b; // Medium gray text
+  --admin-text-muted: #94a3b8;     // Light gray muted text
+  --admin-text-light: #475569;     // Dark gray light text
+  
+  // Border Colors - Light Theme
+  --admin-border-primary: #e2e8f0; // Light gray main borders
+  --admin-border-secondary: #cbd5e1; // Medium gray secondary borders
+  --admin-border-light: #f1f5f9;   // Very light gray borders
+  
+  // Accent Colors - Light Theme (same as dark for consistency)
+  --admin-accent-blue: #3b82f6;    // Blue
+  --admin-accent-blue-light: #2196f3; // Light blue
+  --admin-accent-red: #ef4444;     // Red
+  --admin-accent-green: #10b981;   // Green
+  --admin-accent-orange: #f59e0b;  // Orange
+  --admin-accent-purple: #8b5cf6;  // Purple
+  --admin-accent-indigo: #6366f1;  // Indigo
+  
+  // Status Colors - Light Theme
+  --admin-status-success: #059669; // Darker green
+  --admin-status-warning: #d97706; // Darker orange
+  --admin-status-error: #dc2626;   // Darker red
+  --admin-status-info: #2563eb;    // Darker blue
+  
+  // Material Override Colors - Light Theme
+  --admin-mat-disabled: #94a3b8;   // Light gray disabled text
+  --admin-mat-outline: #cbd5e1;    // Light gray form field outline
+  --admin-mat-label: #475569;      // Dark gray form field label
+  
+  // Shadows - Light Theme (lighter shadows)
+  --admin-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --admin-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --admin-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --admin-shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
 } 

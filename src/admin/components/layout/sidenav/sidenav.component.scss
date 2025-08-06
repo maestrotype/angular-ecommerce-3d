@@ -4,7 +4,7 @@
 
   h2 {
     margin: 0;
-    color: var(--admin-text-light, #e0e0e0);
+    color: var(--admin-text-primary, #ffffff);
     font-size: 1.5rem;
     font-weight: var(--admin-font-weight-semibold, 600);
   }
@@ -17,9 +17,10 @@
     margin: 4px 8px;
     border-radius: var(--admin-border-radius-md, 8px);
     transition: all var(--admin-transition-fast, 0.2s ease);
+    color: var(--admin-text-primary, #ffffff);
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.04);
+      background-color: rgba(255, 255, 255, 0.1);
     }
 
     &.active {
@@ -29,6 +30,21 @@
       mat-icon {
         color: var(--admin-text-primary, #ffffff);
       }
+    }
+
+    mat-icon {
+      color: var(--admin-text-primary, #ffffff);
+    }
+
+    // Add styles for text spans
+    span[matListItemTitle] {
+      color: var(--admin-text-primary, #ffffff);
+      font-size: var(--admin-font-size-md, 14px);
+      font-weight: var(--admin-font-weight-medium, 500);
+    }
+
+    span[matListItemMeta] {
+      color: var(--admin-text-primary, #ffffff);
     }
   }
 }
@@ -52,9 +68,11 @@
   button {
     width: 100%;
     justify-content: flex-start;
+    color: var(--admin-accent-red, #f44336);
 
     mat-icon {
       margin-right: var(--admin-spacing-sm, 8px);
+      color: var(--admin-accent-red, #f44336);
     }
   }
 }

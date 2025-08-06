@@ -4,7 +4,7 @@
 
 .dashboard-container h1 {
   margin-bottom: var(--admin-spacing-lg, 24px);
-  color: var(--admin-text-muted, #333);
+  color: var(--admin-text-primary, #ffffff);
   font-size: var(--admin-font-size-xxxl, 28px);
   font-weight: var(--admin-font-weight-medium, 500);
 }
@@ -18,7 +18,7 @@
   
   p {
     margin-top: var(--admin-spacing-md, 16px);
-    color: var(--admin-text-muted, #666);
+    color: var(--admin-text-secondary, #9ca3af);
     font-size: var(--admin-font-size-lg, 16px);
   }
 }
@@ -62,7 +62,7 @@
   
   h3 {
     margin: 0 0 var(--admin-spacing-sm, 8px) 0;
-    color: var(--admin-text-muted, #666);
+    color: var(--admin-text-secondary, #9ca3af);
     font-size: var(--admin-font-size-md, 14px);
     font-weight: var(--admin-font-weight-medium, 500);
     text-transform: uppercase;
@@ -74,7 +74,7 @@
   margin: 0;
   font-size: var(--admin-font-size-xxl, 24px);
   font-weight: bold;
-  color: #999;
+  color: var(--admin-text-primary, #ffffff);
 }
 
 @media (max-width: 768px) {

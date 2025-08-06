@@ -1,4 +1,4 @@
-<mat-toolbar color="primary" class="admin-header">
+<mat-toolbar class="admin-header">
     <button 
       mat-icon-button 
       class="menu-button"
@@ -13,6 +13,16 @@
     <span class="spacer"></span>
     
     <div class="header-actions">
+      <!-- Theme Toggle -->
+      <button 
+        mat-icon-button 
+        (click)="toggleTheme()" 
+        [matTooltip]="(currentTheme === 'dark' ? 'SWITCH_TO_LIGHT' : 'SWITCH_TO_DARK') | translate"
+        class="theme-toggle-button"
+      >
+        <mat-icon>{{ currentTheme === 'dark' ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+      
       <button mat-icon-button [routerLink]="'/home'" [matTooltip]="'GO_TO_STOREFRONT' | translate">
         <mat-icon>storefront</mat-icon>
       </button>

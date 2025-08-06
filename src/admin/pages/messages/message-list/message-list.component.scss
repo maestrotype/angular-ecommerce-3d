@@ -1,9 +1,9 @@
 
 .message-list-container {
   padding: 24px;
-  background-color: #1f2937;
+  background-color: var(--admin-bg-main, #1f2937);
   min-height: calc(100vh - 64px);
-  color: #ffffff;
+  color: var(--admin-text-primary, #ffffff);
 }
 
 .header {
@@ -11,7 +11,7 @@
   
   h2 {
     margin: 0;
-    color: #ffffff;
+    color: var(--admin-text-primary, #ffffff);
     font-weight: 500;
   }
 }
@@ -39,10 +39,10 @@
 }
 
 .table-container {
-  background: #2d2d2d;
+  background: var(--admin-bg-card, #2d2d2d);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  border: 1px solid #404040;
+  border: 1px solid var(--admin-border-primary, #404040);
   overflow: hidden;
 }
 
@@ -62,7 +62,7 @@
   padding: 48px;
   
   p {
-    color: #ffffff;
+    color: var(--admin-text-primary, #ffffff);
     font-size: 16px;
   }
 }
@@ -79,11 +79,11 @@
 }
 
 .message-card {
-  background: #2d2d2d;
+  background: var(--admin-bg-card, #2d2d2d);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   padding: 16px;
-  border: 1px solid #404040;
+  border: 1px solid var(--admin-border-primary, #404040);
   transition: all 0.3s ease;
 
   &:hover {
