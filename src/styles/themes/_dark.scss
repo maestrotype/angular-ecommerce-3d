@@ -7,40 +7,47 @@
   /* Dark theme overrides */
   background-color: #0f172a;
   color: #f8fafc;
-  
+
+  /* Skeleton loading variables for dark theme */
+  --skeleton-bg: #374151;
+  --skeleton-bg-dark: #1f2937;
+  --skeleton-shimmer: #4b5563;
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2d2d2d;
+
   /* Dark theme for demo sections */
   .demo-section {
     background: #1e293b;
     border: 1px solid #475569;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
-  
+
   .button-demo {
     background: #334155;
     border: 1px solid #475569;
   }
-  
+
   /* Dark theme for color swatches */
   .color-swatch {
     background: #1e293b;
     border: 1px solid #475569;
-    
+
     .color-name {
       color: #f8fafc;
       text-shadow: none;
     }
   }
-  
+
   /* Dark theme for headings */
   h1, h2, h3, h4, h5, h6 {
     color: #f8fafc;
   }
-  
+
   /* Dark theme for text */
   p {
     color: #cbd5e1;
   }
-  
+
   .text-secondary {
     color: #94a3b8;
   }
@@ -163,8 +170,8 @@
 
   /* Special offer dark styling - using Hero Glass approach */
   .special-offer {
-    background: linear-gradient(135deg, 
-      rgba(248, 250, 252, 0.85) 0%, 
+    background: linear-gradient(135deg,
+      rgba(248, 250, 252, 0.85) 0%,
       rgba(226, 232, 240, 0.75) 30%,
       rgba(203, 213, 225, 0.85) 70%,
       rgba(186, 200, 216, 0.9) 100%) !important;

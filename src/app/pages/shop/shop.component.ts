@@ -1,14 +1,15 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Product } from 'src/shared/models/product.model';
-
 import { ProductService } from '../../core/services/product.service';
 import { CategoryService } from '../../core/services/category.service';
 import { CartService } from '../../core/services/cart.service';
 import { FavoritesService } from '../../core/services/favorites.service';
 import { NotificationService } from '../../core/services/notification.service';
-import { CartItem } from 'src/shared/models/cart-item.model';
+import { OptimizationService } from '../../core/services/optimization.service';
+import { Product } from 'src/shared/models/product.model';
 import { Category } from 'src/shared/models/category.model';
+import { CartItem } from 'src/shared/models/cart-item.model';
+import { Subject, takeUntil } from 'rxjs';
 
 interface DropdownOption {
   value: string;
@@ -20,24 +21,26 @@ interface DropdownOption {
   templateUrl: './shop.component.html',
   styleUrls: ['./shop.component.scss']
 })
-export class ShopComponent implements OnInit {
-  @Input() product!: Product;
-  @Input() quantity: number = 1;
+export class ShopComponent implements OnInit, OnDestroy {
+  products: Product[] = [];
+  filteredProducts: Product[] = [];
+  categories: Category[] = [];
+  
+  // Filter and sort properties
   searchTerm: string = '';
   selectedCategory: string = 'all';
   sortBy: string = 'name';
   viewMode: string = 'grid';
-
-  categories: Category[] = [];
-  products: Product[] = [];
-  filteredProducts: Product[] = [];
-
-  // Pagination
+  
+  // Pagination properties
   currentPage: number = 1;
   pageSize: number = 8;
   totalPages: number = 1;
   paginatedProducts: Product[] = [];
-
+  
+  // Loading state
+  loading = true;
+  
   // Dropdown options
   categoryOptions: DropdownOption[] = [];
   sortOptions: DropdownOption[] = [
@@ -45,6 +48,8 @@ export class ShopComponent implements OnInit {
     { value: 'price', label: 'Sort by Price' },
     { value: 'rating', label: 'Sort by Rating' }
   ];
+  
+  private destroy$ = new Subject<void>();
 
   constructor(
     private router: Router,
@@ -53,10 +58,25 @@ export class ShopComponent implements OnInit {
     private cartService: CartService,
     private favoritesService: FavoritesService,
     private categoryService: CategoryService,
-    private notificationService: NotificationService
-  ) { }
+    private notificationService: NotificationService,
+    private optimizationService: OptimizationService
+  ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.loadCategories();
+    this.loadProducts();
+    this.setupRouteParams();
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  /**
+   * Load categories for filtering
+   */
+  private loadCategories() {
     this.categoryService.getAllCategories().subscribe(categories => {
       this.categories = categories;
       this.categoryOptions = [
@@ -64,15 +84,38 @@ export class ShopComponent implements OnInit {
         ...categories.map(cat => ({ value: cat.name, label: cat.name }))
       ];
     });
+  }
 
-    this.productService.getProducts().subscribe({
+  /**
+   * Load products with optimization
+   */
+  private loadProducts() {
+    this.loading = true;
+    
+    // Use memoization for caching products
+    this.optimizationService.memoizeObservable(
+      'products:all',
+      this.productService.getProducts(),
+      []
+    ).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
       next: (products) => {
         this.products = products;
-        this.filterProducts();
+        this.applyFilters();
+        this.loading = false;
       },
-      error: (err) => { console.log(err); }
+      error: (error) => {
+        console.error('Error loading products:', error);
+        this.loading = false;
+      }
     });
-    
+  }
+
+  /**
+   * Setup route parameters for search and category
+   */
+  private setupRouteParams() {
     this.route.queryParams.subscribe(params => {
       if (params['search']) {
         this.searchTerm = params['search'];
@@ -80,114 +123,146 @@ export class ShopComponent implements OnInit {
       if (params['category']) {
         this.selectedCategory = params['category'];
       }
-      this.filterProducts();
+      this.applyFilters();
     });
   }
 
-  onSearchChange(): void {
-    this.filterProducts();
+  /**
+   * Memoized function for getting unique categories
+   */
+  private getUniqueCategories(products: Product[]): string[] {
+    return this.optimizationService.useCallback(
+      'getUniqueCategories',
+      (products: Product[]) => {
+        return [...new Set(products.map(p => p.category))];
+      },
+      []
+    )(products);
   }
 
-  onCategoryChange(value: string): void {
-    this.selectedCategory = value;
-    this.currentPage = 1;
-    this.filterProducts();
+  /**
+   * Memoized function for filtering products
+   */
+  private filterProducts(products: Product[], category: string, search: string, sortBy: string): Product[] {
+    return this.optimizationService.useCallback(
+      'filterProducts',
+      (products: Product[], category: string, search: string, sortBy: string) => {
+        let filtered = products;
+        
+        // Filter by search term
+        if (search) {
+          const searchLower = search.toLowerCase();
+          filtered = filtered.filter(product =>
+            product.name.toLowerCase().includes(searchLower) ||
+            product.description.toLowerCase().includes(searchLower)
+          );
+        }
+        
+        // Filter by category
+        if (category !== 'all') {
+          filtered = filtered.filter(product => product.category === category);
+        }
+        
+        // Sort products
+        switch (sortBy) {
+          case 'name':
+            filtered.sort((a, b) => a.name.localeCompare(b.name));
+            break;
+          case 'price':
+            filtered.sort((a, b) => a.price - b.price);
+            break;
+          case 'rating':
+            filtered.sort((a, b) => b.rating - a.rating);
+            break;
+        }
+        
+        return filtered;
+      },
+      []
+    )(products, category, search, sortBy);
   }
 
-  onSortChange(value: string): void {
-    this.sortBy = value;
-    this.currentPage = 1;
-    this.filterProducts();
-  }
-
-  changeViewMode(mode: string): void {
-    this.viewMode = mode;
-  }
-
-  private filterProducts(): void {
-    let filtered = [...this.products];
-
-    // Filter by search term
-    if (this.searchTerm) {
-      filtered = filtered.filter(product =>
-        product.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        product.description.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
-    }
-
-    // Filter by category
-    if (this.selectedCategory !== 'all') {
-      filtered = filtered.filter(product => product.category === this.selectedCategory);
-    }
-
-    // Sort products
-    switch (this.sortBy) {
-      case 'name':
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case 'price':
-        filtered.sort((a, b) => a.price - b.price);
-        break;
-      case 'rating':
-        filtered.sort((a, b) => b.rating - a.rating);
-        break;
-    }
-
-    this.filteredProducts = filtered;
-    this.totalPages = Math.max(1, Math.ceil(filtered.length / this.pageSize));
+  /**
+   * Apply filters and update pagination
+   */
+  private applyFilters() {
+    this.filteredProducts = this.filterProducts(
+      this.products, 
+      this.selectedCategory, 
+      this.searchTerm,
+      this.sortBy
+    );
+    
+    this.totalPages = Math.max(1, Math.ceil(this.filteredProducts.length / this.pageSize));
     this.currentPage = Math.min(this.currentPage, this.totalPages);
     this.paginateProducts();
   }
 
-  paginateProducts(): void {
+  /**
+   * Update paginated products
+   */
+  private paginateProducts() {
     const start = (this.currentPage - 1) * this.pageSize;
     const end = start + this.pageSize;
     this.paginatedProducts = this.filteredProducts.slice(start, end);
   }
 
-  goToPage(page: number): void {
-    console.log('goToPage called with:', page, 'totalPages:', this.totalPages);
+  // Event handlers
+  onSearchChange() {
+    this.currentPage = 1;
+    this.applyFilters();
+  }
+
+  onCategoryChange(value: string) {
+    this.selectedCategory = value;
+    this.currentPage = 1;
+    this.applyFilters();
+  }
+
+  onSortChange(value: string) {
+    this.sortBy = value;
+    this.currentPage = 1;
+    this.applyFilters();
+  }
+
+  changeViewMode(mode: string) {
+    this.viewMode = mode;
+  }
+
+  // Pagination methods
+  goToPage(page: number) {
     if (page < 1 || page > this.totalPages) {
-      console.log('Invalid page number');
       return;
     }
     this.currentPage = page;
     this.paginateProducts();
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    console.log('Current page set to:', this.currentPage);
   }
 
-  nextPage(): void {
-    console.log('nextPage called, currentPage:', this.currentPage, 'totalPages:', this.totalPages);
+  nextPage() {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
       this.paginateProducts();
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      console.log('Moved to next page:', this.currentPage);
-    } else {
-      console.log('Already on last page');
     }
   }
 
-  prevPage(): void {
-    console.log('prevPage called, currentPage:', this.currentPage);
+  prevPage() {
     if (this.currentPage > 1) {
       this.currentPage--;
       this.paginateProducts();
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      console.log('Moved to previous page:', this.currentPage);
-    } else {
-      console.log('Already on first page');
     }
   }
 
-  goToProductDetail(productId: number): void {
+  // Product actions
+  goToProductDetail(productId: number) {
     this.router.navigate(['/product', productId]).then(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
 
-  addToCart(product: Product): void {
+  addToCart(product: Product) {
     const cartItem: Omit<CartItem, 'quantity'> = {
       productId: product.id,
       name: product.name,
@@ -198,11 +273,8 @@ export class ShopComponent implements OnInit {
       specifications: product.specifications,
     };
   
-    for (let i = 0; i < this.quantity; i++) {
-      this.cartService.addToCart(cartItem);
-    }
-  
-    this.notificationService.showSuccess(`Added ${this.quantity} ${product.name} to cart!`);
+    this.cartService.addToCart(cartItem);
+    this.notificationService.showSuccess(`Added ${product.name} to cart!`);
   }
 
   getDiscountedPrice(product: Product): number {
@@ -212,16 +284,20 @@ export class ShopComponent implements OnInit {
     return product?.price || 0;
   }
 
-  quickView(product: Product): void {
-    console.log('Quick view:', product);
+  onFavoriteToggled(event: { product: Product; isFavorite: boolean }) {
+    console.log(`${event.product.name} ${event.isFavorite ? 'added to' : 'removed from'} favorites`);
   }
 
-  /**
-   * Handle favorite toggle events
-   */
-  onFavoriteToggled(event: { product: Product; isFavorite: boolean }): void {
-    // The FavoritesService already handles the toggle logic
-    // This method can be used for additional UI feedback if needed
-    console.log(`${event.product.name} ${event.isFavorite ? 'added to' : 'removed from'} favorites`);
+  // Memoized statistics
+  get productsStats() {
+    return this.optimizationService.memoize(
+      'productsStats',
+      () => ({
+        total: this.products.length,
+        filtered: this.filteredProducts.length,
+        categories: this.categories.length
+      }),
+      [this.products.length, this.filteredProducts.length, this.categories.length]
+    );
   }
 }
