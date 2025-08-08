@@ -13,6 +13,16 @@
     <span class="spacer"></span>
     
     <div class="header-actions">
+      <!-- Theme Toggle -->
+      <button 
+        mat-icon-button 
+        (click)="toggleTheme()" 
+        [matTooltip]="getThemeTooltip()"
+        class="theme-toggle"
+      >
+        <mat-icon>{{ getThemeIcon() }}</mat-icon>
+      </button>
+      
       <button mat-icon-button [routerLink]="'/home'" [matTooltip]="'GO_TO_STOREFRONT' | translate">
         <mat-icon>storefront</mat-icon>
       </button>

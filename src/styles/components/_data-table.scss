@@ -1,0 +1,473 @@
+/* ==========================================================================
+   DATA TABLE COMPONENTS
+   Universal table styles with Material Design overrides
+   ========================================================================== */
+
+// Admin Panel Colors
+:root {
+  --color-admin-bg: #1f2937;
+  --color-admin-text: #ffffff;
+  --color-admin-subtitle: #9ca3af;
+  --color-card-bg: #2d2d2d;
+  --color-card-border: #404040;
+  --color-card-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --color-card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --color-category-id: #3b82f6;
+  --color-error: #ef4444;
+  --color-image-border: #4b5563;
+  --color-image-bg: #ffffff;
+  --color-placeholder-bg: #374151;
+  --color-stock-low: #ef4444;
+  --color-stock-medium: #f59e0b;
+  --color-stock-high: #10b981;
+  --color-price: #10b981;
+  --color-stock-text: #d1d5db;
+  --color-drag-handle: #666;
+  --color-chip-primary: #3b82f6;
+  --color-admin-accent: #c2185b;
+  --color-admin-accent-hover: #ad1457;
+  --color-admin-button: #c2185b;
+  --color-admin-button-hover: #ad1457;
+}
+
+// Data Table Container
+.data-table-container {
+  background: var(--color-table-bg, #2d2d2d);
+  border-radius: var(--table-border-radius, 8px);
+  box-shadow: var(--table-shadow, 0 2px 8px rgba(0, 0, 0, 0.3));
+  border: 1px solid var(--color-table-border, #404040);
+  overflow: hidden;
+  margin: 0 var(--table-margin, 24px);
+}
+
+// Data Table Header
+.data-table-header {
+  background: var(--color-table-header-bg, #374151);
+  color: var(--color-table-header-text, #ffffff);
+  font-weight: 600;
+  padding: var(--table-padding, 16px);
+  border-bottom: 1px solid var(--color-table-border, #404040);
+}
+
+// Data Table Row
+.data-table-row {
+  background: var(--color-table-row-bg, #2d2d2d);
+  color: var(--color-table-row-text, #ffffff);
+  padding: var(--table-padding, 16px);
+  border-bottom: 1px solid var(--color-table-border, #404040);
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: var(--color-table-row-hover, #374151);
+  }
+}
+
+// Data Table Cell
+.data-table-cell {
+  color: var(--color-table-row-text, #ffffff);
+  padding: var(--table-padding, 16px);
+  border-bottom: 1px solid var(--color-table-border, #404040);
+}
+
+// Status Badge
+.status-badge {
+  background: var(--color-status-badge-bg, #374151);
+  color: var(--color-status-badge-text, #ffffff);
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 12px;
+  display: inline-block;
+
+  &.status-pending {
+    background: var(--color-status-pending, #ff9800);
+    color: #ffffff;
+  }
+
+  &.status-success {
+    background: var(--color-status-success, #4caf50);
+    color: #ffffff;
+  }
+
+  &.status-error {
+    background: var(--color-status-error, #f44336);
+    color: #ffffff;
+  }
+
+  &.status-warning {
+    background: var(--color-status-warning, #ff9800);
+    color: #ffffff;
+  }
+
+  &.status-info {
+    background: var(--color-status-info, #2196f3);
+    color: #ffffff;
+  }
+}
+
+// Action Button
+.action-button {
+  color: var(--color-action-button-color, #f44336);
+  min-width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: var(--color-action-button-hover, rgba(244, 67, 54, 0.1));
+  }
+
+  &:disabled {
+    color: var(--color-icon-button-disabled, #6b7280);
+  }
+}
+
+// User Info
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-user-avatar-bg, #374151);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    mat-icon {
+      color: var(--color-user-avatar-icon, #9ca3af);
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .user-details {
+    .user-name {
+      color: var(--color-user-name-color, #ffffff);
+      font-weight: 500;
+      margin: 0;
+    }
+
+    .user-phone {
+      color: var(--color-user-phone-color, #9ca3af);
+      font-size: 14px;
+      margin: 0;
+    }
+  }
+}
+
+// No Data
+.no-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+  color: var(--color-no-data-text, #ffffff);
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: var(--color-no-data-icon, #9ca3af);
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    color: var(--color-no-data-title, #ffffff);
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  p {
+    color: var(--color-no-data-description, #9ca3af);
+    margin: 0;
+    font-size: 14px;
+  }
+}
+
+// Material Design Overrides - EXACTLY matching original
+::ng-deep {
+  // Table Overrides
+  .mat-mdc-table {
+    background: var(--color-table-bg, #2d2d2d);
+
+    .mat-mdc-header-row {
+      background: var(--color-table-header-bg, #374151);
+
+      .mat-mdc-header-cell {
+        color: var(--color-table-header-text, #ffffff);
+        font-weight: 600;
+        padding: var(--table-padding, 16px);
+        border-bottom: 1px solid var(--color-table-border, #404040);
+      }
+    }
+
+    .mat-mdc-row {
+      background: var(--color-table-row-bg, #2d2d2d);
+
+      &:hover {
+        background: var(--color-table-row-hover, #374151);
+      }
+
+      .mat-mdc-cell {
+        color: var(--color-table-row-text, #ffffff);
+        padding: var(--table-padding, 16px);
+        border-bottom: 1px solid var(--color-table-border, #404040);
+      }
+    }
+  }
+
+  // Paginator Overrides - EXACTLY like original
+  .mat-mdc-paginator {
+    background: var(--color-paginator-bg, #2d2d2d);
+    color: var(--color-paginator-text, #ffffff);
+    border-top: 1px solid var(--color-paginator-border, #404040);
+
+    .mat-mdc-paginator-page-size-label,
+    .mat-mdc-paginator-range-label {
+      color: var(--color-paginator-text, #ffffff);
+    }
+
+    .mat-mdc-icon-button {
+      color: var(--color-paginator-text, #ffffff);
+
+      &:disabled {
+        color: var(--color-paginator-disabled, #6b7280);
+      }
+
+      // Override Material's default button styles
+      .mat-mdc-button-touch-target {
+        background: transparent;
+      }
+
+      .mdc-icon-button {
+        color: var(--color-paginator-text, #ffffff);
+        
+        &:disabled {
+          color: var(--color-paginator-disabled, #6b7280);
+        }
+      }
+    }
+
+    .mat-mdc-select {
+      color: var(--color-paginator-text, #ffffff);
+
+      .mat-mdc-select-arrow {
+        color: var(--color-paginator-arrow, #9ca3af);
+      }
+
+      // Override Material's default select styles
+      .mdc-select {
+        color: var(--color-paginator-text, #ffffff);
+        
+        .mdc-select__anchor {
+          color: var(--color-paginator-text, #ffffff);
+        }
+      }
+    }
+
+    .mat-mdc-select-panel {
+      background: var(--color-paginator-dropdown-bg, #2d2d2d);
+
+      .mat-mdc-option {
+        background: var(--color-paginator-dropdown-bg, #2d2d2d);
+        color: var(--color-paginator-text, #ffffff);
+
+        &:hover {
+          background: var(--color-paginator-dropdown-hover, #374151);
+        }
+
+        &.mat-mdc-option-active {
+          background: var(--color-paginator-dropdown-active, #3b82f6);
+        }
+
+        // Override Material's default option styles
+        .mdc-list-item {
+          color: var(--color-paginator-text, #ffffff);
+          
+          &:hover {
+            background: var(--color-paginator-dropdown-hover, #374151);
+          }
+          
+          &.mdc-list-item--selected {
+            background: var(--color-paginator-dropdown-active, #3b82f6);
+          }
+        }
+      }
+    }
+
+    // Additional overrides for Material's internal elements
+    .mdc-paginator {
+      background: var(--color-paginator-bg, #2d2d2d);
+      color: var(--color-paginator-text, #ffffff);
+      
+      .mdc-paginator__container {
+        background: var(--color-paginator-bg, #2d2d2d);
+      }
+      
+      .mdc-paginator__page-size {
+        color: var(--color-paginator-text, #ffffff);
+      }
+      
+      .mdc-paginator__range-actions {
+        color: var(--color-paginator-text, #ffffff);
+      }
+    }
+  }
+
+  // Chip Overrides - EXACTLY like original mat-chip
+  .mat-mdc-chip {
+    background: var(--color-chip-bg, #374151);
+    color: var(--color-chip-text, #ffffff);
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 12px;
+
+    &.mat-mdc-chip-selected {
+      background: var(--color-chip-selected-bg, #3b82f6);
+      color: #ffffff;
+    }
+
+    // Role colors
+    &.mat-primary {
+      background: var(--color-chip-primary-bg, #3b82f6);
+      color: #ffffff;
+    }
+
+    &.mat-warn {
+      background: var(--color-chip-warn-bg, #f44336);
+      color: #ffffff;
+    }
+
+    &.mat-accent {
+      background: var(--color-chip-accent-bg, #ff9800);
+      color: #ffffff;
+    }
+  }
+
+  // Icon Button Overrides - EXACTLY like original
+  .data-table-container .mat-mdc-icon-button { // Scoped to data-table-container
+    color: var(--color-icon-button-color, #f44336);
+    min-width: 40px;
+    height: 40px;
+
+    &:hover {
+      background: var(--color-icon-button-hover, rgba(244, 67, 54, 0.1));
+    }
+
+    &.mat-button-disabled {
+      color: var(--color-icon-button-disabled, #6b7280);
+    }
+
+    // Different colors for different actions
+    &.mat-primary {
+      color: var(--color-icon-button-primary, #3b82f6);
+
+      &:hover {
+        background: var(--color-icon-button-primary-hover, rgba(59, 130, 246, 0.1));
+      }
+    }
+
+    &.mat-warn {
+      color: var(--color-icon-button-warn, #f44336);
+
+      &:hover {
+        background: var(--color-icon-button-warn-hover, rgba(244, 67, 54, 0.1));
+      }
+    }
+  }
+
+  // Form Field Overrides
+  .mat-mdc-form-field {
+    .mat-mdc-form-field-label {
+      color: var(--color-form-label-color, #e5e7eb);
+    }
+
+    .mat-mdc-input-element {
+      color: var(--color-form-input-color, #ffffff);
+    }
+
+    .mat-mdc-form-field-outline {
+      color: var(--color-form-outline-color, #6b7280);
+    }
+
+    &.mat-focused {
+      .mat-mdc-form-field-outline-thick {
+        color: var(--color-form-focus-color, #3b82f6);
+      }
+
+      .mat-mdc-form-field-label {
+        color: var(--color-form-focus-color, #3b7280);
+      }
+    }
+
+    // Override Material's internal form field styles
+    .mdc-text-field {
+      color: var(--color-form-input-color, #ffffff);
+      
+      .mdc-text-field__input {
+        color: var(--color-form-input-color, #ffffff);
+      }
+      
+      .mdc-floating-label {
+        color: var(--color-form-label-color, #e5e7eb);
+      }
+      
+      .mdc-line-ripple {
+        color: var(--color-form-outline-color, #6b7280);
+      }
+      
+      &.mdc-text-field--focused {
+        .mdc-floating-label {
+          color: var(--color-form-focus-color, #3b82f6);
+        }
+        
+        .mdc-line-ripple {
+          color: var(--color-form-focus-color, #3b82f6);
+        }
+      }
+    }
+  }
+
+  // Additional Material overrides for complete theme switching
+  // Note: Only override elements that are part of the data table
+  // Do not override general buttons or chips that are not part of the table
+
+  // Override any remaining Material default styles
+  .mat-mdc-menu-panel {
+    background: var(--color-paginator-dropdown-bg, #2d2d2d);
+    
+    .mat-mdc-menu-item {
+      color: var(--color-paginator-text, #ffffff);
+      
+      &:hover {
+        background: var(--color-paginator-dropdown-hover, #374151);
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .data-table-container {
+    margin: 0 16px;
+  }
+  
+  .data-table-cell,
+  .data-table-header {
+    padding: 8px;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    gap: 2px;
+  }
+} 

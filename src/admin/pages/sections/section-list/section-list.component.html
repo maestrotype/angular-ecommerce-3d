@@ -1,123 +1,131 @@
 
 <div class="section-list-container">
-    <div class="header">
-      <h2>{{ 'MAIN_PAGE_SECTIONS' | translate }}</h2>
-      <button mat-raised-button color="primary" (click)="addSection()" class="add-button">
-        <mat-icon>add</mat-icon>
-        <span class="button-text">{{ 'ADD_SECTION' | translate }}</span>
-      </button>
-    </div>
-  
-    <!-- Desktop Table View -->
-    <div class="table-container desktop-view">
-      <table mat-table [dataSource]="dataSource" class="sections-table" 
-             cdkDropList (cdkDropListDropped)="drop($event)">
-        
-        <ng-container matColumnDef="order">
-          <th mat-header-cell *matHeaderCellDef>{{ 'ORDER' | translate }}</th>
-          <td mat-cell *matCellDef="let section">
-            <div class="drag-handle" cdkDragHandle>
-              <mat-icon>drag_indicator</mat-icon>
-              {{ section.order }}
-            </div>
-          </td>
-        </ng-container>
-  
-        <ng-container matColumnDef="title">
-          <th mat-header-cell *matHeaderCellDef>{{ 'TITLE' | translate }}</th>
-          <td mat-cell *matCellDef="let section">{{ section.title }}</td>
-        </ng-container>
-  
-        <ng-container matColumnDef="type">
-          <th mat-header-cell *matHeaderCellDef>{{ 'TYPE' | translate }}</th>
-          <td mat-cell *matCellDef="let section">
-            <mat-chip selected>{{ section.type | titlecase }}</mat-chip>
-          </td>
-        </ng-container>
-  
-        <ng-container matColumnDef="isActive">
-          <th mat-header-cell *matHeaderCellDef>{{ 'STATUS' | translate }}</th>
-          <td mat-cell *matCellDef="let section">
-            <mat-slide-toggle [checked]="section.isActive" 
-                              (change)="toggleSection(section)">
-            </mat-slide-toggle>
-          </td>
-        </ng-container>
-  
-        <ng-container matColumnDef="createdAt">
-          <th mat-header-cell *matHeaderCellDef>{{ 'CREATED' | translate }}</th>
-          <td mat-cell *matCellDef="let section">{{ section.createdAt | date:'short' }}</td>
-        </ng-container>
-  
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>{{ 'ACTIONS' | translate }}</th>
-          <td mat-cell *matCellDef="let section">
+  <div class="header-section">
+    <h1>{{ 'MAIN_PAGE_SECTIONS' | translate }}</h1>
+  </div>
+
+  <div class="action-section">
+    <button mat-raised-button color="primary" (click)="addSection()" class="add-button">
+      <mat-icon>add</mat-icon>
+      <span class="button-text">{{ 'ADD_SECTION' | translate }}</span>
+    </button>
+  </div>
+
+  <div class="loading-container" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+    <p>{{ 'LOADING_SECTIONS' | translate }}</p>
+  </div>
+
+  <!-- Desktop Table View -->
+  <div class="data-table-container desktop-view" *ngIf="!loading">
+    <table mat-table [dataSource]="dataSource" class="sections-table" 
+           cdkDropList (cdkDropListDropped)="drop($event)">
+      
+      <ng-container matColumnDef="order">
+        <th mat-header-cell *matHeaderCellDef class="data-table-header">{{ 'ORDER' | translate }}</th>
+        <td mat-cell *matCellDef="let section" class="data-table-cell">
+          <div class="drag-handle" cdkDragHandle>
+            <mat-icon>drag_indicator</mat-icon>
+            {{ section.order }}
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef class="data-table-header">{{ 'TITLE' | translate }}</th>
+        <td mat-cell *matCellDef="let section" class="data-table-cell">{{ section.title }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef class="data-table-header">{{ 'TYPE' | translate }}</th>
+        <td mat-cell *matCellDef="let section" class="data-table-cell">
+          <mat-chip selected>{{ section.type | titlecase }}</mat-chip>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="isActive">
+        <th mat-header-cell *matHeaderCellDef class="data-table-header">{{ 'STATUS' | translate }}</th>
+        <td mat-cell *matCellDef="let section" class="data-table-cell">
+          <mat-slide-toggle [checked]="section.isActive" 
+                            (change)="toggleSection(section)">
+          </mat-slide-toggle>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef class="data-table-header">{{ 'CREATED' | translate }}</th>
+        <td mat-cell *matCellDef="let section" class="data-table-cell">{{ section.createdAt | date:'short' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="data-table-header">{{ 'ACTIONS' | translate }}</th>
+        <td mat-cell *matCellDef="let section" class="data-table-cell">
+          <div class="action-buttons">
             <button mat-icon-button color="primary" (click)="editSection(section)" matTooltip="Edit">
               <mat-icon>edit</mat-icon>
             </button>
             <button mat-icon-button color="warn" (click)="deleteSection(section)" matTooltip="Delete">
               <mat-icon>delete</mat-icon>
             </button>
-          </td>
-        </ng-container>
-  
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag></tr>
-      </table>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" class="data-table-header"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag class="data-table-row"></tr>
+    </table>
+
+    <div class="no-data" *ngIf="dataSource.data.length === 0">
+      <mat-icon>dashboard</mat-icon>
+      <h3>{{ 'NO_SECTIONS_FOUND' | translate }}</h3>
+      <p>No sections found. Create your first section to get started.</p>
     </div>
+  </div>
 
-    <!-- Mobile Card View -->
-    <div class="mobile-view">
-      <div class="sections-grid" cdkDropList (cdkDropListDropped)="drop($event)">
-        <div *ngFor="let section of dataSource.data; let i = index" 
-             class="section-card" cdkDrag>
+  <!-- Mobile Card View -->
+  <div class="mobile-view" *ngIf="!loading">
+    <div class="sections-grid" cdkDropList (cdkDropListDropped)="drop($event)">
+      <div *ngFor="let section of dataSource.data; let i = index" 
+           class="section-card" cdkDrag>
+        
+        <div class="card-header">
+          <div class="drag-handle" cdkDragHandle>
+            <mat-icon>drag_indicator</mat-icon>
+            <span class="order-number">{{ section.order }}</span>
+          </div>
+          <mat-slide-toggle [checked]="section.isActive" 
+                            (change)="toggleSection(section)"
+                            class="status-toggle">
+          </mat-slide-toggle>
+        </div>
+
+        <div class="card-content">
+          <div class="section-title">
+            <h3>{{ section.title }}</h3>
+          </div>
           
-          <div class="card-header">
-            <div class="drag-handle" cdkDragHandle>
-              <mat-icon>drag_indicator</mat-icon>
-              <span class="order-number">{{ section.order }}</span>
-            </div>
-            <mat-slide-toggle [checked]="section.isActive" 
-                              (change)="toggleSection(section)"
-                              class="status-toggle">
-            </mat-slide-toggle>
+          <div class="section-type">
+            <mat-chip selected>{{ section.type | titlecase }}</mat-chip>
           </div>
+          
+          <div class="section-date">
+            <mat-icon>schedule</mat-icon>
+            <span>{{ section.createdAt | date:'short' }}</span>
+          </div>
+        </div>
 
-          <div class="card-content">
-            <div class="section-title">
-              <h3>{{ section.title }}</h3>
-            </div>
-            
-            <div class="section-type">
-              <mat-chip selected>{{ section.type | titlecase }}</mat-chip>
-            </div>
-            
-            <div class="section-date">
-              <mat-icon>schedule</mat-icon>
-              <span>{{ section.createdAt | date:'short' }}</span>
-            </div>
-          </div>
-
-          <div class="card-actions">
-            <button mat-icon-button color="primary" (click)="editSection(section)" 
-                    class="action-button">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button color="warn" (click)="deleteSection(section)" 
-                    class="action-button">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
+        <div class="card-actions">
+          <button mat-icon-button color="primary" (click)="editSection(section)" 
+                  class="action-button">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteSection(section)" 
+                  class="action-button">
+            <mat-icon>delete</mat-icon>
+          </button>
         </div>
       </div>
     </div>
-  
-    <div *ngIf="loading" class="loading">
-      <mat-spinner></mat-spinner>
-    </div>
-  
-    <div *ngIf="!loading && dataSource.data.length === 0" class="no-data">
-      <p>{{ 'NO_SECTIONS_FOUND' | translate }}</p>
-    </div>
   </div>
+</div>
   

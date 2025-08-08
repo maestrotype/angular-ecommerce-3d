@@ -85,6 +85,57 @@ export interface ThemeColors {
   'input-bg': string;
   'input-border': string;
   'input-focus-border': string;
+  
+  // Data Table Colors
+  'table-bg': string;
+  'table-border': string;
+  'table-header-bg': string;
+  'table-header-text': string;
+  'table-row-bg': string;
+  'table-row-text': string;
+  'table-row-hover': string;
+  'status-badge-bg': string;
+  'status-badge-text': string;
+  'status-pending': string;
+  'status-success': string;
+  'status-error': string;
+  'status-warning': string;
+  'status-info': string;
+  'action-button-color': string;
+  'action-button-hover': string;
+  'user-avatar-bg': string;
+  'user-avatar-icon': string;
+  'user-name-color': string;
+  'user-phone-color': string;
+  'no-data-text': string;
+  'no-data-icon': string;
+  'no-data-title': string;
+  'no-data-description': string;
+  'paginator-bg': string;
+  'paginator-text': string;
+  'paginator-border': string;
+  'paginator-disabled': string;
+  'paginator-arrow': string;
+  'paginator-dropdown-bg': string;
+  'paginator-dropdown-hover': string;
+  'paginator-dropdown-active': string;
+  'chip-bg': string;
+  'chip-text': string;
+  'chip-selected-bg': string;
+  'chip-primary-bg': string;
+  'chip-warn-bg': string;
+  'chip-accent-bg': string;
+  'icon-button-color': string;
+  'icon-button-hover': string;
+  'icon-button-disabled': string;
+  'icon-button-primary': string;
+  'icon-button-primary-hover': string;
+  'icon-button-warn': string;
+  'icon-button-warn-hover': string;
+  'form-label-color': string;
+  'form-input-color': string;
+  'form-outline-color': string;
+  'form-focus-color': string;
 }
 
 export interface ThemeLayout {

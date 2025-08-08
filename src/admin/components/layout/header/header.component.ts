@@ -5,6 +5,8 @@ import { Subject } from 'rxjs';
 import { takeUntil, switchMap } from 'rxjs/operators';
 import { AuthService } from '../../../services/auth.service';
 import { NotificationService, Notification } from '../../../services/notification.service';
+import { ThemeService } from '../../../../app/core/themes/theme.service';
+import { Theme } from '../../../../app/core/themes/theme.model';
 
 @Component({
   selector: 'app-admin-header',
@@ -17,15 +19,27 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   notifications: Notification[] = [];
   unreadCount = 0;
+  currentTheme: Theme;
 
   constructor(
     private router: Router,
     private authService: AuthService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private themeService: ThemeService
   ) {}
 
   ngOnInit(): void {
-    // Загружаем уведомления при инициализации
+    // Initialize theme
+    this.currentTheme = this.themeService.getCurrentTheme();
+    
+    // Subscribe to theme changes
+    this.themeService.currentTheme$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(theme => {
+      this.currentTheme = theme;
+    });
+
+    // Load notifications on initialization
     this.notificationService.loadNotifications()
       .pipe(takeUntil(this.destroy$))
       .subscribe(notifications => {
@@ -33,21 +47,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.notificationService.updateNotifications(notifications);
       });
 
-    // Подписываемся на изменения уведомлений
+    // Subscribe to notification changes
     this.notificationService.notifications$
       .pipe(takeUntil(this.destroy$))
       .subscribe(notifications => {
         this.notifications = notifications.slice(0, 5);
       });
 
-    // Подписываемся на количество непрочитанных
+    // Subscribe to unread count
     this.notificationService.unreadCount$
       .pipe(takeUntil(this.destroy$))
       .subscribe(count => {
         this.unreadCount = count;
       });
 
-    // Получаем актуальное количество непрочитанных с сервера
+    // Get actual unread count from server
     this.notificationService.getUnreadCount()
       .pipe(takeUntil(this.destroy$))
       .subscribe(count => {
@@ -60,6 +74,54 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  toggleTheme(): void {
+    const currentThemeId = this.currentTheme.id;
+    let newThemeId: string;
+    
+    // Cycle through themes: dark -> default -> glass -> dark
+    switch (currentThemeId) {
+      case 'dark':
+        newThemeId = 'default';
+        break;
+      case 'default':
+        newThemeId = 'glass';
+        break;
+      case 'glass':
+        newThemeId = 'dark';
+        break;
+      default:
+        newThemeId = 'dark';
+    }
+    
+    this.themeService.setTheme(newThemeId);
+  }
+
+  getThemeIcon(): string {
+    switch (this.currentTheme?.id) {
+      case 'dark':
+        return 'light_mode';
+      case 'default':
+        return 'blur_on';
+      case 'glass':
+        return 'dark_mode';
+      default:
+        return 'light_mode';
+    }
+  }
+
+  getThemeTooltip(): string {
+    switch (this.currentTheme?.id) {
+      case 'dark':
+        return 'SWITCH_TO_LIGHT';
+      case 'default':
+        return 'SWITCH_TO_GLASS';
+      case 'glass':
+        return 'SWITCH_TO_DARK';
+      default:
+        return 'SWITCH_TO_LIGHT';
+    }
+  }
+
   onNotificationClick(notification: Notification): void {
     if (notification.status === 'unread') {
       this.notificationService.markAsRead(notification.id).pipe(
@@ -69,7 +131,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       });
     }
 
-    // Навигация в зависимости от типа уведомления
+    // Navigation based on notification type
     switch (notification.type) {
       case 'order_created':
       case 'order_updated':

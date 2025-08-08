@@ -1,3 +1,5 @@
+@import '../../../../styles/components/data-table';
+
 .user-list-container {
   padding: 0;
   background-color: #1f2937;
@@ -71,22 +73,22 @@
     background-color: #2d2d2d;
     
     th {
-      background-color: #374151 !important;
-      color: #ffffff !important;
+      background-color: #374151;
+      color: #ffffff;
       font-weight: 600;
       padding: 16px;
       border-bottom: 1px solid #4b5563;
     }
     
     td {
-      background-color: #2d2d2d !important;
-      color: #ffffff !important;
+      background-color: #2d2d2d;
+      color: #ffffff;
       padding: 16px;
       border-bottom: 1px solid #404040;
     }
     
     tr:hover td {
-      background-color: #374151 !important;
+      background-color: #374151;
     }
     
     .user-info {
@@ -443,88 +445,88 @@
 
 ::ng-deep {
   .mat-chip {
-    background-color: #3b82f6 !important;
-    color: #ffffff !important;
+    background-color: #3b82f6;
+    color: #ffffff;
   }
   
   .mat-icon-button {
-    color: #ffffff !important;
+    color: #ffffff;
     
     &.mat-button-disabled {
-      color: #6b7280 !important;
+      color: #6b7280;
     }
   }
   
   .mat-raised-button.mat-primary {
-    background-color: #3b82f6 !important;
-    color: #ffffff !important;
+    background-color: #3b82f6;
+    color: #ffffff;
   }
   
   .mat-form-field {
     .mat-form-field-label {
-      color: #e5e7eb !important;
+      color: #e5e7eb;
     }
     
     .mat-input-element {
-      color: #ffffff !important;
+      color: #ffffff;
     }
     
     .mat-form-field-outline {
-      color: #6b7280 !important;
+      color: #6b7280;
     }
     
     &.mat-focused {
       .mat-form-field-outline-thick {
-        color: #3b82f6 !important;
+        color: #3b82f6;
       }
       
       .mat-form-field-label {
-        color: #3b82f6 !important;
+        color: #3b82f6;
       }
     }
   }
   
   .mat-select {
-    color: #ffffff !important;
+    color: #ffffff;
     
     .mat-select-arrow {
-      color: #9ca3af !important;
+      color: #9ca3af;
     }
   }
   
   .mat-option {
-    background-color: #2d2d2d !important;
-    color: #ffffff !important;
+    background-color: #2d2d2d;
+    color: #ffffff;
     
     &:hover {
-      background-color: #374151 !important;
+      background-color: #374151;
     }
     
     &.mat-selected {
-      background-color: #3b82f6 !important;
+      background-color: #3b82f6;
     }
   }
   
   .mat-select-panel {
-    background-color: #2d2d2d !important;
+    background-color: #2d2d2d;
   }
   
   .mat-paginator {
-    background-color: #2d2d2d !important;
-    color: #ffffff !important;
+    background-color: #2d2d2d;
+    color: #ffffff;
     border-top: 1px solid #404040;
     
     .mat-paginator-page-size-label,
     .mat-paginator-range-label {
-      color: #ffffff !important;
+      color: #ffffff;
     }
     
     .mat-icon-button {
-      color: #ffffff !important;
+      color: #ffffff;
     }
     
     .mat-select {
-      color: #ffffff !important;
+      color: #ffffff;
     }
   }
 }

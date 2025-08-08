@@ -1,6 +1,6 @@
 /* ==========================================================================
    COMPONENTS INDEX
-   Main entry point for all component styles
+   Import all component styles
    ========================================================================== */
 
 // Import component styles
@@ -9,4 +9,5 @@
 @import './forms';
 @import './modals';
 @import './navigation';
-@import './tables'; 
+@import './tables';
+@import './data-table'; 

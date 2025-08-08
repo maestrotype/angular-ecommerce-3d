@@ -1,28 +1,51 @@
+@import '../../../../styles/components/data-table';
+
 .category-list-container {
   padding: 0;
-  background-color: #1f2937;
+  background-color: var(--color-admin-bg, #1f2937);
   min-height: calc(100vh - 64px);
-  color: #ffffff;
+  color: var(--color-admin-text, #ffffff);
 }
 
 .header-section {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
   margin-bottom: 24px;
   padding: 24px 24px 0 24px;
-  background-color: #1f2937;
-
+  
   h1 {
-    color: #ffffff;
-    margin: 0;
+    color: var(--color-admin-text, #ffffff);
+    margin: 0 0 8px 0;
     font-size: 2rem;
     font-weight: 600;
   }
+  
+  .subtitle {
+    color: var(--color-admin-subtitle, #9ca3af);
+    margin: 0;
+    font-size: 1rem;
+  }
+}
+
+.action-section {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 24px;
+  padding: 0 24px;
 
   .add-button {
     .button-text {
       margin-left: 8px;
+    }
+  }
+
+  // Override Material button colors to match header color
+  ::ng-deep .mat-mdc-raised-button.mat-primary {
+    background-color: var(--color-admin-button, #ec4899);
+    color: #ffffff;
+    
+    &:hover {
+      background-color: var(--color-admin-button-hover, #db2777);
     }
   }
 }
@@ -32,47 +55,70 @@
   gap: 16px;
   margin-bottom: 24px;
   padding: 0 24px;
-  background-color: #1f2937;
+  align-items: flex-end;
 
   .search-field {
-    min-width: 200px;
+    flex: 1;
+    max-width: 400px;
   }
 }
 
-.table-container {
-  background: #2d2d2d;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  border: 1px solid #404040;
-  overflow: hidden;
-  margin: 0 24px;
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+  color: var(--color-admin-text, #ffffff);
+  
+  mat-spinner {
+    margin-bottom: 16px;
+  }
 }
 
 .category-table {
   width: 100%;
-  background-color: #2d2d2d;
-
-  th {
-    background-color: #374151 !important;
-    color: #ffffff !important;
-    font-weight: 600;
-    padding: 16px;
-    border-bottom: 1px solid #4b5563;
+  
+  .mat-column-actions {
+    width: 120px;
+    text-align: center;
   }
 
-  td {
-    background-color: #2d2d2d !important;
-    color: #ffffff !important;
-    padding: 16px;
-    border-bottom: 1px solid #404040;
+  // Override universal padding for compact rows - make them even smaller
+  .data-table-header,
+  .data-table-cell {
+    padding: 8px 16px;
   }
 
-  tr:hover td {
-    background-color: #374151 !important;
+  // Override action button colors to match header color
+  ::ng-deep .mat-mdc-icon-button {
+    &.mat-primary {
+      color: var(--color-admin-accent, #c2185b);
+      
+      &:hover {
+        background-color: rgba(194, 24, 91, 0.1);
+      }
+    }
+    
+    &.mat-warn {
+      color: var(--color-error, #ef4444);
+      
+      &:hover {
+        background-color: rgba(239, 68, 68, 0.1);
+      }
+    }
   }
 }
 
-// Mobile card styles
+// Ensure action buttons are displayed horizontally
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
 .mobile-view {
   display: none;
 }
@@ -81,18 +127,19 @@
   display: grid;
   gap: 16px;
   grid-template-columns: 1fr;
+  padding: 0 24px;
 }
 
 .category-card {
-  background: #2d2d2d;
+  background: var(--color-card-bg, #2d2d2d);
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--color-card-shadow, 0 2px 8px rgba(0, 0, 0, 0.3));
   padding: 16px;
-  border: 1px solid #404040;
+  border: 1px solid var(--color-card-border, #404040);
   transition: all 0.3s ease;
 
   &:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--color-card-shadow-hover, 0 4px 12px rgba(0, 0, 0, 0.4));
     transform: translateY(-2px);
   }
 
@@ -104,7 +151,7 @@
 
     .category-id {
       font-weight: 600;
-      color: #3b82f6;
+      color: var(--color-category-id, #3b82f6);
       font-size: 14px;
     }
   }
@@ -117,7 +164,7 @@
         margin: 0;
         font-size: 16px;
         font-weight: 600;
-        color: #ffffff;
+        color: var(--color-admin-text, #ffffff);
         line-height: 1.4;
       }
     }
@@ -125,7 +172,7 @@
     .category-description {
       p {
         margin: 0;
-        color: #9ca3af;
+        color: var(--color-admin-subtitle, #9ca3af);
         font-size: 14px;
         line-height: 1.4;
       }
@@ -138,7 +185,7 @@
     gap: 8px;
     margin-top: 12px;
     padding-top: 12px;
-    border-top: 1px solid #404040;
+    border-top: 1px solid var(--color-card-border, #404040);
 
     .action-button {
       width: 36px;
@@ -154,7 +201,7 @@
   }
 }
 
-.loading-container, .error-container {
+.error-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -162,103 +209,37 @@
   padding: 40px;
   margin: 0 24px;
   text-align: center;
-  color: #ffffff;
-  background-color: #2d2d2d;
+  color: var(--color-admin-text, #ffffff);
+  background-color: var(--color-card-bg, #2d2d2d);
   border-radius: 8px;
-  border: 1px solid #404040;
-}
+  border: 1px solid var(--color-card-border, #404040);
 
-.error-container mat-icon {
-  font-size: 48px;
-  height: 48px;
-  width: 48px;
-  margin-bottom: 16px;
-  color: #ef4444;
-}
-
-// Galaxy Z Fold 5/6 unfolded (690px) - use desktop format with compact table
-@media (min-width: 690px) and (max-width: 768px) {
-  .category-list-container {
-    padding: 0;
-  }
-
-  .header-section {
-    padding: 16px 16px 0 16px;
-
-    h1 {
-      font-size: 1.5rem;
-    }
-
-    .add-button {
-      width: auto;
-      
-      .button-text {
-        display: inline;
-      }
-    }
-  }
-
-  .filter-section {
-    padding: 0 16px;
-
-    .search-field {
-      min-width: 150px;
-      max-width: 300px;
-    }
-  }
-
-  .desktop-view {
-    display: block !important;
-  }
-
-  .mobile-view {
-    display: none !important;
-  }
-
-  // Compact table for Galaxy Z Fold
-  .category-table {
-    th, td {
-      padding: 8px 12px;
-      font-size: 13px;
-    }
-
-    .mat-column-id {
-      width: 60px;
-    }
-
-    .mat-column-name {
-      width: 120px;
-    }
-
-    .mat-column-description {
-      width: 200px;
-    }
-
-    .mat-column-actions {
-      width: 80px;
-    }
-  }
-
-  .table-container {
-    margin: 0 16px;
+  mat-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    margin-bottom: 16px;
+    color: var(--color-error, #ef4444);
   }
 }
 
+// Responsive Design
 @media (max-width: 768px) {
   .category-list-container {
     padding: 0;
   }
 
   .header-section {
-    flex-direction: column;
-    gap: 16px;
-    align-items: stretch;
     padding: 16px;
 
     h1 {
       text-align: center;
       font-size: 1.5rem;
     }
+  }
+
+  .action-section {
+    padding: 0 16px;
 
     .add-button {
       width: 100%;
@@ -271,12 +252,12 @@
 
   .filter-section {
     flex-direction: column;
+    align-items: stretch;
     gap: 12px;
     padding: 0 16px;
-    align-items: stretch;
 
     .search-field {
-      min-width: none;
+      max-width: none;
     }
   }
 
@@ -293,11 +274,6 @@
     padding: 0 16px;
   }
 
-  .table-container {
-    margin: 0 16px;
-  }
-
-  .loading-container,
   .error-container {
     margin: 0 16px;
   }

@@ -4,11 +4,25 @@
   top: 0;
   z-index: 1000;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+  // Ensure header icons have correct colors
+  .mat-mdc-icon-button {
+    color: #ffffff;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    mat-icon {
+      color: #ffffff;
+    }
+  }
 }
 
 .header-title {
   font-size: 20px;
   font-weight: 500;
+  color: #ffffff;
 }
 
 .spacer {
@@ -19,6 +33,19 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  
+  // Ensure header action icons have correct colors
+  .mat-mdc-icon-button {
+    color: #ffffff;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    mat-icon {
+      color: #ffffff;
+    }
+  }
 }
 
 .notification-button {

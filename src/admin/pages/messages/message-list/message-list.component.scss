@@ -1,25 +1,37 @@
+@import '../../../../styles/components/data-table';
 
 .message-list-container {
-  padding: 24px;
+  padding: 0;
   background-color: #1f2937;
   min-height: calc(100vh - 64px);
   color: #ffffff;
 }
 
-.header {
+.header-section {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 24px;
+  padding: 24px 24px 0 24px;
   
-  h2 {
-    margin: 0;
+  h1 {
     color: #ffffff;
-    font-weight: 500;
+    margin: 0 0 8px 0;
+    font-size: 2rem;
+    font-weight: 600;
+  }
+  
+  .subtitle {
+    color: #9ca3af;
+    margin: 0;
+    font-size: 1rem;
   }
 }
 
-.filters {
+.filter-section {
   display: flex;
   gap: 16px;
   margin-bottom: 24px;
+  padding: 0 24px;
   align-items: flex-end;
   
   .search-field {
@@ -38,12 +50,18 @@
   }
 }
 
-.table-container {
-  background: #2d2d2d;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  border: 1px solid #404040;
-  overflow: hidden;
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+  color: #ffffff;
+  
+  mat-spinner {
+    margin-bottom: 16px;
+  }
 }
 
 .messages-table {
@@ -52,18 +70,6 @@
   .mat-column-actions {
     width: 200px;
     text-align: center;
-  }
-}
-
-.loading, .no-data {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 48px;
-  
-  p {
-    color: #ffffff;
-    font-size: 16px;
   }
 }
 
@@ -76,6 +82,7 @@
   display: grid;
   gap: 16px;
   grid-template-columns: 1fr;
+  padding: 0 24px;
 }
 
 .message-card {
@@ -174,13 +181,23 @@
 // Responsive Design
 @media (max-width: 768px) {
   .message-list-container {
-    padding: 16px;
+    padding: 0;
   }
 
-  .filters {
+  .header-section {
+    padding: 16px;
+
+    h1 {
+      text-align: center;
+      font-size: 1.5rem;
+    }
+  }
+
+  .filter-section {
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
+    padding: 0 16px;
     
     .search-field {
       max-width: none;
@@ -205,6 +222,7 @@
 
   .messages-grid {
     grid-template-columns: 1fr;
+    padding: 0 16px;
   }
 }
 
@@ -221,101 +239,6 @@
 
   .desktop-view {
     display: block;
-  }
-}
-
-// Material Design overrides for dark theme
-::ng-deep {
-  .mat-form-field {
-    .mat-form-field-label {
-      color: #e5e7eb !important;
-    }
-    
-    .mat-input-element {
-      color: #ffffff !important;
-    }
-    
-    .mat-form-field-outline {
-      color: #6b7280 !important;
-    }
-    
-    &.mat-focused {
-      .mat-form-field-outline-thick {
-        color: #3b82f6 !important;
-      }
-      
-      .mat-form-field-label {
-        color: #3b82f6 !important;
-      }
-    }
-  }
-  
-  .mat-select {
-    color: #ffffff !important;
-    
-    .mat-select-arrow {
-      color: #9ca3af !important;
-    }
-  }
-  
-  .mat-option {
-    background-color: #2d2d2d !important;
-    color: #ffffff !important;
-    
-    &:hover {
-      background-color: #374151 !important;
-    }
-    
-    &.mat-selected {
-      background-color: #3b82f6 !important;
-    }
-  }
-  
-  .mat-select-panel {
-    background-color: #2d2d2d !important;
-  }
-  
-  .mat-chip {
-    background-color: #3b82f6 !important;
-    color: #ffffff !important;
-  }
-  
-  .mat-icon-button {
-    color: #ffffff !important;
-    
-    &.mat-button-disabled {
-      color: #6b7280 !important;
-    }
-  }
-  
-  .mat-raised-button.mat-primary {
-    background-color: #3b82f6 !important;
-    color: #ffffff !important;
-  }
-  
-  .mat-table {
-    background-color: #2d2d2d !important;
-  }
-  
-  .mat-header-row {
-    background-color: #374151 !important;
-  }
-  
-  .mat-row {
-    background-color: #2d2d2d !important;
-    
-    &:hover {
-      background-color: #374151 !important;
-    }
-  }
-  
-  .mat-header-cell {
-    color: #ffffff !important;
-    font-weight: 600;
-  }
-  
-  .mat-cell {
-    color: #ffffff !important;
   }
 }
   

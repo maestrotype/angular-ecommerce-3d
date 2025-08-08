@@ -1,6 +1,9 @@
 <div class="category-list-container">
   <div class="header-section">
     <h1>{{ 'CATEGORY_MANAGEMENT' | translate }}</h1>
+  </div>
+
+  <div class="action-section">
     <button mat-raised-button color="primary" (click)="addCategory()" class="add-button">
       <mat-icon>add</mat-icon>
       <span class="button-text">{{ 'ADD_CATEGORY' | translate }}</span>
@@ -19,58 +22,71 @@
     </mat-form-field>
   </div>
 
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner></mat-spinner>
+    <p>{{ 'LOADING_CATEGORIES' | translate }}</p>
+  </div>
+
   <!-- Desktop Table View -->
-  <div class="table-container desktop-view" *ngIf="!isLoading">
+  <div class="data-table-container desktop-view" *ngIf="!isLoading">
     <table mat-table [dataSource]="dataSource" matSort class="category-table">
       <!-- ID Column -->
       <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-        <td mat-cell *matCellDef="let category">{{ category.id }}</td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="data-table-header">ID</th>
+        <td mat-cell *matCellDef="let category" class="data-table-cell">{{ category.id }}</td>
       </ng-container>
 
       <!-- Name Column -->
       <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'NAME' | translate }}</th>
-        <td mat-cell *matCellDef="let category">{{ category.name }}</td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="data-table-header">{{ 'NAME' | translate }}</th>
+        <td mat-cell *matCellDef="let category" class="data-table-cell">{{ category.name }}</td>
       </ng-container>
 
       <!-- Description Column -->
       <ng-container matColumnDef="description">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'DESCRIPTION' | translate }}</th>
-        <td mat-cell *matCellDef="let category">{{ category.description }}</td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="data-table-header">{{ 'DESCRIPTION' | translate }}</th>
+        <td mat-cell *matCellDef="let category" class="data-table-cell">{{ category.description }}</td>
       </ng-container>
 
       <!-- Actions Column -->
       <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>{{ 'ACTIONS' | translate }}</th>
-        <td mat-cell *matCellDef="let category">
-          <button
-            mat-icon-button
-            color="primary"
-            (click)="editCategory(category)"
-            matTooltip="Edit"
-          >
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button
-            mat-icon-button
-            color="warn"
-            (click)="deleteCategory(category)"
-            matTooltip="Delete"
-          >
-            <mat-icon>delete</mat-icon>
-          </button>
+        <th mat-header-cell *matHeaderCellDef class="data-table-header">{{ 'ACTIONS' | translate }}</th>
+        <td mat-cell *matCellDef="let category" class="data-table-cell">
+          <div class="action-buttons">
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="editCategory(category)"
+              matTooltip="Edit"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              color="warn"
+              (click)="deleteCategory(category)"
+              matTooltip="Delete"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" class="data-table-header"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="data-table-row"></tr>
     </table>
 
     <mat-paginator
       [pageSizeOptions]="[5, 10, 20]"
       showFirstLastButtons
     ></mat-paginator>
+
+    <div class="no-data" *ngIf="dataSource.data.length === 0">
+      <mat-icon>category</mat-icon>
+      <h3>{{ 'NO_CATEGORIES' | translate }}</h3>
+      <p>No categories found matching your criteria.</p>
+    </div>
   </div>
 
   <!-- Mobile Card View -->
@@ -103,11 +119,6 @@
         </div>
       </div>
     </div>
-  </div>
-
-  <div *ngIf="isLoading" class="loading-container">
-    <mat-spinner></mat-spinner>
-    <p>{{ 'LOADING_CATEGORIES' | translate }}</p>
   </div>
 
   <div *ngIf="error" class="error-container">
