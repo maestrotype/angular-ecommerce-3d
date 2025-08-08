@@ -50,7 +50,7 @@ import { ActionButtonComponent } from './components/ui/action-button/action-butt
 import { CategoryFormComponent } from './pages/categories/category-form/category-form.component';
 import { ImageUploadComponent } from './components/ui/image-upload/image-upload.component';
 import { ImageProcessorComponent } from './components/ui/image-processor/image-processor.component';
-import { ImageProcessorDemoComponent } from './pages/image-processor-demo/image-processor-demo.component';
+
 import { ErrorDialogComponent } from './components/error-dialog/error-dialog.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { SharedModule } from '../app/shared/shared.module';
@@ -91,7 +91,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     ActionButtonComponent,
     ImageUploadComponent,
     ImageProcessorComponent,
-    ImageProcessorDemoComponent,
     ErrorDialogComponent,
     ConfirmationDialogComponent,
   ],

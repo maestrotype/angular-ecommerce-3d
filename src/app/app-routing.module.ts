@@ -5,19 +5,17 @@ import { ShopComponent } from "./pages/shop/shop.component";
 import { AboutComponent } from "./pages/about/about.component";
 import { FavoritesComponent } from "./pages/favorites/favorites.component";
 import { ContactsComponent } from "./pages/contacts/contacts.component";
-import { SeoTestComponent } from "./pages/seo-test/seo-test.component";
 import { ProductDetailComponent } from "./components/product-detail/product-detail.component";
-import { StyleDemoComponent } from "./pages/style-demo/style-demo.component";
+
 
 const routes: Routes = [
   { path: "home", component: HomeComponent },
   { path: "shop", component: ShopComponent },
   { path: "about", component: AboutComponent },
   { path: "favorites", component: FavoritesComponent },
-  { path: "seo-test", component: SeoTestComponent },
   { path: "contacts", component: ContactsComponent },
   { path: "product/:id", component: ProductDetailComponent },
-  { path: "style-demo", component: StyleDemoComponent },
+
   { path: "", redirectTo: "/home", pathMatch: "full" },
   {
     path: 'admin',

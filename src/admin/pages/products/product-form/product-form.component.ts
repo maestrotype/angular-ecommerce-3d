@@ -372,12 +372,30 @@ export class ProductFormComponent implements OnInit {
       model3dUrl: this.model3dUrl,
     };
 
-    console.log("Submitting product data:", productData);
-
-    if (this.isEditMode && this.productId) {
-      this.updateProduct(this.productId, productData);
-    } else {
-      this.createProduct(productData);
+    if (this.productForm.valid) {
+      const productData = this.productForm.value;
+      
+      if (this.isEditMode) {
+        this.productService.updateProduct(this.productId, productData).subscribe({
+          next: (product) => {
+            this.snackBar.open('Product updated successfully!', 'Close', { duration: 3000 });
+            this.router.navigate(['/admin/products']);
+          },
+          error: (error) => {
+            this.snackBar.open('Error updating product', 'Close', { duration: 3000 });
+          }
+        });
+      } else {
+        this.productService.createProduct(productData).subscribe({
+          next: (product) => {
+            this.snackBar.open('Product created successfully!', 'Close', { duration: 3000 });
+            this.router.navigate(['/admin/products']);
+          },
+          error: (error) => {
+            this.snackBar.open('Error creating product', 'Close', { duration: 3000 });
+          }
+        });
+      }
     }
   }
 

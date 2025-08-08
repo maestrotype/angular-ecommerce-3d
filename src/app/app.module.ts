@@ -45,8 +45,7 @@ import { SectionRendererComponent } from './components/section-renderer/section-
 
 // Favorites Components
 import { FavoritesComponent } from './pages/favorites/favorites.component';
-import { StyleDemoComponent } from './pages/style-demo/style-demo.component';
-import { SeoTestComponent } from './pages/seo-test/seo-test.component';
+
 
 // Shared Module
 import { SharedModule } from './shared/shared.module';
@@ -86,8 +85,6 @@ import { ThemeService } from './core/themes/theme.service';
     SectionRendererComponent,
     FavoritesComponent,
     ContactFormComponent,
-    StyleDemoComponent,
-    SeoTestComponent
   ],
       imports: [
     BrowserModule, 

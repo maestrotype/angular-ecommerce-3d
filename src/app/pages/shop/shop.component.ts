@@ -70,7 +70,9 @@ export class ShopComponent implements OnInit {
         this.products = products;
         this.filterProducts();
       },
-      error: (err) => { console.log(err); }
+      error: (err) => { 
+        // Handle error silently
+      }
     });
     
     this.route.queryParams.subscribe(params => {
@@ -146,38 +148,23 @@ export class ShopComponent implements OnInit {
   }
 
   goToPage(page: number): void {
-    console.log('goToPage called with:', page, 'totalPages:', this.totalPages);
-    if (page < 1 || page > this.totalPages) {
-      console.log('Invalid page number');
-      return;
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.paginateProducts();
     }
-    this.currentPage = page;
-    this.paginateProducts();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    console.log('Current page set to:', this.currentPage);
   }
 
   nextPage(): void {
-    console.log('nextPage called, currentPage:', this.currentPage, 'totalPages:', this.totalPages);
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
       this.paginateProducts();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      console.log('Moved to next page:', this.currentPage);
-    } else {
-      console.log('Already on last page');
     }
   }
 
   prevPage(): void {
-    console.log('prevPage called, currentPage:', this.currentPage);
     if (this.currentPage > 1) {
       this.currentPage--;
       this.paginateProducts();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      console.log('Moved to previous page:', this.currentPage);
-    } else {
-      console.log('Already on first page');
     }
   }
 
@@ -213,7 +200,7 @@ export class ShopComponent implements OnInit {
   }
 
   quickView(product: Product): void {
-    console.log('Quick view:', product);
+    // console.log('Quick view:', product);
   }
 
   /**
@@ -222,6 +209,6 @@ export class ShopComponent implements OnInit {
   onFavoriteToggled(event: { product: Product; isFavorite: boolean }): void {
     // The FavoritesService already handles the toggle logic
     // This method can be used for additional UI feedback if needed
-    console.log(`${event.product.name} ${event.isFavorite ? 'added to' : 'removed from'} favorites`);
+    // console.log(`${event.product.name} ${event.isFavorite ? 'added to' : 'removed from'} favorites`);
   }
 }

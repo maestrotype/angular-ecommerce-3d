@@ -58,7 +58,7 @@
   padding: var(--admin-spacing-lg);
   flex: 1;
   overflow-y: auto;
-  max-height: calc(80vh - 80px); // Вычитаем высоту header
+  max-height: calc(80vh - 80px); // Subtract header height
 }
 
 .order-info {

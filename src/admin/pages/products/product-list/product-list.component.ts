@@ -59,7 +59,6 @@ export class ProductListComponent implements OnInit {
 
     this.productService.getAllProducts().subscribe({
       next: (products) => {
-        console.log("Products loaded:", products);
         this.allProducts = products;
         this.dataSource.data = products;
         this.isLoading = false;
@@ -161,13 +160,7 @@ export class ProductListComponent implements OnInit {
     return "";
   }
 
-  onImageError(event: any, product: Product): void {
-    console.log('Image error for product:', product.name, 'URL:', event.target.src);
-    // Hide the broken image and show placeholder
-    event.target.style.display = 'none';
-    const placeholderDiv = event.target.parentElement.querySelector('.no-image-placeholder');
-    if (placeholderDiv) {
-      placeholderDiv.style.display = 'flex';
-    }
+  onImageError(event: any, product: any): void {
+    // Handle image error silently
   }
 }

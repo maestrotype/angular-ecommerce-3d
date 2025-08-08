@@ -1,51 +1,32 @@
 
 .product-list-container {
-    padding: 0;
-    background-color: #1f2937; // Темно-серый фон вместо прозрачного
-    min-height: calc(100vh - 64px);
-    color: #ffffff;
-  }
-  
-  .header-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
-    padding: 24px 24px 0 24px;
-    background-color: #1f2937; // Темно-серый фон
-    
-    h1 {
-      color: #ffffff;
-      margin: 0;
-      font-size: 2rem;
-      font-weight: 600;
-    }
+  padding: 20px;
+  background-color: #1f2937; // Dark gray background instead of transparent
+  min-height: 100vh;
+}
 
-    .add-button {
-      .button-text {
-        margin-left: 8px;
-      }
-    }
-  }
-  
-  .filter-section {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 24px;
-    padding: 0 24px;
-    background-color: #1f2937; // Темно-серый фон
-    
-    .search-field {
-      flex: 1;
-      min-width: 200px;
-    }
+.product-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #1f2937; // Dark gray background
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-    .category-filter {
-      min-width: 150px;
-    }
-  }
-  
-  .table-container {
+.product-filters {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #1f2937; // Dark gray background
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table-container {
     background: #2d2d2d;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);

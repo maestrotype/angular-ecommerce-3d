@@ -25,7 +25,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Загружаем уведомления при инициализации
+    // Load notifications on initialization
     this.notificationService.loadNotifications()
       .pipe(takeUntil(this.destroy$))
       .subscribe(notifications => {
@@ -33,21 +33,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.notificationService.updateNotifications(notifications);
       });
 
-    // Подписываемся на изменения уведомлений
+    // Subscribe to notification changes
     this.notificationService.notifications$
       .pipe(takeUntil(this.destroy$))
       .subscribe(notifications => {
         this.notifications = notifications.slice(0, 5);
       });
 
-    // Подписываемся на количество непрочитанных
+    // Subscribe to unread count
     this.notificationService.unreadCount$
       .pipe(takeUntil(this.destroy$))
       .subscribe(count => {
         this.unreadCount = count;
       });
 
-    // Получаем актуальное количество непрочитанных с сервера
+    // Get actual unread count from server
     this.notificationService.getUnreadCount()
       .pipe(takeUntil(this.destroy$))
       .subscribe(count => {
@@ -69,7 +69,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       });
     }
 
-    // Навигация в зависимости от типа уведомления
+    // Navigation based on notification type
     switch (notification.type) {
       case 'order_created':
       case 'order_updated':
