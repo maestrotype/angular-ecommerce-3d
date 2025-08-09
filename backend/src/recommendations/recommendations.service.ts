@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In } from 'typeorm';
+import { Repository, In, Not, Between } from 'typeorm';
 import { Observable, from, throwError, of } from 'rxjs';
 import { map, catchError, switchMap, tap, filter } from 'rxjs/operators';
 import { ProductRecommendation, RecommendationType } from './entities/product-recommendation.entity';
@@ -54,13 +54,83 @@ export class RecommendationsService {
   getSimilarProducts(productId: ProductId, limit: number = this.config.defaultLimit): Observable<ProductWithScore[]> {
     console.log('Getting similar products for productId:', productId, 'limit:', limit);
     
-    // Simple test - just return popular products for now
-    console.log('Returning popular products as fallback');
-    return this.getPopularProducts(limit).pipe(
-      tap(products => console.log('Returned popular products:', products.length)),
+    return from(this.productRepository.findOne({ where: { id: productId } })).pipe(
+      switchMap(targetProduct => {
+        if (!targetProduct) {
+          console.log('Target product not found, returning popular products');
+          return this.getPopularProducts(limit);
+        }
+
+        console.log('Target product found:', targetProduct.name, 'category:', targetProduct.category);
+        
+        // Find products from the same category with similar price range
+        const priceRange = Number(targetProduct.price) * 0.3; // 30% price range
+        const minPrice = Number(targetProduct.price) - priceRange;
+        const maxPrice = Number(targetProduct.price) + priceRange;
+        
+        console.log('Looking for similar products in category:', targetProduct.category, 'price range:', minPrice, '-', maxPrice);
+        
+        return from(this.productRepository.createQueryBuilder('product')
+          .where('product.category = :category', { category: targetProduct.category })
+          .andWhere('product.id != :productId', { productId })
+          .andWhere('product.price BETWEEN :minPrice AND :maxPrice', { minPrice, maxPrice })
+          .orderBy('product.rating', 'DESC')
+          .addOrderBy('product.createdAt', 'DESC')
+          .take(limit)
+          .getMany()
+        ).pipe(
+          map(products => {
+            console.log('Found', products.length, 'similar products in same category');
+            return products.map(p => ({
+              id: p.id,
+              name: p.name,
+              price: p.price,
+              imageUrl: p.imageUrl,
+              category: p.category,
+              rating: p.rating,
+              discount: p.discount,
+              isSpecial: p.isSpecial,
+              score: this.calculateSimilarityScore(targetProduct, p)
+            }));
+          }),
+          switchMap(similarProducts => {
+            // If we don't have enough similar products, fill with popular products from other categories
+            if (similarProducts.length < limit) {
+              const needed = limit - similarProducts.length;
+              console.log('Need', needed, 'more products, adding popular products from other categories');
+              
+              return from(this.productRepository.find({
+                where: {
+                  category: Not(targetProduct.category), // Different category
+                  id: Not(productId)
+                },
+                order: { rating: 'DESC' },
+                take: needed
+              })).pipe(
+                map(additionalProducts => {
+                  const additional = additionalProducts.map(p => ({
+                    id: p.id,
+                    name: p.name,
+                    price: p.price,
+                    imageUrl: p.imageUrl,
+                    category: p.category,
+                    rating: p.rating,
+                    discount: p.discount,
+                    isSpecial: p.isSpecial,
+                    score: (p.rating || 0) * 0.5 // Lower score for different category
+                  }));
+                  return [...similarProducts, ...additional];
+                })
+              );
+            }
+            return of(similarProducts);
+          })
+        );
+      }),
+      tap(products => console.log('Returned', products.length, 'similar products')),
       catchError(error => {
         console.error('Error in getSimilarProducts:', error);
-        return of([]);
+        return this.getPopularProducts(limit);
       })
     );
   }
@@ -71,13 +141,78 @@ export class RecommendationsService {
   getBoughtTogetherProducts(productId: ProductId, limit: number = this.config.defaultLimit): Observable<ProductWithScore[]> {
     console.log('Getting bought together products for productId:', productId, 'limit:', limit);
     
-    // Simple test - just return popular products for now
-    console.log('Returning popular products as fallback');
-    return this.getPopularProducts(limit).pipe(
-      tap(products => console.log('Returned popular products:', products.length)),
+    return from(this.productRepository.findOne({ where: { id: productId } })).pipe(
+      switchMap(targetProduct => {
+        if (!targetProduct) {
+          console.log('Target product not found, returning popular products');
+          return this.getPopularProducts(limit);
+        }
+
+        console.log('Target product found:', targetProduct.name, 'category:', targetProduct.category);
+        
+        // For "bought together", we want products from DIFFERENT categories
+        // This simulates complementary products that customers buy together
+        return from(this.productRepository.find({
+          where: {
+            category: Not(targetProduct.category), // Different category is key for "bought together"
+            id: Not(productId) // Exclude current product
+          },
+          order: { rating: 'DESC', isSpecial: 'DESC' }, // Prefer highly rated and special products
+          take: limit
+        })).pipe(
+          map(products => {
+            console.log('Found', products.length, 'complementary products from different categories');
+            return products.map(p => ({
+              id: p.id,
+              name: p.name,
+              price: p.price,
+              imageUrl: p.imageUrl,
+              category: p.category,
+              rating: p.rating,
+              discount: p.discount,
+              isSpecial: p.isSpecial,
+              score: this.calculateComplementaryScore(targetProduct, p)
+            }));
+          }),
+          switchMap(complementaryProducts => {
+            // If we don't have enough from different categories, add some popular products
+            if (complementaryProducts.length < limit) {
+              const needed = limit - complementaryProducts.length;
+              console.log('Need', needed, 'more products, adding popular products');
+              
+              return from(this.productRepository.find({
+                where: {
+                  id: Not(productId)
+                },
+                order: { rating: 'DESC' },
+                take: needed
+              })).pipe(
+                map(additionalProducts => {
+                  const additional = additionalProducts
+                    .filter(p => !complementaryProducts.some(cp => cp.id === p.id)) // Avoid duplicates
+                    .map(p => ({
+                      id: p.id,
+                      name: p.name,
+                      price: p.price,
+                      imageUrl: p.imageUrl,
+                      category: p.category,
+                      rating: p.rating,
+                      discount: p.discount,
+                      isSpecial: p.isSpecial,
+                      score: (p.rating || 0) * 0.3 // Lower score for fallback
+                    }));
+                  return [...complementaryProducts, ...additional];
+                })
+              );
+            }
+            return of(complementaryProducts);
+          })
+        );
+      }),
+      tap(products => console.log('Returned', products.length, 'bought together products')),
       catchError(error => {
         console.error('Error in getBoughtTogetherProducts:', error);
-        return of([]);
+        return this.getPopularProducts(limit);
       })
     );
   }
@@ -504,5 +639,75 @@ export class RecommendationsService {
     
     console.log('Mapped product to DTO:', dto);
     return dto;
+  }
+
+  /**
+   * Calculate similarity score between two products
+   */
+  private calculateSimilarityScore(targetProduct: Product, candidateProduct: Product): number {
+    let score = 0;
+    
+    // Same category gets high score
+    if (targetProduct.category === candidateProduct.category) {
+      score += 50;
+    }
+    
+    // Similar price range gets points
+    const targetPrice = Number(targetProduct.price);
+    const candidatePrice = Number(candidateProduct.price);
+    const priceDiff = Math.abs(targetPrice - candidatePrice);
+    const priceRange = targetPrice * 0.3; // 30% range
+    
+    if (priceDiff <= priceRange) {
+      score += 30;
+    } else if (priceDiff <= priceRange * 2) {
+      score += 15;
+    }
+    
+    // Rating bonus
+    if (candidateProduct.rating) {
+      score += candidateProduct.rating * 2;
+    }
+    
+    // Special product bonus
+    if (candidateProduct.isSpecial) {
+      score += 10;
+    }
+    
+    return Math.min(score, 100); // Cap at 100
+  }
+
+  /**
+   * Calculate complementary score for "bought together" products
+   */
+  private calculateComplementaryScore(targetProduct: Product, candidateProduct: Product): number {
+    let score = 0;
+    
+    // Different category is preferred for complementary products
+    if (targetProduct.category !== candidateProduct.category) {
+      score += 40;
+    }
+    
+    // Rating is important for complementary products
+    if (candidateProduct.rating) {
+      score += candidateProduct.rating * 3;
+    }
+    
+    // Special products are more likely to be bought together
+    if (candidateProduct.isSpecial) {
+      score += 20;
+    }
+    
+    // Price complementarity - not too expensive compared to main product
+    const targetPrice = Number(targetProduct.price);
+    const candidatePrice = Number(candidateProduct.price);
+    
+    if (candidatePrice <= targetPrice * 0.5) {
+      score += 20; // Cheaper complementary products are good
+    } else if (candidatePrice <= targetPrice) {
+      score += 10;
+    }
+    
+    return Math.min(score, 100); // Cap at 100
   }
 } 

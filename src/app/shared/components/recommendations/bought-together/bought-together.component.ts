@@ -115,6 +115,10 @@ export class BoughtTogetherComponent implements OnInit, OnDestroy {
         if (success) {
           console.log('BoughtTogether: Navigation successful to product:', productId);
           console.log('BoughtTogether: New URL:', this.router.url);
+          // Scroll to top after successful navigation
+          setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }, 100);
         } else {
           console.error('BoughtTogether: Navigation returned false for product:', productId);
           console.log('BoughtTogether: Current URL after failed navigation:', this.router.url);

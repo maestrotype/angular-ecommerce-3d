@@ -25,7 +25,10 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })],
+  imports: [RouterModule.forRoot(routes, { 
+    onSameUrlNavigation: 'reload',
+    scrollPositionRestoration: 'top' // Automatically scroll to top on route change
+  })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

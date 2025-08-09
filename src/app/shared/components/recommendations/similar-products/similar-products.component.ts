@@ -122,6 +122,10 @@ export class SimilarProductsComponent implements OnInit, OnDestroy {
         if (success) {
           console.log('SimilarProducts: Navigation successful to product:', productId);
           console.log('SimilarProducts: New URL:', this.router.url);
+          // Scroll to top after successful navigation
+          setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }, 100);
         } else {
           console.error('SimilarProducts: Navigation returned false for product:', productId);
           console.log('SimilarProducts: Current URL after failed navigation:', this.router.url);
