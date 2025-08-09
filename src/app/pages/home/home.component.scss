@@ -81,3 +81,333 @@
     opacity: 1;
   }
 }
+
+// Skeleton loading styles for better user experience
+.skeleton-container {
+  padding: 0;
+  min-height: 100vh;
+  background: var(--bg-primary, #ffffff);
+}
+
+.skeleton-section {
+  margin-bottom: 0;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+
+  &.hero-skeleton {
+    background: linear-gradient(135deg, var(--bg-primary, #ffffff) 0%, var(--bg-secondary, #f8f9fa) 100%);
+  }
+
+  &.content-skeleton {
+    background: var(--bg-primary, #ffffff);
+    padding: 4rem 0;
+  }
+}
+
+// Hero section skeleton styles
+.skeleton-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 100%;
+
+  .skeleton-hero-content {
+    flex: 1;
+    max-width: 500px;
+    margin-right: 2rem;
+
+    .skeleton-badge {
+      width: 80px;
+      height: 24px;
+      background: linear-gradient(90deg, var(--skeleton-bg, #f0f0f0) 25%, var(--skeleton-bg-dark, #e0e0e0) 50%, var(--skeleton-bg, #f0f0f0) 75%);
+      background-size: 200% 100%;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      animation: skeleton-shimmer 2s infinite;
+    }
+
+    .skeleton-hero-title {
+      width: 100%;
+      height: 48px;
+      background: linear-gradient(90deg, var(--skeleton-bg, #f0f0f0) 25%, var(--skeleton-bg-dark, #e0e0e0) 50%, var(--skeleton-bg, #f0f0f0) 75%);
+      background-size: 200% 100%;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      animation: skeleton-shimmer 2s infinite;
+    }
+
+    .skeleton-hero-subtitle {
+      width: 80%;
+      height: 32px;
+      background: linear-gradient(90deg, var(--skeleton-bg, #f0f0f0) 25%, var(--skeleton-bg-dark, #e0e0e0) 50%, var(--skeleton-bg, #f0f0f0) 75%);
+      background-size: 200% 100%;
+      border-radius: 6px;
+      margin-bottom: 1.5rem;
+      animation: skeleton-shimmer 2s infinite 0.2s;
+    }
+
+    .skeleton-hero-description {
+      width: 90%;
+      height: 20px;
+      background: linear-gradient(90deg, var(--skeleton-bg, #f0f0f0) 25%, var(--skeleton-bg-dark, #e0e0e0) 50%, var(--skeleton-bg, #f0f0f0) 75%);
+      background-size: 200% 100%;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+      animation: skeleton-shimmer 2s infinite 0.4s;
+
+      &:nth-child(2) {
+        width: 70%;
+        animation-delay: 0.6s;
+      }
+    }
+
+    .skeleton-cta-button {
+      width: 160px;
+      height: 48px;
+      background: linear-gradient(90deg, var(--skeleton-bg, #f0f0f0) 25%, var(--skeleton-bg-dark, #e0e0e0) 50%, var(--skeleton-bg, #f0f0f0) 75%);
+      background-size: 200% 100%;
+      border-radius: 24px;
+      margin-top: 2rem;
+      animation: skeleton-shimmer 2s infinite 0.8s;
+    }
+  }
+
+  .skeleton-hero-image {
+    flex: 1;
+    max-width: 500px;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .skeleton-3d-model {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--skeleton-bg, #f0f0f0) 25%, var(--skeleton-bg-dark, #e0e0e0) 50%, var(--skeleton-bg, #f0f0f0) 75%);
+      background-size: 200% 200%;
+      border-radius: 16px;
+      animation: skeleton-shimmer 2.5s infinite 1s;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+// Content section skeleton styles
+.skeleton-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+
+  .skeleton-content-header {
+    text-align: center;
+    margin-bottom: 3rem;
+
+    .skeleton-section-title {
+      width: 60%;
+      height: 40px;
+      background: linear-gradient(90deg, var(--skeleton-bg, #f0f0f0) 25%, var(--skeleton-bg-dark, #e0e0e0) 50%, var(--skeleton-bg, #f0f0f0) 75%);
+      background-size: 200% 100%;
+      border-radius: 8px;
+      margin: 0 auto 1rem;
+      animation: skeleton-shimmer 2s infinite;
+    }
+
+    .skeleton-section-subtitle {
+      width: 40%;
+      height: 24px;
+      background: linear-gradient(90deg, var(--skeleton-bg, #f0f0f0) 25%, var(--skeleton-bg-dark, #e0e0e0) 50%, var(--skeleton-bg, #f0f0f0) 75%);
+      background-size: 200% 100%;
+      border-radius: 6px;
+      margin: 0 auto;
+      animation: skeleton-shimmer 2s infinite 0.3s;
+    }
+  }
+
+  .skeleton-content-body {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+
+    .skeleton-text-line {
+      height: 16px;
+      background: linear-gradient(90deg, var(--skeleton-bg, #f0f0f0) 25%, var(--skeleton-bg-dark, #e0e0e0) 50%, var(--skeleton-bg, #f0f0f0) 75%);
+      background-size: 200% 100%;
+      border-radius: 4px;
+      margin-bottom: 0.75rem;
+      animation: skeleton-shimmer 2s infinite;
+
+      &.short {
+        width: 60%;
+        animation-delay: 0.2s;
+      }
+
+      &.medium {
+        width: 80%;
+        animation-delay: 0.4s;
+      }
+
+      &:last-child {
+        width: 40%;
+        animation-delay: 0.6s;
+      }
+    }
+  }
+
+  .skeleton-content-footer {
+    text-align: center;
+
+    .skeleton-button {
+      width: 140px;
+      height: 44px;
+      background: linear-gradient(90deg, var(--skeleton-bg, #f0f0f0) 25%, var(--skeleton-bg-dark, #e0e0e0) 50%, var(--skeleton-bg, #f0f0f0) 75%);
+      background-size: 200% 100%;
+      border-radius: 22px;
+      margin: 0 auto;
+      animation: skeleton-shimmer 2s infinite 0.8s;
+    }
+  }
+}
+
+// Enhanced skeleton animation with shimmer effect
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+// Staggered animation for multiple skeleton elements
+.skeleton-section {
+  &:nth-child(1) .skeleton-hero-content > *,
+  &:nth-child(1) .skeleton-content-header > * {
+    animation-delay: 0s;
+  }
+  
+  &:nth-child(2) .skeleton-content-header > * {
+    animation-delay: 0.2s;
+  }
+  
+  &:nth-child(3) .skeleton-content-header > * {
+    animation-delay: 0.4s;
+  }
+}
+
+// Responsive design for skeleton loading
+@media (max-width: 768px) {
+  .skeleton-hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 0 1rem;
+
+    .skeleton-hero-content {
+      margin-right: 0;
+      margin-bottom: 2rem;
+      max-width: 100%;
+
+      .skeleton-hero-title {
+        height: 40px;
+      }
+
+      .skeleton-hero-subtitle {
+        width: 90%;
+        height: 28px;
+      }
+
+      .skeleton-hero-description {
+        width: 100%;
+        
+        &:nth-child(2) {
+          width: 80%;
+        }
+      }
+    }
+
+    .skeleton-hero-image {
+      max-width: 100%;
+      height: 300px;
+    }
+  }
+
+  .skeleton-content {
+    padding: 0 1rem;
+
+    .skeleton-content-header {
+      .skeleton-section-title {
+        width: 80%;
+        height: 36px;
+      }
+
+      .skeleton-section-subtitle {
+        width: 60%;
+        height: 20px;
+      }
+    }
+
+    .skeleton-content-body {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+}
+
+// Dark theme support for skeleton loading
+[data-theme="dark"] {
+  .skeleton-section {
+    &.hero-skeleton {
+      background: linear-gradient(135deg, var(--bg-primary, #1a1a1a) 0%, var(--bg-secondary, #2d2d2d) 100%);
+    }
+    
+    &.content-skeleton {
+      background: var(--bg-primary, #1a1a1a);
+    }
+  }
+
+  .skeleton-badge,
+  .skeleton-hero-title,
+  .skeleton-hero-subtitle,
+  .skeleton-hero-description,
+  .skeleton-cta-button,
+  .skeleton-3d-model,
+  .skeleton-section-title,
+  .skeleton-section-subtitle,
+  .skeleton-text-line,
+  .skeleton-button {
+    background: linear-gradient(90deg, var(--skeleton-bg-dark, #2d2d2d) 25%, var(--skeleton-bg, #3a3a3a) 50%, var(--skeleton-bg-dark, #2d2d2d) 75%);
+    background-size: 200% 100%;
+  }
+}
+
+// Glass theme support for skeleton loading
+[data-theme="glass"] {
+  .skeleton-section {
+    &.hero-skeleton {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    }
+    
+    &.content-skeleton {
+      background: rgba(255, 255, 255, 0.05);
+    }
+  }
+
+  .skeleton-badge,
+  .skeleton-hero-title,
+  .skeleton-hero-subtitle,
+  .skeleton-hero-description,
+  .skeleton-cta-button,
+  .skeleton-3d-model,
+  .skeleton-section-title,
+  .skeleton-section-subtitle,
+  .skeleton-text-line,
+  .skeleton-button {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.1) 75%);
+    background-size: 200% 100%;
+    backdrop-filter: blur(10px);
+  }
+}

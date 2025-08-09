@@ -3,6 +3,15 @@
    Theme system entry point
    ========================================================================== */
 
+// Global skeleton loading variables
+:root {
+  --skeleton-bg: #f5f5f5;
+  --skeleton-bg-dark: #e8e8e8;
+  --skeleton-shimmer: #f0f0f0;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+}
+
 // Theme specific styles
 @import './dark';
 @import './glass'; 
