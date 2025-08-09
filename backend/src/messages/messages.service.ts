@@ -2,6 +2,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Observable, from, of, throwError } from 'rxjs';
+import { map, catchError, switchMap } from 'rxjs/operators';
 import { Message } from './entities/message.entity';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
@@ -13,15 +15,18 @@ export class MessagesService {
     private messageRepository: Repository<Message>
   ) {}
 
-  async createMessage(createMessageDto: CreateMessageDto): Promise<Message> {
+  createMessage(createMessageDto: CreateMessageDto): Observable<Message> {
     const message = this.messageRepository.create({
       ...createMessageDto,
       status: 'new'
     });
-    return await this.messageRepository.save(message);
+    
+    return from(this.messageRepository.save(message)).pipe(
+      catchError(error => throwError(() => new Error(`Failed to create message: ${error.message}`)))
+    );
   }
 
-  async getAllMessages(filters: any = {}): Promise<Message[]> {
+  getAllMessages(filters: any = {}): Observable<Message[]> {
     const queryBuilder = this.messageRepository.createQueryBuilder('message');
 
     if (filters.status) {
@@ -42,41 +47,59 @@ export class MessagesService {
     }
 
     queryBuilder.orderBy('message.createdAt', 'DESC');
-    return await queryBuilder.getMany();
-  }
-
-  async getMessageById(id: number): Promise<Message> {
-    const message = await this.messageRepository.findOne({ where: { id } });
-    if (!message) {
-      throw new NotFoundException(`Message with ID ${id} not found`);
-    }
-    return message;
-  }
-
-  async updateMessage(id: number, updateMessageDto: UpdateMessageDto): Promise<Message> {
-    const message = await this.getMessageById(id);
     
-    if (updateMessageDto.status) {
-      message.status = updateMessageDto.status;
-    }
-
-    if (updateMessageDto.adminResponse) {
-      message.adminResponse = updateMessageDto.adminResponse;
-      message.respondedAt = new Date();
-      if (message.status === 'new' || message.status === 'in_progress') {
-        message.status = 'answered';
-      }
-    }
-
-    return await this.messageRepository.save(message);
+    return from(queryBuilder.getMany()).pipe(
+      catchError(error => throwError(() => new Error(`Failed to get messages: ${error.message}`)))
+    );
   }
 
-  async deleteMessage(id: number): Promise<void> {
-    const message = await this.getMessageById(id);
-    await this.messageRepository.remove(message);
+  getMessageById(id: number): Observable<Message> {
+    return from(this.messageRepository.findOne({ where: { id } })).pipe(
+      map(message => {
+        if (!message) {
+          throw new NotFoundException(`Message with ID ${id} not found`);
+        }
+        return message;
+      }),
+      catchError(error => {
+        if (error instanceof NotFoundException) {
+          return throwError(() => error);
+        }
+        return throwError(() => new Error(`Failed to get message: ${error.message}`));
+      })
+    );
   }
 
-  async getMessagesCount(filters: any = {}): Promise<number> {
+  updateMessage(id: number, updateMessageDto: UpdateMessageDto): Observable<Message> {
+    return this.getMessageById(id).pipe(
+      switchMap(message => {
+        if (updateMessageDto.status) {
+          message.status = updateMessageDto.status;
+        }
+
+        if (updateMessageDto.adminResponse) {
+          message.adminResponse = updateMessageDto.adminResponse;
+          message.respondedAt = new Date();
+          if (message.status === 'new' || message.status === 'in_progress') {
+            message.status = 'answered';
+          }
+        }
+
+        return from(this.messageRepository.save(message));
+      }),
+      catchError(error => throwError(() => new Error(`Failed to update message: ${error.message}`)))
+    );
+  }
+
+  deleteMessage(id: number): Observable<void> {
+    return this.getMessageById(id).pipe(
+      switchMap(message => from(this.messageRepository.remove(message))),
+      map(() => void 0),
+      catchError(error => throwError(() => new Error(`Failed to delete message: ${error.message}`)))
+    );
+  }
+
+  getMessagesCount(filters: any = {}): Observable<number> {
     const queryBuilder = this.messageRepository.createQueryBuilder('message');
 
     if (filters.status) {
@@ -91,10 +114,14 @@ export class MessagesService {
       );
     }
 
-    return await queryBuilder.getCount();
+    return from(queryBuilder.getCount()).pipe(
+      catchError(error => throwError(() => new Error(`Failed to get messages count: ${error.message}`)))
+    );
   }
 
-  async getUnreadCount(): Promise<number> {
-    return await this.messageRepository.count({ where: { status: 'new' } });
+  getUnreadCount(): Observable<number> {
+    return from(this.messageRepository.count({ where: { status: 'new' } })).pipe(
+      catchError(error => throwError(() => new Error(`Failed to get unread count: ${error.message}`)))
+    );
   }
 }

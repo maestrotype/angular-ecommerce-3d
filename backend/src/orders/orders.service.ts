@@ -1,11 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Observable, from, throwError, forkJoin, of } from 'rxjs';
+import { map, catchError, switchMap, tap } from 'rxjs/operators';
 import { Order } from './entities/order.entity';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { NotificationsService } from '../notifications/notifications.service';
 import { ProductsService } from '../products/products.service';
+
 @Injectable()
 export class OrdersService {
   constructor(
@@ -15,84 +18,129 @@ export class OrdersService {
     private productsService: ProductsService,
   ) {}
 
-  async create(createOrderDto: CreateOrderDto): Promise<Order> {
+  create(createOrderDto: CreateOrderDto): Observable<Order> {
     const order = this.orderRepository.create(createOrderDto);
-    const savedOrder = await this.orderRepository.save(order);
     
-    // Decrease stock for each item in the order
-    if (createOrderDto.items && Array.isArray(createOrderDto.items)) {
-      for (const item of createOrderDto.items) {
-        if (item.productId && item.quantity) {
-          try {
-            await this.productsService.decreaseStock(item.productId, item.quantity);
-          } catch (error) {
-            console.error(`Failed to decrease stock for product ${item.productId}:`, error);
+    return from(this.orderRepository.save(order)).pipe(
+      switchMap(savedOrder => {
+        // Decrease stock for each item in the order
+        const stockUpdates = [];
+        if (createOrderDto.items && Array.isArray(createOrderDto.items)) {
+          for (const item of createOrderDto.items) {
+            if (item.productId && item.quantity) {
+              stockUpdates.push(
+                this.productsService.decreaseStock(item.productId, item.quantity).pipe(
+                  catchError(error => {
+                    console.error(`Failed to decrease stock for product ${item.productId}:`, error);
+                    return of(null);
+                  })
+                )
+              );
+            }
           }
         }
-      }
-    }
-    
-    // Create notification for new order
-    await this.notificationsService.createOrderNotification(
-      savedOrder.id, 
-      createOrderDto.customerName
+        
+        // Create notification for new order
+        const notification = this.notificationsService.createOrderNotification(
+          savedOrder.id, 
+          createOrderDto.customerName
+        );
+        
+        // Combine all operations
+        const operations = [...stockUpdates, notification];
+        if (operations.length === 0) {
+          return of(savedOrder);
+        }
+        
+        return forkJoin(operations).pipe(
+          map(() => savedOrder)
+        );
+      }),
+      catchError(error => throwError(() => new Error(`Failed to create order: ${error.message}`)))
     );
-    
-    return savedOrder;
   }
 
-  async getOrderStats() {
-    const totalOrders = await this.orderRepository.count();
-    
-    return { totalOrders };
+  getOrderStats(): Observable<{ totalOrders: number }> {
+    return from(this.orderRepository.count()).pipe(
+      map(totalOrders => ({ totalOrders })),
+      catchError(error => throwError(() => new Error(`Failed to get order stats: ${error.message}`)))
+    );
   }
 
-  async findAll(): Promise<Order[]> {
-    return await this.orderRepository.find({
+  findAll(): Observable<Order[]> {
+    return from(this.orderRepository.find({
       order: { createdAt: 'DESC' }
-    });
+    })).pipe(
+      catchError(error => throwError(() => new Error(`Failed to get orders: ${error.message}`)))
+    );
   }
 
-  async findOne(id: number): Promise<Order> {
-    const order = await this.orderRepository.findOne({ where: { id } });
-    if (!order) {
-      throw new NotFoundException(`Order with ID ${id} not found`);
-    }
-    return order;
+  findOne(id: number): Observable<Order> {
+    return from(this.orderRepository.findOne({ where: { id } })).pipe(
+      map(order => {
+        if (!order) {
+          throw new NotFoundException(`Order with ID ${id} not found`);
+        }
+        return order;
+      }),
+      catchError(error => {
+        if (error instanceof NotFoundException) {
+          return throwError(() => error);
+        }
+        return throwError(() => new Error(`Failed to get order: ${error.message}`));
+      })
+    );
   }
 
-  async update(id: number, updateOrderDto: UpdateOrderDto): Promise<Order> {
-    const order = await this.findOne(id);
-    
-    // If status changed, create notification
-    if (updateOrderDto.status && updateOrderDto.status !== order.status) {
-      await this.notificationsService.create({
-        type: 'order_updated' as any,
-        title: 'Order Status Updated',
-        message: `Order #${id} status changed to ${updateOrderDto.status}`,
-        data: { orderId: id, newStatus: updateOrderDto.status, oldStatus: order.status }
-      });
-    }
-    
-    Object.assign(order, updateOrderDto);
-    return await this.orderRepository.save(order);
+  update(id: number, updateOrderDto: UpdateOrderDto): Observable<Order> {
+    return this.findOne(id).pipe(
+      switchMap(order => {
+        // If status changed, create notification
+        if (updateOrderDto.status && updateOrderDto.status !== order.status) {
+          const notification = this.notificationsService.create({
+            type: 'order_updated' as any,
+            title: 'Order Status Updated',
+            message: `Order #${id} status changed to ${updateOrderDto.status}`,
+            data: { orderId: id, newStatus: updateOrderDto.status, oldStatus: order.status }
+          });
+          
+          return notification.pipe(
+            switchMap(() => {
+              Object.assign(order, updateOrderDto);
+              return from(this.orderRepository.save(order));
+            })
+          );
+        }
+        
+        Object.assign(order, updateOrderDto);
+        return from(this.orderRepository.save(order));
+      }),
+      catchError(error => throwError(() => new Error(`Failed to update order: ${error.message}`)))
+    );
   }
 
-  async remove(id: number): Promise<void> {
-    const order = await this.findOne(id);
-    await this.orderRepository.remove(order);
+  remove(id: number): Observable<void> {
+    return this.findOne(id).pipe(
+      switchMap(order => from(this.orderRepository.remove(order))),
+      map(() => void 0),
+      catchError(error => throwError(() => new Error(`Failed to remove order: ${error.message}`)))
+    );
   }
 
-  async getStats() {
-    const totalOrders = await this.orderRepository.count();
-    const totalRevenue = await this.orderRepository
-      .createQueryBuilder('order')
-      .select('SUM(order.totalAmount)', 'sum')
-      .getRawOne();
-
-    return {
-      totalOrders,
-      totalRevenue: parseFloat(totalRevenue.sum) || 0,
-    };
+  getStats(): Observable<{ totalOrders: number; totalRevenue: number }> {
+    return forkJoin({
+      totalOrders: from(this.orderRepository.count()),
+      totalRevenue: from(this.orderRepository
+        .createQueryBuilder('order')
+        .select('SUM(order.totalAmount)', 'sum')
+        .getRawOne()
+      )
+    }).pipe(
+      map(({ totalOrders, totalRevenue }) => ({
+        totalOrders,
+        totalRevenue: parseFloat(totalRevenue.sum) || 0,
+      })),
+      catchError(error => throwError(() => new Error(`Failed to get stats: ${error.message}`)))
+    );
   }
 }

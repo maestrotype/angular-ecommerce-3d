@@ -248,7 +248,7 @@ export class HeaderComponent implements OnInit {
   private scrollToElement(elementId: string): void {
     const element = document.getElementById(elementId);
     if (element) {
-      const headerHeight = 80; // Высота фиксированного хедера
+      const headerHeight = 80; // Fixed header height
       const elementPosition = element.offsetTop - headerHeight;
       
       window.scrollTo({

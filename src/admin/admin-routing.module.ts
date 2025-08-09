@@ -43,6 +43,10 @@ const routes: Routes = [
       { path: 'messages', component: MessageListComponent },
       { path: 'sections', component: SectionListComponent },
       { 
+        path: 'seo', 
+        loadChildren: () => import('./pages/seo/seo.module').then(m => m.SeoModule)
+      },
+      { 
         path: 'profile', 
         loadChildren: () => import('./pages/profile/profile.module').then(m => m.ProfileModule)
       },

@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { SeoUpdateInterceptor } from './core/interceptors/seo-update.interceptor';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -44,7 +45,7 @@ import { SectionRendererComponent } from './components/section-renderer/section-
 
 // Favorites Components
 import { FavoritesComponent } from './pages/favorites/favorites.component';
-import { StyleDemoComponent } from './pages/style-demo/style-demo.component';
+
 
 // Shared Module
 import { SharedModule } from './shared/shared.module';
@@ -84,7 +85,6 @@ import { ThemeService } from './core/themes/theme.service';
     SectionRendererComponent,
     FavoritesComponent,
     ContactFormComponent,
-    StyleDemoComponent
   ],
       imports: [
     BrowserModule, 
@@ -101,6 +101,7 @@ import { ThemeService } from './core/themes/theme.service';
   providers: [
     provideAnimationsAsync(),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: SeoUpdateInterceptor, multi: true },
     ThemeService
   ],
   bootstrap: [AppComponent]

@@ -8,6 +8,5 @@ import { Component } from '@angular/core';
 export class ContactsComponent {
   onMessageSent(): void {
     // Additional logic after message is sent
-    console.log('Message sent successfully');
   }
 } 

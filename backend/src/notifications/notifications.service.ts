@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Notification, NotificationType, NotificationStatus } from './entities/notification.entity';
+import { Observable, from, throwError } from 'rxjs';
+import { map, catchError, switchMap } from 'rxjs/operators';
+import { Notification, NotificationStatus, NotificationType } from './entities/notification.entity';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 
 @Injectable()
@@ -11,12 +13,15 @@ export class NotificationsService {
     private notificationRepository: Repository<Notification>,
   ) {}
 
-  async create(createNotificationDto: CreateNotificationDto): Promise<Notification> {
+  create(createNotificationDto: CreateNotificationDto): Observable<Notification> {
     const notification = this.notificationRepository.create(createNotificationDto);
-    return await this.notificationRepository.save(notification);
+    
+    return from(this.notificationRepository.save(notification)).pipe(
+      catchError(error => throwError(() => new Error(`Failed to create notification: ${error.message}`)))
+    );
   }
 
-  async findAll(userId?: number): Promise<Notification[]> {
+  findAll(userId?: number): Observable<Notification[]> {
     const query = this.notificationRepository.createQueryBuilder('notification');
     
     if (userId) {
@@ -25,12 +30,15 @@ export class NotificationsService {
       query.where('notification.userId IS NULL');
     }
     
-    return await query
+    return from(query
       .orderBy('notification.createdAt', 'DESC')
-      .getMany();
+      .getMany()
+    ).pipe(
+      catchError(error => throwError(() => new Error(`Failed to get notifications: ${error.message}`)))
+    );
   }
 
-  async findUnread(userId?: number): Promise<Notification[]> {
+  findUnread(userId?: number): Observable<Notification[]> {
     const query = this.notificationRepository.createQueryBuilder('notification')
       .where('notification.status = :status', { status: NotificationStatus.UNREAD });
     
@@ -40,17 +48,28 @@ export class NotificationsService {
       query.andWhere('notification.userId IS NULL');
     }
     
-    return await query
+    return from(query
       .orderBy('notification.createdAt', 'DESC')
-      .getMany();
+      .getMany()
+    ).pipe(
+      catchError(error => throwError(() => new Error(`Failed to get unread notifications: ${error.message}`)))
+    );
   }
 
-  async markAsRead(id: number): Promise<Notification> {
-    await this.notificationRepository.update(id, { status: NotificationStatus.READ });
-    return await this.notificationRepository.findOne({ where: { id } });
+  markAsRead(id: number): Observable<Notification> {
+    return from(this.notificationRepository.update(id, { status: NotificationStatus.READ })).pipe(
+      switchMap(() => from(this.notificationRepository.findOne({ where: { id } }))),
+      map(notification => {
+        if (!notification) {
+          throw new Error(`Notification with ID ${id} not found`);
+        }
+        return notification;
+      }),
+      catchError(error => throwError(() => new Error(`Failed to mark notification as read: ${error.message}`)))
+    );
   }
 
-  async markAllAsRead(userId?: number): Promise<void> {
+  markAllAsRead(userId?: number): Observable<void> {
     const query = this.notificationRepository.createQueryBuilder()
       .update(Notification)
       .set({ status: NotificationStatus.READ })
@@ -62,10 +81,13 @@ export class NotificationsService {
       query.andWhere('userId IS NULL');
     }
     
-    await query.execute();
+    return from(query.execute()).pipe(
+      map(() => void 0),
+      catchError(error => throwError(() => new Error(`Failed to mark all notifications as read: ${error.message}`)))
+    );
   }
 
-  async getUnreadCount(userId?: number): Promise<number> {
+  getUnreadCount(userId?: number): Observable<number> {
     const query = this.notificationRepository.createQueryBuilder('notification')
       .where('notification.status = :status', { status: NotificationStatus.UNREAD });
     
@@ -75,12 +97,14 @@ export class NotificationsService {
       query.andWhere('notification.userId IS NULL');
     }
     
-    return await query.getCount();
+    return from(query.getCount()).pipe(
+      catchError(error => throwError(() => new Error(`Failed to get unread count: ${error.message}`)))
+    );
   }
 
   // Helper methods for creating specific notifications
-  async createOrderNotification(orderId: number, customerName: string): Promise<Notification> {
-    return await this.create({
+  createOrderNotification(orderId: number, customerName: string): Observable<Notification> {
+    return this.create({
       type: NotificationType.ORDER_CREATED,
       title: 'New Order Received',
       message: `Order #${orderId} from ${customerName} has been received`,
@@ -88,8 +112,8 @@ export class NotificationsService {
     });
   }
 
-  async createLowStockNotification(productName: string, stock: number): Promise<Notification> {
-    return await this.create({
+  createLowStockNotification(productName: string, stock: number): Observable<Notification> {
+    return this.create({
       type: NotificationType.LOW_STOCK,
       title: 'Low Stock Alert',
       message: `${productName} is running low on stock (${stock} remaining)`,
@@ -97,8 +121,8 @@ export class NotificationsService {
     });
   }
 
-  async createNewUserNotification(userName: string, userEmail: string): Promise<Notification> {
-    return await this.create({
+  createNewUserNotification(userName: string, userEmail: string): Observable<Notification> {
+    return this.create({
       type: NotificationType.NEW_USER,
       title: 'New User Registration',
       message: `${userName} (${userEmail}) has registered`,

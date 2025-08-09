@@ -2,10 +2,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Observable, from, throwError } from 'rxjs';
+import { map, catchError, switchMap, tap } from 'rxjs/operators';
 import { Product } from './entities/product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { NotificationsService } from '../notifications/notifications.service';
+
 @Injectable()
 export class ProductsService {
   private readonly LOW_STOCK_THRESHOLD = 10;
@@ -17,90 +20,118 @@ export class ProductsService {
     private notificationsService: NotificationsService,
   ) {}
 
-  async create(createProductDto: CreateProductDto): Promise<Product> {
+  create(createProductDto: CreateProductDto): Observable<Product> {
     const product = this.productRepository.create(createProductDto);
-    const savedProduct = await this.productRepository.save(product);
     
-    // Check for low stock on new product
-    await this.checkAndNotifyLowStock(savedProduct);
-    
-    return savedProduct;
+    return from(this.productRepository.save(product)).pipe(
+      switchMap(savedProduct => 
+        this.checkAndNotifyLowStock(savedProduct).pipe(
+          map(() => savedProduct)
+        )
+      ),
+      catchError(error => throwError(() => new Error(`Failed to create product: ${error.message}`)))
+    );
   }
 
-  async findAll(): Promise<Product[]> {
-    return await this.productRepository.find({
+  findAll(): Observable<Product[]> {
+    return from(this.productRepository.find({
       order: { createdAt: 'DESC' },
-    });
+    })).pipe(
+      catchError(error => throwError(() => new Error(`Failed to get products: ${error.message}`)))
+    );
   }
 
-  async findOne(id: number): Promise<Product> {
-    const product = await this.productRepository.findOne({ where: { id } });
-    if (!product) {
-      throw new NotFoundException(`Product with ID ${id} not found`);
-    }
-    return product;
+  findOne(id: number): Observable<Product> {
+    return from(this.productRepository.findOne({ where: { id } })).pipe(
+      map(product => {
+        if (!product) {
+          throw new NotFoundException(`Product with ID ${id} not found`);
+        }
+        return product;
+      }),
+      catchError(error => {
+        if (error instanceof NotFoundException) {
+          return throwError(() => error);
+        }
+        return throwError(() => new Error(`Failed to get product: ${error.message}`));
+      })
+    );
   }
 
-  async update(id: number, updateProductDto: UpdateProductDto): Promise<Product> {
-    const product = await this.findOne(id);
-    Object.assign(product, updateProductDto);
-    const updatedProduct = await this.productRepository.save(product);
-    
-    // Check for low stock after update
-    await this.checkAndNotifyLowStock(updatedProduct);
-    
-    return updatedProduct;
+  update(id: number, updateProductDto: UpdateProductDto): Observable<Product> {
+    return this.findOne(id).pipe(
+      switchMap(product => {
+        Object.assign(product, updateProductDto);
+        return from(this.productRepository.save(product));
+      }),
+      switchMap(updatedProduct => 
+        this.checkAndNotifyLowStock(updatedProduct).pipe(
+          map(() => updatedProduct)
+        )
+      ),
+      catchError(error => throwError(() => new Error(`Failed to update product: ${error.message}`)))
+    );
   }
 
-  async remove(id: number): Promise<void> {
-    const product = await this.findOne(id);
-    await this.productRepository.remove(product);
-    
-    // Remove from low stock tracking
-    this.lowStockNotified.delete(id);
+  remove(id: number): Observable<void> {
+    return this.findOne(id).pipe(
+      switchMap(product => from(this.productRepository.remove(product))),
+      tap(() => {
+        // Remove from low stock tracking
+        this.lowStockNotified.delete(id);
+      }),
+      map(() => void 0),
+      catchError(error => throwError(() => new Error(`Failed to remove product: ${error.message}`)))
+    );
   }
 
-  async findByCategory(category: string): Promise<Product[]> {
-    return await this.productRepository.find({
+  findByCategory(category: string): Observable<Product[]> {
+    return from(this.productRepository.find({
       where: { category },
       order: { createdAt: 'DESC' },
-    });
+    })).pipe(
+      catchError(error => throwError(() => new Error(`Failed to get products by category: ${error.message}`)))
+    );
   }
 
-  async findFeatured(): Promise<Product[]> {
-    return await this.productRepository.find({
+  findFeatured(): Observable<Product[]> {
+    return from(this.productRepository.find({
       where: { isSpecial: true },
       order: { rating: 'DESC' },
-    });
+    })).pipe(
+      catchError(error => throwError(() => new Error(`Failed to get featured products: ${error.message}`)))
+    );
   }
 
   // Method to decrease stock (called when order is placed)
-  async decreaseStock(productId: number, quantity: number): Promise<Product> {
-    const product = await this.findOne(productId);
-    
-    if (product.stock < quantity) {
-      throw new Error(`Insufficient stock for product ${product.name}`);
-    }
-    
-    product.stock -= quantity;
-    const updatedProduct = await this.productRepository.save(product);
-    
-    // Check for low stock after decreasing
-    await this.checkAndNotifyLowStock(updatedProduct);
-    
-    return updatedProduct;
+  decreaseStock(productId: number, quantity: number): Observable<Product> {
+    return this.findOne(productId).pipe(
+      switchMap(product => {
+        if (product.stock < quantity) {
+          throw new Error(`Insufficient stock for product ${product.name}`);
+        }
+        
+        product.stock -= quantity;
+        return from(this.productRepository.save(product));
+      }),
+      switchMap(updatedProduct => 
+        this.checkAndNotifyLowStock(updatedProduct).pipe(
+          map(() => updatedProduct)
+        )
+      ),
+      catchError(error => throwError(() => new Error(`Failed to decrease stock: ${error.message}`)))
+    );
   }
 
-  private async checkAndNotifyLowStock(product: Product): Promise<void> {
+  private checkAndNotifyLowStock(product: Product): Observable<void> {
     // Only notify if stock is below threshold and we haven't already notified for this product
     if (product.stock <= this.LOW_STOCK_THRESHOLD && !this.lowStockNotified.has(product.id)) {
-      await this.notificationsService.createLowStockNotification(product.name, product.stock);
-      this.lowStockNotified.add(product.id);
+      return this.notificationsService.createLowStockNotification(product.name, product.stock).pipe(
+        tap(() => this.lowStockNotified.add(product.id)),
+        map(() => void 0)
+      );
     }
     
-    // If stock is replenished above threshold, remove from notified set
-    if (product.stock > this.LOW_STOCK_THRESHOLD && this.lowStockNotified.has(product.id)) {
-      this.lowStockNotified.delete(product.id);
-    }
+    return from(Promise.resolve(void 0));
   }
 }

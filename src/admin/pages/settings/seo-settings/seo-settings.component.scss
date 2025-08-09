@@ -1,0 +1,333 @@
+.seo-settings-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .seo-settings-header {
+    margin-bottom: 32px;
+
+    .page-title {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .page-subtitle {
+      color: #666;
+      font-size: 1rem;
+      margin: 0;
+    }
+  }
+
+  .seo-settings-content {
+    .seo-tabs {
+      ::ng-deep .mat-tab-header {
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      ::ng-deep .mat-tab-label {
+        font-weight: 500;
+        color: #666;
+        
+        &.mat-tab-label-active {
+          color: #1976d2;
+        }
+      }
+
+      ::ng-deep .mat-tab-body-content {
+        padding: 24px 0;
+      }
+    }
+
+    .settings-card {
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+      .mat-card-header {
+        padding-bottom: 16px;
+        border-bottom: 1px solid #f0f0f0;
+
+        .mat-card-title {
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: #333;
+          margin-bottom: 4px;
+        }
+
+        .mat-card-subtitle {
+          color: #666;
+          font-size: 0.875rem;
+        }
+      }
+
+      .mat-card-content {
+        padding-top: 24px;
+      }
+    }
+
+    .settings-form {
+      .form-row {
+        margin-bottom: 20px;
+
+        &.checkbox-row {
+          display: flex;
+          gap: 32px;
+          align-items: center;
+          margin-top: 16px;
+
+          mat-checkbox {
+            margin-right: 16px;
+          }
+        }
+
+        .full-width {
+          width: 100%;
+        }
+
+        .half-width {
+          width: 48%;
+        }
+
+        mat-form-field {
+          .mat-form-field-wrapper {
+            padding-bottom: 0;
+          }
+
+          .mat-form-field-outline {
+            border-radius: 8px;
+          }
+
+          .mat-form-field-label {
+            color: #666;
+          }
+
+          .mat-form-field-outline-thick {
+            color: #1976d2;
+          }
+
+          .mat-icon {
+            color: #999;
+          }
+
+          .mat-error {
+            font-size: 0.75rem;
+            margin-top: 4px;
+          }
+
+          .mat-hint {
+            font-size: 0.75rem;
+            color: #999;
+          }
+        }
+      }
+
+      .form-actions {
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid #f0f0f0;
+
+        button {
+          min-width: 120px;
+          height: 40px;
+          font-weight: 500;
+
+          mat-icon {
+            margin-right: 8px;
+          }
+        }
+      }
+    }
+
+    .og-preview {
+      margin-top: 24px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border: 1px solid #e9ecef;
+
+      h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 16px;
+      }
+
+      .og-card {
+        display: flex;
+        background: white;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        overflow: hidden;
+        max-width: 500px;
+
+        .og-image {
+          width: 120px;
+          height: 120px;
+          object-fit: cover;
+          flex-shrink: 0;
+        }
+
+        .og-content {
+          padding: 16px;
+          flex: 1;
+
+          h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #333;
+            margin: 0 0 8px 0;
+            line-height: 1.2;
+          }
+
+          p {
+            font-size: 0.875rem;
+            color: #666;
+            margin: 0 0 8px 0;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+          }
+
+          .og-url {
+            font-size: 0.75rem;
+            color: #999;
+            text-transform: lowercase;
+          }
+        }
+      }
+    }
+  }
+
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+
+    mat-spinner {
+      margin-bottom: 16px;
+    }
+
+    p {
+      color: #666;
+      font-size: 1rem;
+      margin: 0;
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .seo-settings-container {
+    padding: 16px;
+
+    .seo-settings-header {
+      .page-title {
+        font-size: 1.5rem;
+      }
+    }
+
+    .seo-settings-content {
+      .settings-form {
+        .form-row {
+          &.checkbox-row {
+            flex-direction: column;
+            gap: 16px;
+            align-items: flex-start;
+          }
+
+          .half-width {
+            width: 100%;
+          }
+        }
+      }
+
+      .og-preview {
+        .og-card {
+          flex-direction: column;
+
+          .og-image {
+            width: 100%;
+            height: 200px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Dark theme support
+@media (prefers-color-scheme: dark) {
+  .seo-settings-container {
+    .seo-settings-header {
+      .page-title {
+        color: #fff;
+      }
+
+      .page-subtitle {
+        color: #ccc;
+      }
+    }
+
+    .seo-settings-content {
+      .settings-card {
+        background: #424242;
+        color: #fff;
+
+        .mat-card-header {
+          border-bottom-color: #555;
+
+          .mat-card-title {
+            color: #fff;
+          }
+
+          .mat-card-subtitle {
+            color: #ccc;
+          }
+        }
+
+        .mat-card-content {
+          color: #fff;
+        }
+      }
+
+      .og-preview {
+        background: #424242;
+        border-color: #555;
+
+        h3 {
+          color: #fff;
+        }
+
+        .og-card {
+          background: #333;
+          border-color: #555;
+
+          .og-content {
+            h4 {
+              color: #fff;
+            }
+
+            p {
+              color: #ccc;
+            }
+
+            .og-url {
+              color: #999;
+            }
+          }
+        }
+      }
+    }
+
+    .loading-container {
+      p {
+        color: #ccc;
+      }
+    }
+  }
+} 

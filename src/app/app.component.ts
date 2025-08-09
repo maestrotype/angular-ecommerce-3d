@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { ThemeService } from './core/themes/theme.service';
+import { FrontendSeoService } from './core/services/frontend-seo.service';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,8 @@ export class AppComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private frontendSeoService: FrontendSeoService
   ) {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
@@ -25,6 +27,9 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Load and apply SEO settings from backend
+    this.frontendSeoService.loadAndApplySeoSettings().subscribe();
+    
     // ThemeService will auto-initialize in its constructor
   }
 

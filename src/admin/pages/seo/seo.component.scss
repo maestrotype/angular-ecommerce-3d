@@ -1,0 +1,182 @@
+.seo-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.seo-header {
+  margin-bottom: 32px;
+  
+  .page-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: #999;
+    margin: 0 0 8px 0;
+  }
+  
+  .page-subtitle {
+    font-size: 16px;
+    color: #666;
+    margin: 0;
+  }
+}
+
+.seo-content {
+  .seo-tabs {
+    ::ng-deep .mat-tab-header {
+      border-bottom: 1px solid #e0e0e0;
+      margin-bottom: 24px;
+    }
+
+    ::ng-deep .mat-tab-label {
+      font-weight: 500;
+      color: #666;
+      min-width: 120px;
+      
+      &.mat-tab-label-active {
+        color: #1976d2;
+      }
+    }
+
+    ::ng-deep .mat-tab-body-content {
+      padding: 0;
+    }
+  }
+}
+
+.settings-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-bottom: 24px;
+  
+  mat-card-header {
+    margin-bottom: 16px;
+    
+    mat-card-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #999;
+    }
+    
+    mat-card-subtitle {
+      font-size: 14px;
+      color: #666;
+      margin-top: 4px;
+    }
+  }
+}
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  
+  .full-width {
+    flex: 1;
+  }
+  
+  .half-width {
+    flex: 1;
+  }
+  
+  &.checkbox-row {
+    flex-direction: column;
+    gap: 8px;
+    
+    mat-checkbox {
+      margin-bottom: 4px;
+    }
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+  
+  button {
+    min-width: 120px;
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  
+  p {
+    margin-top: 16px;
+    color: #666;
+    font-size: 16px;
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .seo-container {
+    padding: 16px;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 12px;
+    
+    .half-width {
+      flex: none;
+    }
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    
+    button {
+      width: 100%;
+    }
+  }
+  
+  .seo-tabs {
+    ::ng-deep .mat-tab-label {
+      min-width: 80px;
+      font-size: 14px;
+    }
+  }
+}
+
+// Dark Theme Support
+@media (prefers-color-scheme: dark) {
+  .seo-container {
+    background-color: #424242;
+  }
+  
+  .settings-card {
+    background-color: #616161;
+    
+    mat-card-header {
+      mat-card-title {
+        color: #fff;
+      }
+      
+      mat-card-subtitle {
+        color: #ccc;
+      }
+    }
+  }
+  
+  .seo-header {
+    .page-title {
+      color: #fff;
+    }
+    
+    .page-subtitle {
+      color: #ccc;
+    }
+  }
+} 
