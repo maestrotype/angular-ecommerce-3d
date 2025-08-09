@@ -26,21 +26,36 @@ export class ProductDetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    if (id) {
-      this.productService.getProductById(id).subscribe({
-        next: (product) => {
-          this.product = product;
-          this.loading = false;
-        },
-        error: () => {
-          this.loading = false;
-          this.router.navigate(['/shop']);
-        }
-      });
-    } else {
-      this.router.navigate(['/shop']);
-    }
+    // Subscribe to route params to handle navigation between products
+    this.route.paramMap.subscribe(params => {
+      const id = Number(params.get('id'));
+      console.log('ProductDetailComponent: Loading product with ID:', id);
+      
+      if (id) {
+        this.loading = true;
+        this.product = undefined; // Clear previous product
+        
+        this.productService.getProductById(id).subscribe({
+          next: (product) => {
+            console.log('ProductDetailComponent: Product loaded successfully:', product);
+            this.product = product;
+            this.loading = false;
+            // Reset view state
+            this.selectedType = 'image';
+            this.selectedImageIndex = 0;
+            this.quantity = 1;
+          },
+          error: (error) => {
+            console.error('ProductDetailComponent: Error loading product:', error);
+            this.loading = false;
+            this.router.navigate(['/shop']);
+          }
+        });
+      } else {
+        console.error('ProductDetailComponent: No product ID provided');
+        this.router.navigate(['/shop']);
+      }
+    });
   }
 
   onThumbnailSelected(type: 'image' | '3d', index?: number): void {

@@ -1,15 +1,16 @@
 .notification-content {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
   padding: 16px 20px;
-  background: var(--color-surface);
+  padding-right: 50px; // Extra padding for close button
+  background: var(--color-surface, #ffffff);
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  border: 1px solid var(--color-cards-border);
+  border: 1px solid var(--color-cards-border, #e5e7eb);
   backdrop-filter: blur(10px);
-  min-width: 300px;
-  max-width: 400px;
+  min-width: 320px;
+  max-width: 500px; // Increased max width
   position: relative;
   animation: slideIn 0.3s ease-out;
 }
@@ -22,6 +23,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
+  margin-top: 2px; // Align with first line of text
   
   i {
     font-size: 16px;
@@ -32,56 +34,88 @@
   flex: 1;
   font-size: 14px;
   font-weight: 500;
-  color: var(--color-text-primary);
+  color: var(--color-text-primary, #333);
   line-height: 1.4;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  min-width: 0; // Allow text to shrink
 }
 
 .notification-close {
   flex-shrink: 0;
-  background: none;
+  background: rgba(0, 0, 0, 0.1);
   border: none;
   cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
+  padding: 8px;
+  border-radius: 50%;
   color: var(--color-text-secondary);
   transition: all 0.2s ease;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
   
   &:hover {
-    background: rgba(0, 0, 0, 0.05);
+    background: rgba(0, 0, 0, 0.2);
     color: var(--color-text-primary);
+    transform: scale(1.1);
+  }
+  
+  &:active {
+    transform: scale(0.95);
   }
   
   i {
     font-size: 14px;
+    font-weight: bold;
   }
 }
 
-// Type-specific styles
+// Type-specific styles using CSS variables
 .notification-modal.success {
   .notification-icon {
-    background: rgba(76, 175, 80, 0.1);
-    color: #4caf50;
+    background: var(--color-success-bg, rgba(76, 175, 80, 0.1));
+    color: var(--color-success, #4caf50);
+  }
+  
+  .notification-content {
+    border-left: 4px solid var(--color-success, #4caf50);
   }
 }
 
 .notification-modal.error {
   .notification-icon {
-    background: rgba(244, 67, 54, 0.1);
-    color: #f44336;
+    background: var(--color-error-bg, rgba(244, 67, 54, 0.1));
+    color: var(--color-error, #f44336);
+  }
+  
+  .notification-content {
+    border-left: 4px solid var(--color-error, #f44336);
   }
 }
 
 .notification-modal.warning {
   .notification-icon {
-    background: rgba(255, 152, 0, 0.1);
-    color: #ff9800;
+    background: var(--color-warning-bg, rgba(255, 152, 0, 0.1));
+    color: var(--color-warning, #ff9800);
+  }
+  
+  .notification-content {
+    border-left: 4px solid var(--color-warning, #ff9800);
   }
 }
 
 .notification-modal.info {
   .notification-icon {
-    background: rgba(33, 150, 243, 0.1);
-    color: #2196f3;
+    background: var(--color-info-bg, rgba(33, 150, 243, 0.1));
+    color: var(--color-info, #2196f3);
+  }
+  
+  .notification-content {
+    border-left: 4px solid var(--color-info, #2196f3);
   }
 }
 
@@ -98,7 +132,18 @@
 
 // Glass theme support
 .glass-theme .notification-content {
-  background: var(--color-buttons-glass);
-  border: 1px solid var(--color-cards-border);
+  background: var(--color-buttons-glass, rgba(255, 255, 255, 0.1));
+  border: 1px solid var(--color-cards-border, rgba(255, 255, 255, 0.2));
   backdrop-filter: blur(10px);
+}
+
+// Dark theme support
+.dark-theme .notification-content {
+  background: var(--color-surface-dark, #1f2937);
+  border-color: var(--color-cards-border-dark, #374151);
+  color: var(--color-text-primary-dark, #f9fafb);
+}
+
+.dark-theme .notification-message {
+  color: var(--color-text-primary-dark, #f9fafb);
 } 
