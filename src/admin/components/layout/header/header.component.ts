@@ -17,6 +17,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   notifications: Notification[] = [];
   unreadCount = 0;
+  isDarkTheme = true; // Default to dark theme
 
   constructor(
     private router: Router,
@@ -25,6 +26,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    // Load theme preference from localStorage
+    const savedTheme = localStorage.getItem('adminTheme');
+    this.isDarkTheme = savedTheme === 'light' ? false : true; // Default to dark
+    this.applyTheme();
+
     // Load notifications on initialization
     this.notificationService.loadNotifications()
       .pipe(takeUntil(this.destroy$))
@@ -58,6 +64,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  toggleTheme(): void {
+    this.isDarkTheme = !this.isDarkTheme;
+    this.applyTheme();
+    
+    // Save theme preference
+    localStorage.setItem('adminTheme', this.isDarkTheme ? 'dark' : 'light');
+  }
+
+  private applyTheme(): void {
+    const theme = this.isDarkTheme ? 'dark' : 'light';
+    document.body.setAttribute('data-theme', theme);
   }
 
   onNotificationClick(notification: Notification): void {

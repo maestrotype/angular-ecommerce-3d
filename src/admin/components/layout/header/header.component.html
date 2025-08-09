@@ -16,6 +16,12 @@
       <button mat-icon-button [routerLink]="'/home'" [matTooltip]="'GO_TO_STOREFRONT' | translate">
         <mat-icon>storefront</mat-icon>
       </button>
+      
+      <!-- Theme Toggle -->
+      <button mat-icon-button (click)="toggleTheme()" [matTooltip]="isDarkTheme ? 'Switch to Light Theme' : 'Switch to Dark Theme'">
+        <mat-icon>{{ isDarkTheme ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+      
       <!-- Notifications -->
       <button mat-icon-button [matMenuTriggerFor]="notificationMenu" class="notification-button">
         <mat-icon [matBadge]="unreadCount > 0 ? unreadCount : null" matBadgeColor="warn" matBadgeSize="small">
