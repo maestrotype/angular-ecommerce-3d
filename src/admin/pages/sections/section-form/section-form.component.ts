@@ -1,5 +1,5 @@
 
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { forkJoin, of, Observable, throwError } from 'rxjs';
 import { switchMap, catchError, finalize, map } from 'rxjs/operators';
@@ -8,13 +8,16 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SectionService } from '../../../services/section.service';
 import { Section, CreateSectionDto, UpdateSectionDto, MenuItem } from '../../../models/section.model';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { ImageUploadComponent } from '../../../components/ui/image-upload/image-upload.component';
 
 @Component({
   selector: 'app-section-form',
   templateUrl: './section-form.component.html',
   styleUrls: ['./section-form.component.scss']
 })
-export class SectionFormComponent {
+export class SectionFormComponent implements AfterViewInit {
+  @ViewChildren(ImageUploadComponent) imageUploadComponents!: QueryList<ImageUploadComponent>;
+  
   sectionForm: FormGroup;
   isEditMode: boolean;
   loading = false;
@@ -63,6 +66,17 @@ export class SectionFormComponent {
     }
 
     this.loadAvailableSections();
+  }
+
+  ngAfterViewInit(): void {
+    // Subscribe to changes in the imageUploadComponents QueryList
+    this.imageUploadComponents.changes.subscribe(() => {
+      // This will be called whenever the QueryList changes,
+      // allowing you to access the newly added ImageUploadComponent instances.
+      // For example, if you need to re-initialize them or update their state.
+      // This is a placeholder; you might need to implement specific logic here
+      // if you have specific initialization needs for the image upload components.
+    });
   }
 
   private loadAvailableSections(): void {
@@ -224,9 +238,14 @@ export class SectionFormComponent {
     this.sectionService.uploadImage(file).subscribe({
       next: (response) => {
         if (response?.url) {
-          const baseUrl = window.location.origin;
-          const iconUrl = response.url.startsWith('http') ? response.url : baseUrl + response.url;
+          const iconUrl = response.url;
           this.categories.at(index).patchValue({ icon: iconUrl });
+          
+          // Find the corresponding image upload component and notify it
+          const imageUploadComponents = this.imageUploadComponents.toArray();
+          if (imageUploadComponents[index + 1]) { // +1 because first component is for logo
+            imageUploadComponents[index + 1].onUploadSuccess(iconUrl);
+          }
         }
         this.uploadingCategoryIcon = false;
       },

@@ -372,30 +372,32 @@ export class ProductFormComponent implements OnInit {
       model3dUrl: this.model3dUrl,
     };
 
-    if (this.productForm.valid) {
-      const productData = this.productForm.value;
-      
-      if (this.isEditMode) {
-        this.productService.updateProduct(this.productId, productData).subscribe({
-          next: (product) => {
-            this.snackBar.open('Product updated successfully!', 'Close', { duration: 3000 });
-            this.router.navigate(['/admin/products']);
-          },
-          error: (error) => {
-            this.snackBar.open('Error updating product', 'Close', { duration: 3000 });
-          }
-        });
-      } else {
-        this.productService.createProduct(productData).subscribe({
-          next: (product) => {
-            this.snackBar.open('Product created successfully!', 'Close', { duration: 3000 });
-            this.router.navigate(['/admin/products']);
-          },
-          error: (error) => {
-            this.snackBar.open('Error creating product', 'Close', { duration: 3000 });
-          }
-        });
-      }
+    if (this.isEditMode) {
+      this.productService.updateProduct(this.productId!, productData).subscribe({
+        next: (product) => {
+          this.isLoading = false;
+          this.snackBar.open('Product updated successfully!', 'Close', { duration: 3000 });
+          this.router.navigate(['/admin/products']);
+        },
+        error: (error) => {
+          this.isLoading = false;
+          console.error('Update error:', error);
+          this.snackBar.open('Error updating product', 'Close', { duration: 3000 });
+        }
+      });
+    } else {
+      this.productService.createProduct(productData).subscribe({
+        next: (product) => {
+          this.isLoading = false;
+          this.snackBar.open('Product created successfully!', 'Close', { duration: 3000 });
+          this.router.navigate(['/admin/products']);
+        },
+        error: (error) => {
+          this.isLoading = false;
+          console.error('Create error:', error);
+          this.snackBar.open('Error creating product', 'Close', { duration: 3000 });
+        }
+      });
     }
   }
 
