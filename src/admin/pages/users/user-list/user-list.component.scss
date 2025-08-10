@@ -2,9 +2,9 @@
 
 .user-list-container {
   padding: 0;
-  background-color: #1f2937;
+  background-color: var(--color-admin-content-inner-bg);
   min-height: calc(100vh - 64px);
-  color: #ffffff;
+  color: var(--admin-text-primary);
 }
 
 .header-section {

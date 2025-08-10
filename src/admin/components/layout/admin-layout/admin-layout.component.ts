@@ -10,7 +10,9 @@ import { TranslateService } from '@ngx-translate/core';
 export class AdminLayoutComponent implements OnInit, OnDestroy { 
   isMobile = false;
 
-  constructor(private translate: TranslateService) {
+  constructor(
+    private translate: TranslateService
+  ) {
     const savedLang = localStorage.getItem('adminLang') || 'en';
     this.translate.setDefaultLang(savedLang);
     this.translate.use(savedLang);

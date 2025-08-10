@@ -1,0 +1,71 @@
+// Admin Panel - Global Variables
+// Base sizing, spacing, and structural variables that are theme-independent
+
+:root {
+  // Base Spacing System
+  --admin-space-xs: 4px;
+  --admin-space-sm: 8px;
+  --admin-space-md: 16px;
+  --admin-space-lg: 24px;
+  --admin-space-xl: 32px;
+  --admin-space-xxl: 48px;
+  
+  // Base Typography Sizes
+  --admin-font-xs: 12px;
+  --admin-font-sm: 14px;
+  --admin-font-md: 16px;
+  --admin-font-lg: 18px;
+  --admin-font-xl: 20px;
+  --admin-font-xxl: 24px;
+  
+  // Base Font Weights
+  --admin-font-light: 300;
+  --admin-font-normal: 400;
+  --admin-font-medium: 500;
+  --admin-font-semibold: 600;
+  --admin-font-bold: 700;
+  
+  // Base Border Radius
+  --admin-radius-sm: 4px;
+  --admin-radius-md: 8px;
+  --admin-radius-lg: 12px;
+  --admin-radius-xl: 16px;
+  
+  // Base Shadows (structure, not colors)
+  --admin-shadow-sm: 0 1px 3px;
+  --admin-shadow-md: 0 4px 6px;
+  --admin-shadow-lg: 0 10px 15px;
+  --admin-shadow-xl: 0 20px 25px;
+  
+  // Component Base Sizes
+  --admin-header-height: 64px;
+  --admin-sidebar-width: 240px;
+  --admin-sidebar-collapsed: 60px;
+  
+  // Data Table Base Sizes
+  --admin-table-row-height: 56px;
+  --admin-table-header-height: 64px;
+  --admin-table-cell-padding: 16px;
+  --admin-table-compact-padding: 8px;
+  
+  // Form Base Sizes
+  --admin-input-height: 48px;
+  --admin-input-padding: 12px 16px;
+  --admin-button-height: 40px;
+  --admin-button-padding: 8px 16px;
+  
+  // Layout Base Sizes
+  --admin-content-padding: 24px;
+  --admin-card-padding: 24px;
+  --admin-modal-padding: 24px;
+  
+  // Z-Index System
+  --admin-z-base: 1;
+  --admin-z-dropdown: 1000;
+  --admin-z-sticky: 1020;
+  --admin-z-fixed: 1030;
+  --admin-z-modal-backdrop: 1040;
+  --admin-z-modal: 1050;
+  --admin-z-popover: 1060;
+  --admin-z-tooltip: 1070;
+} 

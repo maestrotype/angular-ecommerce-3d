@@ -141,7 +141,26 @@ export const darkTheme: Theme = {
     'form-label-color': '#e5e7eb',
     'form-input-color': '#ffffff',
     'form-outline-color': '#6b7280',
-    'form-focus-color': '#3b82f6'
+    'form-focus-color': '#3b82f6',
+    // Search component colors
+    'search-bg': '#374151',
+    'search-border': '#4b5563',
+    'search-text': '#ffffff',
+    'search-placeholder': '#9ca3af',
+    'search-icon': '#9ca3af',
+    'search-focus-border': '#3b82f6',
+    'search-focus-bg': '#374151',
+    'search-button-bg': '#ec4899',
+    'search-button-text': '#ffffff',
+    'search-button-hover-bg': '#db2777',
+    'search-dropdown-bg': '#1f2937',
+    'search-dropdown-border': '#374151',
+    'search-dropdown-text': '#d1d5db',
+    'search-dropdown-hover-bg': '#374151',
+    
+    // Two-layer background system
+    'admin-content-outer-bg': '#303030', // Outer layer (admin-main)
+    'admin-content-inner-bg': '#1f2937', // Inner layer (message-list-container, etc.)
   },
   layout: {
     'container-max-width': '1200px',

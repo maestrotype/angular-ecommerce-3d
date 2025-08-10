@@ -3,6 +3,7 @@ import { Component, EventEmitter, Output, OnInit, OnDestroy } from '@angular/cor
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil, switchMap } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../../services/auth.service';
 import { NotificationService, Notification } from '../../../services/notification.service';
 import { ThemeService } from '../../../../app/core/themes/theme.service';
@@ -19,16 +20,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   notifications: Notification[] = [];
   unreadCount = 0;
+  currentUser: any = null;
   currentTheme: Theme;
 
   constructor(
     private router: Router,
     private authService: AuthService,
     private notificationService: NotificationService,
+    private translate: TranslateService,
     private themeService: ThemeService
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.loadCurrentUser();
+    
     // Initialize theme
     this.currentTheme = this.themeService.getCurrentTheme();
     
@@ -69,9 +74,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private loadCurrentUser() {
+    const user = this.authService.getCurrentUser();
+    if (user) {
+      this.currentUser = user;
+    }
   }
 
   toggleTheme(): void {
@@ -175,9 +187,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return `${diffDays}d ago`;
   }
 
-  logout(): void {
+  logout() {
     this.authService.logout();
     this.router.navigate(['/admin/login']);
+  }
+
+  switchLanguage(language: string) {
+    this.translate.use(language);
+    localStorage.setItem('adminLang', language);
   }
 }
 

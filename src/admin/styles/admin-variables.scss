@@ -44,16 +44,20 @@
   --admin-bg-hover: #e3f2fd;
   --admin-bg-overlay: rgba(0, 0, 0, 0.5);
   
+  // Two-layer background system
+  --admin-content-outer-bg: #1f2937;
+  --admin-content-inner-bg: #f1f5f9;
+  
   // Text Colors
-  --admin-text-primary: #212121;
-  --admin-text-secondary: #757575;
-  --admin-text-disabled: #bdbdbd;
+  --admin-text-primary: #111827;
+  --admin-text-secondary: #6b7280;
+  --admin-text-disabled: #9ca3af;
   --admin-text-inverse: #ffffff;
   
   // Border Colors
-  --admin-border-primary: #e0e0e0;
-  --admin-border-secondary: #f0f0f0;
-  --admin-border-focus: #1976d2;
+  --admin-border-primary: #d1d5db;
+  --admin-border-secondary: #e5e7eb;
+  --admin-border-focus: #3b82f6;
   --admin-border-error: #f44336;
   
   // Spacing
@@ -151,6 +155,10 @@
   --admin-bg-card: #1e1e1e;
   --admin-bg-hover: #2d2d2d;
   
+  // Two-layer background system
+  --admin-bg-outer: #303030;
+  --admin-bg-inner: #1f2937;
+  
   --admin-text-primary: #ffffff;
   --admin-text-secondary: #b0b0b0;
   --admin-text-disabled: #666666;
@@ -197,6 +205,30 @@
   --admin-bg-card: rgba(255, 255, 255, 0.1);
   --admin-bg-hover: rgba(255, 255, 255, 0.15);
   
+  // Two-layer background system
+  --admin-bg-outer: rgba(255, 255, 255, 0.05);
+  --admin-bg-inner: rgba(255, 255, 255, 0.1);
+  
   --admin-border-primary: rgba(255, 255, 255, 0.2);
   --admin-border-secondary: rgba(255, 255, 255, 0.1);
+}
+
+// Light Theme Variables (default theme)
+[data-theme="default"] {
+  --admin-bg-primary: #ffffff;
+  --admin-bg-secondary: #f8fafc;
+  --admin-bg-tertiary: #f1f5f9;
+  --admin-bg-card: #ffffff;
+  --admin-bg-hover: #e2e8f0;
+  
+  // Two-layer background system
+  --admin-bg-outer: #1f2937;
+  --admin-bg-inner: #f1f5f9;
+  
+  --admin-text-primary: #111827;
+  --admin-text-secondary: #6b7280;
+  --admin-text-disabled: #9ca3af;
+  
+  --admin-border-primary: #e5e7eb;
+  --admin-border-secondary: #f3f4f6;
 } 

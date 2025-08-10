@@ -28,6 +28,19 @@
   --color-admin-accent-hover: #ad1457;
   --color-admin-button: #c2185b;
   --color-admin-button-hover: #ad1457;
+  
+  // Table specific variables
+  --color-table-bg: #2d2d2d;
+  --color-table-header-bg: #374151;
+  --color-table-header-text: #ffffff;
+  --color-table-row-bg: #2d2d2d;
+  --color-table-row-text: #ffffff;
+  --color-table-row-hover: #374151;
+  --color-table-border: #404040;
+  --table-padding: 16px;
+  --table-border-radius: 8px;
+  --table-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --table-margin: 24px;
 }
 
 // Data Table Container
@@ -107,18 +120,20 @@
 
 // Action Button
 .action-button {
-  color: var(--color-action-button-color, #f44336);
+  color: var(--color-action-button-color, #c2185b);
   min-width: 40px;
   height: 40px;
-  border-radius: 50%;
+  border-radius: 4px;
   transition: all 0.2s ease;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
-    background: var(--color-action-button-hover, rgba(244, 67, 54, 0.1));
-  }
-
-  &:disabled {
-    color: var(--color-icon-button-disabled, #6b7280);
+    background: var(--color-action-button-hover, rgba(194, 24, 91, 0.1));
   }
 }
 
@@ -236,10 +251,10 @@
     }
 
     .mat-mdc-icon-button {
-      color: var(--color-paginator-text, #ffffff);
+      color: var(--color-paginator-arrow, #ffffff);
 
       &:disabled {
-        color: var(--color-paginator-disabled, #6b7280);
+        color: var(--color-paginator-disabled, #666666);
       }
 
       // Override Material's default button styles

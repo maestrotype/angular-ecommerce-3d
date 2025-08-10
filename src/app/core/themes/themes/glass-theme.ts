@@ -141,7 +141,26 @@ export const glassTheme: Theme = {
     'form-label-color': 'rgba(255, 255, 255, 0.8)',
     'form-input-color': '#ffffff',
     'form-outline-color': 'rgba(255, 255, 255, 0.2)',
-    'form-focus-color': '#667eea'
+    'form-focus-color': '#667eea',
+    // Search component colors
+    'search-bg': 'rgba(255, 255, 255, 0.1)',
+    'search-border': 'rgba(255, 255, 255, 0.2)',
+    'search-text': '#ffffff',
+    'search-placeholder': 'rgba(255, 255, 255, 0.5)',
+    'search-icon': 'rgba(255, 255, 255, 0.7)',
+    'search-focus-border': '#667eea',
+    'search-focus-bg': 'rgba(255, 255, 255, 0.15)',
+    'search-button-bg': 'rgba(236, 72, 153, 0.8)',
+    'search-button-text': '#ffffff',
+    'search-button-hover-bg': 'rgba(219, 39, 119, 0.9)',
+    'search-dropdown-bg': 'rgba(255, 255, 255, 0.1)',
+    'search-dropdown-border': 'rgba(255, 255, 255, 0.2)',
+    'search-dropdown-text': 'rgba(255, 255, 255, 0.8)',
+    'search-dropdown-hover-bg': 'rgba(255, 255, 255, 0.2)',
+    
+    // Two-layer background system
+    'admin-content-outer-bg': 'rgba(255, 255, 255, 0.05)', // Outer layer (admin-main) - very subtle glass
+    'admin-content-inner-bg': 'rgba(255, 255, 255, 0.1)', // Inner layer (message-list-container, etc.) - more visible glass
   },
   layout: {
     'container-max-width': '1200px',

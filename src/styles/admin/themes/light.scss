@@ -1,0 +1,102 @@
+// Admin Panel - Light Theme
+// Color variables and theme-specific overrides for light theme
+
+:root[data-admin-theme="light"] {
+  // Two-Layer Background System
+  --admin-bg-outer: #1f2937;  // Dark outer layer
+  --admin-bg-inner: #f1f5f9;  // Light inner layer
+  
+  // Base Colors
+  --admin-bg-primary: #ffffff;
+  --admin-bg-secondary: #f8fafc;
+  --admin-bg-tertiary: #f1f5f9;
+  --admin-bg-hover: #e2e8f0;
+  --admin-bg-active: #cbd5e1;
+  --admin-bg-disabled: #f1f5f9;
+  
+  // Text Colors
+  --admin-text-primary: #111827;
+  --admin-text-secondary: #6b7280;
+  --admin-text-tertiary: #9ca3af;
+  --admin-text-disabled: #d1d5db;
+  --admin-text-inverse: #ffffff;
+  --admin-text-accent: #c2185b;
+  
+  // Border Colors
+  --admin-border-primary: #e5e7eb;
+  --admin-border-secondary: #f3f4f6;
+  --admin-border-focus: #3b82f6;
+  --admin-border-error: #ef4444;
+  --admin-border-success: #10b981;
+  
+  // Shadow Colors
+  --admin-shadow-color: rgba(0, 0, 0, 0.1);
+  --admin-shadow-color-md: rgba(0, 0, 0, 0.15);
+  --admin-shadow-color-lg: rgba(0, 0, 0, 0.2);
+  
+  // Status Colors
+  --admin-status-success: #10b981;
+  --admin-status-warning: #f59e0b;
+  --admin-status-error: #ef4444;
+  --admin-status-info: #3b82f6;
+  --admin-status-pending: #f59e0b;
+  
+  // Data Table Colors
+  --admin-table-bg: #ffffff;
+  --admin-table-header-bg: #f8fafc;
+  --admin-table-border: #e5e7eb;
+  --admin-table-row-hover: #f8fafc;
+  --admin-table-text: #111827;
+  --admin-table-text-secondary: #6b7280;
+  
+  // Pagination Colors
+  --admin-paginator-bg: #ffffff;
+  --admin-paginator-text: #111827;
+  --admin-paginator-border: #e5e7eb;
+  --admin-paginator-disabled: #9ca3af;
+  --admin-paginator-arrow: #6b7280;
+  --admin-paginator-hover: #f8fafc;
+  
+  // Form Colors
+  --admin-input-bg: #ffffff;
+  --admin-input-border: #d1d5db;
+  --admin-input-text: #111827;
+  --admin-input-placeholder: #9ca3af;
+  --admin-input-focus-border: #3b82f6;
+  --admin-input-error-border: #ef4444;
+  
+  // Button Colors
+  --admin-button-primary-bg: #c2185b;
+  --admin-button-primary-text: #ffffff;
+  --admin-button-primary-hover: #ad1457;
+  --admin-button-secondary-bg: #f8fafc;
+  --admin-button-secondary-text: #374151;
+  --admin-button-secondary-hover: #e2e8f0;
+  
+  // Search Component Colors
+  --admin-search-bg: #ffffff;
+  --admin-search-border: #d1d5db;
+  --admin-search-text: #111827;
+  --admin-search-placeholder: #9ca3af;
+  --admin-search-icon: #6b7280;
+  --admin-search-focus-border: #3b82f6;
+  --admin-search-button-bg: #c2185b;
+  --admin-search-button-text: #ffffff;
+  --admin-search-button-hover: #ad1457;
+  
+  // Badge/Chip Colors
+  --admin-badge-bg: #546e7a;
+  --admin-badge-text: #ffffff;
+  --admin-badge-success: #10b981;
+  --admin-badge-warning: #f59e0b;
+  --admin-badge-error: #ef4444;
+  --admin-badge-info: #3b82f6;
+  
+  // Navigation Colors
+  --admin-nav-bg: #1f2937;
+  --admin-nav-text: #d1d5db;
+  --admin-nav-text-active: #ffffff;
+  --admin-nav-hover: #374151;
+  --admin-nav-active: #4f46e5;
+  --admin-nav-border: #374151;
+} 

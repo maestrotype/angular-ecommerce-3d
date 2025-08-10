@@ -136,6 +136,25 @@ export interface ThemeColors {
   'form-input-color': string;
   'form-outline-color': string;
   'form-focus-color': string;
+  // Search component colors
+  'search-bg': string;
+  'search-border': string;
+  'search-text': string;
+  'search-placeholder': string;
+  'search-icon': string;
+  'search-focus-border': string;
+  'search-focus-bg': string;
+  'search-button-bg': string;
+  'search-button-text': string;
+  'search-button-hover-bg': string;
+  'search-dropdown-bg': string;
+  'search-dropdown-border': string;
+  'search-dropdown-text': string;
+  'search-dropdown-hover-bg': string;
+  
+  // Two-layer background system
+  'admin-content-outer-bg': string; // Outer layer (admin-main)
+  'admin-content-inner-bg': string; // Inner layer (message-list-container, etc.)
 }
 
 export interface ThemeLayout {

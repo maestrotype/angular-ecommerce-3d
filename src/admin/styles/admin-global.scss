@@ -3,6 +3,28 @@
 
 // Global Admin Styles
 
+// Two-layer background system
+.admin-main {
+  flex: 1;
+  padding: 24px;
+  background-color: var(--admin-bg-outer, #303030);
+  min-height: calc(100vh - 64px);
+  overflow-x: auto;
+}
+
+// Inner layer containers (message-list-container, order-list-container, etc.)
+.message-list-container,
+.order-list-container,
+.user-list-container,
+.category-list-container,
+.product-list-container,
+.section-list-container {
+  padding: 0;
+  background-color: var(--admin-bg-inner, #1f2937);
+  min-height: calc(100vh - 64px);
+  color: var(--admin-text-primary, #ffffff);
+}
+
 // Reset and Base
 * {
   box-sizing: border-box;

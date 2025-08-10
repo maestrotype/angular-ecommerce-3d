@@ -1,0 +1,112 @@
+// Admin Panel - Glass Theme
+// Glass/blur effect theme with transparency
+
+:root[data-admin-theme="glass"] {
+  // Two-Layer Background System
+  --admin-bg-outer: rgba(31, 41, 55, 0.8);  // Semi-transparent dark outer
+  --admin-bg-inner: rgba(255, 255, 255, 0.1);  // Glass inner layer
+  
+  // Base Colors
+  --admin-bg-primary: rgba(255, 255, 255, 0.1);
+  --admin-bg-secondary: rgba(255, 255, 255, 0.05);
+  --admin-bg-tertiary: rgba(255, 255, 255, 0.15);
+  --admin-bg-hover: rgba(255, 255, 255, 0.2);
+  --admin-bg-active: rgba(255, 255, 255, 0.25);
+  --admin-bg-disabled: rgba(255, 255, 255, 0.05);
+  
+  // Text Colors
+  --admin-text-primary: #ffffff;
+  --admin-text-secondary: rgba(255, 255, 255, 0.8);
+  --admin-text-tertiary: rgba(255, 255, 255, 0.6);
+  --admin-text-disabled: rgba(255, 255, 255, 0.4);
+  --admin-text-inverse: #111827;
+  --admin-text-accent: #ec4899;
+  
+  // Border Colors
+  --admin-border-primary: rgba(255, 255, 255, 0.2);
+  --admin-border-secondary: rgba(255, 255, 255, 0.1);
+  --admin-border-focus: #3b82f6;
+  --admin-border-error: #ef4444;
+  --admin-border-success: #10b981;
+  
+  // Shadow Colors
+  --admin-shadow-color: rgba(0, 0, 0, 0.3);
+  --admin-shadow-color-md: rgba(0, 0, 0, 0.4);
+  --admin-shadow-color-lg: rgba(0, 0, 0, 0.5);
+  
+  // Status Colors
+  --admin-status-success: #10b981;
+  --admin-status-warning: #f59e0b;
+  --admin-status-error: #ef4444;
+  --admin-status-info: #3b82f6;
+  --admin-status-pending: #f59e0b;
+  
+  // Data Table Colors
+  --admin-table-bg: rgba(255, 255, 255, 0.1);
+  --admin-table-header-bg: rgba(255, 255, 255, 0.15);
+  --admin-table-border: rgba(255, 255, 255, 0.2);
+  --admin-table-row-hover: rgba(255, 255, 255, 0.15);
+  --admin-table-text: #ffffff;
+  --admin-table-text-secondary: rgba(255, 255, 255, 0.8);
+  
+  // Pagination Colors
+  --admin-paginator-bg: rgba(255, 255, 255, 0.1);
+  --admin-paginator-text: #ffffff;
+  --admin-paginator-border: rgba(255, 255, 255, 0.2);
+  --admin-paginator-disabled: rgba(255, 255, 255, 0.4);
+  --admin-paginator-arrow: rgba(255, 255, 255, 0.8);
+  --admin-paginator-hover: rgba(255, 255, 255, 0.15);
+  
+  // Form Colors
+  --admin-input-bg: rgba(255, 255, 255, 0.1);
+  --admin-input-border: rgba(255, 255, 255, 0.2);
+  --admin-input-text: #ffffff;
+  --admin-input-placeholder: rgba(255, 255, 255, 0.6);
+  --admin-input-focus-border: #3b82f6;
+  --admin-input-error-border: #ef4444;
+  
+  // Button Colors
+  --admin-button-primary-bg: #c2185b;
+  --admin-button-primary-text: #ffffff;
+  --admin-button-primary-hover: #ad1457;
+  --admin-button-secondary-bg: rgba(255, 255, 255, 0.1);
+  --admin-button-secondary-text: rgba(255, 255, 255, 0.9);
+  --admin-button-secondary-hover: rgba(255, 255, 255, 0.2);
+  
+  // Search Component Colors
+  --admin-search-bg: rgba(255, 255, 255, 0.1);
+  --admin-search-border: rgba(255, 255, 255, 0.2);
+  --admin-search-text: #ffffff;
+  --admin-search-placeholder: rgba(255, 255, 255, 0.6);
+  --admin-search-icon: rgba(255, 255, 255, 0.8);
+  --admin-search-focus-border: #3b82f6;
+  --admin-search-button-bg: #c2185b;
+  --admin-search-button-text: #ffffff;
+  --admin-search-button-hover: #ad1457;
+  
+  // Badge/Chip Colors
+  --admin-badge-bg: #546e7a;
+  --admin-badge-text: #ffffff;
+  --admin-badge-success: #10b981;
+  --admin-badge-warning: #f59e0b;
+  --admin-badge-error: #ef4444;
+  --admin-badge-info: #3b82f6;
+  
+  // Navigation Colors
+  --admin-nav-bg: rgba(17, 24, 39, 0.9);
+  --admin-nav-text: rgba(255, 255, 255, 0.8);
+  --admin-nav-text-active: #ffffff;
+  --admin-nav-hover: rgba(255, 255, 255, 0.1);
+  --admin-nav-active: #4f46e5;
+  --admin-nav-border: rgba(255, 255, 255, 0.1);
+}
+
+// Glass effect for containers
+:root[data-admin-theme="glass"] {
+  .admin-content-inner,
+  .data-table-container,
+  .admin-card {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+} 

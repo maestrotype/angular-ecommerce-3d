@@ -1,0 +1,42 @@
+// Admin Panel - Form Components
+// Styles for form elements and search components
+
+.admin-search-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  
+  .admin-search-input {
+    @include admin-input();
+    padding-right: 40px;
+    background-color: var(--admin-search-bg);
+    border-color: var(--admin-search-border);
+    color: var(--admin-search-text);
+    
+    &::placeholder {
+      color: var(--admin-search-placeholder);
+    }
+    
+    &:focus {
+      border-color: var(--admin-search-focus-border);
+      background-color: var(--admin-search-focus-bg, var(--admin-search-bg));
+    }
+  }
+  
+  .admin-search-icon {
+    position: absolute;
+    right: 12px;
+    color: var(--admin-search-icon);
+    pointer-events: none;
+  }
+}
+
+.admin-search-button {
+  @include admin-button('primary');
+  background-color: var(--admin-search-button-bg);
+  color: var(--admin-search-button-text);
+  
+  &:hover {
+    background-color: var(--admin-search-button-hover);
+  }
+} 

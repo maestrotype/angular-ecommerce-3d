@@ -1,9 +1,9 @@
 
 .order-list-container {
   padding: 0;
-  background-color: var(--admin-order-list-bg);
+  background-color: var(--color-admin-content-inner-bg);
   min-height: calc(100vh - 64px);
-  color: var(--admin-order-list-text-primary);
+  color: var(--admin-text-primary);
 }
 
 .header-section {
