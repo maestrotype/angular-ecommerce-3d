@@ -1,0 +1,65 @@
+// Admin Panel - Reset & Normalize
+// Basic reset for consistent styling across browsers
+
+* {
+  box-sizing: border-box;
+}
+
+// Admin-specific font family
+.admin-layout,
+.admin-layout * {
+  font-family: 'Roboto', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+}
+
+// Remove default margins and paddings from common elements
+.admin-layout {
+  h1, h2, h3, h4, h5, h6,
+  p, ul, ol, li,
+  form, fieldset, legend,
+  table, tr, td, th {
+    margin: 0;
+    padding: 0;
+  }
+
+  // Reset list styles
+  ul, ol {
+    list-style: none;
+  }
+
+  // Reset button styles
+  button {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  // Reset input styles
+  input, textarea, select {
+    font: inherit;
+    border: none;
+    outline: none;
+    background: none;
+  }
+
+  // Reset table styles
+  table {
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+
+  // Reset anchor styles
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  // Reset image styles
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+} 

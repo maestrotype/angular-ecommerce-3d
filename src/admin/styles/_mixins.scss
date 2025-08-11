@@ -1,0 +1,124 @@
+// Admin Panel - Global Mixins
+// Reusable mixins for admin components
+
+// Button mixin
+@mixin admin-button($variant: 'primary') {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--admin-space-sm);
+  padding: var(--admin-button-padding);
+  height: var(--admin-button-height);
+  border: none;
+  border-radius: var(--admin-radius-md);
+  font-size: var(--admin-font-sm);
+  font-weight: var(--admin-font-medium);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  
+  @if $variant == 'primary' {
+    background-color: var(--admin-button-primary-bg);
+    color: var(--admin-button-primary-text);
+    
+    &:hover {
+      background-color: var(--admin-button-primary-hover);
+    }
+  } @else if $variant == 'secondary' {
+    background-color: var(--admin-button-secondary-bg);
+    color: var(--admin-button-secondary-text);
+    border: 1px solid var(--admin-border-primary);
+    
+    &:hover {
+      background-color: var(--admin-button-secondary-hover);
+    }
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+// Input field mixin
+@mixin admin-input() {
+  width: 100%;
+  height: var(--admin-input-height);
+  padding: var(--admin-input-padding);
+  background-color: var(--admin-input-bg);
+  border: 1px solid var(--admin-input-border);
+  border-radius: var(--admin-radius-md);
+  color: var(--admin-input-text);
+  font-size: var(--admin-font-sm);
+  transition: border-color 0.2s ease;
+  
+  &::placeholder {
+    color: var(--admin-input-placeholder);
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: var(--admin-input-focus-border);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+  
+  &.error {
+    border-color: var(--admin-input-error-border);
+  }
+}
+
+// Card mixin
+@mixin admin-card() {
+  background-color: var(--admin-bg-primary);
+  border: 1px solid var(--admin-border-primary);
+  border-radius: var(--admin-radius-lg);
+  padding: var(--admin-card-padding);
+  box-shadow: var(--admin-shadow-sm) var(--admin-shadow-color);
+}
+
+// Text truncation mixin
+@mixin truncate-text() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Responsive breakpoint mixins
+@mixin admin-mobile {
+  @media (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin admin-tablet {
+  @media (min-width: 769px) and (max-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin admin-desktop {
+  @media (min-width: 1025px) {
+    @content;
+  }
+}
+
+// Loading spinner mixin
+@mixin admin-spinner($size: 24px) {
+  width: $size;
+  height: $size;
+  border: 2px solid var(--admin-border-primary);
+  border-top: 2px solid var(--admin-text-accent);
+  border-radius: 50%;
+  animation: admin-spin 1s linear infinite;
+}
+
+@keyframes admin-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Focus ring mixin
+@mixin admin-focus-ring() {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+} 

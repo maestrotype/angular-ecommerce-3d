@@ -1,0 +1,26 @@
+// Admin Panel - Two-Layer Background System
+// Layout system for outer and inner background layers
+
+.admin-main {
+  flex: 1;
+  padding: var(--admin-content-padding);
+  background-color: var(--admin-bg-outer);
+  min-height: calc(100vh - var(--admin-header-height));
+  overflow-x: auto;
+}
+
+// Inner layer containers for all list components
+.admin-content-inner,
+.message-list-container,
+.order-list-container,
+.user-list-container,
+.category-list-container,
+.product-list-container,
+.section-list-container {
+  padding: 0;
+  background-color: var(--admin-bg-inner);
+  min-height: calc(100vh - var(--admin-header-height));
+  color: var(--admin-text-primary);
+  border-radius: var(--admin-radius-lg);
+  box-shadow: var(--admin-shadow-sm) var(--admin-shadow-color);
+} 

@@ -1,0 +1,26 @@
+// Admin Panel - Main Styles Entry Point
+// This file imports all admin-specific styles in the correct order
+
+// 1. Variables and Mixins
+@import './admin-variables';
+@import './admin-mixins';
+
+// 2. Global Styles
+@import './admin-global';
+
+// 3. Themes
+@import './themes/light';
+@import './themes/dark';
+@import './themes/glass';
+
+// 4. Components
+@import './components/data-table';
+@import './components/forms';
+@import './components/buttons';
+@import './components/modals';
+@import './components/navigation';
+
+// 5. Layouts
+@import './layouts/two-layer-bg';
+@import './layouts/grid';
+@import './layouts/responsive'; 

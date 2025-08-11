@@ -1,4 +1,4 @@
-import { Theme } from '../theme.model';
+import { Theme } from './theme.model';
 
 export const glassTheme: Theme = {
   id: 'glass',

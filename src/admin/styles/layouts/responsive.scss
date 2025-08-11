@@ -1,0 +1,9 @@
+// Admin Panel - Responsive Layout
+// Mobile and tablet adaptations
+
+@include admin-mobile {
+  .data-table-cell {
+    padding: var(--admin-table-compact-padding);
+    font-size: var(--admin-font-xs);
+  }
+} 

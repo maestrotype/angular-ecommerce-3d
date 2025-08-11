@@ -1,7 +1,7 @@
 import { Theme } from './theme.model';
-import { defaultThemeNew } from './themes/default-theme-new';
-import { darkTheme } from './themes/dark-theme';
-import { glassTheme } from './themes/glass-theme';
+import { defaultThemeNew } from './default-theme-new';
+import { darkTheme } from './dark-theme';
+import { glassTheme } from './glass-theme';
 
 export const AVAILABLE_THEMES: Theme[] = [
   defaultThemeNew,

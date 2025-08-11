@@ -1,0 +1,22 @@
+// Admin Panel - Button Components
+// Universal button styles
+
+.admin-btn {
+  @include admin-button('primary');
+  
+  &.secondary {
+    @include admin-button('secondary');
+  }
+  
+  &.small {
+    height: 32px;
+    padding: 4px 12px;
+    font-size: var(--admin-font-xs);
+  }
+  
+  &.large {
+    height: 48px;
+    padding: 12px 24px;
+    font-size: var(--admin-font-md);
+  }
+} 

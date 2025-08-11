@@ -1,0 +1,279 @@
+// Admin Panel - Data Table Component
+// Universal styles for all data table components
+
+.data-table-container {
+  background-color: var(--admin-table-bg);
+  border-radius: var(--admin-radius-md);
+  overflow: hidden;
+  box-shadow: var(--admin-shadow-sm) var(--admin-shadow-color);
+}
+
+.data-table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--admin-space-lg);
+  background-color: var(--admin-table-header-bg);
+  border-bottom: 1px solid var(--admin-border-primary);
+
+  h1, h2, h3 {
+    margin: 0;
+    color: var(--admin-text-primary);
+    font-size: var(--admin-font-xl);
+    font-weight: var(--admin-font-bold);
+  }
+
+  .header-actions {
+    display: flex;
+    gap: var(--admin-space-md);
+    align-items: center;
+  }
+}
+
+.data-table-filters {
+  display: flex;
+  gap: var(--admin-space-md);
+  padding: var(--admin-space-lg);
+  background-color: var(--admin-bg-secondary);
+  border-bottom: 1px solid var(--admin-border-primary);
+  flex-wrap: wrap;
+
+  .search-container {
+    flex: 1;
+    min-width: 200px;
+    max-width: 400px;
+  }
+
+  .filter-controls {
+    display: flex;
+    gap: var(--admin-space-sm);
+    align-items: center;
+  }
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--admin-table-bg);
+
+  .data-table-header-row {
+    background-color: var(--admin-table-header-bg);
+
+    .data-table-header-cell {
+      padding: var(--admin-table-cell-padding);
+      text-align: left;
+      font-weight: var(--admin-font-semibold);
+      color: var(--admin-text-primary);
+      border-bottom: 2px solid var(--admin-border-primary);
+      font-size: var(--admin-font-sm);
+    }
+  }
+
+  .data-table-row {
+    border-bottom: 1px solid var(--admin-border-secondary);
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: var(--admin-table-row-hover);
+    }
+
+    .data-table-cell {
+      padding: var(--admin-table-cell-padding);
+      color: var(--admin-text-primary);
+      font-size: var(--admin-font-sm);
+      vertical-align: middle;
+
+      &.compact {
+        padding: var(--admin-table-compact-padding);
+      }
+    }
+  }
+}
+
+// User info styles for tables
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: var(--admin-space-md);
+
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--admin-bg-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--admin-text-secondary);
+    font-weight: var(--admin-font-medium);
+  }
+
+  .user-details {
+    .user-name {
+      font-weight: var(--admin-font-medium);
+      color: var(--admin-text-primary);
+      margin-bottom: 2px;
+    }
+
+    .user-email {
+      font-size: var(--admin-font-xs);
+      color: var(--admin-text-secondary);
+    }
+  }
+}
+
+// Status badges
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: var(--admin-radius-xl);
+  font-size: var(--admin-font-xs);
+  font-weight: var(--admin-font-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &.success {
+    background-color: var(--admin-badge-success);
+    color: white;
+  }
+
+  &.warning {
+    background-color: var(--admin-badge-warning);
+    color: white;
+  }
+
+  &.error {
+    background-color: var(--admin-badge-error);
+    color: white;
+  }
+
+  &.info {
+    background-color: var(--admin-badge-info);
+    color: white;
+  }
+
+  &.default {
+    background-color: var(--admin-badge-bg);
+    color: var(--admin-badge-text);
+  }
+}
+
+// Action buttons
+.action-buttons {
+  display: flex;
+  gap: var(--admin-space-sm);
+  align-items: center;
+
+  .action-button {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: var(--admin-radius-sm);
+    background: transparent;
+    color: var(--admin-text-accent);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: var(--admin-bg-hover);
+      color: var(--admin-text-accent);
+    }
+
+    &.edit {
+      color: var(--admin-status-info);
+      
+      &:hover {
+        background-color: rgba(59, 130, 246, 0.1);
+      }
+    }
+
+    &.delete {
+      color: var(--admin-status-error);
+      
+      &:hover {
+        background-color: rgba(239, 68, 68, 0.1);
+      }
+    }
+  }
+}
+
+// No data state
+.no-data {
+  text-align: center;
+  padding: var(--admin-space-xxl);
+  color: var(--admin-text-secondary);
+
+  .no-data-icon {
+    font-size: 48px;
+    margin-bottom: var(--admin-space-md);
+    opacity: 0.5;
+  }
+
+  .no-data-title {
+    font-size: var(--admin-font-lg);
+    font-weight: var(--admin-font-medium);
+    margin-bottom: var(--admin-space-sm);
+    color: var(--admin-text-primary);
+  }
+
+  .no-data-description {
+    font-size: var(--admin-font-sm);
+    color: var(--admin-text-secondary);
+  }
+}
+
+// Loading state
+.loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--admin-space-xxl);
+  color: var(--admin-text-secondary);
+}
+
+// Pagination override for Material Design
+::ng-deep {
+  .mat-mdc-paginator {
+    background: var(--admin-paginator-bg);
+    color: var(--admin-paginator-text);
+    border-top: 1px solid var(--admin-paginator-border);
+
+    .mat-mdc-paginator-page-size-label,
+    .mat-mdc-paginator-range-label {
+      color: var(--admin-paginator-text);
+    }
+
+    .mat-mdc-icon-button {
+      color: var(--admin-paginator-arrow);
+
+      &:disabled {
+        color: var(--admin-paginator-disabled);
+      }
+
+      &:hover:not(:disabled) {
+        background-color: var(--admin-paginator-hover);
+      }
+    }
+
+    .mat-mdc-select-value,
+    .mat-mdc-select-arrow {
+      color: var(--admin-paginator-text);
+    }
+
+    .mat-mdc-select-panel {
+      background-color: var(--admin-paginator-bg);
+      
+      .mat-mdc-option {
+        color: var(--admin-paginator-text);
+
+        &:hover {
+          background-color: var(--admin-paginator-hover);
+        }
+      }
+    }
+  }
+} 

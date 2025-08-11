@@ -1,6 +1,6 @@
-import { Theme } from '../theme.model';
+import { Theme } from './theme.model';
 
-export const defaultThemeNew: Theme = {
+export const defaultTheme: Theme = {
   id: 'default',
   name: 'Default',
   description: 'Clean modern design with blue primary colors',
