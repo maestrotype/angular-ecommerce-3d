@@ -5,7 +5,12 @@ export enum NotificationType {
   ORDER_UPDATED = 'order_updated',
   LOW_STOCK = 'low_stock',
   NEW_USER = 'new_user',
-  SYSTEM = 'system'
+  SYSTEM = 'system',
+  PAYMENT_CREATED = 'payment_created',
+  PAYMENT_SUCCESS = 'payment_success',
+  PAYMENT_FAILED = 'payment_failed',
+  ORDER_CONFIRMATION = 'order_confirmation',
+  ORDER_STATUS_UPDATE = 'order_status_update'
 }
 
 export enum NotificationStatus {

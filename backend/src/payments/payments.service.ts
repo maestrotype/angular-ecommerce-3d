@@ -1,0 +1,256 @@
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Observable, from, throwError, forkJoin, of } from 'rxjs';
+import { map, catchError, switchMap } from 'rxjs/operators';
+import { Payment, PaymentStatus, PaymentMethod } from './entities/payment.entity';
+import { CreatePaymentDto } from './dto/create-payment.dto';
+import { PaymentStrategy, PaymentData, PaymentResult } from './interfaces/payment-strategy.interface';
+import { LiqPayStrategy } from './strategies/liqpay.strategy';
+import { NotificationsService } from '../notifications/notifications.service';
+import { OrdersService } from '../orders/orders.service';
+import { EmailService } from '../email/email.service';
+
+@Injectable()
+export class PaymentsService {
+  private readonly paymentStrategies: Map<PaymentMethod, PaymentStrategy> = new Map();
+
+  constructor(
+    @InjectRepository(Payment)
+    private paymentRepository: Repository<Payment>,
+    private liqpayStrategy: LiqPayStrategy,
+    private notificationsService: NotificationsService,
+    private ordersService: OrdersService,
+    private emailService: EmailService
+  ) {
+    // Register payment strategies
+    this.paymentStrategies.set(PaymentMethod.LIQPAY, this.liqpayStrategy);
+    // Future: this.paymentStrategies.set(PaymentMethod.STRIPE, this.stripeStrategy);
+    // Future: this.paymentStrategies.set(PaymentMethod.PAYPAL, this.paypalStrategy);
+  }
+
+  createPayment(createPaymentDto: CreatePaymentDto): Observable<PaymentResult> {
+    // Get payment strategy
+    const strategy = this.paymentStrategies.get(createPaymentDto.paymentMethod);
+    if (!strategy) {
+      return throwError(() => new BadRequestException(`Payment method ${createPaymentDto.paymentMethod} is not supported`));
+    }
+
+    // Check if currency is supported
+    if (!strategy.isSupported(createPaymentDto.currency)) {
+      return throwError(() => new BadRequestException(`Currency ${createPaymentDto.currency} is not supported for ${createPaymentDto.paymentMethod}`));
+    }
+
+    // Create payment record in database
+    const payment = this.paymentRepository.create({
+      orderId: createPaymentDto.orderId,
+      amount: createPaymentDto.amount,
+      currency: createPaymentDto.currency,
+      paymentMethod: createPaymentDto.paymentMethod,
+      status: PaymentStatus.PENDING,
+      description: createPaymentDto.description,
+      customerEmail: createPaymentDto.customerEmail,
+      customerPhone: createPaymentDto.customerPhone,
+      metadata: createPaymentDto.metadata
+    });
+
+    return from(this.paymentRepository.save(payment)).pipe(
+      switchMap(savedPayment => {
+        // Create payment using strategy
+        const paymentData: PaymentData = {
+          orderId: createPaymentDto.orderId,
+          amount: createPaymentDto.amount,
+          currency: createPaymentDto.currency,
+          description: createPaymentDto.description,
+          customerEmail: createPaymentDto.customerEmail,
+          customerPhone: createPaymentDto.customerPhone
+        };
+
+        return from(strategy.createPayment(paymentData)).pipe(
+          switchMap(result => {
+            if (result.success) {
+              // Update payment with transaction details
+              return from(this.paymentRepository.update(savedPayment.id, {
+                transactionId: result.transactionId,
+                liqpayPaymentId: result.paymentId
+              })).pipe(
+                switchMap(() => {
+                  // Send notification using EmailService
+                  return from(this.emailService.sendPaymentCreated(savedPayment, { id: createPaymentDto.orderId } as any)).pipe(
+                    map(() => ({
+                      success: true,
+                      data: result.data,
+                      paymentId: savedPayment.id.toString(),
+                      transactionId: result.transactionId
+                    }))
+                  );
+                })
+              );
+            } else {
+              // Update payment status to failed
+              return from(this.paymentRepository.update(savedPayment.id, {
+                status: PaymentStatus.FAILED,
+                errorMessage: result.error
+              })).pipe(
+                switchMap(() => throwError(() => new BadRequestException(result.error)))
+              );
+            }
+          })
+        );
+      }),
+      catchError(error => {
+        // Show error popup instead of logging
+        this.notificationsService.create({
+          type: 'system' as any,
+          title: 'Payment Error',
+          message: `Failed to create payment: ${error.message}`,
+          data: { error: error.message, type: 'payment_creation_error' }
+        });
+        return throwError(() => error);
+      })
+    );
+  }
+
+  processLiqPayWebhook(data: string, signature: string): Observable<void> {
+    // Verify webhook signature
+    const strategy = this.paymentStrategies.get(PaymentMethod.LIQPAY);
+    if (!strategy) {
+      return throwError(() => new BadRequestException('LiqPay strategy not found'));
+    }
+
+    return from(strategy.verifyWebhook(data, signature)).pipe(
+      switchMap(isValid => {
+        if (!isValid) {
+          return throwError(() => new BadRequestException('Invalid LiqPay webhook signature'));
+        }
+
+        // Parse webhook data
+        const decodedData = Buffer.from(data, 'base64').toString('utf-8');
+        const webhookData = JSON.parse(decodedData);
+
+        // Find payment by order ID
+        return from(this.paymentRepository.findOne({
+          where: { orderId: parseInt(webhookData.order_id) }
+        })).pipe(
+          switchMap(payment => {
+            if (!payment) {
+              return throwError(() => new NotFoundException(`Payment not found for order ${webhookData.order_id}`));
+            }
+
+            // Process webhook based on status
+            return this.processLiqPayStatus(payment, webhookData).pipe(
+              map(() => void 0)
+            );
+          })
+        );
+      }),
+      catchError(error => {
+        // Show error popup instead of logging
+        this.notificationsService.create({
+          type: 'system' as any,
+          title: 'Webhook Error',
+          message: `Failed to process LiqPay webhook: ${error.message}`,
+          data: { error: error.message, type: 'webhook_error' }
+        });
+        return throwError(() => error);
+      })
+    );
+  }
+
+  private processLiqPayStatus(payment: Payment, webhookData: any): Observable<void> {
+    const { status, liqpay_order_id, amount, currency } = webhookData;
+
+    switch (status) {
+      case 'success':
+        // Payment successful
+        return from(this.paymentRepository.update(payment.id, {
+          status: PaymentStatus.COMPLETED,
+          liqpayPaymentId: liqpay_order_id
+        })).pipe(
+          switchMap(() => {
+            // Update order status
+            return from(this.ordersService.update(payment.orderId, { status: 'confirmed' as any }));
+          }),
+          switchMap(() => {
+            // Send success notification using EmailService
+            return this.emailService.sendPaymentSuccess(payment, { id: payment.orderId } as any);
+          })
+        );
+
+      case 'failure':
+        // Payment failed
+        return from(this.paymentRepository.update(payment.id, {
+          status: PaymentStatus.FAILED,
+          errorMessage: webhookData.error_description || 'Payment failed'
+        })).pipe(
+          switchMap(() => {
+            // Send failure notification using EmailService
+            return this.emailService.sendPaymentFailed(payment, { id: payment.orderId } as any);
+          })
+        );
+
+      case 'wait_accept':
+        // Payment pending
+        return from(this.paymentRepository.update(payment.id, {
+          status: PaymentStatus.PROCESSING
+        })).pipe(
+          map(() => void 0)
+        );
+
+      default:
+        // Unknown status - show warning popup
+        this.notificationsService.create({
+          type: 'system' as any,
+          title: 'Unknown Payment Status',
+          message: `Unknown LiqPay status: ${status}`,
+          data: { orderId: payment.orderId, status }
+        });
+        return of(void 0);
+    }
+  }
+
+  getPaymentById(id: number): Observable<Payment> {
+    return from(this.paymentRepository.findOne({ where: { id } })).pipe(
+      map(payment => {
+        if (!payment) {
+          throw new NotFoundException(`Payment with ID ${id} not found`);
+        }
+        return payment;
+      }),
+      catchError(error => throwError(() => error))
+    );
+  }
+
+  getPaymentsByOrderId(orderId: number): Observable<Payment[]> {
+    return from(this.paymentRepository.find({ where: { orderId } }));
+  }
+
+  getAllPayments(): Observable<Payment[]> {
+    return from(this.paymentRepository.find({
+      order: { createdAt: 'DESC' }
+    }));
+  }
+
+  getPaymentStats(): Observable<{ totalPayments: number; totalAmount: number; successRate: number }> {
+    return forkJoin({
+      totalPayments: from(this.paymentRepository.count()),
+      completedPayments: from(this.paymentRepository.count({ where: { status: PaymentStatus.COMPLETED } })),
+      totalAmount: from(this.paymentRepository
+        .createQueryBuilder('payment')
+        .select('SUM(payment.amount)', 'sum')
+        .where('payment.status = :status', { status: PaymentStatus.COMPLETED })
+        .getRawOne()
+      )
+    }).pipe(
+      map(({ totalPayments, completedPayments, totalAmount }) => {
+        const successRate = totalPayments > 0 ? (completedPayments / totalPayments) * 100 : 0;
+
+        return {
+          totalPayments,
+          totalAmount: parseFloat(totalAmount.sum) || 0,
+          successRate: Math.round(successRate * 100) / 100
+        };
+      })
+    );
+  }
+} 
