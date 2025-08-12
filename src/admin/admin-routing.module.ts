@@ -13,6 +13,7 @@ import { AdminAuthGuard } from './guards/admin-auth.guard';
 import { CategoryFormComponent } from './pages/categories/category-form/category-form.component';
 import { MessageListComponent } from './pages/messages/message-list/message-list.component';
 import { SectionListComponent } from './pages/sections/section-list/section-list.component';
+import { PaymentsComponent } from './pages/payments/payments.component';
 
 const routes: Routes = [
   {
@@ -42,6 +43,7 @@ const routes: Routes = [
       { path: 'users', component: UserListComponent },
       { path: 'messages', component: MessageListComponent },
       { path: 'sections', component: SectionListComponent },
+      { path: 'payments', component: PaymentsComponent },
       { 
         path: 'seo', 
         loadChildren: () => import('./pages/seo/seo.module').then(m => m.SeoModule)

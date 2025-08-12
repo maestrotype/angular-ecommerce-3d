@@ -1,0 +1,215 @@
+<div class="checkout-page">
+  <div class="container">
+    <div class="checkout-header">
+      <button class="back-btn glass-theme" (click)="goBackToCart()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        Back to Cart
+      </button>
+      <h1>Checkout</h1>
+    </div>
+
+    <div class="checkout-content">
+      <!-- Order Summary -->
+      <div class="order-summary glass-theme">
+        <h2>Order Summary</h2>
+        <div class="cart-items">
+          <div *ngFor="let item of cartItems" class="cart-item">
+            <div class="item-image">
+              <img [src]="item.imageUrl" [alt]="item.name" />
+            </div>
+            <div class="item-details">
+              <h3 class="item-name">{{ item.name }}</h3>
+              <p class="item-price theme-price">${{ item.price | number:'1.2-2' }}</p>
+              <span class="item-quantity">Qty: {{ item.quantity }}</span>
+            </div>
+            <div class="item-total">
+              <span class="theme-price">${{ (item.price * item.quantity) | number:'1.2-2' }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="order-total">
+          <div class="total-line">
+            <span>Subtotal:</span>
+            <span class="theme-price">${{ totalPrice | number:'1.2-2' }}</span>
+          </div>
+          <div class="total-line">
+            <span>Shipping:</span>
+            <span class="theme-price">Free</span>
+          </div>
+          <div class="total-line total-final">
+            <span>Total:</span>
+            <span class="theme-price">${{ totalPrice | number:'1.2-2' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Checkout Form -->
+      <div class="checkout-form glass-theme">
+        <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
+          <!-- Customer Information -->
+          <div class="form-section">
+            <h3>Customer Information</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="customerName">Full Name *</label>
+                <input
+                  id="customerName"
+                  type="text"
+                  formControlName="customerName"
+                  [class.error]="checkoutForm.get('customerName')?.invalid && checkoutForm.get('customerName')?.touched"
+                  placeholder="Enter your full name"
+                />
+                <span class="error-message" *ngIf="getFieldError('customerName')">
+                  {{ getFieldError('customerName') }}
+                </span>
+              </div>
+              
+              <div class="form-group">
+                <label for="customerEmail">Email *</label>
+                <input
+                  id="customerEmail"
+                  type="email"
+                  formControlName="customerEmail"
+                  [class.error]="checkoutForm.get('customerEmail')?.invalid && checkoutForm.get('customerEmail')?.touched"
+                  placeholder="Enter your email"
+                />
+                <span class="error-message" *ngIf="getFieldError('customerEmail')">
+                  {{ getFieldError('customerEmail') }}
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="customerPhone">Phone *</label>
+              <input
+                id="customerPhone"
+                type="tel"
+                formControlName="customerPhone"
+                [class.error]="checkoutForm.get('customerPhone')?.invalid && checkoutForm.get('customerPhone')?.touched"
+                placeholder="+380 XX XXX XX XX"
+              />
+              <span class="error-message" *ngIf="getFieldError('customerPhone')">
+                {{ getFieldError('customerPhone') }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Shipping Information -->
+          <div class="form-section">
+            <h3>Shipping Information</h3>
+            <div class="form-group">
+              <label for="shippingAddress">Shipping Address *</label>
+              <textarea
+                id="shippingAddress"
+                formControlName="shippingAddress"
+                [class.error]="checkoutForm.get('shippingAddress')?.invalid && checkoutForm.get('shippingAddress')?.touched"
+                placeholder="Enter your complete shipping address"
+                rows="3"
+              ></textarea>
+              <span class="error-message" *ngIf="getFieldError('shippingAddress')">
+                {{ getFieldError('shippingAddress') }}
+              </span>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="city">City *</label>
+                <input
+                  id="city"
+                  type="text"
+                  formControlName="city"
+                  [class.error]="checkoutForm.get('city')?.invalid && checkoutForm.get('city')?.touched"
+                  placeholder="Enter city"
+                />
+                <span class="error-message" *ngIf="getFieldError('city')">
+                  {{ getFieldError('city') }}
+                </span>
+              </div>
+              
+              <div class="form-group">
+                <label for="postalCode">Postal Code *</label>
+                <input
+                  id="postalCode"
+                  type="text"
+                  formControlName="postalCode"
+                  [class.error]="checkoutForm.get('postalCode')?.invalid && checkoutForm.get('postalCode')?.touched"
+                  placeholder="Enter postal code"
+                />
+                <span class="error-message" *ngIf="getFieldError('postalCode')">
+                  {{ getFieldError('postalCode') }}
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="country">Country *</label>
+              <input
+                id="country"
+                type="text"
+                formControlName="country"
+                [class.error]="checkoutForm.get('country')?.invalid && checkoutForm.get('country')?.touched"
+                placeholder="Enter country"
+              />
+              <span class="error-message" *ngIf="getFieldError('country')">
+                {{ getFieldError('country') }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Payment Method -->
+          <div class="form-section">
+            <h3>Payment Method</h3>
+            <div class="payment-methods">
+              <div
+                *ngFor="let method of paymentMethods"
+                class="payment-method"
+                [class.selected]="selectedPaymentMethod === method.id"
+                (click)="onPaymentMethodChange(method.id)"
+              >
+                <div class="method-icon">
+                  <mat-icon>{{ method.icon }}</mat-icon>
+                </div>
+                <div class="method-info">
+                  <h4>{{ method.name }}</h4>
+                  <p>{{ method.description }}</p>
+                </div>
+                <div class="method-radio">
+                  <div class="radio-circle" [class.selected]="selectedPaymentMethod === method.id"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Additional Notes -->
+          <div class="form-section">
+            <h3>Additional Notes</h3>
+            <div class="form-group">
+              <label for="notes">Order Notes (Optional)</label>
+              <textarea
+                id="notes"
+                formControlName="notes"
+                placeholder="Any special instructions or notes for your order"
+                rows="3"
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="form-actions">
+            <button
+              type="submit"
+              class="submit-btn glass-theme"
+              [disabled]="checkoutForm.invalid || isLoading"
+            >
+              <span *ngIf="!isLoading">Place Order - ${{ totalPrice | number:'1.2-2' }}</span>
+              <span *ngIf="isLoading">Processing...</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div> 

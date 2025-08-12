@@ -32,7 +32,7 @@ export class SidenavComponent {
     { label: "MESSAGES", route: "/admin/messages", icon: "email" },
     { label: "PAGE_SECTIONS", route: "/admin/sections", icon: "view_module" },
     { label: "SEO", route: "/admin/seo", icon: "search" },
-    { label: "SETTINGS", route: "/admin/settings", icon: "settings" },
+    { label: "PAYMENTS", route: "/admin/payments", icon: "payment" },
   ];
 
   constructor(

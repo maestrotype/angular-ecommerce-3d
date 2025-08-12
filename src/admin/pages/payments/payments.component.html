@@ -1,0 +1,125 @@
+<div class="payments-page">
+  <div class="page-header">
+    <h1>{{ 'PAYMENT_MANAGEMENT' | translate }}</h1>
+    <div class="stats-cards">
+      <div class="stat-card">
+        <div class="stat-value">{{ totalPayments }}</div>
+        <div class="stat-label">Total Payments</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${{ totalAmount.toFixed(2) }}</div>
+        <div class="stat-label">Total Amount</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ successRate.toFixed(1) }}%</div>
+        <div class="stat-label">Success Rate</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-section">
+    <div class="section-header">
+      <h2>Payment Transactions</h2>
+      <div class="search-bar">
+        <mat-form-field appearance="outline">
+          <mat-label>Search payments</mat-label>
+          <input matInput placeholder="Search by order ID, customer email...">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="payments-table">
+      <table mat-table [dataSource]="payments" class="mat-elevation-z1">
+        <!-- Payment ID Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>Payment ID</th>
+          <td mat-cell *matCellDef="let payment">{{ payment.id }}</td>
+        </ng-container>
+
+        <!-- Order ID Column -->
+        <ng-container matColumnDef="orderId">
+          <th mat-header-cell *matHeaderCellDef>Order ID</th>
+          <td mat-cell *matCellDef="let payment">{{ payment.orderId }}</td>
+        </ng-container>
+
+        <!-- Amount Column -->
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef>Amount</th>
+          <td mat-cell *matCellDef="let payment">
+            <span class="amount">{{ formatAmount(payment.amount) }}</span>
+            <span class="currency">{{ payment.currency }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Payment Method Column -->
+        <ng-container matColumnDef="paymentMethod">
+          <th mat-header-cell *matHeaderCellDef>Method</th>
+          <td mat-cell *matCellDef="let payment">
+            <div class="payment-method">
+              <mat-icon>{{ getPaymentMethodIcon(payment.paymentMethod) }}</mat-icon>
+              <span>{{ payment.paymentMethod | titlecase }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let payment">
+            <span class="status-badge" [class]="getStatusColor(payment.status)">
+              {{ payment.status | titlecase }}
+            </span>
+          </td>
+        </ng-container>
+
+        <!-- Customer Email Column -->
+        <ng-container matColumnDef="customerEmail">
+          <th mat-header-cell *matHeaderCellDef>Customer</th>
+          <td mat-cell *matCellDef="let payment">
+            <div class="customer-info">
+              <span class="email">{{ payment.customerEmail || 'N/A' }}</span>
+              <span class="phone" *ngIf="payment.customerPhone">{{ payment.customerPhone }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Date Column -->
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell *matHeaderCellDef>Date</th>
+          <td mat-cell *matCellDef="let payment">{{ formatDate(payment.createdAt) }}</td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let payment">
+            <div class="actions">
+              <button mat-icon-button matTooltip="View Details" (click)="viewPayment(payment)">
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button mat-icon-button matTooltip="View Order" (click)="viewOrder(payment.orderId)">
+                <mat-icon>shopping_cart</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <div *ngIf="isLoading" class="loading">
+        <mat-spinner diameter="40"></mat-spinner>
+        <span>Loading payments...</span>
+      </div>
+
+      <div *ngIf="!isLoading && payments.length === 0" class="no-data">
+        <mat-icon>payment</mat-icon>
+        <span>No payments found</span>
+      </div>
+
+      <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons></mat-paginator>
+    </div>
+  </div>
+</div> 

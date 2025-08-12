@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 import { ModalConfig } from '../../../core/services/modal.service';
 import { CartService } from '../../../core/services/cart.service';
 import { ModalService } from '../../../core/services/modal.service';
@@ -22,7 +23,8 @@ export class CartModalComponent {
   constructor(
     private cartService: CartService,
     private modalService: ModalService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -59,27 +61,8 @@ export class CartModalComponent {
   }
 
   checkout(): void {
-    const orderData: CreateOrderRequest = {
-      totalAmount: this.totalPrice,
-      customerName: 'test',
-      customerEmail: 'test@test.com',
-      items: this.cartItems.map(item => ({
-        productId: item.productId,
-        name: item.name,
-        price: Number(item.price),
-        quantity: item.quantity,
-        imageUrl: item.imageUrl
-      }))
-    };
-    this.cartService.createOrder(orderData).subscribe({
-      next: (order) => {
-        this.notificationService.showSuccess('Order created successfully');
-        this.cartService.clearCart();
-        this.onClose();
-      },
-      error: (err) => {
-        this.notificationService.showError('Error creating order');
-      }
-    });
+    // Navigate to checkout page instead of creating order directly
+    this.onClose();
+    this.router.navigate(['/checkout']);
   }
 }
