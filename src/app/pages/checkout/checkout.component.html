@@ -12,7 +12,7 @@
 
     <div class="checkout-content">
       <!-- Order Summary -->
-      <div class="order-summary glass-theme">
+                   <div [class]="getThemeClass('order-summary')">
         <h2>Order Summary</h2>
         <div class="cart-items">
           <div *ngFor="let item of cartItems" class="cart-item">
@@ -47,7 +47,7 @@
       </div>
 
       <!-- Checkout Form -->
-      <div class="checkout-form glass-theme">
+                     <div [class]="getThemeClass('checkout-form')">
         <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
           <!-- Customer Information -->
           <div class="form-section">
@@ -201,7 +201,7 @@
           <div class="form-actions">
             <button
               type="submit"
-              class="submit-btn glass-theme"
+              [class]="getThemeClass('submit-btn')"
               [disabled]="checkoutForm.invalid || isLoading"
             >
               <span *ngIf="!isLoading">Place Order - ${{ totalPrice | number:'1.2-2' }}</span>

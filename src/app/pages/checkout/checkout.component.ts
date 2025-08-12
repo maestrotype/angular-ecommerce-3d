@@ -8,6 +8,7 @@ import { CreateOrderRequest } from '../../../shared/models/create-order-request.
 import { Order } from '../../../shared/models/order.model';
 import { NotificationService } from '../../core/services/notification.service';
 import { ModalService } from '../../core/services/modal.service';
+import { ThemeService } from '../../core/themes/theme.service';
 
 @Component({
   selector: 'app-checkout',
@@ -29,13 +30,15 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   ];
   
   selectedPaymentMethod = 'liqpay';
+  currentTheme = 'default';
 
   constructor(
     private fb: FormBuilder,
     private cartService: CartService,
     private router: Router,
     private notificationService: NotificationService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private themeService: ThemeService
   ) {
     this.checkoutForm = this.fb.group({
       customerName: ['', [Validators.required, Validators.minLength(2)]],
@@ -51,11 +54,20 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadCartData();
+    this.loadTheme();
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private loadTheme(): void {
+    this.themeService.currentTheme$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(theme => {
+      this.currentTheme = theme.id;
+    });
   }
 
   private loadCartData(): void {
@@ -124,6 +136,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   goBackToCart(): void {
     this.router.navigate(['/shop']);
+  }
+
+  getThemeClass(baseClass: string): string {
+    return `${baseClass} ${this.currentTheme}-theme`;
   }
 
   getFieldError(fieldName: string): string {
