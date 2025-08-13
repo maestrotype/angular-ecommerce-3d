@@ -71,6 +71,25 @@
 
       <!-- Product Tabs Component -->
       <app-product-tabs [product]="product"></app-product-tabs>
+
+      <!-- Recommendations Section -->
+      <div class="recommendations-section">
+        <!-- Similar Products -->
+        <app-similar-products 
+          [product]="product" 
+          [limit]="4"
+          [showTitle]="true"
+          title="Similar Products">
+        </app-similar-products>
+
+        <!-- Bought Together -->
+        <app-bought-together 
+          [product]="product" 
+          [limit]="4"
+          [showTitle]="true"
+          title="Frequently Bought Together">
+        </app-bought-together>
+      </div>
     </div>
   </div>
 </div>

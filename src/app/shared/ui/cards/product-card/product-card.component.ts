@@ -1,4 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
+import { ViewportScroller } from '@angular/common';
 import { Product } from 'src/shared/models/product.model';
 
 @Component({
@@ -15,7 +17,16 @@ export class ProductCardComponent {
   @Output() favoriteToggle = new EventEmitter<{ product: Product; isFavorite: boolean }>();
   @Output() addToCart = new EventEmitter<Product>();
 
+  constructor(
+    private router: Router,
+    private viewportScroller: ViewportScroller
+  ) {}
+
   onProductClick(): void {
+    // Navigate to product page and scroll to top
+    this.router.navigate(['/product', this.product.id]).then(() => {
+      this.viewportScroller.scrollToPosition([0, 0]);
+    });
     this.productClick.emit(this.product);
   }
 

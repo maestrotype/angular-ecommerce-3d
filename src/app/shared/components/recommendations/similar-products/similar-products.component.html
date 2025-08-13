@@ -1,0 +1,73 @@
+<div class="similar-products" *ngIf="similarProducts.length > 0 || loading || error">
+  <div class="recommendations-header" *ngIf="showTitle">
+    <h3 class="recommendations-title">{{ title }}</h3>
+    <p class="recommendations-subtitle">You might also like these products</p>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-skeleton" *ngIf="loading">
+    <div class="skeleton-card" *ngFor="let item of [1,2,3,4]">
+      <div class="skeleton-image"></div>
+      <div class="skeleton-content">
+        <div class="skeleton-title"></div>
+        <div class="skeleton-meta"></div>
+        <div class="skeleton-price"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-state" *ngIf="error && !loading">
+    <div class="error-content">
+      <div class="error-icon">⚠️</div>
+      <h4 class="error-title">Unable to Load Similar Products</h4>
+      <p class="error-message">We're having trouble loading similar products right now.</p>
+      <button class="retry-button" (click)="retryLoad()">
+        <span class="retry-icon">🔄</span>
+        Try Again
+      </button>
+    </div>
+  </div>
+
+  <!-- Products Grid -->
+  <div class="products-grid" *ngIf="!loading && !error && similarProducts.length > 0">
+    <div 
+      class="product-card" 
+      *ngFor="let product of similarProducts"
+      (click)="onProductClick(product)"
+    >
+      <div class="product-image">
+        <img [src]="product.imageUrl" [alt]="product.name" />
+        <div class="product-overlay">
+          <div class="view-details">View Details</div>
+        </div>
+      </div>
+      
+      <div class="product-info">
+        <h4 class="product-name">{{ product.name }}</h4>
+        
+        <div class="product-meta">
+          <div class="product-rating" *ngIf="product.rating">
+            <span class="rating-star">⭐</span>
+            <span class="rating-value">{{ product.rating }}</span>
+          </div>
+          <span class="product-category">{{ product.category }}</span>
+        </div>
+        
+        <div class="product-price">
+          <span class="current-price">${{ getDiscountedPrice(product) | number:'1.2-2' }}</span>
+          <span *ngIf="product.discount" class="original-price">${{ product.price | number:'1.2-2' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="!loading && !error && similarProducts.length === 0">
+    <div class="empty-content">
+      <div class="empty-icon">🔍</div>
+      <h4 class="empty-title">No Similar Products Found</h4>
+      <p class="empty-message">We couldn't find any similar products for this item.</p>
+    </div>
+  </div>
+</div> 

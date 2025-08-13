@@ -13,6 +13,7 @@ import { SectionsModule } from './sections/sections.module';
 import { UploadsModule } from './upload-module/uploads.module';
 import { SeoModule } from './seo/seo.module';
 import { PaymentsModule } from './payments/payments.module';
+import { RecommendationsModule } from './recommendations/recommendations.module';
 // import { ServeStaticModule } from '@nestjs/serve-static';
 // import { join } from 'path';
 @Module({
@@ -34,7 +35,8 @@ import { PaymentsModule } from './payments/payments.module';
     NotificationsModule,
     UploadsModule,
     SeoModule,
-    PaymentsModule
+    PaymentsModule,
+    RecommendationsModule
   ],
 })
 export class AppModule {}

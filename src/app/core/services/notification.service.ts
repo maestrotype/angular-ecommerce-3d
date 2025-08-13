@@ -8,28 +8,28 @@ import { NotificationData } from '../../shared/modal/notification-modal/notifica
 export class NotificationService {
   constructor(private modalService: ModalService) {}
 
-  showSuccess(message: string, autoClose: number = 3000): void {
+  showSuccess(message: string, autoClose: number = 5000): void {
     this.showNotification({
       message,
       type: 'success'
     }, autoClose);
   }
 
-  showError(message: string, autoClose: number = 5000): void {
+  showError(message: string, autoClose: number = 8000): void {
     this.showNotification({
       message,
       type: 'error'
     }, autoClose);
   }
 
-  showWarning(message: string, autoClose: number = 4000): void {
+  showWarning(message: string, autoClose: number = 6000): void {
     this.showNotification({
       message,
       type: 'warning'
     }, autoClose);
   }
 
-  showInfo(message: string, autoClose: number = 3000): void {
+  showInfo(message: string, autoClose: number = 5000): void {
     this.showNotification({
       message,
       type: 'info'
@@ -47,11 +47,11 @@ export class NotificationService {
         closeOnBackdrop: true,
         closeOnEscape: true,
         showCloseButton: true,
-        autoClose
+        autoClose: autoClose > 0 ? autoClose : 0 // 0 means no auto close
       }
     });
 
-    // Auto close after specified time
+    // Auto close after specified time (only if autoClose > 0)
     if (autoClose > 0) {
       setTimeout(() => {
         this.modalService.closeModal(modalId);
