@@ -48,6 +48,7 @@ import { SectionRendererComponent } from './components/section-renderer/section-
 // Favorites Components
 import { FavoritesComponent } from './pages/favorites/favorites.component';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
+import { PaymentComponent } from './pages/payment/payment.component';
 
 
 // Shared Module
@@ -93,6 +94,7 @@ export function HttpLoaderFactory(http: any) {
     FavoritesComponent,
     ContactFormComponent,
     CheckoutComponent,
+    PaymentComponent,
   ],
       imports: [
     BrowserModule, 

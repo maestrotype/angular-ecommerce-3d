@@ -59,7 +59,7 @@ export class FavoritesComponent implements OnInit, OnDestroy {
     const cartItem = {
       productId: product.id,
       name: product.name,
-      price: product.discount ? product.price * (1 - product.discount / 100) : product.price,
+      price: Number(product.discount ? product.price * (1 - product.discount / 100) : product.price), // Convert to number
       imageUrl: product.imageUrl,
       discount: product.discount
     };
@@ -102,8 +102,8 @@ export class FavoritesComponent implements OnInit, OnDestroy {
    */
   getDiscountedPrice(product: Product): number {
     if (product.discount) {
-      return product.price * (1 - product.discount / 100);
+      return Number(product.price) * (1 - Number(product.discount) / 100);
     }
-    return product.price;
+    return Number(product.price);
   }
 } 

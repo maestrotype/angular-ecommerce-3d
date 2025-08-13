@@ -266,7 +266,7 @@ export class ShopComponent implements OnInit, OnDestroy {
     const cartItem: Omit<CartItem, 'quantity'> = {
       productId: product.id,
       name: product.name,
-      price: this.getDiscountedPrice(product),
+      price: Number(this.getDiscountedPrice(product)), // Convert to number
       imageUrl: product.imageUrl,
       discount: product.discount,
       features: product.features,
@@ -279,9 +279,9 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   getDiscountedPrice(product: Product): number {
     if (product && product.discount) {
-      return product.price * (1 - product.discount / 100);
+      return Number(product.price) * (1 - Number(product.discount) / 100);
     }
-    return product?.price || 0;
+    return Number(product?.price) || 0;
   }
 
   onFavoriteToggled(event: { product: Product; isFavorite: boolean }) {

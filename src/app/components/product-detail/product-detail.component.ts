@@ -82,7 +82,7 @@ export class ProductDetailComponent implements OnInit {
       const cartItem = {
         productId: this.product.id,
         name: this.product.name,
-        price: this.product.price,
+        price: Number(this.product.price), // Convert to number
         imageUrl: this.product.imageUrl,
         discount: this.product.discount
       };

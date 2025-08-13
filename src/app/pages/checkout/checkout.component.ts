@@ -80,6 +80,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       this.cartItems = items;
       this.totalPrice = total;
       
+
+      
       if (items.length === 0) {
         this.router.navigate(['/shop']);
       }
@@ -95,24 +97,26 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       this.isLoading = true;
       
       const orderData: CreateOrderRequest = {
-        customerName: this.checkoutForm.value.customerName,
-        customerEmail: this.checkoutForm.value.customerEmail,
-        customerPhone: this.checkoutForm.value.customerPhone,
-        shippingAddress: this.checkoutForm.value.shippingAddress,
-        city: this.checkoutForm.value.city,
-        postalCode: this.checkoutForm.value.postalCode,
-        country: this.checkoutForm.value.country,
-        notes: this.checkoutForm.value.notes,
+        customerName: String(this.checkoutForm.value.customerName),
+        customerEmail: String(this.checkoutForm.value.customerEmail),
+        customerPhone: String(this.checkoutForm.value.customerPhone),
+        shippingAddress: String(this.checkoutForm.value.shippingAddress),
+        city: String(this.checkoutForm.value.city),
+        postalCode: String(this.checkoutForm.value.postalCode),
+        country: String(this.checkoutForm.value.country),
+        notes: String(this.checkoutForm.value.notes),
         items: this.cartItems.map(item => ({
-          productId: item.productId,
-          name: item.name,
-          quantity: item.quantity,
-          price: item.price,
-          imageUrl: item.imageUrl
+          productId: Number(item.productId),
+          name: String(item.name),
+          quantity: Number(item.quantity),
+          price: Number(item.price),        // ← Принудительно в число!
+          imageUrl: String(item.imageUrl)
         })),
-        totalAmount: this.totalPrice,
-        paymentMethod: this.selectedPaymentMethod
+        totalAmount: Number(this.totalPrice),  // ← Принудительно в число!
+        paymentMethod: String(this.selectedPaymentMethod)
       };
+
+
 
       this.cartService.createOrder(orderData).pipe(
         takeUntil(this.destroy$)
@@ -121,7 +125,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
           this.isLoading = false;
           this.notificationService.showSuccess('Order created successfully!');
           
-          // Redirect to payment page or order confirmation
+          // Store order data for payment page
+          localStorage.setItem(`order_${order.id}`, JSON.stringify(orderData));
+          
+          // Redirect to payment page
           this.router.navigate(['/payment', order.id]);
         },
         error: (error) => {
