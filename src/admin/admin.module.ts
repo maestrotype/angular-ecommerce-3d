@@ -43,6 +43,7 @@ import { MessageListComponent } from './pages/messages/message-list/message-list
 import { MessageDetailComponent } from './pages/messages/message-detail/message-detail.component';
 import { SectionListComponent } from './pages/sections/section-list/section-list.component';
 import { SectionFormComponent } from './pages/sections/section-form/section-form.component';
+import { PaymentsComponent } from './pages/payments/payments.component';
 // Shared Components
 import { DataTableComponent } from './components/blocks/data-table/data-table.component';
 import { FormFieldComponent } from './components/ui/form-field/form-field.component';
@@ -62,6 +63,7 @@ import { MessageService } from './services/message.service';
 import { SectionService } from './services/section.service';
 import { ErrorHandlerService } from './services/error-handler.service';
 import { ConfirmationService } from './services/confirmation.service';
+import { PaymentService } from './services/payment.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -83,6 +85,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MessageDetailComponent,
     SectionListComponent,
     SectionFormComponent,
+    PaymentsComponent,
 
     UserListComponent,
     UserEditDialogComponent,
@@ -139,7 +142,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     MessageService,
     SectionService,
     ErrorHandlerService,
-    ConfirmationService
+    ConfirmationService,
+    PaymentService
   ]
 })
 export class AdminModule { }

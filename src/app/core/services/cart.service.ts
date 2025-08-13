@@ -22,13 +22,22 @@ export class CartService {
   }
 
   addToCart(item: Omit<CartItem, 'quantity'>): void {
+    // Ensure price is a number
+    const validatedItem = {
+      ...item,
+      price: Number(item.price),
+      productId: Number(item.productId),
+      quantity: 1
+    };
+    
+    console.log('Adding item to cart:', validatedItem);
     const currentItems = this.cartItemsSubject.value;
-    const existingItem = currentItems.find(cartItem => cartItem.productId === item.productId);
+    const existingItem = currentItems.find(cartItem => cartItem.productId === validatedItem.productId);
     
     if (existingItem) {
       existingItem.quantity += 1;
     } else {
-      currentItems.push({ ...item, quantity: 1 });
+      currentItems.push(validatedItem);
     }
     
     this.updateCart(currentItems);
@@ -79,8 +88,16 @@ export class CartService {
   }
 
   private updateCart(items: CartItem[]): void {
-    this.cartItemsSubject.next(items);
-    this.saveCartToStorage(items);
+    // Validate and convert types for all items
+    const validatedItems = items.map(item => ({
+      ...item,
+      productId: Number(item.productId),
+      price: Number(item.price),
+      quantity: Number(item.quantity)
+    }));
+    
+    this.cartItemsSubject.next(validatedItems);
+    this.saveCartToStorage(validatedItems);
   }
 
   private saveCartToStorage(items: CartItem[]): void {
@@ -92,7 +109,16 @@ export class CartService {
     if (savedCart) {
       try {
         const items = JSON.parse(savedCart) as CartItem[];
-        this.cartItemsSubject.next(items);
+        
+        // Validate and convert types for loaded items
+        const validatedItems = items.map(item => ({
+          ...item,
+          productId: Number(item.productId),
+          price: Number(item.price),
+          quantity: Number(item.quantity)
+        }));
+        
+        this.cartItemsSubject.next(validatedItems);
       } catch (error) {
         console.error('Error loading cart from storage:', error);
       }

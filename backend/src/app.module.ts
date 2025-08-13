@@ -12,6 +12,7 @@ import { MessagesModule } from './messages/messages.module';
 import { SectionsModule } from './sections/sections.module';
 import { UploadsModule } from './upload-module/uploads.module';
 import { SeoModule } from './seo/seo.module';
+import { PaymentsModule } from './payments/payments.module';
 import { RecommendationsModule } from './recommendations/recommendations.module';
 // import { ServeStaticModule } from '@nestjs/serve-static';
 // import { join } from 'path';
@@ -34,6 +35,7 @@ import { RecommendationsModule } from './recommendations/recommendations.module'
     NotificationsModule,
     UploadsModule,
     SeoModule,
+    PaymentsModule,
     RecommendationsModule
   ],
 })

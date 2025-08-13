@@ -47,7 +47,19 @@ export class Order {
   shippingAddress: string;
 
   @Column({ nullable: true })
+  city: string;
+
+  @Column({ nullable: true })
+  postalCode: string;
+
+  @Column({ nullable: true })
+  country: string;
+
+  @Column({ nullable: true })
   notes: string;
+
+  @Column({ nullable: true })
+  paymentMethod: string;
 
   @CreateDateColumn()
   createdAt: Date;

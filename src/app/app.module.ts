@@ -9,6 +9,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -45,6 +47,8 @@ import { SectionRendererComponent } from './components/section-renderer/section-
 
 // Favorites Components
 import { FavoritesComponent } from './pages/favorites/favorites.component';
+import { CheckoutComponent } from './pages/checkout/checkout.component';
+import { PaymentComponent } from './pages/payment/payment.component';
 
 
 // Shared Module
@@ -52,6 +56,10 @@ import { SharedModule } from './shared/shared.module';
 
 // Services
 import { ThemeService } from './core/themes/theme.service';
+
+export function HttpLoaderFactory(http: any) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
 
 
 @NgModule({
@@ -85,6 +93,8 @@ import { ThemeService } from './core/themes/theme.service';
     SectionRendererComponent,
     FavoritesComponent,
     ContactFormComponent,
+    CheckoutComponent,
+    PaymentComponent,
   ],
       imports: [
     BrowserModule, 
@@ -96,7 +106,14 @@ import { ThemeService } from './core/themes/theme.service';
     AppRoutingModule,
     MatIconModule,
     MatButtonModule,
-    SharedModule
+    SharedModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClientModule]
+      }
+    })
   ],
   providers: [
     provideAnimationsAsync(),

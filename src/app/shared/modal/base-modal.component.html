@@ -11,7 +11,7 @@
       >
         <!-- Close Button -->
         <button 
-          *ngIf="modal.options?.showCloseButton" 
+          *ngIf="modal.options?.showCloseButton && modal.type !== 'notification'" 
           class="modal-close-btn"
           (click)="closeModal(modal.id)"
           aria-label="Close modal"

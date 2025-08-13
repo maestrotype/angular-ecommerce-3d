@@ -1,11 +1,13 @@
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
-import { HomeComponent } from "./pages/home/home.component";
-import { ShopComponent } from "./pages/shop/shop.component";
-import { AboutComponent } from "./pages/about/about.component";
-import { FavoritesComponent } from "./pages/favorites/favorites.component";
-import { ContactsComponent } from "./pages/contacts/contacts.component";
-import { ProductDetailComponent } from "./components/product-detail/product-detail.component";
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { HomeComponent } from './pages/home/home.component';
+import { ShopComponent } from './pages/shop/shop.component';
+import { AboutComponent } from './pages/about/about.component';
+import { FavoritesComponent } from './pages/favorites/favorites.component';
+import { ContactsComponent } from './pages/contacts/contacts.component';
+import { ProductDetailComponent } from './components/product-detail/product-detail.component';
+import { CheckoutComponent } from './pages/checkout/checkout.component';
+import { PaymentComponent } from './pages/payment/payment.component';
 
 
 const routes: Routes = [
@@ -15,6 +17,8 @@ const routes: Routes = [
   { path: "favorites", component: FavoritesComponent },
   { path: "contacts", component: ContactsComponent },
   { path: "product/:id", component: ProductDetailComponent },
+  { path: "checkout", component: CheckoutComponent },
+  { path: "payment/:id", component: PaymentComponent },
 
   { path: "", redirectTo: "/home", pathMatch: "full" },
   {
