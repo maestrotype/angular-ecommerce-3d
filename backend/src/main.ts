@@ -11,6 +11,8 @@ import { NestExpressApplication } from "@nestjs/platform-express";
 import { ValidationPipe } from "@nestjs/common";
 import { AppModule } from "./app.module";
 import { join } from "path";
+import { AllExceptionsFilter } from "./common/filters/http-exception.filter";
+import { LoggingInterceptor } from "./common/interceptors/logging.interceptor";
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -49,6 +51,12 @@ async function bootstrap() {
     allowedHeaders: ["Content-Type", "Authorization", "Accept"],
     optionsSuccessStatus: 200,
   });
+
+  // Global exception filter - catches ALL errors safely
+  app.useGlobalFilters(new AllExceptionsFilter());
+
+  // Global logging interceptor
+  app.useGlobalInterceptors(new LoggingInterceptor());
 
   // Global validation pipe
   app.useGlobalPipes(
