@@ -41,6 +41,11 @@ export class ProductsController {
     return this.productsService.findFeatured();
   }
 
+  @Get("search")
+  searchProducts(@Query("search") searchTerm: string) {
+    return this.productsService.searchProducts(searchTerm);
+  }
+
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.productsService.findOne(+id);

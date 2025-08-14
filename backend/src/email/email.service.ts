@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Observable, of, throwError, from } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -51,7 +51,7 @@ export class EmailService {
           message: `Failed to send payment success notification: ${error.message}`,
           data: { orderId: order.id, type: 'error' }
         });
-        return throwError(() => error);
+        return throwError(() => new InternalServerErrorException(`Failed to send payment success notification: ${error.message}`));
       })
     );
   }
@@ -89,7 +89,7 @@ export class EmailService {
           message: `Failed to send payment failed notification: ${error.message}`,
           data: { orderId: order.id, type: 'error' }
         });
-        return throwError(() => error);
+        return throwError(() => new InternalServerErrorException(`Failed to send payment failed notification: ${error.message}`));
       })
     );
   }
@@ -126,7 +126,7 @@ export class EmailService {
           message: `Failed to send order confirmation: ${error.message}`,
           data: { orderId: order.id, type: 'error' }
         });
-        return throwError(() => error);
+        return throwError(() => new InternalServerErrorException(`Failed to send order confirmation: ${error.message}`));
       })
     );
   }
@@ -163,7 +163,7 @@ export class EmailService {
           message: `Failed to send status update: ${error.message}`,
           data: { orderId: order.id, type: 'error' }
         });
-        return throwError(() => error);
+        return throwError(() => new InternalServerErrorException(`Failed to send status update: ${error.message}`));
       })
     );
   }
@@ -200,7 +200,7 @@ export class EmailService {
           message: `Failed to send payment created notification: ${error.message}`,
           data: { orderId: order.id, type: 'error' }
         });
-        return throwError(() => error);
+        return throwError(() => new InternalServerErrorException(`Failed to send payment created notification: ${error.message}`));
       })
     );
   }

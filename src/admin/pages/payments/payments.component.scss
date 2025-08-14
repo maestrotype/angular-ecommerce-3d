@@ -1,3 +1,4 @@
+// First you need to delete the important!!!, then delete this comment
 .payments-page {
   padding: var(--admin-spacing-lg);
   background-color: var(--admin-order-list-bg);
@@ -94,10 +95,10 @@
     .payments-table {
       .mat-table {
         width: 100%;
-        background: transparent;
+        background-color: var(--admin-order-list-card-bg);
 
         .mat-header-cell {
-          background: var(--admin-order-list-header-bg);
+          background-color: var(--admin-order-list-header-bg);
           color: var(--admin-order-list-text-primary);
           font-weight: var(--admin-font-weight-bold);
           font-size: var(--admin-font-size-sm);
@@ -108,6 +109,7 @@
         }
 
         .mat-cell {
+          background-color: var(--admin-order-list-card-bg);
           color: var(--admin-order-list-text-primary);
           padding: var(--admin-spacing-md);
           font-size: var(--admin-font-size-sm);
@@ -116,16 +118,8 @@
         .mat-row {
           border-bottom: 1px solid var(--admin-order-list-border);
           
-          &:hover {
-            background: var(--admin-order-list-row-hover);
-          }
-
-          &:nth-child(even) {
-            background: var(--admin-order-list-card-bg);
-          }
-
-          &:nth-child(odd) {
-            background: var(--admin-order-list-card-bg);
+          &:hover td {
+            background-color: var(--admin-order-list-row-hover);
           }
         }
       }
@@ -439,21 +433,23 @@
   }
   
   .mat-paginator {
-    background-color: var(--admin-order-list-pagination-bg) !important;
-    color: var(--admin-order-list-text-primary) !important;
-    border-top: 1px solid var(--admin-order-list-pagination-border);
+    background-color: #2d2d2d !important;
+    color: #ffffff !important;
+    border-top: 1px solid #404040;
     
     .mat-paginator-page-size-label,
     .mat-paginator-range-label {
-      color: var(--admin-order-list-text-primary) !important;
+      color: #ffffff !important;
     }
     
     .mat-icon-button {
-      color: var(--admin-order-list-text-primary) !important;
+      color: #ffffff !important;
     }
     
     .mat-select {
-      color: var(--admin-order-list-text-primary) !important;
+      color: #ffffff !important;
     }
   }
+  
+
 }

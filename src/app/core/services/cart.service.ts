@@ -1,7 +1,7 @@
 
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, forkJoin, of } from 'rxjs';
+import { map, switchMap, catchError } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Order } from 'src/shared/models/order.model';
 import { CreateOrderRequest } from 'src/shared/models/create-order-request.model';
@@ -15,6 +15,7 @@ export class CartService {
   private cartItemsSubject = new BehaviorSubject<CartItem[]>([]);
   public cartItems$ = this.cartItemsSubject.asObservable();
   private apiUrl = environment.apiUrl + '/orders';
+  private productsApiUrl = environment.apiUrl + '/products';
 
   constructor(private http: HttpClient) {
     // Load cart from localStorage on service initialization
@@ -118,10 +119,42 @@ export class CartService {
           quantity: Number(item.quantity)
         }));
         
-        this.cartItemsSubject.next(validatedItems);
+        // Check stock availability for all items
+        this.validateCartItemsStock(validatedItems);
       } catch (error) {
         console.error('Error loading cart from storage:', error);
       }
     }
+  }
+
+  private validateCartItemsStock(items: CartItem[]): void {
+    if (items.length === 0) {
+      this.cartItemsSubject.next([]);
+      return;
+    }
+
+    // Check stock for each item
+    const stockChecks = items.map(item => 
+      this.http.get<any>(`${this.productsApiUrl}/${item.productId}`).pipe(
+        map(product => ({ item, product, hasStock: product.stock >= item.quantity })),
+        catchError(() => of({ item, product: null, hasStock: false }))
+      )
+    );
+
+    forkJoin(stockChecks).subscribe(results => {
+      // Keep only items with sufficient stock
+      const validItems = results
+        .filter(result => result.hasStock)
+        .map(result => result.item);
+      
+      // Update cart with valid items only
+      this.cartItemsSubject.next(validItems);
+      this.saveCartToStorage(validItems);
+      
+      // Remove invalid items from localStorage
+      if (validItems.length !== items.length) {
+        console.log('Removed items with insufficient stock from cart');
+      }
+    });
   }
 }

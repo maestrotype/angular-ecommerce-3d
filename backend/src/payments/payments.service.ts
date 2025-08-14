@@ -1,9 +1,9 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Observable, from, throwError, forkJoin, of } from 'rxjs';
 import { map, catchError, switchMap } from 'rxjs/operators';
-import { Payment, PaymentStatus, PaymentMethod } from './entities/payment.entity';
+import { Payment, PaymentStatus, PaymentMethod, Currency } from './entities/payment.entity';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { PaymentStrategy, PaymentData, PaymentResult } from './interfaces/payment-strategy.interface';
 import { LiqPayStrategy } from './strategies/liqpay.strategy';
@@ -30,23 +30,45 @@ export class PaymentsService {
   }
 
   createPayment(createPaymentDto: CreatePaymentDto): Observable<PaymentResult> {
-    // Get payment strategy
-    const strategy = this.paymentStrategies.get(createPaymentDto.paymentMethod);
-    if (!strategy) {
-      return throwError(() => new BadRequestException(`Payment method ${createPaymentDto.paymentMethod} is not supported`));
+    // Validate and convert payment method
+    let paymentMethod: PaymentMethod;
+    try {
+      paymentMethod = createPaymentDto.paymentMethod as PaymentMethod;
+      if (!Object.values(PaymentMethod).includes(paymentMethod)) {
+        return throwError(() => new BadRequestException(`Payment method ${createPaymentDto.paymentMethod} is not supported`));
+      }
+    } catch (error) {
+      return throwError(() => new BadRequestException(`Invalid payment method: ${createPaymentDto.paymentMethod}`));
     }
 
-    // Check if currency is supported
-    if (!strategy.isSupported(createPaymentDto.currency)) {
-      return throwError(() => new BadRequestException(`Currency ${createPaymentDto.currency} is not supported for ${createPaymentDto.paymentMethod}`));
+    // Validate and convert currency
+    let currency: Currency;
+    try {
+      currency = createPaymentDto.currency as Currency;
+      if (!Object.values(Currency).includes(currency)) {
+        return throwError(() => new BadRequestException(`Currency ${createPaymentDto.currency} is not supported`));
+      }
+    } catch (error) {
+      return throwError(() => new BadRequestException(`Invalid currency: ${createPaymentDto.currency}`));
+    }
+
+    // Get payment strategy
+    const strategy = this.paymentStrategies.get(paymentMethod);
+    if (!strategy) {
+      return throwError(() => new BadRequestException(`Payment method ${paymentMethod} is not supported`));
+    }
+
+    // Check if currency is supported by strategy
+    if (!strategy.isSupported(currency)) {
+      return throwError(() => new BadRequestException(`Currency ${currency} is not supported for ${paymentMethod}`));
     }
 
     // Create payment record in database
     const payment = this.paymentRepository.create({
       orderId: createPaymentDto.orderId,
       amount: createPaymentDto.amount,
-      currency: createPaymentDto.currency,
-      paymentMethod: createPaymentDto.paymentMethod,
+      currency: currency,
+      paymentMethod: paymentMethod,
       status: PaymentStatus.PENDING,
       description: createPaymentDto.description,
       customerEmail: createPaymentDto.customerEmail,
@@ -60,7 +82,7 @@ export class PaymentsService {
         const paymentData: PaymentData = {
           orderId: createPaymentDto.orderId,
           amount: createPaymentDto.amount,
-          currency: createPaymentDto.currency,
+          currency: currency,
           description: createPaymentDto.description,
           customerEmail: createPaymentDto.customerEmail,
           customerPhone: createPaymentDto.customerPhone
@@ -106,7 +128,13 @@ export class PaymentsService {
           message: `Failed to create payment: ${error.message}`,
           data: { error: error.message, type: 'payment_creation_error' }
         });
-        return throwError(() => error);
+        
+        // Return proper NestJS exception instead of raw error
+        if (error instanceof BadRequestException) {
+          return throwError(() => error);
+        } else {
+          return throwError(() => new InternalServerErrorException(`Payment creation failed: ${error.message}`));
+        }
       })
     );
   }

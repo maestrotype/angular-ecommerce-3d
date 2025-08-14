@@ -109,11 +109,11 @@ export class CheckoutComponent implements OnInit, OnDestroy {
           productId: Number(item.productId),
           name: String(item.name),
           quantity: Number(item.quantity),
-          price: Number(item.price),        // ← Принудительно в число!
+          price: Number(item.price),
           imageUrl: String(item.imageUrl)
         })),
-        totalAmount: Number(this.totalPrice),  // ← Принудительно в число!
-        paymentMethod: String(this.selectedPaymentMethod)
+        totalAmount: Number(this.totalPrice),
+
       };
 
 
