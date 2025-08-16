@@ -22,11 +22,13 @@ export class ProductInfoComponent {
   ) { }
 
   incrementQuantity(): void {
+    if (this.isOutOfStock()) return;
     this.quantity++;
     this.quantityChanged.emit(this.quantity);
   }
 
   decrementQuantity(): void {
+    if (this.isOutOfStock()) return;
     if (this.quantity > 1) {
       this.quantity--;
       this.quantityChanged.emit(this.quantity);
@@ -34,6 +36,11 @@ export class ProductInfoComponent {
   }
 
   onAddToCart(): void {
+    if (this.isOutOfStock()) {
+      this.notificationService.showError('This item is out of stock.');
+      return;
+    }
+
     const cartItem = {
       productId: this.product.id,
       name: this.product.name,
@@ -46,7 +53,6 @@ export class ProductInfoComponent {
       this.cartService.addToCart(cartItem);
     }
 
-    // Show success message
     this.notificationService.showSuccess(`Added ${this.quantity} ${this.product.name} to cart!`);
   }
 
@@ -57,12 +63,15 @@ export class ProductInfoComponent {
     return this.product?.price || 0;
   }
 
+  isOutOfStock(): boolean {
+    const stock = this.product?.stock ?? 0;
+    return stock <= 0;
+  }
+
   /**
    * Handle favorite toggle events
    */
   onFavoriteToggled(event: { product: Product; isFavorite: boolean }): void {
-    // The FavoritesService already handles the toggle logic
-    // This method can be used for additional UI feedback if needed
     console.log(`${event.product.name} ${event.isFavorite ? 'added to' : 'removed from'} favorites`);
   }
 }
