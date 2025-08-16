@@ -1,4 +1,4 @@
-<div [class]="cardClasses" (click)="onProductClick()">
+<div [class]="cardClasses + (product?.stock !== undefined && product.stock <= 0 ? ' out-of-stock' : '')" (click)="onProductClick()">
   <div class="product-image">
     <img [src]="product.imageUrl" [alt]="product.name" />
     
@@ -13,6 +13,10 @@
     
     <div *ngIf="product.isSpecial" class="special-badge">
       SPECIAL OFFER
+    </div>
+
+    <div *ngIf="product?.stock !== undefined && product.stock <= 0" class="out-of-stock-badge">
+      OUT OF STOCK
     </div>
   </div>
   
@@ -38,7 +42,7 @@
       </div>
       
       <app-base-button 
-        *ngIf="showAddToCart"
+        *ngIf="showAddToCart && ((product?.stock ?? 0) > 0)"
         type="glass" 
         size="small"
         (clicked)="onAddToCart($event)"

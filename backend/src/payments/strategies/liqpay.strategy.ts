@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Observable, of, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 import { PaymentStrategy, PaymentData, PaymentResult, WebhookData } from '../interfaces/payment-strategy.interface';
 import { PaymentMethod, Currency } from '../entities/payment.entity';
 
@@ -36,15 +35,11 @@ export class LiqPayStrategy implements PaymentStrategy<LiqPayPaymentData> {
     this.isSandbox = this.configService.get<string>('NODE_ENV') === 'development';
     this.frontendUrl = this.configService.get<string>('FRONTEND_URL');
     this.backendUrl = this.configService.get<string>('BACKEND_URL');
-
-    if (!this.publicKey || !this.privateKey) {
-      // Configuration error will be handled by the calling service
-    }
   }
 
   createPayment(paymentData: PaymentData): Observable<PaymentResult<LiqPayPaymentData>> {
     // Validate currency support
-    if (!this.isSupported(paymentData.currency)) {
+    if (!this.isSupported(paymentData.currency as Currency)) {
       return of({
         success: false,
         error: `Currency ${paymentData.currency} is not supported by LiqPay`
@@ -128,19 +123,14 @@ export class LiqPayStrategy implements PaymentStrategy<LiqPayPaymentData> {
   }
 
   private generateSignature(data: any): string {
-    try {
-      // Convert data to string if it's an object
-      const dataString = typeof data === 'string' ? data : JSON.stringify(data);
-      
-      // LiqPay signature format: private_key + data + private_key
-      const signatureString = this.privateKey + dataString + this.privateKey;
-      
-      // Generate SHA1 hash
-      const crypto = require('crypto');
-      return crypto.createHash('sha1').update(signatureString).digest('base64');
-      
-    } catch (error) {
-      throw new Error('Signature generation failed');
-    }
+    // Convert data to string if it's an object
+    const dataString = typeof data === 'string' ? data : JSON.stringify(data);
+
+    // LiqPay signature format: private_key + data + private_key
+    const signatureString = this.privateKey + dataString + this.privateKey;
+
+    // Generate SHA1 hash
+    const crypto = require('crypto');
+    return crypto.createHash('sha1').update(signatureString).digest('base64');
   }
 } 

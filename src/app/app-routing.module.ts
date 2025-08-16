@@ -8,6 +8,8 @@ import { ContactsComponent } from './pages/contacts/contacts.component';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
 import { PaymentComponent } from './pages/payment/payment.component';
+import { PaymentSuccessComponent } from './pages/payment-success/payment-success.component';
+import { PaymentErrorComponent } from './pages/payment-error/payment-error.component';
 
 
 const routes: Routes = [
@@ -19,6 +21,8 @@ const routes: Routes = [
   { path: "product/:id", component: ProductDetailComponent },
   { path: "checkout", component: CheckoutComponent },
   { path: "payment/:id", component: PaymentComponent },
+  { path: "payment/success", component: PaymentSuccessComponent },
+  { path: "payment/error", component: PaymentErrorComponent },
 
   { path: "", redirectTo: "/home", pathMatch: "full" },
   {

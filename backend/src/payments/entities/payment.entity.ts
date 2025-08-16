@@ -1,25 +1,18 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { Order } from '../../orders/entities/order.entity';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-// Payment status enum
 export enum PaymentStatus {
   PENDING = 'pending',
   PROCESSING = 'processing',
   COMPLETED = 'completed',
-  FAILED = 'failed',
-  REFUNDED = 'refunded',
-  CANCELLED = 'cancelled'
+  FAILED = 'failed'
 }
 
-// Payment method enum
 export enum PaymentMethod {
   LIQPAY = 'liqpay',
   STRIPE = 'stripe',
-  PAYPAL = 'paypal',
-  BANK_TRANSFER = 'bank_transfer'
+  PAYPAL = 'paypal'
 }
 
-// Currency enum
 export enum Currency {
   UAH = 'UAH',
   USD = 'USD',
@@ -31,60 +24,41 @@ export class Payment {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column('int')
   orderId: number;
 
-  @ManyToOne(() => Order, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'orderId' })
-  order: Order;
-
-  @Column('decimal', { precision: 10, scale: 2 })
+  @Column('decimal', { precision: 12, scale: 2 })
   amount: number;
 
-  @Column({
-    type: 'enum',
-    enum: Currency,
-    default: Currency.UAH
-  })
+  @Column({ type: 'enum', enum: Currency })
   currency: Currency;
 
-  @Column({
-    type: 'enum',
-    enum: PaymentMethod,
-    default: PaymentMethod.LIQPAY
-  })
+  @Column({ type: 'enum', enum: PaymentMethod })
   paymentMethod: PaymentMethod;
 
-  @Column({
-    type: 'enum',
-    enum: PaymentStatus,
-    default: PaymentStatus.PENDING
-  })
+  @Column({ type: 'enum', enum: PaymentStatus, default: PaymentStatus.PENDING })
   status: PaymentStatus;
 
-  @Column({ nullable: true })
-  transactionId: string;
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  description?: string;
 
-  @Column({ nullable: true })
-  liqpayPaymentId: string;
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  transactionId?: string;
 
-  @Column({ nullable: true })
-  paymentIntentId: string;
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  liqpayPaymentId?: string;
 
-  @Column({ nullable: true })
-  description: string;
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  customerEmail?: string;
 
-  @Column({ nullable: true })
-  customerEmail: string;
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  customerPhone?: string;
 
-  @Column({ nullable: true })
-  customerPhone: string;
+  @Column({ type: 'text', nullable: true })
+  metadata?: string;
 
-  @Column({ nullable: true })
-  errorMessage: string;
-
-  @Column({ nullable: true })
-  metadata: string; // JSON string for additional data
+  @Column({ type: 'text', nullable: true })
+  errorMessage?: string;
 
   @CreateDateColumn()
   createdAt: Date;

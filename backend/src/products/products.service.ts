@@ -1,5 +1,6 @@
 
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, InternalServerErrorException } from '@nestjs/common';
+import { MoreThan, Like } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Observable, from, throwError } from 'rxjs';
@@ -29,7 +30,7 @@ export class ProductsService {
           map(() => savedProduct)
         )
       ),
-      catchError(error => throwError(() => new Error(`Failed to create product: ${error.message}`)))
+      catchError(error => throwError(() => new InternalServerErrorException(`Failed to create product: ${error.message}`)))
     );
   }
 
@@ -37,7 +38,16 @@ export class ProductsService {
     return from(this.productRepository.find({
       order: { createdAt: 'DESC' },
     })).pipe(
-      catchError(error => throwError(() => new Error(`Failed to get products: ${error.message}`)))
+      catchError(error => throwError(() => new InternalServerErrorException(`Failed to get products: ${error.message}`)))
+    );
+  }
+
+  findAvailable(): Observable<Product[]> {
+    return from(this.productRepository.find({
+      where: { stock: MoreThan(0) },
+      order: { createdAt: 'DESC' },
+    })).pipe(
+      catchError(error => throwError(() => new InternalServerErrorException(`Failed to get products: ${error.message}`)))
     );
   }
 
@@ -53,7 +63,7 @@ export class ProductsService {
         if (error instanceof NotFoundException) {
           return throwError(() => error);
         }
-        return throwError(() => new Error(`Failed to get product: ${error.message}`));
+        return throwError(() => new InternalServerErrorException(`Failed to get product: ${error.message}`));
       })
     );
   }
@@ -69,7 +79,7 @@ export class ProductsService {
           map(() => updatedProduct)
         )
       ),
-      catchError(error => throwError(() => new Error(`Failed to update product: ${error.message}`)))
+      catchError(error => throwError(() => new InternalServerErrorException(`Failed to update product: ${error.message}`)))
     );
   }
 
@@ -81,25 +91,25 @@ export class ProductsService {
         this.lowStockNotified.delete(id);
       }),
       map(() => void 0),
-      catchError(error => throwError(() => new Error(`Failed to remove product: ${error.message}`)))
+      catchError(error => throwError(() => new InternalServerErrorException(`Failed to remove product: ${error.message}`)))
     );
   }
 
   findByCategory(category: string): Observable<Product[]> {
     return from(this.productRepository.find({
-      where: { category },
+      where: { category, stock: MoreThan(0) }, // Only products with stock > 0
       order: { createdAt: 'DESC' },
     })).pipe(
-      catchError(error => throwError(() => new Error(`Failed to get products by category: ${error.message}`)))
+      catchError(error => throwError(() => new InternalServerErrorException(`Failed to get products by category: ${error.message}`)))
     );
   }
 
   findFeatured(): Observable<Product[]> {
     return from(this.productRepository.find({
-      where: { isSpecial: true },
+      where: { isSpecial: true, stock: MoreThan(0) }, // Only products with stock > 0
       order: { rating: 'DESC' },
     })).pipe(
-      catchError(error => throwError(() => new Error(`Failed to get featured products: ${error.message}`)))
+      catchError(error => throwError(() => new InternalServerErrorException(`Failed to get featured products: ${error.message}`)))
     );
   }
 
@@ -108,7 +118,7 @@ export class ProductsService {
     return this.findOne(productId).pipe(
       switchMap(product => {
         if (product.stock < quantity) {
-          throw new Error(`Insufficient stock for product ${product.name}`);
+          throw new BadRequestException(`Insufficient stock for product ${product.name}`);
         }
         
         product.stock -= quantity;
@@ -119,7 +129,7 @@ export class ProductsService {
           map(() => updatedProduct)
         )
       ),
-      catchError(error => throwError(() => new Error(`Failed to decrease stock: ${error.message}`)))
+      catchError(error => throwError(() => new InternalServerErrorException(`Failed to decrease stock: ${error.message}`)))
     );
   }
 
@@ -133,5 +143,17 @@ export class ProductsService {
     }
     
     return from(Promise.resolve(void 0));
+  }
+
+  searchProducts(searchTerm: string): Observable<Product[]> {
+    return from(this.productRepository.find({
+      where: [
+        { name: Like(`%${searchTerm}%`), stock: MoreThan(0) },
+        { description: Like(`%${searchTerm}%`), stock: MoreThan(0) }
+      ],
+      order: { createdAt: 'DESC' },
+    })).pipe(
+      catchError(error => throwError(() => new InternalServerErrorException(`Failed to search products: ${error.message}`)))
+    );
   }
 }

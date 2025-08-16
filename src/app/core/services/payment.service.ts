@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment.prod';
 import { Payment, PaymentRequest, PaymentResponse, PaymentStatus } from '../../../shared/models/payment.model';
+import { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,14 +12,29 @@ import { Payment, PaymentRequest, PaymentResponse, PaymentStatus } from '../../.
 export class PaymentService {
   private apiUrl = `${environment.apiUrl}/payments`;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private notificationService: NotificationService
+  ) {}
 
   createPayment(paymentRequest: PaymentRequest): Observable<PaymentResponse> {
-    return this.http.post<PaymentResponse>(`${this.apiUrl}/create`, paymentRequest)
+    return this.http.post<PaymentResponse>(`${this.apiUrl}`, paymentRequest)
       .pipe(
         map(response => response),
         catchError(error => {
           console.error('Error creating payment:', error);
+          
+          // Show user-friendly error notification
+          if (error.status === 404) {
+            this.notificationService.showError('Payment service is not available. Please try again later.');
+          } else if (error.status === 403) {
+            this.notificationService.showError('Access denied. Please log in again.');
+          } else if (error.status === 0) {
+            this.notificationService.showError('Network error. Please check your connection.');
+          } else {
+            this.notificationService.showError('Failed to create payment. Please try again.');
+          }
+          
           return throwError(() => new Error('Failed to create payment'));
         })
       );
@@ -29,6 +45,7 @@ export class PaymentService {
       .pipe(
         catchError(error => {
           console.error('Error fetching payment:', error);
+          this.notificationService.showError('Failed to fetch payment details.');
           return throwError(() => new Error('Failed to fetch payment'));
         })
       );

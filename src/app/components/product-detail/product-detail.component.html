@@ -18,6 +18,9 @@
       <div class="product-grid">
         <div class="product-detail-main">
           <div class="main-view">
+            <div *ngIf="product?.stock !== undefined && product.stock <= 0" class="out-of-stock-badge">
+              OUT OF STOCK
+            </div>
             <img
               *ngIf="selectedType === 'image' && product?.images?.length"
               [src]="product.images[selectedImageIndex]"

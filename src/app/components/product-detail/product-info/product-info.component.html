@@ -36,18 +36,20 @@
     </div>
   
     <!-- Quantity and Add to Cart -->
-    <div class="purchase-section">
+    <div class="purchase-section" [class.disabled]="isOutOfStock()">
       <div class="quantity-selector">
         <label>Quantity:</label>
         <div class="quantity-controls">
-          <button class="quantity-btn" (click)="decrementQuantity()">-</button>
+          <button class="quantity-btn" (click)="decrementQuantity()" [disabled]="isOutOfStock()">-</button>
           <span class="quantity-value">{{ quantity }}</span>
-          <button class="quantity-btn" (click)="incrementQuantity()">+</button>
+          <button class="quantity-btn" (click)="incrementQuantity()" [disabled]="isOutOfStock()">+</button>
         </div>
       </div>
       
-      <button class="add-to-cart-btn" (click)="onAddToCart()">
+      <button class="add-to-cart-btn" (click)="onAddToCart()" [disabled]="isOutOfStock()">
         🛒 Add to Cart
       </button>
+
+      <span *ngIf="isOutOfStock()" class="out-of-stock-inline">OUT OF STOCK</span>
     </div>
   </div>

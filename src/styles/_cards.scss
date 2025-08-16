@@ -57,6 +57,19 @@
       font-size: 0.8rem;
       font-weight: 600;
     }
+
+    .out-of-stock-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: #6b7280; // neutral gray
+      color: #ffffff;
+      padding: 0.5rem 0.75rem;
+      border-radius: 14px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
   }
   
   .product-info {
@@ -133,6 +146,11 @@
 
 .product-card.special-offer {
   border: 2px solid var(--color-accent);
+}
+
+.product-card.out-of-stock {
+  opacity: 0.7;
+  filter: grayscale(0.2);
 }
 
 .product-card.list-card {

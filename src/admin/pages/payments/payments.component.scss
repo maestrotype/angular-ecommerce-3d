@@ -1,70 +1,75 @@
+// First you need to delete the important!!!, then delete this comment
 .payments-page {
-  padding: 2rem;
+  padding: var(--admin-spacing-lg);
+  background-color: var(--admin-order-list-bg);
+  min-height: calc(100vh - 64px);
+  color: var(--admin-order-list-text-primary);
 
   .page-header {
-    margin-bottom: 2rem;
+    margin-bottom: var(--admin-spacing-lg);
 
     h1 {
-      margin: 0 0 1.5rem 0;
-      font-size: 2rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      border-bottom: 2px solid var(--primary);
-      padding-bottom: 0.5rem;
+      margin: 0 0 var(--admin-spacing-md) 0;
+      font-size: var(--admin-font-size-xxl);
+      font-weight: var(--admin-font-weight-bold);
+      color: var(--admin-order-list-text-primary);
+      border-bottom: 2px solid var(--admin-primary);
+      padding-bottom: var(--admin-spacing-sm);
     }
 
     .stats-cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.5rem;
+      gap: var(--admin-spacing-md);
 
       .stat-card {
-        background: var(--bg-secondary);
-        border-radius: 12px;
-        padding: 1.5rem;
+        background: var(--admin-order-list-card-bg);
+        border-radius: var(--admin-border-radius-lg);
+        padding: var(--admin-spacing-md);
         text-align: center;
-        box-shadow: var(--shadow-light);
-        border: 1px solid var(--border-primary);
+        box-shadow: var(--admin-shadow-md);
+        border: 1px solid var(--admin-order-list-border);
 
         .stat-value {
-          font-size: 2rem;
-          font-weight: 700;
-          color: var(--success);
-          margin-bottom: 0.5rem;
+          font-size: var(--admin-font-size-xxl);
+          font-weight: var(--admin-font-weight-bold);
+          color: var(--admin-primary);
+          margin-bottom: var(--admin-spacing-sm);
         }
 
         .stat-label {
-          font-size: 0.9rem;
-          color: var(--text-primary);
+          font-size: var(--admin-font-size-sm);
+          color: var(--admin-order-list-text-secondary);
           text-transform: uppercase;
           letter-spacing: 0.5px;
-          font-weight: 500;
+          font-weight: var(--admin-font-weight-medium);
         }
       }
     }
   }
 
   .content-section {
-    background: var(--surface-primary);
-    border-radius: 12px;
-    padding: 2rem;
-    box-shadow: var(--shadow-light);
-    border: 1px solid var(--border-primary);
+    background: var(--admin-order-list-card-bg);
+    border-radius: var(--admin-border-radius-md);
+    padding: var(--admin-spacing-lg);
+    box-shadow: var(--admin-shadow-md);
+    border: 1px solid var(--admin-order-list-border);
+    margin: 0 var(--admin-spacing-lg);
 
     .section-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 2rem;
+      margin-bottom: var(--admin-spacing-lg);
 
       h2 {
         margin: 0;
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: var(--text-primary);
-        border-bottom: 1px solid var(--primary);
-        padding-bottom: 0.5rem;
-        margin-bottom: 1rem;
+        font-size: var(--admin-font-size-lg);
+        font-weight: var(--admin-font-weight-bold);
+        color: var(--admin-order-list-text-primary);
+        border-bottom: 1px solid var(--admin-primary);
+        padding-bottom: var(--admin-spacing-sm);
+        margin-bottom: var(--admin-spacing-md);
       }
 
       .search-bar {
@@ -75,12 +80,12 @@
           
           ::ng-deep .mat-mdc-form-field {
             .mat-mdc-text-field-wrapper {
-              background: var(--bg-secondary);
-              border-radius: 8px;
+              background: var(--admin-bg-secondary);
+              border-radius: var(--admin-border-radius-md);
             }
             
             .mat-mdc-form-field-focus-overlay {
-              background: var(--bg-hover);
+              background: var(--admin-bg-hover);
             }
           }
         }
@@ -90,63 +95,56 @@
     .payments-table {
       .mat-table {
         width: 100%;
-        background: transparent;
+        background-color: var(--admin-order-list-card-bg);
 
         .mat-header-cell {
-          background: var(--bg-tertiary);
-          color: var(--text-primary);
-          font-weight: 600;
-          font-size: 0.9rem;
+          background-color: var(--admin-order-list-header-bg);
+          color: var(--admin-order-list-text-primary);
+          font-weight: var(--admin-font-weight-bold);
+          font-size: var(--admin-font-size-sm);
           text-transform: uppercase;
           letter-spacing: 0.5px;
-          padding: 1rem 0.5rem;
-          border-bottom: 2px solid var(--border-primary);
+          padding: var(--admin-spacing-md);
+          border-bottom: 1px solid var(--admin-border-primary);
         }
 
         .mat-cell {
-          color: var(--text-primary);
-          padding: 1rem 0.5rem;
-          font-size: 0.9rem;
+          background-color: var(--admin-order-list-card-bg);
+          color: var(--admin-order-list-text-primary);
+          padding: var(--admin-spacing-md);
+          font-size: var(--admin-font-size-sm);
         }
 
         .mat-row {
-          border-bottom: 1px solid var(--border-secondary);
+          border-bottom: 1px solid var(--admin-order-list-border);
           
-          &:hover {
-            background: var(--bg-hover);
-          }
-
-          &:nth-child(even) {
-            background: var(--bg-secondary);
-          }
-
-          &:nth-child(odd) {
-            background: var(--surface-primary);
+          &:hover td {
+            background-color: var(--admin-order-list-row-hover);
           }
         }
       }
 
       .amount {
-        font-weight: 700;
-        color: var(--success);
-        margin-right: 0.5rem;
-        font-size: 1.1rem;
+        font-weight: var(--admin-font-weight-bold);
+        color: var(--admin-order-detail-price-color);
+        margin-right: var(--admin-spacing-sm);
+        font-size: var(--admin-font-size-lg);
       }
 
       .currency {
-        font-size: 0.8rem;
-        color: var(--text-primary);
+        font-size: var(--admin-font-size-xs);
+        color: var(--admin-order-list-text-secondary);
         text-transform: uppercase;
-        font-weight: 500;
+        font-weight: var(--admin-font-weight-medium);
       }
 
       .payment-method {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: var(--admin-spacing-sm);
 
         mat-icon {
-          color: var(--primary);
+          color: var(--admin-primary);
           font-size: 20px;
           width: 20px;
           height: 20px;
@@ -154,40 +152,40 @@
       }
 
       .status-badge {
-        padding: 0.25rem 0.75rem;
+        padding: var(--admin-spacing-xs) var(--admin-spacing-md);
         border-radius: 20px;
-        font-size: 0.8rem;
-        font-weight: 500;
+        font-size: var(--admin-font-size-xs);
+        font-weight: var(--admin-font-weight-medium);
         text-transform: uppercase;
         letter-spacing: 0.5px;
 
         &.success {
           background: rgba(76, 175, 80, 0.1);
-          color: var(--success);
+          color: var(--admin-success);
           border: 1px solid rgba(76, 175, 80, 0.3);
         }
 
         &.warning {
           background: rgba(255, 152, 0, 0.1);
-          color: var(--warning);
+          color: var(--admin-warning);
           border: 1px solid rgba(255, 152, 0, 0.3);
         }
 
         &.error {
           background: rgba(244, 67, 54, 0.1);
-          color: var(--error);
+          color: var(--admin-error);
           border: 1px solid rgba(244, 67, 54, 0.3);
         }
 
         &.info {
           background: rgba(33, 150, 243, 0.1);
-          color: var(--info);
+          color: var(--admin-info);
           border: 1px solid rgba(33, 150, 243, 0.3);
         }
 
         &.default {
           background: rgba(158, 158, 158, 0.1);
-          color: var(--text-secondary);
+          color: var(--admin-order-list-text-secondary);
           border: 1px solid rgba(158, 158, 158, 0.3);
         }
       }
@@ -195,30 +193,30 @@
       .customer-info {
         display: flex;
         flex-direction: column;
-        gap: 0.25rem;
+        gap: var(--admin-spacing-xs);
 
         .email {
-          font-weight: 600;
-          color: var(--text-primary);
-          font-size: 0.9rem;
+          font-weight: var(--admin-font-weight-medium);
+          color: var(--admin-order-list-text-primary);
+          font-size: var(--admin-font-size-sm);
         }
 
         .phone {
-          font-size: 0.8rem;
-          color: var(--text-primary);
+          font-size: var(--admin-font-size-xs);
+          color: var(--admin-order-list-text-secondary);
           opacity: 0.8;
         }
       }
 
       .actions {
         display: flex;
-        gap: 0.5rem;
+        gap: var(--admin-spacing-sm);
 
         button {
-          color: var(--text-secondary);
+          color: var(--admin-order-list-text-secondary);
 
           &:hover {
-            color: var(--primary);
+            color: var(--admin-primary);
           }
         }
       }
@@ -227,12 +225,12 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 1rem;
-        padding: 3rem;
-        color: var(--text-secondary);
+        gap: var(--admin-spacing-md);
+        padding: var(--admin-spacing-xxl);
+        color: var(--admin-order-list-text-secondary);
 
         mat-spinner {
-          color: var(--primary);
+          color: var(--admin-primary);
         }
 
         mat-icon {
@@ -249,14 +247,15 @@
 // Responsive design
 @media (max-width: 1024px) {
   .payments-page {
-    padding: 1rem;
+    padding: var(--admin-spacing-md);
 
     .content-section {
-      padding: 1rem;
+      padding: var(--admin-spacing-md);
+      margin: 0 var(--admin-spacing-md);
 
       .section-header {
         flex-direction: column;
-        gap: 1rem;
+        gap: var(--admin-spacing-md);
         align-items: stretch;
 
         .search-bar {
@@ -269,6 +268,8 @@
 
 @media (max-width: 768px) {
   .payments-page {
+    padding: var(--admin-spacing-md);
+
     .page-header {
       .stats-cards {
         grid-template-columns: 1fr;
@@ -276,6 +277,19 @@
     }
 
     .content-section {
+      margin: 0 var(--admin-spacing-md);
+      padding: var(--admin-spacing-md);
+
+      .section-header {
+        flex-direction: column;
+        gap: var(--admin-spacing-md);
+        align-items: stretch;
+
+        .search-bar {
+          width: 100%;
+        }
+      }
+
       .payments-table {
         overflow-x: auto;
 
@@ -285,4 +299,157 @@
       }
     }
   }
-} 
+}
+
+// Galaxy Z Fold 5/6 unfolded (690px) - use desktop format with compact table
+@media (min-width: 690px) and (max-width: 768px) {
+  .payments-page {
+    padding: var(--admin-spacing-md);
+
+    .page-header {
+      .stats-cards {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      }
+    }
+
+    .content-section {
+      margin: 0 var(--admin-spacing-md);
+      padding: var(--admin-spacing-md);
+
+      .section-header {
+        flex-direction: row;
+        gap: var(--admin-spacing-md);
+        align-items: center;
+
+        .search-bar {
+          width: 250px;
+        }
+      }
+
+      // Compact table for Galaxy Z Fold
+      .payments-table .mat-table {
+        th, td {
+          padding: 6px 8px;
+          font-size: 12px;
+        }
+
+        .mat-column-id {
+          width: 60px;
+        }
+
+        .mat-column-orderId {
+          width: 60px;
+        }
+
+        .mat-column-amount {
+          width: 80px;
+        }
+
+        .mat-column-paymentMethod {
+          width: 80px;
+        }
+
+        .mat-column-status {
+          width: 80px;
+        }
+
+        .mat-column-customerEmail {
+          width: 120px;
+        }
+
+        .mat-column-createdAt {
+          width: 80px;
+        }
+
+        .mat-column-actions {
+          width: 60px;
+        }
+      }
+    }
+  }
+}
+
+::ng-deep {
+  .mat-icon-button {
+    color: #ffffff !important;
+    
+    &.mat-button-disabled {
+      color: #6b7280 !important;
+    }
+  }
+  
+  .mat-raised-button.mat-primary {
+    background-color: #3b82f6 !important;
+    color: #ffffff !important;
+  }
+  
+  .mat-form-field {
+    .mat-form-field-label {
+      color: #e5e7eb !important;
+    }
+    
+    .mat-input-element {
+      color: #ffffff !important;
+    }
+    
+    .mat-form-field-outline {
+      color: #6b7280 !important;
+    }
+    
+    &.mat-focused {
+      .mat-form-field-outline-thick {
+        color: #3b82f6 !important;
+      }
+      
+      .mat-form-field-label {
+        color: #3b82f6 !important;
+      }
+    }
+  }
+  
+  .mat-select {
+    color: #ffffff !important;
+    
+    .mat-select-arrow {
+      color: #9ca3af !important;
+    }
+  }
+  
+  .mat-option {
+    background-color: #2d2d2d !important;
+    color: #ffffff !important;
+    
+    &:hover {
+      background-color: #374151 !important;
+    }
+    
+    &.mat-selected {
+      background-color: #3b82f6 !important;
+    }
+  }
+  
+  .mat-select-panel {
+    background-color: #2d2d2d !important;
+  }
+  
+  .mat-paginator {
+    background-color: #2d2d2d !important;
+    color: #ffffff !important;
+    border-top: 1px solid #404040;
+    
+    .mat-paginator-page-size-label,
+    .mat-paginator-range-label {
+      color: #ffffff !important;
+    }
+    
+    .mat-icon-button {
+      color: #ffffff !important;
+    }
+    
+    .mat-select {
+      color: #ffffff !important;
+    }
+  }
+  
+
+}
