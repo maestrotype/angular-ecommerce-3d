@@ -70,6 +70,7 @@
             class="product-card"
             [class.list-card]="viewMode === 'list'"
             [class.special-offer]="product.isSpecial"
+            [class.out-of-stock]="product?.stock !== undefined && product.stock <= 0"
             (click)="goToProductDetail(product.id)"
           >
             <div class="product-image">
@@ -83,6 +84,9 @@
               </div>
               <div *ngIf="product.isSpecial" class="special-badge">
                 SPECIAL OFFER
+              </div>
+              <div *ngIf="product?.stock !== undefined && product.stock <= 0" class="out-of-stock-badge">
+                {{ 'OUT_OF_STOCK' | translate }}
               </div>
             </div>
             
@@ -101,6 +105,7 @@
               <div class="product-footer">
                 <span class="product-price">${{ product.price }}</span>
                 <app-base-button 
+                  *ngIf="(product?.stock ?? 0) > 0"
                   type="glass" 
                   size="small"
                   (clicked)="addToCart(product); $event.stopPropagation()"

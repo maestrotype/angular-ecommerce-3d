@@ -285,5 +285,6 @@
   "CATEGORY_DELETED_SUCCESS": "Категория успешно удалена",
   "TEST_ITEM": "тестовый элемент",
   "PUBLISH": "опубликовать",
-  "ARTICLE": "статью"
+  "ARTICLE": "статью",
+  "OUT_OF_STOCK": "Нет в наличии"
 }

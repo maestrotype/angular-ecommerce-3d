@@ -88,7 +88,7 @@ export class PaymentsService {
           customerPhone: createPaymentDto.customerPhone
         };
 
-        return from(strategy.createPayment(paymentData)).pipe(
+        return this.ensureObservable(strategy.createPayment(paymentData)).pipe(
           switchMap(result => {
             if (result.success) {
               // Update payment with transaction details
@@ -111,8 +111,7 @@ export class PaymentsService {
             } else {
               // Update payment status to failed
               return from(this.paymentRepository.update(savedPayment.id, {
-                status: PaymentStatus.FAILED,
-                errorMessage: result.error
+                status: PaymentStatus.FAILED
               })).pipe(
                 switchMap(() => throwError(() => new BadRequestException(result.error)))
               );
@@ -146,7 +145,7 @@ export class PaymentsService {
       return throwError(() => new BadRequestException('LiqPay strategy not found'));
     }
 
-    return from(strategy.verifyWebhook(data, signature)).pipe(
+    return this.ensureObservable(strategy.verifyWebhook(data, signature)).pipe(
       switchMap(isValid => {
         if (!isValid) {
           return throwError(() => new BadRequestException('Invalid LiqPay webhook signature'));
@@ -186,7 +185,7 @@ export class PaymentsService {
   }
 
   private processLiqPayStatus(payment: Payment, webhookData: any): Observable<void> {
-    const { status, liqpay_order_id, amount, currency } = webhookData;
+    const { status, liqpay_order_id } = webhookData;
 
     switch (status) {
       case 'success':
@@ -208,8 +207,7 @@ export class PaymentsService {
       case 'failure':
         // Payment failed
         return from(this.paymentRepository.update(payment.id, {
-          status: PaymentStatus.FAILED,
-          errorMessage: webhookData.error_description || 'Payment failed'
+          status: PaymentStatus.FAILED
         })).pipe(
           switchMap(() => {
             // Send failure notification using EmailService
@@ -280,5 +278,80 @@ export class PaymentsService {
         };
       })
     );
+  }
+
+  updatePaymentStatus(id: number, status: PaymentStatus, notes?: string): Observable<Payment> {
+    return this.getPaymentById(id).pipe(
+      switchMap(payment => {
+        const updateData: Partial<Payment> = { status };
+        
+        if (notes) {
+          updateData.metadata = JSON.stringify({ 
+            ...JSON.parse(payment.metadata || '{}'), 
+            adminNotes: notes,
+            updatedAt: new Date().toISOString()
+          });
+        }
+
+        return from(this.paymentRepository.update(id, updateData)).pipe(
+          switchMap(() => this.getPaymentById(id))
+        );
+      }),
+      catchError(error => throwError(() => new InternalServerErrorException(`Failed to update payment status: ${error.message}`)))
+    );
+  }
+
+  searchPayments(filters: {
+    status?: PaymentStatus;
+    paymentMethod?: PaymentMethod;
+    startDate?: Date;
+    endDate?: Date;
+    customerEmail?: string;
+    minAmount?: number;
+    maxAmount?: number;
+  }): Observable<Payment[]> {
+    const queryBuilder = this.paymentRepository.createQueryBuilder('payment');
+
+    if (filters.status) {
+      queryBuilder.andWhere('payment.status = :status', { status: filters.status });
+    }
+
+    if (filters.paymentMethod) {
+      queryBuilder.andWhere('payment.paymentMethod = :paymentMethod', { paymentMethod: filters.paymentMethod });
+    }
+
+    if (filters.startDate) {
+      queryBuilder.andWhere('payment.createdAt >= :startDate', { startDate: filters.startDate });
+    }
+
+    if (filters.endDate) {
+      queryBuilder.andWhere('payment.createdAt <= :endDate', { endDate: filters.endDate });
+    }
+
+    if (filters.customerEmail) {
+      queryBuilder.andWhere('payment.customerEmail ILIKE :customerEmail', { customerEmail: `%${filters.customerEmail}%` });
+    }
+
+    if (filters.minAmount !== undefined) {
+      queryBuilder.andWhere('payment.amount >= :minAmount', { minAmount: filters.minAmount });
+    }
+
+    if (filters.maxAmount !== undefined) {
+      queryBuilder.andWhere('payment.amount <= :maxAmount', { maxAmount: filters.maxAmount });
+    }
+
+    return from(queryBuilder
+      .orderBy('payment.createdAt', 'DESC')
+      .getMany()
+    ).pipe(
+      catchError(error => throwError(() => new InternalServerErrorException(`Failed to search payments: ${error.message}`)))
+    );
+  }
+
+  private ensureObservable<T>(value: Observable<T> | Promise<T> | T): Observable<T> {
+    if ((value as any)?.subscribe) {
+      return value as Observable<T>;
+    }
+    return from(Promise.resolve(value as T));
   }
 } 

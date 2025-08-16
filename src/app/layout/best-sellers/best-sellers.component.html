@@ -6,7 +6,7 @@
         </div>
 
         <div class="products-grid">
-            <div class="product-card" *ngFor="let product of bestSellers" (click)="goToProductDetail(product.id)">
+            <div class="product-card" *ngFor="let product of bestSellers" (click)="goToProductDetail(product.id)" [class.out-of-stock]="product?.stock !== undefined && product.stock <= 0">
                 <div class="product-image">
                     <img [src]="product.imageUrl" [alt]="product.name" loading="lazy" />
                     <!-- <div class="product-overlay">
@@ -16,6 +16,9 @@
                     </div> -->
                     <div *ngIf="product.isSpecial" class="special-badge">
                         SPECIAL OFFER
+                    </div>
+                    <div *ngIf="product?.stock !== undefined && product.stock <= 0" class="out-of-stock-badge">
+                        {{ 'OUT_OF_STOCK' | translate }}
                     </div>
                 </div>
 

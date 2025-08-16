@@ -326,5 +326,6 @@
   "FREE": "Free",
   "SUBTOTAL": "Subtotal:",
   "SHIPPING": "Shipping:",
-  "QTY": "Qty:"
+  "QTY": "Qty:",
+  "OUT_OF_STOCK": "Out of stock"
 }

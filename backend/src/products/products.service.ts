@@ -36,7 +36,15 @@ export class ProductsService {
 
   findAll(): Observable<Product[]> {
     return from(this.productRepository.find({
-      where: { stock: MoreThan(0) }, // Only products with stock > 0
+      order: { createdAt: 'DESC' },
+    })).pipe(
+      catchError(error => throwError(() => new InternalServerErrorException(`Failed to get products: ${error.message}`)))
+    );
+  }
+
+  findAvailable(): Observable<Product[]> {
+    return from(this.productRepository.find({
+      where: { stock: MoreThan(0) },
       order: { createdAt: 'DESC' },
     })).pipe(
       catchError(error => throwError(() => new InternalServerErrorException(`Failed to get products: ${error.message}`)))

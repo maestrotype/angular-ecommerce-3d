@@ -1,8 +1,10 @@
-import { Controller, Post, Get, Body, Param, ParseIntPipe, HttpCode, HttpStatus, UseGuards, Headers } from '@nestjs/common';
+import { Controller, Post, Get, Put, Body, Param, ParseIntPipe, HttpCode, HttpStatus, UseGuards, Headers, Query } from '@nestjs/common';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { PaymentsService } from './payments.service';
 import { CreatePaymentDto, LiqPayWebhookDto, PaymentResponseDto } from './dto/create-payment.dto';
+import { UpdatePaymentStatusDto } from './dto/update-payment-status.dto';
+import { SearchPaymentsDto } from './dto/search-payments.dto';
 import { Payment } from './entities/payment.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdminGuard } from '../auth/guards/admin.guard';
@@ -114,6 +116,46 @@ export class PaymentsController {
       catchError(error => of({
         success: false,
         error: error.message || 'Failed to retrieve payment statistics'
+      }))
+    );
+  }
+
+  @Put(':id/status')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @HttpCode(HttpStatus.OK)
+  updatePaymentStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatePaymentStatusDto: UpdatePaymentStatusDto
+  ): Observable<PaymentResponseDto> {
+    return this.paymentsService.updatePaymentStatus(
+      id, 
+      updatePaymentStatusDto.status, 
+      updatePaymentStatusDto.notes
+    ).pipe(
+      map(payment => ({
+        success: true,
+        data: payment,
+        message: 'Payment status updated successfully'
+      })),
+      catchError(error => of({
+        success: false,
+        error: error.message || 'Failed to update payment status'
+      }))
+    );
+  }
+
+  @Get('search')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  searchPayments(@Query() searchPaymentsDto: SearchPaymentsDto): Observable<PaymentResponseDto> {
+    return this.paymentsService.searchPayments(searchPaymentsDto).pipe(
+      map(payments => ({
+        success: true,
+        data: payments,
+        message: 'Payments search completed successfully'
+      })),
+      catchError(error => of({
+        success: false,
+        error: error.message || 'Failed to search payments'
       }))
     );
   }
