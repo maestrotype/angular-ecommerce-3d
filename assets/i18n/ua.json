@@ -276,5 +276,6 @@
   "CATEGORY_DELETED_SUCCESS": "Категорію успішно видалено",
   "TEST_ITEM": "тестовий елемент",
   "PUBLISH": "опублікувати",
-  "ARTICLE": "статтю"
+  "ARTICLE": "статтю",
+  "OUT_OF_STOCK": "Немає в наявності"
 }
