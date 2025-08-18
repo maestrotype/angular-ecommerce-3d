@@ -2,7 +2,6 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ModalConfig } from '../../../core/services/modal.service';
 
-
 @Component({
   selector: 'app-auth-modal',
   templateUrl: './auth-modal.component.html',
@@ -15,6 +14,7 @@ export class AuthModalComponent {
   currentView: 'login' | 'register' = 'login';
   error: string = '';
   loading: boolean = false;
+  user: any = null;
   
   loginForm = {
     email: '',
@@ -28,7 +28,9 @@ export class AuthModalComponent {
     confirmPassword: ''
   };
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) {
+    this.user = this.authService.getUser();
+  }
 
   onClose(): void {
     this.close.emit();
@@ -36,6 +38,12 @@ export class AuthModalComponent {
 
   switchView(view: 'login' | 'register'): void {
     this.currentView = view;
+    this.error = '';
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.user = null;
     this.error = '';
   }
 
@@ -49,9 +57,8 @@ export class AuthModalComponent {
     this.authService.login(this.loginForm.email, this.loginForm.password).subscribe({
       next: (res) => {
         this.authService.saveAuthData(res.token, res.user);
+        this.user = res.user; // Stay on modal and show profile on Login tab
         this.loading = false;
-        this.onClose();
-        window.location.reload();
       },
       error: (err) => {
         this.loading = false;
@@ -78,9 +85,8 @@ export class AuthModalComponent {
     ).subscribe({
       next: (res) => {
         this.authService.saveAuthData(res.token, res.user);
+        this.user = res.user; // Remain in modal; user can switch tabs or logout
         this.loading = false;
-        this.onClose();
-        window.location.reload();
       },
       error: (err) => {
         this.loading = false;
