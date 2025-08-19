@@ -14,7 +14,6 @@ export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.CREATED)
   createPayment(@Body() createPaymentDto: CreatePaymentDto): Observable<PaymentResponseDto> {
     return this.paymentsService.createPayment(createPaymentDto).pipe(
@@ -57,7 +56,6 @@ export class PaymentsController {
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
   getPayment(@Param('id', ParseIntPipe) id: number): Observable<PaymentResponseDto> {
     return this.paymentsService.getPaymentById(id).pipe(
       map(payment => ({
@@ -69,6 +67,13 @@ export class PaymentsController {
         success: false,
         error: error.message || 'Failed to retrieve payment'
       }))
+    );
+  }
+
+  @Get(':id/status')
+  getPaymentStatus(@Param('id', ParseIntPipe) id: number): Observable<{ status: string }> {
+    return this.paymentsService.getPaymentById(id).pipe(
+      map((payment) => ({ status: payment.status }))
     );
   }
 
@@ -161,11 +166,11 @@ export class PaymentsController {
   }
 
   @Post('stripe/intent')
-  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.CREATED)
   createStripeIntent(@Body() body: { orderId: number; amount: number; currency: string; description?: string }): Observable<PaymentResponseDto> {
     return this.paymentsService.createStripeIntent(body).pipe(
-      map(res => ({ success: true, data: res, message: 'Stripe intent created' })),
-      catchError(error => of({ success: false, error: error.message || 'Failed to create Stripe intent' }))
+      map((res) => ({ success: true, data: res, message: 'Stripe intent created' })),
+      catchError((error) => of({ success: false, error: error.message || 'Failed to create Stripe intent' }))
     );
   }
 } 

@@ -22,6 +22,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
   isLoading = false;
   paymentStatus: PaymentStatus;
   currentTheme = 'default';
+  selectedMethod: 'liqpay' | 'stripe' | 'paypal' = 'liqpay';
   
   // LiqPay specific
   liqpayData: any;
@@ -67,15 +68,34 @@ export class PaymentComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe(params => {
       this.orderId = +params['id'];
-      if (!this.orderId) {
+      if (this.orderId) {
+        const orderData = this.getOrderData();
+        if (orderData?.paymentMethod) {
+          this.selectedMethod = orderData.paymentMethod;
+        }
+        if (this.selectedMethod === 'liqpay') {
+          this.createPayment();
+        } else if (this.selectedMethod === 'stripe') {
+          // For Stripe, create intent and then rely on client-side Stripe SDK integration (future step)
+          this.notificationService.showInfo('Creating Stripe PaymentIntent...');
+          this.paymentService.createStripeIntent({
+            orderId: this.orderId,
+            amount: orderData.totalAmount,
+            currency: 'usd',
+            description: `Order #${this.orderId}`
+          }).pipe(takeUntil(this.destroy$)).subscribe({
+            next: (clientSecret) => {
+              console.log('[Stripe] clientSecret:', clientSecret);
+              this.notificationService.showSuccess('Stripe intent created. Integrate Stripe Elements to complete payment.');
+            },
+            error: () => {}
+          });
+        } else {
+          this.notificationService.showWarning(`Payment method ${this.selectedMethod} is not enabled yet.`);
+        }
+      } else {
         this.notificationService.showError('Invalid order ID');
         this.router.navigate(['/shop']);
-        return;
-      }
-      // Do not auto-create payment; wait for explicit button click
-      const orderData = this.getOrderData();
-      if (!orderData) {
-        this.notificationService.showWarning('Order data not found. Please go back to checkout.');
       }
     });
   }
@@ -95,7 +115,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
       orderId: this.orderId,
       amount: orderData.totalAmount,
       currency: 'USD',
-      paymentMethod: 'liqpay',
+      paymentMethod: this.selectedMethod,
       customerEmail: orderData.customerEmail,
       customerPhone: orderData.customerPhone,
       description: `Payment for order #${this.orderId}`
@@ -106,9 +126,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
     ).subscribe({
       next: (response: any) => {
         this.isLoading = false;
-        if (response.success && response.redirectUrl) {
-          // Redirect to LiqPay
-          window.location.href = response.redirectUrl;
+        if (response?.success && response?.data?.data && response?.data?.signature) {
+          // Auto-submit LiqPay checkout form
+          this.submitLiqPayForm(response.data.data, response.data.signature);
         } else if (response.payment) {
           this.payment = response.payment;
           this.startStatusTracking();
@@ -124,26 +144,25 @@ export class PaymentComponent implements OnInit, OnDestroy {
     });
   }
 
-  triggerStripeIntent(): void {
-    const orderData = this.getOrderData();
-    if (!orderData) {
-      this.notificationService.showError('Order data not found');
-      return;
-    }
-    this.paymentService.createStripeIntent({
-      orderId: this.orderId,
-      amount: orderData.totalAmount,
-      currency: 'usd',
-      description: `Order #${this.orderId}`
-    }).pipe(takeUntil(this.destroy$)).subscribe({
-      next: (clientSecret) => {
-        console.log('[Stripe] clientSecret:', clientSecret);
-        this.notificationService.showSuccess('Stripe intent created. Check console for clientSecret.');
-      },
-      error: () => {
-        // notification already shown in service
-      }
-    });
+  private submitLiqPayForm(dataBase64: string, signature: string): void {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'https://www.liqpay.ua/api/3/checkout';
+
+    const dataInput = document.createElement('input');
+    dataInput.type = 'hidden';
+    dataInput.name = 'data';
+    dataInput.value = String(dataBase64);
+    form.appendChild(dataInput);
+
+    const signatureInput = document.createElement('input');
+    signatureInput.type = 'hidden';
+    signatureInput.name = 'signature';
+    signatureInput.value = String(signature);
+    form.appendChild(signatureInput);
+
+    document.body.appendChild(form);
+    form.submit();
   }
 
   private getOrderData(): any {

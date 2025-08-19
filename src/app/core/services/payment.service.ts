@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError, of } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment.prod';
 import { Payment, PaymentRequest, PaymentResponse, PaymentStatus } from '../../../shared/models/payment.model';
@@ -61,15 +61,7 @@ export class PaymentService {
       );
   }
 
-  processLiqPayWebhook(data: string, signature: string): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/liqpay-webhook`, { data, signature })
-      .pipe(
-        catchError(error => {
-          console.error('Error processing LiqPay webhook:', error);
-          return throwError(() => new Error('Failed to process webhook'));
-        })
-      );
-  }
+  // Webhook is called by LiqPay directly to the backend. No client call is needed.
 
   getPaymentStatus(paymentId: number): Observable<PaymentStatus> {
     return this.http.get<{ status: PaymentStatus }>(`${this.apiUrl}/${paymentId}/status`)

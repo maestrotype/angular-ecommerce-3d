@@ -6,7 +6,12 @@ import { PaymentMethod, Currency } from '../entities/payment.entity';
 
 // LiqPay specific payment data interface
 export interface LiqPayPaymentData {
-  params: {
+  // Base64-encoded JSON of params as required by LiqPay
+  data: string;
+  // Signature computed as base64(sha1(private_key + data + private_key))
+  signature: string;
+  // Optional: plain params for debugging in client
+  params?: {
     action: string;
     amount: number;
     currency: string;
@@ -16,9 +21,8 @@ export interface LiqPayPaymentData {
     server_url: string;
     language: string;
     sandbox: number;
+    public_key: string;
   };
-  signature: string;
-  publicKey: string;
 }
 
 @Injectable()
@@ -57,16 +61,18 @@ export class LiqPayStrategy implements PaymentStrategy<LiqPayPaymentData> {
         result_url: `${this.frontendUrl}/payment/success`,
         server_url: `${this.backendUrl}/payments/liqpay/webhook`,
         language: 'uk',
-        sandbox: this.isSandbox ? 1 : 0
+        sandbox: this.isSandbox ? 1 : 0,
+        public_key: this.publicKey
       };
 
-      // Generate signature for LiqPay
-      const signature = this.generateSignature(params);
+      // Prepare base64-encoded data and signature for LiqPay form
+      const data = Buffer.from(JSON.stringify(params)).toString('base64');
+      const signature = this.generateSignature(data);
 
       const liqpayData: LiqPayPaymentData = {
-        params,
+        data,
         signature,
-        publicKey: this.publicKey
+        params
       };
 
       return of({
@@ -85,6 +91,7 @@ export class LiqPayStrategy implements PaymentStrategy<LiqPayPaymentData> {
 
   verifyWebhook(data: string, signature: string): Observable<boolean> {
     try {
+      // `data` is already base64-encoded payload from LiqPay
       const calculatedSignature = this.generateSignature(data);
       return of(calculatedSignature === signature);
     } catch (error) {
@@ -122,15 +129,10 @@ export class LiqPayStrategy implements PaymentStrategy<LiqPayPaymentData> {
     return [Currency.UAH, Currency.USD, Currency.EUR].includes(currency);
   }
 
-  private generateSignature(data: any): string {
-    // Convert data to string if it's an object
-    const dataString = typeof data === 'string' ? data : JSON.stringify(data);
-
-    // LiqPay signature format: private_key + data + private_key
-    const signatureString = this.privateKey + dataString + this.privateKey;
-
-    // Generate SHA1 hash
+  private generateSignature(dataBase64: string): string {
+    // LiqPay signature format: base64(sha1(private_key + data + private_key))
     const crypto = require('crypto');
-    return crypto.createHash('sha1').update(signatureString).digest('base64');
+    const toHash = this.privateKey + dataBase64 + this.privateKey;
+    return crypto.createHash('sha1').update(toHash).digest('base64');
   }
 } 

@@ -113,7 +113,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
           imageUrl: String(item.imageUrl)
         })),
         totalAmount: Number(this.totalPrice),
-
+        paymentMethod: this.selectedPaymentMethod
       };
 
 
