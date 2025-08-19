@@ -62,7 +62,7 @@ export class PaymentService {
   }
 
   processLiqPayWebhook(data: string, signature: string): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/liqpay-webhook`, { data, signature })
+    return this.http.post<void>(`${this.apiUrl}/liqpay/webhook`, { data, signature })
       .pipe(
         catchError(error => {
           console.error('Error processing LiqPay webhook:', error);

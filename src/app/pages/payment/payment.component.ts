@@ -102,9 +102,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
     ).subscribe({
       next: (response: any) => {
         this.isLoading = false;
-        if (response.success && response.redirectUrl) {
-          // Redirect to LiqPay
-          window.location.href = response.redirectUrl;
+        if (response?.success && response?.data?.data && response?.data?.signature) {
+          // Auto-submit LiqPay checkout form
+          this.submitLiqPayForm(response.data.data, response.data.signature);
         } else if (response.payment) {
           this.payment = response.payment;
           this.startStatusTracking();
@@ -118,6 +118,27 @@ export class PaymentComponent implements OnInit, OnDestroy {
         console.error('Payment creation error:', error);
       }
     });
+  }
+
+  private submitLiqPayForm(dataBase64: string, signature: string): void {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'https://www.liqpay.ua/api/3/checkout';
+
+    const dataInput = document.createElement('input');
+    dataInput.type = 'hidden';
+    dataInput.name = 'data';
+    dataInput.value = String(dataBase64);
+    form.appendChild(dataInput);
+
+    const signatureInput = document.createElement('input');
+    signatureInput.type = 'hidden';
+    signatureInput.name = 'signature';
+    signatureInput.value = String(signature);
+    form.appendChild(signatureInput);
+
+    document.body.appendChild(form);
+    form.submit();
   }
 
   private getOrderData(): any {

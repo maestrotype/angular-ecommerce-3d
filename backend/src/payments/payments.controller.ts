@@ -13,6 +13,14 @@ import { AdminGuard } from '../auth/guards/admin.guard';
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
+  @Get(':id/status')
+  getPaymentStatus(@Param('id', ParseIntPipe) id: number): Observable<{ status: string }> {
+    return this.paymentsService.getPaymentById(id).pipe(
+      map(payment => ({ status: payment.status })),
+      catchError(() => of({ status: 'failed' }))
+    );
+  }
+
   @Post()
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.CREATED)
