@@ -359,6 +359,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 [data-theme='glass'] .mat-mdc-text-field-wrapper,
 [data-theme='default'] .mat-mdc-text-field-wrapper {
   border-radius: 12px;
-  overflow: hidden;
+  /* overflow removed to preserve notched outline corners and overlays */
   background-clip: padding-box;
 }
