@@ -40,7 +40,8 @@
               <div class="method-info">
                 <h4>{{ selectedMethod | titlecase }}</h4>
                 <p *ngIf="selectedMethod==='liqpay'">Secure online payment</p>
-                <p *ngIf="selectedMethod!=='liqpay'">This method is not enabled yet. Please choose LiqPay at checkout.</p>
+                <p *ngIf="selectedMethod==='stripe'">Pay with card using Stripe</p>
+                <p *ngIf="selectedMethod==='paypal'">Pay with PayPal (coming soon)</p>
               </div>
             </div>
           </div>
@@ -51,8 +52,9 @@
             <span *ngIf="!isLoading">Pay Now</span>
             <span *ngIf="isLoading">Processing...</span>
           </button>
-          <div *ngIf="selectedMethod==='stripe'" style="margin-top:8px;color:#2a6;">
-            Stripe intent will be created; integrate Stripe Elements to collect card details.
+          <div *ngIf="selectedMethod==='stripe'" style="margin-top:16px;">
+            <div id="card-element" style="padding:12px;border:1px solid #ddd;border-radius:8px;background:#fff;"></div>
+            <button class="pay-btn" style="margin-top:12px;" type="button" (click)="confirmStripePayment()">Pay with Card</button>
           </div>
           <div *ngIf="selectedMethod==='paypal'" style="margin-top:8px;color:#b36b00;">
             PayPal is not implemented yet.

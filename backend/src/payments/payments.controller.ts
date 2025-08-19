@@ -1,4 +1,5 @@
 import { Controller, Post, Get, Put, Body, Param, ParseIntPipe, HttpCode, HttpStatus, UseGuards, Headers, Query } from '@nestjs/common';
+import { Request } from 'express';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { PaymentsService } from './payments.service';
@@ -171,6 +172,16 @@ export class PaymentsController {
     return this.paymentsService.createStripeIntent(body).pipe(
       map((res) => ({ success: true, data: res, message: 'Stripe intent created' })),
       catchError((error) => of({ success: false, error: error.message || 'Failed to create Stripe intent' }))
+    );
+  }
+
+  @Post('stripe/webhook')
+  @HttpCode(HttpStatus.OK)
+  handleStripeWebhook(@Body() body: any, @Headers('stripe-signature') signature: string, req: Request): Observable<{ received: boolean }> {
+    const rawBody = (req as any).rawBody || JSON.stringify(body);
+    return this.paymentsService.handleStripeWebhook(rawBody, signature).pipe(
+      map(() => ({ received: true })),
+      catchError(() => of({ received: false }))
     );
   }
 } 

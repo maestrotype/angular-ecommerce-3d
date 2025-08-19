@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil, interval } from 'rxjs';
+import { environment } from '../../../environments/environment.prod';
 import { PaymentService } from '../../core/services/payment.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { ModalService } from '../../core/services/modal.service';
@@ -23,6 +24,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
   paymentStatus: PaymentStatus;
   currentTheme = 'default';
   selectedMethod: 'liqpay' | 'stripe' | 'paypal' = 'liqpay';
+  stripe: any = null;
+  elements: any = null;
+  cardEl: any = null;
   
   // LiqPay specific
   liqpayData: any;
@@ -76,7 +80,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
         if (this.selectedMethod === 'liqpay') {
           this.createPayment();
         } else if (this.selectedMethod === 'stripe') {
-          // For Stripe, create intent and then rely on client-side Stripe SDK integration (future step)
           this.notificationService.showInfo('Creating Stripe PaymentIntent...');
           this.paymentService.createStripeIntent({
             orderId: this.orderId,
@@ -85,8 +88,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
             description: `Order #${this.orderId}`
           }).pipe(takeUntil(this.destroy$)).subscribe({
             next: (clientSecret) => {
-              console.log('[Stripe] clientSecret:', clientSecret);
-              this.notificationService.showSuccess('Stripe intent created. Integrate Stripe Elements to complete payment.');
+              this.initStripe(clientSecret);
             },
             error: () => {}
           });
@@ -97,6 +99,70 @@ export class PaymentComponent implements OnInit, OnDestroy {
         this.notificationService.showError('Invalid order ID');
         this.router.navigate(['/shop']);
       }
+    });
+  }
+
+  private async initStripe(clientSecret: string): Promise<void> {
+    try {
+      if (!this.stripe) {
+        const publishableKey = environment.stripePublishableKey || '';
+        if (!publishableKey) {
+          this.notificationService.showError('Stripe publishable key is not configured.');
+          return;
+        }
+        await this.loadStripeJs();
+        if (!(window as any).Stripe) {
+          this.notificationService.showError('Stripe.js failed to load.');
+          return;
+        }
+        this.stripe = (window as any).Stripe(publishableKey);
+      }
+      if (!this.stripe) {
+        this.notificationService.showError('Failed to initialize Stripe.');
+        return;
+      }
+      this.elements = this.stripe.elements();
+      if (!this.cardEl) {
+        this.cardEl = this.elements.create('card');
+        const mountPoint = document.getElementById('card-element');
+        if (mountPoint) this.cardEl.mount(mountPoint);
+      }
+      // Store clientSecret for confirm step
+      (this as any)._stripeClientSecret = clientSecret;
+    } catch (e) {
+      this.notificationService.showError('Failed to load Stripe Elements.');
+    }
+  }
+
+  async confirmStripePayment(): Promise<void> {
+    if (!this.stripe || !(this as any)._stripeClientSecret || !this.cardEl) return;
+    const clientSecret = (this as any)._stripeClientSecret as string;
+    const { error, paymentIntent } = await this.stripe.confirmCardPayment(clientSecret, {
+      payment_method: { card: this.cardEl }
+    });
+    if (error) {
+      this.notificationService.showError(error.message || 'Payment failed');
+      return;
+    }
+    if (paymentIntent && paymentIntent.status === 'succeeded') {
+      this.notificationService.showSuccess('Payment completed successfully!');
+      this.router.navigate(['/payment-success', this.orderId]);
+    }
+  }
+
+  private loadStripeJs(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if (document.getElementById('stripe-js')) {
+        resolve();
+        return;
+      }
+      const script = document.createElement('script');
+      script.id = 'stripe-js';
+      script.src = 'https://js.stripe.com/v3/';
+      script.async = true;
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error('Stripe.js load error'));
+      document.body.appendChild(script);
     });
   }
 
