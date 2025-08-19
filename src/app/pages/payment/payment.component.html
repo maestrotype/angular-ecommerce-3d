@@ -50,6 +50,7 @@
             <span *ngIf="!isLoading">Pay Now</span>
             <span *ngIf="isLoading">Processing...</span>
           </button>
+          <button class="pay-btn" style="margin-left:12px" type="button" (click)="triggerStripeIntent()">Test Stripe Intent (logs clientSecret)</button>
         </div>
       </div>
 

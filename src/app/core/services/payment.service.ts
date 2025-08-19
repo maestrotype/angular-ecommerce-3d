@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment.prod';
 import { Payment, PaymentRequest, PaymentResponse, PaymentStatus } from '../../../shared/models/payment.model';
@@ -78,6 +78,29 @@ export class PaymentService {
         catchError(error => {
           console.error('Error fetching payment status:', error);
           return throwError(() => new Error('Failed to fetch payment status'));
+        })
+      );
+  }
+
+  createStripeIntent(params: { orderId: number; amount: number; currency: string; description?: string }): Observable<string> {
+    type StripeIntentResponse = { success: boolean; data?: { clientSecret: string }; error?: string; message?: string };
+    return this.http.post<StripeIntentResponse>(`${this.apiUrl}/stripe/intent`, params)
+      .pipe(
+        map(res => {
+          if (res.success && res.data?.clientSecret) {
+            return res.data.clientSecret;
+          }
+          const message = res.error || res.message || 'Failed to create Stripe intent';
+          this.notificationService.showError(message);
+          throw new Error(message);
+        }),
+        catchError(error => {
+          if (error.status === 401 || error.status === 403) {
+            this.notificationService.showError('Please log in to continue.');
+          } else {
+            this.notificationService.showError('Failed to create Stripe intent.');
+          }
+          return throwError(() => error);
         })
       );
   }

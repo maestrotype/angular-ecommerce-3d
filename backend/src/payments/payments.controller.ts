@@ -159,4 +159,13 @@ export class PaymentsController {
       }))
     );
   }
+
+  @Post('stripe/intent')
+  @UseGuards(JwtAuthGuard)
+  createStripeIntent(@Body() body: { orderId: number; amount: number; currency: string; description?: string }): Observable<PaymentResponseDto> {
+    return this.paymentsService.createStripeIntent(body).pipe(
+      map(res => ({ success: true, data: res, message: 'Stripe intent created' })),
+      catchError(error => of({ success: false, error: error.message || 'Failed to create Stripe intent' }))
+    );
+  }
 } 

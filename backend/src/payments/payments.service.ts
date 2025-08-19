@@ -10,6 +10,7 @@ import { LiqPayStrategy } from './strategies/liqpay.strategy';
 import { NotificationsService } from '../notifications/notifications.service';
 import { OrdersService } from '../orders/orders.service';
 import { EmailService } from '../email/email.service';
+import { StripeStrategy } from './strategies/stripe.strategy';
 
 @Injectable()
 export class PaymentsService {
@@ -21,12 +22,12 @@ export class PaymentsService {
     private liqpayStrategy: LiqPayStrategy,
     private notificationsService: NotificationsService,
     private ordersService: OrdersService,
-    private emailService: EmailService
+    private emailService: EmailService,
+    private stripeStrategy: StripeStrategy
   ) {
     // Register payment strategies
     this.paymentStrategies.set(PaymentMethod.LIQPAY, this.liqpayStrategy);
-    // Future: this.paymentStrategies.set(PaymentMethod.STRIPE, this.stripeStrategy);
-    // Future: this.paymentStrategies.set(PaymentMethod.PAYPAL, this.paypalStrategy);
+    // Stripe will be accessed directly via stripeStrategy for intent creation
   }
 
   createPayment(createPaymentDto: CreatePaymentDto): Observable<PaymentResult> {
@@ -345,6 +346,24 @@ export class PaymentsService {
       .getMany()
     ).pipe(
       catchError(error => throwError(() => new InternalServerErrorException(`Failed to search payments: ${error.message}`)))
+    );
+  }
+
+  createStripeIntent(body: { orderId: number; amount: number; currency: string; description?: string }): Observable<{ clientSecret: string }> {
+    const paymentData: PaymentData = {
+      orderId: Number(body.orderId),
+      amount: Number(body.amount),
+      currency: body.currency as any,
+      description: body.description || `Order #${body.orderId}`
+    };
+
+    return this.stripeStrategy.createPayment(paymentData).pipe(
+      switchMap(result => {
+        if (!result.success || !result.data?.clientSecret) {
+          return throwError(() => new BadRequestException(result.error || 'Stripe intent creation failed'));
+        }
+        return of({ clientSecret: result.data.clientSecret });
+      })
     );
   }
 

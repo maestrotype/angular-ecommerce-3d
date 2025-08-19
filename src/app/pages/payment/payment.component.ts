@@ -34,7 +34,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
+    public router: Router,
     private paymentService: PaymentService,
     private notificationService: NotificationService,
     private modalService: ModalService,
@@ -67,11 +67,15 @@ export class PaymentComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe(params => {
       this.orderId = +params['id'];
-      if (this.orderId) {
-        this.createPayment();
-      } else {
+      if (!this.orderId) {
         this.notificationService.showError('Invalid order ID');
         this.router.navigate(['/shop']);
+        return;
+      }
+      // Do not auto-create payment; wait for explicit button click
+      const orderData = this.getOrderData();
+      if (!orderData) {
+        this.notificationService.showWarning('Order data not found. Please go back to checkout.');
       }
     });
   }
@@ -116,6 +120,28 @@ export class PaymentComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.notificationService.showError('Failed to create payment. Please try again.');
         console.error('Payment creation error:', error);
+      }
+    });
+  }
+
+  triggerStripeIntent(): void {
+    const orderData = this.getOrderData();
+    if (!orderData) {
+      this.notificationService.showError('Order data not found');
+      return;
+    }
+    this.paymentService.createStripeIntent({
+      orderId: this.orderId,
+      amount: orderData.totalAmount,
+      currency: 'usd',
+      description: `Order #${this.orderId}`
+    }).pipe(takeUntil(this.destroy$)).subscribe({
+      next: (clientSecret) => {
+        console.log('[Stripe] clientSecret:', clientSecret);
+        this.notificationService.showSuccess('Stripe intent created. Check console for clientSecret.');
+      },
+      error: () => {
+        // notification already shown in service
       }
     });
   }
