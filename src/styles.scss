@@ -39,8 +39,8 @@
 
 /* Glass Theme Styles */
 .glass-theme {
-  background: var(--color-surface-primary, rgba(255, 255, 255, 0.1));
-  border: 1px solid var(--color-border-primary, rgba(255, 255, 255, 0.2));
+  // background: var(--color-surface-primary, rgba(255, 255, 255, 0.1));
+  // border: 1px solid var(--color-border-primary, rgba(255, 255, 255, 0.2));
   backdrop-filter: blur(10px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
@@ -352,4 +352,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .warning-snackbar .mat-simple-snackbar-action {
   color: white;
+}
+
+/* Global dark theme input fixes */
+[data-theme='dark'] .mat-mdc-text-field-wrapper,
+[data-theme='glass'] .mat-mdc-text-field-wrapper,
+[data-theme='default'] .mat-mdc-text-field-wrapper {
+  border-radius: 12px;
+  /* overflow removed to preserve notched outline corners and overlays */
+  background-clip: padding-box;
 }
