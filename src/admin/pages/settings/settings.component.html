@@ -238,5 +238,142 @@
         </form>
       </mat-card-content>
     </mat-card>
+
+    <!-- Payment Settings Card -->
+    <mat-card class="settings-card">
+      <mat-card-header>
+        <mat-card-title>{{ 'PAYMENT_SETTINGS' | translate }}</mat-card-title>
+        <mat-card-subtitle>Configure payment gateways and methods</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="paymentForm" (ngSubmit)="onSavePayment()" class="settings-form">
+          
+          <!-- Stripe Settings -->
+          <div class="payment-gateway-section">
+            <h3>Stripe</h3>
+            <div class="form-row">
+              <mat-slide-toggle formControlName="stripeEnabled" color="primary">
+                Enable Stripe
+              </mat-slide-toggle>
+            </div>
+            
+            <div class="form-row" *ngIf="paymentForm.get('stripeEnabled')?.value">
+              <mat-slide-toggle formControlName="stripeTestMode" color="accent">
+                Test Mode
+              </mat-slide-toggle>
+            </div>
+
+            <div class="form-row" *ngIf="paymentForm.get('stripeEnabled')?.value">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Stripe Publishable Key</mat-label>
+                <input matInput formControlName="stripePublishableKey" placeholder="pk_test_... or pk_live_...">
+                <mat-icon matSuffix>vpn_key</mat-icon>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row" *ngIf="paymentForm.get('stripeEnabled')?.value">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Stripe Secret Key</mat-label>
+                <input matInput formControlName="stripeSecretKey" placeholder="sk_test_... or sk_live_..." type="password">
+                <mat-icon matSuffix>lock</mat-icon>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row" *ngIf="paymentForm.get('stripeEnabled')?.value">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Webhook Secret</mat-label>
+                <input matInput formControlName="stripeWebhookSecret" placeholder="whsec_..." type="password">
+                <mat-icon matSuffix>webhook</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- LiqPay Settings -->
+          <div class="payment-gateway-section">
+            <h3>LiqPay</h3>
+            <div class="form-row">
+              <mat-slide-toggle formControlName="liqpayEnabled" color="primary">
+                Enable LiqPay
+              </mat-slide-toggle>
+            </div>
+            
+            <div class="form-row" *ngIf="paymentForm.get('liqpayEnabled')?.value">
+              <mat-slide-toggle formControlName="liqpayTestMode" color="accent">
+                Test Mode
+              </mat-slide-toggle>
+            </div>
+
+            <div class="form-row" *ngIf="paymentForm.get('liqpayEnabled')?.value">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>LiqPay Public Key</mat-label>
+                <input matInput formControlName="liqpayPublicKey" placeholder="iqpb_test_... or iqpb_live_...">
+                <mat-icon matSuffix>vpn_key</mat-icon>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row" *ngIf="paymentForm.get('liqpayEnabled')?.value">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>LiqPay Private Key</mat-label>
+                <input matInput formControlName="liqpayPrivateKey" placeholder="iqpb_test_... or iqpb_live_..." type="password">
+                <mat-icon matSuffix>lock</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- PayPal Settings -->
+          <div class="payment-gateway-section">
+            <h3>PayPal</h3>
+            <div class="form-row">
+              <mat-slide-toggle formControlName="paypalEnabled" color="primary">
+                Enable PayPal
+              </mat-slide-toggle>
+            </div>
+            
+            <div class="form-row" *ngIf="paymentForm.get('paypalEnabled')?.value">
+              <mat-slide-toggle formControlName="paypalTestMode" color="accent">
+                Test Mode
+              </mat-slide-toggle>
+            </div>
+
+            <div class="form-row" *ngIf="paymentForm.get('paypalEnabled')?.value">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>PayPal Client ID</mat-label>
+                <input matInput formControlName="paypalClientId" placeholder="Client ID from PayPal Developer">
+                <mat-icon matSuffix>account_circle</mat-icon>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row" *ngIf="paymentForm.get('paypalEnabled')?.value">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>PayPal Client Secret</mat-label>
+                <input matInput formControlName="paypalClientSecret" placeholder="Client Secret from PayPal Developer" type="password">
+                <mat-icon matSuffix>lock</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- Default Payment Method -->
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Default Payment Method</mat-label>
+              <mat-select formControlName="defaultPaymentMethod">
+                <mat-option value="stripe" *ngIf="paymentForm.get('stripeEnabled')?.value">Stripe</mat-option>
+                <mat-option value="liqpay" *ngIf="paymentForm.get('liqpayEnabled')?.value">LiqPay</mat-option>
+                <mat-option value="paypal" *ngIf="paymentForm.get('paypalEnabled')?.value">PayPal</mat-option>
+              </mat-select>
+              <mat-icon matSuffix>payment</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="form-actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="paymentForm.invalid || isLoading">
+              <mat-icon>save</mat-icon>
+              {{ isLoading ? ('SAVING' | translate) : ('SAVE_PAYMENT_SETTINGS' | translate) }}
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>

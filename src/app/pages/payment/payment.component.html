@@ -54,7 +54,7 @@
           </button>
           <div *ngIf="selectedMethod==='stripe'" style="margin-top:16px;">
             <div id="card-element" style="padding:12px;border:1px solid #ddd;border-radius:8px;background:#fff;"></div>
-            <button class="pay-btn" style="margin-top:12px;" type="button" (click)="confirmStripePayment()">Pay with Card</button>
+            <button class="pay-btn" style="margin-top:12px;" type="button" (click)="confirmStripePayment()" [disabled]="!stripe || !cardEl">Pay with Card</button>
           </div>
           <div *ngIf="selectedMethod==='paypal'" style="margin-top:8px;color:#b36b00;">
             PayPal is not implemented yet.

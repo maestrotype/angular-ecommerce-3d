@@ -93,6 +93,8 @@
   "SYSTEM_UPDATES": "System Updates",
   "SYSTEM_UPDATES_DESC": "Receive notifications about system updates",
   "SAVE_NOTIFICATION_SETTINGS": "Save Notification Settings",
+  "PAYMENT_SETTINGS": "Payment Settings",
+  "SAVE_PAYMENT_SETTINGS": "Save Payment Settings",
   "SECURITY_SETTINGS": "Security Settings",
   "SECURITY_SETTINGS_DESC": "Configure security and authentication",
   "TWO_FACTOR_AUTH": "Two-Factor Authentication",

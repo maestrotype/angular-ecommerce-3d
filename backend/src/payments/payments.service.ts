@@ -353,8 +353,10 @@ export class PaymentsService {
     const paymentData: PaymentData = {
       orderId: Number(body.orderId),
       amount: Number(body.amount),
-      currency: body.currency as any,
-      description: body.description || `Order #${body.orderId}`
+      currency: String(body.currency || 'USD').toUpperCase() as any, // Ensure uppercase for enum
+      description: body.description || `Order #${body.orderId}`,
+      customerEmail: '', // Will be filled from order data
+      customerPhone: ''
     };
 
     // Ensure we have a payment record for this order
@@ -363,21 +365,32 @@ export class PaymentsService {
         if (existing) {
           return of(existing);
         }
-        const payment = this.paymentRepository.create({
-          orderId: paymentData.orderId,
-          amount: paymentData.amount,
-          currency: paymentData.currency as Currency,
-          paymentMethod: PaymentMethod.STRIPE,
-          status: PaymentStatus.PENDING,
-          description: paymentData.description
-        });
-        return from(this.paymentRepository.save(payment));
+        // Get order data to fill customer info
+        return from(this.ordersService.findOne(paymentData.orderId)).pipe(
+          switchMap(order => {
+            const payment = this.paymentRepository.create({
+              orderId: paymentData.orderId,
+              amount: paymentData.amount,
+              currency: paymentData.currency as Currency,
+              paymentMethod: PaymentMethod.STRIPE,
+              status: PaymentStatus.PENDING,
+              description: paymentData.description,
+              customerEmail: order?.customerEmail || '',
+              customerPhone: order?.customerPhone || ''
+            });
+            return from(this.paymentRepository.save(payment));
+          })
+        );
       })
     );
 
     return ensurePayment$.pipe(
-      switchMap(() => this.stripeStrategy.createPayment(paymentData)),
+      switchMap(() => {
+        console.log('[Stripe] Creating PaymentIntent for order:', paymentData.orderId);
+        return this.stripeStrategy.createPayment(paymentData);
+      }),
       switchMap(result => {
+        console.log('[Stripe] Strategy result:', result);
         if (!result.success || !result.data?.clientSecret) {
           return throwError(() => new BadRequestException(result.error || 'Stripe intent creation failed'));
         }
@@ -387,14 +400,27 @@ export class PaymentsService {
   }
 
   handleStripeWebhook(rawBody: string, signature: string): Observable<void> {
-    const event = this.stripeStrategy.constructEvent(rawBody, signature);
-    if (!event) {
-      return throwError(() => new BadRequestException('Invalid Stripe signature'));
-    }
+    return this.stripeStrategy.verifyWebhook(rawBody, signature).pipe(
+      switchMap(isValid => {
+        if (!isValid) {
+          return throwError(() => new BadRequestException('Invalid Stripe webhook signature'));
+        }
+        
+        // Parse the webhook body to get the event
+        try {
+          const event = JSON.parse(rawBody);
+          return this.processStripeWebhookEvent(event);
+        } catch (error) {
+          return throwError(() => new BadRequestException('Invalid webhook body format'));
+        }
+      })
+    );
+  }
 
+  private processStripeWebhookEvent(event: any): Observable<void> {
     switch (event.type) {
       case 'payment_intent.succeeded': {
-        const intent: any = (event as any).data.object;
+        const intent: any = event.data.object;
         const orderId = Number(intent.metadata?.orderId);
         if (!orderId) return of(void 0);
         return from(this.paymentRepository.findOne({ where: { orderId } })).pipe(
@@ -409,7 +435,7 @@ export class PaymentsService {
         );
       }
       case 'payment_intent.payment_failed': {
-        const intent: any = (event as any).data.object;
+        const intent: any = event.data.object;
         const orderId = Number(intent.metadata?.orderId);
         if (!orderId) return of(void 0);
         return from(this.paymentRepository.findOne({ where: { orderId } })).pipe(

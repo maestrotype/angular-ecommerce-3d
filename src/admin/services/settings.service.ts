@@ -27,10 +27,28 @@ export interface SecuritySettings {
   maxLoginAttempts: number;
 }
 
+export interface PaymentSettings {
+  stripeEnabled: boolean;
+  stripeTestMode: boolean;
+  stripePublishableKey: string;
+  stripeSecretKey: string;
+  stripeWebhookSecret: string;
+  liqpayEnabled: boolean;
+  liqpayTestMode: boolean;
+  liqpayPublicKey: string;
+  liqpayPrivateKey: string;
+  paypalEnabled: boolean;
+  paypalTestMode: boolean;
+  paypalClientId: string;
+  paypalClientSecret: string;
+  defaultPaymentMethod: string;
+}
+
 export interface AppSettings {
   general?: GeneralSettings;
   notifications?: NotificationSettings;
   security?: SecuritySettings;
+  payment?: PaymentSettings;
 }
 
 @Injectable({
@@ -64,6 +82,22 @@ export class SettingsService {
         passwordExpiry: 90,
         maxLoginAttempts: 5,
       },
+      payment: {
+        stripeEnabled: false,
+        stripeTestMode: true,
+        stripePublishableKey: '',
+        stripeSecretKey: '',
+        stripeWebhookSecret: '',
+        liqpayEnabled: false,
+        liqpayTestMode: true,
+        liqpayPublicKey: '',
+        liqpayPrivateKey: '',
+        paypalEnabled: false,
+        paypalTestMode: true,
+        paypalClientId: '',
+        paypalClientSecret: '',
+        defaultPaymentMethod: 'stripe'
+      }
     });
   }
 
@@ -77,5 +111,9 @@ export class SettingsService {
 
   updateSecuritySettings(settings: SecuritySettings): Observable<ApiResponse> {
     return this.http.put<ApiResponse>(`${this.apiUrl}/security`, settings);
+  }
+
+  updatePaymentSettings(settings: PaymentSettings): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(`${this.apiUrl}/payment`, settings);
   }
 }
