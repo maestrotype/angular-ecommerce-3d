@@ -15,6 +15,71 @@
   --bg-primary: #1a1a1a;
   --bg-secondary: #2d2d2d;
 
+  /* Product Detail Dark Theme Variables */
+  --product-detail-bg: #1e293b;
+  --product-detail-card-bg: #334155;
+  --product-detail-border: 1px solid #475569;
+  --product-detail-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --product-detail-radius: 16px;
+  --product-detail-padding: 24px;
+  
+  --product-title-color: #f8fafc;
+  --product-title-size: clamp(24px, 2.6vw, 34px);
+  --product-title-weight: 700;
+  
+  --product-meta-color: #94a3b8;
+  --product-meta-size: 14px;
+  
+  --product-price-color: #f8fafc;
+  --product-price-size: 28px;
+  --product-price-weight: 700;
+  --product-original-price-color: #64748b;
+  
+  --product-stock-color: #10b981;
+  --product-stock-oos-color: #ef4444;
+  
+  --product-stepper-bg: #475569;
+  --product-stepper-border: 1px solid #64748b;
+  --product-stepper-radius: 10px;
+  --product-stepper-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  --product-stepper-btn-bg: #64748b;
+  --product-stepper-btn-hover: #94a3b8;
+  --product-stepper-value-color: #f8fafc;
+  
+  --product-cta-bg: #6366f1;
+  --product-cta-color: #ffffff;
+  --product-cta-radius: 12px;
+  --product-cta-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+  --product-cta-hover-shadow: 0 12px 32px rgba(99, 102, 241, 0.4);
+  
+  --product-favorite-color: #94a3b8;
+  --product-favorite-hover: #ef4444;
+  
+  --product-oos-color: #ef4444;
+  
+  // Characteristics
+  --product-specs-bg: #475569;
+  --product-specs-border: 1px solid #64748b;
+  --product-specs-radius: 12px;
+  --product-specs-padding: 12px;
+  --product-specs-label-color: #94a3b8;
+  --product-specs-value-color: #f8fafc;
+  
+  // Product Image Area
+  --product-main-view-bg: #334155;
+  --product-main-view-radius: 16px;
+  --product-main-view-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --product-thumb-radius: 8px;
+  --product-thumb-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  
+  // Product Tabs
+  --product-tabs-bg: #334155;
+  --product-tabs-border: 1px solid #475569;
+  --product-tabs-radius: 16px;
+  --product-tabs-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --product-tabs-nav-bg: #475569;
+  --product-tabs-nav-border: 1px solid #64748b;
+
   /* Dark theme for demo sections */
   .demo-section {
     background: #1e293b;

@@ -74,4 +74,24 @@ export class ProductInfoComponent {
   onFavoriteToggled(event: { product: Product; isFavorite: boolean }): void {
     console.log(`${event.product.name} ${event.isFavorite ? 'added to' : 'removed from'} favorites`);
   }
+
+  /**
+   * Get key specifications to display in summary
+   */
+  getKeySpecs(): Array<{key: string, value: string}> {
+    if (!this.product?.specifications) {
+      return [];
+    }
+    
+    const specs = this.product.specifications;
+    const keySpecs = ['Material', 'Color', 'Size', 'Weight', 'Brand'];
+    
+    return keySpecs
+      .filter(key => specs[key as keyof typeof specs])
+      .map(key => ({
+        key,
+        value: String(specs[key as keyof typeof specs])
+      }))
+      .slice(0, 4); // Show max 4 specs
+  }
 }

@@ -8,6 +8,71 @@
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
   
+  /* Product Detail Glass Theme Variables */
+  --product-detail-bg: rgba(255, 255, 255, 0.1);
+  --product-detail-card-bg: rgba(255, 255, 255, 0.15);
+  --product-detail-border: 1px solid rgba(255, 255, 255, 0.2);
+  --product-detail-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  --product-detail-radius: 20px;
+  --product-detail-padding: 28px;
+  
+  --product-title-color: #1e293b;
+  --product-title-size: clamp(24px, 2.6vw, 34px);
+  --product-title-weight: 700;
+  
+  --product-meta-color: #475569;
+  --product-meta-size: 14px;
+  
+  --product-price-color: #1e293b;
+  --product-price-size: 28px;
+  --product-price-weight: 700;
+  --product-original-price-color: #64748b;
+  
+  --product-stock-color: #059669;
+  --product-stock-oos-color: #dc2626;
+  
+  --product-stepper-bg: rgba(255, 255, 255, 0.2);
+  --product-stepper-border: 1px solid rgba(255, 255, 255, 0.3);
+  --product-stepper-radius: 12px;
+  --product-stepper-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --product-stepper-btn-bg: rgba(255, 255, 255, 0.3);
+  --product-stepper-btn-hover: rgba(255, 255, 255, 0.4);
+  --product-stepper-value-color: #1e293b;
+  
+  --product-cta-bg: rgba(255, 255, 255, 0.25);
+  --product-cta-color: #1e293b;
+  --product-cta-radius: 14px;
+  --product-cta-shadow: 0 8px 32px rgba(255, 255, 255, 0.2);
+  --product-cta-hover-shadow: 0 12px 40px rgba(255, 255, 255, 0.25);
+  
+  --product-favorite-color: #475569;
+  --product-favorite-hover: #dc2626;
+  
+  --product-oos-color: #dc2626;
+  
+  // Characteristics
+  --product-specs-bg: rgba(255, 255, 255, 0.1);
+  --product-specs-border: 1px solid rgba(255, 255, 255, 0.2);
+  --product-specs-radius: 12px;
+  --product-specs-padding: 12px;
+  --product-specs-label-color: #64748b;
+  --product-specs-value-color: #1e293b;
+  
+  // Product Image Area
+  --product-main-view-bg: rgba(255, 255, 255, 0.15);
+  --product-main-view-radius: 20px;
+  --product-main-view-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  --product-thumb-radius: 12px;
+  --product-thumb-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  
+  // Product Tabs
+  --product-tabs-bg: rgba(255, 255, 255, 0.15);
+  --product-tabs-border: 1px solid rgba(255, 255, 255, 0.2);
+  --product-tabs-radius: 20px;
+  --product-tabs-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  --product-tabs-nav-bg: rgba(255, 255, 255, 0.1);
+  --product-tabs-nav-border: 1px solid rgba(255, 255, 255, 0.2);
+  
   /* Glass effect for cards and surfaces */
   .demo-section {
     background: rgba(255, 255, 255, 0.1);

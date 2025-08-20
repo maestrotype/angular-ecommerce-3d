@@ -2,11 +2,16 @@
   <!-- Header -->
   <div class="product-header">
     <div class="container">
-      <button class="back-btn glass-theme" (click)="goBack()">← Back to Shop</button>
+      <button class="back-btn glass-theme" (click)="goBack()">
+        ← Back to Shop
+      </button>
       <nav class="breadcrumb">
-        <a class="breadcrumb-link" (click)="navigateToHome()">Home</a> / 
+        <a class="breadcrumb-link" (click)="navigateToHome()">Home</a> /
         <a class="breadcrumb-link" (click)="navigateToShop()">Shop</a> /
-        <a class="breadcrumb-link" (click)="navigateToCategory()">{{ product.category }}</a> /
+        <a class="breadcrumb-link" (click)="navigateToCategory()">{{
+          product.category
+        }}</a>
+        /
         <span class="current">{{ product.name }}</span>
       </nav>
     </div>
@@ -18,7 +23,10 @@
       <div class="product-grid">
         <div class="product-detail-main">
           <div class="main-view">
-            <div *ngIf="product?.stock !== undefined && product.stock <= 0" class="out-of-stock-badge">
+            <div
+              *ngIf="product?.stock !== undefined && product.stock <= 0"
+              class="out-of-stock-badge"
+            >
               OUT OF STOCK
             </div>
             <img
@@ -61,36 +69,38 @@
             ></app-three-d-viewer>
           </div>
         </div>
-
-        <!-- Product Info Component -->
-        <app-product-info
-          [product]="product"
-          [quantity]="quantity"
-          (quantityChanged)="onQuantityChanged($event)"
-          (addToCart)="onAddToCart()"
-        >
-        </app-product-info>
+        <div class="product-detail-info">
+          <!-- Product Info Component -->
+          <app-product-info
+            [product]="product"
+            [quantity]="quantity"
+            (quantityChanged)="onQuantityChanged($event)"
+            (addToCart)="onAddToCart()"
+          >
+          </app-product-info>
+          <!-- Product Tabs Component -->
+          <app-product-tabs [product]="product"></app-product-tabs>
+        </div>
       </div>
-
-      <!-- Product Tabs Component -->
-      <app-product-tabs [product]="product"></app-product-tabs>
 
       <!-- Recommendations Section -->
       <div class="recommendations-section">
         <!-- Similar Products -->
-        <app-similar-products 
-          [product]="product" 
+        <app-similar-products
+          [product]="product"
           [limit]="4"
           [showTitle]="true"
-          title="Similar Products">
+          title="Similar Products"
+        >
         </app-similar-products>
 
         <!-- Bought Together -->
-        <app-bought-together 
-          [product]="product" 
+        <app-bought-together
+          [product]="product"
           [limit]="4"
           [showTitle]="true"
-          title="Frequently Bought Together">
+          title="Frequently Bought Together"
+        >
         </app-bought-together>
       </div>
     </div>
@@ -112,7 +122,9 @@
     <div class="not-found-content">
       <h2>Product Not Found</h2>
       <p>The product you're looking for doesn't exist.</p>
-      <button class="back-btn glass-theme" (click)="goBack()">Back to Shop</button>
+      <button class="back-btn glass-theme" (click)="goBack()">
+        Back to Shop
+      </button>
     </div>
   </div>
 </div>
