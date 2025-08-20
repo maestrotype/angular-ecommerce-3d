@@ -41,7 +41,7 @@
                 <h4>{{ selectedMethod | titlecase }}</h4>
                 <p *ngIf="selectedMethod==='liqpay'">Secure online payment</p>
                 <p *ngIf="selectedMethod==='stripe'">Pay with card using Stripe</p>
-                <p *ngIf="selectedMethod==='paypal'">Pay with PayPal (coming soon)</p>
+                <p *ngIf="selectedMethod==='paypal'">Pay with PayPal</p>
               </div>
             </div>
           </div>
@@ -56,8 +56,11 @@
             <div id="card-element" style="padding:12px;border:1px solid #ddd;border-radius:8px;background:#fff;"></div>
             <button class="pay-btn" style="margin-top:12px;" type="button" (click)="confirmStripePayment()" [disabled]="!stripe || !cardEl">Pay with Card</button>
           </div>
-          <div *ngIf="selectedMethod==='paypal'" style="margin-top:8px;color:#b36b00;">
-            PayPal is not implemented yet.
+          <div *ngIf="selectedMethod==='paypal'" style="margin-top:8px;">
+            <button class="pay-btn paypal-btn" (click)="createPayment()" [disabled]="isLoading">
+              <span *ngIf="!isLoading">Pay with PayPal</span>
+              <span *ngIf="isLoading">Creating PayPal Payment...</span>
+            </button>
           </div>
         </div>
       </div>

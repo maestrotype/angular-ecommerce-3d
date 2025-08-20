@@ -96,4 +96,27 @@ export class PaymentService {
         })
       );
   }
+
+  createPayPalPayment(params: { orderId: number; amount: number; currency: string; description?: string }): Observable<{ approvalUrl: string; orderId: string }> {
+    type PayPalResponse = { success: boolean; data?: { approvalUrl: string; orderId: string }; error?: string; message?: string };
+    return this.http.post<PayPalResponse>(`${this.apiUrl}/paypal/create`, params)
+      .pipe(
+        map(res => {
+          if (res.success && res.data?.approvalUrl) {
+            return res.data;
+          }
+          const message = res.error || res.message || 'Failed to create PayPal payment';
+          this.notificationService.showError(message);
+          throw new Error(message);
+        }),
+        catchError(error => {
+          if (error.status === 401 || error.status === 403) {
+            this.notificationService.showError('Please log in to continue.');
+          } else {
+            this.notificationService.showError('Failed to create PayPal payment.');
+          }
+          return throwError(() => error);
+        })
+      );
+  }
 } 

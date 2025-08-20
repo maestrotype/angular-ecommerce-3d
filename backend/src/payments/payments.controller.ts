@@ -184,4 +184,22 @@ export class PaymentsController {
       catchError(() => of({ received: false }))
     );
   }
+
+  @Post('paypal/create')
+  @HttpCode(HttpStatus.CREATED)
+  createPayPalPayment(@Body() body: { orderId: number; amount: number; currency: string; description?: string }): Observable<PaymentResponseDto> {
+    return this.paymentsService.createPayPalPayment(body).pipe(
+      map((res) => ({ success: true, data: res, message: 'PayPal payment created' })),
+      catchError((error) => of({ success: false, error: error.message || 'Failed to create PayPal payment' }))
+    );
+  }
+
+  @Post('paypal/webhook')
+  @HttpCode(HttpStatus.OK)
+  handlePayPalWebhook(@Body() body: any, @Headers() headers: any): Observable<{ received: boolean }> {
+    return this.paymentsService.handlePayPalWebhook(body, headers).pipe(
+      map(() => ({ received: true })),
+      catchError(() => of({ received: false }))
+    );
+  }
 } 

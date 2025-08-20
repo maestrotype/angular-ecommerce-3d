@@ -10,6 +10,7 @@ import { NotificationsModule } from '../notifications/notifications.module';
 import { EmailModule } from '../email/email.module';
 import { EmailService } from '../email/email.service';
 import { StripeStrategy } from './strategies/stripe.strategy';
+import { PayPalStrategy } from './strategies/paypal.strategy';
 
 @Module({
   imports: [
@@ -24,8 +25,9 @@ import { StripeStrategy } from './strategies/stripe.strategy';
     PaymentsService,
     LiqPayStrategy,
     StripeStrategy,
+    PayPalStrategy,
     EmailService,
   ],
-  exports: [PaymentsService, LiqPayStrategy, StripeStrategy],
+  exports: [PaymentsService, LiqPayStrategy, StripeStrategy, PayPalStrategy],
 })
 export class PaymentsModule {} 

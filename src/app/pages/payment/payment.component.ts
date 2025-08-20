@@ -92,6 +92,19 @@ export class PaymentComponent implements OnInit, OnDestroy {
             },
             error: () => {}
           });
+        } else if (this.selectedMethod === 'paypal') {
+          this.notificationService.showInfo('Creating PayPal payment...');
+          this.paymentService.createPayPalPayment({
+            orderId: this.orderId,
+            amount: orderData.totalAmount,
+            currency: 'USD', // Ensure uppercase to match backend enum
+            description: `Order #${this.orderId}`
+          }).pipe(takeUntil(this.destroy$)).subscribe({
+            next: (paypalData) => {
+              this.handlePayPalPayment(paypalData);
+            },
+            error: () => {}
+          });
         } else {
           this.notificationService.showWarning(`Payment method ${this.selectedMethod} is not enabled yet.`);
         }
@@ -387,5 +400,39 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   goBackToCheckout(): void {
     this.router.navigate(['/checkout']);
+  }
+
+  private handlePayPalPayment(paypalData: { approvalUrl: string; orderId: string }): void {
+    console.log('PayPal payment created:', paypalData);
+    
+    // Redirect user to PayPal for payment approval
+    if (paypalData.approvalUrl) {
+      this.notificationService.showInfo('Redirecting to PayPal...');
+      
+      // Store payment info for status tracking
+      this.payment = {
+        id: 0, // Will be updated when payment is processed
+        orderId: Number(paypalData.orderId),
+        amount: this.order?.totalAmount || 0,
+        currency: 'USD',
+        paymentMethod: 'paypal',
+        status: 'pending',
+        description: `Order #${paypalData.orderId}`,
+        customerEmail: '', // Will be filled from order data
+        customerPhone: '', // Will be filled from order data
+        createdAt: new Date(),
+        updatedAt: new Date()
+      } as Payment;
+
+      // Start status tracking
+      this.startStatusTracking();
+      
+      // Redirect to PayPal
+      setTimeout(() => {
+        window.location.href = paypalData.approvalUrl;
+      }, 1000);
+    } else {
+      this.notificationService.showError('Failed to get PayPal approval URL');
+    }
   }
 }

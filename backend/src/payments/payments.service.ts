@@ -11,6 +11,7 @@ import { NotificationsService } from '../notifications/notifications.service';
 import { OrdersService } from '../orders/orders.service';
 import { EmailService } from '../email/email.service';
 import { StripeStrategy } from './strategies/stripe.strategy';
+import { PayPalStrategy } from './strategies/paypal.strategy';
 
 @Injectable()
 export class PaymentsService {
@@ -23,10 +24,12 @@ export class PaymentsService {
     private notificationsService: NotificationsService,
     private ordersService: OrdersService,
     private emailService: EmailService,
-    private stripeStrategy: StripeStrategy
+    private stripeStrategy: StripeStrategy,
+    private paypalStrategy: PayPalStrategy
   ) {
     // Register payment strategies
     this.paymentStrategies.set(PaymentMethod.LIQPAY, this.liqpayStrategy);
+    this.paymentStrategies.set(PaymentMethod.PAYPAL, this.paypalStrategy);
     // Stripe is handled via dedicated methods below
   }
 
@@ -458,5 +461,108 @@ export class PaymentsService {
       return value as Observable<T>;
     }
     return from(Promise.resolve(value as T));
+  }
+
+  // PayPal Payment Methods
+  createPayPalPayment(paymentData: any): Observable<any> {
+    console.log('[PayPal] Creating payment for order:', paymentData.orderId);
+    
+    const ensurePayment$ = from(this.paymentRepository.findOne({ where: { orderId: paymentData.orderId } })).pipe(
+      switchMap(existing => {
+        if (existing) {
+          return of(existing);
+        }
+        // Get order data to fill customer info
+        return from(this.ordersService.findOne(paymentData.orderId)).pipe(
+          switchMap(order => {
+            const payment = this.paymentRepository.create({
+              orderId: paymentData.orderId,
+              amount: paymentData.amount,
+              currency: paymentData.currency as Currency,
+              paymentMethod: PaymentMethod.PAYPAL,
+              status: PaymentStatus.PENDING,
+              description: paymentData.description,
+              customerEmail: order?.customerEmail || '',
+              customerPhone: order?.customerPhone || ''
+            });
+            return from(this.paymentRepository.save(payment));
+          })
+        );
+      })
+    );
+
+    return ensurePayment$.pipe(
+      switchMap(() => {
+        console.log('[PayPal] Creating payment via strategy for order:', paymentData.orderId);
+        return this.paypalStrategy.createPayment(paymentData);
+      }),
+      switchMap(result => {
+        console.log('[PayPal] Strategy result:', result);
+        if (!result.success || !result.data?.approvalUrl) {
+          return throwError(() => new BadRequestException(result.error || 'PayPal payment creation failed'));
+        }
+        return of({ 
+          approvalUrl: result.data.approvalUrl,
+          orderId: result.data.orderId 
+        });
+      })
+    );
+  }
+
+  handlePayPalWebhook(payload: any, headers: any): Observable<void> {
+    return this.paypalStrategy.verifyWebhook(payload, headers).pipe(
+      switchMap(isValid => {
+        if (!isValid) {
+          return throwError(() => new BadRequestException('Invalid PayPal webhook signature'));
+        }
+        
+        return this.processPayPalWebhookEvent(payload);
+      })
+    );
+  }
+
+  private processPayPalWebhookEvent(payload: any): Observable<void> {
+    const eventType = payload.event_type;
+    const resource = payload.resource;
+
+    switch (eventType) {
+      case 'PAYMENT.CAPTURE.COMPLETED': {
+        const orderId = Number(resource?.custom_id || resource?.invoice_id);
+        if (!orderId) return of(void 0);
+        
+        return from(this.paymentRepository.findOne({ where: { orderId } })).pipe(
+          switchMap(payment => {
+            if (!payment) return of(void 0);
+            return from(this.paymentRepository.update(payment.id, { 
+              status: PaymentStatus.COMPLETED, 
+              transactionId: resource.id 
+            })).pipe(
+              switchMap(() => from(this.ordersService.update(payment.orderId, { status: 'confirmed' as any }))),
+              switchMap(() => this.emailService.sendPaymentSuccess(payment, { id: payment.orderId } as any)),
+              map(() => void 0)
+            );
+          })
+        );
+      }
+      case 'PAYMENT.CAPTURE.DENIED': {
+        const orderId = Number(resource?.custom_id || resource?.invoice_id);
+        if (!orderId) return of(void 0);
+        
+        return from(this.paymentRepository.findOne({ where: { orderId } })).pipe(
+          switchMap(payment => {
+            if (!payment) return of(void 0);
+            return from(this.paymentRepository.update(payment.id, { 
+              status: PaymentStatus.FAILED, 
+              errorMessage: 'Payment denied by PayPal' 
+            })).pipe(
+              switchMap(() => this.emailService.sendPaymentFailed(payment, { id: payment.orderId } as any)),
+              map(() => void 0)
+            );
+          })
+        );
+      }
+      default:
+        return of(void 0);
+    }
   }
 } 
