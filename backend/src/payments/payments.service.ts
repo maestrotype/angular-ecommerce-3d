@@ -27,7 +27,7 @@ export class PaymentsService {
   ) {
     // Register payment strategies
     this.paymentStrategies.set(PaymentMethod.LIQPAY, this.liqpayStrategy);
-    // Stripe will be accessed directly via stripeStrategy for intent creation
+    // Stripe is handled via dedicated methods below
   }
 
   createPayment(createPaymentDto: CreatePaymentDto): Observable<PaymentResult> {
@@ -357,7 +357,26 @@ export class PaymentsService {
       description: body.description || `Order #${body.orderId}`
     };
 
-    return this.stripeStrategy.createPayment(paymentData).pipe(
+    // Ensure we have a payment record for this order
+    const ensurePayment$ = from(this.paymentRepository.findOne({ where: { orderId: paymentData.orderId } })).pipe(
+      switchMap(existing => {
+        if (existing) {
+          return of(existing);
+        }
+        const payment = this.paymentRepository.create({
+          orderId: paymentData.orderId,
+          amount: paymentData.amount,
+          currency: paymentData.currency as Currency,
+          paymentMethod: PaymentMethod.STRIPE,
+          status: PaymentStatus.PENDING,
+          description: paymentData.description
+        });
+        return from(this.paymentRepository.save(payment));
+      })
+    );
+
+    return ensurePayment$.pipe(
+      switchMap(() => this.stripeStrategy.createPayment(paymentData)),
       switchMap(result => {
         if (!result.success || !result.data?.clientSecret) {
           return throwError(() => new BadRequestException(result.error || 'Stripe intent creation failed'));
@@ -365,6 +384,47 @@ export class PaymentsService {
         return of({ clientSecret: result.data.clientSecret });
       })
     );
+  }
+
+  handleStripeWebhook(rawBody: string, signature: string): Observable<void> {
+    const event = this.stripeStrategy.constructEvent(rawBody, signature);
+    if (!event) {
+      return throwError(() => new BadRequestException('Invalid Stripe signature'));
+    }
+
+    switch (event.type) {
+      case 'payment_intent.succeeded': {
+        const intent: any = (event as any).data.object;
+        const orderId = Number(intent.metadata?.orderId);
+        if (!orderId) return of(void 0);
+        return from(this.paymentRepository.findOne({ where: { orderId } })).pipe(
+          switchMap(payment => {
+            if (!payment) return of(void 0);
+            return from(this.paymentRepository.update(payment.id, { status: PaymentStatus.COMPLETED, transactionId: intent.id })).pipe(
+              switchMap(() => from(this.ordersService.update(payment.orderId, { status: 'confirmed' as any }))),
+              switchMap(() => this.emailService.sendPaymentSuccess(payment, { id: payment.orderId } as any)),
+              map(() => void 0)
+            );
+          })
+        );
+      }
+      case 'payment_intent.payment_failed': {
+        const intent: any = (event as any).data.object;
+        const orderId = Number(intent.metadata?.orderId);
+        if (!orderId) return of(void 0);
+        return from(this.paymentRepository.findOne({ where: { orderId } })).pipe(
+          switchMap(payment => {
+            if (!payment) return of(void 0);
+            return from(this.paymentRepository.update(payment.id, { status: PaymentStatus.FAILED, errorMessage: intent.last_payment_error?.message })).pipe(
+              switchMap(() => this.emailService.sendPaymentFailed(payment, { id: payment.orderId } as any)),
+              map(() => void 0)
+            );
+          })
+        );
+      }
+      default:
+        return of(void 0);
+    }
   }
 
   private ensureObservable<T>(value: Observable<T> | Promise<T> | T): Observable<T> {

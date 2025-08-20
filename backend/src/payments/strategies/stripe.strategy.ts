@@ -13,11 +13,16 @@ export interface StripeIntentData {
 @Injectable()
 export class StripeStrategy implements PaymentStrategy<StripeIntentData> {
   private stripe: Stripe | null = null;
+  private webhookSecret: string | null = null;
 
   constructor(private configService: ConfigService) {
     const secret = this.configService.get<string>('STRIPE_SECRET_KEY');
     if (secret && secret.trim().length > 0) {
       this.stripe = new Stripe(secret);
+    }
+    const wh = this.configService.get<string>('STRIPE_WEBHOOK_SECRET');
+    if (wh && wh.trim().length > 0) {
+      this.webhookSecret = wh;
     }
   }
 
@@ -48,4 +53,17 @@ export class StripeStrategy implements PaymentStrategy<StripeIntentData> {
 
   verifyWebhook(): Observable<boolean> { return of(true); }
   isSupported(): boolean { return true; }
+
+  constructEvent(rawBody: string | Buffer, signature: string): Stripe.Event | null {
+    if (!this.stripe || !this.webhookSecret) return null;
+    try {
+      return this.stripe.webhooks.constructEvent(
+        rawBody,
+        signature,
+        this.webhookSecret
+      );
+    } catch (e) {
+      return null;
+    }
+  }
 } 
