@@ -101,27 +101,27 @@
   --admin-z-tooltip: 1070;
   
   // Order Details Specific
-  --admin-order-detail-bg: #ffffff;
-  --admin-order-detail-header-bg: #f5f5f5;
-  --admin-order-detail-card-bg: #ffffff;
-  --admin-order-detail-border: #e0e0e0;
-  --admin-order-detail-text-primary: #212121;
-  --admin-order-detail-text-secondary: #757575;
-  --admin-order-detail-text-label: #9e9e9e;
+  --admin-order-detail-bg: #1f2937;
+  --admin-order-detail-header-bg: #374151;
+  --admin-order-detail-card-bg: #2d2d2d;
+  --admin-order-detail-border: #404040;
+  --admin-order-detail-text-primary: #ffffff;
+  --admin-order-detail-text-secondary: #9ca3af;
+  --admin-order-detail-text-label: #9ca3af;
   --admin-order-detail-price-color: #4caf50;
   --admin-order-detail-total-color: #4caf50;
   
   // Order List Specific
-  --admin-order-list-bg: #ffffff;
-  --admin-order-list-card-bg: #ffffff;
-  --admin-order-list-border: #e0e0e0;
-  --admin-order-list-text-primary: #212121;
-  --admin-order-list-text-secondary: #757575;
-  --admin-order-list-text-label: #9e9e9e;
-  --admin-order-list-header-bg: #f5f5f5;
-  --admin-order-list-row-hover: #f5f5f5;
-  --admin-order-list-pagination-bg: #ffffff;
-  --admin-order-list-pagination-border: #e0e0e0;
+  --admin-order-list-bg: #1f2937;
+  --admin-order-list-card-bg: #2d2d2d;
+  --admin-order-list-border: #404040;
+  --admin-order-list-text-primary: #ffffff;
+  --admin-order-list-text-secondary: #9ca3af;
+  --admin-order-list-text-label: #9ca3af;
+  --admin-order-list-header-bg: #374151;
+  --admin-order-list-row-hover: #374151;
+  --admin-order-list-pagination-bg: #2d2d2d;
+  --admin-order-list-pagination-border: #404040;
   
   // Common Order Status Colors (shared between list and detail)
   --admin-order-status-pending: #ff9800;

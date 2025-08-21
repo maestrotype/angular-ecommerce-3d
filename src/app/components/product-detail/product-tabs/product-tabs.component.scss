@@ -1,36 +1,37 @@
 .product-tabs {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: var(--product-tabs-bg);
+  border: var(--product-tabs-border);
+  border-radius: var(--product-tabs-radius);
+  box-shadow: var(--product-tabs-shadow);
   overflow: hidden;
-  margin-bottom: 2rem;
   width: 100%;
 
   .tabs-nav {
     display: flex;
-    background: #f8f9fa;
-    border-bottom: 1px solid #e9ecef;
+    background: var(--product-tabs-nav-bg);
+    border-bottom: var(--product-tabs-nav-border);
+    border-radius: var(--product-tabs-radius) var(--product-tabs-radius) 0 0;
 
     .tab-btn {
       flex: 1;
       background: transparent;
       border: none;
-      padding: 1rem 1.5rem;
+      padding: 0.75rem 1rem;
       cursor: pointer;
       font-weight: 500;
-      color: #6c757d;
+      color: var(--product-meta-color, #6c757d);
       transition: all 0.2s ease;
       position: relative;
-      font-size: 0.95rem;
+      font-size: 0.85rem;
 
       &:hover {
         background: rgba(0, 0, 0, 0.05);
-        color: #495057;
+        color: var(--product-title-color, #495057);
       }
 
       &.active {
-        background: white;
-        color: #333;
+        background: var(--product-detail-card-bg, white);
+        color: var(--product-title-color, #333);
         font-weight: 600;
 
         &::after {
@@ -40,18 +41,32 @@
           left: 0;
           right: 0;
           height: 2px;
-          background: #007bff;
+          background: var(--product-cta-bg, #007bff);
         }
+      }
+      
+      @media (max-width: 768px) {
+        padding: 0.6rem 0.75rem;
+        font-size: 0.8rem;
       }
     }
   }
 
   .tabs-content {
-    padding: 1.5rem;
-    background: white;
+    padding: 1.25rem;
+    background: var(--product-tabs-bg);
+    border-radius: 0 0 var(--product-tabs-radius) var(--product-tabs-radius);
 
     .tab-panel {
-      min-height: 120px;
+      min-height: 100px;
+    }
+    
+    @media (max-width: 768px) {
+      padding: 1rem;
+      
+      .tab-panel {
+        min-height: 80px;
+      }
     }
   }
 }

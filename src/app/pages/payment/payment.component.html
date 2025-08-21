@@ -29,7 +29,7 @@
         </div>
 
         <div class="payment-methods">
-          <h3>Select Payment Method</h3>
+          <h3>Selected Payment Method</h3>
           <div class="method-options">
             <div class="method-option selected">
               <div class="method-icon">
@@ -38,18 +38,30 @@
                 </svg>
               </div>
               <div class="method-info">
-                <h4>LiqPay</h4>
-                <p>Secure online payment</p>
+                <h4>{{ selectedMethod | titlecase }}</h4>
+                <p *ngIf="selectedMethod==='liqpay'">Secure online payment</p>
+                <p *ngIf="selectedMethod==='stripe'">Pay with card using Stripe</p>
+                <p *ngIf="selectedMethod==='paypal'">Pay with PayPal</p>
               </div>
             </div>
           </div>
         </div>
 
         <div class="payment-actions">
-          <button class="pay-btn" (click)="createPayment()" [disabled]="isLoading">
+          <button class="pay-btn" (click)="createPayment()" [disabled]="isLoading || selectedMethod!=='liqpay'">
             <span *ngIf="!isLoading">Pay Now</span>
             <span *ngIf="isLoading">Processing...</span>
           </button>
+          <div *ngIf="selectedMethod==='stripe'" style="margin-top:16px;">
+            <div id="card-element" style="padding:12px;border:1px solid #ddd;border-radius:8px;background:#fff;"></div>
+            <button class="pay-btn" style="margin-top:12px;" type="button" (click)="confirmStripePayment()" [disabled]="!stripe || !cardEl">Pay with Card</button>
+          </div>
+          <div *ngIf="selectedMethod==='paypal'" style="margin-top:8px;">
+            <button class="pay-btn paypal-btn" (click)="createPayment()" [disabled]="isLoading">
+              <span *ngIf="!isLoading">Pay with PayPal</span>
+              <span *ngIf="isLoading">Creating PayPal Payment...</span>
+            </button>
+          </div>
         </div>
       </div>
 

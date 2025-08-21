@@ -3,15 +3,15 @@
     <h1>{{ 'PAYMENT_MANAGEMENT' | translate }}</h1>
     <div class="stats-cards">
       <div class="stat-card">
-        <div class="stat-value">{{ totalPayments }}</div>
+        <div class="stat-value">{{ totalPayments || 0 }}</div>
         <div class="stat-label">Total Payments</div>
       </div>
       <div class="stat-card">
-        <div class="stat-value">${{ totalAmount.toFixed(2) }}</div>
+        <div class="stat-value">${{ formatAmount(totalAmount) }}</div>
         <div class="stat-label">Total Amount</div>
       </div>
       <div class="stat-card">
-        <div class="stat-value">{{ successRate.toFixed(1) }}%</div>
+        <div class="stat-value">{{ formatSuccessRate(successRate) }}%</div>
         <div class="stat-label">Success Rate</div>
       </div>
     </div>
@@ -21,17 +21,17 @@
     <div class="section-header">
       <div class="filters-area">
         <h2>Payment Transactions</h2>
-        <div class="filters-grid">
+        <div class="filters-grid" *ngIf="filtersForm" [formGroup]="filtersForm">
           <mat-form-field appearance="outline" class="field status">
             <mat-label>Status</mat-label>
-            <mat-select [formControl]="filtersForm.controls['status']">
+            <mat-select formControlName="status">
               <mat-option *ngFor="let s of statusOptions" [value]="s.value">{{ s.label }}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="field method">
             <mat-label>Method</mat-label>
-            <mat-select [formControl]="filtersForm.controls['paymentMethod']">
+            <mat-select formControlName="paymentMethod">
               <mat-option *ngFor="let m of methodOptions" [value]="m.value">{{ m.label }}</mat-option>
             </mat-select>
           </mat-form-field>
@@ -69,7 +69,7 @@
     </div>
 
     <div class="payments-table">
-      <table mat-table [dataSource]="payments" class="mat-elevation-z1">
+      <table mat-table [dataSource]="payments" class="mat-elevation-z1" *ngIf="!isLoading && payments.length > 0">
         <!-- Payment ID Column -->
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef>Payment ID</th>
@@ -87,7 +87,7 @@
           <th mat-header-cell *matHeaderCellDef>Amount</th>
           <td mat-cell *matCellDef="let payment">
             <span class="amount">{{ formatAmount(payment.amount) }}</span>
-            <span class="currency">{{ payment.currency }}</span>
+            <span class="currency">{{ formatCurrency(payment.currency) }}</span>
           </td>
         </ng-container>
 
@@ -97,7 +97,7 @@
           <td mat-cell *matCellDef="let payment">
             <div class="payment-method">
               <mat-icon>{{ getPaymentMethodIcon(payment.paymentMethod) }}</mat-icon>
-              <span>{{ payment.paymentMethod | titlecase }}</span>
+              <span>{{ payment.paymentMethod ? (payment.paymentMethod | titlecase) : 'Unknown' }}</span>
             </div>
           </td>
         </ng-container>

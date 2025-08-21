@@ -150,7 +150,7 @@ export class ErrorHandlerService {
     
     this.snackBar.open(
       `${error.title}: ${error.message}`,
-      error.action || 'Закрыть',
+      error.action || 'Close',
       {
         duration,
         panelClass: [`admin-snackbar-${error.type}`]

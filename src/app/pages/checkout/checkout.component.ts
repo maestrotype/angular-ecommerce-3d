@@ -9,6 +9,7 @@ import { Order } from '../../../shared/models/order.model';
 import { NotificationService } from '../../core/services/notification.service';
 import { ModalService } from '../../core/services/modal.service';
 import { ThemeService } from '../../core/themes/theme.service';
+import { PaymentSettingsService } from '../../core/services/payment-settings.service';
 
 @Component({
   selector: 'app-checkout',
@@ -23,12 +24,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   totalPrice = 0;
   isLoading = false;
   
-  paymentMethods = [
-    { id: 'liqpay', name: 'LiqPay', icon: 'credit_card', description: 'Secure online payment' },
-    { id: 'stripe', name: 'Stripe', icon: 'payment', description: 'Credit card payment' },
-    { id: 'paypal', name: 'PayPal', icon: 'account_balance_wallet', description: 'Pay with PayPal' }
-  ];
-  
+  paymentMethods: Array<{id: string, name: string, icon: string, description: string}> = [];
   selectedPaymentMethod = 'liqpay';
   currentTheme = 'default';
 
@@ -38,7 +34,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     private router: Router,
     private notificationService: NotificationService,
     private modalService: ModalService,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private paymentSettingsService: PaymentSettingsService
   ) {
     this.checkoutForm = this.fb.group({
       customerName: ['', [Validators.required, Validators.minLength(2)]],
@@ -55,6 +52,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadCartData();
     this.loadTheme();
+    this.loadPaymentMethods();
   }
 
   ngOnDestroy(): void {
@@ -67,6 +65,23 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe(theme => {
       this.currentTheme = theme.id;
+    });
+  }
+
+  private loadPaymentMethods(): void {
+    console.log('[CheckoutComponent] Loading payment methods...');
+    
+    this.paymentSettingsService.getEnabledPaymentMethods().pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(methods => {
+      console.log('[CheckoutComponent] Received payment methods:', methods);
+      this.paymentMethods = methods;
+      
+      // Set default payment method if available
+      if (methods.length > 0) {
+        this.selectedPaymentMethod = methods[0].id;
+        console.log('[CheckoutComponent] Set default payment method to:', this.selectedPaymentMethod);
+      }
     });
   }
 
@@ -113,7 +128,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
           imageUrl: String(item.imageUrl)
         })),
         totalAmount: Number(this.totalPrice),
-
+        paymentMethod: this.selectedPaymentMethod
       };
 
 

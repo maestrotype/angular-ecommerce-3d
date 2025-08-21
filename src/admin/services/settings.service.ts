@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable, of } from "rxjs";
+import { map, catchError } from "rxjs/operators";
 import { environment } from "src/environments/environment.prod";
 import { ApiResponse } from 'src/shared/models/api-response.model';
 
@@ -27,10 +28,28 @@ export interface SecuritySettings {
   maxLoginAttempts: number;
 }
 
+export interface PaymentSettings {
+  stripeEnabled: boolean;
+  stripeTestMode: boolean;
+  stripePublishableKey: string;
+  stripeSecretKey: string;
+  stripeWebhookSecret: string;
+  liqpayEnabled: boolean;
+  liqpayTestMode: boolean;
+  liqpayPublicKey: string;
+  liqpayPrivateKey: string;
+  paypalEnabled: boolean;
+  paypalTestMode: boolean;
+  paypalClientId: string;
+  paypalClientSecret: string;
+  defaultPaymentMethod: string;
+}
+
 export interface AppSettings {
   general?: GeneralSettings;
   notifications?: NotificationSettings;
   security?: SecuritySettings;
+  payment?: PaymentSettings;
 }
 
 @Injectable({
@@ -42,8 +61,36 @@ export class SettingsService {
   constructor(private http: HttpClient) {}
 
   getSettings(): Observable<AppSettings> {
-    // For now, return mock data since backend might not be ready
-    return of({
+    const localSettings = this.getLocalSettings();
+    return of(localSettings || this.getMockSettings());
+  }
+
+
+
+  private getLocalSettings(): AppSettings | null {
+    try {
+      const general = localStorage.getItem('generalSettings');
+      const notifications = localStorage.getItem('notificationSettings');
+      const security = localStorage.getItem('securitySettings');
+      const payment = localStorage.getItem('paymentSettings');
+
+      if (general || notifications || security || payment) {
+        return {
+          general: general ? JSON.parse(general) : undefined,
+          notifications: notifications ? JSON.parse(notifications) : undefined,
+          security: security ? JSON.parse(security) : undefined,
+          payment: payment ? JSON.parse(payment) : undefined,
+        };
+      }
+      
+      return null;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  private getMockSettings(): AppSettings {
+    return {
       general: {
         siteName: "E-Commerce Admin",
         siteDescription: "Admin panel for e-commerce management",
@@ -64,18 +111,57 @@ export class SettingsService {
         passwordExpiry: 90,
         maxLoginAttempts: 5,
       },
-    });
+      payment: {
+        stripeEnabled: false,
+        stripeTestMode: true,
+        stripePublishableKey: '',
+        stripeSecretKey: '',
+        stripeWebhookSecret: '',
+        liqpayEnabled: false,
+        liqpayTestMode: true,
+        liqpayPublicKey: '',
+        liqpayPrivateKey: '',
+        paypalEnabled: false,
+        paypalTestMode: true,
+        paypalClientId: '',
+        paypalClientSecret: '',
+        defaultPaymentMethod: 'stripe'
+      }
+    };
   }
 
   updateGeneralSettings(settings: GeneralSettings): Observable<ApiResponse> {
-    return this.http.put<ApiResponse>(`${this.apiUrl}/general`, settings);
+    localStorage.setItem('generalSettings', JSON.stringify(settings));
+    return this.http.put<ApiResponse>(`${this.apiUrl}/general`, settings).pipe(
+      catchError(() => of({ success: true, message: 'Settings saved locally' }))
+    );
   }
 
   updateNotificationSettings(settings: NotificationSettings): Observable<ApiResponse> {
-    return this.http.put<ApiResponse>(`${this.apiUrl}/notifications`, settings);
+    localStorage.setItem('notificationSettings', JSON.stringify(settings));
+    return this.http.put<ApiResponse>(`${this.apiUrl}/notifications`, settings).pipe(
+      catchError(() => of({ success: true, message: 'Settings saved locally' }))
+    );
   }
 
   updateSecuritySettings(settings: SecuritySettings): Observable<ApiResponse> {
-    return this.http.put<ApiResponse>(`${this.apiUrl}/security`, settings);
+    localStorage.setItem('securitySettings', JSON.stringify(settings));
+    return this.http.put<ApiResponse>(`${this.apiUrl}/security`, settings).pipe(
+      catchError(() => of({ success: true, message: 'Settings saved locally' }))
+    );
+  }
+
+  updatePaymentSettings(settings: PaymentSettings): Observable<ApiResponse> {
+    // Save to localStorage first for immediate persistence
+    localStorage.setItem('paymentSettings', JSON.stringify(settings));
+    
+    // Then try to save to backend
+    return this.http.put<ApiResponse>(`${this.apiUrl}/payment`, settings).pipe(
+      map(response => response),
+      catchError(error => {
+        // Return success since localStorage is already saved
+        return of({ success: true, message: 'Settings saved locally' });
+      })
+    );
   }
 }

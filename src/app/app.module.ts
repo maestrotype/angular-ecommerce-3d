@@ -58,6 +58,7 @@ import { SharedModule } from './shared/shared.module';
 
 // Services
 import { ThemeService } from './core/themes/theme.service';
+import { PaymentSettingsService } from './core/services/payment-settings.service';
 
 export function HttpLoaderFactory(http: any) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -123,7 +124,8 @@ export function HttpLoaderFactory(http: any) {
     provideAnimationsAsync(),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: SeoUpdateInterceptor, multi: true },
-    ThemeService
+    ThemeService,
+    PaymentSettingsService
   ],
   bootstrap: [AppComponent]
 })

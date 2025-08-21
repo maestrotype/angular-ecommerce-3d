@@ -12,6 +12,92 @@
   --bg-secondary: #f8f9fa;
 }
 
+// Product Detail Theme Variables
+:root {
+  // Default theme (minimalist)
+  --product-detail-bg: #ffffff;
+  --product-detail-card-bg: #ffffff;
+  --product-detail-border: none;
+  --product-detail-shadow: none;
+  --product-detail-radius: 0;
+  --product-detail-padding: 24px;
+  
+  --product-title-color: #1f2937;
+  --product-title-size: clamp(24px, 2.6vw, 34px);
+  --product-title-weight: 700;
+  
+  --product-meta-color: #6b7280;
+  --product-meta-size: 14px;
+  
+  --product-price-color: #111827;
+  --product-price-size: 28px;
+  --product-price-weight: 700;
+  --product-original-price-color: #9ca3af;
+  
+  --product-stock-color: #059669;
+  --product-stock-oos-color: #dc2626;
+  
+  --product-stepper-bg: #ffffff;
+  --product-stepper-border: 1px solid #e5e7eb;
+  --product-stepper-radius: 10px;
+  --product-stepper-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  --product-stepper-btn-bg: #f9fafb;
+  --product-stepper-btn-hover: #f3f4f6;
+  --product-stepper-value-color: #111827;
+  
+  --product-cta-bg: #6366f1;
+  --product-cta-color: #ffffff;
+  --product-cta-radius: 12px;
+  --product-cta-shadow: 0 8px 24px rgba(99, 102, 241, 0.15);
+  --product-cta-hover-shadow: 0 12px 32px rgba(99, 102, 241, 0.18);
+  
+  --product-favorite-color: #6b7280;
+  --product-favorite-hover: #dc2626;
+  
+  --product-oos-color: #b91c1c;
+  
+  // Characteristics
+  --product-specs-bg: transparent;
+  --product-specs-border: none;
+  --product-specs-radius: 0;
+  --product-specs-padding: 0;
+  --product-specs-label-color: #6b7280;
+  --product-specs-value-color: #1f2937;
+  
+  // Product Image Area
+  --product-main-view-bg: #ffffff;
+  --product-main-view-radius: 0;
+  --product-main-view-shadow: none;
+  --product-thumb-radius: 0;
+  --product-thumb-shadow: none;
+  
+  // Product Tabs
+  --product-tabs-bg: #ffffff;
+  --product-tabs-border: none;
+  --product-tabs-radius: 0;
+  --product-tabs-shadow: none;
+  --product-tabs-nav-bg: #f8f9fa;
+  --product-tabs-nav-border: 1px solid #e9ecef;
+  
+  // Spacing
+  --product-spacing-xs: 6px;
+  --product-spacing-sm: 8px;
+  --product-spacing-md: 12px;
+  --product-spacing-lg: 16px;
+  --product-spacing-xl: 20px;
+  --product-spacing-2xl: 24px;
+  
+  // Typography
+  --product-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --product-line-height: 1.2;
+  --product-letter-spacing: -0.025em;
+  
+  // Transitions
+  --product-transition-fast: 0.12s ease;
+  --product-transition-normal: 0.2s ease;
+  --product-transition-slow: 0.3s ease;
+}
+
 // Theme specific styles
 @import './dark';
 @import './glass'; 

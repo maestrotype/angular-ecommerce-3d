@@ -61,15 +61,7 @@ export class PaymentService {
       );
   }
 
-  processLiqPayWebhook(data: string, signature: string): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/liqpay-webhook`, { data, signature })
-      .pipe(
-        catchError(error => {
-          console.error('Error processing LiqPay webhook:', error);
-          return throwError(() => new Error('Failed to process webhook'));
-        })
-      );
-  }
+  // Webhook is called by LiqPay directly to the backend. No client call is needed.
 
   getPaymentStatus(paymentId: number): Observable<PaymentStatus> {
     return this.http.get<{ status: PaymentStatus }>(`${this.apiUrl}/${paymentId}/status`)
@@ -78,6 +70,52 @@ export class PaymentService {
         catchError(error => {
           console.error('Error fetching payment status:', error);
           return throwError(() => new Error('Failed to fetch payment status'));
+        })
+      );
+  }
+
+  createStripeIntent(params: { orderId: number; amount: number; currency: string; description?: string }): Observable<string> {
+    type StripeIntentResponse = { success: boolean; data?: { clientSecret: string }; error?: string; message?: string };
+    return this.http.post<StripeIntentResponse>(`${this.apiUrl}/stripe/intent`, params)
+      .pipe(
+        map(res => {
+          if (res.success && res.data?.clientSecret) {
+            return res.data.clientSecret;
+          }
+          const message = res.error || res.message || 'Failed to create Stripe intent';
+          this.notificationService.showError(message);
+          throw new Error(message);
+        }),
+        catchError(error => {
+          if (error.status === 401 || error.status === 403) {
+            this.notificationService.showError('Please log in to continue.');
+          } else {
+            this.notificationService.showError('Failed to create Stripe intent.');
+          }
+          return throwError(() => error);
+        })
+      );
+  }
+
+  createPayPalPayment(params: { orderId: number; amount: number; currency: string; description?: string }): Observable<{ approvalUrl: string; orderId: string }> {
+    type PayPalResponse = { success: boolean; data?: { approvalUrl: string; orderId: string }; error?: string; message?: string };
+    return this.http.post<PayPalResponse>(`${this.apiUrl}/paypal/create`, params)
+      .pipe(
+        map(res => {
+          if (res.success && res.data?.approvalUrl) {
+            return res.data;
+          }
+          const message = res.error || res.message || 'Failed to create PayPal payment';
+          this.notificationService.showError(message);
+          throw new Error(message);
+        }),
+        catchError(error => {
+          if (error.status === 401 || error.status === 403) {
+            this.notificationService.showError('Please log in to continue.');
+          } else {
+            this.notificationService.showError('Failed to create PayPal payment.');
+          }
+          return throwError(() => error);
         })
       );
   }

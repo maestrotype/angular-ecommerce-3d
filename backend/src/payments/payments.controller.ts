@@ -1,4 +1,5 @@
 import { Controller, Post, Get, Put, Body, Param, ParseIntPipe, HttpCode, HttpStatus, UseGuards, Headers, Query } from '@nestjs/common';
+import { Request } from 'express';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { PaymentsService } from './payments.service';
@@ -14,7 +15,6 @@ export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.CREATED)
   createPayment(@Body() createPaymentDto: CreatePaymentDto): Observable<PaymentResponseDto> {
     return this.paymentsService.createPayment(createPaymentDto).pipe(
@@ -57,7 +57,6 @@ export class PaymentsController {
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
   getPayment(@Param('id', ParseIntPipe) id: number): Observable<PaymentResponseDto> {
     return this.paymentsService.getPaymentById(id).pipe(
       map(payment => ({
@@ -69,6 +68,13 @@ export class PaymentsController {
         success: false,
         error: error.message || 'Failed to retrieve payment'
       }))
+    );
+  }
+
+  @Get(':id/status')
+  getPaymentStatus(@Param('id', ParseIntPipe) id: number): Observable<{ status: string }> {
+    return this.paymentsService.getPaymentById(id).pipe(
+      map((payment) => ({ status: payment.status }))
     );
   }
 
@@ -157,6 +163,43 @@ export class PaymentsController {
         success: false,
         error: error.message || 'Failed to search payments'
       }))
+    );
+  }
+
+  @Post('stripe/intent')
+  @HttpCode(HttpStatus.CREATED)
+  createStripeIntent(@Body() body: { orderId: number; amount: number; currency: string; description?: string }): Observable<PaymentResponseDto> {
+    return this.paymentsService.createStripeIntent(body).pipe(
+      map((res) => ({ success: true, data: res, message: 'Stripe intent created' })),
+      catchError((error) => of({ success: false, error: error.message || 'Failed to create Stripe intent' }))
+    );
+  }
+
+  @Post('stripe/webhook')
+  @HttpCode(HttpStatus.OK)
+  handleStripeWebhook(@Body() body: any, @Headers('stripe-signature') signature: string, req: Request): Observable<{ received: boolean }> {
+    const rawBody = (req as any).rawBody || JSON.stringify(body);
+    return this.paymentsService.handleStripeWebhook(rawBody, signature).pipe(
+      map(() => ({ received: true })),
+      catchError(() => of({ received: false }))
+    );
+  }
+
+  @Post('paypal/create')
+  @HttpCode(HttpStatus.CREATED)
+  createPayPalPayment(@Body() body: { orderId: number; amount: number; currency: string; description?: string }): Observable<PaymentResponseDto> {
+    return this.paymentsService.createPayPalPayment(body).pipe(
+      map((res) => ({ success: true, data: res, message: 'PayPal payment created' })),
+      catchError((error) => of({ success: false, error: error.message || 'Failed to create PayPal payment' }))
+    );
+  }
+
+  @Post('paypal/webhook')
+  @HttpCode(HttpStatus.OK)
+  handlePayPalWebhook(@Body() body: any, @Headers() headers: any): Observable<{ received: boolean }> {
+    return this.paymentsService.handlePayPalWebhook(body, headers).pipe(
+      map(() => ({ received: true })),
+      catchError(() => of({ received: false }))
     );
   }
 } 

@@ -1,55 +1,60 @@
 <div class="product-info">
+  <div class="title-row">
     <h1 class="product-title">{{ product.name }}</h1>
-    
-    <div class="product-meta">
-      <div class="rating" *ngIf="product.rating">
-        <span class="stars">
-          <span *ngFor="let star of [1,2,3,4,5]" 
-                class="star" 
-                [class.filled]="star <= product.rating!">
-            ⭐
-          </span>
-        </span>
-        <span class="rating-value">({{ product.rating }})</span>
-      </div>
-      <span class="category">{{ product.category }}</span>
-    </div>
-  
-    <div class="price-section">
-      <div class="price-container">
-        <span class="current-price">${{ getDiscountedPrice() | number:'1.2-2' }}</span>
-        <span *ngIf="product.discount" class="original-price">${{ product.price | number:'1.2-2' }}</span>
-      </div>
-      <div *ngIf="product.isSpecial" class="special-offer-text">
-        Limited Time Offer!
-      </div>
-    </div>
-
-    <!-- Favorite Button -->
-    <div class="favorite-section">
+    <div class="favorite-inline">
       <app-favorite-button 
         [product]="product" 
-        size="medium"
-        [showText]="true"
-        (favoriteToggled)="onFavoriteToggled($event)"
-      ></app-favorite-button>
-    </div>
-  
-    <!-- Quantity and Add to Cart -->
-    <div class="purchase-section" [class.disabled]="isOutOfStock()">
-      <div class="quantity-selector">
-        <label>Quantity:</label>
-        <div class="quantity-controls">
-          <button class="quantity-btn" (click)="decrementQuantity()" [disabled]="isOutOfStock()">-</button>
-          <span class="quantity-value">{{ quantity }}</span>
-          <button class="quantity-btn" (click)="incrementQuantity()" [disabled]="isOutOfStock()">+</button>
-        </div>
-      </div>
-      
-      <button class="add-to-cart-btn" (click)="onAddToCart()" [disabled]="isOutOfStock()">
-        🛒 Add to Cart
-      </button>
-
-      <span *ngIf="isOutOfStock()" class="out-of-stock-inline">OUT OF STOCK</span>
+        size="small"
+        [showText]="false"
+        (favoriteToggled)="onFavoriteToggled($event)">
+      </app-favorite-button>
     </div>
   </div>
+  
+  <div class="product-meta">
+    <div class="rating" *ngIf="product.rating">
+      <span class="stars">
+        <span *ngFor="let star of [1,2,3,4,5]" 
+              class="star" 
+              [class.filled]="star <= product.rating!">⭐</span>
+      </span>
+      <span class="rating-value">({{ product.rating }})</span>
+    </div>
+    <span class="category">{{ product.category }}</span>
+  </div>
+
+  <div class="price-section">
+    <div class="price-container">
+      <span class="current-price">${{ getDiscountedPrice() | number:'1.2-2' }}</span>
+      <span *ngIf="product.discount" class="original-price">${{ product.price | number:'1.2-2' }}</span>
+    </div>
+    <div *ngIf="product?.stock !== undefined" class="stock-line" [class.oos]="product.stock <= 0">
+      <span *ngIf="product.stock > 0">In stock: {{ product.stock }}</span>
+      <span *ngIf="product.stock <= 0">Out of stock</span>
+    </div>
+  </div>
+
+  <!-- Characteristics Section -->
+  <div class="characteristics-section" *ngIf="product.specifications && getKeySpecs().length > 0">
+    <div class="specs-grid">
+      <div *ngFor="let spec of getKeySpecs()" class="spec-item">
+        <span class="spec-label">{{ spec.key }}:</span>
+        <span class="spec-value">{{ spec.value }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="purchase-row" [class.disabled]="isOutOfStock()">
+    <div class="stepper">
+      <button class="quantity-btn" (click)="decrementQuantity()" [disabled]="isOutOfStock()">−</button>
+      <span class="quantity-value" aria-live="polite">{{ quantity }}</span>
+      <button class="quantity-btn" (click)="incrementQuantity()" [disabled]="isOutOfStock()">+</button>
+    </div>
+
+    <button class="add-to-cart-btn" (click)="onAddToCart()" [disabled]="isOutOfStock()">
+      🛒 Add to Cart
+    </button>
+  </div>
+
+  <div *ngIf="isOutOfStock()" class="oos-note">OUT OF STOCK</div>
+</div>

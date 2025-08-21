@@ -3,14 +3,14 @@
    Main entry point for the new design system
    ========================================================================== */
 
+// Import theme styles FIRST (before components)
+@import './themes/index';
+
 // Import core styles
 @import './core/index';
 
 // Import component styles
 @import './components/index';
-
-// Import theme styles
-@import './themes/index';
 
 // Import layout styles
 @import './layouts/index';
