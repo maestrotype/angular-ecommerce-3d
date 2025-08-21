@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable, of } from "rxjs";
+import { map, catchError } from "rxjs/operators";
 import { environment } from "src/environments/environment.prod";
 import { ApiResponse } from 'src/shared/models/api-response.model';
 
@@ -60,45 +61,95 @@ export class SettingsService {
   constructor(private http: HttpClient) {}
 
   getSettings(): Observable<AppSettings> {
-    // For now, return mock data since backend might not be ready
-    return of({
-      general: {
-        siteName: "E-Commerce Admin",
-        siteDescription: "Admin panel for e-commerce management",
-        currency: "USD",
-        timezone: "UTC",
-        language: "en",
-      },
-      notifications: {
-        emailNotifications: true,
-        orderNotifications: true,
-        stockAlerts: true,
-        userRegistrations: true,
-        systemUpdates: false,
-      },
-      security: {
-        twoFactorAuth: false,
-        sessionTimeout: 30,
-        passwordExpiry: 90,
-        maxLoginAttempts: 5,
-      },
-      payment: {
-        stripeEnabled: false,
-        stripeTestMode: true,
-        stripePublishableKey: '',
-        stripeSecretKey: '',
-        stripeWebhookSecret: '',
-        liqpayEnabled: false,
-        liqpayTestMode: true,
-        liqpayPublicKey: '',
-        liqpayPrivateKey: '',
-        paypalEnabled: false,
-        paypalTestMode: true,
-        paypalClientId: '',
-        paypalClientSecret: '',
-        defaultPaymentMethod: 'stripe'
-      }
-    });
+    // Try to get real settings from backend, fallback to mock data
+    return this.http.get<{ success: boolean; data?: any; error?: string }>(`${this.apiUrl}`).pipe(
+      map(response => {
+        if (response.success && response.data) {
+          return response.data;
+        }
+        // Fallback to mock data if backend fails
+        return {
+          general: {
+            siteName: "E-Commerce Admin",
+            siteDescription: "Admin panel for e-commerce management",
+            currency: "USD",
+            timezone: "UTC",
+            language: "en",
+          },
+          notifications: {
+            emailNotifications: true,
+            orderNotifications: true,
+            stockAlerts: true,
+            userRegistrations: true,
+            systemUpdates: false,
+          },
+          security: {
+            twoFactorAuth: false,
+            sessionTimeout: 30,
+            passwordExpiry: 90,
+            maxLoginAttempts: 5,
+          },
+          payment: {
+            stripeEnabled: false,
+            stripeTestMode: true,
+            stripePublishableKey: '',
+            stripeSecretKey: '',
+            stripeWebhookSecret: '',
+            liqpayEnabled: false,
+            liqpayTestMode: true,
+            liqpayPublicKey: '',
+            liqpayPrivateKey: '',
+            paypalEnabled: false,
+            paypalTestMode: true,
+            paypalClientId: '',
+            paypalClientSecret: '',
+            defaultPaymentMethod: 'stripe'
+          }
+        };
+      }),
+      catchError(error => {
+        console.warn('Failed to load settings from backend, using mock data:', error);
+        // Return mock data on error
+        return of({
+          general: {
+            siteName: "E-Commerce Admin",
+            siteDescription: "Admin panel for e-commerce management",
+            currency: "USD",
+            timezone: "UTC",
+            language: "en",
+          },
+          notifications: {
+            emailNotifications: true,
+            orderNotifications: true,
+            stockAlerts: true,
+            userRegistrations: true,
+            systemUpdates: false,
+          },
+          security: {
+            twoFactorAuth: false,
+            sessionTimeout: 30,
+            passwordExpiry: 90,
+            maxLoginAttempts: 5,
+          },
+          payment: {
+            stripeEnabled: false,
+            stripeTestMode: true,
+            stripePublishableKey: '',
+            stripeSecretKey: '',
+            stripeWebhookSecret: '',
+            liqpayEnabled: false,
+            liqpayTestMode: true,
+            liqpayPublicKey: '',
+            liqpayPrivateKey: '',
+            paypalEnabled: false,
+            paypalTestMode: true,
+            paypalClientId: '',
+            paypalClientSecret: '',
+            defaultPaymentMethod: 'stripe'
+          }
+        });
+      })
+    );
   }
 
   updateGeneralSettings(settings: GeneralSettings): Observable<ApiResponse> {

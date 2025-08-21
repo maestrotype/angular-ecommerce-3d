@@ -14,6 +14,7 @@ import { UploadsModule } from './upload-module/uploads.module';
 import { SeoModule } from './seo/seo.module';
 import { PaymentsModule } from './payments/payments.module';
 import { RecommendationsModule } from './recommendations/recommendations.module';
+import { SettingsModule } from './settings/settings.module';
 // import { ServeStaticModule } from '@nestjs/serve-static';
 // import { join } from 'path';
 @Module({
@@ -36,7 +37,8 @@ import { RecommendationsModule } from './recommendations/recommendations.module'
     UploadsModule,
     SeoModule,
     PaymentsModule,
-    RecommendationsModule
+    RecommendationsModule,
+    SettingsModule
   ],
 })
 export class AppModule {}
