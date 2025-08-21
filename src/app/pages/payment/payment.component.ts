@@ -8,6 +8,7 @@ import { ModalService } from '../../core/services/modal.service';
 import { ThemeService } from '../../core/themes/theme.service';
 import { Payment, PaymentStatus, PaymentRequest } from '../../../shared/models/payment.model';
 import { Order } from '../../../shared/models/order.model';
+import { PaymentSettingsService } from '../../core/services/payment-settings.service';
 
 @Component({
   selector: 'app-payment',
@@ -43,7 +44,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
     private paymentService: PaymentService,
     private notificationService: NotificationService,
     private modalService: ModalService,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private paymentSettingsService: PaymentSettingsService
   ) {}
 
   ngOnInit(): void {
@@ -77,37 +79,43 @@ export class PaymentComponent implements OnInit, OnDestroy {
         if (orderData?.paymentMethod) {
           this.selectedMethod = orderData.paymentMethod;
         }
-        if (this.selectedMethod === 'liqpay') {
-          this.createPayment();
-        } else if (this.selectedMethod === 'stripe') {
-          this.notificationService.showInfo('Creating Stripe PaymentIntent...');
-          this.paymentService.createStripeIntent({
-            orderId: this.orderId,
-            amount: orderData.totalAmount,
-            currency: 'USD', // Ensure uppercase to match backend enum
-            description: `Order #${this.orderId}`
-          }).pipe(takeUntil(this.destroy$)).subscribe({
-            next: (clientSecret) => {
-              this.initStripe(clientSecret);
-            },
-            error: () => {}
-          });
-        } else if (this.selectedMethod === 'paypal') {
-          this.notificationService.showInfo('Creating PayPal payment...');
-          this.paymentService.createPayPalPayment({
-            orderId: this.orderId,
-            amount: orderData.totalAmount,
-            currency: 'USD', // Ensure uppercase to match backend enum
-            description: `Order #${this.orderId}`
-          }).pipe(takeUntil(this.destroy$)).subscribe({
-            next: (paypalData) => {
-              this.handlePayPalPayment(paypalData);
-            },
-            error: () => {}
-          });
-        } else {
-          this.notificationService.showWarning(`Payment method ${this.selectedMethod} is not enabled yet.`);
-        }
+        
+        // Check if selected payment method is enabled
+        this.paymentSettingsService.getPaymentSettings().pipe(
+          takeUntil(this.destroy$)
+        ).subscribe(settings => {
+          if (this.selectedMethod === 'liqpay' && settings.liqpayEnabled) {
+            this.createPayment();
+          } else if (this.selectedMethod === 'stripe' && settings.stripeEnabled) {
+            this.notificationService.showInfo('Creating Stripe PaymentIntent...');
+            this.paymentService.createStripeIntent({
+              orderId: this.orderId,
+              amount: orderData.totalAmount,
+              currency: 'USD', // Ensure uppercase to match backend enum
+              description: `Order #${this.orderId}`
+            }).pipe(takeUntil(this.destroy$)).subscribe({
+              next: (clientSecret) => {
+                this.initStripe(clientSecret);
+              },
+              error: () => {}
+            });
+          } else if (this.selectedMethod === 'paypal' && settings.paypalEnabled) {
+            this.notificationService.showInfo('Creating PayPal payment...');
+            this.paymentService.createPayPalPayment({
+              orderId: this.orderId,
+              amount: orderData.totalAmount,
+              currency: 'USD', // Ensure uppercase to match backend enum
+              description: `Order #${this.orderId}`
+            }).pipe(takeUntil(this.destroy$)).subscribe({
+              next: (paypalData) => {
+                this.handlePayPalPayment(paypalData);
+              },
+              error: () => {}
+            });
+          } else {
+            this.notificationService.showWarning(`Payment method ${this.selectedMethod} is not enabled yet.`);
+          }
+        });
       } else {
         this.notificationService.showError('Invalid order ID');
         this.router.navigate(['/shop']);

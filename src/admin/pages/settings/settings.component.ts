@@ -28,11 +28,13 @@ export class SettingsComponent implements OnInit {
   ngOnInit(): void {
     try {
       this.initializeForms();
-      this.loadSettings();
       
       const savedLang = localStorage.getItem('adminLang') || 'en';
       this.translate.setDefaultLang(savedLang);
       this.translate.use(savedLang);
+      
+      // Load settings after forms are initialized
+      this.loadSettings();
     } catch (error) {
       console.error('Failed to initialize settings component:', error);
     }
@@ -94,30 +96,38 @@ export class SettingsComponent implements OnInit {
   onLanguageChange(lang: string) {
     this.translate.use(lang);
     localStorage.setItem('adminLang', lang);
+    
+    // Update form value if form exists
+    if (this.generalForm && this.generalForm.get('language')) {
+      this.generalForm.get('language')?.setValue(lang);
+    }
   }
 
   loadSettings(): void {
     this.settingsService.getSettings().subscribe({
       next: (settings) => {
         try {
-          if (settings.general) {
-            this.generalForm.patchValue(settings.general);
-          }
-          if (settings.notifications) {
-            this.notificationForm.patchValue(settings.notifications);
-          }
-          if (settings.security) {
-            this.securityForm.patchValue(settings.security);
-          }
-          if (settings.payment) {
-            this.paymentForm.patchValue(settings.payment);
-          }
-          
-          // Set language after forms are initialized
-          const savedLang = localStorage.getItem('adminLang') || 'en';
-          if (this.generalForm && this.generalForm.get('language')) {
-            this.generalForm.get('language')?.setValue(savedLang);
-          }
+          // Wait for forms to be initialized before patching values
+          setTimeout(() => {
+            if (settings.general && this.generalForm) {
+              this.generalForm.patchValue(settings.general);
+            }
+            if (settings.notifications && this.notificationForm) {
+              this.notificationForm.patchValue(settings.notifications);
+            }
+            if (settings.security && this.securityForm) {
+              this.securityForm.patchValue(settings.security);
+            }
+            if (settings.payment && this.paymentForm) {
+              this.paymentForm.patchValue(settings.payment);
+            }
+            
+            // Set language after forms are initialized
+            const savedLang = localStorage.getItem('adminLang') || 'en';
+            if (this.generalForm && this.generalForm.get('language')) {
+              this.generalForm.get('language')?.setValue(savedLang);
+            }
+          }, 100);
         } catch (error) {
           console.error('Error patching form values:', error);
         }
@@ -130,30 +140,29 @@ export class SettingsComponent implements OnInit {
 
   onSaveGeneral(): void {
     try {
-      if (!this.generalForm) {
-        console.error('General form not initialized');
+      if (!this.generalForm || !this.generalForm.valid) {
+        console.error('General form not initialized or invalid');
         return;
       }
       
-      if (this.generalForm.valid) {
-        this.isLoading = true;
-        this.settingsService.updateGeneralSettings(this.generalForm.value).subscribe({
-          next: () => {
-            this.snackBar.open('General settings updated successfully', 'Close', {
-              duration: 3000,
-              panelClass: ['success-snackbar']
-            });
-            this.isLoading = false;
-          },
-          error: (error) => {
-            this.snackBar.open('Failed to update general settings', 'Close', {
-              duration: 3000,
-              panelClass: ['error-snackbar']
-            });
-            this.isLoading = false;
-          }
-        });
-      }
+      this.isLoading = true;
+      this.settingsService.updateGeneralSettings(this.generalForm.value).subscribe({
+        next: () => {
+          this.snackBar.open('General settings updated successfully', 'Close', {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Failed to update general settings:', error);
+          this.snackBar.open('Failed to update general settings', 'Close', {
+            duration: 3000,
+            panelClass: ['error-snackbar']
+          });
+          this.isLoading = false;
+        }
+      });
     } catch (error) {
       console.error('Error saving general settings:', error);
       this.isLoading = false;
@@ -177,6 +186,7 @@ export class SettingsComponent implements OnInit {
           this.isLoading = false;
         },
         error: (error) => {
+          console.error('Failed to update notification settings:', error);
           this.snackBar.open('Failed to update notification settings', 'Close', {
             duration: 3000,
             panelClass: ['error-snackbar']
@@ -192,30 +202,29 @@ export class SettingsComponent implements OnInit {
 
   onSaveSecurity(): void {
     try {
-      if (!this.securityForm) {
-        console.error('Security form not initialized');
+      if (!this.securityForm || !this.securityForm.valid) {
+        console.error('Security form not initialized or invalid');
         return;
       }
       
-      if (this.securityForm.valid) {
-        this.isLoading = true;
-        this.settingsService.updateSecuritySettings(this.securityForm.value).subscribe({
-          next: () => {
-            this.snackBar.open('Security settings updated successfully', 'Close', {
-              duration: 3000,
-              panelClass: ['success-snackbar']
-            });
-            this.isLoading = false;
-          },
-          error: (error) => {
-            this.snackBar.open('Failed to update security settings', 'Close', {
-              duration: 3000,
-              panelClass: ['error-snackbar']
-            });
-            this.isLoading = false;
-          }
-        });
-      }
+      this.isLoading = true;
+      this.settingsService.updateSecuritySettings(this.securityForm.value).subscribe({
+        next: () => {
+          this.snackBar.open('Security settings updated successfully', 'Close', {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Failed to update security settings:', error);
+          this.snackBar.open('Failed to update security settings', 'Close', {
+            duration: 3000,
+            panelClass: ['error-snackbar']
+          });
+          this.isLoading = false;
+        }
+      });
     } catch (error) {
       console.error('Error saving security settings:', error);
       this.isLoading = false;
@@ -224,30 +233,29 @@ export class SettingsComponent implements OnInit {
 
   onSavePayment(): void {
     try {
-      if (!this.paymentForm) {
-        console.error('Payment form not initialized');
+      if (!this.paymentForm || !this.paymentForm.valid) {
+        console.error('Payment form not initialized or invalid');
         return;
       }
       
-      if (this.paymentForm.valid) {
-        this.isLoading = true;
-        this.settingsService.updatePaymentSettings(this.paymentForm.value).subscribe({
-          next: () => {
-            this.snackBar.open('Payment settings updated successfully', 'Close', {
-              duration: 3000,
-              panelClass: ['success-snackbar']
-            });
-            this.isLoading = false;
-          },
-          error: (error) => {
-            this.snackBar.open('Failed to update payment settings', 'Close', {
-              duration: 3000,
-              panelClass: ['error-snackbar']
-            });
-            this.isLoading = false;
-          }
-        });
-      }
+      this.isLoading = true;
+      this.settingsService.updatePaymentSettings(this.paymentForm.value).subscribe({
+        next: () => {
+          this.snackBar.open('Payment settings updated successfully', 'Close', {
+            duration: 3000,
+            panelClass: ['success-snackbar']
+          });
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Failed to update payment settings:', error);
+          this.snackBar.open('Failed to update payment settings', 'Close', {
+            duration: 3000,
+            panelClass: ['error-snackbar']
+          });
+          this.isLoading = false;
+        }
+      });
     } catch (error) {
       console.error('Error saving payment settings:', error);
       this.isLoading = false;

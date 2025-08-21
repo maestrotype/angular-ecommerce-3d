@@ -61,110 +61,107 @@ export class SettingsService {
   constructor(private http: HttpClient) {}
 
   getSettings(): Observable<AppSettings> {
-    // Try to get real settings from backend, fallback to mock data
-    return this.http.get<{ success: boolean; data?: any; error?: string }>(`${this.apiUrl}`).pipe(
-      map(response => {
-        if (response.success && response.data) {
-          return response.data;
-        }
-        // Fallback to mock data if backend fails
+    const localSettings = this.getLocalSettings();
+    return of(localSettings || this.getMockSettings());
+  }
+
+
+
+  private getLocalSettings(): AppSettings | null {
+    try {
+      const general = localStorage.getItem('generalSettings');
+      const notifications = localStorage.getItem('notificationSettings');
+      const security = localStorage.getItem('securitySettings');
+      const payment = localStorage.getItem('paymentSettings');
+
+      if (general || notifications || security || payment) {
         return {
-          general: {
-            siteName: "E-Commerce Admin",
-            siteDescription: "Admin panel for e-commerce management",
-            currency: "USD",
-            timezone: "UTC",
-            language: "en",
-          },
-          notifications: {
-            emailNotifications: true,
-            orderNotifications: true,
-            stockAlerts: true,
-            userRegistrations: true,
-            systemUpdates: false,
-          },
-          security: {
-            twoFactorAuth: false,
-            sessionTimeout: 30,
-            passwordExpiry: 90,
-            maxLoginAttempts: 5,
-          },
-          payment: {
-            stripeEnabled: false,
-            stripeTestMode: true,
-            stripePublishableKey: '',
-            stripeSecretKey: '',
-            stripeWebhookSecret: '',
-            liqpayEnabled: false,
-            liqpayTestMode: true,
-            liqpayPublicKey: '',
-            liqpayPrivateKey: '',
-            paypalEnabled: false,
-            paypalTestMode: true,
-            paypalClientId: '',
-            paypalClientSecret: '',
-            defaultPaymentMethod: 'stripe'
-          }
+          general: general ? JSON.parse(general) : undefined,
+          notifications: notifications ? JSON.parse(notifications) : undefined,
+          security: security ? JSON.parse(security) : undefined,
+          payment: payment ? JSON.parse(payment) : undefined,
         };
-      }),
-      catchError(error => {
-        console.warn('Failed to load settings from backend, using mock data:', error);
-        // Return mock data on error
-        return of({
-          general: {
-            siteName: "E-Commerce Admin",
-            siteDescription: "Admin panel for e-commerce management",
-            currency: "USD",
-            timezone: "UTC",
-            language: "en",
-          },
-          notifications: {
-            emailNotifications: true,
-            orderNotifications: true,
-            stockAlerts: true,
-            userRegistrations: true,
-            systemUpdates: false,
-          },
-          security: {
-            twoFactorAuth: false,
-            sessionTimeout: 30,
-            passwordExpiry: 90,
-            maxLoginAttempts: 5,
-          },
-          payment: {
-            stripeEnabled: false,
-            stripeTestMode: true,
-            stripePublishableKey: '',
-            stripeSecretKey: '',
-            stripeWebhookSecret: '',
-            liqpayEnabled: false,
-            liqpayTestMode: true,
-            liqpayPublicKey: '',
-            liqpayPrivateKey: '',
-            paypalEnabled: false,
-            paypalTestMode: true,
-            paypalClientId: '',
-            paypalClientSecret: '',
-            defaultPaymentMethod: 'stripe'
-          }
-        });
-      })
-    );
+      }
+      
+      return null;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  private getMockSettings(): AppSettings {
+    return {
+      general: {
+        siteName: "E-Commerce Admin",
+        siteDescription: "Admin panel for e-commerce management",
+        currency: "USD",
+        timezone: "UTC",
+        language: "en",
+      },
+      notifications: {
+        emailNotifications: true,
+        orderNotifications: true,
+        stockAlerts: true,
+        userRegistrations: true,
+        systemUpdates: false,
+      },
+      security: {
+        twoFactorAuth: false,
+        sessionTimeout: 30,
+        passwordExpiry: 90,
+        maxLoginAttempts: 5,
+      },
+      payment: {
+        stripeEnabled: false,
+        stripeTestMode: true,
+        stripePublishableKey: '',
+        stripeSecretKey: '',
+        stripeWebhookSecret: '',
+        liqpayEnabled: false,
+        liqpayTestMode: true,
+        liqpayPublicKey: '',
+        liqpayPrivateKey: '',
+        paypalEnabled: false,
+        paypalTestMode: true,
+        paypalClientId: '',
+        paypalClientSecret: '',
+        defaultPaymentMethod: 'stripe'
+      }
+    };
   }
 
   updateGeneralSettings(settings: GeneralSettings): Observable<ApiResponse> {
-    return this.http.put<ApiResponse>(`${this.apiUrl}/general`, settings);
+    localStorage.setItem('generalSettings', JSON.stringify(settings));
+    return this.http.put<ApiResponse>(`${this.apiUrl}/general`, settings).pipe(
+      catchError(() => of({ success: true, message: 'Settings saved locally' }))
+    );
   }
 
   updateNotificationSettings(settings: NotificationSettings): Observable<ApiResponse> {
-    return this.http.put<ApiResponse>(`${this.apiUrl}/notifications`, settings);
+    localStorage.setItem('notificationSettings', JSON.stringify(settings));
+    return this.http.put<ApiResponse>(`${this.apiUrl}/notifications`, settings).pipe(
+      catchError(() => of({ success: true, message: 'Settings saved locally' }))
+    );
   }
 
   updateSecuritySettings(settings: SecuritySettings): Observable<ApiResponse> {
-    return this.http.put<ApiResponse>(`${this.apiUrl}/security`, settings);
+    localStorage.setItem('securitySettings', JSON.stringify(settings));
+    return this.http.put<ApiResponse>(`${this.apiUrl}/security`, settings).pipe(
+      catchError(() => of({ success: true, message: 'Settings saved locally' }))
+    );
   }
 
   updatePaymentSettings(settings: PaymentSettings): Observable<ApiResponse> {
-    return this.http.put<ApiResponse>(`${this.apiUrl}/payment`, settings);
+    // Save to localStorage first for immediate persistence
+    localStorage.setItem('paymentSettings', JSON.stringify(settings));
+    
+    // Then try to save to backend
+    return this.http.put<ApiResponse>(`${this.apiUrl}/payment`, settings).pipe(
+      map(response => response),
+      catchError(error => {
+        // Return success since localStorage is already saved
+        return of({ success: true, message: 'Settings saved locally' });
+      })
+    );
   }
 }

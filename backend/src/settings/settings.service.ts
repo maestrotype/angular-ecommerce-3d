@@ -17,7 +17,12 @@ export class SettingsService {
   constructor(
     @InjectRepository(Settings)
     private settingsRepository: Repository<Settings>,
-  ) {}
+  ) {
+    // Initialize default settings when service starts
+    this.initializeDefaultSettings().catch(error => {
+      console.error('[SettingsService] Failed to initialize default settings:', error);
+    });
+  }
 
   // Get all settings
   getAllSettings(): Observable<Settings[]> {
@@ -205,6 +210,7 @@ export class SettingsService {
 
   // Initialize default settings
   async initializeDefaultSettings(): Promise<void> {
+    console.log('[SettingsService] Initializing default settings...');
     const defaultSettings = [
       // General settings
       { key: 'general.siteName', value: 'E-Commerce Admin', type: 'string', category: 'general', description: 'Site name' },
@@ -243,11 +249,16 @@ export class SettingsService {
       { key: 'payment.defaultPaymentMethod', value: 'stripe', type: 'string', category: 'payment', description: 'Default payment method' }
     ];
 
+    let createdCount = 0;
     for (const setting of defaultSettings) {
       const existing = await this.settingsRepository.findOne({ where: { key: setting.key } });
       if (!existing) {
         await this.settingsRepository.save(setting);
+        createdCount++;
+        console.log(`[SettingsService] Created setting: ${setting.key}`);
       }
     }
+    
+    console.log(`[SettingsService] Default settings initialization complete. Created ${createdCount} new settings.`);
   }
 }
