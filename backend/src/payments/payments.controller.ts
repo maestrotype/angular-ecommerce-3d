@@ -152,8 +152,19 @@ export class PaymentsController {
 
   @Get('search')
   @UseGuards(JwtAuthGuard, AdminGuard)
-  searchPayments(@Query() searchPaymentsDto: SearchPaymentsDto): Observable<PaymentResponseDto> {
-    return this.paymentsService.searchPayments(searchPaymentsDto).pipe(
+  searchPayments(@Query() query: any): Observable<PaymentResponseDto> {
+    const filters = {
+      limit: query.limit ? parseInt(query.limit) : 20,
+      offset: query.offset ? parseInt(query.offset) : 0,
+      status: query.status,
+      paymentMethod: query.paymentMethod,
+      startDate: query.startDate ? new Date(query.startDate) : undefined,
+      endDate: query.endDate ? new Date(query.endDate) : undefined,
+      customerEmail: query.customerEmail,
+      minAmount: query.minAmount ? parseInt(query.minAmount) : undefined,
+      maxAmount: query.maxAmount ? parseInt(query.maxAmount) : undefined
+    };
+    return this.paymentsService.searchPayments(filters).pipe(
       map(payments => ({
         success: true,
         data: payments,

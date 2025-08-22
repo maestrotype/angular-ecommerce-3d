@@ -68,9 +68,30 @@ export class StripeStrategy implements PaymentStrategy<StripeIntentData> {
       });
     }
 
-    const amountInMinor = Math.round(Number(paymentData.amount) * 100);
-    // Ensure currency is uppercase for database enum
+    // Check minimum amount for Stripe
+    const amount = Number(paymentData.amount);
     const currency = String(paymentData.currency || 'USD').toUpperCase();
+    
+    // Stripe minimum amounts (in major currency units)
+    const minAmounts: { [key: string]: number } = {
+      'USD': 0.50,  // $0.50 minimum
+      'EUR': 0.50,  // €0.50 minimum
+      'GBP': 0.30,  // £0.30 minimum
+      'UAH': 10.00, // ₴10.00 minimum
+      'RUB': 30.00  // ₽30.00 minimum
+    };
+    
+    const minAmount = minAmounts[currency] || 0.50;
+    if (amount < minAmount) {
+      const errorMsg = `Amount ${amount} ${currency} is below minimum ${minAmount} ${currency} required by Stripe`;
+      console.error('[Stripe]', errorMsg);
+      return of({ 
+        success: false, 
+        error: errorMsg 
+      });
+    }
+
+    const amountInMinor = Math.round(amount * 100);
     console.log('[Stripe] Creating PaymentIntent:', { amount: amountInMinor, currency, orderId: paymentData.orderId });
 
     console.log('[Stripe] About to create PaymentIntent with Stripe instance:', !!this.stripe);

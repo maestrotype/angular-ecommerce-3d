@@ -272,7 +272,6 @@ export class PaymentsService {
       totalAmount: from(this.paymentRepository
         .createQueryBuilder('payment')
         .select('SUM(payment.amount)', 'sum')
-        .where('payment.status = :status', { status: PaymentStatus.COMPLETED })
         .getRawOne()
       )
     }).pipe(
@@ -466,11 +465,11 @@ export class PaymentsService {
     }
   }
 
-  private ensureObservable<T>(value: Observable<T> | Promise<T> | T): Observable<T> {
+  private ensureObservable<T>(value: Observable<T> | T): Observable<T> {
     if ((value as any)?.subscribe) {
       return value as Observable<T>;
     }
-    return from(Promise.resolve(value as T));
+    return of(value as T);
   }
 
   // PayPal Payment Methods
