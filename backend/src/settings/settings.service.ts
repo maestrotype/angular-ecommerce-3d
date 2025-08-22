@@ -211,6 +211,18 @@ export class SettingsService {
   // Initialize default settings
   async initializeDefaultSettings(): Promise<void> {
     console.log('[SettingsService] Initializing default settings...');
+    
+    // Get Stripe keys from environment variables
+    const stripePublishableKey = process.env.STRIPE_PUBLISHABLE_KEY || '';
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY || '';
+    const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
+    
+    console.log('[SettingsService] Stripe keys from env:', { 
+      publishableKey: stripePublishableKey ? '***' + stripePublishableKey.slice(-4) : 'NOT SET',
+      secretKey: stripeSecretKey ? '***' + stripeSecretKey.slice(-4) : 'NOT SET',
+      webhookSecret: stripeWebhookSecret ? '***' + stripeWebhookSecret.slice(-4) : 'NOT SET'
+    });
+    
     const defaultSettings = [
       // General settings
       { key: 'general.siteName', value: 'E-Commerce Admin', type: 'string', category: 'general', description: 'Site name' },
@@ -233,11 +245,11 @@ export class SettingsService {
       { key: 'notifications.systemUpdates', value: 'false', type: 'boolean', category: 'notifications', description: 'Enable system update notifications' },
       
       // Payment settings
-      { key: 'payment.stripeEnabled', value: 'false', type: 'boolean', category: 'payment', description: 'Enable Stripe payments' },
+      { key: 'payment.stripeEnabled', value: stripePublishableKey ? 'true' : 'false', type: 'boolean', category: 'payment', description: 'Enable Stripe payments' },
       { key: 'payment.stripeTestMode', value: 'true', type: 'boolean', category: 'payment', description: 'Enable Stripe test mode' },
-      { key: 'payment.stripePublishableKey', value: '', type: 'string', category: 'payment', description: 'Stripe publishable key' },
-      { key: 'payment.stripeSecretKey', value: '', type: 'string', category: 'payment', description: 'Stripe secret key' },
-      { key: 'payment.stripeWebhookSecret', value: '', type: 'string', category: 'payment', description: 'Stripe webhook secret' },
+      { key: 'payment.stripePublishableKey', value: stripePublishableKey, type: 'string', category: 'payment', description: 'Stripe publishable key' },
+      { key: 'payment.stripeSecretKey', value: stripeSecretKey, type: 'string', category: 'payment', description: 'Stripe secret key' },
+      { key: 'payment.stripeWebhookSecret', value: stripeWebhookSecret, type: 'string', category: 'payment', description: 'Stripe webhook secret' },
       { key: 'payment.liqpayEnabled', value: 'false', type: 'boolean', category: 'payment', description: 'Enable LiqPay payments' },
       { key: 'payment.liqpayTestMode', value: 'true', type: 'boolean', category: 'payment', description: 'Enable LiqPay test mode' },
       { key: 'payment.liqpayPublicKey', value: '', type: 'string', category: 'payment', description: 'LiqPay public key' },

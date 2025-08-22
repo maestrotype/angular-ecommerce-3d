@@ -17,16 +17,40 @@ export class StripeStrategy implements PaymentStrategy<StripeIntentData> {
   private webhookSecret: string | null = null;
 
   constructor(private configService: ConfigService) {
-    const secret = this.configService.get<string>('STRIPE_SECRET_KEY');
-    if (secret && secret.trim().length > 0 && secret !== 'sk_test_mock_key_for_testing_only') {
-      this.stripe = new Stripe(secret);
-      console.log('[Stripe] Real Stripe instance created');
-    } else {
-      console.log('[Stripe] Running in mock mode - no real Stripe keys provided');
+    console.log('[Stripe] Constructor called');
+    
+    // Try ConfigService first, then fallback to process.env
+    let secret = this.configService.get<string>('STRIPE_SECRET_KEY');
+    console.log('[Stripe] ConfigService STRIPE_SECRET_KEY:', secret ? '***' + secret.slice(-4) : 'NOT SET');
+    
+    if (!secret) {
+      secret = process.env.STRIPE_SECRET_KEY;
+      console.log('[Stripe] Fallback to process.env STRIPE_SECRET_KEY:', secret ? '***' + secret.slice(-4) : 'NOT SET');
     }
-    const wh = this.configService.get<string>('STRIPE_WEBHOOK_SECRET');
+    
+    if (secret && secret.trim().length > 0 && secret !== 'sk_test_mock_key_for_testing_only') {
+      try {
+        console.log('[Stripe] Attempting to create Stripe instance with key:', secret.substring(0, 20) + '...' + secret.substring(secret.length - 4));
+        this.stripe = new Stripe(secret);
+        console.log('[Stripe] Real Stripe instance created successfully');
+        console.log('[Stripe] Stripe instance methods:', Object.keys(this.stripe));
+      } catch (error) {
+        console.error('[Stripe] Failed to create Stripe instance:', error);
+        this.stripe = null;
+      }
+    } else {
+      console.log('[Stripe] Running in mock mode - no valid Stripe keys provided');
+      console.log('[Stripe] Secret key length:', secret ? secret.length : 0);
+      console.log('[Stripe] Secret key starts with:', secret ? secret.substring(0, 10) : 'N/A');
+    }
+    
+    let wh = this.configService.get<string>('STRIPE_WEBHOOK_SECRET');
+    if (!wh) {
+      wh = process.env.STRIPE_WEBHOOK_SECRET;
+    }
     if (wh && wh.trim().length > 0) {
       this.webhookSecret = wh;
+      console.log('[Stripe] Webhook secret set:', '***' + wh.slice(-4));
     }
   }
 
@@ -34,6 +58,7 @@ export class StripeStrategy implements PaymentStrategy<StripeIntentData> {
     if (!this.stripe) {
       // Mock mode - return fake client secret for testing
       console.log('[Stripe] Mock mode: Creating fake PaymentIntent for order:', paymentData.orderId);
+      console.log('[Stripe] Stripe instance is null. Check if STRIPE_SECRET_KEY is set correctly.');
       const mockClientSecret = 'pi_mock_' + Date.now() + '_secret_' + Math.random().toString(36).substr(2, 9);
       
       return of({ 
@@ -48,6 +73,9 @@ export class StripeStrategy implements PaymentStrategy<StripeIntentData> {
     const currency = String(paymentData.currency || 'USD').toUpperCase();
     console.log('[Stripe] Creating PaymentIntent:', { amount: amountInMinor, currency, orderId: paymentData.orderId });
 
+    console.log('[Stripe] About to create PaymentIntent with Stripe instance:', !!this.stripe);
+    console.log('[Stripe] Stripe instance methods:', Object.keys(this.stripe));
+    
     return from(
       this.stripe.paymentIntents.create({
         amount: amountInMinor,

@@ -169,9 +169,17 @@ export class PaymentsController {
   @Post('stripe/intent')
   @HttpCode(HttpStatus.CREATED)
   createStripeIntent(@Body() body: { orderId: number; amount: number; currency: string; description?: string }): Observable<PaymentResponseDto> {
+    console.log('[PaymentsController] createStripeIntent called with body:', body);
+    
     return this.paymentsService.createStripeIntent(body).pipe(
-      map((res) => ({ success: true, data: res, message: 'Stripe intent created' })),
-      catchError((error) => of({ success: false, error: error.message || 'Failed to create Stripe intent' }))
+      map((res) => {
+        console.log('[PaymentsController] Stripe intent created successfully:', res);
+        return { success: true, data: res, message: 'Stripe intent created' };
+      }),
+      catchError((error) => {
+        console.error('[PaymentsController] Failed to create Stripe intent:', error);
+        return of({ success: false, error: error.message || 'Failed to create Stripe intent' });
+      })
     );
   }
 

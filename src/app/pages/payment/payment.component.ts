@@ -38,6 +38,10 @@ export class PaymentComponent implements OnInit, OnDestroy {
   maxStatusChecks = 30; // 5 minutes with 10-second intervals
   statusCheckCount = 0;
 
+  // Stripe configuration
+  stripePublishableKey = '';
+  stripeClientSecret = '';
+
   constructor(
     private route: ActivatedRoute,
     public router: Router,
@@ -84,6 +88,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
         this.paymentSettingsService.getPaymentSettings().pipe(
           takeUntil(this.destroy$)
         ).subscribe(settings => {
+          // Store Stripe publishable key
+          this.stripePublishableKey = settings.stripePublishableKey;
+          
           if (this.selectedMethod === 'liqpay' && settings.liqpayEnabled) {
             this.createPayment();
           } else if (this.selectedMethod === 'stripe' && settings.stripeEnabled) {
@@ -442,5 +449,85 @@ export class PaymentComponent implements OnInit, OnDestroy {
     } else {
       this.notificationService.showError('Failed to get PayPal approval URL');
     }
+  }
+
+  // Stripe Elements integration methods
+  getOrderTotal(): number {
+    return this.order?.totalAmount || 0;
+  }
+
+  getStripePublishableKey(): string {
+    const key = this.stripePublishableKey;
+    console.log('Stripe publishable key:', key);
+    
+    if (!key) {
+      console.warn('Stripe publishable key is empty! Please configure it in admin settings.');
+      return 'pk_test_51Oq...'; // Fallback for testing
+    }
+    
+    return key;
+  }
+
+  onStripePaymentSuccess(paymentData: any): void {
+    console.log('Stripe payment success:', paymentData);
+    
+    // Create payment record
+    this.payment = {
+      id: 0,
+      orderId: this.orderId,
+      amount: paymentData.amount,
+      currency: paymentData.currency.toUpperCase(),
+      paymentMethod: 'stripe',
+      status: 'pending',
+      description: `Order #${this.orderId}`,
+      customerEmail: '',
+      customerPhone: '',
+      createdAt: new Date(),
+      updatedAt: new Date()
+    } as Payment;
+
+    // Start status tracking
+    this.startStatusTracking();
+    
+    this.notificationService.showSuccess('Payment method created successfully! Processing payment...');
+  }
+
+  onStripePaymentError(errorMessage: string): void {
+    console.error('Stripe payment error:', errorMessage);
+    this.notificationService.showError(`Payment failed: ${errorMessage}`);
+  }
+
+  onStripeLoadingChange(isLoading: boolean): void {
+    // Update loading state for Stripe specifically
+    console.log('Stripe loading state:', isLoading);
+  }
+
+  // Create Stripe PaymentIntent when Stripe is selected
+  createStripePaymentIntent(): void {
+    if (this.selectedMethod !== 'stripe') return;
+    
+    this.isLoading = true;
+    this.notificationService.showInfo('Creating Stripe PaymentIntent...');
+    
+    this.paymentService.createStripeIntent({
+      orderId: this.orderId,
+      amount: this.getOrderTotal(),
+      currency: 'USD',
+      description: `Order #${this.orderId}`
+    }).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (clientSecret) => {
+        this.stripeClientSecret = clientSecret;
+        this.isLoading = false;
+        this.notificationService.showSuccess('Stripe PaymentIntent created successfully!');
+        console.log('Stripe clientSecret received:', clientSecret);
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.notificationService.showError(`Failed to create Stripe PaymentIntent: ${error}`);
+        console.error('Stripe PaymentIntent error:', error);
+      }
+    });
   }
 }

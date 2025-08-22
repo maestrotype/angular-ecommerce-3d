@@ -52,9 +52,22 @@
             <span *ngIf="!isLoading">Pay Now</span>
             <span *ngIf="isLoading">Processing...</span>
           </button>
-          <div *ngIf="selectedMethod==='stripe'" style="margin-top:16px;">
-            <div id="card-element" style="padding:12px;border:1px solid #ddd;border-radius:8px;background:#fff;"></div>
-            <button class="pay-btn" style="margin-top:12px;" type="button" (click)="confirmStripePayment()" [disabled]="!stripe || !cardEl">Pay with Card</button>
+          <div *ngIf="selectedMethod==='stripe'" class="stripe-payment-section">
+            <button *ngIf="!stripeClientSecret" class="pay-btn" (click)="createStripePaymentIntent()" [disabled]="isLoading">
+              <span *ngIf="!isLoading">Initialize Stripe Payment</span>
+              <span *ngIf="isLoading">Creating PaymentIntent...</span>
+            </button>
+            
+            <app-stripe-elements
+              *ngIf="stripeClientSecret"
+              [amount]="getOrderTotal()"
+              [currency]="'usd'"
+              [publishableKey]="getStripePublishableKey()"
+              [clientSecret]="stripeClientSecret"
+              (paymentSuccess)="onStripePaymentSuccess($event)"
+              (paymentError)="onStripePaymentError($event)"
+              (loadingChange)="onStripeLoadingChange($event)">
+            </app-stripe-elements>
           </div>
           <div *ngIf="selectedMethod==='paypal'" style="margin-top:8px;">
             <button class="pay-btn paypal-btn" (click)="createPayment()" [disabled]="isLoading">
