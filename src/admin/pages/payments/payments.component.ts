@@ -2,9 +2,11 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
 import { PaymentService, PaymentSearchFilters, UpdatePaymentStatusRequest } from '../../services/payment.service';
 import { Payment } from '../../models/payment.model';
 import { ErrorHandlerService } from '../../services/error-handler.service';
+import { PaymentDetailsDialogComponent } from './payment-details-dialog.component';
 
 @Component({
   selector: 'app-payments',
@@ -48,7 +50,8 @@ export class PaymentsComponent implements OnInit, OnDestroy {
   constructor(
     private paymentService: PaymentService,
     private fb: FormBuilder,
-    private errorHandler: ErrorHandlerService
+    private errorHandler: ErrorHandlerService,
+    private dialog: MatDialog
   ) {
     // Form will be initialized in ngOnInit
   }
@@ -188,7 +191,8 @@ export class PaymentsComponent implements OnInit, OnDestroy {
       next: (payments) => {
         this.payments = payments || [];
         this.isLoading = false;
-        this.length = payments.length;
+        // Update length for pagination - use totalPayments if available, otherwise use current results
+        this.length = this.totalPayments > 0 ? this.totalPayments : payments.length;
       },
       error: (error) => {
         console.error('Failed to apply filters:', error);
@@ -250,7 +254,14 @@ export class PaymentsComponent implements OnInit, OnDestroy {
 
   viewPayment(payment: Payment): void {
     if (!payment?.id) return;
-    this.errorHandler?.showInfo?.(`Payment #${payment.id}`);
+    
+    // Open payment details dialog
+    this.dialog.open(PaymentDetailsDialogComponent, {
+      data: { payment },
+      width: '700px',
+      maxHeight: '90vh',
+      disableClose: false
+    });
   }
 
   viewOrder(orderId: number | null): void {
@@ -258,7 +269,7 @@ export class PaymentsComponent implements OnInit, OnDestroy {
     this.errorHandler?.showInfo?.(`Open order #${orderId}`);
   }
 
-  private hasActiveFilters(): boolean {
+  hasActiveFilters(): boolean {
     if (!this.filtersForm?.value) return false;
     const v = this.filtersForm.value;
     return !!(v.status || v.paymentMethod || v.customerEmail || v.minAmount || v.maxAmount || v.startDate || v.endDate);

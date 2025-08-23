@@ -18,6 +18,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -44,6 +46,7 @@ import { MessageDetailComponent } from './pages/messages/message-detail/message-
 import { SectionListComponent } from './pages/sections/section-list/section-list.component';
 import { SectionFormComponent } from './pages/sections/section-form/section-form.component';
 import { PaymentsComponent } from './pages/payments/payments.component';
+import { PaymentDetailsDialogComponent } from './pages/payments/payment-details-dialog.component';
 // Shared Components
 import { DataTableComponent } from './components/blocks/data-table/data-table.component';
 import { FormFieldComponent } from './components/ui/form-field/form-field.component';
@@ -89,6 +92,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     SectionListComponent,
     SectionFormComponent,
     PaymentsComponent,
+    PaymentDetailsDialogComponent,
 
     UserListComponent,
     UserEditDialogComponent,
@@ -118,6 +122,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     MatDialogModule,
     MatSnackBarModule,
     MatProgressSpinnerModule,

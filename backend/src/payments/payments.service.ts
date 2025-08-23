@@ -316,6 +316,8 @@ export class PaymentsService {
     customerEmail?: string;
     minAmount?: number;
     maxAmount?: number;
+    limit?: number;
+    offset?: number;
   }): Observable<Payment[]> {
     const queryBuilder = this.paymentRepository.createQueryBuilder('payment');
 
@@ -345,6 +347,14 @@ export class PaymentsService {
 
     if (filters.maxAmount !== undefined) {
       queryBuilder.andWhere('payment.amount <= :maxAmount', { maxAmount: filters.maxAmount });
+    }
+
+    // Add pagination
+    if (filters.limit !== undefined) {
+      queryBuilder.limit(filters.limit);
+    }
+    if (filters.offset !== undefined) {
+      queryBuilder.offset(filters.offset);
     }
 
     return from(queryBuilder
