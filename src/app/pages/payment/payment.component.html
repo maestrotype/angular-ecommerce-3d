@@ -25,6 +25,7 @@
           <div class="order-details">
             <p><strong>Order ID:</strong> #{{ orderId }}</p>
             <p><strong>Status:</strong> <span class="status pending">Pending Payment</span></p>
+            <p><strong>Debug - Order Data:</strong> {{ getOrderData() | json }}</p>
           </div>
         </div>
 
@@ -52,9 +53,30 @@
             <span *ngIf="!isLoading">Pay Now</span>
             <span *ngIf="isLoading">Processing...</span>
           </button>
-          <div *ngIf="selectedMethod==='stripe'" style="margin-top:16px;">
-            <div id="card-element" style="padding:12px;border:1px solid #ddd;border-radius:8px;background:#fff;"></div>
-            <button class="pay-btn" style="margin-top:12px;" type="button" (click)="confirmStripePayment()" [disabled]="!stripe || !cardEl">Pay with Card</button>
+                     <div *ngIf="selectedMethod==='stripe'" class="stripe-payment-section">
+             <button *ngIf="!stripeClientSecret" class="pay-btn" (click)="createStripePaymentIntent()" [disabled]="isLoading">
+               <span *ngIf="!isLoading">Initialize Stripe Payment</span>
+               <span *ngIf="isLoading">Creating PaymentIntent...</span>
+             </button>
+             
+             <!-- Show this button if no client secret yet -->
+             <div *ngIf="!stripeClientSecret && !isLoading" class="stripe-info">
+               <p>Click "Initialize Stripe Payment" to set up your card payment</p>
+             </div>
+            
+            <!-- Simple Stripe Form -->
+            <div *ngIf="stripeClientSecret" class="stripe-form">
+              <div class="card-input-container">
+                <label for="card-element">Card Information</label>
+                <div id="card-element" class="card-element"></div>
+                <div id="card-errors" class="card-errors" role="alert"></div>
+              </div>
+              
+              <button class="pay-btn stripe-pay-btn" (click)="onStripePaymentClick()" [disabled]="isLoading">
+                <span *ngIf="!isLoading">Pay with Card</span>
+                <span *ngIf="isLoading">Processing...</span>
+              </button>
+            </div>
           </div>
           <div *ngIf="selectedMethod==='paypal'" style="margin-top:8px;">
             <button class="pay-btn paypal-btn" (click)="createPayment()" [disabled]="isLoading">

@@ -1,0 +1,41 @@
+<div class="stripe-test-page">
+  <div class="container">
+    <h1>Stripe Elements Test</h1>
+    <p>This is a test page to demonstrate Stripe Elements integration.</p>
+    
+    <div class="test-info">
+      <h3>Test Configuration</h3>
+      <p><strong>Amount:</strong> ${{ testAmount }}</p>
+      <p><strong>Currency:</strong> {{ testCurrency | uppercase }}</p>
+      <p><strong>Publishable Key:</strong> {{ testPublishableKey }}</p>
+    </div>
+
+    <div class="stripe-demo">
+      <h3>Payment Form</h3>
+      <app-stripe-elements
+        [amount]="testAmount"
+        [currency]="testCurrency"
+        [publishableKey]="testPublishableKey"
+        (paymentSuccess)="onPaymentSuccess($event)"
+        (paymentError)="onPaymentError($event)"
+        (loadingChange)="onLoadingChange($event)">
+      </app-stripe-elements>
+    </div>
+
+    <div class="test-cards">
+      <h3>Test Card Numbers</h3>
+      <div class="card-list">
+        <div class="card-item">
+          <strong>Success:</strong> 4242 4242 4242 4242
+        </div>
+        <div class="card-item">
+          <strong>Decline:</strong> 4000 0000 0000 0002
+        </div>
+        <div class="card-item">
+          <strong>3D Secure:</strong> 4000 0025 0000 3155
+        </div>
+      </div>
+      <p class="note">Use any future expiry date and any 3-digit CVC</p>
+    </div>
+  </div>
+</div> 

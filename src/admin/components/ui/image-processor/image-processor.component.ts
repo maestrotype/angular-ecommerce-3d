@@ -1,8 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment.prod';
 import { ErrorHandlerService } from '../../../services/error-handler.service';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil, catchError, finalize } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 export interface ProcessingOptions {
   removeBackground: boolean;
@@ -22,7 +25,7 @@ export interface ProcessedImageResult {
   templateUrl: './image-processor.component.html',
   styleUrls: ['./image-processor.component.scss']
 })
-export class ImageProcessorComponent {
+export class ImageProcessorComponent implements OnDestroy {
   @Input() label = 'Upload Image';
   @Input() placeholder = 'Select image to process';
   @Input() control: FormControl = new FormControl();
@@ -40,10 +43,17 @@ export class ImageProcessorComponent {
   previewUrl: string | null = null;
   processedUrl: string | null = null;
 
+  private destroy$ = new Subject<void>();
+
   constructor(
     private http: HttpClient,
     private errorHandler: ErrorHandlerService
   ) {}
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   onFileSelected(event: any): void {
     const file = event.target.files[0];
@@ -63,35 +73,38 @@ export class ImageProcessorComponent {
     reader.readAsDataURL(file);
   }
 
-  private async processImage(): Promise<void> {
+  private processImage(): void {
     if (!this.selectedFile) return;
 
     this.isProcessing = true;
 
-    try {
-      const formData = new FormData();
-      formData.append('image', this.selectedFile);
-      formData.append('removeBackground', this.processingOptions.removeBackground.toString());
-      formData.append('optimize', this.processingOptions.optimize.toString());
+    const formData = new FormData();
+    formData.append('image', this.selectedFile);
+    formData.append('removeBackground', this.processingOptions.removeBackground.toString());
+    formData.append('optimize', this.processingOptions.optimize.toString());
 
-      const result = await this.http.post<ProcessedImageResult>(
-        `${environment.apiUrl}/uploads/process-image`,
-        formData
-      ).toPromise();
-
-                        if (result) {
-                    this.processedUrl = result.url;
-                    this.control.setValue(result.url);
-                    this.fileProcessed.emit(result);
-                    this.errorHandler.showSuccess('Image processed successfully!');
-                  }
-                    } catch (error: any) {
-                  const errorMessage = error.error?.message || 'Failed to process image';
-                  this.processingError.emit(errorMessage);
-                  this.errorHandler.showImageProcessingError(error);
-                } finally {
-      this.isProcessing = false;
-    }
+    this.http.post<ProcessedImageResult>(
+      `${environment.apiUrl}/uploads/process-image`,
+      formData
+    ).pipe(
+      takeUntil(this.destroy$),
+      catchError((error: any) => {
+        const errorMessage = error.error?.message || 'Failed to process image';
+        this.processingError.emit(errorMessage);
+        this.errorHandler.showImageProcessingError(error);
+        return of(null);
+      }),
+      finalize(() => {
+        this.isProcessing = false;
+      })
+    ).subscribe(result => {
+      if (result) {
+        this.processedUrl = result.url;
+        this.control.setValue(result.url);
+        this.fileProcessed.emit(result);
+        this.errorHandler.showSuccess('Image processed successfully!');
+      }
+    });
   }
 
   removeImage(): void {

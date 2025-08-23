@@ -1,8 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Subject, from, of } from 'rxjs';
 import { takeUntil, catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
 import { RecommendationsService, RecommendationProduct } from '../../../../core/services/recommendations.service';
 import { Product } from 'src/shared/models/product.model';
 import { NotificationService } from '../../../../core/services/notification.service';
@@ -117,27 +116,30 @@ export class SimilarProductsComponent implements OnInit, OnDestroy {
       console.log('SimilarProducts: About to navigate to product ID:', productId);
       console.log('SimilarProducts: Current URL:', this.router.url);
       
-      this.router.navigate(['/product', productId]).then(success => {
-        console.log('SimilarProducts: Navigation promise resolved with success:', success);
-        if (success) {
-          console.log('SimilarProducts: Navigation successful to product:', productId);
-          console.log('SimilarProducts: New URL:', this.router.url);
-          // Scroll to top after successful navigation
-          setTimeout(() => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }, 100);
-        } else {
-          console.error('SimilarProducts: Navigation returned false for product:', productId);
-          console.log('SimilarProducts: Current URL after failed navigation:', this.router.url);
-          // Don't show error notification for false return, as it might be normal
-          // when navigating to the same route with different params
+      from(this.router.navigate(['/product', productId])).subscribe({
+        next: (success) => {
+          console.log('SimilarProducts: Navigation observable resolved with success:', success);
+          if (success) {
+            console.log('SimilarProducts: Navigation successful to product:', productId);
+            console.log('SimilarProducts: New URL:', this.router.url);
+            // Scroll to top after successful navigation
+            setTimeout(() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 100);
+          } else {
+            console.error('SimilarProducts: Navigation returned false for product:', productId);
+            console.log('SimilarProducts: Current URL after failed navigation:', this.router.url);
+            // Don't show error notification for false return, as it might be normal
+            // when navigating to the same route with different params
+          }
+        },
+        error: (error) => {
+          console.error('SimilarProducts: Navigation observable error for product:', productId, error);
+          this.notificationService.showError(
+            'Navigation error. Please try again.',
+            3000
+          );
         }
-      }).catch(error => {
-        console.error('SimilarProducts: Navigation promise rejected for product:', productId, error);
-        this.notificationService.showError(
-          'Navigation error. Please try again.',
-          3000
-        );
       });
     } catch (error) {
       console.error('SimilarProducts: Error navigating to product:', error);

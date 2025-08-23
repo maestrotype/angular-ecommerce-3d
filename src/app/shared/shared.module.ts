@@ -7,6 +7,9 @@ import { FavoriteButtonComponent } from './favorite-button/favorite-button.compo
 // Recommendation Components
 import { SimilarProductsComponent } from './components/recommendations/similar-products/similar-products.component';
 import { BoughtTogetherComponent } from './components/recommendations/bought-together/bought-together.component';
+// Payment Components
+import { StripeElementsComponent } from './components/stripe-elements/stripe-elements.component';
+import { StripeTestComponent } from '../pages/stripe-test/stripe-test.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +17,9 @@ import { BoughtTogetherComponent } from './components/recommendations/bought-tog
     ProductCardComponent,
     FavoriteButtonComponent,
     SimilarProductsComponent,
-    BoughtTogetherComponent
+    BoughtTogetherComponent,
+    StripeElementsComponent,
+    StripeTestComponent
   ],
   imports: [
     CommonModule,
@@ -29,7 +34,9 @@ import { BoughtTogetherComponent } from './components/recommendations/bought-tog
     ProductCardComponent,
     FavoriteButtonComponent,
     SimilarProductsComponent,
-    BoughtTogetherComponent
+    BoughtTogetherComponent,
+    StripeElementsComponent,
+    StripeTestComponent
   ]
 })
 export class SharedModule { } 

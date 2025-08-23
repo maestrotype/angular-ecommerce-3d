@@ -1,0 +1,46 @@
+<div class="stripe-elements-container">
+  <!-- Initialization Error -->
+  <div *ngIf="!isStripeReady && errorMessage" class="init-error">
+    <div class="error-icon">⚠️</div>
+    <h3>Stripe Configuration Error</h3>
+    <p>{{ errorMessage }}</p>
+    <p class="help-text">Please contact administrator to configure Stripe properly.</p>
+  </div>
+
+  <!-- Card Element Container -->
+  <div *ngIf="isStripeReady" class="card-element-wrapper">
+    <label class="card-label">Card Information</label>
+    <div #cardElement class="card-element"></div>
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+  </div>
+
+  <!-- Payment Button -->
+  <button 
+    type="button"
+    class="payment-button"
+    [disabled]="isLoading || !isStripeReady || !isCardReady"
+    (click)="handlePayment()"
+    [class.loading]="isLoading">
+    
+    <span *ngIf="!isLoading" class="button-text">
+      Pay {{ amount | currency:currency:'symbol':'1.2-2' }}
+    </span>
+    
+    <span *ngIf="isLoading" class="loading-text">
+      <svg class="spinner" viewBox="0 0 50 50">
+        <circle cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+      </svg>
+      Processing...
+    </span>
+  </button>
+
+  <!-- Security Notice -->
+  <div class="security-notice">
+    <svg class="lock-icon" viewBox="0 0 24 24">
+      <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6z"/>
+    </svg>
+    <span>Your payment information is secure and encrypted</span>
+  </div>
+</div> 

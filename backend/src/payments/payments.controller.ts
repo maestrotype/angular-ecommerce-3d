@@ -152,8 +152,19 @@ export class PaymentsController {
 
   @Get('search')
   @UseGuards(JwtAuthGuard, AdminGuard)
-  searchPayments(@Query() searchPaymentsDto: SearchPaymentsDto): Observable<PaymentResponseDto> {
-    return this.paymentsService.searchPayments(searchPaymentsDto).pipe(
+  searchPayments(@Query() query: any): Observable<PaymentResponseDto> {
+    const filters = {
+      limit: query.limit ? parseInt(query.limit) : 20,
+      offset: query.offset ? parseInt(query.offset) : 0,
+      status: query.status,
+      paymentMethod: query.paymentMethod,
+      startDate: query.startDate ? new Date(query.startDate) : undefined,
+      endDate: query.endDate ? new Date(query.endDate) : undefined,
+      customerEmail: query.customerEmail,
+      minAmount: query.minAmount ? parseInt(query.minAmount) : undefined,
+      maxAmount: query.maxAmount ? parseInt(query.maxAmount) : undefined
+    };
+    return this.paymentsService.searchPayments(filters).pipe(
       map(payments => ({
         success: true,
         data: payments,
@@ -169,9 +180,17 @@ export class PaymentsController {
   @Post('stripe/intent')
   @HttpCode(HttpStatus.CREATED)
   createStripeIntent(@Body() body: { orderId: number; amount: number; currency: string; description?: string }): Observable<PaymentResponseDto> {
+    console.log('[PaymentsController] createStripeIntent called with body:', body);
+    
     return this.paymentsService.createStripeIntent(body).pipe(
-      map((res) => ({ success: true, data: res, message: 'Stripe intent created' })),
-      catchError((error) => of({ success: false, error: error.message || 'Failed to create Stripe intent' }))
+      map((res) => {
+        console.log('[PaymentsController] Stripe intent created successfully:', res);
+        return { success: true, data: res, message: 'Stripe intent created' };
+      }),
+      catchError((error) => {
+        console.error('[PaymentsController] Failed to create Stripe intent:', error);
+        return of({ success: false, error: error.message || 'Failed to create Stripe intent' });
+      })
     );
   }
 

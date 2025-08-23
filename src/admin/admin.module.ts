@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -64,6 +64,9 @@ import { SectionService } from './services/section.service';
 import { ErrorHandlerService } from './services/error-handler.service';
 import { ConfirmationService } from './services/confirmation.service';
 import { PaymentService } from './services/payment.service';
+
+// Interceptors
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -143,7 +146,12 @@ export function HttpLoaderFactory(http: HttpClient) {
     SectionService,
     ErrorHandlerService,
     ConfirmationService,
-    PaymentService
+    PaymentService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
   ]
 })
 export class AdminModule { }

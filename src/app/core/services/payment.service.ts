@@ -119,4 +119,73 @@ export class PaymentService {
         })
       );
   }
+
+  // Admin methods for payment management
+  getAllPayments(): Observable<Payment[]> {
+    return this.http.get<Payment[]>(`${this.apiUrl}`)
+      .pipe(
+        catchError(error => {
+          console.error('Error fetching all payments:', error);
+          this.notificationService.showError('Failed to fetch payments.');
+          return throwError(() => new Error('Failed to fetch payments'));
+        })
+      );
+  }
+
+  getPaymentStats(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/stats/overview`)
+      .pipe(
+        catchError(error => {
+          console.error('Error fetching payment stats:', error);
+          this.notificationService.showError('Failed to fetch payment statistics.');
+          return throwError(() => new Error('Failed to fetch payment stats'));
+        })
+      );
+  }
+
+  searchPayments(filters: any = {}): Observable<Payment[]> {
+    let params = new URLSearchParams();
+    
+    if (filters.status && filters.status !== 'all') {
+      params.set('status', filters.status);
+    }
+    if (filters.method && filters.method !== 'all') {
+      params.set('method', filters.method);
+    }
+    if (filters.customerEmail) {
+      params.set('customerEmail', filters.customerEmail);
+    }
+    if (filters.minAmount) {
+      params.set('minAmount', filters.minAmount.toString());
+    }
+    if (filters.maxAmount) {
+      params.set('maxAmount', filters.maxAmount.toString());
+    }
+    if (filters.fromDate) {
+      params.set('fromDate', filters.fromDate);
+    }
+    if (filters.toDate) {
+      params.set('toDate', filters.toDate);
+    }
+
+    return this.http.get<Payment[]>(`${this.apiUrl}/search?${params.toString()}`)
+      .pipe(
+        catchError(error => {
+          console.error('Error searching payments:', error);
+          this.notificationService.showError('Failed to search payments.');
+          return throwError(() => new Error('Failed to search payments'));
+        })
+      );
+  }
+
+  updatePaymentStatus(paymentId: number, status: string, notes?: string): Observable<Payment> {
+    return this.http.put<Payment>(`${this.apiUrl}/${paymentId}/status`, { status, notes })
+      .pipe(
+        catchError(error => {
+          console.error('Error updating payment status:', error);
+          this.notificationService.showError('Failed to update payment status.');
+          return throwError(() => new Error('Failed to update payment status'));
+        })
+      );
+  }
 } 

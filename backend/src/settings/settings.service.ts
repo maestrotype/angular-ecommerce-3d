@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Observable, from, of, throwError } from 'rxjs';
-import { map, catchError, switchMap } from 'rxjs/operators';
+import { map, catchError, switchMap, tap, mergeMap, toArray } from 'rxjs/operators';
 import { Settings } from './entities/settings.entity';
 import { 
   UpdateSettingsDto, 
@@ -19,8 +19,10 @@ export class SettingsService {
     private settingsRepository: Repository<Settings>,
   ) {
     // Initialize default settings when service starts
-    this.initializeDefaultSettings().catch(error => {
-      console.error('[SettingsService] Failed to initialize default settings:', error);
+    this.initializeDefaultSettings().subscribe({
+      error: (error) => {
+        console.error('[SettingsService] Failed to initialize default settings:', error);
+      }
     });
   }
 
@@ -209,8 +211,20 @@ export class SettingsService {
   }
 
   // Initialize default settings
-  async initializeDefaultSettings(): Promise<void> {
+  initializeDefaultSettings(): Observable<void> {
     console.log('[SettingsService] Initializing default settings...');
+    
+    // Get Stripe keys from environment variables
+    const stripePublishableKey = process.env.STRIPE_PUBLISHABLE_KEY || '';
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY || '';
+    const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
+    
+    console.log('[SettingsService] Stripe keys from env:', { 
+      publishableKey: stripePublishableKey ? '***' + stripePublishableKey.slice(-4) : 'NOT SET',
+      secretKey: stripeSecretKey ? '***' + stripeSecretKey.slice(-4) : 'NOT SET',
+      webhookSecret: stripeWebhookSecret ? '***' + stripeWebhookSecret.slice(-4) : 'NOT SET'
+    });
+    
     const defaultSettings = [
       // General settings
       { key: 'general.siteName', value: 'E-Commerce Admin', type: 'string', category: 'general', description: 'Site name' },
@@ -233,11 +247,11 @@ export class SettingsService {
       { key: 'notifications.systemUpdates', value: 'false', type: 'boolean', category: 'notifications', description: 'Enable system update notifications' },
       
       // Payment settings
-      { key: 'payment.stripeEnabled', value: 'false', type: 'boolean', category: 'payment', description: 'Enable Stripe payments' },
+      { key: 'payment.stripeEnabled', value: stripePublishableKey ? 'true' : 'false', type: 'boolean', category: 'payment', description: 'Enable Stripe payments' },
       { key: 'payment.stripeTestMode', value: 'true', type: 'boolean', category: 'payment', description: 'Enable Stripe test mode' },
-      { key: 'payment.stripePublishableKey', value: '', type: 'string', category: 'payment', description: 'Stripe publishable key' },
-      { key: 'payment.stripeSecretKey', value: '', type: 'string', category: 'payment', description: 'Stripe secret key' },
-      { key: 'payment.stripeWebhookSecret', value: '', type: 'string', category: 'payment', description: 'Stripe webhook secret' },
+      { key: 'payment.stripePublishableKey', value: stripePublishableKey, type: 'string', category: 'payment', description: 'Stripe publishable key' },
+      { key: 'payment.stripeSecretKey', value: stripeSecretKey, type: 'string', category: 'payment', description: 'Stripe secret key' },
+      { key: 'payment.stripeWebhookSecret', value: stripeWebhookSecret, type: 'string', category: 'payment', description: 'Stripe webhook secret' },
       { key: 'payment.liqpayEnabled', value: 'false', type: 'boolean', category: 'payment', description: 'Enable LiqPay payments' },
       { key: 'payment.liqpayTestMode', value: 'true', type: 'boolean', category: 'payment', description: 'Enable LiqPay test mode' },
       { key: 'payment.liqpayPublicKey', value: '', type: 'string', category: 'payment', description: 'LiqPay public key' },
@@ -249,16 +263,33 @@ export class SettingsService {
       { key: 'payment.defaultPaymentMethod', value: 'stripe', type: 'string', category: 'payment', description: 'Default payment method' }
     ];
 
-    let createdCount = 0;
-    for (const setting of defaultSettings) {
-      const existing = await this.settingsRepository.findOne({ where: { key: setting.key } });
-      if (!existing) {
-        await this.settingsRepository.save(setting);
-        createdCount++;
-        console.log(`[SettingsService] Created setting: ${setting.key}`);
-      }
-    }
-    
-    console.log(`[SettingsService] Default settings initialization complete. Created ${createdCount} new settings.`);
+    // Process each setting and collect results
+    const settingObservables = defaultSettings.map(setting => 
+      from(this.settingsRepository.findOne({ where: { key: setting.key } })).pipe(
+        switchMap(existing => {
+          if (!existing) {
+            return from(this.settingsRepository.save(setting)).pipe(
+              tap(() => console.log(`[SettingsService] Created setting: ${setting.key}`)),
+              map(() => true)
+            );
+          }
+          return of(false);
+        })
+      )
+    );
+
+    return from(settingObservables).pipe(
+      mergeMap(observable => observable),
+      toArray(),
+      map(results => {
+        const createdCount = results.filter(result => result).length;
+        console.log(`[SettingsService] Default settings initialization complete. Created ${createdCount} new settings.`);
+        return void 0;
+      }),
+      catchError(error => {
+        console.error('[SettingsService] Initialize default settings error:', error);
+        return throwError(() => error);
+      })
+    );
   }
 }

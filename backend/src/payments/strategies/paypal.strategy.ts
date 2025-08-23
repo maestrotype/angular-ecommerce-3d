@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Observable, of } from 'rxjs';
+import { Observable, of, from, throwError } from 'rxjs';
+import { map, mergeMap, catchError } from 'rxjs/operators';
 import { PaymentStrategy } from '../interfaces/payment-strategy.interface';
 import { PaymentData } from '../interfaces/payment-strategy.interface';
 import { PaymentMethod } from '../entities/payment.entity';
@@ -135,28 +136,32 @@ export class PayPalStrategy implements PaymentStrategy {
   }
 
   // Helper method to get PayPal access token
-  private async getAccessToken(): Promise<string> {
+  private getAccessToken(): Observable<string> {
     if (this.isTestMode) {
-      return 'MOCK_ACCESS_TOKEN';
+      return of('MOCK_ACCESS_TOKEN');
     }
 
     try {
       // Real PayPal OAuth token request would go here
-      const response = await fetch(`${this.PAYPAL_BASE_URL}/v1/oauth2/token`, {
+      return from(fetch(`${this.PAYPAL_BASE_URL}/v1/oauth2/token`, {
         method: 'POST',
         headers: {
           'Authorization': `Basic ${Buffer.from(`${this.PAYPAL_CLIENT_ID}:${this.PAYPAL_CLIENT_SECRET}`).toString('base64')}`,
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: 'grant_type=client_credentials'
-      });
-
-      const data = await response.json();
-      return data.access_token;
+      })).pipe(
+        mergeMap(response => from(response.json())),
+        map(data => data.access_token),
+        catchError(error => {
+          console.error('Failed to get PayPal access token:', error);
+          return throwError(() => new Error('PayPal authentication failed'));
+        })
+      );
 
     } catch (error) {
       console.error('Failed to get PayPal access token:', error);
-      throw new Error('PayPal authentication failed');
+      return throwError(() => new Error('PayPal authentication failed'));
     }
   }
 }

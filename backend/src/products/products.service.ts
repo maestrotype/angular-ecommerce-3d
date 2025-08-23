@@ -3,7 +3,7 @@ import { Injectable, NotFoundException, BadRequestException, InternalServerError
 import { MoreThan, Like } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Observable, from, throwError } from 'rxjs';
+import { Observable, from, throwError, of } from 'rxjs';
 import { map, catchError, switchMap, tap } from 'rxjs/operators';
 import { Product } from './entities/product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -142,7 +142,7 @@ export class ProductsService {
       );
     }
     
-    return from(Promise.resolve(void 0));
+    return of(void 0);
   }
 
   searchProducts(searchTerm: string): Observable<Product[]> {

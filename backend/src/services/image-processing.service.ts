@@ -3,6 +3,8 @@ import * as sharp from 'sharp';
 import axios from 'axios';
 import * as FormData from 'form-data';
 import { imageProcessingConfig } from '../config/image-processing.config';
+import { Observable, from, throwError } from 'rxjs';
+import { map, catchError, switchMap } from 'rxjs/operators';
 
 export interface ProcessedImageResult {
   originalUrl: string;
@@ -15,26 +17,25 @@ export interface ProcessedImageResult {
 export class ImageProcessingService {
   private readonly logger = new Logger(ImageProcessingService.name);
 
-  async processImageWithBackgroundRemoval(
+  processImageWithBackgroundRemoval(
     imageBuffer: Buffer,
     originalFormat: string
-  ): Promise<Buffer> {
-    try {
-      if (!imageProcessingConfig.removeBgApiKey) {
-        this.logger.warn('Remove.bg API key not configured, processing image without background removal');
-        return await this.optimizeImage(imageBuffer);
-      }
-
-      const processedBuffer = await this.removeBackground(imageBuffer);
-      const pngBuffer = await this.convertToPng(processedBuffer);
-      return pngBuffer;
-    } catch (error) {
-      this.logger.error('Error processing image with background removal:', error);
-      return await this.optimizeImage(imageBuffer);
+  ): Observable<Buffer> {
+    if (!imageProcessingConfig.removeBgApiKey) {
+      this.logger.warn('Remove.bg API key not configured, processing image without background removal');
+      return this.optimizeImage(imageBuffer);
     }
+
+    return this.removeBackground(imageBuffer).pipe(
+      switchMap(processedBuffer => this.convertToPng(processedBuffer)),
+      catchError(error => {
+        this.logger.error('Error processing image with background removal:', error);
+        return this.optimizeImage(imageBuffer);
+      })
+    );
   }
 
-  private async removeBackground(imageBuffer: Buffer): Promise<Buffer> {
+  private removeBackground(imageBuffer: Buffer): Observable<Buffer> {
     try {
       const formData = new FormData();
       formData.append('image_file', imageBuffer, {
@@ -43,7 +44,7 @@ export class ImageProcessingService {
       });
       formData.append('size', 'auto');
       
-      const response = await axios.post(
+      return from(axios.post(
         imageProcessingConfig.removeBgApiUrl,
         formData,
         {
@@ -53,39 +54,61 @@ export class ImageProcessingService {
           },
           responseType: 'arraybuffer',
         }
+      )).pipe(
+        map(response => Buffer.from(response.data)),
+        catchError(error => {
+          this.logger.error('Remove.bg API error:', error.response?.data || error.message);
+          return throwError(() => new Error('Failed to remove background'));
+        })
       );
-
-      return Buffer.from(response.data);
     } catch (error) {
-      this.logger.error('Remove.bg API error:', error.response?.data || error.message);
-      throw new Error('Failed to remove background');
+      this.logger.error('Remove.bg API error:', error);
+      return throwError(() => new Error('Failed to remove background'));
     }
   }
 
-  async convertToPng(imageBuffer: Buffer): Promise<Buffer> {
-    return sharp(imageBuffer)
+  convertToPng(imageBuffer: Buffer): Observable<Buffer> {
+    return from(sharp(imageBuffer)
       .png(imageProcessingConfig.sharpOptions)
-      .toBuffer();
+      .toBuffer()
+    ).pipe(
+      catchError(error => {
+        this.logger.error('PNG conversion error:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  async optimizeImage(imageBuffer: Buffer): Promise<Buffer> {
-    return sharp(imageBuffer)
+  optimizeImage(imageBuffer: Buffer): Observable<Buffer> {
+    return from(sharp(imageBuffer)
       .resize(1200, 1200, {
         fit: 'inside',
         withoutEnlargement: true
       })
       .png({ quality: 90 })
-      .toBuffer();
+      .toBuffer()
+    ).pipe(
+      catchError(error => {
+        this.logger.error('Image optimization error:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  async createThumbnail(imageBuffer: Buffer, size: number = 300): Promise<Buffer> {
-    return sharp(imageBuffer)
+  createThumbnail(imageBuffer: Buffer, size: number = 300): Observable<Buffer> {
+    return from(sharp(imageBuffer)
       .resize(size, size, {
         fit: 'cover',
         position: 'center'
       })
       .png({ quality: 80 })
-      .toBuffer();
+      .toBuffer()
+    ).pipe(
+      catchError(error => {
+        this.logger.error('Thumbnail creation error:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
   validateImageFormat(filename: string): boolean {

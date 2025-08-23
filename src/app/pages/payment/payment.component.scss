@@ -206,6 +206,14 @@
           cursor: not-allowed;
         }
       }
+
+      .stripe-payment-section {
+        margin-top: 1.5rem;
+        padding: 1.5rem;
+        background: var(--color-surface-secondary, #f9fafb);
+        border-radius: 12px;
+        border: 1px solid var(--color-border-secondary, #e5e7eb);
+      }
     }
   }
 
@@ -458,4 +466,59 @@
       gap: 0.25rem;
     }
   }
-} 
+}
+
+// Stripe Form Styles
+.stripe-form {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.card-input-container {
+  margin-bottom: 20px;
+}
+
+.card-input-container label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #333;
+}
+
+.card-element {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  min-height: 40px;
+}
+
+.card-errors {
+  color: #dc3545;
+  font-size: 14px;
+  margin-top: 8px;
+  min-height: 20px;
+}
+
+ .stripe-pay-btn {
+   width: 100%;
+   margin-top: 10px;
+ }
+ 
+ .stripe-info {
+   margin-top: 15px;
+   padding: 15px;
+   background: #f8f9fa;
+   border: 1px solid #e9ecef;
+   border-radius: 6px;
+   text-align: center;
+ }
+ 
+ .stripe-info p {
+   margin: 0;
+   color: #6c757d;
+   font-size: 14px;
+ }

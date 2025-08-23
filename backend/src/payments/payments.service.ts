@@ -27,6 +27,10 @@ export class PaymentsService {
     private stripeStrategy: StripeStrategy,
     private paypalStrategy: PayPalStrategy
   ) {
+    console.log('[PaymentsService] Constructor called');
+    console.log('[PaymentsService] StripeStrategy instance:', !!this.stripeStrategy);
+    console.log('[PaymentsService] StripeStrategy constructor:', this.stripeStrategy?.constructor?.name);
+    
     // Register payment strategies
     this.paymentStrategies.set(PaymentMethod.LIQPAY, this.liqpayStrategy);
     this.paymentStrategies.set(PaymentMethod.PAYPAL, this.paypalStrategy);
@@ -268,7 +272,6 @@ export class PaymentsService {
       totalAmount: from(this.paymentRepository
         .createQueryBuilder('payment')
         .select('SUM(payment.amount)', 'sum')
-        .where('payment.status = :status', { status: PaymentStatus.COMPLETED })
         .getRawOne()
       )
     }).pipe(
@@ -353,6 +356,8 @@ export class PaymentsService {
   }
 
   createStripeIntent(body: { orderId: number; amount: number; currency: string; description?: string }): Observable<{ clientSecret: string }> {
+    console.log('[PaymentsService] createStripeIntent called with body:', body);
+    
     const paymentData: PaymentData = {
       orderId: Number(body.orderId),
       amount: Number(body.amount),
@@ -361,6 +366,8 @@ export class PaymentsService {
       customerEmail: '', // Will be filled from order data
       customerPhone: ''
     };
+    
+    console.log('[PaymentsService] PaymentData created:', paymentData);
 
     // Ensure we have a payment record for this order
     const ensurePayment$ = from(this.paymentRepository.findOne({ where: { orderId: paymentData.orderId } })).pipe(
@@ -390,6 +397,8 @@ export class PaymentsService {
     return ensurePayment$.pipe(
       switchMap(() => {
         console.log('[Stripe] Creating PaymentIntent for order:', paymentData.orderId);
+        console.log('[Stripe] StripeStrategy instance in createStripeIntent:', !!this.stripeStrategy);
+        console.log('[Stripe] About to call stripeStrategy.createPayment');
         return this.stripeStrategy.createPayment(paymentData);
       }),
       switchMap(result => {
@@ -456,11 +465,11 @@ export class PaymentsService {
     }
   }
 
-  private ensureObservable<T>(value: Observable<T> | Promise<T> | T): Observable<T> {
+  private ensureObservable<T>(value: Observable<T> | T): Observable<T> {
     if ((value as any)?.subscribe) {
       return value as Observable<T>;
     }
-    return from(Promise.resolve(value as T));
+    return of(value as T);
   }
 
   // PayPal Payment Methods
