@@ -6,6 +6,8 @@ import { Section } from './entities/section.entity';
 import { CreateSectionDto } from './dto/create-section.dto';
 import { UpdateSectionDto } from './dto/update-section.dto';
 import { ReorderSectionsDto } from './dto/reorder-sections.dto';
+import { Observable, from, throwError } from 'rxjs';
+import { map, switchMap, catchError } from 'rxjs/operators';
 
 @Injectable()
 export class SectionsService {
@@ -14,66 +16,114 @@ export class SectionsService {
     private sectionRepository: Repository<Section>,
   ) {}
 
-  async create(createSectionDto: CreateSectionDto): Promise<Section> {
-    const maxOrder = await this.sectionRepository
+  create(createSectionDto: CreateSectionDto): Observable<Section> {
+    return from(this.sectionRepository
       .createQueryBuilder('section')
       .select('MAX(section.order)', 'maxOrder')
-      .getRawOne();
+      .getRawOne()
+    ).pipe(
+      switchMap(maxOrderResult => {
+        const section = this.sectionRepository.create({
+          ...createSectionDto,
+          order: createSectionDto.order ?? (maxOrderResult.maxOrder || 0) + 1,
+        });
 
-    const section = this.sectionRepository.create({
-      ...createSectionDto,
-      order: createSectionDto.order ?? (maxOrder.maxOrder || 0) + 1,
-    });
-
-    return await this.sectionRepository.save(section);
+        return from(this.sectionRepository.save(section));
+      }),
+      catchError(error => {
+        console.error('[SectionsService] Create error:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  async findAll(): Promise<Section[]> {
-    return await this.sectionRepository.find({
+  findAll(): Observable<Section[]> {
+    return from(this.sectionRepository.find({
       order: { order: 'ASC' },
-    });
+    })).pipe(
+      catchError(error => {
+        console.error('[SectionsService] Find all error:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  async findAllActive(): Promise<Section[]> {
-    return await this.sectionRepository.find({
+  findAllActive(): Observable<Section[]> {
+    return from(this.sectionRepository.find({
       where: { isActive: true },
       order: { order: 'ASC' },
-    });
+    })).pipe(
+      catchError(error => {
+        console.error('[SectionsService] Find all active error:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  async findOne(id: number): Promise<Section> {
-    const section = await this.sectionRepository.findOne({ where: { id } });
-    if (!section) {
-      throw new NotFoundException(`Section with ID ${id} not found`);
-    }
-    return section;
+  findOne(id: number): Observable<Section> {
+    return from(this.sectionRepository.findOne({ where: { id } })).pipe(
+      map(section => {
+        if (!section) {
+          throw new NotFoundException(`Section with ID ${id} not found`);
+        }
+        return section;
+      }),
+      catchError(error => {
+        console.error('[SectionsService] Find one error:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  async update(id: number, updateSectionDto: UpdateSectionDto): Promise<Section> {
-    const section = await this.findOne(id);
-    Object.assign(section, updateSectionDto);
-    return await this.sectionRepository.save(section);
+  update(id: number, updateSectionDto: UpdateSectionDto): Observable<Section> {
+    return this.findOne(id).pipe(
+      switchMap(section => {
+        Object.assign(section, updateSectionDto);
+        return from(this.sectionRepository.save(section));
+      }),
+      catchError(error => {
+        console.error('[SectionsService] Update error:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  async remove(id: number): Promise<void> {
-    const section = await this.findOne(id);
-    await this.sectionRepository.remove(section);
+  remove(id: number): Observable<void> {
+    return this.findOne(id).pipe(
+      switchMap(section => from(this.sectionRepository.remove(section))),
+      map(() => void 0),
+      catchError(error => {
+        console.error('[SectionsService] Remove error:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  async toggleActive(id: number): Promise<Section> {
-    const section = await this.findOne(id);
-    section.isActive = !section.isActive;
-    return await this.sectionRepository.save(section);
+  toggleActive(id: number): Observable<Section> {
+    return this.findOne(id).pipe(
+      switchMap(section => {
+        section.isActive = !section.isActive;
+        return from(this.sectionRepository.save(section));
+      }),
+      catchError(error => {
+        console.error('[SectionsService] Toggle active error:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  async reorder(reorderSectionsDto: ReorderSectionsDto): Promise<Section[]> {
+  reorder(reorderSectionsDto: ReorderSectionsDto): Observable<Section[]> {
     const { sectionIds } = reorderSectionsDto;
 
-    for (let i = 0; i < sectionIds.length; i++) {
-      await this.sectionRepository.update(sectionIds[i], { order: i + 1 });
-    }
-
-    return await this.findAll();
+    return from(sectionIds.map((sectionId, index) => 
+      this.sectionRepository.update(sectionId, { order: index + 1 })
+    )).pipe(
+      switchMap(() => this.findAll()),
+      catchError(error => {
+        console.error('[SectionsService] Reorder error:', error);
+        return throwError(() => error);
+      })
+    );
   }
 }
 

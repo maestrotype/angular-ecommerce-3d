@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { Payment, PaymentStats } from '../models/payment.model';
 import { environment } from 'src/environments/environment.prod';
 
@@ -31,9 +31,9 @@ export class PaymentService {
   constructor(private http: HttpClient) {}
 
   getAllPayments(): Observable<Payment[]> {
-    return this.http.get<Payment[]>(this.apiUrl).pipe(
+    return this.http.get<{ success: boolean; data: Payment[]; message?: string }>(this.apiUrl).pipe(
+      map(response => response.success ? response.data : []),
       catchError(() => {
-        // Return mock data if backend is not available
         console.warn('Backend not available, using mock payment data');
         return of([
           {
@@ -83,7 +83,6 @@ export class PaymentService {
   getPaymentById(id: number): Observable<Payment> {
     return this.http.get<Payment>(`${this.apiUrl}/${id}`).pipe(
       catchError(() => {
-        // Return mock data if backend is not available
         console.warn('Backend not available, using mock payment data');
         return of({
           id: id,
@@ -105,7 +104,6 @@ export class PaymentService {
   getPaymentsByOrder(orderId: number): Observable<Payment[]> {
     return this.http.get<Payment[]>(`${this.apiUrl}/order/${orderId}`).pipe(
       catchError(() => {
-        // Return mock data if backend is not available
         console.warn('Backend not available, using mock order payments data');
         return of([
           {
@@ -127,9 +125,9 @@ export class PaymentService {
   }
 
   getPaymentStats(): Observable<PaymentStats> {
-    return this.http.get<PaymentStats>(`${this.apiUrl}/stats/overview`).pipe(
+    return this.http.get<{ success: boolean; data: PaymentStats; message?: string }>(`${this.apiUrl}/stats/overview`).pipe(
+      map(response => response.success ? response.data : { totalPayments: 0, totalAmount: 0, successRate: 0 }),
       catchError(() => {
-        // Return mock stats if backend is not available
         console.warn('Backend not available, using mock payment stats');
         return of({
           totalPayments: 3,
@@ -155,7 +153,6 @@ export class PaymentService {
 
     return this.http.get<Payment[]>(`${this.apiUrl}/search`, { params }).pipe(
       catchError(() => {
-        // Return mock data if backend is not available
         console.warn('Backend not available, using mock search results');
         const mockPayments = [
           {
@@ -199,7 +196,6 @@ export class PaymentService {
           }
         ];
 
-        // Apply basic filtering to mock data
         let filteredPayments = mockPayments;
         
         if (filters.status) {
@@ -228,7 +224,6 @@ export class PaymentService {
   updatePaymentStatus(id: number, body: UpdatePaymentStatusRequest): Observable<Payment> {
     return this.http.put<Payment>(`${this.apiUrl}/${id}/status`, body).pipe(
       catchError(() => {
-        // Return mock data if backend is not available
         console.warn('Backend not available, using mock updated payment data');
         return of({
           id: id,

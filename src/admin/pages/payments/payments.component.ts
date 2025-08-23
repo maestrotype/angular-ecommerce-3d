@@ -54,43 +54,21 @@ export class PaymentsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    try {
-      // Initialize form first
-      this.initializeForm();
-      
-      // Verify form was created
-      if (!this.filtersForm) {
-        console.error('Payment filters form was not initialized');
-        return;
-      }
-      
-      // Then load data
-      this.loadPayments();
-      this.loadPaymentStats();
-      
-      console.log('Payments component initialized successfully');
-    } catch (error) {
-      console.error('Failed to initialize payments component:', error);
-    }
+    this.initializeForm();
+    this.loadPayments();
+    this.loadPaymentStats();
   }
 
   private initializeForm(): void {
-    try {
-      this.filtersForm = this.fb.group({
-        status: [''],
-        paymentMethod: [''],
-        customerEmail: [''],
-        minAmount: [''],
-        maxAmount: [''],
-        startDate: [''],
-        endDate: ['']
-      });
-      console.log('Payment filters form initialized successfully');
-    } catch (error) {
-      console.error('Failed to initialize payment filters form:', error);
-      // Create a minimal form as fallback
-      this.filtersForm = this.fb.group({});
-    }
+    this.filtersForm = this.fb.group({
+      status: [''],
+      paymentMethod: [''],
+      customerEmail: [''],
+      minAmount: [''],
+      maxAmount: [''],
+      startDate: [''],
+      endDate: ['']
+    });
   }
 
   ngOnDestroy(): void {
@@ -100,14 +78,12 @@ export class PaymentsComponent implements OnInit, OnDestroy {
 
   private loadPayments(): void {
     this.isLoading = true;
-    // Default load uses simple list and stats length for paginator length
     this.paymentService.getAllPayments().pipe(
       takeUntil(this.destroy$)
     ).subscribe({
       next: (payments) => {
         this.payments = payments || [];
         this.isLoading = false;
-        // Use totalPayments for initial length when no filters applied
         this.length = this.totalPayments || payments.length || 0;
       },
       error: (error) => {
@@ -115,9 +91,7 @@ export class PaymentsComponent implements OnInit, OnDestroy {
         this.payments = [];
         this.isLoading = false;
         this.length = 0;
-        if (this.errorHandler && typeof this.errorHandler.handleGlobalError === 'function') {
-          this.errorHandler.handleGlobalError(error);
-        }
+        this.errorHandler?.handleGlobalError?.(error);
       }
     });
   }
@@ -130,43 +104,34 @@ export class PaymentsComponent implements OnInit, OnDestroy {
         this.totalPayments = stats?.totalPayments || 0;
         this.totalAmount = stats?.totalAmount || 0;
         this.successRate = stats?.successRate || 0;
-        // Update paginator length after stats are loaded
         this.length = this.totalPayments;
       },
       error: (error) => {
         console.error('Failed to load payment stats:', error);
-        // Set default values on error
         this.totalPayments = 0;
         this.totalAmount = 0;
         this.successRate = 0;
         this.length = 0;
-        if (this.errorHandler && typeof this.errorHandler.handleGlobalError === 'function') {
-          this.errorHandler.handleGlobalError(error);
-        }
+        this.errorHandler?.handleGlobalError?.(error);
       }
     });
   }
 
-  // Formatters
-  getStatusColor(status: string): string {
-    switch (status) {
-      case 'completed':
-        return 'success';
-      case 'pending':
-        return 'warning';
-      case 'failed':
-        return 'error';
-      case 'processing':
-        return 'info';
-      default:
-        return 'default';
+  getStatusColor(status: string | null | undefined): string {
+    if (!status) return 'default';
+    switch (status.toLowerCase()) {
+      case 'completed': return 'success';
+      case 'pending': return 'warning';
+      case 'failed': return 'error';
+      case 'processing': return 'info';
+      default: return 'default';
     }
   }
 
-  // Safe formatting methods
-  formatAmount(amount: number | null | undefined): string {
-    if (amount == null || isNaN(amount)) return '0.00';
-    return amount.toFixed(2);
+  formatAmount(amount: number | string | null | undefined): string {
+    if (!amount) return '0.00';
+    const numAmount = typeof amount === 'string' ? parseFloat(amount) : amount;
+    return isNaN(numAmount) ? '0.00' : numAmount.toFixed(2);
   }
 
   formatCurrency(currency: string | null | undefined): string {
@@ -174,12 +139,13 @@ export class PaymentsComponent implements OnInit, OnDestroy {
   }
 
   formatSuccessRate(rate: number | null | undefined): string {
-    if (rate == null || isNaN(rate)) return '0.0';
+    if (!rate || isNaN(rate)) return '0.0';
     return rate.toFixed(1);
   }
 
   getPaymentMethodIcon(method: string | null | undefined): string {
-    switch (method) {
+    if (!method) return 'payment';
+    switch (method.toLowerCase()) {
       case 'stripe': return 'credit_card';
       case 'liqpay': return 'account_balance';
       case 'paypal': return 'account_balance_wallet';
@@ -187,8 +153,10 @@ export class PaymentsComponent implements OnInit, OnDestroy {
     }
   }
 
-  formatDate(date: string): string {
-    return new Date(date).toLocaleDateString('en-US', {
+  formatDate(date: string | null | undefined): string {
+    if (!date) return 'N/A';
+    const dateObj = new Date(date);
+    return isNaN(dateObj.getTime()) ? 'Invalid Date' : dateObj.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -197,75 +165,56 @@ export class PaymentsComponent implements OnInit, OnDestroy {
     });
   }
 
-  // Actions
   applyFilters(): void {
-    try {
-      if (!this.filtersForm || !this.filtersForm.value) {
-        console.error('Cannot apply filters: form not initialized');
-        return;
-      }
-      
-      const raw = this.filtersForm.value;
-      const filters: PaymentSearchFilters = {
-        status: raw.status || undefined,
-        paymentMethod: raw.paymentMethod || undefined,
-        customerEmail: raw.customerEmail || undefined,
-        minAmount: raw.minAmount !== '' ? Number(raw.minAmount) : undefined,
-        maxAmount: raw.maxAmount !== '' ? Number(raw.maxAmount) : undefined,
-        startDate: raw.startDate ? new Date(raw.startDate) : undefined,
-        endDate: raw.endDate ? new Date(raw.endDate) : undefined,
-        limit: this.pageSize,
-        offset: this.pageIndex * this.pageSize
-      };
+    if (!this.filtersForm?.value) return;
+    
+    const raw = this.filtersForm.value;
+    const filters: PaymentSearchFilters = {
+      status: raw.status || undefined,
+      paymentMethod: raw.paymentMethod || undefined,
+      customerEmail: raw.customerEmail || undefined,
+      minAmount: raw.minAmount !== '' ? Number(raw.minAmount) : undefined,
+      maxAmount: raw.maxAmount !== '' ? Number(raw.maxAmount) : undefined,
+      startDate: raw.startDate ? new Date(raw.startDate) : undefined,
+      endDate: raw.endDate ? new Date(raw.endDate) : undefined,
+      limit: this.pageSize,
+      offset: this.pageIndex * this.pageSize
+    };
 
-      this.isLoading = true;
-      this.paymentService.searchPayments(filters).pipe(
-        takeUntil(this.destroy$)
-      ).subscribe({
-        next: (payments) => {
-          this.payments = payments || [];
-          this.isLoading = false;
-          // When filters are applied we do not know total count precisely; use current size
-          this.length = payments.length;
-        },
-        error: (error) => {
-          console.error('Failed to apply filters:', error);
-          this.isLoading = false;
-          this.payments = [];
-          this.length = 0;
-          if (this.errorHandler && typeof this.errorHandler.handleGlobalError === 'function') {
-            this.errorHandler.handleGlobalError(error);
-          }
-        }
-      });
-    } catch (error) {
-      console.error('Error applying filters:', error);
-      this.isLoading = false;
-    }
+    this.isLoading = true;
+    this.paymentService.searchPayments(filters).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (payments) => {
+        this.payments = payments || [];
+        this.isLoading = false;
+        this.length = payments.length;
+      },
+      error: (error) => {
+        console.error('Failed to apply filters:', error);
+        this.isLoading = false;
+        this.payments = [];
+        this.length = 0;
+        this.errorHandler?.handleGlobalError?.(error);
+      }
+    });
   }
 
   resetFilters(): void {
-    try {
-      if (!this.filtersForm) {
-        console.error('Cannot reset filters: form not initialized');
-        return;
-      }
-      
-      this.filtersForm.reset({
-        status: '',
-        paymentMethod: '',
-        customerEmail: '',
-        minAmount: '',
-        maxAmount: '',
-        startDate: '',
-        endDate: ''
-      });
-      this.pageIndex = 0;
-      this.loadPaymentStats();
-      this.loadPayments();
-    } catch (error) {
-      console.error('Error resetting filters:', error);
-    }
+    if (!this.filtersForm) return;
+    
+    this.filtersForm.reset({
+      status: '',
+      paymentMethod: '',
+      customerEmail: '',
+      minAmount: '',
+      maxAmount: '',
+      startDate: '',
+      endDate: ''
+    });
+    this.pageIndex = 0;
+    this.loadPaymentStats();
+    this.loadPayments();
   }
 
   onPageChange(event: PageEvent): void {
@@ -279,53 +228,39 @@ export class PaymentsComponent implements OnInit, OnDestroy {
   }
 
   updateStatus(payment: Payment, status: 'completed' | 'processing' | 'failed'): void {
+    if (!payment?.id) return;
+    
     const body: UpdatePaymentStatusRequest = { status, notes: `Updated via admin at ${new Date().toISOString()}` };
     this.paymentService.updatePaymentStatus(payment.id, body).pipe(
       takeUntil(this.destroy$)
     ).subscribe({
       next: (updated) => {
-        // Update local state
         const idx = this.payments.findIndex(p => p.id === payment.id);
         if (idx >= 0) {
           this.payments[idx] = { ...this.payments[idx], status: updated.status } as Payment;
         }
-        if (this.errorHandler && typeof this.errorHandler.showSuccess === 'function') {
-          this.errorHandler.showSuccess('Payment status updated');
-        }
+        this.errorHandler?.showSuccess?.('Payment status updated');
       },
       error: (error) => {
         console.error('Failed to update payment status:', error);
-        if (this.errorHandler && typeof this.errorHandler.handleGlobalError === 'function') {
-          this.errorHandler.handleGlobalError(error);
-        }
+        this.errorHandler?.handleGlobalError?.(error);
       }
     });
   }
 
   viewPayment(payment: Payment): void {
-    // Placeholder for modal implementation
-    if (this.errorHandler && typeof this.errorHandler.showInfo === 'function') {
-      this.errorHandler.showInfo(`Payment #${payment.id}`);
-    }
+    if (!payment?.id) return;
+    this.errorHandler?.showInfo?.(`Payment #${payment.id}`);
   }
 
-  viewOrder(orderId: number): void {
-    // Placeholder for navigation to order details
-    if (this.errorHandler && typeof this.errorHandler.showInfo === 'function') {
-      this.errorHandler.showInfo(`Open order #${orderId}`);
-    }
+  viewOrder(orderId: number | null): void {
+    if (!orderId) return;
+    this.errorHandler?.showInfo?.(`Open order #${orderId}`);
   }
 
   private hasActiveFilters(): boolean {
-    try {
-      if (!this.filtersForm || !this.filtersForm.value) {
-        return false;
-      }
-      const v = this.filtersForm.value;
-      return !!(v.status || v.paymentMethod || v.customerEmail || v.minAmount || v.maxAmount || v.startDate || v.endDate);
-    } catch (error) {
-      console.error('Error checking active filters:', error);
-      return false;
-    }
+    if (!this.filtersForm?.value) return false;
+    const v = this.filtersForm.value;
+    return !!(v.status || v.paymentMethod || v.customerEmail || v.minAmount || v.maxAmount || v.startDate || v.endDate);
   }
 } 

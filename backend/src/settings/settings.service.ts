@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Observable, from, of, throwError } from 'rxjs';
-import { map, catchError, switchMap } from 'rxjs/operators';
+import { map, catchError, switchMap, tap, mergeMap, toArray } from 'rxjs/operators';
 import { Settings } from './entities/settings.entity';
 import { 
   UpdateSettingsDto, 
@@ -19,8 +19,10 @@ export class SettingsService {
     private settingsRepository: Repository<Settings>,
   ) {
     // Initialize default settings when service starts
-    this.initializeDefaultSettings().catch(error => {
-      console.error('[SettingsService] Failed to initialize default settings:', error);
+    this.initializeDefaultSettings().subscribe({
+      error: (error) => {
+        console.error('[SettingsService] Failed to initialize default settings:', error);
+      }
     });
   }
 
@@ -209,7 +211,7 @@ export class SettingsService {
   }
 
   // Initialize default settings
-  async initializeDefaultSettings(): Promise<void> {
+  initializeDefaultSettings(): Observable<void> {
     console.log('[SettingsService] Initializing default settings...');
     
     // Get Stripe keys from environment variables
@@ -261,16 +263,33 @@ export class SettingsService {
       { key: 'payment.defaultPaymentMethod', value: 'stripe', type: 'string', category: 'payment', description: 'Default payment method' }
     ];
 
-    let createdCount = 0;
-    for (const setting of defaultSettings) {
-      const existing = await this.settingsRepository.findOne({ where: { key: setting.key } });
-      if (!existing) {
-        await this.settingsRepository.save(setting);
-        createdCount++;
-        console.log(`[SettingsService] Created setting: ${setting.key}`);
-      }
-    }
-    
-    console.log(`[SettingsService] Default settings initialization complete. Created ${createdCount} new settings.`);
+    // Process each setting and collect results
+    const settingObservables = defaultSettings.map(setting => 
+      from(this.settingsRepository.findOne({ where: { key: setting.key } })).pipe(
+        switchMap(existing => {
+          if (!existing) {
+            return from(this.settingsRepository.save(setting)).pipe(
+              tap(() => console.log(`[SettingsService] Created setting: ${setting.key}`)),
+              map(() => true)
+            );
+          }
+          return of(false);
+        })
+      )
+    );
+
+    return from(settingObservables).pipe(
+      mergeMap(observable => observable),
+      toArray(),
+      map(results => {
+        const createdCount = results.filter(result => result).length;
+        console.log(`[SettingsService] Default settings initialization complete. Created ${createdCount} new settings.`);
+        return void 0;
+      }),
+      catchError(error => {
+        console.error('[SettingsService] Initialize default settings error:', error);
+        return throwError(() => error);
+      })
+    );
   }
 }

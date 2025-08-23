@@ -13,12 +13,36 @@ import { readFileSync, unlinkSync } from "fs";
 import * as os from "os";
 import { v2 as cloudinary } from "cloudinary";
 import { ImageProcessingService } from "../services/image-processing.service";
+import { Observable, from, throwError, bindNodeCallback, of } from 'rxjs';
+import { map, catchError, tap, switchMap } from 'rxjs/operators';
 
 // GLB optimization function
-async function optimizeGLB(inputPath: string, outputPath: string): Promise<void> {
+function optimizeGLB(inputPath: string, outputPath: string): Observable<void> {
   // Implementation for GLB optimization
   // This would typically use gltf-transform or similar library
   console.log(`Optimizing GLB from ${inputPath} to ${outputPath}`);
+  return of(void 0);
+}
+
+// Helper function to create Cloudinary upload observable
+function createCloudinaryUpload(folder: string, resourceType: "image" | "raw" | "video" | "auto", buffer: Buffer): Observable<any> {
+  return new Observable(observer => {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        folder,
+        resource_type: resourceType,
+      },
+      (error, result) => {
+        if (error) {
+          observer.error(new BadRequestException("Cloudinary upload failed"));
+        } else {
+          observer.next(result);
+          observer.complete();
+        }
+      }
+    );
+    uploadStream.end(buffer);
+  });
 }
 
 @Controller("uploads")
@@ -40,46 +64,32 @@ export class UploadsController {
       },
     })
   )
-  async uploadSectionImage(@UploadedFile() file: Express.Multer.File) {
+  uploadSectionImage(@UploadedFile() file: Express.Multer.File): Observable<{ url: string; publicId: string }> {
     if (!file) {
-      throw new BadRequestException("No file uploaded");
+      return throwError(() => new BadRequestException("No file uploaded"));
     }
 
-    try {
-      const uploadPromise = new Promise((resolve, reject) => {
-        const uploadStream = cloudinary.uploader.upload_stream(
-          {
-            folder: "section-images",
-            resource_type: "image",
-          },
-          (error, result) => {
-            if (error) {
-              reject(new BadRequestException("Cloudinary upload failed"));
-            } else {
-              resolve(result);
-            }
+    const imageBuffer = readFileSync(file.path);
+    
+    return createCloudinaryUpload("section-images", "image", imageBuffer).pipe(
+      map((result: any) => {
+        unlinkSync(file.path);
+        return {
+          url: result.secure_url,
+          publicId: result.public_id,
+        };
+      }),
+      catchError(error => {
+        if (file.path) {
+          try {
+            unlinkSync(file.path);
+          } catch (unlinkError) {
+            console.error("Failed to delete temp file:", unlinkError);
           }
-        );
-        uploadStream.end(readFileSync(file.path));
-      });
-
-      const result = await uploadPromise as any;
-      unlinkSync(file.path);
-
-      return {
-        url: result.secure_url,
-        publicId: result.public_id,
-      };
-    } catch (error) {
-      if (file.path) {
-        try {
-          unlinkSync(file.path);
-        } catch (unlinkError) {
-          console.error("Failed to delete temp file:", unlinkError);
         }
-      }
-      throw new BadRequestException("Section image upload failed");
-    }
+        return throwError(() => new BadRequestException("Section image upload failed"));
+      })
+    );
   }
 
   @Post("section-3d-model")
@@ -97,46 +107,32 @@ export class UploadsController {
       },
     })
   )
-  async uploadSection3dModel(@UploadedFile() file: Express.Multer.File) {
+  uploadSection3dModel(@UploadedFile() file: Express.Multer.File): Observable<{ url: string; publicId: string }> {
     if (!file) {
-      throw new BadRequestException("No file uploaded");
+      return throwError(() => new BadRequestException("No file uploaded"));
     }
 
-    try {
-      const uploadPromise = new Promise((resolve, reject) => {
-        const uploadStream = cloudinary.uploader.upload_stream(
-          {
-            folder: "section-3d-models",
-            resource_type: "raw",
-          },
-          (error, result) => {
-            if (error) {
-              reject(new BadRequestException("Cloudinary upload failed"));
-            } else {
-              resolve(result);
-            }
+    const modelBuffer = readFileSync(file.path);
+    
+    return createCloudinaryUpload("section-3d-models", "raw", modelBuffer).pipe(
+      map((result: any) => {
+        unlinkSync(file.path);
+        return {
+          url: result.secure_url,
+          publicId: result.public_id,
+        };
+      }),
+      catchError(error => {
+        if (file.path) {
+          try {
+            unlinkSync(file.path);
+          } catch (unlinkError) {
+            console.error("Failed to delete temp file:", unlinkError);
           }
-        );
-        uploadStream.end(readFileSync(file.path));
-      });
-
-      const result = await uploadPromise as any;
-      unlinkSync(file.path);
-
-      return {
-        url: result.secure_url,
-        publicId: result.public_id,
-      };
-    } catch (error) {
-      if (file.path) {
-        try {
-          unlinkSync(file.path);
-        } catch (unlinkError) {
-          console.error("Failed to delete temp file:", unlinkError);
         }
-      }
-      throw new BadRequestException("3D model upload failed");
-    }
+        return throwError(() => new BadRequestException("3D model upload failed"));
+      })
+    );
   }
 
   @Post("product-3d-model")
@@ -154,46 +150,32 @@ export class UploadsController {
       },
     })
   )
-  async uploadProduct3dModel(@UploadedFile() file: Express.Multer.File) {
+  uploadProduct3dModel(@UploadedFile() file: Express.Multer.File): Observable<{ url: string; publicId: string }> {
     if (!file) {
-      throw new BadRequestException("No file uploaded");
+      return throwError(() => new BadRequestException("No file uploaded"));
     }
 
-    try {
-      const uploadPromise = new Promise((resolve, reject) => {
-        const uploadStream = cloudinary.uploader.upload_stream(
-          {
-            folder: "product-3d-models",
-            resource_type: "raw",
-          },
-          (error, result) => {
-            if (error) {
-              reject(new BadRequestException("Cloudinary upload failed"));
-            } else {
-              resolve(result);
-            }
+    const modelBuffer = readFileSync(file.path);
+    
+    return createCloudinaryUpload("product-3d-models", "raw", modelBuffer).pipe(
+      map((result: any) => {
+        unlinkSync(file.path);
+        return {
+          url: result.secure_url,
+          publicId: result.public_id,
+        };
+      }),
+      catchError(error => {
+        if (file.path) {
+          try {
+            unlinkSync(file.path);
+          } catch (unlinkError) {
+            console.error("Failed to delete temp file:", unlinkError);
           }
-        );
-        uploadStream.end(readFileSync(file.path));
-      });
-
-      const result = await uploadPromise as any;
-      unlinkSync(file.path);
-
-      return {
-        url: result.secure_url,
-        publicId: result.public_id,
-      };
-    } catch (error) {
-      if (file.path) {
-        try {
-          unlinkSync(file.path);
-        } catch (unlinkError) {
-          console.error("Failed to delete temp file:", unlinkError);
         }
-      }
-      throw new BadRequestException("3D model optimization or upload failed");
-    }
+        return throwError(() => new BadRequestException("3D model optimization or upload failed"));
+      })
+    );
   }
 
   @Post("process-image")
@@ -211,75 +193,64 @@ export class UploadsController {
       },
     })
   )
-  async processImageWithBackgroundRemoval(
+  processImageWithBackgroundRemoval(
     @UploadedFile() file: Express.Multer.File,
     @Body() body: { removeBackground?: any; optimize?: any }
-  ) {
+  ): Observable<{ url: string; format: string; processed: boolean; originalFormat: string; size: number }> {
     if (!file) {
-      throw new BadRequestException("No file uploaded");
+      return throwError(() => new BadRequestException("No file uploaded"));
     }
 
     if (!file.originalname || !this.imageProcessingService?.validateImageFormat(file.originalname)) {
-      throw new BadRequestException("Only image files (JPG, PNG, WEBP) are allowed!");
+      return throwError(() => new BadRequestException("Only image files (JPG, PNG, WEBP) are allowed!"));
     }
 
-    try {
-      const imageBuffer = readFileSync(file.path);
-      let processedBuffer: Buffer;
-      
-      const removeBackground = body.removeBackground === 'true' || body.removeBackground === true || body.removeBackground === '1';
-      const optimize = body.optimize === 'true' || body.optimize === true || body.optimize === '1';
-      
-      if (removeBackground) {
-        processedBuffer = await this.imageProcessingService.processImageWithBackgroundRemoval(
-          imageBuffer,
-          file.originalname.split('.').pop() || 'jpg'
+    const imageBuffer = readFileSync(file.path);
+    const removeBackground = body.removeBackground === 'true' || body.removeBackground === true || body.removeBackground === '1';
+    const optimize = body.optimize === 'true' || body.optimize === true || body.optimize === '1';
+    
+    let processObservable: Observable<Buffer>;
+    
+    if (removeBackground) {
+      processObservable = this.imageProcessingService.processImageWithBackgroundRemoval(
+        imageBuffer,
+        file.originalname.split('.').pop() || 'jpg'
+      );
+    } else {
+      processObservable = this.imageProcessingService.convertToPng(imageBuffer);
+    }
+
+    if (optimize) {
+      processObservable = processObservable.pipe(
+        switchMap(processedBuffer => this.imageProcessingService.optimizeImage(processedBuffer))
+      );
+    }
+
+    return processObservable.pipe(
+      switchMap(processedBuffer => {
+        return createCloudinaryUpload('processed-images', 'image', processedBuffer).pipe(
+          map((result: any) => {
+            unlinkSync(file.path);
+            return {
+              url: result.secure_url,
+              format: 'png',
+              processed: true,
+              originalFormat: file.originalname.split('.').pop() || 'unknown',
+              size: processedBuffer.length
+            };
+          })
         );
-      } else {
-        processedBuffer = await this.imageProcessingService.convertToPng(imageBuffer);
-      }
-
-      if (optimize) {
-        processedBuffer = await this.imageProcessingService.optimizeImage(processedBuffer);
-      }
-
-      const uploadPromise = new Promise((resolve, reject) => {
-        const uploadStream = cloudinary.uploader.upload_stream(
-          {
-            folder: 'processed-images',
-            format: 'png',
-            resource_type: 'image',
-          },
-          (error, result) => {
-            if (error) {
-              reject(new BadRequestException('Cloudinary upload failed'));
-            } else {
-              resolve(result);
-            }
+      }),
+      catchError(error => {
+        if (file.path) {
+          try {
+            unlinkSync(file.path);
+          } catch (unlinkError) {
+            // Ignore cleanup errors
           }
-        );
-        uploadStream.end(processedBuffer);
-      });
-
-      const result = await uploadPromise as any;
-      unlinkSync(file.path);
-      
-      return {
-        url: result.secure_url,
-        format: 'png',
-        processed: true,
-        originalFormat: file.originalname.split('.').pop() || 'unknown',
-        size: processedBuffer.length
-      };
-    } catch (error) {
-      if (file.path) {
-        try {
-          unlinkSync(file.path);
-        } catch (unlinkError) {
-          // Ignore cleanup errors
         }
-      }
-      throw new BadRequestException(error.message || 'Image processing failed');
-    }
+        return throwError(() => new BadRequestException(error.message || 'Image processing failed'));
+      })
+    );
   }
 }  

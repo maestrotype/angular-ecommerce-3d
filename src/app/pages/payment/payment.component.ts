@@ -170,13 +170,16 @@ export class PaymentComponent implements OnInit, OnDestroy {
       
       if (!this.stripe) {
         this.notificationService.showError('Failed to initialize Stripe.');
-        return;
+        return of(void 0);
       }
       
       // Store clientSecret for confirm step
       (this as any)._stripeClientSecret = clientSecret;
       
-            return this.mountCardElements();
+      return this.mountCardElements();
+    } catch (error) {
+      console.error('[Stripe] Initialization error:', error);
+      return throwError(() => error);
     }
   }
 
@@ -264,6 +267,20 @@ export class PaymentComponent implements OnInit, OnDestroy {
       }),
       map(() => void 0)
     );
+  }
+
+  onStripePaymentClick(): void {
+    this.isLoading = true;
+    this.confirmStripePayment().subscribe({
+      next: () => {
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('[Stripe] Payment click error:', error);
+        this.isLoading = false;
+        this.notificationService.showError('Payment failed. Please try again.');
+      }
+    });
   }
 
   private loadStripeJs(): Observable<void> {

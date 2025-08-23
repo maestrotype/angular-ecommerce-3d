@@ -9,6 +9,9 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { NotificationsService } from '../notifications/notifications.service';
+import { Observable, from, throwError, of } from 'rxjs';
+import { map, switchMap, catchError } from 'rxjs/operators';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -18,90 +21,147 @@ export class AuthService {
     private notificationsService: NotificationsService,
   ) {}
 
-  async register(registerDto: RegisterDto): Promise<User> {
-    const hashedPassword = await bcrypt.hash(registerDto.password, 12);
-    const user = this.userRepository.create({
-      ...registerDto,
-      password: hashedPassword,
-    });
-    const savedUser = await this.userRepository.save(user);
-    
-    // Create notification for new user registration
-    await this.notificationsService.createNewUserNotification(
-      savedUser.name,
-      savedUser.email
+  register(registerDto: RegisterDto): Observable<User> {
+    return from(bcrypt.hash(registerDto.password, 12)).pipe(
+      switchMap(hashedPassword => {
+        const user = this.userRepository.create({
+          ...registerDto,
+          password: hashedPassword,
+        });
+        return from(this.userRepository.save(user));
+      }),
+      switchMap(savedUser => {
+        // Create notification for new user registration
+        return from(this.notificationsService.createNewUserNotification(
+          savedUser.name,
+          savedUser.email
+        )).pipe(
+          map(() => savedUser)
+        );
+      }),
+      catchError(error => {
+        console.error('[AuthService] Registration error:', error);
+        return throwError(() => error);
+      })
     );
-    
-    return savedUser;
   }
 
-  async login(loginDto: LoginDto) {
-    const user = await this.userRepository.findOne({
+  login(loginDto: LoginDto): Observable<{ user: any; token: string; expiresIn: number }> {
+    return from(this.userRepository.findOne({
       where: { email: loginDto.email },
-    });
+    })).pipe(
+      switchMap(user => {
+        if (!user) {
+          return throwError(() => new UnauthorizedException('Invalid credentials'));
+        }
+        
+        return from(bcrypt.compare(loginDto.password, user.password)).pipe(
+          map(isValid => ({ user, isValid }))
+        );
+      }),
+      switchMap(({ user, isValid }) => {
+        if (!isValid) {
+          return throwError(() => new UnauthorizedException('Invalid credentials'));
+        }
 
-    if (!user || !(await bcrypt.compare(loginDto.password, user.password))) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
+        const payload = { sub: user.id, email: user.email, role: user.role };
+        const token = this.jwtService.sign(payload);
 
-    const payload = { sub: user.id, email: user.email, role: user.role };
-    const token = this.jwtService.sign(payload);
-
-    return {
-      user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        role: user.role,
-      },
-      token,
-      expiresIn: 604800, // 7 days in seconds
-    };
+        return of({
+          user: {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+          },
+          token,
+          expiresIn: 604800, // 7 days in seconds
+        });
+      }),
+      catchError(error => {
+        console.error('[AuthService] Login error:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  async findById(id: number): Promise<User> {
-    return await this.userRepository.findOne({ where: { id } });
+  findById(id: number): Observable<User> {
+    return from(this.userRepository.findOne({ where: { id } })).pipe(
+      catchError(error => {
+        console.error('[AuthService] Find by ID error:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  async createAdminUser(): Promise<User> {
-    const existingAdmin = await this.userRepository.findOne({
+  createAdminUser(): Observable<User> {
+    return from(this.userRepository.findOne({
       where: { email: 'admin@example.com' },
-    });
+    })).pipe(
+      switchMap(existingAdmin => {
+        if (existingAdmin) {
+          return of(existingAdmin);
+        }
 
-    if (existingAdmin) {
-      return existingAdmin;
-    }
-
-    const hashedPassword = await bcrypt.hash('admin123', 12);
-    const adminUser = this.userRepository.create({
-      email: 'admin@example.com',
-      name: 'Admin User',
-      password: hashedPassword,
-      role: UserRole.ADMIN,
-    });
-
-    return await this.userRepository.save(adminUser);
+        return from(bcrypt.hash('admin123', 12)).pipe(
+          switchMap(hashedPassword => {
+            const adminUser = this.userRepository.create({
+              email: 'admin@example.com',
+              name: 'Admin User',
+              password: hashedPassword,
+              role: UserRole.ADMIN,
+            });
+            return from(this.userRepository.save(adminUser));
+          })
+        );
+      }),
+      catchError(error => {
+        console.error('[AuthService] Create admin error:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  async findAll(): Promise<User[]> {
-    return await this.userRepository.find();
+  findAll(): Observable<User[]> {
+    return from(this.userRepository.find()).pipe(
+      catchError(error => {
+        console.error('[AuthService] Find all error:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  async findAllPaginated(page: number = 1, limit: number = 10) {
-    const [users, total] = await this.userRepository.findAndCount({
+  findAllPaginated(page: number = 1, limit: number = 10): Observable<{ users: User[]; total: number }> {
+    return from(this.userRepository.findAndCount({
         skip: (page - 1) * limit,
         take: limit,
         order: { id: 'ASC' }
-    });
-    return { users, total };
-}
-
-  async updateUser(id: number, dto: UpdateUserDto): Promise<User> {
-    await this.userRepository.update(id, dto);
-    return await this.findById(id);
+    })).pipe(
+      map(([users, total]) => ({ users, total })),
+      catchError(error => {
+        console.error('[AuthService] Find all paginated error:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  async removeUser(id: number): Promise<void> {
-    await this.userRepository.delete(id);
-  }     
+  updateUser(id: number, dto: UpdateUserDto): Observable<User> {
+    return from(this.userRepository.update(id, dto)).pipe(
+      switchMap(() => from(this.userRepository.findOne({ where: { id } }))),
+      catchError(error => {
+        console.error('[AuthService] Update user error:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  removeUser(id: number): Observable<void> {
+    return from(this.userRepository.delete(id)).pipe(
+      map(() => void 0),
+      catchError(error => {
+        console.error('[AuthService] Remove user error:', error);
+        return throwError(() => error);
+      })
+    );
+  }
 }
