@@ -7,6 +7,7 @@ import { PaymentService, PaymentSearchFilters, UpdatePaymentStatusRequest } from
 import { Payment } from '../../models/payment.model';
 import { ErrorHandlerService } from '../../services/error-handler.service';
 import { PaymentDetailsDialogComponent } from './payment-details-dialog.component';
+import { OrderDetailsDialogComponent } from './order-details-dialog.component';
 
 @Component({
   selector: 'app-payments',
@@ -234,16 +235,37 @@ export class PaymentsComponent implements OnInit, OnDestroy {
   updateStatus(payment: Payment, status: 'completed' | 'processing' | 'failed'): void {
     if (!payment?.id) return;
     
-    const body: UpdatePaymentStatusRequest = { status, notes: `Updated via admin at ${new Date().toISOString()}` };
+    console.log('[PaymentsComponent] updateStatus called with:', { paymentId: payment.id, status });
+    
+    const body: UpdatePaymentStatusRequest = { 
+      status: status, 
+      notes: `Updated via admin at ${new Date().toISOString()}` 
+    };
+    
+    console.log('[PaymentsComponent] Sending update request:', body);
+    
     this.paymentService.updatePaymentStatus(payment.id, body).pipe(
       takeUntil(this.destroy$)
     ).subscribe({
       next: (updated) => {
-        const idx = this.payments.findIndex(p => p.id === payment.id);
-        if (idx >= 0) {
-          this.payments[idx] = { ...this.payments[idx], status: updated.status } as Payment;
+        console.log('[PaymentsComponent] Payment status updated successfully:', updated);
+        
+        if (updated) {
+          // Update the payment in the local array immediately
+          const idx = this.payments.findIndex(p => p.id === payment.id);
+          if (idx >= 0) {
+            this.payments[idx] = { ...this.payments[idx], status: updated.status } as Payment;
+          }
+          
+          // Force change detection
+          this.payments = [...this.payments];
+          
+          // Reload payment stats to update success rate
+          this.loadPaymentStats();
+          this.errorHandler?.showSuccess?.('Payment status updated successfully');
+        } else {
+          this.errorHandler?.handleGlobalError?.('Failed to update payment status');
         }
-        this.errorHandler?.showSuccess?.('Payment status updated');
       },
       error: (error) => {
         console.error('Failed to update payment status:', error);
@@ -266,7 +288,14 @@ export class PaymentsComponent implements OnInit, OnDestroy {
 
   viewOrder(orderId: number | null): void {
     if (!orderId) return;
-    this.errorHandler?.showInfo?.(`Open order #${orderId}`);
+    
+    // Open order details dialog
+    this.dialog.open(OrderDetailsDialogComponent, {
+      data: { orderId },
+      width: '800px',
+      maxHeight: '90vh',
+      disableClose: false
+    });
   }
 
   hasActiveFilters(): boolean {

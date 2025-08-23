@@ -162,22 +162,11 @@ export class PaymentService {
   }
 
   updatePaymentStatus(id: number, body: UpdatePaymentStatusRequest): Observable<Payment> {
-    return this.http.put<Payment>(`${this.apiUrl}/${id}/status`, body).pipe(
-      catchError(() => {
-        console.warn('Backend not available, using mock updated payment data');
-        return of({
-          id: id,
-          orderId: 1000 + id,
-          amount: 99.99,
-          currency: 'USD' as const,
-          paymentMethod: 'stripe' as const,
-          status: body.status as any,
-          description: 'Mock updated payment',
-          customerEmail: 'updated@example.com',
-          customerPhone: '+1234567890',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        });
+    return this.http.put<{ success: boolean; data: Payment; message?: string }>(`${this.apiUrl}/${id}/status`, body).pipe(
+      map(response => response.success ? response.data : null),
+      catchError((error) => {
+        console.error('Update payment status error:', error);
+        throw error;
       })
     );
   }

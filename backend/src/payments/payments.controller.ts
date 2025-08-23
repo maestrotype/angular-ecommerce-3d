@@ -165,6 +165,8 @@ export class PaymentsController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updatePaymentStatusDto: UpdatePaymentStatusDto
   ): Observable<PaymentResponseDto> {
+    console.log('[PaymentsController] updatePaymentStatus called with:', { id, dto: updatePaymentStatusDto });
+    
     return this.paymentsService.updatePaymentStatus(
       id, 
       updatePaymentStatusDto.status, 

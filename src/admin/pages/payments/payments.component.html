@@ -137,7 +137,7 @@
                 <mat-icon>shopping_cart</mat-icon>
               </button>
               <button mat-icon-button [matMenuTriggerFor]="statusMenu" matTooltip="Change Status" [disabled]="!payment?.id">
-                <mat-icon>sync</mat-icon>
+                <mat-icon>edit</mat-icon>
               </button>
               <mat-menu #statusMenu="matMenu">
                 <button mat-menu-item (click)="updateStatus(payment, 'completed')" [disabled]="!payment?.id">

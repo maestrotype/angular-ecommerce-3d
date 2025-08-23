@@ -287,10 +287,14 @@ export class PaymentsService {
     );
   }
 
-  updatePaymentStatus(id: number, status: PaymentStatus, notes?: string): Observable<Payment> {
+  updatePaymentStatus(id: number, status: string, notes?: string): Observable<Payment> {
+    console.log('[PaymentsService] updatePaymentStatus called with:', { id, status, notes });
+    
     return this.getPaymentById(id).pipe(
       switchMap(payment => {
-        const updateData: Partial<Payment> = { status };
+        console.log('[PaymentsService] Found payment:', payment);
+        
+        const updateData: Partial<Payment> = { status: status as PaymentStatus };
         
         if (notes) {
           updateData.metadata = JSON.stringify({ 
@@ -300,11 +304,19 @@ export class PaymentsService {
           });
         }
 
+        console.log('[PaymentsService] Update data:', updateData);
+        
         return from(this.paymentRepository.update(id, updateData)).pipe(
-          switchMap(() => this.getPaymentById(id))
+          switchMap(() => {
+            console.log('[PaymentsService] Payment updated, fetching updated payment');
+            return this.getPaymentById(id);
+          })
         );
       }),
-      catchError(error => throwError(() => new InternalServerErrorException(`Failed to update payment status: ${error.message}`)))
+      catchError(error => {
+        console.error('[PaymentsService] Error updating payment status:', error);
+        return throwError(() => new InternalServerErrorException(`Failed to update payment status: ${error.message}`));
+      })
     );
   }
 
