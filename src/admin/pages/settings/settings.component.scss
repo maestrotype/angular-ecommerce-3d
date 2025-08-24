@@ -4,6 +4,33 @@
   margin: 0 auto;
   background-color: #1f2937;
   color: var(--admin-text-primary);
+  position: relative;
+}
+
+.global-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(31, 41, 55, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  z-index: 1000;
+  border-radius: 8px;
+  
+  span {
+    color: var(--admin-text-primary);
+    font-size: 16px;
+    font-weight: 500;
+  }
+  
+  mat-spinner {
+    filter: drop-shadow(0 4px 8px rgba(96, 165, 250, 0.3));
+  }
 }
 
 .settings-header {
@@ -100,6 +127,8 @@
 
 .form-actions {
   display: flex;
+  align-items: center;
+  gap: 12px;
   justify-content: flex-end;
   margin-top: 16px;
   
@@ -111,6 +140,10 @@
       margin-right: 8px;
     }
   }
+}
+
+.inline-spinner {
+  margin-left: 8px;
 }
 
 mat-form-field {

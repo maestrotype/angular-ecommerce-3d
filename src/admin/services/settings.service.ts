@@ -61,33 +61,25 @@ export class SettingsService {
   constructor(private http: HttpClient) {}
 
   getSettings(): Observable<AppSettings> {
-    const localSettings = this.getLocalSettings();
-    return of(localSettings || this.getMockSettings());
+    return this.http.get<{ success: boolean; data: AppSettings }>(this.apiUrl).pipe(
+      map(response => {
+        if (response.success && response.data) {
+          return response.data;
+        }
+        // Fallback to mock settings if backend fails
+        return this.getMockSettings();
+      }),
+      catchError(error => {
+        console.error('Failed to load settings from backend:', error);
+        // Return mock settings as fallback
+        return of(this.getMockSettings());
+      })
+    );
   }
 
 
 
-  private getLocalSettings(): AppSettings | null {
-    try {
-      const general = localStorage.getItem('generalSettings');
-      const notifications = localStorage.getItem('notificationSettings');
-      const security = localStorage.getItem('securitySettings');
-      const payment = localStorage.getItem('paymentSettings');
-
-      if (general || notifications || security || payment) {
-        return {
-          general: general ? JSON.parse(general) : undefined,
-          notifications: notifications ? JSON.parse(notifications) : undefined,
-          security: security ? JSON.parse(security) : undefined,
-          payment: payment ? JSON.parse(payment) : undefined,
-        };
-      }
-      
-      return null;
-    } catch (error) {
-      return null;
-    }
-  }
+  // Local storage methods removed - now using backend API
 
   private getMockSettings(): AppSettings {
     return {
@@ -131,36 +123,41 @@ export class SettingsService {
   }
 
   updateGeneralSettings(settings: GeneralSettings): Observable<ApiResponse> {
-    localStorage.setItem('generalSettings', JSON.stringify(settings));
     return this.http.put<ApiResponse>(`${this.apiUrl}/general`, settings).pipe(
-      catchError(() => of({ success: true, message: 'Settings saved locally' }))
+      map(response => response),
+      catchError(error => {
+        console.error('Failed to update general settings:', error);
+        throw error;
+      })
     );
   }
 
   updateNotificationSettings(settings: NotificationSettings): Observable<ApiResponse> {
-    localStorage.setItem('notificationSettings', JSON.stringify(settings));
     return this.http.put<ApiResponse>(`${this.apiUrl}/notifications`, settings).pipe(
-      catchError(() => of({ success: true, message: 'Settings saved locally' }))
+      map(response => response),
+      catchError(error => {
+        console.error('Failed to update notification settings:', error);
+        throw error;
+      })
     );
   }
 
   updateSecuritySettings(settings: SecuritySettings): Observable<ApiResponse> {
-    localStorage.setItem('securitySettings', JSON.stringify(settings));
     return this.http.put<ApiResponse>(`${this.apiUrl}/security`, settings).pipe(
-      catchError(() => of({ success: true, message: 'Settings saved locally' }))
+      map(response => response),
+      catchError(error => {
+        console.error('Failed to update security settings:', error);
+        throw error;
+      })
     );
   }
 
   updatePaymentSettings(settings: PaymentSettings): Observable<ApiResponse> {
-    // Save to localStorage first for immediate persistence
-    localStorage.setItem('paymentSettings', JSON.stringify(settings));
-    
-    // Then try to save to backend
     return this.http.put<ApiResponse>(`${this.apiUrl}/payment`, settings).pipe(
       map(response => response),
       catchError(error => {
-        // Return success since localStorage is already saved
-        return of({ success: true, message: 'Settings saved locally' });
+        console.error('Failed to update payment settings:', error);
+        throw error;
       })
     );
   }

@@ -10,6 +10,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { SettingsRoutingModule } from './settings-routing.module';
@@ -35,6 +36,7 @@ import { ThemeSelectorComponent } from '../../../app/shared/ui/theme-selector/th
     MatSelectModule,
     MatDividerModule,
     MatSnackBarModule,
+    MatProgressSpinnerModule,
     TranslateModule
   ],
   providers: [

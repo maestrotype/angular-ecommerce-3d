@@ -1,4 +1,10 @@
 <div class="settings-container">
+  <!-- Global Loading Indicator -->
+  <div *ngIf="isLoading" class="global-loading-overlay">
+    <mat-spinner diameter="50"></mat-spinner>
+    <span>Loading settings...</span>
+  </div>
+  
   <div class="settings-header">
     <h1 class="page-title">{{ 'SETTINGS' | translate }}</h1>
     <p class="page-subtitle">{{ 'CONFIGURE_SETTINGS' | translate }}</p>
@@ -60,9 +66,10 @@
 
           <div class="form-actions">
             <button mat-raised-button color="primary" type="submit" [disabled]="generalForm.invalid || isLoading">
-              <mat-icon>save</mat-icon>
+              <mat-icon>{{ isLoading ? 'hourglass_empty' : 'save' }}</mat-icon>
               {{ isLoading ? ('SAVING' | translate) : ('SAVE_GENERAL_SETTINGS' | translate) }}
             </button>
+            <mat-spinner *ngIf="isLoading" diameter="20" class="inline-spinner"></mat-spinner>
           </div>
         </form>
       </mat-card-content>
@@ -154,9 +161,10 @@
 
           <div class="form-actions">
             <button mat-raised-button color="primary" type="submit" [disabled]="isLoading">
-              <mat-icon>notifications</mat-icon>
+              <mat-icon>{{ isLoading ? 'hourglass_empty' : 'notifications' }}</mat-icon>
               {{ isLoading ? ('SAVING' | translate) : ('SAVE_NOTIFICATION_SETTINGS' | translate) }}
             </button>
+            <mat-spinner *ngIf="isLoading" diameter="20" class="inline-spinner"></mat-spinner>
           </div>
         </form>
       </mat-card-content>
@@ -233,9 +241,10 @@
 
           <div class="form-actions">
             <button mat-raised-button color="primary" type="submit" [disabled]="securityForm.invalid || isLoading">
-              <mat-icon>security</mat-icon>
+              <mat-icon>{{ isLoading ? 'hourglass_empty' : 'security' }}</mat-icon>
               {{ isLoading ? ('SAVING' | translate) : ('SAVE_SECURITY_SETTINGS' | translate) }}
             </button>
+            <mat-spinner *ngIf="isLoading" diameter="20" class="inline-spinner"></mat-spinner>
           </div>
         </form>
       </mat-card-content>
@@ -370,9 +379,10 @@
 
           <div class="form-actions">
             <button mat-raised-button color="primary" type="submit" [disabled]="paymentForm.invalid || isLoading">
-              <mat-icon>save</mat-icon>
+              <mat-icon>{{ isLoading ? 'hourglass_empty' : 'save' }}</mat-icon>
               {{ isLoading ? ('SAVING' | translate) : ('SAVE_PAYMENT_SETTINGS' | translate) }}
             </button>
+            <mat-spinner *ngIf="isLoading" diameter="20" class="inline-spinner"></mat-spinner>
           </div>
         </form>
       </mat-card-content>

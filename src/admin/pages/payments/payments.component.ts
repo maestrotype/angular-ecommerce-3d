@@ -31,14 +31,14 @@ export class PaymentsComponent implements OnInit, OnDestroy {
   // Filters form
   filtersForm: FormGroup;
   statusOptions = [
-    { value: '', label: 'All' },
+    { value: 'all', label: 'All' },
     { value: 'pending', label: 'Pending' },
     { value: 'processing', label: 'Processing' },
     { value: 'completed', label: 'Completed' },
     { value: 'failed', label: 'Failed' }
   ];
   methodOptions = [
-    { value: '', label: 'All' },
+    { value: 'all', label: 'All' },
     { value: 'liqpay', label: 'LiqPay' },
     { value: 'stripe', label: 'Stripe' },
     { value: 'paypal', label: 'PayPal' }
@@ -59,19 +59,27 @@ export class PaymentsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initializeForm();
-    this.loadPayments();
     this.loadPaymentStats();
+    
+    // Apply default filters to show initial data
+    setTimeout(() => {
+      this.applyFilters();
+    }, 100);
   }
 
   private initializeForm(): void {
+    // Set default values for better UX
+    const today = new Date();
+    const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+    
     this.filtersForm = this.fb.group({
-      status: [''],
-      paymentMethod: [''],
+      status: ['all'], // Default to show all statuses
+      paymentMethod: ['all'], // Default to show all methods
       customerEmail: [''],
-      minAmount: [''],
-      maxAmount: [''],
-      startDate: [''],
-      endDate: ['']
+      minAmount: ['0'], // Default minimum amount
+      maxAmount: ['10000'], // Default maximum amount
+      startDate: [lastMonth], // Default to last month
+      endDate: [today] // Default to today
     });
   }
 
@@ -92,6 +100,29 @@ export class PaymentsComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('Failed to load payments:', error);
+        this.payments = [];
+        this.isLoading = false;
+        this.length = 0;
+        this.errorHandler?.handleGlobalError?.(error);
+      }
+    });
+  }
+  
+  /**
+   * Load all payments without filters (fallback method)
+   */
+  private loadAllPayments(): void {
+    this.isLoading = true;
+    this.paymentService.getAllPayments().pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (payments) => {
+        this.payments = payments || [];
+        this.isLoading = false;
+        this.length = this.totalPayments || payments.length || 0;
+      },
+      error: (error) => {
+        console.error('Failed to load all payments:', error);
         this.payments = [];
         this.isLoading = false;
         this.length = 0;
@@ -173,17 +204,32 @@ export class PaymentsComponent implements OnInit, OnDestroy {
     if (!this.filtersForm?.value) return;
     
     const raw = this.filtersForm.value;
+    
+    // Properly handle date conversion for calendar inputs
+    const startDate = this.convertCalendarDate(raw.startDate, false);
+    const endDate = this.convertCalendarDate(raw.endDate, true);
+    
     const filters: PaymentSearchFilters = {
-      status: raw.status || undefined,
-      paymentMethod: raw.paymentMethod || undefined,
+      status: raw.status && raw.status !== 'all' ? raw.status : undefined,
+      paymentMethod: raw.paymentMethod && raw.paymentMethod !== 'all' ? raw.paymentMethod : undefined,
       customerEmail: raw.customerEmail || undefined,
       minAmount: raw.minAmount !== '' ? Number(raw.minAmount) : undefined,
       maxAmount: raw.maxAmount !== '' ? Number(raw.maxAmount) : undefined,
-      startDate: raw.startDate ? new Date(raw.startDate) : undefined,
-      endDate: raw.endDate ? new Date(raw.endDate) : undefined,
-      limit: this.pageSize,
-      offset: this.pageIndex * this.pageSize
+      startDate: startDate,
+      endDate: endDate,
+      limit: 50, // Use larger limit to show more results initially
+      offset: 0  // Reset to first page when applying filters
     };
+    
+    // Debug logging for date conversion
+    console.log('[PaymentsComponent] Date conversion:', {
+      rawStartDate: raw.startDate,
+      rawEndDate: raw.endDate,
+      convertedStartDate: startDate,
+      convertedEndDate: endDate,
+      startDateISO: startDate?.toISOString(),
+      endDateISO: endDate?.toISOString()
+    });
 
     this.isLoading = true;
     this.paymentService.searchPayments(filters).pipe(
@@ -192,6 +238,8 @@ export class PaymentsComponent implements OnInit, OnDestroy {
       next: (payments) => {
         this.payments = payments || [];
         this.isLoading = false;
+        // Reset pagination to first page
+        this.pageIndex = 0;
         // Update length for pagination - use totalPayments if available, otherwise use current results
         this.length = this.totalPayments > 0 ? this.totalPayments : payments.length;
       },
@@ -208,27 +256,80 @@ export class PaymentsComponent implements OnInit, OnDestroy {
   resetFilters(): void {
     if (!this.filtersForm) return;
     
+    // Reset to default values instead of empty
+    const today = new Date();
+    const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+    
     this.filtersForm.reset({
-      status: '',
-      paymentMethod: '',
+      status: 'all',
+      paymentMethod: 'all',
       customerEmail: '',
-      minAmount: '',
-      maxAmount: '',
-      startDate: '',
-      endDate: ''
+      minAmount: '0',
+      maxAmount: '10000',
+      startDate: lastMonth,
+      endDate: today
     });
+    
+    // Reset pagination
     this.pageIndex = 0;
+    this.pageSize = 10; // Reset to default page size
     this.loadPaymentStats();
-    this.loadPayments();
+    this.loadAllPayments();
   }
 
   onPageChange(event: PageEvent): void {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
     if (this.hasActiveFilters()) {
-      this.applyFilters();
+      // When changing pages with active filters, use pagination
+      const raw = this.filtersForm?.value;
+      
+      // Properly handle date conversion for calendar inputs
+      const startDate = this.convertCalendarDate(raw?.startDate, false);
+      const endDate = this.convertCalendarDate(raw?.endDate, true);
+      
+      const filters: PaymentSearchFilters = {
+        status: raw?.status && raw.status !== 'all' ? raw.status : undefined,
+        paymentMethod: raw?.paymentMethod && raw.paymentMethod !== 'all' ? raw.paymentMethod : undefined,
+        customerEmail: raw?.customerEmail || undefined,
+        minAmount: raw?.minAmount !== '' ? Number(raw.minAmount) : undefined,
+        maxAmount: raw?.maxAmount !== '' ? Number(raw.maxAmount) : undefined,
+        startDate: startDate,
+        endDate: endDate,
+        limit: this.pageSize,
+        offset: this.pageIndex * this.pageSize
+      };
+      
+      // Debug logging for pagination date conversion
+      console.log('[PaymentsComponent] Pagination date conversion:', {
+        rawStartDate: raw?.startDate,
+        rawEndDate: raw?.endDate,
+        convertedStartDate: startDate,
+        convertedEndDate: endDate,
+        startDateISO: startDate?.toISOString(),
+        endDateISO: endDate?.toISOString(),
+        pageSize: this.pageSize,
+        pageIndex: this.pageIndex,
+        offset: this.pageIndex * this.pageSize
+      });
+      
+      this.isLoading = true;
+      this.paymentService.searchPayments(filters).pipe(
+        takeUntil(this.destroy$)
+      ).subscribe({
+        next: (payments) => {
+          this.payments = payments || [];
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Failed to load paginated payments:', error);
+          this.isLoading = false;
+          this.payments = [];
+          this.errorHandler?.handleGlobalError?.(error);
+        }
+      });
     } else {
-      this.loadPayments();
+      this.loadAllPayments();
     }
   }
 
@@ -301,6 +402,50 @@ export class PaymentsComponent implements OnInit, OnDestroy {
   hasActiveFilters(): boolean {
     if (!this.filtersForm?.value) return false;
     const v = this.filtersForm.value;
-    return !!(v.status || v.paymentMethod || v.customerEmail || v.minAmount || v.maxAmount || v.startDate || v.endDate);
+    
+    // Check if any non-default filters are active
+    const hasStatusFilter = v.status && v.status !== 'all';
+    const hasMethodFilter = v.paymentMethod && v.paymentMethod !== 'all';
+    const hasEmailFilter = v.customerEmail && v.customerEmail.trim() !== '';
+    const hasMinAmountFilter = v.minAmount && v.minAmount !== '0';
+    const hasMaxAmountFilter = v.maxAmount && v.maxAmount !== '10000';
+    const hasDateFilter = v.startDate || v.endDate;
+    
+    return !!(hasStatusFilter || hasMethodFilter || hasEmailFilter || hasMinAmountFilter || hasMaxAmountFilter || hasDateFilter);
+  }
+  
+  /**
+   * Convert calendar date inputs to proper UTC dates for API queries
+   * @param dateInput - Date from calendar input
+   * @param isEndDate - Whether this is an end date (will be set to end of day)
+   * @returns UTC Date object or undefined
+   */
+  private convertCalendarDate(dateInput: any, isEndDate: boolean = false): Date | undefined {
+    if (!dateInput) return undefined;
+    
+    try {
+      const localDate = new Date(dateInput);
+      
+      if (isEndDate) {
+        // For end date, set to end of day (23:59:59.999)
+        return new Date(Date.UTC(
+          localDate.getFullYear(), 
+          localDate.getMonth(), 
+          localDate.getDate(), 
+          23, 59, 59, 999
+        ));
+      } else {
+        // For start date, set to start of day (00:00:00.000)
+        return new Date(Date.UTC(
+          localDate.getFullYear(), 
+          localDate.getMonth(), 
+          localDate.getDate(), 
+          0, 0, 0, 0
+        ));
+      }
+    } catch (error) {
+      console.error('[PaymentsComponent] Error converting calendar date:', error, dateInput);
+      return undefined;
+    }
   }
 } 
