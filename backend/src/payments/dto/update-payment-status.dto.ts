@@ -1,9 +1,9 @@
-import { IsEnum, IsOptional, IsString, IsNumber } from 'class-validator';
+import { IsEnum, IsOptional, IsString, IsNumber, IsIn } from 'class-validator';
 import { PaymentStatus } from '../entities/payment.entity';
 
 export class UpdatePaymentStatusDto {
-  @IsEnum(PaymentStatus)
-  status: PaymentStatus;
+  @IsIn(['pending', 'processing', 'completed', 'failed'])
+  status: string;
 
   @IsOptional()
   @IsString()

@@ -1,0 +1,100 @@
+<div class="payment-details-dialog">
+  <div class="dialog-header">
+    <h2 mat-dialog-title>
+      <mat-icon>payment</mat-icon>
+      Payment Details #{{ data.payment.id }}
+    </h2>
+    <button mat-icon-button (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content>
+    <div class="payment-info">
+      <div class="info-section">
+        <h3>Basic Information</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="label">Payment ID:</span>
+            <span class="value">{{ data.payment.id }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Order ID:</span>
+            <span class="value">{{ data.payment.orderId }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Amount:</span>
+            <span class="value amount">{{ data.payment.amount }} {{ data.payment.currency }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Method:</span>
+            <span class="value method">
+              <mat-icon>{{ getPaymentMethodIcon(data.payment.paymentMethod) }}</mat-icon>
+              {{ data.payment.paymentMethod | titlecase }}
+            </span>
+          </div>
+          <div class="info-item">
+            <span class="label">Status:</span>
+            <span class="value status" [class]="getStatusColor(data.payment.status)">
+              {{ data.payment.status | titlecase }}
+            </span>
+          </div>
+          <div class="info-item">
+            <span class="label">Description:</span>
+            <span class="value">{{ getSafeValue(data.payment.description) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-section">
+        <h3>Customer Information</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="label">Email:</span>
+            <span class="value">{{ getSafeValue(data.payment.customerEmail) }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Phone:</span>
+            <span class="value">{{ getSafeValue(data.payment.customerPhone) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-section">
+        <h3>Timestamps</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="label">Created:</span>
+            <span class="value">{{ formatDate(data.payment.createdAt) }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Updated:</span>
+            <span class="value">{{ formatDate(data.payment.updatedAt) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-section">
+        <h3>Transaction Details</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="label">Transaction ID:</span>
+            <span class="value">{{ getSafeValue(data.payment.transactionId) }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">LiqPay ID:</span>
+            <span class="value">{{ getSafeValue(data.payment.liqpayPaymentId) }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Error Message:</span>
+            <span class="value error">{{ getErrorMessage(data.payment) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="close()">Close</button>
+  </mat-dialog-actions>
+</div>

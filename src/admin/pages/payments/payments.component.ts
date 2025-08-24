@@ -2,9 +2,12 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
 import { PaymentService, PaymentSearchFilters, UpdatePaymentStatusRequest } from '../../services/payment.service';
 import { Payment } from '../../models/payment.model';
 import { ErrorHandlerService } from '../../services/error-handler.service';
+import { PaymentDetailsDialogComponent } from './payment-details-dialog.component';
+import { OrderDetailsDialogComponent } from './order-details-dialog.component';
 
 @Component({
   selector: 'app-payments',
@@ -48,7 +51,8 @@ export class PaymentsComponent implements OnInit, OnDestroy {
   constructor(
     private paymentService: PaymentService,
     private fb: FormBuilder,
-    private errorHandler: ErrorHandlerService
+    private errorHandler: ErrorHandlerService,
+    private dialog: MatDialog
   ) {
     // Form will be initialized in ngOnInit
   }
@@ -188,7 +192,8 @@ export class PaymentsComponent implements OnInit, OnDestroy {
       next: (payments) => {
         this.payments = payments || [];
         this.isLoading = false;
-        this.length = payments.length;
+        // Update length for pagination - use totalPayments if available, otherwise use current results
+        this.length = this.totalPayments > 0 ? this.totalPayments : payments.length;
       },
       error: (error) => {
         console.error('Failed to apply filters:', error);
@@ -230,16 +235,37 @@ export class PaymentsComponent implements OnInit, OnDestroy {
   updateStatus(payment: Payment, status: 'completed' | 'processing' | 'failed'): void {
     if (!payment?.id) return;
     
-    const body: UpdatePaymentStatusRequest = { status, notes: `Updated via admin at ${new Date().toISOString()}` };
+    console.log('[PaymentsComponent] updateStatus called with:', { paymentId: payment.id, status });
+    
+    const body: UpdatePaymentStatusRequest = { 
+      status: status, 
+      notes: `Updated via admin at ${new Date().toISOString()}` 
+    };
+    
+    console.log('[PaymentsComponent] Sending update request:', body);
+    
     this.paymentService.updatePaymentStatus(payment.id, body).pipe(
       takeUntil(this.destroy$)
     ).subscribe({
       next: (updated) => {
-        const idx = this.payments.findIndex(p => p.id === payment.id);
-        if (idx >= 0) {
-          this.payments[idx] = { ...this.payments[idx], status: updated.status } as Payment;
+        console.log('[PaymentsComponent] Payment status updated successfully:', updated);
+        
+        if (updated) {
+          // Update the payment in the local array immediately
+          const idx = this.payments.findIndex(p => p.id === payment.id);
+          if (idx >= 0) {
+            this.payments[idx] = { ...this.payments[idx], status: updated.status } as Payment;
+          }
+          
+          // Force change detection
+          this.payments = [...this.payments];
+          
+          // Reload payment stats to update success rate
+          this.loadPaymentStats();
+          this.errorHandler?.showSuccess?.('Payment status updated successfully');
+        } else {
+          this.errorHandler?.handleGlobalError?.('Failed to update payment status');
         }
-        this.errorHandler?.showSuccess?.('Payment status updated');
       },
       error: (error) => {
         console.error('Failed to update payment status:', error);
@@ -250,15 +276,29 @@ export class PaymentsComponent implements OnInit, OnDestroy {
 
   viewPayment(payment: Payment): void {
     if (!payment?.id) return;
-    this.errorHandler?.showInfo?.(`Payment #${payment.id}`);
+    
+    // Open payment details dialog
+    this.dialog.open(PaymentDetailsDialogComponent, {
+      data: { payment },
+      width: '700px',
+      maxHeight: '90vh',
+      disableClose: false
+    });
   }
 
   viewOrder(orderId: number | null): void {
     if (!orderId) return;
-    this.errorHandler?.showInfo?.(`Open order #${orderId}`);
+    
+    // Open order details dialog
+    this.dialog.open(OrderDetailsDialogComponent, {
+      data: { orderId },
+      width: '800px',
+      maxHeight: '90vh',
+      disableClose: false
+    });
   }
 
-  private hasActiveFilters(): boolean {
+  hasActiveFilters(): boolean {
     if (!this.filtersForm?.value) return false;
     const v = this.filtersForm.value;
     return !!(v.status || v.paymentMethod || v.customerEmail || v.minAmount || v.maxAmount || v.startDate || v.endDate);

@@ -56,6 +56,38 @@ export class PaymentsController {
     );
   }
 
+  @Get('search')
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  searchPayments(@Query() query: any): Observable<PaymentResponseDto> {
+    console.log('[PaymentsController] searchPayments query:', query);
+    console.log('[PaymentsController] query types:', typeof query.limit, typeof query.offset);
+    
+    const filters = {
+      limit: query.limit ? parseInt(query.limit) : 20,
+      offset: query.offset ? parseInt(query.offset) : 0,
+      status: query.status,
+      paymentMethod: query.paymentMethod,
+      startDate: query.startDate ? new Date(query.startDate) : undefined,
+      endDate: query.endDate ? new Date(query.endDate) : undefined,
+      customerEmail: query.customerEmail,
+      minAmount: query.minAmount ? parseInt(query.minAmount) : undefined,
+      maxAmount: query.maxAmount ? parseInt(query.maxAmount) : undefined
+    };
+    
+    console.log('[PaymentsController] parsed filters:', filters);
+    return this.paymentsService.searchPayments(filters).pipe(
+      map(payments => ({
+        success: true,
+        data: payments,
+        message: 'Payments search completed successfully'
+      })),
+      catchError(error => of({
+        success: false,
+        error: error.message || 'Failed to search payments'
+      }))
+    );
+  }
+
   @Get(':id')
   getPayment(@Param('id', ParseIntPipe) id: number): Observable<PaymentResponseDto> {
     return this.paymentsService.getPaymentById(id).pipe(
@@ -133,6 +165,8 @@ export class PaymentsController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updatePaymentStatusDto: UpdatePaymentStatusDto
   ): Observable<PaymentResponseDto> {
+    console.log('[PaymentsController] updatePaymentStatus called with:', { id, dto: updatePaymentStatusDto });
+    
     return this.paymentsService.updatePaymentStatus(
       id, 
       updatePaymentStatusDto.status, 
@@ -146,33 +180,6 @@ export class PaymentsController {
       catchError(error => of({
         success: false,
         error: error.message || 'Failed to update payment status'
-      }))
-    );
-  }
-
-  @Get('search')
-  @UseGuards(JwtAuthGuard, AdminGuard)
-  searchPayments(@Query() query: any): Observable<PaymentResponseDto> {
-    const filters = {
-      limit: query.limit ? parseInt(query.limit) : 20,
-      offset: query.offset ? parseInt(query.offset) : 0,
-      status: query.status,
-      paymentMethod: query.paymentMethod,
-      startDate: query.startDate ? new Date(query.startDate) : undefined,
-      endDate: query.endDate ? new Date(query.endDate) : undefined,
-      customerEmail: query.customerEmail,
-      minAmount: query.minAmount ? parseInt(query.minAmount) : undefined,
-      maxAmount: query.maxAmount ? parseInt(query.maxAmount) : undefined
-    };
-    return this.paymentsService.searchPayments(filters).pipe(
-      map(payments => ({
-        success: true,
-        data: payments,
-        message: 'Payments search completed successfully'
-      })),
-      catchError(error => of({
-        success: false,
-        error: error.message || 'Failed to search payments'
       }))
     );
   }

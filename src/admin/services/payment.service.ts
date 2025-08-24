@@ -151,93 +151,22 @@ export class PaymentService {
     if (filters.limit != null) params = params.set('limit', String(filters.limit));
     if (filters.offset != null) params = params.set('offset', String(filters.offset));
 
-    return this.http.get<Payment[]>(`${this.apiUrl}/search`, { params }).pipe(
-      catchError(() => {
-        console.warn('Backend not available, using mock search results');
-        const mockPayments = [
-          {
-            id: 1,
-            orderId: 1001,
-            amount: 99.99,
-            currency: 'USD' as const,
-            paymentMethod: 'stripe' as const,
-            status: 'completed' as const,
-            description: 'Test payment',
-            customerEmail: 'test@example.com',
-            customerPhone: '+1234567890',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
-          },
-          {
-            id: 2,
-            orderId: 1002,
-            amount: 149.99,
-            currency: 'USD' as const,
-            paymentMethod: 'liqpay' as const,
-            status: 'pending' as const,
-            description: 'Test payment 2',
-            customerEmail: 'user@example.com',
-            customerPhone: '+0987654321',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
-          },
-          {
-            id: 3,
-            orderId: 1003,
-            amount: 79.99,
-            currency: 'EUR' as const,
-            paymentMethod: 'paypal' as const,
-            status: 'processing' as const,
-            description: 'Test PayPal payment',
-            customerEmail: 'paypal@example.com',
-            customerPhone: '+1122334455',
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
-          }
-        ];
-
-        let filteredPayments = mockPayments;
-        
-        if (filters.status) {
-          filteredPayments = filteredPayments.filter(p => p.status === filters.status);
-        }
-        if (filters.paymentMethod) {
-          filteredPayments = filteredPayments.filter(p => p.paymentMethod === filters.paymentMethod);
-        }
-        if (filters.customerEmail) {
-          filteredPayments = filteredPayments.filter(p => 
-            p.customerEmail?.toLowerCase().includes(filters.customerEmail!.toLowerCase())
-          );
-        }
-        if (filters.minAmount != null) {
-          filteredPayments = filteredPayments.filter(p => p.amount >= filters.minAmount!);
-        }
-        if (filters.maxAmount != null) {
-          filteredPayments = filteredPayments.filter(p => p.amount <= filters.maxAmount!);
-        }
-
-        return of(filteredPayments);
+    return this.http.get<{ success: boolean; data: Payment[]; message?: string }>(`${this.apiUrl}/search`, { params }).pipe(
+      map(response => response.success ? response.data : []),
+      catchError((error) => {
+        console.error('Search payments error:', error);
+        // Return empty array instead of mock data
+        return of([]);
       })
     );
   }
 
   updatePaymentStatus(id: number, body: UpdatePaymentStatusRequest): Observable<Payment> {
-    return this.http.put<Payment>(`${this.apiUrl}/${id}/status`, body).pipe(
-      catchError(() => {
-        console.warn('Backend not available, using mock updated payment data');
-        return of({
-          id: id,
-          orderId: 1000 + id,
-          amount: 99.99,
-          currency: 'USD' as const,
-          paymentMethod: 'stripe' as const,
-          status: body.status as any,
-          description: 'Mock updated payment',
-          customerEmail: 'updated@example.com',
-          customerPhone: '+1234567890',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        });
+    return this.http.put<{ success: boolean; data: Payment; message?: string }>(`${this.apiUrl}/${id}/status`, body).pipe(
+      map(response => response.success ? response.data : null),
+      catchError((error) => {
+        console.error('Update payment status error:', error);
+        throw error;
       })
     );
   }
