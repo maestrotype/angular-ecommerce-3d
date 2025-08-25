@@ -1,0 +1,34 @@
+<section class="orders-page">
+  <div class="container">
+  <div class="header">
+    <button class="back" (click)="goShop()">← Back to Shop</button>
+    <h1>My Orders</h1>
+  </div>
+
+  <div class="state" *ngIf="isLoading">Loading...</div>
+  <div class="state error" *ngIf="!isLoading && error">{{ error }}</div>
+
+  <div class="empty" *ngIf="!isLoading && !error && orders.length === 0">
+    <p>No orders yet</p>
+    <button class="primary" (click)="goShop()">Start Shopping</button>
+  </div>
+
+  <div class="orders" *ngIf="!isLoading && !error && orders.length > 0">
+    <div class="order" *ngFor="let order of orders">
+      <div class="row">
+        <div class="left">
+          <div class="id">#{{ order.id }}</div>
+          <div class="date">{{ order.createdAt | date:'medium' }}</div>
+        </div>
+        <div class="right">
+          <span class="badge">{{ getStatusLabel(order.status) }}</span>
+          <span class="count">{{ getItemsCount(order) }} items</span>
+          <span class="total">${{ getTotal(order) | number:'1.2-2' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+

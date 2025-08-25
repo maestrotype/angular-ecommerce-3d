@@ -30,7 +30,11 @@
             <div class="email">{{ user.email }}</div>
           </div>
         </div>
-        <button class="auth-submit-btn" (click)="logout()">Logout</button>
+        <div class="divider"></div>
+        <div class="profile-actions">
+          <button class="btn btn-primary" (click)="goToMyOrders()">My Orders</button>
+          <button class="btn btn-ghost danger" (click)="logout()">Logout</button>
+        </div>
       </div>
       <!-- Login Form when user is not logged in -->
       <ng-template #loginFormTpl>

@@ -47,6 +47,7 @@ import { SectionRendererComponent } from './components/section-renderer/section-
 
 // Favorites Components
 import { FavoritesComponent } from './pages/favorites/favorites.component';
+import { MyOrdersComponent } from './pages/my-orders/my-orders.component';
 import { CheckoutComponent } from './pages/checkout/checkout.component';
 import { PaymentComponent } from './pages/payment/payment.component';
 import { PaymentSuccessComponent } from './pages/payment-success/payment-success.component';
@@ -95,6 +96,7 @@ export function HttpLoaderFactory(http: any) {
     ThreeDViewerComponent, 
     SectionRendererComponent,
     FavoritesComponent,
+    MyOrdersComponent,
     ContactFormComponent,
     CheckoutComponent,
     PaymentComponent,
