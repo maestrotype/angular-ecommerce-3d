@@ -60,7 +60,7 @@
         <div class="stat-content">
           <mat-icon class="stat-icon aov">trending_up</mat-icon>
           <div class="stat-info">
-            <h3>AOV</h3>
+            <h3>{{ 'AOV' | translate }}</h3>
             <p class="stat-number">{{ formatCurrency(dashboardData.aov) }}</p>
           </div>
         </div>
@@ -72,7 +72,7 @@
         <div class="stat-content">
           <mat-icon class="stat-icon success-rate">check_circle</mat-icon>
           <div class="stat-info">
-            <h3>Success Rate</h3>
+            <h3>{{ 'SUCCESS_RATE' | translate }}</h3>
             <p class="stat-number">{{ dashboardData.successRate }}%</p>
           </div>
         </div>
@@ -82,7 +82,7 @@
 
   <!-- Payment Errors Section -->
   <div class="payment-errors-section" *ngIf="!isLoading">
-    <h2>Recent Payment Issues</h2>
+    <h2>{{ 'RECENT_PAYMENT_ISSUES' | translate }}</h2>
     <mat-card class="errors-card">
       <mat-card-content>
         <div class="errors-list" *ngIf="dashboardData.paymentErrors && dashboardData.paymentErrors.length > 0; else noErrors">
@@ -102,7 +102,7 @@
         <ng-template #noErrors>
           <div class="no-errors">
             <mat-icon>check_circle</mat-icon>
-            <p>No payment errors in the last 24 hours</p>
+            <p>{{ 'NO_PAYMENT_ERRORS' | translate }}</p>
           </div>
         </ng-template>
       </mat-card-content>
