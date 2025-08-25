@@ -77,11 +77,19 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       console.log('[CheckoutComponent] Received payment methods:', methods);
       this.paymentMethods = methods;
       
-      // Set default payment method if available
-      if (methods.length > 0) {
-        this.selectedPaymentMethod = methods[0].id;
-        console.log('[CheckoutComponent] Set default payment method to:', this.selectedPaymentMethod);
-      }
+      // Get default payment method from settings
+      this.paymentSettingsService.getPaymentSettings().pipe(
+        takeUntil(this.destroy$)
+      ).subscribe(settings => {
+        // Set default payment method if available and valid
+        if (settings.defaultPaymentMethod && methods.some(m => m.id === settings.defaultPaymentMethod)) {
+          this.selectedPaymentMethod = settings.defaultPaymentMethod;
+          console.log('[CheckoutComponent] Set default payment method to:', this.selectedPaymentMethod);
+        } else if (methods.length > 0) {
+          this.selectedPaymentMethod = methods[0].id;
+          console.log('[CheckoutComponent] Set fallback payment method to:', this.selectedPaymentMethod);
+        }
+      });
     });
   }
 

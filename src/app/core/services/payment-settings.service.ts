@@ -85,7 +85,8 @@ export class PaymentSettingsService {
       map(settings => {
         const methods = [];
 
-        if (settings.stripeEnabled) {
+        // Only show Stripe if enabled AND has valid keys
+        if (settings.stripeEnabled && settings.stripePublishableKey && settings.stripePublishableKey.trim()) {
           methods.push({
             id: 'stripe',
             name: 'Stripe',
@@ -94,7 +95,8 @@ export class PaymentSettingsService {
           });
         }
 
-        if (settings.liqpayEnabled) {
+        // Only show LiqPay if enabled AND has valid keys
+        if (settings.liqpayEnabled && settings.liqpayPublicKey && settings.liqpayPublicKey.trim()) {
           methods.push({
             id: 'liqpay',
             name: 'LiqPay',
@@ -103,7 +105,8 @@ export class PaymentSettingsService {
           });
         }
 
-        if (settings.paypalEnabled) {
+        // Only show PayPal if enabled AND has valid keys
+        if (settings.paypalEnabled && settings.paypalClientId && settings.paypalClientId.trim()) {
           methods.push({
             id: 'paypal',
             name: 'PayPal',

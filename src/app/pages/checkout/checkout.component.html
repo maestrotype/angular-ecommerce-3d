@@ -180,6 +180,17 @@
                   <div class="radio-circle" [class.selected]="selectedPaymentMethod === method.id"></div>
                 </div>
               </div>
+              
+              <!-- No payment methods available -->
+              <div *ngIf="paymentMethods.length === 0" class="no-payment-methods">
+                <div class="warning-icon">
+                  <mat-icon>warning</mat-icon>
+                </div>
+                <div class="warning-text">
+                  <h4>No Payment Methods Available</h4>
+                  <p>Please configure payment methods in Admin → Settings → Payment Settings</p>
+                </div>
+              </div>
             </div>
           </div>
 
