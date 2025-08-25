@@ -82,7 +82,8 @@ export class SettingsService {
     });
 
     return from(updates).pipe(
-      switchMap(updateObservable => updateObservable),
+      mergeMap(updateObservable => updateObservable),
+      toArray(),
       map(() => ({ success: true, message: 'Payment settings updated' })),
       catchError((error) => {
         console.error('Error updating payment settings:', error);
@@ -109,7 +110,8 @@ export class SettingsService {
     });
 
     return from(updates).pipe(
-      switchMap(updateObservable => updateObservable),
+      mergeMap(updateObservable => updateObservable),
+      toArray(),
       map(() => ({ success: true, message: 'General settings updated' })),
       catchError((error) => {
         console.error('Error updating general settings:', error);
@@ -136,7 +138,8 @@ export class SettingsService {
     });
 
     return from(updates).pipe(
-      switchMap(updateObservable => updateObservable),
+      mergeMap(updateObservable => updateObservable),
+      toArray(),
       map(() => ({ success: true, message: 'Security settings updated' })),
       catchError((error) => {
         console.error('Error updating security settings:', error);
@@ -163,7 +166,8 @@ export class SettingsService {
     });
 
     return from(updates).pipe(
-      switchMap(updateObservable => updateObservable),
+      mergeMap(updateObservable => updateObservable),
+      toArray(),
       map(() => ({ success: true, message: 'Notification settings updated' })),
       catchError((error) => {
         console.error('Error updating notification settings:', error);

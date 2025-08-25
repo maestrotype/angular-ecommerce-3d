@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment.prod';
 
 export interface PaymentSettings {
   stripeEnabled: boolean;
@@ -24,9 +26,23 @@ export interface PaymentSettings {
 })
 export class PaymentSettingsService {
 
+  constructor(private http: HttpClient) {}
+
   getPaymentSettings(): Observable<PaymentSettings> {
-    const localSettings = this.getLocalPaymentSettings();
-    return of(localSettings);
+    // Primary source: backend settings (grouped)
+    return this.http.get<{ success: boolean; data?: { payment?: PaymentSettings } }>(`${environment.apiUrl}/settings`).pipe(
+      map(res => {
+        const settings = (res && res.success && res.data && res.data.payment) ? res.data.payment : null;
+        if (settings) {
+          // Cache for fallback usage
+          this.setLocalPaymentSettings(settings);
+          return settings;
+        }
+        // Fallback to cached/local defaults
+        return this.getLocalPaymentSettings();
+      }),
+      catchError(() => of(this.getLocalPaymentSettings()))
+    );
   }
 
   private getLocalPaymentSettings(): PaymentSettings {
@@ -56,6 +72,12 @@ export class PaymentSettingsService {
       paypalClientSecret: '',
       defaultPaymentMethod: 'stripe'
     };
+  }
+
+  private setLocalPaymentSettings(settings: PaymentSettings): void {
+    try {
+      localStorage.setItem('paymentSettings', JSON.stringify(settings));
+    } catch {}
   }
 
   getEnabledPaymentMethods(): Observable<Array<{id: string, name: string, icon: string, description: string}>> {
