@@ -1,23 +1,23 @@
 <div class="seo-settings-container">
   <div class="seo-header">
-    <h1>SEO Settings</h1>
-    <p>Configure search engine optimization settings for your store</p>
+    <h1>{{ 'SEO_SETTINGS' | translate }}</h1>
+    <p>{{ 'SEO_SETTINGS_DESC' | translate }}</p>
   </div>
 
   <div class="seo-content" *ngIf="!loading; else loadingTemplate">
     <mat-tab-group [(selectedIndex)]="selectedTab" class="seo-tabs">
       
       <!-- Meta Tags Tab -->
-      <mat-tab label="Meta Tags">
+      <mat-tab label="{{ 'META_TAGS' | translate }}">
         <div class="tab-content">
           <form [formGroup]="seoForm" class="seo-form">
             
             <div class="form-section">
-              <h3>Basic Meta Tags</h3>
+              <h3>{{ 'BASIC_META_TAGS' | translate }}</h3>
               
               <div class="form-row">
                 <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Site Name</mat-label>
+                  <mat-label>{{ 'SITE_NAME' | translate }}</mat-label>
                   <input matInput formControlName="siteName" placeholder="Your Store Name">
                   <mat-hint>{{ getCharacterCount('siteName') }}/{{ getMaxLength('siteName') }}</mat-hint>
                   <mat-error *ngIf="!isFieldValid('siteName')">{{ getFieldError('siteName') }}</mat-error>
@@ -26,7 +26,7 @@
 
               <div class="form-row">
                 <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Site Description</mat-label>
+                  <mat-label>{{ 'SITE_DESCRIPTION' | translate }}</mat-label>
                   <textarea matInput formControlName="siteDescription" 
                            placeholder="Brief description of your store" 
                            rows="3"></textarea>
@@ -37,7 +37,7 @@
 
               <div class="form-row">
                 <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Site Keywords</mat-label>
+                  <mat-label>{{ 'SITE_KEYWORDS' | translate }}</mat-label>
                   <textarea matInput formControlName="siteKeywords" 
                            placeholder="Comma-separated keywords" 
                            rows="2"></textarea>
@@ -48,7 +48,7 @@
 
               <div class="form-row">
                 <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Site URL</mat-label>
+                  <mat-label>{{ 'SITE_URL' | translate }}</mat-label>
                   <input matInput formControlName="siteUrl" placeholder="https://yourstore.com">
                   <mat-error *ngIf="!isFieldValid('siteUrl')">{{ getFieldError('siteUrl') }}</mat-error>
                 </mat-form-field>
@@ -56,7 +56,7 @@
 
               <div class="form-row">
                 <mat-form-field appearance="outline">
-                  <mat-label>Default Language</mat-label>
+                  <mat-label>{{ 'DEFAULT_LANGUAGE' | translate }}</mat-label>
                   <input matInput formControlName="defaultLanguage" placeholder="en">
                   <mat-error *ngIf="!isFieldValid('defaultLanguage')">{{ getFieldError('defaultLanguage') }}</mat-error>
                 </mat-form-field>
@@ -68,7 +68,8 @@
                       (click)="onSaveSeoSettings()" 
                       [disabled]="!seoForm.valid || saving">
                 <mat-spinner diameter="20" *ngIf="saving"></mat-spinner>
-                {{ saving ? 'Saving...' : 'Save Meta Tags' }}
+                <span *ngIf="saving">{{ 'SAVING' | translate }}</span>
+                <span *ngIf="!saving">{{ 'SAVE_META_TAGS' | translate }}</span>
               </button>
             </div>
           </form>
@@ -76,25 +77,25 @@
       </mat-tab>
 
       <!-- Social Media Tab -->
-      <mat-tab label="Social Media">
+      <mat-tab label="{{ 'SOCIAL_MEDIA' | translate }}">
         <div class="tab-content">
           <form [formGroup]="seoForm" class="seo-form">
             
             <div class="form-section">
-              <h3>Open Graph (Facebook)</h3>
+              <h3>{{ 'OPEN_GRAPH_FACEBOOK' | translate }}</h3>
               
               <div class="form-row">
                 <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Default OG Image URL</mat-label>
+                  <mat-label>{{ 'DEFAULT_OG_IMAGE_URL' | translate }}</mat-label>
                   <input matInput formControlName="defaultOgImage" 
                          placeholder="https://yourstore.com/images/og-default.jpg">
-                  <mat-hint>Default image for social media sharing</mat-hint>
+                  <mat-hint>{{ 'DEFAULT_IMAGE_SOCIAL_SHARING' | translate }}</mat-hint>
                 </mat-form-field>
               </div>
 
               <div class="form-row">
                 <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>OG Site Name</mat-label>
+                  <mat-label>{{ 'OG_SITE_NAME' | translate }}</mat-label>
                   <input matInput formControlName="ogSiteName" placeholder="Your Store Name">
                   <mat-hint>{{ getCharacterCount('ogSiteName') }}/{{ getMaxLength('ogSiteName') }}</mat-hint>
                 </mat-form-field>
@@ -102,11 +103,11 @@
             </div>
 
             <div class="form-section">
-              <h3>Twitter Cards</h3>
+              <h3>{{ 'TWITTER_CARDS' | translate }}</h3>
               
               <div class="form-row">
                 <mat-form-field appearance="outline">
-                  <mat-label>Twitter Handle</mat-label>
+                  <mat-label>{{ 'TWITTER_HANDLE' | translate }}</mat-label>
                   <input matInput formControlName="twitterHandle" placeholder="@yourstore">
                   <mat-hint>{{ getCharacterCount('twitterHandle') }}/{{ getMaxLength('twitterHandle') }}</mat-hint>
                 </mat-form-field>
@@ -118,7 +119,8 @@
                       (click)="onSaveSeoSettings()" 
                       [disabled]="!seoForm.valid || saving">
                 <mat-spinner diameter="20" *ngIf="saving"></mat-spinner>
-                {{ saving ? 'Saving...' : 'Save Social Media' }}
+                <span *ngIf="saving">{{ 'SAVING' | translate }}</span>
+                <span *ngIf="!saving">{{ 'SAVE_SOCIAL_MEDIA' | translate }}</span>
               </button>
             </div>
           </form>
@@ -126,40 +128,40 @@
       </mat-tab>
 
       <!-- Analytics Tab -->
-      <mat-tab label="Analytics">
+      <mat-tab label="{{ 'ANALYTICS' | translate }}">
         <div class="tab-content">
           <form [formGroup]="seoForm" class="seo-form">
             
             <div class="form-section">
-              <h3>Google Services</h3>
+              <h3>{{ 'GOOGLE_SERVICES' | translate }}</h3>
               
               <div class="form-row">
                 <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Google Analytics ID</mat-label>
+                  <mat-label>{{ 'GOOGLE_ANALYTICS_ID' | translate }}</mat-label>
                   <input matInput formControlName="googleAnalyticsId" placeholder="G-XXXXXXXXXX">
-                  <mat-hint>Your Google Analytics 4 measurement ID</mat-hint>
+                  <mat-hint>{{ 'GOOGLE_ANALYTICS_MEASUREMENT_ID_HINT' | translate }}</mat-hint>
                 </mat-form-field>
               </div>
 
               <div class="form-row">
                 <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Google Search Console</mat-label>
+                  <mat-label>{{ 'GOOGLE_SEARCH_CONSOLE' | translate }}</mat-label>
                   <input matInput formControlName="googleSearchConsole" 
                          placeholder="Meta tag content from Search Console">
-                  <mat-hint>Meta tag content for Google Search Console verification</mat-hint>
+                  <mat-hint>{{ 'GOOGLE_SEARCH_CONSOLE_META_TAG_HINT' | translate }}</mat-hint>
                 </mat-form-field>
               </div>
             </div>
 
             <div class="form-section">
-              <h3>Other Services</h3>
+              <h3>{{ 'OTHER_SERVICES' | translate }}</h3>
               
               <div class="form-row">
                 <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Bing Webmaster Tools</mat-label>
+                  <mat-label>{{ 'BING_WEBMASTER_TOOLS' | translate }}</mat-label>
                   <input matInput formControlName="bingWebmasterTools" 
                          placeholder="Meta tag content from Bing Webmaster Tools">
-                  <mat-hint>Meta tag content for Bing Webmaster Tools verification</mat-hint>
+                  <mat-hint>{{ 'BING_WEBMASTER_TOOLS_META_TAG_HINT' | translate }}</mat-hint>
                 </mat-form-field>
               </div>
             </div>
@@ -169,7 +171,8 @@
                       (click)="onSaveSeoSettings()" 
                       [disabled]="!seoForm.valid || saving">
                 <mat-spinner diameter="20" *ngIf="saving"></mat-spinner>
-                {{ saving ? 'Saving...' : 'Save Analytics' }}
+                <span *ngIf="saving">{{ 'SAVING' | translate }}</span>
+                <span *ngIf="!saving">{{ 'SAVE_ANALYTICS' | translate }}</span>
               </button>
             </div>
           </form>
@@ -177,71 +180,74 @@
       </mat-tab>
 
       <!-- Advanced Tab -->
-      <mat-tab label="Advanced">
+      <mat-tab label="{{ 'ADVANCED' | translate }}">
         <div class="tab-content">
           <form [formGroup]="seoForm" class="seo-form">
             
             <div class="form-section">
-              <h3>SEO Features</h3>
+              <h3>{{ 'SEO_FEATURES' | translate }}</h3>
               
               <div class="form-row">
                 <mat-checkbox formControlName="enableSitemap">
-                  Enable XML Sitemap Generation
+                  {{ 'ENABLE_XML_SITEMAP_GENERATION' | translate }}
                 </mat-checkbox>
-                <p class="form-hint">Automatically generate and update sitemap.xml</p>
+                <p class="form-hint">{{ 'XML_SITEMAP_GENERATION_HINT' | translate }}</p>
               </div>
 
               <div class="form-row">
                 <mat-checkbox formControlName="enableStructuredData">
-                  Enable Structured Data (JSON-LD)
+                  {{ 'ENABLE_STRUCTURED_DATA' | translate }}
                 </mat-checkbox>
-                <p class="form-hint">Add structured data markup for better search results</p>
+                <p class="form-hint">{{ 'STRUCTURED_DATA_HINT' | translate }}</p>
               </div>
             </div>
 
             <div class="form-section">
-              <h3>Robots.txt</h3>
+              <h3>{{ 'ROBOTS_TXT' | translate }}</h3>
               
               <div class="form-row">
                 <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Robots.txt Content</mat-label>
+                  <mat-label>{{ 'ROBOTS_TXT_CONTENT' | translate }}</mat-label>
                   <textarea matInput [formControl]="robotsTxtForm.get('robotsTxtContent')" 
                            placeholder="User-agent: *&#10;Allow: /&#10;Disallow: /admin/" 
                            rows="8"></textarea>
-                  <mat-hint>Content for robots.txt file</mat-hint>
+                  <mat-hint>{{ 'ROBOTS_TXT_CONTENT_HINT' | translate }}</mat-hint>
                 </mat-form-field>
               </div>
 
-              <div class="form-actions">
-                <button mat-raised-button color="primary" 
-                        (click)="onSaveRobotsTxt()" 
-                        [disabled]="!robotsTxtForm.valid || saving">
-                  <mat-spinner diameter="20" *ngIf="saving"></mat-spinner>
-                  {{ saving ? 'Saving...' : 'Save Robots.txt' }}
-                </button>
-              </div>
+                              <div class="form-actions">
+                  <button mat-raised-button color="primary" 
+                          (click)="onSaveRobotsTxt()" 
+                          [disabled]="!robotsTxtForm.valid || saving">
+                    <mat-spinner diameter="20" *ngIf="saving"></mat-spinner>
+                    <span *ngIf="saving">{{ 'SAVING' | translate }}</span>
+                    <span *ngIf="!saving">{{ 'SAVE_ROBOTS_TXT' | translate }}</span>
+                  </button>
+                </div>
             </div>
 
             <div class="form-section">
-              <h3>Sitemap Generation</h3>
+              <h3>{{ 'SITEMAP_GENERATION' | translate }}</h3>
               
-              <div class="form-row">
-                <button mat-raised-button color="accent" 
-                        (click)="onGenerateSitemap()" 
-                        [disabled]="saving">
-                  <mat-spinner diameter="20" *ngIf="saving"></mat-spinner>
-                  {{ saving ? 'Generating...' : 'Generate Sitemap' }}
-                </button>
-                <p class="form-hint">Manually generate sitemap.xml file</p>
-              </div>
+                              <div class="form-row">
+                  <button mat-raised-button color="accent" 
+                          (click)="onGenerateSitemap()" 
+                          [disabled]="saving">
+                    <mat-spinner diameter="20" *ngIf="saving"></mat-spinner>
+                    <span *ngIf="saving">{{ 'GENERATING' | translate }}</span>
+                    <span *ngIf="!saving">{{ 'GENERATE_SITEMAP' | translate }}</span>
+                  </button>
+                  <p class="form-hint">{{ 'MANUAL_SITEMAP_GENERATION_HINT' | translate }}</p>
+                </div>
             </div>
 
-            <div class="form-actions">
+                        <div class="form-actions">
               <button mat-raised-button color="primary" 
                       (click)="onSaveSeoSettings()" 
                       [disabled]="!seoForm.valid || saving">
                 <mat-spinner diameter="20" *ngIf="saving"></mat-spinner>
-                {{ saving ? 'Saving...' : 'Save Advanced Settings' }}
+                <span *ngIf="saving">{{ 'SAVING' | translate }}</span>
+                <span *ngIf="!saving">{{ 'SAVE_ADVANCED_SETTINGS' | translate }}</span>
               </button>
             </div>
           </form>
@@ -255,7 +261,7 @@
   <ng-template #loadingTemplate>
     <div class="loading-container">
       <mat-spinner diameter="50"></mat-spinner>
-      <p>Loading SEO settings...</p>
+      <p>{{ 'LOADING_SEO_SETTINGS' | translate }}</p>
     </div>
   </ng-template>
 </div> 

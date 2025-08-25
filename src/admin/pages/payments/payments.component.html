@@ -4,15 +4,15 @@
     <div class="stats-cards">
       <div class="stat-card">
         <div class="stat-value">{{ totalPayments || 0 }}</div>
-        <div class="stat-label">Total Payments</div>
+        <div class="stat-label">{{ 'TOTAL_PAYMENTS' | translate }}</div>
       </div>
       <div class="stat-card">
         <div class="stat-value">${{ formatAmount(totalAmount) }}</div>
-        <div class="stat-label">Total Amount</div>
+        <div class="stat-label">{{ 'TOTAL_AMOUNT' | translate }}</div>
       </div>
       <div class="stat-card">
         <div class="stat-value">{{ formatSuccessRate(successRate) }}%</div>
-        <div class="stat-label">Success Rate</div>
+        <div class="stat-label">{{ 'SUCCESS_RATE' | translate }}</div>
       </div>
     </div>
   </div>
@@ -20,54 +20,54 @@
   <div class="content-section">
     <div class="section-header">
       <div class="filters-area">
-        <h2>Payment Transactions</h2>
+        <h2>{{ 'PAYMENT_TRANSACTIONS' | translate }}</h2>
         <div class="filters-grid" *ngIf="filtersForm" [formGroup]="filtersForm">
           <mat-form-field appearance="outline" class="field status">
-            <mat-label>Status</mat-label>
+            <mat-label>{{ 'STATUS' | translate }}</mat-label>
             <mat-select formControlName="status">
               <mat-option *ngFor="let s of statusOptions" [value]="s.value">{{ s.label }}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="field method">
-            <mat-label>Method</mat-label>
+            <mat-label>{{ 'METHOD' | translate }}</mat-label>
             <mat-select formControlName="paymentMethod">
               <mat-option *ngFor="let m of methodOptions" [value]="m.value">{{ m.label }}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="field email">
-            <mat-label>Customer email</mat-label>
+            <mat-label>{{ 'CUSTOMER_EMAIL' | translate }}</mat-label>
             <input matInput placeholder="user@example.com" formControlName="customerEmail" />
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="field min">
-            <mat-label>Min amount</mat-label>
+            <mat-label>{{ 'MIN_AMOUNT' | translate }}</mat-label>
             <input matInput type="number" formControlName="minAmount" />
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="field max">
-            <mat-label>Max amount</mat-label>
+            <mat-label>{{ 'MAX_AMOUNT' | translate }}</mat-label>
             <input matInput type="number" formControlName="maxAmount" />
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="field from">
-            <mat-label>From</mat-label>
+            <mat-label>{{ 'FROM' | translate }}</mat-label>
             <input matInput [matDatepicker]="startPicker" formControlName="startDate" placeholder="дд.мм.гггг" />
             <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
             <mat-datepicker #startPicker></mat-datepicker>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="field to">
-            <mat-label>To</mat-label>
+            <mat-label>{{ 'TO' | translate }}</mat-label>
             <input matInput [matDatepicker]="endPicker" formControlName="endDate" placeholder="дд.мм.гггг" />
             <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
             <mat-datepicker #endPicker></mat-datepicker>
           </mat-form-field>
         </div>
         <div class="filters-actions">
-          <button mat-raised-button color="primary" (click)="applyFilters()">Apply</button>
-          <button mat-stroked-button (click)="resetFilters()">Reset</button>
+          <button mat-raised-button color="primary" (click)="applyFilters()">{{ 'APPLY' | translate }}</button>
+          <button mat-stroked-button (click)="resetFilters()">{{ 'RESET' | translate }}</button>
         </div>
       </div>
     </div>
@@ -75,17 +75,17 @@
     <div class="payments-table">
       <table mat-table [dataSource]="payments" class="mat-elevation-z1" *ngIf="!isLoading && payments && payments.length > 0">
         <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef>Payment ID</th>
-          <td mat-cell *matCellDef="let payment">{{ payment?.id || 'N/A' }}</td>
+          <th mat-header-cell *matHeaderCellDef>{{ 'PAYMENT_ID' | translate }}</th>
+          <td mat-cell *matCellDef="let payment">{{ payment?.id || ('N_A' | translate) }}</td>
         </ng-container>
 
         <ng-container matColumnDef="orderId">
-          <th mat-header-cell *matHeaderCellDef>Order ID</th>
-          <td mat-cell *matCellDef="let payment">{{ payment?.orderId || 'N/A' }}</td>
+          <th mat-header-cell *matHeaderCellDef>{{ 'ORDER_ID' | translate }}</th>
+          <td mat-cell *matCellDef="let payment">{{ payment?.orderId || ('N_A' | translate) }}</td>
         </ng-container>
 
         <ng-container matColumnDef="amount">
-          <th mat-header-cell *matHeaderCellDef>Amount</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'AMOUNT' | translate }}</th>
           <td mat-cell *matCellDef="let payment">
             <span class="amount">{{ formatAmount(payment?.amount) }}</span>
             <span class="currency">{{ formatCurrency(payment?.currency) }}</span>
@@ -93,64 +93,64 @@
         </ng-container>
 
         <ng-container matColumnDef="paymentMethod">
-          <th mat-header-cell *matHeaderCellDef>Method</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'METHOD' | translate }}</th>
           <td mat-cell *matCellDef="let payment">
             <div class="payment-method">
               <mat-icon>{{ getPaymentMethodIcon(payment?.paymentMethod) }}</mat-icon>
-              <span>{{ payment?.paymentMethod ? (payment.paymentMethod | titlecase) : 'N/A' }}</span>
+              <span>{{ payment?.paymentMethod ? (payment.paymentMethod | titlecase) : ('N_A' | translate) }}</span>
             </div>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'STATUS' | translate }}</th>
           <td mat-cell *matCellDef="let payment">
             <span class="status-badge" [class]="getStatusColor(payment?.status)">
-              {{ payment?.status ? (payment.status | titlecase) : 'N/A' }}
+              {{ payment?.status ? (payment.status | titlecase) : ('N_A' | translate) }}
             </span>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="customerEmail">
-          <th mat-header-cell *matHeaderCellDef>Customer</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'CUSTOMER' | translate }}</th>
           <td mat-cell *matCellDef="let payment">
             <div class="customer-info">
-              <span class="email">{{ payment?.customerEmail || 'N/A' }}</span>
+              <span class="email">{{ payment?.customerEmail || ('N_A' | translate) }}</span>
               <span class="phone" *ngIf="payment?.customerPhone">{{ payment.customerPhone }}</span>
             </div>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="createdAt">
-          <th mat-header-cell *matHeaderCellDef>Date</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'DATE' | translate }}</th>
           <td mat-cell *matCellDef="let payment">{{ formatDate(payment?.createdAt) }}</td>
         </ng-container>
 
         <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'ACTIONS' | translate }}</th>
           <td mat-cell *matCellDef="let payment">
             <div class="actions">
-              <button mat-icon-button matTooltip="View Details" (click)="viewPayment(payment)" [disabled]="!payment?.id">
+              <button mat-icon-button [matTooltip]="'VIEW' | translate" (click)="viewPayment(payment)" [disabled]="!payment?.id">
                 <mat-icon>visibility</mat-icon>
               </button>
-              <button mat-icon-button matTooltip="View Order" (click)="viewOrder(payment?.orderId)">
+              <button mat-icon-button [matTooltip]="'VIEW_ORDER' | translate" (click)="viewOrder(payment?.orderId)">
                 <mat-icon>shopping_cart</mat-icon>
               </button>
-              <button mat-icon-button [matMenuTriggerFor]="statusMenu" matTooltip="Change Status" [disabled]="!payment?.id">
+              <button mat-icon-button [matMenuTriggerFor]="statusMenu" [matTooltip]="'CHANGE_STATUS' | translate" [disabled]="!payment?.id">
                 <mat-icon>edit</mat-icon>
               </button>
               <mat-menu #statusMenu="matMenu">
                 <button mat-menu-item (click)="updateStatus(payment, 'completed')" [disabled]="!payment?.id">
                   <mat-icon>check_circle</mat-icon>
-                  <span>Mark Completed</span>
+                  <span>{{ 'MARK_COMPLETED' | translate }}</span>
                 </button>
                 <button mat-menu-item (click)="updateStatus(payment, 'processing')" [disabled]="!payment?.id">
                   <mat-icon>hourglass_top</mat-icon>
-                  <span>Mark Processing</span>
+                  <span>{{ 'MARK_PROCESSING' | translate }}</span>
                 </button>
                 <button mat-menu-item (click)="updateStatus(payment, 'failed')" [disabled]="!payment?.id">
                   <mat-icon>cancel</mat-icon>
-                  <span>Mark Failed</span>
+                  <span>{{ 'MARK_FAILED' | translate }}</span>
                 </button>
               </mat-menu>
             </div>
@@ -163,12 +163,12 @@
 
       <div *ngIf="isLoading" class="loading">
         <mat-spinner diameter="40"></mat-spinner>
-        <span>Loading payments...</span>
+        <span>{{ 'LOADING_PAYMENTS' | translate }}</span>
       </div>
 
       <div *ngIf="!isLoading && (!payments || payments.length === 0)" class="no-data">
         <mat-icon>payment</mat-icon>
-        <span>{{ hasActiveFilters() ? 'No payments match your filters' : 'No payments found' }}</span>
+        <span>{{ hasActiveFilters() ? ('NO_PAYMENTS_MATCH_FILTERS' | translate) : ('NO_PAYMENTS_FOUND' | translate) }}</span>
       </div>
 
       <mat-paginator [length]="length" [pageIndex]="pageIndex" [pageSize]="pageSize"

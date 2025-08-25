@@ -380,6 +380,51 @@
       }
     }
 
+    .no-payment-methods {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.5rem;
+      border: 2px dashed var(--color-warning, #f59e0b);
+      border-radius: 8px;
+      background: var(--color-warning-bg, #fef3c7);
+      margin-top: 1rem;
+
+      .warning-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 8px;
+        background: var(--color-warning, #f59e0b);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        flex-shrink: 0;
+
+        mat-icon {
+          width: 24px;
+          height: 24px;
+        }
+      }
+
+      .warning-text {
+        flex: 1;
+
+        h4 {
+          margin: 0 0 0.5rem 0;
+          color: var(--color-warning-dark, #d97706);
+          font-size: 1rem;
+        }
+
+        p {
+          margin: 0;
+          color: var(--color-warning-darker, #92400e);
+          font-size: 0.875rem;
+          line-height: 1.4;
+        }
+      }
+    }
+
     .submit-btn {
       width: 100%;
       padding: 1rem 2rem;
