@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ModalConfig } from '../../../core/services/modal.service';
 
@@ -28,7 +29,7 @@ export class AuthModalComponent {
     confirmPassword: ''
   };
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private router: Router) {
     this.user = this.authService.getUser();
   }
 
@@ -45,6 +46,11 @@ export class AuthModalComponent {
     this.authService.logout();
     this.user = null;
     this.error = '';
+  }
+
+  goToMyOrders(): void {
+    this.close.emit();
+    this.router.navigate(['/my-orders']);
   }
 
   onLogin(): void {

@@ -66,7 +66,11 @@ export class DashboardService {
   private getRevenue(): Observable<number> {
     return this.http.get<Order[]>(`${this.apiUrl}/orders`).pipe(
       map((orders) => {
-        return orders.reduce((total, order) => total + (order.totalAmount || 0), 0);
+        const sum = (orders || []).reduce((total, order: any) => {
+          const amount = Number((order && (order as any).totalAmount) ?? 0);
+          return total + (isNaN(amount) ? 0 : amount);
+        }, 0);
+        return Number.isFinite(sum) ? sum : 0;
       }),
       catchError(() => of(45678))
     );
