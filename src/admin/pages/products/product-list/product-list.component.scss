@@ -71,7 +71,7 @@
   .product-image {
     width: 50px;
     height: 50px;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 4px;
     border: 1px solid #4b5563;
     background-color: #ffffff;
@@ -176,7 +176,7 @@
         border: 1px solid #4b5563;
         background-color: #ffffff;
         padding: 4px;
-        object-fit: cover;
+        object-fit: contain;
       }
 
       .no-image-placeholder {

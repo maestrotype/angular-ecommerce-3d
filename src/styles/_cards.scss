@@ -102,7 +102,7 @@
       }
       
       .product-category {
-        background: var(--color-primary);
+        background: var(--color-background-tertiary, #e9ecef);
         color: white;
         padding: 0.25rem 0.75rem;
         border-radius: 12px;
