@@ -65,7 +65,7 @@
             align-items: center;
 
             img {
-                object-fit: cover;
+                object-fit: contain;
                 transition: transform 0.3s ease;
                 height: 250px;
                 scale: 1;
