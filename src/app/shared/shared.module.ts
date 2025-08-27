@@ -10,6 +10,7 @@ import { BoughtTogetherComponent } from './components/recommendations/bought-tog
 // Payment Components
 import { StripeElementsComponent } from './components/stripe-elements/stripe-elements.component';
 import { StripeTestComponent } from '../pages/stripe-test/stripe-test.component';
+import { SectionRendererComponent } from '../components/section-renderer/section-renderer.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { StripeTestComponent } from '../pages/stripe-test/stripe-test.component'
     SimilarProductsComponent,
     BoughtTogetherComponent,
     StripeElementsComponent,
-    StripeTestComponent
+    StripeTestComponent,
+    SectionRendererComponent
   ],
   imports: [
     CommonModule,
@@ -36,7 +38,8 @@ import { StripeTestComponent } from '../pages/stripe-test/stripe-test.component'
     SimilarProductsComponent,
     BoughtTogetherComponent,
     StripeElementsComponent,
-    StripeTestComponent
+    StripeTestComponent,
+    SectionRendererComponent
   ]
 })
 export class SharedModule { } 
