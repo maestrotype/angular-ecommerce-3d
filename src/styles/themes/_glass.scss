@@ -8,6 +8,30 @@
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
   
+  /* Favorites page glass theme */
+  --favorites-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --favorites-header-bg: rgba(255, 255, 255, 0.1);
+  --favorites-header-text: #ffffff;
+  --favorites-header-overlay: rgba(255, 255, 255, 0.05);
+  --favorites-header-blur: blur(20px);
+  --favorites-back-btn-bg: rgba(255, 255, 255, 0.15);
+  --favorites-back-btn-text: #ffffff;
+  --favorites-back-btn-border: rgba(255, 255, 255, 0.3);
+  --favorites-back-btn-blur: blur(15px);
+  --favorites-back-btn-hover-bg: rgba(255, 255, 255, 0.25);
+  --favorites-back-btn-hover-border: rgba(255, 255, 255, 0.4);
+  --favorites-title-size: 2.5rem;
+  --favorites-title-weight: 700;
+  --favorites-heart-color: #ff6b6b;
+  --favorites-subtitle-size: 1.1rem;
+  --favorites-subtitle-opacity: 0.9;
+  --favorites-card-bg: rgba(255, 255, 255, 0.1);
+  --favorites-card-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  --favorites-card-blur: blur(20px);
+  --favorites-card-border: rgba(255, 255, 255, 0.2);
+  --favorites-card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  --favorites-card-hover-bg: rgba(255, 255, 255, 0.15);
+  
   /* Product Detail Glass Theme Variables */
   --product-detail-bg: rgba(255, 255, 255, 0.1);
   --product-detail-card-bg: rgba(255, 255, 255, 0.15);

@@ -7,6 +7,43 @@
   /* Dark theme overrides */
   background-color: #0f172a;
   color: #f8fafc;
+  
+  /* Favorites page dark theme */
+  --favorites-bg: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  --favorites-header-bg: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+  --favorites-header-text: #f3f4f6;
+  --favorites-header-overlay: rgba(0, 0, 0, 0.4);
+  --favorites-header-blur: blur(0px);
+  --favorites-back-btn-bg: rgba(156, 163, 175, 0.2);
+  --favorites-back-btn-text: #f3f4f6;
+  --favorites-back-btn-border: rgba(156, 163, 175, 0.3);
+  --favorites-back-btn-blur: blur(10px);
+  --favorites-back-btn-hover-bg: rgba(156, 163, 175, 0.3);
+  --favorites-back-btn-hover-border: rgba(156, 163, 175, 0.4);
+  --favorites-title-size: 2.5rem;
+  --favorites-title-weight: 700;
+  --favorites-heart-color: #f87171;
+  --favorites-subtitle-size: 1.1rem;
+  --favorites-subtitle-opacity: 0.8;
+  --favorites-card-bg: #374151;
+  --favorites-card-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --favorites-card-blur: blur(12px);
+  --favorites-card-border: rgba(156, 163, 175, 0.2);
+  --favorites-card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+  --favorites-card-hover-bg: #4b5563;
+  
+  /* Favorites page additional elements */
+  --favorites-top-bar-bg: #374151;
+  --favorites-top-bar-text: #f3f4f6;
+  --favorites-clear-btn-bg: #6b7280;
+  --favorites-clear-btn-text: #f3f4f6;
+  --favorites-clear-btn-hover-bg: #9ca3af;
+  --favorites-product-name-color: #f3f4f6;
+  --favorites-product-category-color: #93c5fd;
+  --favorites-product-price-color: #3b82f6;
+  --favorites-add-to-cart-bg: #6b7280;
+  --favorites-add-to-cart-text: #f3f4f6;
+  --favorites-add-to-cart-hover-bg: #9ca3af;
 
   /* Skeleton loading variables for dark theme */
   --skeleton-bg: #374151;
@@ -16,10 +53,10 @@
   --bg-secondary: #2d2d2d;
 
   /* Product Detail Dark Theme Variables */
-  --product-detail-bg: #1e293b;
-  --product-detail-card-bg: #334155;
-  --product-detail-border: 1px solid #475569;
-  --product-detail-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --product-detail-bg: #374151;
+  --product-detail-card-bg: #4b5563;
+  --product-detail-border: 1px solid #6b7280;
+  --product-detail-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   --product-detail-radius: 16px;
   --product-detail-padding: 24px;
   
@@ -38,13 +75,13 @@
   --product-stock-color: #10b981;
   --product-stock-oos-color: #ef4444;
   
-  --product-stepper-bg: #475569;
-  --product-stepper-border: 1px solid #64748b;
+  --product-stepper-bg: #6b7280;
+  --product-stepper-border: 1px solid #9ca3af;
   --product-stepper-radius: 10px;
-  --product-stepper-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  --product-stepper-btn-bg: #64748b;
-  --product-stepper-btn-hover: #94a3b8;
-  --product-stepper-value-color: #f8fafc;
+  --product-stepper-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --product-stepper-btn-bg: #9ca3af;
+  --product-stepper-btn-hover: #d1d5db;
+  --product-stepper-value-color: #f3f4f6;
   
   --product-cta-bg: #6366f1;
   --product-cta-color: #ffffff;
@@ -58,47 +95,47 @@
   --product-oos-color: #ef4444;
   
   // Characteristics
-  --product-specs-bg: #475569;
-  --product-specs-border: 1px solid #64748b;
+  --product-specs-bg: #6b7280;
+  --product-specs-border: 1px solid #9ca3af;
   --product-specs-radius: 12px;
   --product-specs-padding: 12px;
-  --product-specs-label-color: #94a3b8;
-  --product-specs-value-color: #f8fafc;
+  --product-specs-label-color: #9ca3af;
+  --product-specs-value-color: #f3f4f6;
   
   // Product Image Area
-  --product-main-view-bg: #334155;
+  --product-main-view-bg: #4b5563;
   --product-main-view-radius: 16px;
-  --product-main-view-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --product-main-view-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   --product-thumb-radius: 8px;
-  --product-thumb-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --product-thumb-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   
   // Product Tabs
-  --product-tabs-bg: #334155;
-  --product-tabs-border: 1px solid #475569;
+  --product-tabs-bg: #4b5563;
+  --product-tabs-border: 1px solid #6b7280;
   --product-tabs-radius: 16px;
-  --product-tabs-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  --product-tabs-nav-bg: #475569;
-  --product-tabs-nav-border: 1px solid #64748b;
+  --product-tabs-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --product-tabs-nav-bg: #6b7280;
+  --product-tabs-nav-border: 1px solid #9ca3af;
 
   /* Dark theme for demo sections */
   .demo-section {
-    background: #1e293b;
-    border: 1px solid #475569;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    background: #374151;
+    border: 1px solid #6b7280;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   }
 
   .button-demo {
-    background: #334155;
-    border: 1px solid #475569;
+    background: #4b5563;
+    border: 1px solid #6b7280;
   }
 
   /* Dark theme for color swatches */
   .color-swatch {
-    background: #1e293b;
-    border: 1px solid #475569;
+    background: #374151;
+    border: 1px solid #6b7280;
 
     .color-name {
-      color: #f8fafc;
+      color: #f3f4f6;
       text-shadow: none;
     }
   }
@@ -119,13 +156,13 @@
 
   /* Auth modal dark styling */
   .auth-modal {
-    background: #1e293b;
+    background: #374151;
     border: none;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 
     .auth-header {
-      background: #1e293b;
-      border-bottom: 1px solid #475569;
+      background: #374151;
+      border-bottom: 1px solid #4b5563;
       padding: 0;
       border-radius: 8px 8px 0 0;
       overflow: hidden;
@@ -140,25 +177,25 @@
 
         .auth-tab {
           flex: 1;
-          background: #1e293b;
+          background: #374151;
           border: none;
           padding: var(--spacing-md);
           cursor: pointer;
           font-weight: var(--font-weight-medium);
-          color: #94a3b8;
+          color: #9ca3af;
           transition: all var(--transition-normal);
           position: relative;
           border-radius: 0;
           margin: 0;
 
           &:hover {
-            background: #475569;
-            color: #f8fafc;
+            background: #4b5563;
+            color: #f3f4f6;
           }
 
           &.active {
-            color: #f8fafc;
-            background: #334155;
+            color: #f3f4f6;
+            background: #6b7280;
             border-radius: 8px 0 0 0;
             margin: 0;
 
@@ -181,7 +218,7 @@
     }
 
     .auth-content {
-      background: #1e293b;
+      background: #374151;
       padding: var(--spacing-xl);
     }
 
@@ -205,12 +242,12 @@
     }
 
     .auth-content .auth-form .form-group input {
-      background: #334155;
-      border: 1px solid #475569;
-      color: #f8fafc;
+      background: #4b5563;
+      border: 1px solid #6b7280;
+      color: #f3f4f6;
 
       &::placeholder {
-        color: #94a3b8;
+        color: #9ca3af;
       }
 
       &:focus {
@@ -236,37 +273,37 @@
   /* Special offer dark styling - using Hero Glass approach */
   .special-offer {
     background: linear-gradient(135deg,
-      rgba(248, 250, 252, 0.85) 0%,
-      rgba(226, 232, 240, 0.75) 30%,
-      rgba(203, 213, 225, 0.85) 70%,
-      rgba(186, 200, 216, 0.9) 100%);
+      rgba(55, 65, 81, 0.9) 0%,
+      rgba(75, 85, 99, 0.85) 30%,
+      rgba(107, 114, 128, 0.9) 70%,
+      rgba(156, 163, 175, 0.95) 100%);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(156, 163, 175, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 
     .offer-title {
-      color: #1e293b;
-      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      color: #f3f4f6;
+      background: linear-gradient(135deg, #f3f4f6 0%, #d1d5db 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
     .offer-subtitle {
-      color: #64748b;
+      color: #9ca3af;
     }
 
     .shop-button {
-      background: rgba(255, 255, 255, 0.25);
-      border: 1.5px solid rgba(255, 255, 255, 0.5);
-      color: #334155;
+      background: rgba(156, 163, 175, 0.3);
+      border: 1.5px solid rgba(156, 163, 175, 0.5);
+      color: #f3f4f6;
       backdrop-filter: blur(12px) saturate(180%);
-      box-shadow: 0 8px 32px rgba(51, 65, 85, 0.10), 0 1.5px 8px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 1.5px 8px rgba(0, 0, 0, 0.2);
 
       &:hover {
-        background: rgba(99, 102, 241, 0.18);
-        color: #6366f1;
-        box-shadow: 0 12px 40px rgba(99, 102, 241, 0.18);
+        background: rgba(99, 102, 241, 0.3);
+        color: #a5b4fc;
+        box-shadow: 0 12px 40px rgba(99, 102, 241, 0.3);
         border-color: #6366f1;
       }
     }
