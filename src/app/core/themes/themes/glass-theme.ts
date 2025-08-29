@@ -52,24 +52,24 @@ export const glassTheme: Theme = {
     'bg-overlay': 'rgba(0, 0, 0, 0.3)',
     
     // Surface Colors
-    'surface-primary': 'rgba(255, 255, 255, 0.1)',
-    'surface-secondary': 'rgba(255, 255, 255, 0.05)',
+    'surface-primary': 'rgba(255, 255, 255, 0.15)',
+    'surface-secondary': 'rgba(255, 255, 255, 0.12)',
     'surface-tertiary': 'rgba(255, 255, 255, 0.02)',
-    'surface-hover': 'rgba(255, 255, 255, 0.15)',
+    'surface-hover': 'rgba(255, 255, 255, 0.2)',
     
     // Text Colors
-    'text-primary': '#ffffff',
-    'text-secondary': 'rgba(255, 255, 255, 0.8)',
-    'text-tertiary': 'rgba(255, 255, 255, 0.6)',
+    'text-primary': '#1e293b',
+    'text-secondary': '#475569',
+    'text-tertiary': '#64748b',
     'text-disabled': 'rgba(255, 255, 255, 0.4)',
-    'text-inverse': '#333333',
+    'text-inverse': '#ffffff',
     'text-accent': '#667eea',
     
     // Border Colors
     'border-primary': 'rgba(255, 255, 255, 0.2)',
-    'border-secondary': 'rgba(255, 255, 255, 0.1)',
+    'border-secondary': 'rgba(255, 255, 255, 0.15)',
     'border-tertiary': 'rgba(255, 255, 255, 0.05)',
-    'border-focus': '#667eea',
+    'border-focus': '#6366f1',
     
     // Shadow Colors
     'shadow-light': 'rgba(0, 0, 0, 0.1)',
@@ -84,12 +84,12 @@ export const glassTheme: Theme = {
     'special-offer-button-hover': 'rgba(99,102,241,0.18)',
     'special-offer-button-shadow': 'rgba(51,65,85,0.10)',
     
-    // Modal Colors
-    'modal-bg': 'rgba(255,255,255,0.1)',
-    'modal-header-bg': 'rgba(255,255,255,0.1)',
+    // Modal Colors - убрал дублирующиеся, они теперь в components
+    'modal-bg': 'rgba(255,255,255,0.15)',
+    'modal-header-bg': 'rgba(255,255,255,0.15)',
     'modal-border': 'rgba(255,255,255,0.2)',
-    'input-bg': 'rgba(255,255,255,0.1)',
-    'input-border': 'rgba(255,255,255,0.2)',
+    'input-bg': 'rgba(255,255,255,0.2)',
+    'input-border': 'rgba(255,255,255,0.25)',
     'input-focus-border': '#6366f1'
   },
   layout: {
@@ -170,6 +170,36 @@ export const glassTheme: Theme = {
     // Transitions
     'transition-fast': '0.15s ease',
     'transition-normal': '0.3s ease',
-    'transition-slow': '0.5s ease'
+    'transition-slow': '0.5s ease',
+    
+    // Auth Modal Variables
+    'auth-modal-bg': 'rgba(102, 126, 234, 0.25)',
+    'auth-modal-shadow': '0 20px 40px rgba(0, 0, 0, 0.15)',
+    'auth-modal-border': '1px solid rgba(102, 126, 234, 0.3)',
+    'auth-header-bg': 'rgba(102, 126, 234, 0.2)',
+    'auth-header-border': '1px solid rgba(102, 126, 234, 0.25)',
+    'auth-tab-inactive': '#475569',
+    'auth-tab-active': '#1e293b',
+    'auth-tab-active-bg': 'rgba(102, 126, 234, 0.3)',
+    'auth-tab-hover': '#64748b',
+    'auth-tab-hover-bg': 'rgba(102, 126, 234, 0.25)',
+    'auth-content-bg': 'rgba(102, 126, 234, 0.2)',
+    'auth-input-bg': 'rgba(102, 126, 234, 0.25)',
+    'auth-input-border': '1px solid rgba(102, 126, 234, 0.3)',
+    'auth-input-focus': '#6366f1',
+    'auth-btn-primary': 'linear-gradient(135deg, rgba(102, 126, 234, 0.35) 0%, rgba(102, 126, 234, 0.45) 100%)',
+    'auth-btn-secondary': 'rgba(102, 126, 234, 0.2)',
+    'auth-btn-secondary-text': '#475569',
+    'auth-btn-secondary-border': '1px solid rgba(102, 126, 234, 0.35)',
+    
+    // Additional CSS variables for compatibility
+    'color-text-tertiary': '#64748b',
+    'color-text-primary': '#1e293b',
+    'color-text-secondary': '#475569',
+    'color-text-inverse': '#ffffff',
+    'color-primary': '#6366f1',
+    'color-surface-primary': 'rgba(102, 126, 234, 0.25)',
+    'color-surface-secondary': 'rgba(102, 126, 234, 0.2)',
+    'color-border-primary': 'rgba(102, 126, 234, 0.3)'
   }
 }; 

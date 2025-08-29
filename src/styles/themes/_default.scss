@@ -3,7 +3,7 @@
   /* brand */
   --color-primary: hsl(258 90% 60%);
   --color-accent: hsl(210 90% 55%);
-
+  
   /* neutrals & text */
   --text-primary: hsl(220 20% 15%);
   --text-secondary: hsl(220 10% 40%);
@@ -12,6 +12,19 @@
   /* surfaces */
   --surface: #ffffff;
   --surface-2: hsl(220 14% 97%);
+  
+  /* Default theme for auth modal */
+  .auth-modal {
+    .auth-header {
+      .auth-tabs {
+        .auth-tab {
+          &.active {
+            border-radius: 8px 0 0 0;
+          }
+        }
+      }
+    }
+  }
   
   /* Favorites page specific */
   --favorites-bg: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);

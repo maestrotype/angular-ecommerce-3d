@@ -172,6 +172,36 @@ export interface ThemeComponents {
   'transition-fast': string;
   'transition-normal': string;
   'transition-slow': string;
+  
+  // Auth Modal Variables
+  'auth-modal-bg': string;
+  'auth-modal-shadow': string;
+  'auth-modal-border': string;
+  'auth-header-bg': string;
+  'auth-header-border': string;
+  'auth-tab-inactive': string;
+  'auth-tab-active': string;
+  'auth-tab-active-bg': string;
+  'auth-tab-hover': string;
+  'auth-tab-hover-bg': string;
+  'auth-content-bg': string;
+  'auth-input-bg': string;
+  'auth-input-border': string;
+  'auth-input-focus': string;
+  'auth-btn-primary': string;
+  'auth-btn-secondary': string;
+  'auth-btn-secondary-text': string;
+  'auth-btn-secondary-border': string;
+  
+  // Additional CSS variables for compatibility
+  'color-text-tertiary': string;
+  'color-text-primary': string;
+  'color-text-secondary': string;
+  'color-text-inverse': string;
+  'color-primary': string;
+  'color-surface-primary': string;
+  'color-surface-secondary': string;
+  'color-border-primary': string;
 }
 
 export interface Theme {

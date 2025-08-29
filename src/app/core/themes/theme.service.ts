@@ -11,22 +11,20 @@ export class ThemeService {
   public currentTheme$ = this.currentThemeSubject.asObservable();
 
   constructor() {
-    console.log('ThemeService initialized');
     this.initializeTheme();
   }
 
   private initializeTheme(): void {
     const savedThemeId = localStorage.getItem('selected-theme');
-    console.log('Initializing theme, saved theme ID:', savedThemeId);
     
     if (savedThemeId) {
       const theme = this.getThemeById(savedThemeId);
       if (theme) {
-        console.log('Applying saved theme:', theme.name);
         this.setTheme(theme.id);
+      } else {
+        this.setTheme(DEFAULT_THEME_ID);
       }
     } else {
-      console.log('No saved theme, applying default:', DEFAULT_THEME_ID);
       this.setTheme(DEFAULT_THEME_ID);
     }
   }
@@ -40,46 +38,40 @@ export class ThemeService {
   }
 
   setTheme(themeId: string): void {
-    console.log('Setting theme:', themeId);
     const theme = this.getThemeById(themeId);
+    
     if (theme) {
-      console.log('Applying theme:', theme.name);
       this.currentThemeSubject.next(theme);
       this.applyTheme(theme);
       localStorage.setItem('selected-theme', themeId);
+    } else {
+      console.error('Theme not found for ID:', themeId);
     }
   }
 
   private applyTheme(theme: Theme): void {
-    console.log('Applying theme to document:', theme.name);
     const root = document.documentElement;
 
     // Set data-theme attribute for CSS selectors
     root.setAttribute('data-theme', theme.id);
-    console.log(`Set data-theme = ${theme.id}`);
 
     // Apply colors
     Object.entries(theme.colors).forEach(([key, value]) => {
       const cssVar = `--color-${key}`;
       root.style.setProperty(cssVar, value.toString());
-      console.log(`Set ${cssVar} = ${value}`);
     });
 
     // Apply layout
     Object.entries(theme.layout).forEach(([key, value]) => {
       const cssVar = `--${key}`;
       root.style.setProperty(cssVar, value.toString());
-      console.log(`Set ${cssVar} = ${value}`);
     });
 
     // Apply components
     Object.entries(theme.components).forEach(([key, value]) => {
       const cssVar = `--${key}`;
       root.style.setProperty(cssVar, value.toString());
-      console.log(`Set ${cssVar} = ${value}`);
     });
-    
-    console.log('Theme application completed');
   }
 
   getCurrentTheme(): Theme {

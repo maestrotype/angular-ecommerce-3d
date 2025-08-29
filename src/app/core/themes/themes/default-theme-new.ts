@@ -170,6 +170,36 @@ export const defaultThemeNew: Theme = {
     // Transitions
     'transition-fast': '0.15s ease',
     'transition-normal': '0.3s ease',
-    'transition-slow': '0.5s ease'
+    'transition-slow': '0.5s ease',
+    
+    // Auth Modal Variables
+    'auth-modal-bg': '#ffffff',
+    'auth-modal-shadow': '0 20px 40px rgba(0, 0, 0, 0.1)',
+    'auth-modal-border': '1px solid rgba(0, 0, 0, 0.08)',
+    'auth-header-bg': '#f8fafc',
+    'auth-header-border': '1px solid rgba(0, 0, 0, 0.06)',
+    'auth-tab-inactive': '#64748b',
+    'auth-tab-active': '#1e293b',
+    'auth-tab-active-bg': '#e2e8f0',
+    'auth-tab-hover': '#475569',
+    'auth-tab-hover-bg': '#f1f5f9',
+    'auth-content-bg': '#ffffff',
+    'auth-input-bg': '#f8fafc',
+    'auth-input-border': '1px solid #e2e8f0',
+    'auth-input-focus': '#6366f1',
+    'auth-btn-primary': 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+    'auth-btn-secondary': '#f1f5f9',
+    'auth-btn-secondary-text': '#475569',
+    'auth-btn-secondary-border': '1px solid #e2e8f0',
+    
+    // Additional CSS variables for compatibility
+    'color-text-tertiary': '#999999',
+    'color-text-primary': '#333333',
+    'color-text-secondary': '#666666',
+    'color-text-inverse': '#ffffff',
+    'color-primary': '#667eea',
+    'color-surface-primary': '#ffffff',
+    'color-surface-secondary': '#f8f9fa',
+    'color-border-primary': '#e0e0e0'
   }
 }; 

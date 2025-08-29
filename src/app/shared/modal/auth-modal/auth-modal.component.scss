@@ -1,14 +1,15 @@
 .auth-modal {
     width: 100%;
     max-width: 440px;
-    background: var(--color-modal-bg);
+    background: var(--auth-modal-bg);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--auth-modal-shadow);
+    border: var(--auth-modal-border);
     overflow: hidden;
 
     .auth-header {
-      background: var(--color-modal-header-bg);
-      border-bottom: 1px solid var(--color-modal-border);
+      background: var(--auth-header-bg);
+      border-bottom: var(--auth-header-border);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -24,19 +25,19 @@
           padding: var(--spacing-md) var(--spacing-lg);
           cursor: pointer;
           font-weight: var(--font-weight-medium);
-          color: var(--color-text-secondary);
+          color: var(--auth-tab-inactive);
           transition: all var(--transition-normal);
           position: relative;
           border-radius: var(--radius-md) var(--radius-md) 0 0;
 
           &:hover {
-            background: var(--color-surface-hover);
-            color: var(--color-auth-button-primary);
+            background: var(--auth-tab-hover-bg);
+            color: var(--auth-tab-hover);
           }
 
           &.active {
-            color: var(--color-auth-button-primary);
-            background: var(--color-surface-primary);
+            color: var(--auth-tab-active);
+            background: var(--auth-tab-active-bg);
 
             &::after {
               content: '';
@@ -45,7 +46,7 @@
               left: 0;
               right: 0;
               height: 2px;
-              background: var(--color-auth-button-primary);
+              background: var(--color-primary);
             }
           }
         }
@@ -53,6 +54,7 @@
     }
 
     .auth-content {
+      background: var(--auth-content-bg);
       padding: var(--spacing-xl);
 
       /* Profile summary (authorized state in Login tab) */
@@ -95,7 +97,7 @@
 
         .divider {
           height: 1px;
-          background: var(--color-modal-border);
+          background: var(--color-border-primary);
           margin: var(--spacing-sm) 0;
         }
 
@@ -115,18 +117,18 @@
           }
 
           .btn-primary {
-            background: var(--color-auth-button-primary);
+            background: var(--auth-btn-primary);
             color: var(--color-text-inverse);
-            &:hover { background: var(--color-auth-button-hover); box-shadow: 0 8px 20px var(--color-auth-button-shadow); }
-            &:focus { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-auth-button-primary) 25%, transparent); }
+            &:hover { background: var(--color-primary); box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3); }
+            &:focus { outline: none; box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 25%, transparent); }
           }
 
           .btn-ghost {
-            background: transparent;
-            border-color: var(--color-modal-border);
-            color: var(--color-text-primary);
-            &:hover { background: var(--color-surface-hover); }
-            &.danger { color: #ef4444; border-color: color-mix(in srgb, #ef4444 35%, var(--color-modal-border)); }
+            background: var(--auth-btn-secondary);
+            border: var(--auth-btn-secondary-border);
+            color: var(--auth-btn-secondary-text);
+            &:hover { background: var(--color-surface-secondary); }
+            &.danger { color: #ef4444; border: 1px solid color-mix(in srgb, #ef4444 35%, var(--color-border-primary)); }
             &.danger:hover { background: color-mix(in srgb, #ef4444 10%, transparent); }
           }
         }
@@ -148,8 +150,8 @@
           input {
             width: 100%;
             padding: var(--spacing-sm) var(--spacing-md);
-            background: var(--color-input-bg);
-            border: 1px solid var(--color-input-border);
+            background: var(--auth-input-bg);
+            border: var(--auth-input-border);
             border-radius: var(--radius-md);
             font-size: var(--font-size-md);
             color: var(--color-text-primary);
@@ -157,8 +159,8 @@
 
             &:focus {
               outline: none;
-              border-color: var(--color-input-focus-border);
-              box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-input-focus-border) 25%, transparent);
+              border-color: var(--auth-input-focus);
+              box-shadow: 0 0 0 3px color-mix(in srgb, var(--auth-input-focus) 25%, transparent);
             }
 
             &::placeholder {
@@ -169,7 +171,7 @@
 
         .auth-submit-btn {
           width: 100%;
-          background: var(--color-auth-button-primary);
+          background: var(--auth-btn-primary);
           color: var(--color-text-inverse);
           border: none;
           padding: var(--spacing-sm) var(--spacing-md);
@@ -181,9 +183,9 @@
           margin-bottom: var(--spacing-md);
 
           &:hover {
-            background: var(--color-auth-button-hover);
+            background: var(--color-primary);
             transform: translateY(-1px);
-            box-shadow: 0 8px 20px var(--color-auth-button-shadow);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
           }
         }
 
@@ -191,7 +193,7 @@
           text-align: center;
 
           .forgot-password-link {
-            color: var(--color-auth-button-primary);
+            color: var(--color-primary);
             text-decoration: none;
             font-size: var(--font-size-sm);
 
@@ -205,7 +207,7 @@
   }
 
   .error-message {
-    color: var(--color-auth-button-primary);
+    color: var(--color-primary);
     margin-bottom: var(--spacing-md);
     text-align: center;
     font-size: var(--font-size-sm);
@@ -217,63 +219,68 @@
     .auth-content .profile-summary .avatar { background: rgba(255,255,255,0.08); }
   }
 
+  /* Glass theme refinements */
   [data-theme='glass'] .auth-modal {
-    /* Stronger glass surface with clear contrast */
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    color: #1f2937;
-
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    
     .auth-header {
-      background: rgba(255, 255, 255, 0.85);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-      .auth-tab {
-        color: var(--color-text-inverse);
-        &:hover { background: rgba(0,0,0,0.04); color: var(--color-primary); }
-        &.active { color: var(--color-primary); }
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+    }
+    
+    .auth-content {
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    
+    /* Fix text colors for glass theme - use dark text for readability */
+    .auth-form {
+      .form-group {
+        label {
+          color: #1e293b; /* Dark text for labels */
+        }
+        
+        input {
+          color: #1e293b; /* Dark text for input values */
+          
+          &::placeholder {
+            color: #64748b; /* Dark gray for placeholders */
+          }
+        }
       }
     }
-
-    .auth-content {
-      color: var(--color-text-inverse);
-
-      .profile-summary {
-        .profile-header {
-          .avatar {
-            background: rgba(255, 255, 255, 0.96);
-            border: 1px solid rgba(0,0,0,0.06);
-            color: #111827;
+    
+    /* Fix profile text colors - use dark colors like in Contacts section */
+    .profile-summary {
+      .profile-header {
+        .info {
+          .name {
+            color: #1e293b; /* Dark text for name - like product titles */
           }
-          .info {
-            .name { color: var(--color-text-inverse); }
-            .email { color: color-mix(in srgb, var(--color-text-inverse) 80%, transparent); }
+          .email {
+            color: #475569; /* Dark gray for email - like product meta */
           }
         }
       }
-
-      .auth-form {
-        .form-group {
-          label { color: var(--color-text-inverse); }
-          input {
-            background: rgba(255, 255, 255, 0.96);
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            color: #111827; /* dark ink on light input */
-            &::placeholder { color: #6b7280; }
-            &:focus {
-              border-color: var(--color-primary);
-              box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 20%, transparent);
-            }
-          }
-        }
-
-        .auth-submit-btn {
-          background: var(--color-primary);
-          &:hover { background: var(--color-primary-hover); }
-          color: #ffffff;
-          box-shadow: 0 8px 20px color-mix(in srgb, var(--color-primary) 25%, transparent);
-        }
+    }
+    
+    /* Fix button text colors */
+    .profile-actions {
+      .btn-ghost {
+        color: #475569; /* Dark text for secondary buttons */
       }
+    }
+    
+    /* Fix avatar text color */
+    .profile-summary .profile-header .avatar {
+      color: #1e293b; /* Dark text for avatar initials */
+    }
+    
+    /* Add backdrop-filter for inputs */
+    input {
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
   }
 

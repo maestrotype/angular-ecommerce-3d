@@ -44,6 +44,10 @@
   --favorites-add-to-cart-bg: #6b7280;
   --favorites-add-to-cart-text: #f3f4f6;
   --favorites-add-to-cart-hover-bg: #9ca3af;
+  
+
+  
+
 
   /* Skeleton loading variables for dark theme */
   --skeleton-bg: #374151;
@@ -154,121 +158,7 @@
     color: #94a3b8;
   }
 
-  /* Auth modal dark styling */
-  .auth-modal {
-    background: #374151;
-    border: none;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 
-    .auth-header {
-      background: #374151;
-      border-bottom: 1px solid #4b5563;
-      padding: 0;
-      border-radius: 8px 8px 0 0;
-      overflow: hidden;
-      display: block;
-
-      .auth-tabs {
-        display: flex;
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        padding: 0;
-
-        .auth-tab {
-          flex: 1;
-          background: #374151;
-          border: none;
-          padding: var(--spacing-md);
-          cursor: pointer;
-          font-weight: var(--font-weight-medium);
-          color: #9ca3af;
-          transition: all var(--transition-normal);
-          position: relative;
-          border-radius: 0;
-          margin: 0;
-
-          &:hover {
-            background: #4b5563;
-            color: #f3f4f6;
-          }
-
-          &.active {
-            color: #f3f4f6;
-            background: #6b7280;
-            border-radius: 8px 0 0 0;
-            margin: 0;
-
-            &::after {
-              display: none;
-            }
-          }
-
-          &:first-child.active {
-            border-radius: 8px 0 0 0;
-            margin-right: 0;
-          }
-
-          &:last-child.active {
-            border-radius: 0 8px 0 0;
-            margin-left: 0;
-          }
-        }
-      }
-    }
-
-    .auth-content {
-      background: #374151;
-      padding: var(--spacing-xl);
-    }
-
-    .auth-submit-btn {
-      background: var(--color-auth-button-primary);
-      color: var(--color-text-inverse);
-      border: none;
-      padding: var(--spacing-sm) var(--spacing-md);
-      border-radius: var(--radius-md);
-      font-size: var(--font-size-md);
-      font-weight: var(--font-weight-semibold);
-      cursor: pointer;
-      transition: all var(--transition-normal);
-      margin-bottom: var(--spacing-md);
-
-      &:hover {
-        background: var(--color-auth-button-hover);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px var(--color-auth-button-shadow);
-      }
-    }
-
-    .auth-content .auth-form .form-group input {
-      background: #4b5563;
-      border: 1px solid #6b7280;
-      color: #f3f4f6;
-
-      &::placeholder {
-        color: #9ca3af;
-      }
-
-      &:focus {
-        border-color: var(--color-auth-button-primary);
-        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-      }
-    }
-
-    .auth-content .auth-form .form-group label {
-      color: #f8fafc;
-      font-weight: 500;
-    }
-
-    .auth-content .auth-form .auth-links .forgot-password-link {
-      color: var(--color-auth-button-primary);
-    }
-
-    .auth-content .auth-form .error-message {
-      color: #e74c3c;
-    }
-  }
 
   /* Special offer dark styling - using Hero Glass approach */
   .special-offer {
@@ -311,6 +201,19 @@
     /* Remove the pink radial gradient overlay */
     &::before {
       display: none;
+    }
+  }
+  
+  /* Dark theme for auth modal */
+  .auth-modal {
+    .auth-header {
+      .auth-tabs {
+        .auth-tab {
+          &.active {
+            border-radius: 8px 0 0 0;
+          }
+        }
+      }
     }
   }
 } 

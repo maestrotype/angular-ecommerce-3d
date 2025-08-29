@@ -125,7 +125,8 @@ export class HeaderComponent implements OnInit {
   
   private loadThemes(): void {
     this.themes = this.themeService.getAllThemes();
-    this.currentTheme = this.themeService.getCurrentTheme().id;
+    const currentTheme = this.themeService.getCurrentTheme();
+    this.currentTheme = currentTheme.id;
   }
   
   toggleThemeMenu(): void {

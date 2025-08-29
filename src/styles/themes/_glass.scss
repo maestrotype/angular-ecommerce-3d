@@ -32,6 +32,10 @@
   --favorites-card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   --favorites-card-hover-bg: rgba(255, 255, 255, 0.15);
   
+
+  
+
+  
   /* Product Detail Glass Theme Variables */
   --product-detail-bg: rgba(255, 255, 255, 0.1);
   --product-detail-card-bg: rgba(255, 255, 255, 0.15);
@@ -138,90 +142,7 @@
     }
   }
 
-  /* Auth modal glass styling */
-  .auth-modal {
-    background: linear-gradient(135deg, 
-      rgba(248, 250, 252, 0.85) 0%, 
-      rgba(226, 232, 240, 0.75) 30%,
-      rgba(203, 213, 225, 0.85) 70%,
-      rgba(186, 200, 216, 0.9) 100%);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 
-    .auth-header {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .auth-content {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(15px);
-    }
-
-    .auth-submit-btn {
-      background: rgba(255, 255, 255, 0.25);
-      border: 1.5px solid rgba(255, 255, 255, 0.5);
-      color: #334155;
-      backdrop-filter: blur(12px) saturate(180%);
-      box-shadow: 0 8px 32px rgba(51, 65, 85, 0.10), 0 1.5px 8px rgba(0, 0, 0, 0.08);
-
-      &:hover {
-        background: rgba(99, 102, 241, 0.18);
-        color: #6366f1;
-        box-shadow: 0 12px 40px rgba(99, 102, 241, 0.18);
-        border-color: #6366f1;
-      }
-    }
-
-    .auth-content .auth-form .form-group input {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: #1e293b;
-
-      &::placeholder {
-        color: rgba(30, 41, 59, 0.6);
-      }
-
-      &:focus {
-        border-color: #6366f1;
-        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-      }
-    }
-
-    .auth-content .auth-form .form-group label {
-      color: #1e293b;
-      font-weight: 500;
-    }
-
-    .auth-header .auth-tabs .auth-tab {
-      color: #64748b;
-
-      &.active {
-        color: #6366f1;
-        background: rgba(255, 255, 255, 0.2);
-
-        &::after {
-          background: #6366f1;
-        }
-      }
-
-      &:hover {
-        background: rgba(99, 102, 241, 0.1);
-        color: #6366f1;
-      }
-    }
-
-    .auth-content .auth-form .auth-links .forgot-password-link {
-      color: #6366f1;
-    }
-
-    .auth-content .auth-form .error-message {
-      color: #e74c3c;
-    }
-  }
 
   /* Special offer glass styling - using Hero Glass approach */
   .special-offer {
@@ -265,5 +186,26 @@
     &::before {
       display: none;
     }
+  }
+  
+  /* Glass effect for auth modal - removed duplicate styles */
+  /* Auth modal styles are now handled by ThemeService CSS variables */
+  
+  /* Ensure auth modal has proper background for glass theme */
+  .modal-backdrop {
+    background: rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  /* Special styling for auth modal in glass theme */
+  .modal-container .auth-modal {
+    /* Ensure the modal is properly transparent */
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    /* Add stronger backdrop filter for better glass effect */
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
   }
 } 
