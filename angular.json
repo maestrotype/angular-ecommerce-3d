@@ -22,7 +22,10 @@
               "src/styles.scss",
               "src/styles/main.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "optimization": {
+              "fonts": { "inline": false }
+            }
           },
           "configurations": {
             "production": {
