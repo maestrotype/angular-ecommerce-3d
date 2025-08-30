@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { Product } from 'src/shared/models/product.model';
 import { ProductService } from '../../core/services/product.service';
 import { Section } from 'src/shared/models/section.model';
+import { CartService } from '../../core/services/cart.service';
+import { NotificationService } from '../../core/services/notification.service';
 
 @Component({
     selector: 'app-best-sellers',
@@ -15,7 +17,9 @@ export class BestSellersComponent implements OnInit {
 
     constructor(
         private router: Router,
-        private productService: ProductService
+        private productService: ProductService,
+        private cartService: CartService,
+        private notificationService: NotificationService
     ) { }
 
     ngOnInit(): void {
@@ -37,5 +41,19 @@ export class BestSellersComponent implements OnInit {
         this.router.navigate(['/product', productId]).then(() => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
           });
+    }
+
+    addToCart(product: Product, event: Event): void {
+        event.stopPropagation();
+        const cartItem = {
+            productId: product.id,
+            name: product.name,
+            price: Number(product.price),
+            imageUrl: product.imageUrl,
+            discount: product.discount
+        };
+        this.cartService.addToCart(cartItem);
+        this.notificationService.showSuccess(`Added ${product.name} to cart!`);
+        console.log('Added to cart:', product.name);
     }
 }

@@ -24,10 +24,20 @@
 
                 <div class="product-info">
                     <h3 class="product-name">{{ product.name }}</h3>
-                    <div class="product-price">
-                        <span class="current-price">${{ product.price }}</span>
-                        <span *ngIf="product.discount" class="original-price">${{ (product.price / (1 - product.discount
-                            / 100)) | number:'1.2-2' }}</span>
+                    <div class="product-bottom">
+                        <div class="product-price">
+                            <span class="current-price">${{ product.price }}</span>
+                            <span *ngIf="product.discount" class="original-price">${{ (product.price / (1 - product.discount
+                                / 100)) | number:'1.2-2' }}</span>
+                        </div>
+                        <button class="cart-icon" (click)="addToCart(product, $event)" title="Add to Cart">
+                            <!-- Default theme icon -->
+                            <span class="material-icons default-icon">shopping_cart</span>
+                            <!-- Dark theme icon -->
+                            <span class="material-icons dark-icon">add_shopping_cart</span>
+                            <!-- Glass theme icon -->
+                            <span class="material-icons glass-icon">local_mall</span>
+                        </button>
                     </div>
                 </div>
             </div>
