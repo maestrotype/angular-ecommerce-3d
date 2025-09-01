@@ -46,6 +46,21 @@ export class ProductCardComponent {
     return this.product.price;
   }
 
+  getStarsArray(): Array<{ filled: boolean }> {
+    const rating = this.product.rating || 0;
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      stars.push({ filled: i <= rating });
+    }
+    return stars;
+  }
+
+  onQuickView(event: Event): void {
+    event.stopPropagation();
+    // TODO: Implement quick view functionality
+    console.log('Quick view for product:', this.product.id);
+  }
+
   get cardClasses(): string {
     const classes = ['product-card'];
     

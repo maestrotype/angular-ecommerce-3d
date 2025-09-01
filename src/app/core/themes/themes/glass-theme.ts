@@ -84,7 +84,7 @@ export const glassTheme: Theme = {
     'special-offer-button-hover': 'rgba(99,102,241,0.18)',
     'special-offer-button-shadow': 'rgba(51,65,85,0.10)',
     
-    // Modal Colors - убрал дублирующиеся, они теперь в components
+    // Modal Colors - removed duplicates, they are now in components
     'modal-bg': 'rgba(255,255,255,0.15)',
     'modal-header-bg': 'rgba(255,255,255,0.15)',
     'modal-border': 'rgba(255,255,255,0.2)',

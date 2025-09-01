@@ -50,6 +50,8 @@ export class ShopComponent implements OnInit, OnDestroy {
   ];
   
   private destroy$ = new Subject<void>();
+  // Math object for template usage
+  Math = Math;
 
   constructor(
     private router: Router,
@@ -262,7 +264,15 @@ export class ShopComponent implements OnInit, OnDestroy {
     });
   }
 
-  addToCart(product: Product) {
+  // TrackBy function for performance
+  trackByProductId(index: number, product: Product): number {
+    return product.id;
+  }
+
+  addToCart(product: Product, event?: Event) {
+    if (event) {
+      event.stopPropagation();
+    }
     const cartItem: Omit<CartItem, 'quantity'> = {
       productId: product.id,
       name: product.name,
@@ -275,6 +285,39 @@ export class ShopComponent implements OnInit, OnDestroy {
   
     this.cartService.addToCart(cartItem);
     this.notificationService.showSuccess(`Added ${product.name} to cart!`);
+  }
+
+  // Quick view placeholder
+  quickView(product: Product): void {
+    console.log('Quick view for product:', product);
+  }
+
+  // Rating functionality
+  rateProduct(product: Product, rating: number): void {
+    // Prevent parent click navigation when rating
+    (window.event as Event | undefined)?.stopPropagation?.();
+
+    if (!product.userRating) {
+      product.userRating = rating;
+      product.ratingCount = (product.ratingCount || 0) + 1;
+    } else {
+      product.userRating = rating;
+    }
+
+    this.updateProductRating(product);
+    this.notificationService.showSuccess(`Rated ${product.name} with ${rating} stars!`);
+  }
+
+  private updateProductRating(product: Product): void {
+    if (product.userRating) {
+      const currentRating = product.rating || 0;
+      const currentCount = product.ratingCount || 0;
+      if (currentCount > 0) {
+        product.rating = ((currentRating * currentCount) + product.userRating) / (currentCount + 1);
+      } else {
+        product.rating = product.userRating;
+      }
+    }
   }
 
   getDiscountedPrice(product: Product): number {

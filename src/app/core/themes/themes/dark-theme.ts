@@ -85,11 +85,11 @@ export const darkTheme: Theme = {
     'special-offer-button-shadow': 'rgba(99, 102, 241, 0.3)',
     
     // Modal Colors
-    'modal-bg': '#1e293b',
-    'modal-header-bg': '#334155',
-    'modal-border': '#475569',
-    'input-bg': '#334155',
-    'input-border': '#475569',
+    'modal-bg': '#1f2937',
+    'modal-header-bg': '#111827',
+    'modal-border': '#4b5563',
+    'input-bg': '#374151',
+    'input-border': '#6b7280',
     'input-focus-border': '#6366f1'
   },
   layout: {

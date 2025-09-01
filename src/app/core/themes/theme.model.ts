@@ -72,19 +72,19 @@ export interface ThemeColors {
   
   // Special Button Colors
   'auth-button-primary': string;
-  'auth-button-hover': string;
-  'auth-button-shadow': string;
-  'special-offer-button': string;
-  'special-offer-button-hover': string;
-  'special-offer-button-shadow': string;
+  'auth-button-hover'?: string;
+  'auth-button-shadow'?: string;
+  'special-offer-button'?: string;
+  'special-offer-button-hover'?: string;
+  'special-offer-button-shadow'?: string;
   
   // Modal Colors
-  'modal-bg': string;
-  'modal-header-bg': string;
-  'modal-border': string;
-  'input-bg': string;
-  'input-border': string;
-  'input-focus-border': string;
+  'modal-bg'?: string;
+  'modal-header-bg'?: string;
+  'modal-border'?: string;
+  'input-bg'?: string;
+  'input-border'?: string;
+  'input-focus-border'?: string;
 }
 
 export interface ThemeLayout {
