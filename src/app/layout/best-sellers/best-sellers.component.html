@@ -18,8 +18,8 @@
                                     (click)="quickView(product)"
                                     title="Quick View">
                                 <span class="material-icons">visibility</span>
-                            </button>
-
+                    </button>
+                    
                             <!-- Favorite Button -->
                             <button class="action-btn favorite-btn"
                                     (click)="onFavoriteToggled($event)"
@@ -27,7 +27,7 @@
                                     [class.is-favorite]="product.isFavorite">
                                 <span class="material-icons">favorite_border</span>
                                 <span class="material-icons filled">favorite</span>
-                            </button>
+                        </button>
                         </div>
                     </div>
 
@@ -73,7 +73,7 @@
                     <div class="product-footer">
                         <div class="product-price">
                             <div class="price-main">
-                                <span class="current-price">${{ product.price }}</span>
+                            <span class="current-price">${{ product.price }}</span>
                                 <span class="original-price" *ngIf="product.originalPrice">${{ product.originalPrice }}</span>
                             </div>
                         </div>
