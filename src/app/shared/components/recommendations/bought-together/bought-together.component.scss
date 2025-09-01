@@ -1,7 +1,7 @@
 .bought-together {
   margin: 2rem 0;
   padding: 2rem 0;
-  background: var(--color-background-secondary, #f8f9fa);
+  background: var(--color-surface-primary, #f8f9fa);
   border-radius: 12px;
 
   .recommendations-header {
@@ -38,7 +38,7 @@
   }
 
   .product-card {
-    background: white;
+    background: var(--color-surface-primary, #ffffff);
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
@@ -68,7 +68,7 @@
       position: relative;
       aspect-ratio: 1;
       overflow: hidden;
-      background-color: #F7F7F7;
+      background-color: var(--color-surface-primary, #F7F7F7);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -122,7 +122,7 @@
           }
 
           &:hover {
-            background: #fff;
+            background: var(--color-surface-primary, #ffffff);
             transform: scale(1.1);
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
           }
@@ -373,7 +373,7 @@
     padding: 0 1rem;
 
     .skeleton-card {
-      background: white;
+      background: var(--color-surface-primary, #ffffff);
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       overflow: hidden;
@@ -424,7 +424,7 @@
     justify-content: center;
     align-items: center;
     padding: 2rem;
-    background: white;
+    background: var(--color-surface-primary, #ffffff);
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     margin: 1rem;
@@ -482,7 +482,7 @@
     justify-content: center;
     align-items: center;
     padding: 2rem;
-    background: white;
+    background: var(--color-surface-primary, #ffffff);
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     margin: 1rem;

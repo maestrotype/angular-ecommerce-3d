@@ -1,6 +1,6 @@
 .best-sellers {
     padding: 80px 0;
-    background: #fff;
+    background: var(--color-surface-primary, #ffffff);
     font-family: 'Inter', sans-serif;
 
     .container {
@@ -37,7 +37,7 @@
     }
 
     .product-card {
-        background: #fff;
+        background: var(--color-surface-primary, #ffffff);
         border-radius: 12px;
         overflow: hidden;
         transition: all 0.3s ease;
@@ -109,7 +109,7 @@
                 }
 
                 &:hover {
-                    background: #fff;
+                    background: var(--color-surface-primary, #ffffff);
                     transform: translateY(0) scale(1.1);
                     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
                 }
@@ -156,7 +156,7 @@
                     }
 
                     &:hover {
-                        background: #fff;
+                        background: var(--color-surface-primary, #ffffff);
                         transform: scale(1.1);
                         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
                     }

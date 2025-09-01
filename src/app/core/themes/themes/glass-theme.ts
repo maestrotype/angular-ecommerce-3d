@@ -105,8 +105,8 @@ export const glassTheme: Theme = {
   },
   components: {
     // Typography
-    'font-family-primary': "'Roboto', 'Helvetica Neue', sans-serif",
-    'font-family-secondary': "'Inter', 'Segoe UI', sans-serif",
+    'font-family-primary': "'Montserrat', 'Segoe UI', sans-serif",
+    'font-family-secondary': "'Raleway', 'Helvetica Neue', sans-serif",
     'font-family-mono': "'Monaco', 'Menlo', 'Ubuntu Mono', monospace",
     
     // Font Sizes

@@ -1,7 +1,7 @@
 .product-images {
   .main-image {
     position: relative;
-    background: rgba(255,255,255,0.7);
+    background: var(--color-surface-primary, rgba(255,255,255,0.7));
     border-radius: 20px;
     padding: 2rem;
     box-shadow: 0 8px 32px rgba(31,38,135,0.08);
@@ -14,6 +14,14 @@
     min-width: 220px;
     width: 100%;
     aspect-ratio: 1/1;
+}
+
+:host-context([data-theme="dark"]) .product-images {
+  .main-image {
+    background: #343A40;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+}
     @media (max-width: 600px) {
       max-width: 95vw;
       min-width: 160px;
@@ -66,7 +74,7 @@
       cursor: pointer;
       border: 2px solid transparent;
       transition: all 0.3s ease;
-      background: #fff;
+      background: var(--color-surface-primary, #1e293b);
       box-shadow: 0 1px 4px rgba(0,0,0,0.04);
       &.active, &:hover {
         border-color: #667eea;

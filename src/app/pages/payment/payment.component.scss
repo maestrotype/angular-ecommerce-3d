@@ -492,7 +492,7 @@
   padding: 12px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  background: white;
+  background: var(--color-surface-primary, #ffffff);
   min-height: 40px;
 }
 

@@ -4,7 +4,7 @@
    ========================================================================== */
 
 .product-card {
-  background: var(--surface, #fff);
+  background: var(--color-surface-primary, #ffffff);
   border: 1px solid var(--border, #e5e7eb);
   border-radius: var(--radius-m, 16px);
   box-shadow: var(--shadow-sm, 0 1px 3px rgba(0,0,0,.1));

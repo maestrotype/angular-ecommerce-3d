@@ -87,11 +87,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const searchIcon = (event.target as Element).closest('.search-icon');
     const searchInput = (event.target as Element).closest('.desktop-search, .mobile-search');
     const searchResults = (event.target as Element).closest('.search-results');
+    const themeSwitcher = (event.target as Element).closest('.theme-switcher');
     
     if (!searchIcon && !searchInput && !searchResults) {
       this.isSearchOpen = false;
       this.searchTerm = '';
       this.searchResults = [];
+    }
+    
+    // Close theme menus when clicking outside
+    if (!themeSwitcher) {
+      this.showThemeMenu = false;
+      this.showNewThemeMenu = false;
     }
   }
 

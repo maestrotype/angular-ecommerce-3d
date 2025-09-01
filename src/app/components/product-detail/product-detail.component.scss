@@ -1,19 +1,15 @@
 .product-detail {
   min-height: 100vh;
-  background: #f8f9fa;
+  background: var(--color-bg-primary, #f8f9fa);
   padding-top: 80px;
-  position: relative;
-  z-index: 1;
 }
 
 .product-header {
-  background: white;
+  background: var(--color-surface-primary, #1e293b);
   border-bottom: 1px solid #e9ecef;
   height: 60px;
   display: flex;
   align-items: center;
-  position: relative;
-  z-index: 10;
 
   .container {
     max-width: 1200px;
@@ -78,78 +74,51 @@
 
 .product-content {
   padding: 2rem 0;
-  position: relative;
-  z-index: 2;
 
   .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 1rem;
-    
-    @media (max-width: 768px) {
-      padding: 0 0.75rem;
-    }
   }
 }
 
 .product-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 440px;
-  gap: 48px;
-  align-items: start;
+  display: flex;
+  gap: 3rem;
+  align-items: flex-start;
   margin-bottom: 3rem;
+  justify-content: center;
   max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
   padding: 0 1rem;
-  position: relative;
-  z-index: 3;
-  
-  .product-detail-info {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    width: 100%;
-    position: relative;
-    z-index: 4;
-    
-    @media (max-width: 1024px) {
-      max-width: 500px;
-      margin: 0 auto;
-    }
-  }
-  
-
-
-  @media (max-width: 1279px) {
-    grid-template-columns: minmax(0, 1fr) 400px;
-    gap: 40px;
-  }
 
   @media (max-width: 1024px) {
-    grid-template-columns: 1fr;
-    gap: 24px;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
     max-width: 100%;
-    padding: 0 1rem;
-    justify-items: center;
+    padding: 0 0.5rem;
   }
 }
 
 .product-detail-main {
-  width: 100%;
-  
+  flex: 0 0 500px;
+  max-width: 500px;
+
   @media (max-width: 1024px) {
+    flex: none;
+    width: 100%;
     max-width: 500px;
-    margin: 0 auto;
   }
 }
 
 .main-view {
   width: 100%;
   height: 420px;
-  background: var(--product-main-view-bg);
-  border-radius: var(--product-main-view-radius);
-  box-shadow: var(--product-main-view-shadow);
+  background: var(--color-surface-primary, #1e293b);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -194,11 +163,11 @@
   height: 60px;
   object-fit: contain;
   border: 2px solid transparent;
-  border-radius: var(--product-thumb-radius);
+  border-radius: 8px;
   cursor: pointer;
-  background: white;
+  background: var(--color-surface-primary, #1e293b);
   transition: all 0.2s ease;
-  box-shadow: var(--product-thumb-shadow);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -230,7 +199,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f8f9fa;
+  background: var(--color-bg-primary, #f8f9fa);
 
   .container {
     max-width: 1200px;
@@ -241,7 +210,7 @@
 
   .loading-content {
     text-align: center;
-    color: #666;
+    color: var(--color-text-secondary, #666);
   }
 }
 
@@ -250,7 +219,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f8f9fa;
+  background: var(--color-bg-primary, #f8f9fa);
 
   .container {
     max-width: 1200px;
@@ -261,15 +230,15 @@
 
   .not-found-content {
     text-align: center;
-    color: #666;
+    color: var(--color-text-secondary, #666);
 
     h2 {
-      color: #333;
+      color: var(--color-text-primary, #333);
       margin-bottom: 1rem;
     }
 
     .back-btn {
-      background: #007bff;
+      background: var(--color-primary, #007bff);
       color: white;
       border: none;
       padding: 0.75rem 1.5rem;
@@ -280,33 +249,8 @@
       margin-top: 1rem;
 
       &:hover {
-        background: #0056b3;
+        background: var(--color-primary-dark, #0056b3);
       }
-    }
-  }
-}
-
-.recommendations-section {
-  margin-top: 3rem;
-  padding-top: 2rem;
-  border-top: 1px solid #e9ecef;
-  position: relative;
-  z-index: 5;
-
-  .recommendations-header {
-    text-align: center;
-    margin-bottom: 2rem;
-
-    h3 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--color-text-primary, #333);
-      margin-bottom: 0.5rem;
-    }
-
-    p {
-      color: var(--color-text-secondary, #666);
-      font-size: 0.9rem;
     }
   }
 }

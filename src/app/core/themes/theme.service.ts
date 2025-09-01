@@ -72,6 +72,7 @@ export class ThemeService {
       const cssVar = `--${key}`;
       root.style.setProperty(cssVar, value.toString());
     });
+
   }
 
   getCurrentTheme(): Theme {

@@ -30,7 +30,7 @@
       }
 
       &.active {
-        background: var(--product-detail-card-bg, white);
+        background: var(--product-detail-card-bg, var(--color-surface-primary, #1e293b));
         color: var(--product-title-color, #333);
         font-weight: 600;
 
@@ -54,7 +54,7 @@
 
   .tabs-content {
     padding: 1.25rem;
-    background: var(--product-tabs-bg);
+    background: var(--product-tabs-bg, var(--color-surface-primary, #1e293b));
     border-radius: 0 0 var(--product-tabs-radius) var(--product-tabs-radius);
 
     .tab-panel {
@@ -73,7 +73,7 @@
 
 .description-content {
   p {
-    color: #666;
+    color: var(--color-text-secondary, #666);
     line-height: 1.6;
     font-size: 1rem;
     margin-bottom: 1.5rem;
@@ -81,7 +81,7 @@
 
   .features {
     h3 {
-      color: #333;
+      color: var(--color-text-primary, #333);
       margin-bottom: 1rem;
       font-size: 1.1rem;
     }
@@ -91,9 +91,9 @@
       padding: 0;
 
       li {
-        color: #666;
+        color: var(--color-text-secondary, #666);
         padding: 0.5rem 0;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid var(--color-border-primary, #eee);
         position: relative;
         padding-left: 1.5rem;
 
@@ -115,7 +115,7 @@
 
 .specifications-content {
   h3 {
-    color: #333;
+    color: var(--color-text-primary, #333);
     margin-bottom: 1.5rem;
     font-size: 1.1rem;
   }
@@ -132,12 +132,12 @@
 
       dt {
         font-weight: 500;
-        color: #333;
+        color: var(--color-text-primary, #333);
         min-width: 120px;
       }
 
       dd {
-        color: #666;
+        color: var(--color-text-secondary, #666);
         margin: 0;
       }
     }
@@ -146,7 +146,7 @@
 
 .delivery-content {
   h3 {
-    color: #333;
+    color: var(--color-text-primary, #333);
     margin-bottom: 1.5rem;
     font-size: 1.1rem;
   }
@@ -158,17 +158,17 @@
     .delivery-option,
     .payment-methods {
       padding: 1rem;
-      background: #f8f9fa;
+      background: var(--color-surface-secondary, #f8f9fa);
       border-radius: 8px;
 
       h4 {
-        color: #333;
+        color: var(--color-text-primary, #333);
         margin-bottom: 0.5rem;
         font-size: 1rem;
       }
 
       p {
-        color: #666;
+        color: var(--color-text-secondary, #666);
         margin: 0;
       }
     }

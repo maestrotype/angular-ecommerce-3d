@@ -45,7 +45,7 @@
   
     .modal-content {
       position: relative;
-      background: white;
+      background: var(--color-surface-primary, #ffffff);
       border-radius: 16px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
       animation: modalSlideIn 0.3s ease-out;
