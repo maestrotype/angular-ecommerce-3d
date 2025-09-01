@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { CartService } from '../../core/services/cart.service';
@@ -15,7 +15,7 @@ import { Theme } from '../../core/themes/theme.model';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   @ViewChild('searchInput') searchInput!: ElementRef;
   @ViewChild('mobileSearchInput') mobileSearchInput!: ElementRef;
   
@@ -28,6 +28,7 @@ export class HeaderComponent implements OnInit {
   isMobile = false;
   private cartSubscription: Subscription = new Subscription();
   private favoritesSubscription: Subscription = new Subscription();
+  private themeSubscription: Subscription = new Subscription();
 
   // Header customization
   headerSettings: HeaderSettings | null = null;
@@ -73,6 +74,7 @@ export class HeaderComponent implements OnInit {
   ngOnDestroy(): void {
     this.cartSubscription.unsubscribe();
     this.favoritesSubscription.unsubscribe();
+    this.themeSubscription.unsubscribe();
     document.removeEventListener('click', this.onDocumentClick.bind(this));
     window.removeEventListener('resize', this.checkScreenSize.bind(this));
   }
@@ -125,8 +127,12 @@ export class HeaderComponent implements OnInit {
   
   private loadThemes(): void {
     this.themes = this.themeService.getAllThemes();
-    const currentTheme = this.themeService.getCurrentTheme();
-    this.currentTheme = currentTheme.id;
+    this.currentTheme = this.themeService.getCurrentTheme().id;
+    
+    // Subscribe to theme changes
+    this.themeSubscription = this.themeService.currentTheme$.subscribe(theme => {
+      this.currentTheme = theme.id;
+    });
   }
   
   toggleThemeMenu(): void {
@@ -143,7 +149,6 @@ export class HeaderComponent implements OnInit {
     this.currentTheme = themeId;
     this.themeService.setTheme(themeId);
     this.showThemeMenu = false;
-    this.showNewThemeMenu = false;
   }
 
   toggleMobileMenu() {
