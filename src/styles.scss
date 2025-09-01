@@ -190,9 +190,10 @@
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-@import './styles/_grid.scss';
-@import './styles/_buttons.scss';
-@import './styles/_cards.scss';
+// Styles moved to main.scss - DO NOT REMOVE THIS COMMENT
+// @import './styles/_grid.scss';
+// @import './styles/_buttons.scss';
+// @import './styles/_cards.scss';
 
 /* body { margin: 0; font-family: Arial, sans-serif; background: #fff;} */
 
@@ -269,7 +270,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   box-sizing: border-box;
 }
 
-/* Исправляем конкретный класс, который показан в DevTools */
+/* Fix specific class shown in DevTools */
 .mat-mdc-dialog-container .mdc-dialog_container {
   width: 600px;
 }

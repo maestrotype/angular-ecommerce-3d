@@ -5,6 +5,7 @@ import { takeUntil, catchError } from 'rxjs/operators';
 import { RecommendationsService, RecommendationProduct } from '../../../../core/services/recommendations.service';
 import { Product } from 'src/shared/models/product.model';
 import { NotificationService } from '../../../../core/services/notification.service';
+import { CartService } from '../../../../core/services/cart.service';
 
 @Component({
   selector: 'app-bought-together',
@@ -22,10 +23,14 @@ export class BoughtTogetherComponent implements OnInit, OnDestroy {
   error: boolean = false;
   private destroy$ = new Subject<void>();
 
+  // Math object for template usage
+  Math = Math;
+
   constructor(
     private recommendationsService: RecommendationsService,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private cartService: CartService
   ) {}
 
   ngOnInit(): void {
@@ -37,6 +42,74 @@ export class BoughtTogetherComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  // TrackBy function for performance
+  trackByProductId(index: number, product: RecommendationProduct): number {
+    return product.id;
+  }
+
+  quickView(product: RecommendationProduct): void {
+    console.log('Quick view for product:', product);
+    // Implement quick view functionality
+  }
+
+  onFavoriteToggled(event: any): void {
+    console.log('Favorite toggled:', event);
+    // Implement favorite functionality
+  }
+
+  addToCart(product: RecommendationProduct, event: Event): void {
+    event.stopPropagation();
+    const cartItem = {
+      productId: product.id,
+      name: product.name,
+      price: Number(product.price),
+      imageUrl: product.imageUrl,
+      discount: product.discount
+    };
+    this.cartService.addToCart(cartItem);
+    this.notificationService.showSuccess(`Added ${product.name} to cart!`);
+    console.log('Added to cart:', product.name);
+  }
+
+  // Rating functionality
+  rateProduct(product: RecommendationProduct, rating: number): void {
+    event?.stopPropagation();
+
+    // Update product rating locally
+    if (!product.userRating) {
+      product.userRating = rating;
+      product.ratingCount = (product.ratingCount || 0) + 1;
+    } else {
+      // If user already rated, update their rating
+      const oldRating = product.userRating;
+      product.userRating = rating;
+    }
+
+    // Recalculate average rating
+    this.updateProductRating(product);
+
+    // Show success message
+    this.notificationService.showSuccess(`Rated ${product.name} with ${rating} stars!`);
+
+    console.log(`Product ${product.name} rated with ${rating} stars`);
+  }
+
+  private updateProductRating(product: RecommendationProduct): void {
+    // This would typically call a service to update the rating on the backend
+    // For now, we'll just update the local rating
+    if (product.userRating) {
+      // Simple average calculation (in real app, this would come from backend)
+      const currentRating = product.rating || 0;
+      const currentCount = product.ratingCount || 0;
+
+      if (currentCount > 0) {
+        product.rating = ((currentRating * currentCount) + product.userRating) / (currentCount + 1);
+      } else {
+        product.rating = product.userRating;
+      }
+    }
   }
 
   private loadBoughtTogetherProducts(): void {

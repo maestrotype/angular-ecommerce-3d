@@ -2,53 +2,92 @@
   <div class="product-image">
     <img [src]="product.imageUrl" [alt]="product.name" />
     
-    <div class="product-overlay">
-      <app-favorite-button 
-        *ngIf="showFavorite"
-        [product]="product" 
-        size="small"
-        (favoriteToggled)="onFavoriteToggle($event)"
-      ></app-favorite-button>
-    </div>
+         <!-- Top overlay with favorite button and cart icon -->
+     <div class="product-overlay top">
+       <div class="overlay-actions">
+         <button class="cart-icon-btn" (click)="onAddToCart($event)" title="Add to Cart">
+           🛒
+         </button>
+         <app-favorite-button 
+           *ngIf="showFavorite"
+           [product]="product" 
+           size="small"
+           (favoriteToggled)="onFavoriteToggle($event)"
+         ></app-favorite-button>
+       </div>
+     </div>
     
+    <!-- Special offer badge -->
     <div *ngIf="product.isSpecial" class="special-badge">
-      SPECIAL OFFER
+      <span class="badge-text">-{{ product.discount }}%</span>
     </div>
 
+    <!-- Out of stock badge -->
     <div *ngIf="product?.stock !== undefined && product.stock <= 0" class="out-of-stock-badge">
       OUT OF STOCK
     </div>
   </div>
   
   <div class="product-info">
-    <h3 class="product-name">{{ product.name }}</h3>
-    
+    <!-- Product category -->
     <div class="product-meta">
-      <div class="product-rating" *ngIf="product.rating">
-        <span class="rating-star">⭐</span>
-        <span class="rating-value">{{ product.rating }}</span>
-      </div>
       <span class="product-category">{{ product.category }}</span>
     </div>
     
+    <!-- Product name -->
+    <h3 class="product-name">{{ product.name }}</h3>
+    
+    <!-- Product code -->
+    <div class="product-code" *ngIf="product.id">
+      Код товара: {{ product.id }}
+    </div>
+    
+    <!-- Rating and reviews -->
+    <div class="product-rating" *ngIf="product.rating">
+      <div class="stars">
+        <span *ngFor="let star of getStarsArray()" class="star" [class.filled]="star.filled">★</span>
+      </div>
+      <span class="rating-value">{{ product.rating }}</span>
+      <span class="reviews-count">({{ product.reviewsCount || 0 }})</span>
+    </div>
+    
+    <!-- Description for list layout -->
     <p *ngIf="layout === 'list' && product.description" class="product-description">
       {{ product.description }}
     </p>
     
+    <!-- Product footer with prices and actions -->
     <div class="product-footer">
+      <!-- Price section -->
       <div class="product-price">
-        <span class="current-price">${{ getDiscountedPrice() | number:'1.2-2' }}</span>
+        <div class="price-main">
+          <span class="current-price">${{ getDiscountedPrice() | number:'1.2-2' }}</span>
+          <span *ngIf="product.discount" class="discount-badge">-{{ product.discount }}%</span>
+        </div>
         <span *ngIf="product.discount" class="original-price">${{ product.price | number:'1.2-2' }}</span>
       </div>
       
-      <app-base-button 
-        *ngIf="showAddToCart && ((product?.stock ?? 0) > 0)"
-        type="glass" 
-        size="small"
-        (clicked)="onAddToCart($event)"
-      >
-        🛒 Add to Cart
-      </app-base-button>
+      <!-- Action buttons -->
+      <div class="product-actions">
+        <app-base-button 
+          *ngIf="showAddToCart && ((product?.stock ?? 0) > 0)"
+          type="primary" 
+          size="medium"
+          (clicked)="onAddToCart($event)"
+          class="add-to-cart-btn"
+        >
+          🛒 Add to Cart
+        </app-base-button>
+        
+        <app-base-button 
+          type="ghost" 
+          size="small"
+          (clicked)="onQuickView($event)"
+          class="quick-view-btn"
+        >
+          👁 Quick View
+        </app-base-button>
+      </div>
     </div>
   </div>
 </div> 

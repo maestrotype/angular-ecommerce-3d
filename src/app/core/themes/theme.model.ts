@@ -72,19 +72,19 @@ export interface ThemeColors {
   
   // Special Button Colors
   'auth-button-primary': string;
-  'auth-button-hover': string;
-  'auth-button-shadow': string;
-  'special-offer-button': string;
-  'special-offer-button-hover': string;
-  'special-offer-button-shadow': string;
+  'auth-button-hover'?: string;
+  'auth-button-shadow'?: string;
+  'special-offer-button'?: string;
+  'special-offer-button-hover'?: string;
+  'special-offer-button-shadow'?: string;
   
   // Modal Colors
-  'modal-bg': string;
-  'modal-header-bg': string;
-  'modal-border': string;
-  'input-bg': string;
-  'input-border': string;
-  'input-focus-border': string;
+  'modal-bg'?: string;
+  'modal-header-bg'?: string;
+  'modal-border'?: string;
+  'input-bg'?: string;
+  'input-border'?: string;
+  'input-focus-border'?: string;
 }
 
 export interface ThemeLayout {
@@ -172,6 +172,36 @@ export interface ThemeComponents {
   'transition-fast': string;
   'transition-normal': string;
   'transition-slow': string;
+  
+  // Auth Modal Variables
+  'auth-modal-bg': string;
+  'auth-modal-shadow': string;
+  'auth-modal-border': string;
+  'auth-header-bg': string;
+  'auth-header-border': string;
+  'auth-tab-inactive': string;
+  'auth-tab-active': string;
+  'auth-tab-active-bg': string;
+  'auth-tab-hover': string;
+  'auth-tab-hover-bg': string;
+  'auth-content-bg': string;
+  'auth-input-bg': string;
+  'auth-input-border': string;
+  'auth-input-focus': string;
+  'auth-btn-primary': string;
+  'auth-btn-secondary': string;
+  'auth-btn-secondary-text': string;
+  'auth-btn-secondary-border': string;
+  
+  // Additional CSS variables for compatibility
+  'color-text-tertiary': string;
+  'color-text-primary': string;
+  'color-text-secondary': string;
+  'color-text-inverse': string;
+  'color-primary': string;
+  'color-surface-primary': string;
+  'color-surface-secondary': string;
+  'color-border-primary': string;
 }
 
 export interface Theme {

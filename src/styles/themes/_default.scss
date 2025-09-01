@@ -1,0 +1,53 @@
+/* Default theme mapping to design tokens; non-breaking scaffold */
+:root {
+  /* brand */
+  --color-primary: hsl(258 90% 60%);
+  --color-accent: hsl(210 90% 55%);
+  
+  /* neutrals & text */
+  --text-primary: hsl(220 20% 15%);
+  --text-secondary: hsl(220 10% 40%);
+  --border: hsl(220 14% 90%);
+
+  /* surfaces */
+  --surface: #ffffff;
+  --surface-2: hsl(220 14% 97%);
+  
+  /* Default theme for auth modal */
+  .auth-modal {
+    .auth-header {
+      .auth-tabs {
+        .auth-tab {
+          &.active {
+            border-radius: 8px 0 0 0;
+          }
+        }
+      }
+    }
+  }
+  
+  /* Favorites page specific */
+  --favorites-bg: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  --favorites-header-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --favorites-header-text: #ffffff;
+  --favorites-header-overlay: rgba(255, 255, 255, 0.1);
+  --favorites-header-blur: blur(0px);
+  --favorites-back-btn-bg: rgba(255, 255, 255, 0.2);
+  --favorites-back-btn-text: #ffffff;
+  --favorites-back-btn-border: rgba(255, 255, 255, 0.3);
+  --favorites-back-btn-blur: blur(10px);
+  --favorites-back-btn-hover-bg: rgba(255, 255, 255, 0.3);
+  --favorites-back-btn-hover-border: rgba(255, 255, 255, 0.5);
+  --favorites-title-size: 2.5rem;
+  --favorites-title-weight: 700;
+  --favorites-heart-color: #ff6b6b;
+  --favorites-subtitle-size: 1.1rem;
+  --favorites-subtitle-opacity: 0.9;
+  --favorites-card-bg: rgba(255, 255, 255, 0.9);
+  --favorites-card-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --favorites-card-blur: blur(12px);
+  --favorites-card-border: rgba(0, 0, 0, 0.08);
+  --favorites-card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  --favorites-card-hover-bg: rgba(255, 255, 255, 0.95);
+}
+

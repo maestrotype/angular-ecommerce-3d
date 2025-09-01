@@ -6,28 +6,89 @@
         </div>
 
         <div class="products-grid">
-            <div class="product-card" *ngFor="let product of bestSellers" (click)="goToProductDetail(product.id)" [class.out-of-stock]="product?.stock !== undefined && product.stock <= 0">
+            <div class="product-card" *ngFor="let product of bestSellersProducts; trackBy: trackByProductId" (click)="goToProductDetail(product.id)" [class.out-of-stock]="product?.stock !== undefined && product.stock <= 0">
                 <div class="product-image">
                     <img [src]="product.imageUrl" [alt]="product.name" loading="lazy" />
-                    <!-- <div class="product-overlay">
-                        <button class="quick-view-btn" (click)="quickView(product); $event.stopPropagation()">
-                            Quick View
+
+                    <!-- Product Overlay with Quick View and Favorite -->
+                    <div class="product-overlay">
+                        <div class="overlay-actions">
+                            <!-- Quick View Button -->
+                            <button class="action-btn quick-view-btn"
+                                    (click)="quickView(product)"
+                                    title="Quick View">
+                                <span class="material-icons">visibility</span>
+                    </button>
+                    
+                            <!-- Favorite Button -->
+                            <button class="action-btn favorite-btn"
+                                    (click)="onFavoriteToggled($event)"
+                                    title="Add to Favorites"
+                                    [class.is-favorite]="product.isFavorite">
+                                <span class="material-icons">favorite_border</span>
+                                <span class="material-icons filled">favorite</span>
                         </button>
-                    </div> -->
-                    <div *ngIf="product.isSpecial" class="special-badge">
+                        </div>
+                    </div>
+
+                    <!-- Special Offer Badge -->
+                    <div class="special-badge" *ngIf="product.isSpecial">
                         SPECIAL OFFER
                     </div>
-                    <div *ngIf="product?.stock !== undefined && product.stock <= 0" class="out-of-stock-badge">
+
+                    <!-- New Badge -->
+                    <div class="new-badge" *ngIf="product.isNew">
+                        NEW
+                    </div>
+
+                    <!-- Out of Stock Badge -->
+                    <div class="out-of-stock-badge" *ngIf="product?.stock !== undefined && product.stock <= 0">
                         OUT OF STOCK
+                    </div>
+
+                    <!-- Discount Badge -->
+                    <div class="discount-badge" *ngIf="product.discount">
+                        -{{ product.discount }}%
                     </div>
                 </div>
 
                 <div class="product-info">
                     <h3 class="product-name">{{ product.name }}</h3>
-                    <div class="product-price">
-                        <span class="current-price">${{ product.price }}</span>
-                        <span *ngIf="product.discount" class="original-price">${{ (product.price / (1 - product.discount
-                            / 100)) | number:'1.2-2' }}</span>
+
+                    <div class="product-rating">
+                        <div class="stars">
+                            <span class="star"
+                                  *ngFor="let star of [1,2,3,4,5]; let i = index"
+                                  [class.filled]="i < Math.floor(product.rating || 0)"
+                                  (click)="rateProduct(product, i + 1)"
+                                  title="Rate {{ i + 1 }} stars">
+                                ⭐
+                            </span>
+                        </div>
+                        <span class="rating-value">({{ product.rating || 0 }})</span>
+                        <span class="rating-count" *ngIf="product.ratingCount">({{ product.ratingCount }} reviews)</span>
+                        <span class="product-category">{{ product.category }}</span>
+                    </div>
+
+                    <div class="product-footer">
+                        <div class="product-price">
+                            <div class="price-main">
+                            <span class="current-price">${{ product.price }}</span>
+                                <span class="original-price" *ngIf="product.originalPrice">${{ product.originalPrice }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Cart Button - Always Visible -->
+                        <button class="cart-btn"
+                                (click)="addToCart(product, $event)"
+                                title="Add to Cart">
+                            <span class="material-icons">shopping_cart</span>
+                        </button>
+                    </div>
+
+                    <!-- Stock Indicator -->
+                    <div class="stock-indicator" *ngIf="product?.stock !== undefined && product.stock > 0 && product.stock <= 5">
+                        Only {{ product.stock }} left in stock!
                     </div>
                 </div>
             </div>

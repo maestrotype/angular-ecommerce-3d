@@ -77,20 +77,7 @@ export const defaultThemeNew: Theme = {
     'shadow-heavy': 'rgba(0, 0, 0, 0.25)',
     
     // Special Button Colors
-    'auth-button-primary': '#e74c3c',
-    'auth-button-hover': '#c0392b',
-    'auth-button-shadow': 'rgba(231, 76, 60, 0.3)',
-    'special-offer-button': '#e74c3c',
-    'special-offer-button-hover': '#c0392b',
-    'special-offer-button-shadow': 'rgba(231, 76, 60, 0.3)',
-    
-    // Modal Colors
-    'modal-bg': '#ffffff',
-    'modal-header-bg': '#f8f9fa',
-    'modal-border': '#e0e0e0',
-    'input-bg': '#f8f9fa',
-    'input-border': '#e0e0e0',
-    'input-focus-border': '#e74c3c'
+    'auth-button-primary': '#e74c3c'
   },
   layout: {
     'container-max-width': '1200px',
@@ -150,12 +137,12 @@ export const defaultThemeNew: Theme = {
     'radius-full': '9999px',
     
     // Shadows
-    'shadow-xs': '0 1px 2px rgba(0, 0, 0, 0.05)',
-    'shadow-sm': '0 1px 3px rgba(0, 0, 0, 0.1)',
-    'shadow-md': '0 4px 6px rgba(0, 0, 0, 0.1)',
-    'shadow-lg': '0 10px 15px rgba(0, 0, 0, 0.1)',
-    'shadow-xl': '0 20px 25px rgba(0, 0, 0, 0.15)',
-    'shadow-xxl': '0 25px 50px rgba(0, 0, 0, 0.25)',
+    'shadow-xs': '0 1px 3px rgba(0, 0, 0, 0.1)',
+    'shadow-sm': '0 2px 4px rgba(0, 0, 0, 0.1)',
+    'shadow-md': '0 4px 8px rgba(0, 0, 0, 0.1)',
+    'shadow-lg': '0 8px 16px rgba(0, 0, 0, 0.1)',
+    'shadow-xl': '0 12px 24px rgba(0, 0, 0, 0.15)',
+    'shadow-xxl': '0 16px 32px rgba(0, 0, 0, 0.2)',
     
     // Z-Index
     'z-index-dropdown': '1000',
@@ -170,6 +157,36 @@ export const defaultThemeNew: Theme = {
     // Transitions
     'transition-fast': '0.15s ease',
     'transition-normal': '0.3s ease',
-    'transition-slow': '0.5s ease'
+    'transition-slow': '0.5s ease',
+    
+    // Auth Modal Variables
+    'auth-modal-bg': '#ffffff',
+    'auth-modal-shadow': '0 20px 40px rgba(0, 0, 0, 0.1)',
+    'auth-modal-border': '1px solid #e0e0e0',
+    'auth-header-bg': '#f8f9fa',
+    'auth-header-border': '1px solid #e0e0e0',
+    'auth-tab-inactive': '#666666',
+    'auth-tab-active': '#667eea',
+    'auth-tab-active-bg': '#e3f2fd',
+    'auth-tab-hover': '#333333',
+    'auth-tab-hover-bg': '#f1f3f4',
+    'auth-content-bg': '#ffffff',
+    'auth-input-bg': '#ffffff',
+    'auth-input-border': '1px solid #e0e0e0',
+    'auth-input-focus': '#667eea',
+    'auth-btn-primary': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    'auth-btn-secondary': '#f8f9fa',
+    'auth-btn-secondary-text': '#666666',
+    'auth-btn-secondary-border': '1px solid #e0e0e0',
+    
+    // Additional CSS variables for compatibility
+    'color-text-tertiary': '#999999',
+    'color-text-primary': '#333333',
+    'color-text-secondary': '#666666',
+    'color-text-inverse': '#ffffff',
+    'color-primary': '#667eea',
+    'color-surface-primary': '#ffffff',
+    'color-surface-secondary': '#f8f9fa',
+    'color-border-primary': '#e0e0e0'
   }
 }; 

@@ -41,6 +41,9 @@ export class HeaderComponent implements OnInit {
   themes: Theme[] = [];
   currentTheme = 'default';
   showThemeMenu = false;
+  // Feature flag for new theme switcher UI (keeps old one by default)
+  enableNewThemeSwitcher = true;
+  showNewThemeMenu = false;
 
   constructor(
     private router: Router,
@@ -122,17 +125,25 @@ export class HeaderComponent implements OnInit {
   
   private loadThemes(): void {
     this.themes = this.themeService.getAllThemes();
-    this.currentTheme = this.themeService.getCurrentTheme().id;
+    const currentTheme = this.themeService.getCurrentTheme();
+    this.currentTheme = currentTheme.id;
   }
   
   toggleThemeMenu(): void {
     this.showThemeMenu = !this.showThemeMenu;
+  }
+
+  // New switcher (hidden behind flag)
+  toggleNewThemeMenu(): void {
+    if (!this.enableNewThemeSwitcher) { return; }
+    this.showNewThemeMenu = !this.showNewThemeMenu;
   }
   
   changeTheme(themeId: string): void {
     this.currentTheme = themeId;
     this.themeService.setTheme(themeId);
     this.showThemeMenu = false;
+    this.showNewThemeMenu = false;
   }
 
   toggleMobileMenu() {

@@ -3,6 +3,9 @@
    Main entry point for the new design system
    ========================================================================== */
 
+// Design tokens (scaffold) — defines CSS vars, does not change existing styles
+@import './tokens/index';
+
 // Import theme styles FIRST (before components)
 @import './themes/index';
 

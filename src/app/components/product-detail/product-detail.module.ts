@@ -8,6 +8,7 @@ import { ProductDetailComponent } from './product-detail.component';
 import { ProductImagesComponent } from './product-images/product-images.component';
 import { ProductInfoComponent } from './product-info/product-info.component';
 import { ProductTabsComponent } from './product-tabs/product-tabs.component';
+import { ThreeDViewerModule } from '../three-d-viewer/three-d-viewer.module';
 
 const routes: Routes = [
   { path: '', component: ProductDetailComponent }
@@ -25,6 +26,7 @@ const routes: Routes = [
     SharedModule,
     MatIconModule,
     MatButtonModule,
+    ThreeDViewerModule,
     RouterModule.forChild(routes)
   ]
 })

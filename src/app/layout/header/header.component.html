@@ -60,10 +60,10 @@
         <app-icon name="shopping-cart" stroke="#333" />
         <span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span>
       </a>
-      <!-- Theme Switcher -->
-      <div class="theme-switcher" *ngIf="!isMobile">
+      <!-- Theme Switcher (old) -->
+      <div class="theme-switcher" *ngIf="!isMobile && !enableNewThemeSwitcher">
         <button class="theme-toggle" (click)="toggleThemeMenu()">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="26" height="26" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
@@ -75,6 +75,48 @@
             [class.active]="currentTheme === theme.id"
             (click)="changeTheme(theme.id)">
             {{ theme.name }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Theme Switcher (new, behind flag) -->
+      <div class="theme-switcher" *ngIf="!isMobile && enableNewThemeSwitcher">
+        <button class="theme-switcher__toggle" (click)="toggleNewThemeMenu()" aria-label="Theme switcher">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 4v2m0 12v2m8-8h-2M6 12H4m12.364 6.364l-1.414-1.414M7.05 7.05L5.636 5.636m12.728 0l-1.414 1.414M7.05 16.95l-1.414 1.414M12 8a4 4 0 100 8 4 4 0 000-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="theme-switcher__popover" *ngIf="showNewThemeMenu">
+          <button 
+            class="theme-switcher__option" 
+            *ngFor="let theme of themes"
+            (click)="changeTheme(theme.id)"
+            type="button">
+            <span class="theme-switcher__swatch">
+              <ng-container [ngSwitch]="theme.id">
+                <svg *ngSwitchCase="'default'" width="24" height="16" viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="0" y="0" width="24" height="16" fill="var(--surface-2)"/>
+                  <rect x="0" y="8" width="24" height="8" fill="var(--color-primary)"/>
+                </svg>
+                <svg *ngSwitchCase="'dark'" width="24" height="16" viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="0" y="0" width="24" height="16" fill="#111827"/>
+                  <circle cx="18" cy="5" r="3" fill="#f59e0b"/>
+                </svg>
+                <svg *ngSwitchCase="'glass'" width="24" height="16" viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stop-color="rgba(255,255,255,.4)"/>
+                      <stop offset="100%" stop-color="rgba(255,255,255,.2)"/>
+                    </linearGradient>
+                  </defs>
+                  <rect x="0" y="0" width="24" height="16" fill="url(#g1)"/>
+                  <rect x="0" y="0" width="24" height="16" stroke="var(--border)" fill="none"/>
+                </svg>
+                <span *ngSwitchDefault style="display:block;width:24px;height:16px;background:var(--color-primary);"></span>
+              </ng-container>
+            </span>
+            <span class="theme-switcher__label">{{ theme.name }}</span>
+            <span class="theme-switcher__check" *ngIf="currentTheme === theme.id">✔</span>
           </button>
         </div>
       </div>

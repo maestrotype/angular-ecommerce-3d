@@ -98,6 +98,9 @@
   --product-transition-slow: 0.3s ease;
 }
 
+// Default theme mapping (keeps existing look)
+@import './default';
+
 // Theme specific styles
 @import './dark';
 @import './glass'; 

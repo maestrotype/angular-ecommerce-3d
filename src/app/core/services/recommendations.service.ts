@@ -14,6 +14,12 @@ export interface RecommendationProduct {
   rating?: number;
   discount?: number;
   isSpecial?: boolean;
+  isNew?: boolean;
+  originalPrice?: number;
+  stock?: number;
+  isFavorite?: boolean;
+  userRating?: number;
+  ratingCount?: number;
   score: number;
 }
 
