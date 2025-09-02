@@ -1,0 +1,124 @@
+/* ==========================================================================
+   THEME VARIABLES - Единый источник истины для всех тем
+   ========================================================================== */
+
+:root {
+  /* ==========================================================================
+     HERO SECTION VARIABLES
+     ========================================================================== */
+  
+  /* Default theme - Light glass effect */
+  --hero-bg-gradient: linear-gradient(135deg, 
+    rgba(248, 250, 252, 0.85) 0%, 
+    rgba(226, 232, 240, 0.75) 30%,
+    rgba(203, 213, 225, 0.85) 70%,
+    rgba(186, 200, 216, 0.9) 100%);
+  
+  --hero-backdrop-filter: blur(20px);
+  --hero-text-color: #1e293b;
+  --hero-accent-color: #6366f1;
+  
+  /* ==========================================================================
+     SURFACE VARIABLES
+     ========================================================================== */
+  
+  --surface-primary: #ffffff;
+  --surface-secondary: #f8f9fa;
+  --surface-tertiary: #e9ecef;
+  --surface-hover: #f1f3f4;
+  
+  /* ==========================================================================
+     TEXT VARIABLES
+     ========================================================================== */
+  
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-tertiary: #94a3b8;
+  --text-inverse: #ffffff;
+  
+  /* ==========================================================================
+     BORDER VARIABLES
+     ========================================================================== */
+  
+  --border-primary: #e5e7eb;
+  --border-secondary: #f3f4f6;
+  --border-focus: #6366f1;
+}
+
+/* ==========================================================================
+   DARK THEME OVERRIDES
+   ========================================================================== */
+
+[data-theme="dark"] {
+  /* Hero section - Dark glass effect */
+  --hero-bg-gradient: linear-gradient(135deg, 
+    rgba(15, 23, 42, 0.95) 0%, 
+    rgba(30, 41, 59, 0.9) 30%,
+    rgba(51, 65, 85, 0.85) 70%,
+    rgba(71, 85, 105, 0.9) 100%);
+  
+  --hero-backdrop-filter: blur(20px);
+  --hero-text-color: #f8fafc;
+  --hero-accent-color: #60a5fa;
+  
+  /* Surface variables - Different for different elements */
+  --surface-primary: #1e293b;        // For cards, modals
+  --surface-secondary: #334155;      // For secondary surfaces
+  --surface-tertiary: #475569;       // For tertiary surfaces
+  --surface-hover: #3b82f6;          // For hover states
+  
+  /* Button specific variables */
+  --button-primary-bg: #6366f1;      // Light background for buttons
+  --button-primary-text: #ffffff;    // White text for buttons
+  --button-primary-border: #6366f1;  // Button border
+  
+  /* Text variables */
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-tertiary: #94a3b8;
+  --text-inverse: #0f172a;
+  
+  /* Border variables */
+  --border-primary: #475569;
+  --border-secondary: #334155;
+  --border-focus: #60a5fa;
+}
+
+/* ==========================================================================
+   GLASS THEME OVERRIDES
+   ========================================================================== */
+
+[data-theme="glass"] {
+  /* Hero section - Glass morphism effect */
+  --hero-bg-gradient: linear-gradient(135deg, 
+    rgba(248, 250, 252, 0.85) 0%, 
+    rgba(241, 245, 249, 0.8) 30%,
+    rgba(226, 232, 240, 0.75) 70%,
+    rgba(203, 213, 225, 0.8) 100%);
+  
+  --hero-backdrop-filter: blur(25px) saturate(180%);
+  --hero-text-color: #1e293b;
+  --hero-accent-color: #6366f1;
+  
+  /* Surface variables - Glass effect */
+  --surface-primary: rgba(255, 255, 255, 0.15);
+  --surface-secondary: rgba(255, 255, 255, 0.12);
+  --surface-tertiary: rgba(255, 255, 255, 0.08);
+  --surface-hover: rgba(255, 255, 255, 0.2);
+  
+  /* Button specific variables - Glass morphism style */
+  --button-primary-bg: rgba(255, 255, 255, 0.25);
+  --button-primary-text: #1e293b;
+  --button-primary-border: rgba(255, 255, 255, 0.5);
+  
+  /* Text variables */
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-tertiary: #64748b;
+  --text-inverse: #ffffff;
+  
+  /* Border variables */
+  --border-primary: rgba(255, 255, 255, 0.2);
+  --border-secondary: rgba(255, 255, 255, 0.15);
+  --border-focus: #6366f1;
+}

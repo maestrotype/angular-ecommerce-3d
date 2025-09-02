@@ -76,16 +76,6 @@
     border-color: rgba(71, 85, 105, 0.3);
   }
   
-  /* Force all white elements to be dark with higher specificity */
-  body,
-  body .container,
-  body .page,
-  body .section,
-  body .hero-section,
-  body .products-section {
-    background: #0f172a;
-  }
-
   /* Force product-details-info to be dark */
   body .product-detail-info {
     background: transparent !important;
