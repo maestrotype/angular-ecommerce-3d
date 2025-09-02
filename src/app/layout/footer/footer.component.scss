@@ -1,8 +1,9 @@
 .footer {
-    background: var(--color-surface-primary, #EFEFEF);
-    color: var(--color-text-primary, #1A1A1A);
+    background: var(--footer-bg);
+    color: var(--footer-text);
     padding: 60px 0 20px;
     display: block;
+    backdrop-filter: var(--hero-backdrop-filter);
 
     .footer-mobile {
         display: none;
@@ -46,10 +47,10 @@
         }
 
         .footer-title {
-            font-size: 1.125rem;
+            font-size: 1.25rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
-            color: var(--color-text-primary, #1A1A1A);
+            color: var(--footer-text);
         }
 
         .footer-links {
@@ -61,12 +62,12 @@
                 margin-bottom: 0.75rem;
 
                 a {
-                    color: var(--color-text-primary, #1A1A1A);
+                    color: var(--footer-link);
                     text-decoration: none;
                     transition: color 0.3s ease;
 
                     &:hover {
-                        color: #FF6B6B;
+                        color: var(--footer-link-hover);
                     }
                 }
             }
@@ -84,7 +85,7 @@
         }
 
         .copyright {
-            color: var(--color-text-primary, #1A1A1A);
+            color: var(--footer-text);
             margin: 0;
         }
 
@@ -93,12 +94,12 @@
             gap: 1rem;
 
             .social-link {
-                color: var(--color-text-primary, #1A1A1A);
+                color: var(--footer-link);
                 transition: color 0.3s ease;
                 padding: 0.5rem;
 
                 &:hover {
-                    color: #FF6B6B;
+                    color: var(--footer-link-hover);
                 }
 
                 svg {

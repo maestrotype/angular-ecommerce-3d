@@ -1,6 +1,7 @@
 .best-sellers {
     padding: 80px 0;
-    background: var(--color-surface-primary, #ffffff);
+    background: var(--best-sellers-bg, var(--color-surface-primary, #ffffff));
+    color: var(--best-sellers-text, var(--text-primary, #1e293b));
     font-family: 'Inter', sans-serif;
 
     .container {
@@ -14,7 +15,7 @@
         margin-bottom: 4rem;
 
         .section-subtitle {
-            color: #666;
+            color: var(--text-secondary, #666);
             font-size: 0.875rem;
             font-weight: 600;
             letter-spacing: 0.1em;
@@ -373,21 +374,22 @@
 
 // Dark theme - different font and cart icon
 :host-context([data-theme="dark"]) .best-sellers {
-    background: #0f172a;
+    background: var(--best-sellers-bg);
+    color: var(--best-sellers-text);
     font-family: 'Poppins', sans-serif;
 
     .section-header {
         .section-subtitle {
-            color: #94a3b8;
+            color: var(--text-secondary);
         }
 
         .section-title {
-            color: #f8fafc;
+            color: var(--best-sellers-text);
         }
     }
 
     .product-card {
-        background: #1e293b;
+        background: var(--surface-primary);
         border-color: #334155;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 
@@ -459,15 +461,15 @@
 
 // Glass тема - жидкое стекло
 :host-context([data-theme="glass"]) .best-sellers {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--best-sellers-bg);
 
     .section-header {
         .section-subtitle {
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--text-secondary);
         }
 
         .section-title {
-            color: #ffffff;
+            color: var(--best-sellers-text);
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
     }

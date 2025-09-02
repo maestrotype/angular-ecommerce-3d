@@ -1,6 +1,6 @@
 .brands {
     padding: 60px 0;
-    background: #f8f9fa;
+    background: var(--brands-bg);
 
     .container {
         max-width: 1200px;
@@ -15,7 +15,7 @@
         .section-title {
             font-size: 2rem;
             font-weight: 600;
-            color: #333;
+            color: var(--brands-text);
         }
     }
 
@@ -31,11 +31,11 @@
         justify-content: center;
         align-items: center;
         padding: 1rem;
-        opacity: 0.6;
+        opacity: var(--brands-logo-opacity);
         transition: opacity 0.3s ease;
 
         &:hover {
-            opacity: 1;
+            opacity: var(--brands-logo-hover-opacity);
         }
 
         .brand-logo {
@@ -43,12 +43,12 @@
             max-height: 60px;
             width: auto;
             height: auto;
-            filter: grayscale(100%);
+            filter: var(--brands-logo-filter);
             transition: filter 0.3s ease;
         }
 
         &:hover .brand-logo {
-            filter: grayscale(0%);
+            filter: var(--brands-logo-hover-filter);
         }
     }
 }
