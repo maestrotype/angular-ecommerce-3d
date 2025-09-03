@@ -854,4 +854,55 @@
         }
     }
 }
+
+:host-context([data-theme="dark"]) .shop {
+    background: #0f172a;
+
+    .shop-header {
+        background: linear-gradient(135deg, 
+            rgba(15, 23, 42, 0.95) 0%, 
+            rgba(30, 41, 59, 0.9) 30%,
+            rgba(51, 65, 85, 0.85) 70%,
+            rgba(71, 85, 105, 0.9) 100%);
+        backdrop-filter: blur(20px);
+
+        .header-content {
+            .section-subtitle {
+                color: #cbd5e1;
+            }
+
+            .section-title {
+                color: #f8fafc;
+            }
+
+            .section-description {
+                color: #cbd5e1;
+            }
+        }
+    }
+
+    .filters-section {
+        background: #1e293b;
+        border-bottom: 1px solid #334155;
+    }
+
+    .products-section {
+        .product-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: #f8fafc;
+
+            &:hover {
+                background: #334155;
+                border-color: #475569;
+            }
+
+            .product-info {
+                .product-name {
+                    color: #f8fafc;
+                }
+            }
+        }
+    }
+}
   
