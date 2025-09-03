@@ -57,6 +57,7 @@
                 max-height: 100%;
                 border-radius: 8px;
                 transition: transform 0.3s ease;
+                filter: var(--categories-icon-filter);
             }
         }
 

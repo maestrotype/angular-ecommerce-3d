@@ -1,9 +1,10 @@
 .footer {
     background: var(--footer-bg);
+    backdrop-filter: var(--footer-backdrop-filter);
     color: var(--footer-text);
     padding: 60px 0 20px;
     display: block;
-    backdrop-filter: var(--hero-backdrop-filter);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
 
     .footer-mobile {
         display: none;

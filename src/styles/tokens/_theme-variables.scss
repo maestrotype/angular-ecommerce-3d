@@ -2,106 +2,104 @@
    THEME VARIABLES - Единый источник истины для всех тем
    ========================================================================== */
 
+/* Default theme variables */
 :root {
-  /* ==========================================================================
-     HERO SECTION VARIABLES
-     ========================================================================== */
-  
-  /* Default theme - Light glass effect */
+  /* Hero section - Default theme */
   --hero-bg-gradient: linear-gradient(135deg, 
-    rgba(248, 250, 252, 0.85) 0%, 
-    rgba(226, 232, 240, 0.75) 30%,
-    rgba(203, 213, 225, 0.85) 70%,
-    rgba(186, 200, 216, 0.9) 100%);
+    #f8fafcd9, 
+    #e2e8f0bf 30%, 
+    #cbd5e1d9 70%, 
+    #bac8d8e6);
   
   --hero-backdrop-filter: blur(20px);
   --hero-text-color: #1e293b;
-  --hero-accent-color: #6366f1;
+  --hero-accent-color: #3b82f6;
   
-  /* ==========================================================================
-     SPECIAL OFFER SECTION VARIABLES
-     ========================================================================== */
-  
+  /* Special Offer section - Default theme */
   --special-offer-bg: linear-gradient(135deg, 
-    rgba(248, 250, 252, 0.85) 0%, 
-    rgba(226, 232, 240, 0.75) 30%,
-    rgba(203, 213, 225, 0.85) 70%,
-    rgba(186, 200, 216, 0.9) 100%);
+    rgba(255, 255, 255, 0.9) 0%, 
+    rgba(248, 250, 252, 0.8) 30%,
+    rgba(241, 245, 249, 0.7) 70%,
+    rgba(226, 232, 240, 0.8) 100%);
   
   --special-offer-backdrop-filter: blur(20px);
   --special-offer-text: #1e293b;
-  --special-offer-accent: #6366f1;
+  --special-offer-accent: #3b82f6;
   
-  /* ==========================================================================
-     CATEGORIES SECTION VARIABLES
-     ========================================================================== */
-  
+  /* Categories section - Default theme */
   --categories-bg: #ffffff;
-  --categories-text: #333333;
-  --categories-card-bg: #f8f9fa;
-  --categories-card-hover: #e9ecef;
-  --categories-card-border: #e5e7eb;
+  --categories-text: #1e293b;
+  --categories-card-bg: #ffffff;
+  --categories-card-hover: #f8fafc;
+  --categories-card-border: #e2e8f0;
+  --categories-icon-filter: none;
   
-  /* ==========================================================================
-     FOOTER SECTION VARIABLES
-     ========================================================================== */
+  /* Footer section - Default theme */
+  --footer-bg: linear-gradient(135deg, 
+    #f8fafcd9, 
+    #e2e8f0bf 30%, 
+    #cbd5e1d9 70%, 
+    #bac8d8e6);
+  --footer-backdrop-filter: blur(20px);
+  --footer-text: #1e293b;
+  --footer-link: #64748b;
+  --footer-link-hover: #1e293b;
   
-  --footer-bg: #EFEFEF;
-  --footer-text: #1A1A1A;
-  --footer-link: #666666;
-  --footer-link-hover: #333333;
-  
-  /* ==========================================================================
-     ABOUT SECTION VARIABLES
-     ========================================================================== */
-  
+  /* About section - Default theme */
   --about-bg: #ffffff;
-  --about-text: #333333;
+  --about-text: #1e293b;
   --about-title: #1e293b;
-  --about-subtitle: #666666;
+  --about-subtitle: #64748b;
   --about-button-bg: #ef4444;
   --about-button-hover: #dc2626;
   
-  /* ==========================================================================
-     BRANDS SECTION VARIABLES
-     ========================================================================== */
-  
-  --brands-bg: #f8f9fa;
-  --brands-text: #333333;
-  --brands-logo-opacity: 0.6;
+  /* Brands section - Default theme */
+  --brands-bg: #f8fafc;
+  --brands-text: #1e293b;
+  --brands-logo-opacity: 0.7;
   --brands-logo-hover-opacity: 1;
-  --brands-logo-filter: grayscale(100%);
-  --brands-logo-hover-filter: grayscale(0%);
+  --brands-logo-filter: none;
+  --brands-logo-hover-filter: none;
   
-  /* ==========================================================================
-     BEST SELLERS SECTION VARIABLES
-     ========================================================================== */
+  /* Contacts section - Default theme */
+  --contacts-bg: #ffffff;
+  --contacts-text: #1e293b;
+  --contacts-title: #1e293b;
+  --contacts-subtitle: #64748b;
+  --contacts-card-bg: #f8fafc;
+  --contacts-card-text: #1e293b;
+  --contacts-input-bg: #ffffff;
+  --contacts-input-text: #1e293b;
+  --contacts-button-bg: #3b82f6;
+  --contacts-button-hover: #2563eb;
   
-  --best-sellers-bg: #f8f9fa;
+  /* Header section - Default theme */
+  --header-bg: rgba(255, 255, 255, 0.95);
+  --header-backdrop-filter: blur(10px);
+  --header-text: #1e293b;
+  --header-link: #64748b;
+  --header-link-hover: #1e293b;
+  --header-search-bg: rgba(255, 255, 255, 0.9);
+  --header-search-text: #1e293b;
+  
+  /* Best Sellers section - Default theme */
+  --best-sellers-bg: #ffffff;
   --best-sellers-text: #1e293b;
+  --best-sellers-subtitle: #64748b;
   
-  /* ==========================================================================
-     SURFACE VARIABLES
-     ========================================================================== */
-  
+  /* Surface variables - Different for different elements */
   --surface-primary: #ffffff;
   --surface-secondary: #f8f9fa;
   --surface-tertiary: #e9ecef;
   --surface-hover: #f1f3f4;
   
-  /* ==========================================================================
-     TEXT VARIABLES
-     ========================================================================== */
-  
+  /* Text variables */
   --text-primary: #1e293b;
   --text-secondary: #64748b;
   --text-tertiary: #94a3b8;
   --text-inverse: #ffffff;
   
-  /* ==========================================================================
-     BORDER VARIABLES
-     ========================================================================== */
-  
+  /* Border variables */
   --border-primary: #e5e7eb;
   --border-secondary: #f3f4f6;
   --border-focus: #6366f1;
@@ -134,15 +132,17 @@
   --special-offer-text: #f8fafc;
   --special-offer-accent: #60a5fa;
   
-  /* Categories section - Dark theme (admin palette) */
+  /* Categories section - Dark theme (admin palette) - light grey icons */
   --categories-bg: #1e293b;
   --categories-text: #f8fafc;
   --categories-card-bg: #334155;
   --categories-card-hover: #475569;
   --categories-card-border: #475569;
+  --categories-icon-filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(80%) contrast(100%);
   
-  /* Footer section - Dark theme (admin palette) */
-  --footer-bg: #334155;
+  /* Footer section - Dark theme (admin palette) - semi-transparent with light text */
+  --footer-bg: rgba(255, 255, 255, 0.35);
+  --footer-backdrop-filter: blur(15px) saturate(180%);
   --footer-text: #f8fafc;
   --footer-link: #cbd5e1;
   --footer-link-hover: #ffffff;
@@ -155,17 +155,39 @@
   --about-button-bg: #ef4444;
   --about-button-hover: #dc2626;
   
-  /* Brands section - Dark theme (admin palette) */
+  /* Brands section - Dark theme (admin palette) - light grey text */
   --brands-bg: #334155;
-  --brands-text: #f8fafc;
-  --brands-logo-opacity: 0.7;
+  --brands-text: #cbd5e1;
+  --brands-logo-opacity: 1;
   --brands-logo-hover-opacity: 1;
-  --brands-logo-filter: grayscale(100%) brightness(0.8);
-  --brands-logo-hover-filter: grayscale(0%) brightness(1);
+  --brands-logo-filter: brightness(0) invert(1);
+  --brands-logo-hover-filter: brightness(0) invert(1);
   
-  /* Best Sellers section - Dark theme (admin palette) */
+  /* Contacts section - Dark theme (admin palette) - same as categories cards */
+  --contacts-bg: #334155;
+  --contacts-text: #f8fafc;
+  --contacts-title: #ffffff;
+  --contacts-subtitle: #cbd5e1;
+  --contacts-card-bg: #374151;
+  --contacts-card-text: #f8fafc;
+  --contacts-input-bg: rgba(255, 255, 255, 0.35);
+  --contacts-input-text: #1e293b;
+  --contacts-button-bg: #60a5fa;
+  --contacts-button-hover: #3b82f6;
+  
+  /* Header section - Dark theme (admin palette) - semi-transparent like contact form */
+  --header-bg: rgba(255, 255, 255, 0.35);
+  --header-backdrop-filter: blur(15px) saturate(180%);
+  --header-text: #1e293b;
+  --header-link: #4b5563;
+  --header-link-hover: #1e293b;
+  --header-search-bg: rgba(255, 255, 255, 0.5);
+  --header-search-text: #1e293b;
+  
+  /* Best Sellers section - Dark theme (admin palette) - white subtitle */
   --best-sellers-bg: #475569;
   --best-sellers-text: #f8fafc;
+  --best-sellers-subtitle: #ffffff;
   
   /* Surface variables - Different for different elements */
   --surface-primary: #1e293b;
@@ -223,6 +245,7 @@
   --categories-card-bg: rgba(255, 255, 255, 0.15);
   --categories-card-hover: rgba(255, 255, 255, 0.25);
   --categories-card-border: rgba(255, 255, 255, 0.2);
+  --categories-icon-filter: none;
   
   /* Footer section - Glass theme (same palette as header) */
   --footer-bg: linear-gradient(135deg, 
@@ -249,6 +272,26 @@
   --brands-logo-hover-opacity: 1;
   --brands-logo-filter: grayscale(100%);
   --brands-logo-hover-filter: grayscale(0%);
+  
+  /* Contacts section - Glass theme */
+  --contacts-bg: rgba(248, 250, 252, 0.8);
+  --contacts-text: #1e293b;
+  --contacts-title: #1e293b;
+  --contacts-subtitle: #475569;
+  --contacts-card-bg: rgba(255, 255, 255, 0.3);
+  --contacts-card-text: #1e293b;
+  --contacts-input-bg: rgba(255, 255, 255, 0.5);
+  --contacts-input-text: #1e293b;
+  --contacts-button-bg: #6366f1;
+  --contacts-button-hover: #4f46e5;
+  
+  /* Header section - Glass theme */
+  --header-bg: rgba(248, 250, 252, 0.8);
+  --header-text: #1e293b;
+  --header-link: #475569;
+  --header-link-hover: #1e293b;
+  --header-search-bg: rgba(255, 255, 255, 0.5);
+  --header-search-text: #1e293b;
   
   /* Best Sellers section - Glass theme */
   --best-sellers-bg: linear-gradient(135deg, 
