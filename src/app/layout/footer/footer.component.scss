@@ -5,6 +5,23 @@
     padding: 60px 0 20px;
     display: block;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, 
+            rgba(248, 250, 252, 0.85), 
+            rgba(226, 232, 240, 0.75) 30%, 
+            rgba(203, 213, 225, 0.85) 70%, 
+            rgba(186, 200, 216, 0.9));
+        pointer-events: none;
+        z-index: -1;
+    }
 
     .footer-mobile {
         display: none;

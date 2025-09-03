@@ -44,6 +44,8 @@
   --footer-text: #1e293b;
   --footer-link: #64748b;
   --footer-link-hover: #1e293b;
+  --footer-will-change: transform;
+  --footer-transform: translateZ(0);
   
   /* About section - Default theme */
   --about-bg: #ffffff;
@@ -140,12 +142,12 @@
   --categories-card-border: #475569;
   --categories-icon-filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(80%) contrast(100%);
   
-  /* Footer section - Dark theme (admin palette) - semi-transparent with light text */
+  /* Footer section - Dark theme (admin palette) - semi-transparent with dark text */
   --footer-bg: rgba(255, 255, 255, 0.35);
   --footer-backdrop-filter: blur(15px) saturate(180%);
-  --footer-text: #f8fafc;
-  --footer-link: #cbd5e1;
-  --footer-link-hover: #ffffff;
+  --footer-text: #1e293b;
+  --footer-link: #475569;
+  --footer-link-hover: #1e293b;
   
   /* About section - Dark theme (admin palette) */
   --about-bg: #1e293b;
@@ -295,11 +297,13 @@
   
   /* Best Sellers section - Glass theme */
   --best-sellers-bg: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.9) 0%, 
-    rgba(248, 250, 252, 0.85) 30%,
-    rgba(241, 245, 249, 0.8) 70%,
-    rgba(226, 232, 240, 0.85) 100%);
+    #f8fafcd9, 
+    #e2e8f0bf 30%, 
+    #cbd5e1d9 70%, 
+    #bac8d8e6);
   --best-sellers-text: #1e293b;
+  --best-sellers-will-change: transform;
+  --best-sellers-transform: translateZ(0);
   
   /* Surface variables - Glass effect */
   --surface-primary: rgba(255, 255, 255, 0.15);

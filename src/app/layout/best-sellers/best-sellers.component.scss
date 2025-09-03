@@ -3,6 +3,8 @@
     background: var(--best-sellers-bg, var(--color-surface-primary, #ffffff));
     color: var(--best-sellers-text, var(--text-primary, #1e293b));
     font-family: 'Inter', sans-serif;
+    will-change: var(--best-sellers-will-change, auto);
+    transform: var(--best-sellers-transform, none);
 
     .container {
         max-width: 1200px;
