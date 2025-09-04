@@ -8,15 +8,6 @@
   background-color: #0f172a;
   color: #f8fafc;
   
-  /* Header icons - remove background blocks for dark theme with higher specificity */
-  body .header .user-actions .search-icon::before,
-  body .header .user-actions .profile-icon::before,
-  body .header .user-actions .cart::before,
-  body .header .user-actions .favorites::before,
-  body .header .user-actions .theme-toggle::before {
-    display: none;
-  }
-  
   /* Override root variables for dark theme */
   --color-surface-primary: #1e293b;
   --color-surface-secondary: #334155;
@@ -250,16 +241,22 @@
     .cart,
     .favorites,
     .theme-toggle {
-      &::before {
-        display: none;
-      }
+      font-size: 1.2em;
+      cursor: pointer;
+      padding: 0.75rem;
+      border-radius: var(--radius-m, 12px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      backdrop-filter: blur(0px);
+      color: var(--text-secondary, #666);
 
       &:hover {
-        color: var(--header-link-hover);
+        color: var(--color-primary, #3b82f6);
         transform: translateX(5px) translateY(-2px);
       }
 
       &:active {
+        color: var(--color-primary, #3b82f6);
         transform: translateX(2px) translateY(0px);
       }
     }

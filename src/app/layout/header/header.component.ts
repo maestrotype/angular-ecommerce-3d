@@ -63,6 +63,28 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.loadThemes();
     this.checkScreenSize();
     
+    // Check theme when window regains focus (returning from admin)
+    window.addEventListener('focus', () => {
+      const actualTheme = this.themeService.getCurrentTheme().id;
+      if (this.currentTheme !== actualTheme) {
+        this.currentTheme = actualTheme;
+        // Force reapply theme to DOM
+        this.themeService.setTheme(actualTheme);
+      }
+    });
+    
+    // Also check when tab becomes visible (returning from admin)
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        const actualTheme = this.themeService.getCurrentTheme().id;
+        if (this.currentTheme !== actualTheme) {
+          this.currentTheme = actualTheme;
+          // Force reapply theme to DOM
+          this.themeService.setTheme(actualTheme);
+        }
+      }
+    });
+    
     this.searchTerm = '';
     this.searchResults = [];
     
@@ -134,6 +156,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   
   private loadThemes(): void {
     this.themes = this.themeService.getAllThemes();
+    
+    // Get current theme immediately
     this.currentTheme = this.themeService.getCurrentTheme().id;
     
     // Subscribe to theme changes
@@ -153,9 +177,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
   
   changeTheme(themeId: string): void {
-    this.currentTheme = themeId;
     this.themeService.setTheme(themeId);
     this.showThemeMenu = false;
+    this.showNewThemeMenu = false;
   }
 
   toggleMobileMenu() {

@@ -277,35 +277,31 @@
         &.view-grid-4 {
           grid-template-columns: repeat(4, 1fr);
         }
-
-        &.view-grid-5 {
-          grid-template-columns: repeat(5, 1fr);
-        }
       }
 
       // Responsive adjustments
       @media (max-width: 1200px) {
         .products-grid {
-          &.view-grid-5 {
-            grid-template-columns: repeat(4, 1fr);
+          &.view-grid-4 {
+            grid-template-columns: repeat(3, 1fr);
           }
         }
       }
 
       @media (max-width: 992px) {
         .products-grid {
-          &.view-grid-4,
-          &.view-grid-5 {
-            grid-template-columns: repeat(3, 1fr);
+          &.view-grid-3,
+          &.view-grid-4 {
+            grid-template-columns: repeat(2, 1fr);
           }
         }
       }
 
       @media (max-width: 768px) {
         .products-grid {
+          &.view-grid-2,
           &.view-grid-3,
-          &.view-grid-4,
-          &.view-grid-5 {
+          &.view-grid-4 {
             grid-template-columns: repeat(2, 1fr);
           }
         }
@@ -1058,7 +1054,7 @@
       .view-btn {
         width: 40px;
         height: 40px;
-        background: var(--color-surface-primary, #ffffff);
+        background: transparent;
         border: 1px solid var(--border, #e5e7eb);
         border-radius: 4px;
         cursor: pointer;
@@ -1068,13 +1064,14 @@
         justify-content: center;
 
         &:hover {
-          background: var(--surface-2, rgba(0, 0, 0, 0.05));
+          background: transparent;
+          border-color: var(--color-primary, #3b82f6);
         }
 
         &.active {
-          background: var(--color-primary, #3b82f6);
+          background: transparent;
           border-color: var(--color-primary, #3b82f6);
-          color: white;
+          color: var(--color-primary, #3b82f6);
         }
 
         .view-icon {

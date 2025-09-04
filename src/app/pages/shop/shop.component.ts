@@ -43,7 +43,7 @@ export class ShopComponent implements OnInit, OnDestroy {
   paginatedProducts: Product[] = [];
   
   // View mode
-  viewMode: 'list' | 'grid-2' | 'grid-3' | 'grid-4' | 'grid-5' = 'grid-4';
+  viewMode: 'list' | 'grid-2' | 'grid-3' | 'grid-4' = 'grid-4';
   
   // Filter sidebar properties
   isFilterSidebarOpen = false;
@@ -51,21 +51,12 @@ export class ShopComponent implements OnInit, OnDestroy {
   maxPrice: number | null = null;
   showOnlyOnSale = false;
   
-  // Filter categories for sidebar
-  filterCategories: FilterCategory[] = [
-    { id: 'shoes', name: 'Shoes', count: 24, selected: false },
-    { id: 'bags', name: 'Bags', count: 18, selected: false },
-    { id: 'clothing', name: 'Clothing', count: 32, selected: false },
-    { id: 'accessories', name: 'Accessories', count: 15, selected: false }
-  ];
+  // Filter categories for sidebar - will be populated from API
+  filterCategories: FilterCategory[] = [];
 
-  // Dropdown options
+  // Dropdown options - will be populated from API
   categoryOptions: DropdownOption[] = [
-    { value: 'all', label: 'All categories' },
-    { value: 'shoes', label: 'Shoes' },
-    { value: 'bags', label: 'Bags' },
-    { value: 'clothing', label: 'Clothing' },
-    { value: 'accessories', label: 'Accessories' }
+    { value: 'all', label: 'All categories' }
   ];
 
   sortOptions: DropdownOption[] = [
@@ -103,30 +94,54 @@ export class ShopComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  private loadProducts(): void {
-    this.productService.getProducts()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (products) => {
-          this.products = products;
-          this.applyFilters();
-        },
-        error: (error) => {
-          console.error('Error loading products:', error);
-          this.notificationService.showError('Failed to load products');
-        }
-      });
-  }
-
   private loadCategories(): void {
     this.categoryService.getAllCategories()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (categories) => {
           this.categories = categories;
+          
+          // Update dropdown options
+          this.categoryOptions = [
+            { value: 'all', label: 'All categories' },
+            ...categories.map(cat => ({ value: cat.name, label: cat.name }))
+          ];
+          
+          // Update filter categories with real data and counts
+          this.updateFilterCategories();
         },
         error: (error) => {
           console.error('Error loading categories:', error);
+        }
+      });
+  }
+
+  private updateFilterCategories(): void {
+    // Create filter categories from real categories and count products
+    this.filterCategories = this.categories.map(category => {
+      const count = this.products.filter(product => product.category === category.name).length;
+      return {
+        id: category.name,
+        name: category.name,
+        count: count,
+        selected: false
+      };
+    });
+  }
+
+  private loadProducts(): void {
+    this.productService.getProducts()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (products) => {
+          this.products = products;
+          // Update filter categories after products are loaded
+          this.updateFilterCategories();
+          this.applyFilters();
+        },
+        error: (error) => {
+          console.error('Error loading products:', error);
+          this.notificationService.showError('Failed to load products');
         }
       });
   }
@@ -168,11 +183,17 @@ export class ShopComponent implements OnInit, OnDestroy {
   }
 
   applyFilters(): void {
-    // Apply category filters from sidebar
-    const selectedCategories = this.filterCategories.filter(cat => cat.selected).map(cat => cat.id);
+    // Update category counts
+    this.updateCategoryCounts();
     
-    // Apply price filter
-    // Apply sale filter
+    // Sync selectedCategory with sidebar selections
+    const selectedCategories = this.filterCategories.filter(cat => cat.selected).map(cat => cat.id);
+    if (selectedCategories.length === 1) {
+      this.selectedCategory = selectedCategories[0];
+    } else if (selectedCategories.length === 0) {
+      this.selectedCategory = 'all';
+    }
+    // If multiple categories selected, keep current selectedCategory but filter by all selected
     
     // Close sidebar
     this.isFilterSidebarOpen = false;
@@ -181,15 +202,19 @@ export class ShopComponent implements OnInit, OnDestroy {
     this.filterProducts();
   }
 
-  changeViewMode(mode: 'list' | 'grid-2' | 'grid-3' | 'grid-4' | 'grid-5'): void {
+  changeViewMode(mode: 'list' | 'grid-2' | 'grid-3' | 'grid-4'): void {
     this.viewMode = mode;
   }
 
   private filterProducts(): void {
     let filtered = [...this.products];
 
-    // Filter by category
-    if (this.selectedCategory !== 'all') {
+    // Filter by selected categories from sidebar
+    const selectedCategories = this.filterCategories.filter(cat => cat.selected).map(cat => cat.id);
+    if (selectedCategories.length > 0) {
+      filtered = filtered.filter(product => selectedCategories.includes(product.category || ''));
+    } else if (this.selectedCategory !== 'all') {
+      // Fallback to dropdown category filter
       filtered = filtered.filter(product => product.category === this.selectedCategory);
     }
 
@@ -294,5 +319,13 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   trackByProductId(index: number, product: Product): number {
     return product.id;
+  }
+
+  // Add method to update counts when filters change
+  private updateCategoryCounts(): void {
+    this.filterCategories.forEach(filterCategory => {
+      const count = this.products.filter(product => product.category === filterCategory.id).length;
+      filterCategory.count = count;
+    });
   }
 }

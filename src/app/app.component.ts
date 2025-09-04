@@ -19,6 +19,9 @@ export class AppComponent implements OnInit {
     private themeService: ThemeService,
     private frontendSeoService: FrontendSeoService
   ) {
+    // Clear data-theme from body immediately when frontend loads (from admin)
+    document.body.removeAttribute('data-theme');
+    
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
@@ -27,10 +30,22 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Load and apply SEO settings from backend
-    this.frontendSeoService.loadAndApplySeoSettings().subscribe();
+    // Watch for data-theme changes on body and remove them
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+          const body = mutation.target as HTMLElement;
+          if (body.tagName === 'BODY' && body.getAttribute('data-theme') === 'dark') {
+            body.removeAttribute('data-theme');
+          }
+        }
+      });
+    });
     
-    // ThemeService will auto-initialize in its constructor
+    observer.observe(document.body, { attributes: true, attributeFilter: ['data-theme'] });
+    
+    // Load and apply SEO settings from backend
+    this.frontendSeoService.reloadSeoSettings().subscribe();
   }
 
   isAdminRoute(): boolean {

@@ -43,7 +43,7 @@
           <div class="price-range">
             <div class="price-inputs">
               <input type="number" [(ngModel)]="minPrice" placeholder="Min" class="price-input">
-              <span>-</span>
+              <span class="price-separator">-</span>
               <input type="number" [(ngModel)]="maxPrice" placeholder="Max" class="price-input">
             </div>
             <div class="price-display">Price: ${{ minPrice || 0 }} – ${{ maxPrice || 1000 }}</div>
@@ -96,7 +96,7 @@
           <!-- Right side - View toggles -->
           <div class="view-toggles">
             <button class="view-btn" [class.active]="viewMode === 'list'" (click)="changeViewMode('list')">
-              <span class="view-icon">|</span>
+              <span class="view-icon">☰</span>
             </button>
             <button class="view-btn" [class.active]="viewMode === 'grid-2'" (click)="changeViewMode('grid-2')">
               <span class="view-icon">||</span>
@@ -106,9 +106,6 @@
             </button>
             <button class="view-btn" [class.active]="viewMode === 'grid-4'" (click)="changeViewMode('grid-4')">
               <span class="view-icon">||||</span>
-            </button>
-            <button class="view-btn" [class.active]="viewMode === 'grid-5'" (click)="changeViewMode('grid-5')">
-              <span class="view-icon">|||||</span>
             </button>
           </div>
         </div>
