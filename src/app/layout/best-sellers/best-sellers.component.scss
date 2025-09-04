@@ -1,7 +1,10 @@
 .best-sellers {
     padding: 80px 0;
-    background: #fff;
+    background: var(--best-sellers-bg, var(--color-surface-primary, #ffffff));
+    color: var(--best-sellers-text, var(--text-primary, #1e293b));
     font-family: 'Inter', sans-serif;
+    will-change: var(--best-sellers-will-change, auto);
+    transform: var(--best-sellers-transform, none);
 
     .container {
         max-width: 1200px;
@@ -14,7 +17,7 @@
         margin-bottom: 4rem;
 
         .section-subtitle {
-            color: #666;
+            color: var(--best-sellers-subtitle, var(--text-secondary, #666));
             font-size: 0.875rem;
             font-weight: 600;
             letter-spacing: 0.1em;
@@ -37,7 +40,7 @@
     }
 
     .product-card {
-        background: #fff;
+        background: var(--color-surface-primary, #ffffff);
         border-radius: 12px;
         overflow: hidden;
         transition: all 0.3s ease;
@@ -60,11 +63,6 @@
             .product-overlay {
                 opacity: 1;
             }
-
-            .cart-icon {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .product-image {
@@ -84,37 +82,6 @@
                 scale: 1;
             }
 
-            .cart-icon {
-                position: absolute;
-                top: 12px;
-                right: 12px;
-                background: rgba(255, 255, 255, 0.95);
-                border: none;
-                border-radius: 50%;
-                width: 40px;
-                height: 40px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-                opacity: 0;
-                transform: translateY(-10px);
-                z-index: 10;
-
-                .material-icons {
-                    font-size: 20px;
-                    color: #333;
-                }
-
-                &:hover {
-                    background: #fff;
-                    transform: translateY(0) scale(1.1);
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-                }
-            }
-
             .product-overlay {
                 position: absolute;
                 top: 0;
@@ -130,7 +97,6 @@
 
                 .overlay-actions {
                     display: flex;
-                    flex-direction: column;
                     gap: 12px;
                     align-items: center;
                 }
@@ -156,7 +122,7 @@
                     }
 
                     &:hover {
-                        background: #fff;
+                        background: var(--color-surface-primary, #ffffff);
                         transform: scale(1.1);
                         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
                     }
@@ -198,12 +164,21 @@
                             }
                         }
                     }
-                }
-            }
 
-            // Show overlay on hover
-            &:hover .product-overlay {
-                opacity: 1;
+                    // Cart Button Specific Styles
+                    &.cart-btn {
+                        .material-icons {
+                            color: #6366f1;
+                        }
+
+                        &:hover {
+                            background: #6366f1;
+                            .material-icons {
+                                color: white;
+                            }
+                        }
+                    }
+                }
             }
 
             .special-badge {
@@ -250,60 +225,6 @@
                 margin-bottom: 0.5rem;
             }
 
-            .product-rating {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                margin: 8px 0;
-                flex-wrap: wrap;
-                justify-content: space-between;
-
-                .stars {
-                    display: flex;
-                    gap: 2px;
-                }
-
-                .star {
-                    cursor: pointer;
-                    font-size: 18px;
-                    color: #d1d5db;
-                    transition: all 0.2s ease;
-
-                    &:hover {
-                        transform: scale(1.2);
-                        color: #fbbf24;
-                    }
-
-                    &.filled {
-                        color: #fbbf24;
-                    }
-                }
-
-                .rating-value {
-                    color: #6b7280;
-                    font-size: 14px;
-                    font-weight: 500;
-                }
-
-                .rating-count {
-                    color: #9ca3af;
-                    font-size: 12px;
-                }
-
-                .product-category {
-                    color: #6366f1;
-                    font-size: 0.75rem;
-                    font-weight: 600;
-                    text-transform: uppercase;
-                    letter-spacing: 0.5px;
-                    background: rgba(99, 102, 241, 0.1);
-                    padding: 2px 8px;
-                    border-radius: 12px;
-                    margin-left: auto;
-                    flex-shrink: 0;
-                }
-            }
-
             .product-footer {
                 display: flex;
                 justify-content: space-between;
@@ -325,38 +246,16 @@
                     }
                 }
 
-                .cart-btn {
-                    background: #6366f1;
-                    border: none;
-                    border-radius: 50%;
-                    width: 40px;
-                    height: 40px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
-
-                    .material-icons {
-                        font-size: 20px;
-                        color: white;
-                        transition: all 0.3s ease;
-                    }
-
-                    &:hover {
-                        background: #4f46e5;
-                        transform: scale(1.1);
-                        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
-                        
-                        .material-icons {
-                            transform: scale(1.1);
-                        }
-                    }
-
-                    &:active {
-                        transform: scale(0.95);
-                    }
+                .product-category {
+                    color: #6366f1;
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                    background: rgba(99, 102, 241, 0.1);
+                    padding: 2px 8px;
+                    border-radius: 12px;
+                    flex-shrink: 0;
                 }
             }
 
@@ -373,21 +272,22 @@
 
 // Dark theme - different font and cart icon
 :host-context([data-theme="dark"]) .best-sellers {
-    background: #0f172a;
+    background: var(--best-sellers-bg);
+    color: var(--best-sellers-text);
     font-family: 'Poppins', sans-serif;
 
     .section-header {
         .section-subtitle {
-            color: #94a3b8;
+            color: var(--text-secondary);
         }
 
         .section-title {
-            color: #f8fafc;
+            color: var(--best-sellers-text);
         }
     }
 
     .product-card {
-        background: #1e293b;
+        background: var(--surface-primary);
         border-color: #334155;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 
@@ -459,15 +359,15 @@
 
 // Glass тема - жидкое стекло
 :host-context([data-theme="glass"]) .best-sellers {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--best-sellers-bg);
 
     .section-header {
         .section-subtitle {
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--text-secondary);
         }
 
         .section-title {
-            color: #ffffff;
+            color: var(--best-sellers-text);
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
     }

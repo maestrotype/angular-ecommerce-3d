@@ -1,3 +1,4 @@
+@import './styles/tokens/index';
 /* CSS Custom Properties for Theming */
 :root {
   /* Default theme variables - will be overridden by ThemeService */
@@ -16,6 +17,7 @@
   --color-cards-background: #ffffff;
   --color-cards-border: rgba(0, 0, 0, 0.1);
   --color-cards-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --color-surface-primary: #ffffff;
   
   --layout-container-maxWidth: 1200px;
   --layout-container-padding: 0 20px;

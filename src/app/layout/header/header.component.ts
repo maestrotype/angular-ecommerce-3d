@@ -63,6 +63,28 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.loadThemes();
     this.checkScreenSize();
     
+    // Check theme when window regains focus (returning from admin)
+    window.addEventListener('focus', () => {
+      const actualTheme = this.themeService.getCurrentTheme().id;
+      if (this.currentTheme !== actualTheme) {
+        this.currentTheme = actualTheme;
+        // Force reapply theme to DOM
+        this.themeService.setTheme(actualTheme);
+      }
+    });
+    
+    // Also check when tab becomes visible (returning from admin)
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        const actualTheme = this.themeService.getCurrentTheme().id;
+        if (this.currentTheme !== actualTheme) {
+          this.currentTheme = actualTheme;
+          // Force reapply theme to DOM
+          this.themeService.setTheme(actualTheme);
+        }
+      }
+    });
+    
     this.searchTerm = '';
     this.searchResults = [];
     
@@ -87,11 +109,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const searchIcon = (event.target as Element).closest('.search-icon');
     const searchInput = (event.target as Element).closest('.desktop-search, .mobile-search');
     const searchResults = (event.target as Element).closest('.search-results');
+    const themeSwitcher = (event.target as Element).closest('.theme-switcher');
     
     if (!searchIcon && !searchInput && !searchResults) {
       this.isSearchOpen = false;
       this.searchTerm = '';
       this.searchResults = [];
+    }
+    
+    // Close theme menus when clicking outside
+    if (!themeSwitcher) {
+      this.showThemeMenu = false;
+      this.showNewThemeMenu = false;
     }
   }
 
@@ -127,6 +156,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   
   private loadThemes(): void {
     this.themes = this.themeService.getAllThemes();
+    
+    // Get current theme immediately
     this.currentTheme = this.themeService.getCurrentTheme().id;
     
     // Subscribe to theme changes
@@ -146,9 +177,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
   
   changeTheme(themeId: string): void {
-    this.currentTheme = themeId;
     this.themeService.setTheme(themeId);
     this.showThemeMenu = false;
+    this.showNewThemeMenu = false;
   }
 
   toggleMobileMenu() {

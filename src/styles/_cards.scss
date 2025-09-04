@@ -1,5 +1,5 @@
 .card {
-  background: var(--color-cards-background);
+  background: var(--color-surface-primary, var(--color-cards-background));
   border: 1px solid var(--color-cards-border);
   border-radius: var(--layout-cards-borderRadius, 12px);
   box-shadow: var(--layout-cards-shadow);
@@ -16,6 +16,7 @@
   @extend .card;
   cursor: pointer;
   position: relative;
+  background: var(--color-surface-primary, var(--color-cards-background));
   
   .product-image {
     position: relative;

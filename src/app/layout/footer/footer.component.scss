@@ -1,8 +1,27 @@
 .footer {
-    background: #EFEFEF;
-    color: #1A1A1A;
+    background: var(--footer-bg);
+    backdrop-filter: var(--footer-backdrop-filter);
+    color: var(--footer-text);
     padding: 60px 0 20px;
     display: block;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, 
+            rgba(248, 250, 252, 0.85), 
+            rgba(226, 232, 240, 0.75) 30%, 
+            rgba(203, 213, 225, 0.85) 70%, 
+            rgba(186, 200, 216, 0.9));
+        pointer-events: none;
+        z-index: -1;
+    }
 
     .footer-mobile {
         display: none;
@@ -35,21 +54,21 @@
             .logo-text {
                 font-size: 1.5rem;
                 font-weight: 700;
-                color: #1A1A1A;
+                color: var(--color-text-primary, #1A1A1A);
             }
         }
 
         .footer-description {
-            color: #1A1A1A;
+            color: var(--color-text-primary, #1A1A1A);
             line-height: 1.6;
             margin-bottom: 2rem;
         }
 
         .footer-title {
-            font-size: 1.125rem;
+            font-size: 1.25rem;
             font-weight: 600;
             margin-bottom: 1.5rem;
-            color: #1A1A1A;
+            color: var(--footer-text);
         }
 
         .footer-links {
@@ -61,12 +80,12 @@
                 margin-bottom: 0.75rem;
 
                 a {
-                    color: #1A1A1A;
+                    color: var(--footer-link);
                     text-decoration: none;
                     transition: color 0.3s ease;
 
                     &:hover {
-                        color: #FF6B6B;
+                        color: var(--footer-link-hover);
                     }
                 }
             }
@@ -84,7 +103,7 @@
         }
 
         .copyright {
-            color: #1A1A1A;
+            color: var(--footer-text);
             margin: 0;
         }
 
@@ -93,12 +112,12 @@
             gap: 1rem;
 
             .social-link {
-                color: #1A1A1A;
+                color: var(--footer-link);
                 transition: color 0.3s ease;
                 padding: 0.5rem;
 
                 &:hover {
-                    color: #FF6B6B;
+                    color: var(--footer-link-hover);
                 }
 
                 svg {
@@ -127,13 +146,13 @@
             position: fixed;
             bottom: 0;
             z-index: 2;
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--color-surface-primary, rgba(255, 255, 255, 0.95));
             backdrop-filter: blur(10px);
             .cart {
                 display: flex;
                 align-items: center;
                 position: relative;
-                color: #333;
+                color: var(--color-text-primary, #333);
                 span {
                   position: absolute;
                   top: -14px;

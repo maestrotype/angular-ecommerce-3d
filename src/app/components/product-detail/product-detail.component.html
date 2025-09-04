@@ -83,9 +83,8 @@
         </div>
       </div>
 
-      <!-- Recommendations Section -->
-      <div class="recommendations-section">
-        <!-- Similar Products -->
+      <!-- Similar Products Section -->
+      <div class="similar-products-section">
         <app-similar-products
           [product]="product"
           [limit]="4"
@@ -93,8 +92,10 @@
           title="Similar Products"
         >
         </app-similar-products>
+      </div>
 
-        <!-- Bought Together -->
+      <!-- Bought Together Section -->
+      <div class="bought-together-section">
         <app-bought-together
           [product]="product"
           [limit]="4"

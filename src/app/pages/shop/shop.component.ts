@@ -16,6 +16,13 @@ interface DropdownOption {
   label: string;
 }
 
+interface FilterCategory {
+  id: string;
+  name: string;
+  count: number;
+  selected: boolean;
+}
+
 @Component({
   selector: 'app-shop',
   templateUrl: './shop.component.html',
@@ -29,318 +36,296 @@ export class ShopComponent implements OnInit, OnDestroy {
   // Filter and sort properties
   searchTerm: string = '';
   selectedCategory: string = 'all';
-  sortBy: string = 'name';
-  viewMode: string = 'grid';
-  
-  // Pagination properties
+  sortBy: string = 'latest';
   currentPage: number = 1;
-  pageSize: number = 8;
+  itemsPerPage: number = 18;
   totalPages: number = 1;
   paginatedProducts: Product[] = [];
   
-  // Loading state
-  loading = true;
+  // View mode
+  viewMode: 'list' | 'grid-2' | 'grid-3' | 'grid-4' = 'grid-4';
   
-  // Dropdown options
-  categoryOptions: DropdownOption[] = [];
-  sortOptions: DropdownOption[] = [
-    { value: 'name', label: 'Sort by Name' },
-    { value: 'price', label: 'Sort by Price' },
-    { value: 'rating', label: 'Sort by Rating' }
+  // Filter sidebar properties
+  isFilterSidebarOpen = false;
+  minPrice: number | null = null;
+  maxPrice: number | null = null;
+  showOnlyOnSale = false;
+  
+  // Filter categories for sidebar - will be populated from API
+  filterCategories: FilterCategory[] = [];
+
+  // Dropdown options - will be populated from API
+  categoryOptions: DropdownOption[] = [
+    { value: 'all', label: 'All categories' }
   ];
-  
+
+  sortOptions: DropdownOption[] = [
+    { value: 'latest', label: 'Latest' },
+    { value: 'name', label: 'Name' },
+    { value: 'price-low', label: 'Price: Low to High' },
+    { value: 'price-high', label: 'Price: High to Low' },
+    { value: 'rating', label: 'Rating' }
+  ];
+
   private destroy$ = new Subject<void>();
+
   // Math object for template usage
   Math = Math;
 
   constructor(
-    private router: Router,
-    private route: ActivatedRoute,
     private productService: ProductService,
+    private categoryService: CategoryService,
     private cartService: CartService,
     private favoritesService: FavoritesService,
-    private categoryService: CategoryService,
     private notificationService: NotificationService,
-    private optimizationService: OptimizationService
+    private optimizationService: OptimizationService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
-  ngOnInit() {
-    this.loadCategories();
+  ngOnInit(): void {
     this.loadProducts();
+    this.loadCategories();
     this.setupRouteParams();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-  /**
-   * Load categories for filtering
-   */
-  private loadCategories() {
-    this.categoryService.getAllCategories().subscribe(categories => {
-      this.categories = categories;
-      this.categoryOptions = [
-        { value: 'all', label: 'All categories' },
-        ...categories.map(cat => ({ value: cat.name, label: cat.name }))
-      ];
+  private loadCategories(): void {
+    this.categoryService.getAllCategories()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (categories) => {
+          this.categories = categories;
+          
+          // Update dropdown options
+          this.categoryOptions = [
+            { value: 'all', label: 'All categories' },
+            ...categories.map(cat => ({ value: cat.name, label: cat.name }))
+          ];
+          
+          // Update filter categories with real data and counts
+          this.updateFilterCategories();
+        },
+        error: (error) => {
+          console.error('Error loading categories:', error);
+        }
+      });
+  }
+
+  private updateFilterCategories(): void {
+    // Create filter categories from real categories and count products
+    this.filterCategories = this.categories.map(category => {
+      const count = this.products.filter(product => product.category === category.name).length;
+      return {
+        id: category.name,
+        name: category.name,
+        count: count,
+        selected: false
+      };
     });
   }
 
-  /**
-   * Load products with optimization
-   */
-  private loadProducts() {
-    this.loading = true;
-    
-    // Use memoization for caching products
-    this.optimizationService.memoizeObservable(
-      'products:all',
-      this.productService.getProducts(),
-      []
-    ).pipe(
-      takeUntil(this.destroy$)
-    ).subscribe({
-      next: (products) => {
-        this.products = products;
+  private loadProducts(): void {
+    this.productService.getProducts()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (products) => {
+          this.products = products;
+          // Update filter categories after products are loaded
+          this.updateFilterCategories();
+          this.applyFilters();
+        },
+        error: (error) => {
+          console.error('Error loading products:', error);
+          this.notificationService.showError('Failed to load products');
+        }
+      });
+  }
+
+  private setupRouteParams(): void {
+    this.route.queryParams
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        if (params['category']) {
+          this.selectedCategory = params['category'];
+        }
+        if (params['search']) {
+          this.searchTerm = params['search'];
+        }
         this.applyFilters();
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Error loading products:', error);
-        this.loading = false;
-      }
-    });
+      });
   }
 
-  /**
-   * Setup route parameters for search and category
-   */
-  private setupRouteParams() {
-    this.route.queryParams.subscribe(params => {
-      if (params['search']) {
-        this.searchTerm = params['search'];
-      }
-      if (params['category']) {
-        this.selectedCategory = params['category'];
-      }
-      this.applyFilters();
-    });
+  onCategoryChange(category: string): void {
+    this.selectedCategory = category;
+    this.currentPage = 1;
+    this.applyFilters();
+    this.updateUrl();
   }
 
-  /**
-   * Memoized function for getting unique categories
-   */
-  private getUniqueCategories(products: Product[]): string[] {
-    return this.optimizationService.useCallback(
-      'getUniqueCategories',
-      (products: Product[]) => {
-        return [...new Set(products.map(p => p.category))];
-      },
-      []
-    )(products);
+  onSortChange(sortBy: string): void {
+    this.sortBy = sortBy;
+    this.applyFilters();
   }
 
-  /**
-   * Memoized function for filtering products
-   */
-  private filterProducts(products: Product[], category: string, search: string, sortBy: string): Product[] {
-    return this.optimizationService.useCallback(
-      'filterProducts',
-      (products: Product[], category: string, search: string, sortBy: string) => {
-        let filtered = products;
-        
-        // Filter by search term
-        if (search) {
-          const searchLower = search.toLowerCase();
-          filtered = filtered.filter(product =>
-            product.name.toLowerCase().includes(searchLower) ||
-            product.description.toLowerCase().includes(searchLower)
-          );
-        }
-        
-        // Filter by category
-        if (category !== 'all') {
-          filtered = filtered.filter(product => product.category === category);
-        }
-        
-        // Sort products
-        switch (sortBy) {
-          case 'name':
-            filtered.sort((a, b) => a.name.localeCompare(b.name));
-            break;
-          case 'price':
-            filtered.sort((a, b) => a.price - b.price);
-            break;
-          case 'rating':
-            filtered.sort((a, b) => b.rating - a.rating);
-            break;
-        }
-        
-        return filtered;
-      },
-      []
-    )(products, category, search, sortBy);
+  onItemsPerPageChange(value: string): void {
+    this.itemsPerPage = parseInt(value);
+    this.currentPage = 1;
+    this.updatePagination();
   }
 
-  /**
-   * Apply filters and update pagination
-   */
-  private applyFilters() {
-    this.filteredProducts = this.filterProducts(
-      this.products, 
-      this.selectedCategory, 
-      this.searchTerm,
-      this.sortBy
-    );
+  toggleFilterSidebar(): void {
+    this.isFilterSidebarOpen = !this.isFilterSidebarOpen;
+  }
+
+  applyFilters(): void {
+    // Update category counts
+    this.updateCategoryCounts();
     
-    this.totalPages = Math.max(1, Math.ceil(this.filteredProducts.length / this.pageSize));
-    this.currentPage = Math.min(this.currentPage, this.totalPages);
-    this.paginateProducts();
+    // Sync selectedCategory with sidebar selections
+    const selectedCategories = this.filterCategories.filter(cat => cat.selected).map(cat => cat.id);
+    if (selectedCategories.length === 1) {
+      this.selectedCategory = selectedCategories[0];
+    } else if (selectedCategories.length === 0) {
+      this.selectedCategory = 'all';
+    }
+    // If multiple categories selected, keep current selectedCategory but filter by all selected
+    
+    // Close sidebar
+    this.isFilterSidebarOpen = false;
+    
+    // Trigger product filtering
+    this.filterProducts();
   }
 
-  /**
-   * Update paginated products
-   */
-  private paginateProducts() {
-    const start = (this.currentPage - 1) * this.pageSize;
-    const end = start + this.pageSize;
-    this.paginatedProducts = this.filteredProducts.slice(start, end);
-  }
-
-  // Event handlers
-  onSearchChange() {
-    this.currentPage = 1;
-    this.applyFilters();
-  }
-
-  onCategoryChange(value: string) {
-    this.selectedCategory = value;
-    this.currentPage = 1;
-    this.applyFilters();
-  }
-
-  onSortChange(value: string) {
-    this.sortBy = value;
-    this.currentPage = 1;
-    this.applyFilters();
-  }
-
-  changeViewMode(mode: string) {
+  changeViewMode(mode: 'list' | 'grid-2' | 'grid-3' | 'grid-4'): void {
     this.viewMode = mode;
   }
 
-  // Pagination methods
-  goToPage(page: number) {
-    if (page < 1 || page > this.totalPages) {
-      return;
+  private filterProducts(): void {
+    let filtered = [...this.products];
+
+    // Filter by selected categories from sidebar
+    const selectedCategories = this.filterCategories.filter(cat => cat.selected).map(cat => cat.id);
+    if (selectedCategories.length > 0) {
+      filtered = filtered.filter(product => selectedCategories.includes(product.category || ''));
+    } else if (this.selectedCategory !== 'all') {
+      // Fallback to dropdown category filter
+      filtered = filtered.filter(product => product.category === this.selectedCategory);
     }
-    this.currentPage = page;
-    this.paginateProducts();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Filter by search term
+    if (this.searchTerm) {
+      const searchLower = this.searchTerm.toLowerCase();
+      filtered = filtered.filter(product => 
+        product.name.toLowerCase().includes(searchLower) ||
+        product.description?.toLowerCase().includes(searchLower)
+      );
+    }
+
+    // Filter by price range
+    if (this.minPrice !== null) {
+      filtered = filtered.filter(product => product.price >= this.minPrice!);
+    }
+    if (this.maxPrice !== null) {
+      filtered = filtered.filter(product => product.price <= this.maxPrice!);
+    }
+
+    // Filter by sale status
+    if (this.showOnlyOnSale) {
+      filtered = filtered.filter(product => product.isSpecial || product.discount);
+    }
+
+    // Sort products
+    filtered = this.sortProducts(filtered, this.sortBy);
+
+    this.filteredProducts = filtered;
+    this.updatePagination();
   }
 
-  nextPage() {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-      this.paginateProducts();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+  private sortProducts(products: Product[], sortBy: string): Product[] {
+    switch (sortBy) {
+      case 'latest':
+        // Since Product doesn't have createdAt, sort by id (assuming higher id = newer)
+        return products.sort((a, b) => b.id - a.id);
+      case 'name':
+        return products.sort((a, b) => a.name.localeCompare(b.name));
+      case 'price-low':
+        return products.sort((a, b) => a.price - b.price);
+      case 'price-high':
+        return products.sort((a, b) => b.price - a.price);
+      case 'rating':
+        return products.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+      default:
+        return products;
     }
   }
 
-  prevPage() {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-      this.paginateProducts();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+  private updatePagination(): void {
+    this.totalPages = Math.ceil(this.filteredProducts.length / this.itemsPerPage);
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.paginatedProducts = this.filteredProducts.slice(startIndex, endIndex);
   }
 
-  // Product actions
-  goToProductDetail(productId: number) {
-    this.router.navigate(['/product', productId]).then(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+  private updateUrl(): void {
+    const queryParams: any = {};
+    if (this.selectedCategory !== 'all') {
+      queryParams.category = this.selectedCategory;
+    }
+    if (this.searchTerm) {
+      queryParams.search = this.searchTerm;
+    }
+    
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams,
+      queryParamsHandling: 'merge'
     });
   }
 
-  // TrackBy function for performance
+  goToProductDetail(productId: number): void {
+    this.router.navigate(['/product', productId]);
+  }
+
+  quickView(product: Product): void {
+    // Implement quick view functionality
+    console.log('Quick view:', product);
+  }
+
+  onFavoriteToggled(event: Event): void {
+    event.stopPropagation();
+    // Implement favorite toggle functionality
+  }
+
+  addToCart(product: Product, event: Event): void {
+    event.stopPropagation();
+    
+    const cartItem: CartItem = {
+      productId: product.id,
+      name: product.name,
+      price: product.price,
+      quantity: 1,
+      imageUrl: product.imageUrl
+    };
+
+    this.cartService.addToCart(cartItem);
+    this.notificationService.showSuccess(`${product.name} added to cart`);
+  }
+
   trackByProductId(index: number, product: Product): number {
     return product.id;
   }
 
-  addToCart(product: Product, event?: Event) {
-    if (event) {
-      event.stopPropagation();
-    }
-    const cartItem: Omit<CartItem, 'quantity'> = {
-      productId: product.id,
-      name: product.name,
-      price: Number(this.getDiscountedPrice(product)), // Convert to number
-      imageUrl: product.imageUrl,
-      discount: product.discount,
-      features: product.features,
-      specifications: product.specifications,
-    };
-  
-    this.cartService.addToCart(cartItem);
-    this.notificationService.showSuccess(`Added ${product.name} to cart!`);
-  }
-
-  // Quick view placeholder
-  quickView(product: Product): void {
-    console.log('Quick view for product:', product);
-  }
-
-  // Rating functionality
-  rateProduct(product: Product, rating: number): void {
-    // Prevent parent click navigation when rating
-    (window.event as Event | undefined)?.stopPropagation?.();
-
-    if (!product.userRating) {
-      product.userRating = rating;
-      product.ratingCount = (product.ratingCount || 0) + 1;
-    } else {
-      product.userRating = rating;
-    }
-
-    this.updateProductRating(product);
-    this.notificationService.showSuccess(`Rated ${product.name} with ${rating} stars!`);
-  }
-
-  private updateProductRating(product: Product): void {
-    if (product.userRating) {
-      const currentRating = product.rating || 0;
-      const currentCount = product.ratingCount || 0;
-      if (currentCount > 0) {
-        product.rating = ((currentRating * currentCount) + product.userRating) / (currentCount + 1);
-      } else {
-        product.rating = product.userRating;
-      }
-    }
-  }
-
-  getDiscountedPrice(product: Product): number {
-    if (product && product.discount) {
-      return Number(product.price) * (1 - Number(product.discount) / 100);
-    }
-    return Number(product?.price) || 0;
-  }
-
-  onFavoriteToggled(event: { product: Product; isFavorite: boolean }) {
-    console.log(`${event.product.name} ${event.isFavorite ? 'added to' : 'removed from'} favorites`);
-  }
-
-  // Memoized statistics
-  get productsStats() {
-    return this.optimizationService.memoize(
-      'productsStats',
-      () => ({
-        total: this.products.length,
-        filtered: this.filteredProducts.length,
-        categories: this.categories.length
-      }),
-      [this.products.length, this.filteredProducts.length, this.categories.length]
-    );
+  // Add method to update counts when filters change
+  private updateCategoryCounts(): void {
+    this.filterCategories.forEach(filterCategory => {
+      const count = this.products.filter(product => product.category === filterCategory.id).length;
+      filterCategory.count = count;
+    });
   }
 }

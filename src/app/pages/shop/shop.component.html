@@ -17,45 +17,96 @@
         </div>
       </div>
     </div>
-  
-    <!-- Filters Section -->
-    <div class="filters-section">
-      <div class="container">
-        <div class="filters-container">
-          <!-- Controls -->
-          <div class="controls-container">
-            <app-custom-dropdown
-              class="glass-theme"
-              [options]="categoryOptions"
-              [selectedValue]="selectedCategory"
-              placeholder="All categories"
-              (valueChange)="onCategoryChange($event)"
-            ></app-custom-dropdown>
-            
-            <app-custom-dropdown
-              class="glass-theme"
-              [options]="sortOptions"
-              [selectedValue]="sortBy"
-              placeholder="Sort by Name"
-              (valueChange)="onSortChange($event)"
-            ></app-custom-dropdown>
-            
-            <div class="view-toggle">
-              <button 
-                class="view-btn glass-theme"
-                [class.active]="viewMode === 'grid'"
-                (click)="changeViewMode('grid')"
-              >
-                📋
-              </button>
-              <button 
-                class="view-btn glass-theme"
-                [class.active]="viewMode === 'list'"
-                (click)="changeViewMode('list')"
-              >
-                📄
-              </button>
+
+    <!-- Filter Sidebar -->
+    <div class="filter-sidebar" [class.open]="isFilterSidebarOpen">
+      <div class="sidebar-content">
+        <div class="sidebar-header">
+          <h3>Filters</h3>
+          <button class="close-btn" (click)="toggleFilterSidebar()">×</button>
+        </div>
+        
+        <div class="filter-section">
+          <h4>Categories</h4>
+          <div class="category-list">
+            <label *ngFor="let category of filterCategories" class="category-item">
+              <input type="checkbox" [value]="category.id" [(ngModel)]="category.selected">
+              <span class="checkmark"></span>
+              <span class="category-name">{{ category.name }}</span>
+              <span class="category-count">({{ category.count }})</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="filter-section">
+          <h4>Price</h4>
+          <div class="price-range">
+            <div class="price-inputs">
+              <input type="number" [(ngModel)]="minPrice" placeholder="Min" class="price-input">
+              <span class="price-separator">-</span>
+              <input type="number" [(ngModel)]="maxPrice" placeholder="Max" class="price-input">
             </div>
+            <div class="price-display">Price: ${{ minPrice || 0 }} – ${{ maxPrice || 1000 }}</div>
+          </div>
+        </div>
+
+        <button class="filter-apply-btn" (click)="applyFilters()">FILTER</button>
+      </div>
+    </div>
+
+    <!-- Filter Overlay -->
+    <div class="filter-overlay" [class.open]="isFilterSidebarOpen" (click)="toggleFilterSidebar()"></div>
+  
+    <!-- Filters and Sort Bar -->
+    <div class="filters-sort-bar">
+      <div class="container">
+        <div class="filters-sort-content">
+          <!-- Left side -->
+          <div class="filters-left">
+            <button class="filter-btn" (click)="toggleFilterSidebar()">
+              <span class="hamburger-icon">☰</span>
+              FILTER
+            </button>
+            <span class="sort-label">Sort by :</span>
+            <select class="sort-dropdown" [(ngModel)]="sortBy" (change)="onSortChange($event.target.value)">
+              <option value="latest">Latest</option>
+              <option value="best-selling">Best Selling</option>
+              <option value="best-rated">Best Rated</option>
+              <option value="price-low">Price Low</option>
+              <option value="price-high">Price High</option>
+            </select>
+          </div>
+
+          <!-- Middle -->
+          <div class="filters-middle">
+            <label class="sale-checkbox">
+              <input type="checkbox" [(ngModel)]="showOnlyOnSale">
+              <span class="checkmark"></span>
+              Show only products on sale
+            </label>
+            <span class="show-label">Show :</span>
+            <select class="show-dropdown" [(ngModel)]="itemsPerPage" (change)="onItemsPerPageChange($event.target.value)">
+              <option value="12">12</option>
+              <option value="18">18</option>
+              <option value="24">24</option>
+              <option value="36">36</option>
+            </select>
+          </div>
+
+          <!-- Right side - View toggles -->
+          <div class="view-toggles">
+            <button class="view-btn" [class.active]="viewMode === 'list'" (click)="changeViewMode('list')">
+              <span class="view-icon">☰</span>
+            </button>
+            <button class="view-btn" [class.active]="viewMode === 'grid-2'" (click)="changeViewMode('grid-2')">
+              <span class="view-icon">||</span>
+            </button>
+            <button class="view-btn" [class.active]="viewMode === 'grid-3'" (click)="changeViewMode('grid-3')">
+              <span class="view-icon">|||</span>
+            </button>
+            <button class="view-btn" [class.active]="viewMode === 'grid-4'" (click)="changeViewMode('grid-4')">
+              <span class="view-icon">||||</span>
+            </button>
           </div>
         </div>
       </div>
@@ -64,7 +115,7 @@
     <!-- Products Section -->
     <div class="products-section">
       <div class="container">
-        <div class="products-grid" [class.list-view]="viewMode === 'list'">
+        <div class="products-grid" [class]="'view-' + viewMode">
           <div 
             *ngFor="let product of paginatedProducts; trackBy: trackByProductId" 
             class="product-card"

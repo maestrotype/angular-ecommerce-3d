@@ -146,18 +146,14 @@
 
   /* Special offer glass styling - using Hero Glass approach */
   .special-offer {
-    background: linear-gradient(135deg, 
-      rgba(248, 250, 252, 0.85) 0%, 
-      rgba(226, 232, 240, 0.75) 30%,
-      rgba(203, 213, 225, 0.85) 70%,
-      rgba(186, 200, 216, 0.9) 100%);
-    backdrop-filter: blur(20px);
+    background: var(--special-offer-bg);
+    backdrop-filter: var(--special-offer-backdrop-filter);
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 
     .offer-title {
-      color: #1e293b;
-      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      color: var(--special-offer-text);
+      background: linear-gradient(135deg, var(--special-offer-text) 0%, #334155 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;

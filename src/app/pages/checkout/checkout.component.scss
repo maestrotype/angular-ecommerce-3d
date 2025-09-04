@@ -1,6 +1,6 @@
 .checkout-page {
   min-height: 100vh;
-  background: var(--color-bg-primary, #ffffff);
+  background: var(--color-bg-primary, var(--color-surface-primary, #ffffff));
   padding: 6rem 0;
 
   .container {
@@ -255,7 +255,7 @@
         padding: 0.75rem;
         border: 2px solid var(--color-border-primary, #e5e7eb);
         border-radius: 8px;
-        background: var(--color-input-bg, #ffffff);
+        background: var(--color-input-bg, var(--color-surface-primary, #ffffff));
         color: var(--color-text-primary, #333333);
         font-size: 1rem;
         transition: all 0.3s ease;

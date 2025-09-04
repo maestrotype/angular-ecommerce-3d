@@ -1,0 +1,331 @@
+/* ==========================================================================
+   THEME VARIABLES - Единый источник истины для всех тем
+   ========================================================================== */
+
+/* Default theme variables */
+:root {
+  /* Default theme variables */
+  --hero-bg-gradient: linear-gradient(135deg, 
+    rgba(248, 250, 252, 0.85) 0%, 
+    rgba(241, 245, 249, 0.8) 30%, 
+    rgba(226, 232, 240, 0.75) 70%, 
+    rgba(203, 213, 225, 0.8) 100%
+  );
+  
+  --hero-backdrop-filter: blur(25px) saturate(180%);
+  --hero-text-color: #1e293b;
+  --hero-accent-color: #3b82f6;
+  
+  /* Special Offer section - Default theme */
+  --special-offer-bg: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.9) 0%, 
+    rgba(248, 250, 252, 0.8) 30%,
+    rgba(241, 245, 249, 0.7) 70%,
+    rgba(226, 232, 240, 0.8) 100%);
+  
+  --special-offer-backdrop-filter: blur(20px);
+  --special-offer-text: #1e293b;
+  --special-offer-accent: #3b82f6;
+  
+  /* Categories section - Default theme */
+  --categories-bg: #ffffff;
+  --categories-text: #1e293b;
+  --categories-card-bg: #ffffff;
+  --categories-card-hover: #f8fafc;
+  --categories-card-border: #e2e8f0;
+  --categories-icon-filter: none;
+  
+  /* Footer section - Default theme */
+  --footer-bg: linear-gradient(135deg, 
+    #f8fafcd9, 
+    #e2e8f0bf 30%, 
+    #cbd5e1d9 70%, 
+    #bac8d8e6);
+  --footer-backdrop-filter: blur(20px);
+  --footer-text: #1e293b;
+  --footer-link: #64748b;
+  --footer-link-hover: #1e293b;
+  --footer-will-change: transform;
+  --footer-transform: translateZ(0);
+  
+  /* About section - Default theme */
+  --about-bg: #ffffff;
+  --about-text: #1e293b;
+  --about-title: #1e293b;
+  --about-subtitle: #64748b;
+  --about-button-bg: #ef4444;
+  --about-button-hover: #dc2626;
+  
+  /* Brands section - Default theme */
+  --brands-bg: #f8fafc;
+  --brands-text: #1e293b;
+  --brands-logo-opacity: 0.7;
+  --brands-logo-hover-opacity: 1;
+  --brands-logo-filter: none;
+  --brands-logo-hover-filter: none;
+  
+  /* Contacts section - Default theme */
+  --contacts-bg: #ffffff;
+  --contacts-text: #1e293b;
+  --contacts-title: #1e293b;
+  --contacts-subtitle: #64748b;
+  --contacts-card-bg: #f8fafc;
+  --contacts-card-text: #1e293b;
+  --contacts-input-bg: #ffffff;
+  --contacts-input-text: #1e293b;
+  --contacts-button-bg: #3b82f6;
+  --contacts-button-hover: #2563eb;
+  
+  /* Header section - Default theme */
+  --header-bg: rgba(255, 255, 255, 0.95);
+  --header-backdrop-filter: blur(10px);
+  --header-text: #1e293b;
+  --header-link: #64748b;
+  --header-link-hover: #1e293b;
+  --header-search-bg: rgba(255, 255, 255, 0.9);
+  --header-search-text: #1e293b;
+  
+  /* Best Sellers section - Default theme */
+  --best-sellers-bg: #ffffff;
+  --best-sellers-text: #1e293b;
+  --best-sellers-subtitle: #64748b;
+  
+  /* Surface variables - Different for different elements */
+  --surface-primary: #ffffff;
+  --surface-secondary: #f8f9fa;
+  --surface-tertiary: #e9ecef;
+  --surface-hover: #f1f3f4;
+  
+  /* Text variables */
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-tertiary: #94a3b8;
+  --text-inverse: #ffffff;
+  
+  /* Border variables */
+  --border-primary: #e5e7eb;
+  --border-secondary: #f3f4f6;
+  --border-focus: #6366f1;
+}
+
+/* ==========================================================================
+   DARK THEME OVERRIDES
+   ========================================================================== */
+
+[data-theme="dark"] {
+  /* Dark theme variables */
+  --hero-bg-gradient: linear-gradient(135deg, 
+    #1e293b 0%, 
+    #334155 50%, 
+    #475569 100%
+  );
+  
+  --hero-backdrop-filter: blur(20px);
+  --hero-text-color: #f8fafc;
+  --hero-accent-color: #60a5fa;
+  
+  /* Special Offer section - Dark theme */
+  --special-offer-bg: linear-gradient(135deg, 
+    rgba(15, 23, 42, 0.95) 0%, 
+    rgba(30, 41, 59, 0.9) 30%,
+    rgba(51, 65, 85, 0.85) 70%,
+    rgba(71, 85, 105, 0.9) 100%);
+  
+  --special-offer-backdrop-filter: blur(20px);
+  --special-offer-text: #f8fafc;
+  --special-offer-accent: #60a5fa;
+  
+  /* Categories section - Dark theme (admin palette) - light grey icons */
+  --categories-bg: #1e293b;
+  --categories-text: #f8fafc;
+  --categories-card-bg: #334155;
+  --categories-card-hover: #475569;
+  --categories-card-border: #475569;
+  --categories-icon-filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(80%) contrast(100%);
+  
+  /* Footer section - Dark theme (admin palette) - semi-transparent with dark text */
+  --footer-bg: rgba(255, 255, 255, 0.35);
+  --footer-backdrop-filter: blur(15px) saturate(180%);
+  --footer-text: #1e293b;
+  --footer-link: #475569;
+  --footer-link-hover: #1e293b;
+  
+  /* About section - Dark theme (admin palette) */
+  --about-bg: #1e293b;
+  --about-text: #f8fafc;
+  --about-title: #ffffff;
+  --about-subtitle: #cbd5e1;
+  --about-button-bg: #ef4444;
+  --about-button-hover: #dc2626;
+  
+  /* Brands section - Dark theme (admin palette) - light grey text */
+  --brands-bg: #334155;
+  --brands-text: #cbd5e1;
+  --brands-logo-opacity: 1;
+  --brands-logo-hover-opacity: 1;
+  --brands-logo-filter: brightness(0) invert(1);
+  --brands-logo-hover-filter: brightness(0) invert(1);
+  
+  /* Contacts section - Dark theme (admin palette) - same as categories cards */
+  --contacts-bg: #334155;
+  --contacts-text: #f8fafc;
+  --contacts-title: #ffffff;
+  --contacts-subtitle: #cbd5e1;
+  --contacts-card-bg: #374151;
+  --contacts-card-text: #f8fafc;
+  --contacts-input-bg: rgba(255, 255, 255, 0.35);
+  --contacts-input-text: #1e293b;
+  --contacts-button-bg: #60a5fa;
+  --contacts-button-hover: #3b82f6;
+  
+  /* Header section - Dark theme (admin palette) - semi-transparent like contact form */
+  --header-bg: rgba(255, 255, 255, 0.35);
+  --header-backdrop-filter: blur(15px) saturate(180%);
+  --header-text: #1e293b;
+  --header-link: #4b5563;
+  --header-link-hover: #1e293b;
+  --header-search-bg: rgba(255, 255, 255, 0.5);
+  --header-search-text: #1e293b;
+  
+  /* Best Sellers section - Dark theme (admin palette) - white subtitle */
+  --best-sellers-bg: #475569;
+  --best-sellers-text: #f8fafc;
+  --best-sellers-subtitle: #ffffff;
+  
+  /* Surface variables - Different for different elements */
+  --surface-primary: #1e293b;
+  --surface-secondary: #334155;
+  --surface-tertiary: #475569;
+  --surface-hover: #3b82f6;
+  
+  /* Button specific variables */
+  --button-primary-bg: #6366f1;
+  --button-primary-text: #ffffff;
+  --button-primary-border: #6366f1;
+  
+  /* Text variables */
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-tertiary: #94a3b8;
+  --text-inverse: #0f172a;
+  
+  /* Border variables */
+  --border-primary: #475569;
+  --border-secondary: #334155;
+  --border-focus: #60a5fa;
+}
+
+/* ==========================================================================
+   GLASS THEME OVERRIDES
+   ========================================================================== */
+
+[data-theme="glass"] {
+  /* Glass theme variables */
+  --hero-bg-gradient: linear-gradient(135deg, 
+    #f8fafcd9, 
+    #e2e8f0bf 30%, 
+    #cbd5e1d9 70%, 
+    #bac8d8e6
+  );
+  
+  --hero-backdrop-filter: blur(20px);
+  --hero-text-color: #1e293b;
+  --hero-accent-color: #6366f1;
+  
+  /* Special Offer section - Same as hero for consistency */
+  --special-offer-bg: linear-gradient(135deg, 
+    rgba(248, 250, 252, 0.85) 0%, 
+    rgba(241, 245, 249, 0.8) 30%,
+    rgba(226, 232, 240, 0.75) 70%,
+    rgba(203, 213, 225, 0.8) 100%);
+  
+  --special-offer-backdrop-filter: blur(25px) saturate(180%);
+  --special-offer-text: #1e293b;
+  --special-offer-accent: #6366f1;
+  
+  /* Categories section - Glass theme */
+  --categories-bg: rgba(248, 250, 252, 0.8);
+  --categories-text: #1e293b;
+  --categories-card-bg: rgba(255, 255, 255, 0.15);
+  --categories-card-hover: rgba(255, 255, 255, 0.25);
+  --categories-card-border: rgba(255, 255, 255, 0.2);
+  --categories-icon-filter: none;
+  
+  /* Footer section - Glass theme (same palette as header) */
+  --footer-bg: linear-gradient(135deg, 
+    rgba(248, 250, 252, 0.85) 0%, 
+    rgba(241, 245, 249, 0.8) 30%,
+    rgba(226, 232, 240, 0.75) 70%,
+    rgba(203, 213, 225, 0.8) 100%);
+  --footer-text: #1e293b;
+  --footer-link: #475569;
+  --footer-link-hover: #1e293b;
+  
+  /* About section - Glass theme */
+  --about-bg: rgba(248, 250, 252, 0.8);
+  --about-text: #1e293b;
+  --about-title: #1e293b;
+  --about-subtitle: #475569;
+  --about-button-bg: #ef4444;
+  --about-button-hover: #dc2626;
+  
+  /* Brands section - Glass theme */
+  --brands-bg: rgba(248, 250, 252, 0.8);
+  --brands-text: #1e293b;
+  --brands-logo-opacity: 0.6;
+  --brands-logo-hover-opacity: 1;
+  --brands-logo-filter: grayscale(100%);
+  --brands-logo-hover-filter: grayscale(0%);
+  
+  /* Contacts section - Glass theme */
+  --contacts-bg: rgba(248, 250, 252, 0.8);
+  --contacts-text: #1e293b;
+  --contacts-title: #1e293b;
+  --contacts-subtitle: #475569;
+  --contacts-card-bg: rgba(255, 255, 255, 0.3);
+  --contacts-card-text: #1e293b;
+  --contacts-input-bg: rgba(255, 255, 255, 0.5);
+  --contacts-input-text: #1e293b;
+  --contacts-button-bg: #6366f1;
+  --contacts-button-hover: #4f46e5;
+  
+  /* Header section - Glass theme */
+  --header-bg: rgba(248, 250, 252, 0.8);
+  --header-text: #1e293b;
+  --header-link: #475569;
+  --header-link-hover: #1e293b;
+  --header-search-bg: rgba(255, 255, 255, 0.5);
+  --header-search-text: #1e293b;
+  
+  /* Best Sellers section - Glass theme */
+  --best-sellers-bg: linear-gradient(135deg, 
+    #f8fafcd9, 
+    #e2e8f0bf 30%, 
+    #cbd5e1d9 70%, 
+    #bac8d8e6);
+  --best-sellers-text: #1e293b;
+  --best-sellers-will-change: transform;
+  --best-sellers-transform: translateZ(0);
+  
+  /* Surface variables - Glass effect */
+  --surface-primary: rgba(255, 255, 255, 0.15);
+  --surface-secondary: rgba(255, 255, 255, 0.12);
+  --surface-tertiary: rgba(255, 255, 255, 0.08);
+  --surface-hover: rgba(255, 255, 255, 0.2);
+  
+  /* Button specific variables - Glass morphism style */
+  --button-primary-bg: rgba(255, 255, 255, 0.25);
+  --button-primary-text: #1e293b;
+  --button-primary-border: rgba(255, 255, 255, 0.5);
+  
+  /* Text variables */
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-tertiary: #64748b;
+  --text-inverse: #ffffff;
+  
+  /* Border variables */
+  --border-primary: rgba(255, 255, 255, 0.2);
+  --border-secondary: rgba(255, 255, 255, 0.15);
+  --border-focus: #6366f1;
+}

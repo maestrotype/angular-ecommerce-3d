@@ -1,10 +1,6 @@
 .contact-section {
   padding: 4rem 2rem;
-  background: linear-gradient(135deg, 
-    rgba(248, 250, 252, 0.85) 0%, 
-    rgba(226, 232, 240, 0.75) 30%,
-    rgba(203, 213, 225, 0.85) 70%,
-    rgba(186, 200, 216, 0.9) 100%);
+  background: var(--contacts-bg);
   position: relative;
   overflow: hidden;
 
@@ -39,14 +35,14 @@
     h2 {
       font-size: 2.5rem;
       margin-bottom: 1rem;
-      color: #334155;
+      color: var(--contacts-title);
       font-weight: 800;
       letter-spacing: 0.01em;
     }
     p {
       font-size: 1.2rem;
       margin-bottom: 2rem;
-      color: #64748b;
+      color: var(--contacts-subtitle);
       line-height: 1.6;
     }
     .contact-details {
@@ -56,9 +52,9 @@
         gap: 1rem;
         margin-bottom: 1.5rem;
         font-size: 1.1rem;
-        color: #334155;
+        color: var(--contacts-card-text);
         padding: 1rem 1.5rem;
-        background: rgba(255,255,255,0.35);
+        background: var(--contacts-card-bg);
         border-radius: 16px;
         backdrop-filter: blur(12px) saturate(180%);
         border: 1.5px solid rgba(255,255,255,0.5);
@@ -115,16 +111,18 @@
         border: 1px solid rgba(0,0,0,0.08);
         border-radius: 12px;
         font-size: 1rem;
-        background: rgba(255,255,255,0.9);
+        background: var(--contacts-input-bg);
+        color: var(--contacts-input-text);
         transition: all 0.3s ease;
         &::placeholder {
-          color: #999;
+          color: var(--contacts-input-text);
+          opacity: 0.7;
         }
         &:focus {
           outline: none;
           border-color: #6366f1;
           box-shadow: 0 0 0 3px rgba(99,102,241,0.08);
-          background: white;
+          background: var(--contacts-input-bg);
         }
       }
       textarea {
@@ -132,9 +130,9 @@
         min-height: 120px;
       }
       .cta-button-glass {
-        background: rgba(255,255,255,0.25);
+        background: var(--contacts-button-bg);
         border: 1.5px solid rgba(255,255,255,0.5);
-        color: #334155;
+        color: #ffffff;
         padding: 1rem 2.5rem;
         font-size: 1.1rem;
         font-weight: 700;
@@ -149,8 +147,8 @@
         overflow: hidden;
         align-self: flex-start;
         &:hover {
-          background: rgba(99,102,241,0.10);
-          color: #6366f1;
+          background: var(--contacts-button-hover);
+          color: #ffffff;
           box-shadow: 0 4px 16px rgba(99,102,241,0.10);
           border-color: #b3bcf6;
           filter: none;

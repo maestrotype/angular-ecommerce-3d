@@ -11,6 +11,9 @@ export class ThemeService {
   public currentTheme$ = this.currentThemeSubject.asObservable();
 
   constructor() {
+    // Clear any data-theme from both html and body immediately (from admin)
+    document.documentElement.removeAttribute('data-theme');
+    document.body.removeAttribute('data-theme');
     this.initializeTheme();
   }
 
@@ -52,26 +55,16 @@ export class ThemeService {
   private applyTheme(theme: Theme): void {
     const root = document.documentElement;
 
+    // Clear any conflicting data-theme attributes from both html and body (from admin)
+    document.documentElement.removeAttribute('data-theme');
+    document.body.removeAttribute('data-theme');
+    
     // Set data-theme attribute for CSS selectors
     root.setAttribute('data-theme', theme.id);
 
-    // Apply colors
-    Object.entries(theme.colors).forEach(([key, value]) => {
-      const cssVar = `--color-${key}`;
-      root.style.setProperty(cssVar, value.toString());
-    });
-
-    // Apply layout
-    Object.entries(theme.layout).forEach(([key, value]) => {
-      const cssVar = `--${key}`;
-      root.style.setProperty(cssVar, value.toString());
-    });
-
-    // Apply components
-    Object.entries(theme.components).forEach(([key, value]) => {
-      const cssVar = `--${key}`;
-      root.style.setProperty(cssVar, value.toString());
-    });
+    // IMPORTANT: Clear data-theme from body AFTER setting it on html
+    // This prevents body from overriding html theme
+    document.body.removeAttribute('data-theme');
   }
 
   getCurrentTheme(): Theme {

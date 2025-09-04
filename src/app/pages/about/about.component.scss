@@ -8,7 +8,7 @@
 }
 
 .cta-button {
-    background: #ef4444;
+    background: var(--about-button-bg);
     color: white;
     border: none;
     padding: 1rem 2rem;
@@ -26,7 +26,7 @@
         bottom: 0;
     }
     &:hover {
-        background: #dc2626;
+        background: var(--about-button-hover);
         transform: translateY(-2px);
         box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
     }
@@ -34,7 +34,7 @@
 }
 
 .about {
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    background: var(--about-bg);
     min-height: 80vh;
     display: flex;
     align-items: center;
@@ -76,7 +76,7 @@
             font-size: 3.5rem;
             font-weight: 700;
             line-height: 1.1;
-            color: #1e293b;
+            color: var(--about-title);
             margin-bottom: 1.5rem;
             position: relative;
             .highlight {
@@ -86,7 +86,7 @@
 
         .about-subtitle {
             font-size: 1.125rem;
-            color: #64748b;
+            color: var(--about-subtitle);
             line-height: 1.6;
             margin-bottom: 2.5rem;
             max-width: 400px;

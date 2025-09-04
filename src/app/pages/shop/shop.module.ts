@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { ShopComponent } from './shop.component';
 import { SharedModule } from '../../shared/shared.module';
@@ -19,6 +20,7 @@ const routes: Routes = [
   ],
   imports: [
     CommonModule,
+    FormsModule,
     SharedModule,
     MatIconModule,
     MatButtonModule,
