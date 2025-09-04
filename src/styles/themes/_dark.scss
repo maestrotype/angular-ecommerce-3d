@@ -75,11 +75,11 @@
   }
 
   body .product-info {
-    background: #374151;
+    background: transparent;
     color: #f8fafc;
-    border: 1px solid #4b5563;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
   }
 
   /* Force all product cards to be dark */
@@ -103,7 +103,7 @@
 
   /* Force all product prices to be dark */
   body .product-price {
-    background: #4b5563;
+    background: transparent;
     color: #f8fafc;
   }
 
