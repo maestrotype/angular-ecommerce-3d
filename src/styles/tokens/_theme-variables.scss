@@ -6,13 +6,13 @@
 :root {
   /* Default theme variables */
   --hero-bg-gradient: linear-gradient(135deg, 
-    #f8fafcd9, 
-    #e2e8f0bf 30%, 
-    #cbd5e1d9 70%, 
-    #bac8d8e6
+    rgba(248, 250, 252, 0.85) 0%, 
+    rgba(241, 245, 249, 0.8) 30%, 
+    rgba(226, 232, 240, 0.75) 70%, 
+    rgba(203, 213, 225, 0.8) 100%
   );
   
-  --hero-backdrop-filter: blur(20px);
+  --hero-backdrop-filter: blur(25px) saturate(180%);
   --hero-text-color: #1e293b;
   --hero-accent-color: #3b82f6;
   
@@ -222,13 +222,13 @@
 [data-theme="glass"] {
   /* Glass theme variables */
   --hero-bg-gradient: linear-gradient(135deg, 
-    rgba(248, 250, 252, 0.85) 0%, 
-    rgba(241, 245, 249, 0.8) 30%, 
-    rgba(226, 232, 240, 0.75) 70%, 
-    rgba(203, 213, 225, 0.8) 100%
+    #f8fafcd9, 
+    #e2e8f0bf 30%, 
+    #cbd5e1d9 70%, 
+    #bac8d8e6
   );
   
-  --hero-backdrop-filter: blur(25px) saturate(180%);
+  --hero-backdrop-filter: blur(20px);
   --hero-text-color: #1e293b;
   --hero-accent-color: #6366f1;
   

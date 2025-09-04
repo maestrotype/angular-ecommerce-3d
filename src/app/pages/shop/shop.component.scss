@@ -54,9 +54,10 @@
   
     // Filters Section
     .filters-section {
-      background: var(--color-surface-primary, #ffffff);
+      background: rgba(248, 250, 252, 0.8);
+      backdrop-filter: blur(10px);
       padding: 2rem 0;
-      border-bottom: 1px solid #e2e8f0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
       position: relative;
       z-index: var(--z-index-popover);
   
@@ -917,8 +918,9 @@
 
 /* Filters and Sort Bar */
 .filters-sort-bar {
-  background: var(--color-surface-primary, #ffffff);
-  border-bottom: 1px solid var(--border, #e5e7eb);
+  background: rgba(248, 250, 252, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   padding: 1rem 0;
 
   .filters-sort-content {
@@ -937,8 +939,8 @@
         align-items: center;
         gap: 0.5rem;
         padding: 0.5rem 1rem;
-        background: var(--color-surface-primary, #ffffff);
-        border: 1px solid var(--border, #e5e7eb);
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.3);
         border-radius: 4px;
         color: var(--text-primary, #1e293b);
         font-weight: 600;
@@ -946,7 +948,8 @@
         transition: all 0.2s ease;
 
         &:hover {
-          background: var(--surface-2, rgba(0, 0, 0, 0.05));
+          background: transparent;
+          border-color: var(--color-primary, #3b82f6);
         }
 
         .hamburger-icon {
@@ -961,9 +964,9 @@
 
       .sort-dropdown {
         padding: 0.5rem;
-        border: 1px solid var(--border, #e5e7eb);
+        border: 1px solid rgba(255, 255, 255, 0.3);
         border-radius: 4px;
-        background: var(--color-surface-primary, #ffffff);
+        background: transparent;
         color: var(--text-primary, #1e293b);
         cursor: pointer;
 
@@ -992,8 +995,9 @@
         .checkmark {
           width: 18px;
           height: 18px;
-          border: 2px solid var(--border, #e5e7eb);
+          border: 2px solid rgba(255, 255, 255, 0.3);
           border-radius: 4px;
+          background: transparent;
           position: relative;
           transition: all 0.2s ease;
 
@@ -1034,9 +1038,9 @@
 
       .show-dropdown {
         padding: 0.5rem;
-        border: 1px solid var(--border, #e5e7eb);
+        border: 1px solid rgba(255, 255, 255, 0.3);
         border-radius: 4px;
-        background: var(--color-surface-primary, #ffffff);
+        background: transparent;
         color: var(--text-primary, #1e293b);
         cursor: pointer;
 
@@ -1055,7 +1059,7 @@
         width: 40px;
         height: 40px;
         background: transparent;
-        border: 1px solid var(--border, #e5e7eb);
+        border: 1px solid rgba(255, 255, 255, 0.3);
         border-radius: 4px;
         cursor: pointer;
         transition: all 0.2s ease;
