@@ -5,9 +5,14 @@
             <h2 class="section-title">{{ data?.title || "Best Sellers" }}</h2>
         </div>
 
+        <!-- Debug information -->
+        <div *ngIf="bestSellersProducts.length === 0" style="text-align: center; padding: 2rem; color: #666;">
+            <p>Loading products... ({{ bestSellersProducts.length }} products loaded)</p>
+        </div>
+
         <div class="products-grid" *ngIf="bestSellersProducts.length > 0">
             <div 
-                class="product-card" 
+                class="product-card animate-in" 
                 *ngFor="let product of bestSellersProducts; trackBy: trackByProductId"
                 (click)="goToProductDetail(product.id)"
                 [class.out-of-stock]="product?.stock !== undefined && product.stock <= 0">
