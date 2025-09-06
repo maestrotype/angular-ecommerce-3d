@@ -90,6 +90,41 @@
   --best-sellers-text: #1e293b;
   --best-sellers-subtitle: #64748b;
   
+  /* Favorites section - Default theme */
+  --favorites-bg: #f8fafc;
+  --favorites-header-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --favorites-header-text: #ffffff;
+  --favorites-header-overlay: rgba(255, 255, 255, 0.1);
+  --favorites-header-blur: blur(0px);
+  --favorites-back-btn-bg: rgba(255, 255, 255, 0.2);
+  --favorites-back-btn-text: #ffffff;
+  --favorites-back-btn-border: rgba(255, 255, 255, 0.3);
+  --favorites-back-btn-blur: blur(10px);
+  --favorites-back-btn-hover-bg: rgba(255, 255, 255, 0.3);
+  --favorites-back-btn-hover-border: rgba(255, 255, 255, 0.5);
+  --favorites-title-size: 2.5rem;
+  --favorites-title-weight: 700;
+  --favorites-heart-color: #ff6b6b;
+  --favorites-subtitle-size: 1.1rem;
+  --favorites-subtitle-opacity: 0.9;
+  --favorites-top-bar-bg: #ffffff;
+  --favorites-top-bar-text: #333333;
+  --favorites-clear-btn-bg: #6c757d;
+  --favorites-clear-btn-text: #ffffff;
+  --favorites-clear-btn-hover-bg: #5a6268;
+  --favorites-card-bg: rgba(255, 255, 255, 0.65);
+  --favorites-card-shadow: 0 8px 32px rgba(31, 38, 135, 0.08);
+  --favorites-card-blur: blur(12px);
+  --favorites-card-border: rgba(255, 255, 255, 0.18);
+  --favorites-card-hover-shadow: 0 20px 40px rgba(31, 38, 135, 0.13);
+  --favorites-card-hover-bg: rgba(255, 255, 255, 0.95);
+  --favorites-product-name-color: #333333;
+  --favorites-product-category-color: #667eea;
+  --favorites-product-price-color: #667eea;
+  --favorites-add-to-cart-bg: rgba(255, 255, 255, 0.7);
+  --favorites-add-to-cart-text: #333333;
+  --favorites-add-to-cart-hover-bg: rgba(255, 255, 255, 0.95);
+  
   /* Surface variables - Different for different elements */
   --surface-primary: #ffffff;
   --surface-secondary: #f8f9fa;
@@ -191,6 +226,41 @@
   --best-sellers-bg: #475569;
   --best-sellers-text: #f8fafc;
   --best-sellers-subtitle: #ffffff;
+  
+  /* Favorites section - Dark theme */
+  --favorites-bg: #0f172a;
+  --favorites-header-bg: linear-gradient(135deg, #334155 0%, #475569 100%);
+  --favorites-header-text: #f8fafc;
+  --favorites-header-overlay: rgba(0, 0, 0, 0.2);
+  --favorites-header-blur: blur(10px);
+  --favorites-back-btn-bg: rgba(255, 255, 255, 0.1);
+  --favorites-back-btn-text: #f8fafc;
+  --favorites-back-btn-border: rgba(255, 255, 255, 0.2);
+  --favorites-back-btn-blur: blur(15px);
+  --favorites-back-btn-hover-bg: rgba(255, 255, 255, 0.2);
+  --favorites-back-btn-hover-border: rgba(255, 255, 255, 0.3);
+  --favorites-title-size: 2.5rem;
+  --favorites-title-weight: 700;
+  --favorites-heart-color: #ff6b6b;
+  --favorites-subtitle-size: 1.1rem;
+  --favorites-subtitle-opacity: 0.9;
+  --favorites-top-bar-bg: #334155;
+  --favorites-top-bar-text: #f8fafc;
+  --favorites-clear-btn-bg: #6c757d;
+  --favorites-clear-btn-text: #ffffff;
+  --favorites-clear-btn-hover-bg: #5a6268;
+  --favorites-card-bg: #374151;
+  --favorites-card-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --favorites-card-blur: blur(15px);
+  --favorites-card-border: rgba(255, 255, 255, 0.1);
+  --favorites-card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  --favorites-card-hover-bg: #4b5563;
+  --favorites-product-name-color: #f8fafc;
+  --favorites-product-category-color: #60a5fa;
+  --favorites-product-price-color: #60a5fa;
+  --favorites-add-to-cart-bg: rgba(255, 255, 255, 0.1);
+  --favorites-add-to-cart-text: #f8fafc;
+  --favorites-add-to-cart-hover-bg: rgba(255, 255, 255, 0.2);
   
   /* Surface variables - Different for different elements */
   --surface-primary: #1e293b;
@@ -302,6 +372,41 @@
   --best-sellers-text: #1e293b;
   --best-sellers-will-change: transform;
   --best-sellers-transform: translateZ(0);
+  
+  /* Favorites section - Glass theme */
+  --favorites-bg: linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(226, 232, 240, 0.6) 100%);
+  --favorites-header-bg: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
+  --favorites-header-text: #1e293b;
+  --favorites-header-overlay: rgba(255, 255, 255, 0.1);
+  --favorites-header-blur: blur(20px);
+  --favorites-back-btn-bg: rgba(255, 255, 255, 0.25);
+  --favorites-back-btn-text: #1e293b;
+  --favorites-back-btn-border: rgba(255, 255, 255, 0.3);
+  --favorites-back-btn-blur: blur(15px);
+  --favorites-back-btn-hover-bg: rgba(255, 255, 255, 0.35);
+  --favorites-back-btn-hover-border: rgba(255, 255, 255, 0.5);
+  --favorites-title-size: 2.5rem;
+  --favorites-title-weight: 700;
+  --favorites-heart-color: #ff6b6b;
+  --favorites-subtitle-size: 1.1rem;
+  --favorites-subtitle-opacity: 0.9;
+  --favorites-top-bar-bg: rgba(255, 255, 255, 0.2);
+  --favorites-top-bar-text: #1e293b;
+  --favorites-clear-btn-bg: rgba(108, 117, 125, 0.8);
+  --favorites-clear-btn-text: #ffffff;
+  --favorites-clear-btn-hover-bg: rgba(90, 98, 104, 0.9);
+  --favorites-card-bg: rgba(255, 255, 255, 0.15);
+  --favorites-card-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+  --favorites-card-blur: blur(20px);
+  --favorites-card-border: rgba(255, 255, 255, 0.2);
+  --favorites-card-hover-shadow: 0 20px 40px rgba(31, 38, 135, 0.15);
+  --favorites-card-hover-bg: rgba(255, 255, 255, 0.25);
+  --favorites-product-name-color: #1e293b;
+  --favorites-product-category-color: #6366f1;
+  --favorites-product-price-color: #6366f1;
+  --favorites-add-to-cart-bg: rgba(255, 255, 255, 0.2);
+  --favorites-add-to-cart-text: #1e293b;
+  --favorites-add-to-cart-hover-bg: rgba(255, 255, 255, 0.3);
   
   /* Surface variables - Glass effect */
   --surface-primary: rgba(255, 255, 255, 0.15);

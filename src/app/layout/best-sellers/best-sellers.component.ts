@@ -31,89 +31,14 @@ export class BestSellersComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        console.log('BestSellersComponent ngOnInit called');
         this.productService.getBestSellers().subscribe({
             next: (products) => {
-                console.log('Best sellers loaded:', products);
                 this.bestSellers = products;
-                
-                // Fallback data for testing if API returns empty array
-                if (products.length === 0) {
-                    console.log('No products from API, using fallback data');
-                    this.bestSellers = this.getFallbackProducts();
-                }
             },
             error: (err) => {
               console.error('Error loading best sellers:', err);
-              console.log('Using fallback data due to error');
-              this.bestSellers = this.getFallbackProducts();
             }
           });
-    }
-
-    private getFallbackProducts(): Product[] {
-        return [
-            {
-                id: 1,
-                name: 'Test Product 1',
-                price: 99.99,
-                imageUrl: 'https://via.placeholder.com/300x300?text=Product+1',
-                category: 'Electronics',
-                description: 'Test product description',
-                stock: 10,
-                rating: 4.5,
-                ratingCount: 100,
-                isSpecial: false,
-                isNew: true,
-                discount: 0,
-                originalPrice: 0
-            },
-            {
-                id: 2,
-                name: 'Test Product 2',
-                price: 149.99,
-                imageUrl: 'https://via.placeholder.com/300x300?text=Product+2',
-                category: 'Electronics',
-                description: 'Test product description',
-                stock: 5,
-                rating: 4.8,
-                ratingCount: 50,
-                isSpecial: true,
-                isNew: false,
-                discount: 20,
-                originalPrice: 187.49
-            },
-            {
-                id: 3,
-                name: 'Test Product 3',
-                price: 79.99,
-                imageUrl: 'https://via.placeholder.com/300x300?text=Product+3',
-                category: 'Accessories',
-                description: 'Test product description',
-                stock: 15,
-                rating: 4.2,
-                ratingCount: 75,
-                isSpecial: false,
-                isNew: false,
-                discount: 0,
-                originalPrice: 0
-            },
-            {
-                id: 4,
-                name: 'Test Product 4',
-                price: 199.99,
-                imageUrl: 'https://via.placeholder.com/300x300?text=Product+4',
-                category: 'Electronics',
-                description: 'Test product description',
-                stock: 0,
-                rating: 4.9,
-                ratingCount: 200,
-                isSpecial: true,
-                isNew: false,
-                discount: 15,
-                originalPrice: 235.29
-            }
-        ];
     }
 
     // TrackBy function for performance

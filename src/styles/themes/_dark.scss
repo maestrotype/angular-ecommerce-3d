@@ -95,6 +95,86 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
   }
 
+  /* Force favorites page to be dark with maximum specificity */
+  body .favorites-page {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+  }
+
+  body .favorites-page .favorites-header {
+    background: linear-gradient(135deg, #334155 0%, #475569 100%) !important;
+    color: #f8fafc !important;
+  }
+
+  body .favorites-page .favorites-header .page-title {
+    color: #f8fafc !important;
+  }
+
+  body .favorites-page .favorites-header .page-subtitle {
+    color: #f8fafc !important;
+  }
+
+  body .favorites-page .favorites-header .back-btn {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  }
+
+  body .favorites-page .actions-bar {
+    background: #334155 !important;
+    color: #f8fafc !important;
+    border: 1px solid #475569 !important;
+  }
+
+  body .favorites-page .favorites-count {
+    color: #f8fafc !important;
+  }
+
+  body .favorites-page .clear-all-btn {
+    background: #6c757d !important;
+    color: #ffffff !important;
+  }
+
+  body .favorites-page .clear-all-btn:hover {
+    background: #5a6268 !important;
+  }
+
+  body .favorites-page .product-card {
+    background: #374151 !important;
+    color: #f8fafc !important;
+    border: 1px solid #4b5563 !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  body .favorites-page .product-card:hover {
+    background: #4b5563 !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4) !important;
+  }
+
+  body .favorites-page .product-name {
+    color: #f8fafc !important;
+  }
+
+  body .favorites-page .product-category {
+    background: #60a5fa !important;
+    color: white !important;
+  }
+
+  body .favorites-page .current-price {
+    color: #60a5fa !important;
+  }
+
+  body .favorites-page .action-btn {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #f8fafc !important;
+  }
+
+  body .favorites-page .action-btn:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #60a5fa !important;
+  }
+
+
   /* Force all product titles to be dark */
   body .product-title {
     background: #374151;
