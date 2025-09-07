@@ -5,11 +5,6 @@
             <h2 class="section-title">{{ data?.title || "Best Sellers" }}</h2>
         </div>
 
-        <!-- Debug information -->
-        <div *ngIf="bestSellersProducts.length === 0" style="text-align: center; padding: 2rem; color: #666;">
-            <p>Loading products... ({{ bestSellersProducts.length }} products loaded)</p>
-        </div>
-
         <div class="products-grid" *ngIf="bestSellersProducts.length > 0">
             <div 
                 class="product-card animate-in" 

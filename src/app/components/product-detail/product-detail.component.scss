@@ -4,6 +4,116 @@
   padding-top: 80px;
 }
 
+// Dark theme for product detail
+:host-context([data-theme="dark"]) .product-detail {
+  background: #0f172a;
+  color: #f8fafc;
+
+  .product-header {
+    background: #1e293b;
+    border-bottom: 1px solid #334155;
+
+    .breadcrumb {
+      color: #cbd5e1;
+
+      .breadcrumb-link {
+        color: #cbd5e1;
+
+        &:hover {
+          color: #60a5fa;
+        }
+      }
+    }
+
+    .back-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: #f8fafc;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: #60a5fa;
+      }
+    }
+  }
+
+  .product-content {
+    background: #0f172a;
+
+    .product-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #f8fafc;
+
+      .product-title {
+        color: #f8fafc;
+      }
+
+      .product-price {
+        color: #60a5fa;
+      }
+
+      .product-description {
+        color: #cbd5e1;
+      }
+    }
+
+    .product-tabs {
+      background: #1e293b;
+      border: 1px solid #334155;
+
+      .tab-btn {
+        color: #cbd5e1;
+        background: transparent;
+
+        &.active {
+          background: #334155;
+          color: #f8fafc;
+        }
+
+        &:hover {
+          background: #334155;
+          color: #f8fafc;
+        }
+      }
+
+      .tab-content {
+        background: #1e293b;
+        color: #f8fafc;
+        border: 1px solid #334155;
+      }
+    }
+  }
+
+  .similar-products {
+    background: #0f172a;
+
+    .section-title {
+      color: #f8fafc;
+    }
+
+    .section-subtitle {
+      color: #cbd5e1;
+    }
+  }
+
+  // Product images dark theme
+  .main-image {
+    background: #1e293b;
+    border: 1px solid #334155;
+  }
+
+  .thumb-image {
+    background: #1e293b;
+    border: 1px solid #334155;
+  }
+
+  .main-view {
+    background: #1e293b;
+    border: 1px solid #334155;
+  }
+}
+
 .product-header {
   background: var(--color-surface-primary, #1e293b);
   border-bottom: 1px solid #e9ecef;

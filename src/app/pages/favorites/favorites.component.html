@@ -1,7 +1,7 @@
-<div class="favorites-page">
-  <!-- Header Section -->
-  <div class="favorites-header">
-    <div class="container">
+<section class="favorites-page">
+  <div class="section-wrapper">
+    <!-- Header Section -->
+    <div class="favorites-header">
       <div class="header-content">
         <button class="back-btn" (click)="goBack()">
           ← Back to Shop
@@ -15,88 +15,85 @@
         </p>
       </div>
     </div>
-  </div>
 
-  <!-- Content Section -->
-  <div class="favorites-content">
-    <div class="container">
-      <!-- Loading State -->
-      <div *ngIf="isLoading" class="loading-state">
-        <div class="loading-spinner"></div>
-        <p>Loading your favorites...</p>
-      </div>
+    <!-- Content Section -->
+    <div class="favorites-content">
+      <div class="container">
+        <!-- Loading State -->
+        <div *ngIf="isLoading" class="loading-state">
+          <div class="loading-spinner"></div>
+          <p>Loading your favorites...</p>
+        </div>
 
-      <!-- Empty State -->
-      <div *ngIf="!isLoading && favorites.length === 0" class="empty-state">
-        <div class="empty-icon">💔</div>
-        <h2>No favorites yet</h2>
-        <p>Start exploring our products and add your favorites!</p>
-        <button class="shop-now-btn" (click)="onShopNow()">
-          Explore Products
-        </button>
-      </div>
-
-      <!-- Favorites List -->
-      <div *ngIf="!isLoading && favorites.length > 0" class="favorites-section">
-        <!-- Actions Bar -->
-        <div class="actions-bar">
-          <div class="favorites-count">
-            {{ favorites.length }} item{{ favorites.length !== 1 ? 's' : '' }} in favorites
-          </div>
-          <button 
-            class="clear-all-btn" 
-            (click)="onClearFavorites()"
-            [disabled]="favorites.length === 0"
-          >
-            Clear All
+        <!-- Empty State -->
+        <div *ngIf="!isLoading && favorites.length === 0" class="empty-state">
+          <div class="empty-icon">💔</div>
+          <h2>No favorites yet</h2>
+          <p>Start exploring our products and add your favorites!</p>
+          <button class="shop-now-btn" (click)="onShopNow()">
+            Explore Products
           </button>
         </div>
 
-        <!-- Products Grid -->
-        <div class="favorites-grid">
-          <div 
-            *ngFor="let product of favorites" 
-            class="favorite-item"
-            (click)="onProductClick(product)"
-          >
-            <div class="item-image">
-              <img [src]="product.imageUrl" [alt]="product.name" />
-              <div class="item-overlay">
-                <button 
-                  class="remove-favorite-btn"
-                  (click)="onRemoveFavorite(product); $event.stopPropagation()"
-                  title="Remove from favorites"
-                >
-                  ✕
-                </button>
-              </div>
+        <!-- Favorites List -->
+        <div *ngIf="!isLoading && favorites.length > 0" class="favorites-section">
+          <!-- Actions Bar -->
+          <div class="actions-bar">
+            <div class="favorites-count">
+              {{ favorites.length }} item{{ favorites.length !== 1 ? 's' : '' }} in favorites
             </div>
-            
-            <div class="item-info">
-              <h3 class="item-name">{{ product.name }}</h3>
-              <div class="item-meta">
-                <span class="item-category">{{ product.category }}</span>
-                <div class="item-rating" *ngIf="product.rating">
-                  <span class="star">⭐</span>
-                  <span>{{ product.rating }}</span>
+            <button 
+              class="clear-all-btn" 
+              (click)="onClearFavorites()"
+              [disabled]="favorites.length === 0"
+            >
+              Clear All
+            </button>
+          </div>
+
+          <!-- Products Grid -->
+          <div class="products-grid">
+            <div 
+              *ngFor="let product of favorites" 
+              class="product-card animate-in"
+              (click)="onProductClick(product)"
+            >
+              <div class="product-image">
+                <img [src]="product.imageUrl" [alt]="product.name" loading="lazy" />
+                
+                <div class="product-overlay">
+                  <div class="overlay-actions">
+                    <button class="action-btn" (click)="onProductClick(product); $event.stopPropagation()">
+                      <span class="material-icons">visibility</span>
+                    </button>
+                    <button class="action-btn favorite-btn is-favorite" 
+                            (click)="onRemoveFavorite(product); $event.stopPropagation()">
+                      <span class="material-icons">favorite</span>
+                    </button>
+                    <button class="action-btn" (click)="onAddToCart(product); $event.stopPropagation()">
+                      <span class="material-icons">shopping_cart</span>
+                    </button>
+                  </div>
                 </div>
               </div>
-              
-              <div class="item-price">
-                <span class="current-price">${{ getDiscountedPrice(product) | number:'1.2-2' }}</span>
-                <span *ngIf="product.discount" class="original-price">${{ product.price | number:'1.2-2' }}</span>
+
+              <div class="product-info">
+                <h3 class="product-name">{{ product.name }}</h3>
+                
+                <div class="product-footer">
+                  <div class="product-price">
+                    <div class="price-main">
+                      <span class="current-price">${{ getDiscountedPrice(product) | number:'1.2-2' }}</span>
+                      <span class="original-price" *ngIf="product.discount">${{ product.price | number:'1.2-2' }}</span>
+                    </div>
+                  </div>
+                  <div class="product-category">{{ product.category }}</div>
+                </div>
               </div>
-              
-              <button 
-                class="add-to-cart-btn"
-                (click)="onAddToCart(product); $event.stopPropagation()"
-              >
-                🛒 Add to Cart
-              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div> 
+</section>

@@ -92,6 +92,7 @@
   
   /* Favorites section - Default theme */
   --favorites-bg: #f8fafc;
+  --favorites-text: #1e293b;
   --favorites-header-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   --favorites-header-text: #ffffff;
   --favorites-header-overlay: rgba(255, 255, 255, 0.1);
@@ -229,6 +230,7 @@
   
   /* Favorites section - Dark theme */
   --favorites-bg: #0f172a;
+  --favorites-text: #f8fafc;
   --favorites-header-bg: linear-gradient(135deg, #334155 0%, #475569 100%);
   --favorites-header-text: #f8fafc;
   --favorites-header-overlay: rgba(0, 0, 0, 0.2);
@@ -375,6 +377,7 @@
   
   /* Favorites section - Glass theme */
   --favorites-bg: linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(226, 232, 240, 0.6) 100%);
+  --favorites-text: #1e293b;
   --favorites-header-bg: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
   --favorites-header-text: #1e293b;
   --favorites-header-overlay: rgba(255, 255, 255, 0.1);
