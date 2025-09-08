@@ -14,14 +14,18 @@
     border-bottom: 1px solid #334155;
 
     .breadcrumb {
-      color: #cbd5e1;
+      color: var(--breadcrumb-color, #cbd5e1);
 
       .breadcrumb-link {
-        color: #cbd5e1;
+        color: var(--breadcrumb-link-color, #cbd5e1);
 
         &:hover {
-          color: #60a5fa;
+          color: var(--breadcrumb-link-hover-color, #60a5fa);
         }
+      }
+
+      .current {
+        color: var(--breadcrumb-current-color, #f8fafc);
       }
     }
 
@@ -46,54 +50,28 @@
       color: #f8fafc;
 
       .product-title {
-        color: #f8fafc;
+        color: var(--product-title-color, #f8fafc);
       }
 
       .product-price {
-        color: #60a5fa;
+        color: var(--product-price-color, #60a5fa);
       }
 
       .product-description {
-        color: #cbd5e1;
-      }
-    }
-
-    .product-tabs {
-      background: #1e293b;
-      border: 1px solid #334155;
-
-      .tab-btn {
-        color: #cbd5e1;
-        background: transparent;
-
-        &.active {
-          background: #334155;
-          color: #f8fafc;
-        }
-
-        &:hover {
-          background: #334155;
-          color: #f8fafc;
-        }
-      }
-
-      .tab-content {
-        background: #1e293b;
-        color: #f8fafc;
-        border: 1px solid #334155;
+        color: var(--product-description-color, #cbd5e1);
       }
     }
   }
 
   .similar-products {
-    background: #0f172a;
+    background: var(--similar-products-bg, #0f172a);
 
     .section-title {
-      color: #f8fafc;
+      color: var(--similar-products-title-color, #f8fafc);
     }
 
     .section-subtitle {
-      color: #cbd5e1;
+      color: var(--similar-products-subtitle-color, #cbd5e1);
     }
   }
 }
@@ -136,11 +114,11 @@
   }
 
   .breadcrumb {
-    color: #6c757d;
+    color: var(--breadcrumb-color, #6c757d);
     font-size: 0.9rem;
 
     .breadcrumb-link {
-      color: #6c757d;
+      color: var(--breadcrumb-link-color, #6c757d);
       text-decoration: none;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -149,7 +127,7 @@
       margin: 0 0.25rem;
 
       &:hover {
-        color: var(--color-primary, #667eea);
+        color: var(--breadcrumb-link-hover-color, #667eea);
         background: rgba(102, 126, 234, 0.1);
         text-decoration: underline;
       }
@@ -160,7 +138,7 @@
     }
 
     .current {
-      color: #333;
+      color: var(--breadcrumb-current-color, #333);
       font-weight: 500;
     }
   }

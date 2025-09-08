@@ -18,7 +18,7 @@
   
   /* Special Offer section - Default theme */
   --special-offer-bg: linear-gradient(135deg, 
-    rgba(255, 255, 255, 0.9) 0%, 
+    rgba(255, 255, 255, 0.9) 0%, image.png
     rgba(248, 250, 252, 0.8) 30%,
     rgba(241, 245, 249, 0.7) 70%,
     rgba(226, 232, 240, 0.8) 100%);
@@ -261,6 +261,38 @@
   --product-detail-thumb-border: 2px solid transparent;
   --product-detail-thumb-selected-border: 2px solid #007bff;
   
+  /* Product Text Colors - Dark theme */
+  --product-title-color: #f8fafc;
+  --product-meta-color: #cbd5e1;
+  --product-price-color: #60a5fa;
+  --product-description-color: #e2e8f0;
+  --product-specs-label-color: #cbd5e1;
+  --product-specs-value-color: #f1f5f9;
+  
+  /* Breadcrumb and Navigation - Dark theme */
+  --breadcrumb-color: #cbd5e1;
+  --breadcrumb-link-color: #cbd5e1;
+  --breadcrumb-link-hover-color: #60a5fa;
+  --breadcrumb-current-color: #f8fafc;
+  
+  /* Similar Products - Dark theme */
+  --similar-products-title-color: #f8fafc;
+  --similar-products-subtitle-color: #cbd5e1;
+  --similar-products-bg: #0f172a;
+  --similar-products-card-bg: #1e293b;
+  --similar-products-card-border: 1px solid #334155;
+  --similar-products-card-text: #f8fafc;
+  --similar-products-card-price: #60a5fa;
+  
+  /* Bought Together - Dark theme */
+  --bought-together-title-color: #f8fafc;
+  --bought-together-subtitle-color: #cbd5e1;
+  --bought-together-bg: #0f172a;
+  --bought-together-card-bg: #1e293b;
+  --bought-together-card-border: 1px solid #334155;
+  --bought-together-card-text: #f8fafc;
+  --bought-together-card-price: #60a5fa;
+  
   /* Product Stepper - Dark theme */
   --product-stepper-bg: #334155;
   --product-stepper-border: 1px solid #475569;
@@ -279,6 +311,28 @@
   --glass-btn-hover-bg: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.08) 100%);
   --glass-btn-hover-border: 1px solid rgba(255,255,255,0.3);
   --glass-btn-hover-shadow: 0 12px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+  
+  /* Product Tabs - Dark theme */
+  --product-tabs-bg: #1e293b;
+  --product-tabs-border: 1px solid #334155;
+  --product-tabs-radius: 12px;
+  --product-tabs-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --product-tabs-nav-bg: #334155;
+  --product-tabs-nav-border: 1px solid #475569;
+  --product-tabs-active-bg: #475569;
+  --product-tabs-active-color: #f8fafc;
+  --product-tabs-active-border: #60a5fa;
+  --product-tabs-hover-bg: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+  --product-tabs-hover-color: #e2e8f0;
+  --product-tabs-text-color: #cbd5e1;
+  --product-tabs-content-color: #f1f5f9;
+  
+  /* Delivery Options - Dark theme */
+  --delivery-option-bg: #334155;
+  --delivery-option-border: 1px solid #475569;
+  --delivery-option-text: #f8fafc;
+  --delivery-option-title: #ffffff;
+  --delivery-option-subtitle: #cbd5e1;
   
   /* Best Sellers section - Dark theme (admin palette) - white subtitle */
   --best-sellers-bg: #475569;
