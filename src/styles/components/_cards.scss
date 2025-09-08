@@ -14,13 +14,21 @@
   cursor: pointer;
   width: 100%;
   min-width: 280px;
+  
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  
+  &.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
 
   &:hover { 
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); 
     transform: translateY(-4px);
   }
 
-  // Dark theme styles
   [data-theme="dark"] & {
     background: #1e293b;
     border: 1px solid #334155;
@@ -31,7 +39,6 @@
     }
   }
 
-  // Product image section
   .product-image {
     position: relative;
     width: 100%;
@@ -121,50 +128,47 @@
         transform: scale(1.05);
       }
     }
+
+    .special-badge,
+    .new-badge,
+    .discount-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: #e74c3c;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+
+    .new-badge {
+      background: #27ae60;
+    }
+
+    .discount-badge {
+      background: #f39c12;
+    }
+
+    .out-of-stock-badge {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      z-index: 2;
+    }
   }
 
-  // Special offer badge
-  .special-badge,
-  .new-badge,
-  .discount-badge {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    background: #e74c3c;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    z-index: 2;
-  }
-
-  .new-badge {
-    background: #27ae60;
-  }
-
-  .discount-badge {
-    background: #f39c12;
-  }
-
-  // Out of stock badge
-  .out-of-stock-badge {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 600;
-    text-transform: uppercase;
-    z-index: 2;
-  }
-
-  // Product info section
   .product-info {
     padding: 16px;
     display: flex;
@@ -184,53 +188,6 @@
 
       [data-theme="dark"] & {
         color: #f8fafc;
-      }
-    }
-
-    .product-rating {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 12px;
-
-      .stars {
-        display: flex;
-        gap: 2px;
-
-        .star {
-          color: #ddd;
-          font-size: 14px;
-
-          &.filled {
-            color: #fbbf24;
-          }
-        }
-      }
-
-      .rating-value,
-      .rating-count {
-        font-size: 12px;
-        color: #666;
-
-        [data-theme="dark"] & {
-          color: #94a3b8;
-        }
-      }
-
-      .product-category {
-        background: #f0f0f0;
-        color: #666;
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-size: 11px;
-        font-weight: 500;
-        text-transform: uppercase;
-        margin-left: auto;
-
-        [data-theme="dark"] & {
-          background: #334155;
-          color: #cbd5e1;
-        }
       }
     }
 
@@ -267,26 +224,18 @@
         }
       }
 
-      .cart-btn {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: #333;
-        border: none;
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
+      .product-category {
+        background: #f0f0f0;
+        color: #666;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 500;
+        text-transform: uppercase;
 
-        &:hover {
-          background: #555;
-          transform: scale(1.1);
-        }
-
-        .material-icons {
-          font-size: 18px;
+        [data-theme="dark"] & {
+          background: #334155;
+          color: #cbd5e1;
         }
       }
     }
@@ -385,5 +334,17 @@
       background: rgba(75, 85, 99, 0.5);
       border-color: rgba(75, 85, 99, 0.7);
     }
+  }
+}
+
+// Ключевые кадры анимации
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

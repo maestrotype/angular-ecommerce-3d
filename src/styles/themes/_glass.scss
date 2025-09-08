@@ -4,8 +4,7 @@
    ========================================================================== */
 
 [data-theme="glass"] {
-  /* Background gradient for glass theme */
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  /* Background gradient for glass theme - removed to prevent conflicts */
   min-height: 100vh;
   
   /* Favorites page glass theme */
@@ -204,4 +203,111 @@
     backdrop-filter: blur(25px) saturate(180%);
     -webkit-backdrop-filter: blur(25px) saturate(180%);
   }
+
+  /* Favorites page glass theme */
+  body .favorites-page {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
+    color: #1e293b;
+  }
+
+  body .favorites-page .favorites-content {
+    background: transparent;
+    color: #1e293b;
+  }
+
+  body .favorites-page .favorites-header {
+    background: rgba(255, 255, 255, 0.1);
+    color: #1e293b;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  body .favorites-page .favorites-header .page-title {
+    color: #1e293b;
+  }
+
+  body .favorites-page .favorites-header .page-subtitle {
+    color: #1e293b;
+  }
+
+  body .favorites-page .favorites-header .back-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+
+  body .favorites-page .favorites-header .back-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  body .favorites-page .actions-bar {
+    background: rgba(255, 255, 255, 0.2);
+    color: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 24px 32px;
+    border-radius: 16px;
+  }
+
+  body .favorites-page .favorites-count {
+    color: #1e293b;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  body .favorites-page .clear-all-btn {
+    background: rgba(108, 117, 125, 0.8);
+    color: #ffffff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+
+  body .favorites-page .clear-all-btn:hover {
+    background: rgba(90, 98, 104, 0.9);
+  }
+
+  body .favorites-page .product-card {
+    background: rgba(255, 255, 255, 0.15);
+    color: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  body .favorites-page .product-card:hover {
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  body .favorites-page .product-name {
+    color: #1e293b;
+  }
+
+  body .favorites-page .product-category {
+    background: #6366f1;
+    color: white;
+  }
+
+  body .favorites-page .current-price {
+    color: #6366f1;
+  }
+
+  body .favorites-page .action-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: #1e293b;
+  }
+
+  body .favorites-page .action-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    color: #6366f1;
+  }
+
+
 } 

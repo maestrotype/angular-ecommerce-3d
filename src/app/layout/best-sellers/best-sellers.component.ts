@@ -32,10 +32,11 @@ export class BestSellersComponent implements OnInit {
 
     ngOnInit(): void {
         this.productService.getBestSellers().subscribe({
-            next: (products) => this.bestSellers = products,
+            next: (products) => {
+                this.bestSellers = products;
+            },
             error: (err) => {
               console.error('Error loading best sellers:', err);
-              alert('Error loading best sellers.');
             }
           });
     }
@@ -73,6 +74,16 @@ export class BestSellersComponent implements OnInit {
     onFavoriteToggled(event: any): void {
         console.log('Favorite toggled:', event);
         // Implement favorite functionality
+    }
+
+    isFavorite(productId: number): boolean {
+        // TODO: Implement favorite service
+        return false;
+    }
+
+    toggleFavorite(product: Product): void {
+        // TODO: Implement favorite service
+        console.log('Toggle favorite for product:', product.name);
     }
 
     // Rating functionality
