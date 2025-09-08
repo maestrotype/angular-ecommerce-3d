@@ -85,6 +85,34 @@
   --header-search-bg: rgba(255, 255, 255, 0.9);
   --header-search-text: #1e293b;
   
+  /* Product Detail section - Default theme */
+  --product-detail-bg: #f8f9fa;
+  --product-detail-card-bg: #ffffff;
+  --product-detail-card-border: 1px solid #e5e7eb;
+  --product-detail-main-view-bg: #ffffff;
+  --product-detail-main-view-border: 1px solid #e5e7eb;
+  --product-detail-thumb-bg: #ffffff;
+  --product-detail-thumb-border: 2px solid transparent;
+  --product-detail-thumb-selected-border: 2px solid #007bff;
+  
+  /* Product Stepper - Default theme */
+  --product-stepper-bg: #ffffff;
+  --product-stepper-border: 1px solid #e5e7eb;
+  --product-stepper-radius: 10px;
+  --product-stepper-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --product-stepper-btn-bg: #f9fafb;
+  --product-stepper-btn-hover: #f3f4f6;
+  --product-stepper-value-color: #111827;
+  
+  /* Glass Style Buttons - Default theme */
+  --glass-btn-bg: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 100%);
+  --glass-btn-border: 1px solid rgba(255,255,255,0.3);
+  --glass-btn-color: #1e293b;
+  --glass-btn-shadow: 0 8px 32px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.4);
+  --glass-btn-hover-bg: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 100%);
+  --glass-btn-hover-border: 1px solid rgba(255,255,255,0.4);
+  --glass-btn-hover-shadow: 0 12px 40px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.5);
+  
   /* Best Sellers section - Default theme */
   --best-sellers-bg: #ffffff;
   --best-sellers-text: #1e293b;
@@ -222,6 +250,35 @@
   --header-link-hover: #60a5fa;
   --header-search-bg: rgba(255, 255, 255, 0.5);
   --header-search-text: #1e293b;
+  
+  /* Product Detail section - Dark theme */
+  --product-detail-bg: #0f172a;
+  --product-detail-card-bg: #1e293b;
+  --product-detail-card-border: 1px solid #334155;
+  --product-detail-main-view-bg: #1e293b;
+  --product-detail-main-view-border: 1px solid #334155;
+  --product-detail-thumb-bg: #1e293b;
+  --product-detail-thumb-border: 2px solid transparent;
+  --product-detail-thumb-selected-border: 2px solid #007bff;
+  
+  /* Product Stepper - Dark theme */
+  --product-stepper-bg: #334155;
+  --product-stepper-border: 1px solid #475569;
+  --product-stepper-radius: 10px;
+  --product-stepper-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --product-stepper-btn-bg: #475569;
+  --product-stepper-btn-hover: #64748b;
+  --product-stepper-btn-color: #f8fafc;
+  --product-stepper-value-color: #f8fafc;
+  
+  /* Glass Style Buttons - Dark theme */
+  --glass-btn-bg: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+  --glass-btn-border: 1px solid rgba(255,255,255,0.2);
+  --glass-btn-color: #f8fafc;
+  --glass-btn-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+  --glass-btn-hover-bg: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.08) 100%);
+  --glass-btn-hover-border: 1px solid rgba(255,255,255,0.3);
+  --glass-btn-hover-shadow: 0 12px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
   
   /* Best Sellers section - Dark theme (admin palette) - white subtitle */
   --best-sellers-bg: #475569;
