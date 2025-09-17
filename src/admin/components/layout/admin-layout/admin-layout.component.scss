@@ -1,64 +1,74 @@
-
 .admin-container {
-    height: 100vh;
-  }
-  
+  height: 100vh;
+  background-color: var(--admin-bg-primary);
+  color: var(--admin-text-primary);
+  transition: background-color var(--admin-transition-normal), color var(--admin-transition-normal);
+}
+
+.admin-sidenav {
+  width: 260px;
+  background-color: var(--admin-bg-secondary);
+  border-right: 1px solid var(--admin-border-primary);
+  color: var(--admin-text-primary);
+  transition: background-color var(--admin-transition-normal), 
+              color var(--admin-transition-normal),
+              border-color var(--admin-transition-normal);
+}
+
+.admin-content {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--admin-bg-primary);
+  color: var(--admin-text-primary);
+  transition: background-color var(--admin-transition-normal), color var(--admin-transition-normal);
+}
+
+.admin-main {
+  flex: 1;
+  padding: 24px;
+  background-color: var(--admin-bg-primary);
+  color: var(--admin-text-primary);
+  min-height: calc(100vh - 64px);
+  overflow-x: auto;
+  transition: background-color var(--admin-transition-normal), color var(--admin-transition-normal);
+}
+
+// Galaxy Z Fold 5/6 unfolded (690px) - use desktop format
+@media (min-width: 690px) and (max-width: 768px) {
   .admin-sidenav {
-    width: 260px;
-    background-color: #424242;
-    border-right: none;
-  }
-  
-  .admin-content {
-    display: flex;
-    flex-direction: column;
+    width: 240px;
+    box-shadow: none;
   }
   
   .admin-main {
-    flex: 1;
-    padding: 24px;
-    background-color: var(--mat-sidenav-content-background-color);
+    padding: 16px;
     min-height: calc(100vh - 64px);
-    overflow-x: auto;
   }
-  
-  // Galaxy Z Fold 5/6 unfolded (690px) - use desktop format
-  @media (min-width: 690px) and (max-width: 768px) {
-    .admin-sidenav {
-      width: 240px;
-      box-shadow: none;
-    }
-    
-    .admin-main {
-      padding: 16px;
-      min-height: calc(100vh - 64px);
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .admin-sidenav {
-      width: 280px;
-      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
-    }
-    
-    .admin-main {
-      padding: 16px;
-      min-height: calc(100vh - 56px); // Smaller header on mobile
-    }
+}
 
-    // Ensure content doesn't get pushed by overlay sidenav
-    .admin-content {
-      width: 100%;
-    }
+@media (max-width: 768px) {
+  .admin-sidenav {
+    width: 280px;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .admin-main {
+    padding: 16px;
+    min-height: calc(100vh - 56px); // Smaller header on mobile
   }
 
-  @media (max-width: 480px) {
-    .admin-sidenav {
-      width: 100%;
-    }
-    
-    .admin-main {
-      padding: 12px;
-    }
+  // Ensure content doesn't get pushed by overlay sidenav
+  .admin-content {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-sidenav {
+    width: 100%;
   }
   
+  .admin-main {
+    padding: 12px;
+  }
+}

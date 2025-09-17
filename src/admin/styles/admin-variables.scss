@@ -36,7 +36,7 @@
   --admin-info-light: #64b5f6;
   --admin-info-dark: #0d47a1;
   
-  // Background Colors
+  // Background Colors - Light Theme (Default)
   --admin-bg-primary: #ffffff;
   --admin-bg-secondary: #f5f5f5;
   --admin-bg-tertiary: #fafafa;
@@ -44,13 +44,22 @@
   --admin-bg-hover: #e3f2fd;
   --admin-bg-overlay: rgba(0, 0, 0, 0.5);
   
-  // Text Colors
+  // Text Colors - Light Theme (Default)
   --admin-text-primary: #212121;
   --admin-text-secondary: #757575;
   --admin-text-disabled: #bdbdbd;
   --admin-text-inverse: #ffffff;
   
-  // Border Colors
+  // Material Design Component Variables - Light Theme (Default)
+  --mdc-list-item-label-text-color: var(--admin-text-primary);
+  --mdc-list-item-supporting-text-color: var(--admin-text-secondary);
+  --mdc-list-item-leading-icon-color: var(--admin-text-secondary);
+  --mdc-list-item-trailing-icon-color: var(--admin-text-secondary);
+  --mdc-list-item-selected-label-text-color: var(--admin-text-primary);
+  --mdc-list-item-disabled-label-text-color: var(--admin-text-disabled);
+  --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
+  --mdc-list-item-focus-label-text-color: var(--admin-text-primary);
+  // Border Colors - Light Theme (Default)
   --admin-border-primary: #e0e0e0;
   --admin-border-secondary: #f0f0f0;
   --admin-border-focus: #1976d2;
@@ -141,22 +150,45 @@
   --admin-breakpoint-lg: 992px;
   --admin-breakpoint-xl: 1200px;
   --admin-breakpoint-xxl: 1400px;
+
+  // Material Design List item variables (default scope)
+  --mdc-list-list-item-label-text-color: var(--admin-text-primary);
+  --mdc-list-list-item-supporting-text-color: var(--admin-text-secondary);
+  --mdc-list-list-item-disabled-text-color: var(--admin-text-disabled);
+  --mdc-list-list-item-leading-icon-color: var(--admin-text-secondary);
+  --mdc-list-list-item-trailing-icon-color: var(--admin-text-secondary);
+  // MDC list hover tokens (default scope)
+  --mdc-list-list-item-hover-label-text-color: var(--admin-text-primary);
+  --mdc-list-list-item-hover-state-layer-color: transparent;
+  --mdc-list-list-item-hover-state-layer-opacity: 0;
+  --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
+  // Override MDC card container tokens globally
+  --mdc-elevated-card-container-color: transparent;
+  --mdc-filled-card-container-color: transparent;
+  --mdc-outlined-card-container-color: transparent;
 }
 
 // Dark Theme Variables
 [data-theme="dark"] {
+  // Background Colors - Dark Theme
   --admin-bg-primary: #121212;
   --admin-bg-secondary: #1e1e1e;
   --admin-bg-tertiary: #2d2d2d;
-  --admin-bg-card: #1e1e1e;
+  --admin-bg-card: transparent;
   --admin-bg-hover: #2d2d2d;
+  --admin-bg-overlay: rgba(255, 255, 255, 0.1);
   
+  // Text Colors - Dark Theme
   --admin-text-primary: #ffffff;
   --admin-text-secondary: #b0b0b0;
   --admin-text-disabled: #666666;
+  --admin-text-inverse: #000000;
   
+  // Border Colors - Dark Theme
   --admin-border-primary: #404040;
   --admin-border-secondary: #333333;
+  --admin-border-focus: #42a5f5;
+  --admin-border-error: #f44336;
   
   // Order Details Dark Theme
   --admin-order-detail-bg: #1f2937;
@@ -187,16 +219,77 @@
   --admin-order-status-shipped: #4caf50;
   --admin-order-status-delivered: #4caf50;
   --admin-order-status-cancelled: #f44336;
+
+  // Material Design List item variables (dark theme)
+  --mdc-list-list-item-label-text-color: var(--admin-text-primary);
+  --mdc-list-list-item-supporting-text-color: var(--admin-text-secondary);
+  --mdc-list-list-item-disabled-text-color: var(--admin-text-disabled);
+  --mdc-list-list-item-leading-icon-color: var(--admin-text-secondary);
+  --mdc-list-list-item-trailing-icon-color: var(--admin-text-secondary);
+  // MDC list hover tokens (dark)
+  --mdc-list-list-item-hover-label-text-color: var(--admin-text-primary);
+  --mdc-list-list-item-hover-state-layer-color: transparent;
+  --mdc-list-list-item-hover-state-layer-opacity: 0;
+  --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
+  // Ensure MDC card container tokens are transparent in dark theme
+  --mdc-elevated-card-container-color: transparent;
+  --mdc-filled-card-container-color: transparent;
+  --mdc-outlined-card-container-color: transparent;
+}
+
+// Light Theme Variables (explicit)
+[data-theme="light"] {
+  // Background Colors - Light Theme
+  --admin-bg-primary: #ffffff;
+  --admin-bg-secondary: #f5f5f5;
+  --admin-bg-tertiary: #fafafa;
+  --admin-bg-card: transparent;
+  --admin-bg-hover: #e3f2fd;
+  --admin-bg-overlay: rgba(0, 0, 0, 0.5);
+  
+  // Text Colors - Light Theme
+  --admin-text-primary: #212121;
+  --admin-text-secondary: #757575;
+  --admin-text-disabled: #bdbdbd;
+  --admin-text-inverse: #ffffff;
+  
+  // Border Colors - Light Theme
+  --admin-border-primary: #e0e0e0;
+  --admin-border-secondary: #f0f0f0;
+  --admin-border-focus: #1976d2;
+  --admin-border-error: #f44336;
+  
+  // Ensure MDC card container tokens are transparent in light theme
+  --mdc-elevated-card-container-color: transparent;
+  --mdc-filled-card-container-color: transparent;
+  --mdc-outlined-card-container-color: transparent;
+  
+  // MDC list hover tokens (light)
+  --mdc-list-list-item-hover-label-text-color: var(--admin-text-primary);
+  --mdc-list-list-item-hover-state-layer-color: transparent;
+  --mdc-list-list-item-hover-state-layer-opacity: 0;
+  --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
 }
 
 // Glass Theme Variables
 [data-theme="glass"] {
+  // Background Colors - Glass Theme
   --admin-bg-primary: rgba(255, 255, 255, 0.1);
   --admin-bg-secondary: rgba(255, 255, 255, 0.05);
   --admin-bg-tertiary: rgba(255, 255, 255, 0.02);
   --admin-bg-card: rgba(255, 255, 255, 0.1);
   --admin-bg-hover: rgba(255, 255, 255, 0.15);
+  --admin-bg-overlay: rgba(0, 0, 0, 0.3);
   
+  // Text Colors - Glass Theme
+  --admin-text-primary: #ffffff;
+  --admin-text-secondary: rgba(255, 255, 255, 0.8);
+  --admin-text-disabled: rgba(255, 255, 255, 0.5);
+  --admin-text-inverse: #000000;
+  
+  // Border Colors - Glass Theme
   --admin-border-primary: rgba(255, 255, 255, 0.2);
   --admin-border-secondary: rgba(255, 255, 255, 0.1);
-} 
+  --admin-border-focus: #42a5f5;
+  --admin-border-error: #f44336;
+}

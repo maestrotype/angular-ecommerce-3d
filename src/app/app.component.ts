@@ -20,22 +20,27 @@ export class AppComponent implements OnInit {
     private frontendSeoService: FrontendSeoService
   ) {
     // Clear data-theme from body immediately when frontend loads (from admin)
-    document.body.removeAttribute('data-theme');
-    
+    // But only if we're not in admin route
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
         this.adminRoute = event.url.startsWith('/admin');
+        
+        // Only clear admin theme if we're switching to frontend
+        if (!this.adminRoute) {
+          document.body.removeAttribute('data-theme');
+        }
       });
   }
 
   ngOnInit(): void {
     // Watch for data-theme changes on body and remove them
+    // But only if we're not in admin route
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
           const body = mutation.target as HTMLElement;
-          if (body.tagName === 'BODY' && body.getAttribute('data-theme') === 'dark') {
+          if (body.tagName === 'BODY' && body.getAttribute('data-theme') === 'dark' && !this.adminRoute) {
             body.removeAttribute('data-theme');
           }
         }

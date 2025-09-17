@@ -28,7 +28,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Load theme preference from localStorage
     const savedTheme = localStorage.getItem('adminTheme');
-    this.isDarkTheme = savedTheme === 'light' ? false : true; // Default to dark
+    this.isDarkTheme = savedTheme === 'dark'; // Default to dark if no saved theme
     this.applyTheme();
 
     // Load notifications on initialization
@@ -76,7 +76,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private applyTheme(): void {
     const theme = this.isDarkTheme ? 'dark' : 'light';
-    document.body.setAttribute('data-theme', theme);
+    // Apply theme to documentElement instead of body for consistency with frontend
+    document.documentElement.setAttribute('data-theme', theme);
   }
 
   onNotificationClick(notification: Notification): void {
@@ -137,4 +138,3 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.router.navigate(['/admin/login']);
   }
 }
-
