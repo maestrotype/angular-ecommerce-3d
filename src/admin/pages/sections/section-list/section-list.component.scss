@@ -39,22 +39,22 @@
     background-color: #2d2d2d;
     
     th {
-      background-color: #374151 !important;
-      color: #ffffff !important;
+      background-color: #374151 ;
+      color: #ffffff ;
       font-weight: 600;
       padding: 16px;
       border-bottom: 1px solid #4b5563;
     }
     
     td {
-      background-color: #2d2d2d !important;
-      color: #ffffff !important;
+      background-color: #2d2d2d ;
+      color: #ffffff ;
       padding: 16px;
       border-bottom: 1px solid #404040;
     }
     
     tr:hover td {
-      background-color: #374151 !important;
+      background-color: #374151 ;
     }
     
     .mat-column-actions {
@@ -190,8 +190,8 @@
         mat-chip {
           font-size: 12px;
           height: 24px;
-          background-color: #3b82f6 !important;
-          color: #ffffff !important;
+          background-color: #3b82f6 ;
+          color: #ffffff ;
         }
       }
 
@@ -258,11 +258,11 @@
     }
 
     .desktop-view {
-      display: block !important;
+      display: block ;
     }
 
     .mobile-view {
-      display: none !important;
+      display: none ;
     }
 
     // Compact table for Galaxy Z Fold
@@ -350,39 +350,39 @@
 
   ::ng-deep {
     .mat-chip {
-      background-color: #3b82f6 !important;
-      color: #ffffff !important;
+      background-color: #3b82f6 ;
+      color: #ffffff ;
     }
     
     .mat-icon-button {
-      color: #ffffff !important;
+      color: #ffffff ;
       
       &.mat-button-disabled {
-        color: #6b7280 !important;
+        color: #6b7280 ;
       }
     }
     
     .mat-raised-button.mat-primary {
-      background-color: #3b82f6 !important;
-      color: #ffffff !important;
+      background-color: #3b82f6 ;
+      color: #ffffff ;
     }
     
     .mat-slide-toggle {
       .mat-slide-toggle-bar {
-        background-color: #4b5563 !important;
+        background-color: #4b5563 ;
       }
       
       .mat-slide-toggle-thumb {
-        background-color: #9ca3af !important;
+        background-color: #9ca3af ;
       }
       
       &.mat-checked {
         .mat-slide-toggle-bar {
-          background-color: #3b82f6 !important;
+          background-color: #3b82f6 ;
         }
         
         .mat-slide-toggle-thumb {
-          background-color: #ffffff !important;
+          background-color: #ffffff ;
         }
       }
     }

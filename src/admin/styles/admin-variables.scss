@@ -58,6 +58,7 @@
   --mdc-list-item-selected-label-text-color: var(--admin-text-primary);
   --mdc-list-item-disabled-label-text-color: var(--admin-text-disabled);
   --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
+  --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
   --mdc-list-item-focus-label-text-color: var(--admin-text-primary);
   // Border Colors - Light Theme (Default)
   --admin-border-primary: #e0e0e0;
@@ -162,7 +163,11 @@
   --mdc-list-list-item-hover-state-layer-color: transparent;
   --mdc-list-list-item-hover-state-layer-opacity: 0;
   --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
-  // Override MDC card container tokens globally
+  --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
+  --mdc-list-list-item-hover-leading-icon-color: var(--admin-text-secondary);
+  --mdc-list-list-item-hover-trailing-icon-color: var(--admin-text-secondary);
+  --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
+  --mdc-list-item-hover-trailing-icon-color: var(--admin-text-secondary);  // Override MDC card container tokens globally
   --mdc-elevated-card-container-color: transparent;
   --mdc-filled-card-container-color: transparent;
   --mdc-outlined-card-container-color: transparent;
@@ -231,6 +236,7 @@
   --mdc-list-list-item-hover-state-layer-color: transparent;
   --mdc-list-list-item-hover-state-layer-opacity: 0;
   --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
+  --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
   // Ensure MDC card container tokens are transparent in dark theme
   --mdc-elevated-card-container-color: transparent;
   --mdc-filled-card-container-color: transparent;
@@ -269,6 +275,7 @@
   --mdc-list-list-item-hover-state-layer-color: transparent;
   --mdc-list-list-item-hover-state-layer-opacity: 0;
   --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
+  --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
 }
 
 // Glass Theme Variables

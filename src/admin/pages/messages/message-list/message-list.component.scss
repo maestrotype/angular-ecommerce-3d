@@ -228,94 +228,94 @@
 ::ng-deep {
   .mat-form-field {
     .mat-form-field-label {
-      color: #e5e7eb !important;
+      color: #e5e7eb ;
     }
     
     .mat-input-element {
-      color: #ffffff !important;
+      color: #ffffff ;
     }
     
     .mat-form-field-outline {
-      color: #6b7280 !important;
+      color: #6b7280 ;
     }
     
     &.mat-focused {
       .mat-form-field-outline-thick {
-        color: #3b82f6 !important;
+        color: #3b82f6 ;
       }
       
       .mat-form-field-label {
-        color: #3b82f6 !important;
+        color: #3b82f6 ;
       }
     }
   }
   
   .mat-select {
-    color: #ffffff !important;
+    color: #ffffff ;
     
     .mat-select-arrow {
-      color: #9ca3af !important;
+      color: #9ca3af ;
     }
   }
   
   .mat-option {
-    background-color: #2d2d2d !important;
-    color: #ffffff !important;
+    background-color: #2d2d2d ;
+    color: #ffffff ;
     
     &:hover {
-      background-color: #374151 !important;
+      background-color: #374151 ;
     }
     
     &.mat-selected {
-      background-color: #3b82f6 !important;
+      background-color: #3b82f6 ;
     }
   }
   
   .mat-select-panel {
-    background-color: #2d2d2d !important;
+    background-color: #2d2d2d ;
   }
   
   .mat-chip {
-    background-color: #3b82f6 !important;
-    color: #ffffff !important;
+    background-color: #3b82f6 ;
+    color: #ffffff ;
   }
   
   .mat-icon-button {
-    color: #ffffff !important;
+    color: #ffffff ;
     
     &.mat-button-disabled {
-      color: #6b7280 !important;
+      color: #6b7280 ;
     }
   }
   
   .mat-raised-button.mat-primary {
-    background-color: #3b82f6 !important;
-    color: #ffffff !important;
+    background-color: #3b82f6 ;
+    color: #ffffff ;
   }
   
   .mat-table {
-    background-color: #2d2d2d !important;
+    background-color: #2d2d2d ;
   }
   
   .mat-header-row {
-    background-color: #374151 !important;
+    background-color: #374151 ;
   }
   
   .mat-row {
-    background-color: #2d2d2d !important;
+    background-color: #2d2d2d ;
     
     &:hover {
-      background-color: #374151 !important;
+      background-color: #374151 ;
     }
   }
   
   .mat-header-cell {
-    color: #ffffff !important;
+    color: #ffffff ;
     font-weight: 600;
   }
   
   .mat-cell {
-    color: #ffffff !important;
+    color: #ffffff ;
   }
 }
   

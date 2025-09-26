@@ -43,14 +43,14 @@
   }
   
   .form-card {
-    background-color: #2d2d2d !important;
+    background-color: #2d2d2d ;
     border: 1px solid #404040;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
   
   .form-content {
-    padding: 24px !important;
+    padding: 24px ;
   }
   
   .form-row {
@@ -82,15 +82,15 @@
     }
   
     .submit-button {
-      background-color: #3b82f6 !important;
-      color: #ffffff !important;
+      background-color: #3b82f6 ;
+      color: #ffffff ;
   
       &:hover:not(:disabled) {
-        background-color: #2563eb !important;
+        background-color: #2563eb ;
       }
   
       &:disabled {
-        background-color: #6b7280 !important;
+        background-color: #6b7280 ;
         cursor: not-allowed;
       }
     }

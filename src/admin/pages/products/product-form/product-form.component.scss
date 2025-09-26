@@ -43,14 +43,14 @@
   }
   
   .form-card {
-    background-color: #2d2d2d !important;
+    background-color: #2d2d2d ;
     border: 1px solid #404040;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
   
   .form-content {
-    padding: 24px !important;
+    padding: 24px ;
   }
   
   .form-grid {
@@ -138,15 +138,15 @@
     }
     
     .submit-button {
-      background-color: #3b82f6 !important;
-      color: #ffffff !important;
+      background-color: #3b82f6 ;
+      color: #ffffff ;
       
       &:hover:not(:disabled) {
-        background-color: #2563eb !important;
+        background-color: #2563eb ;
       }
       
       &:disabled {
-        background-color: #6b7280 !important;
+        background-color: #6b7280 ;
         cursor: not-allowed;
       }
     }
@@ -345,61 +345,61 @@
   // Material Design overrides for dark theme
   ::ng-deep {
     .mat-card-title {
-      color: #ffffff !important;
+      color: #ffffff ;
       font-weight: 600;
     }
     
     .mat-form-field {
       .mat-form-field-label {
-        color: #e5e7eb !important;
+        color: #e5e7eb ;
       }
       
       .mat-input-element {
-        color: #ffffff !important;
+        color: #ffffff ;
       }
       
       .mat-form-field-outline {
-        color: #6b7280 !important;
+        color: #6b7280 ;
       }
       
       &.mat-focused {
         .mat-form-field-outline-thick {
-          color: #3b82f6 !important;
+          color: #3b82f6 ;
         }
         
         .mat-form-field-label {
-          color: #3b82f6 !important;
+          color: #3b82f6 ;
         }
       }
     }
     
     .mat-select {
-      color: #ffffff !important;
+      color: #ffffff ;
       
       .mat-select-arrow {
-        color: #9ca3af !important;
+        color: #9ca3af ;
       }
     }
     
     .mat-option {
-      background-color: #2d2d2d !important;
-      color: #ffffff !important;
+      background-color: #2d2d2d ;
+      color: #ffffff ;
       
       &:hover {
-        background-color: #374151 !important;
+        background-color: #374151 ;
       }
       
       &.mat-selected {
-        background-color: #3b82f6 !important;
+        background-color: #3b82f6 ;
       }
     }
     
     .mat-select-panel {
-      background-color: #2d2d2d !important;
+      background-color: #2d2d2d ;
     }
     
     .mat-error {
-      color: #ef4444 !important;
+      color: #ef4444 ;
     }
   }
 
