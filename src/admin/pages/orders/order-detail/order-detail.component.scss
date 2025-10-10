@@ -244,7 +244,7 @@
 // Material Design overrides for dark theme
 ::ng-deep {
   .mat-dialog-container {
-    background-color: #1f2937 ;
+    background-color: var(--admin-bg-card) ;
     color: #ffffff ;
   }
 
@@ -276,10 +276,10 @@
   }
 
   .mat-option {
-    background-color: #2d2d2d ;
+    background-color: var(--admin-bg-secondary) ;
     color: #ffffff ;
     &:hover {
-      background-color: #374151 ;
+      background-color: var(--admin-bg-hover) ;
     }
     &.mat-selected {
       background-color: #3b82f6 ;
@@ -287,7 +287,7 @@
   }
 
   .mat-select-panel {
-    background-color: #2d2d2d ;
+    background-color: var(--admin-bg-secondary) ;
   }
 
   .mat-raised-button.mat-primary {

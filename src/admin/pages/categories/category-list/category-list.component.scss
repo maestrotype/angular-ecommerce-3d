@@ -1,6 +1,6 @@
 .category-list-container {
   padding: 0;
-  background-color: #1f2937;
+  background-color: var(--admin-bg-card);
   min-height: calc(100vh - 64px);
   color: #ffffff;
 }
@@ -11,7 +11,7 @@
   align-items: center;
   margin-bottom: 24px;
   padding: 24px 24px 0 24px;
-  background-color: #1f2937;
+  background-color: var(--admin-bg-card);
 
   h1 {
     color: #ffffff;
@@ -32,7 +32,7 @@
   gap: 16px;
   margin-bottom: 24px;
   padding: 0 24px;
-  background-color: #1f2937;
+  background-color: var(--admin-bg-card);
 
   .search-field {
     min-width: 200px;
@@ -40,7 +40,7 @@
 }
 
 .table-container {
-  background: #2d2d2d;
+  background: var(--admin-bg-secondary);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.3);
   border: 1px solid #404040;
@@ -50,10 +50,10 @@
 
 .category-table {
   width: 100%;
-  background-color: #2d2d2d;
+  background-color: var(--admin-bg-secondary);
 
   th {
-    background-color: #374151 ;
+    background-color: var(--admin-bg-hover) ;
     color: #ffffff ;
     font-weight: 600;
     padding: 16px;
@@ -61,14 +61,14 @@
   }
 
   td {
-    background-color: #2d2d2d ;
+    background-color: var(--admin-bg-secondary) ;
     color: #ffffff ;
     padding: 16px;
     border-bottom: 1px solid #404040;
   }
 
   tr:hover td {
-    background-color: #374151 ;
+    background-color: var(--admin-bg-hover) ;
   }
 }
 
@@ -84,7 +84,7 @@
 }
 
 .category-card {
-  background: #2d2d2d;
+  background: var(--admin-bg-secondary);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   padding: 16px;
@@ -163,7 +163,7 @@
   margin: 0 24px;
   text-align: center;
   color: #ffffff;
-  background-color: #2d2d2d;
+  background-color: var(--admin-bg-secondary);
   border-radius: 8px;
   border: 1px solid #404040;
 }

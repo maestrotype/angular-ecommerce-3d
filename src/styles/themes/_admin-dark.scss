@@ -1,0 +1,18 @@
+[data-theme='admin-dark'] {
+    --color-bg: #0f172a;
+    --color-text: #e2e8f0;
+    --color-primary: #2563eb;
+    --color-surface: #1e293b;
+  
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  
+    .mat-toolbar {
+      background-color: var(--color-surface);
+    }
+  
+    a {
+      color: var(--color-primary);
+    }
+  }
+  

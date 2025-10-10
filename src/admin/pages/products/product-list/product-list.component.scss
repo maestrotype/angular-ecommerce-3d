@@ -1,7 +1,7 @@
 
 .product-list-container {
   padding: 20px;
-  background-color: #1f2937; // Dark gray background instead of transparent
+  background-color: var(--admin-bg-card); // Dark gray background instead of transparent
   min-height: 100vh;
 }
 
@@ -11,7 +11,7 @@
   align-items: center;
   margin-bottom: 20px;
   padding: 20px;
-  background-color: #1f2937; // Dark gray background
+  background-color: var(--admin-bg-card); // Dark gray background
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -21,13 +21,13 @@
   gap: 15px;
   margin-bottom: 20px;
   padding: 15px;
-  background-color: #1f2937; // Dark gray background
+  background-color: var(--admin-bg-card); // Dark gray background
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .table-container {
-    background: #2d2d2d;
+    background: var(--admin-bg-secondary);
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     border: 1px solid #404040;
@@ -37,10 +37,10 @@
   
   .product-table {
     width: 100%;
-    background-color: #2d2d2d;
+    background-color: var(--admin-bg-secondary);
     
     th {
-      background-color: #374151 ;
+      background-color: var(--admin-bg-hover) ;
       color: #ffffff ;
       font-weight: 600;
       padding: 16px;
@@ -48,14 +48,14 @@
     }
     
     td {
-      background-color: #2d2d2d ;
+      background-color: var(--admin-bg-secondary) ;
       color: #ffffff ;
       padding: 16px;
       border-bottom: 1px solid #404040;
     }
     
     tr:hover td {
-      background-color: #374151 ;
+      background-color: var(--admin-bg-hover) ;
     }
   }
   
@@ -81,7 +81,7 @@
   .no-image-placeholder {
     width: 50px;
     height: 50px;
-    background-color: #374151;
+    background-color: var(--admin-bg-hover);
     border: 1px solid #4b5563;
     border-radius: 4px;
     display: flex;
@@ -112,7 +112,7 @@
     margin: 0 24px;
     text-align: center;
     color: #ffffff;
-    background-color: #2d2d2d;
+    background-color: var(--admin-bg-secondary);
     border-radius: 8px;
     border: 1px solid #404040;
   }
@@ -151,7 +151,7 @@
   }
 
   .product-card {
-    background: #2d2d2d;
+    background: var(--admin-bg-secondary);
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     padding: 16px;
@@ -182,7 +182,7 @@
       .no-image-placeholder {
         width: 80px;
         height: 80px;
-        background-color: #374151;
+        background-color: var(--admin-bg-hover);
         border: 1px solid #4b5563;
         border-radius: 8px;
         display: flex;
@@ -436,7 +436,7 @@
   // Material Design overrides for dark theme
   ::ng-deep {
     .mat-paginator {
-      background-color: #2d2d2d ;
+      background-color: var(--admin-bg-secondary) ;
       color: #ffffff ;
       border-top: 1px solid #404040;
       
@@ -487,11 +487,11 @@
     }
     
     .mat-option {
-      background-color: #2d2d2d ;
+      background-color: var(--admin-bg-secondary) ;
       color: #ffffff ;
       
       &:hover {
-        background-color: #374151 ;
+        background-color: var(--admin-bg-hover) ;
       }
       
       &.mat-selected {
@@ -500,7 +500,7 @@
     }
     
     .mat-select-panel {
-      background-color: #2d2d2d ;
+      background-color: var(--admin-bg-secondary) ;
     }
     
     .mat-chip {
@@ -522,18 +522,18 @@
     }
     
     .mat-table {
-      background-color: #2d2d2d ;
+      background-color: var(--admin-bg-secondary) ;
     }
     
     .mat-header-row {
-      background-color: #374151 ;
+      background-color: var(--admin-bg-hover) ;
     }
     
     .mat-row {
-      background-color: #2d2d2d ;
+      background-color: var(--admin-bg-secondary) ;
       
       &:hover {
-        background-color: #374151 ;
+        background-color: var(--admin-bg-hover) ;
       }
     }
     

@@ -1,7 +1,7 @@
 
 .message-detail-container {
   max-width: 800px;
-  background-color: #1f2937;
+  background-color: var(--admin-bg-card);
   color: #ffffff;
 }
 
@@ -25,7 +25,7 @@
 }
 
 .message-info {
-  background: #2d2d2d;
+  background: var(--admin-bg-secondary);
   padding: 16px;
   border-radius: 8px;
   margin-bottom: 24px;
@@ -58,7 +58,7 @@
   }
 
   .content-text, .reply-text {
-    background: #374151;
+    background: var(--admin-bg-hover);
     padding: 16px;
     border-radius: 8px;
     border: 1px solid #404040;
@@ -117,7 +117,7 @@
 // Material Design overrides for dark theme
 ::ng-deep {
   .mat-dialog-container {
-    background-color: #1f2937 ;
+    background-color: var(--admin-bg-card) ;
     color: #ffffff ;
   }
   

@@ -1,6 +1,6 @@
 .user-list-container {
   padding: 0;
-  background-color: #1f2937;
+  background-color: var(--admin-bg-card);
   min-height: calc(100vh - 64px);
   color: #ffffff;
 }
@@ -59,7 +59,7 @@
 }
 
 .table-container {
-  background: #2d2d2d;
+  background: var(--admin-bg-secondary);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   border: 1px solid #404040;
@@ -68,10 +68,10 @@
   
   .users-table {
     width: 100%;
-    background-color: #2d2d2d;
+    background-color: var(--admin-bg-secondary);
     
     th {
-      background-color: #374151 ;
+      background-color: var(--admin-bg-hover) ;
       color: #ffffff ;
       font-weight: 600;
       padding: 16px;
@@ -79,14 +79,14 @@
     }
     
     td {
-      background-color: #2d2d2d ;
+      background-color: var(--admin-bg-secondary) ;
       color: #ffffff ;
       padding: 16px;
       border-bottom: 1px solid #404040;
     }
     
     tr:hover td {
-      background-color: #374151 ;
+      background-color: var(--admin-bg-hover) ;
     }
     
     .user-info {
@@ -98,7 +98,7 @@
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        background-color: #374151;
+        background-color: var(--admin-bg-hover);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -165,7 +165,7 @@
 }
 
 .user-card {
-  background: #2d2d2d;
+  background: var(--admin-bg-secondary);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   padding: 16px;
@@ -187,7 +187,7 @@
       width: 60px;
       height: 60px;
       border-radius: 50%;
-      background-color: #374151;
+      background-color: var(--admin-bg-hover);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -493,11 +493,11 @@
   }
   
   .mat-option {
-    background-color: #2d2d2d ;
+    background-color: var(--admin-bg-secondary) ;
     color: #ffffff ;
     
     &:hover {
-      background-color: #374151 ;
+      background-color: var(--admin-bg-hover) ;
     }
     
     &.mat-selected {
@@ -506,11 +506,11 @@
   }
   
   .mat-select-panel {
-    background-color: #2d2d2d ;
+    background-color: var(--admin-bg-secondary) ;
   }
   
   .mat-paginator {
-    background-color: #2d2d2d ;
+    background-color: var(--admin-bg-secondary) ;
     color: #ffffff ;
     border-top: 1px solid #404040;
     

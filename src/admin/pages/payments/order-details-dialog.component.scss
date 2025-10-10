@@ -1,7 +1,7 @@
 .order-details-dialog {
   min-width: 800px;
   max-width: 1000px;
-  background: #1f2937;
+  background: var(--admin-bg-card);
   color: #f9fafb;
   border-radius: 12px;
   overflow: hidden;
@@ -66,7 +66,7 @@
 
 .order-info {
   padding: 24px;
-  background: #1f2937;
+  background: var(--admin-bg-card);
   max-height: 70vh;
   overflow-y: auto;
 
@@ -75,7 +75,7 @@
   }
 
   &::-webkit-scrollbar-track {
-    background: #374151;
+    background: var(--admin-bg-hover);
     border-radius: 4px;
   }
 
@@ -87,7 +87,7 @@
 
 .info-section {
   margin-bottom: 32px;
-  background: #374151;
+  background: var(--admin-bg-hover);
   border-radius: 12px;
   padding: 20px;
   border: 1px solid #4b5563;

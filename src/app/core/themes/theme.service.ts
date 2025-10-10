@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Theme } from './theme.model';
 import { AVAILABLE_THEMES, DEFAULT_THEME_ID } from './theme-config';
+
+type Area = 'frontend' | 'admin';
 
 @Injectable({
   providedIn: 'root'
@@ -10,25 +12,29 @@ export class ThemeService {
   private currentThemeSubject = new BehaviorSubject<Theme>(this.getThemeById(DEFAULT_THEME_ID));
   public currentTheme$ = this.currentThemeSubject.asObservable();
 
+  private adminThemeSubject = new BehaviorSubject<Theme | null>(null);
+  public adminTheme$ = this.adminThemeSubject.asObservable();
+
   constructor() {
-    // Clear any data-theme from both html and body immediately (from admin)
-    document.documentElement.removeAttribute('data-theme');
-    document.body.removeAttribute('data-theme');
     this.initializeTheme();
   }
 
   private initializeTheme(): void {
-    const savedThemeId = localStorage.getItem('selected-theme');
-    
-    if (savedThemeId) {
-      const theme = this.getThemeById(savedThemeId);
-      if (theme) {
-        this.setTheme(theme.id);
-      } else {
-        this.setTheme(DEFAULT_THEME_ID);
+    const savedFrontend = localStorage.getItem('selected-theme');
+    const savedAdmin = localStorage.getItem('selected-theme-admin');
+
+    const frontendTheme = savedFrontend ? this.getThemeById(savedFrontend) : this.getThemeById(DEFAULT_THEME_ID);
+    if (frontendTheme) {
+      this.applyTheme(frontendTheme, 'frontend');
+      this.currentThemeSubject.next(frontendTheme);
+    }
+
+    if (savedAdmin) {
+      const adminTheme = this.getThemeById(savedAdmin);
+      if (adminTheme) {
+        this.applyTheme(adminTheme, 'admin');
+        this.adminThemeSubject.next(adminTheme);
       }
-    } else {
-      this.setTheme(DEFAULT_THEME_ID);
     }
   }
 
@@ -40,34 +46,57 @@ export class ThemeService {
     return AVAILABLE_THEMES;
   }
 
-  setTheme(themeId: string): void {
+  setTheme(themeId: string, area: Area = 'frontend'): void {
     const theme = this.getThemeById(themeId);
-    
-    if (theme) {
-      this.currentThemeSubject.next(theme);
-      this.applyTheme(theme);
-      localStorage.setItem('selected-theme', themeId);
-    } else {
+
+    if (!theme) {
       console.error('Theme not found for ID:', themeId);
+      return;
     }
+
+    const storageKey = area === 'admin' ? 'selected-theme-admin' : 'selected-theme';
+    localStorage.setItem(storageKey, themeId);
+
+    if (area === 'admin') {
+      this.adminThemeSubject.next(theme);
+    } else {
+      this.currentThemeSubject.next(theme);
+    }
+
+    this.applyTheme(theme, area);
   }
 
-  private applyTheme(theme: Theme): void {
-    const root = document.documentElement;
+  private applyTheme(theme: Theme, area: Area = 'frontend'): void {
+    if (!theme || !theme.id) {
+      return;
+    }
 
-    // Clear any conflicting data-theme attributes from both html and body (from admin)
-    document.documentElement.removeAttribute('data-theme');
-    document.body.removeAttribute('data-theme');
-    
-    // Set data-theme attribute for CSS selectors
-    root.setAttribute('data-theme', theme.id);
-
-    // IMPORTANT: Clear data-theme from body AFTER setting it on html
-    // This prevents body from overriding html theme
-    document.body.removeAttribute('data-theme');
+    if (area === 'admin') {
+      document.body.setAttribute('data-theme', theme.id);
+    } else {
+      document.documentElement.setAttribute('data-theme', theme.id);
+    }
   }
 
   getCurrentTheme(): Theme {
     return this.currentThemeSubject.value;
   }
-} 
+
+  getCurrentAdminTheme(): Theme | null {
+    return this.adminThemeSubject.value;
+  }
+
+  clearTheme(area: Area = 'frontend'): void {
+    if (area === 'admin') {
+      document.body.removeAttribute('data-theme');
+      localStorage.removeItem('selected-theme-admin');
+      this.adminThemeSubject.next(null);
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.removeItem('selected-theme');
+      const fallback = this.getThemeById(DEFAULT_THEME_ID);
+      this.currentThemeSubject.next(fallback);
+      this.applyTheme(fallback, 'frontend');
+    }
+  }
+}

@@ -1,0 +1,196 @@
+/* ==========================================================================
+   ADMIN: Material overrides that follow admin theme variables
+   - relies on admin variables defined in admin-light / admin-dark:
+     --admin-input-bg, --admin-input-text, --admin-input-border,
+     --admin-input-label, --admin-input-focus-border, --admin-primary,
+     --admin-bg-secondary, --admin-bg-card, --admin-bg-hover, --admin-danger
+   - use selectors [data-theme='...'] so it works if theme is applied to html or body
+   ========================================================================== */
+
+/* Safe defaults if variables missing */
+:root {
+    --admin-input-bg: var(--admin-bg-card, #fff);
+    --admin-input-text: var(--admin-text-primary, #111827);
+    --admin-input-border: var(--admin-border-color, #d1d5db);
+    --admin-input-label: var(--admin-text-secondary, #6b7280);
+    --admin-input-focus-border: var(--admin-primary, #3b82f6);
+    --admin-primary: var(--admin-primary, #3b82f6);
+    --admin-bg-secondary: var(--admin-bg-secondary, #f3f4f6);
+    --admin-bg-hover: var(--admin-bg-hover, #e5e7eb);
+    --admin-danger: var(--admin-danger, #ef4444);
+  }
+  
+  /* Target both cases: theme on <html> or on <body> */
+  [data-theme='light'], [data-theme='dark'] {
+  
+    /* ===== Text fields / outlined inputs (MDC) ===== */
+    /* wrapper: gives background, radius and base border */
+    .mat-mdc-text-field-wrapper {
+      background-color: var(--admin-input-bg);
+      color: var(--admin-input-text);
+      border-radius: 12px;
+      border: 1px solid var(--admin-input-border);
+      transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
+    }
+  
+    /* input text color */
+    .mat-mdc-text-field-wrapper .mat-input-element,
+    .mat-mdc-text-field-wrapper input,
+    .mat-mdc-text-field-wrapper textarea {
+      color: var(--admin-input-text);
+    }
+  
+    /* floating label */
+    .mat-mdc-text-field-wrapper .mdc-floating-label {
+      color: var(--admin-input-label);
+      transition: color .12s ease, transform .12s ease;
+    }
+  
+    /* label when floated (focused/has-value) */
+    .mat-mdc-text-field-wrapper .mdc-floating-label--float-above,
+    .mat-mdc-text-field-wrapper.mat-focused .mdc-floating-label {
+      color: var(--admin-input-focus-border);
+    }
+  
+    /* outline stroke color (leading / notch / trailing) */
+    .mat-mdc-text-field-wrapper .mdc-notched-outline__leading,
+    .mat-mdc-text-field-wrapper .mdc-notched-outline__notch,
+    .mat-mdc-text-field-wrapper .mdc-notched-outline__trailing {
+      border-color: var(--admin-input-border);
+      /* some mdc implementations use stroke */
+      stroke: var(--admin-input-border);
+    }
+  
+    /* focused state */
+    .mat-mdc-text-field-wrapper.mat-focused,
+    .mat-mdc-text-field-wrapper:focus-within {
+      border-color: var(--admin-input-focus-border);
+      box-shadow: 0 0 0 4px rgba(0,0,0,0); /* no strong default, use below for visible focus */
+    }
+  
+    .mat-mdc-text-field-wrapper.mat-focused {
+      box-shadow: 0 0 0 3px rgba(var(--admin-primary-rgb, 59,130,246), 0.12);
+    }
+  
+    /* hover state (not focused) */
+    .mat-mdc-text-field-wrapper:hover:not(.mat-focused) {
+      border-color: var(--admin-input-focus-border);
+    }
+  
+    /* disabled */
+    .mat-mdc-text-field-wrapper .mat-form-field-disabled,
+    .mat-mdc-text-field-wrapper[aria-disabled="true"] {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+  
+    /* ===== Selects ===== */
+    .mat-mdc-select-trigger, .mat-mdc-select {
+      color: var(--admin-input-text);
+    }
+  
+    .mat-mdc-select .mat-mdc-select-arrow,
+    .mat-mdc-select-arrow {
+      color: var(--admin-input-label);
+    }
+  
+    .mat-select-panel {
+      background-color: var(--admin-bg-secondary);
+      color: var(--admin-input-text);
+    }
+  
+    .mat-option {
+      background: transparent;
+      color: var(--admin-input-text);
+    }
+  
+    .mat-option:hover {
+      background: var(--admin-bg-hover);
+    }
+  
+    .mat-option.mat-selected {
+      background: var(--admin-primary);
+      color: #fff;
+    }
+  
+    /* ===== Buttons ===== */
+    .mat-mdc-button,
+    .mat-mdc-raised-button,
+    .mat-mdc-flat-button,
+    .mat-mdc-stroked-button {
+      transition: background-color .12s ease, border-color .12s ease, color .12s ease;
+    }
+  
+    /* primary raised/filled */
+    .mat-mdc-raised-button.mat-primary,
+    .mat-mdc-button.mat-primary {
+      background-color: var(--admin-primary);
+      color: #ffffff;
+      border-color: transparent;
+    }
+  
+    .mat-mdc-raised-button.mat-primary:hover,
+    .mat-mdc-button.mat-primary:hover {
+      filter: brightness(.95);
+    }
+  
+    /* outlined / secondary */
+    .mat-mdc-stroked-button {
+      border-color: var(--admin-input-border);
+      color: var(--admin-input-text);
+    }
+  
+    .mat-mdc-stroked-button:hover {
+      border-color: var(--admin-input-focus-border);
+    }
+  
+    .mat-mdc-button.mat-button-disabled,
+    .mat-mdc-raised-button.mat-button-disabled {
+      opacity: 0.6;
+    }
+  
+    /* ===== Paginator ===== */
+    .mat-paginator {
+      background-color: var(--admin-bg-secondary);
+      color: var(--admin-input-text);
+      border-top: 1px solid var(--admin-input-border);
+    }
+  
+    .mat-paginator .mat-icon-button {
+      color: var(--admin-input-text);
+    }
+  
+    /* ===== Cards / Panels / Menus ===== */
+    .mat-card, .mat-menu-panel, .mat-dialog-container {
+      background-color: var(--admin-bg-secondary);
+      color: var(--admin-input-text);
+      border: 1px solid var(--admin-input-border);
+    }
+  
+    /* ===== Icons and icon-buttons ===== */
+    .mat-icon-button, .mat-button .mat-icon, button .mat-icon {
+      color: var(--admin-input-text);
+    }
+  
+    .mat-icon-button.mat-button-disabled {
+      color: var(--admin-text-secondary);
+    }
+  
+    /* ===== Checkboxes / Radios / Slide toggles ===== */
+    .mat-mdc-checkbox .mdc-checkbox__native-control:checked ~ .mdc-checkbox__background,
+    .mat-mdc-radio-button .mdc-radio__native-control:checked ~ .mdc-radio__background {
+      color: var(--admin-primary);
+      background-color: var(--admin-primary);
+    }
+  
+    /* focus visible (accessibility) */
+    :where(.mat-focus-indicator:focus-visible) {
+      outline: 3px solid rgba(var(--admin-primary-rgb, 59,130,246), 0.14);
+      outline-offset: 2px;
+    }
+  }
+  
+  /* If you need to force higher specificity for particularly stubborn MDC selectors,
+     you can duplicate selectors or add !important in a measured way.
+     But prefer to keep overrides global (this file) and after material-theme.scss so it wins. */
+  

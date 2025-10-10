@@ -38,10 +38,10 @@
   
   // Background Colors - Light Theme (Default)
   --admin-bg-primary: #ffffff;
-  --admin-bg-secondary: #f5f5f5;
+  --admin-bg-secondary: #f0f2f5;
   --admin-bg-tertiary: #fafafa;
   --admin-bg-card: #ffffff;
-  --admin-bg-hover: #e3f2fd;
+  --admin-bg-hover: #e8f4f8;
   --admin-bg-overlay: rgba(0, 0, 0, 0.5);
   
   // Text Colors - Light Theme (Default)
@@ -61,8 +61,8 @@
   --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
   --mdc-list-item-focus-label-text-color: var(--admin-text-primary);
   // Border Colors - Light Theme (Default)
-  --admin-border-primary: #e0e0e0;
-  --admin-border-secondary: #f0f0f0;
+  --admin-border-primary: #b0b0b0;
+  --admin-border-secondary: #c0c0c0;
   --admin-border-focus: #1976d2;
   --admin-border-error: #f44336;
   
@@ -111,27 +111,27 @@
   --admin-z-tooltip: 1070;
   
   // Order Details Specific
-  --admin-order-detail-bg: #1f2937;
-  --admin-order-detail-header-bg: #374151;
-  --admin-order-detail-card-bg: #2d2d2d;
-  --admin-order-detail-border: #404040;
-  --admin-order-detail-text-primary: #ffffff;
-  --admin-order-detail-text-secondary: #9ca3af;
-  --admin-order-detail-text-label: #9ca3af;
-  --admin-order-detail-price-color: #4caf50;
-  --admin-order-detail-total-color: #4caf50;
+  --admin-order-detail-bg: var(--admin-bg-card);
+  --admin-order-detail-header-bg: var(--admin-bg-hover);
+  --admin-order-detail-card-bg: var(--admin-bg-secondary);
+  --admin-order-detail-border: var(--admin-border-primary);
+  --admin-order-detail-text-primary: var(--admin-text-primary);
+  --admin-order-detail-text-secondary: var(--admin-text-secondary);
+  --admin-order-detail-text-label: var(--admin-text-secondary);
+  --admin-order-detail-price-color: var(--admin-success);
+  --admin-order-detail-total-color: var(--admin-success);
   
   // Order List Specific
-  --admin-order-list-bg: #1f2937;
-  --admin-order-list-card-bg: #2d2d2d;
-  --admin-order-list-border: #404040;
-  --admin-order-list-text-primary: #ffffff;
-  --admin-order-list-text-secondary: #9ca3af;
-  --admin-order-list-text-label: #9ca3af;
-  --admin-order-list-header-bg: #374151;
-  --admin-order-list-row-hover: #374151;
-  --admin-order-list-pagination-bg: #2d2d2d;
-  --admin-order-list-pagination-border: #404040;
+  --admin-order-list-bg: var(--admin-bg-card);
+  --admin-order-list-card-bg: var(--admin-bg-secondary);
+  --admin-order-list-border: var(--admin-border-primary);
+  --admin-order-list-text-primary: var(--admin-text-primary);
+  --admin-order-list-text-secondary: var(--admin-text-secondary);
+  --admin-order-list-text-label: var(--admin-text-secondary);
+  --admin-order-list-header-bg: var(--admin-bg-hover);
+  --admin-order-list-row-hover: var(--admin-bg-hover);
+  --admin-order-list-pagination-bg: var(--admin-bg-secondary);
+  --admin-order-list-pagination-border: var(--admin-border-primary);
   
   // Common Order Status Colors (shared between list and detail)
   --admin-order-status-pending: #ff9800;
@@ -247,10 +247,10 @@
 [data-theme="light"] {
   // Background Colors - Light Theme
   --admin-bg-primary: #ffffff;
-  --admin-bg-secondary: #f5f5f5;
+  --admin-bg-secondary: #f0f2f5;
   --admin-bg-tertiary: #fafafa;
   --admin-bg-card: transparent;
-  --admin-bg-hover: #e3f2fd;
+  --admin-bg-hover: #e8f4f8;
   --admin-bg-overlay: rgba(0, 0, 0, 0.5);
   
   // Text Colors - Light Theme
@@ -260,8 +260,8 @@
   --admin-text-inverse: #ffffff;
   
   // Border Colors - Light Theme
-  --admin-border-primary: #e0e0e0;
-  --admin-border-secondary: #f0f0f0;
+  --admin-border-primary: #b0b0b0;
+  --admin-border-secondary: #c0c0c0;
   --admin-border-focus: #1976d2;
   --admin-border-error: #f44336;
   

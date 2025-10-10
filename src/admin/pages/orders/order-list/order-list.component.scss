@@ -425,11 +425,11 @@
   }
   
   .mat-option {
-    background-color: #2d2d2d ;
+    background-color: var(--admin-bg-secondary) ;
     color: #ffffff ;
     
     &:hover {
-      background-color: #374151 ;
+      background-color: var(--admin-bg-hover) ;
     }
     
     &.mat-selected {
@@ -438,11 +438,11 @@
   }
   
   .mat-select-panel {
-    background-color: #2d2d2d ;
+    background-color: var(--admin-bg-secondary) ;
   }
   
   .mat-paginator {
-    background-color: #2d2d2d ;
+    background-color: var(--admin-bg-secondary) ;
     color: #ffffff ;
     border-top: 1px solid #404040;
     

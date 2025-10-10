@@ -2,7 +2,7 @@
     padding: 0;
     max-width: none;
     margin: 0;
-    background-color: #1f2937;
+    background-color: var(--admin-bg-card);
     min-height: calc(100vh - 64px);
     color: #ffffff;
   }
@@ -14,7 +14,7 @@
     margin-bottom: 32px;
     padding: 24px 24px 0 24px;
     border-bottom: 1px solid #333;
-    background-color: #1f2937;
+    background-color: var(--admin-bg-card);
   
     h1 {
       color: #ffffff;
@@ -24,7 +24,7 @@
     }
   
     .back-button {
-      background-color: #374151;
+      background-color: var(--admin-bg-hover);
       color: #ffffff;
       border: 1px solid #4b5563;
   
@@ -39,11 +39,11 @@
     flex-direction: column;
     gap: 32px;
     padding: 0 24px;
-    background-color: #1f2937;
+    background-color: var(--admin-bg-card);
   }
   
   .form-card {
-    background-color: #2d2d2d ;
+    background-color: var(--admin-bg-secondary) ;
     border: 1px solid #404040;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
