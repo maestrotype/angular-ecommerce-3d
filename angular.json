@@ -19,6 +19,7 @@
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "src/styles.scss",
+              "src/styles/admin/admin.scss",
               "src/styles/main.scss",
               "src/styles/admin/material-theme.scss"
             ],
