@@ -1,100 +1,136 @@
 <mat-toolbar color="primary" class="admin-header">
-    <button 
-      mat-icon-button 
-      class="menu-button"
-      (click)="toggleSidenav.emit()"
-      aria-label="Toggle sidenav"
+  <button
+    mat-icon-button
+    class="menu-button"
+    (click)="toggleSidenav.emit()"
+    aria-label="Toggle sidenav"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <span class="header-title">{{ "ADMIN_PANEL" | translate }}</span>
+
+  <span class="spacer"></span>
+
+  <div class="header-actions">
+    <button
+      mat-icon-button
+      [routerLink]="'/home'"
+      [matTooltip]="'GO_TO_STOREFRONT' | translate"
     >
-      <mat-icon>menu</mat-icon>
+      <mat-icon>storefront</mat-icon>
     </button>
-    
-    <span class="header-title">{{ 'ADMIN_PANEL' | translate }}</span>
-    
-    <span class="spacer"></span>
-    
-    <div class="header-actions">
-      <button mat-icon-button [routerLink]="'/home'" [matTooltip]="'GO_TO_STOREFRONT' | translate">
-        <mat-icon>storefront</mat-icon>
-      </button>
-      
-      <!-- Theme Toggle -->
-      <button mat-icon-button (click)="toggleTheme()" [matTooltip]="isDarkTheme ? 'Switch to Light Theme' : 'Switch to Dark Theme'">
-        <mat-icon>{{ isDarkTheme ? 'light_mode' : 'dark_mode' }}</mat-icon>
-      </button>
-      
-      <!-- Notifications -->
-      <button mat-icon-button [matMenuTriggerFor]="notificationMenu" class="notification-button">
-        <mat-icon [matBadge]="unreadCount > 0 ? unreadCount : null" matBadgeColor="warn" matBadgeSize="small">
-          notifications
-        </mat-icon>
-      </button>
-      
-      <!-- User Menu -->
-      <button mat-icon-button [matMenuTriggerFor]="userMenu">
-        <mat-icon>account_circle</mat-icon>
-      </button>
-    </div>
-  </mat-toolbar>
-  
-  
-  <!-- Notification Menu -->
-  <mat-menu #notificationMenu="matMenu" class="notification-menu">
-    <div class="notification-header">
-      <span class="notification-title">{{ 'NOTIFICATIONS' | translate }}</span>
-      <button mat-button class="mark-all-read" (click)="markAllAsRead()" *ngIf="unreadCount > 0">
-        Mark all as read
-      </button>
-    </div>
-    
-    <mat-divider></mat-divider>
-    
-    <div class="notification-list" *ngIf="notifications.length > 0; else noNotifications">
-      <button 
-        mat-menu-item 
-        class="notification-item"
-        [class.unread]="notification.status === 'unread'"
-        (click)="onNotificationClick(notification)"
-        *ngFor="let notification of notifications"
+
+    <!-- Theme Toggle -->
+    <button
+      mat-icon-button
+      (click)="toggleTheme()"
+      [matTooltip]="
+        isDarkTheme ? 'Switch to Light Theme' : 'Switch to Dark Theme'
+      "
+    >
+      <mat-icon>{{ isDarkTheme ? "light_mode" : "dark_mode" }}</mat-icon>
+    </button>
+
+    <!-- Notifications -->
+    <!-- <button
+      mat-icon-button
+      [matMenuTriggerFor]="notificationMenu"
+      class="notification-button"
+    >
+      <mat-icon
+        [matBadge]="unreadCount > 0 ? unreadCount : null"
+        matBadgeColor="warn"
+        matBadgeSize="small"
       >
-        <div class="notification-content">
-          <div class="notification-icon">
-            <mat-icon [color]="getNotificationColor(notification.type)">
-              {{ getNotificationIcon(notification.type) }}
-            </mat-icon>
-          </div>
-          <div class="notification-text">
-            <div class="notification-title">{{ notification.title }}</div>
-            <div class="notification-message">{{ notification.message }}</div>
-            <div class="notification-time">{{ getRelativeTime(notification.createdAt) }}</div>
-          </div>
-          <div class="notification-status" *ngIf="notification.status === 'unread'">
-            <div class="unread-dot"></div>
+        notifications
+      </mat-icon>
+    </button> -->
+
+    <app-notification-badge
+      [count]="unreadCount"
+      [pulse]="unreadCount > 0"
+      (onClick)="openNotificationMenu()"
+    ></app-notification-badge>
+
+    <!-- User Menu -->
+    <button mat-icon-button [matMenuTriggerFor]="userMenu">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
+
+<!-- Notification Menu -->
+<mat-menu #notificationMenu="matMenu" class="notification-menu">
+  <div class="notification-header">
+    <span class="notification-title">{{ "NOTIFICATIONS" | translate }}</span>
+    <button
+      mat-button
+      class="mark-all-read"
+      (click)="markAllAsRead()"
+      *ngIf="unreadCount > 0"
+    >
+      Mark all as read
+    </button>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div
+    class="notification-list"
+    *ngIf="notifications.length > 0; else noNotifications"
+  >
+    <button
+      mat-menu-item
+      class="notification-item"
+      [class.unread]="notification.status === 'unread'"
+      (click)="onNotificationClick(notification)"
+      *ngFor="let notification of notifications"
+    >
+      <div class="notification-content">
+        <div class="notification-icon">
+          <mat-icon [color]="getNotificationColor(notification.type)">
+            {{ getNotificationIcon(notification.type) }}
+          </mat-icon>
+        </div>
+        <div class="notification-text">
+          <div class="notification-title">{{ notification.title }}</div>
+          <div class="notification-message">{{ notification.message }}</div>
+          <div class="notification-time">
+            {{ getRelativeTime(notification.createdAt) }}
           </div>
         </div>
-      </button>
-    </div>
-    
-    <ng-template #noNotifications>
-      <div class="no-notifications">
-        <mat-icon>notifications_none</mat-icon>
-        <span>{{ 'NO_NOTIFICATIONS' | translate }}</span>
+        <div
+          class="notification-status"
+          *ngIf="notification.status === 'unread'"
+        >
+          <div class="unread-dot"></div>
+        </div>
       </div>
-    </ng-template>
-  </mat-menu>
-  
-  <!-- User Menu -->
-  <mat-menu #userMenu="matMenu">
-    <button mat-menu-item routerLink="/admin/profile">
-      <mat-icon>person</mat-icon>
-      <span>{{ 'PROFILE' | translate }}</span>
     </button>
-    <button mat-menu-item routerLink="/admin/settings">
-      <mat-icon>settings</mat-icon>
-      <span>{{ 'SETTINGS' | translate }}</span>
-    </button>
-    <mat-divider></mat-divider>
-    <button mat-menu-item (click)="logout()">
-      <mat-icon>logout</mat-icon>
-      <span>{{ 'LOGOUT' | translate }}</span>
-    </button>
-  </mat-menu>
+  </div>
+
+  <ng-template #noNotifications>
+    <div class="no-notifications">
+      <mat-icon>notifications_none</mat-icon>
+      <span>{{ "NO_NOTIFICATIONS" | translate }}</span>
+    </div>
+  </ng-template>
+</mat-menu>
+
+<!-- User Menu -->
+<mat-menu #userMenu="matMenu">
+  <button mat-menu-item routerLink="/admin/profile">
+    <mat-icon>person</mat-icon>
+    <span>{{ "PROFILE" | translate }}</span>
+  </button>
+  <button mat-menu-item routerLink="/admin/settings">
+    <mat-icon>settings</mat-icon>
+    <span>{{ "SETTINGS" | translate }}</span>
+  </button>
+  <mat-divider></mat-divider>
+  <button mat-menu-item (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    <span>{{ "LOGOUT" | translate }}</span>
+  </button>
+</mat-menu>

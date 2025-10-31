@@ -123,9 +123,12 @@
     /* primary raised/filled */
     .mat-mdc-raised-button.mat-primary,
     .mat-mdc-button.mat-primary {
-      background-color: var(--admin-primary);
+      background-color: var(--admin-button);
       color: #ffffff;
       border-color: transparent;
+      height: 100%;
+      padding: 10px;
+      white-space: nowrap;
     }
   
     .mat-mdc-raised-button.mat-primary:hover,

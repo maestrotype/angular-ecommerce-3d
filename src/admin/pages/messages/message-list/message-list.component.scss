@@ -3,7 +3,10 @@
   padding: 24px;
   background-color: var(--admin-bg-card);
   min-height: calc(100vh - 64px);
-  color: #ffffff;
+  color: var(--mdc-list-list-item-label-text-color);
+  .mat-mdc-row {
+    background-color: var(--admin-order-list-card-bg);
+  }
 }
 
 .header {
@@ -11,7 +14,8 @@
   
   h2 {
     margin: 0;
-    color: #ffffff;
+    padding-bottom: 10px;
+    color: var(--mdc-list-list-item-label-text-color);
     font-weight: 500;
   }
 }
@@ -20,7 +24,7 @@
   display: flex;
   gap: 16px;
   margin-bottom: 24px;
-  align-items: flex-end;
+  align-items: baseline;
   
   .search-field {
     flex: 1;
@@ -32,6 +36,7 @@
   }
 
   .search-button {
+    // height: 100%;
     .button-text {
       margin-left: 8px;
     }
@@ -42,13 +47,12 @@
   background: var(--admin-bg-secondary);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  border: 1px solid #404040;
   overflow: hidden;
 }
 
 .messages-table {
   width: 100%;
-  
+  background: var(--admin-table-header-bg); 
   .mat-column-actions {
     width: 200px;
     text-align: center;
@@ -62,7 +66,7 @@
   padding: 48px;
   
   p {
-    color: #ffffff;
+    color: var(--mdc-list-list-item-label-text-color);
     font-size: 16px;
   }
 }
@@ -104,7 +108,7 @@
         margin: 0 0 4px 0;
         font-size: 16px;
         font-weight: 600;
-        color: #ffffff;
+        color: var(--mdc-list-list-item-label-text-color);
       }
 
       .email {
@@ -129,7 +133,7 @@
         margin: 0;
         font-size: 14px;
         font-weight: 500;
-        color: #ffffff;
+        color: var(--mdc-list-list-item-label-text-color);
         line-height: 1.4;
       }
     }

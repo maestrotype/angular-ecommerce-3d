@@ -35,6 +35,8 @@
   --admin-info-hover: #1976d2;
   --admin-info-light: #64b5f6;
   --admin-info-dark: #0d47a1;
+
+  --admin-button: #ff4b4b;
   
   // Background Colors - Light Theme (Default)
   --admin-bg-primary: #ffffff;
@@ -179,7 +181,7 @@
   --admin-bg-primary: #121212;
   --admin-bg-secondary: #1e1e1e;
   --admin-bg-tertiary: #2d2d2d;
-  --admin-bg-card: transparent;
+  --admin-bg-card: #1f2937;;
   --admin-bg-hover: #2d2d2d;
   --admin-bg-overlay: rgba(255, 255, 255, 0.1);
   
@@ -198,7 +200,8 @@
   // Order Details Dark Theme
   --admin-order-detail-bg: #1f2937;
   --admin-order-detail-header-bg: #374151;
-  --admin-order-detail-card-bg: #2d2d2d;
+  --admin-table-header-bg: #374151;
+  --admin-table-content-bg: #2d2d2d;
   --admin-order-detail-border: #404040;
   --admin-order-detail-text-primary: #ffffff;
   --admin-order-detail-text-secondary: #9ca3af;
@@ -249,7 +252,7 @@
   --admin-bg-primary: #ffffff;
   --admin-bg-secondary: #f0f2f5;
   --admin-bg-tertiary: #fafafa;
-  --admin-bg-card: transparent;
+  --admin-bg-card: #f0f2f5;
   --admin-bg-hover: #e8f4f8;
   --admin-bg-overlay: rgba(0, 0, 0, 0.5);
   
@@ -260,7 +263,7 @@
   --admin-text-inverse: #ffffff;
   
   // Border Colors - Light Theme
-  --admin-border-primary: #b0b0b0;
+  --admin-border-primary: rgb(255 255 255 / 50%);
   --admin-border-secondary: #c0c0c0;
   --admin-border-focus: #1976d2;
   --admin-border-error: #f44336;

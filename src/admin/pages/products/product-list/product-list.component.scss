@@ -1,7 +1,24 @@
 
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  h1 {
+    color: var(--mdc-list-list-item-label-text-color);
+  }
+}
+
+.filter-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
 .product-list-container {
   padding: 20px;
-  background-color: var(--admin-bg-card); // Dark gray background instead of transparent
+  background-color: var(--admin-border-primary);
   min-height: 100vh;
 }
 
@@ -30,26 +47,25 @@
     background: var(--admin-bg-secondary);
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    border: 1px solid #404040;
     overflow: scroll;
-    margin: 0 24px;
   }
   
   .product-table {
     width: 100%;
-    background-color: var(--admin-bg-secondary);
+    background-color: var(--admin-bg-tertiary);
     
     th {
-      background-color: var(--admin-bg-hover) ;
-      color: #ffffff ;
+      background-color: var(--admin-table-header-bg) ;
+      color: var(--mdc-list-list-item-label-text-color);
+      
       font-weight: 600;
       padding: 16px;
       border-bottom: 1px solid #4b5563;
     }
     
     td {
-      background-color: var(--admin-bg-secondary) ;
-      color: #ffffff ;
+      background-color: var(--admin-table-content-bg) ;
+      color: var(--mdc-list-list-item-label-text-color);
       padding: 16px;
       border-bottom: 1px solid #404040;
     }

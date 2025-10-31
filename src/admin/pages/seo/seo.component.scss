@@ -6,6 +6,9 @@
 
 .seo-header {
   margin-bottom: var(--admin-spacing-xl, 32px);
+  h1, h3, p {
+    color: var(--mdc-list-list-item-label-text-color);
+  }
 }
 
 .seo-content {

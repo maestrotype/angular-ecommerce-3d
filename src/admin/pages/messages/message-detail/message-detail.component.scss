@@ -2,7 +2,7 @@
 .message-detail-container {
   max-width: 800px;
   background-color: var(--admin-bg-card);
-  color: #ffffff;
+  color: var(--mdc-list-list-item-label-text-color);
 }
 
 .header {
@@ -15,7 +15,7 @@
 
   h2 {
     margin: 0;
-    color: #ffffff;
+    color: var(--mdc-list-list-item-label-text-color);
   }
 }
 
@@ -53,7 +53,7 @@
 
   h4 {
     margin: 0 0 12px 0;
-    color: #ffffff;
+    color: var(--mdc-list-list-item-label-text-color);
     font-weight: 500;
   }
 
@@ -64,7 +64,7 @@
     border: 1px solid #404040;
     white-space: pre-wrap;
     line-height: 1.6;
-    color: #ffffff;
+    color: var(--mdc-list-list-item-label-text-color);
   }
 
   .reply-date {
@@ -89,7 +89,7 @@
 
   h4 {
     margin: 0 0 16px 0;
-    color: #ffffff;
+    color: var(--mdc-list-list-item-label-text-color);
     font-weight: 500;
   }
 
@@ -118,24 +118,24 @@
 ::ng-deep {
   .mat-dialog-container {
     background-color: var(--admin-bg-card) ;
-    color: #ffffff ;
+    color: var(--mdc-list-list-item-label-text-color);
   }
   
   .mat-dialog-title {
-    color: #ffffff ;
+    color: var(--mdc-list-list-item-label-text-color);
   }
   
   .mat-dialog-content {
-    color: #ffffff ;
+    color: var(--mdc-list-list-item-label-text-color);
   }
   
   .mat-form-field {
     .mat-form-field-label {
-      color: #e5e7eb ;
+      color: var(--mdc-list-list-item-label-text-color);
     }
     
     .mat-input-element {
-      color: #ffffff ;
+      color: var(--mdc-list-list-item-label-text-color);
     }
     
     .mat-form-field-outline {
@@ -155,16 +155,16 @@
   
   .mat-chip {
     background-color: #3b82f6 ;
-    color: #ffffff ;
+    color: var(--mdc-list-list-item-label-text-color);
   }
   
   .mat-button {
-    color: #ffffff ;
+    color: var(--mdc-list-list-item-label-text-color);
   }
   
   .mat-raised-button.mat-primary {
     background-color: #3b82f6 ;
-    color: #ffffff ;
+    color: var(--mdc-list-list-item-label-text-color);
   }
 }
   

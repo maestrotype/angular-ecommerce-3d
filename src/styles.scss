@@ -368,3 +368,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   /* overflow removed to preserve notched outline corners and overlays */
   background-clip: padding-box;
 }
+
+.mat-badge-warn {
+  --mat-badge-background-color: #ff6b6b;
+  --mat-badge-text-color: #ffffff;
+}

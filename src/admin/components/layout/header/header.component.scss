@@ -1,56 +1,58 @@
 .admin-header {
-  background-color: var(--admin-bg-card);
+  background-color: var(--admin-order-list-card-bg);
   color: var(--admin-text-primary);
   border-bottom: 1px solid var(--admin-border-primary);
-  transition: background-color var(--admin-transition-normal), 
-              color var(--admin-transition-normal),
-              border-color var(--admin-transition-normal);
-  
+  transition: background-color var(--admin-transition-normal),
+    color var(--admin-transition-normal),
+    border-color var(--admin-transition-normal);
+
   .header-title {
     font-size: var(--admin-font-size-lg);
     font-weight: var(--admin-font-weight-medium);
     color: var(--admin-text-primary);
   }
-  
+
   .spacer {
     flex: 1 1 auto;
   }
-  
+
   .header-actions {
     display: flex;
     align-items: center;
     gap: var(--admin-spacing-sm);
-    
+
     button {
       color: var(--admin-text-primary);
-      transition: color var(--admin-transition-normal), 
-                  background-color var(--admin-transition-normal);
-      
+      transition: color var(--admin-transition-normal),
+        background-color var(--admin-transition-normal);
+
       &:hover {
         background-color: var(--admin-bg-hover);
         color: var(--admin-primary);
       }
     }
   }
-  
+
   .menu-button {
     color: var(--admin-text-primary);
-    
+
     &:hover {
       background-color: var(--admin-bg-hover);
     }
   }
-  
+
   .notification-button {
     position: relative;
     color: var(--admin-text-primary);
-    
+
     &:hover {
       background-color: var(--admin-bg-hover);
     }
-    
+
     mat-icon {
-      color: var(--admin-text-primary);
+      // color: var(--admin-text-primary);
+      top: 0;
+      right: 0;
     }
   }
 }
@@ -61,49 +63,49 @@
     padding: var(--admin-spacing-md);
     border-bottom: 1px solid var(--admin-border-primary);
     transition: background-color var(--admin-transition-normal);
-    
+
     &:hover {
       background-color: var(--admin-bg-hover);
     }
-    
+
     &:last-child {
       border-bottom: none;
     }
-    
+
     .notification-content {
       .notification-title {
         font-weight: var(--admin-font-weight-medium);
         color: var(--admin-text-primary);
         margin-bottom: var(--admin-spacing-xs);
       }
-      
+
       .notification-message {
         color: var(--admin-text-secondary);
         font-size: var(--admin-font-size-sm);
         margin-bottom: var(--admin-spacing-xs);
       }
-      
+
       .notification-time {
         color: var(--admin-text-disabled);
         font-size: var(--admin-font-size-xs);
       }
     }
-    
+
     .notification-icon {
       color: var(--admin-text-secondary);
       margin-right: var(--admin-spacing-sm);
     }
   }
-  
+
   .notification-actions {
     padding: var(--admin-spacing-sm);
     border-top: 1px solid var(--admin-border-primary);
     background-color: var(--admin-bg-secondary);
-    
+
     button {
       color: var(--admin-text-primary);
       font-size: var(--admin-font-size-sm);
-      
+
       &:hover {
         background-color: var(--admin-bg-hover);
       }
@@ -117,19 +119,19 @@
     padding: var(--admin-spacing-md);
     border-bottom: 1px solid var(--admin-border-primary);
     background-color: var(--admin-bg-secondary);
-    
+
     .user-name {
       font-weight: var(--admin-font-weight-medium);
       color: var(--admin-text-primary);
       margin-bottom: var(--admin-spacing-xs);
     }
-    
+
     .user-email {
       color: var(--admin-text-secondary);
       font-size: var(--admin-font-size-sm);
     }
   }
-  
+
   .user-actions {
     button {
       color: var(--admin-text-primary);
@@ -137,11 +139,11 @@
       text-align: left;
       padding: var(--admin-spacing-sm) var(--admin-spacing-md);
       transition: background-color var(--admin-transition-normal);
-      
+
       &:hover {
         background-color: var(--admin-bg-hover);
       }
-      
+
       mat-icon {
         margin-right: var(--admin-spacing-sm);
         color: var(--admin-text-secondary);
@@ -153,14 +155,14 @@
 // Theme toggle button
 .theme-toggle {
   color: var(--admin-text-primary);
-  transition: color var(--admin-transition-normal), 
-              background-color var(--admin-transition-normal);
-  
+  transition: color var(--admin-transition-normal),
+    background-color var(--admin-transition-normal);
+
   &:hover {
     background-color: var(--admin-bg-hover);
     color: var(--admin-primary);
   }
-  
+
   mat-icon {
     color: var(--admin-text-primary);
     transition: color var(--admin-transition-normal);
@@ -173,7 +175,7 @@
     .header-title {
       font-size: var(--admin-font-size-md);
     }
-    
+
     .header-actions {
       gap: var(--admin-spacing-xs);
     }
@@ -185,7 +187,7 @@
     .header-title {
       font-size: var(--admin-font-size-sm);
     }
-    
+
     .header-actions {
       button {
         padding: 8px;

@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil, switchMap } from 'rxjs/operators';
 import { AuthService } from '../../../services/auth.service';
+import { ViewChild } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { NotificationService, Notification } from '../../../services/notification.service';
 
 @Component({
@@ -13,6 +15,7 @@ import { NotificationService, Notification } from '../../../services/notificatio
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   @Output() toggleSidenav = new EventEmitter<void>();
+  @ViewChild(MatMenuTrigger) notificationMenuTrigger!: MatMenuTrigger;
   
   private destroy$ = new Subject<void>();
   notifications: Notification[] = [];
@@ -78,6 +81,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const theme = this.isDarkTheme ? 'dark' : 'light';
     // Apply theme to documentElement instead of body for consistency with frontend
     document.documentElement.setAttribute('data-theme', theme);
+  }
+
+  openNotificationMenu(): void {
+    if (this.notificationMenuTrigger) {
+      this.notificationMenuTrigger.openMenu(); // 👈 открываем mat-menu вручную
+    }
+  }
+
+  closeNotificationMenu(): void {
+    if (this.notificationMenuTrigger) {
+      this.notificationMenuTrigger.closeMenu();
+    }
   }
 
   onNotificationClick(notification: Notification): void {

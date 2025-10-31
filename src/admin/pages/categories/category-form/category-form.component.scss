@@ -4,7 +4,7 @@
     margin: 0;
     background-color: var(--admin-bg-card);
     min-height: calc(100vh - 64px);
-    color: #ffffff;
+    color: var(--mdc-list-list-item-label-text-color);
   }
   
   .header-section {
@@ -17,7 +17,7 @@
     background-color: var(--admin-bg-card);
   
     h1 {
-      color: #ffffff;
+      color: var(--mdc-list-list-item-label-text-color);
       margin: 0;
       font-size: 2rem;
       font-weight: 600;
@@ -25,7 +25,7 @@
   
     .back-button {
       background-color: var(--admin-bg-hover);
-      color: #ffffff;
+      color: var(--mdc-list-list-item-label-text-color);
       border: 1px solid #4b5563;
   
       &:hover {
@@ -73,7 +73,7 @@
   
     .cancel-button {
       background-color: #6b7280;
-      color: #ffffff;
+      color: var(--mdc-list-list-item-label-text-color);
       border: 1px solid #9ca3af;
   
       &:hover {
@@ -83,7 +83,7 @@
   
     .submit-button {
       background-color: #3b82f6 ;
-      color: #ffffff ;
+      color: var(--mdc-list-list-item-label-text-color);
   
       &:hover:not(:disabled) {
         background-color: #2563eb ;

@@ -1,8 +1,12 @@
 .user-list-container {
-  padding: 0;
+  padding: 24px;
   background-color: var(--admin-bg-card);
+  background-color: var(--admin-border-primary);
   min-height: calc(100vh - 64px);
-  color: #ffffff;
+  color: var(--mdc-list-list-item-label-text-color);
+  .mat-mdc-row {
+    background-color: var(--admin-order-list-card-bg);
+  }
 }
 
 .header-section {
@@ -12,7 +16,7 @@
   padding: 24px 24px 0 24px;
   
   h1 {
-    color: #ffffff;
+    color: var(--mdc-list-list-item-label-text-color);
     margin: 0 0 8px 0;
     font-size: 2rem;
     font-weight: 600;
@@ -51,7 +55,7 @@
   justify-content: center;
   padding: 48px 24px;
   text-align: center;
-  color: #ffffff;
+  color: var(--mdc-list-list-item-label-text-color);
   
   mat-spinner {
     margin-bottom: 16px;
@@ -62,9 +66,7 @@
   background: var(--admin-bg-secondary);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  border: 1px solid #404040;
   overflow: hidden;
-  margin: 0 24px;
   
   .users-table {
     width: 100%;
@@ -72,7 +74,7 @@
     
     th {
       background-color: var(--admin-bg-hover) ;
-      color: #ffffff ;
+      color: var(--mdc-list-list-item-label-text-color);
       font-weight: 600;
       padding: 16px;
       border-bottom: 1px solid #4b5563;
@@ -80,7 +82,7 @@
     
     td {
       background-color: var(--admin-bg-secondary) ;
-      color: #ffffff ;
+      color: var(--mdc-list-list-item-label-text-color);
       padding: 16px;
       border-bottom: 1px solid #404040;
     }
@@ -111,7 +113,7 @@
       .user-name {
         font-weight: 500;
         margin-bottom: 2px;
-        color: #ffffff;
+        color: var(--mdc-list-list-item-label-text-color);
       }
       
       .user-phone {
@@ -130,7 +132,7 @@
 .no-data {
   text-align: center;
   padding: 48px 24px;
-  color: #ffffff;
+  color: var(--mdc-list-list-item-label-text-color);
   
   mat-icon {
     font-size: 48px;
@@ -143,7 +145,7 @@
   h3 {
     margin: 0 0 8px 0;
     font-weight: 500;
-    color: #ffffff;
+    color: var(--mdc-list-list-item-label-text-color);
   }
   
   p {
@@ -215,7 +217,7 @@
         margin: 0;
         font-size: 16px;
         font-weight: 600;
-        color: #ffffff;
+        color: var(--mdc-list-list-item-label-text-color);
         line-height: 1.4;
       }
     }
@@ -444,11 +446,11 @@
 ::ng-deep {
   .mat-chip {
     background-color: #3b82f6 ;
-    color: #ffffff ;
+    color: var(--mdc-list-list-item-label-text-color);
   }
   
   .mat-icon-button {
-    color: #ffffff ;
+    color: var(--mdc-list-list-item-label-text-color);
     
     &.mat-button-disabled {
       color: #6b7280 ;
@@ -457,7 +459,7 @@
   
   .mat-raised-button.mat-primary {
     background-color: #3b82f6 ;
-    color: #ffffff ;
+    color: var(--mdc-list-list-item-label-text-color);
   }
   
   .mat-form-field {
@@ -466,7 +468,7 @@
     }
     
     .mat-input-element {
-      color: #ffffff ;
+      color: var(--mdc-list-list-item-label-text-color);
     }
     
     .mat-form-field-outline {
@@ -485,7 +487,7 @@
   }
   
   .mat-select {
-    color: #ffffff ;
+    color: var(--mdc-list-list-item-label-text-color);
     
     .mat-select-arrow {
       color: #9ca3af ;
@@ -494,7 +496,7 @@
   
   .mat-option {
     background-color: var(--admin-bg-secondary) ;
-    color: #ffffff ;
+    color: var(--mdc-list-list-item-label-text-color);
     
     &:hover {
       background-color: var(--admin-bg-hover) ;
@@ -511,20 +513,20 @@
   
   .mat-paginator {
     background-color: var(--admin-bg-secondary) ;
-    color: #ffffff ;
+    color: var(--mdc-list-list-item-label-text-color);
     border-top: 1px solid #404040;
     
     .mat-paginator-page-size-label,
     .mat-paginator-range-label {
-      color: #ffffff ;
+      color: var(--mdc-list-list-item-label-text-color);
     }
     
     .mat-icon-button {
-      color: #ffffff ;
+      color: var(--mdc-list-list-item-label-text-color);
     }
     
     .mat-select {
-      color: #ffffff ;
+      color: var(--mdc-list-list-item-label-text-color);
     }
   }
 }

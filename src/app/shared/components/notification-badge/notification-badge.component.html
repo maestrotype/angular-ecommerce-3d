@@ -1,0 +1,12 @@
+<div class="notification-badge-wrapper" (click)="onClick.emit()">
+    <i class="material-icons">notifications</i>
+  
+    <span
+      *ngIf="count > 0"
+      class="notification-badge"
+      [class.pulse]="pulse"
+    >
+      {{ displayCount }}
+    </span>
+  </div>
+  

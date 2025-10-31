@@ -7,7 +7,7 @@
 
 .admin-sidenav {
   width: 260px;
-  background-color: var(--admin-bg-secondary);
+  background-color: var(--admin-table-content-bg);
   border-right: 1px solid var(--admin-border-primary);
   color: var(--admin-text-primary);
   transition: background-color var(--admin-transition-normal), 
@@ -26,7 +26,9 @@
 .admin-main {
   flex: 1;
   padding: 24px;
-  background-color: var(--admin-bg-primary);
+  background-color: var(--mat-sidenav-content-background-color);
+  background-color: var(--admin-bg-card);
+  background-color: var(--admin-bg-secondary);
   color: var(--admin-text-primary);
   min-height: calc(100vh - 64px);
   overflow-x: auto;
