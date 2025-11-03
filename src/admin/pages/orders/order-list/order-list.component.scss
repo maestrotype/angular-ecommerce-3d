@@ -4,6 +4,7 @@
   background-color: var(--admin-order-list-bg);
   min-height: calc(100vh - 64px);
   color: var(--admin-order-list-text-primary);
+  box-shadow: var(--admin-shadow-md);
 }
 
 .header-section {
@@ -64,8 +65,14 @@
   }
 }
 
+:host ::ng-deep {
+  .mat-mdc-table {
+    background-color: var(--admin-basic-bg);
+  }
+}
+
 .table-container {
-  background: var(--admin-order-list-card-bg);
+  background: var(--admin-basic-bg);
   border-radius: var(--admin-border-radius-md);
   box-shadow: var(--admin-shadow-md);
   border: 1px solid var(--admin-order-list-border);
@@ -74,10 +81,8 @@
 
   .order-table {
     width: 100%;
-    background-color: var(--admin-order-list-card-bg);
-
     th {
-      background-color: var(--admin-order-list-header-bg) ;
+      background-color: var(--admin-table-header-bg) ;
       color: var(--admin-order-list-text-primary) ;
       font-weight: var(--admin-font-weight-bold);
       padding: var(--admin-spacing-md);
@@ -85,7 +90,6 @@
     }
 
     td {
-      background-color: var(--admin-order-list-card-bg) ;
       color: var(--admin-order-list-text-primary) ;
       padding: var(--admin-spacing-md);
       border-bottom: 1px solid var(--admin-order-list-border);
@@ -137,7 +141,7 @@
     }
 
     tr:hover td {
-      background-color: var(--admin-order-list-row-hover) ;
+      background-color: var(--admin-basic-bg) ;
     }
   }
 

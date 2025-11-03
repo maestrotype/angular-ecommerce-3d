@@ -43,8 +43,13 @@
   }
 }
 
+:host ::ng-deep {
+  .mat-mdc-table {
+    background-color: var(--admin-basic-bg);
+  }
+}
+
 .table-container {
-  background: var(--admin-bg-secondary);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   overflow: hidden;
@@ -52,7 +57,9 @@
 
 .messages-table {
   width: 100%;
-  background: var(--admin-table-header-bg); 
+  th {
+    background-color: var(--admin-table-header-bg) ;
+  }
   .mat-column-actions {
     width: 200px;
     text-align: center;
