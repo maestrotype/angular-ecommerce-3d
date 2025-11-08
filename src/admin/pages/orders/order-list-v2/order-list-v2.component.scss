@@ -1,0 +1,162 @@
+.header-section {
+  h1 {
+    margin: 0;
+  }
+}
+
+.order-table {
+  td {
+    .customer-info {
+      .customer-name {
+        font-weight: var(--admin-font-weight-medium);
+        margin-bottom: var(--admin-spacing-xs);
+        color: var(--admin-text-primary);
+      }
+      
+      .customer-email {
+        font-size: var(--admin-font-size-sm);
+        color: var(--admin-text-secondary);
+      }
+      
+      .customer-phone {
+        font-size: var(--admin-font-size-sm);
+        color: var(--admin-text-secondary);
+      }
+    }
+    
+    .items-info {
+      font-size: var(--admin-font-size-sm);
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--admin-text-secondary);
+    }
+    
+    .total-amount {
+      font-weight: var(--admin-font-weight-bold);
+      color: var(--admin-primary);
+      font-size: var(--admin-font-size-lg);
+    }
+    
+    .status-select {
+      mat-select {
+        font-size: var(--admin-font-size-sm);
+        
+        &.status-pending { color: var(--admin-order-status-pending); }
+        &.status-confirmed { color: var(--admin-order-status-processing); }
+        &.status-processing { color: var(--admin-order-status-processing); }
+        &.status-shipped { color: var(--admin-order-status-shipped); }
+        &.status-delivered { color: var(--admin-order-status-delivered); }
+        &.status-cancelled { color: var(--admin-order-status-cancelled); }
+      }
+    }
+  }
+}
+
+.error-container {
+  text-align: center;
+  padding: var(--admin-spacing-xxl) var(--admin-spacing-lg);
+  color: var(--admin-text-primary);
+  margin: 0 var(--admin-spacing-lg);
+
+  p {
+    margin: var(--admin-spacing-md) 0;
+    font-size: var(--admin-font-size-lg);
+  }
+}
+
+.mobile-view {
+  display: none;
+}
+
+.desktop-view {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .desktop-view {
+    display: none;
+  }
+
+  .mobile-view {
+    display: block;
+  }
+}
+
+::ng-deep {
+  .mat-icon-button {
+    color: var(--admin-text-primary);
+    
+    &.mat-button-disabled {
+      color: var(--admin-text-disabled);
+    }
+  }
+  
+  .mat-form-field {
+    .mat-form-field-label {
+      color: var(--admin-text-secondary);
+    }
+    
+    .mat-input-element {
+      color: var(--admin-text-primary);
+    }
+    
+    .mat-form-field-outline {
+      color: var(--admin-border-primary);
+    }
+    
+    &.mat-focused {
+      .mat-form-field-outline-thick {
+        color: var(--admin-primary);
+      }
+      
+      .mat-form-field-label {
+        color: var(--admin-primary);
+      }
+    }
+  }
+  
+  .mat-select {
+    color: var(--admin-text-primary);
+    
+    .mat-select-arrow {
+      color: var(--admin-text-secondary);
+    }
+  }
+  
+  .mat-option {
+    background-color: var(--admin-bg-secondary);
+    color: var(--admin-text-primary);
+    
+    &:hover {
+      background-color: var(--admin-bg-hover);
+    }
+    
+    &.mat-selected {
+      background-color: var(--admin-primary);
+    }
+  }
+  
+  .mat-select-panel {
+    background-color: var(--admin-bg-secondary);
+  }
+  
+  .mat-paginator {
+    background-color: var(--admin-bg-secondary);
+    color: var(--admin-text-primary);
+    border-top: 1px solid var(--admin-border-primary);
+    
+    .mat-paginator-page-size-label,
+    .mat-paginator-range-label {
+      color: var(--admin-text-primary);
+    }
+    
+    .mat-icon-button {
+      color: var(--admin-text-primary);
+    }
+    
+    .mat-select {
+      color: var(--admin-text-primary);
+    }
+  }
+}

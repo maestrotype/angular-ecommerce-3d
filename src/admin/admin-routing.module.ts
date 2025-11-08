@@ -8,6 +8,7 @@ import { ProductListComponent } from './pages/products/product-list/product-list
 import { ProductFormComponent } from './pages/products/product-form/product-form.component';
 import { CategoryListComponent } from './pages/categories/category-list/category-list.component';
 import { OrderListComponent } from './pages/orders/order-list/order-list.component';
+import { OrderListV2Component } from './pages/orders/order-list-v2/order-list-v2.component';
 import { UserListComponent } from './pages/users/user-list/user-list.component';
 import { AdminAuthGuard } from './guards/admin-auth.guard';
 import { CategoryFormComponent } from './pages/categories/category-form/category-form.component';
@@ -40,6 +41,7 @@ const routes: Routes = [
         component: CategoryFormComponent,
       },
       { path: 'orders', component: OrderListComponent },
+      { path: 'orders-v2', component: OrderListV2Component },
       { path: 'users', component: UserListComponent },
       { path: 'messages', component: MessageListComponent },
       { path: 'sections', component: SectionListComponent },

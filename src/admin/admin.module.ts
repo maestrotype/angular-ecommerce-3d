@@ -50,6 +50,9 @@ import { PaymentDetailsDialogComponent } from './pages/payments/payment-details-
 import { OrderDetailsDialogComponent } from './pages/payments/order-details-dialog.component';
 // Shared Components
 import { DataTableComponent } from './components/blocks/data-table/data-table.component';
+import { ListContainerComponent } from './components/blocks/list-container/list-container.component';
+import { AdminTableComponent } from './components/blocks/admin-table/admin-table.component';
+import { OrderListV2Component } from './pages/orders/order-list-v2/order-list-v2.component';
 import { FormFieldComponent } from './components/ui/form-field/form-field.component';
 import { ActionButtonComponent } from './components/ui/action-button/action-button.component';
 import { CategoryFormComponent } from './pages/categories/category-form/category-form.component';
@@ -87,6 +90,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     CategoryListComponent,
     CategoryFormComponent,
     OrderListComponent,
+    OrderListV2Component,
     OrderDetailComponent,
     MessageListComponent,
     MessageDetailComponent,
@@ -99,6 +103,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     UserListComponent,
     UserEditDialogComponent,
     DataTableComponent,
+    ListContainerComponent,
+    AdminTableComponent,
     FormFieldComponent,
     ActionButtonComponent,
     ImageUploadComponent,

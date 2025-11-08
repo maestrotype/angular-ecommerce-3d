@@ -1,0 +1,15 @@
+<div class="admin-table-container">
+  <div class="admin-table-wrapper" *ngIf="!loading">
+    <ng-content></ng-content>
+    <mat-paginator 
+      [pageSizeOptions]="pageSizeOptions" 
+      [showFirstLastButtons]="showFirstLastButtons">
+    </mat-paginator>
+  </div>
+
+  <div *ngIf="loading" class="admin-table-loading">
+    <mat-spinner></mat-spinner>
+    <p>Loading...</p>
+  </div>
+</div>
+

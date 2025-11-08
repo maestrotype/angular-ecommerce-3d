@@ -1,0 +1,56 @@
+.admin-table-container {
+  background-color: var(--admin-basic-bg);
+  border-radius: var(--admin-border-radius-md);
+  box-shadow: var(--admin-shadow-md);
+  border: 1px solid var(--admin-border-primary);
+  overflow: hidden;
+}
+
+.admin-table-wrapper {
+  ::ng-deep {
+    .mat-mdc-table {
+      background-color: var(--admin-basic-bg);
+      width: 100%;
+      
+      th {
+        background-color: var(--admin-table-header-bg);
+        color: var(--admin-text-primary);
+        font-weight: var(--admin-font-weight-bold);
+        padding: var(--admin-spacing-md);
+        border-bottom: 1px solid var(--admin-border-primary);
+      }
+
+      td {
+        color: var(--admin-text-primary);
+        padding: var(--admin-spacing-md);
+        border-bottom: 1px solid var(--admin-border-primary);
+      }
+
+      tr:hover td {
+        background-color: var(--admin-bg-hover);
+      }
+    }
+  }
+  
+  mat-paginator {
+    background-color: var(--admin-bg-secondary);
+    color: var(--admin-text-primary);
+    border-top: 1px solid var(--admin-border-primary);
+  }
+}
+
+.admin-table-loading {
+  text-align: center;
+  padding: var(--admin-spacing-xxl) var(--admin-spacing-lg);
+  color: var(--admin-text-primary);
+
+  mat-spinner {
+    margin: 0 auto var(--admin-spacing-md);
+  }
+
+  p {
+    margin: var(--admin-spacing-md) 0;
+    font-size: var(--admin-font-size-lg);
+  }
+}
+
