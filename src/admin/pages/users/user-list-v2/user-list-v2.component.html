@@ -1,0 +1,118 @@
+<app-list-container>
+  <div list-header class="header-section">
+    <h1>{{ 'USER_MANAGEMENT' | translate}}</h1>
+  </div>
+
+  <div list-kpis class="stats-cards">
+    <div class="stat-card">
+      <div class="stat-number">{{ dataSource.data.length }}</div>
+      <div class="stat-label">{{ 'TOTAL_USERS' | translate}}</div>
+    </div>
+  </div>
+
+  <div list-filters class="filter-section">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>{{ 'SEARCH_USERS' | translate}}</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Search by name or email...">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
+
+  <app-admin-table [loading]="isLoading" [dataSource]="dataSource" [displayedColumns]="displayedColumns">
+    <table mat-table [dataSource]="dataSource" matSort class="users-table">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+        <td mat-cell *matCellDef="let user">{{ user.id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'NAME' | translate}}</th>
+        <td mat-cell *matCellDef="let user">
+          <div class="user-info">
+            <div class="user-avatar">
+              <mat-icon>person</mat-icon>
+            </div>
+            <div>
+              <div class="user-name">{{ user.name }}</div>
+              <div class="user-phone" *ngIf="user.phone">{{ user.phone }}</div>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'EMAIL' | translate}}</th>
+        <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="role">
+        <th mat-header-cell *matHeaderCellDef>{{ 'ROLE' | translate}}</th>
+        <td mat-cell *matCellDef="let user">
+          <mat-chip [color]="getRoleColor(user.role)" selected>
+            {{ user.role | titlecase }}
+          </mat-chip>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>{{ 'STATUS' | translate}}</th>
+        <td mat-cell *matCellDef="let user">
+          <mat-chip [color]="getStatusColor(user.status || 'active')" selected>
+            {{ (user.status || 'active') | titlecase }}
+          </mat-chip>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'CREATED' | translate}}</th>
+        <td mat-cell *matCellDef="let user">
+          {{ user.createdAt | date:'short' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>{{ 'ACTIONS' | translate}}</th>
+        <td mat-cell *matCellDef="let user">
+          <div class="action-buttons">
+            <button mat-icon-button
+                    matTooltip="Edit user"
+                    (click)="editUser(user)">
+              <mat-icon>edit</mat-icon>
+            </button>
+
+            <button mat-icon-button
+                    matTooltip="Change role"
+                    [color]="user.role === 'admin' ? 'warn' : 'primary'"
+                    (click)="changeUserRole(user)">
+              <mat-icon>{{ user.role === 'admin' ? 'person_remove' : 'admin_panel_settings' }}</mat-icon>
+            </button>
+
+            <button mat-icon-button
+                    [matTooltip]="user.status === 'inactive' ? 'Unblock user' : 'Block user'"
+                    [color]="user.status === 'inactive' ? 'primary' : 'warn'"
+                    (click)="toggleUserStatus(user)">
+              <mat-icon>{{ user.status === 'inactive' ? 'lock_open' : 'block' }}</mat-icon>
+            </button>
+
+            <button mat-icon-button
+                    matTooltip="Delete user"
+                    color="warn"
+                    (click)="deleteUser(user)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </app-admin-table>
+
+  <div *ngIf="error" class="error-container">
+    <mat-icon color="warn">error</mat-icon>
+    <p>{{ error }}</p>
+    <button mat-button color="primary" (click)="loadUsers()">{{ 'RETRY' | translate}}</button>
+  </div>
+</app-list-container>
+

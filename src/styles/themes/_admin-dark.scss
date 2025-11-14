@@ -1,8 +1,9 @@
 [data-theme='admin-dark'] {
-    --color-bg: #0f172a;
-    --color-text: #e2e8f0;
-    --color-primary: #2563eb;
-    --color-surface: #1e293b;
+    /* Mapped to admin variables for consistency */
+    --color-bg: var(--admin-bg-primary, #0f172a);
+    --color-text: var(--admin-text-primary, #e2e8f0);
+    --color-primary: var(--admin-primary, #2563eb);
+    --color-surface: var(--admin-bg-card, #1e293b);
   
     background-color: var(--color-bg);
     color: var(--color-text);

@@ -20,7 +20,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   notifications: Notification[] = [];
   unreadCount = 0;
-  isDarkTheme = true; // Default to dark theme
+  currentTheme: 'light' | 'dark' | 'glass' = 'dark'; // Default to dark theme
 
   constructor(
     private router: Router,
@@ -30,8 +30,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // Load theme preference from localStorage
-    const savedTheme = localStorage.getItem('adminTheme');
-    this.isDarkTheme = savedTheme === 'dark'; // Default to dark if no saved theme
+    const savedTheme = localStorage.getItem('adminTheme') as 'light' | 'dark' | 'glass' | null;
+    this.currentTheme = savedTheme || 'dark'; // Default to dark if no saved theme
     this.applyTheme();
 
     // Load notifications on initialization
@@ -70,22 +70,28 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   toggleTheme(): void {
-    this.isDarkTheme = !this.isDarkTheme;
+    // Cycle through themes: dark -> light -> glass -> dark
+    if (this.currentTheme === 'dark') {
+      this.currentTheme = 'light';
+    } else if (this.currentTheme === 'light') {
+      this.currentTheme = 'glass';
+    } else {
+      this.currentTheme = 'dark';
+    }
     this.applyTheme();
     
     // Save theme preference
-    localStorage.setItem('adminTheme', this.isDarkTheme ? 'dark' : 'light');
+    localStorage.setItem('adminTheme', this.currentTheme);
   }
 
   private applyTheme(): void {
-    const theme = this.isDarkTheme ? 'dark' : 'light';
     // Apply theme to documentElement instead of body for consistency with frontend
-    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.setAttribute('data-theme', this.currentTheme);
   }
 
   openNotificationMenu(): void {
     if (this.notificationMenuTrigger) {
-      this.notificationMenuTrigger.openMenu(); // 👈 открываем mat-menu вручную
+      this.notificationMenuTrigger.openMenu();
     }
   }
 

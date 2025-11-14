@@ -18,3 +18,6 @@ export class AdminTableComponent {
   @Output() pageChange = new EventEmitter<PageEvent>();
 }
 
+
+
+

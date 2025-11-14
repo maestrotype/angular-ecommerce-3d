@@ -40,6 +40,7 @@ import { CategoryListComponent } from './pages/categories/category-list/category
 import { OrderListComponent } from './pages/orders/order-list/order-list.component';
 import { OrderDetailComponent } from './pages/orders/order-detail/order-detail.component';
 import { UserListComponent } from './pages/users/user-list/user-list.component';
+import { UserListV2Component } from './pages/users/user-list-v2/user-list-v2.component';
 import { UserEditDialogComponent } from './pages/users/user-edit-dialog/user-edit-dialog.component';
 import { MessageListComponent } from './pages/messages/message-list/message-list.component';
 import { MessageDetailComponent } from './pages/messages/message-detail/message-detail.component';
@@ -101,6 +102,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     OrderDetailsDialogComponent,
 
     UserListComponent,
+    UserListV2Component,
     UserEditDialogComponent,
     DataTableComponent,
     ListContainerComponent,

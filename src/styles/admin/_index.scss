@@ -7,6 +7,10 @@
 // Import admin variables
 @import '../../admin/styles/admin-variables';
 
+// Import liquid glass variables and mixins for admin
+@import '../_liquid-glass-variables';
+@import '../_liquid-glass';
+
 // Admin specific styles will be added here
 // @import './dashboard';
 // @import './forms';

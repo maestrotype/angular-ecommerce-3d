@@ -10,6 +10,7 @@ import { CategoryListComponent } from './pages/categories/category-list/category
 import { OrderListComponent } from './pages/orders/order-list/order-list.component';
 import { OrderListV2Component } from './pages/orders/order-list-v2/order-list-v2.component';
 import { UserListComponent } from './pages/users/user-list/user-list.component';
+import { UserListV2Component } from './pages/users/user-list-v2/user-list-v2.component';
 import { AdminAuthGuard } from './guards/admin-auth.guard';
 import { CategoryFormComponent } from './pages/categories/category-form/category-form.component';
 import { MessageListComponent } from './pages/messages/message-list/message-list.component';
@@ -43,6 +44,7 @@ const routes: Routes = [
       { path: 'orders', component: OrderListComponent },
       { path: 'orders-v2', component: OrderListV2Component },
       { path: 'users', component: UserListComponent },
+      { path: 'users-v2', component: UserListV2Component },
       { path: 'messages', component: MessageListComponent },
       { path: 'sections', component: SectionListComponent },
       { path: 'payments', component: PaymentsComponent },

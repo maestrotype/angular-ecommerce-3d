@@ -26,10 +26,16 @@
       mat-icon-button
       (click)="toggleTheme()"
       [matTooltip]="
-        isDarkTheme ? 'Switch to Light Theme' : 'Switch to Dark Theme'
+        currentTheme === 'dark' ? 'Switch to Light Theme' : 
+        currentTheme === 'light' ? 'Switch to Glass Theme' : 
+        'Switch to Dark Theme'
       "
     >
-      <mat-icon>{{ isDarkTheme ? "light_mode" : "dark_mode" }}</mat-icon>
+      <mat-icon>
+        {{ currentTheme === 'dark' ? 'light_mode' : 
+           currentTheme === 'light' ? 'blur_on' : 
+           'dark_mode' }}
+      </mat-icon>
     </button>
 
     <!-- Notifications -->

@@ -35,6 +35,7 @@ export class SidenavComponent {
       badge: 0,
     },
     { label: "USERS", route: "/admin/users", icon: "people" },
+    { label: "USERS-V2", route: "/admin/users-v2", icon: "people" },
     { label: "MESSAGES", route: "/admin/messages", icon: "email" },
     { label: "PAGE_SECTIONS", route: "/admin/sections", icon: "view_module" },
     { label: "SEO", route: "/admin/seo", icon: "search" },
