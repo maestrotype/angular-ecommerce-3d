@@ -56,6 +56,15 @@ export class UserListV2Component implements OnInit, AfterViewInit {
     });
   }
 
+  onSearch(): void {
+    this.loadUsers();
+  }
+
+  clearSearch(): void {
+    this.searchTerm = '';
+    this.loadUsers();
+  }
+
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.searchTerm = filterValue.trim();

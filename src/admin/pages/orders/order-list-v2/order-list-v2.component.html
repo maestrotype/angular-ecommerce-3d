@@ -4,17 +4,18 @@
   </div>
 
   <div list-kpis class="stats-cards">
-    <div class="stat-card">
-      <div class="stat-number">{{ dataSource.data.length }}</div>
-      <div class="stat-label">{{ 'TOTAL_ORDERS' | translate}}</div>
-    </div>
+    <app-stat-card [number]="dataSource.data.length" [label]="'TOTAL_ORDERS' | translate"></app-stat-card>
   </div>
   <div list-filters class="filter-section">
-    <mat-form-field appearance="outline" class="search-field">
-      <mat-label>{{ 'SEARCH_ORDERS' | translate}}</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Search by customer, email...">
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
+    <app-search-bar 
+      width="100%"
+      maxWidth="500px"
+      [label]="'SEARCH_ORDERS' | translate"
+      [placeholder]="'Search by customer, email...'"
+      [(searchTerm)]="searchTerm"
+      (onSearch)="onSearch()"
+      (onClear)="clearSearch()">
+    </app-search-bar>
   </div>
 
   <app-admin-table [loading]="isLoading" [dataSource]="dataSource" [displayedColumns]="displayedColumns">

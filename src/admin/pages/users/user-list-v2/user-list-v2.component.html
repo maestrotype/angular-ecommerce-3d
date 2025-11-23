@@ -1,21 +1,21 @@
 <app-list-container>
   <div list-header class="header-section">
     <h1>{{ 'USER_MANAGEMENT' | translate}}</h1>
+    <p class="subtitle">{{ 'USER_MANAGEMENT_SUBTITLE' | translate}}</p>
   </div>
 
   <div list-kpis class="stats-cards">
-    <div class="stat-card">
-      <div class="stat-number">{{ dataSource.data.length }}</div>
-      <div class="stat-label">{{ 'TOTAL_USERS' | translate}}</div>
-    </div>
+    <app-stat-card [number]="dataSource.data.length" [label]="'TOTAL_USERS' | translate"></app-stat-card>
   </div>
 
   <div list-filters class="filter-section">
-    <mat-form-field appearance="outline" class="search-field">
-      <mat-label>{{ 'SEARCH_USERS' | translate}}</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Search by name or email...">
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
+    <app-search-bar 
+      [label]="'SEARCH_USERS' | translate"
+      [placeholder]="'Search by name or email'"
+      [(searchTerm)]="searchTerm"
+      (onSearch)="onSearch()"
+      (onClear)="clearSearch()">
+    </app-search-bar>
   </div>
 
   <app-admin-table [loading]="isLoading" [dataSource]="dataSource" [displayedColumns]="displayedColumns">

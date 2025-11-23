@@ -1,6 +1,6 @@
 ::ng-deep {
   .list {
-    padding: var(--admin-spacing-lg);
+    padding: var(--admin-spacing-md);
     background-color: var(--admin-bg-card);
     min-height: calc(100vh - 64px);
     color: var(--admin-text-primary);
@@ -10,7 +10,7 @@
   .list__header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     margin-bottom: 24px;
     flex-wrap: wrap;
     gap: 1rem;
@@ -20,6 +20,10 @@
     display: flex;
     align-items: center;
     gap: 16px;
+    width: 100%;
+    .header-section {
+      width: 100%;
+    }
 
     h1 {
       margin: 0;
@@ -117,9 +121,5 @@
       min-width: none;
       max-width: none;
     }
-  }
-
-  .list__content {
-    padding: 0 16px;
   }
 }

@@ -1,0 +1,118 @@
+@import '../../../../styles/_liquid-glass';
+
+.stat-card {
+  background-color: var(--admin-bg-card);
+  border-radius: var(--admin-border-radius-lg);
+  padding: var(--admin-spacing-md);
+  min-width: 120px;
+  border: 1px solid var(--admin-border-primary);
+  box-shadow: var(--admin-shadow-sm);
+  transition: all var(--admin-transition-normal);
+  position: relative;
+  overflow: hidden;
+
+  // Liquid Glass эффект для темы Glass
+  [data-theme="glass"] & {
+    // Базовый эффект стекла
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 
+      0 8px 32px rgba(99, 102, 241, 0.15),
+      0 2px 8px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    
+    // Градиентный оверлей для глубины
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(99, 102, 241, 0.1) 0%,
+        rgba(14, 165, 233, 0.1) 50%,
+        rgba(139, 92, 246, 0.1) 100%
+      );
+      opacity: 0.6;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    // Световой эффект сверху
+    &::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.2) 0%,
+        transparent 70%
+      );
+      opacity: 0;
+      transition: opacity var(--admin-transition-normal);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    // Эффект при наведении
+    &:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 
+        0 12px 48px rgba(99, 102, 241, 0.25),
+        0 4px 16px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      border-color: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.3);
+      
+      &::after {
+        opacity: 1;
+      }
+    }
+
+    // Контент должен быть поверх эффектов
+    > * {
+      position: relative;
+      z-index: 2;
+    }
+  }
+
+  .stat-number {
+    font-size: var(--admin-font-size-xxl);
+    font-weight: var(--admin-font-weight-bold);
+    color: var(--admin-primary);
+    text-align: center;
+    position: relative;
+    z-index: 2;
+
+    [data-theme="glass"] & {
+      background: var(--lg-gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 2px 4px rgba(99, 102, 241, 0.3));
+    }
+  }
+
+  .stat-label {
+    font-size: var(--admin-font-size-sm);
+    color: var(--admin-text-secondary);
+    text-align: center;
+    margin-top: var(--admin-spacing-sm);
+    position: relative;
+    z-index: 2;
+
+    [data-theme="glass"] & {
+      color: var(--lg-text-secondary);
+      font-weight: var(--admin-font-weight-medium);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+

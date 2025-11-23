@@ -129,6 +129,8 @@
       height: 100%;
       padding: 10px;
       white-space: nowrap;
+      position: relative;
+      overflow: hidden;
     }
   
     .mat-mdc-raised-button.mat-primary:hover,
@@ -191,7 +193,68 @@
       outline-offset: 2px;
     }
   }
-  
+
+  /* Shimmer animation for button hover effect */
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%) translateY(-100%);
+    }
+    100% {
+      transform: translateX(100%) translateY(100%);
+    }
+  }
+
+  /* Dark theme specific button styles */
+  [data-theme='dark'] {
+    /* primary raised/filled buttons - dark theme */
+    .mat-mdc-raised-button.mat-primary,
+    .mat-mdc-button.mat-primary {
+      // --mdc-protected-button-container-color: #607d8b;
+      --mdc-protected-button-container-color: #313638;
+      --mdc-protected-button-label-text-color: white;
+      --mat-protected-button-state-layer-color: white;
+      background-color: #313638;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mat-mdc-raised-button.mat-primary::before,
+    .mat-mdc-button.mat-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+      );
+      transform: translateX(-100%) translateY(-100%);
+      transition: transform 0.6s ease;
+      pointer-events: none;
+    }
+
+    .mat-mdc-raised-button.mat-primary:hover,
+    .mat-mdc-button.mat-primary:hover {
+      filter: none;
+    }
+
+    .mat-mdc-raised-button.mat-primary:hover::before,
+    .mat-mdc-button.mat-primary:hover::before {
+      animation: shimmer 1.5s ease-in-out infinite;
+    }
+  }
+
+  [data-theme='light'] {
+
+  .mat-mdc-raised-button.mat-primary,
+  .mat-mdc-button.mat-primary {
+    color: #111827;
+  }
+}
   /* If you need to force higher specificity for particularly stubborn MDC selectors,
      you can duplicate selectors or add !important in a measured way.
      But prefer to keep overrides global (this file) and after material-theme.scss so it wins. */

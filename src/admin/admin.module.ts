@@ -59,9 +59,10 @@ import { ActionButtonComponent } from './components/ui/action-button/action-butt
 import { CategoryFormComponent } from './pages/categories/category-form/category-form.component';
 import { ImageUploadComponent } from './components/ui/image-upload/image-upload.component';
 import { ImageProcessorComponent } from './components/ui/image-processor/image-processor.component';
-
 import { ErrorDialogComponent } from './components/error-dialog/error-dialog.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
+import { SearchBarComponent } from './components/ui/search-bar/search-bar.component';
+import { StatCardComponent } from './components/ui/stat-card/stat-card.component';
 import { SharedModule } from '../app/shared/shared.module';
 
 // Services
@@ -113,6 +114,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ImageProcessorComponent,
     ErrorDialogComponent,
     ConfirmationDialogComponent,
+    SearchBarComponent,
+    StatCardComponent,
   ],
   imports: [
     CommonModule,
