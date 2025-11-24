@@ -20,7 +20,6 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    width: 100%;
     .header-section {
       width: 100%;
     }
@@ -88,7 +87,8 @@
 
   .filter-section {
     display: flex;
-    gap: var(--admin-spacing-md);
+    gap: var(--admin-spacing-lg);
+    padding-left: var(--admin-spacing-lg);
     margin-bottom: var(--admin-spacing-lg);
     flex-wrap: wrap;
   }

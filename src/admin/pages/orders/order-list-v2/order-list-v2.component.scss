@@ -1,63 +1,121 @@
-.header-section {
-  h1 {
-    margin: 0;
+// Styles for reusable components customization
+:host ::ng-deep {
+  // Override list-container styles to match original Orders
+  .list {
+    padding: 0;
+    background-color: var(--admin-order-list-bg);
+    min-height: calc(100vh - 64px);
+    color: var(--admin-order-list-text-primary);
   }
-}
 
-.order-table {
-  td {
-    .customer-info {
-      .customer-name {
-        font-weight: var(--admin-font-weight-medium);
-        margin-bottom: var(--admin-spacing-xs);
-        color: var(--admin-text-primary);
-      }
+  .list__header {
+    padding: 24px 24px 0 24px;
+  }
+
+  .list__kpis {
+    padding: 0 24px;
+  }
+
+  .list__filters {
+    padding: 0 var(--admin-spacing-lg);
+  }
+
+  .list__content {
+    padding: 0;
+  }
+
+  // Table styles - override admin-table component
+  .admin-table-container {
+    margin: 0 var(--admin-spacing-lg);
+    border: 1px solid var(--admin-order-list-border);
+  }
+
+  .admin-table-wrapper {
+    .order-table {
+      width: 100%;
       
-      .customer-email {
-        font-size: var(--admin-font-size-sm);
-        color: var(--admin-text-secondary);
+      th {
+        background-color: var(--admin-table-header-bg);
+        color: var(--admin-order-list-text-primary);
+        font-weight: var(--admin-font-weight-bold);
+        padding: var(--admin-spacing-md);
+        border-bottom: 1px solid var(--admin-border-primary);
       }
-      
-      .customer-phone {
-        font-size: var(--admin-font-size-sm);
-        color: var(--admin-text-secondary);
-      }
-    }
-    
-    .items-info {
-      font-size: var(--admin-font-size-sm);
-      max-width: 200px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      color: var(--admin-text-secondary);
-    }
-    
-    .total-amount {
-      font-weight: var(--admin-font-weight-bold);
-      color: var(--admin-primary);
-      font-size: var(--admin-font-size-lg);
-    }
-    
-    .status-select {
-      mat-select {
-        font-size: var(--admin-font-size-sm);
+
+      td {
+        color: var(--admin-order-list-text-primary);
+        padding: var(--admin-spacing-md);
+        border-bottom: 1px solid var(--admin-order-list-border);
         
-        &.status-pending { color: var(--admin-order-status-pending); }
-        &.status-confirmed { color: var(--admin-order-status-processing); }
-        &.status-processing { color: var(--admin-order-status-processing); }
-        &.status-shipped { color: var(--admin-order-status-shipped); }
-        &.status-delivered { color: var(--admin-order-status-delivered); }
-        &.status-cancelled { color: var(--admin-order-status-cancelled); }
+        .customer-info {
+          .customer-name {
+            font-weight: var(--admin-font-weight-medium);
+            margin-bottom: var(--admin-spacing-xs);
+            color: var(--admin-order-list-text-primary);
+          }
+          
+          .customer-email {
+            font-size: var(--admin-font-size-sm);
+            color: var(--admin-order-list-text-secondary);
+          }
+          
+          .customer-phone {
+            font-size: var(--admin-font-size-sm);
+            color: var(--admin-order-list-text-secondary);
+          }
+        }
+        
+        .items-info {
+          font-size: var(--admin-font-size-sm);
+          max-width: 200px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          color: var(--admin-order-list-text-secondary);
+        }
+        
+        .total-amount {
+          font-weight: var(--admin-font-weight-bold);
+          color: var(--admin-order-detail-price-color);
+          font-size: var(--admin-font-size-lg);
+        }
+        
+        .status-select {
+          mat-select {
+            font-size: var(--admin-font-size-sm);
+            
+            &.status-pending { color: var(--admin-order-status-pending); }
+            &.status-confirmed { color: var(--admin-order-status-processing); }
+            &.status-processing { color: var(--admin-order-status-processing); }
+            &.status-shipped { color: var(--admin-order-status-shipped); }
+            &.status-delivered { color: var(--admin-order-status-delivered); }
+            &.status-cancelled { color: var(--admin-order-status-cancelled); }
+          }
+        }
       }
+
+      tr:hover td {
+        background-color: var(--admin-basic-bg);
+      }
+    }
+
+    mat-paginator {
+      background-color: var(--admin-order-list-pagination-bg);
+      color: var(--admin-order-list-text-primary);
+      border-top: 1px solid var(--admin-order-list-pagination-border);
     }
   }
 }
 
+.loading-container,
 .error-container {
   text-align: center;
   padding: var(--admin-spacing-xxl) var(--admin-spacing-lg);
-  color: var(--admin-text-primary);
+  color: var(--admin-order-list-text-primary);
   margin: 0 var(--admin-spacing-lg);
+
+  mat-spinner {
+    margin: 0 auto var(--admin-spacing-md);
+  }
 
   p {
     margin: var(--admin-spacing-md) 0;
@@ -69,71 +127,531 @@
   display: none;
 }
 
-.desktop-view {
-  display: block;
+.orders-grid {
+  display: grid;
+  gap: var(--admin-spacing-md);
+  grid-template-columns: 1fr;
+  padding: 0 var(--admin-spacing-lg);
+}
+
+.order-card {
+  background: var(--admin-order-list-card-bg);
+  border-radius: var(--admin-border-radius-lg);
+  box-shadow: var(--admin-shadow-md);
+  padding: var(--admin-spacing-md);
+  border: 1px solid var(--admin-order-list-border);
+  transition: var(--admin-transition-normal);
+
+  &:hover {
+    box-shadow: var(--admin-shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--admin-spacing-md);
+
+    .order-id {
+      font-size: var(--admin-font-size-lg);
+      font-weight: var(--admin-font-weight-bold);
+      color: var(--admin-order-list-text-primary);
+    }
+
+    .status-select {
+      min-width: 120px;
+    }
+  }
+
+  .card-content {
+    .customer-info {
+      margin-bottom: var(--admin-spacing-md);
+
+      h3 {
+        margin: 0 0 var(--admin-spacing-sm) 0;
+        font-size: var(--admin-font-size-md);
+        font-weight: var(--admin-font-weight-bold);
+        color: var(--admin-order-list-text-primary);
+      }
+
+      .customer-email, .customer-phone {
+        display: flex;
+        align-items: center;
+        gap: var(--admin-spacing-sm);
+        margin-bottom: var(--admin-spacing-xs);
+        color: var(--admin-order-list-text-secondary);
+        font-size: var(--admin-font-size-sm);
+
+        mat-icon {
+          font-size: var(--admin-font-size-md);
+          width: var(--admin-font-size-md);
+          height: var(--admin-font-size-md);
+        }
+      }
+    }
+
+    .items-info {
+      margin-bottom: var(--admin-spacing-md);
+
+      h4 {
+        margin: 0 0 var(--admin-spacing-xs) 0;
+        font-size: var(--admin-font-size-sm);
+        font-weight: var(--admin-font-weight-bold);
+        color: var(--admin-order-list-text-primary);
+      }
+
+      p {
+        margin: 0;
+        font-size: var(--admin-font-size-sm);
+        color: var(--admin-order-list-text-secondary);
+        line-height: 1.4;
+      }
+    }
+
+    .order-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--admin-spacing-sm);
+
+      .total-label {
+        font-size: var(--admin-font-size-sm);
+        color: var(--admin-order-list-text-secondary);
+      }
+
+      .total-amount {
+        font-size: var(--admin-font-size-lg);
+        font-weight: var(--admin-font-weight-bold);
+        color: var(--admin-order-detail-price-color);
+      }
+    }
+
+    .order-date {
+      display: flex;
+      align-items: center;
+      gap: var(--admin-spacing-xs);
+      color: var(--admin-order-list-text-secondary);
+      font-size: var(--admin-font-size-xs);
+
+      mat-icon {
+        font-size: var(--admin-font-size-md);
+        width: var(--admin-font-size-md);
+        height: var(--admin-font-size-md);
+      }
+    }
+  }
+
+  .card-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--admin-spacing-sm);
+    margin-top: var(--admin-spacing-md);
+    padding-top: var(--admin-spacing-md);
+    border-top: 1px solid var(--admin-order-list-border);
+
+    .action-button {
+      width: 36px;
+      height: 36px;
+      line-height: 36px;
+
+      mat-icon {
+        font-size: var(--admin-font-size-lg);
+        width: var(--admin-font-size-lg);
+        height: var(--admin-font-size-lg);
+      }
+    }
+  }
+}
+
+// Mobile view styles
+.mobile-view {
+  display: none;
+}
+
+.orders-grid {
+  display: grid;
+  gap: var(--admin-spacing-md);
+  grid-template-columns: 1fr;
+  padding: 0 var(--admin-spacing-lg);
+}
+
+.order-card {
+  background: var(--admin-order-list-card-bg);
+  border-radius: var(--admin-border-radius-lg);
+  box-shadow: var(--admin-shadow-md);
+  padding: var(--admin-spacing-md);
+  border: 1px solid var(--admin-order-list-border);
+  transition: var(--admin-transition-normal);
+
+  &:hover {
+    box-shadow: var(--admin-shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--admin-spacing-md);
+
+    .order-id {
+      font-size: var(--admin-font-size-lg);
+      font-weight: var(--admin-font-weight-bold);
+      color: var(--admin-order-list-text-primary);
+    }
+
+    .status-select {
+      min-width: 120px;
+    }
+  }
+
+  .card-content {
+    .customer-info {
+      margin-bottom: var(--admin-spacing-md);
+
+      h3 {
+        margin: 0 0 var(--admin-spacing-sm) 0;
+        font-size: var(--admin-font-size-md);
+        font-weight: var(--admin-font-weight-bold);
+        color: var(--admin-order-list-text-primary);
+      }
+
+      .customer-email, .customer-phone {
+        display: flex;
+        align-items: center;
+        gap: var(--admin-spacing-sm);
+        margin-bottom: var(--admin-spacing-xs);
+        color: var(--admin-order-list-text-secondary);
+        font-size: var(--admin-font-size-sm);
+
+        mat-icon {
+          font-size: var(--admin-font-size-md);
+          width: var(--admin-font-size-md);
+          height: var(--admin-font-size-md);
+        }
+      }
+    }
+
+    .items-info {
+      margin-bottom: var(--admin-spacing-md);
+
+      h4 {
+        margin: 0 0 var(--admin-spacing-xs) 0;
+        font-size: var(--admin-font-size-sm);
+        font-weight: var(--admin-font-weight-bold);
+        color: var(--admin-order-list-text-primary);
+      }
+
+      p {
+        margin: 0;
+        font-size: var(--admin-font-size-sm);
+        color: var(--admin-order-list-text-secondary);
+        line-height: 1.4;
+      }
+    }
+
+    .order-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--admin-spacing-sm);
+
+      .total-label {
+        font-size: var(--admin-font-size-sm);
+        color: var(--admin-order-list-text-secondary);
+      }
+
+      .total-amount {
+        font-size: var(--admin-font-size-lg);
+        font-weight: var(--admin-font-weight-bold);
+        color: var(--admin-order-detail-price-color);
+      }
+    }
+
+    .order-date {
+      display: flex;
+      align-items: center;
+      gap: var(--admin-spacing-xs);
+      color: var(--admin-order-list-text-secondary);
+      font-size: var(--admin-font-size-xs);
+
+      mat-icon {
+        font-size: var(--admin-font-size-md);
+        width: var(--admin-font-size-md);
+        height: var(--admin-font-size-md);
+      }
+    }
+  }
+
+  .card-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--admin-spacing-sm);
+    margin-top: var(--admin-spacing-md);
+    padding-top: var(--admin-spacing-md);
+    border-top: 1px solid var(--admin-order-list-border);
+
+    .action-button {
+      width: 36px;
+      height: 36px;
+      line-height: 36px;
+
+      mat-icon {
+        font-size: var(--admin-font-size-lg);
+        width: var(--admin-font-size-lg);
+        height: var(--admin-font-size-lg);
+      }
+    }
+  }
+}
+
+.loading-container,
+.error-container {
+  text-align: center;
+  padding: var(--admin-spacing-xxl) var(--admin-spacing-lg);
+  color: var(--admin-order-list-text-primary);
+  margin: 0 var(--admin-spacing-lg);
+
+  mat-spinner {
+    margin: 0 auto var(--admin-spacing-md);
+  }
+
+  p {
+    margin: var(--admin-spacing-md) 0;
+    font-size: var(--admin-font-size-lg);
+  }
 }
 
 @media (max-width: 768px) {
-  .desktop-view {
+  :host ::ng-deep {
+    .list__header {
+      flex-direction: column;
+      gap: 16px;
+      align-items: stretch;
+      padding: 16px;
+
+      h1 {
+        text-align: center;
+        font-size: 1.5rem;
+      }
+    }
+
+    .list__kpis {
+      padding: 0 16px;
+      
+      .stats-cards {
+        justify-content: center;
+      }
+    }
+
+    .list__filters,
+    .filter-section {
+      flex-direction: column;
+      gap: 12px;
+      padding: 0 16px;
+      align-items: stretch;
+
+      .search-field {
+        min-width: none;
+        max-width: none;
+      }
+    }
+  }
+
+  :host ::ng-deep .admin-table-wrapper .desktop-view {
     display: none;
   }
 
   .mobile-view {
     display: block;
   }
+
+  .orders-grid {
+    grid-template-columns: 1fr;
+    padding: 0 16px;
+  }
+
+  :host ::ng-deep .admin-table-container {
+    margin: 0 16px;
+  }
+
+  .loading-container,
+  .error-container {
+    margin: 0 16px;
+  }
 }
 
-::ng-deep {
+@media (min-width: 769px) and (max-width: 1024px) {
+  .orders-grid {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  }
+}
+
+@media (min-width: 1025px) {
+  .mobile-view {
+    display: none;
+  }
+
+  :host ::ng-deep .admin-table-wrapper .desktop-view {
+    display: block;
+  }
+}
+
+// Galaxy Z Fold 5/6 unfolded (690px) - use desktop format with compact table
+@media (min-width: 690px) and (max-width: 768px) {
+  :host ::ng-deep {
+    .list__header {
+      flex-direction: row;
+      gap: 1rem;
+      align-items: flex-start;
+      padding: 16px 16px 0 16px;
+
+      h1 {
+        text-align: left;
+        font-size: 1.5rem;
+      }
+    }
+
+    .list__kpis {
+      padding: 0 16px;
+      
+      .stats-cards {
+        justify-content: flex-end;
+      }
+    }
+
+    .list__filters,
+    .filter-section {
+      flex-direction: row;
+      gap: 12px;
+      padding: 0 16px;
+      align-items: center;
+
+      .search-field {
+        min-width: 150px;
+        max-width: 300px;
+      }
+    }
+  }
+
+  :host ::ng-deep .admin-table-wrapper .desktop-view {
+    display: block;
+  }
+
+  .mobile-view {
+    display: none;
+  }
+
+  // Compact table for Galaxy Z Fold
+  :host ::ng-deep .admin-table-wrapper .order-table {
+    th, td {
+      padding: 6px 8px;
+      font-size: 12px;
+    }
+
+    .mat-column-id {
+      width: 60px;
+    }
+
+    .mat-column-customer {
+      width: 120px;
+    }
+
+    .mat-column-items {
+      width: 100px;
+    }
+
+    .mat-column-total {
+      width: 60px;
+    }
+
+    .mat-column-status {
+      width: 80px;
+    }
+
+    .mat-column-actions {
+      width: 60px;
+    }
+
+    // Hide less important columns on small screens
+    .mat-column-date {
+      display: none;
+    }
+  }
+
+  .orders-grid {
+    grid-template-columns: 1fr;
+    padding: 0 16px;
+  }
+
+  :host ::ng-deep .admin-table-container {
+    margin: 0 16px;
+  }
+
+  .loading-container,
+  .error-container {
+    margin: 0 16px;
+  }
+}
+
+// Material components styling to match original Orders
+:host ::ng-deep {
   .mat-icon-button {
-    color: var(--admin-text-primary);
+    color: var(--admin-order-list-text-primary, #ffffff);
     
     &.mat-button-disabled {
-      color: var(--admin-text-disabled);
+      color: var(--admin-text-disabled, #6b7280);
     }
+  }
+  
+  .mat-raised-button.mat-primary {
+    background-color: var(--admin-primary, #3b82f6);
+    color: #ffffff;
   }
   
   .mat-form-field {
     .mat-form-field-label {
-      color: var(--admin-text-secondary);
+      color: var(--admin-input-label, #e5e7eb);
     }
     
     .mat-input-element {
-      color: var(--admin-text-primary);
+      color: var(--admin-order-list-text-primary, #ffffff);
     }
     
     .mat-form-field-outline {
-      color: var(--admin-border-primary);
+      color: var(--admin-input-border, #6b7280);
     }
     
     &.mat-focused {
       .mat-form-field-outline-thick {
-        color: var(--admin-primary);
+        color: var(--admin-primary, #3b82f6);
       }
       
       .mat-form-field-label {
-        color: var(--admin-primary);
+        color: var(--admin-primary, #3b82f6);
       }
     }
   }
   
   .mat-select {
-    color: var(--admin-text-primary);
+    color: var(--admin-order-list-text-primary, #ffffff);
     
     .mat-select-arrow {
-      color: var(--admin-text-secondary);
+      color: var(--admin-text-secondary, #9ca3af);
     }
   }
   
   .mat-option {
     background-color: var(--admin-bg-secondary);
-    color: var(--admin-text-primary);
+    color: var(--admin-order-list-text-primary, #ffffff);
     
     &:hover {
       background-color: var(--admin-bg-hover);
     }
     
     &.mat-selected {
-      background-color: var(--admin-primary);
+      background-color: var(--admin-primary, #3b82f6);
     }
   }
   
@@ -142,21 +660,22 @@
   }
   
   .mat-paginator {
-    background-color: var(--admin-bg-secondary);
-    color: var(--admin-text-primary);
-    border-top: 1px solid var(--admin-border-primary);
+    background-color: var(--admin-order-list-pagination-bg, var(--admin-bg-secondary));
+    color: var(--admin-order-list-text-primary, #ffffff);
+    border-top: 1px solid var(--admin-order-list-pagination-border, #404040);
     
     .mat-paginator-page-size-label,
     .mat-paginator-range-label {
-      color: var(--admin-text-primary);
+      color: var(--admin-order-list-text-primary, #ffffff);
     }
     
     .mat-icon-button {
-      color: var(--admin-text-primary);
+      color: var(--admin-order-list-text-primary, #ffffff);
     }
     
     .mat-select {
-      color: var(--admin-text-primary);
+      color: var(--admin-order-list-text-primary, #ffffff);
     }
   }
 }
+
