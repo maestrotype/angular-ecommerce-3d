@@ -2,10 +2,23 @@
 .header-section {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   flex-wrap: wrap;
+  width: 100%;
+  gap: var(--admin-spacing-md);
+
   h1 {
     color: var(--mdc-list-list-item-label-text-color);
+    margin: 0;
+    flex: 1;
+  }
+
+  .add-button {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 24px;
   }
 }
 
@@ -401,6 +414,7 @@
 
       .add-button {
         width: 100%;
+      justify-content: center;
         
         .button-text {
           display: inline;

@@ -291,37 +291,77 @@
 
 // Glass Theme Variables
 [data-theme="glass"] {
+  // Core glass surfaces & helpers
+  --admin-glass-surface-strong: linear-gradient(
+    150deg,
+    rgba(250, 251, 255, 0.9) 0%,
+    rgba(221, 232, 255, 0.55) 45%,
+    rgba(196, 210, 239, 0.35) 100%
+  );
+  --admin-glass-surface-soft: linear-gradient(
+    155deg,
+    rgba(240, 244, 255, 0.75) 0%,
+    rgba(217, 230, 250, 0.5) 60%,
+    rgba(199, 211, 233, 0.35) 100%
+  );
+  --admin-glass-surface-muted: linear-gradient(
+    165deg,
+    rgba(226, 232, 240, 0.45) 0%,
+    rgba(203, 213, 225, 0.25) 60%,
+    rgba(186, 200, 216, 0.18) 100%
+  );
+  --admin-glass-border-strong: rgba(255, 255, 255, 0.7);
+  --admin-glass-border-soft: rgba(255, 255, 255, 0.35);
+  --admin-glass-divider: rgba(255, 255, 255, 0.45);
+  --admin-glass-highlight: rgba(255, 255, 255, 0.65);
+  --admin-glass-shadow: 0 18px 45px rgba(15, 23, 42, 0.18);
+  --admin-glass-shadow-lg: 0 28px 80px rgba(15, 23, 42, 0.25);
+  --admin-glass-inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+
   // Background Colors - Glass Theme
-  --admin-bg-primary: rgba(255, 255, 255, 0.4);
-  --admin-bg-secondary: rgba(255, 255, 255, 0.35);
-  --admin-bg-tertiary: rgba(255, 255, 255, 0.3);
-  --admin-bg-card: rgba(255, 255, 255, 0.5);
-  --admin-bg-hover: rgba(255, 255, 255, 0.6);
-  --admin-bg-overlay: rgba(0, 0, 0, 0.3);
-  --admin-basic-bg: rgba(255, 255, 255, 0.45);
-  --admin-table-bg: rgba(255, 255, 255, 0.4);
-  --admin-table-border: rgba(255, 255, 255, 0.5);
-  --admin-table-header-bg: rgba(255, 255, 255, 0.55);
+  --admin-bg-primary: transparent;
+  --admin-bg-secondary: transparent;
+  --admin-bg-tertiary: rgba(255, 255, 255, 0.15);
+  --admin-bg-card: var(--admin-glass-surface-soft);
+  --admin-bg-hover: rgba(255, 255, 255, 0.35);
+  --admin-bg-overlay: rgba(15, 23, 42, 0.2);
+  --admin-basic-bg: rgba(255, 255, 255, 0.3);
+  --admin-table-bg: var(--admin-glass-surface-muted);
+  --admin-table-border: var(--admin-glass-border-soft);
+  --admin-table-header-bg: var(--admin-glass-surface-strong);
   
   // Text Colors - Glass Theme
-  --admin-text-primary: #1e293b;
+  --admin-text-primary: #0f172a;
   --admin-text-secondary: #475569;
   --admin-text-disabled: #94a3b8;
   --admin-text-inverse: #ffffff;
   
   // Border Colors - Glass Theme
-  --admin-border-primary: rgba(255, 255, 255, 0.6);
-  --admin-border-secondary: rgba(255, 255, 255, 0.4);
+  --admin-border-primary: var(--admin-glass-border-strong);
+  --admin-border-secondary: var(--admin-glass-border-soft);
   --admin-border-focus: #6366f1;
   --admin-border-error: #ef4444;
   
-  // Shadows for Glass Effect
-  --admin-glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-  --admin-glass-inner-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  // Order Details / List glass overrides
+  --admin-order-detail-bg: var(--admin-glass-surface-soft);
+  --admin-order-detail-header-bg: rgba(255, 255, 255, 0.35);
+  --admin-order-detail-card-bg: var(--admin-glass-surface-muted);
+  --admin-order-detail-border: var(--admin-glass-border-soft);
+  --admin-order-detail-text-primary: var(--admin-text-primary);
+  --admin-order-detail-text-secondary: var(--admin-text-secondary);
+  --admin-order-list-bg: var(--admin-glass-surface-strong);
+  --admin-order-list-card-bg: var(--admin-glass-surface-soft);
+  --admin-order-list-border: var(--admin-glass-border-soft);
+  --admin-order-list-text-primary: var(--admin-text-primary);
+  --admin-order-list-text-secondary: var(--admin-text-secondary);
+  --admin-order-list-header-bg: rgba(255, 255, 255, 0.25);
+  --admin-order-list-row-hover: rgba(255, 255, 255, 0.25);
+  --admin-order-list-pagination-bg: rgba(255, 255, 255, 0.18);
+  --admin-order-list-pagination-border: var(--admin-glass-border-soft);
   
   // Neon Accents
-  --admin-neon-primary: #BB86FC;
-  --admin-neon-secondary: #CF6679;
+  --admin-neon-primary: #9ba9ff;
+  --admin-neon-secondary: #cdd6ff;
   
   // Material Design List item variables (glass theme)
   --mdc-list-list-item-label-text-color: var(--admin-text-primary);

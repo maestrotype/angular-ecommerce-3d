@@ -26,8 +26,19 @@
   
   // Glass theme effects
   [data-theme="glass"] & {
-    @include lg-glass-effect(var(--admin-bg-card), var(--admin-border-primary));
-    border-radius: var(--lg-radius-lg);
+    @include lg-glass-effect(var(--admin-glass-surface-muted), var(--admin-border-secondary));
+    border-radius: 28px;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.25), transparent 80%);
+      pointer-events: none;
+    }
   }
 }
 
@@ -56,12 +67,23 @@
   
   // Glass theme effects
   [data-theme="glass"] & {
-    background: var(--admin-bg-card);
+    background: var(--admin-glass-surface-strong);
     backdrop-filter: var(--lg-glass-blur);
     -webkit-backdrop-filter: var(--lg-glass-blur);
-    border-radius: var(--lg-radius-xl);
-    box-shadow: var(--admin-glass-shadow);
+    border-radius: 36px;
+    box-shadow: var(--admin-glass-shadow-lg);
     border: 1px solid var(--admin-border-primary);
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.45), transparent 60%);
+      pointer-events: none;
+    }
   }
 }
 

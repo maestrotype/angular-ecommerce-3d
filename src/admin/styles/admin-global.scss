@@ -21,20 +21,38 @@ body {
   
   // Glass theme background
   [data-theme="glass"] & {
-    background: var(--lg-gradient-bg);
     min-height: 100vh;
     position: relative;
+    background-color: #b7c3d5;
+    background-image:
+      radial-gradient(circle at 12% 18%, rgba(147, 197, 253, 0.45), transparent 55%),
+      radial-gradient(circle at 78% 8%, rgba(178, 156, 255, 0.4), transparent 60%),
+      radial-gradient(circle at 30% 80%, rgba(125, 211, 252, 0.22), transparent 45%),
+      linear-gradient(135deg, #d4dbea 0%, #c8d4e5 40%, #b8c6da 100%);
+    background-attachment: fixed;
     
-    &::before {
+    &::before,
+    &::after {
       content: '';
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: var(--lg-gradient-overlay);
-      z-index: -1;
+      inset: 0;
       pointer-events: none;
+    }
+
+    &::before {
+      z-index: -2;
+      background: radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.55), transparent 65%);
+      filter: blur(45px);
+    }
+
+    &::after {
+      z-index: -3;
+      background:
+        radial-gradient(closest-side, rgba(99, 102, 241, 0.35), transparent 70%) 55% 15% / 45% 45% no-repeat,
+        radial-gradient(closest-side, rgba(14, 165, 233, 0.25), transparent 65%) 5% 65% / 35% 35% no-repeat,
+        var(--lg-gradient-overlay);
+      filter: blur(40px);
+      mix-blend-mode: screen;
     }
   }
 }
@@ -94,8 +112,20 @@ button {
     backdrop-filter: var(--lg-glass-blur);
     -webkit-backdrop-filter: var(--lg-glass-blur);
     border: 1px solid var(--admin-border-primary);
-    border-radius: var(--lg-radius-xl);
+    border-radius: 28px;
     box-shadow: var(--admin-glass-shadow);
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.35), transparent 70%);
+      opacity: 0.6;
+      pointer-events: none;
+    }
   }
 }
 
@@ -117,6 +147,27 @@ button {
   .mat-mdc-row:hover {
     background-color: var(--admin-bg-hover);
   }
+
+  [data-theme="glass"] & {
+    background: transparent;
+    backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid var(--admin-border-secondary);
+    border-radius: 24px;
+
+    .mat-mdc-header-cell,
+    .mat-mdc-cell {
+      background: transparent;
+    }
+
+    .mat-mdc-header-cell {
+      border-bottom: 1px solid var(--admin-glass-divider);
+      color: var(--admin-text-secondary);
+    }
+
+    .mat-mdc-cell {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    }
+  }
 }
 
 // Form Fields
@@ -127,11 +178,12 @@ button {
     
     // Glass theme improvements
     [data-theme="glass"] & {
-      background-color: var(--admin-bg-card);
+      background: var(--admin-glass-surface-muted);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      border: 1px solid var(--admin-border-primary);
-      border-radius: var(--lg-radius-md);
+      border: 1px solid var(--admin-border-secondary);
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
     }
   }
   
@@ -172,6 +224,14 @@ button {
   background-color: var(--admin-bg-card);
   color: var(--admin-text-primary);
   border: 1px solid var(--admin-border-primary);
+
+  [data-theme="glass"] & {
+    background: var(--admin-glass-surface-muted);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-color: var(--admin-border-secondary);
+    box-shadow: var(--admin-glass-shadow);
+  }
 }
 
 .mat-mdc-menu-item {
@@ -190,9 +250,10 @@ button {
   
   // Glass theme improvements
   [data-theme="glass"] & {
-    background-color: var(--admin-bg-card);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: var(--admin-glass-surface-soft);
+    backdrop-filter: blur(18px) saturate(180%);
+    -webkit-backdrop-filter: blur(18px) saturate(180%);
+    border-bottom: 1px solid var(--admin-glass-border-soft);
     box-shadow: var(--admin-glass-shadow);
   }
 }
@@ -205,9 +266,10 @@ button {
   
   // Glass theme improvements
   [data-theme="glass"] & {
-    background-color: var(--admin-basic-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: var(--admin-glass-surface-muted);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border-right: 1px solid var(--admin-glass-border-soft);
     box-shadow: var(--admin-glass-shadow);
   }
 }

@@ -1,10 +1,11 @@
 ::ng-deep {
   .list {
-    padding: var(--admin-spacing-md);
+    padding: var(--admin-spacing-lg);
     background-color: var(--admin-bg-card);
     min-height: calc(100vh - 64px);
     color: var(--admin-text-primary);
     box-shadow: var(--admin-shadow-md);
+    border-radius: var(--admin-border-radius-lg);
   }
 
   .list__header {
@@ -18,8 +19,9 @@
 
   .list__header-left {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 16px;
+    width: 100%;
     .header-section {
       width: 100%;
     }
@@ -82,6 +84,7 @@
       flex: 1;
       min-width: 200px;
       max-width: 400px;
+      width: 100%;
     }
   }
 
@@ -91,6 +94,57 @@
     padding-left: var(--admin-spacing-lg);
     margin-bottom: var(--admin-spacing-lg);
     flex-wrap: wrap;
+    width: 80%;
+  }
+
+  [data-theme="glass"] .list {
+    background: var(--admin-glass-surface-strong);
+    border-radius: 40px;
+    border: 1px solid var(--admin-border-primary);
+    box-shadow: var(--admin-glass-shadow-lg);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(circle at 25% 15%, rgba(255, 255, 255, 0.6), transparent 60%);
+      pointer-events: none;
+      opacity: 0.8;
+    }
+  }
+
+  [data-theme="glass"] .list__header,
+  [data-theme="glass"] .list__filters,
+  [data-theme="glass"] .filter-section {
+    position: relative;
+    z-index: 1;
+    background: transparent;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  [data-theme="glass"] .list__header {
+    border-bottom: 1px solid var(--admin-glass-divider);
+  }
+
+  [data-theme="glass"] .list__filters {
+    margin-top: 24px;
+    margin-bottom: 32px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 16px;
+  }
+
+  [data-theme="glass"] .stats-cards .stat-card {
+    background: var(--admin-glass-surface-muted);
+    border: 1px solid var(--admin-border-secondary);
+    box-shadow: var(--admin-glass-shadow);
+    color: var(--admin-text-primary);
   }
 }
 

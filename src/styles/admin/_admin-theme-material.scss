@@ -194,6 +194,48 @@
     }
   }
 
+/* Glass theme specific button styling */
+[data-theme='glass'] {
+  .mat-mdc-raised-button.mat-primary,
+  .mat-mdc-button.mat-primary {
+    background: linear-gradient(140deg, rgba(255, 255, 255, 0.45), rgba(210, 225, 255, 0.25));
+    color: #0f172a;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 15px 30px rgba(15, 23, 42, 0.2);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    border-radius: 18px;
+  }
+
+  .mat-mdc-raised-button.mat-primary::after,
+  .mat-mdc-button.mat-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(130deg, rgba(255, 255, 255, 0.45), transparent 70%);
+    opacity: 0.9;
+    pointer-events: none;
+  }
+
+  .mat-mdc-raised-button.mat-primary:hover,
+  .mat-mdc-button.mat-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 18px 38px rgba(15, 23, 42, 0.22);
+  }
+
+  .mat-mdc-raised-button.mat-primary:active,
+  .mat-mdc-button.mat-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.2);
+  }
+
+  .mat-mdc-raised-button.mat-primary .mat-icon,
+  .mat-mdc-button.mat-primary .mat-icon {
+    color: inherit;
+  }
+}
+
   /* Shimmer animation for button hover effect */
   @keyframes shimmer {
     0% {
