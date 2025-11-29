@@ -203,7 +203,7 @@
   // Order Details Dark Theme
   --admin-order-detail-bg: #1f2937;
   --admin-order-detail-header-bg: #374151;
-  --admin-table-header-bg: #374151;
+  --admin-table-header-bg: #4b5563;
   --admin-basic-bg: #2d2d2d;
   --admin-order-detail-border: #404040;
   --admin-order-detail-text-primary: #ffffff;
@@ -214,7 +214,7 @@
   
   // Order List Dark Theme
   --admin-order-list-bg: #1f2937;
-  --admin-order-list-card-bg: #2d2d2d;
+  --admin-order-list-card-bg: #374151;
   --admin-order-list-border: #404040;
   --admin-order-list-text-primary: #ffffff;
   --admin-order-list-text-secondary: #9ca3af;
@@ -258,11 +258,11 @@
   --admin-bg-card: #f0f2f5;
   --admin-table-bg: #fafafa;
   --admin-table-border: #a0a0a0;
-  --admin-table-header-bg: #f0f2f5;
+  --admin-table-header-bg: #e5e7eb;
   --admin-bg-hover: #e8f4f8;
   --admin-bg-overlay: rgba(0, 0, 0, 0.5);
-  --admin-basic-bg: #f9f9f9;
-  --admin-order-list-card-bg: #f0f2f5;
+  --admin-basic-bg: #ffffff;
+  --admin-order-list-card-bg: #f8fafc;
   
   // Text Colors - Light Theme
   --admin-text-primary: #212121;
@@ -271,7 +271,7 @@
   --admin-text-inverse: #ffffff;
   
   // Border Colors - Light Theme
-  --admin-border-primary: #f0f2f5;
+  --admin-border-primary: #d0d0d0;
   --admin-border-secondary: #c0c0c0;
   --admin-border-focus: #1976d2;
   --admin-border-error: #f44336;

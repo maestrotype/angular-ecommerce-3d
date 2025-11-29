@@ -48,26 +48,9 @@
 
 .category-table {
   width: 100%;
-  background-color: var(--admin-bg-secondary);
-
-  th {
-    background-color: var(--admin-bg-hover) ;
-    color: var(--mdc-list-list-item-label-text-color);
-    font-weight: 600;
-    padding: 16px;
-    border-bottom: 1px solid #4b5563;
-  }
-
-  td {
-    background-color: var(--admin-bg-secondary) ;
-    color: var(--mdc-list-list-item-label-text-color);
-    padding: 16px;
-    border-bottom: 1px solid #404040;
-  }
-
-  tr:hover td {
-    background-color: var(--admin-bg-hover) ;
-  }
+  
+  // Table styles are now in _admin-theme-material.scss
+  // Only category-specific styles remain here
 }
 
 // Mobile card styles

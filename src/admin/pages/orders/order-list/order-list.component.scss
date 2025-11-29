@@ -169,17 +169,17 @@
   .order-table {
     width: 100%;
     th {
-      background-color: var(--admin-table-header-bg) ;
-      color: var(--admin-order-list-text-primary) ;
+      background-color: var(--admin-table-header-bg);
+      color: var(--admin-order-list-text-primary);
       font-weight: var(--admin-font-weight-bold);
       padding: var(--admin-spacing-md);
-      border-bottom: 1px solid var(--admin-border-primary);
+      border-bottom: none;
     }
 
     td {
-      color: var(--admin-order-list-text-primary) ;
+      color: var(--admin-order-list-text-primary);
       padding: var(--admin-spacing-md);
-      border-bottom: 1px solid var(--admin-order-list-border);
+      border-bottom: none;
       
       .customer-info {
         .customer-name {
@@ -227,8 +227,17 @@
       }
     }
 
+    // Elegant row separation without borders
+    tr:nth-child(even) td {
+      background-color: var(--admin-order-list-card-bg);
+    }
+    
+    tr:nth-child(odd) td {
+      background-color: var(--admin-basic-bg);
+    }
+    
     tr:hover td {
-      background-color: var(--admin-basic-bg) ;
+      background-color: var(--admin-bg-hover) !important;
     }
   }
 

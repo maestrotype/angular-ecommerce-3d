@@ -27,6 +27,15 @@
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+  gap: var(--admin-spacing-md);
+  
+  .filter-spacer {
+    flex: 1;
+  }
+  
+  .category-filter {
+    margin-left: auto;
+  }
 }
 
 .product-list-container {
@@ -71,24 +80,8 @@
   .product-table {
     width: 100%;
     
-    th {
-      background-color: var(--admin-table-header-bg) ;
-      color: var(--mdc-list-list-item-label-text-color);
-      
-      font-weight: 600;
-      padding: 16px;
-      border-bottom: 1px solid var(--admin-table-border);
-    }
-    
-    td {
-      color: var(--mdc-list-list-item-label-text-color);
-      padding: 16px;
-      border-bottom: 1px solid var(--admin-table-border);
-    }
-    
-    tr:hover td {
-      background-color: var(--admin-bg-hover) ;
-    }
+    // Table styles are now in _admin-theme-material.scss
+    // Only product-specific styles remain here
   }
   
   .image-container {

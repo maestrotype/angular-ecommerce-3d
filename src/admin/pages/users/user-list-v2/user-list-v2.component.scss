@@ -1,10 +1,58 @@
+// Override list-container styles to match original Users
+:host ::ng-deep {
+  .list {
+    padding: 24px;
+    background-color: var(--admin-bg-card);
+    min-height: calc(100vh - 64px);
+    color: var(--admin-text-primary);
+  }
+
+  .list__header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 24px;
+    padding: 0;
+  }
+
+  .list__filters {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding: 0;
+    align-items: baseline;
+    flex-wrap: wrap;
+  }
+
+  .list__content {
+    padding: 0;
+  }
+}
+
 .header-section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
   h1 {
+    color: var(--admin-text-primary);
+    margin: 0 0 8px 0;
+    font-size: 2rem;
+    font-weight: 600;
+  }
+
+  .subtitle {
+    color: var(--admin-text-secondary);
+    font-size: 1rem;
     margin: 0;
   }
 }
 
 .users-table {
+  width: 100%;
+  
+  // Table styles are now in _admin-theme-material.scss
+  // Only user-specific styles remain here
+  
   td {
     .user-info {
       display: flex;
@@ -46,6 +94,8 @@
       align-items: center;
     }
   }
+  
+  // Row separation and hover styles are now in _admin-theme-material.scss
 }
 
 .error-container {
@@ -142,5 +192,9 @@
     }
   }
 }
+
+
+
+
 
 

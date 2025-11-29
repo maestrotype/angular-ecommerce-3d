@@ -16,6 +16,8 @@
       (onClear)="clearSearch()">
     </app-search-bar>
 
+    <div class="filter-spacer"></div>
+
     <mat-form-field appearance="outline" class="category-filter">
       <mat-label>{{ 'CATEGORY' | translate }}</mat-label>
       <mat-select (selectionChange)="filterByCategory($event)">

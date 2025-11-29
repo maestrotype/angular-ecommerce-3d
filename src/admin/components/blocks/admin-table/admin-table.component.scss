@@ -4,6 +4,7 @@
   box-shadow: var(--admin-shadow-md);
   border: 1px solid var(--admin-order-list-border, var(--admin-border-primary));
   overflow: hidden;
+  margin: 0;
 
   [data-theme="glass"] & {
     background: var(--admin-glass-surface-muted);
@@ -27,30 +28,8 @@
 }
 
 .admin-table-wrapper {
-  ::ng-deep {
-    .mat-mdc-table {
-      background-color: var(--admin-basic-bg);
-      width: 100%;
-      
-      th {
-        background-color: var(--admin-table-header-bg);
-        color: var(--admin-order-list-text-primary, var(--admin-text-primary));
-        font-weight: var(--admin-font-weight-bold);
-        padding: var(--admin-spacing-md);
-        border-bottom: 1px solid var(--admin-border-primary);
-      }
-
-      td {
-        color: var(--admin-order-list-text-primary, var(--admin-text-primary));
-        padding: var(--admin-spacing-md);
-        border-bottom: 1px solid var(--admin-order-list-border, var(--admin-border-primary));
-      }
-
-      tr:hover td {
-        background-color: var(--admin-basic-bg);
-      }
-    }
-  }
+  // Table styles are now in _admin-theme-material.scss
+  // Only component-specific styles remain here
   
   [data-theme="glass"] & {
     ::ng-deep .mat-mdc-table {

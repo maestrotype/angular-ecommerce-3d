@@ -1,9 +1,9 @@
-<div class="message-list-container">
-  <div class="header">
-    <h2>{{ 'MESSAGES' | translate }}</h2>
+<app-list-container>
+  <div list-header class="header-section">
+    <h1>{{ 'MESSAGES' | translate }}</h1>
   </div>
 
-  <div class="filters">
+  <div list-filters class="filter-section">
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>{{ 'SEARCH_MESSAGES' | translate }}</mat-label>
       <input matInput [(ngModel)]="searchTerm" (keyup.enter)="onSearch()" placeholder="Search by name, email, or subject">
@@ -91,4 +91,4 @@
   <div *ngIf="!loading && filteredMessages.length === 0" class="no-data">
     <p>{{ 'NO_MESSAGES' | translate }}</p>
   </div>
-</div>
+</app-list-container>

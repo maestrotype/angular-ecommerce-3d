@@ -9,9 +9,18 @@
   
   // Glass theme background gradient
   [data-theme="glass"] & {
-    background: var(--lg-gradient-bg);
-    backdrop-filter: var(--lg-glass-blur);
-    -webkit-backdrop-filter: var(--lg-glass-blur);
+    background: transparent;
+    
+    // Remove Material's default borders
+    ::ng-deep {
+      .mat-drawer-backdrop {
+        background: transparent;
+      }
+      
+      .mat-sidenav-container {
+        background: transparent;
+      }
+    }
   }
 }
 
@@ -24,21 +33,11 @@
               color var(--admin-transition-normal),
               border-color var(--admin-transition-normal);
   
-  // Glass theme effects
+  // Glass theme effects - iOS/macOS style
+  // Styles are defined globally in _admin-theme-material.scss
   [data-theme="glass"] & {
-    @include lg-glass-effect(var(--admin-glass-surface-muted), var(--admin-border-secondary));
-    border-radius: 28px;
-    position: relative;
-    overflow: hidden;
-
-    &::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.25), transparent 80%);
-      pointer-events: none;
-    }
+    // Component-specific overrides only
+    box-shadow: none;
   }
 }
 
@@ -57,33 +56,15 @@
 .admin-main {
   flex: 1;
   padding: 24px;
-  background-color: var(--mat-sidenav-content-background-color);
-  background-color: var(--admin-bg-card);
   background-color: var(--admin-bg-secondary);
   color: var(--admin-text-primary);
   min-height: calc(100vh - 64px);
   overflow-x: auto;
   transition: background-color var(--admin-transition-normal), color var(--admin-transition-normal);
   
-  // Glass theme effects
+  // Glass theme - keep it simple
   [data-theme="glass"] & {
-    background: var(--admin-glass-surface-strong);
-    backdrop-filter: var(--lg-glass-blur);
-    -webkit-backdrop-filter: var(--lg-glass-blur);
-    border-radius: 36px;
-    box-shadow: var(--admin-glass-shadow-lg);
-    border: 1px solid var(--admin-border-primary);
-    position: relative;
-    overflow: hidden;
-
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.45), transparent 60%);
-      pointer-events: none;
-    }
+    background: transparent;
   }
 }
 

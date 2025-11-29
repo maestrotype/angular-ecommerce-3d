@@ -73,22 +73,30 @@
     background-color: var(--admin-bg-secondary);
     
     th {
-      background-color: var(--admin-bg-hover) ;
-      color: var(--mdc-list-list-item-label-text-color);
-      font-weight: 600;
-      padding: 16px;
-      border-bottom: 1px solid #4b5563;
+      background-color: var(--admin-table-header-bg);
+      color: var(--admin-text-primary);
+      font-weight: var(--admin-font-weight-bold);
+      padding: var(--admin-spacing-md);
+      border-bottom: none;
     }
     
     td {
-      background-color: var(--admin-bg-secondary) ;
-      color: var(--mdc-list-list-item-label-text-color);
-      padding: 16px;
-      border-bottom: 1px solid #404040;
+      color: var(--admin-text-primary);
+      padding: var(--admin-spacing-md);
+      border-bottom: none;
+    }
+    
+    // Elegant row separation without borders
+    tr:nth-child(even) td {
+      background-color: var(--admin-order-list-card-bg);
+    }
+    
+    tr:nth-child(odd) td {
+      background-color: var(--admin-basic-bg);
     }
     
     tr:hover td {
-      background-color: var(--admin-bg-hover) ;
+      background-color: var(--admin-bg-hover) !important;
     }
     
     .user-info {

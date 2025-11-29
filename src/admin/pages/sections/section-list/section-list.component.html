@@ -1,17 +1,16 @@
 
-<div class="section-list-container">
-    <div class="header">
-      <h2>{{ 'MAIN_PAGE_SECTIONS' | translate }}</h2>
-      <button mat-raised-button color="primary" (click)="addSection()" class="add-button">
-        <mat-icon>add</mat-icon>
-        <span class="button-text">{{ 'ADD_SECTION' | translate }}</span>
-      </button>
-    </div>
+<app-list-container>
+  <div list-header class="header-section">
+    <h1>{{ 'MAIN_PAGE_SECTIONS' | translate }}</h1>
+    <button mat-raised-button color="primary" (click)="addSection()" class="add-button">
+      <mat-icon>add</mat-icon>
+      <span class="button-text">{{ 'ADD_SECTION' | translate }}</span>
+    </button>
+  </div>
   
-    <!-- Desktop Table View -->
-    <div class="table-container desktop-view">
-      <table mat-table [dataSource]="dataSource" class="sections-table" 
-             cdkDropList (cdkDropListDropped)="drop($event)">
+  <app-admin-table [loading]="loading" [dataSource]="dataSource" [displayedColumns]="displayedColumns">
+    <table mat-table [dataSource]="dataSource" class="sections-table" 
+           cdkDropList (cdkDropListDropped)="drop($event)" matSort>
         
         <ng-container matColumnDef="order">
           <th mat-header-cell *matHeaderCellDef>{{ 'ORDER' | translate }}</th>
@@ -61,10 +60,10 @@
           </td>
         </ng-container>
   
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag></tr>
-      </table>
-    </div>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag></tr>
+    </table>
+  </app-admin-table>
 
     <!-- Mobile Card View -->
     <div class="mobile-view">
@@ -112,12 +111,8 @@
       </div>
     </div>
   
-    <div *ngIf="loading" class="loading">
-      <mat-spinner></mat-spinner>
-    </div>
-  
-    <div *ngIf="!loading && dataSource.data.length === 0" class="no-data">
-      <p>{{ 'NO_SECTIONS_FOUND' | translate }}</p>
-    </div>
+  <div *ngIf="!loading && dataSource.data.length === 0" class="no-data">
+    <p>{{ 'NO_SECTIONS_FOUND' | translate }}</p>
   </div>
+</app-list-container>
   

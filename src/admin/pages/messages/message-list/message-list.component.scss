@@ -1,44 +1,47 @@
 
-.message-list-container {
-  padding: 24px;
-  background-color: var(--admin-bg-card);
-  min-height: calc(100vh - 64px);
-  color: var(--mdc-list-list-item-label-text-color);
-  .mat-mdc-row {
-    background-color: var(--admin-order-list-card-bg);
-  }
-}
-
-.header {
-  margin-bottom: 24px;
-  
-  h2 {
-    margin: 0;
-    padding-bottom: 10px;
-    color: var(--mdc-list-list-item-label-text-color);
-    font-weight: 500;
-  }
-}
-
-.filters {
+.header-section {
   display: flex;
-  gap: 16px;
-  margin-bottom: 24px;
-  align-items: baseline;
-  
-  .search-field {
-    flex: 1;
-    max-width: 400px;
-  }
-  
-  .status-filter {
-    min-width: 150px;
-  }
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: var(--admin-spacing-md);
 
-  .search-button {
-    // height: 100%;
-    .button-text {
-      margin-left: 8px;
+  h1 {
+    color: var(--admin-text-primary);
+    margin: 0;
+    flex: 1;
+    font-size: var(--admin-font-size-xxl);
+    font-weight: var(--admin-font-weight-bold);
+  }
+}
+
+:host ::ng-deep {
+  .list__filters.filter-section,
+  .list__filters .filter-section,
+  .filter-section {
+    display: flex;
+    gap: var(--admin-spacing-md);
+    margin-bottom: var(--admin-spacing-lg);
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 0 var(--admin-spacing-lg);
+    width: 100%;
+    
+    .search-field {
+      flex: 1;
+      min-width: 200px;
+      max-width: 400px;
+    }
+    
+    .status-filter {
+      min-width: 150px;
+    }
+
+    .search-button {
+      .button-text {
+        margin-left: 8px;
+      }
     }
   }
 }
@@ -57,24 +60,74 @@
 
 .messages-table {
   width: 100%;
-  th {
-    background-color: var(--admin-table-header-bg) ;
+  
+  // Table styles are now in _admin-theme-material.scss
+  // Only message-specific styles remain here
+  
+  // Subject column - distinct styling with accent color
+  .mat-column-subject {
+    font-weight: var(--admin-font-weight-medium);
+    
+    // Apply color to both header and cells
+    &.mat-mdc-header-cell,
+    &.mat-mdc-cell {
+      color: var(--admin-primary);
+    }
+    
+    // For dark theme, use lighter accent
+    [data-theme="dark"] & {
+      &.mat-mdc-header-cell,
+      &.mat-mdc-cell {
+        color: var(--admin-primary-light);
+      }
+    }
+    
+    // For glass theme, use primary color
+    [data-theme="glass"] & {
+      &.mat-mdc-header-cell,
+      &.mat-mdc-cell {
+        color: var(--admin-border-focus);
+      }
+    }
   }
+  
+  // Also target cells directly
+  td.mat-column-subject,
+  th.mat-column-subject {
+    font-weight: var(--admin-font-weight-medium);
+    color: var(--admin-primary);
+    
+    [data-theme="dark"] & {
+      color: var(--admin-primary-light);
+    }
+    
+    [data-theme="glass"] & {
+      color: var(--admin-border-focus);
+    }
+  }
+  
   .mat-column-actions {
     width: 200px;
     text-align: center;
   }
 }
 
-.loading, .no-data {
+.loading-container, .error-container, .no-data {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  padding: 48px;
+  justify-content: center;
+  padding: var(--admin-spacing-xxl) var(--admin-spacing-lg);
+  margin: 0 var(--admin-spacing-lg);
+  text-align: center;
+  color: var(--admin-text-primary);
+  background-color: var(--admin-bg-secondary);
+  border-radius: var(--admin-border-radius-md);
+  border: 1px solid var(--admin-border-primary);
   
   p {
-    color: var(--mdc-list-list-item-label-text-color);
-    font-size: 16px;
+    margin: 0;
+    font-size: var(--admin-font-size-lg);
   }
 }
 
@@ -90,15 +143,15 @@
 }
 
 .message-card {
-  background: var(--admin-bg-secondary);
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  padding: 16px;
-  border: 1px solid #404040;
-  transition: all 0.3s ease;
+  background: var(--admin-bg-card);
+  border-radius: var(--admin-border-radius-lg);
+  box-shadow: var(--admin-shadow-md);
+  padding: var(--admin-spacing-md);
+  border: 1px solid var(--admin-border-primary);
+  transition: var(--admin-transition-normal);
 
   &:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--admin-shadow-lg);
     transform: translateY(-2px);
   }
 
@@ -112,16 +165,16 @@
       flex: 1;
 
       h3 {
-        margin: 0 0 4px 0;
-        font-size: 16px;
-        font-weight: 600;
-        color: var(--mdc-list-list-item-label-text-color);
+        margin: 0 0 var(--admin-spacing-xs) 0;
+        font-size: var(--admin-font-size-md);
+        font-weight: var(--admin-font-weight-bold);
+        color: var(--admin-text-primary);
       }
 
       .email {
         margin: 0;
-        font-size: 14px;
-        color: #9ca3af;
+        font-size: var(--admin-font-size-sm);
+        color: var(--admin-text-secondary);
       }
     }
 
@@ -138,9 +191,9 @@
 
       h4 {
         margin: 0;
-        font-size: 14px;
-        font-weight: 500;
-        color: var(--mdc-list-list-item-label-text-color);
+        font-size: var(--admin-font-size-sm);
+        font-weight: var(--admin-font-weight-medium);
+        color: var(--admin-text-primary);
         line-height: 1.4;
       }
     }
@@ -148,14 +201,14 @@
     .date {
       display: flex;
       align-items: center;
-      gap: 4px;
-      color: #9ca3af;
-      font-size: 12px;
+      gap: var(--admin-spacing-xs);
+      color: var(--admin-text-secondary);
+      font-size: var(--admin-font-size-xs);
 
       mat-icon {
-        font-size: 16px;
-        width: 16px;
-        height: 16px;
+        font-size: var(--admin-font-size-md);
+        width: var(--admin-font-size-md);
+        height: var(--admin-font-size-md);
       }
     }
   }

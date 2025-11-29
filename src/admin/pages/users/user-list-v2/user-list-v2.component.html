@@ -4,10 +4,6 @@
     <p class="subtitle">{{ 'USER_MANAGEMENT_SUBTITLE' | translate}}</p>
   </div>
 
-  <div list-kpis class="stats-cards">
-    <app-stat-card [number]="dataSource.data.length" [label]="'TOTAL_USERS' | translate"></app-stat-card>
-  </div>
-
   <div list-filters class="filter-section">
     <app-search-bar 
       [label]="'SEARCH_USERS' | translate"

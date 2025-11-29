@@ -7,13 +7,48 @@
     color var(--admin-transition-normal),
     border-color var(--admin-transition-normal);
   
-  // Glass theme improvements
+  // Remove box-shadow for glass theme
   [data-theme="glass"] & {
-    background-color: var(--admin-bg-card);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--admin-border-primary);
-    box-shadow: var(--admin-glass-shadow);
+    box-shadow: none;
+  }
+  
+  // Glass theme improvements - iOS/macOS style
+  [data-theme="glass"] & {
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 
+      0 4px 16px rgba(0, 0, 0, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    position: relative;
+    
+    // Override Material toolbar styles
+    ::ng-deep {
+      .mat-toolbar-row,
+      .mat-toolbar-single-row {
+        border: none;
+        background: transparent;
+      }
+    }
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.6),
+        transparent
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
   }
 
   .header-title {

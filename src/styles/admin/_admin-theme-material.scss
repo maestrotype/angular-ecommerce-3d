@@ -154,16 +154,60 @@
     }
   
     /* ===== Paginator ===== */
-    .mat-paginator {
-      background-color: var(--admin-bg-secondary);
-      color: var(--admin-input-text);
-      border-top: 1px solid var(--admin-input-border);
+    .mat-paginator,
+    .mat-mdc-paginator {
+      background-color: var(--admin-table-header-bg);
+      color: var(--admin-text-primary);
+      border-top: 1px solid var(--admin-border-primary);
     }
-  
-    .mat-paginator .mat-icon-button {
-      color: var(--admin-input-text);
+
+    .mat-paginator .mat-icon-button,
+    .mat-mdc-paginator .mat-mdc-icon-button {
+      color: var(--admin-text-primary);
     }
-  
+
+    .mat-paginator .mat-paginator-page-size-label,
+    .mat-paginator .mat-paginator-range-label,
+    .mat-mdc-paginator .mat-mdc-paginator-page-size-label,
+    .mat-mdc-paginator .mat-mdc-paginator-range-label {
+      color: var(--admin-text-primary);
+    }
+
+    /* ===== Tables ===== */
+    .mat-mdc-table {
+      background-color: var(--admin-basic-bg, var(--admin-bg-card));
+      
+      /* Table header - distinct background */
+      .mat-mdc-header-row .mat-mdc-header-cell {
+        background-color: var(--admin-table-header-bg);
+        color: var(--admin-text-primary);
+        font-weight: var(--admin-font-weight-bold);
+        padding: var(--admin-spacing-md);
+        border-bottom: none;
+      }
+
+      /* Table cells - no borders */
+      .mat-mdc-cell {
+        color: var(--admin-text-primary);
+        padding: var(--admin-spacing-md);
+        border-bottom: none;
+      }
+
+      /* Elegant row separation without borders */
+      .mat-mdc-row:nth-child(even) .mat-mdc-cell {
+        background-color: var(--admin-order-list-card-bg, var(--admin-bg-secondary));
+      }
+      
+      .mat-mdc-row:nth-child(odd) .mat-mdc-cell {
+        background-color: var(--admin-basic-bg, var(--admin-bg-card));
+      }
+
+      /* Hover effect */
+      .mat-mdc-row:hover .mat-mdc-cell {
+        background-color: var(--admin-bg-hover);
+      }
+    }
+
     /* ===== Cards / Panels / Menus ===== */
     .mat-card, .mat-menu-panel, .mat-dialog-container {
       background-color: var(--admin-bg-secondary);
@@ -194,8 +238,74 @@
     }
   }
 
-/* Glass theme specific button styling */
+/* Glass theme specific styling */
 [data-theme='glass'] {
+  /* ===== Sidenav / Drawer - Liquid Glass Effect ===== */
+  .mat-sidenav-container .mat-sidenav,
+  .mat-drawer-container .mat-drawer,
+  mat-sidenav.mat-sidenav,
+  mat-drawer.mat-drawer {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: none;
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  }
+  
+  /* ===== Toolbar / Header - Liquid Glass Effect ===== */
+  .mat-toolbar.mat-toolbar,
+  mat-toolbar.mat-toolbar,
+  .admin-header.mat-toolbar {
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 
+      0 4px 16px rgba(0, 0, 0, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  }
+  
+  /* ===== Sidenav Container - Remove borders ===== */
+  .mat-sidenav-container,
+  .mat-drawer-container {
+    background: transparent;
+  }
+  
+  .mat-sidenav-content,
+  .mat-drawer-content {
+    background: transparent;
+  }
+  
+  /* Remove Material's default borders and shadows */
+  .mat-drawer-backdrop {
+    background: transparent;
+  }
+  
+  .mat-drawer-inner-container {
+    background: transparent;
+    border: none;
+  }
+  
+  /* Remove any borders from sidenav inner elements */
+  .mat-sidenav .mat-list-item,
+  .mat-drawer .mat-list-item {
+    border-bottom: none;
+  }
+  
+  .mat-sidenav .sidenav-header,
+  .mat-drawer .sidenav-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .mat-sidenav .sidenav-footer,
+  .mat-drawer .sidenav-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  /* ===== Button styling ===== */
   .mat-mdc-raised-button.mat-primary,
   .mat-mdc-button.mat-primary {
     background: linear-gradient(140deg, rgba(255, 255, 255, 0.45), rgba(210, 225, 255, 0.25));
