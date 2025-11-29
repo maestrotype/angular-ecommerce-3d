@@ -37,9 +37,8 @@
       position: relative;
       overflow: hidden;
       
-      // Liquid Glass эффект для темы Glass
+      // Liquid Glass Glass
       [data-theme="glass"] & {
-        // Базовый эффект стекла
         background: rgba(255, 255, 255, 0.25);
         backdrop-filter: blur(16px) saturate(180%);
         -webkit-backdrop-filter: blur(16px) saturate(180%);
@@ -49,7 +48,6 @@
           0 2px 8px rgba(0, 0, 0, 0.1),
           inset 0 1px 0 rgba(255, 255, 255, 0.3);
         
-        // Градиентный оверлей для глубины
         &::before {
           content: '';
           position: absolute;
@@ -68,7 +66,6 @@
           pointer-events: none;
         }
 
-        // Световой эффект сверху
         &::after {
           content: '';
           position: absolute;
@@ -87,7 +84,6 @@
           pointer-events: none;
         }
 
-        // Эффект при наведении
         &:hover {
           transform: translateY(-4px) scale(1.02);
           box-shadow: 
@@ -169,17 +165,17 @@
   .order-table {
     width: 100%;
     th {
-      background-color: var(--admin-table-header-bg);
-      color: var(--admin-order-list-text-primary);
+      background-color: var(--admin-table-header-bg) ;
+      color: var(--admin-order-list-text-primary) ;
       font-weight: var(--admin-font-weight-bold);
       padding: var(--admin-spacing-md);
-      border-bottom: none;
+      border-bottom: 1px solid var(--admin-border-primary);
     }
 
     td {
-      color: var(--admin-order-list-text-primary);
+      color: var(--admin-order-list-text-primary) ;
       padding: var(--admin-spacing-md);
-      border-bottom: none;
+      border-bottom: 1px solid var(--admin-order-list-border);
       
       .customer-info {
         .customer-name {
@@ -227,17 +223,8 @@
       }
     }
 
-    // Elegant row separation without borders
-    tr:nth-child(even) td {
-      background-color: var(--admin-order-list-card-bg);
-    }
-    
-    tr:nth-child(odd) td {
-      background-color: var(--admin-basic-bg);
-    }
-    
     tr:hover td {
-      background-color: var(--admin-bg-hover) !important;
+      background-color: var(--admin-basic-bg) ;
     }
   }
 
