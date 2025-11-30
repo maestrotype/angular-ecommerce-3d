@@ -318,46 +318,48 @@
   --admin-glass-shadow-lg: 0 28px 80px rgba(15, 23, 42, 0.25);
   --admin-glass-inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
 
-  // Background Colors - Glass Theme
-  --admin-bg-primary: transparent;
-  --admin-bg-secondary: transparent;
-  --admin-bg-tertiary: rgba(255, 255, 255, 0.15);
-  --admin-bg-card: var(--admin-glass-surface-soft);
-  --admin-bg-hover: rgba(255, 255, 255, 0.35);
+  // Background Colors - Glass Theme (same as light theme for consistency)
+  --admin-bg-primary: #ffffff;
+  --admin-bg-secondary: #fff;
+  --admin-bg-tertiary: #fafafa;
+  --admin-bg-card: #f0f2f5;
+  --admin-bg-hover: #e8f4f8;
   --admin-bg-overlay: rgba(15, 23, 42, 0.2);
-  --admin-basic-bg: rgba(255, 255, 255, 0.3);
-  --admin-table-bg: var(--admin-glass-surface-muted);
-  --admin-table-border: var(--admin-glass-border-soft);
-  --admin-table-header-bg: var(--admin-glass-surface-strong);
   
-  // Text Colors - Glass Theme
-  --admin-text-primary: #0f172a;
-  --admin-text-secondary: #475569;
-  --admin-text-disabled: #94a3b8;
+  // Table colors - EXACT same as light theme but with transparency for glass effect
+  --admin-basic-bg: #ffffff;
+  --admin-table-bg: #fafafa;
+  --admin-table-border: #a0a0a0;
+  --admin-table-header-bg: #e5e7eb;
+  
+  // Text Colors - Glass Theme (same as light theme)
+  --admin-text-primary: #212121;
+  --admin-text-secondary: #757575;
+  --admin-text-disabled: #bdbdbd;
   --admin-text-inverse: #ffffff;
   
-  // Border Colors - Glass Theme
-  --admin-border-primary: var(--admin-glass-border-strong);
-  --admin-border-secondary: var(--admin-glass-border-soft);
-  --admin-border-focus: #6366f1;
-  --admin-border-error: #ef4444;
+  // Border Colors - Glass Theme (same as light theme)
+  --admin-border-primary: #d0d0d0;
+  --admin-border-secondary: #c0c0c0;
+  --admin-border-focus: #1976d2;
+  --admin-border-error: #f44336;
   
-  // Order Details / List glass overrides
-  --admin-order-detail-bg: var(--admin-glass-surface-soft);
-  --admin-order-detail-header-bg: rgba(255, 255, 255, 0.35);
-  --admin-order-detail-card-bg: var(--admin-glass-surface-muted);
-  --admin-order-detail-border: var(--admin-glass-border-soft);
+  // Order Details / List glass overrides - EXACT same as light theme
+  --admin-order-detail-bg: #f0f2f5;
+  --admin-order-detail-header-bg: #e8f4f8;
+  --admin-order-detail-card-bg: #ffffff;
+  --admin-order-detail-border: #d0d0d0;
   --admin-order-detail-text-primary: var(--admin-text-primary);
   --admin-order-detail-text-secondary: var(--admin-text-secondary);
-  --admin-order-list-bg: var(--admin-glass-surface-strong);
-  --admin-order-list-card-bg: var(--admin-glass-surface-soft);
-  --admin-order-list-border: var(--admin-glass-border-soft);
+  --admin-order-list-bg: #f0f2f5;
+  --admin-order-list-card-bg: #f8fafc;
+  --admin-order-list-border: #d0d0d0;
   --admin-order-list-text-primary: var(--admin-text-primary);
   --admin-order-list-text-secondary: var(--admin-text-secondary);
-  --admin-order-list-header-bg: rgba(255, 255, 255, 0.25);
-  --admin-order-list-row-hover: rgba(255, 255, 255, 0.25);
-  --admin-order-list-pagination-bg: rgba(255, 255, 255, 0.18);
-  --admin-order-list-pagination-border: var(--admin-glass-border-soft);
+  --admin-order-list-header-bg: #e5e7eb;
+  --admin-order-list-row-hover: #e8f4f8;
+  --admin-order-list-pagination-bg: #e5e7eb;
+  --admin-order-list-pagination-border: #d0d0d0;
   
   // Neon Accents
   --admin-neon-primary: #9ba9ff;

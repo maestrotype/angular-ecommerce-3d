@@ -5,58 +5,11 @@
   border: 1px solid var(--admin-order-list-border, var(--admin-border-primary));
   overflow: hidden;
   margin: 0;
-
-  [data-theme="glass"] & {
-    background: var(--admin-glass-surface-muted);
-    border-radius: 32px;
-    border: 1px solid var(--admin-border-primary);
-    box-shadow: var(--admin-glass-shadow);
-    backdrop-filter: blur(22px) saturate(160%);
-    -webkit-backdrop-filter: blur(22px) saturate(160%);
-    overflow: hidden;
-    position: relative;
-
-    &::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      background: linear-gradient(145deg, rgba(255, 255, 255, 0.2), transparent 70%);
-      pointer-events: none;
-    }
-  }
 }
 
 .admin-table-wrapper {
   // Table styles are now in _admin-theme-material.scss
   // Only component-specific styles remain here
-  
-  [data-theme="glass"] & {
-    ::ng-deep .mat-mdc-table {
-      background: transparent;
-      border-collapse: separate;
-      border-spacing: 0;
-
-      th,
-      td {
-        backdrop-filter: none;
-      }
-
-      th {
-        background: transparent;
-        border-bottom: 1px solid var(--admin-glass-divider);
-      }
-
-      td {
-        background: transparent;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.18);
-      }
-
-      tr:hover td {
-        background: rgba(255, 255, 255, 0.08);
-      }
-    }
-  }
   
   mat-paginator {
     background-color: var(--admin-order-list-pagination-bg, var(--admin-bg-secondary));
