@@ -53,51 +53,15 @@
   position: relative;
   overflow: hidden;
 
-  // Glass effect for glass theme - use same colors as light theme
+  // Glass effect for glass theme
   [data-theme="glass"] & {
-    background: var(--admin-bg-secondary);
+    background: rgba(255, 255, 255, 0.5);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid var(--admin-border-primary);
+    border: 1px solid rgba(255, 255, 255, 0.5);
     box-shadow: 
-      var(--admin-shadow-sm),
-      inset 0 1px 0 rgba(255, 255, 255, 0.6);
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(
-        135deg,
-        rgba(99, 102, 241, 0.1) 0%,
-        rgba(14, 165, 233, 0.1) 50%,
-        rgba(139, 92, 246, 0.1) 100%
-      );
-      opacity: 0.6;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    &::after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(
-        circle,
-        rgba(255, 255, 255, 0.2) 0%,
-        transparent 70%
-      );
-      opacity: 0;
-      transition: opacity var(--admin-transition-normal);
-      z-index: 1;
-      pointer-events: none;
-    }
+      0 4px 16px rgba(31, 41, 55, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.7);
   }
 
   &:hover {
@@ -106,13 +70,11 @@
 
     [data-theme="glass"] & {
       transform: translateY(-4px);
+      background: rgba(255, 255, 255, 0.65);
+      border-color: rgba(255, 255, 255, 0.6);
       box-shadow: 
-        var(--admin-shadow-lg),
-        inset 0 1px 0 rgba(255, 255, 255, 0.7);
-      
-      &::after {
-        opacity: 1;
-      }
+        0 8px 24px rgba(31, 41, 55, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
     }
   }
 }

@@ -18,9 +18,9 @@
 
     <div class="filter-spacer"></div>
 
-    <mat-form-field appearance="outline" class="category-filter">
+    <mat-form-field appearance="outline" class="category-filter" floatLabel="always">
       <mat-label>{{ 'CATEGORY' | translate }}</mat-label>
-      <mat-select (selectionChange)="filterByCategory($event)">
+      <mat-select [placeholder]="'CATEGORY' | translate" (selectionChange)="filterByCategory($event)">
         <mat-option value="">{{ 'CATEGORIES_ALL' | translate }}</mat-option>
         <mat-option value="shoes">{{ 'SHOES' | translate }}</mat-option>
         <mat-option value="handbags">{{ 'HANDBAGS' | translate }}</mat-option>

@@ -19,45 +19,46 @@ body {
   padding: 0;
   transition: background-color var(--admin-transition-normal), color var(--admin-transition-normal);
   
-  // Glass theme background - iOS/macOS style
+  // Glass theme background - iOS/macOS blue-gray style
   [data-theme="glass"] & {
     min-height: 100vh;
     position: relative;
     background: linear-gradient(
       135deg,
-      #e0e7ff 0%,
-      #c7d2fe 25%,
-      #a5b4fc 50%,
-      #c7d2fe 75%,
-      #e0e7ff 100%
+      #d4dce6 0%,
+      #bcc8d4 20%,
+      #a8b8c8 40%,
+      #9caab8 60%,
+      #b0bcc8 80%,
+      #c4d0dc 100%
     );
     background-size: 400% 400%;
     animation: gradientShift 15s ease infinite;
     background-attachment: fixed;
     
-    // Subtle texture overlay
+    // Subtle texture overlay with blue-gray tones
     &::before {
       content: '';
       position: fixed;
       inset: 0;
       z-index: -1;
       background:
-        radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.15), transparent 50%),
-        radial-gradient(circle at 80% 70%, rgba(14, 165, 233, 0.12), transparent 50%),
-        radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.1), transparent 60%);
+        radial-gradient(circle at 20% 30%, rgba(139, 166, 204, 0.25), transparent 45%),
+        radial-gradient(circle at 80% 70%, rgba(156, 163, 175, 0.2), transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(147, 181, 207, 0.18), transparent 50%);
       pointer-events: none;
     }
 
-    // Blurred color spots for depth
+    // Blurred color spots for depth with cooler tones
     &::after {
       content: '';
       position: fixed;
       inset: 0;
       z-index: -2;
       background:
-        radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.25), transparent 40%),
-        radial-gradient(circle at 85% 80%, rgba(14, 165, 233, 0.2), transparent 40%),
-        radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.15), transparent 50%);
+        radial-gradient(circle at 15% 20%, rgba(139, 166, 204, 0.3), transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(147, 181, 207, 0.25), transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(156, 163, 175, 0.2), transparent 50%);
       filter: blur(60px);
       pointer-events: none;
     }

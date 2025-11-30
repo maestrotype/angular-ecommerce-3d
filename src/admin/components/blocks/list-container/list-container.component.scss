@@ -91,21 +91,21 @@
   .filter-section {
     display: flex;
     gap: var(--admin-spacing-lg);
-    padding-left: var(--admin-spacing-lg);
+    padding: 0 var(--admin-spacing-lg);
     margin-bottom: var(--admin-spacing-lg);
     flex-wrap: wrap;
-    width: 80%;
+    width: 100%;
   }
 
   [data-theme="glass"] .list {
-    background: var(--admin-bg-card);
+    background: rgba(255, 255, 255, 0.5);
     border-radius: var(--admin-border-radius-lg);
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.6);
     box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+      0 8px 32px rgba(31, 41, 55, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
     padding: var(--admin-spacing-lg);
   }
 
@@ -131,13 +131,13 @@
   }
 
   [data-theme="glass"] .stats-cards .stat-card {
-    background: var(--admin-order-list-card-bg);
-    border: 1px solid var(--admin-order-list-border);
+    background: rgba(248, 250, 252, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.5);
     box-shadow: 
-      0 4px 16px rgba(0, 0, 0, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
+      0 4px 16px rgba(31, 41, 55, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     color: var(--admin-text-primary);
   }
 }
