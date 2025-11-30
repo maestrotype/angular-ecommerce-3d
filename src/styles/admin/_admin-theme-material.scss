@@ -240,32 +240,218 @@
 
 /* Glass theme specific styling */
 [data-theme='glass'] {
+  /* ===== Input fields - deep inset (strongly pressed) ===== */
+  .mat-mdc-form-field .mat-mdc-text-field-wrapper,
+  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    box-shadow: 
+      inset 0 5px 15px rgba(31, 41, 55, 0.4),
+      inset 0 3px 8px rgba(31, 41, 55, 0.3),
+      inset 0 -1px 2px rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    transition: all 0.3s ease;
+  }
+  
+  .mat-mdc-text-field-wrapper:hover,
+  .mat-mdc-form-field:hover .mat-mdc-text-field-wrapper {
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 
+      inset 0 5px 15px rgba(31, 41, 55, 0.35),
+      inset 0 3px 8px rgba(31, 41, 55, 0.25),
+      inset 0 -1px 2px rgba(255, 255, 255, 0.3);
+  }
+  
+  .mat-mdc-text-field-wrapper.mat-focused,
+  .mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
+    background: rgba(255, 255, 255, 0.28);
+    box-shadow: 
+      inset 0 5px 15px rgba(59, 130, 246, 0.35),
+      inset 0 3px 8px rgba(31, 41, 55, 0.25),
+      inset 0 -1px 2px rgba(255, 255, 255, 0.35),
+      0 0 0 3px rgba(59, 130, 246, 0.3);
+  }
+  
+  /* Remove ALL borders for glass theme - high specificity */
+  .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline .mdc-notched-outline__leading,
+  .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline .mdc-notched-outline__notch,
+  .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline .mdc-notched-outline__trailing,
+  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__leading,
+  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__notch,
+  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__trailing {
+    border-color: transparent;
+    border-width: 0;
+    opacity: 0;
+  }
+  
+  .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline,
+  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline {
+    display: none;
+  }
+  
+  /* ===== Select dropdowns - deep inset shadows ===== */
+  .mat-mdc-select-trigger,
+  .mat-mdc-select {
+    color: var(--admin-text-primary);
+  }
+  
+  .mat-mdc-select .mat-mdc-select-arrow,
+  .mat-mdc-select-arrow {
+    color: var(--admin-text-secondary);
+  }
+  
+  /* Select label - use hint/placeholder approach */
+  .mat-mdc-form-field .mdc-text-field__input::placeholder {
+    color: var(--admin-text-secondary);
+    opacity: 0.8;
+  }
+  
+  /* Select value text */
+  .mat-mdc-select-value,
+  .mat-mdc-select-value-text,
+  .mat-mdc-select-min-line {
+    color: var(--admin-text-primary);
+    opacity: 1;
+  }
+  
+  /* Select placeholder - always visible */
+  .mat-mdc-select-placeholder,
+  .mat-mdc-select-placeholder.mat-mdc-select-placeholder {
+    color: var(--admin-text-secondary);
+    opacity: 1;
+  }
+  
+  /* Select trigger text */
+  .mat-mdc-select-trigger .mat-mdc-select-placeholder {
+    color: var(--admin-text-secondary);
+    opacity: 1;
+  }
+  
+  /* Mat-label (alternative to floating label) */
+  .mat-mdc-form-field mat-label,
+  .mat-mdc-form-field .mat-mdc-form-field-label,
+  mat-label {
+    color: var(--admin-text-secondary);
+    opacity: 1;
+    display: inline-block;
+    visibility: visible;
+  }
+  
+  /* Select field wrapper - strong inset effect */
+  .mat-mdc-form-field:has(.mat-mdc-select) .mat-mdc-text-field-wrapper {
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 
+      inset 0 4px 12px rgba(31, 41, 55, 0.35),
+      inset 0 2px 6px rgba(31, 41, 55, 0.25),
+      inset 0 -1px 3px rgba(255, 255, 255, 0.3),
+      0 1px 2px rgba(255, 255, 255, 0.2);
+  }
+  
+  .mat-mdc-form-field:has(.mat-mdc-select):hover .mat-mdc-text-field-wrapper {
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 
+      inset 0 4px 12px rgba(31, 41, 55, 0.3),
+      inset 0 2px 6px rgba(31, 41, 55, 0.2),
+      inset 0 -1px 3px rgba(255, 255, 255, 0.4),
+      0 1px 3px rgba(255, 255, 255, 0.3);
+  }
+  
+  /* Dropdown panel */
+  .mat-mdc-select-panel.mat-mdc-select-panel,
+  .mat-select-panel.mat-select-panel {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: none;
+    box-shadow: 
+      0 8px 24px rgba(31, 41, 55, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  }
+  
+  .mat-option,
+  .mat-mdc-option {
+    background: transparent;
+    color: var(--admin-text-primary);
+    transition: background 0.2s ease;
+  }
+  
+  .mat-option:hover,
+  .mat-mdc-option:hover {
+    background: rgba(255, 255, 255, 0.5);
+  }
+  
+  .mat-option.mat-selected,
+  .mat-mdc-option.mat-selected {
+    background: rgba(59, 130, 246, 0.15);
+    color: var(--admin-text-primary);
+  }
+  
+  /* ===== Form field labels and placeholders ===== */
+  .mat-mdc-form-field .mdc-floating-label,
+  .mat-mdc-text-field-wrapper .mdc-floating-label,
+  .mat-mdc-form-field .mat-mdc-floating-label {
+    color: var(--admin-text-secondary);
+    opacity: 1;
+  }
+  
+  .mat-mdc-form-field.mat-focused .mdc-floating-label,
+  .mat-mdc-text-field-wrapper.mat-focused .mdc-floating-label,
+  .mat-mdc-form-field.mat-focused .mat-mdc-floating-label {
+    color: var(--admin-text-primary);
+    opacity: 1;
+  }
+  
+  /* Input text */
+  .mat-mdc-form-field .mat-mdc-input-element,
+  .mat-mdc-text-field-wrapper .mat-input-element,
+  .mat-mdc-input-element {
+    color: var(--admin-text-primary);
+    opacity: 1;
+  }
+  
+  /* Placeholder text */
+  .mat-mdc-input-element::placeholder,
+  .mat-input-element::placeholder {
+    color: var(--admin-text-secondary);
+    opacity: 0.7;
+  }
+  
+  /* ===== Tables with glass effect ===== */
+  .mat-mdc-table {
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: 
+      0 4px 16px rgba(31, 41, 55, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
+  
   /* ===== Sidenav / Drawer - Liquid Glass Effect ===== */
   .mat-sidenav-container .mat-sidenav,
   .mat-drawer-container .mat-drawer,
   mat-sidenav.mat-sidenav,
   mat-drawer.mat-drawer {
-    background: rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
     border: none;
     box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      0 8px 32px rgba(31, 41, 55, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4);
   }
   
   /* ===== Toolbar / Header - Liquid Glass Effect ===== */
   .mat-toolbar.mat-toolbar,
   mat-toolbar.mat-toolbar,
   .admin-header.mat-toolbar {
-    background: rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
     border: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
     box-shadow: 
-      0 4px 16px rgba(0, 0, 0, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+      0 4px 16px rgba(31, 41, 55, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4);
   }
   
   /* ===== Sidenav Container - Remove borders ===== */
@@ -308,28 +494,35 @@
   /* ===== Button styling ===== */
   .mat-mdc-raised-button.mat-primary,
   .mat-mdc-button.mat-primary {
-    background: linear-gradient(140deg, rgba(255, 255, 255, 0.45), rgba(210, 225, 255, 0.25));
+    background: rgba(255, 255, 255, 0.3);
     color: #0f172a;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 15px 30px rgba(15, 23, 42, 0.2);
-    backdrop-filter: blur(24px) saturate(160%);
-    -webkit-backdrop-filter: blur(24px) saturate(160%);
-    border-radius: 18px;
-  }
-
-  .mat-mdc-raised-button.mat-primary::after,
-  .mat-mdc-button.mat-primary::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: linear-gradient(130deg, rgba(255, 255, 255, 0.45), transparent 70%);
-    opacity: 0.9;
-    pointer-events: none;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 
+      0 4px 16px rgba(31, 41, 55, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border-radius: 12px;
+    font-weight: 500;
   }
 
   .mat-mdc-raised-button.mat-primary:hover,
   .mat-mdc-button.mat-primary:hover {
+    background: rgba(255, 255, 255, 0.4);
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 
+      0 6px 20px rgba(31, 41, 55, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
+  
+  .mat-mdc-raised-button.mat-primary:active,
+  .mat-mdc-button.mat-primary:active {
+    background: rgba(255, 255, 255, 0.35);
+    transform: translateY(1px);
+  }
+  
+  .mat-mdc-raised-button.mat-primary:disabled,
+  .mat-mdc-button.mat-primary:disabled {
     transform: translateY(-1px);
     box-shadow: 0 18px 38px rgba(15, 23, 42, 0.22);
   }
