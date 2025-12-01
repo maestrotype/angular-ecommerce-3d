@@ -1,0 +1,74 @@
+// Dark Glass Theme Variables (iOS26 style - warm dark background)
+[data-theme="dark-glass"] {
+  // Background Colors - LIGHT TRANSPARENT GLASS (liquid glass)
+  --admin-bg-primary: rgba(90, 85, 80, 0.5);
+  --admin-bg-secondary: rgba(85, 80, 75, 0.45);
+  --admin-bg-tertiary: rgba(80, 75, 70, 0.4);
+  --admin-bg-card: rgba(90, 85, 80, 0.5);
+  --admin-bg-hover: rgba(100, 95, 90, 0.5);
+  --admin-bg-overlay: rgba(0, 0, 0, 0.4);
+  
+  // Table colors - LIGHT GRAY-BROWN liquid glass (MORE transparent)
+  --admin-basic-bg: rgba(90, 85, 80, 0.5);
+  --admin-table-bg: rgba(90, 85, 80, 0.5);
+  --admin-table-border: rgba(255, 255, 255, 0.2);
+  --admin-table-header-bg: rgba(80, 75, 70, 0.55);
+  
+  // Text Colors - Dark Glass Theme (light text for dark background)
+  --admin-text-primary: rgba(255, 255, 255, 0.95);
+  --admin-text-secondary: rgba(255, 255, 255, 0.7);
+  --admin-text-disabled: rgba(255, 255, 255, 0.4);
+  --admin-text-inverse: #1a1a1a;
+  
+  // Border Colors - Dark Glass Theme
+  --admin-border-primary: rgba(255, 255, 255, 0.2);
+  --admin-border-secondary: rgba(255, 255, 255, 0.15);
+  --admin-border-focus: #8ab4f8;
+  --admin-border-error: #f28b82;
+  
+  // Order Details / List dark glass overrides - GRAY-BROWN
+  --admin-order-detail-bg: rgba(75, 70, 65, 0.65);
+  --admin-order-detail-header-bg: rgba(65, 60, 55, 0.7);
+  --admin-order-detail-card-bg: rgba(70, 65, 60, 0.6);
+  --admin-order-detail-border: rgba(255, 255, 255, 0.15);
+  --admin-order-detail-text-primary: var(--admin-text-primary);
+  --admin-order-detail-text-secondary: var(--admin-text-secondary);
+  --admin-order-list-bg: rgba(75, 70, 65, 0.65);
+  --admin-order-list-card-bg: rgba(70, 65, 60, 0.6);
+  --admin-order-list-border: rgba(255, 255, 255, 0.15);
+  --admin-order-list-text-primary: var(--admin-text-primary);
+  --admin-order-list-text-secondary: var(--admin-text-secondary);
+  --admin-order-list-header-bg: rgba(65, 60, 55, 0.7);
+  --admin-order-list-row-hover: rgba(85, 80, 75, 0.5);
+  --admin-order-list-pagination-bg: rgba(65, 60, 55, 0.7);
+  --admin-order-list-pagination-border: rgba(255, 255, 255, 0.15);
+  
+  // Component-specific colors
+  --admin-primary: #8ab4f8;
+  --admin-primary-hover: #aec7f9;
+  --admin-secondary: #f8bbd0;
+  --admin-accent: #ffcc80;
+  --admin-success: #81c784;
+  --admin-warning: #ffb74d;
+  --admin-error: #f28b82;
+  --admin-info: #64b5f6;
+  --admin-danger: #f28b82;
+  
+  // Button colors
+  --admin-button: #8ab4f8;
+  --admin-button-hover: #aec7f9;
+  --admin-button-text: #1a1a1a;
+  
+  // Input colors - LIGHT GLASS
+  --admin-input-bg: rgba(90, 85, 80, 0.5);
+  --admin-input-text: rgba(255, 255, 255, 1);
+  --admin-input-border: rgba(255, 255, 255, 0.2);
+  --admin-input-label: rgba(255, 255, 255, 0.9);
+  --admin-input-focus-border: #8ab4f8;
+  
+  // MDC card container tokens
+  --mdc-elevated-card-container-color: transparent;
+  --mdc-filled-card-container-color: transparent;
+  --mdc-outlined-card-container-color: transparent;
+}
+

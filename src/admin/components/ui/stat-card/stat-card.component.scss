@@ -10,10 +10,15 @@
   transition: all var(--admin-transition-normal);
   position: relative;
   overflow: hidden;
+  
+  // Dark Glass theme - specific styles in list-container
+  [data-theme="dark-glass"] & {
+    background-color: transparent;
+    color: rgba(255, 255, 255, 1);
+  }
 
   // Liquid Glass эффект для темы Glass
   [data-theme="glass"] & {
-    // Базовый эффект стекла
     background: rgba(255, 255, 255, 0.25);
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
@@ -42,7 +47,6 @@
       pointer-events: none;
     }
 
-    // Световой эффект сверху
     &::after {
       content: '';
       position: absolute;
@@ -61,7 +65,6 @@
       pointer-events: none;
     }
 
-    // Эффект при наведении
     &:hover {
       transform: translateY(-4px) scale(1.02);
       box-shadow: 
@@ -76,7 +79,6 @@
       }
     }
 
-    // Контент должен быть поверх эффектов
     > * {
       position: relative;
       z-index: 2;

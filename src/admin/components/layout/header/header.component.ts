@@ -20,7 +20,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   notifications: Notification[] = [];
   unreadCount = 0;
-  currentTheme: 'light' | 'dark' | 'glass' = 'dark'; // Default to dark theme
+  currentTheme: 'light' | 'dark' | 'glass' | 'dark-glass' = 'dark'; // Default to dark theme
 
   constructor(
     private router: Router,
@@ -70,11 +70,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   toggleTheme(): void {
-    // Cycle through themes: dark -> light -> glass -> dark
+    // Cycle through themes: dark -> light -> glass -> dark-glass -> dark
     if (this.currentTheme === 'dark') {
       this.currentTheme = 'light';
     } else if (this.currentTheme === 'light') {
       this.currentTheme = 'glass';
+    } else if (this.currentTheme === 'glass') {
+      this.currentTheme = 'dark-glass';
     } else {
       this.currentTheme = 'dark';
     }
