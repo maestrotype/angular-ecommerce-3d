@@ -21,7 +21,7 @@
   }
   
   /* Target both cases: theme on <html> or on <body> */
-  [data-theme='light'], [data-theme='dark'], [data-theme='glass'] {
+  [data-theme='light'], [data-theme='dark'], [data-theme='glass'], [data-theme='dark-glass'] {
   
     /* ===== Text fields / outlined inputs (MDC) ===== */
     /* wrapper: gives background, radius and base border */
@@ -536,6 +536,336 @@
   .mat-mdc-raised-button.mat-primary .mat-icon,
   .mat-mdc-button.mat-primary .mat-icon {
     color: inherit;
+  }
+}
+
+/* Dark Glass theme specific styling */
+[data-theme='dark-glass'] {
+  /* ===== Input fields - LIGHT glass for dark background ===== */
+  .mat-mdc-form-field .mat-mdc-text-field-wrapper,
+  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper {
+    background: rgba(255, 255, 255, 0.12);
+    border: none;
+    box-shadow: 
+      inset 0 3px 8px rgba(0, 0, 0, 0.3),
+      inset 0 1px 4px rgba(0, 0, 0, 0.2),
+      inset 0 -1px 2px rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    transition: all 0.3s ease;
+  }
+  
+  .mat-mdc-text-field-wrapper:hover,
+  .mat-mdc-form-field:hover .mat-mdc-text-field-wrapper {
+    background: rgba(255, 255, 255, 0.16);
+    box-shadow: 
+      inset 0 3px 8px rgba(0, 0, 0, 0.25),
+      inset 0 1px 4px rgba(0, 0, 0, 0.18),
+      inset 0 -1px 2px rgba(255, 255, 255, 0.12);
+  }
+  
+  .mat-mdc-text-field-wrapper.mat-focused,
+  .mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 
+      inset 0 3px 8px rgba(138, 180, 248, 0.15),
+      inset 0 1px 4px rgba(0, 0, 0, 0.15),
+      inset 0 -1px 2px rgba(255, 255, 255, 0.15),
+      0 0 0 3px rgba(138, 180, 248, 0.35);
+  }
+  
+  /* Remove ALL borders for dark-glass theme */
+  .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline .mdc-notched-outline__leading,
+  .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline .mdc-notched-outline__notch,
+  .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline .mdc-notched-outline__trailing,
+  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__leading,
+  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__notch,
+  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__trailing {
+    border-color: transparent;
+    border-width: 0;
+    opacity: 0;
+  }
+  
+  .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline,
+  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline {
+    display: none;
+  }
+  
+  /* ===== Text visibility ===== */
+  .mat-mdc-form-field .mat-mdc-input-element,
+  .mat-mdc-text-field-wrapper .mat-input-element,
+  .mat-mdc-input-element {
+    color: rgba(255, 255, 255, 0.95);
+    opacity: 1;
+  }
+  
+  .mat-mdc-input-element::placeholder,
+  .mat-input-element::placeholder,
+  .mat-mdc-form-field input::placeholder {
+    color: rgba(255, 255, 255, 0.9);
+    opacity: 1;
+  }
+  
+  /* Labels */
+  .mat-mdc-form-field .mdc-floating-label,
+  .mat-mdc-form-field .mat-mdc-floating-label {
+    color: rgba(255, 255, 255, 0.7);
+    opacity: 1;
+  }
+  
+  .mat-mdc-form-field.mat-focused .mdc-floating-label,
+  .mat-mdc-form-field.mat-focused .mat-mdc-floating-label {
+    color: rgba(255, 255, 255, 0.95);
+    opacity: 1;
+  }
+  
+  /* ===== Sidenav / Drawer - DARKER glass with WHITE text ===== */
+  .mat-sidenav-container .mat-sidenav,
+  .mat-drawer-container .mat-drawer,
+  mat-sidenav.mat-sidenav,
+  mat-drawer.mat-drawer {
+    background: rgba(15, 10, 20, 0.6);
+    backdrop-filter: blur(50px) saturate(180%);
+    -webkit-backdrop-filter: blur(50px) saturate(180%);
+    border: none;
+    color: rgba(255, 255, 255, 0.95);
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+  
+  /* White text for all sidenav items */
+  .mat-sidenav .mat-list-item,
+  .mat-drawer .mat-list-item,
+  .mat-sidenav .nav-link,
+  .mat-drawer .nav-link,
+  .mat-sidenav a,
+  .mat-drawer a {
+    color: rgba(255, 255, 255, 0.95);
+  }
+  
+  .mat-sidenav mat-icon,
+  .mat-drawer mat-icon {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  /* ===== Toolbar / Header - DARK glass ===== */
+  .mat-toolbar.mat-toolbar,
+  mat-toolbar.mat-toolbar,
+  .admin-header.mat-toolbar {
+    background: rgba(20, 15, 25, 0.55);
+    backdrop-filter: blur(50px) saturate(180%);
+    -webkit-backdrop-filter: blur(50px) saturate(180%);
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 
+      0 4px 16px rgba(0, 0, 0, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+  
+  /* ===== Select dropdowns - GRAY-BROWN glass (Apple style) ===== */
+  .mat-mdc-select-panel.mat-mdc-select-panel,
+  .mat-select-panel.mat-select-panel {
+    background: rgba(75, 70, 65, 0.7);
+    backdrop-filter: blur(80px) saturate(180%);
+    -webkit-backdrop-filter: blur(80px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    box-shadow: 
+      0 10px 30px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
+  
+  .mat-option,
+  .mat-mdc-option {
+    color: rgba(255, 255, 255, 0.95);
+  }
+  
+  .mat-option:hover,
+  .mat-mdc-option:hover {
+    background: rgba(85, 80, 75, 0.6);
+    color: rgba(255, 255, 255, 1);
+  }
+  
+  .mat-option.mat-selected,
+  .mat-mdc-option.mat-selected {
+    background: rgba(95, 90, 85, 0.7);
+    color: rgba(255, 255, 255, 1);
+  }
+  
+  /* ===== Logout button - red glass accent ===== */
+  .sidenav-footer button,
+  .sidenav-footer .mat-mdc-button {
+    background: rgba(242, 139, 130, 0.2);
+    color: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(242, 139, 130, 0.4);
+    border-radius: 12px;
+    box-shadow: 
+      0 4px 16px rgba(242, 139, 130, 0.2),
+      0 0 15px rgba(242, 139, 130, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    padding: 12px 16px;
+    font-weight: 500;
+  }
+  
+  .sidenav-footer button:hover,
+  .sidenav-footer .mat-mdc-button:hover {
+    background: rgba(242, 139, 130, 0.3);
+    border-color: rgba(242, 139, 130, 0.5);
+    box-shadow: 
+      0 6px 20px rgba(242, 139, 130, 0.3),
+      0 0 20px rgba(242, 139, 130, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  
+  .sidenav-footer button mat-icon,
+  .sidenav-footer .mat-mdc-button mat-icon {
+    color: rgba(255, 255, 255, 0.95);
+  }
+  
+  /* ===== Paginator - LIGHT glass (Apple style) ===== */
+  .mat-paginator,
+  .mat-mdc-paginator {
+    background-color: transparent;
+    color: rgba(255, 255, 255, 0.95);
+    border-top: none;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border-radius: 0 0 20px 20px;
+  }
+  
+  .mat-paginator .mat-icon-button,
+  .mat-mdc-paginator .mat-mdc-icon-button {
+    color: rgba(255, 255, 255, 0.95);
+  }
+  
+  .mat-paginator .mat-paginator-page-size-label,
+  .mat-paginator .mat-paginator-range-label,
+  .mat-mdc-paginator .mat-mdc-paginator-page-size-label,
+  .mat-mdc-paginator .mat-mdc-paginator-range-label {
+    color: rgba(255, 255, 255, 0.95);
+  }
+  
+  .mat-mdc-paginator .mat-mdc-select,
+  .mat-paginator .mat-select {
+    color: rgba(255, 255, 255, 0.95);
+  }
+  
+  .mat-mdc-paginator .mat-mdc-select-value,
+  .mat-paginator .mat-select-value {
+    color: rgba(255, 255, 255, 0.95);
+  }
+  
+  .mat-mdc-paginator .mat-mdc-select-trigger,
+  .mat-paginator .mat-select-trigger {
+    color: rgba(255, 255, 255, 0.95);
+  }
+  
+  .mat-mdc-paginator .mat-mdc-select-arrow,
+  .mat-paginator .mat-select-arrow {
+    color: rgba(255, 255, 255, 0.95);
+  }
+  
+  /* ===== Tables - LIGHT liquid glass (Apple style) ===== */
+  .mat-mdc-table.mat-mdc-table,
+  table.mat-mdc-table.mat-mdc-table {
+    background-color: transparent;
+    backdrop-filter: blur(100px) saturate(200%);
+    -webkit-backdrop-filter: blur(100px) saturate(200%);
+    border-radius: 20px 20px 0 0;
+    overflow: hidden;
+    box-shadow: none;
+    
+    /* Header - WHITE text with top highlight (Apple style) */
+    .mat-mdc-header-row.mat-mdc-header-row,
+    thead tr,
+    .mat-mdc-header-cell.mat-mdc-header-cell {
+      background: var(--admin-table-header-bg);
+      color: rgba(255, 255, 255, 1);
+      font-weight: 600;
+      border: none;
+      box-shadow: 
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        0 1px 0 rgba(0, 0, 0, 0.08);
+    }
+    
+    /* Rows - WHITE text with liquid glass effect */
+    .mat-mdc-row,
+    tbody tr {
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 1);
+      box-shadow: none;
+      
+      &:hover {
+        background: rgba(100, 95, 90, 0.45);
+        box-shadow: 
+          inset 0 1px 0 rgba(255, 255, 255, 0.2),
+          inset 0 0 20px rgba(255, 255, 255, 0.05);
+      }
+    }
+    
+    /* Cells - PURE WHITE text */
+    .mat-mdc-cell,
+    td {
+      border: none;
+      color: rgba(255, 255, 255, 1);
+      padding: 16px 12px;
+    }
+    
+    /* Zebra striping - LIGHT GRAY-BROWN (liquid glass) */
+    tbody tr:nth-child(odd) {
+      background: rgba(80, 75, 70, 0.2);
+    }
+    
+    tbody tr:nth-child(even) {
+      background: rgba(70, 65, 60, 0.12);
+    }
+    
+    /* First row top corners */
+    tbody tr:first-child td:first-child {
+      border-top-left-radius: 0;
+    }
+    
+    tbody tr:first-child td:last-child {
+      border-top-right-radius: 0;
+    }
+  }
+  
+  /* Remove inner table shadows to prevent dark corners */
+  .admin-table-wrapper .mat-mdc-table {
+    box-shadow: none;
+  }
+  
+  /* ===== Button styling ===== */
+  .mat-mdc-raised-button.mat-primary,
+  .mat-mdc-button.mat-primary {
+    background: rgba(138, 180, 248, 0.3);
+    color: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(138, 180, 248, 0.5);
+    box-shadow: 
+      0 4px 16px rgba(138, 180, 248, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border-radius: 12px;
+    font-weight: 500;
+  }
+
+  .mat-mdc-raised-button.mat-primary:hover,
+  .mat-mdc-button.mat-primary:hover {
+    background: rgba(138, 180, 248, 0.4);
+    border-color: rgba(138, 180, 248, 0.6);
+    box-shadow: 
+      0 6px 20px rgba(138, 180, 248, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+  
+  .mat-mdc-raised-button.mat-primary:active,
+  .mat-mdc-button.mat-primary:active {
+    background: rgba(138, 180, 248, 0.35);
+    transform: translateY(1px);
   }
 }
 
