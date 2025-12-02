@@ -153,6 +153,21 @@
     }
     
     .logout-button {
+      background: transparent;
+      
+      [data-theme="dark-glass"] & {
+        background: transparent;
+        color: rgba(255, 255, 255, 0.9);
+        
+        &:hover {
+          background: rgba(255, 255, 255, 0.1);
+        }
+        
+        mat-icon {
+          color: rgba(255, 255, 255, 0.7);
+        }
+      }
+
       width: 100%;
       color: var(--admin-text-primary);
       text-align: left;
