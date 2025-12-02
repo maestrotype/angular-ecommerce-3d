@@ -1,0 +1,14 @@
+node_modules
+dist
+.git
+.gitignore
+*.md
+*.log
+.env
+.env.*
+!.env.example
+.angular
+.vscode
+coverage
+e2e
+backend
