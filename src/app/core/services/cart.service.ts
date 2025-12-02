@@ -31,7 +31,7 @@ export class CartService {
       quantity: 1
     };
     
-    console.log('Adding item to cart:', validatedItem);
+    
     const currentItems = this.cartItemsSubject.value;
     const existingItem = currentItems.find(cartItem => cartItem.productId === validatedItem.productId);
     
@@ -122,7 +122,7 @@ export class CartService {
         // Check stock availability for all items
         this.validateCartItemsStock(validatedItems);
       } catch (error) {
-        console.error('Error loading cart from storage:', error);
+        
       }
     }
   }
@@ -153,7 +153,7 @@ export class CartService {
       
       // Remove invalid items from localStorage
       if (validItems.length !== items.length) {
-        console.log('Removed items with insufficient stock from cart');
+        
       }
     });
   }

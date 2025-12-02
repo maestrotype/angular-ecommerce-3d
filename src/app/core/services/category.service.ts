@@ -17,7 +17,7 @@ export class CategoryService {
     return this.http.get<Category[]>(this.API_URL)
       .pipe(
         catchError(error => {
-          console.error('Failed to fetch categories from API:', error);
+          
           return throwError(() => error);
         })
       );

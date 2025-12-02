@@ -54,7 +54,7 @@ export class SectionListComponent implements OnInit {
           'Close',
           { duration: 5000 }
         );
-        console.error('Error loading sections:', error);
+        
       }
     });
   }
@@ -93,7 +93,7 @@ export class SectionListComponent implements OnInit {
       },
       error: (error) => {
         this.snackBar.open('Error updating section', 'Close', { duration: 3000 });
-        console.error('Error toggling section:', error);
+        
       }
     });
   }
@@ -107,7 +107,7 @@ export class SectionListComponent implements OnInit {
         },
         error: (error) => {
           this.snackBar.open('Error deleting section', 'Close', { duration: 3000 });
-          console.error('Error deleting section:', error);
+          
         }
       });
     }
@@ -126,7 +126,7 @@ export class SectionListComponent implements OnInit {
       },
       error: (error) => {
         this.snackBar.open('Error reordering sections', 'Close', { duration: 3000 });
-        console.error('Error reordering sections:', error);
+        
         this.loadSections();
       }
     });

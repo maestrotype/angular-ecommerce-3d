@@ -35,7 +35,7 @@ export class NotificationService {
     interval(10000).pipe(
       switchMap(() => this.loadNotifications()),
       catchError(error => {
-        console.error('Error polling notifications:', error);
+        
         return [];
       })
     ).subscribe();
@@ -44,7 +44,7 @@ export class NotificationService {
   loadNotifications(): Observable<Notification[]> {
     return this.http.get<Notification[]>(this.apiUrl).pipe(
       catchError(error => {
-        console.error('Failed to load notifications:', error);
+        
         return [];
       })
     );
@@ -54,7 +54,7 @@ export class NotificationService {
     return this.http.get<{ count: number }>(`${this.apiUrl}/unread/count`).pipe(
       map(res => res.count),
       catchError(error => {
-        console.error('Failed to get unread count:', error);
+        
         return [0];
       })
     );
@@ -63,7 +63,7 @@ export class NotificationService {
   markAsRead(id: number): Observable<Notification> {
     return this.http.patch<Notification>(`${this.apiUrl}/${id}/read`, {}).pipe(
       catchError(error => {
-        console.error('Failed to mark as read:', error);
+        
         this.updateLocalNotificationStatus(id, 'read');
         throw error;
       })
@@ -73,7 +73,7 @@ export class NotificationService {
   markAllAsRead(): Observable<any> {
     return this.http.patch(`${this.apiUrl}/read-all`, {}).pipe(
       catchError(error => {
-        console.error('Failed to mark all as read:', error);
+        
         this.updateAllLocalNotificationsStatus('read');
         throw error;
       })

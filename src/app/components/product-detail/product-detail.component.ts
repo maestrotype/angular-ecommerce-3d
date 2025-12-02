@@ -31,7 +31,7 @@ export class ProductDetailComponent implements OnInit {
     // Subscribe to route params to handle navigation between products
     this.route.paramMap.subscribe(params => {
       const id = Number(params.get('id'));
-      console.log('ProductDetailComponent: Loading product with ID:', id);
+      
       
       // Scroll to top immediately when route changes
       this.viewportScroller.scrollToPosition([0, 0]);
@@ -42,7 +42,7 @@ export class ProductDetailComponent implements OnInit {
         
         this.productService.getProductById(id).subscribe({
           next: (product) => {
-            console.log('ProductDetailComponent: Product loaded successfully:', product);
+            
             this.product = product;
             this.loading = false;
             // Reset view state
@@ -56,13 +56,13 @@ export class ProductDetailComponent implements OnInit {
             }, 100);
           },
           error: (error) => {
-            console.error('ProductDetailComponent: Error loading product:', error);
+            
             this.loading = false;
             this.router.navigate(['/shop']);
           }
         });
       } else {
-        console.error('ProductDetailComponent: No product ID provided');
+        
         this.router.navigate(['/shop']);
       }
     });

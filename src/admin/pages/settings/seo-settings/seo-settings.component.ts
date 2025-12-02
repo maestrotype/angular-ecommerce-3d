@@ -84,7 +84,7 @@ export class SeoSettingsComponent implements OnInit, OnDestroy {
           this.loading = false;
         },
         error: (error) => {
-          console.error('Error loading SEO settings:', error);
+          
           this.snackBar.open('Failed to load SEO settings', 'Close', {
             duration: 3000,
             panelClass: ['error-snackbar']
@@ -111,7 +111,7 @@ export class SeoSettingsComponent implements OnInit, OnDestroy {
             });
           },
           error: (error) => {
-            console.error('Error saving SEO settings:', error);
+            
             this.saving = false;
             this.snackBar.open('Failed to save SEO settings', 'Close', {
               duration: 3000,
@@ -138,7 +138,7 @@ export class SeoSettingsComponent implements OnInit, OnDestroy {
             }
           },
           error: (error) => {
-            console.error('Error updating robots.txt:', error);
+            
             this.snackBar.open('Failed to update robots.txt', 'Close', {
               duration: 3000,
               panelClass: ['error-snackbar']
@@ -161,7 +161,7 @@ export class SeoSettingsComponent implements OnInit, OnDestroy {
           }
         },
         error: (error) => {
-          console.error('Error generating sitemap:', error);
+          
           this.snackBar.open('Failed to generate sitemap', 'Close', {
             duration: 3000,
             panelClass: ['error-snackbar']

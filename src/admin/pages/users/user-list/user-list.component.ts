@@ -47,7 +47,7 @@ export class UserListComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error loading users:', error);
+        
         this.snackBar.open('Error loading users', 'Close', { duration: 3000 });
         this.isLoading = false;
       }
@@ -98,7 +98,7 @@ export class UserListComponent implements OnInit {
         this.loadUsers();
       },
       error: (error) => {
-        console.error('Error updating user status:', error);
+        
         this.snackBar.open('Error updating user status', 'Close', { duration: 3000 });
       }
     });
@@ -113,7 +113,7 @@ export class UserListComponent implements OnInit {
         this.loadUsers();
       },
       error: (error) => {
-        console.error('Error changing user role:', error);
+        
         this.snackBar.open('Error changing user role', 'Close', { duration: 3000 });
       }
     });
@@ -127,7 +127,7 @@ export class UserListComponent implements OnInit {
           this.loadUsers();
         },
         error: (error) => {
-          console.error('Error deleting user:', error);
+          
           this.snackBar.open('Error deleting user', 'Close', { duration: 3000 });
         }
       });

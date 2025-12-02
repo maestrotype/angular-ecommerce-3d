@@ -24,7 +24,7 @@ export class SitemapService {
     return this.getSitemapUrls().pipe(
       map(urls => this.createSitemapXml(urls)),
       catchError(error => {
-        console.error('Error generating sitemap:', error);
+        
         return of(this.createBasicSitemapXml());
       })
     );

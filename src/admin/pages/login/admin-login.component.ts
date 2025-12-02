@@ -47,7 +47,7 @@ export class AdminLoginComponent {
           this.snackBar.open('Login failed. Please check your credentials.', 'Close', { 
             duration: 5000 
           });
-          console.error('Login error:', error);
+          
         }
       });
     }

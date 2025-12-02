@@ -50,7 +50,7 @@ export class ThemeService {
     const theme = this.getThemeById(themeId);
 
     if (!theme) {
-      console.error('Theme not found for ID:', themeId);
+      
       return;
     }
 

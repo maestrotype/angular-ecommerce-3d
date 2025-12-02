@@ -159,7 +159,7 @@ export class ErrorHandlerService {
   }
 
   handleGlobalError(error: any): void {
-    console.error('Global error:', error);
+    
     
     if (error.status === 0) {
       this.showNetworkError(error);

@@ -649,6 +649,20 @@
     color: rgba(255, 255, 255, 0.7);
   }
   
+  /* Borders between nav items */
+  .mat-sidenav .nav-item.nav-item,
+  .mat-drawer .nav-item.nav-item,
+  .admin-sidenav .nav-item.nav-item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    margin-bottom: 2px;
+  }
+  
+  .mat-sidenav .nav-item:last-child,
+  .mat-drawer .nav-item:last-child,
+  .admin-sidenav .nav-item:last-child {
+    border-bottom: none;
+  }
+  
   /* ===== Toolbar / Header - DARK glass ===== */
   .mat-toolbar.mat-toolbar,
   mat-toolbar.mat-toolbar,
@@ -790,20 +804,33 @@
         0 1px 0 rgba(0, 0, 0, 0.08);
     }
     
-    /* Rows - WHITE text with liquid glass effect */
-    .mat-mdc-row,
+    /* Rows - WHITE text with shadow separator (top to bottom) */
+    .mat-mdc-row.mat-mdc-row,
     tbody tr {
       background: transparent;
-      border: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       color: rgba(255, 255, 255, 1);
-      box-shadow: none;
       
       &:hover {
         background: rgba(100, 95, 90, 0.45);
+        border-bottom-color: rgba(255, 255, 255, 0.15);
         box-shadow: 
           inset 0 1px 0 rgba(255, 255, 255, 0.2),
           inset 0 0 20px rgba(255, 255, 255, 0.05);
       }
+      
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+    
+    /* Cells - remove internal borders */
+    .mat-mdc-cell.mat-mdc-cell,
+    td {
+      border-bottom: none;
     }
     
     /* Cells - PURE WHITE text */

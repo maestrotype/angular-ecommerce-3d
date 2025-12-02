@@ -29,6 +29,6 @@ export class IconComponent implements OnInit {
           .replace(/<svg([^>]*)>/, `<svg$1 width="${this.width}" height="${this.height}" fill="${this.fill}" stroke="${this.stroke}" stroke-width="${this.strokeWidth}" class="${this.class}">`);
         this.svgContent = this.sanitizer.bypassSecurityTrustHtml(sanitized);
       })
-      .catch(err => console.error('Icon load error:', err));
+      .catch(() => {});
   }
 }

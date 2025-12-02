@@ -69,9 +69,9 @@ export class Bag3dFirstComponent implements AfterViewInit {
       });
       this.camera.lookAt(this.model.position);
       this.scene.add(this.model);
-      console.log('Model loaded successfully:', this.model);
+      
     }, undefined, (error) => {
-      console.error('Error loading model:', error);
+      
     });
   }
 

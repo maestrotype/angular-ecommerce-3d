@@ -250,7 +250,7 @@ export class SectionFormComponent implements AfterViewInit {
         this.uploadingCategoryIcon = false;
       },
       error: (error) => {
-        console.error('Error uploading category icon:', error);
+        
         this.snackBar.open('Error uploading category icon', 'Close', { duration: 3000 });
         this.uploadingCategoryIcon = false;
       }
@@ -390,7 +390,7 @@ export class SectionFormComponent implements AfterViewInit {
             },
             error: (error) => {
               this.loading = false;
-              console.error('Error updating section:', error);
+              
               this.snackBar.open('Error updating section', 'Close', { duration: 3000 });
             }
           });
@@ -403,7 +403,7 @@ export class SectionFormComponent implements AfterViewInit {
             },
             error: (error) => {
               this.loading = false;
-              console.error('Error creating section:', error);
+              
               this.snackBar.open('Error creating section', 'Close', { duration: 3000 });
             }
           });
@@ -411,7 +411,7 @@ export class SectionFormComponent implements AfterViewInit {
       },
       error: (error) => {
         this.loading = false;
-        console.error('Error in upload process:', error);
+        
         this.snackBar.open('Error processing section', 'Close', { duration: 3000 });
       }
     });

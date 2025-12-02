@@ -65,7 +65,7 @@ export class ProductListComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-        console.error("Error loading products:", err);
+        
         this.error = "Failed to load products. Please try again.";
         this.isLoading = false;
         this.errorHandler.showError({

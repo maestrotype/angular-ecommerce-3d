@@ -39,7 +39,7 @@ export class DashboardService {
       paymentErrors: this.getPaymentErrors(),
     }).pipe(
       catchError((error) => {
-        console.warn("Dashboard API failed, using mock data:", error);
+        
         return of({
           products: 1234,
           orders: 567,

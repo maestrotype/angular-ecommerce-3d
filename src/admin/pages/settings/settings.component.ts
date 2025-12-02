@@ -36,7 +36,7 @@ export class SettingsComponent implements OnInit {
       // Load settings after forms are initialized
       this.loadSettings();
     } catch (error) {
-      console.error('Failed to initialize settings component:', error);
+      
     }
   }
 
@@ -82,9 +82,9 @@ export class SettingsComponent implements OnInit {
         defaultPaymentMethod: ['stripe', Validators.required]
       });
 
-      console.log('Settings forms initialized successfully');
+      
     } catch (error) {
-      console.error('Failed to initialize settings forms:', error);
+      
       // Create minimal forms as fallback
       this.generalForm = this.fb.group({});
       this.notificationForm = this.fb.group({});
@@ -108,7 +108,7 @@ export class SettingsComponent implements OnInit {
     this.settingsService.getSettings().subscribe({
       next: (settings) => {
         try {
-          console.log('[SettingsComponent] Loaded settings:', settings);
+          
           
           // Patch form values directly since forms are already initialized
           if (settings.general && this.generalForm) {
@@ -132,12 +132,12 @@ export class SettingsComponent implements OnInit {
           
           this.isLoading = false;
         } catch (error) {
-          console.error('Error patching form values:', error);
+          
           this.isLoading = false;
         }
       },
       error: (error) => {
-        console.error('Failed to load settings:', error);
+        
         this.isLoading = false;
       }
     });
@@ -156,7 +156,7 @@ export class SettingsComponent implements OnInit {
       this.isLoading = true;
       this.settingsService.updateGeneralSettings(this.generalForm.value).subscribe({
         next: (response) => {
-          console.log('[SettingsComponent] General settings updated:', response);
+          
           this.snackBar.open('General settings updated successfully', 'Close', {
             duration: 3000,
             panelClass: ['success-snackbar']
@@ -164,7 +164,7 @@ export class SettingsComponent implements OnInit {
           this.isLoading = false;
         },
         error: (error) => {
-          console.error('Failed to update general settings:', error);
+          
           this.snackBar.open(`Failed to update general settings: ${error.error?.message || error.message || 'Unknown error'}`, 'Close', {
             duration: 5000,
             panelClass: ['error-snackbar']
@@ -173,7 +173,7 @@ export class SettingsComponent implements OnInit {
         }
       });
     } catch (error) {
-      console.error('Error saving general settings:', error);
+      
       this.snackBar.open('Unexpected error occurred', 'Close', {
         duration: 3000,
         panelClass: ['error-snackbar']
@@ -195,7 +195,7 @@ export class SettingsComponent implements OnInit {
       this.isLoading = true;
       this.settingsService.updateNotificationSettings(this.notificationForm.value).subscribe({
         next: (response) => {
-          console.log('[SettingsComponent] Notification settings updated:', response);
+          
           this.snackBar.open('Notification settings updated successfully', 'Close', {
             duration: 3000,
             panelClass: ['success-snackbar']
@@ -203,7 +203,7 @@ export class SettingsComponent implements OnInit {
           this.isLoading = false;
         },
         error: (error) => {
-          console.error('Failed to update notification settings:', error);
+          
           this.snackBar.open(`Failed to update notification settings: ${error.error?.message || error.message || 'Unknown error'}`, 'Close', {
             duration: 5000,
             panelClass: ['error-snackbar']
@@ -212,7 +212,7 @@ export class SettingsComponent implements OnInit {
         }
       });
     } catch (error) {
-      console.error('Error saving notification settings:', error);
+      
       this.snackBar.open('Unexpected error occurred', 'Close', {
         duration: 3000,
         panelClass: ['error-snackbar']
@@ -234,7 +234,7 @@ export class SettingsComponent implements OnInit {
       this.isLoading = true;
       this.settingsService.updateSecuritySettings(this.securityForm.value).subscribe({
         next: (response) => {
-          console.log('[SettingsComponent] Security settings updated:', response);
+          
           this.snackBar.open('Security settings updated successfully', 'Close', {
             duration: 3000,
             panelClass: ['success-snackbar']
@@ -242,7 +242,7 @@ export class SettingsComponent implements OnInit {
           this.isLoading = false;
         },
         error: (error) => {
-          console.error('Failed to update security settings:', error);
+          
           this.snackBar.open(`Failed to update security settings: ${error.error?.message || error.message || 'Unknown error'}`, 'Close', {
             duration: 5000,
             panelClass: ['error-snackbar']
@@ -251,7 +251,7 @@ export class SettingsComponent implements OnInit {
         }
       });
     } catch (error) {
-      console.error('Error saving security settings:', error);
+      
       this.snackBar.open('Unexpected error occurred', 'Close', {
         duration: 3000,
         panelClass: ['error-snackbar']
@@ -273,7 +273,7 @@ export class SettingsComponent implements OnInit {
       this.isLoading = true;
       this.settingsService.updatePaymentSettings(this.paymentForm.value).subscribe({
         next: (response) => {
-          console.log('[SettingsComponent] Payment settings updated:', response);
+          
           this.snackBar.open('Payment settings updated successfully', 'Close', {
             duration: 3000,
             panelClass: ['success-snackbar']
@@ -281,7 +281,7 @@ export class SettingsComponent implements OnInit {
           this.isLoading = false;
         },
         error: (error) => {
-          console.error('Failed to update payment settings:', error);
+          
           this.snackBar.open(`Failed to update payment settings: ${error.error?.message || error.message || 'Unknown error'}`, 'Close', {
             duration: 5000,
             panelClass: ['error-snackbar']
@@ -290,7 +290,7 @@ export class SettingsComponent implements OnInit {
         }
       });
     } catch (error) {
-      console.error('Error saving payment settings:', error);
+      
       this.snackBar.open('Unexpected error occurred', 'Close', {
         duration: 3000,
         panelClass: ['error-snackbar']

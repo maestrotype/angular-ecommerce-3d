@@ -45,7 +45,7 @@ export class HeaderService {
         return headerSection || null;
       }),
       catchError(error => {
-        console.error('Error fetching header section:', error);
+        
         return of(this.getDefaultHeaderSection());
       })
     );

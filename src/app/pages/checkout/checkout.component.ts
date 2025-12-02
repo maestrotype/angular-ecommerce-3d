@@ -69,12 +69,12 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   private loadPaymentMethods(): void {
-    console.log('[CheckoutComponent] Loading payment methods...');
+    
     
     this.paymentSettingsService.getEnabledPaymentMethods().pipe(
       takeUntil(this.destroy$)
     ).subscribe(methods => {
-      console.log('[CheckoutComponent] Received payment methods:', methods);
+      
       this.paymentMethods = methods;
       
       // Get default payment method from settings
@@ -84,10 +84,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         // Set default payment method if available and valid
         if (settings.defaultPaymentMethod && methods.some(m => m.id === settings.defaultPaymentMethod)) {
           this.selectedPaymentMethod = settings.defaultPaymentMethod;
-          console.log('[CheckoutComponent] Set default payment method to:', this.selectedPaymentMethod);
+          
         } else if (methods.length > 0) {
           this.selectedPaymentMethod = methods[0].id;
-          console.log('[CheckoutComponent] Set fallback payment method to:', this.selectedPaymentMethod);
+          
         }
       });
     });

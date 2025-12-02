@@ -47,13 +47,18 @@
   .nav-list {
     padding: var(--admin-spacing-md) 0;
     
-    .nav-item {
+    .nav-item.nav-item {
       margin: 0 var(--admin-spacing-sm);
       border-radius: var(--admin-border-radius-sm);
       transition: background-color var(--admin-transition-normal);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.2);
       
       &:hover {
         background-color: var(--admin-bg-hover);
+      }
+      
+      &:last-child {
+        border-bottom: none;
       }
       
       &.active {

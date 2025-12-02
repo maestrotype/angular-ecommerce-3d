@@ -70,7 +70,7 @@ export class MessageService {
     return this.http.post<ApiResponse<Message>>(this.apiUrl, messageData)
       .pipe(
         catchError(error => {
-          console.error('Error creating message:', error);
+          
           return of({
             success: false,
             error: 'Failed to send message'
@@ -98,7 +98,7 @@ export class MessageService {
     return this.http.get<PaginatedResponse<Message>>(this.apiUrl, { params })
       .pipe(
         catchError(error => {
-          console.error('Error fetching messages:', error);
+          
           return of({
             data: [],
             count: 0,
@@ -114,7 +114,7 @@ export class MessageService {
     return this.http.get<ApiResponse<Message>>(`${this.apiUrl}/${id}`)
       .pipe(
         catchError(error => {
-          console.error('Error fetching message:', error);
+          
           return of({
             success: false,
             error: 'Failed to fetch message'
@@ -127,7 +127,7 @@ export class MessageService {
     return this.http.put<ApiResponse<Message>>(`${this.apiUrl}/${id}`, updateData)
       .pipe(
         catchError(error => {
-          console.error('Error updating message:', error);
+          
           return of({
             success: false,
             error: 'Failed to update message'
@@ -140,7 +140,7 @@ export class MessageService {
     return this.http.delete<ApiResponse>(`${this.apiUrl}/${id}`)
       .pipe(
         catchError(error => {
-          console.error('Error deleting message:', error);
+          
           return of({
             success: false,
             error: 'Failed to delete message'
@@ -162,7 +162,7 @@ export class MessageService {
     return this.http.get<ApiResponse<{ count: number }>>(`${this.apiUrl}/count`, { params })
       .pipe(
         catchError(error => {
-          console.error('Error fetching messages count:', error);
+          
           return of({
             success: false,
             data: { count: 0 }
@@ -175,7 +175,7 @@ export class MessageService {
     return this.http.get<ApiResponse<{ count: number }>>(`${this.apiUrl}/unread`)
       .pipe(
         catchError(error => {
-          console.error('Error fetching unread count:', error);
+          
           return of({
             success: false,
             data: { count: 0 }

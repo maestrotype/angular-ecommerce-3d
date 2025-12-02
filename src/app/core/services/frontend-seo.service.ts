@@ -48,7 +48,7 @@ export class FrontendSeoService {
         return null;
       }),
       catchError(error => {
-        console.error('Error loading SEO settings:', error);
+        
         // Apply default settings if backend is not available
         this.applyDefaultSeoSettings();
         return of(null);

@@ -18,7 +18,7 @@ export class SpecialOfferComponent implements OnInit {
         this.productService.getSpecialOffers().subscribe({
             next: (products) => this.specialOffers = products,
             error: (err) => {
-              console.error('Error loading special offers:', err);
+              
               alert('Error loading special offers.');
             }
           });

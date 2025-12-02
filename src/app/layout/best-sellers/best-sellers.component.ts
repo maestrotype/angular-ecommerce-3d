@@ -36,7 +36,7 @@ export class BestSellersComponent implements OnInit {
                 this.bestSellers = products;
             },
             error: (err) => {
-              console.error('Error loading best sellers:', err);
+              
             }
           });
     }
@@ -47,7 +47,7 @@ export class BestSellersComponent implements OnInit {
     }
 
     quickView(product: Product): void {
-        console.log('Quick view for product:', product);
+        
         // Implement quick view functionality
     }
 
@@ -68,11 +68,11 @@ export class BestSellersComponent implements OnInit {
         };
         this.cartService.addToCart(cartItem);
         this.notificationService.showSuccess(`Added ${product.name} to cart!`);
-        console.log('Added to cart:', product.name);
+        
     }
 
     onFavoriteToggled(event: any): void {
-        console.log('Favorite toggled:', event);
+        
         // Implement favorite functionality
     }
 
@@ -83,7 +83,7 @@ export class BestSellersComponent implements OnInit {
 
     toggleFavorite(product: Product): void {
         // TODO: Implement favorite service
-        console.log('Toggle favorite for product:', product.name);
+        
     }
 
     // Rating functionality
@@ -106,7 +106,7 @@ export class BestSellersComponent implements OnInit {
         // Show success message
         this.notificationService.showSuccess(`Rated ${product.name} with ${rating} stars!`);
         
-        console.log(`Product ${product.name} rated with ${rating} stars`);
+        
     }
 
     private updateProductRating(product: Product): void {

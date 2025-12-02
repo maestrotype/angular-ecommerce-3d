@@ -46,7 +46,7 @@ export class MessageDetailComponent implements OnInit {
         this.message = updatedMessage;
       },
       error: (error) => {
-        console.error('Error marking message as read:', error);
+        
       }
     });
   }
@@ -71,7 +71,7 @@ export class MessageDetailComponent implements OnInit {
           this.loading = false;
         },
         error: (error) => {
-          console.error('Error sending reply:', error);
+          
           this.snackBar.open('Error sending reply', 'Close', { duration: 3000 });
           this.loading = false;
         }

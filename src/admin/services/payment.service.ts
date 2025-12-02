@@ -34,7 +34,7 @@ export class PaymentService {
     return this.http.get<{ success: boolean; data: Payment[]; message?: string }>(this.apiUrl).pipe(
       map(response => response.success ? response.data : []),
       catchError(() => {
-        console.warn('Backend not available, using mock payment data');
+        
         return of([
           {
             id: 1,
@@ -83,7 +83,7 @@ export class PaymentService {
   getPaymentById(id: number): Observable<Payment> {
     return this.http.get<Payment>(`${this.apiUrl}/${id}`).pipe(
       catchError(() => {
-        console.warn('Backend not available, using mock payment data');
+        
         return of({
           id: id,
           orderId: 1000 + id,
@@ -104,7 +104,7 @@ export class PaymentService {
   getPaymentsByOrder(orderId: number): Observable<Payment[]> {
     return this.http.get<Payment[]>(`${this.apiUrl}/order/${orderId}`).pipe(
       catchError(() => {
-        console.warn('Backend not available, using mock order payments data');
+        
         return of([
           {
             id: orderId * 10 + 1,
@@ -128,7 +128,7 @@ export class PaymentService {
     return this.http.get<{ success: boolean; data: PaymentStats; message?: string }>(`${this.apiUrl}/stats/overview`).pipe(
       map(response => response.success ? response.data : { totalPayments: 0, totalAmount: 0, successRate: 0 }),
       catchError(() => {
-        console.warn('Backend not available, using mock payment stats');
+        
         return of({
           totalPayments: 3,
           totalAmount: 329.97,
@@ -154,7 +154,7 @@ export class PaymentService {
     return this.http.get<{ success: boolean; data: Payment[]; message?: string }>(`${this.apiUrl}/search`, { params }).pipe(
       map(response => response.success ? response.data : []),
       catchError((error) => {
-        console.error('Search payments error:', error);
+        
         // Return empty array instead of mock data
         return of([]);
       })
@@ -165,7 +165,7 @@ export class PaymentService {
     return this.http.put<{ success: boolean; data: Payment; message?: string }>(`${this.apiUrl}/${id}/status`, body).pipe(
       map(response => response.success ? response.data : null),
       catchError((error) => {
-        console.error('Update payment status error:', error);
+        
         throw error;
       })
     );

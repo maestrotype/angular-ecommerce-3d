@@ -109,7 +109,7 @@ export class FavoritesService {
         this.favoritesSubject.next(favorites);
       }
     } catch (error) {
-      console.error('Error loading favorites from storage:', error);
+      
     }
   }
 
@@ -120,7 +120,7 @@ export class FavoritesService {
     try {
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(favorites));
     } catch (error) {
-      console.error('Error saving favorites to storage:', error);
+      
     }
   }
 
