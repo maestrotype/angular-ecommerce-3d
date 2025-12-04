@@ -981,3 +981,22 @@
      you can duplicate selectors or add !important in a measured way.
      But prefer to keep overrides global (this file) and after material-theme.scss so it wins. */
   
+// Dark Glass theme - Logout button transparent
+[data-theme='dark-glass'] {
+  .sidenav-footer button.mat-mdc-button,
+  .sidenav-footer .logout-btn {
+    background: transparent;
+    background-color: transparent;
+    --mdc-text-button-container-color: transparent;
+    --mat-text-button-state-layer-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    mat-icon {
+      color: rgba(255, 255, 255, 0.7);
+    }
+  }
+}

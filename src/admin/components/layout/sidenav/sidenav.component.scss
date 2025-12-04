@@ -150,12 +150,9 @@
     [data-theme="dark-glass"] & {
       border-top: 1px solid rgba(255, 255, 255, 0.15);
       background: transparent;
-    }
-    
-    .logout-button {
-      background: transparent;
       
-      [data-theme="dark-glass"] & {
+      // Logout button - transparent, no background
+      button {
         background: transparent;
         color: rgba(255, 255, 255, 0.9);
         
@@ -167,8 +164,11 @@
           color: rgba(255, 255, 255, 0.7);
         }
       }
-
+    }
+    
+    .logout-button, button {
       width: 100%;
+      background: transparent;
       color: var(--admin-text-primary);
       text-align: left;
       padding: var(--admin-spacing-md);
