@@ -28,7 +28,7 @@ export class UserService {
   getUserById(id: number): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/${id}`).pipe(
       catchError(error => {
-        console.error('Failed to fetch user:', error);
+        
         throw error;
       })
     );
@@ -37,7 +37,7 @@ export class UserService {
   createUser(userData: Partial<User>): Observable<User> {
     return this.http.post<User>(this.apiUrl, userData).pipe(
       catchError(error => {
-        console.error('Failed to create user:', error);
+        
         throw error;
       })
     );
@@ -46,7 +46,7 @@ export class UserService {
   updateUser(id: number, userData: Partial<User>): Observable<User> {
     return this.http.patch<User>(`${this.apiUrl}/${id}`, userData).pipe(
       catchError(error => {
-        console.error('Failed to update user:', error);
+        
         throw error;
       })
     );
@@ -67,7 +67,7 @@ export class UserService {
   deleteUser(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
     catchError(error => {
-      console.error('Failed to delete user:', error);
+      
       throw error;
     }))}
 }

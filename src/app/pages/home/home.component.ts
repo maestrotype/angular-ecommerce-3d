@@ -54,7 +54,7 @@ export class HomeComponent implements OnInit {
         this.sectionsLoading = false;
       },
       error: (err) => {
-        console.error('Error loading sections:', err);
+        
         this.sectionsLoading = false;
       }
     });
@@ -71,7 +71,7 @@ export class HomeComponent implements OnInit {
         this.bestSellersLoading = false;
       },
       error: (err) => {
-        console.error('Error loading best sellers:', err);
+        
         this.bestSellersLoading = false;
       }
     });
@@ -88,7 +88,7 @@ export class HomeComponent implements OnInit {
         this.specialOfferLoading = false;
       },
       error: (err) => {
-        console.error('Error loading special offers:', err);
+        
         this.specialOfferLoading = false;
       }
     });

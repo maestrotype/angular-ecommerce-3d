@@ -111,7 +111,7 @@ export class ShopComponent implements OnInit, OnDestroy {
           this.updateFilterCategories();
         },
         error: (error) => {
-          console.error('Error loading categories:', error);
+          
         }
       });
   }
@@ -140,7 +140,7 @@ export class ShopComponent implements OnInit, OnDestroy {
           this.applyFilters();
         },
         error: (error) => {
-          console.error('Error loading products:', error);
+          
           this.notificationService.showError('Failed to load products');
         }
       });
@@ -294,7 +294,7 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   quickView(product: Product): void {
     // Implement quick view functionality
-    console.log('Quick view:', product);
+    
   }
 
   onFavoriteToggled(event: Event): void {

@@ -39,7 +39,7 @@ export class MessageListComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading messages:', error);
+        
         this.snackBar.open('Error loading messages', 'Close', { duration: 3000 });
         this.loading = false;
       }
@@ -74,7 +74,7 @@ export class MessageListComponent implements OnInit {
         this.loadMessages();
       },
       error: (error) => {
-        console.error('Error marking message as read:', error);
+        
         this.snackBar.open('Error updating message', 'Close', { duration: 3000 });
       }
     });
@@ -87,7 +87,7 @@ export class MessageListComponent implements OnInit {
         this.loadMessages();
       },
       error: (error) => {
-        console.error('Error archiving message:', error);
+        
         this.snackBar.open('Error updating message', 'Close', { duration: 3000 });
       }
     });
@@ -101,7 +101,7 @@ export class MessageListComponent implements OnInit {
           this.loadMessages();
         },
         error: (error) => {
-          console.error('Error deleting message:', error);
+          
           this.snackBar.open('Error deleting message', 'Close', { duration: 3000 });
         }
       });

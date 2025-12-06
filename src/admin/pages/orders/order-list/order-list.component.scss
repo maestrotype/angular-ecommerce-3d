@@ -4,6 +4,7 @@
   background-color: var(--admin-order-list-bg);
   min-height: calc(100vh - 64px);
   color: var(--admin-order-list-text-primary);
+  box-shadow: var(--admin-shadow-md);
 }
 
 .header-section {
@@ -32,12 +33,87 @@
       padding: var(--admin-spacing-md);
       min-width: 120px;
       border: 1px solid var(--admin-order-list-border);
+      transition: all var(--admin-transition-normal);
+      position: relative;
+      overflow: hidden;
+      
+      // Liquid Glass Glass
+      [data-theme="glass"] & {
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+        border: 1.5px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 
+          0 8px 32px rgba(99, 102, 241, 0.15),
+          0 2px 8px rgba(0, 0, 0, 0.1),
+          inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(
+            135deg,
+            rgba(99, 102, 241, 0.1) 0%,
+            rgba(14, 165, 233, 0.1) 50%,
+            rgba(139, 92, 246, 0.1) 100%
+          );
+          opacity: 0.6;
+          z-index: 0;
+          pointer-events: none;
+        }
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: radial-gradient(
+            circle,
+            rgba(255, 255, 255, 0.2) 0%,
+            transparent 70%
+          );
+          opacity: 0;
+          transition: opacity var(--admin-transition-normal);
+          z-index: 1;
+          pointer-events: none;
+        }
+
+        &:hover {
+          transform: translateY(-4px) scale(1.02);
+          box-shadow: 
+            0 12px 48px rgba(99, 102, 241, 0.25),
+            0 4px 16px rgba(0, 0, 0, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.4);
+          border-color: rgba(255, 255, 255, 0.5);
+          background: rgba(255, 255, 255, 0.3);
+          
+          &::after {
+            opacity: 1;
+          }
+        }
+      }
       
       .stat-number {
         font-size: var(--admin-font-size-xxl);
         font-weight: var(--admin-font-weight-bold);
         color: var(--admin-primary);
         text-align: center;
+        position: relative;
+        z-index: 2;
+        
+        [data-theme="glass"] & {
+          background: linear-gradient(135deg, #6366f1 0%, #0ea5e9 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          filter: drop-shadow(0 2px 4px rgba(99, 102, 241, 0.3));
+        }
       }
       
       .stat-label {
@@ -45,6 +121,14 @@
         color: var(--admin-order-list-text-secondary);
         text-align: center;
         margin-top: var(--admin-spacing-sm);
+        position: relative;
+        z-index: 2;
+        
+        [data-theme="glass"] & {
+          color: #64748b;
+          font-weight: var(--admin-font-weight-medium);
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
       }
     }
   }
@@ -64,8 +148,14 @@
   }
 }
 
+:host ::ng-deep {
+  .mat-mdc-table {
+    background-color: var(--admin-basic-bg);
+  }
+}
+
 .table-container {
-  background: var(--admin-order-list-card-bg);
+  background: var(--admin-basic-bg);
   border-radius: var(--admin-border-radius-md);
   box-shadow: var(--admin-shadow-md);
   border: 1px solid var(--admin-order-list-border);
@@ -74,19 +164,16 @@
 
   .order-table {
     width: 100%;
-    background-color: var(--admin-order-list-card-bg);
-
     th {
-      background-color: var(--admin-order-list-header-bg) !important;
-      color: var(--admin-order-list-text-primary) !important;
+      background-color: var(--admin-table-header-bg) ;
+      color: var(--admin-order-list-text-primary) ;
       font-weight: var(--admin-font-weight-bold);
       padding: var(--admin-spacing-md);
       border-bottom: 1px solid var(--admin-border-primary);
     }
 
     td {
-      background-color: var(--admin-order-list-card-bg) !important;
-      color: var(--admin-order-list-text-primary) !important;
+      color: var(--admin-order-list-text-primary) ;
       padding: var(--admin-spacing-md);
       border-bottom: 1px solid var(--admin-order-list-border);
       
@@ -137,13 +224,13 @@
     }
 
     tr:hover td {
-      background-color: var(--admin-order-list-row-hover) !important;
+      background-color: var(--admin-basic-bg) ;
     }
   }
 
   mat-paginator {
-    background-color: var(--admin-order-list-pagination-bg) !important;
-    color: var(--admin-order-list-text-primary) !important;
+    background-color: var(--admin-order-list-pagination-bg) ;
+    color: var(--admin-order-list-text-primary) ;
     border-top: 1px solid var(--admin-order-list-pagination-border);
   }
 }
@@ -380,83 +467,83 @@
 
 ::ng-deep {
   .mat-icon-button {
-    color: #ffffff !important;
+    color: #ffffff ;
     
     &.mat-button-disabled {
-      color: #6b7280 !important;
+      color: #6b7280 ;
     }
   }
   
   .mat-raised-button.mat-primary {
-    background-color: #3b82f6 !important;
-    color: #ffffff !important;
+    background-color: #3b82f6 ;
+    color: #ffffff ;
   }
   
   .mat-form-field {
     .mat-form-field-label {
-      color: #e5e7eb !important;
+      color: #e5e7eb ;
     }
     
     .mat-input-element {
-      color: #ffffff !important;
+      color: #ffffff ;
     }
     
     .mat-form-field-outline {
-      color: #6b7280 !important;
+      color: #6b7280 ;
     }
     
     &.mat-focused {
       .mat-form-field-outline-thick {
-        color: #3b82f6 !important;
+        color: #3b82f6 ;
       }
       
       .mat-form-field-label {
-        color: #3b82f6 !important;
+        color: #3b82f6 ;
       }
     }
   }
   
   .mat-select {
-    color: #ffffff !important;
+    color: #ffffff ;
     
     .mat-select-arrow {
-      color: #9ca3af !important;
+      color: #9ca3af ;
     }
   }
   
   .mat-option {
-    background-color: #2d2d2d !important;
-    color: #ffffff !important;
+    background-color: var(--admin-bg-secondary) ;
+    color: #ffffff ;
     
     &:hover {
-      background-color: #374151 !important;
+      background-color: var(--admin-bg-hover) ;
     }
     
     &.mat-selected {
-      background-color: #3b82f6 !important;
+      background-color: #3b82f6 ;
     }
   }
   
   .mat-select-panel {
-    background-color: #2d2d2d !important;
+    background-color: var(--admin-bg-secondary) ;
   }
   
   .mat-paginator {
-    background-color: #2d2d2d !important;
-    color: #ffffff !important;
+    background-color: var(--admin-bg-secondary) ;
+    color: #ffffff ;
     border-top: 1px solid #404040;
     
     .mat-paginator-page-size-label,
     .mat-paginator-range-label {
-      color: #ffffff !important;
+      color: #ffffff ;
     }
     
     .mat-icon-button {
-      color: #ffffff !important;
+      color: #ffffff ;
     }
     
     .mat-select {
-      color: #ffffff !important;
+      color: #ffffff ;
     }
   }
 }

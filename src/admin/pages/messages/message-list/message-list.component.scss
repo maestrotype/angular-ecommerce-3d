@@ -1,53 +1,110 @@
 
-.message-list-container {
-  padding: 24px;
-  background-color: #1f2937;
-  min-height: calc(100vh - 64px);
-  color: #ffffff;
-}
-
-.header {
-  margin-bottom: 24px;
-  
-  h2 {
-    margin: 0;
-    color: #ffffff;
-    font-weight: 500;
-  }
-}
-
-.filters {
+.header-section {
   display: flex;
-  gap: 16px;
-  margin-bottom: 24px;
-  align-items: flex-end;
-  
-  .search-field {
-    flex: 1;
-    max-width: 400px;
-  }
-  
-  .status-filter {
-    min-width: 150px;
-  }
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: var(--admin-spacing-md);
 
-  .search-button {
-    .button-text {
-      margin-left: 8px;
+  h1 {
+    color: var(--admin-text-primary);
+    margin: 0;
+    flex: 1;
+    font-size: var(--admin-font-size-xxl);
+    font-weight: var(--admin-font-weight-bold);
+  }
+}
+
+:host ::ng-deep {
+  .list__filters.filter-section,
+  .list__filters .filter-section,
+  .filter-section {
+    display: flex;
+    gap: var(--admin-spacing-md);
+    margin-bottom: var(--admin-spacing-lg);
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 0 var(--admin-spacing-lg);
+    width: 100%;
+    
+    .search-field {
+      flex: 1;
+      min-width: 200px;
+      max-width: 400px;
+    }
+    
+    .status-filter {
+      min-width: 150px;
+    }
+
+    .search-button {
+      .button-text {
+        margin-left: 8px;
+      }
     }
   }
 }
 
+:host ::ng-deep {
+  .mat-mdc-table {
+    background-color: var(--admin-basic-bg);
+  }
+}
+
 .table-container {
-  background: #2d2d2d;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  border: 1px solid #404040;
   overflow: hidden;
 }
 
 .messages-table {
   width: 100%;
+  
+  // Table styles are now in _admin-theme-material.scss
+  // Only message-specific styles remain here
+  
+  // Subject column - distinct styling with accent color
+  .mat-column-subject {
+    font-weight: var(--admin-font-weight-medium);
+    
+    // Apply color to both header and cells
+    &.mat-mdc-header-cell,
+    &.mat-mdc-cell {
+      color: var(--admin-primary);
+    }
+    
+    // For dark theme, use lighter accent
+    [data-theme="dark"] & {
+      &.mat-mdc-header-cell,
+      &.mat-mdc-cell {
+        color: var(--admin-primary-light);
+      }
+    }
+    
+    // For glass theme, use primary color
+    [data-theme="glass"] & {
+      &.mat-mdc-header-cell,
+      &.mat-mdc-cell {
+        color: var(--admin-border-focus);
+      }
+    }
+  }
+  
+  // Also target cells directly
+  td.mat-column-subject,
+  th.mat-column-subject {
+    font-weight: var(--admin-font-weight-medium);
+    color: var(--admin-primary);
+    
+    [data-theme="dark"] & {
+      color: var(--admin-primary-light);
+    }
+    
+    [data-theme="glass"] & {
+      color: var(--admin-border-focus);
+    }
+  }
   
   .mat-column-actions {
     width: 200px;
@@ -55,15 +112,22 @@
   }
 }
 
-.loading, .no-data {
+.loading-container, .error-container, .no-data {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  padding: 48px;
+  justify-content: center;
+  padding: var(--admin-spacing-xxl) var(--admin-spacing-lg);
+  margin: 0 var(--admin-spacing-lg);
+  text-align: center;
+  color: var(--admin-text-primary);
+  background-color: var(--admin-bg-secondary);
+  border-radius: var(--admin-border-radius-md);
+  border: 1px solid var(--admin-border-primary);
   
   p {
-    color: #ffffff;
-    font-size: 16px;
+    margin: 0;
+    font-size: var(--admin-font-size-lg);
   }
 }
 
@@ -79,15 +143,15 @@
 }
 
 .message-card {
-  background: #2d2d2d;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  padding: 16px;
-  border: 1px solid #404040;
-  transition: all 0.3s ease;
+  background: var(--admin-bg-card);
+  border-radius: var(--admin-border-radius-lg);
+  box-shadow: var(--admin-shadow-md);
+  padding: var(--admin-spacing-md);
+  border: 1px solid var(--admin-border-primary);
+  transition: var(--admin-transition-normal);
 
   &:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--admin-shadow-lg);
     transform: translateY(-2px);
   }
 
@@ -101,16 +165,16 @@
       flex: 1;
 
       h3 {
-        margin: 0 0 4px 0;
-        font-size: 16px;
-        font-weight: 600;
-        color: #ffffff;
+        margin: 0 0 var(--admin-spacing-xs) 0;
+        font-size: var(--admin-font-size-md);
+        font-weight: var(--admin-font-weight-bold);
+        color: var(--admin-text-primary);
       }
 
       .email {
         margin: 0;
-        font-size: 14px;
-        color: #9ca3af;
+        font-size: var(--admin-font-size-sm);
+        color: var(--admin-text-secondary);
       }
     }
 
@@ -127,9 +191,9 @@
 
       h4 {
         margin: 0;
-        font-size: 14px;
-        font-weight: 500;
-        color: #ffffff;
+        font-size: var(--admin-font-size-sm);
+        font-weight: var(--admin-font-weight-medium);
+        color: var(--admin-text-primary);
         line-height: 1.4;
       }
     }
@@ -137,14 +201,14 @@
     .date {
       display: flex;
       align-items: center;
-      gap: 4px;
-      color: #9ca3af;
-      font-size: 12px;
+      gap: var(--admin-spacing-xs);
+      color: var(--admin-text-secondary);
+      font-size: var(--admin-font-size-xs);
 
       mat-icon {
-        font-size: 16px;
-        width: 16px;
-        height: 16px;
+        font-size: var(--admin-font-size-md);
+        width: var(--admin-font-size-md);
+        height: var(--admin-font-size-md);
       }
     }
   }
@@ -228,94 +292,94 @@
 ::ng-deep {
   .mat-form-field {
     .mat-form-field-label {
-      color: #e5e7eb !important;
+      color: #e5e7eb ;
     }
     
     .mat-input-element {
-      color: #ffffff !important;
+      color: #ffffff ;
     }
     
     .mat-form-field-outline {
-      color: #6b7280 !important;
+      color: #6b7280 ;
     }
     
     &.mat-focused {
       .mat-form-field-outline-thick {
-        color: #3b82f6 !important;
+        color: #3b82f6 ;
       }
       
       .mat-form-field-label {
-        color: #3b82f6 !important;
+        color: #3b82f6 ;
       }
     }
   }
   
   .mat-select {
-    color: #ffffff !important;
+    color: #ffffff ;
     
     .mat-select-arrow {
-      color: #9ca3af !important;
+      color: #9ca3af ;
     }
   }
   
   .mat-option {
-    background-color: #2d2d2d !important;
-    color: #ffffff !important;
+    background-color: var(--admin-bg-secondary) ;
+    color: #ffffff ;
     
     &:hover {
-      background-color: #374151 !important;
+      background-color: var(--admin-bg-hover) ;
     }
     
     &.mat-selected {
-      background-color: #3b82f6 !important;
+      background-color: #3b82f6 ;
     }
   }
   
   .mat-select-panel {
-    background-color: #2d2d2d !important;
+    background-color: var(--admin-bg-secondary) ;
   }
   
   .mat-chip {
-    background-color: #3b82f6 !important;
-    color: #ffffff !important;
+    background-color: #3b82f6 ;
+    color: #ffffff ;
   }
   
   .mat-icon-button {
-    color: #ffffff !important;
+    color: #ffffff ;
     
     &.mat-button-disabled {
-      color: #6b7280 !important;
+      color: #6b7280 ;
     }
   }
   
   .mat-raised-button.mat-primary {
-    background-color: #3b82f6 !important;
-    color: #ffffff !important;
+    background-color: #3b82f6 ;
+    color: #ffffff ;
   }
   
   .mat-table {
-    background-color: #2d2d2d !important;
+    background-color: var(--admin-bg-secondary) ;
   }
   
   .mat-header-row {
-    background-color: #374151 !important;
+    background-color: var(--admin-bg-hover) ;
   }
   
   .mat-row {
-    background-color: #2d2d2d !important;
+    background-color: var(--admin-bg-secondary) ;
     
     &:hover {
-      background-color: #374151 !important;
+      background-color: var(--admin-bg-hover) ;
     }
   }
   
   .mat-header-cell {
-    color: #ffffff !important;
+    color: #ffffff ;
     font-weight: 600;
   }
   
   .mat-cell {
-    color: #ffffff !important;
+    color: #ffffff ;
   }
 }
   

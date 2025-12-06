@@ -55,7 +55,7 @@ export class StripeElementsComponent implements OnInit, OnDestroy {
   private initializeStripe(): void {
     this.setLoading(true);
     
-    console.log('Initializing Stripe with key:', this.publishableKey);
+    
     
     if (!this.publishableKey || this.publishableKey === 'pk_test_51Oq...') {
       this.paymentError.emit('Valid Stripe publishable key is required. Please configure it in admin settings.');
@@ -111,14 +111,10 @@ export class StripeElementsComponent implements OnInit, OnDestroy {
 
         // Mount card element
         if (this.cardElement && this.cardElement.nativeElement) {
-          console.log('[StripeElements] Mounting card element to DOM');
+          
           this.card!.mount(this.cardElement.nativeElement);
-          console.log('[StripeElements] Card element mounted successfully');
+          
         } else {
-          console.error('[StripeElements] Card element DOM not ready:', {
-            cardElement: !!this.cardElement,
-            nativeElement: !!this.cardElement?.nativeElement
-          });
           throw new Error('Card element DOM not ready');
         }
 

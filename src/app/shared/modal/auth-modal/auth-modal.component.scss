@@ -2,7 +2,7 @@
     width: 100%;
     max-width: 440px;
     background: var(--auth-modal-bg);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-lg, 12px);
     box-shadow: var(--auth-modal-shadow);
     border: var(--auth-modal-border);
     overflow: hidden;
@@ -28,7 +28,7 @@
           color: var(--auth-tab-inactive);
           transition: all var(--transition-normal);
           position: relative;
-          border-radius: var(--radius-md) var(--radius-md) 0 0;
+          border-radius: var(--radius-md, 8px) var(--radius-md, 8px) 0 0;
 
           &:hover {
             background: var(--auth-tab-hover-bg);
@@ -110,7 +110,7 @@
           .btn {
             flex: 1;
             padding: var(--spacing-sm) var(--spacing-md);
-            border-radius: var(--radius-md);
+            border-radius: var(--radius-md, 8px);
             border: 1px solid transparent;
             cursor: pointer;
             transition: all var(--transition-normal);
@@ -152,7 +152,7 @@
             padding: var(--spacing-sm) var(--spacing-md);
             background: var(--auth-input-bg);
             border: var(--auth-input-border);
-            border-radius: var(--radius-md);
+            border-radius: var(--radius-md, 8px);
             font-size: var(--font-size-md);
             color: var(--color-text-primary);
             transition: all var(--transition-normal);

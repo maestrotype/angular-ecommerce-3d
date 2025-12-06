@@ -40,6 +40,7 @@ import { CategoryListComponent } from './pages/categories/category-list/category
 import { OrderListComponent } from './pages/orders/order-list/order-list.component';
 import { OrderDetailComponent } from './pages/orders/order-detail/order-detail.component';
 import { UserListComponent } from './pages/users/user-list/user-list.component';
+import { UserListV2Component } from './pages/users/user-list-v2/user-list-v2.component';
 import { UserEditDialogComponent } from './pages/users/user-edit-dialog/user-edit-dialog.component';
 import { MessageListComponent } from './pages/messages/message-list/message-list.component';
 import { MessageDetailComponent } from './pages/messages/message-detail/message-detail.component';
@@ -50,14 +51,18 @@ import { PaymentDetailsDialogComponent } from './pages/payments/payment-details-
 import { OrderDetailsDialogComponent } from './pages/payments/order-details-dialog.component';
 // Shared Components
 import { DataTableComponent } from './components/blocks/data-table/data-table.component';
+import { ListContainerComponent } from './components/blocks/list-container/list-container.component';
+import { AdminTableComponent } from './components/blocks/admin-table/admin-table.component';
+import { OrderListV2Component } from './pages/orders/order-list-v2/order-list-v2.component';
 import { FormFieldComponent } from './components/ui/form-field/form-field.component';
 import { ActionButtonComponent } from './components/ui/action-button/action-button.component';
 import { CategoryFormComponent } from './pages/categories/category-form/category-form.component';
 import { ImageUploadComponent } from './components/ui/image-upload/image-upload.component';
 import { ImageProcessorComponent } from './components/ui/image-processor/image-processor.component';
-
 import { ErrorDialogComponent } from './components/error-dialog/error-dialog.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
+import { SearchBarComponent } from './components/ui/search-bar/search-bar.component';
+import { StatCardComponent } from './components/ui/stat-card/stat-card.component';
 import { SharedModule } from '../app/shared/shared.module';
 
 // Services
@@ -87,6 +92,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     CategoryListComponent,
     CategoryFormComponent,
     OrderListComponent,
+    OrderListV2Component,
     OrderDetailComponent,
     MessageListComponent,
     MessageDetailComponent,
@@ -97,14 +103,19 @@ export function HttpLoaderFactory(http: HttpClient) {
     OrderDetailsDialogComponent,
 
     UserListComponent,
+    UserListV2Component,
     UserEditDialogComponent,
     DataTableComponent,
+    ListContainerComponent,
+    AdminTableComponent,
     FormFieldComponent,
     ActionButtonComponent,
     ImageUploadComponent,
     ImageProcessorComponent,
     ErrorDialogComponent,
     ConfirmationDialogComponent,
+    SearchBarComponent,
+    StatCardComponent,
   ],
   imports: [
     CommonModule,

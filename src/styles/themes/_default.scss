@@ -1,17 +1,13 @@
 /* Default theme mapping to design tokens; non-breaking scaffold */
+/* Note: Color variables are now defined in core/_variables.scss */
+/* Only theme-specific variables are kept here */
 :root {
-  /* brand */
-  --color-primary: hsl(258 90% 60%);
-  --color-accent: hsl(210 90% 55%);
-  
-  /* neutrals & text */
-  --text-primary: hsl(220 20% 15%);
-  --text-secondary: hsl(220 10% 40%);
-  --border: hsl(220 14% 90%);
-
-  /* surfaces */
-  --surface: #ffffff;
-  --surface-2: hsl(220 14% 97%);
+  /* Legacy aliases for compatibility (mapped to core variables) */
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --border: var(--color-border-primary);
+  --surface: var(--color-surface-primary);
+  --surface-2: var(--color-surface-secondary);
   
   /* Default theme for auth modal */
   .auth-modal {

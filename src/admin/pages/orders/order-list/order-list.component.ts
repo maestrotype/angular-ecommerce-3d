@@ -67,7 +67,7 @@ export class OrderListComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error loading orders:', error);
+        
         this.error = 'Failed to load orders';
         this.snackBar.open('Error loading orders', 'Close', { duration: 3000 });
         this.isLoading = false;
@@ -116,7 +116,7 @@ export class OrderListComponent implements OnInit {
         this.loadOrders();
       },
       error: (error) => {
-        console.error('Error updating order status:', error);
+        
         this.snackBar.open('Error updating order status', 'Close', { duration: 3000 });
       }
     });

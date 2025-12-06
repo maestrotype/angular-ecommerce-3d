@@ -33,7 +33,7 @@ export class OrderDetailComponent implements OnInit {
       error: (error) => {
         this.error = 'Failed to load order details';
         this.loading = false;
-        console.error('Error loading order details:', error);
+        
       }
     });
   }
@@ -46,7 +46,7 @@ export class OrderDetailComponent implements OnInit {
         this.order = updatedOrder;
       },
       error: (error) => {
-        console.error('Error updating order status:', error);
+        
       }
     });
   }

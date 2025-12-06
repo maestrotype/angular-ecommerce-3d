@@ -1,8 +1,12 @@
 .user-list-container {
-  padding: 0;
-  background-color: #1f2937;
+  padding: 24px;
+  background-color: var(--admin-bg-card);
+  background-color: var(--admin-border-primary);
   min-height: calc(100vh - 64px);
-  color: #ffffff;
+  color: var(--mdc-list-list-item-label-text-color);
+  .mat-mdc-row {
+    background-color: var(--admin-order-list-card-bg);
+  }
 }
 
 .header-section {
@@ -12,7 +16,7 @@
   padding: 24px 24px 0 24px;
   
   h1 {
-    color: #ffffff;
+    color: var(--mdc-list-list-item-label-text-color);
     margin: 0 0 8px 0;
     font-size: 2rem;
     font-weight: 600;
@@ -30,7 +34,7 @@
   gap: 16px;
   margin-bottom: 24px;
   padding: 0 24px;
-  align-items: flex-end;
+  align-items: baseline;
   
   .search-field {
     flex: 1;
@@ -51,7 +55,7 @@
   justify-content: center;
   padding: 48px 24px;
   text-align: center;
-  color: #ffffff;
+  color: var(--mdc-list-list-item-label-text-color);
   
   mat-spinner {
     margin-bottom: 16px;
@@ -59,34 +63,40 @@
 }
 
 .table-container {
-  background: #2d2d2d;
+  background: var(--admin-bg-secondary);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  border: 1px solid #404040;
   overflow: hidden;
-  margin: 0 24px;
   
   .users-table {
     width: 100%;
-    background-color: #2d2d2d;
+    background-color: var(--admin-bg-secondary);
     
     th {
-      background-color: #374151 !important;
-      color: #ffffff !important;
-      font-weight: 600;
-      padding: 16px;
-      border-bottom: 1px solid #4b5563;
+      background-color: var(--admin-table-header-bg);
+      color: var(--admin-text-primary);
+      font-weight: var(--admin-font-weight-bold);
+      padding: var(--admin-spacing-md);
+      border-bottom: none;
     }
     
     td {
-      background-color: #2d2d2d !important;
-      color: #ffffff !important;
-      padding: 16px;
-      border-bottom: 1px solid #404040;
+      color: var(--admin-text-primary);
+      padding: var(--admin-spacing-md);
+      border-bottom: none;
+    }
+    
+    // Elegant row separation without borders
+    tr:nth-child(even) td {
+      background-color: var(--admin-order-list-card-bg);
+    }
+    
+    tr:nth-child(odd) td {
+      background-color: var(--admin-basic-bg);
     }
     
     tr:hover td {
-      background-color: #374151 !important;
+      background-color: var(--admin-bg-hover);
     }
     
     .user-info {
@@ -98,7 +108,7 @@
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        background-color: #374151;
+        background-color: var(--admin-bg-hover);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -111,7 +121,7 @@
       .user-name {
         font-weight: 500;
         margin-bottom: 2px;
-        color: #ffffff;
+        color: var(--mdc-list-list-item-label-text-color);
       }
       
       .user-phone {
@@ -130,7 +140,7 @@
 .no-data {
   text-align: center;
   padding: 48px 24px;
-  color: #ffffff;
+  color: var(--mdc-list-list-item-label-text-color);
   
   mat-icon {
     font-size: 48px;
@@ -143,7 +153,7 @@
   h3 {
     margin: 0 0 8px 0;
     font-weight: 500;
-    color: #ffffff;
+    color: var(--mdc-list-list-item-label-text-color);
   }
   
   p {
@@ -165,7 +175,7 @@
 }
 
 .user-card {
-  background: #2d2d2d;
+  background: var(--admin-bg-secondary);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   padding: 16px;
@@ -187,7 +197,7 @@
       width: 60px;
       height: 60px;
       border-radius: 50%;
-      background-color: #374151;
+      background-color: var(--admin-bg-hover);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -215,7 +225,7 @@
         margin: 0;
         font-size: 16px;
         font-weight: 600;
-        color: #ffffff;
+        color: var(--mdc-list-list-item-label-text-color);
         line-height: 1.4;
       }
     }
@@ -443,88 +453,88 @@
 
 ::ng-deep {
   .mat-chip {
-    background-color: #3b82f6 !important;
-    color: #ffffff !important;
+    background-color: #3b82f6 ;
+    color: var(--mdc-list-list-item-label-text-color);
   }
   
   .mat-icon-button {
-    color: #ffffff !important;
+    color: var(--mdc-list-list-item-label-text-color);
     
     &.mat-button-disabled {
-      color: #6b7280 !important;
+      color: #6b7280 ;
     }
   }
   
   .mat-raised-button.mat-primary {
-    background-color: #3b82f6 !important;
-    color: #ffffff !important;
+    background-color: #3b82f6 ;
+    color: var(--mdc-list-list-item-label-text-color);
   }
   
   .mat-form-field {
     .mat-form-field-label {
-      color: #e5e7eb !important;
+      color: #e5e7eb ;
     }
     
     .mat-input-element {
-      color: #ffffff !important;
+      color: var(--mdc-list-list-item-label-text-color);
     }
     
     .mat-form-field-outline {
-      color: #6b7280 !important;
+      color: #6b7280 ;
     }
     
     &.mat-focused {
       .mat-form-field-outline-thick {
-        color: #3b82f6 !important;
+        color: #3b82f6 ;
       }
       
       .mat-form-field-label {
-        color: #3b82f6 !important;
+        color: #3b82f6 ;
       }
     }
   }
   
   .mat-select {
-    color: #ffffff !important;
+    color: var(--mdc-list-list-item-label-text-color);
     
     .mat-select-arrow {
-      color: #9ca3af !important;
+      color: #9ca3af ;
     }
   }
   
   .mat-option {
-    background-color: #2d2d2d !important;
-    color: #ffffff !important;
+    background-color: var(--admin-bg-secondary) ;
+    color: var(--mdc-list-list-item-label-text-color);
     
     &:hover {
-      background-color: #374151 !important;
+      background-color: var(--admin-bg-hover) ;
     }
     
     &.mat-selected {
-      background-color: #3b82f6 !important;
+      background-color: #3b82f6 ;
     }
   }
   
   .mat-select-panel {
-    background-color: #2d2d2d !important;
+    background-color: var(--admin-bg-secondary) ;
   }
   
   .mat-paginator {
-    background-color: #2d2d2d !important;
-    color: #ffffff !important;
+    background-color: var(--admin-bg-secondary) ;
+    color: var(--mdc-list-list-item-label-text-color);
     border-top: 1px solid #404040;
     
     .mat-paginator-page-size-label,
     .mat-paginator-range-label {
-      color: #ffffff !important;
+      color: var(--mdc-list-list-item-label-text-color);
     }
     
     .mat-icon-button {
-      color: #ffffff !important;
+      color: var(--mdc-list-list-item-label-text-color);
     }
     
     .mat-select {
-      color: #ffffff !important;
+      color: var(--mdc-list-list-item-label-text-color);
     }
   }
 }

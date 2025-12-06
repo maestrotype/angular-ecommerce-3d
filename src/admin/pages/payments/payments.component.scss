@@ -342,23 +342,28 @@
 }
 
 @media (max-width: 768px) {
+  ::ng-deep .mat-mdc-paginator .mat-mdc-paginator-range-label {
+    margin: 0 32px 0 0;
+  }
   .payments-page {
-    padding: var(--admin-spacing-md);
+    padding: 0;
 
     .page-header {
+      padding: var(--admin-spacing-md);
       .stats-cards {
         grid-template-columns: 1fr;
       }
     }
 
     .content-section {
-      margin: 0 var(--admin-spacing-md);
-      padding: var(--admin-spacing-md);
+      margin: 0;
+      padding: 0;
 
       .section-header {
         flex-direction: column;
         gap: var(--admin-spacing-md);
         align-items: stretch;
+        padding: var(--admin-spacing-md);
 
         .search-bar {
           width: 100%;
@@ -378,6 +383,10 @@
 
 // Galaxy Z Fold 5/6 unfolded (690px) - use desktop format with compact table
 @media (min-width: 690px) and (max-width: 768px) {
+  .mat-mdc-paginator-container {
+    padding: 0;
+  }
+  
   .payments-page {
     padding: var(--admin-spacing-md);
 
@@ -395,6 +404,7 @@
         flex-direction: row;
         gap: var(--admin-spacing-md);
         align-items: center;
+        padding: var(--admin-spacing-md);
 
         .search-bar {
           width: 250px;
@@ -465,7 +475,7 @@
   }
 }
 
-// Material theme overrides using CSS variables - no !important needed
+// Material theme overrides using CSS variables - no  needed
 ::ng-deep {
   .payments-page {
     .mat-icon-button {

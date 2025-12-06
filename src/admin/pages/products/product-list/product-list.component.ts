@@ -30,6 +30,7 @@ export class ProductListComponent implements OnInit {
   isLoading = false;
   error: string | null = null;
   allProducts: Product[] = [];
+  searchTerm = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -64,7 +65,7 @@ export class ProductListComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-        console.error("Error loading products:", err);
+        
         this.error = "Failed to load products. Please try again.";
         this.isLoading = false;
         this.errorHandler.showError({
@@ -76,9 +77,28 @@ export class ProductListComponent implements OnInit {
     });
   }
 
+  onSearch(): void {
+    this.dataSource.filter = this.searchTerm.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  clearSearch(): void {
+    this.searchTerm = '';
+    this.dataSource.filter = '';
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
+    this.searchTerm = filterValue.trim();
     this.dataSource.filter = filterValue.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   filterByCategory(event: any): void {

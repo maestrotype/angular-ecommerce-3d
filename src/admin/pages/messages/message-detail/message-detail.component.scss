@@ -1,8 +1,8 @@
 
 .message-detail-container {
   max-width: 800px;
-  background-color: #1f2937;
-  color: #ffffff;
+  background-color: var(--admin-bg-card);
+  color: var(--mdc-list-list-item-label-text-color);
 }
 
 .header {
@@ -15,7 +15,7 @@
 
   h2 {
     margin: 0;
-    color: #ffffff;
+    color: var(--mdc-list-list-item-label-text-color);
   }
 }
 
@@ -25,7 +25,7 @@
 }
 
 .message-info {
-  background: #2d2d2d;
+  background: var(--admin-bg-secondary);
   padding: 16px;
   border-radius: 8px;
   margin-bottom: 24px;
@@ -53,18 +53,18 @@
 
   h4 {
     margin: 0 0 12px 0;
-    color: #ffffff;
+    color: var(--mdc-list-list-item-label-text-color);
     font-weight: 500;
   }
 
   .content-text, .reply-text {
-    background: #374151;
+    background: var(--admin-bg-hover);
     padding: 16px;
     border-radius: 8px;
     border: 1px solid #404040;
     white-space: pre-wrap;
     line-height: 1.6;
-    color: #ffffff;
+    color: var(--mdc-list-list-item-label-text-color);
   }
 
   .reply-date {
@@ -89,7 +89,7 @@
 
   h4 {
     margin: 0 0 16px 0;
-    color: #ffffff;
+    color: var(--mdc-list-list-item-label-text-color);
     font-weight: 500;
   }
 
@@ -117,54 +117,54 @@
 // Material Design overrides for dark theme
 ::ng-deep {
   .mat-dialog-container {
-    background-color: #1f2937 !important;
-    color: #ffffff !important;
+    background-color: var(--admin-bg-card) ;
+    color: var(--mdc-list-list-item-label-text-color);
   }
   
   .mat-dialog-title {
-    color: #ffffff !important;
+    color: var(--mdc-list-list-item-label-text-color);
   }
   
   .mat-dialog-content {
-    color: #ffffff !important;
+    color: var(--mdc-list-list-item-label-text-color);
   }
   
   .mat-form-field {
     .mat-form-field-label {
-      color: #e5e7eb !important;
+      color: var(--mdc-list-list-item-label-text-color);
     }
     
     .mat-input-element {
-      color: #ffffff !important;
+      color: var(--mdc-list-list-item-label-text-color);
     }
     
     .mat-form-field-outline {
-      color: #6b7280 !important;
+      color: #6b7280 ;
     }
     
     &.mat-focused {
       .mat-form-field-outline-thick {
-        color: #3b82f6 !important;
+        color: #3b82f6 ;
       }
       
       .mat-form-field-label {
-        color: #3b82f6 !important;
+        color: #3b82f6 ;
       }
     }
   }
   
   .mat-chip {
-    background-color: #3b82f6 !important;
-    color: #ffffff !important;
+    background-color: #3b82f6 ;
+    color: var(--mdc-list-list-item-label-text-color);
   }
   
   .mat-button {
-    color: #ffffff !important;
+    color: var(--mdc-list-list-item-label-text-color);
   }
   
   .mat-raised-button.mat-primary {
-    background-color: #3b82f6 !important;
-    color: #ffffff !important;
+    background-color: #3b82f6 ;
+    color: var(--mdc-list-list-item-label-text-color);
   }
 }
   

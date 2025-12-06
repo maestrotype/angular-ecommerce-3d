@@ -1,0 +1,13 @@
+.search-field {
+  flex: 1;
+  min-width: 300px;
+  max-width: 800px;
+  width: 100%;
+}
+
+.search-button, .clear-button {
+  .button-text {
+    margin-left: var(--admin-spacing-sm);
+  }
+}
+

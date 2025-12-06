@@ -35,24 +35,36 @@
   --admin-info-hover: #1976d2;
   --admin-info-light: #64b5f6;
   --admin-info-dark: #0d47a1;
+
+  --admin-button: linear-gradient(45deg, #306BCB, #CF6679);
   
-  // Background Colors
+  // Background Colors - Light Theme (Default)
   --admin-bg-primary: #ffffff;
-  --admin-bg-secondary: #f5f5f5;
+  --admin-bg-secondary: #fff;
   --admin-bg-tertiary: #fafafa;
   --admin-bg-card: #ffffff;
-  --admin-bg-hover: #e3f2fd;
+  --admin-bg-hover: #e8f4f8;
   --admin-bg-overlay: rgba(0, 0, 0, 0.5);
   
-  // Text Colors
+  // Text Colors - Light Theme (Default)
   --admin-text-primary: #212121;
   --admin-text-secondary: #757575;
   --admin-text-disabled: #bdbdbd;
   --admin-text-inverse: #ffffff;
   
-  // Border Colors
-  --admin-border-primary: #e0e0e0;
-  --admin-border-secondary: #f0f0f0;
+  // Material Design Component Variables - Light Theme (Default)
+  --mdc-list-item-label-text-color: var(--admin-text-primary);
+  --mdc-list-item-supporting-text-color: var(--admin-text-secondary);
+  --mdc-list-item-leading-icon-color: var(--admin-text-secondary);
+  --mdc-list-item-trailing-icon-color: var(--admin-text-secondary);
+  --mdc-list-item-selected-label-text-color: var(--admin-text-primary);
+  --mdc-list-item-disabled-label-text-color: var(--admin-text-disabled);
+  --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
+  --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
+  --mdc-list-item-focus-label-text-color: var(--admin-text-primary);
+  // Border Colors - Light Theme (Default)
+  --admin-border-primary: #b0b0b0;
+  --admin-border-secondary: #c0c0c0;
   --admin-border-focus: #1976d2;
   --admin-border-error: #f44336;
   
@@ -101,27 +113,27 @@
   --admin-z-tooltip: 1070;
   
   // Order Details Specific
-  --admin-order-detail-bg: #1f2937;
-  --admin-order-detail-header-bg: #374151;
-  --admin-order-detail-card-bg: #2d2d2d;
-  --admin-order-detail-border: #404040;
-  --admin-order-detail-text-primary: #ffffff;
-  --admin-order-detail-text-secondary: #9ca3af;
-  --admin-order-detail-text-label: #9ca3af;
-  --admin-order-detail-price-color: #4caf50;
-  --admin-order-detail-total-color: #4caf50;
+  --admin-order-detail-bg: var(--admin-bg-card);
+  --admin-order-detail-header-bg: var(--admin-bg-hover);
+  --admin-order-detail-card-bg: var(--admin-bg-secondary);
+  --admin-order-detail-border: var(--admin-border-primary);
+  --admin-order-detail-text-primary: var(--admin-text-primary);
+  --admin-order-detail-text-secondary: var(--admin-text-secondary);
+  --admin-order-detail-text-label: var(--admin-text-secondary);
+  --admin-order-detail-price-color: var(--admin-success);
+  --admin-order-detail-total-color: var(--admin-success);
   
   // Order List Specific
-  --admin-order-list-bg: #1f2937;
-  --admin-order-list-card-bg: #2d2d2d;
-  --admin-order-list-border: #404040;
-  --admin-order-list-text-primary: #ffffff;
-  --admin-order-list-text-secondary: #9ca3af;
-  --admin-order-list-text-label: #9ca3af;
-  --admin-order-list-header-bg: #374151;
-  --admin-order-list-row-hover: #374151;
-  --admin-order-list-pagination-bg: #2d2d2d;
-  --admin-order-list-pagination-border: #404040;
+  --admin-order-list-bg: var(--admin-bg-card);
+  --admin-order-list-card-bg: var(--admin-bg-secondary);
+  --admin-order-list-border: var(--admin-border-primary);
+  --admin-order-list-text-primary: var(--admin-text-primary);
+  --admin-order-list-text-secondary: var(--admin-text-secondary);
+  --admin-order-list-text-label: var(--admin-text-secondary);
+  --admin-order-list-header-bg: var(--admin-bg-hover);
+  --admin-order-list-row-hover: var(--admin-bg-hover);
+  --admin-order-list-pagination-bg: var(--admin-bg-secondary);
+  --admin-order-list-pagination-border: var(--admin-border-primary);
   
   // Common Order Status Colors (shared between list and detail)
   --admin-order-status-pending: #ff9800;
@@ -141,27 +153,58 @@
   --admin-breakpoint-lg: 992px;
   --admin-breakpoint-xl: 1200px;
   --admin-breakpoint-xxl: 1400px;
+
+  // Material Design List item variables (default scope)
+  --mdc-list-list-item-label-text-color: var(--admin-text-primary);
+  --mdc-list-list-item-supporting-text-color: var(--admin-text-secondary);
+  --mdc-list-list-item-disabled-text-color: var(--admin-text-disabled);
+  --mdc-list-list-item-leading-icon-color: var(--admin-text-secondary);
+  --mdc-list-list-item-trailing-icon-color: var(--admin-text-secondary);
+  // MDC list hover tokens (default scope)
+  --mdc-list-list-item-hover-label-text-color: var(--admin-text-primary);
+  --mdc-list-list-item-hover-state-layer-color: transparent;
+  --mdc-list-list-item-hover-state-layer-opacity: 0;
+  --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
+  --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
+  --mdc-list-list-item-hover-leading-icon-color: var(--admin-text-secondary);
+  --mdc-list-list-item-hover-trailing-icon-color: var(--admin-text-secondary);
+  --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
+  --mdc-list-item-hover-trailing-icon-color: var(--admin-text-secondary);
+  // Override MDC card container tokens globally
+  --mdc-elevated-card-container-color: transparent;
+  --mdc-filled-card-container-color: transparent;
+  --mdc-outlined-card-container-color: transparent;
 }
 
 // Dark Theme Variables
 [data-theme="dark"] {
+  // Background Colors - Dark Theme
   --admin-bg-primary: #121212;
   --admin-bg-secondary: #1e1e1e;
   --admin-bg-tertiary: #2d2d2d;
-  --admin-bg-card: #1e1e1e;
+  --admin-bg-card: #1f2937;
+  --admin-table-bg: #2d2d2d;
+  --admin-table-border: #404040;
   --admin-bg-hover: #2d2d2d;
+  --admin-bg-overlay: rgba(255, 255, 255, 0.1);
   
+  // Text Colors - Dark Theme
   --admin-text-primary: #ffffff;
   --admin-text-secondary: #b0b0b0;
   --admin-text-disabled: #666666;
+  --admin-text-inverse: #000000;
   
+  // Border Colors - Dark Theme
   --admin-border-primary: #404040;
   --admin-border-secondary: #333333;
+  --admin-border-focus: #42a5f5;
+  --admin-border-error: #f44336;
   
   // Order Details Dark Theme
   --admin-order-detail-bg: #1f2937;
   --admin-order-detail-header-bg: #374151;
-  --admin-order-detail-card-bg: #2d2d2d;
+  --admin-table-header-bg: #4b5563;
+  --admin-basic-bg: #2d2d2d;
   --admin-order-detail-border: #404040;
   --admin-order-detail-text-primary: #ffffff;
   --admin-order-detail-text-secondary: #9ca3af;
@@ -171,7 +214,7 @@
   
   // Order List Dark Theme
   --admin-order-list-bg: #1f2937;
-  --admin-order-list-card-bg: #2d2d2d;
+  --admin-order-list-card-bg: #374151;
   --admin-order-list-border: #404040;
   --admin-order-list-text-primary: #ffffff;
   --admin-order-list-text-secondary: #9ca3af;
@@ -187,16 +230,155 @@
   --admin-order-status-shipped: #4caf50;
   --admin-order-status-delivered: #4caf50;
   --admin-order-status-cancelled: #f44336;
+
+  // Material Design List item variables (dark theme)
+  --mdc-list-list-item-label-text-color: var(--admin-text-primary);
+  --mdc-list-list-item-supporting-text-color: var(--admin-text-secondary);
+  --mdc-list-list-item-disabled-text-color: var(--admin-text-disabled);
+  --mdc-list-list-item-leading-icon-color: var(--admin-text-secondary);
+  --mdc-list-list-item-trailing-icon-color: var(--admin-text-secondary);
+  // MDC list hover tokens (dark)
+  --mdc-list-list-item-hover-label-text-color: var(--admin-text-primary);
+  --mdc-list-list-item-hover-state-layer-color: transparent;
+  --mdc-list-list-item-hover-state-layer-opacity: 0;
+  --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
+  --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
+  // Ensure MDC card container tokens are transparent in dark theme
+  --mdc-elevated-card-container-color: transparent;
+  --mdc-filled-card-container-color: transparent;
+  --mdc-outlined-card-container-color: transparent;
+}
+
+// Light Theme Variables (explicit)
+[data-theme="light"] {
+  // Background Colors - Light Theme
+  --admin-bg-primary: #ffffff;
+  --admin-bg-secondary: #fff;
+  --admin-bg-tertiary: #fafafa;
+  --admin-bg-card: #f0f2f5;
+  --admin-table-bg: #fafafa;
+  --admin-table-border: #a0a0a0;
+  --admin-table-header-bg: #e5e7eb;
+  --admin-bg-hover: #e8f4f8;
+  --admin-bg-overlay: rgba(0, 0, 0, 0.5);
+  --admin-basic-bg: #ffffff;
+  --admin-order-list-card-bg: #f8fafc;
+  
+  // Text Colors - Light Theme
+  --admin-text-primary: #212121;
+  --admin-text-secondary: #757575;
+  --admin-text-disabled: #bdbdbd;
+  --admin-text-inverse: #ffffff;
+  
+  // Border Colors - Light Theme
+  --admin-border-primary: #d0d0d0;
+  --admin-border-secondary: #c0c0c0;
+  --admin-border-focus: #1976d2;
+  --admin-border-error: #f44336;
+  
+  // Ensure MDC card container tokens are transparent in light theme
+  --mdc-elevated-card-container-color: transparent;
+  --mdc-filled-card-container-color: transparent;
+  --mdc-outlined-card-container-color: transparent;
+  
+  // MDC list hover tokens (light)
+  --mdc-list-list-item-hover-label-text-color: var(--admin-text-primary);
+  --mdc-list-list-item-hover-state-layer-color: transparent;
+  --mdc-list-list-item-hover-state-layer-opacity: 0;
+  --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
+  --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
 }
 
 // Glass Theme Variables
 [data-theme="glass"] {
-  --admin-bg-primary: rgba(255, 255, 255, 0.1);
-  --admin-bg-secondary: rgba(255, 255, 255, 0.05);
-  --admin-bg-tertiary: rgba(255, 255, 255, 0.02);
-  --admin-bg-card: rgba(255, 255, 255, 0.1);
-  --admin-bg-hover: rgba(255, 255, 255, 0.15);
+  // Core glass surfaces & helpers
+  --admin-glass-surface-strong: linear-gradient(
+    150deg,
+    rgba(250, 251, 255, 0.9) 0%,
+    rgba(221, 232, 255, 0.55) 45%,
+    rgba(196, 210, 239, 0.35) 100%
+  );
+  --admin-glass-surface-soft: linear-gradient(
+    155deg,
+    rgba(240, 244, 255, 0.75) 0%,
+    rgba(217, 230, 250, 0.5) 60%,
+    rgba(199, 211, 233, 0.35) 100%
+  );
+  --admin-glass-surface-muted: linear-gradient(
+    165deg,
+    rgba(226, 232, 240, 0.45) 0%,
+    rgba(203, 213, 225, 0.25) 60%,
+    rgba(186, 200, 216, 0.18) 100%
+  );
+  --admin-glass-border-strong: rgba(255, 255, 255, 0.7);
+  --admin-glass-border-soft: rgba(255, 255, 255, 0.35);
+  --admin-glass-divider: rgba(255, 255, 255, 0.45);
+  --admin-glass-highlight: rgba(255, 255, 255, 0.65);
+  --admin-glass-shadow: 0 18px 45px rgba(15, 23, 42, 0.18);
+  --admin-glass-shadow-lg: 0 28px 80px rgba(15, 23, 42, 0.25);
+  --admin-glass-inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+
+  // Background Colors - Glass Theme (translucent for glass effect)
+  --admin-bg-primary: rgba(255, 255, 255, 0.15);
+  --admin-bg-secondary: rgba(255, 255, 255, 0.2);
+  --admin-bg-tertiary: rgba(250, 250, 250, 0.15);
+  --admin-bg-card: rgba(240, 242, 245, 0.25);
+  --admin-bg-hover: rgba(232, 244, 248, 0.3);
+  --admin-bg-overlay: rgba(15, 23, 42, 0.2);
   
-  --admin-border-primary: rgba(255, 255, 255, 0.2);
-  --admin-border-secondary: rgba(255, 255, 255, 0.1);
-} 
+  // Table colors - translucent for glass effect
+  --admin-basic-bg: rgba(255, 255, 255, 0.2);
+  --admin-table-bg: rgba(250, 250, 250, 0.15);
+  --admin-table-border: rgba(160, 160, 160, 0.3);
+  --admin-table-header-bg: rgba(229, 231, 235, 0.3);
+  
+  // Text Colors - Glass Theme (same as light theme)
+  --admin-text-primary: #212121;
+  --admin-text-secondary: #757575;
+  --admin-text-disabled: #bdbdbd;
+  --admin-text-inverse: #ffffff;
+  
+  // Border Colors - Glass Theme (same as light theme)
+  --admin-border-primary: #d0d0d0;
+  --admin-border-secondary: #c0c0c0;
+  --admin-border-focus: #1976d2;
+  --admin-border-error: #f44336;
+  
+  // Order Details / List glass overrides - translucent
+  --admin-order-detail-bg: rgba(240, 242, 245, 0.25);
+  --admin-order-detail-header-bg: rgba(232, 244, 248, 0.3);
+  --admin-order-detail-card-bg: rgba(255, 255, 255, 0.2);
+  --admin-order-detail-border: rgba(208, 208, 208, 0.3);
+  --admin-order-detail-text-primary: var(--admin-text-primary);
+  --admin-order-detail-text-secondary: var(--admin-text-secondary);
+  --admin-order-list-bg: rgba(240, 242, 245, 0.25);
+  --admin-order-list-card-bg: rgba(248, 250, 252, 0.25);
+  --admin-order-list-border: rgba(208, 208, 208, 0.3);
+  --admin-order-list-text-primary: var(--admin-text-primary);
+  --admin-order-list-text-secondary: var(--admin-text-secondary);
+  --admin-order-list-header-bg: rgba(229, 231, 235, 0.3);
+  --admin-order-list-row-hover: rgba(232, 244, 248, 0.35);
+  --admin-order-list-pagination-bg: rgba(229, 231, 235, 0.3);
+  --admin-order-list-pagination-border: rgba(208, 208, 208, 0.3);
+  
+  // Neon Accents
+  --admin-neon-primary: #9ba9ff;
+  --admin-neon-secondary: #cdd6ff;
+  
+  // Material Design List item variables (glass theme)
+  --mdc-list-list-item-label-text-color: var(--admin-text-primary);
+  --mdc-list-list-item-supporting-text-color: var(--admin-text-secondary);
+  --mdc-list-list-item-disabled-text-color: var(--admin-text-disabled);
+  --mdc-list-list-item-leading-icon-color: var(--admin-text-secondary);
+  --mdc-list-list-item-trailing-icon-color: var(--admin-text-secondary);
+  // MDC list hover tokens (glass)
+  --mdc-list-list-item-hover-label-text-color: var(--admin-text-primary);
+  --mdc-list-list-item-hover-state-layer-color: rgba(255, 255, 255, 0.1);
+  --mdc-list-list-item-hover-state-layer-opacity: 0.2;
+  --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
+  --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
+  // Ensure MDC card container tokens are transparent in glass theme
+  --mdc-elevated-card-container-color: transparent;
+  --mdc-filled-card-container-color: transparent;
+  --mdc-outlined-card-container-color: transparent;
+}

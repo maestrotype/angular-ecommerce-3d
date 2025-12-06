@@ -11,6 +11,7 @@ import { BoughtTogetherComponent } from './components/recommendations/bought-tog
 import { StripeElementsComponent } from './components/stripe-elements/stripe-elements.component';
 import { StripeTestComponent } from '../pages/stripe-test/stripe-test.component';
 import { SectionRendererComponent } from '../components/section-renderer/section-renderer.component';
+import { NotificationBadgeComponent } from './components/notification-badge/notification-badge.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { SectionRendererComponent } from '../components/section-renderer/section
     BoughtTogetherComponent,
     StripeElementsComponent,
     StripeTestComponent,
-    SectionRendererComponent
+    SectionRendererComponent,
+    NotificationBadgeComponent
   ],
   imports: [
     CommonModule,
@@ -39,7 +41,8 @@ import { SectionRendererComponent } from '../components/section-renderer/section
     BoughtTogetherComponent,
     StripeElementsComponent,
     StripeTestComponent,
-    SectionRendererComponent
+    SectionRendererComponent,
+    NotificationBadgeComponent
   ]
 })
 export class SharedModule { } 

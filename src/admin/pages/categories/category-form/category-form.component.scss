@@ -2,9 +2,9 @@
     padding: 0;
     max-width: none;
     margin: 0;
-    background-color: #1f2937;
+    background-color: var(--admin-bg-card);
     min-height: calc(100vh - 64px);
-    color: #ffffff;
+    color: var(--mdc-list-list-item-label-text-color);
   }
   
   .header-section {
@@ -14,18 +14,18 @@
     margin-bottom: 32px;
     padding: 24px 24px 0 24px;
     border-bottom: 1px solid #333;
-    background-color: #1f2937;
+    background-color: var(--admin-bg-card);
   
     h1 {
-      color: #ffffff;
+      color: var(--mdc-list-list-item-label-text-color);
       margin: 0;
       font-size: 2rem;
       font-weight: 600;
     }
   
     .back-button {
-      background-color: #374151;
-      color: #ffffff;
+      background-color: var(--admin-bg-hover);
+      color: var(--mdc-list-list-item-label-text-color);
       border: 1px solid #4b5563;
   
       &:hover {
@@ -39,18 +39,18 @@
     flex-direction: column;
     gap: 32px;
     padding: 0 24px;
-    background-color: #1f2937;
+    background-color: var(--admin-bg-card);
   }
   
   .form-card {
-    background-color: #2d2d2d !important;
+    background-color: var(--admin-bg-secondary) ;
     border: 1px solid #404040;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
   
   .form-content {
-    padding: 24px !important;
+    padding: 24px ;
   }
   
   .form-row {
@@ -73,7 +73,7 @@
   
     .cancel-button {
       background-color: #6b7280;
-      color: #ffffff;
+      color: var(--mdc-list-list-item-label-text-color);
       border: 1px solid #9ca3af;
   
       &:hover {
@@ -82,15 +82,15 @@
     }
   
     .submit-button {
-      background-color: #3b82f6 !important;
-      color: #ffffff !important;
+      background-color: #3b82f6 ;
+      color: var(--mdc-list-list-item-label-text-color);
   
       &:hover:not(:disabled) {
-        background-color: #2563eb !important;
+        background-color: #2563eb ;
       }
   
       &:disabled {
-        background-color: #6b7280 !important;
+        background-color: #6b7280 ;
         cursor: not-allowed;
       }
     }

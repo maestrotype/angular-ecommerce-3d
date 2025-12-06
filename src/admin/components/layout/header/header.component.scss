@@ -1,182 +1,248 @@
-
 .admin-header {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.header-title {
-  font-size: 20px;
-  font-weight: 500;
-}
-
-.spacer {
-  flex: 1 1 auto;
-}
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.notification-button {
-  position: relative;
-}
-
-// Notification Menu Styles
-.notification-menu {
-  width: 380px;
-  max-width: 90vw;
-  background: #2d2d2d;
-  color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-}
-
-.notification-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px;
-  background-color: #3d3d3d;
-  border-radius: 8px 8px 0 0;
+  background-color: transparent;
+  color: var(--admin-text-primary);
+  border-bottom: 1px solid var(--admin-table-border);
+  box-shadow: none;
+  transition: background-color var(--admin-transition-normal),
+    color var(--admin-transition-normal),
+    border-color var(--admin-transition-normal);
   
-  .notification-title {
-    font-weight: 600;
-    font-size: 16px;
-    color: white;
+  // Remove box-shadow for glass theme
+  [data-theme="glass"] & {
+    box-shadow: none;
   }
   
-  .mark-all-read {
-    font-size: 12px;
-    color: #4CAF50;
-    background: transparent;
+  // Dark Glass theme - white text
+  [data-theme="dark-glass"] & {
+    color: rgba(255, 255, 255, 1);
+    background-color: transparent;
+  }
+  
+  // Glass theme improvements - iOS/macOS style
+  [data-theme="glass"] & {
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     border: none;
-    padding: 4px 8px;
-    border-radius: 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 
+      0 4px 16px rgba(0, 0, 0, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    position: relative;
     
+    // Override Material toolbar styles
+    ::ng-deep {
+      .mat-toolbar-row,
+      .mat-toolbar-single-row {
+        border: none;
+        background: transparent;
+      }
+    }
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.6),
+        transparent
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+  }
+
+  .header-title {
+    font-size: var(--admin-font-size-lg);
+    font-weight: var(--admin-font-weight-medium);
+    color: var(--admin-text-primary);
+  }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--admin-spacing-sm);
+
+    button {
+      color: var(--admin-text-primary);
+      transition: color var(--admin-transition-normal),
+        background-color var(--admin-transition-normal);
+
+      &:hover {
+        background-color: var(--admin-bg-hover);
+        color: var(--admin-primary);
+      }
+    }
+  }
+
+  .menu-button {
+    color: var(--admin-text-primary);
+
     &:hover {
-      background: rgba(76, 175, 80, 0.1);
+      background-color: var(--admin-bg-hover);
+    }
+  }
+
+  .notification-button {
+    position: relative;
+    color: var(--admin-text-primary);
+
+    &:hover {
+      background-color: var(--admin-bg-hover);
+    }
+
+    mat-icon {
+      // color: var(--admin-text-primary);
+      top: 0;
+      right: 0;
     }
   }
 }
 
-.notification-list {
-  max-height: 400px;
-  overflow-y: auto;
-  background: #2d2d2d;
-}
-
-.notification-item {
-  width: 100%;
-  padding: 12px 16px;
-  min-height: auto;
-  line-height: normal;
-  white-space: normal;
-  background: transparent;
-  border: none;
-  color: white;
-  text-align: left;
-  
-  &.unread {
-    background-color: rgba(33, 150, 243, 0.1);
-    border-left: 3px solid #2196F3;
-  }
-  
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-  }
-}
-
-.notification-content {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  width: 100%;
-}
-
-.notification-icon {
-  flex-shrink: 0;
-  margin-top: 2px;
-  
-  mat-icon {
-    font-size: 20px;
-    width: 20px;
-    height: 20px;
-    color: #9E9E9E;
-  }
-}
-
-.notification-text {
-  flex: 1;
-  text-align: left;
-  
-  .notification-title {
-    font-weight: 600;
-    font-size: 14px;
-    margin-bottom: 4px;
-    color: white;
-  }
-  
-  .notification-message {
-    font-size: 12px;
-    color: #B0B0B0;
-    line-height: 1.4;
-    margin-bottom: 4px;
-  }
-  
-  .notification-time {
-    font-size: 11px;
-    color: #757575;
-  }
-}
-
-.notification-status {
-  flex-shrink: 0;
-  
-  .unread-dot {
-    width: 8px;
-    height: 8px;
-    background-color: #2196F3;
-    border-radius: 50%;
-    margin-top: 4px;
-  }
-}
-
-.no-notifications {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 32px 16px;
-  color: #9E9E9E;
-  background: #2d2d2d;
-  
-  mat-icon {
-    font-size: 48px;
-    width: 48px;
-    height: 48px;
-    margin-bottom: 8px;
-    color: #757575;
-  }
-  
-  span {
-    font-size: 14px;
-    color: #B0B0B0;
-  }
-}
-
-@media (max-width: 768px) {
-  .notification-menu {
-    width: 320px;
-  }
-  
-  .notification-header {
-    padding: 12px;
-  }
-  
+// Notification menu
+.notification-menu {
   .notification-item {
-    padding: 10px 12px;
+    padding: var(--admin-spacing-md);
+    border-bottom: 1px solid var(--admin-border-primary);
+    transition: background-color var(--admin-transition-normal);
+
+    &:hover {
+      background-color: var(--admin-bg-hover);
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .notification-content {
+      .notification-title {
+        font-weight: var(--admin-font-weight-medium);
+        color: var(--admin-text-primary);
+        margin-bottom: var(--admin-spacing-xs);
+      }
+
+      .notification-message {
+        color: var(--admin-text-secondary);
+        font-size: var(--admin-font-size-sm);
+        margin-bottom: var(--admin-spacing-xs);
+      }
+
+      .notification-time {
+        color: var(--admin-text-disabled);
+        font-size: var(--admin-font-size-xs);
+      }
+    }
+
+    .notification-icon {
+      color: var(--admin-text-secondary);
+      margin-right: var(--admin-spacing-sm);
+    }
+  }
+
+  .notification-actions {
+    padding: var(--admin-spacing-sm);
+    border-top: 1px solid var(--admin-border-primary);
+    background-color: var(--admin-bg-secondary);
+
+    button {
+      color: var(--admin-text-primary);
+      font-size: var(--admin-font-size-sm);
+
+      &:hover {
+        background-color: var(--admin-bg-hover);
+      }
+    }
+  }
+}
+
+// User menu
+.user-menu {
+  .user-info {
+    padding: var(--admin-spacing-md);
+    border-bottom: 1px solid var(--admin-border-primary);
+    background-color: var(--admin-bg-secondary);
+
+    .user-name {
+      font-weight: var(--admin-font-weight-medium);
+      color: var(--admin-text-primary);
+      margin-bottom: var(--admin-spacing-xs);
+    }
+
+    .user-email {
+      color: var(--admin-text-secondary);
+      font-size: var(--admin-font-size-sm);
+    }
+  }
+
+  .user-actions {
+    button {
+      color: var(--admin-text-primary);
+      width: 100%;
+      text-align: left;
+      padding: var(--admin-spacing-sm) var(--admin-spacing-md);
+      transition: background-color var(--admin-transition-normal);
+
+      &:hover {
+        background-color: var(--admin-bg-hover);
+      }
+
+      mat-icon {
+        margin-right: var(--admin-spacing-sm);
+        color: var(--admin-text-secondary);
+      }
+    }
+  }
+}
+
+// Theme toggle button
+.theme-toggle {
+  color: var(--admin-text-primary);
+  transition: color var(--admin-transition-normal),
+    background-color var(--admin-transition-normal);
+
+  &:hover {
+    background-color: var(--admin-bg-hover);
+    color: var(--admin-primary);
+  }
+
+  mat-icon {
+    color: var(--admin-text-primary);
+    transition: color var(--admin-transition-normal);
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .admin-header {
+    .header-title {
+      font-size: var(--admin-font-size-md);
+    }
+
+    .header-actions {
+      gap: var(--admin-spacing-xs);
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-header {
+    .header-title {
+      font-size: var(--admin-font-size-sm);
+    }
+
+    .header-actions {
+      button {
+        padding: 8px;
+      }
+    }
   }
 }

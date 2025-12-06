@@ -58,7 +58,7 @@ export class ProductCardComponent {
   onQuickView(event: Event): void {
     event.stopPropagation();
     // TODO: Implement quick view functionality
-    console.log('Quick view for product:', this.product.id);
+    
   }
 
   get cardClasses(): string {

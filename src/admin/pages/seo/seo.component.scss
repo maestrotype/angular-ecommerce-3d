@@ -1,5 +1,11 @@
+h1, h3, p {
+  color: var(--mdc-list-list-item-label-text-color);
+}
+
 .seo-settings-container {
   padding: var(--admin-spacing-lg, 24px);
+  background-color: var(--admin-border-primary);
+  background-color: var(--admin-order-list-card-bg);
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -16,7 +22,7 @@
     }
 
     ::ng-deep .mat-tab-body-content {
-      padding: 0 var(--admin-spacing-md, 16px) var(--admin-spacing-lg, 24px);
+      padding: 0 var(--admin-spacing-lg, 16px) var(--admin-spacing-lg, 24px);
     }
   }
 }
@@ -31,13 +37,13 @@
 .form-section {
   display: flex;
   flex-direction: column;
-  gap: var(--admin-spacing-md, 16px);
+  gap: var(--admin-spacing-lg, 16px);
 }
 
 .form-row {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--admin-spacing-md, 16px);
+  gap: var(--admin-spacing-lg, 16px);
 
   .full-width { grid-column: 1 / -1; }
   .half-width { grid-column: span 1; }
@@ -48,8 +54,8 @@
 .form-actions {
   display: flex;
   justify-content: flex-end;
-  gap: var(--admin-spacing-md, 16px);
-  margin-top: var(--admin-spacing-md, 16px);
+  gap: var(--admin-spacing-lg, 16px);
+  margin-top: var(--admin-spacing-lg, 16px);
 
   button { min-width: 140px; }
 }

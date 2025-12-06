@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil, switchMap } from 'rxjs/operators';
 import { AuthService } from '../../../services/auth.service';
+import { ViewChild } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { NotificationService, Notification } from '../../../services/notification.service';
 
 @Component({
@@ -13,11 +15,12 @@ import { NotificationService, Notification } from '../../../services/notificatio
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   @Output() toggleSidenav = new EventEmitter<void>();
+  @ViewChild(MatMenuTrigger) notificationMenuTrigger!: MatMenuTrigger;
   
   private destroy$ = new Subject<void>();
   notifications: Notification[] = [];
   unreadCount = 0;
-  isDarkTheme = true; // Default to dark theme
+  currentTheme: 'light' | 'dark' | 'glass' | 'dark-glass' = 'dark'; // Default to dark theme
 
   constructor(
     private router: Router,
@@ -27,8 +30,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // Load theme preference from localStorage
-    const savedTheme = localStorage.getItem('adminTheme');
-    this.isDarkTheme = savedTheme === 'light' ? false : true; // Default to dark
+    const savedTheme = localStorage.getItem('adminTheme') as 'light' | 'dark' | 'glass' | null;
+    this.currentTheme = savedTheme || 'dark'; // Default to dark if no saved theme
     this.applyTheme();
 
     // Load notifications on initialization
@@ -67,16 +70,37 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   toggleTheme(): void {
-    this.isDarkTheme = !this.isDarkTheme;
+    // Cycle through themes: dark -> light -> glass -> dark-glass -> dark
+    if (this.currentTheme === 'dark') {
+      this.currentTheme = 'light';
+    } else if (this.currentTheme === 'light') {
+      this.currentTheme = 'glass';
+    } else if (this.currentTheme === 'glass') {
+      this.currentTheme = 'dark-glass';
+    } else {
+      this.currentTheme = 'dark';
+    }
     this.applyTheme();
     
     // Save theme preference
-    localStorage.setItem('adminTheme', this.isDarkTheme ? 'dark' : 'light');
+    localStorage.setItem('adminTheme', this.currentTheme);
   }
 
   private applyTheme(): void {
-    const theme = this.isDarkTheme ? 'dark' : 'light';
-    document.body.setAttribute('data-theme', theme);
+    // Apply theme to documentElement instead of body for consistency with frontend
+    document.documentElement.setAttribute('data-theme', this.currentTheme);
+  }
+
+  openNotificationMenu(): void {
+    if (this.notificationMenuTrigger) {
+      this.notificationMenuTrigger.openMenu();
+    }
+  }
+
+  closeNotificationMenu(): void {
+    if (this.notificationMenuTrigger) {
+      this.notificationMenuTrigger.closeMenu();
+    }
   }
 
   onNotificationClick(notification: Notification): void {
@@ -137,4 +161,3 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.router.navigate(['/admin/login']);
   }
 }
-

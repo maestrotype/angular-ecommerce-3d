@@ -70,7 +70,7 @@ export class SettingsService {
         return this.getMockSettings();
       }),
       catchError(error => {
-        console.error('Failed to load settings from backend:', error);
+        
         // Return mock settings as fallback
         return of(this.getMockSettings());
       })
@@ -126,7 +126,7 @@ export class SettingsService {
     return this.http.put<ApiResponse>(`${this.apiUrl}/general`, settings).pipe(
       map(response => response),
       catchError(error => {
-        console.error('Failed to update general settings:', error);
+        
         throw error;
       })
     );
@@ -136,7 +136,7 @@ export class SettingsService {
     return this.http.put<ApiResponse>(`${this.apiUrl}/notifications`, settings).pipe(
       map(response => response),
       catchError(error => {
-        console.error('Failed to update notification settings:', error);
+        
         throw error;
       })
     );
@@ -146,7 +146,7 @@ export class SettingsService {
     return this.http.put<ApiResponse>(`${this.apiUrl}/security`, settings).pipe(
       map(response => response),
       catchError(error => {
-        console.error('Failed to update security settings:', error);
+        
         throw error;
       })
     );
@@ -156,7 +156,7 @@ export class SettingsService {
     return this.http.put<ApiResponse>(`${this.apiUrl}/payment`, settings).pipe(
       map(response => response),
       catchError(error => {
-        console.error('Failed to update payment settings:', error);
+        
         throw error;
       })
     );

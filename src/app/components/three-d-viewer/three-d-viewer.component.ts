@@ -77,11 +77,11 @@ export class ThreeDViewerComponent implements AfterViewInit {
       });
       this.camera.lookAt(this.model.position);
       this.scene.add(this.model);
-      console.log('Model loaded successfully:', this.model);
+      
       this.modelLoaded.emit();
       this.animate(); // Start animation only after model is loaded
     }, undefined, (error) => {
-      console.error('Error loading model:', error);
+      
     });
   }
 

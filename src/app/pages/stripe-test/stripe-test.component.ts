@@ -12,16 +12,16 @@ export class StripeTestComponent {
   testPublishableKey = 'pk_test_51Oq...'; // Replace with your test key
 
   onPaymentSuccess(paymentData: StripePaymentData): void {
-    console.log('Payment successful:', paymentData);
+    
     alert(`Payment successful! Payment Method ID: ${paymentData.paymentMethodId}`);
   }
 
   onPaymentError(errorMessage: string): void {
-    console.error('Payment error:', errorMessage);
+    
     alert(`Payment failed: ${errorMessage}`);
   }
 
   onLoadingChange(isLoading: boolean): void {
-    console.log('Loading state:', isLoading);
+    
   }
 } 

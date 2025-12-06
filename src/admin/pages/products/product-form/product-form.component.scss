@@ -2,7 +2,7 @@
     padding: 0;
     max-width: none;
     margin: 0;
-    background-color: #1f2937;
+    background-color: var(--admin-bg-card);
     min-height: calc(100vh - 64px);
     color: #ffffff;
   }
@@ -14,7 +14,7 @@
     margin-bottom: 32px;
     padding: 24px 24px 0 24px;
     border-bottom: 1px solid #333;
-    background-color: #1f2937;
+    background-color: var(--admin-bg-card);
     
     h1 {
       color: #ffffff;
@@ -24,7 +24,7 @@
     }
     
     .back-button {
-      background-color: #374151;
+      background-color: var(--admin-bg-hover);
       color: #ffffff;
       border: 1px solid #4b5563;
       
@@ -39,18 +39,18 @@
     flex-direction: column;
     gap: 32px;
     padding: 0 24px;
-    background-color: #1f2937;
+    background-color: var(--admin-bg-card);
   }
   
   .form-card {
-    background-color: #2d2d2d !important;
+    background-color: var(--admin-bg-secondary) ;
     border: 1px solid #404040;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
   
   .form-content {
-    padding: 24px !important;
+    padding: 24px ;
   }
   
   .form-grid {
@@ -115,7 +115,7 @@
     color: #9ca3af;
     font-style: italic;
     padding: 32px;
-    background-color: #374151;
+    background-color: var(--admin-bg-hover);
     border-radius: 8px;
     border: 2px dashed #6b7280;
   }
@@ -138,15 +138,15 @@
     }
     
     .submit-button {
-      background-color: #3b82f6 !important;
-      color: #ffffff !important;
+      background-color: #3b82f6 ;
+      color: #ffffff ;
       
       &:hover:not(:disabled) {
-        background-color: #2563eb !important;
+        background-color: #2563eb ;
       }
       
       &:disabled {
-        background-color: #6b7280 !important;
+        background-color: #6b7280 ;
         cursor: not-allowed;
       }
     }
@@ -177,7 +177,7 @@
         border-radius: 12px;
         padding: 40px 20px;
         text-align: center;
-        background-color: #374151;
+        background-color: var(--admin-bg-hover);
         transition: all 0.3s ease;
         cursor: pointer;
         min-height: 200px;
@@ -187,7 +187,7 @@
 
         &:hover {
           border-color: #3b82f6;
-          background-color: #1f2937;
+          background-color: var(--admin-bg-card);
         }
 
         .upload-content {
@@ -317,7 +317,7 @@
     }
 
     .processing-options {
-      background: #2d2d2d;
+      background: var(--admin-bg-secondary);
       border: 1px solid #4b5563;
       border-radius: 12px;
       padding: 16px;
@@ -345,61 +345,61 @@
   // Material Design overrides for dark theme
   ::ng-deep {
     .mat-card-title {
-      color: #ffffff !important;
+      color: #ffffff ;
       font-weight: 600;
     }
     
     .mat-form-field {
       .mat-form-field-label {
-        color: #e5e7eb !important;
+        color: #e5e7eb ;
       }
       
       .mat-input-element {
-        color: #ffffff !important;
+        color: #ffffff ;
       }
       
       .mat-form-field-outline {
-        color: #6b7280 !important;
+        color: #6b7280 ;
       }
       
       &.mat-focused {
         .mat-form-field-outline-thick {
-          color: #3b82f6 !important;
+          color: #3b82f6 ;
         }
         
         .mat-form-field-label {
-          color: #3b82f6 !important;
+          color: #3b82f6 ;
         }
       }
     }
     
     .mat-select {
-      color: #ffffff !important;
+      color: #ffffff ;
       
       .mat-select-arrow {
-        color: #9ca3af !important;
+        color: #9ca3af ;
       }
     }
     
     .mat-option {
-      background-color: #2d2d2d !important;
-      color: #ffffff !important;
+      background-color: var(--admin-bg-secondary) ;
+      color: #ffffff ;
       
       &:hover {
-        background-color: #374151 !important;
+        background-color: var(--admin-bg-hover) ;
       }
       
       &.mat-selected {
-        background-color: #3b82f6 !important;
+        background-color: #3b82f6 ;
       }
     }
     
     .mat-select-panel {
-      background-color: #2d2d2d !important;
+      background-color: var(--admin-bg-secondary) ;
     }
     
     .mat-error {
-      color: #ef4444 !important;
+      color: #ef4444 ;
     }
   }
 

@@ -208,7 +208,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.searchResults = results;
         },
         error: (error) => {
-          console.error('Search error:', error);
+          
           this.searchResults = [];
         }
       });
@@ -303,7 +303,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         behavior: 'smooth'
       });
     } else {
-      console.warn(`Element with id '${elementId}' not found`);
+      
     }
   }
 

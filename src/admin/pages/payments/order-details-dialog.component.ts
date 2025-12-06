@@ -66,11 +66,11 @@ export class OrderDetailsDialogComponent {
         return this.mapOrderToDetails(order);
       }),
       catchError(error => {
-        console.error('Failed to load order details from orders endpoint:', error);
+        
         // If orders endpoint fails, try to get from payments endpoint
         return this.http.get<{ success: boolean; data: any[]; message?: string }>(`${environment.apiUrl}/payments/order/${this.data.orderId}`).pipe(
           map(paymentResponse => {
-            console.log('[OrderDetailsDialog] Payments endpoint response:', paymentResponse);
+            
             if (paymentResponse.success && paymentResponse.data.length > 0) {
               const payment = paymentResponse.data[0];
               // Create mock order details from payment data
@@ -101,7 +101,7 @@ export class OrderDetailsDialogComponent {
             return null;
           }),
           catchError(paymentError => {
-            console.error('Failed to load order details from payments endpoint:', paymentError);
+            
             return of(null);
           })
         );

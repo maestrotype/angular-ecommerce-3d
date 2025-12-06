@@ -25,7 +25,7 @@ export class AuthService {
           this.setSession(response);
         }),
         catchError(error => {
-          console.warn('API login failed:', error);
+          
           throw error;
         })
       );
@@ -39,7 +39,7 @@ export class AuthService {
           this.setSession(response);
         }),
         catchError(error => {
-          console.warn('API registration failed:', error);
+          
           throw error;
         })
       );

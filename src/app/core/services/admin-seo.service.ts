@@ -60,7 +60,7 @@ export class AdminSeoService {
         throw new Error('Failed to get SEO settings');
       }),
       catchError(error => {
-        console.error('Error getting SEO settings:', error);
+        
         throw error;
       })
     );
@@ -76,7 +76,7 @@ export class AdminSeoService {
         throw new Error('Failed to update SEO settings');
       }),
       catchError(error => {
-        console.error('Error updating SEO settings:', error);
+        
         throw error;
       })
     );
@@ -91,7 +91,7 @@ export class AdminSeoService {
         throw new Error('Failed to generate sitemap');
       }),
       catchError(error => {
-        console.error('Error generating sitemap:', error);
+        
         throw error;
       })
     );
@@ -106,7 +106,7 @@ export class AdminSeoService {
         throw new Error('Failed to get robots.txt');
       }),
       catchError(error => {
-        console.error('Error getting robots.txt:', error);
+        
         throw error;
       })
     );
@@ -121,7 +121,7 @@ export class AdminSeoService {
         throw new Error('Failed to update robots.txt');
       }),
       catchError(error => {
-        console.error('Error updating robots.txt:', error);
+        
         throw error;
       })
     );

@@ -22,7 +22,7 @@ export class PaymentService {
       .pipe(
         map(response => response),
         catchError(error => {
-          console.error('Error creating payment:', error);
+          
           
           // Show user-friendly error notification
           if (error.status === 404) {
@@ -44,7 +44,7 @@ export class PaymentService {
     return this.http.get<Payment>(`${this.apiUrl}/${id}`)
       .pipe(
         catchError(error => {
-          console.error('Error fetching payment:', error);
+          
           this.notificationService.showError('Failed to fetch payment details.');
           return throwError(() => new Error('Failed to fetch payment'));
         })
@@ -55,7 +55,7 @@ export class PaymentService {
     return this.http.get<Payment[]>(`${this.apiUrl}/order/${orderId}`)
       .pipe(
         catchError(error => {
-          console.error('Error fetching payments for order:', error);
+          
           return throwError(() => new Error('Failed to fetch payments for order'));
         })
       );
@@ -68,7 +68,7 @@ export class PaymentService {
       .pipe(
         map(response => response.status),
         catchError(error => {
-          console.error('Error fetching payment status:', error);
+          
           return throwError(() => new Error('Failed to fetch payment status'));
         })
       );
@@ -125,7 +125,7 @@ export class PaymentService {
     return this.http.get<Payment[]>(`${this.apiUrl}`)
       .pipe(
         catchError(error => {
-          console.error('Error fetching all payments:', error);
+          
           this.notificationService.showError('Failed to fetch payments.');
           return throwError(() => new Error('Failed to fetch payments'));
         })
@@ -136,7 +136,7 @@ export class PaymentService {
     return this.http.get<any>(`${this.apiUrl}/stats/overview`)
       .pipe(
         catchError(error => {
-          console.error('Error fetching payment stats:', error);
+          
           this.notificationService.showError('Failed to fetch payment statistics.');
           return throwError(() => new Error('Failed to fetch payment stats'));
         })
@@ -171,7 +171,7 @@ export class PaymentService {
     return this.http.get<Payment[]>(`${this.apiUrl}/search?${params.toString()}`)
       .pipe(
         catchError(error => {
-          console.error('Error searching payments:', error);
+          
           this.notificationService.showError('Failed to search payments.');
           return throwError(() => new Error('Failed to search payments'));
         })
@@ -182,7 +182,7 @@ export class PaymentService {
     return this.http.put<Payment>(`${this.apiUrl}/${paymentId}/status`, { status, notes })
       .pipe(
         catchError(error => {
-          console.error('Error updating payment status:', error);
+          
           this.notificationService.showError('Failed to update payment status.');
           return throwError(() => new Error('Failed to update payment status'));
         })

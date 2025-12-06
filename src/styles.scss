@@ -1,42 +1,39 @@
 @import './styles/tokens/index';
 /* CSS Custom Properties for Theming */
+/* Note: Most variables are now defined in core/_variables.scss */
+/* Only unique variables that are not in core are kept here */
 :root {
-  /* Default theme variables - will be overridden by ThemeService */
-  --color-primary: #667eea;
-  --color-secondary: #764ba2;
-  --color-accent: #f093fb;
-  --color-background: #f5f7fa;
-  --color-surface: #ffffff;
-  --color-text-primary: #333333;
-  --color-text-secondary: #666666;
-  --color-text-accent: #667eea;
-  --color-buttons-primary: #667eea;
-  --color-buttons-secondary: #6c757d;
+  /* Glass button specific variables (used in components) */
   --color-buttons-glass: rgba(255, 255, 255, 0.3);
   --color-buttons-glassHover: rgba(255, 255, 255, 0.5);
-  --color-cards-background: #ffffff;
-  --color-cards-border: rgba(0, 0, 0, 0.1);
-  --color-cards-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --color-surface-primary: #ffffff;
   
-  --layout-container-maxWidth: 1200px;
-  --layout-container-padding: 0 20px;
-  --layout-grid-columns-desktop: 4;
-  --layout-grid-columns-tablet: 3;
-  --layout-grid-columns-mobile: 2;
-  --layout-grid-gap: 1rem;
-  --layout-cards-borderRadius: 12px;
-  --layout-cards-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --layout-cards-padding: 1rem;
+  /* Layout variables (mapped to core variables for compatibility) */
+  --layout-container-maxWidth: var(--container-max-width, 1200px);
+  --layout-container-padding: var(--container-padding, 0 20px);
+  --layout-grid-columns-desktop: var(--grid-columns-desktop, 4);
+  --layout-grid-columns-tablet: var(--grid-columns-tablet, 3);
+  --layout-grid-columns-mobile: var(--grid-columns-mobile, 2);
+  --layout-grid-gap: var(--grid-gap, 1rem);
+  --layout-cards-borderRadius: var(--radius-lg, 12px);
+  --layout-cards-shadow: var(--shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.1));
+  --layout-cards-padding: var(--spacing-md, 1rem);
   
-  --component-buttons-borderRadius: 8px;
-  --component-buttons-fontSize: 0.9rem;
-  --component-buttons-fontWeight: 600;
-  --component-buttons-padding: 12px 24px;
+  /* Component specific variables */
+  --component-buttons-borderRadius: var(--radius-md, 8px);
+  --component-buttons-fontSize: var(--font-size-sm, 0.9rem);
+  --component-buttons-fontWeight: var(--font-weight-semibold, 600);
+  --component-buttons-padding: var(--spacing-sm, 12px) var(--spacing-lg, 24px);
   --component-buttons-glassOpacity: 0.3;
   --component-productCards-imageHeight: 200px;
-  --component-productCards-infoPadding: 1rem;
+  --component-productCards-infoPadding: var(--spacing-md, 1rem);
   --component-productCards-overlayOpacity: 0.8;
+  
+  /* Legacy aliases for compatibility (will be removed in future) */
+  --color-background: var(--color-bg-primary);
+  --color-surface: var(--color-surface-primary);
+  --color-cards-background: var(--color-surface-primary);
+  --color-cards-border: var(--color-border-primary);
+  --color-cards-shadow: var(--shadow-sm);
 }
 
 /* Glass Theme Styles */
@@ -191,11 +188,6 @@
   transform: translateY(-4px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
-
-// Styles moved to main.scss - DO NOT REMOVE THIS COMMENT
-// @import './styles/_grid.scss';
-// @import './styles/_buttons.scss';
-// @import './styles/_cards.scss';
 
 // Import theme styles
 @import './styles/themes/_index.scss';
@@ -367,4 +359,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   border-radius: 12px;
   /* overflow removed to preserve notched outline corners and overlays */
   background-clip: padding-box;
+}
+
+.mat-badge-warn {
+  --mat-badge-background-color: #ff6b6b;
+  --mat-badge-text-color: #ffffff;
 }

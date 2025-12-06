@@ -72,7 +72,7 @@ export class ProductInfoComponent {
    * Handle favorite toggle events
    */
   onFavoriteToggled(event: { product: Product; isFavorite: boolean }): void {
-    console.log(`${event.product.name} ${event.isFavorite ? 'added to' : 'removed from'} favorites`);
+    
   }
 
   /**

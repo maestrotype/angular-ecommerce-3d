@@ -1,8 +1,13 @@
 .category-list-container {
-  padding: 0;
-  background-color: #1f2937;
+  padding: 24px;
+  background-color: transparent;
   min-height: calc(100vh - 64px);
-  color: #ffffff;
+  color: var(--mdc-list-list-item-label-text-color);
+  
+  // Dark glass - white text
+  [data-theme="dark-glass"] & {
+    color: rgba(255, 255, 255, 1);
+  }
 }
 
 .header-section {
@@ -11,10 +16,10 @@
   align-items: center;
   margin-bottom: 24px;
   padding: 24px 24px 0 24px;
-  background-color: #1f2937;
+  background-color: transparent;
 
   h1 {
-    color: #ffffff;
+    color: var(--mdc-list-list-item-label-text-color);
     margin: 0;
     font-size: 2rem;
     font-weight: 600;
@@ -32,7 +37,7 @@
   gap: 16px;
   margin-bottom: 24px;
   padding: 0 24px;
-  background-color: #1f2937;
+  background-color: transparent;
 
   .search-field {
     min-width: 200px;
@@ -40,36 +45,17 @@
 }
 
 .table-container {
-  background: #2d2d2d;
+  background: var(--admin-bg-secondary);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  border: 1px solid #404040;
   overflow: hidden;
-  margin: 0 24px;
 }
 
 .category-table {
   width: 100%;
-  background-color: #2d2d2d;
-
-  th {
-    background-color: #374151 !important;
-    color: #ffffff !important;
-    font-weight: 600;
-    padding: 16px;
-    border-bottom: 1px solid #4b5563;
-  }
-
-  td {
-    background-color: #2d2d2d !important;
-    color: #ffffff !important;
-    padding: 16px;
-    border-bottom: 1px solid #404040;
-  }
-
-  tr:hover td {
-    background-color: #374151 !important;
-  }
+  
+  // Table styles are now in _admin-theme-material.scss
+  // Only category-specific styles remain here
 }
 
 // Mobile card styles
@@ -84,7 +70,7 @@
 }
 
 .category-card {
-  background: #2d2d2d;
+  background: var(--admin-bg-secondary);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   padding: 16px;
@@ -117,7 +103,7 @@
         margin: 0;
         font-size: 16px;
         font-weight: 600;
-        color: #ffffff;
+        color: var(--mdc-list-list-item-label-text-color);
         line-height: 1.4;
       }
     }
@@ -162,8 +148,8 @@
   padding: 40px;
   margin: 0 24px;
   text-align: center;
-  color: #ffffff;
-  background-color: #2d2d2d;
+  color: var(--mdc-list-list-item-label-text-color);
+  background-color: var(--admin-bg-secondary);
   border-radius: 8px;
   border: 1px solid #404040;
 }
@@ -208,11 +194,11 @@
   }
 
   .desktop-view {
-    display: block !important;
+    display: block ;
   }
 
   .mobile-view {
-    display: none !important;
+    display: none ;
   }
 
   // Compact table for Galaxy Z Fold

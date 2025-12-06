@@ -77,7 +77,7 @@ export class RecommendationsService {
 
     return this.http.get<any>(`${this.API_URL}/recommendations/similar/${productId}?limit=${limit}`).pipe(
       map(response => {
-        console.log('Similar products response:', response);
+        
         
         if (!response.success) {
           throw new Error(response.error || 'Failed to get similar products');
@@ -85,7 +85,7 @@ export class RecommendationsService {
         
         // Backend returns { data: { similarProducts: [...] } }
         const products = response.data?.similarProducts || [];
-        console.log('Extracted similar products:', products);
+        
         
         return products;
       }),
@@ -96,7 +96,7 @@ export class RecommendationsService {
         this.isShowingError = false;
       }),
       catchError(error => {
-        console.error('Error fetching similar products:', error);
+        
         
         // Only show notification if not already showing
         if (!this.isShowingError) {
@@ -122,7 +122,7 @@ export class RecommendationsService {
 
     return this.http.get<any>(`${this.API_URL}/recommendations/bought-together/${productId}?limit=${limit}`).pipe(
       map(response => {
-        console.log('Bought together response:', response);
+        
         
         if (!response.success) {
           throw new Error(response.error || 'Failed to get bought together products');
@@ -130,7 +130,7 @@ export class RecommendationsService {
         
         // Backend returns { data: { boughtTogetherProducts: [...] } }
         const products = response.data?.boughtTogetherProducts || [];
-        console.log('Extracted bought together products:', products);
+        
         
         return products;
       }),
@@ -141,7 +141,7 @@ export class RecommendationsService {
         this.isShowingError = false;
       }),
       catchError(error => {
-        console.error('Error fetching bought together products:', error);
+        
         
         // Only show notification if not already showing
         if (!this.isShowingError) {
@@ -175,7 +175,7 @@ export class RecommendationsService {
         this.isShowingError = false;
       }),
       catchError(error => {
-        console.error('Error fetching personalized recommendations:', error);
+        
         
         // Only show notification if not already showing
         if (!this.isShowingError) {
@@ -224,6 +224,6 @@ export class RecommendationsService {
     }
 
     this.notificationService.showError(userMessage, 5000);
-    console.error(`Recommendation error in ${context}:`, error);
+    
   }
 } 

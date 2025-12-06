@@ -83,7 +83,7 @@ export class ProductFormComponent implements OnInit {
         this.categories = categories;
       },
       error: (error) => {
-        console.error('Error loading categories:', error);
+        
         this.snackBar.open('Failed to load categories list', "Close", {
           duration: 5000,
         });
@@ -170,7 +170,7 @@ export class ProductFormComponent implements OnInit {
           }
         },
         error: (error) => {
-          console.error('Image processing error:', error);
+          
           this.isUploading = false;
           
           let errorMessage = 'Failed to process image';
@@ -204,7 +204,7 @@ export class ProductFormComponent implements OnInit {
           this.isUploading = false;
         },
         error: (error) => {
-          console.error('Upload error:', error);
+          
           this.isUploading = false;
           this.snackBar.open('Failed to upload image', "Close", {
             duration: 5000,
@@ -292,7 +292,7 @@ export class ProductFormComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-        console.error("Error loading product:", err);
+        
         this.snackBar.open('Failed to load product data', "Close", {
           duration: 5000,
         });
@@ -381,7 +381,7 @@ export class ProductFormComponent implements OnInit {
         },
         error: (error) => {
           this.isLoading = false;
-          console.error('Update error:', error);
+          
           this.snackBar.open('Error updating product', 'Close', { duration: 3000 });
         }
       });
@@ -394,7 +394,7 @@ export class ProductFormComponent implements OnInit {
         },
         error: (error) => {
           this.isLoading = false;
-          console.error('Create error:', error);
+          
           this.snackBar.open('Error creating product', 'Close', { duration: 3000 });
         }
       });
@@ -416,7 +416,7 @@ export class ProductFormComponent implements OnInit {
   createProduct(productData: ProductCreateRequest): void {
     this.productService.createProduct(productData).subscribe({
       next: (product) => {
-        console.log("Product created:", product);
+        
         this.isLoading = false;
         this.snackBar.open("Product created successfully!", "Close", {
           duration: 3000,
@@ -424,7 +424,7 @@ export class ProductFormComponent implements OnInit {
         this.router.navigate(["/admin/products"]);
       },
       error: (err) => {
-        console.error("Error creating product:", err);
+        
         this.isLoading = false;
         this.snackBar.open("Error creating product", "Close", {
           duration: 5000,
@@ -436,7 +436,7 @@ export class ProductFormComponent implements OnInit {
   updateProduct(id: number, productData: ProductUpdateRequest): void {
     this.productService.updateProduct(id, productData).subscribe({
       next: (product) => {
-        console.log("Product updated:", product);
+        
         this.isLoading = false;
         this.snackBar.open("Product updated successfully!", "Close", {
           duration: 3000,
@@ -444,7 +444,7 @@ export class ProductFormComponent implements OnInit {
         this.router.navigate(["/admin/products"]);
       },
       error: (err) => {
-        console.error("Error updating product:", err);
+        
         this.isLoading = false;
         this.snackBar.open("Error updating product", "Close", {
           duration: 5000,

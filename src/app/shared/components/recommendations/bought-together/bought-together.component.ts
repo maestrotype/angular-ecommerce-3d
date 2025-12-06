@@ -50,12 +50,12 @@ export class BoughtTogetherComponent implements OnInit, OnDestroy {
   }
 
   quickView(product: RecommendationProduct): void {
-    console.log('Quick view for product:', product);
+    
     // Implement quick view functionality
   }
 
   onFavoriteToggled(event: any): void {
-    console.log('Favorite toggled:', event);
+    
     // Implement favorite functionality
   }
 
@@ -70,7 +70,7 @@ export class BoughtTogetherComponent implements OnInit, OnDestroy {
     };
     this.cartService.addToCart(cartItem);
     this.notificationService.showSuccess(`Added ${product.name} to cart!`);
-    console.log('Added to cart:', product.name);
+    
   }
 
   // Rating functionality
@@ -93,7 +93,7 @@ export class BoughtTogetherComponent implements OnInit, OnDestroy {
     // Show success message
     this.notificationService.showSuccess(`Rated ${product.name} with ${rating} stars!`);
 
-    console.log(`Product ${product.name} rated with ${rating} stars`);
+    
   }
 
   private updateProductRating(product: RecommendationProduct): void {
@@ -120,7 +120,7 @@ export class BoughtTogetherComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.destroy$),
         catchError(error => {
-          console.error('Error loading bought together products:', error);
+          
           this.error = true;
           this.loading = false;
           this.notificationService.showError(
@@ -144,7 +144,7 @@ export class BoughtTogetherComponent implements OnInit, OnDestroy {
           }
         },
         error: (error) => {
-          console.error('Unexpected error in bought together products:', error);
+          
           this.error = true;
           this.loading = false;
           this.notificationService.showError(
@@ -157,11 +157,11 @@ export class BoughtTogetherComponent implements OnInit, OnDestroy {
 
   onProductClick(product: RecommendationProduct): void {
     try {
-      console.log('Navigating to bought-together product:', product);
-      console.log('Product ID:', product.id, 'Type:', typeof product.id);
+      
+      
       
       if (!product.id && product.id !== 0) {
-        console.error('Product ID is undefined, null, or empty');
+        
         this.notificationService.showError(
           'Invalid product ID. Cannot navigate to product.',
           3000
@@ -172,7 +172,7 @@ export class BoughtTogetherComponent implements OnInit, OnDestroy {
       // Ensure product ID is a number
       const productId = Number(product.id);
       if (isNaN(productId)) {
-        console.error('Product ID is not a valid number:', product.id);
+        
         this.notificationService.showError(
           'Invalid product ID format. Cannot navigate to product.',
           3000
@@ -180,27 +180,27 @@ export class BoughtTogetherComponent implements OnInit, OnDestroy {
         return;
       }
       
-      console.log('Navigating to product ID:', productId);
+      
       
       from(this.router.navigate(['/product', productId])).subscribe({
         next: (success) => {
-          console.log('BoughtTogether: Navigation observable resolved with success:', success);
+          
           if (success) {
-            console.log('BoughtTogether: Navigation successful to product:', productId);
-            console.log('BoughtTogether: New URL:', this.router.url);
+            
+            
             // Scroll to top after successful navigation
             setTimeout(() => {
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }, 100);
           } else {
-            console.error('BoughtTogether: Navigation returned false for product:', productId);
-            console.log('BoughtTogether: Current URL after failed navigation:', this.router.url);
+            
+            
             // Don't show error notification for false return, as it might be normal
             // when navigating to the same route with different params
           }
         },
         error: (error) => {
-          console.error('BoughtTogether: Navigation observable error for product:', productId, error);
+          
           this.notificationService.showError(
             'Navigation error. Please try again.',
             3000
@@ -208,7 +208,7 @@ export class BoughtTogetherComponent implements OnInit, OnDestroy {
         }
       });
     } catch (error) {
-      console.error('Error navigating to product:', error);
+      
       this.notificationService.showError(
         'Unable to navigate to product page. Please try again.',
         3000

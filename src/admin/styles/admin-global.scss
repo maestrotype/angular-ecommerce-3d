@@ -1,5 +1,6 @@
 @import './admin-variables.scss';
 @import './admin-mixins.scss';
+@import '../../styles/_liquid-glass';
 
 // Global Admin Styles
 
@@ -16,12 +17,109 @@ body {
   background: var(--admin-bg-primary);
   margin: 0;
   padding: 0;
+  transition: background-color var(--admin-transition-normal), color var(--admin-transition-normal);
+  
+  // Glass theme background - bright blue like macOS/iOS
+  [data-theme="glass"] & {
+    min-height: 100vh;
+    position: relative;
+    background: linear-gradient(
+      135deg,
+      #6a9bc8 0%,
+      #5a8bb8 20%,
+      #4a7ba7 40%,
+      #3a6b97 60%,
+      #4a7ba7 80%,
+      #5a8bb8 100%
+    );
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    background-attachment: fixed;
+    
+    // Bright blue overlay
+    &::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(100, 150, 200, 0.5), transparent 45%),
+        radial-gradient(circle at 80% 70%, rgba(80, 130, 180, 0.45), transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(90, 140, 190, 0.4), transparent 50%);
+      pointer-events: none;
+    }
+
+    // Blurred blue depth
+    &::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(100, 150, 200, 0.6), transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(90, 140, 190, 0.55), transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(80, 130, 180, 0.5), transparent 50%);
+      filter: blur(80px);
+      pointer-events: none;
+    }
+  }
+  
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  
+  // Dark Glass theme background - VERY DARK with warm sunset colors like iOS26
+  [data-theme="dark-glass"] & {
+    min-height: 100vh;
+    position: relative;
+    background: linear-gradient(
+      135deg,
+      #1a0a1e 0%,
+      #2a1a2e 20%,
+      #3a2535 40%,
+      #2a1a2e 60%,
+      #1a0a1e 80%,
+      #0a0510 100%
+    );
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    background-attachment: fixed;
+    
+    // STRONG warm orange/pink overlay (sunset effect)
+    &::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(220, 100, 80, 0.35), transparent 45%),
+        radial-gradient(circle at 80% 70%, rgba(200, 80, 120, 0.3), transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(210, 90, 100, 0.25), transparent 50%);
+      pointer-events: none;
+    }
+
+    // Blurred warm depth (stronger)
+    &::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(220, 100, 80, 0.4), transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(210, 90, 100, 0.35), transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(200, 80, 120, 0.3), transparent 50%);
+      filter: blur(100px);
+      pointer-events: none;
+    }
+  }
 }
 
 // Typography
 h1, h2, h3, h4, h5, h6 {
   @include admin-heading(1);
   margin: 0 0 var(--admin-spacing-md) 0;
+  color: var(--admin-text-primary);
 }
 
 h1 { @include admin-heading(1); }
@@ -32,6 +130,7 @@ h4 { @include admin-heading(4); }
 p {
   @include admin-text('md', 'normal');
   margin: 0 0 var(--admin-spacing-md) 0;
+  color: var(--admin-text-primary);
 }
 
 // Links
@@ -48,169 +147,101 @@ a {
 // Buttons
 button {
   @include admin-button('primary');
-  
-  &.secondary {
-    @include admin-button('secondary');
-  }
-  
-  &.success {
-    @include admin-button('success');
-  }
-  
-  &.warning {
-    @include admin-button('warning');
-  }
-  
-  &.error {
-    @include admin-button('error');
-  }
-}
-
-// Form Elements
-input, textarea, select {
-  @include admin-form-field;
-}
-
-label {
-  @include admin-form-label;
-}
-
-// Material Design Overrides
-.mat-mdc-button {
-  @include admin-button('primary');
-  
-  &.mat-secondary {
-    @include admin-button('secondary');
-  }
-  
-  &.mat-warn {
-    @include admin-button('error');
-  }
-}
-
-.mat-mdc-raised-button {
-  @include admin-button('primary');
-  
-  &.mat-secondary {
-    @include admin-button('secondary');
-  }
-  
-  &.mat-warn {
-    @include admin-button('error');
-  }
-}
-
-.mat-mdc-fab {
-  background: var(--admin-primary);
-  color: var(--admin-text-inverse);
-  
-  &:hover {
-    background: var(--admin-primary-hover);
-  }
 }
 
 // Cards
 .mat-mdc-card {
-  @include admin-card;
+  /* Override MDC theme token to remove default grey background */
+  --mdc-elevated-card-container-color: transparent;
+  --mdc-filled-card-container-color: transparent;
+  --mdc-outlined-card-container-color: transparent;
+
+  background-color: var(--admin-bg-card);
+  color: var(--admin-text-primary);
+  border: 1px solid var(--admin-border-primary);
+  transition: background-color var(--admin-transition-normal), 
+              color var(--admin-transition-normal),
+              border-color var(--admin-transition-normal),
+              box-shadow var(--admin-transition-normal);
   
-  .mat-mdc-card-header {
-    background: var(--admin-bg-secondary);
-    border-bottom: 1px solid var(--admin-border-primary);
-    padding: var(--admin-spacing-md);
-    
-    .mat-mdc-card-title {
-      @include admin-heading(3);
-      margin: 0;
+  // Glass theme effects
+  [data-theme="glass"] & {
+    background: var(--admin-bg-card);
+    backdrop-filter: var(--lg-glass-blur);
+    -webkit-backdrop-filter: var(--lg-glass-blur);
+    border: 1px solid var(--admin-border-primary);
+    border-radius: 28px;
+    box-shadow: var(--admin-glass-shadow);
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.35), transparent 70%);
+      opacity: 0.6;
+      pointer-events: none;
     }
-    
-    .mat-mdc-card-subtitle {
-      @include admin-text('sm', 'normal');
-      color: var(--admin-text-secondary);
-      margin: var(--admin-spacing-xs) 0 0 0;
-    }
-  }
-  
-  .mat-mdc-card-content {
-    padding: var(--admin-spacing-md);
-  }
-  
-  .mat-mdc-card-actions {
-    padding: var(--admin-spacing-md);
-    border-top: 1px solid var(--admin-border-primary);
-    background: var(--admin-bg-secondary);
   }
 }
 
 // Tables
 .mat-mdc-table {
-  background: var(--admin-bg-card);
-  border-radius: var(--admin-border-radius-lg);
-  overflow: hidden;
-  box-shadow: var(--admin-shadow-sm);
+  background-color: var(--admin-bg-card);
+  color: var(--admin-text-primary);
   
-  .mat-mdc-header-row {
-    background: var(--admin-bg-secondary);
-    
-    .mat-mdc-header-cell {
-      @include admin-text('sm', 'medium');
-      color: var(--admin-text-primary);
-      padding: var(--admin-spacing-md);
-      border-bottom: 2px solid var(--admin-border-primary);
-    }
+  .mat-mdc-header-cell {
+    color: var(--admin-text-primary);
+    background-color: var(--admin-bg-secondary);
   }
   
-  .mat-mdc-row {
-    &:hover {
-      background: var(--admin-bg-hover);
-    }
-    
-    .mat-mdc-cell {
-      @include admin-text('sm', 'normal');
-      padding: var(--admin-spacing-md);
-      border-bottom: 1px solid var(--admin-border-secondary);
-    }
+  .mat-mdc-cell {
+    color: var(--admin-text-primary);
+    border-bottom-color: var(--admin-border-primary);
   }
-}
+  
+  .mat-mdc-row:hover {
+    background-color: var(--admin-bg-hover);
+  }
 
-// Paginator
-.mat-mdc-paginator {
-  background: var(--admin-bg-card);
-  border-top: 1px solid var(--admin-border-primary);
-  
-  .mat-mdc-paginator-page-size {
-    .mat-mdc-select {
-      @include admin-form-field;
+  [data-theme="glass"] & {
+    background: transparent;
+    backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid var(--admin-border-secondary);
+    border-radius: 24px;
+
+    .mat-mdc-header-cell,
+    .mat-mdc-cell {
+      background: transparent;
     }
-  }
-  
-  .mat-mdc-paginator-navigation-previous,
-  .mat-mdc-paginator-navigation-next {
-    @include admin-button('secondary');
+
+    .mat-mdc-header-cell {
+      border-bottom: 1px solid var(--admin-glass-divider);
+      color: var(--admin-text-secondary);
+    }
+
+    .mat-mdc-cell {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    }
   }
 }
 
 // Form Fields
 .mat-mdc-form-field {
-  width: 100%;
-  
   .mat-mdc-text-field-wrapper {
-    background: var(--admin-bg-primary);
-    border: 1px solid var(--admin-border-primary);
-    border-radius: var(--admin-border-radius-md);
+    background-color: var(--admin-bg-card);
+    color: var(--admin-text-primary);
     
-    &:hover {
-      border-color: var(--admin-border-focus);
-    }
-  }
-  
-  .mat-mdc-form-field-focus-overlay {
-    background: transparent;
-  }
-  
-  &.mat-focused {
-    .mat-mdc-text-field-wrapper {
-      border-color: var(--admin-border-focus);
-      box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+    // Glass theme improvements
+    [data-theme="glass"] & {
+      background: var(--admin-glass-surface-muted);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid var(--admin-border-secondary);
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
     }
   }
   
@@ -221,47 +252,125 @@ label {
   .mat-mdc-input-element {
     color: var(--admin-text-primary);
   }
+  
+  .mat-mdc-input-element::placeholder {
+    color: var(--admin-text-secondary);
+  }
+  
+  .mat-mdc-form-field-outline {
+    color: var(--admin-border-primary);
+  }
+  
+  &.mat-focused .mat-mdc-form-field-outline {
+    color: var(--admin-border-focus);
+  }
 }
 
 // Select
 .mat-mdc-select {
-  .mat-mdc-select-trigger {
-    background: var(--admin-bg-primary);
-    border: 1px solid var(--admin-border-primary);
-    border-radius: var(--admin-border-radius-md);
-    padding: var(--admin-spacing-sm) var(--admin-spacing-md);
-    
-    &:hover {
-      border-color: var(--admin-border-focus);
-    }
-  }
-  
   .mat-mdc-select-value {
     color: var(--admin-text-primary);
   }
+  
+  .mat-mdc-select-arrow {
+    color: var(--admin-text-secondary);
+  }
 }
 
-// Dialog
-.mat-mdc-dialog-container {
-  .mat-mdc-dialog-surface {
-    background: var(--admin-bg-card);
-    border-radius: var(--admin-border-radius-lg);
-    box-shadow: var(--admin-shadow-xl);
+// Menu
+.mat-mdc-menu-panel {
+  background-color: var(--admin-bg-card);
+  color: var(--admin-text-primary);
+  border: 1px solid var(--admin-border-primary);
+
+  [data-theme="glass"] & {
+    background: var(--admin-glass-surface-muted);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-color: var(--admin-border-secondary);
+    box-shadow: var(--admin-glass-shadow);
   }
+}
+
+.mat-mdc-menu-item {
+  color: var(--admin-text-primary);
   
-  .mat-mdc-dialog-title {
-    @include admin-heading(3);
+  &:hover {
+    background-color: var(--admin-bg-hover);
+  }
+}
+
+// Toolbar
+.mat-toolbar {
+  background-color: var(--admin-bg-card);
+  color: var(--admin-text-primary);
+  border-bottom: 1px solid var(--admin-border-primary);
+  
+  // Glass theme improvements
+  [data-theme="glass"] & {
+    background: var(--admin-glass-surface-soft);
+    backdrop-filter: blur(18px) saturate(180%);
+    -webkit-backdrop-filter: blur(18px) saturate(180%);
+    border-bottom: 1px solid var(--admin-glass-border-soft);
+    box-shadow: var(--admin-glass-shadow);
+  }
+}
+
+// Sidenav
+.mat-drawer {
+  background-color: var(--admin-bg-secondary);
+  color: var(--admin-text-primary);
+  border-right: 1px solid var(--admin-border-primary);
+  
+  // Glass theme improvements
+  [data-theme="glass"] & {
+    background: var(--admin-glass-surface-muted);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border-right: 1px solid var(--admin-glass-border-soft);
+    box-shadow: var(--admin-glass-shadow);
+  }
+}
+
+.mat-drawer-content {
+  background-color: var(--admin-bg-primary);
+  color: var(--admin-text-primary);
+}
+
+// List wrapper baseline
+.mat-mdc-list {
+  background-color: var(--admin-bg-card);
+  color: var(--admin-text-primary);
+}
+
+// (removed global .mat-mdc-list-item block; visuals are handled in .sidenav-nav scope)
+
+// Ensure sidenav nav-list items keep text color on hover
+
+.mat-mdc-nav-list a[mat-list-item].mat-mdc-list-item .mdc-list-item__primary-text,
+.mat-mdc-nav-list a[mat-list-item].mat-mdc-list-item .mat-mdc-list-item-title,
+.mat-mdc-nav-list a[mat-list-item].mat-mdc-list-item:hover .mdc-list-item__primary-text,
+.mat-mdc-nav-list a[mat-list-item].mat-mdc-list-item:hover .mat-mdc-list-item-title {
+  color: var(--admin-text-primary);
+}
+
+// Paginator
+.mat-mdc-paginator {
+  background-color: var(--admin-bg-card);
+  color: var(--admin-text-primary);
+  border-top: 1px solid var(--admin-border-primary);
+  
+  .mat-mdc-paginator-page-size-label,
+  .mat-mdc-paginator-range-label {
     color: var(--admin-text-primary);
   }
   
-  .mat-mdc-dialog-content {
+  .mat-mdc-icon-button {
     color: var(--admin-text-primary);
-  }
-  
-  .mat-mdc-dialog-actions {
-    border-top: 1px solid var(--admin-border-primary);
-    padding: var(--admin-spacing-md);
-    background: var(--admin-bg-secondary);
+    
+    &:disabled {
+      color: var(--admin-text-disabled);
+    }
   }
 }
 
@@ -368,62 +477,301 @@ label {
 
 // Progress Spinner
 .mat-mdc-progress-spinner {
-  .mdc-circular-progress__determinate-circle,
-  .mdc-circular-progress__indeterminate-circle-graphic {
+  circle {
     stroke: var(--admin-primary);
   }
 }
 
-// Progress Bar
-.mat-mdc-progress-bar {
-  .mdc-linear-progress__bar-inner {
-    border-color: var(--admin-primary);
+// Dialog
+.mat-mdc-dialog-container {
+  .mdc-dialog__surface {
+    background-color: var(--admin-bg-card);
+    color: var(--admin-text-primary);
   }
   
-  .mdc-linear-progress__buffer-bar {
-    background-color: var(--admin-border-primary);
+  .mdc-dialog__title {
+    color: var(--admin-text-primary);
   }
-}
-
-// Chips
-.mat-mdc-chip {
-  background: var(--admin-bg-secondary);
-  color: var(--admin-text-primary);
-  border: 1px solid var(--admin-border-primary);
   
-  &.mat-mdc-chip-selected {
-    background: var(--admin-primary);
-    color: var(--admin-text-inverse);
-    border-color: var(--admin-primary);
+  .mdc-dialog__content {
+    color: var(--admin-text-primary);
   }
-}
-
-// Divider
-.mat-mdc-divider {
-  border-color: var(--admin-border-primary);
 }
 
 // Tooltip
 .mat-mdc-tooltip {
-  background: var(--admin-text-primary);
+  background-color: var(--admin-bg-tertiary);
   color: var(--admin-text-inverse);
-  font-size: var(--admin-font-size-xs);
+  font-size: var(--admin-font-size-sm);
 }
 
-// Responsive
-@include admin-mobile {
-  .mat-mdc-dialog-container {
-    .mat-mdc-dialog-surface {
-      margin: var(--admin-spacing-md);
-      max-width: calc(100vw - 2 * var(--admin-spacing-md));
-    }
+// Status badges
+.status-badge {
+  padding: 4px 8px;
+  border-radius: var(--admin-border-radius-sm);
+  font-size: var(--admin-font-size-xs);
+  font-weight: var(--admin-font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  
+  &.success {
+    background-color: var(--admin-success);
+    color: var(--admin-text-inverse);
   }
   
-  .mat-mdc-table {
-    .mat-mdc-header-cell,
-    .mat-mdc-cell {
-      padding: var(--admin-spacing-sm);
-      font-size: var(--admin-font-size-xs);
+  &.warning {
+    background-color: var(--admin-warning);
+    color: var(--admin-text-inverse);
+  }
+  
+  &.error {
+    background-color: var(--admin-error);
+    color: var(--admin-text-inverse);
+  }
+  
+  &.info {
+    background-color: var(--admin-info);
+    color: var(--admin-text-inverse);
+  }
+  
+  &.default {
+    background-color: var(--admin-bg-tertiary);
+    color: var(--admin-text-secondary);
+  }
+}
+
+// Payment method icons
+.payment-method {
+  display: flex;
+  align-items: center;
+  gap: var(--admin-spacing-sm);
+  
+  mat-icon {
+    color: var(--admin-text-secondary);
+  }
+  
+  span {
+    color: var(--admin-text-primary);
+  }
+}
+
+// Customer info
+.customer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  
+  .email {
+    color: var(--admin-text-primary);
+    font-weight: var(--admin-font-weight-medium);
+  }
+  
+  .phone {
+    color: var(--admin-text-secondary);
+    font-size: var(--admin-font-size-sm);
+  }
+}
+
+// Actions
+.actions {
+  display: flex;
+  gap: var(--admin-spacing-xs);
+  
+  button {
+    color: var(--admin-text-secondary);
+    
+    &:hover {
+      color: var(--admin-text-primary);
+      background-color: var(--admin-bg-hover);
+    }
+    
+    &:disabled {
+      color: var(--admin-text-disabled);
     }
   }
-} 
+}
+
+// Loading and no-data states
+.loading, .no-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--admin-spacing-md);
+  padding: var(--admin-spacing-xl);
+  color: var(--admin-text-secondary);
+  
+  mat-icon {
+    color: var(--admin-text-disabled);
+  }
+}
+
+// Statistics cards
+.stat-card {
+  background-color: var(--admin-order-list-card-bg);
+  border: 1px solid var(--admin-border-primary);
+  border-radius: var(--admin-border-radius-md);
+  padding: var(--admin-spacing-lg);
+  text-align: center;
+  transition: all var(--admin-transition-normal);
+  
+  &:hover {
+    box-shadow: var(--admin-shadow-md);
+    transform: translateY(-2px);
+  }
+  
+  .stat-value {
+    font-size: var(--admin-font-size-xxl);
+    font-weight: var(--admin-font-weight-bold);
+    color: var(--admin-primary);
+    margin-bottom: var(--admin-spacing-sm);
+  }
+  
+  .stat-label {
+    font-size: var(--admin-font-size-sm);
+    color: var(--admin-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+// Filters
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--admin-spacing-md);
+  margin-bottom: var(--admin-spacing-lg);
+}
+
+.filters-actions {
+  display: flex;
+  gap: var(--admin-spacing-md);
+  margin-bottom: var(--admin-spacing-lg);
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .filters-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .filters-actions {
+    flex-direction: column;
+  }
+  
+  .stat-card {
+    padding: var(--admin-spacing-md);
+  }
+}
+
+// Clean sidenav navigation styles
+.mat-mdc-nav-list a[mat-list-item].mat-mdc-list-item {
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--admin-border-radius-sm);
+  transition: box-shadow var(--admin-transition-normal),
+              transform var(--admin-transition-normal);
+  will-change: box-shadow, transform;
+
+  // Force dark text/icon colors always
+  --mdc-list-item-label-text-color: var(--admin-text-primary);
+  --mdc-list-item-leading-icon-color: var(--admin-text-secondary);
+  --mdc-list-item-trailing-icon-color: var(--admin-text-secondary);
+  --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
+  --mdc-list-item-selected-label-text-color: var(--admin-text-primary);
+
+  // Disable Material state layers
+  --mdc-list-list-item-hover-state-layer-color: transparent;
+  --mdc-list-list-item-hover-state-layer-opacity: 0;
+  --mat-list-active-indicator-color: transparent;
+
+  // Left accent bar
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: transparent;
+    border-radius: 2px 0 0 2px;
+    pointer-events: none;
+    z-index: 2;
+    transition: background-color var(--admin-transition-normal);
+  }
+
+  // Shadow/outline layer
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--admin-border-radius-sm);
+    box-shadow: none;
+    pointer-events: none;
+    z-index: 1;
+    transition: box-shadow var(--admin-transition-normal);
+  }
+
+  // Hover state
+  &:hover {
+    background: transparent;
+    box-shadow: 0 2px 8px rgba(0,0,0,.20), 0 0 0 1px var(--admin-border-primary);
+    transform: translateY(-1px);
+  }
+  &:hover::before {
+    background: var(--admin-primary);
+  }
+
+  // Active/selected state
+  &:is(.mdc-list-item--activated, .mat-mdc-list-item-selected, .active, [aria-current='page']) {
+    background: transparent;
+    box-shadow: 0 4px 14px rgba(0,0,0,.22), 0 0 0 1px var(--admin-border-primary);
+    transform: translateY(-1px);
+  }
+  &:is(.mdc-list-item--activated, .mat-mdc-list-item-selected, .active, [aria-current='page'])::before {
+    background: var(--admin-primary);
+  }
+
+  // Force dark text in all states
+  .mdc-list-item__primary-text,
+  .mdc-list-item__text,
+  .mat-mdc-list-item-title {
+    color: var(--admin-text-primary);
+  }
+  mat-icon[matListItemIcon],
+  .mat-mdc-list-item-icon {
+    color: var(--admin-text-secondary);
+  }
+
+  // Keep ripple below our layers
+  .mdc-list-item__ripple {
+    z-index: 0;
+  }
+  .mdc-list-item__ripple::before,
+  .mdc-list-item__ripple::after {
+    opacity: 0;
+    background: transparent;
+  }
+}
+
+// Scoped admin sidenav tokens (container-level)
+.sidenav-nav {
+  // text/icon colors
+  --mdc-list-item-label-text-color: var(--admin-text-primary);
+  --mdc-list-item-leading-icon-color: var(--admin-text-secondary);
+  --mdc-list-item-trailing-icon-color: var(--admin-text-secondary);
+
+  // hover/focus layers off and colors stay dark
+  --mdc-list-list-item-hover-state-layer-color: transparent;
+  --mdc-list-list-item-hover-state-layer-opacity: 0;
+  --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
+  --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
+  --mdc-list-list-item-focus-state-layer-color: transparent;
+  --mdc-list-list-item-focus-state-layer-opacity: 0;
+  --mdc-list-item-focus-label-text-color: var(--admin-text-primary);
+
+  // selected/active colors and indicator off
+  --mat-list-active-indicator-color: transparent;
+  --mdc-list-item-selected-label-text-color: var(--admin-text-primary);
+  --mdc-list-item-selected-leading-icon-color: var(--admin-text-secondary);
+}

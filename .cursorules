@@ -1,0 +1,37 @@
+# CODE QUALITY RULES
+
+## CRITICAL CHECKS (Before every commit)
+
+### 1. NO !important in CSS
+grep -r "!important" src/ | wc -l  # Should be 0
+
+### 2. NO console.log in production
+grep -r "console\." src/ --include="*.ts" | wc -l  # Should be 0
+
+### 3. NO Russian comments
+grep -r "//.*[А-Яа-я]" src/ --include="*.ts" --include="*.scss" | wc -l  # Should be 0
+
+### 4. Run linter
+npm run lint
+
+## CODE STYLE
+
+TypeScript: Use const/let, not var. Add proper types.
+SCSS: Use CSS variables, not hardcoded values. No !important.
+Comments: English only.
+
+## COMMIT FORMAT
+
+type(scope): Short description
+
+Types: feat, fix, docs, style, refactor, perf, test, chore
+
+Examples:
+- feat(auth): Add JWT authentication
+- fix(cart): Fix total price calculation
+- docs(readme): Update installation guide
+
+## SECURITY
+
+Never commit: API keys, .env files, node_modules, passwords
+Always check: .gitignore is complete, .env.example has NO real data

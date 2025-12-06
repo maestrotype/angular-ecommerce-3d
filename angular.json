@@ -18,9 +18,10 @@
             "tsConfig": "tsconfig.app.json",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
-              "@angular/material/prebuilt-themes/pink-bluegrey.css",
               "src/styles.scss",
-              "src/styles/main.scss"
+              "src/styles/admin/admin.scss",
+              "src/styles/main.scss",
+              "src/styles/admin/material-theme.scss"
             ],
             "scripts": [],
             "optimization": {

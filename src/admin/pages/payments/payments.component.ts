@@ -99,7 +99,7 @@ export class PaymentsComponent implements OnInit, OnDestroy {
         this.length = this.totalPayments || payments.length || 0;
       },
       error: (error) => {
-        console.error('Failed to load payments:', error);
+        
         this.payments = [];
         this.isLoading = false;
         this.length = 0;
@@ -122,7 +122,7 @@ export class PaymentsComponent implements OnInit, OnDestroy {
         this.length = this.totalPayments || payments.length || 0;
       },
       error: (error) => {
-        console.error('Failed to load all payments:', error);
+        
         this.payments = [];
         this.isLoading = false;
         this.length = 0;
@@ -142,7 +142,7 @@ export class PaymentsComponent implements OnInit, OnDestroy {
         this.length = this.totalPayments;
       },
       error: (error) => {
-        console.error('Failed to load payment stats:', error);
+        
         this.totalPayments = 0;
         this.totalAmount = 0;
         this.successRate = 0;
@@ -222,14 +222,6 @@ export class PaymentsComponent implements OnInit, OnDestroy {
     };
     
     // Debug logging for date conversion
-    console.log('[PaymentsComponent] Date conversion:', {
-      rawStartDate: raw.startDate,
-      rawEndDate: raw.endDate,
-      convertedStartDate: startDate,
-      convertedEndDate: endDate,
-      startDateISO: startDate?.toISOString(),
-      endDateISO: endDate?.toISOString()
-    });
 
     this.isLoading = true;
     this.paymentService.searchPayments(filters).pipe(
@@ -244,7 +236,7 @@ export class PaymentsComponent implements OnInit, OnDestroy {
         this.length = this.totalPayments > 0 ? this.totalPayments : payments.length;
       },
       error: (error) => {
-        console.error('Failed to apply filters:', error);
+        
         this.isLoading = false;
         this.payments = [];
         this.length = 0;
@@ -301,17 +293,6 @@ export class PaymentsComponent implements OnInit, OnDestroy {
       };
       
       // Debug logging for pagination date conversion
-      console.log('[PaymentsComponent] Pagination date conversion:', {
-        rawStartDate: raw?.startDate,
-        rawEndDate: raw?.endDate,
-        convertedStartDate: startDate,
-        convertedEndDate: endDate,
-        startDateISO: startDate?.toISOString(),
-        endDateISO: endDate?.toISOString(),
-        pageSize: this.pageSize,
-        pageIndex: this.pageIndex,
-        offset: this.pageIndex * this.pageSize
-      });
       
       this.isLoading = true;
       this.paymentService.searchPayments(filters).pipe(
@@ -322,7 +303,7 @@ export class PaymentsComponent implements OnInit, OnDestroy {
           this.isLoading = false;
         },
         error: (error) => {
-          console.error('Failed to load paginated payments:', error);
+          
           this.isLoading = false;
           this.payments = [];
           this.errorHandler?.handleGlobalError?.(error);
@@ -336,20 +317,20 @@ export class PaymentsComponent implements OnInit, OnDestroy {
   updateStatus(payment: Payment, status: 'completed' | 'processing' | 'failed'): void {
     if (!payment?.id) return;
     
-    console.log('[PaymentsComponent] updateStatus called with:', { paymentId: payment.id, status });
+    
     
     const body: UpdatePaymentStatusRequest = { 
       status: status, 
       notes: `Updated via admin at ${new Date().toISOString()}` 
     };
     
-    console.log('[PaymentsComponent] Sending update request:', body);
+    
     
     this.paymentService.updatePaymentStatus(payment.id, body).pipe(
       takeUntil(this.destroy$)
     ).subscribe({
       next: (updated) => {
-        console.log('[PaymentsComponent] Payment status updated successfully:', updated);
+        
         
         if (updated) {
           // Update the payment in the local array immediately
@@ -369,7 +350,7 @@ export class PaymentsComponent implements OnInit, OnDestroy {
         }
       },
       error: (error) => {
-        console.error('Failed to update payment status:', error);
+        
         this.errorHandler?.handleGlobalError?.(error);
       }
     });
@@ -444,7 +425,7 @@ export class PaymentsComponent implements OnInit, OnDestroy {
         ));
       }
     } catch (error) {
-      console.error('[PaymentsComponent] Error converting calendar date:', error, dateInput);
+      
       return undefined;
     }
   }
