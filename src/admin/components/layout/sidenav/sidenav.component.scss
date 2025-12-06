@@ -176,11 +176,29 @@
       transition: background-color var(--admin-transition-normal);
       
       &:hover {
-        background-color: var(--admin-bg-hover);
+        background-color: transparent;
       }
       
       mat-icon {
         margin-right: var(--admin-spacing-md);
+        color: var(--admin-text-secondary);
+      }
+    }
+    
+    button.logout-btn {
+      background: transparent;
+      box-shadow: none;
+      border: none;
+      color: inherit;
+      padding: var(--admin-spacing-md);
+      text-align: left;
+      transition: background-color var(--admin-transition-normal);
+
+      &:hover {
+        background-color: transparent;
+      }
+
+      mat-icon {
         color: var(--admin-text-secondary);
       }
     }
