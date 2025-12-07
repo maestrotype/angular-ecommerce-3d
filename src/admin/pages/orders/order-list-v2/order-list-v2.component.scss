@@ -32,7 +32,35 @@
   }
 
   .list__content {
-    padding: 0 var(--admin-spacing-lg);
+    padding: 0;
+  }
+  
+  // Add borders between table rows like in original Orders
+  .mat-mdc-table.mat-mdc-table {
+    .mat-mdc-row .mat-mdc-cell {
+      border-bottom: 1px solid var(--admin-order-list-border);
+    }
+    
+    .mat-mdc-row:last-child .mat-mdc-cell {
+      border-bottom: none;
+    }
+  }
+  
+  // Override admin-table-container styles to match original Orders
+  .admin-table-container.admin-table-container {
+    background: var(--admin-basic-bg);
+    border-radius: var(--admin-border-radius-md);
+    box-shadow: var(--admin-shadow-md);
+    border: 1px solid var(--admin-order-list-border);
+    overflow: hidden;
+    margin: 0 var(--admin-spacing-lg);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  
+  // Ensure table inside has proper styling
+  .admin-table-container .mat-mdc-table {
+    background-color: transparent;
   }
 
   .header-section {
@@ -66,8 +94,8 @@
         // Liquid Glass Glass
         [data-theme="glass"] & {
           background: rgba(255, 255, 255, 0.25);
-          backdrop-filter: blur(16px) saturate(180%);
-          -webkit-backdrop-filter: blur(16px) saturate(180%);
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
           border: 1.5px solid rgba(255, 255, 255, 0.4);
           box-shadow: 
             0 8px 32px rgba(99, 102, 241, 0.15),
@@ -111,13 +139,14 @@
           }
   
           &:hover {
-            transform: translateY(-4px) scale(1.02);
+            transform: translateY(-2px);
             box-shadow: 
               0 12px 48px rgba(99, 102, 241, 0.25),
               0 4px 16px rgba(0, 0, 0, 0.15),
               inset 0 1px 0 rgba(255, 255, 255, 0.4);
             border-color: rgba(255, 255, 255, 0.5);
             background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: none;
             
             &::after {
               opacity: 1;
