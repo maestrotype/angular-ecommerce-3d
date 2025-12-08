@@ -1,7 +1,7 @@
-// Override list-container styles to match original Users
+// Override list-container styles to match Orders structure
 :host ::ng-deep {
   .list {
-    padding: 24px;
+    padding: 0;
     background-color: var(--admin-bg-card);
     min-height: calc(100vh - 64px);
     color: var(--admin-text-primary);
@@ -11,20 +11,54 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 24px;
-    padding: 0;
+    padding: 24px 24px 0 24px;
   }
 
   .list__filters {
     display: flex;
     gap: 16px;
     margin-bottom: 24px;
-    padding: 0;
+    padding: 0 24px;
     align-items: baseline;
     flex-wrap: wrap;
   }
 
   .list__content {
     padding: 0;
+  }
+  
+  // Dark Glass theme - transparent background for list
+  [data-theme="dark-glass"] .list {
+    background-color: transparent;
+    color: rgba(255, 255, 255, 1);
+  }
+  
+  // Add borders between table rows
+  .mat-mdc-table.mat-mdc-table {
+    .mat-mdc-row .mat-mdc-cell {
+      border-bottom: 1px solid var(--admin-order-list-border);
+    }
+    
+    .mat-mdc-row:last-child .mat-mdc-cell {
+      border-bottom: none;
+    }
+  }
+  
+  // Override admin-table-container styles to match Orders
+  .admin-table-container.admin-table-container {
+    background: var(--admin-basic-bg);
+    border-radius: var(--admin-border-radius-md);
+    box-shadow: var(--admin-shadow-md);
+    border: 1px solid var(--admin-order-list-border);
+    overflow: hidden;
+    margin: 0 var(--admin-spacing-lg);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  
+  // Ensure table inside has proper styling
+  .admin-table-container .mat-mdc-table {
+    background-color: transparent;
   }
 }
 
