@@ -53,7 +53,7 @@
     box-shadow: var(--admin-shadow-md);
     border: 1px solid var(--admin-order-list-border);
     overflow: hidden;
-    margin: 0 var(--admin-spacing-lg);
+    margin: 0;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
@@ -249,7 +249,7 @@
   text-align: center;
   padding: var(--admin-spacing-xxl) var(--admin-spacing-lg);
   color: var(--admin-order-list-text-primary);
-  margin: 0 var(--admin-spacing-lg);
+  margin: 0;
 
   mat-spinner {
     margin: 0 auto var(--admin-spacing-md);
@@ -549,7 +549,7 @@
   text-align: center;
   padding: var(--admin-spacing-xxl) var(--admin-spacing-lg);
   color: var(--admin-order-list-text-primary);
-  margin: 0 var(--admin-spacing-lg);
+  margin: 0;
 
   mat-spinner {
     margin: 0 auto var(--admin-spacing-md);

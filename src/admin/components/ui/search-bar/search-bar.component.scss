@@ -1,7 +1,15 @@
-.search-field {
+:host {
+  display: block;
   flex: 1;
-  min-width: 300px;
-  max-width: 800px;
+  min-width: 200px;
+  max-width: 400px;
+}
+
+.search-bar {
+  width: 100%;
+}
+
+.search-field {
   width: 100%;
 }
 
@@ -10,4 +18,3 @@
     margin-left: var(--admin-spacing-sm);
   }
 }
-

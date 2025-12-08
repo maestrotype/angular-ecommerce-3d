@@ -20,6 +20,7 @@
   .list__filters.filter-section,
   .list__filters .filter-section,
   .filter-section {
+    justify-content: flex-start;
     display: flex;
     gap: var(--admin-spacing-md);
     margin-bottom: var(--admin-spacing-lg);
@@ -116,7 +117,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   padding: var(--admin-spacing-xxl) var(--admin-spacing-lg);
   margin: 0 var(--admin-spacing-lg);
   text-align: center;

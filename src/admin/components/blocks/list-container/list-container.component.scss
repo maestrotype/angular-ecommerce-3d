@@ -88,9 +88,9 @@
 
   .list__filters {
     display: flex;
+    justify-content: flex-start;
     gap: var(--admin-spacing-md);
     margin-bottom: var(--admin-spacing-lg);
-    padding: 0 var(--admin-spacing-lg);
     flex-wrap: wrap;
 
     .search-field {
@@ -103,8 +103,8 @@
 
   .filter-section {
     display: flex;
+    justify-content: flex-start;
     gap: var(--admin-spacing-lg);
-    padding: 0 var(--admin-spacing-lg);
     margin-bottom: var(--admin-spacing-lg);
     flex-wrap: wrap;
     width: 100%;
