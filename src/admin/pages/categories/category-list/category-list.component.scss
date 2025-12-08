@@ -33,6 +33,7 @@
 }
 
 .filter-section {
+  justify-content: flex-start;
   display: flex;
   gap: 16px;
   margin-bottom: 24px;
@@ -41,10 +42,12 @@
 
   .search-field {
     min-width: 200px;
+    max-width: 400px;
   }
 }
 
 .table-container {
+  margin: 0 24px;
   background: var(--admin-bg-secondary);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.3);
