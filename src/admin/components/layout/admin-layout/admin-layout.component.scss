@@ -90,6 +90,11 @@
   overflow-x: auto;
   transition: background-color var(--admin-transition-normal), color var(--admin-transition-normal);
   
+  // Performance optimizations for scrolling
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  will-change: scroll-position;
+  
   // Glass theme - keep it simple
   [data-theme="glass"] & {
     background: transparent;

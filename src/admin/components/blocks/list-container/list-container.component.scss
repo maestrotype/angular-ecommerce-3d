@@ -88,9 +88,9 @@
 
   .list__filters {
     display: flex;
+    justify-content: flex-start;
     gap: var(--admin-spacing-md);
     margin-bottom: var(--admin-spacing-lg);
-    padding: 0 var(--admin-spacing-lg);
     flex-wrap: wrap;
 
     .search-field {
@@ -103,8 +103,8 @@
 
   .filter-section {
     display: flex;
+    justify-content: flex-start;
     gap: var(--admin-spacing-lg);
-    padding: 0 var(--admin-spacing-lg);
     margin-bottom: var(--admin-spacing-lg);
     flex-wrap: wrap;
     width: 100%;
@@ -119,7 +119,7 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(40px) saturate(180%);
     -webkit-backdrop-filter: blur(40px) saturate(180%);
-    padding: var(--admin-spacing-lg);
+    
   }
 
   [data-theme="glass"] .list__header,
@@ -174,7 +174,6 @@
       inset 0 0 60px rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(100px) saturate(200%);
     -webkit-backdrop-filter: blur(100px) saturate(200%);
-    padding: var(--admin-spacing-lg);
   }
   
   [data-theme="dark-glass"] .stats-cards .stat-card {

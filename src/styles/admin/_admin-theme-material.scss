@@ -20,6 +20,19 @@
     --admin-danger: var(--admin-danger, #ef4444);
   }
   
+  /* Performance optimizations for backdrop-filter */
+  [data-theme='glass'],
+  [data-theme='dark-glass'] {
+    /* Create stacking context and GPU layer for elements with backdrop-filter */
+    .mat-sidenav,
+    .mat-drawer,
+    .mat-toolbar,
+    .admin-header,
+    .mat-mdc-table {
+      isolation: isolate;
+    }
+  }
+  
   /* Target both cases: theme on <html> or on <body> */
   [data-theme='light'], [data-theme='dark'], [data-theme='glass'], [data-theme='dark-glass'] {
   
@@ -249,9 +262,11 @@
       inset 0 5px 15px rgba(31, 41, 55, 0.4),
       inset 0 3px 8px rgba(31, 41, 55, 0.3),
       inset 0 -1px 2px rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(30px) saturate(180%);
-    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    backdrop-filter: blur(15px) saturate(150%);
+    -webkit-backdrop-filter: blur(15px) saturate(150%);
     transition: all 0.3s ease;
+    will-change: transform;
+    transform: translateZ(0);
   }
   
   .mat-mdc-text-field-wrapper:hover,
@@ -361,12 +376,14 @@
   .mat-mdc-select-panel.mat-mdc-select-panel,
   .mat-select-panel.mat-select-panel {
     background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    backdrop-filter: blur(15px) saturate(150%);
+    -webkit-backdrop-filter: blur(15px) saturate(150%);
     border: none;
     box-shadow: 
       0 8px 24px rgba(31, 41, 55, 0.2),
       inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    will-change: transform;
+    transform: translateZ(0);
   }
   
   .mat-option,
@@ -419,11 +436,13 @@
   
   /* ===== Tables with glass effect ===== */
   .mat-mdc-table {
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(15px) saturate(150%);
+    -webkit-backdrop-filter: blur(15px) saturate(150%);
     box-shadow: 
       0 4px 16px rgba(31, 41, 55, 0.1),
       inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
   }
   
   /* ===== Sidenav / Drawer - Liquid Glass Effect ===== */
@@ -432,12 +451,14 @@
   mat-sidenav.mat-sidenav,
   mat-drawer.mat-drawer {
     background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(30px) saturate(180%);
-    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
     border: none;
     box-shadow: 
       0 8px 32px rgba(31, 41, 55, 0.15),
       inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    will-change: transform;
+    transform: translateZ(0);
   }
   
   /* ===== Toolbar / Header - Liquid Glass Effect ===== */
@@ -445,13 +466,15 @@
   mat-toolbar.mat-toolbar,
   .admin-header.mat-toolbar {
     background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(30px) saturate(180%);
-    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
     border: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.25);
     box-shadow: 
       0 4px 16px rgba(31, 41, 55, 0.15),
       inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    will-change: transform;
+    transform: translateZ(0);
   }
   
   /* ===== Sidenav Container - Remove borders ===== */
@@ -500,10 +523,12 @@
     box-shadow: 
       0 4px 16px rgba(31, 41, 55, 0.2),
       inset 0 1px 0 rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    backdrop-filter: blur(15px) saturate(150%);
+    -webkit-backdrop-filter: blur(15px) saturate(150%);
     border-radius: 12px;
     font-weight: 500;
+    will-change: transform;
+    transform: translateZ(0);
   }
 
   .mat-mdc-raised-button.mat-primary:hover,
@@ -550,9 +575,11 @@
       inset 0 3px 8px rgba(0, 0, 0, 0.3),
       inset 0 1px 4px rgba(0, 0, 0, 0.2),
       inset 0 -1px 2px rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(30px) saturate(180%);
-    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    backdrop-filter: blur(15px) saturate(150%);
+    -webkit-backdrop-filter: blur(15px) saturate(150%);
     transition: all 0.3s ease;
+    will-change: transform;
+    transform: translateZ(0);
   }
   
   .mat-mdc-text-field-wrapper:hover,
@@ -625,13 +652,15 @@
   mat-sidenav.mat-sidenav,
   mat-drawer.mat-drawer {
     background: rgba(15, 10, 20, 0.6);
-    backdrop-filter: blur(50px) saturate(180%);
-    -webkit-backdrop-filter: blur(50px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
     border: none;
     color: rgba(255, 255, 255, 0.95);
     box-shadow: 
       0 8px 32px rgba(0, 0, 0, 0.6),
       inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    will-change: transform;
+    transform: translateZ(0);
   }
   
   /* White text for all sidenav items */
@@ -668,26 +697,30 @@
   mat-toolbar.mat-toolbar,
   .admin-header.mat-toolbar {
     background: rgba(20, 15, 25, 0.55);
-    backdrop-filter: blur(50px) saturate(180%);
-    -webkit-backdrop-filter: blur(50px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
     border: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: 
       0 4px 16px rgba(0, 0, 0, 0.35),
       inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    will-change: transform;
+    transform: translateZ(0);
   }
   
   /* ===== Select dropdowns - GRAY-BROWN glass (Apple style) ===== */
   .mat-mdc-select-panel.mat-mdc-select-panel,
   .mat-select-panel.mat-select-panel {
     background: rgba(75, 70, 65, 0.7);
-    backdrop-filter: blur(80px) saturate(180%);
-    -webkit-backdrop-filter: blur(80px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 12px;
     box-shadow: 
       0 10px 30px rgba(0, 0, 0, 0.4),
       inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    will-change: transform;
+    transform: translateZ(0);
   }
   
   .mat-option,
@@ -779,11 +812,13 @@
   .mat-mdc-table.mat-mdc-table,
   table.mat-mdc-table.mat-mdc-table {
     background-color: transparent;
-    backdrop-filter: blur(100px) saturate(200%);
-    -webkit-backdrop-filter: blur(100px) saturate(200%);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
     border-radius: 20px 20px 0 0;
     overflow: hidden;
     box-shadow: none;
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
     
     /* Header - WHITE text with top highlight (Apple style) */
     .mat-mdc-header-row.mat-mdc-header-row,
@@ -807,13 +842,13 @@
       border-right: none;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       color: rgba(255, 255, 255, 1);
+      will-change: auto;
+      contain: none;
       
       &:hover {
         background: rgba(100, 95, 90, 0.45);
         border-bottom-color: rgba(255, 255, 255, 0.15);
-        box-shadow: 
-          inset 0 1px 0 rgba(255, 255, 255, 0.2),
-          inset 0 0 20px rgba(255, 255, 255, 0.05);
+        box-shadow: none;
       }
       
       &:last-child {
@@ -838,10 +873,12 @@
     /* Zebra striping - LIGHT GRAY-BROWN (liquid glass) */
     tbody tr:nth-child(odd) {
       background: rgba(80, 75, 70, 0.2);
+      will-change: auto;
     }
     
     tbody tr:nth-child(even) {
       background: rgba(70, 65, 60, 0.12);
+      will-change: auto;
     }
     
     /* First row top corners */
@@ -868,10 +905,12 @@
     box-shadow: 
       0 4px 16px rgba(138, 180, 248, 0.25),
       inset 0 1px 0 rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    backdrop-filter: blur(15px) saturate(150%);
+    -webkit-backdrop-filter: blur(15px) saturate(150%);
     border-radius: 12px;
     font-weight: 500;
+    will-change: transform;
+    transform: translateZ(0);
   }
 
   .mat-mdc-raised-button.mat-primary:hover,

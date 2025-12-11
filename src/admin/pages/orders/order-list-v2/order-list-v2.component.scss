@@ -1,8 +1,8 @@
 // Styles for reusable components customization
 :host ::ng-deep {
+
   // Override list-container styles to match original Orders
   .list {
-    padding: 0;
     background-color: var(--admin-order-list-bg);
     min-height: calc(100vh - 64px);
     color: var(--admin-order-list-text-primary);
@@ -13,10 +13,10 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 24px;
-    padding: 24px 24px 0 24px;
     flex-wrap: wrap;
     gap: 1rem;
+    padding: 0;
+    margin: 0;
   }
 
   .list__kpis {
@@ -27,12 +27,43 @@
     display: flex;
     gap: var(--admin-spacing-md);
     margin-bottom: var(--admin-spacing-lg);
-    padding: 0 var(--admin-spacing-lg);
     flex-wrap: wrap;
+
+    [data-theme="dark-glass"] & {
+      padding: 0;
+    }
   }
 
   .list__content {
-    padding: 0 var(--admin-spacing-lg);
+    padding: 0;
+  }
+
+  // Add borders between table rows like in original Orders
+  .mat-mdc-table.mat-mdc-table {
+    .mat-mdc-row .mat-mdc-cell {
+      border-bottom: 1px solid var(--admin-order-list-border);
+    }
+
+    .mat-mdc-row:last-child .mat-mdc-cell {
+      border-bottom: none;
+    }
+  }
+
+  // Override admin-table-container styles to match original Orders
+  .admin-table-container.admin-table-container {
+    background: var(--admin-basic-bg);
+    border-radius: var(--admin-border-radius-md);
+    box-shadow: var(--admin-shadow-md);
+    border: 1px solid var(--admin-order-list-border);
+    overflow: hidden;
+    margin: 0 var(--admin-spacing-lg);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  // Ensure table inside has proper styling
+  .admin-table-container .mat-mdc-table {
+    background-color: transparent;
   }
 
   .header-section {
@@ -41,18 +72,18 @@
     align-items: flex-start;
     flex-wrap: wrap;
     gap: 1rem;
-  
+
     h1 {
       margin: 0;
       color: var(--admin-order-list-text-primary);
       font-size: var(--admin-font-size-xxl);
       font-weight: var(--admin-font-weight-bold);
     }
-  
+
     .stats-cards {
       display: flex;
       gap: var(--admin-spacing-md);
-      
+
       .stat-card {
         background: var(--admin-order-list-card-bg);
         border-radius: var(--admin-border-radius-lg);
@@ -62,18 +93,18 @@
         transition: all var(--admin-transition-normal);
         position: relative;
         overflow: hidden;
-        
+
         // Liquid Glass Glass
         [data-theme="glass"] & {
           background: rgba(255, 255, 255, 0.25);
-          backdrop-filter: blur(16px) saturate(180%);
-          -webkit-backdrop-filter: blur(16px) saturate(180%);
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
           border: 1.5px solid rgba(255, 255, 255, 0.4);
-          box-shadow: 
+          box-shadow:
             0 8px 32px rgba(99, 102, 241, 0.15),
             0 2px 8px rgba(0, 0, 0, 0.1),
             inset 0 1px 0 rgba(255, 255, 255, 0.3);
-          
+
           &::before {
             content: '';
             position: absolute;
@@ -81,17 +112,15 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(
-              135deg,
-              rgba(99, 102, 241, 0.1) 0%,
-              rgba(14, 165, 233, 0.1) 50%,
-              rgba(139, 92, 246, 0.1) 100%
-            );
+            background: linear-gradient(135deg,
+                rgba(99, 102, 241, 0.1) 0%,
+                rgba(14, 165, 233, 0.1) 50%,
+                rgba(139, 92, 246, 0.1) 100%);
             opacity: 0.6;
             z-index: 0;
             pointer-events: none;
           }
-  
+
           &::after {
             content: '';
             position: absolute;
@@ -99,32 +128,31 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(
-              circle,
-              rgba(255, 255, 255, 0.2) 0%,
-              transparent 70%
-            );
+            background: radial-gradient(circle,
+                rgba(255, 255, 255, 0.2) 0%,
+                transparent 70%);
             opacity: 0;
             transition: opacity var(--admin-transition-normal);
             z-index: 1;
             pointer-events: none;
           }
-  
+
           &:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 
+            transform: translateY(-2px);
+            box-shadow:
               0 12px 48px rgba(99, 102, 241, 0.25),
               0 4px 16px rgba(0, 0, 0, 0.15),
               inset 0 1px 0 rgba(255, 255, 255, 0.4);
             border-color: rgba(255, 255, 255, 0.5);
             background: rgba(255, 255, 255, 0.3);
-            
+            backdrop-filter: none;
+
             &::after {
               opacity: 1;
             }
           }
         }
-        
+
         .stat-number {
           font-size: var(--admin-font-size-xxl);
           font-weight: var(--admin-font-weight-bold);
@@ -132,7 +160,7 @@
           text-align: center;
           position: relative;
           z-index: 2;
-          
+
           [data-theme="glass"] & {
             background: linear-gradient(135deg, #6366f1 0%, #0ea5e9 100%);
             -webkit-background-clip: text;
@@ -141,7 +169,7 @@
             filter: drop-shadow(0 2px 4px rgba(99, 102, 241, 0.3));
           }
         }
-        
+
         .stat-label {
           font-size: var(--admin-font-size-sm);
           color: var(--admin-order-list-text-secondary);
@@ -149,7 +177,7 @@
           margin-top: var(--admin-spacing-sm);
           position: relative;
           z-index: 2;
-          
+
           [data-theme="glass"] & {
             color: #64748b;
             font-weight: var(--admin-font-weight-medium);
@@ -158,11 +186,11 @@
         }
       }
     }
-  }  
+  }
 
   // Table container margin is handled in admin-table component
   // No need to override here
-  
+
   // Table styles are now in _admin-theme-material.scss
   // Only page-specific styles remain here
   .admin-table-wrapper {
@@ -173,18 +201,18 @@
           margin-bottom: var(--admin-spacing-xs);
           color: var(--admin-order-list-text-primary);
         }
-        
+
         .customer-email {
           font-size: var(--admin-font-size-sm);
           color: var(--admin-order-list-text-secondary);
         }
-        
+
         .customer-phone {
           font-size: var(--admin-font-size-sm);
           color: var(--admin-order-list-text-secondary);
         }
       }
-      
+
       .items-info {
         font-size: var(--admin-font-size-sm);
         max-width: 200px;
@@ -192,23 +220,40 @@
         text-overflow: ellipsis;
         color: var(--admin-order-list-text-secondary);
       }
-      
+
       .total-amount {
         font-weight: var(--admin-font-weight-bold);
         color: var(--admin-order-detail-price-color);
         font-size: var(--admin-font-size-lg);
       }
-      
+
       .status-select {
         mat-select {
           font-size: var(--admin-font-size-sm);
-          
-          &.status-pending { color: var(--admin-order-status-pending); }
-          &.status-confirmed { color: var(--admin-order-status-processing); }
-          &.status-processing { color: var(--admin-order-status-processing); }
-          &.status-shipped { color: var(--admin-order-status-shipped); }
-          &.status-delivered { color: var(--admin-order-status-delivered); }
-          &.status-cancelled { color: var(--admin-order-status-cancelled); }
+
+          &.status-pending {
+            color: var(--admin-order-status-pending);
+          }
+
+          &.status-confirmed {
+            color: var(--admin-order-status-processing);
+          }
+
+          &.status-processing {
+            color: var(--admin-order-status-processing);
+          }
+
+          &.status-shipped {
+            color: var(--admin-order-status-shipped);
+          }
+
+          &.status-delivered {
+            color: var(--admin-order-status-delivered);
+          }
+
+          &.status-cancelled {
+            color: var(--admin-order-status-cancelled);
+          }
         }
       }
     }
@@ -284,7 +329,8 @@
         color: var(--admin-order-list-text-primary);
       }
 
-      .customer-email, .customer-phone {
+      .customer-email,
+      .customer-phone {
         display: flex;
         align-items: center;
         gap: var(--admin-spacing-sm);
@@ -426,7 +472,8 @@
         color: var(--admin-order-list-text-primary);
       }
 
-      .customer-email, .customer-phone {
+      .customer-email,
+      .customer-phone {
         display: flex;
         align-items: center;
         gap: var(--admin-spacing-sm);
@@ -548,7 +595,7 @@
 
     .list__kpis {
       padding: 0 16px;
-      
+
       .stats-cards {
         justify-content: center;
       }
@@ -620,7 +667,7 @@
 
     .list__kpis {
       padding: 0 16px;
-      
+
       .stats-cards {
         justify-content: flex-end;
       }
@@ -650,7 +697,9 @@
 
   // Compact table for Galaxy Z Fold
   :host ::ng-deep .admin-table-wrapper .order-table {
-    th, td {
+
+    th,
+    td {
       padding: 6px 8px;
       font-size: 12px;
     }
@@ -700,83 +749,82 @@
 :host ::ng-deep {
   .mat-icon-button {
     color: var(--admin-order-list-text-primary, #ffffff);
-    
+
     &.mat-button-disabled {
       color: var(--admin-text-disabled, #6b7280);
     }
   }
-  
+
   .mat-raised-button.mat-primary {
     background-color: var(--admin-primary, #3b82f6);
     color: #ffffff;
   }
-  
+
   .mat-form-field {
     .mat-form-field-label {
       color: var(--admin-input-label, #e5e7eb);
     }
-    
+
     .mat-input-element {
       color: var(--admin-order-list-text-primary, #ffffff);
     }
-    
+
     .mat-form-field-outline {
       color: var(--admin-input-border, #6b7280);
     }
-    
+
     &.mat-focused {
       .mat-form-field-outline-thick {
         color: var(--admin-primary, #3b82f6);
       }
-      
+
       .mat-form-field-label {
         color: var(--admin-primary, #3b82f6);
       }
     }
   }
-  
+
   .mat-select {
     color: var(--admin-order-list-text-primary, #ffffff);
-    
+
     .mat-select-arrow {
       color: var(--admin-text-secondary, #9ca3af);
     }
   }
-  
+
   .mat-option {
     background-color: var(--admin-bg-secondary);
     color: var(--admin-order-list-text-primary, #ffffff);
-    
+
     &:hover {
       background-color: var(--admin-bg-hover);
     }
-    
+
     &.mat-selected {
       background-color: var(--admin-primary, #3b82f6);
     }
   }
-  
+
   .mat-select-panel {
     background-color: var(--admin-bg-secondary);
   }
-  
+
   .mat-paginator {
     background-color: var(--admin-order-list-pagination-bg, var(--admin-bg-secondary));
     color: var(--admin-order-list-text-primary, #ffffff);
     border-top: 1px solid var(--admin-order-list-pagination-border, #404040);
-    
+
     .mat-paginator-page-size-label,
     .mat-paginator-range-label {
       color: var(--admin-order-list-text-primary, #ffffff);
     }
-    
+
     .mat-icon-button {
       color: var(--admin-order-list-text-primary, #ffffff);
     }
-    
+
     .mat-select {
       color: var(--admin-order-list-text-primary, #ffffff);
     }
   }
 }
-
