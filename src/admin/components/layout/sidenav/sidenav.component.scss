@@ -255,3 +255,57 @@
     }
   }
 }
+
+// Dark Glass theme - fix active/focus text color for Material list items
+:host-context([data-theme="dark-glass"]) {
+  .mat-mdc-list-item,
+  .mat-mdc-nav-list .mat-mdc-list-item {
+    &:active,
+    &:focus,
+    &.cdk-keyboard-focused,
+    &.cdk-program-focused {
+      .mdc-list-item__primary-text,
+      .mat-mdc-list-item-title,
+      .mat-mdc-list-item-unscoped-content {
+        color: rgba(255, 255, 255, 0.95);
+      }
+      
+      .mat-mdc-list-item-icon,
+      mat-icon {
+        color: rgba(255, 255, 255, 0.8);
+      }
+    }
+  }
+  
+  // Ensure text stays white on all states
+  .mdc-list-item__primary-text {
+    color: rgba(255, 255, 255, 0.95);
+  }
+}
+
+// Dark Glass theme - fix active/focus text color for Material list items
+:host-context([data-theme="dark-glass"]) {
+  .mat-mdc-list-item,
+  .mat-mdc-nav-list .mat-mdc-list-item {
+    &:active,
+    &:focus,
+    &.cdk-keyboard-focused,
+    &.cdk-program-focused {
+      .mdc-list-item__primary-text,
+      .mat-mdc-list-item-title,
+      .mat-mdc-list-item-unscoped-content {
+        color: rgba(255, 255, 255, 0.95);
+      }
+      
+      .mat-mdc-list-item-icon,
+      mat-icon {
+        color: rgba(255, 255, 255, 0.8);
+      }
+    }
+  }
+  
+  // Ensure text stays white on all states
+  .mdc-list-item__primary-text {
+    color: rgba(255, 255, 255, 0.95);
+  }
+}
