@@ -1,5 +1,5 @@
-<div class="category-list-container">
-  <div class="header-section">
+<app-list-container>
+  <div list-header class="header-section">
     <h1>{{ 'CATEGORY_MANAGEMENT' | translate }}</h1>
     <button mat-raised-button color="primary" (click)="addCategory()" class="add-button">
       <mat-icon>add</mat-icon>
@@ -7,7 +7,7 @@
     </button>
   </div>
 
-  <div class="filter-section">
+  <div list-filters class="filter-section">
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>{{ 'SEARCH_CATEGORIES' | translate }}</mat-label>
       <input
@@ -19,8 +19,7 @@
     </mat-form-field>
   </div>
 
-  <!-- Desktop Table View -->
-  <div class="table-container desktop-view" *ngIf="!isLoading">
+  <app-admin-table [loading]="isLoading" [dataSource]="dataSource" [displayedColumns]="displayedColumns">
     <table mat-table [dataSource]="dataSource" matSort class="category-table">
       <!-- ID Column -->
       <ng-container matColumnDef="id">
@@ -71,7 +70,7 @@
       [pageSizeOptions]="[5, 10, 20]"
       showFirstLastButtons
     ></mat-paginator>
-  </div>
+  </app-admin-table>
 
   <!-- Mobile Card View -->
   <div class="mobile-view" *ngIf="!isLoading">
@@ -105,14 +104,9 @@
     </div>
   </div>
 
-  <div *ngIf="isLoading" class="loading-container">
-    <mat-spinner></mat-spinner>
-    <p>{{ 'LOADING_CATEGORIES' | translate }}</p>
-  </div>
-
   <div *ngIf="error" class="error-container">
     <mat-icon color="warn">error</mat-icon>
     <p>{{ error }}</p>
     <button mat-button color="primary" (click)="loadCategories()">{{ 'RETRY' | translate }}</button>
   </div>
-</div>
+</app-list-container>
