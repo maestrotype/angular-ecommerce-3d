@@ -106,7 +106,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     UserListV2Component,
     UserEditDialogComponent,
     DataTableComponent,
-    ListContainerComponent,
     AdminTableComponent,
     FormFieldComponent,
     ActionButtonComponent,
@@ -122,6 +121,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ReactiveFormsModule,
     FormsModule,
     AdminRoutingModule,
+    ListContainerComponent,
     // Angular Material Modules
     MatToolbarModule,
     MatSidenavModule,

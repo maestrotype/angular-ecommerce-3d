@@ -1,7 +1,7 @@
-<div class="seo-settings-container">
-  <div class="seo-header">
+<app-list-container>
+  <div list-header class="seo-header">
     <h1>{{ 'SEO_SETTINGS' | translate }}</h1>
-    <p>{{ 'SEO_SETTINGS_DESC' | translate }}</p>
+    <p class="subtitle">{{ 'SEO_SETTINGS_DESC' | translate }}</p>
   </div>
 
   <div class="seo-content" *ngIf="!loading; else loadingTemplate">
@@ -264,4 +264,4 @@
       <p>{{ 'LOADING_SEO_SETTINGS' | translate }}</p>
     </div>
   </ng-template>
-</div> 
+</app-list-container> 

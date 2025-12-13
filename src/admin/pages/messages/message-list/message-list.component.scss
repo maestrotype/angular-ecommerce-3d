@@ -40,6 +40,10 @@
     }
 
     .search-button {
+      height: 56px;
+      min-height: 56px;
+      padding: 0 24px;
+      
       .button-text {
         margin-left: 8px;
       }
