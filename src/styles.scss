@@ -365,3 +365,51 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   --mat-badge-background-color: #ff6b6b;
   --mat-badge-text-color: #ffffff;
 }
+// Dark Glass theme - ensure white text in sidenav on all states
+[data-theme="dark-glass"] {
+  .mat-mdc-nav-list,
+  .mat-mdc-list {
+    --mdc-list-list-item-label-text-color: rgba(255, 255, 255, 0.95);
+    --mdc-list-list-item-hover-label-text-color: rgba(255, 255, 255, 1);
+    --mdc-list-list-item-focus-label-text-color: rgba(255, 255, 255, 1);
+    --mdc-list-list-item-leading-icon-color: rgba(255, 255, 255, 0.7);
+    
+    .mat-mdc-list-item {
+      &:active,
+      &:focus,
+      &.cdk-keyboard-focused,
+      &.cdk-program-focused,
+      &.mdc-list-item--activated {
+        .mdc-list-item__primary-text,
+        .mat-mdc-list-item-title {
+          color: rgba(255, 255, 255, 0.95);
+        }
+      }
+    }
+  }
+}
+
+// Dark Glass theme - custom icon button colors (like Dashboard icons)
+[data-theme="dark-glass"] {
+  // Edit button - cyan (like ORDERS icon)
+  .mat-mdc-icon-button.mat-primary,
+  button[mat-icon-button][color="primary"] {
+    --mat-icon-button-state-layer-color: #00BCD4;
+    --mat-icon-button-ripple-color: rgba(0, 188, 212, 0.2);
+    
+    mat-icon, .mat-icon {
+      color: #00BCD4;
+    }
+  }
+  
+  // Delete button - green (like PRODUCTS icon)  
+  .mat-mdc-icon-button.mat-warn,
+  button[mat-icon-button][color="warn"] {
+    --mat-icon-button-state-layer-color: #4CAF50;
+    --mat-icon-button-ripple-color: rgba(76, 175, 80, 0.2);
+    
+    mat-icon, .mat-icon {
+      color: #4CAF50;
+    }
+  }
+}

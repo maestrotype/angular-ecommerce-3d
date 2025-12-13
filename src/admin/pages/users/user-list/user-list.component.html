@@ -1,37 +1,32 @@
-<div class="user-list-container">
-  <div class="header-section">
+<app-list-container>
+  <div list-header class="header-section">
     <h1>{{ 'USER_MANAGEMENT' | translate}}</h1>
     <p class="subtitle">{{ 'USER_MANAGEMENT_SUBTITLE' | translate}}</p>
   </div>
 
-  <div class="filter-section">
-        <mat-form-field appearance="outline" class="search-field">
-          <mat-label>{{ 'SEARCH_USERS' | translate}}</mat-label>
-          <input matInput 
-                 [(ngModel)]="searchTerm" 
-                 (keyup.enter)="onSearch()"
-                 placeholder="Search by name or email">
-          <mat-icon matSuffix>search</mat-icon>
-        </mat-form-field>
-        
+  <div list-filters class="filter-section">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>{{ 'SEARCH_USERS' | translate}}</mat-label>
+      <input matInput 
+             [(ngModel)]="searchTerm" 
+             (keyup.enter)="onSearch()"
+             placeholder="Search by name or email">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+    
     <button mat-raised-button color="primary" (click)="onSearch()" class="search-button">
-          <mat-icon>search</mat-icon>
+      <mat-icon>search</mat-icon>
       <span class="button-text">{{ 'SEARCH' | translate}}</span>
-        </button>
-        
+    </button>
+    
     <button mat-button (click)="clearSearch()" *ngIf="searchTerm" class="clear-button">
-          <mat-icon>clear</mat-icon>
+      <mat-icon>clear</mat-icon>
       <span class="button-text">{{ 'CLEAR' | translate}}</span>
-        </button>
-      </div>
+    </button>
+  </div>
 
-      <div class="loading-container" *ngIf="isLoading">
-        <mat-spinner diameter="50"></mat-spinner>
-    <p>{{ 'LOADING_USERS' | translate}}</p>
-      </div>
-
-  <div class="table-container desktop-view" *ngIf="!isLoading">
-        <table mat-table [dataSource]="dataSource" matSort class="users-table">
+  <app-admin-table [loading]="isLoading" [dataSource]="dataSource" [displayedColumns]="displayedColumns">
+    <table mat-table [dataSource]="dataSource" matSort class="users-table">
           
           <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
@@ -134,7 +129,7 @@
           (page)="onPageChange($event)"
           showFirstLastButtons>
         </mat-paginator>
-      </div>
+  </app-admin-table>
 
   <div class="mobile-view" *ngIf="!isLoading">
     <div class="users-grid">
@@ -207,4 +202,4 @@
       </div>
     </div>
   </div>
-</div>
+</app-list-container>

@@ -1,41 +1,29 @@
-.user-list-container {
-  padding: 24px;
-  background-color: var(--admin-bg-card);
-  background-color: var(--admin-border-primary);
-  min-height: calc(100vh - 64px);
-  color: var(--mdc-list-list-item-label-text-color);
-  .mat-mdc-row {
-    background-color: var(--admin-order-list-card-bg);
-  }
-}
-
 .header-section {
   display: flex;
   flex-direction: column;
-  margin-bottom: 24px;
-  padding: 24px 24px 0 24px;
+  gap: var(--admin-spacing-xs);
+  width: 100%;
   
   h1 {
     color: var(--mdc-list-list-item-label-text-color);
-    margin: 0 0 8px 0;
+    margin: 0;
     font-size: 2rem;
     font-weight: 600;
   }
   
   .subtitle {
-    color: #9ca3af;
+    color: var(--admin-text-secondary);
     margin: 0;
     font-size: 1rem;
   }
 }
 
 .filter-section {
-  justify-content: flex-start;
   display: flex;
-  gap: 16px;
-  margin-bottom: 24px;
-  padding: 0 24px;
-  align-items: baseline;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--admin-spacing-md);
   
   .search-field {
     max-width: 400px;
@@ -43,65 +31,30 @@
     min-width: 200px;
   }
   
-  .search-button, .clear-button {
+  .search-button {
+    height: 56px;
+    min-height: 56px;
+    padding: 0 24px;
+    
+    .button-text {
+      margin-left: 8px;
+    }
+  }
+  
+  .clear-button {
+    height: 56px;
+    min-height: 56px;
+    
     .button-text {
       margin-left: 8px;
     }
   }
 }
 
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 48px 24px;
-  text-align: center;
-  color: var(--mdc-list-list-item-label-text-color);
+.users-table {
+  width: 100%;
   
-  mat-spinner {
-    margin-bottom: 16px;
-  }
-}
-
-.table-container {
-  background: var(--admin-bg-secondary);
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  overflow: hidden;
-  
-  .users-table {
-    width: 100%;
-    background-color: var(--admin-bg-secondary);
-    
-    th {
-      background-color: var(--admin-table-header-bg);
-      color: var(--admin-text-primary);
-      font-weight: var(--admin-font-weight-bold);
-      padding: var(--admin-spacing-md);
-      border-bottom: none;
-    }
-    
-    td {
-      color: var(--admin-text-primary);
-      padding: var(--admin-spacing-md);
-      border-bottom: none;
-    }
-    
-    // Elegant row separation without borders
-    tr:nth-child(even) td {
-      background-color: var(--admin-order-list-card-bg);
-    }
-    
-    tr:nth-child(odd) td {
-      background-color: var(--admin-basic-bg);
-    }
-    
-    tr:hover td {
-      background-color: var(--admin-bg-hover);
-    }
-    
-    .user-info {
+  .user-info {
       display: flex;
       align-items: center;
       gap: 12px;
@@ -137,7 +90,6 @@
       gap: 4px;
     }
   }
-}
 
 .no-data {
   text-align: center;
@@ -173,7 +125,6 @@
   display: grid;
   gap: 16px;
   grid-template-columns: 1fr;
-  padding: 0 24px;
 }
 
 .user-card {
@@ -297,13 +248,7 @@
 }
 
 @media (max-width: 768px) {
-  .user-list-container {
-    padding: 0;
-  }
-
   .header-section {
-    padding: 16px;
-
     h1 {
       text-align: center;
       font-size: 1.5rem;
@@ -313,11 +258,11 @@
   .filter-section {
     flex-direction: column;
     gap: 12px;
-    padding: 0 16px;
     align-items: stretch;
 
     .search-field {
-    max-width: 400px;
+      max-width: none;
+      width: 100%;
       min-width: none;
     }
 
@@ -340,11 +285,6 @@
 
   .users-grid {
     grid-template-columns: 1fr;
-    padding: 0 16px;
-  }
-
-  .table-container {
-    margin: 0 16px;
   }
 }
 
@@ -366,13 +306,7 @@
 
 // Galaxy Z Fold 5/6 unfolded (690px) - use desktop format with compact table
 @media (min-width: 690px) and (max-width: 768px) {
-  .user-list-container {
-    padding: 0;
-  }
-
   .header-section {
-    padding: 16px 16px 0 16px;
-
     h1 {
       text-align: left;
       font-size: 1.5rem;
@@ -382,11 +316,9 @@
   .filter-section {
     flex-direction: row;
     gap: 12px;
-    padding: 0 16px;
     align-items: center;
 
     .search-field {
-    max-width: 400px;
       min-width: 150px;
       max-width: 300px;
     }
@@ -447,98 +379,7 @@
 
   .users-grid {
     grid-template-columns: 1fr;
-    padding: 0 16px;
-  }
-
-  .table-container {
-    margin: 0 16px;
   }
 }
 
-::ng-deep {
-  .mat-chip {
-    background-color: #3b82f6 ;
-    color: var(--mdc-list-list-item-label-text-color);
-  }
-  
-  .mat-icon-button {
-    color: var(--mdc-list-list-item-label-text-color);
-    
-    &.mat-button-disabled {
-      color: #6b7280 ;
-    }
-  }
-  
-  .mat-raised-button.mat-primary {
-    background-color: #3b82f6 ;
-    color: var(--mdc-list-list-item-label-text-color);
-  }
-  
-  .mat-form-field {
-    .mat-form-field-label {
-      color: #e5e7eb ;
-    }
-    
-    .mat-input-element {
-      color: var(--mdc-list-list-item-label-text-color);
-    }
-    
-    .mat-form-field-outline {
-      color: #6b7280 ;
-    }
-    
-    &.mat-focused {
-      .mat-form-field-outline-thick {
-        color: #3b82f6 ;
-      }
-      
-      .mat-form-field-label {
-        color: #3b82f6 ;
-      }
-    }
-  }
-  
-  .mat-select {
-    color: var(--mdc-list-list-item-label-text-color);
-    
-    .mat-select-arrow {
-      color: #9ca3af ;
-    }
-  }
-  
-  .mat-option {
-    background-color: var(--admin-bg-secondary) ;
-    color: var(--mdc-list-list-item-label-text-color);
-    
-    &:hover {
-      background-color: var(--admin-bg-hover) ;
-    }
-    
-    &.mat-selected {
-      background-color: #3b82f6 ;
-    }
-  }
-  
-  .mat-select-panel {
-    background-color: var(--admin-bg-secondary) ;
-  }
-  
-  .mat-paginator {
-    background-color: var(--admin-bg-secondary) ;
-    color: var(--mdc-list-list-item-label-text-color);
-    border-top: 1px solid #404040;
-    
-    .mat-paginator-page-size-label,
-    .mat-paginator-range-label {
-      color: var(--mdc-list-list-item-label-text-color);
-    }
-    
-    .mat-icon-button {
-      color: var(--mdc-list-list-item-label-text-color);
-    }
-    
-    .mat-select {
-      color: var(--mdc-list-list-item-label-text-color);
-    }
-  }
-}
+// Specific styles are handled by global theme styles in _admin-theme-material.scss

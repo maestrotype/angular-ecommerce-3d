@@ -1,26 +1,26 @@
-<div class="payments-page">
-  <div class="page-header">
+<app-list-container>
+  <div list-header class="page-header">
     <h1>{{ 'PAYMENT_MANAGEMENT' | translate }}</h1>
-    <div class="stats-cards">
-      <div class="stat-card">
-        <div class="stat-value">{{ totalPayments || 0 }}</div>
-        <div class="stat-label">{{ 'TOTAL_PAYMENTS' | translate }}</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">${{ formatAmount(totalAmount) }}</div>
-        <div class="stat-label">{{ 'TOTAL_AMOUNT' | translate }}</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value">{{ formatSuccessRate(successRate) }}%</div>
-        <div class="stat-label">{{ 'SUCCESS_RATE' | translate }}</div>
+    <div class="list__kpis">
+      <div class="stats-cards">
+        <div class="stat-card">
+          <div class="stat-value">{{ totalPayments || 0 }}</div>
+          <div class="stat-label">{{ 'TOTAL_PAYMENTS' | translate }}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">${{ formatAmount(totalAmount) }}</div>
+          <div class="stat-label">{{ 'TOTAL_AMOUNT' | translate }}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">{{ formatSuccessRate(successRate) }}%</div>
+          <div class="stat-label">{{ 'SUCCESS_RATE' | translate }}</div>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="content-section">
-    <div class="section-header">
-      <div class="filters-area">
-        <h2>{{ 'PAYMENT_TRANSACTIONS' | translate }}</h2>
+  <div list-filters class="filters-area">
+    <h2>{{ 'PAYMENT_TRANSACTIONS' | translate }}</h2>
         <div class="filters-grid" *ngIf="filtersForm" [formGroup]="filtersForm">
           <mat-form-field appearance="outline" class="field status">
             <mat-label>{{ 'STATUS' | translate }}</mat-label>
@@ -65,14 +65,13 @@
             <mat-datepicker #endPicker></mat-datepicker>
           </mat-form-field>
         </div>
-        <div class="filters-actions">
-          <button mat-raised-button color="primary" (click)="applyFilters()">{{ 'APPLY' | translate }}</button>
-          <button mat-stroked-button (click)="resetFilters()">{{ 'RESET' | translate }}</button>
-        </div>
-      </div>
+    <div class="filters-actions">
+      <button mat-raised-button color="primary" (click)="applyFilters()">{{ 'APPLY' | translate }}</button>
+      <button mat-stroked-button (click)="resetFilters()">{{ 'RESET' | translate }}</button>
     </div>
+  </div>
 
-    <div class="payments-table">
+  <div class="payments-table-wrapper">
       <table mat-table [dataSource]="payments" class="mat-elevation-z1" *ngIf="!isLoading && payments && payments.length > 0">
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef>{{ 'PAYMENT_ID' | translate }}</th>
@@ -171,9 +170,8 @@
         <span>{{ hasActiveFilters() ? ('NO_PAYMENTS_MATCH_FILTERS' | translate) : ('NO_PAYMENTS_FOUND' | translate) }}</span>
       </div>
 
-      <mat-paginator [length]="length" [pageIndex]="pageIndex" [pageSize]="pageSize"
-                     [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons
-                     (page)="onPageChange($event)"></mat-paginator>
-    </div>
+    <mat-paginator [length]="length" [pageIndex]="pageIndex" [pageSize]="pageSize"
+                   [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons
+                   (page)="onPageChange($event)"></mat-paginator>
   </div>
-</div> 
+</app-list-container> 

@@ -566,6 +566,13 @@
 
 /* Dark Glass theme specific styling */
 [data-theme='dark-glass'] {
+  /* ===== Material Tabs MDC Variables ===== */
+  --mdc-tab-indicator-active-indicator-color: var(--admin-primary);
+  --mat-tab-header-active-label-text-color: var(--admin-primary);
+  --mat-tab-header-inactive-label-text-color: rgba(255, 255, 255, 0.7);
+  --mat-tab-header-active-hover-label-text-color: var(--admin-primary);
+  --mat-tab-header-inactive-hover-label-text-color: var(--admin-primary);
+  
   /* ===== Input fields - LIGHT glass for dark background ===== */
   .mat-mdc-form-field .mat-mdc-text-field-wrapper,
   .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper {
@@ -619,31 +626,88 @@
   }
   
   /* ===== Text visibility ===== */
-  .mat-mdc-form-field .mat-mdc-input-element,
-  .mat-mdc-text-field-wrapper .mat-input-element,
-  .mat-mdc-input-element {
+  .mat-mdc-form-field.mat-mdc-form-field .mat-mdc-input-element,
+  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mat-input-element,
+  .mat-mdc-input-element.mat-mdc-input-element,
+  input.mat-mdc-input-element.mat-mdc-input-element,
+  textarea.mat-mdc-input-element.mat-mdc-input-element {
     color: rgba(255, 255, 255, 0.95);
     opacity: 1;
   }
   
-  .mat-mdc-input-element::placeholder,
-  .mat-input-element::placeholder,
-  .mat-mdc-form-field input::placeholder {
-    color: rgba(255, 255, 255, 0.9);
+  .mat-mdc-input-element.mat-mdc-input-element::placeholder,
+  .mat-input-element.mat-input-element::placeholder,
+  .mat-mdc-form-field.mat-mdc-form-field input::placeholder,
+  .mat-mdc-form-field.mat-mdc-form-field textarea::placeholder {
+    color: rgba(255, 255, 255, 0.6);
     opacity: 1;
   }
   
   /* Labels */
-  .mat-mdc-form-field .mdc-floating-label,
-  .mat-mdc-form-field .mat-mdc-floating-label {
+  .mat-mdc-form-field.mat-mdc-form-field .mdc-floating-label,
+  .mat-mdc-form-field.mat-mdc-form-field .mat-mdc-floating-label,
+  .mat-mdc-form-field.mat-mdc-form-field label,
+  .mdc-text-field__input.mdc-text-field__input {
     color: rgba(255, 255, 255, 0.7);
     opacity: 1;
   }
   
-  .mat-mdc-form-field.mat-focused .mdc-floating-label,
-  .mat-mdc-form-field.mat-focused .mat-mdc-floating-label {
+  .mat-mdc-form-field.mat-mdc-form-field.mat-focused .mdc-floating-label,
+  .mat-mdc-form-field.mat-mdc-form-field.mat-focused .mat-mdc-floating-label,
+  .mat-mdc-form-field.mat-mdc-form-field.mat-focused label {
     color: rgba(255, 255, 255, 0.95);
     opacity: 1;
+  }
+  
+  /* Hint text (character counters) */
+  .mat-mdc-form-field.mat-mdc-form-field .mat-mdc-form-field-hint,
+  .mat-mdc-form-field.mat-mdc-form-field .mat-hint,
+  .mat-mdc-form-field.mat-mdc-form-field .mat-mdc-form-field-hint-wrapper,
+  .mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-subscript-wrapper {
+    color: rgba(255, 255, 255, 0.6);
+  }
+  
+  /* All headings white */
+  h1, h2, h3, h4, h5, h6 {
+    color: rgba(255, 255, 255, 0.95);
+  }
+  
+  /* ===== Material Tabs - WHITE text with primary color ===== */
+  .mat-mdc-tab-group.mat-mdc-tab-group .mat-mdc-tab.mat-mdc-tab,
+  .mat-mdc-tab-header.mat-mdc-tab-header .mat-mdc-tab.mat-mdc-tab {
+    color: rgba(255, 255, 255, 0.7);
+    transition: color 0.3s ease;
+  }
+  
+  /* Active tab - primary color (голубой) */
+  .mat-mdc-tab-group.mat-mdc-tab-group .mat-mdc-tab.mat-mdc-tab-active,
+  .mat-mdc-tab-header.mat-mdc-tab-header .mat-mdc-tab.mat-mdc-tab-active,
+  .mat-mdc-tab.mat-mdc-tab.mat-mdc-tab-active {
+    color: var(--admin-primary);
+  }
+  
+  /* Hover - primary color (голубой) */
+  .mat-mdc-tab-group.mat-mdc-tab-group .mat-mdc-tab.mat-mdc-tab:hover,
+  .mat-mdc-tab-header.mat-mdc-tab-header .mat-mdc-tab.mat-mdc-tab:hover {
+    color: var(--admin-primary);
+  }
+  
+  /* Tab label content inherits color */
+  .mat-mdc-tab.mat-mdc-tab .mat-mdc-tab-label-content,
+  .mat-mdc-tab.mat-mdc-tab .mdc-tab__text-label {
+    color: inherit;
+  }
+  
+  /* Tab indicator - primary color (голубой) */
+  .mat-mdc-tab-header.mat-mdc-tab-header .mdc-tab-indicator__content--underline,
+  .mat-mdc-tab-header.mat-mdc-tab-header .mat-mdc-tab-indicator .mdc-tab-indicator__content {
+    border-color: var(--admin-primary);
+    background-color: var(--admin-primary);
+  }
+  
+  /* Tab pagination chevron */
+  .mat-mdc-tab-header.mat-mdc-tab-header .mat-mdc-tab-header-pagination-chevron {
+    border-color: rgba(255, 255, 255, 0.7);
   }
   
   /* ===== Sidenav / Drawer - DARKER glass with WHITE text ===== */

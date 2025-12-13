@@ -1,83 +1,232 @@
-h1, h3, p {
-  color: var(--mdc-list-list-item-label-text-color);
-}
-
-.seo-settings-container {
-  padding: var(--admin-spacing-lg, 24px);
-  background-color: var(--admin-border-primary);
-  background-color: var(--admin-order-list-card-bg);
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
 .seo-header {
-  margin-bottom: var(--admin-spacing-xl, 32px);
+  width: 100%;
+  
+  h1 {
+    color: var(--admin-text-primary);
+    margin: 0 0 var(--admin-spacing-sm) 0;
+    font-size: var(--admin-font-size-xxl);
+    font-weight: var(--admin-font-weight-bold);
+  }
+  
+  .subtitle {
+    color: var(--admin-text-secondary);
+    margin: 0;
+    font-size: var(--admin-font-size-md);
+  }
+}
+
+// Dark glass theme - white text
+[data-theme="dark-glass"] {
+  // Headers and text
+  .seo-header h1,
+  .form-section h3,
+  h1, h2, h3, p, label, span {
+    color: rgba(255, 255, 255, 0.95);
+  }
+  
+  .seo-header .subtitle {
+    color: rgba(255, 255, 255, 0.7);
+  }
+}
+
+:host-context([data-theme="dark-glass"]) {
+  // Headers and text
+  .seo-header h1,
+  .form-section h3,
+  h1, h2, h3, p, label, span {
+    color: rgba(255, 255, 255, 0.95);
+  }
+  
+  .seo-header .subtitle {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  // Make sure all text in forms is white
+  .seo-content,
+  .tab-content,
+  .seo-form {
+    color: rgba(255, 255, 255, 0.95);
+  }
+  
+  // Material tabs - primary (голубой) for active and hover
+  ::ng-deep {
+    .seo-tabs.mat-mdc-tab-group .mat-mdc-tab.mat-mdc-tab,
+    .seo-tabs .mat-mdc-tab-header .mat-mdc-tab.mat-mdc-tab {
+      color: rgba(255, 255, 255, 0.7);
+      transition: color 0.3s ease;
+      
+      .mat-mdc-tab-label-content,
+      .mdc-tab__text-label {
+        color: rgba(255, 255, 255, 0.7);
+      }
+    }
+    
+    /* Active tab - primary color (голубой) */
+    .seo-tabs.mat-mdc-tab-group .mat-mdc-tab.mat-mdc-tab.mat-mdc-tab-active,
+    .seo-tabs .mat-mdc-tab-header .mat-mdc-tab.mat-mdc-tab.mat-mdc-tab-active {
+      color: var(--admin-primary);
+      
+      .mat-mdc-tab-label-content,
+      .mdc-tab__text-label {
+        color: var(--admin-primary);
+      }
+    }
+    
+    /* Hover - primary color (голубой) */
+    .seo-tabs.mat-mdc-tab-group .mat-mdc-tab.mat-mdc-tab:hover,
+    .seo-tabs .mat-mdc-tab-header .mat-mdc-tab.mat-mdc-tab:hover {
+      color: var(--admin-primary);
+      
+      .mat-mdc-tab-label-content,
+      .mdc-tab__text-label {
+        color: var(--admin-primary);
+      }
+    }
+    
+    /* Tab indicator - primary color (голубой) */
+    .seo-tabs .mat-mdc-tab-header .mdc-tab-indicator__content--underline,
+    .seo-tabs .mat-mdc-tab-indicator .mdc-tab-indicator__content {
+      border-color: var(--admin-primary);
+      background-color: var(--admin-primary);
+    }
+    
+    // Input fields white text
+    .mat-mdc-form-field.mat-mdc-form-field {
+      .mat-mdc-input-element,
+      input,
+      textarea {
+        color: rgba(255, 255, 255, 0.95);
+      }
+      
+      // Placeholder white
+      .mat-mdc-input-element::placeholder,
+      input::placeholder,
+      textarea::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+      }
+      
+      // Labels white
+      .mat-mdc-floating-label,
+      .mdc-floating-label,
+      label {
+        color: rgba(255, 255, 255, 0.7);
+      }
+      
+      // Hint text (character counter) white
+      .mat-mdc-form-field-hint,
+      .mat-hint {
+        color: rgba(255, 255, 255, 0.6);
+      }
+    }
+  }
 }
 
 .seo-content {
+  margin-top: var(--admin-spacing-lg);
+  
   .seo-tabs {
-    ::ng-deep .mat-tab-header {
-      margin-bottom: var(--admin-spacing-lg, 24px);
-      border-bottom: 1px solid var(--admin-border-primary, rgba(255,255,255,0.12));
+    ::ng-deep .mat-mdc-tab-header {
+      margin-bottom: var(--admin-spacing-lg);
+      border-bottom: 1px solid var(--admin-border-primary);
     }
 
-    ::ng-deep .mat-tab-body-content {
-      padding: 0 var(--admin-spacing-lg, 16px) var(--admin-spacing-lg, 24px);
+    ::ng-deep .mat-mdc-tab-body-content {
+      padding: var(--admin-spacing-lg) 0;
     }
   }
+}
+
+.tab-content {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 /* Sections and form layout */
 .seo-form {
   display: flex;
   flex-direction: column;
-  gap: var(--admin-spacing-xl, 32px);
+  gap: var(--admin-spacing-xl);
 }
 
 .form-section {
   display: flex;
   flex-direction: column;
-  gap: var(--admin-spacing-lg, 16px);
+  gap: var(--admin-spacing-lg);
+
+  h3 {
+    color: var(--admin-text-primary);
+    margin: 0 0 var(--admin-spacing-md) 0;
+    font-size: var(--admin-font-size-lg);
+    font-weight: var(--admin-font-weight-semibold);
+    padding-bottom: var(--admin-spacing-sm);
+    border-bottom: 1px solid var(--admin-border-primary);
+  }
 }
 
 .form-row {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--admin-spacing-lg, 16px);
+  gap: var(--admin-spacing-lg);
 
-  .full-width { grid-column: 1 / -1; }
-  .half-width { grid-column: span 1; }
+  .full-width { 
+    grid-column: 1 / -1; 
+  }
+  
+  .half-width { 
+    grid-column: span 1; 
+  }
 
-  mat-form-field { width: 100%; }
+  mat-form-field { 
+    width: 100%; 
+  }
 }
 
 .form-actions {
   display: flex;
   justify-content: flex-end;
-  gap: var(--admin-spacing-lg, 16px);
-  margin-top: var(--admin-spacing-lg, 16px);
+  gap: var(--admin-spacing-lg);
+  margin-top: var(--admin-spacing-lg);
+  padding-top: var(--admin-spacing-lg);
+  border-top: 1px solid var(--admin-border-primary);
 
-  button { min-width: 140px; }
+  button { 
+    min-width: 140px; 
+  }
 }
 
-/* Loading */
 .loading-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 60px 20px;
+  padding: var(--admin-spacing-xxl);
+  color: var(--admin-text-primary);
+
+  mat-spinner {
+    margin-bottom: var(--admin-spacing-md);
+  }
+
+  p {
+    margin: 0;
+    font-size: var(--admin-font-size-md);
+  }
 }
 
-/* Responsive */
-@media (max-width: 1024px) {
-  .form-row { grid-template-columns: 1fr; }
-}
-
+// Responsive design
 @media (max-width: 768px) {
-  .seo-settings-container { padding: var(--admin-spacing-md, 16px); }
+  .form-row {
+    grid-template-columns: 1fr;
+    
+    .full-width, .half-width {
+      grid-column: 1 / -1;
+    }
+  }
+
   .form-actions {
     flex-direction: column;
-    button { width: 100%; }
+    
+    button {
+      width: 100%;
+    }
   }
-} 
+}

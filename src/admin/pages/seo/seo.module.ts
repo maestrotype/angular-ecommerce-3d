@@ -18,6 +18,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { SeoRoutingModule } from './seo-routing.module';
 import { SeoComponent } from './seo.component';
 import { AdminSeoService } from '../../../app/core/services/admin-seo.service';
+import { ListContainerComponent } from '../../components/blocks/list-container/list-container.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { AdminSeoService } from '../../../app/core/services/admin-seo.service';
     CommonModule,
     ReactiveFormsModule,
     SeoRoutingModule,
+    ListContainerComponent,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
