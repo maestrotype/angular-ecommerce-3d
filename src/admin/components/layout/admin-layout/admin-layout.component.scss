@@ -128,10 +128,9 @@
   
   .admin-main {
     padding: 16px;
-    min-height: calc(100vh - 56px); // Smaller header on mobile
+    min-height: calc(100vh - 56px);
   }
 
-  // Ensure content doesn't get pushed by overlay sidenav
   .admin-content {
     width: 100%;
   }

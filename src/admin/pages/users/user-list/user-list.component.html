@@ -1,7 +1,7 @@
 <app-list-container>
   <div list-header class="header-section">
     <h1>{{ 'USER_MANAGEMENT' | translate}}</h1>
-    <p class="subtitle">{{ 'USER_MANAGEMENT_SUBTITLE' | translate}}</p>
+    <p class="subtitle subtitle-desktop">{{ 'USER_MANAGEMENT_SUBTITLE' | translate}}</p>
   </div>
 
   <div list-filters class="filter-section">
@@ -9,23 +9,23 @@
       <mat-label>{{ 'SEARCH_USERS' | translate}}</mat-label>
       <input matInput 
              [(ngModel)]="searchTerm" 
-             (keyup.enter)="onSearch()"
+             (input)="onSearch()"
              placeholder="Search by name or email">
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
     
-    <button mat-raised-button color="primary" (click)="onSearch()" class="search-button">
+    <button mat-raised-button color="primary" (click)="onSearch()" class="search-button search-button-desktop">
       <mat-icon>search</mat-icon>
       <span class="button-text">{{ 'SEARCH' | translate}}</span>
     </button>
     
-    <button mat-button (click)="clearSearch()" *ngIf="searchTerm" class="clear-button">
+    <button mat-button (click)="clearSearch()" *ngIf="searchTerm" class="clear-button clear-button-desktop">
       <mat-icon>clear</mat-icon>
       <span class="button-text">{{ 'CLEAR' | translate}}</span>
     </button>
   </div>
 
-  <app-admin-table [loading]="isLoading" [dataSource]="dataSource" [displayedColumns]="displayedColumns">
+  <app-admin-table [loading]="isLoading" [dataSource]="dataSource" [displayedColumns]="displayedColumns" class="desktop-view">
     <table mat-table [dataSource]="dataSource" matSort class="users-table">
           
           <ng-container matColumnDef="id">
@@ -134,72 +134,82 @@
   <div class="mobile-view" *ngIf="!isLoading">
     <div class="users-grid">
       <div *ngFor="let user of dataSource.data" class="user-card">
-        <div class="card-header">
-          <div class="user-avatar">
-            <mat-icon>person</mat-icon>
+        <div class="card-main">
+          <div class="card-header">
+            <div class="user-avatar">
+              <mat-icon>person</mat-icon>
+            </div>
+            <div class="user-info">
+              <div class="user-name">{{ user.name }}</div>
+              <div class="user-id">#{{ user.id }}</div>
+            </div>
           </div>
-          <div class="user-id">#{{ user.id }}</div>
-        </div>
 
-        <div class="card-content">
-          <div class="user-name">
-            <h3>{{ user.name }}</h3>
+          <div class="card-content">
+            <div class="user-email">
+              <mat-icon>email</mat-icon>
+              <span>{{ user.email }}</span>
+            </div>
+            
+            <div class="user-phone" *ngIf="user.phone">
+              <mat-icon>phone</mat-icon>
+              <span>{{ user.phone }}</span>
+            </div>
+            
+            <div class="user-bottom">
+              <div class="user-roles">
+                <mat-chip [color]="getRoleColor(user.role)" selected class="role-chip">
+                  {{ user.role | titlecase }}
+                </mat-chip>
+                <mat-chip [color]="getStatusColor(user.status || 'active')" selected class="status-chip">
+                  {{ (user.status || 'active') | titlecase }}
+                </mat-chip>
+              </div>
+            </div>
           </div>
-          
-          <div class="user-email">
-            <mat-icon>email</mat-icon>
-            <span>{{ user.email }}</span>
-          </div>
-          
-          <div class="user-phone" *ngIf="user.phone">
-            <mat-icon>phone</mat-icon>
-            <span>{{ user.phone }}</span>
-          </div>
-          
-          <div class="user-roles">
-            <mat-chip [color]="getRoleColor(user.role)" selected class="role-chip">
-              {{ user.role | titlecase }}
-            </mat-chip>
-            <mat-chip [color]="getStatusColor(user.status || 'active')" selected class="status-chip">
-              {{ (user.status || 'active') | titlecase }}
-            </mat-chip>
-          </div>
-          
-          <div class="user-date">
-            <mat-icon>schedule</mat-icon>
-            <span>{{ user.createdAt | date:'short' }}</span>
-          </div>
-        </div>
 
-        <div class="card-actions">
-          <button mat-icon-button 
-                  (click)="editUser(user)"
-                  class="action-button">
-            <mat-icon>edit</mat-icon>
-          </button>
+          <div class="card-actions">
+            <button mat-icon-button 
+                    matTooltip="Edit"
+                    (click)="editUser(user)"
+                    class="action-button">
+              <mat-icon>edit</mat-icon>
+            </button>
 
-          <button mat-icon-button 
-                  [color]="user.role === 'admin' ? 'warn' : 'primary'"
-                  (click)="changeUserRole(user)"
-                  class="action-button">
-            <mat-icon>{{ user.role === 'admin' ? 'person_remove' : 'admin_panel_settings' }}</mat-icon>
-          </button>
+            <button mat-icon-button 
+                    [matTooltip]="user.role === 'admin' ? 'Remove admin' : 'Make admin'"
+                    [color]="user.role === 'admin' ? 'warn' : 'primary'"
+                    (click)="changeUserRole(user)"
+                    class="action-button">
+              <mat-icon>{{ user.role === 'admin' ? 'person_remove' : 'admin_panel_settings' }}</mat-icon>
+            </button>
 
-          <button mat-icon-button 
-                  [color]="(user.status === 'blocked') ? 'primary' : 'warn'"
-                  (click)="toggleUserStatus(user)"
-                  class="action-button">
-            <mat-icon>{{ (user.status === 'blocked') ? 'lock_open' : 'block' }}</mat-icon>
-          </button>
+            <button mat-icon-button 
+                    [matTooltip]="(user.status === 'blocked') ? 'Unblock' : 'Block'"
+                    [color]="(user.status === 'blocked') ? 'primary' : 'warn'"
+                    (click)="toggleUserStatus(user)"
+                    class="action-button">
+              <mat-icon>{{ (user.status === 'blocked') ? 'lock_open' : 'block' }}</mat-icon>
+            </button>
 
-          <button mat-icon-button 
-                  color="warn"
-                  (click)="deleteUser(user)"
-                  class="action-button">
-            <mat-icon>delete</mat-icon>
-          </button>
+            <button mat-icon-button 
+                    matTooltip="Delete"
+                    color="warn"
+                    (click)="deleteUser(user)"
+                    class="action-button">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
         </div>
       </div>
     </div>
+
+    <mat-paginator 
+      [length]="totalUsers"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[5, 10, 25]"
+      (page)="onPageChange($event)"
+      class="mobile-paginator">
+    </mat-paginator>
   </div>
 </app-list-container>
