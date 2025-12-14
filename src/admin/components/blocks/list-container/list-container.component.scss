@@ -191,7 +191,8 @@
 
 @media (max-width: 768px) {
   ::ng-deep .list {
-    padding: 12px;
+    padding: var(--admin-mobile-padding-vertical) var(--admin-mobile-padding-horizontal);
+    padding-bottom: calc(var(--admin-mobile-padding-vertical) + var(--admin-spacing-md));
   }
 
   .list__header {
