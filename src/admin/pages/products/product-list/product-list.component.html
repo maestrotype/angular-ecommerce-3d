@@ -8,16 +8,6 @@
   </div>
 
   <div list-filters class="filter-section">
-    <app-search-bar 
-      [label]="'SEARCH_PRODUCTS' | translate"
-      [placeholder]="'Search by name, category...'"
-      [(searchTerm)]="searchTerm"
-      (onSearch)="onSearch()"
-      (onClear)="clearSearch()">
-    </app-search-bar>
-
-    
-
     <mat-form-field appearance="outline" class="category-filter" floatLabel="always">
       <mat-label>{{ 'CATEGORY' | translate }}</mat-label>
       <mat-select [placeholder]="'CATEGORY' | translate" (selectionChange)="filterByCategory($event)">
@@ -27,9 +17,22 @@
         <mat-option value="clothing">{{ 'CLOTHING' | translate }}</mat-option>
       </mat-select>
     </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="addProduct()" class="add-button add-button-mobile">
+      <mat-icon>add</mat-icon>
+      <span class="button-text">{{ 'ADD_PRODUCT' | translate }}</span>
+    </button>
+
+    <app-search-bar 
+      [label]="'SEARCH_PRODUCTS' | translate"
+      [placeholder]="'Search by name, category...'"
+      [(searchTerm)]="searchTerm"
+      (onSearch)="onSearch()"
+      (onClear)="clearSearch()">
+    </app-search-bar>
   </div>
 
-  <app-admin-table [loading]="isLoading" [dataSource]="dataSource" [displayedColumns]="displayedColumns">
+  <app-admin-table [loading]="isLoading" [dataSource]="dataSource" [displayedColumns]="displayedColumns" class="desktop-view">
     <table mat-table [dataSource]="dataSource" matSort class="product-table">
       <!-- ID Column -->
       <ng-container matColumnDef="id">
@@ -121,60 +124,65 @@
   <div class="mobile-view" *ngIf="!isLoading">
     <div class="products-grid">
       <div *ngFor="let product of dataSource.data" class="product-card">
-        <div class="card-header">
-          <div class="product-image">
-            <img
-              *ngIf="hasValidImage(product)"
-              [src]="getImageUrl(product)"
-              [alt]="product.name"
-              class="product-image"
-              (error)="onImageError($event, product)"
-            />
-            <div *ngIf="!hasValidImage(product)" class="no-image-placeholder">
-              <mat-icon>image</mat-icon>
-              <span>{{ 'NO_IMAGE' | translate}}</span>
+        <!-- Left: Image -->
+        <div class="card-image-container">
+          <img
+            *ngIf="hasValidImage(product)"
+            [src]="getImageUrl(product)"
+            [alt]="product.name"
+            class="product-image"
+            (error)="onImageError($event, product)"
+          />
+          <div *ngIf="!hasValidImage(product)" class="no-image-placeholder">
+            <mat-icon>image</mat-icon>
+            <span>{{ 'NO_IMAGE' | translate}}</span>
+          </div>
+        </div>
+
+        <!-- Right: All content -->
+        <div class="card-main">
+          <div class="card-header">
+            <div class="product-id">#{{ product.id }}</div>
+          </div>
+
+          <div class="card-content">
+            <div class="product-name">
+              <h3>{{ product.name }}</h3>
+            </div>
+            
+            <div class="product-category">
+              <mat-chip>{{ product.category }}</mat-chip>
+            </div>
+            
+            <div class="product-price">
+              <span class="price">${{ product.price | number : "1.2-2" }}</span>
+            </div>
+            
+            <div class="product-stock">
+              <span [class]="getStockClass(product.stock)">
+                {{ 'STOCK' | translate}}: {{ product.stock }}
+              </span>
             </div>
           </div>
-          <div class="product-id">#{{ product.id }}</div>
-        </div>
 
-        <div class="card-content">
-          <div class="product-name">
-            <h3>{{ product.name }}</h3>
+          <div class="card-actions">
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="editProduct(product)"
+              class="action-button"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              color="warn"
+              (click)="deleteProduct(product)"
+              class="action-button"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
           </div>
-          
-          <div class="product-category">
-            <mat-chip>{{ product.category }}</mat-chip>
-          </div>
-          
-          <div class="product-price">
-            <span class="price">${{ product.price | number : "1.2-2" }}</span>
-          </div>
-          
-          <div class="product-stock">
-            <span [class]="getStockClass(product.stock)">
-              {{ 'STOCK' | translate}}: {{ product.stock }}
-            </span>
-          </div>
-        </div>
-
-        <div class="card-actions">
-          <button
-            mat-icon-button
-            color="primary"
-            (click)="editProduct(product)"
-            class="action-button"
-          >
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button
-            mat-icon-button
-            color="warn"
-            (click)="deleteProduct(product)"
-            class="action-button"
-          >
-            <mat-icon>delete</mat-icon>
-          </button>
         </div>
       </div>
     </div>

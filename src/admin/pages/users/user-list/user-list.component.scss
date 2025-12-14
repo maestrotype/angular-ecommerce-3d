@@ -18,10 +18,10 @@
   }
 }
 
-.filter-section {
+::ng-deep .filter-section {
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
+  justify-content: space-between;
+  align-items: baseline;
   flex-wrap: wrap;
   gap: var(--admin-spacing-md);
   
@@ -32,19 +32,12 @@
   }
   
   .search-button {
-    height: 56px;
-    min-height: 56px;
-    padding: 0 24px;
-    
     .button-text {
       margin-left: 8px;
     }
   }
   
   .clear-button {
-    height: 56px;
-    min-height: 56px;
-    
     .button-text {
       margin-left: 8px;
     }
