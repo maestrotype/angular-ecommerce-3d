@@ -24,7 +24,7 @@
     display: flex;
     gap: var(--admin-spacing-md);
     margin-bottom: var(--admin-spacing-lg);
-    align-items: center;
+    align-items: baseline;
     flex-wrap: wrap;
     padding: 0 var(--admin-spacing-lg);
     width: 100%;
@@ -40,10 +40,6 @@
     }
 
     .search-button {
-      height: 56px;
-      min-height: 56px;
-      padding: 0 24px;
-      
       .button-text {
         margin-left: 8px;
       }
