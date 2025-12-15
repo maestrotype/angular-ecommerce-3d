@@ -1,5 +1,5 @@
 
-import { Component, EventEmitter, Output, OnInit, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil, switchMap } from 'rxjs/operators';
@@ -11,11 +11,12 @@ import { NotificationService, Notification } from '../../../services/notificatio
 @Component({
   selector: 'app-admin-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   @Output() toggleSidenav = new EventEmitter<void>();
-  @ViewChild(MatMenuTrigger) notificationMenuTrigger!: MatMenuTrigger;
+  @ViewChild('notificationMenuTrigger') notificationMenuTrigger!: MatMenuTrigger;
   
   private destroy$ = new Subject<void>();
   notifications: Notification[] = [];
@@ -104,6 +105,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onNotificationClick(notification: Notification): void {
+    // Close the menu first
+    this.closeNotificationMenu();
+    
     if (notification.status === 'unread') {
       this.notificationService.markAsRead(notification.id).pipe(
         switchMap(() => this.notificationService.loadNotifications())
@@ -132,6 +136,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       switchMap(() => this.notificationService.loadNotifications())
     ).subscribe(notifications => {
       this.notificationService.updateNotifications(notifications);
+      this.closeNotificationMenu();
     });
   }
 

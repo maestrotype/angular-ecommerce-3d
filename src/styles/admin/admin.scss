@@ -3,3 +3,22 @@
 @import '../../styles/themes/admin-dark';
 @import '../../styles/themes/admin-light';
 // Glass theme is handled in admin-variables.scss via [data-theme="glass"]
+
+/* ===== CDK Overlay Global Styles ===== */
+.cdk-overlay-pane {
+  &:has(.notification-menu) {
+    margin: 48px auto;
+    padding: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .cdk-overlay-pane {
+    &:has(.notification-menu) {
+      margin: 48px auto;
+      padding: 0;
+      width: 100%;
+      position: static;
+    }
+  }
+}
