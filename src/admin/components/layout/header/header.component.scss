@@ -513,8 +513,17 @@
   }
 }
 
+[data-theme="light"] {
+  .admin-header {
+    background-color: #fff;
+  }
+}
+
 // Dark theme - notification menu enhancements
 [data-theme="dark"] {
+  .admin-header {
+    background-color: #1f2937;
+  }
   .notification-menu.mat-mdc-menu-panel {
     .notification-header {
       background: rgba(31, 41, 55, 0.98);
@@ -676,7 +685,6 @@
   // Light theme - white header
   [data-theme="light"] {
     .admin-header {
-      background-color: #ffffff;
       border-bottom: 1px solid #e5e7eb;
     }
   }
