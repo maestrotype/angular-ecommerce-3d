@@ -41,19 +41,13 @@
     </button>
 
     <!-- Notifications -->
-    <!-- <button
+    <button
       mat-icon-button
       [matMenuTriggerFor]="notificationMenu"
+      #notificationMenuTrigger="matMenuTrigger"
       class="notification-button"
     >
-      <mat-icon
-        [matBadge]="unreadCount > 0 ? unreadCount : null"
-        matBadgeColor="warn"
-        matBadgeSize="small"
-      >
-        notifications
-      </mat-icon>
-    </button> -->
+    </button>
 
     <app-notification-badge
       [count]="unreadCount"
@@ -69,7 +63,7 @@
 </mat-toolbar>
 
 <!-- Notification Menu -->
-<mat-menu #notificationMenu="matMenu" class="notification-menu">
+<mat-menu #notificationMenu="matMenu" class="notification-menu" yPosition="below" xPosition="after">
   <div class="notification-header">
     <span class="notification-title">{{ "NOTIFICATIONS" | translate }}</span>
     <button
@@ -78,11 +72,9 @@
       (click)="markAllAsRead()"
       *ngIf="unreadCount > 0"
     >
-      Mark all as read
+      <span>Mark all as read</span>
     </button>
   </div>
-
-  <mat-divider></mat-divider>
 
   <div
     class="notification-list"
@@ -97,7 +89,7 @@
     >
       <div class="notification-content">
         <div class="notification-icon">
-          <mat-icon [color]="getNotificationColor(notification.type)">
+          <mat-icon>
             {{ getNotificationIcon(notification.type) }}
           </mat-icon>
         </div>
