@@ -5,13 +5,31 @@
 // Glass theme is handled in admin-variables.scss via [data-theme="glass"]
 
 /* ===== CDK Overlay Global Styles ===== */
-.cdk-overlay-pane {
-  &:has(.notification-menu) {
-    margin: 48px auto;
-    padding: 0;
+// Desktop: position notification menu in top-right corner
+.cdk-overlay-container {
+  .cdk-overlay-connected-position-bounding-box {
+    position: absolute;
+    right: 0 !important;
+
+    .cdk-overlay-pane {
+      &:has(.notification-menu) {
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+    }
   }
 }
 
+.cdk-overlay-pane {
+  &:has(.notification-menu) {
+    position: fixed;
+    right: 0;
+    top: 0;
+  }
+}
+
+// Mobile: center notification menu, full width
 @media (max-width: 480px) {
   .cdk-overlay-pane {
     &:has(.notification-menu) {
