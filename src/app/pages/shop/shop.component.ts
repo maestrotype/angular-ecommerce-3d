@@ -67,6 +67,13 @@ export class ShopComponent implements OnInit, OnDestroy {
     { value: 'rating', label: 'Rating' }
   ];
 
+  itemsPerPageOptions: DropdownOption[] = [
+    { value: '12', label: '12' },
+    { value: '18', label: '18' },
+    { value: '24', label: '24' },
+    { value: '36', label: '36' }
+  ];
+
   private destroy$ = new Subject<void>();
 
   // Math object for template usage

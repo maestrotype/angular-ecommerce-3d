@@ -6,6 +6,7 @@
 .custom-dropdown {
   position: relative;
   min-width: 180px;
+  z-index: 1;
 
   .dropdown-trigger {
     display: flex;
@@ -70,7 +71,7 @@
     top: calc(100% + 8px);
     left: 0;
     right: 0;
-    z-index: var(--z-index-popover);
+    z-index: 1000;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px) scale(0.95);
