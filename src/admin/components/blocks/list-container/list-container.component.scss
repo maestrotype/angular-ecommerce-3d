@@ -38,6 +38,9 @@
       color: var(--admin-text-primary);
       font-size: var(--admin-font-size-xxl);
       font-weight: var(--admin-font-weight-bold);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 
@@ -46,6 +49,13 @@
     color: var(--admin-text-primary);
     font-size: var(--admin-font-size-xxl);
     font-weight: var(--admin-font-weight-bold);
+  }
+
+  ::ng-deep .header-section h1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
   }
   
   // Dark Glass theme - white titles
@@ -208,6 +218,11 @@
     }
   }
 
+  ::ng-deep .header-section h1 {
+    text-align: center;
+    font-size: 1.25rem;
+  }
+
   .list__kpis .stats-cards {
     justify-content: center;
   }
@@ -222,5 +237,11 @@
       min-width: none;
       max-width: none;
     }
+  }
+}
+
+@media (max-width: 400px) {
+  ::ng-deep .header-section h1 {
+    font-size: 1.1rem;
   }
 }
