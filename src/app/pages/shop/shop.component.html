@@ -68,13 +68,13 @@
               FILTER
             </button>
             <span class="sort-label">Sort by :</span>
-            <select class="sort-dropdown" [(ngModel)]="sortBy" (change)="onSortChange($event.target.value)">
-              <option value="latest">Latest</option>
-              <option value="best-selling">Best Selling</option>
-              <option value="best-rated">Best Rated</option>
-              <option value="price-low">Price Low</option>
-              <option value="price-high">Price High</option>
-            </select>
+            <app-custom-dropdown 
+              class="sort-dropdown"
+              [options]="sortOptions"
+              [selectedValue]="sortBy"
+              placeholder="Select sorting"
+              (valueChange)="onSortChange($event)">
+            </app-custom-dropdown>
           </div>
 
           <!-- Middle -->
@@ -85,12 +85,13 @@
               Show only products on sale
             </label>
             <span class="show-label">Show :</span>
-            <select class="show-dropdown" [(ngModel)]="itemsPerPage" (change)="onItemsPerPageChange($event.target.value)">
-              <option value="12">12</option>
-              <option value="18">18</option>
-              <option value="24">24</option>
-              <option value="36">36</option>
-            </select>
+            <app-custom-dropdown 
+              class="show-dropdown"
+              [options]="itemsPerPageOptions"
+              [selectedValue]="itemsPerPage.toString()"
+              placeholder="Select items"
+              (valueChange)="onItemsPerPageChange($event)">
+            </app-custom-dropdown>
           </div>
 
           <!-- Right side - View toggles -->

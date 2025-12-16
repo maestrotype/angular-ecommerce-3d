@@ -7,7 +7,6 @@ import { SharedModule } from '../../shared/shared.module';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ThreeDViewerModule } from '../../components/three-d-viewer/three-d-viewer.module';
-import { CustomDropdownComponent } from '../../shared/custom-dropdown/custom-dropdown.component';
 
 const routes: Routes = [
   { path: '', component: ShopComponent }
@@ -15,8 +14,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    ShopComponent,
-    CustomDropdownComponent
+    ShopComponent
   ],
   imports: [
     CommonModule,
