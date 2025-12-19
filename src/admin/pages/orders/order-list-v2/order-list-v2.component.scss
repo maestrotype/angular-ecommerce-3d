@@ -26,7 +26,6 @@
   .list__filters {
     display: flex;
     gap: var(--admin-spacing-md);
-    margin-bottom: var(--admin-spacing-lg);
     flex-wrap: wrap;
 
     [data-theme="dark-glass"] & {
