@@ -106,16 +106,20 @@
     color: #f8fafc;
   }
 
-  body .favorites-page .favorites-header {
+  body .favorites-page .section-wrapper .favorites-header {
     background: linear-gradient(135deg, #334155 0%, #475569 100%);
     color: #f8fafc;
   }
 
-  body .favorites-page .favorites-header .page-title {
+  body .favorites-page .section-wrapper .favorites-header .page-title {
     color: #f8fafc;
   }
 
-  body .favorites-page .favorites-header .page-subtitle {
+  body .favorites-page .section-wrapper .favorites-header .page-subtitle {
+    color: #f8fafc;
+  }
+
+  body .favorites-page .section-wrapper .favorites-header .header-content .page-subtitle {
     color: #f8fafc;
   }
 
