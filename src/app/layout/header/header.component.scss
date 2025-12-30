@@ -11,7 +11,6 @@
   left: 0;
   right: 0;
   z-index: 9999;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 
   .header-container {
     display: flex;
@@ -319,7 +318,8 @@
         cursor: pointer;
         transition: all 0.2s ease;
         font-size: 14px;
-        color: var(--text-primary, #333);
+        color: var(--text-primary);
+        color: #fff;
         
         &:hover {
           background: var(--surface-2, rgba(0, 0, 0, 0.05));

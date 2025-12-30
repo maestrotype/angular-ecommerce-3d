@@ -7,7 +7,7 @@
   --border: var(--color-border-primary);
   --surface: var(--color-surface-primary);
   --surface-2: var(--color-surface-secondary);
-  
+
   /* Default theme for auth modal */
   .auth-modal {
     .auth-header {
@@ -20,7 +20,7 @@
       }
     }
   }
-  
+
   /* Favorites page specific */
   --favorites-bg: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   --favorites-header-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -44,5 +44,11 @@
   --favorites-card-border: rgba(0, 0, 0, 0.08);
   --favorites-card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
   --favorites-card-hover-bg: rgba(255, 255, 255, 0.95);
+  --favorites-header-bg: rgba(255, 255, 255, 0.22);
+  --favorites-header-border: rgba(255, 255, 255, 0.4);
+  --favorites-header-blur: 22px;
+  --favorites-header-shadow: 0 10px 40px rgba(0, 0, 0, 0.18);
+  --favorites-header-text: #ffffff;
+  --favorites-section-wrapper: #eaeaea;
+  --theme-switcher-bg: rgba(255, 255, 255, 0.9);
 }
-

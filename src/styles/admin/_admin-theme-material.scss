@@ -9,257 +9,273 @@
 
 /* Safe defaults if variables missing */
 :root {
-    --admin-input-bg: var(--admin-bg-card, #fff);
-    --admin-input-text: var(--admin-text-primary, #111827);
-    --admin-input-border: var(--admin-border-color, #d1d5db);
-    --admin-input-label: var(--admin-text-secondary, #6b7280);
-    --admin-input-focus-border: var(--admin-primary, #3b82f6);
-    --admin-primary: var(--admin-primary, #3b82f6);
-    --admin-bg-secondary: var(--admin-bg-secondary, #f3f4f6);
-    --admin-bg-hover: var(--admin-bg-hover, #e5e7eb);
-    --admin-danger: var(--admin-danger, #ef4444);
+  --admin-input-bg: var(--admin-bg-card, #fff);
+  --admin-input-text: var(--admin-text-primary, #111827);
+  --admin-input-border: var(--admin-border-color, #d1d5db);
+  --admin-input-label: var(--admin-text-secondary, #6b7280);
+  --admin-input-focus-border: var(--admin-primary, #3b82f6);
+  --admin-primary: var(--admin-primary, #3b82f6);
+  --admin-bg-secondary: var(--admin-bg-secondary, #f3f4f6);
+  --admin-bg-hover: var(--admin-bg-hover, #e5e7eb);
+  --admin-danger: var(--admin-danger, #ef4444);
+  .mat-datepicker-content {
+    padding-bottom: 10px;
   }
-  
-  /* Performance optimizations for backdrop-filter */
-  [data-theme='glass'],
-  [data-theme='dark-glass'] {
-    /* Create stacking context and GPU layer for elements with backdrop-filter */
-    .mat-sidenav,
-    .mat-drawer,
-    .mat-toolbar,
-    .admin-header,
-    .mat-mdc-table {
-      isolation: isolate;
-    }
+  .mat-datepicker-close-button {
+    display: none;
   }
-  
-  /* Target both cases: theme on <html> or on <body> */
-  [data-theme='light'], [data-theme='dark'], [data-theme='glass'], [data-theme='dark-glass'] {
-  
-    /* ===== Text fields / outlined inputs (MDC) ===== */
-    /* wrapper: gives background, radius and base border */
-    .mat-mdc-text-field-wrapper {
-      background-color: var(--admin-input-bg);
-      color: var(--admin-input-text);
-      border-radius: 12px;
-      transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
-    }
-  
-    /* input text color */
-    .mat-mdc-text-field-wrapper .mat-input-element,
-    .mat-mdc-text-field-wrapper input,
-    .mat-mdc-text-field-wrapper textarea {
-      color: var(--admin-input-text);
-    }
-  
-    /* floating label */
-    .mat-mdc-text-field-wrapper .mdc-floating-label {
-      color: var(--admin-input-label);
-      transition: color .12s ease, transform .12s ease;
-    }
-  
-    /* label when floated (focused/has-value) */
-    .mat-mdc-text-field-wrapper .mdc-floating-label--float-above,
-    .mat-mdc-text-field-wrapper.mat-focused .mdc-floating-label {
-      color: var(--admin-input-focus-border);
-    }
-  
-    /* outline stroke color (leading / notch / trailing) */
-    .mat-mdc-text-field-wrapper .mdc-notched-outline__leading,
-    .mat-mdc-text-field-wrapper .mdc-notched-outline__notch,
-    .mat-mdc-text-field-wrapper .mdc-notched-outline__trailing {
-      border-color: var(--admin-input-border);
-      /* some mdc implementations use stroke */
-      stroke: var(--admin-input-border);
-    }
-  
-    /* focused state */
-    .mat-mdc-text-field-wrapper.mat-focused,
-    .mat-mdc-text-field-wrapper:focus-within {
-      border-color: var(--admin-input-focus-border);
-      box-shadow: 0 0 0 4px rgba(0,0,0,0); /* no strong default, use below for visible focus */
-    }
-  
-    .mat-mdc-text-field-wrapper.mat-focused {
-      box-shadow: 0 0 0 3px rgba(var(--admin-primary-rgb, 59,130,246), 0.12);
-    }
-  
-    /* hover state (not focused) */
-    .mat-mdc-text-field-wrapper:hover:not(.mat-focused) {
-      border-color: var(--admin-input-focus-border);
-    }
-  
-    /* disabled */
-    .mat-mdc-text-field-wrapper .mat-form-field-disabled,
-    .mat-mdc-text-field-wrapper[aria-disabled="true"] {
-      opacity: 0.65;
-      cursor: not-allowed;
-    }
-  
-    /* ===== Selects ===== */
-    .mat-mdc-select-trigger, .mat-mdc-select {
-      color: var(--admin-input-text);
-    }
-  
-    .mat-mdc-select .mat-mdc-select-arrow,
-    .mat-mdc-select-arrow {
-      color: var(--admin-input-label);
-    }
-  
-    .mat-select-panel {
-      background-color: var(--admin-bg-secondary);
-      color: var(--admin-input-text);
-    }
-  
-    .mat-option {
-      background: transparent;
-      color: var(--admin-input-text);
-    }
-  
-    .mat-option:hover {
-      background: var(--admin-bg-hover);
-    }
-  
-    .mat-option.mat-selected {
-      background: var(--admin-primary);
-      color: #fff;
-    }
-  
-    /* ===== Buttons ===== */
-    .mat-mdc-button,
-    .mat-mdc-raised-button,
-    .mat-mdc-flat-button,
-    .mat-mdc-stroked-button {
-      transition: background-color .12s ease, border-color .12s ease, color .12s ease;
-    }
-  
-    /* primary raised/filled */
-    .mat-mdc-raised-button.mat-primary,
-    .mat-mdc-button.mat-primary {
-      background-color: var(--admin-button);
-      color: #ffffff;
-      border-color: transparent;
-      height: 100%;
-      padding: 10px;
-      white-space: nowrap;
-      position: relative;
-      overflow: hidden;
-      margin-left: auto;
-    }
-  
-    .mat-mdc-raised-button.mat-primary:hover,
-    .mat-mdc-button.mat-primary:hover {
-      filter: brightness(.95);
-    }
-  
-    /* outlined / secondary */
-    .mat-mdc-stroked-button {
-      border-color: var(--admin-input-border);
-      color: var(--admin-input-text);
-    }
-  
-    .mat-mdc-stroked-button:hover {
-      border-color: var(--admin-input-focus-border);
-    }
-  
-    .mat-mdc-button.mat-button-disabled,
-    .mat-mdc-raised-button.mat-button-disabled {
-      opacity: 0.6;
-    }
-  
-    /* ===== Paginator ===== */
-    .mat-paginator,
-    .mat-mdc-paginator {
+}
+
+/* Performance optimizations for backdrop-filter */
+[data-theme='glass'],
+[data-theme='dark-glass'] {
+
+  /* Create stacking context and GPU layer for elements with backdrop-filter */
+  .mat-sidenav,
+  .mat-drawer,
+  .mat-toolbar,
+  .admin-header,
+  .mat-mdc-table {
+    isolation: isolate;
+  }
+}
+
+/* Target both cases: theme on <html> or on <body> */
+[data-theme='light'],
+[data-theme='dark'],
+[data-theme='glass'],
+[data-theme='dark-glass'] {
+
+  /* ===== Text fields / outlined inputs (MDC) ===== */
+  /* wrapper: gives background, radius and base border */
+  .mat-mdc-text-field-wrapper {
+    background-color: var(--admin-input-bg);
+    color: var(--admin-input-text);
+    border-radius: 12px;
+    transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
+  }
+
+  /* input text color */
+  .mat-mdc-text-field-wrapper .mat-input-element,
+  .mat-mdc-text-field-wrapper input,
+  .mat-mdc-text-field-wrapper textarea {
+    color: var(--admin-input-text);
+  }
+
+  /* floating label */
+  .mat-mdc-text-field-wrapper .mdc-floating-label {
+    color: var(--admin-input-label);
+    transition: color .12s ease, transform .12s ease;
+  }
+
+  /* label when floated (focused/has-value) */
+  .mat-mdc-text-field-wrapper .mdc-floating-label--float-above,
+  .mat-mdc-text-field-wrapper.mat-focused .mdc-floating-label {
+    color: var(--admin-input-focus-border);
+  }
+
+  /* outline stroke color (leading / notch / trailing) */
+  .mat-mdc-text-field-wrapper .mdc-notched-outline__leading,
+  .mat-mdc-text-field-wrapper .mdc-notched-outline__notch,
+  .mat-mdc-text-field-wrapper .mdc-notched-outline__trailing {
+    border-color: var(--admin-input-border);
+    /* some mdc implementations use stroke */
+    stroke: var(--admin-input-border);
+  }
+
+  /* focused state */
+  .mat-mdc-text-field-wrapper.mat-focused,
+  .mat-mdc-text-field-wrapper:focus-within {
+    border-color: var(--admin-input-focus-border);
+    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0);
+    /* no strong default, use below for visible focus */
+  }
+
+  .mat-mdc-text-field-wrapper.mat-focused {
+    box-shadow: 0 0 0 3px rgba(var(--admin-primary-rgb, 59, 130, 246), 0.12);
+  }
+
+  /* hover state (not focused) */
+  .mat-mdc-text-field-wrapper:hover:not(.mat-focused) {
+    border-color: var(--admin-input-focus-border);
+  }
+
+  /* disabled */
+  .mat-mdc-text-field-wrapper .mat-form-field-disabled,
+  .mat-mdc-text-field-wrapper[aria-disabled="true"] {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+
+  /* ===== Selects ===== */
+  .mat-mdc-select-trigger,
+  .mat-mdc-select {
+    color: var(--admin-input-text);
+  }
+
+  .mat-mdc-select .mat-mdc-select-arrow,
+  .mat-mdc-select-arrow {
+    color: var(--admin-input-label);
+  }
+
+  .mat-select-panel {
+    background-color: var(--admin-bg-secondary);
+    color: var(--admin-input-text);
+  }
+
+  .mat-option {
+    background: transparent;
+    color: var(--admin-input-text);
+  }
+
+  .mat-option:hover {
+    background: var(--admin-bg-hover);
+  }
+
+  .mat-option.mat-selected {
+    background: var(--admin-primary);
+    color: #fff;
+  }
+
+  /* ===== Buttons ===== */
+  .mat-mdc-button,
+  .mat-mdc-raised-button,
+  .mat-mdc-flat-button,
+  .mat-mdc-stroked-button {
+    transition: background-color .12s ease, border-color .12s ease, color .12s ease;
+  }
+
+  /* primary raised/filled */
+  .mat-mdc-raised-button.mat-primary,
+  .mat-mdc-button.mat-primary {
+    background-color: var(--admin-button);
+    color: #ffffff;
+    border-color: transparent;
+    height: 100%;
+    padding: 10px;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+    margin-left: auto;
+  }
+
+  .mat-mdc-raised-button.mat-primary:hover,
+  .mat-mdc-button.mat-primary:hover {
+    filter: brightness(.95);
+  }
+
+  /* outlined / secondary */
+  .mat-mdc-stroked-button {
+    border-color: var(--admin-input-border);
+    color: var(--admin-input-text);
+  }
+
+  .mat-mdc-stroked-button:hover {
+    border-color: var(--admin-input-focus-border);
+  }
+
+  .mat-mdc-button.mat-button-disabled,
+  .mat-mdc-raised-button.mat-button-disabled {
+    opacity: 0.6;
+  }
+
+  /* ===== Paginator ===== */
+  .mat-paginator,
+  .mat-mdc-paginator {
+    background-color: var(--admin-table-header-bg);
+    color: var(--admin-text-primary);
+    border-top: 1px solid var(--admin-border-primary);
+  }
+
+  .mat-paginator .mat-icon-button,
+  .mat-mdc-paginator .mat-mdc-icon-button {
+    color: var(--admin-text-primary);
+  }
+
+  .mat-paginator .mat-paginator-page-size-label,
+  .mat-paginator .mat-paginator-range-label,
+  .mat-mdc-paginator .mat-mdc-paginator-page-size-label,
+  .mat-mdc-paginator .mat-mdc-paginator-range-label {
+    color: var(--admin-text-primary);
+  }
+
+  /* ===== Tables ===== */
+  .mat-mdc-table {
+    background-color: var(--admin-basic-bg, var(--admin-bg-card));
+
+    /* Table header - distinct background */
+    .mat-mdc-header-row .mat-mdc-header-cell {
       background-color: var(--admin-table-header-bg);
       color: var(--admin-text-primary);
-      border-top: 1px solid var(--admin-border-primary);
+      font-weight: var(--admin-font-weight-bold);
+      padding: var(--admin-spacing-md);
+      border-bottom: none;
     }
 
-    .mat-paginator .mat-icon-button,
-    .mat-mdc-paginator .mat-mdc-icon-button {
+    /* Table cells - no borders */
+    .mat-mdc-cell {
       color: var(--admin-text-primary);
+      padding: var(--admin-spacing-md);
+      border-bottom: none;
     }
 
-    .mat-paginator .mat-paginator-page-size-label,
-    .mat-paginator .mat-paginator-range-label,
-    .mat-mdc-paginator .mat-mdc-paginator-page-size-label,
-    .mat-mdc-paginator .mat-mdc-paginator-range-label {
-      color: var(--admin-text-primary);
+    /* Elegant row separation without borders */
+    .mat-mdc-row:nth-child(even) .mat-mdc-cell {
+      background-color: var(--admin-order-list-card-bg, var(--admin-bg-secondary));
     }
 
-    /* ===== Tables ===== */
-    .mat-mdc-table {
+    .mat-mdc-row:nth-child(odd) .mat-mdc-cell {
       background-color: var(--admin-basic-bg, var(--admin-bg-card));
-      
-      /* Table header - distinct background */
-      .mat-mdc-header-row .mat-mdc-header-cell {
-        background-color: var(--admin-table-header-bg);
-        color: var(--admin-text-primary);
-        font-weight: var(--admin-font-weight-bold);
-        padding: var(--admin-spacing-md);
-        border-bottom: none;
-      }
-
-      /* Table cells - no borders */
-      .mat-mdc-cell {
-        color: var(--admin-text-primary);
-        padding: var(--admin-spacing-md);
-        border-bottom: none;
-      }
-
-      /* Elegant row separation without borders */
-      .mat-mdc-row:nth-child(even) .mat-mdc-cell {
-        background-color: var(--admin-order-list-card-bg, var(--admin-bg-secondary));
-      }
-      
-      .mat-mdc-row:nth-child(odd) .mat-mdc-cell {
-        background-color: var(--admin-basic-bg, var(--admin-bg-card));
-      }
-
-      /* Hover effect */
-      .mat-mdc-row:hover .mat-mdc-cell {
-        background-color: var(--admin-bg-hover);
-      }
     }
 
-    /* ===== Cards / Panels / Menus ===== */
-    .mat-card, .mat-menu-panel, .mat-dialog-container {
-      background-color: var(--admin-bg-secondary);
-      color: var(--admin-input-text);
-      border: 1px solid var(--admin-input-border);
-    }
-  
-    /* ===== Icons and icon-buttons ===== */
-    .mat-icon-button, .mat-button .mat-icon {
-      color: var(--admin-input-text);
-    }
-  
-    .mat-icon-button.mat-button-disabled {
-      color: var(--admin-text-secondary);
-    }
-  
-    /* ===== Checkboxes / Radios / Slide toggles ===== */
-    .mat-mdc-checkbox .mdc-checkbox__native-control:checked ~ .mdc-checkbox__background,
-    .mat-mdc-radio-button .mdc-radio__native-control:checked ~ .mdc-radio__background {
-      color: var(--admin-primary);
-      background-color: var(--admin-primary);
-    }
-  
-    /* focus visible (accessibility) */
-    :where(.mat-focus-indicator:focus-visible) {
-      outline: 3px solid rgba(var(--admin-primary-rgb, 59,130,246), 0.14);
-      outline-offset: 2px;
+    /* Hover effect */
+    .mat-mdc-row:hover .mat-mdc-cell {
+      background-color: var(--admin-bg-hover);
     }
   }
+
+  /* ===== Cards / Panels / Menus ===== */
+  .mat-card,
+  .mat-menu-panel,
+  .mat-dialog-container {
+    background-color: var(--admin-bg-secondary);
+    color: var(--admin-input-text);
+    border: 1px solid var(--admin-input-border);
+  }
+
+  /* ===== Icons and icon-buttons ===== */
+  .mat-icon-button,
+  .mat-button .mat-icon {
+    color: var(--admin-input-text);
+  }
+
+  .mat-icon-button.mat-button-disabled {
+    color: var(--admin-text-secondary);
+  }
+
+  /* ===== Checkboxes / Radios / Slide toggles ===== */
+  .mat-mdc-checkbox .mdc-checkbox__native-control:checked~.mdc-checkbox__background,
+  .mat-mdc-radio-button .mdc-radio__native-control:checked~.mdc-radio__background {
+    color: var(--admin-primary);
+    background-color: var(--admin-primary);
+  }
+
+  /* focus visible (accessibility) */
+  :where(.mat-focus-indicator:focus-visible) {
+    outline: 3px solid rgba(var(--admin-primary-rgb, 59, 130, 246), 0.14);
+    outline-offset: 2px;
+  }
+}
 
 /* Glass theme specific styling */
 [data-theme='glass'] {
+
   /* ===== Input fields - deep inset (strongly pressed) ===== */
   .mat-mdc-form-field .mat-mdc-text-field-wrapper,
   .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper {
     background: rgba(255, 255, 255, 0.15);
     border: none;
-    box-shadow: 
+    box-shadow:
       inset 0 5px 15px rgba(31, 41, 55, 0.4),
       inset 0 3px 8px rgba(31, 41, 55, 0.3),
       inset 0 -1px 2px rgba(255, 255, 255, 0.25);
@@ -269,26 +285,26 @@
     will-change: transform;
     transform: translateZ(0);
   }
-  
+
   .mat-mdc-text-field-wrapper:hover,
   .mat-mdc-form-field:hover .mat-mdc-text-field-wrapper {
     background: rgba(255, 255, 255, 0.25);
-    box-shadow: 
+    box-shadow:
       inset 0 5px 15px rgba(31, 41, 55, 0.35),
       inset 0 3px 8px rgba(31, 41, 55, 0.25),
       inset 0 -1px 2px rgba(255, 255, 255, 0.3);
   }
-  
+
   .mat-mdc-text-field-wrapper.mat-focused,
   .mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
     background: rgba(255, 255, 255, 0.28);
-    box-shadow: 
+    box-shadow:
       inset 0 5px 15px rgba(59, 130, 246, 0.35),
       inset 0 3px 8px rgba(31, 41, 55, 0.25),
       inset 0 -1px 2px rgba(255, 255, 255, 0.35),
       0 0 0 3px rgba(59, 130, 246, 0.3);
   }
-  
+
   /* Remove ALL borders for glass theme - high specificity */
   .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline .mdc-notched-outline__leading,
   .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline .mdc-notched-outline__notch,
@@ -300,29 +316,29 @@
     border-width: 0;
     opacity: 0;
   }
-  
+
   .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline,
   .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline {
     display: none;
   }
-  
+
   /* ===== Select dropdowns - deep inset shadows ===== */
   .mat-mdc-select-trigger,
   .mat-mdc-select {
     color: var(--admin-text-primary);
   }
-  
+
   .mat-mdc-select .mat-mdc-select-arrow,
   .mat-mdc-select-arrow {
     color: var(--admin-text-secondary);
   }
-  
+
   /* Select label - use hint/placeholder approach */
   .mat-mdc-form-field .mdc-text-field__input::placeholder {
     color: var(--admin-text-secondary);
     opacity: 0.8;
   }
-  
+
   /* Select value text */
   .mat-mdc-select-value,
   .mat-mdc-select-value-text,
@@ -330,20 +346,20 @@
     color: var(--admin-text-primary);
     opacity: 1;
   }
-  
+
   /* Select placeholder - always visible */
   .mat-mdc-select-placeholder,
   .mat-mdc-select-placeholder.mat-mdc-select-placeholder {
     color: var(--admin-text-secondary);
     opacity: 1;
   }
-  
+
   /* Select trigger text */
   .mat-mdc-select-trigger .mat-mdc-select-placeholder {
     color: var(--admin-text-secondary);
     opacity: 1;
   }
-  
+
   /* Mat-label (alternative to floating label) */
   .mat-mdc-form-field mat-label,
   .mat-mdc-form-field .mat-mdc-form-field-label,
@@ -353,26 +369,26 @@
     display: inline-block;
     visibility: visible;
   }
-  
+
   /* Select field wrapper - strong inset effect */
   .mat-mdc-form-field:has(.mat-mdc-select) .mat-mdc-text-field-wrapper {
     background: rgba(255, 255, 255, 0.25);
-    box-shadow: 
+    box-shadow:
       inset 0 4px 12px rgba(31, 41, 55, 0.35),
       inset 0 2px 6px rgba(31, 41, 55, 0.25),
       inset 0 -1px 3px rgba(255, 255, 255, 0.3),
       0 1px 2px rgba(255, 255, 255, 0.2);
   }
-  
+
   .mat-mdc-form-field:has(.mat-mdc-select):hover .mat-mdc-text-field-wrapper {
     background: rgba(255, 255, 255, 0.3);
-    box-shadow: 
+    box-shadow:
       inset 0 4px 12px rgba(31, 41, 55, 0.3),
       inset 0 2px 6px rgba(31, 41, 55, 0.2),
       inset 0 -1px 3px rgba(255, 255, 255, 0.4),
       0 1px 3px rgba(255, 255, 255, 0.3);
   }
-  
+
   /* Dropdown panel */
   .mat-mdc-select-panel.mat-mdc-select-panel,
   .mat-select-panel.mat-select-panel {
@@ -380,31 +396,31 @@
     backdrop-filter: blur(15px) saturate(150%);
     -webkit-backdrop-filter: blur(15px) saturate(150%);
     border: none;
-    box-shadow: 
+    box-shadow:
       0 8px 24px rgba(31, 41, 55, 0.2),
       inset 0 1px 0 rgba(255, 255, 255, 0.9);
     will-change: transform;
     transform: translateZ(0);
   }
-  
+
   .mat-option,
   .mat-mdc-option {
     background: transparent;
     color: var(--admin-text-primary);
     transition: background 0.2s ease;
   }
-  
+
   .mat-option:hover,
   .mat-mdc-option:hover {
     background: rgba(255, 255, 255, 0.5);
   }
-  
+
   .mat-option.mat-selected,
   .mat-mdc-option.mat-selected {
     background: rgba(59, 130, 246, 0.15);
     color: var(--admin-text-primary);
   }
-  
+
   /* ===== Form field labels and placeholders ===== */
   .mat-mdc-form-field .mdc-floating-label,
   .mat-mdc-text-field-wrapper .mdc-floating-label,
@@ -412,14 +428,14 @@
     color: var(--admin-text-secondary);
     opacity: 1;
   }
-  
+
   .mat-mdc-form-field.mat-focused .mdc-floating-label,
   .mat-mdc-text-field-wrapper.mat-focused .mdc-floating-label,
   .mat-mdc-form-field.mat-focused .mat-mdc-floating-label {
     color: var(--admin-text-primary);
     opacity: 1;
   }
-  
+
   /* Input text */
   .mat-mdc-form-field .mat-mdc-input-element,
   .mat-mdc-text-field-wrapper .mat-input-element,
@@ -427,25 +443,25 @@
     color: var(--admin-text-primary);
     opacity: 1;
   }
-  
+
   /* Placeholder text */
   .mat-mdc-input-element::placeholder,
   .mat-input-element::placeholder {
     color: var(--admin-text-secondary);
     opacity: 0.7;
   }
-  
+
   /* ===== Tables with glass effect ===== */
   .mat-mdc-table {
     backdrop-filter: blur(15px) saturate(150%);
     -webkit-backdrop-filter: blur(15px) saturate(150%);
-    box-shadow: 
+    box-shadow:
       0 4px 16px rgba(31, 41, 55, 0.1),
       inset 0 1px 0 rgba(255, 255, 255, 0.6);
     transform: translate3d(0, 0, 0);
     -webkit-transform: translate3d(0, 0, 0);
   }
-  
+
   /* ===== Sidenav / Drawer - Liquid Glass Effect ===== */
   .mat-sidenav-container .mat-sidenav,
   .mat-drawer-container .mat-drawer,
@@ -455,13 +471,13 @@
     backdrop-filter: blur(20px) saturate(150%);
     -webkit-backdrop-filter: blur(20px) saturate(150%);
     border: none;
-    box-shadow: 
+    box-shadow:
       0 8px 32px rgba(31, 41, 55, 0.15),
       inset 0 1px 0 rgba(255, 255, 255, 0.4);
     will-change: transform;
     transform: translateZ(0);
   }
-  
+
   /* ===== Toolbar / Header - Liquid Glass Effect ===== */
   .mat-toolbar.mat-toolbar,
   mat-toolbar.mat-toolbar,
@@ -471,57 +487,57 @@
     -webkit-backdrop-filter: blur(20px) saturate(150%);
     border: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 
+    box-shadow:
       0 4px 16px rgba(31, 41, 55, 0.15),
       inset 0 1px 0 rgba(255, 255, 255, 0.4);
     will-change: transform;
     transform: translateZ(0);
   }
-  
+
   /* ===== Sidenav Container - Remove borders ===== */
   .mat-sidenav-container,
   .mat-drawer-container {
     background: transparent;
   }
-  
+
   .mat-sidenav-content,
   .mat-drawer-content {
     background: transparent;
   }
-  
+
   /* Remove Material's default borders and shadows */
   .mat-drawer-backdrop {
     background: transparent;
   }
-  
+
   .mat-drawer-inner-container {
     background: transparent;
     border: none;
   }
-  
+
   /* Remove any borders from sidenav inner elements */
   .mat-sidenav .mat-list-item,
   .mat-drawer .mat-list-item {
     border-bottom: none;
   }
-  
+
   .mat-sidenav .sidenav-header,
   .mat-drawer .sidenav-header {
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   }
-  
+
   .mat-sidenav .sidenav-footer,
   .mat-drawer .sidenav-footer {
     border-top: 1px solid rgba(255, 255, 255, 0.2);
   }
-  
+
   /* ===== Button styling ===== */
   .mat-mdc-raised-button.mat-primary,
   .mat-mdc-button.mat-primary {
     background: rgba(255, 255, 255, 0.3);
     color: #0f172a;
     border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 
+    box-shadow:
       0 4px 16px rgba(31, 41, 55, 0.2),
       inset 0 1px 0 rgba(255, 255, 255, 0.5);
     backdrop-filter: blur(15px) saturate(150%);
@@ -536,17 +552,17 @@
   .mat-mdc-button.mat-primary:hover {
     background: rgba(255, 255, 255, 0.4);
     border-color: rgba(255, 255, 255, 0.5);
-    box-shadow: 
+    box-shadow:
       0 6px 20px rgba(31, 41, 55, 0.25),
       inset 0 1px 0 rgba(255, 255, 255, 0.6);
   }
-  
+
   .mat-mdc-raised-button.mat-primary:active,
   .mat-mdc-button.mat-primary:active {
     background: rgba(255, 255, 255, 0.35);
     transform: translateY(1px);
   }
-  
+
   .mat-mdc-raised-button.mat-primary:disabled,
   .mat-mdc-button.mat-primary:disabled {
     transform: translateY(-1px);
@@ -573,13 +589,13 @@
   --mat-tab-header-inactive-label-text-color: rgba(255, 255, 255, 0.7);
   --mat-tab-header-active-hover-label-text-color: var(--admin-primary);
   --mat-tab-header-inactive-hover-label-text-color: var(--admin-primary);
-  
+
   /* ===== Input fields - LIGHT glass for dark background ===== */
   .mat-mdc-form-field .mat-mdc-text-field-wrapper,
   .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper {
     background: rgba(255, 255, 255, 0.12);
     border: none;
-    box-shadow: 
+    box-shadow:
       inset 0 3px 8px rgba(0, 0, 0, 0.3),
       inset 0 1px 4px rgba(0, 0, 0, 0.2),
       inset 0 -1px 2px rgba(255, 255, 255, 0.1);
@@ -589,26 +605,26 @@
     will-change: transform;
     transform: translateZ(0);
   }
-  
+
   .mat-mdc-text-field-wrapper:hover,
   .mat-mdc-form-field:hover .mat-mdc-text-field-wrapper {
     background: rgba(255, 255, 255, 0.16);
-    box-shadow: 
+    box-shadow:
       inset 0 3px 8px rgba(0, 0, 0, 0.25),
       inset 0 1px 4px rgba(0, 0, 0, 0.18),
       inset 0 -1px 2px rgba(255, 255, 255, 0.12);
   }
-  
+
   .mat-mdc-text-field-wrapper.mat-focused,
   .mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
     background: rgba(255, 255, 255, 0.2);
-    box-shadow: 
+    box-shadow:
       inset 0 3px 8px rgba(138, 180, 248, 0.15),
       inset 0 1px 4px rgba(0, 0, 0, 0.15),
       inset 0 -1px 2px rgba(255, 255, 255, 0.15),
       0 0 0 3px rgba(138, 180, 248, 0.35);
   }
-  
+
   /* Remove ALL borders for dark-glass theme */
   .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline .mdc-notched-outline__leading,
   .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline .mdc-notched-outline__notch,
@@ -620,12 +636,12 @@
     border-width: 0;
     opacity: 0;
   }
-  
+
   .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline,
   .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline {
     display: none;
   }
-  
+
   /* ===== Text visibility ===== */
   .mat-mdc-form-field.mat-mdc-form-field .mat-mdc-input-element,
   .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mat-input-element,
@@ -635,7 +651,7 @@
     color: rgba(255, 255, 255, 0.95);
     opacity: 1;
   }
-  
+
   .mat-mdc-input-element.mat-mdc-input-element::placeholder,
   .mat-input-element.mat-input-element::placeholder,
   .mat-mdc-form-field.mat-mdc-form-field input::placeholder,
@@ -643,7 +659,7 @@
     color: rgba(255, 255, 255, 0.6);
     opacity: 1;
   }
-  
+
   /* Labels */
   .mat-mdc-form-field.mat-mdc-form-field .mdc-floating-label,
   .mat-mdc-form-field.mat-mdc-form-field .mat-mdc-floating-label,
@@ -652,14 +668,14 @@
     color: rgba(255, 255, 255, 0.7);
     opacity: 1;
   }
-  
+
   .mat-mdc-form-field.mat-mdc-form-field.mat-focused .mdc-floating-label,
   .mat-mdc-form-field.mat-mdc-form-field.mat-focused .mat-mdc-floating-label,
   .mat-mdc-form-field.mat-mdc-form-field.mat-focused label {
     color: rgba(255, 255, 255, 0.95);
     opacity: 1;
   }
-  
+
   /* Hint text (character counters) */
   .mat-mdc-form-field.mat-mdc-form-field .mat-mdc-form-field-hint,
   .mat-mdc-form-field.mat-mdc-form-field .mat-hint,
@@ -667,50 +683,55 @@
   .mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-subscript-wrapper {
     color: rgba(255, 255, 255, 0.6);
   }
-  
+
   /* All headings white */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     color: rgba(255, 255, 255, 0.95);
   }
-  
+
   /* ===== Material Tabs - WHITE text with primary color ===== */
   .mat-mdc-tab-group.mat-mdc-tab-group .mat-mdc-tab.mat-mdc-tab,
   .mat-mdc-tab-header.mat-mdc-tab-header .mat-mdc-tab.mat-mdc-tab {
     color: rgba(255, 255, 255, 0.7);
     transition: color 0.3s ease;
   }
-  
+
   /* Active tab - primary color (голубой) */
   .mat-mdc-tab-group.mat-mdc-tab-group .mat-mdc-tab.mat-mdc-tab-active,
   .mat-mdc-tab-header.mat-mdc-tab-header .mat-mdc-tab.mat-mdc-tab-active,
   .mat-mdc-tab.mat-mdc-tab.mat-mdc-tab-active {
     color: var(--admin-primary);
   }
-  
+
   /* Hover - primary color (голубой) */
   .mat-mdc-tab-group.mat-mdc-tab-group .mat-mdc-tab.mat-mdc-tab:hover,
   .mat-mdc-tab-header.mat-mdc-tab-header .mat-mdc-tab.mat-mdc-tab:hover {
     color: var(--admin-primary);
   }
-  
+
   /* Tab label content inherits color */
   .mat-mdc-tab.mat-mdc-tab .mat-mdc-tab-label-content,
   .mat-mdc-tab.mat-mdc-tab .mdc-tab__text-label {
     color: inherit;
   }
-  
+
   /* Tab indicator - primary color (голубой) */
   .mat-mdc-tab-header.mat-mdc-tab-header .mdc-tab-indicator__content--underline,
   .mat-mdc-tab-header.mat-mdc-tab-header .mat-mdc-tab-indicator .mdc-tab-indicator__content {
     border-color: var(--admin-primary);
     background-color: var(--admin-primary);
   }
-  
+
   /* Tab pagination chevron */
   .mat-mdc-tab-header.mat-mdc-tab-header .mat-mdc-tab-header-pagination-chevron {
     border-color: rgba(255, 255, 255, 0.7);
   }
-  
+
   /* ===== Sidenav / Drawer - DARKER glass with WHITE text ===== */
   .mat-sidenav-container .mat-sidenav,
   .mat-drawer-container .mat-drawer,
@@ -721,13 +742,13 @@
     -webkit-backdrop-filter: blur(20px) saturate(150%);
     border: none;
     color: rgba(255, 255, 255, 0.95);
-    box-shadow: 
+    box-shadow:
       0 8px 32px rgba(0, 0, 0, 0.6),
       inset 0 1px 0 rgba(255, 255, 255, 0.08);
     will-change: transform;
     transform: translateZ(0);
   }
-  
+
   /* White text for all sidenav items */
   .mat-sidenav .mat-list-item,
   .mat-drawer .mat-list-item,
@@ -737,12 +758,12 @@
   .mat-drawer a {
     color: rgba(255, 255, 255, 0.95);
   }
-  
+
   .mat-sidenav mat-icon,
   .mat-drawer mat-icon {
     color: rgba(255, 255, 255, 0.7);
   }
-  
+
   /* Borders between nav items */
   .mat-sidenav .nav-item.nav-item,
   .mat-drawer .nav-item.nav-item,
@@ -750,13 +771,13 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     margin-bottom: 2px;
   }
-  
+
   .mat-sidenav .nav-item:last-child,
   .mat-drawer .nav-item:last-child,
   .admin-sidenav .nav-item:last-child {
     border-bottom: none;
   }
-  
+
   /* ===== Toolbar / Header - DARK glass ===== */
   .mat-toolbar.mat-toolbar,
   mat-toolbar.mat-toolbar,
@@ -766,13 +787,13 @@
     -webkit-backdrop-filter: blur(20px) saturate(150%);
     border: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 
+    box-shadow:
       0 4px 16px rgba(0, 0, 0, 0.35),
       inset 0 1px 0 rgba(255, 255, 255, 0.08);
     will-change: transform;
     transform: translateZ(0);
   }
-  
+
   /* ===== Select dropdowns - GRAY-BROWN glass (Apple style) ===== */
   .mat-mdc-select-panel.mat-mdc-select-panel,
   .mat-select-panel.mat-select-panel {
@@ -781,30 +802,30 @@
     -webkit-backdrop-filter: blur(20px) saturate(150%);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 12px;
-    box-shadow: 
+    box-shadow:
       0 10px 30px rgba(0, 0, 0, 0.4),
       inset 0 1px 0 rgba(255, 255, 255, 0.25);
     will-change: transform;
     transform: translateZ(0);
   }
-  
+
   .mat-option,
   .mat-mdc-option {
     color: rgba(255, 255, 255, 0.95);
   }
-  
+
   .mat-option:hover,
   .mat-mdc-option:hover {
     background: rgba(85, 80, 75, 0.6);
     color: rgba(255, 255, 255, 1);
   }
-  
+
   .mat-option.mat-selected,
   .mat-mdc-option.mat-selected {
     background: rgba(95, 90, 85, 0.7);
     color: rgba(255, 255, 255, 1);
   }
-  
+
   /* ===== Logout button - transparent, no background ===== */
   .sidenav-footer button,
   .sidenav-footer .mat-mdc-button {
@@ -818,19 +839,19 @@
     padding: 12px 16px;
     font-weight: 500;
   }
-  
+
   .sidenav-footer button:hover,
   .sidenav-footer .mat-mdc-button:hover {
     background: transparent;
     border: none;
     box-shadow: none;
   }
-  
+
   .sidenav-footer button mat-icon,
   .sidenav-footer .mat-mdc-button mat-icon {
     color: rgba(255, 255, 255, 0.95);
   }
-  
+
   /* ===== Paginator - LIGHT glass (Apple style) ===== */
   .mat-paginator,
   .mat-mdc-paginator {
@@ -840,39 +861,39 @@
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
     border-radius: 0 0 20px 20px;
   }
-  
+
   .mat-paginator .mat-icon-button,
   .mat-mdc-paginator .mat-mdc-icon-button {
     color: rgba(255, 255, 255, 0.95);
   }
-  
+
   .mat-paginator .mat-paginator-page-size-label,
   .mat-paginator .mat-paginator-range-label,
   .mat-mdc-paginator .mat-mdc-paginator-page-size-label,
   .mat-mdc-paginator .mat-mdc-paginator-range-label {
     color: rgba(255, 255, 255, 0.95);
   }
-  
+
   .mat-mdc-paginator .mat-mdc-select,
   .mat-paginator .mat-select {
     color: rgba(255, 255, 255, 0.95);
   }
-  
+
   .mat-mdc-paginator .mat-mdc-select-value,
   .mat-paginator .mat-select-value {
     color: rgba(255, 255, 255, 0.95);
   }
-  
+
   .mat-mdc-paginator .mat-mdc-select-trigger,
   .mat-paginator .mat-select-trigger {
     color: rgba(255, 255, 255, 0.95);
   }
-  
+
   .mat-mdc-paginator .mat-mdc-select-arrow,
   .mat-paginator .mat-select-arrow {
     color: rgba(255, 255, 255, 0.95);
   }
-  
+
   /* ===== Tables - LIGHT liquid glass (Apple style) ===== */
   .mat-mdc-table.mat-mdc-table,
   table.mat-mdc-table.mat-mdc-table {
@@ -884,7 +905,7 @@
     box-shadow: none;
     transform: translate3d(0, 0, 0);
     -webkit-transform: translate3d(0, 0, 0);
-    
+
     /* Header - WHITE text with top highlight (Apple style) */
     .mat-mdc-header-row.mat-mdc-header-row,
     thead tr,
@@ -893,11 +914,11 @@
       color: rgba(255, 255, 255, 1);
       font-weight: 600;
       border: none;
-      box-shadow: 
+      box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.3),
         0 1px 0 rgba(0, 0, 0, 0.08);
     }
-    
+
     /* Rows - WHITE text with shadow separator (top to bottom) */
     .mat-mdc-row.mat-mdc-row,
     tbody tr {
@@ -909,24 +930,24 @@
       color: rgba(255, 255, 255, 1);
       will-change: auto;
       contain: none;
-      
+
       &:hover {
         background: rgba(100, 95, 90, 0.45);
         border-bottom-color: rgba(255, 255, 255, 0.15);
         box-shadow: none;
       }
-      
+
       &:last-child {
         border-bottom: none;
       }
     }
-    
+
     /* Cells - remove internal borders */
     .mat-mdc-cell.mat-mdc-cell,
     td {
       border-bottom: none;
     }
-    
+
     /* Cells - PURE WHITE text */
     .mat-mdc-cell,
     td {
@@ -934,40 +955,40 @@
       color: rgba(255, 255, 255, 1);
       padding: 16px 12px;
     }
-    
+
     /* Zebra striping - LIGHT GRAY-BROWN (liquid glass) */
     tbody tr:nth-child(odd) {
       background: rgba(80, 75, 70, 0.2);
       will-change: auto;
     }
-    
+
     tbody tr:nth-child(even) {
       background: rgba(70, 65, 60, 0.12);
       will-change: auto;
     }
-    
+
     /* First row top corners */
     tbody tr:first-child td:first-child {
       border-top-left-radius: 0;
     }
-    
+
     tbody tr:first-child td:last-child {
       border-top-right-radius: 0;
     }
   }
-  
+
   /* Remove inner table shadows to prevent dark corners */
   .admin-table-wrapper .mat-mdc-table {
     box-shadow: none;
   }
-  
+
   /* ===== Button styling ===== */
   .mat-mdc-raised-button.mat-primary,
   .mat-mdc-button.mat-primary {
     background: rgba(138, 180, 248, 0.3);
     color: rgba(255, 255, 255, 0.95);
     border: 1px solid rgba(138, 180, 248, 0.5);
-    box-shadow: 
+    box-shadow:
       0 4px 16px rgba(138, 180, 248, 0.25),
       inset 0 1px 0 rgba(255, 255, 255, 0.25);
     backdrop-filter: blur(15px) saturate(150%);
@@ -982,11 +1003,11 @@
   .mat-mdc-button.mat-primary:hover {
     background: rgba(138, 180, 248, 0.4);
     border-color: rgba(138, 180, 248, 0.6);
-    box-shadow: 
+    box-shadow:
       0 6px 20px rgba(138, 180, 248, 0.35),
       inset 0 1px 0 rgba(255, 255, 255, 0.3);
   }
-  
+
   .mat-mdc-raised-button.mat-primary:active,
   .mat-mdc-button.mat-primary:active {
     background: rgba(138, 180, 248, 0.35);
@@ -994,91 +1015,93 @@
   }
 }
 
-  /* Shimmer animation for button hover effect */
-  @keyframes shimmer {
-    0% {
-      transform: translateX(-100%) translateY(-100%);
-    }
-    100% {
-      transform: translateX(100%) translateY(100%);
-    }
+/* Shimmer animation for button hover effect */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) translateY(-100%);
   }
 
-  /* Dark theme specific button styles */
-  [data-theme='dark'] {
-    /* primary raised/filled buttons - dark theme */
-    .mat-mdc-raised-button.mat-primary,
-    .mat-mdc-button.mat-primary {
-      // --mdc-protected-button-container-color: #607d8b;
-      --mdc-protected-button-container-color: #313638;
-      --mdc-protected-button-label-text-color: white;
-      --mat-protected-button-state-layer-color: white;
-      background-color: #313638;
-      position: relative;
-      overflow: hidden;
-    }
+  100% {
+    transform: translateX(100%) translateY(100%);
+  }
+}
 
-    .mat-mdc-raised-button.mat-primary::before,
-    .mat-mdc-button.mat-primary::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(
-        90deg,
+/* Dark theme specific button styles */
+[data-theme='dark'] {
+   .mat-datepicker-content {
+    background-color: #0f172a;
+   }
+  /* primary raised/filled buttons - dark theme */
+  .mat-mdc-raised-button.mat-primary,
+  .mat-mdc-button.mat-primary {
+    // --mdc-protected-button-container-color: #607d8b;
+    --mdc-protected-button-container-color: #313638;
+    --mdc-protected-button-label-text-color: white;
+    --mat-protected-button-state-layer-color: white;
+    background-color: #313638;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mat-mdc-raised-button.mat-primary::before,
+  .mat-mdc-button.mat-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
         transparent,
         rgba(255, 255, 255, 0.2),
-        transparent
-      );
-      transform: translateX(-100%) translateY(-100%);
-      transition: transform 0.6s ease;
-      pointer-events: none;
-    }
-
-    .mat-mdc-raised-button.mat-primary:hover,
-    .mat-mdc-button.mat-primary:hover {
-      filter: none;
-    }
-
-    .mat-mdc-raised-button.mat-primary:hover::before,
-    .mat-mdc-button.mat-primary:hover::before {
-      animation: shimmer 1.5s ease-in-out infinite;
-    }
+        transparent);
+    transform: translateX(-100%) translateY(-100%);
+    transition: transform 0.6s ease;
+    pointer-events: none;
   }
 
-  [data-theme='light'] {
+  .mat-mdc-raised-button.mat-primary:hover,
+  .mat-mdc-button.mat-primary:hover {
+    filter: none;
+  }
+
+  .mat-mdc-raised-button.mat-primary:hover::before,
+  .mat-mdc-button.mat-primary:hover::before {
+    animation: shimmer 1.5s ease-in-out infinite;
+  }
+}
+
+[data-theme='light'] {
 
   .mat-mdc-raised-button.mat-primary,
   .mat-mdc-button.mat-primary {
     background: var(--admin-primary);
     color: #ffffff;
-    box-shadow: 
+    box-shadow:
       0 2px 8px rgba(25, 118, 210, 0.3),
       0 1px 3px rgba(0, 0, 0, 0.12);
     border-radius: var(--admin-border-radius-md);
-    
+
     &:hover {
       background: var(--admin-primary-hover);
-      box-shadow: 
+      box-shadow:
         0 4px 12px rgba(25, 118, 210, 0.4),
         0 2px 4px rgba(0, 0, 0, 0.15);
       transform: translateY(-1px);
     }
-    
+
     &:active {
       transform: translateY(0);
-      box-shadow: 
+      box-shadow:
         0 1px 4px rgba(25, 118, 210, 0.3),
         0 1px 2px rgba(0, 0, 0, 0.12);
     }
   }
 }
-  /* If you need to force higher specificity for particularly stubborn MDC selectors,
+/* If you need to force higher specificity for particularly stubborn MDC selectors,
      you can duplicate selectors or add !important in a measured way.
      But prefer to keep overrides global (this file) and after material-theme.scss so it wins. */
-  
+
 // Dark Glass theme - Logout button transparent
 [data-theme='dark-glass'] {
   .sidenav-footer button.mat-mdc-button,
@@ -1090,14 +1113,17 @@
 }
 
 /* ===== Mat Menu Styles ===== */
-[data-theme='light'], [data-theme='dark'], [data-theme='glass'], [data-theme='dark-glass'] {
+[data-theme='light'],
+[data-theme='dark'],
+[data-theme='glass'],
+[data-theme='dark-glass'] {
   .mat-mdc-menu-panel {
     background-color: var(--admin-bg-card);
     box-shadow: var(--admin-shadow-lg);
     border: 1px solid var(--admin-border-primary);
     min-width: 200px;
     margin-top: 8px;
-    
+
     .mat-mdc-menu-content {
       padding: 8px 0;
     }
@@ -1128,7 +1154,7 @@
       font-weight: var(--admin-font-weight-medium);
     }
   }
-  
+
   .mat-mdc-button.mat-mdc-button-base {
     color: inherit;
   }
@@ -1141,7 +1167,11 @@
 
 // Notification menu - full width on mobile
 @media (max-width: 480px) {
-  [data-theme='light'], [data-theme='dark'], [data-theme='glass'], [data-theme='dark-glass'] {
+
+  [data-theme='light'],
+  [data-theme='dark'],
+  [data-theme='glass'],
+  [data-theme='dark-glass'] {
     .notification-menu.mat-mdc-menu-panel {
       width: 100%;
       min-width: 100%;
@@ -1182,7 +1212,7 @@
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 
+    box-shadow:
       0 8px 32px rgba(0, 0, 0, 0.12),
       inset 0 1px 0 rgba(255, 255, 255, 0.7);
   }
@@ -1194,12 +1224,38 @@
 
 /* Dark Glass theme specific menu styles */
 [data-theme='dark-glass'] {
+  .mat-datepicker-content {
+    background-color: #5a5550;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 15px;
+  }
+
+  .mat-calendar-body-cell-content {
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  --mdc-outlined-button-label-text-color: rgba(255, 255, 255, 0.7);
+  --mdc-outlined-button-state-layer-color: rgba(255, 255, 255, 0.7);
+  --mat-paginator-page-size-label-text-color: rgba(255, 255, 255, 0.7);
+  --mat-paginator-enabled-icon-color: rgba(255, 255, 255, 0.7);
+  --mat-paginator-disabled-icon-color: rgba(255, 255, 255, 0.3);
+  --mat-datepicker-calendar-previous-button-icon-color: rgba(255, 255, 255, 0.7);
+  --mat-datepicker-calendar-next-button-icon-color: rgba(255, 255, 255, 0.7);
+  --mat-datepicker-calendar-period-button-icon-color: rgba(255, 255, 255, 0.7);
+  --mat-datepicker-calendar-navigation-button-icon-color: rgba(255, 255, 255, 0.7);
+  --mat-datepicker-calendar-header-text-color: rgba(255, 255, 255, 0.7);
+  --mat-datepicker-calendar-body-label-text-color: rgba(255, 255, 255, 0.7);
+  --mat-datepicker-calendar-container-background-color: rgba(70, 65, 60, 0.6);
+  --mat-option-selected-state-label-text-color: rgba(255, 255, 255, 0.95);
+  --mat-icon-color: rgba(255, 255, 255, 0.7);
+  --mat-datepicker-toggle-icon-color: rgba(255, 255, 255, 0.7);
+
   .mat-mdc-menu-panel {
     background: rgba(90, 85, 80, 0.85);
     backdrop-filter: blur(40px) saturate(200%);
     -webkit-backdrop-filter: blur(40px) saturate(200%);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 
+    box-shadow:
       0 12px 50px rgba(0, 0, 0, 0.35),
       inset 0 1px 0 rgba(255, 255, 255, 0.3);
   }
@@ -1224,4 +1280,3 @@
     border-top-color: rgba(255, 255, 255, 0.2);
   }
 }
-
