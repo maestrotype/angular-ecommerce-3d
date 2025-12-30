@@ -6,7 +6,7 @@
 [data-theme="glass"] {
   /* Background gradient for glass theme - removed to prevent conflicts */
   min-height: 100vh;
-  
+  --theme-switcher-bg: rgba(206, 208, 212, 0.8);
   /* Favorites page glass theme */
   --favorites-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   --favorites-header-bg: rgba(255, 255, 255, 0.1);

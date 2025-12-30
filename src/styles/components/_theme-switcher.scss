@@ -28,7 +28,7 @@
     position: fixed;
     right: 0;
     top: 100%;
-    background: var(--header-bg);
+    background: var(--theme-switcher-bg);
     backdrop-filter: var(--header-backdrop-filter);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 0;
@@ -50,7 +50,7 @@
     text-align: left; 
     border: none; 
     background: transparent; 
-    color: var(--header-text);
+    color: var(--header-link);
     font-weight: 500; 
     
     &:hover { 
@@ -74,7 +74,7 @@
   }
   
   &__label { 
-    color: var(--header-text);
+    color: var(--header-link);
     font-weight: 500; 
   }
   

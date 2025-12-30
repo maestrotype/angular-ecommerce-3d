@@ -80,7 +80,21 @@
     }
   }
 }
+.no-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--admin-spacing-md);
+  padding: var(--admin-spacing-xxl);
+  color: var(--admin-text-secondary);
 
+  mat-icon {
+    font-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+    opacity: 0.5;
+  }
+}
 .payments-table-wrapper {
   background: var(--admin-order-list-card-bg);
   border-radius: var(--admin-border-radius-md);
