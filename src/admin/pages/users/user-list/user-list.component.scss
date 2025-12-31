@@ -1,682 +1,234 @@
-.header-section {
-  display: flex;
-  flex-direction: column;
-  gap: var(--admin-spacing-xs);
-  width: 100%;
-  
-  h1 {
-    color: var(--mdc-list-list-item-label-text-color);
-    margin: 0;
-    font-size: 2rem;
-    font-weight: 600;
-  }
-  
-  .subtitle {
-    color: var(--admin-text-secondary);
-    margin: 0;
-    font-size: 1rem;
+// Override list-container styles to match Orders structure
+:host ::ng-deep {
+  .list {
+    background-color: var(--admin-bg-card);
+    min-height: calc(100vh - 64px);
+    color: var(--admin-text-primary);
   }
 
-  .subtitle-desktop {
-    display: block;
+  .list__header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+    padding: 0;
+  }
+
+  .list__filters {
+    justify-content: flex-start;
+    display: flex;
+    gap: 16px;
+    margin-bottom: 12px;
+    align-items: baseline;
+    flex-wrap: wrap;
+    padding: 0;
+  }
+
+  .list__content {
+    padding: 0;
+  }
+  
+  // Dark Glass theme - transparent background for list
+  [data-theme="dark-glass"] .list {
+    background-color: transparent;
+    color: rgba(255, 255, 255, 1);
+  }
+  
+  // Add borders between table rows
+  .mat-mdc-table.mat-mdc-table {
+    .mat-mdc-row .mat-mdc-cell {
+      border-bottom: 1px solid var(--admin-order-list-border);
+    }
+    
+    .mat-mdc-row:last-child .mat-mdc-cell {
+      border-bottom: none;
+    }
+  }
+  
+  // Override admin-table-container styles to match Orders
+  .admin-table-container.admin-table-container {
+    background: var(--admin-basic-bg);
+    border-radius: var(--admin-border-radius-md);
+    box-shadow: var(--admin-shadow-md);
+    border: 1px solid var(--admin-order-list-border);
+    overflow: hidden;
+    margin: 0 var(--admin-spacing-lg);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  
+  // Ensure table inside has proper styling
+  .admin-table-container .mat-mdc-table {
+    background-color: transparent;
   }
 }
 
-::ng-deep .filter-section {
+.header-section {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: var(--admin-spacing-md);
-  height: 52px;
-  
-  .search-field {
-    max-width: 400px;
-    flex: 1;
-    min-width: 200px;
+  flex-direction: column;
+  width: 100%;
+
+  h1 {
+    color: var(--admin-text-primary);
+    margin: 0 0 4px 0;
+    font-size: 2rem;
+    font-weight: 600;
   }
-  
-  .search-button {
-    .button-text {
-      margin-left: 8px;
-    }
-  }
-  
-  .clear-button {
-    .button-text {
-      margin-left: 8px;
-    }
+
+  .subtitle {
+    color: var(--admin-text-secondary);
+    font-size: 1rem;
+    margin: 0;
   }
 }
 
 .users-table {
   width: 100%;
   
-  .user-info {
+  // Table styles are now in _admin-theme-material.scss
+  // Only user-specific styles remain here
+  
+  td {
+    .user-info {
       display: flex;
       align-items: center;
-      gap: 12px;
-      
+      gap: var(--admin-spacing-md);
+
       .user-avatar {
         width: 40px;
-        height: 0;
-        padding-bottom: 40px;
+        height: 40px;
         border-radius: 50%;
-        background-color: var(--admin-bg-hover);
-        overflow: visible;
-        position: relative;
-        
-        ::ng-deep mat-icon {
-          color: #9ca3af;
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          font-size: 40px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+        background-color: var(--admin-bg-secondary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--admin-text-secondary);
+
+        mat-icon {
+          font-size: 24px;
+          width: 24px;
+          height: 24px;
         }
       }
-      
+
       .user-name {
-        font-weight: 500;
-        margin-bottom: 2px;
-        color: var(--mdc-list-list-item-label-text-color);
+        font-weight: var(--admin-font-weight-medium);
+        color: var(--admin-text-primary);
+        margin-bottom: var(--admin-spacing-xs);
       }
-      
+
       .user-phone {
-        font-size: 12px;
-        color: #9ca3af;
+        font-size: var(--admin-font-size-sm);
+        color: var(--admin-text-secondary);
       }
     }
-    
+
     .action-buttons {
       display: flex;
-      gap: 4px;
+      gap: var(--admin-spacing-xs);
+      align-items: center;
     }
   }
-
-.no-data {
-  text-align: center;
-  padding: 48px 24px;
-  color: var(--mdc-list-list-item-label-text-color);
   
+  // Row separation and hover styles are now in _admin-theme-material.scss
+}
+
+.error-container {
+  text-align: center;
+  padding: var(--admin-spacing-xxl) var(--admin-spacing-lg);
+  color: var(--admin-text-primary);
+  margin: var(--admin-spacing-lg);
+
   mat-icon {
     font-size: 48px;
     width: 48px;
     height: 48px;
-    margin-bottom: 16px;
-    color: #9ca3af;
+    margin-bottom: var(--admin-spacing-md);
   }
-  
-  h3 {
-    margin: 0 0 8px 0;
-    font-weight: 500;
-    color: var(--mdc-list-list-item-label-text-color);
-  }
-  
+
   p {
-    margin: 0;
-    opacity: 0.7;
-    color: #9ca3af;
+    margin: var(--admin-spacing-md) 0;
+    font-size: var(--admin-font-size-lg);
   }
 }
 
-.desktop-view {
-  display: block;
-}
+::ng-deep {
+  .mat-icon-button {
+    color: var(--admin-text-primary);
 
-.mobile-view {
-  display: none;
-}
-
-.users-grid {
-  display: grid;
-  gap: 12px;
-  grid-template-columns: 1fr;
-}
-
-.user-card {
-  background: var(--admin-bg-secondary);
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  padding: 8px;
-  border: 1px solid var(--admin-border-primary, #404040);
-  transition: all 0.3s ease;
-
-  &:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    transform: translateY(-2px);
-    border-color: var(--admin-primary);
-  }
-
-  .card-main {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    grid-template-areas: 
-      "header actions"
-      "content actions";
-    gap: 6px 8px;
-    align-items: start;
-  }
-
-  .card-header {
-    grid-area: header;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
-    .user-avatar {
-      width: 52px;
-      height: 0;
-      padding-bottom: 52px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.25), rgba(147, 51, 234, 0.25));
-      border: 2px solid rgba(59, 130, 246, 0.35);
-      flex-shrink: 0;
-      box-shadow: 0 3px 10px rgba(59, 130, 246, 0.3);
-      overflow: visible;
-      position: relative;
-      
-      ::ng-deep mat-icon {
-        color: #60a5fa;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        font-size: 52px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-    }
-
-    .user-info {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-    }
-
-    .user-name {
-      font-size: 19px;
-      font-weight: 700;
-      color: var(--mdc-list-list-item-label-text-color);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      line-height: 1.2;
-    }
-
-    .user-id {
-      font-size: 12px;
-      color: #9ca3af;
-      font-weight: 600;
+    &.mat-button-disabled {
+      color: var(--admin-text-disabled);
     }
   }
 
-  .card-content {
-    grid-area: content;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    padding-left: 62px;
-    min-width: 0;
-
-    .user-email, .user-phone {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: rgba(255, 255, 255, 0.85);
-      font-size: 15px;
-      font-weight: 500;
-
-      mat-icon {
-        font-size: 18px;
-        width: 18px;
-        height: 18px;
-        color: #60a5fa;
-        flex-shrink: 0;
-      }
-
-      span {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
+  .mat-form-field {
+    .mat-form-field-label {
+      color: var(--admin-text-secondary);
     }
 
-    .user-bottom {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-      flex-wrap: wrap;
+    .mat-input-element {
+      color: var(--admin-text-primary);
     }
 
-    .user-roles {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
+    .mat-form-field-outline {
+      color: var(--admin-border-primary);
+    }
 
-      .role-chip, .status-chip {
-        font-size: 13px;
-        height: 28px;
-        font-weight: 600;
+    &.mat-focused {
+      .mat-form-field-outline-thick {
+        color: var(--admin-primary);
+      }
+
+      .mat-form-field-label {
+        color: var(--admin-primary);
       }
     }
   }
 
-  .card-actions {
-    grid-area: actions;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    justify-self: end;
-    align-self: start;
+  .mat-chip {
+    font-size: var(--admin-font-size-sm);
+    padding: 4px 12px;
+    min-height: 28px;
 
-    .action-button {
-      width: 64px;
-      height: 64px;
-
-      mat-icon {
-        font-size: 40px;
-        width: 40px;
-        height: 40px;
+    &.mat-chip-selected {
+      &.mat-primary {
+        background-color: var(--admin-primary);
+        color: white;
       }
+
+      &.mat-accent {
+        background-color: var(--admin-accent);
+        color: white;
+      }
+
+      &.mat-warn {
+        background-color: var(--admin-warn);
+        color: white;
+      }
+    }
+  }
+
+  .mat-paginator {
+    background-color: var(--admin-bg-secondary);
+    color: var(--admin-text-primary);
+    border-top: 1px solid var(--admin-border-primary);
+
+    .mat-paginator-page-size-label,
+    .mat-paginator-range-label {
+      color: var(--admin-text-primary);
+    }
+
+    .mat-icon-button {
+      color: var(--admin-text-primary);
+    }
+
+    .mat-select {
+      color: var(--admin-text-primary);
     }
   }
 }
 
-@media (max-width: 768px) {
-  .header-section {
-    h1 {
-      text-align: center;
-      font-size: 1.75rem;
-      font-weight: 700;
-    }
 
-    .subtitle-desktop {
-      display: none;
-    }
-  }
 
-  .filter-section {
-    flex-direction: column;
-    gap: 0;
-    align-items: stretch;
 
-    .search-field {
-      max-width: none;
-      width: 100%;
-      min-width: none;
-    }
 
-    .search-button-desktop,
-    .clear-button-desktop {
-      display: none;
-    }
-  }
 
-  .desktop-view {
-    display: none;
-  }
-
-  .mobile-view {
-    display: block;
-  }
-
-  .users-grid {
-    grid-template-columns: 1fr;
-    gap: 10px;
-    padding-bottom: var(--admin-mobile-padding-vertical);
-  }
-
-  .user-card {
-    padding: 8px;
-
-    .card-main {
-      gap: 4px 6px;
-    }
-
-    .card-header {
-      gap: 8px;
-
-      .user-avatar {
-        width: 48px;
-        height: 0;
-        padding-bottom: 48px;
-        overflow: visible;
-        position: relative;
-
-        ::ng-deep mat-icon {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          font-size: 48px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-      }
-
-      .user-name {
-        font-size: 17px;
-      }
-
-      .user-id {
-        font-size: 11px;
-      }
-    }
-
-    .card-content {
-      padding-left: 56px;
-      gap: 4px;
-
-      .user-email, .user-phone {
-        font-size: 14px;
-
-        mat-icon {
-          font-size: 16px;
-          width: 16px;
-          height: 16px;
-        }
-      }
-
-      .user-roles {
-        gap: 5px;
-
-        .role-chip, .status-chip {
-          font-size: 12px;
-          height: 26px;
-        }
-      }
-    }
-
-    .card-actions {
-      gap: 8px;
-
-      .action-button {
-        width: 58px;
-        height: 58px;
-
-        mat-icon {
-          font-size: 36px;
-          width: 36px;
-          height: 36px;
-        }
-      }
-    }
-  }
-
-  .mobile-paginator {
-    margin-top: var(--admin-spacing-md);
-    
-    ::ng-deep {
-      .mat-mdc-paginator-container {
-        padding: 8px 0;
-        min-height: 48px;
-      }
-
-      .mat-mdc-paginator-page-size {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-
-      .mat-mdc-paginator-page-size-label {
-        font-size: 12px;
-        margin: 0;
-      }
-
-      .mat-mdc-paginator-range-label {
-        font-size: 12px;
-      }
-    }
-  }
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
-  .users-grid {
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  }
-}
-
-@media (min-width: 1025px) {
-  .mobile-view {
-    display: none;
-  }
-
-  .desktop-view {
-    display: block;
-  }
-}
-
-// Very narrow screens (Galaxy Z Fold 5 folded - 344px)
-@media (max-width: 400px) {
-  .user-card {
-    padding: 6px;
-
-    .card-main {
-      gap: 4px 5px;
-    }
-
-    .card-header {
-      gap: 7px;
-
-      .user-avatar {
-        width: 44px;
-        height: 0;
-        padding-bottom: 44px;
-        overflow: visible;
-        position: relative;
-
-        ::ng-deep mat-icon {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          font-size: 44px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-      }
-
-      .user-name {
-        font-size: 16px;
-      }
-
-      .user-id {
-        font-size: 10px;
-      }
-    }
-
-    .card-content {
-      padding-left: 51px;
-      gap: 3px;
-
-      .user-email, .user-phone {
-        font-size: 13px;
-
-        mat-icon {
-          font-size: 15px;
-          width: 15px;
-          height: 15px;
-        }
-      }
-
-      .user-roles {
-        gap: 4px;
-
-        .role-chip, .status-chip {
-          font-size: 11px;
-          height: 24px;
-        }
-      }
-    }
-
-    .card-actions {
-      gap: 7px;
-
-      .action-button {
-        width: 54px;
-        height: 54px;
-
-        mat-icon {
-          font-size: 34px;
-          width: 34px;
-          height: 34px;
-        }
-      }
-    }
-  }
-}
-
-// Galaxy Z Fold 5/6 unfolded (690px) - use desktop format with compact table
-@media (min-width: 690px) and (max-width: 768px) {
-  .header-section {
-    h1 {
-      text-align: left;
-      font-size: 1.5rem;
-    }
-  }
-
-  .filter-section {
-    flex-direction: row;
-    gap: 12px;
-    align-items: center;
-
-    .search-field {
-      min-width: 150px;
-      max-width: 300px;
-    }
-
-    .search-button {
-      width: auto;
-      
-      .button-text {
-        display: inline;
-      }
-    }
-  }
-
-  .desktop-view {
-    display: block;
-  }
-
-  .mobile-view {
-    display: none;
-  }
-
-  // Compact table for Galaxy Z Fold
-  .users-table {
-    th, td {
-      padding: 6px 8px;
-      font-size: 12px;
-    }
-
-    .mat-column-id {
-      width: 40px;
-    }
-
-    .mat-column-name {
-      width: 100px;
-    }
-
-    .mat-column-email {
-      width: 140px;
-    }
-
-    .mat-column-role {
-      width: 60px;
-    }
-
-    .mat-column-status {
-      width: 60px;
-    }
-
-    .mat-column-actions {
-      width: 60px;
-    }
-
-    // Hide less important columns on small screens
-    .mat-column-createdAt {
-      display: none;
-    }
-  }
-
-  .users-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-// Glass theme styles for cards
-[data-theme="glass"] .user-card {
-  background: rgba(255, 255, 255, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 
-    0 4px 16px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-
-  &:hover {
-    box-shadow: 
-      0 6px 20px rgba(0, 0, 0, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.7);
-    border-color: var(--admin-primary);
-  }
-  
-  .user-avatar {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(147, 51, 234, 0.3));
-    border-color: rgba(59, 130, 246, 0.4);
-  }
-}
-
-// Dark Glass theme styles for cards
-[data-theme="dark-glass"] .user-card {
-  background: rgba(70, 65, 60, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 
-    0 4px 20px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(30px) saturate(180%);
-  -webkit-backdrop-filter: blur(30px) saturate(180%);
-
-  &:hover {
-    box-shadow: 
-      0 6px 24px rgba(0, 0, 0, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.25);
-    border-color: var(--admin-primary);
-  }
-
-  .user-avatar {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.25), rgba(147, 51, 234, 0.25));
-    border-color: rgba(59, 130, 246, 0.35);
-  }
-
-  .user-name {
-    color: rgba(255, 255, 255, 0.95);
-  }
-
-  .user-id {
-    color: rgba(255, 255, 255, 0.7);
-  }
-
-  .user-email, .user-phone {
-    color: rgba(255, 255, 255, 0.85);
-
-    mat-icon {
-      color: #60a5fa;
-    }
-  }
-}
-
-// Specific styles are handled by global theme styles in _admin-theme-material.scss

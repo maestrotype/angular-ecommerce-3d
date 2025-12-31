@@ -1,6 +1,5 @@
-
-<div class="order-list-container">
-  <div class="header-section">
+<app-list-container>
+  <div list-header class="header-section">
     <h1>{{ 'ORDER_MANAGEMENT' | translate}}</h1>
     <div class="stats-cards">
       <div class="stat-card">
@@ -10,7 +9,7 @@
     </div>
   </div>
 
-  <div class="filter-section">
+  <div list-filters class="filter-section">
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>{{ 'SEARCH_ORDERS' | translate}}</mat-label>
       <input matInput (keyup)="applyFilter($event)" placeholder="Search by customer, email...">
@@ -18,8 +17,9 @@
     </mat-form-field>
   </div>
 
-  <div class="table-container desktop-view" *ngIf="!isLoading">
-    <table mat-table [dataSource]="dataSource" matSort class="order-table">
+  <app-admin-table [loading]="isLoading" [dataSource]="dataSource" [displayedColumns]="displayedColumns">
+    <div class="desktop-view">
+      <table mat-table [dataSource]="dataSource" matSort class="order-table">
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'ORDER_NUMBER' | translate}}</th>
         <td mat-cell *matCellDef="let order">#{{ order.id }}</td>
@@ -87,12 +87,11 @@
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-  </div>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </app-admin-table>
 
   <div class="mobile-view" *ngIf="!isLoading">
     <div class="orders-grid">
@@ -163,4 +162,4 @@
     <p>{{ error }}</p>
     <button mat-button color="primary" (click)="loadOrders()">{{ 'RETRY' | translate}}</button>
   </div>
-</div>
+</app-list-container>
