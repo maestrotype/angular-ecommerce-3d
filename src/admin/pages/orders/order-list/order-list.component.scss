@@ -1,200 +1,217 @@
+// Styles for reusable components customization
+:host ::ng-deep {
 
-.order-list-container {
-  padding: 0;
-  background-color: var(--admin-order-list-bg);
-  min-height: calc(100vh - 64px);
-  color: var(--admin-order-list-text-primary);
-  box-shadow: var(--admin-shadow-md);
-}
-
-.header-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 24px;
-  padding: 24px 24px 0 24px;
-  flex-wrap: wrap;
-  gap: 1rem;
-
-  h1 {
-    margin: 0;
+  // Override list-container styles to match original Orders
+  .list {
+    background-color: var(--admin-order-list-bg);
+    min-height: calc(100vh - 64px);
     color: var(--admin-order-list-text-primary);
-    font-size: var(--admin-font-size-xxl);
-    font-weight: var(--admin-font-weight-bold);
+    box-shadow: var(--admin-shadow-md);
   }
 
-  .stats-cards {
+  .list__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 0;
+    margin: 0;
+  }
+
+  .list__kpis {
+    padding: 0;
+  }
+
+  .list__filters {
     display: flex;
     gap: var(--admin-spacing-md);
-    
-    .stat-card {
-      background: var(--admin-order-list-card-bg);
-      border-radius: var(--admin-border-radius-lg);
-      padding: var(--admin-spacing-md);
-      min-width: 120px;
-      border: 1px solid var(--admin-order-list-border);
-      transition: all var(--admin-transition-normal);
-      position: relative;
-      overflow: hidden;
-      
-      // Liquid Glass Glass
-      [data-theme="glass"] & {
-        background: rgba(255, 255, 255, 0.25);
-        backdrop-filter: blur(16px) saturate(180%);
-        -webkit-backdrop-filter: blur(16px) saturate(180%);
-        border: 1.5px solid rgba(255, 255, 255, 0.4);
-        box-shadow: 
-          0 8px 32px rgba(99, 102, 241, 0.15),
-          0 2px 8px rgba(0, 0, 0, 0.1),
-          inset 0 1px 0 rgba(255, 255, 255, 0.3);
-        
-        &::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: linear-gradient(
-            135deg,
-            rgba(99, 102, 241, 0.1) 0%,
-            rgba(14, 165, 233, 0.1) 50%,
-            rgba(139, 92, 246, 0.1) 100%
-          );
-          opacity: 0.6;
-          z-index: 0;
-          pointer-events: none;
-        }
+    flex-wrap: wrap;
 
-        &::after {
-          content: '';
-          position: absolute;
-          top: -50%;
-          left: -50%;
-          width: 200%;
-          height: 200%;
-          background: radial-gradient(
-            circle,
-            rgba(255, 255, 255, 0.2) 0%,
-            transparent 70%
-          );
-          opacity: 0;
-          transition: opacity var(--admin-transition-normal);
-          z-index: 1;
-          pointer-events: none;
-        }
+    [data-theme="dark-glass"] & {
+      padding: 0;
+    }
+  }
 
-        &:hover {
-          transform: translateY(-4px) scale(1.02);
-          box-shadow: 
-            0 12px 48px rgba(99, 102, 241, 0.25),
-            0 4px 16px rgba(0, 0, 0, 0.15),
-            inset 0 1px 0 rgba(255, 255, 255, 0.4);
-          border-color: rgba(255, 255, 255, 0.5);
-          background: rgba(255, 255, 255, 0.3);
-          
+  .list__content {
+    padding: 0;
+  }
+
+  // Add borders between table rows like in original Orders
+  .mat-mdc-table.mat-mdc-table {
+    .mat-mdc-row .mat-mdc-cell {
+      border-bottom: 1px solid var(--admin-order-list-border);
+    }
+
+    .mat-mdc-row:last-child .mat-mdc-cell {
+      border-bottom: none;
+    }
+  }
+
+  // Override admin-table-container styles to match original Orders
+  .admin-table-container.admin-table-container {
+    background: var(--admin-basic-bg);
+    border-radius: var(--admin-border-radius-md);
+    box-shadow: var(--admin-shadow-md);
+    border: 1px solid var(--admin-order-list-border);
+    overflow: hidden;
+    margin: 0 var(--admin-spacing-lg);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  // Ensure table inside has proper styling
+  .admin-table-container .mat-mdc-table {
+    background-color: transparent;
+  }
+
+  .header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    h1 {
+      margin: 0;
+      color: var(--admin-order-list-text-primary);
+      font-size: var(--admin-font-size-xxl);
+      font-weight: var(--admin-font-weight-bold);
+    }
+
+    .stats-cards {
+      display: flex;
+      gap: var(--admin-spacing-md);
+
+      .stat-card {
+        background: var(--admin-order-list-card-bg);
+        border-radius: var(--admin-border-radius-lg);
+        padding: var(--admin-spacing-md);
+        min-width: 120px;
+        border: 1px solid var(--admin-order-list-border);
+        transition: all var(--admin-transition-normal);
+        position: relative;
+        overflow: hidden;
+
+        // Liquid Glass Glass
+        [data-theme="glass"] & {
+          background: rgba(255, 255, 255, 0.25);
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
+          border: 1.5px solid rgba(255, 255, 255, 0.4);
+          box-shadow:
+            0 8px 32px rgba(99, 102, 241, 0.15),
+            0 2px 8px rgba(0, 0, 0, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+
+          &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg,
+                rgba(99, 102, 241, 0.1) 0%,
+                rgba(14, 165, 233, 0.1) 50%,
+                rgba(139, 92, 246, 0.1) 100%);
+            opacity: 0.6;
+            z-index: 0;
+            pointer-events: none;
+          }
+
           &::after {
-            opacity: 1;
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle,
+                rgba(255, 255, 255, 0.2) 0%,
+                transparent 70%);
+            opacity: 0;
+            transition: opacity var(--admin-transition-normal);
+            z-index: 1;
+            pointer-events: none;
+          }
+
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow:
+              0 12px 48px rgba(99, 102, 241, 0.25),
+              0 4px 16px rgba(0, 0, 0, 0.15),
+              inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: none;
+
+            &::after {
+              opacity: 1;
+            }
+          }
+        }
+
+        .stat-number {
+          font-size: var(--admin-font-size-xxl);
+          font-weight: var(--admin-font-weight-bold);
+          color: var(--admin-primary);
+          text-align: center;
+          position: relative;
+          z-index: 2;
+
+          [data-theme="glass"] & {
+            background: linear-gradient(135deg, #6366f1 0%, #0ea5e9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 2px 4px rgba(99, 102, 241, 0.3));
+          }
+        }
+
+        .stat-label {
+          font-size: var(--admin-font-size-sm);
+          color: var(--admin-order-list-text-secondary);
+          text-align: center;
+          margin-top: var(--admin-spacing-sm);
+          position: relative;
+          z-index: 2;
+
+          [data-theme="glass"] & {
+            color: #64748b;
+            font-weight: var(--admin-font-weight-medium);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
           }
         }
       }
-      
-      .stat-number {
-        font-size: var(--admin-font-size-xxl);
-        font-weight: var(--admin-font-weight-bold);
-        color: var(--admin-primary);
-        text-align: center;
-        position: relative;
-        z-index: 2;
-        
-        [data-theme="glass"] & {
-          background: linear-gradient(135deg, #6366f1 0%, #0ea5e9 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-          filter: drop-shadow(0 2px 4px rgba(99, 102, 241, 0.3));
-        }
-      }
-      
-      .stat-label {
-        font-size: var(--admin-font-size-sm);
-        color: var(--admin-order-list-text-secondary);
-        text-align: center;
-        margin-top: var(--admin-spacing-sm);
-        position: relative;
-        z-index: 2;
-        
-        [data-theme="glass"] & {
-          color: #64748b;
-          font-weight: var(--admin-font-weight-medium);
-          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-      }
     }
   }
-}
 
-.filter-section {
-  display: flex;
-  gap: var(--admin-spacing-md);
-  margin-bottom: var(--admin-spacing-lg);
-  padding: 0 var(--admin-spacing-lg);
-  flex-wrap: wrap;
+  // Table container margin is handled in admin-table component
+  // No need to override here
 
-  .search-field {
-    flex: 1;
-    min-width: 200px;
-    max-width: 400px;
-  }
-}
-
-:host ::ng-deep {
-  .mat-mdc-table {
-    background-color: var(--admin-basic-bg);
-  }
-}
-
-.table-container {
-  background: var(--admin-basic-bg);
-  border-radius: var(--admin-border-radius-md);
-  box-shadow: var(--admin-shadow-md);
-  border: 1px solid var(--admin-order-list-border);
-  overflow: hidden;
-  margin: 0 var(--admin-spacing-lg);
-
-  .order-table {
-    width: 100%;
-    th {
-      background-color: var(--admin-table-header-bg) ;
-      color: var(--admin-order-list-text-primary) ;
-      font-weight: var(--admin-font-weight-bold);
-      padding: var(--admin-spacing-md);
-      border-bottom: 1px solid var(--admin-border-primary);
-    }
-
-    td {
-      color: var(--admin-order-list-text-primary) ;
-      padding: var(--admin-spacing-md);
-      border-bottom: 1px solid var(--admin-order-list-border);
-      
+  // Table styles are now in _admin-theme-material.scss
+  // Only page-specific styles remain here
+  .admin-table-wrapper {
+    ::ng-deep {
       .customer-info {
         .customer-name {
           font-weight: var(--admin-font-weight-medium);
           margin-bottom: var(--admin-spacing-xs);
           color: var(--admin-order-list-text-primary);
         }
-        
+
         .customer-email {
           font-size: var(--admin-font-size-sm);
           color: var(--admin-order-list-text-secondary);
         }
-        
+
         .customer-phone {
           font-size: var(--admin-font-size-sm);
           color: var(--admin-order-list-text-secondary);
         }
       }
-      
+
       .items-info {
         font-size: var(--admin-font-size-sm);
         max-width: 200px;
@@ -202,36 +219,43 @@
         text-overflow: ellipsis;
         color: var(--admin-order-list-text-secondary);
       }
-      
+
       .total-amount {
         font-weight: var(--admin-font-weight-bold);
         color: var(--admin-order-detail-price-color);
         font-size: var(--admin-font-size-lg);
       }
-      
+
       .status-select {
         mat-select {
           font-size: var(--admin-font-size-sm);
-          
-          &.status-pending { color: var(--admin-order-status-pending); }
-          &.status-confirmed { color: var(--admin-order-status-processing); }
-          &.status-processing { color: var(--admin-order-status-processing); }
-          &.status-shipped { color: var(--admin-order-status-shipped); }
-          &.status-delivered { color: var(--admin-order-status-delivered); }
-          &.status-cancelled { color: var(--admin-order-status-cancelled); }
+
+          &.status-pending {
+            color: var(--admin-order-status-pending);
+          }
+
+          &.status-confirmed {
+            color: var(--admin-order-status-processing);
+          }
+
+          &.status-processing {
+            color: var(--admin-order-status-processing);
+          }
+
+          &.status-shipped {
+            color: var(--admin-order-status-shipped);
+          }
+
+          &.status-delivered {
+            color: var(--admin-order-status-delivered);
+          }
+
+          &.status-cancelled {
+            color: var(--admin-order-status-cancelled);
+          }
         }
       }
     }
-
-    tr:hover td {
-      background-color: var(--admin-basic-bg) ;
-    }
-  }
-
-  mat-paginator {
-    background-color: var(--admin-order-list-pagination-bg) ;
-    color: var(--admin-order-list-text-primary) ;
-    border-top: 1px solid var(--admin-order-list-pagination-border);
   }
 }
 
@@ -304,7 +328,8 @@
         color: var(--admin-order-list-text-primary);
       }
 
-      .customer-email, .customer-phone {
+      .customer-email,
+      .customer-phone {
         display: flex;
         align-items: center;
         gap: var(--admin-spacing-sm);
@@ -393,40 +418,203 @@
   }
 }
 
+// Mobile view styles
+.mobile-view {
+  display: none;
+}
+
+.orders-grid {
+  display: grid;
+  gap: var(--admin-spacing-md);
+  grid-template-columns: 1fr;
+  padding: 0 var(--admin-spacing-lg);
+}
+
+.order-card {
+  background: var(--admin-order-list-card-bg);
+  border-radius: var(--admin-border-radius-lg);
+  box-shadow: var(--admin-shadow-md);
+  padding: var(--admin-spacing-md);
+  border: 1px solid var(--admin-order-list-border);
+  transition: var(--admin-transition-normal);
+
+  &:hover {
+    box-shadow: var(--admin-shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--admin-spacing-md);
+
+    .order-id {
+      font-size: var(--admin-font-size-lg);
+      font-weight: var(--admin-font-weight-bold);
+      color: var(--admin-order-list-text-primary);
+    }
+
+    .status-select {
+      min-width: 120px;
+    }
+  }
+
+  .card-content {
+    .customer-info {
+      margin-bottom: var(--admin-spacing-md);
+
+      h3 {
+        margin: 0 0 var(--admin-spacing-sm) 0;
+        font-size: var(--admin-font-size-md);
+        font-weight: var(--admin-font-weight-bold);
+        color: var(--admin-order-list-text-primary);
+      }
+
+      .customer-email,
+      .customer-phone {
+        display: flex;
+        align-items: center;
+        gap: var(--admin-spacing-sm);
+        margin-bottom: var(--admin-spacing-xs);
+        color: var(--admin-order-list-text-secondary);
+        font-size: var(--admin-font-size-sm);
+
+        mat-icon {
+          font-size: var(--admin-font-size-md);
+          width: var(--admin-font-size-md);
+          height: var(--admin-font-size-md);
+        }
+      }
+    }
+
+    .items-info {
+      margin-bottom: var(--admin-spacing-md);
+
+      h4 {
+        margin: 0 0 var(--admin-spacing-xs) 0;
+        font-size: var(--admin-font-size-sm);
+        font-weight: var(--admin-font-weight-bold);
+        color: var(--admin-order-list-text-primary);
+      }
+
+      p {
+        margin: 0;
+        font-size: var(--admin-font-size-sm);
+        color: var(--admin-order-list-text-secondary);
+        line-height: 1.4;
+      }
+    }
+
+    .order-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--admin-spacing-sm);
+
+      .total-label {
+        font-size: var(--admin-font-size-sm);
+        color: var(--admin-order-list-text-secondary);
+      }
+
+      .total-amount {
+        font-size: var(--admin-font-size-lg);
+        font-weight: var(--admin-font-weight-bold);
+        color: var(--admin-order-detail-price-color);
+      }
+    }
+
+    .order-date {
+      display: flex;
+      align-items: center;
+      gap: var(--admin-spacing-xs);
+      color: var(--admin-order-list-text-secondary);
+      font-size: var(--admin-font-size-xs);
+
+      mat-icon {
+        font-size: var(--admin-font-size-md);
+        width: var(--admin-font-size-md);
+        height: var(--admin-font-size-md);
+      }
+    }
+  }
+
+  .card-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--admin-spacing-sm);
+    margin-top: var(--admin-spacing-md);
+    padding-top: var(--admin-spacing-md);
+    border-top: 1px solid var(--admin-order-list-border);
+
+    .action-button {
+      width: 36px;
+      height: 36px;
+      line-height: 36px;
+
+      mat-icon {
+        font-size: var(--admin-font-size-lg);
+        width: var(--admin-font-size-lg);
+        height: var(--admin-font-size-lg);
+      }
+    }
+  }
+}
+
+.loading-container,
+.error-container {
+  text-align: center;
+  padding: var(--admin-spacing-xxl) var(--admin-spacing-lg);
+  color: var(--admin-order-list-text-primary);
+  margin: 0 var(--admin-spacing-lg);
+
+  mat-spinner {
+    margin: 0 auto var(--admin-spacing-md);
+  }
+
+  p {
+    margin: var(--admin-spacing-md) 0;
+    font-size: var(--admin-font-size-lg);
+  }
+}
+
 @media (max-width: 768px) {
-  .order-list-container {
-    padding: 0;
-  }
+  :host ::ng-deep {
+    .list__header {
+      flex-direction: column;
+      gap: 16px;
+      align-items: stretch;
+      padding: 16px;
 
-  .header-section {
-    flex-direction: column;
-    gap: 16px;
-    align-items: stretch;
-    padding: 16px;
-
-    h1 {
-      text-align: center;
-      font-size: 1.5rem;
+      h1 {
+        text-align: center;
+        font-size: 1.5rem;
+      }
     }
 
-    .stats-cards {
-      justify-content: center;
+    .list__kpis {
+      padding: 0 16px;
+
+      .stats-cards {
+        justify-content: center;
+      }
+    }
+
+    .list__filters,
+    .filter-section {
+      flex-direction: column;
+      gap: 12px;
+      padding: 0 16px;
+      align-items: stretch;
+
+      .search-field {
+        min-width: none;
+        max-width: none;
+      }
     }
   }
 
-  .filter-section {
-    flex-direction: column;
-    gap: 12px;
-    padding: 0 16px;
-    align-items: stretch;
-
-    .search-field {
-      min-width: none;
-      max-width: none;
-    }
-  }
-
-  .desktop-view {
+  :host ::ng-deep .admin-table-wrapper .desktop-view {
     display: none;
   }
 
@@ -437,10 +625,6 @@
   .orders-grid {
     grid-template-columns: 1fr;
     padding: 0 16px;
-  }
-
-  .table-container {
-    margin: 0 16px;
   }
 
   .loading-container,
@@ -460,101 +644,15 @@
     display: none;
   }
 
-  .desktop-view {
+  :host ::ng-deep .admin-table-wrapper .desktop-view {
     display: block;
   }
 }
 
-::ng-deep {
-  .mat-icon-button {
-    color: #ffffff ;
-    
-    &.mat-button-disabled {
-      color: #6b7280 ;
-    }
-  }
-  
-  .mat-raised-button.mat-primary {
-    background-color: #3b82f6 ;
-    color: #ffffff ;
-  }
-  
-  .mat-form-field {
-    .mat-form-field-label {
-      color: #e5e7eb ;
-    }
-    
-    .mat-input-element {
-      color: #ffffff ;
-    }
-    
-    .mat-form-field-outline {
-      color: #6b7280 ;
-    }
-    
-    &.mat-focused {
-      .mat-form-field-outline-thick {
-        color: #3b82f6 ;
-      }
-      
-      .mat-form-field-label {
-        color: #3b82f6 ;
-      }
-    }
-  }
-  
-  .mat-select {
-    color: #ffffff ;
-    
-    .mat-select-arrow {
-      color: #9ca3af ;
-    }
-  }
-  
-  .mat-option {
-    background-color: var(--admin-bg-secondary) ;
-    color: #ffffff ;
-    
-    &:hover {
-      background-color: var(--admin-bg-hover) ;
-    }
-    
-    &.mat-selected {
-      background-color: #3b82f6 ;
-    }
-  }
-  
-  .mat-select-panel {
-    background-color: var(--admin-bg-secondary) ;
-  }
-  
-  .mat-paginator {
-    background-color: var(--admin-bg-secondary) ;
-    color: #ffffff ;
-    border-top: 1px solid #404040;
-    
-    .mat-paginator-page-size-label,
-    .mat-paginator-range-label {
-      color: #ffffff ;
-    }
-    
-    .mat-icon-button {
-      color: #ffffff ;
-    }
-    
-    .mat-select {
-      color: #ffffff ;
-    }
-  }
-}
-
-  // Galaxy Z Fold 5/6 unfolded (690px) - use desktop format with compact table
-  @media (min-width: 690px) and (max-width: 768px) {
-    .order-list-container {
-      padding: 0;
-    }
-
-    .header-section {
+// Galaxy Z Fold 5/6 unfolded (690px) - use desktop format with compact table
+@media (min-width: 690px) and (max-width: 768px) {
+  :host ::ng-deep {
+    .list__header {
       flex-direction: row;
       gap: 1rem;
       align-items: flex-start;
@@ -564,12 +662,17 @@
         text-align: left;
         font-size: 1.5rem;
       }
+    }
+
+    .list__kpis {
+      padding: 0 16px;
 
       .stats-cards {
         justify-content: flex-end;
       }
     }
 
+    .list__filters,
     .filter-section {
       flex-direction: row;
       gap: 12px;
@@ -581,63 +684,146 @@
         max-width: 300px;
       }
     }
+  }
 
-    .desktop-view {
-      display: block;
+  :host ::ng-deep .admin-table-wrapper .desktop-view {
+    display: block;
+  }
+
+  .mobile-view {
+    display: none;
+  }
+
+  // Compact table for Galaxy Z Fold
+  :host ::ng-deep .admin-table-wrapper .order-table {
+
+    th,
+    td {
+      padding: 6px 8px;
+      font-size: 12px;
     }
 
-    .mobile-view {
+    .mat-column-id {
+      width: 60px;
+    }
+
+    .mat-column-customer {
+      width: 120px;
+    }
+
+    .mat-column-items {
+      width: 100px;
+    }
+
+    .mat-column-total {
+      width: 60px;
+    }
+
+    .mat-column-status {
+      width: 80px;
+    }
+
+    .mat-column-actions {
+      width: 60px;
+    }
+
+    // Hide less important columns on small screens
+    .mat-column-date {
       display: none;
     }
+  }
 
-    // Compact table for Galaxy Z Fold
-    .order-table {
-      th, td {
-        padding: 6px 8px;
-        font-size: 12px;
-      }
+  .orders-grid {
+    grid-template-columns: 1fr;
+    padding: 0 16px;
+  }
 
-      .mat-column-orderNumber {
-        width: 60px;
-      }
+  .loading-container,
+  .error-container {
+    margin: 0 16px;
+  }
+}
 
-      .mat-column-customer {
-        width: 120px;
-      }
+// Material components styling to match original Orders
+:host ::ng-deep {
+  .mat-icon-button {
+    color: var(--admin-order-list-text-primary, #ffffff);
 
-      .mat-column-items {
-        width: 100px;
-      }
-
-      .mat-column-total {
-        width: 60px;
-      }
-
-      .mat-column-status {
-        width: 80px;
-      }
-
-      .mat-column-actions {
-        width: 60px;
-      }
-
-      // Hide less important columns on small screens
-      .mat-column-date {
-        display: none;
-      }
-    }
-
-    .orders-grid {
-      grid-template-columns: 1fr;
-      padding: 0 16px;
-    }
-
-    .table-container {
-      margin: 0 16px;
-    }
-
-    .loading-container,
-    .error-container {
-      margin: 0 16px;
+    &.mat-button-disabled {
+      color: var(--admin-text-disabled, #6b7280);
     }
   }
+
+  .mat-raised-button.mat-primary {
+    background-color: var(--admin-primary, #3b82f6);
+    color: #ffffff;
+  }
+
+  .mat-form-field {
+    .mat-form-field-label {
+      color: var(--admin-input-label, #e5e7eb);
+    }
+
+    .mat-input-element {
+      color: var(--admin-order-list-text-primary, #ffffff);
+    }
+
+    .mat-form-field-outline {
+      color: var(--admin-input-border, #6b7280);
+    }
+
+    &.mat-focused {
+      .mat-form-field-outline-thick {
+        color: var(--admin-primary, #3b82f6);
+      }
+
+      .mat-form-field-label {
+        color: var(--admin-primary, #3b82f6);
+      }
+    }
+  }
+
+  .mat-select {
+    color: var(--admin-order-list-text-primary, #ffffff);
+
+    .mat-select-arrow {
+      color: var(--admin-text-secondary, #9ca3af);
+    }
+  }
+
+  .mat-option {
+    background-color: var(--admin-bg-secondary);
+    color: var(--admin-order-list-text-primary, #ffffff);
+
+    &:hover {
+      background-color: var(--admin-bg-hover);
+    }
+
+    &.mat-selected {
+      background-color: var(--admin-primary, #3b82f6);
+    }
+  }
+
+  .mat-select-panel {
+    background-color: var(--admin-bg-secondary);
+  }
+
+  .mat-paginator {
+    background-color: var(--admin-order-list-pagination-bg, var(--admin-bg-secondary));
+    color: var(--admin-order-list-text-primary, #ffffff);
+    border-top: 1px solid var(--admin-order-list-pagination-border, #404040);
+
+    .mat-paginator-page-size-label,
+    .mat-paginator-range-label {
+      color: var(--admin-order-list-text-primary, #ffffff);
+    }
+
+    .mat-icon-button {
+      color: var(--admin-order-list-text-primary, #ffffff);
+    }
+
+    .mat-select {
+      color: var(--admin-order-list-text-primary, #ffffff);
+    }
+  }
+}

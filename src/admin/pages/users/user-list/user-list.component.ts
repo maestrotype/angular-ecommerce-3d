@@ -1,5 +1,4 @@
-
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -14,18 +13,15 @@ import { UserEditDialogComponent } from '../user-edit-dialog/user-edit-dialog.co
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.scss']
 })
-export class UserListComponent implements OnInit {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-
+export class UserListComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['id', 'name', 'email', 'role', 'status', 'createdAt', 'actions'];
   dataSource = new MatTableDataSource<User>();
-  
-  totalUsers = 0;
-  pageSize = 10;
-  currentPage = 0;
-  searchTerm = '';
   isLoading = false;
+  error: string | null = null;
+  searchTerm = '';
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private userService: UserService,
@@ -37,38 +33,57 @@ export class UserListComponent implements OnInit {
     this.loadUsers();
   }
 
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
   loadUsers(): void {
     this.isLoading = true;
-    
-    this.userService.getUsers(this.currentPage + 1, this.pageSize, this.searchTerm).subscribe({
+    this.error = null;
+
+    this.userService.getUsers(1, 100, this.searchTerm).subscribe({
       next: (response) => {
         this.dataSource.data = response.users;
-        this.totalUsers = response.total;
         this.isLoading = false;
       },
       error: (error) => {
         
+        this.error = 'Failed to load users';
         this.snackBar.open('Error loading users', 'Close', { duration: 3000 });
         this.isLoading = false;
       }
     });
   }
 
-  onPageChange(event: any): void {
-    this.currentPage = event.pageIndex;
-    this.pageSize = event.pageSize;
-    this.loadUsers();
-  }
-
   onSearch(): void {
-    this.currentPage = 0;
     this.loadUsers();
   }
 
   clearSearch(): void {
     this.searchTerm = '';
-    this.currentPage = 0;
     this.loadUsers();
+  }
+
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.searchTerm = filterValue.trim();
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  getRoleColor(role: string): string {
+    return role === 'admin' ? 'accent' : 'primary';
+  }
+
+  getStatusColor(status: string): string {
+    switch (status) {
+      case 'active': return 'primary';
+      case 'inactive': return 'warn';
+      default: return 'primary';
+    }
   }
 
   editUser(user: User): void {
@@ -91,8 +106,8 @@ export class UserListComponent implements OnInit {
     operation.subscribe({
       next: (updatedUser) => {
         this.snackBar.open(
-          `User ${isBlocked ? 'unblocked' : 'blocked'} successfully`, 
-          'Close', 
+          `User ${isBlocked ? 'unblocked' : 'blocked'} successfully`,
+          'Close',
           { duration: 3000 }
         );
         this.loadUsers();
@@ -106,7 +121,7 @@ export class UserListComponent implements OnInit {
 
   changeUserRole(user: User): void {
     const newRole = user.role === 'admin' ? 'user' : 'admin';
-    
+
     this.userService.changeUserRole(user.id, newRole).subscribe({
       next: (updatedUser) => {
         this.snackBar.open(`User role changed to ${newRole}`, 'Close', { duration: 3000 });
@@ -133,16 +148,5 @@ export class UserListComponent implements OnInit {
       });
     }
   }
-
-  getRoleColor(role: string): string {
-    return role === 'admin' ? 'accent' : 'primary';
-  }
-
-  getStatusColor(status: string): string {
-    switch (status) {
-      case 'active': return 'primary';
-      case 'blocked': return 'warn';
-      default: return 'primary';
-    }
-  }
 }
+
