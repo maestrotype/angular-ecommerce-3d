@@ -21,9 +21,14 @@
   .mat-datepicker-content {
     padding-bottom: 10px;
   }
+
   .mat-datepicker-close-button {
     display: none;
   }
+}
+
+.mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title {
+  color: var(--mat-card-subtitle-text-color);
 }
 
 /* Performance optimizations for backdrop-filter */
