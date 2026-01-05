@@ -6,6 +6,9 @@
 // Design tokens (scaffold) — defines CSS vars, does not change existing styles
 @import './tokens/index';
 
+// // Import admin specific styles
+// @import './admin/index'; 
+
 // Import theme styles FIRST (before components)
 @import './themes/index';
 
@@ -14,6 +17,3 @@
 
 // Import component styles
 @import './components/index';
-
-// Import admin specific styles
-@import './admin/index'; 

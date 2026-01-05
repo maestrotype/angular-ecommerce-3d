@@ -1,0 +1,60 @@
+/* ==========================================================================
+   ADMIN LIGHT THEME VARIABLES
+   ========================================================================== */
+
+[data-theme='light'] {
+  --admin-bg-main: #f9fafb;
+  --admin-bg-card: #ffffff;
+  --admin-bg-secondary: #f3f4f6;
+  --admin-bg-hover: #f5f6f8;
+  --admin-border-color: #d1d5db;
+  --admin-text-primary: #111827;
+  --admin-text-secondary: #6b7280;
+  --admin-primary: #3b82f6;
+  --admin-primary-rgb: 59, 130, 246;
+  --admin-input-bg: #ffffff;
+  --admin-input-text: #111827;
+  --admin-input-border: #111827;
+  --admin-input-label: #6b7280;
+  --admin-input-focus-border: var(--admin-primary);
+  --admin-danger: #ef4444;
+  --mat-card-subtitle-text-color: #111827;
+
+  // Background Colors - Light Theme
+  --admin-bg-primary: #ffffff;
+  --admin-bg-secondary: #fff;
+  --admin-bg-tertiary: #fafafa;
+  --admin-bg-card: #f0f2f5;
+  --admin-table-bg: #fafafa;
+  --admin-table-border: #a0a0a0;
+  --admin-table-header-bg: #e5e7eb;
+  --admin-bg-hover: #e8f4f8;
+  --admin-bg-overlay: rgba(0, 0, 0, 0.5);
+  --admin-basic-bg: #ffffff;
+  --admin-order-list-card-bg: #f8fafc;
+  
+  // Text Colors - Light Theme
+  --admin-text-primary: #212121;
+  --admin-text-secondary: #757575;
+  --admin-text-disabled: #bdbdbd;
+  --admin-text-inverse: #ffffff;
+  
+  // Border Colors - Light Theme
+  --admin-border-primary: #d0d0d0;
+  --admin-border-secondary: #c0c0c0;
+  --admin-border-focus: #1976d2;
+  --admin-border-error: #f44336;
+  
+  // Ensure MDC card container tokens are transparent in light theme
+  --mdc-elevated-card-container-color: transparent;
+  --mdc-filled-card-container-color: transparent;
+  --mdc-outlined-card-container-color: transparent;
+  
+  // MDC list hover tokens (light)
+  --mdc-list-list-item-hover-label-text-color: var(--admin-text-primary);
+  --mdc-list-list-item-hover-state-layer-color: transparent;
+  --mdc-list-list-item-hover-state-layer-opacity: 0;
+  --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
+  --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
+}
+  

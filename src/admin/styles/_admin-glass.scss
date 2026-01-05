@@ -1,0 +1,93 @@
+// Glass Theme Variables
+[data-theme="glass"] {
+  // Core glass surfaces & helpers
+  --admin-glass-surface-strong: linear-gradient(
+    150deg,
+    rgba(250, 251, 255, 0.9) 0%,
+    rgba(221, 232, 255, 0.55) 45%,
+    rgba(196, 210, 239, 0.35) 100%
+  );
+  --admin-glass-surface-soft: linear-gradient(
+    155deg,
+    rgba(240, 244, 255, 0.75) 0%,
+    rgba(217, 230, 250, 0.5) 60%,
+    rgba(199, 211, 233, 0.35) 100%
+  );
+  --admin-glass-surface-muted: linear-gradient(
+    165deg,
+    rgba(226, 232, 240, 0.45) 0%,
+    rgba(203, 213, 225, 0.25) 60%,
+    rgba(186, 200, 216, 0.18) 100%
+  );
+  --admin-glass-border-strong: rgba(255, 255, 255, 0.7);
+  --admin-glass-border-soft: rgba(255, 255, 255, 0.35);
+  --admin-glass-divider: rgba(255, 255, 255, 0.45);
+  --admin-glass-highlight: rgba(255, 255, 255, 0.65);
+  --admin-glass-shadow: 0 18px 45px rgba(15, 23, 42, 0.18);
+  --admin-glass-shadow-lg: 0 28px 80px rgba(15, 23, 42, 0.25);
+  --admin-glass-inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+
+  // Background Colors - Glass Theme (translucent for glass effect)
+  --admin-bg-primary: rgba(255, 255, 255, 0.15);
+  --admin-bg-secondary: rgba(255, 255, 255, 0.2);
+  --admin-bg-tertiary: rgba(250, 250, 250, 0.15);
+  --admin-bg-card: rgba(240, 242, 245, 0.25);
+  --admin-bg-hover: rgba(232, 244, 248, 0.3);
+  --admin-bg-overlay: rgba(15, 23, 42, 0.2);
+  
+  // Table colors - translucent for glass effect
+  --admin-basic-bg: rgba(255, 255, 255, 0.2);
+  --admin-table-bg: rgba(250, 250, 250, 0.15);
+  --admin-table-border: rgba(160, 160, 160, 0.3);
+  --admin-table-header-bg: rgba(229, 231, 235, 0.3);
+  
+  // Text Colors - Glass Theme (same as light theme)
+  --admin-text-primary: #212121;
+  --admin-text-secondary: #757575;
+  --admin-text-disabled: #bdbdbd;
+  --admin-text-inverse: #ffffff;
+  
+  // Border Colors - Glass Theme (same as light theme)
+  --admin-border-primary: #d0d0d0;
+  --admin-border-secondary: #c0c0c0;
+  --admin-border-focus: #1976d2;
+  --admin-border-error: #f44336;
+  
+  // Order Details / List glass overrides - translucent
+  --admin-order-detail-bg: rgba(240, 242, 245, 0.25);
+  --admin-order-detail-header-bg: rgba(232, 244, 248, 0.3);
+  --admin-order-detail-card-bg: rgba(255, 255, 255, 0.2);
+  --admin-order-detail-border: rgba(208, 208, 208, 0.3);
+  --admin-order-detail-text-primary: var(--admin-text-primary);
+  --admin-order-detail-text-secondary: var(--admin-text-secondary);
+  --admin-order-list-bg: rgba(240, 242, 245, 0.25);
+  --admin-order-list-card-bg: rgba(248, 250, 252, 0.25);
+  --admin-order-list-border: rgba(208, 208, 208, 0.3);
+  --admin-order-list-text-primary: var(--admin-text-primary);
+  --admin-order-list-text-secondary: var(--admin-text-secondary);
+  --admin-order-list-header-bg: rgba(229, 231, 235, 0.3);
+  --admin-order-list-row-hover: rgba(232, 244, 248, 0.35);
+  --admin-order-list-pagination-bg: rgba(229, 231, 235, 0.3);
+  --admin-order-list-pagination-border: rgba(208, 208, 208, 0.3);
+  
+  // Neon Accents
+  --admin-neon-primary: #9ba9ff;
+  --admin-neon-secondary: #cdd6ff;
+  
+  // Material Design List item variables (glass theme)
+  --mdc-list-list-item-label-text-color: var(--admin-text-primary);
+  --mdc-list-list-item-supporting-text-color: var(--admin-text-secondary);
+  --mdc-list-list-item-disabled-text-color: var(--admin-text-disabled);
+  --mdc-list-list-item-leading-icon-color: var(--admin-text-secondary);
+  --mdc-list-list-item-trailing-icon-color: var(--admin-text-secondary);
+  // MDC list hover tokens (glass)
+  --mdc-list-list-item-hover-label-text-color: var(--admin-text-primary);
+  --mdc-list-list-item-hover-state-layer-color: rgba(255, 255, 255, 0.1);
+  --mdc-list-list-item-hover-state-layer-opacity: 0.2;
+  --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
+  --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
+  // Ensure MDC card container tokens are transparent in glass theme
+  --mdc-elevated-card-container-color: transparent;
+  --mdc-filled-card-container-color: transparent;
+  --mdc-outlined-card-container-color: transparent;
+}
