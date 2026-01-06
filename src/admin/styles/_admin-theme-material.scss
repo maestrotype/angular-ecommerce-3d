@@ -21,9 +21,18 @@
   .mat-datepicker-content {
     padding-bottom: 10px;
   }
+
   .mat-datepicker-close-button {
     display: none;
   }
+}
+
+.mat-mdc-checkbox .mdc-form-field>label {
+  color: var(--mat-card-subtitle-text-color);
+}
+
+.mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title {
+  color: var(--mat-card-subtitle-text-color);
 }
 
 /* Performance optimizations for backdrop-filter */
@@ -467,7 +476,7 @@
   .mat-drawer-container .mat-drawer,
   mat-sidenav.mat-sidenav,
   mat-drawer.mat-drawer {
-    background: rgba(255, 255, 255, 0.2);
+    background-color: var(--admin-basic-translucent);
     backdrop-filter: blur(20px) saturate(150%);
     -webkit-backdrop-filter: blur(20px) saturate(150%);
     border: none;

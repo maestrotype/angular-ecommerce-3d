@@ -1,0 +1,89 @@
+[data-theme='dark'] {
+    /* Mapped to admin variables for consistency */
+    --color-bg: var(--admin-bg-primary, #0f172a);
+    --color-text: var(--admin-text-primary, #e2e8f0);
+    --color-primary: var(--admin-primary, #2563eb);
+    --color-surface: var(--admin-bg-card, #1e293b);
+  
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  
+    .mat-toolbar {
+      background-color: var(--color-surface);
+    }
+  
+    a {
+      color: var(--color-primary);
+    }
+  // Background Colors - Dark Theme
+  --admin-bg-primary: #121212;
+  --admin-bg-secondary: #1e1e1e;
+  --admin-bg-tertiary: #2d2d2d;
+  --admin-bg-card: #1f2937;
+  --admin-table-bg: #2d2d2d;
+  --admin-table-border: #404040;
+  --admin-bg-hover: #2d2d2d;
+  --admin-bg-overlay: rgba(255, 255, 255, 0.1);
+  --dashboard-stat-card-bg: #1e1e1e;
+  
+  // Text Colors - Dark Theme
+  --admin-text-primary: #ffffff;
+  --admin-text-secondary: #b0b0b0;
+  --admin-text-disabled: #666666;
+  --admin-text-inverse: #000000;
+  
+  // Border Colors - Dark Theme
+  --admin-border-primary: #404040;
+  --admin-border-secondary: #333333;
+  --admin-border-focus: #42a5f5;
+  --admin-border-error: #f44336;
+  
+  // Order Details Dark Theme
+  --admin-order-detail-bg: #1f2937;
+  --admin-order-detail-header-bg: #374151;
+  --admin-table-header-bg: #4b5563;
+  --admin-basic-bg: #2d2d2d;
+  --admin-order-detail-border: #404040;
+  --admin-order-detail-text-primary: #ffffff;
+  --admin-order-detail-text-secondary: #9ca3af;
+  --admin-order-detail-text-label: #9ca3af;
+  --admin-order-detail-price-color: #4caf50;
+  --admin-order-detail-total-color: #4caf50;
+  
+  // Order List Dark Theme
+  --admin-order-list-bg: #1f2937;
+  --admin-order-list-card-bg: #374151;
+  --admin-order-list-border: #404040;
+  --admin-order-list-text-primary: #ffffff;
+  --admin-order-list-text-secondary: #9ca3af;
+  --admin-order-list-text-label: #9ca3af;
+  --admin-order-list-header-bg: #374151;
+  --admin-order-list-row-hover: #374151;
+  --admin-order-list-pagination-bg: #2d2d2d;
+  --admin-order-list-pagination-border: #404040;
+  
+  // Common Order Status Colors (shared between list and detail)
+  --admin-order-status-pending: #ff9800;
+  --admin-order-status-processing: #2196f3;
+  --admin-order-status-shipped: #4caf50;
+  --admin-order-status-delivered: #4caf50;
+  --admin-order-status-cancelled: #f44336;
+
+  // Material Design List item variables (dark theme)
+  --mdc-list-list-item-label-text-color: var(--admin-text-primary);
+  --mdc-list-list-item-supporting-text-color: var(--admin-text-secondary);
+  --mdc-list-list-item-disabled-text-color: var(--admin-text-disabled);
+  --mdc-list-list-item-leading-icon-color: var(--admin-text-secondary);
+  --mdc-list-list-item-trailing-icon-color: var(--admin-text-secondary);
+  // MDC list hover tokens (dark)
+  --mdc-list-list-item-hover-label-text-color: var(--admin-text-primary);
+  --mdc-list-list-item-hover-state-layer-color: transparent;
+  --mdc-list-list-item-hover-state-layer-opacity: 0;
+  --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
+  --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
+  // Ensure MDC card container tokens are transparent in dark theme
+  --mdc-elevated-card-container-color: transparent;
+  --mdc-filled-card-container-color: transparent;
+  --mdc-outlined-card-container-color: transparent;
+}
+  

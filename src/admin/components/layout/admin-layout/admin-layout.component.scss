@@ -1,48 +1,14 @@
-// Import liquid glass mixins for this component
-@import '../../../../styles/_liquid-glass';
-
 .admin-container {
   height: 100vh;
   background-color: var(--admin-bg-primary);
   color: var(--admin-text-primary);
   transition: background-color var(--admin-transition-normal), color var(--admin-transition-normal);
-  
-  // Glass theme background gradient
-  [data-theme="glass"] & {
-    background: transparent;
-    
-    // Remove Material's default borders
-    ::ng-deep {
-      .mat-drawer-backdrop {
-        background: transparent;
-      }
-      
-      .mat-sidenav-container {
-        background: transparent;
-      }
-    }
-  }
-  
-  // Dark Glass theme
-  [data-theme="dark-glass"] & {
-    background: transparent;
-    color: rgba(255, 255, 255, 1);
-    
-    ::ng-deep {
-      .mat-drawer-backdrop {
-        background: transparent;
-      }
-      
-      .mat-sidenav-container {
-        background: transparent;
-      }
-    }
-  }
 }
 
 .admin-sidenav {
   width: 260px;
   background-color: var(--admin-basic-bg);
+  // background-color: var(--admin-bg-primary);
   box-shadow: 0px 0px 1px var(--admin-text-primary);
   color: var(--admin-text-primary);
   transition: background-color var(--admin-transition-normal), 
@@ -70,7 +36,7 @@
   background-color: var(--admin-bg-primary);
   color: var(--admin-text-primary);
   transition: background-color var(--admin-transition-normal), color var(--admin-transition-normal);
-  
+  overflow: hidden;
   [data-theme="glass"] & {
     background: transparent;
   }
@@ -84,7 +50,7 @@
 .admin-main {
   flex: 1;
   padding: 24px;
-  background-color: var(--admin-bg-secondary);
+  background-color: var(--admin-light-translucent);
   color: var(--admin-text-primary);
   min-height: calc(100vh - 64px);
   overflow-x: auto;

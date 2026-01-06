@@ -1,3 +1,9 @@
+// Default theme mapping (keeps existing look)
+@import './default';
+
+// Theme specific styles
+@import './dark';
+@import './glass'; 
 /* ==========================================================================
    THEMES INDEX
    Theme system entry point
@@ -81,12 +87,3 @@
   --product-transition-normal: 0.2s ease;
   --product-transition-slow: 0.3s ease;
 }
-
-// Default theme mapping (keeps existing look)
-@import './default';
-
-// Theme specific styles
-@import './dark';
-@import './glass'; 
-@import './admin-dark'; 
-@import './admin-light'; 
