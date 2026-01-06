@@ -47,11 +47,6 @@
       background-color: var(--admin-bg-card);
       border: 1px solid var(--admin-border-primary);
 
-      [data-theme="glass"] & {
-        @include lg-glass-effect(var(--admin-bg-card), var(--admin-border-primary));
-        border-radius: var(--lg-radius-xl);
-      }
-
       .mat-card-header {
         padding-bottom: var(--admin-spacing-md);
         border-bottom: 1px solid var(--admin-border-secondary);
@@ -154,10 +149,6 @@
       border-radius: var(--admin-border-radius-md);
       border: 1px solid var(--admin-border-primary);
 
-      [data-theme="glass"] & {
-        @include lg-glass-effect(var(--admin-bg-secondary), var(--admin-border-primary));
-      }
-
       h3 {
         font-size: var(--admin-font-size-md);
         font-weight: var(--admin-font-weight-bold);
@@ -172,10 +163,6 @@
         border-radius: var(--admin-border-radius-md);
         overflow: hidden;
         max-width: 500px;
-
-        [data-theme="glass"] & {
-          @include lg-glass-effect(var(--admin-bg-card), var(--admin-border-primary));
-        }
 
         .og-image {
           width: 120px;
