@@ -2,7 +2,6 @@
   background-color: var(--admin-basic-bg);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: var(--admin-border-radius-md);
   overflow: hidden;
   margin: 0;
@@ -15,7 +14,6 @@
   background-color: rgba(90, 85, 80, 0.85);
   backdrop-filter: blur(10px) saturate(150%);
   -webkit-backdrop-filter: blur(10px) saturate(150%);
-  border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 20px;
   overflow: hidden;
   margin: 0;
@@ -30,7 +28,6 @@
   background-color: var(--admin-basic-bg);
   border-radius: var(--admin-border-radius-md);
   box-shadow: var(--admin-shadow-md);
-  border: 1px solid var(--admin-order-list-border, var(--admin-border-primary));
   overflow: hidden;
   margin: 0;
 }

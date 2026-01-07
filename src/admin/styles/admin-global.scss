@@ -166,8 +166,6 @@ button {
   // Glass theme effects
   [data-theme="glass"] & {
     background: var(--admin-bg-card);
-    backdrop-filter: var(--lg-glass-blur);
-    -webkit-backdrop-filter: var(--lg-glass-blur);
     border: 1px solid var(--admin-border-primary);
     border-radius: 28px;
     box-shadow: var(--admin-glass-shadow);
