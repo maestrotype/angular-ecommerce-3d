@@ -1,5 +1,6 @@
 .admin-sidenav {
   background-color: transparent;
+  background-color: var(--admin-bg-card);
   color: var(--admin-text-primary);
   box-shadow: none;
   transition: background-color var(--admin-transition-normal), 
