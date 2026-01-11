@@ -18,13 +18,22 @@
   --admin-bg-secondary: var(--admin-bg-secondary, #f3f4f6);
   --admin-bg-hover: var(--admin-bg-hover, #e5e7eb);
   --admin-danger: var(--admin-danger, #ef4444);
+
   .mat-datepicker-content {
     padding-bottom: 10px;
+  }
+
+  .mat-drawer-side {
+    border-right: none;
   }
 
   .mat-datepicker-close-button {
     display: none;
   }
+}
+
+.admin-table-container .mat-mdc-table {
+  background-color: inherit;
 }
 
 .mat-mdc-checkbox .mdc-form-field>label {
@@ -33,6 +42,28 @@
 
 .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title {
   color: var(--mat-card-subtitle-text-color);
+}
+
+.admin-header .mat-toolbar {
+  background-color: inherit;
+}
+
+.admin-table-wrapper .mat-mdc-header-row {
+  background-color: var(--admin-table-header-bg);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  // box-shadow: 0 2px 2px #1f293726, inset 0 1px #fff6;
+}
+
+.admin-table-wrapper .mat-mdc-row {
+  background-color: var(--admin-table-row-bg);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  // box-shadow: 0 2px 2px #1f293726, inset 0 1px #fff6;
+}
+
+.admin-table-container .admin-table-wrapper .mat-mdc-table .mat-mdc-row:nth-child(even) {
+  background-color: var(--admin-table-even-bg);
 }
 
 /* Performance optimizations for backdrop-filter */
@@ -210,11 +241,9 @@
 
   /* ===== Tables ===== */
   .mat-mdc-table {
-    background-color: var(--admin-basic-bg, var(--admin-bg-card));
 
     /* Table header - distinct background */
     .mat-mdc-header-row .mat-mdc-header-cell {
-      background-color: var(--admin-table-header-bg);
       color: var(--admin-text-primary);
       font-weight: var(--admin-font-weight-bold);
       padding: var(--admin-spacing-md);
@@ -226,20 +255,6 @@
       color: var(--admin-text-primary);
       padding: var(--admin-spacing-md);
       border-bottom: none;
-    }
-
-    /* Elegant row separation without borders */
-    .mat-mdc-row:nth-child(even) .mat-mdc-cell {
-      background-color: var(--admin-order-list-card-bg, var(--admin-bg-secondary));
-    }
-
-    .mat-mdc-row:nth-child(odd) .mat-mdc-cell {
-      background-color: var(--admin-basic-bg, var(--admin-bg-card));
-    }
-
-    /* Hover effect */
-    .mat-mdc-row:hover .mat-mdc-cell {
-      background-color: var(--admin-bg-hover);
     }
   }
 
@@ -476,7 +491,7 @@
   .mat-drawer-container .mat-drawer,
   mat-sidenav.mat-sidenav,
   mat-drawer.mat-drawer {
-    background-color: var(--admin-basic-translucent);
+    background-color: var(--admin-light-translucent);
     backdrop-filter: blur(20px) saturate(150%);
     -webkit-backdrop-filter: blur(20px) saturate(150%);
     border: none;
@@ -491,7 +506,6 @@
   .mat-toolbar.mat-toolbar,
   mat-toolbar.mat-toolbar,
   .admin-header.mat-toolbar {
-    background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(20px) saturate(150%);
     -webkit-backdrop-filter: blur(20px) saturate(150%);
     border: none;
@@ -791,7 +805,6 @@
   .mat-toolbar.mat-toolbar,
   mat-toolbar.mat-toolbar,
   .admin-header.mat-toolbar {
-    background: rgba(20, 15, 25, 0.55);
     backdrop-filter: blur(20px) saturate(150%);
     -webkit-backdrop-filter: blur(20px) saturate(150%);
     border: none;
@@ -919,36 +932,12 @@
     .mat-mdc-header-row.mat-mdc-header-row,
     thead tr,
     .mat-mdc-header-cell.mat-mdc-header-cell {
-      background: var(--admin-table-header-bg);
       color: rgba(255, 255, 255, 1);
       font-weight: 600;
       border: none;
       box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.3),
         0 1px 0 rgba(0, 0, 0, 0.08);
-    }
-
-    /* Rows - WHITE text with shadow separator (top to bottom) */
-    .mat-mdc-row.mat-mdc-row,
-    tbody tr {
-      background: transparent;
-      border-top: none;
-      border-left: none;
-      border-right: none;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      color: rgba(255, 255, 255, 1);
-      will-change: auto;
-      contain: none;
-
-      &:hover {
-        background: rgba(100, 95, 90, 0.45);
-        border-bottom-color: rgba(255, 255, 255, 0.15);
-        box-shadow: none;
-      }
-
-      &:last-child {
-        border-bottom: none;
-      }
     }
 
     /* Cells - remove internal borders */
@@ -1037,9 +1026,10 @@
 
 /* Dark theme specific button styles */
 [data-theme='dark'] {
-   .mat-datepicker-content {
+  .mat-datepicker-content {
     background-color: #0f172a;
-   }
+  }
+
   /* primary raised/filled buttons - dark theme */
   .mat-mdc-raised-button.mat-primary,
   .mat-mdc-button.mat-primary {
@@ -1084,7 +1074,7 @@
 
   .mat-mdc-raised-button.mat-primary,
   .mat-mdc-button.mat-primary {
-    background: var(--admin-primary);
+    background: var(--add-btn);
     color: #ffffff;
     box-shadow:
       0 2px 8px rgba(25, 118, 210, 0.3),
@@ -1092,7 +1082,7 @@
     border-radius: var(--admin-border-radius-md);
 
     &:hover {
-      background: var(--admin-primary-hover);
+      background: var(--add-btn-hover);
       box-shadow:
         0 4px 12px rgba(25, 118, 210, 0.4),
         0 2px 4px rgba(0, 0, 0, 0.15);
@@ -1107,12 +1097,14 @@
     }
   }
 }
+
 /* If you need to force higher specificity for particularly stubborn MDC selectors,
      you can duplicate selectors or add !important in a measured way.
      But prefer to keep overrides global (this file) and after material-theme.scss so it wins. */
 
 // Dark Glass theme - Logout button transparent
 [data-theme='dark-glass'] {
+
   .sidenav-footer button.mat-mdc-button,
   .sidenav-footer .logout-btn {
     background: transparent;
