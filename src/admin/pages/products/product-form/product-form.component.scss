@@ -137,15 +137,15 @@
     }
     
     .submit-button {
-      background-color: #3b82f6 ;
+      background-color: var(--admin-submit-btn) ;
       color: #ffffff ;
       
       &:hover:not(:disabled) {
-        background-color: #2563eb ;
+        background-color: var(--admin-submit-btn-hover) ;
       }
       
       &:disabled {
-        background-color: #6b7280 ;
+        background-color: var(--admin-submit-btn-disabled) ;
         cursor: not-allowed;
       }
     }

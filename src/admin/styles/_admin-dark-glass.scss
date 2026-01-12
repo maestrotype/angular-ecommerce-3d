@@ -1,11 +1,13 @@
 // Dark Glass Theme Variables (iOS26 style - warm dark background)
 [data-theme="dark-glass"] {
   // Background Colors - LIGHT TRANSPARENT GLASS (liquid glass)
+  --admin-header-bg: #4d4a4e;
   --admin-bg-primary: rgba(90, 85, 80, 0.5);
   --admin-bg-secondary: rgba(85, 80, 75, 0.45);
   --admin-bg-tertiary: rgba(80, 75, 70, 0.4);
   --admin-bg-card: rgba(90, 85, 80, 0.5);
   --admin-bg-hover: rgba(100, 95, 90, 0.5);
+  --admin-back-btn: rgba(100, 95, 90, 0.5);
   --admin-bg-overlay: rgba(0, 0, 0, 0.4);
   --dashboard-stat-card-bg: rgba(85, 80, 75, 0.45);;
   
@@ -14,6 +16,7 @@
   --admin-table-bg: rgba(90, 85, 80, 0.5);
   --admin-table-border: rgba(255, 255, 255, 0.2);
   --admin-table-header-bg: rgba(80, 75, 70, 0.55);
+  --admin-table-even-bg: #46413c6b;
   
   // Text Colors - Dark Glass Theme (light text for dark background)
   --admin-text-primary: rgba(255, 255, 255, 0.95);

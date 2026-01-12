@@ -29,13 +29,6 @@
   }
 }
   
-:host ::ng-deep {
-  .mat-mdc-table {
-    background-color: var(--admin-basic-bg);
-    background-color: rgb(0, 160, 255, 0.5);
-  }
-}
-  
 .sections-table {
   width: 100%;
   

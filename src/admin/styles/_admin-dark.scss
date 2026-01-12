@@ -8,10 +8,6 @@
     background-color: var(--color-bg);
     color: var(--color-text);
   
-    .mat-toolbar {
-      background-color: var(--color-surface);
-    }
-  
     a {
       color: var(--color-primary);
     }
@@ -20,9 +16,11 @@
   --admin-bg-secondary: #1e1e1e;
   --admin-bg-tertiary: #2d2d2d;
   --admin-bg-card: #1f2937;
+  --admin-header-bg: #2d2d2d;
   --admin-table-bg: #2d2d2d;
   --admin-table-border: #404040;
   --admin-bg-hover: #2d2d2d;
+  --admin-back-btn: #2d2d2d;
   --admin-bg-overlay: rgba(255, 255, 255, 0.1);
   --dashboard-stat-card-bg: #1e1e1e;
   
@@ -41,7 +39,10 @@
   // Order Details Dark Theme
   --admin-order-detail-bg: #1f2937;
   --admin-order-detail-header-bg: #374151;
-  --admin-table-header-bg: #4b5563;
+  --admin-table-header-bg: #252525;
+  // --admin-table-even-bg: #1f2937;
+  --admin-table-even-bg: #252525;
+  --admin-table-row-bg: #93b6ff  cc;     
   --admin-basic-bg: #2d2d2d;
   --admin-order-detail-border: #404040;
   --admin-order-detail-text-primary: #ffffff;

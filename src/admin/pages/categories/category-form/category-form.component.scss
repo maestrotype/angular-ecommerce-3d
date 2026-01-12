@@ -1,5 +1,6 @@
 .category-form-container {
-    padding: 0;
+    padding: 14px;
+    border-radius: 10px;
     max-width: none;
     margin: 0;
     background-color: var(--admin-bg-card);
@@ -12,7 +13,6 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 32px;
-    background-color: var(--admin-bg-card);
   
     h1 {
       color: var(--mdc-list-list-item-label-text-color);
@@ -22,10 +22,9 @@
     }
   
     .back-button {
-      background-color: var(--admin-bg-hover);
+      background-color: var(--admin-back-btn);
       color: var(--mdc-list-list-item-label-text-color);
-      border: 1px solid #4b5563;
-  
+      box-shadow: 0px 2px 6px 3px rgb(51 51 51 / 20%);
       &:hover {
         background-color: #4b5563;
       }
@@ -37,12 +36,9 @@
     flex-direction: column;
     gap: 32px;
     padding: 0 24px;
-    background-color: var(--admin-bg-card);
   }
   
   .form-card {
-    background-color: var(--admin-bg-secondary) ;
-    border: 1px solid #404040;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
@@ -70,25 +66,26 @@
     border-top: 1px solid #404040;
   
     .cancel-button {
-      background-color: #6b7280;
+      height: 100%;
+      background-color: var(--admin-cancel-btn);
       color: var(--mdc-list-list-item-label-text-color);
-      border: 1px solid #9ca3af;
+      box-shadow: 0px 2px 6px 3px rgb(51 51 51 / 20%);
   
       &:hover {
-        background-color: #9ca3af;
+        background-color: var(--admin-cancel-btn-hover);
       }
     }
   
     .submit-button {
-      background-color: #3b82f6 ;
+      background-color: var(--admin-submit-btn) ;
       color: var(--mdc-list-list-item-label-text-color);
   
       &:hover:not(:disabled) {
-        background-color: #2563eb ;
+        background-color: var(--admin-submit-btn-hover) ;
       }
   
       &:disabled {
-        background-color: #6b7280 ;
+        background-color: var(--admin-submit-btn-disabled) ;
         cursor: not-allowed;
       }
     }

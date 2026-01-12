@@ -32,6 +32,7 @@
   "EXISTING_CATEGORIES": "Существующие категории",
   "SELECTED_CATEGORIES": "Выбранные категории",
   "ADD_CATEGORY": "Добавить категорию",
+  "UPDATE_CATEGORY": "Обновить категорию",
   "CATEGORY_NAME": "Название категории",
   "CATEGORY_SLUG": "Слаг категории",
   "CATEGORY_ICON": "Иконка категории",

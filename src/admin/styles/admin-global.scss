@@ -186,33 +186,22 @@ button {
 
 // Tables
 .mat-mdc-table {
-  background-color: var(--admin-bg-card);
+  background-color: inherit;
   color: var(--admin-text-primary);
   
   .mat-mdc-header-cell {
     color: var(--admin-text-primary);
-    background-color: var(--admin-bg-secondary);
   }
   
   .mat-mdc-cell {
     color: var(--admin-text-primary);
     border-bottom-color: var(--admin-border-primary);
   }
-  
-  .mat-mdc-row:hover {
-    background-color: var(--admin-bg-hover);
-  }
 
   [data-theme="glass"] & {
-    background: transparent;
     backdrop-filter: blur(20px) saturate(160%);
     border: 1px solid var(--admin-border-secondary);
     border-radius: 24px;
-
-    .mat-mdc-header-cell,
-    .mat-mdc-cell {
-      background: transparent;
-    }
 
     .mat-mdc-header-cell {
       border-bottom: 1px solid var(--admin-glass-divider);
