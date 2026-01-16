@@ -70,13 +70,21 @@
 [data-theme='glass'],
 [data-theme='dark-glass'] {
 
-  /* Create stacking context and GPU layer for elements with backdrop-filter */
+  /* Create stacking context and GPU layer for elements with backdrop-filter.
+     Add GPU hints to reduce Chrome compositing/rendering artifacts for semi-transparent layers. */
   .mat-sidenav,
   .mat-drawer,
   .mat-toolbar,
   .admin-header,
-  .mat-mdc-table {
+  .mat-mdc-table,
+  .admin-table-container,
+  .admin-table-wrapper {
     isolation: isolate;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: transform;
   }
 }
 
@@ -416,13 +424,15 @@
   /* Dropdown panel */
   .mat-mdc-select-panel.mat-mdc-select-panel,
   .mat-select-panel.mat-select-panel {
-    background: rgba(255, 255, 255, 0.7);
+    /* Use variable so themes can override panel background without high-specificity hacks */
+    background: var(--admin-select-panel-bg, rgba(255, 255, 255, 0.7));
     backdrop-filter: blur(15px) saturate(150%);
     -webkit-backdrop-filter: blur(15px) saturate(150%);
     border: none;
     box-shadow:
       0 8px 24px rgba(31, 41, 55, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      /* reduce the bright inset highlight so it doesn't create light rounded boxes in dark themes */
+      inset 0 1px 0 rgba(255, 255, 255, 0.18);
     will-change: transform;
     transform: translateZ(0);
   }
@@ -616,36 +626,35 @@
   /* ===== Input fields - LIGHT glass for dark background ===== */
   .mat-mdc-form-field .mat-mdc-text-field-wrapper,
   .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper {
-    background: rgba(255, 255, 255, 0.12);
-    border: none;
+    /* Use theme variables so dark-glass can control appearance without specificity wars */
+    background: var(--admin-input-bg);
+    border: 1px solid var(--admin-border-secondary);
     box-shadow:
-      inset 0 3px 8px rgba(0, 0, 0, 0.3),
-      inset 0 1px 4px rgba(0, 0, 0, 0.2),
-      inset 0 -1px 2px rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(15px) saturate(150%);
-    -webkit-backdrop-filter: blur(15px) saturate(150%);
-    transition: all 0.3s ease;
+      /* darker inner depth for dark themes */
+      inset 0 3px 8px rgba(0, 0, 0, 0.45),
+      inset 0 1px 4px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    transition: all 0.25s ease;
     will-change: transform;
     transform: translateZ(0);
   }
 
   .mat-mdc-text-field-wrapper:hover,
   .mat-mdc-form-field:hover .mat-mdc-text-field-wrapper {
-    background: rgba(255, 255, 255, 0.16);
+    background: var(--admin-input-bg);
     box-shadow:
-      inset 0 3px 8px rgba(0, 0, 0, 0.25),
-      inset 0 1px 4px rgba(0, 0, 0, 0.18),
-      inset 0 -1px 2px rgba(255, 255, 255, 0.12);
+      inset 0 3px 10px rgba(0, 0, 0, 0.48),
+      inset 0 1px 4px rgba(0, 0, 0, 0.28);
   }
 
   .mat-mdc-text-field-wrapper.mat-focused,
   .mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--admin-input-bg);
     box-shadow:
-      inset 0 3px 8px rgba(138, 180, 248, 0.15),
-      inset 0 1px 4px rgba(0, 0, 0, 0.15),
-      inset 0 -1px 2px rgba(255, 255, 255, 0.15),
-      0 0 0 3px rgba(138, 180, 248, 0.35);
+      inset 0 3px 10px rgba(59, 59, 59, 0.35),
+      inset 0 1px 4px rgba(0, 0, 0, 0.22),
+      0 0 0 3px rgba(138, 180, 248, 0.18);
   }
 
   /* Remove ALL borders for dark-glass theme */
@@ -1279,5 +1288,67 @@
 
   .mat-divider {
     border-top-color: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Strong overrides for Chrome/macOS compositing issues:
+     remove bright inset highlights and heavy backdrop-filters on interactive controls
+     to avoid rendering artifacts (bands/stripes) while keeping dark shadows. */
+  .mat-mdc-form-field .mat-mdc-text-field-wrapper,
+  .mat-mdc-form-field:has(.mat-mdc-select) .mat-mdc-text-field-wrapper {
+    /* remove bright inset highlights, keep subtle dark depth */
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.45), 0 6px 20px rgba(0,0,0,0.45);
+    background: var(--admin-input-bg);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .mat-mdc-select-panel,
+  .mat-select-panel {
+    box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+    background: var(--admin-select-panel-bg, var(--admin-order-list-bg));
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: 1px solid var(--admin-border-secondary);
+  }
+
+  /* Table rows/cells: explicit solid-ish background to avoid banding */
+  .mat-mdc-table,
+  .mat-mdc-table .mat-mdc-row,
+  .mat-mdc-table .mat-mdc-cell {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background-color: var(--admin-table-bg);
+    box-shadow: none;
+  }
+ 
+  /* Reduce heavy compositing effects for tables/sidenav in dark-glass to prevent rendering glitches */
+  .mat-mdc-table,
+  table.mat-mdc-table {
+    /* disable backdrop-filter for large table surfaces in this theme (Chrome compositing bug workaround) */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background-color: var(--admin-table-bg);
+    box-shadow: none;
+  }
+
+  .mat-mdc-table .mat-mdc-row,
+  .mat-mdc-table .mat-mdc-cell,
+  .admin-table-wrapper .mat-mdc-row {
+    background-color: var(--admin-table-bg);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    will-change: transform;
+  }
+
+  /* soften sidenav shadow to avoid visible vertical bands on some GPUs */
+  .mat-sidenav-container .mat-sidenav,
+  .mat-drawer-container .mat-drawer,
+  mat-sidenav.mat-sidenav,
+  mat-drawer.mat-drawer {
+    box-shadow:
+      0 8px 20px rgba(0, 0, 0, 0.45),
+      inset 0 0 0 rgba(0, 0, 0, 0);
   }
 }
