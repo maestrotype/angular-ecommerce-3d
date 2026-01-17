@@ -54,7 +54,6 @@
     border-radius: var(--admin-border-radius-md);
     box-shadow: var(--admin-shadow-md);
     overflow: hidden;
-    margin: 0 var(--admin-spacing-lg);
     /* Improve compositing for semi-transparent backgrounds to avoid rendering glitches */
     isolation: isolate;
     transform: translateZ(0);
