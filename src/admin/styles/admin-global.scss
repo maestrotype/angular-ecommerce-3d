@@ -472,11 +472,13 @@ button {
 .mat-mdc-dialog-container {
   .mdc-dialog__surface {
     background-color: var(--admin-bg-card);
+    border-radius: var(--border-radius-dark-glass)!important;
     color: var(--admin-text-primary);
   }
   
   .mdc-dialog__title {
     color: var(--admin-text-primary);
+    background-color: var(--admin-header-bg);
   }
   
   .mdc-dialog__content {

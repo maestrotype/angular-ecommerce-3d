@@ -54,12 +54,19 @@
     border-radius: var(--admin-border-radius-md);
     box-shadow: var(--admin-shadow-md);
     overflow: hidden;
-    margin: 0 var(--admin-spacing-lg);
+    /* Improve compositing for semi-transparent backgrounds to avoid rendering glitches */
+    isolation: isolate;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: transform;
   }
 
   // Ensure table inside has proper styling
   .admin-table-container .mat-mdc-table {
-    background-color: transparent;
+    /* Use explicit table background instead of transparent to avoid compositing artifacts */
+    background-color: var(--admin-table-bg);
   }
 
   .header-section {
