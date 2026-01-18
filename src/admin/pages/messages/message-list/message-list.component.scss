@@ -26,7 +26,7 @@
     margin-bottom: var(--admin-spacing-lg);
     align-items: baseline;
     flex-wrap: wrap;
-    height: 52px;
+    height: auto;
     width: 100%;
     
     .search-field {
@@ -238,8 +238,28 @@
 
 // Responsive Design
 @media (max-width: 768px) {
-  .message-list-container {
+  /* Target the list container produced by `app-list-container` */
+  ::ng-deep .list {
     padding: 16px;
+  }
+  /* Ensure filter section stacks cleanly on small screens */
+  ::ng-deep .filter-section,
+  ::ng-deep .list__filters,
+  .filter-section {
+    height: auto;
+    align-items: stretch;
+  }
+
+  ::ng-deep .filter-section .status-filter,
+  ::ng-deep .filter-section .search-field {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+  }
+
+  ::ng-deep .filter-section .search-button {
+    width: 100%;
+    align-self: stretch;
   }
 
   .filters {

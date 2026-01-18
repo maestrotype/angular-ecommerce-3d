@@ -28,12 +28,13 @@
   </div>
 
   <!-- TABLE -->
-  <app-admin-table 
-    [loading]="loading" 
-    [dataSource]="filteredMessages" 
-    [displayedColumns]="displayedColumns"
-  >
-    <table mat-table [dataSource]="filteredMessages" matSort class="messages-table">
+  <ng-container *ngIf="!isMobile">
+    <app-admin-table 
+      [loading]="loading" 
+      [dataSource]="filteredMessages" 
+      [displayedColumns]="displayedColumns"
+    >
+      <table mat-table [dataSource]="filteredMessages" matSort class="messages-table">
       
       <ng-container matColumnDef="senderName">
         <th mat-header-cell *matHeaderCellDef>{{ 'SENDER_NAME' | translate }}</th>
@@ -84,8 +85,50 @@
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-  </app-admin-table>
+      </table>
+    </app-admin-table>
+  </ng-container>
+
+  <!-- MOBILE: render card list -->
+  <div *ngIf="isMobile" class="mobile-view">
+    <div class="messages-grid">
+      <div *ngFor="let message of filteredMessages" class="message-card">
+        <div class="card-header">
+          <div class="sender-info">
+            <h3>{{ message.senderName }}</h3>
+            <p class="email">{{ message.senderEmail }}</p>
+          </div>
+          <div class="status-chip">
+            <mat-chip [color]="getStatusColor(message.status)" selected>
+              {{ message.status | titlecase }}
+            </mat-chip>
+          </div>
+        </div>
+
+        <div class="card-content">
+          <div class="subject">
+            <h4>{{ message.subject }}</h4>
+          </div>
+          <div class="date">{{ message.createdAt | date:'short' }}</div>
+        </div>
+
+        <div class="card-actions">
+          <button mat-icon-button color="primary" (click)="viewMessage(message)" matTooltip="View Details">
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <button mat-icon-button color="accent" (click)="markAsRead(message)" *ngIf="message.status === 'new'" matTooltip="Mark as Read">
+            <mat-icon>mark_email_read</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="markAsArchived(message)" *ngIf="message.status !== 'closed'" matTooltip="Archive">
+            <mat-icon>archive</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteMessage(message)" matTooltip="Delete">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- NO DATA / MOBILE -->
   <div *ngIf="!loading && filteredMessages.length === 0" class="no-data">

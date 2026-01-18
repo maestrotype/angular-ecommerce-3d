@@ -1,5 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MessageService } from '../../../services/message.service';
@@ -17,6 +18,7 @@ export class MessageListComponent implements OnInit {
   loading = false;
   searchTerm = '';
   statusFilter = 'all';
+  isMobile = false;
 
   displayedColumns: string[] = ['senderName', 'senderEmail', 'subject', 'status', 'createdAt', 'actions'];
 
@@ -24,10 +26,14 @@ export class MessageListComponent implements OnInit {
     private messageService: MessageService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
+    , private breakpointObserver: BreakpointObserver
   ) {}
 
   ngOnInit(): void {
     this.loadMessages();
+    this.breakpointObserver.observe(['(max-width: 768px)']).subscribe(result => {
+      this.isMobile = result.matches;
+    });
   }
 
   loadMessages(): void {
