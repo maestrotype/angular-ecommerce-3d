@@ -2,14 +2,18 @@
 .message-detail-container {
   max-width: 800px;
   background-color: var(--admin-bg-card);
+  background-color: rgb(96,91,86);
   color: var(--mdc-list-list-item-label-text-color);
+  border: 1.5px solid rgba(255, 255, 255, .18);
+  border-radius: var(--border-radius-dark-glass);
+  box-shadow: 0 16px 60px #00000059, 0 2px 24px #ffb4781a, inset 0 1px #ffffff57, inset 0 0 60px #ffffff08;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #404040;
+  background-color: var(--admin-header-bg);
   padding-bottom: 16px;
   margin-bottom: 24px;
 
@@ -110,7 +114,7 @@
   justify-content: flex-end;
   gap: 12px;
   padding-top: 16px;
-  border-top: 1px solid #404040;
+  background-color: var(--admin-header-bg);
   margin-top: 24px;
 }
 

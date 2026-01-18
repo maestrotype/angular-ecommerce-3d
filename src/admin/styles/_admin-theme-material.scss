@@ -49,7 +49,7 @@
 }
 
 .admin-table-wrapper .mat-mdc-header-row {
-  background-color: var(--admin-header-bg);
+  background-color: var(--admin-table-header-bg);
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
   // box-shadow: 0 2px 2px #1f293726, inset 0 1px #fff6;
@@ -64,6 +64,28 @@
 
 .admin-table-container .admin-table-wrapper .mat-mdc-table .mat-mdc-row:nth-child(even) {
   background-color: var(--admin-table-even-bg);
+}
+
+// Dialog
+.mat-mdc-dialog-panel {
+  .mat-mdc-dialog-container {
+    .mdc-dialog__surface {
+      background-color: var(--admin-bg-card);
+      border-radius: var(--border-radius-dark-glass);
+      color: var(--admin-text-primary);
+      border: 1.5px solid rgba(255, 255, 255, .18);
+      box-shadow: 0 16px 60px #00000059, 0 2px 24px #ffb4781a, inset 0 1px #ffffff57, inset 0 0 60px #ffffff08;
+    }
+
+    .mdc-dialog__title {
+      color: var(--admin-text-primary);
+      background-color: var(--admin-header-bg);
+    }
+
+    .mdc-dialog__content {
+      color: var(--admin-text-primary);
+    }
+  }
 }
 
 /* Performance optimizations for backdrop-filter */
@@ -254,14 +276,14 @@
     .mat-mdc-header-row .mat-mdc-header-cell {
       color: var(--admin-text-primary);
       font-weight: var(--admin-font-weight-bold);
-      padding: var(--admin-spacing-md);
+      padding: var(--admin-spacing-md) var(--admin-spacing-lg);
       border-bottom: none;
     }
 
     /* Table cells - no borders */
     .mat-mdc-cell {
       color: var(--admin-text-primary);
-      padding: var(--admin-spacing-md);
+      padding: var(--admin-spacing-md) var(--admin-spacing-lg);
       border-bottom: none;
     }
   }
@@ -960,7 +982,7 @@
     td {
       border: none;
       color: rgba(255, 255, 255, 1);
-      padding: 16px 12px;
+      padding: 8px 12px;
     }
 
     /* Zebra striping - LIGHT GRAY-BROWN (liquid glass) */
@@ -1296,7 +1318,7 @@
   .mat-mdc-form-field .mat-mdc-text-field-wrapper,
   .mat-mdc-form-field:has(.mat-mdc-select) .mat-mdc-text-field-wrapper {
     /* remove bright inset highlights, keep subtle dark depth */
-    box-shadow: inset 0 2px 6px rgba(0,0,0,0.45), 0 6px 20px rgba(0,0,0,0.45);
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.45), 0 6px 20px rgba(0, 0, 0, 0.45);
     background: var(--admin-input-bg);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
@@ -1304,7 +1326,7 @@
 
   .mat-mdc-select-panel,
   .mat-select-panel {
-    box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
     background: var(--admin-select-panel-bg, var(--admin-order-list-bg));
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
@@ -1320,7 +1342,7 @@
     background-color: var(--admin-table-bg);
     box-shadow: none;
   }
- 
+
   /* Reduce heavy compositing effects for tables/sidenav in dark-glass to prevent rendering glitches */
   .mat-mdc-table,
   table.mat-mdc-table {

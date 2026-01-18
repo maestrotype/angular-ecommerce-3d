@@ -16,7 +16,7 @@
   --admin-table-bg: rgba(90, 85, 80, 0.7);
   --admin-table-border: rgba(255, 255, 255, 0.2);
   --admin-table-header-bg: rgba(80, 75, 70, 0.55);
-  --admin-table-even-bg: #46413c6b;
+  --admin-table-even-bg: rgb(70, 65, 60);
   
   // Text Colors - Dark Glass Theme (light text for dark background)
   --admin-text-primary: rgba(255, 255, 255, 0.95);
@@ -29,6 +29,7 @@
   --admin-border-secondary: rgba(255, 255, 255, 0.15);
   --admin-border-focus: #8ab4f8;
   --admin-border-error: #f28b82;
+  --border-radius-dark-glass: 28px;
   
   // Order Details / List dark glass overrides - GRAY-BROWN
   --admin-order-detail-bg: rgba(75, 70, 65, 0.65);
