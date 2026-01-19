@@ -108,6 +108,12 @@
   --admin-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
   --admin-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
   --admin-shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+
+  // Borders
+  --border-width: 0px;
+  --border-color: rgba(0, 0, 0, 0.12);
+  --border-opacity: 0.12;
+  --border-style: solid;
   
   // Z-Index
   --admin-z-dropdown: 1000;

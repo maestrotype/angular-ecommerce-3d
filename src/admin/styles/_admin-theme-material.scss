@@ -78,8 +78,7 @@
       background-color: var(--admin-bg-card);
       border-radius: var(--border-radius-dark-glass);
       color: var(--admin-text-primary);
-      border: 1.5px solid rgba(255, 255, 255, .18);
-      box-shadow: 0 16px 60px #00000059, 0 2px 24px #ffb4781a, inset 0 1px #ffffff57, inset 0 0 60px #ffffff08;
+      backdrop-filter: blur(5px);
     }
 
     .mdc-dialog__title {
