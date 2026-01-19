@@ -16,7 +16,7 @@
 .cdk-overlay-container {
   .cdk-overlay-connected-position-bounding-box {
     position: absolute;
-    right: 0 !important;
+    right: 0;
 
     .cdk-overlay-pane {
       &:has(.notification-menu) {
