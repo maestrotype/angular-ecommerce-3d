@@ -60,6 +60,8 @@
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   will-change: scroll-position;
+  scrollbar-width: none;          // Firefox
+  -ms-overflow-style: none;       // Edge/IE
 
   // Glass theme - keep it simple
   [data-theme="glass"] & {
