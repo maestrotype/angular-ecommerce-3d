@@ -11,6 +11,10 @@
     a {
       color: var(--color-primary);
     }
+
+    p {
+      color: var(--color-text);
+    }
   // Background Colors - Dark Theme
   --admin-bg-primary: #121212;
   --admin-bg-secondary: #1e1e1e;
@@ -38,12 +42,13 @@
   --admin-border-error: #f44336;
   
   // Order Details Dark Theme
-  --admin-order-detail-bg: #1f2937;
+  --admin-popup-bg: #1f2937;
   --admin-order-detail-header-bg: #374151;
   --admin-table-header-bg: #252525;
   // --admin-table-even-bg: #1f2937;
   --admin-table-even-bg: #252525;
-  --admin-table-row-bg: #93b6ff  cc;     
+  --admin-table-row-bg: #93b6ff  cc;    
+  --admin-table-row-bg: #2d2d2d; 
   --admin-basic-bg: #2d2d2d;
   --admin-order-detail-border: #404040;
   --admin-order-detail-text-primary: #ffffff;

@@ -24,6 +24,11 @@
     -ms-overflow-style: none; // Edge/IE
   }
 
+  .mat-icon {
+    height: auto;
+    width: auto;
+  }
+
   .mat-datepicker-content {
     padding-bottom: 10px;
   }
@@ -1235,6 +1240,8 @@
     .mat-icon {
       color: var(--admin-text-secondary);
       margin-right: 12px;
+      height: auto;
+      width: auto;
     }
 
     .mat-mdc-menu-item-text {

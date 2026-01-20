@@ -47,6 +47,7 @@
   --admin-bg-card: #ffffff;
   --admin-bg-hover: #e8f4f8;
   --admin-bg-overlay: rgba(0, 0, 0, 0.5);
+  --admin-popup-bg: #fafafa;
   
   // Text Colors - Light Theme (Default)
   --admin-text-primary: #212121;
@@ -125,7 +126,6 @@
   --admin-z-tooltip: 1070;
   
   // Order Details Specific
-  --admin-order-detail-bg: var(--admin-bg-card);
   --admin-order-detail-header-bg: var(--admin-bg-hover);
   --admin-order-detail-card-bg: var(--admin-bg-secondary);
   --admin-order-detail-border: var(--admin-border-primary);

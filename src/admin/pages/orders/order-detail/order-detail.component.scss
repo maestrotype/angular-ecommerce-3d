@@ -1,7 +1,7 @@
 .order-detail-container {
   max-width: 900px;
   max-height: 80vh;
-  background-color: var(--admin-order-detail-bg);
+  background-color: var(--admin-popup-bg);
   color: var(--admin-order-detail-text-primary);
   border-radius: var(--admin-border-radius-md);
   overflow: hidden;
@@ -59,6 +59,8 @@
   flex: 1;
   overflow-y: auto;
   max-height: calc(80vh - 80px); // Subtract header height
+  scrollbar-width: none;          // Firefox
+  -ms-overflow-style: none; 
 }
 
 .order-info {
