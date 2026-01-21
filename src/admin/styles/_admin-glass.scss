@@ -46,6 +46,7 @@
   --admin-cancel-btn-hover: #9ca3af;
   --admin-cancel-btn-disabled: #404040;
   --admin-bg-overlay: rgba(15, 23, 42, 0.2);
+  --admin-message-info-bg: rgba(255, 255, 255, 0.3);
   
   // Table colors - translucent for glass effect
   --admin-basic-bg: rgba(255, 255, 255, 0.2);
@@ -56,7 +57,8 @@
   --admin-table-border: rgba(160, 160, 160, 0.3);
   --admin-table-header-bg: rgb(184 200 237 / 50%);
   --admin-table-even-bg: #dbe6ff80;
-  --admin-table-row-bg: #93b6ff  cc;     
+  --admin-table-row-bg: #93b6ff  cc;    
+  --admin-bg-container: #d7e1ff; 
   --dashboard-stat-card-bg: rgba(248, 250, 252, 0.2);
   
   // Text Colors - Glass Theme (same as light theme)
@@ -72,7 +74,7 @@
   --admin-border-error: #f44336;
   
   // Order Details / List glass overrides - translucent
-  --admin-order-detail-bg: rgba(240, 242, 245, 0.25);
+  --admin-popup-bg: rgba(240, 242, 245, 0.25);
   --admin-order-detail-header-bg: rgba(232, 244, 248, 0.3);
   --admin-order-detail-card-bg: rgba(255, 255, 255, 0.2);
   --admin-order-detail-border: rgba(208, 208, 208, 0.3);

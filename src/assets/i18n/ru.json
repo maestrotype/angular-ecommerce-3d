@@ -429,5 +429,8 @@
   "PAYPAL_CLIENT_SECRET": "Секрет клиента PayPal",
   "DEFAULT_PAYMENT_METHOD": "Метод оплаты по умолчанию",
   "CLIENT_ID_FROM_PAYPAL_DEVELOPER": "ID клиента от PayPal Developer",
-  "CLIENT_SECRET_FROM_PAYPAL_DEVELOPER": "Секрет клиента от PayPal Developer"
+  "CLIENT_SECRET_FROM_PAYPAL_DEVELOPER": "Секрет клиента от PayPal Developer",
+  "IN_PROGRESS": "В процессе",
+  "CLOSED": "Закрыто",
+  "ANSWERED": "Отвечено"
 }

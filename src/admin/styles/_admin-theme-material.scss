@@ -24,6 +24,11 @@
     -ms-overflow-style: none; // Edge/IE
   }
 
+  .mat-icon {
+    height: auto;
+    width: auto;
+  }
+
   .mat-datepicker-content {
     padding-bottom: 10px;
   }
@@ -78,8 +83,7 @@
       background-color: var(--admin-bg-card);
       border-radius: var(--border-radius-dark-glass);
       color: var(--admin-text-primary);
-      border: 1.5px solid rgba(255, 255, 255, .18);
-      box-shadow: 0 16px 60px #00000059, 0 2px 24px #ffb4781a, inset 0 1px #ffffff57, inset 0 0 60px #ffffff08;
+      backdrop-filter: blur(5px);
     }
 
     .mdc-dialog__title {
@@ -284,14 +288,14 @@
     .mat-mdc-header-row .mat-mdc-header-cell {
       color: var(--admin-text-primary);
       font-weight: var(--admin-font-weight-bold);
-      padding: var(--admin-spacing-md) var(--admin-spacing-lg);
+      padding: var(--admin-spacing-md) var(--admin-spacing-md);
       border-bottom: none;
     }
 
     /* Table cells - no borders */
     .mat-mdc-cell {
       color: var(--admin-text-primary);
-      padding: var(--admin-spacing-md) var(--admin-spacing-lg);
+      padding: var(--admin-spacing-md) var(--admin-spacing-md);
       border-bottom: none;
     }
   }
@@ -1236,6 +1240,8 @@
     .mat-icon {
       color: var(--admin-text-secondary);
       margin-right: 12px;
+      height: auto;
+      width: auto;
     }
 
     .mat-mdc-menu-item-text {

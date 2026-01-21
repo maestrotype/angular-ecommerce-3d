@@ -32,7 +32,7 @@
   --border-radius-dark-glass: 28px;
   
   // Order Details / List dark glass overrides - GRAY-BROWN
-  --admin-order-detail-bg: rgba(75, 70, 65, 0.65);
+  --admin-popup-bg: rgba(75, 70, 65, 0.65);
   --admin-order-detail-header-bg: rgba(65, 60, 55, 0.7);
   --admin-order-detail-card-bg: rgba(70, 65, 60, 0.6);
   --admin-order-detail-border: rgba(255, 255, 255, 0.15);
@@ -102,6 +102,7 @@
   --admin-bg-secondary: rgba(85, 80, 75, 0.45);
   --admin-bg-tertiary: rgba(80, 75, 70, 0.4);
   --admin-bg-card: rgba(90, 85, 80, 0.7);
+  --admin-bg-container: rgba(90, 85, 80, 0.7);;
   --admin-bg-hover: rgba(100, 95, 90, 0.5);
   --admin-bg-overlay: rgba(0, 0, 0, 0.4);
   
@@ -126,7 +127,7 @@
   --admin-border-error: #f28b82;
   
   // Order Details / List dark glass overrides - GRAY-BROWN
-  --admin-order-detail-bg: rgba(75, 70, 65, 0.65);
+  --admin-popup-bg: rgba(75, 70, 65, 0.65);
   --admin-order-detail-header-bg: rgba(65, 60, 55, 0.7);
   --admin-order-detail-card-bg: rgba(70, 65, 60, 0.6);
   --admin-order-detail-border: rgba(255, 255, 255, 0.15);
@@ -164,6 +165,11 @@
   --admin-input-border: rgba(255, 255, 255, 0.2);
   --admin-input-label: rgba(255, 255, 255, 0.9);
   --admin-input-focus-border: #8ab4f8;
+
+  // Borders
+  --border-width: 0.5px;
+  --border-color: rgba(255, 255, 255, 0.18);
+  --border-opacity: 0.18;
   
   // MDC card container tokens
   --mdc-elevated-card-container-color: transparent;

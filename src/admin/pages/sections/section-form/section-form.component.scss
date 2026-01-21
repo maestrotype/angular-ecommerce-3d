@@ -201,9 +201,11 @@
   }
 }
 .section-form-container {
-  min-width: 1000px;
+  width: 100%;
+  min-width: 320px;
   max-width: 1400px;
-  width: 90vw;
+  scrollbar-width: none;          // Firefox
+  -ms-overflow-style: none;       
 
   h2 {
     margin: 0 0 24px 0;
@@ -213,7 +215,10 @@
   form {
     display: flex;
     flex-direction: column;
+    padding-top: 5px;
     gap: 16px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 
     .full-width {
       width: 100%;
@@ -279,7 +284,7 @@
 
           p {
             margin: 0 0 8px 0;
-            color: #aaa;
+            color: var(--mdc-form-field-label-text-color);
             font-size: 16px;
           }
 

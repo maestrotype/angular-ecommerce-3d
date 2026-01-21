@@ -23,9 +23,9 @@
     }
     
     .back-button {
-      background-color: var(--contacts-button-bg);
-      color: #ffffff;
-      border: 1px solid #4b5563;
+      background-color: var(--admin-bg-container);
+      color: var(--admin-text-secondary);
+      box-shadow: 0 4px 12px #0000004d;
       
       &:hover {
         background-color: #4b5563;
@@ -42,8 +42,7 @@
   }
   
   .form-card {
-    background-color: var(--admin-bg-secondary) ;
-    border: 1px solid #404040;
+    background-color: var(--admin-bg-container); ;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
@@ -164,7 +163,7 @@
   .upload-section {
     .section-label {
       font-size: 14px;
-      color: #e5e7eb;
+      color: var(--admin-text-secondary);
       margin-bottom: 12px;
       font-weight: 500;
       display: block;
@@ -316,8 +315,8 @@
     }
 
     .processing-options {
-      background: var(--admin-bg-secondary);
-      border: 1px solid #4b5563;
+      background: var(--admin-bg-container);
+      box-shadow: 0 4px 12px #0000004d;
       border-radius: 12px;
       padding: 16px;
       margin-top: auto;
