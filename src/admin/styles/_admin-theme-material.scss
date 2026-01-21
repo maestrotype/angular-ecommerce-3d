@@ -288,14 +288,14 @@
     .mat-mdc-header-row .mat-mdc-header-cell {
       color: var(--admin-text-primary);
       font-weight: var(--admin-font-weight-bold);
-      padding: var(--admin-spacing-md) var(--admin-spacing-lg);
+      padding: var(--admin-spacing-md) var(--admin-spacing-md);
       border-bottom: none;
     }
 
     /* Table cells - no borders */
     .mat-mdc-cell {
       color: var(--admin-text-primary);
-      padding: var(--admin-spacing-md) var(--admin-spacing-lg);
+      padding: var(--admin-spacing-md) var(--admin-spacing-md);
       border-bottom: none;
     }
   }

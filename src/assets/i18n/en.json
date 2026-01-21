@@ -429,5 +429,8 @@
   "PAYPAL_CLIENT_SECRET": "PayPal Client Secret",
   "DEFAULT_PAYMENT_METHOD": "Default Payment Method",
   "CLIENT_ID_FROM_PAYPAL_DEVELOPER": "Client ID from PayPal Developer",
-  "CLIENT_SECRET_FROM_PAYPAL_DEVELOPER": "Client Secret from PayPal Developer"
+  "CLIENT_SECRET_FROM_PAYPAL_DEVELOPER": "Client Secret from PayPal Developer",
+  "IN_PROGRESS": "In Progress",
+  "CLOSED": "Closed",
+  "ANSWERED": "Answered"
 }
