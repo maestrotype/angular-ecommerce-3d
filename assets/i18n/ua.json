@@ -36,6 +36,7 @@
   "PRODUCT_NAME": "Назва товару",
   "PRODUCT_NAME_REQUIRED": "Назва товару обов'язкова",
   "CATEGORY": "Категорія",
+  "UPDATE_CATEGORY": "Оновити категорію",
   "CATEGORIES_ALL": "Всі категорії",
   "SEARCH_PRODUCTS": "Пошук товарів",
   "SEARCH_PLACEHOLDER": "Пошук за назвою, категорією...",
@@ -419,5 +420,8 @@
   "PAYPAL_CLIENT_SECRET": "Секрет клієнта PayPal",
   "DEFAULT_PAYMENT_METHOD": "Метод оплати за замовчуванням",
   "CLIENT_ID_FROM_PAYPAL_DEVELOPER": "ID клієнта від PayPal Developer",
-  "CLIENT_SECRET_FROM_PAYPAL_DEVELOPER": "Секрет клієнта від PayPal Developer"
+  "CLIENT_SECRET_FROM_PAYPAL_DEVELOPER": "Секрет клієнта від PayPal Developer",
+  "IN_PROGRESS": "В процесі",
+  "CLOSED": "Закрито",
+  "ANSWERED": "Відповілено"
 }
