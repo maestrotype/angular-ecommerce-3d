@@ -54,6 +54,7 @@
     border-radius: var(--admin-border-radius-md);
     box-shadow: var(--admin-shadow-md);
     overflow: hidden;
+    margin-bottom: 16px;
     /* Improve compositing for semi-transparent backgrounds to avoid rendering glitches */
     isolation: isolate;
     transform: translateZ(0);
@@ -608,7 +609,6 @@
     .filter-section {
       flex-direction: column;
       gap: 12px;
-      padding: 0 16px;
       align-items: stretch;
 
       .search-field {
@@ -628,7 +628,7 @@
 
   .orders-grid {
     grid-template-columns: 1fr;
-    padding: 0 16px;
+    padding: 0px;
   }
 
   .loading-container,
