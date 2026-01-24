@@ -245,8 +245,8 @@
   /* Header section - Dark theme (admin palette) - semi-transparent like contact form */
   --header-bg: rgba(255, 255, 255, 0.35);
   --header-backdrop-filter: blur(15px) saturate(180%);
-  --header-link: #838b95;
-  --header-link-hover: #60a5fa;
+  --header-link: #bebfc7;
+  --header-link-hover: #f8fafc;
   --header-search-bg: rgba(255, 255, 255, 0.5);
   --header-search-text: #1e293b;
   
@@ -483,6 +483,8 @@
   --best-sellers-text: #1e293b;
   --best-sellers-will-change: transform;
   --best-sellers-transform: translateZ(0);
+
+  --similar-products-bg: #d7e1ff;
   
   /* Favorites section - Glass theme */
   --favorites-bg: linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(226, 232, 240, 0.6) 100%);

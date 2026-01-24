@@ -1,5 +1,5 @@
 .product-info {
-  background: var(--product-detail-card-bg, var(--color-surface-primary, #1e293b));
+  background: var(--product-tabs-bg);
   border: var(--product-detail-border, 1px solid #e5e7eb);
   border-radius: var(--product-detail-radius, 16px);
   box-shadow: var(--product-detail-shadow, 0 2px 8px rgba(0, 0, 0, 0.1));
@@ -9,6 +9,7 @@
   font-family: var(--product-font-family);
   line-height: var(--product-line-height);
   letter-spacing: var(--product-letter-spacing);
+  margin-bottom: 20px;
 
   .title-row {
     display: flex;
