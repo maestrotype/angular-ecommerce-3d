@@ -23,7 +23,7 @@
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
-  background: #2a2a2a;
+  background: var(--admin-bg-card);
   
   &:hover {
     border-color: #666;
