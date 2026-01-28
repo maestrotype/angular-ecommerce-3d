@@ -25,7 +25,7 @@
           padding: var(--spacing-md) var(--spacing-lg);
           cursor: pointer;
           font-weight: var(--font-weight-medium);
-          color: var(--auth-tab-inactive);
+          color: var(--auth-tab-text);
           transition: all var(--transition-normal);
           position: relative;
           border-radius: var(--radius-md, 8px) var(--radius-md, 8px) 0 0;
@@ -156,11 +156,12 @@
             font-size: var(--font-size-md);
             color: var(--color-text-primary);
             transition: all var(--transition-normal);
+            box-shadow: 1px 1px 1px inset var(--color-text-secondary);
 
             &:focus {
               outline: none;
               border-color: var(--auth-input-focus);
-              box-shadow: 0 0 0 3px color-mix(in srgb, var(--auth-input-focus) 25%, transparent);
+              box-shadow: 1px 1px 1px inset var(--color-border-primary);
             }
 
             &::placeholder {
