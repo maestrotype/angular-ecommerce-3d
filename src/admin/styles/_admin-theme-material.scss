@@ -19,6 +19,14 @@
   --admin-bg-hover: var(--admin-bg-hover, #e5e7eb);
   --admin-danger: var(--admin-danger, #ef4444);
 
+  .mat-drawer-content {
+    z-index: 1;
+  }
+
+  .mat-drawer-inner-container {
+    box-shadow: 0 8px 32px #0009, inset 0 1px #ffffff14;
+  }
+
   .cdk-overlay-pane:not(.mat-mdc-select-panel-above) div.mat-mdc-select-panel {
     scrollbar-width: none; // Firefox
     -ms-overflow-style: none; // Edge/IE
@@ -44,6 +52,10 @@
 
 .admin-table-container .mat-mdc-table {
   background-color: inherit;
+}
+
+.mat-mdc-card-content .mdc-form-field {
+  color: var(--admin-text-primary);
 }
 
 .mat-mdc-checkbox .mdc-form-field>label {

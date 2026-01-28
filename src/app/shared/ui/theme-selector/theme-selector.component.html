@@ -1,26 +1,103 @@
 <div class="theme-selector">
   <h3 class="theme-selector__title">Choose Theme</h3>
-  
+
   <div class="theme-selector__options">
-    <div 
-      *ngFor="let theme of themes" 
-      class="theme-option"
-      [class.active]="currentTheme?.id === theme.id"
-      (click)="selectTheme(theme.id)"
-    >
-      <div 
-        class="theme-option__preview" 
-        [ngStyle]="getThemePreviewStyle(theme)"
-      ></div>
-      
+    <div *ngFor="let theme of themes" class="theme-option" [class.active]="currentTheme?.id === theme.id"
+      (click)="selectTheme(theme.id)">
+      <!-- Mini UI Preview -->
+      <div class="theme-preview-mini" [ngStyle]="getMiniPreviewStyle(theme)">
+        <div class="mini-header"></div>
+        <div class="mini-content">
+          <div class="mini-card">
+            <div class="mini-button"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Theme Info -->
       <div class="theme-option__info">
         <span class="theme-option__name">{{ theme.name }}</span>
         <p class="theme-option__description">{{ theme.description }}</p>
       </div>
-      
-      <div class="theme-option__check" *ngIf="currentTheme?.id === theme.id">
-        ✓
+
+      <!-- Preview Hint Icon -->
+      <mat-icon class="preview-hint" (click)="showPreview(theme, true); $event.stopPropagation()">
+        visibility
+      </mat-icon>
+
+      <!-- Active Checkmark -->
+      <mat-icon class="theme-check" *ngIf="currentTheme?.id === theme.id">
+        check_circle
+      </mat-icon>
+    </div>
+  </div>
+
+  <!-- Hover Preview Modal -->
+  <div class="theme-preview-modal" *ngIf="previewingTheme">
+    <div class="modal-backdrop" (click)="onModalBackdropClick()"></div>
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="preview-header">
+        <h3>{{ previewingTheme.name }} Preview</h3>
+        <button mat-icon-button (click)="hidePreview()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <!-- Full UI Preview -->
+      <div class="preview-ui" [attr.data-theme]="previewingTheme.id">
+        <div class="preview-dashboard">
+          <div class="dashboard-header">
+            <h2>Dashboard</h2>
+            <button mat-raised-button color="primary">Primary Button</button>
+          </div>
+          <div class="dashboard-cards">
+            <mat-card class="preview-card">
+              <mat-card-header>
+                <mat-card-title>Analytics</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <p>Sample content with theme colors</p>
+              </mat-card-content>
+            </mat-card>
+            <mat-card class="preview-card">
+              <mat-card-header>
+                <mat-card-title>Sales</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <p>Sample content with theme colors</p>
+              </mat-card-content>
+            </mat-card>
+            <mat-card class="preview-card">
+              <mat-card-header>
+                <mat-card-title>Orders</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <p>Sample content with theme colors</p>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+
+      <!-- Color Palette -->
+      <div class="color-palette">
+        <h4>Color Palette</h4>
+        <div class="palette-grid">
+          <div class="color-swatch" *ngFor="let color of getMainColors(previewingTheme)"
+            [style.background]="color.value" [matTooltip]="color.name">
+            <span>{{ color.label }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Apply Button -->
+      <div class="modal-actions">
+        <button mat-raised-button color="primary" (click)="applyAndClose(previewingTheme)">
+          <mat-icon>check</mat-icon>
+          Apply This Theme
+        </button>
       </div>
     </div>
   </div>
-</div> 
+</div>
