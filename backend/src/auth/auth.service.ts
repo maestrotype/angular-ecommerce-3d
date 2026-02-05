@@ -1,5 +1,5 @@
 
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
@@ -19,11 +19,20 @@ export class AuthService {
     private userRepository: Repository<User>,
     private jwtService: JwtService,
     private notificationsService: NotificationsService,
-  ) {}
+  ) { }
 
-  register(registerDto: RegisterDto): Observable<User> {
-    return from(bcrypt.hash(registerDto.password, 12)).pipe(
+  register(registerDto: RegisterDto): Observable<{ user: any; token: string; expiresIn: number }> {
+    // 1. Check if email already exists
+    return from(this.userRepository.findOne({ where: { email: registerDto.email } })).pipe(
+      switchMap(existingUser => {
+        if (existingUser) {
+          return throwError(() => new ConflictException('Email already registered'));
+        }
+        // 2. Hash password
+        return from(bcrypt.hash(registerDto.password, 12));
+      }),
       switchMap(hashedPassword => {
+        // 3. Create and save user
         const user = this.userRepository.create({
           ...registerDto,
           password: hashedPassword,
@@ -31,7 +40,7 @@ export class AuthService {
         return from(this.userRepository.save(user));
       }),
       switchMap(savedUser => {
-        // Create notification for new user registration
+        // 4. Create notification for new user registration
         return from(this.notificationsService.createNewUserNotification(
           savedUser.name,
           savedUser.email
@@ -39,8 +48,29 @@ export class AuthService {
           map(() => savedUser)
         );
       }),
+      switchMap(savedUser => {
+        // 5. Generate JWT token
+        const payload = { sub: savedUser.id, email: savedUser.email, role: savedUser.role };
+        const token = this.jwtService.sign(payload);
+
+        // 6. Return AuthResponse format
+        return of({
+          user: {
+            id: savedUser.id,
+            email: savedUser.email,
+            name: savedUser.name,
+            role: savedUser.role,
+          },
+          token,
+          expiresIn: 604800, // 7 days in seconds
+        });
+      }),
       catchError(error => {
         console.error('[AuthService] Registration error:', error);
+        // Handle database unique constraint errors
+        if (error.code === '23505' || error.message?.includes('duplicate key')) {
+          return throwError(() => new ConflictException('Email already registered'));
+        }
         return throwError(() => error);
       })
     );
@@ -54,7 +84,7 @@ export class AuthService {
         if (!user) {
           return throwError(() => new UnauthorizedException('Invalid credentials'));
         }
-        
+
         return from(bcrypt.compare(loginDto.password, user.password)).pipe(
           map(isValid => ({ user, isValid }))
         );
@@ -133,9 +163,9 @@ export class AuthService {
 
   findAllPaginated(page: number = 1, limit: number = 10): Observable<{ users: User[]; total: number }> {
     return from(this.userRepository.findAndCount({
-        skip: (page - 1) * limit,
-        take: limit,
-        order: { id: 'ASC' }
+      skip: (page - 1) * limit,
+      take: limit,
+      order: { id: 'ASC' }
     })).pipe(
       map(([users, total]) => ({ users, total })),
       catchError(error => {

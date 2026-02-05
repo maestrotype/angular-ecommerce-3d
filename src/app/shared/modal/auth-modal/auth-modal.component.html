@@ -1,18 +1,10 @@
 <div class="auth-modal">
   <div class="auth-header">
     <div class="auth-tabs">
-      <button 
-        class="auth-tab" 
-        [class.active]="currentView === 'login'"
-        (click)="switchView('login')"
-      >
-          Login
+      <button class="auth-tab" [class.active]="currentView === 'login'" (click)="switchView('login')">
+        Login
       </button>
-      <button 
-        class="auth-tab" 
-        [class.active]="currentView === 'register'"
-        (click)="switchView('register')"
-      >
+      <button class="auth-tab" [class.active]="currentView === 'register'" (click)="switchView('register')">
         Register
       </button>
     </div>
@@ -41,26 +33,14 @@
         <form (ngSubmit)="onLogin()" class="auth-form">
           <div class="form-group">
             <label for="login-email">Email</label>
-            <input 
-              id="login-email"
-              type="email" 
-              [(ngModel)]="loginForm.email" 
-              name="email"
-              required
-              placeholder="Enter your email"
-            />
+            <input id="login-email" type="email" [(ngModel)]="loginForm.email" name="email" required
+              placeholder="Enter your email" />
           </div>
 
           <div class="form-group">
             <label for="login-password">Password</label>
-            <input 
-              id="login-password"
-              type="password" 
-              [(ngModel)]="loginForm.password" 
-              name="password"
-              required
-              placeholder="Enter your password"
-            />
+            <input id="login-password" type="password" [(ngModel)]="loginForm.password" name="password" required
+              placeholder="Enter your password" />
           </div>
 
           <button type="submit" class="auth-submit-btn" [disabled]="loading">
@@ -77,52 +57,41 @@
 
     <!-- Register Tab Content (unchanged) -->
     <form *ngIf="currentView === 'register'" (ngSubmit)="onRegister()" class="auth-form">
-      <div class="form-group">
+      <div class="form-group" [class.has-error]="fieldErrors.name">
         <label for="register-name">Name</label>
-        <input 
-          id="register-name"
-          type="text" 
-          [(ngModel)]="registerForm.name" 
-          name="name"
-          required
-          placeholder="Enter your name"
-        />
+        <input id="register-name" type="text" [(ngModel)]="registerForm.name" name="name" required
+          placeholder="Enter your name" (blur)="validateField('name')" />
+        <span class="field-error" *ngIf="fieldErrors.name">{{ fieldErrors.name }}</span>
       </div>
 
-      <div class="form-group">
+      <div class="form-group" [class.has-error]="fieldErrors.email">
         <label for="register-email">Email</label>
-        <input 
-          id="register-email"
-          type="email" 
-          [(ngModel)]="registerForm.email" 
-          name="email"
-          required
-          placeholder="Enter your email"
-        />
+        <input id="register-email" type="email" [(ngModel)]="registerForm.email" name="email" required
+          placeholder="Enter your email" (blur)="validateField('email')" />
+        <span class="field-error" *ngIf="fieldErrors.email">{{ fieldErrors.email }}</span>
       </div>
 
-      <div class="form-group">
+      <div class="form-group" [class.has-error]="fieldErrors.password">
         <label for="register-password">Password</label>
-        <input 
-          id="register-password"
-          type="password" 
-          [(ngModel)]="registerForm.password" 
-          name="password"
-          required
-          placeholder="Enter your password"
-        />
+        <input id="register-password" type="password" [(ngModel)]="registerForm.password" name="password" required
+          placeholder="Enter your password" (blur)="validateField('password')" (input)="checkPasswordStrength()" />
+        <div class="password-strength" *ngIf="registerForm.password && passwordStrength">
+          <div class="strength-bar-container">
+            <div class="strength-bar" [class.weak]="passwordStrength.class === 'weak'"
+              [class.medium]="passwordStrength.class === 'medium'" [class.strong]="passwordStrength.class === 'strong'"
+              [style.width.%]="passwordStrength.percentage">
+            </div>
+          </div>
+          <span class="strength-text">{{ passwordStrength.text }}</span>
+        </div>
+        <span class="field-error" *ngIf="fieldErrors.password">{{ fieldErrors.password }}</span>
       </div>
 
-      <div class="form-group">
+      <div class="form-group" [class.has-error]="fieldErrors.confirmPassword">
         <label for="register-confirm-password">Confirm password</label>
-        <input 
-          id="register-confirm-password"
-          type="password" 
-          [(ngModel)]="registerForm.confirmPassword" 
-          name="confirmPassword"
-          required
-          placeholder="Confirm password"
-        />
+        <input id="register-confirm-password" type="password" [(ngModel)]="registerForm.confirmPassword"
+          name="confirmPassword" required placeholder="Confirm password" (blur)="validateField('confirmPassword')" />
+        <span class="field-error" *ngIf="fieldErrors.confirmPassword">{{ fieldErrors.confirmPassword }}</span>
       </div>
 
       <button type="submit" class="auth-submit-btn" [disabled]="loading">
