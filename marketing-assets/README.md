@@ -13,7 +13,7 @@ marketing-assets/
 └── videos/                # 4 video demonstrations
 ```
 
-## 📸 Screenshots (13 total)
+## 📸 Screenshots (15 total)
 
 ### Frontend Pages (10)
 1. `01_home_page_*.png` - Home page with hero section
@@ -33,6 +33,10 @@ marketing-assets/
 ### Admin Panel (2)
 - `admin_login_*.png` - Admin login page
 - `admin_dashboard_*.png` - Admin dashboard with analytics
+
+### Theme Variations (2)
+- `light_theme_home.png` - Home page in light theme
+- `light_theme_shop.png` - Shop catalog in light theme
 
 ## 🎥 Videos (4 total)
 
