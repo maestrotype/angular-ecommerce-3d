@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
@@ -30,8 +31,9 @@ export class FrontendSeoService {
 
   constructor(
     private http: HttpClient,
-    private seoService: SeoService
-  ) {}
+    private seoService: SeoService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) { }
 
   loadAndApplySeoSettings(): Observable<FrontendSeoSettings | null> {
     if (this.settingsLoaded) {
@@ -48,7 +50,7 @@ export class FrontendSeoService {
         return null;
       }),
       catchError(error => {
-        
+
         // Apply default settings if backend is not available
         this.applyDefaultSeoSettings();
         return of(null);
@@ -93,6 +95,10 @@ export class FrontendSeoService {
   }
 
   private loadGoogleAnalytics(gaId: string): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     // Remove existing GA script
     const existingScript = document.querySelector('script[src*="googletagmanager.com"]');
     if (existingScript) {
@@ -117,6 +123,10 @@ export class FrontendSeoService {
   }
 
   private addGoogleSearchConsole(verificationCode: string): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     // Remove existing verification
     const existingMeta = document.querySelector('meta[name="google-site-verification"]');
     if (existingMeta) {
@@ -131,6 +141,10 @@ export class FrontendSeoService {
   }
 
   private addBingWebmasterTools(verificationCode: string): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     // Remove existing verification
     const existingMeta = document.querySelector('meta[name="msvalidate.01"]');
     if (existingMeta) {

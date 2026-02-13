@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil, interval, Observable, of, from, throwError } from 'rxjs';
 import { map, switchMap, catchError, tap, delay } from 'rxjs/operators';
@@ -18,7 +19,7 @@ import { PaymentSettingsService } from '../../core/services/payment-settings.ser
 })
 export class PaymentComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-  
+
   orderId: number;
   order: Order;
   payment: Payment;
@@ -29,11 +30,11 @@ export class PaymentComponent implements OnInit, OnDestroy {
   stripe: any = null;
   elements: any = null;
   cardEl: any = null;
-  
+
   // LiqPay specific
   liqpayData: any;
   liqpaySignature: any;
-  
+
   // Payment status tracking
   statusCheckInterval: any;
   maxStatusChecks = 30; // 5 minutes with 10-second intervals
@@ -50,8 +51,9 @@ export class PaymentComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private modalService: ModalService,
     private themeService: ThemeService,
-    private paymentSettingsService: PaymentSettingsService
-  ) {}
+    private paymentSettingsService: PaymentSettingsService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) { }
 
   ngOnInit(): void {
     this.loadTheme();
@@ -81,24 +83,24 @@ export class PaymentComponent implements OnInit, OnDestroy {
       this.orderId = +params['id'];
       if (this.orderId) {
         const orderData = this.getOrderData();
-         // Debug log
-        
+        // Debug log
+
         if (orderData?.paymentMethod) {
           this.selectedMethod = orderData.paymentMethod;
         }
-        
+
         // Check if selected payment method is enabled
         this.paymentSettingsService.getPaymentSettings().pipe(
           takeUntil(this.destroy$)
         ).subscribe(settings => {
           // Store Stripe publishable key
           this.stripePublishableKey = settings.stripePublishableKey;
-          
+
           if (this.selectedMethod === 'liqpay' && settings.liqpayEnabled) {
             this.createPayment();
           } else if (this.selectedMethod === 'stripe' && settings.stripeEnabled) {
             // For Stripe, we wait for user to click "Initialize Stripe Payment"
-            
+
             this.notificationService.showInfo('Click "Initialize Stripe Payment" to continue');
           } else if (this.selectedMethod === 'paypal' && settings.paypalEnabled) {
             const orderAmount = orderData?.totalAmount || 0;
@@ -112,7 +114,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
               next: (paypalData) => {
                 this.handlePayPalPayment(paypalData);
               },
-              error: () => {}
+              error: () => { }
             });
           } else {
             this.notificationService.showWarning(`Payment method ${this.selectedMethod} is not enabled yet.`);
@@ -128,22 +130,22 @@ export class PaymentComponent implements OnInit, OnDestroy {
   private initStripe(clientSecret: string): Observable<void> {
     try {
       const publishableKey = environment.stripePublishableKey || '';
-      
+
       if (!this.stripe) {
         if (!publishableKey || publishableKey.includes('mock')) {
           // Mock mode - create fake Stripe instance
-          
+
           this.stripe = {
             elements: () => ({
               create: (type: string) => ({
                 mount: (element: HTMLElement) => {
-                  
+
                   element.innerHTML = '<div style="padding: 12px; border: 1px solid #ddd; background: #f9f9f9; color: #666;">Mock Stripe Card Element (Test Mode)</div>';
                 }
               })
             }),
             confirmCardPayment: (secret: string, options: any) => {
-              
+
               // Simulate successful payment after 2 seconds
               return of({
                 error: null,
@@ -157,28 +159,29 @@ export class PaymentComponent implements OnInit, OnDestroy {
         } else {
           return this.loadStripeJs().pipe(
             tap(() => {
-              if (!(window as any).Stripe) {
+              if (isPlatformBrowser(this.platformId) && (window as any).Stripe) {
+                this.stripe = (window as any).Stripe(publishableKey);
+              } else {
                 this.notificationService.showError('Stripe.js failed to load.');
                 return;
               }
-              this.stripe = (window as any).Stripe(publishableKey);
             }),
             switchMap(() => this.mountCardElements())
           );
         }
       }
-      
+
       if (!this.stripe) {
         this.notificationService.showError('Failed to initialize Stripe.');
         return of(void 0);
       }
-      
+
       // Store clientSecret for confirm step
       (this as any)._stripeClientSecret = clientSecret;
-      
+
       return this.mountCardElements();
     } catch (error) {
-      
+
       return throwError(() => error);
     }
   }
@@ -192,26 +195,26 @@ export class PaymentComponent implements OnInit, OnDestroy {
         this.elements = this.stripe.elements();
         if (!this.cardEl) {
           this.cardEl = this.elements.create('card');
-          
+
           // Try multiple times to find the mount point
           let mountPoint = null;
           let attempts = 0;
           const maxAttempts = 10;
-          
+
           const tryMount = () => {
             mountPoint = document.getElementById('card-element');
             if (!mountPoint && attempts < maxAttempts) {
-              
+
               attempts++;
               setTimeout(tryMount, 200);
             } else if (mountPoint) {
               this.cardEl.mount(mountPoint);
-              
+
             } else {
-              
+
             }
           };
-          
+
           tryMount();
         }
       }),
@@ -231,37 +234,37 @@ export class PaymentComponent implements OnInit, OnDestroy {
       this.notificationService.showError('Stripe not ready. Please wait for initialization.');
       return of(void 0);
     }
-    
+
     const clientSecret = (this as any)._stripeClientSecret as string;
-    
-    
+
+
     return from(this.stripe.confirmCardPayment(clientSecret, {
       payment_method: { card: this.cardEl }
     })).pipe(
       tap(({ error, paymentIntent }) => {
         if (error) {
-          
+
           this.notificationService.showError(error.message || 'Payment failed');
           return;
         }
-        
+
         if (paymentIntent && paymentIntent.status === 'succeeded') {
-          
-          
+
+
           // Create payment record in database
           this.createStripePaymentRecord(paymentIntent.id);
-          
+
           this.notificationService.showSuccess('Payment completed successfully!');
           setTimeout(() => {
             this.router.navigate(['/payment-success', this.orderId]);
           }, 2000);
         } else {
-          
+
           this.notificationService.showInfo('Payment processing...');
         }
       }),
       catchError(error => {
-        
+
         this.notificationService.showError('Payment confirmation failed. Please try again.');
         return of(void 0);
       }),
@@ -276,7 +279,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       },
       error: (error) => {
-        
+
         this.isLoading = false;
         this.notificationService.showError('Payment failed. Please try again.');
       }
@@ -304,7 +307,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   private createPayment(): void {
     this.isLoading = true;
-    
+
     // Get order data from localStorage or route state
     const orderData = this.getOrderData();
     if (!orderData) {
@@ -341,7 +344,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
       error: (error) => {
         this.isLoading = false;
         this.notificationService.showError('Failed to create payment. Please try again.');
-        
+
       }
     });
   }
@@ -373,15 +376,17 @@ export class PaymentComponent implements OnInit, OnDestroy {
     if (navigation?.extras.state) {
       return navigation.extras.state['orderData'];
     }
-    
-    // Fallback to localStorage
-    const storedOrder = localStorage.getItem(`order_${this.orderId}`);
-    if (storedOrder) {
-      return JSON.parse(storedOrder);
+
+    // Fallback to localStorage (browser only)
+    if (isPlatformBrowser(this.platformId)) {
+      const storedOrder = localStorage.getItem(`order_${this.orderId}`);
+      if (storedOrder) {
+        return JSON.parse(storedOrder);
+      }
     }
-    
+
     // Fallback for testing - create mock order data
-    
+
     return {
       totalAmount: 33.00, // Mock amount for testing
       paymentMethod: 'stripe',
@@ -392,7 +397,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   private startStatusTracking(): void {
     if (!this.payment) return;
-    
+
     this.statusCheckInterval = setInterval(() => {
       this.checkPaymentStatus();
     }, 10000); // Check every 10 seconds
@@ -406,13 +411,13 @@ export class PaymentComponent implements OnInit, OnDestroy {
     }
 
     this.statusCheckCount++;
-    
+
     this.paymentService.getPaymentStatus(this.payment.id).pipe(
       takeUntil(this.destroy$)
     ).subscribe({
       next: (status: PaymentStatus) => {
         this.paymentStatus = status;
-        
+
         if (status === PaymentStatus.COMPLETED) {
           this.handlePaymentSuccess();
         } else if (status === PaymentStatus.FAILED) {
@@ -420,7 +425,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
         }
       },
       error: (error) => {
-        
+
       }
     });
   }
@@ -428,7 +433,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
   private handlePaymentSuccess(): void {
     clearInterval(this.statusCheckInterval);
     this.notificationService.showSuccess('Payment completed successfully!');
-    
+
     // Redirect to success page or order confirmation
     setTimeout(() => {
       this.router.navigate(['/payment-success', this.orderId]);
@@ -438,7 +443,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
   private handlePaymentFailure(): void {
     clearInterval(this.statusCheckInterval);
     this.notificationService.showError('Payment failed. Please try again.');
-    
+
     // Redirect back to checkout
     setTimeout(() => {
       this.router.navigate(['/checkout']);
@@ -453,7 +458,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
     if (this.statusCheckInterval) {
       clearInterval(this.statusCheckInterval);
     }
-    
+
     this.modalService.openNotification({
       title: 'Cancel Payment',
       message: 'Are you sure you want to cancel this payment?',
@@ -474,12 +479,12 @@ export class PaymentComponent implements OnInit, OnDestroy {
   }
 
   private handlePayPalPayment(paypalData: { approvalUrl: string; orderId: string }): void {
-    
-    
+
+
     // Redirect user to PayPal for payment approval
     if (paypalData.approvalUrl) {
       this.notificationService.showInfo('Redirecting to PayPal...');
-      
+
       // Store payment info for status tracking
       this.payment = {
         id: 0, // Will be updated when payment is processed
@@ -497,10 +502,12 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
       // Start status tracking
       this.startStatusTracking();
-      
+
       // Redirect to PayPal
       setTimeout(() => {
-        window.location.href = paypalData.approvalUrl;
+        if (isPlatformBrowser(this.platformId)) {
+          window.location.href = paypalData.approvalUrl;
+        }
       }, 1000);
     } else {
       this.notificationService.showError('Failed to get PayPal approval URL');
@@ -515,19 +522,19 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
   getStripePublishableKey(): string {
     const key = this.stripePublishableKey;
-    
-    
+
+
     if (!key) {
-      
+
       return 'pk_test_51Oq...'; // Fallback for testing
     }
-    
+
     return key;
   }
 
   onStripePaymentSuccess(paymentData: any): void {
-    
-    
+
+
     // Create payment record
     this.payment = {
       id: 0,
@@ -545,25 +552,25 @@ export class PaymentComponent implements OnInit, OnDestroy {
 
     // Start status tracking
     this.startStatusTracking();
-    
+
     this.notificationService.showSuccess('Payment method created successfully! Processing payment...');
   }
 
   onStripePaymentError(errorMessage: string): void {
-    
+
     this.notificationService.showError(`Payment failed: ${errorMessage}`);
   }
 
   onStripeLoadingChange(isLoading: boolean): void {
     // Update loading state for Stripe specifically
-    
+
   }
 
   // Create Stripe payment record in database
   private createStripePaymentRecord(stripePaymentId: string): void {
     const orderData = this.getOrderData();
     if (!orderData) {
-      
+
       return;
     }
 
@@ -581,15 +588,15 @@ export class PaymentComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe({
       next: (response: any) => {
-        
-        
+
+
         // Update payment status to COMPLETED after successful Stripe payment
         if (response?.payment?.id) {
           this.updatePaymentStatusToCompleted(response.payment.id);
         }
       },
       error: (error) => {
-        
+
       }
     });
   }
@@ -600,10 +607,10 @@ export class PaymentComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe({
       next: (updatedPayment) => {
-        
+
       },
       error: (error) => {
-        
+
       }
     });
   }
@@ -611,20 +618,20 @@ export class PaymentComponent implements OnInit, OnDestroy {
   // Create Stripe PaymentIntent when Stripe is selected
   createStripePaymentIntent(): void {
     if (this.selectedMethod !== 'stripe') return;
-    
+
     // Check minimum amount for Stripe
     const orderTotal = this.getOrderTotal();
     const minAmount = 0.50; // $0.50 minimum for USD
-    
-    
+
+
     if (orderTotal < minAmount) {
       this.notificationService.showError(`Order amount $${orderTotal} is below minimum $${minAmount} required by Stripe. Please add more items to your cart.`);
       return;
     }
-    
+
     this.isLoading = true;
     this.notificationService.showInfo('Creating Stripe PaymentIntent...');
-    
+
     this.paymentService.createStripeIntent({
       orderId: this.orderId,
       amount: orderTotal,
@@ -637,17 +644,17 @@ export class PaymentComponent implements OnInit, OnDestroy {
         this.stripeClientSecret = clientSecret;
         this.isLoading = false;
         this.notificationService.showSuccess('Stripe PaymentIntent created successfully!');
-        
+
         // Initialize Stripe Elements after getting client secret
-                      this.initStripe(clientSecret).subscribe({
-                next: () => this.notificationService.showSuccess('Stripe payment initialized successfully!'),
-                error: (error) => this.notificationService.showError('Failed to initialize Stripe: ' + error.message)
-              });
+        this.initStripe(clientSecret).subscribe({
+          next: () => this.notificationService.showSuccess('Stripe payment initialized successfully!'),
+          error: (error) => this.notificationService.showError('Failed to initialize Stripe: ' + error.message)
+        });
       },
       error: (error) => {
         this.isLoading = false;
         this.notificationService.showError(`Failed to create Stripe PaymentIntent: ${error}`);
-        
+
       }
     });
   }

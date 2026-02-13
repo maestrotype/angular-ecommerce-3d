@@ -1,0 +1,17 @@
+{
+    "extends": "./tsconfig.app.json",
+    "compilerOptions": {
+        "outDir": "./out-tsc/server",
+        "target": "ES2022",
+        "types": [
+            "node"
+        ],
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "module": "ES2022"
+    },
+    "files": [
+        "src/main.server.ts",
+        "server.ts"
+    ]
+}

@@ -1,5 +1,6 @@
 
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject, Observable, forkJoin, of } from 'rxjs';
 import { map, switchMap, catchError } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
@@ -17,8 +18,11 @@ export class CartService {
   private apiUrl = environment.apiUrl + '/orders';
   private productsApiUrl = environment.apiUrl + '/products';
 
-  constructor(private http: HttpClient) {
-    // Load cart from localStorage on service initialization
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    // Load cart from localStorage on service initialization (browser only)
     this.loadCartFromStorage();
   }
 
@@ -30,17 +34,17 @@ export class CartService {
       productId: Number(item.productId),
       quantity: 1
     };
-    
-    
+
+
     const currentItems = this.cartItemsSubject.value;
     const existingItem = currentItems.find(cartItem => cartItem.productId === validatedItem.productId);
-    
+
     if (existingItem) {
       existingItem.quantity += 1;
     } else {
       currentItems.push(validatedItem);
     }
-    
+
     this.updateCart(currentItems);
   }
 
@@ -53,7 +57,7 @@ export class CartService {
   updateQuantity(itemId: number, quantity: number): void {
     const currentItems = this.cartItemsSubject.value;
     const item = currentItems.find(cartItem => cartItem.productId === itemId);
-    
+
     if (item) {
       if (quantity <= 0) {
         this.removeFromCart(itemId);
@@ -96,21 +100,27 @@ export class CartService {
       price: Number(item.price),
       quantity: Number(item.quantity)
     }));
-    
+
     this.cartItemsSubject.next(validatedItems);
     this.saveCartToStorage(validatedItems);
   }
 
   private saveCartToStorage(items: CartItem[]): void {
-    localStorage.setItem('cart', JSON.stringify(items));
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('cart', JSON.stringify(items));
+    }
   }
 
   private loadCartFromStorage(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return; // Skip on server-side
+    }
+
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
       try {
         const items = JSON.parse(savedCart) as CartItem[];
-        
+
         // Validate and convert types for loaded items
         const validatedItems = items.map(item => ({
           ...item,
@@ -118,11 +128,11 @@ export class CartService {
           price: Number(item.price),
           quantity: Number(item.quantity)
         }));
-        
+
         // Check stock availability for all items
         this.validateCartItemsStock(validatedItems);
       } catch (error) {
-        
+
       }
     }
   }
@@ -134,7 +144,7 @@ export class CartService {
     }
 
     // Check stock for each item
-    const stockChecks = items.map(item => 
+    const stockChecks = items.map(item =>
       this.http.get<any>(`${this.productsApiUrl}/${item.productId}`).pipe(
         map(product => ({ item, product, hasStock: product.stock >= item.quantity })),
         catchError(() => of({ item, product: null, hasStock: false }))
@@ -146,14 +156,14 @@ export class CartService {
       const validItems = results
         .filter(result => result.hasStock)
         .map(result => result.item);
-      
+
       // Update cart with valid items only
       this.cartItemsSubject.next(validItems);
       this.saveCartToStorage(validItems);
-      
+
       // Remove invalid items from localStorage
       if (validItems.length !== items.length) {
-        
+
       }
     });
   }

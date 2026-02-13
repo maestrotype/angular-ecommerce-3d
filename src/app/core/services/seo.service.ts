@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Meta, Title } from '@angular/platform-browser';
 
 export interface SeoData {
@@ -23,8 +24,9 @@ export class SeoService {
 
   constructor(
     private title: Title,
-    private meta: Meta
-  ) {}
+    private meta: Meta,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) { }
 
   updateSeo(data: SeoData): void {
     this.updateTitle(data.title);
@@ -78,7 +80,7 @@ export class SeoService {
   }
 
   updateStructuredData(data?: any): void {
-    if (!data) return;
+    if (!data || !isPlatformBrowser(this.platformId)) return;
 
     // Remove existing structured data
     const existingScript = document.querySelector('script[type="application/ld+json"]');

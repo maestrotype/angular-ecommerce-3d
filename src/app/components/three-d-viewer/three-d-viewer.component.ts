@@ -1,4 +1,5 @@
-import { Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ElementRef, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
@@ -20,11 +21,20 @@ export class ThreeDViewerComponent implements AfterViewInit {
   private renderer!: THREE.WebGLRenderer;
   private model!: THREE.Object3D;
   private lastFrameTime = 0;
-  private isMobile = /Mobi|Android/i.test(navigator.userAgent);
+  private isMobile = false;
+
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.isMobile = /Mobi|Android/i.test(navigator.userAgent);
+    }
+  }
 
   ngAfterViewInit() {
-    this.initThree();
-    this.loadModel();
+    // Only initialize Three.js in browser (not on server)
+    if (isPlatformBrowser(this.platformId)) {
+      this.initThree();
+      this.loadModel();
+    }
   }
 
   private initThree() {
@@ -38,7 +48,8 @@ export class ThreeDViewerComponent implements AfterViewInit {
 
     // Renderer with enhanced quality
     this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); // Limit pixel ratio for performance
+    const pixelRatio = isPlatformBrowser(this.platformId) ? Math.min(window.devicePixelRatio, 1.5) : 1;
+    this.renderer.setPixelRatio(pixelRatio); // Limit pixel ratio for performance
     this.renderer.setSize(container.clientWidth, container.clientHeight);
     this.renderer.shadowMap.enabled = !this.isMobile;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -77,11 +88,11 @@ export class ThreeDViewerComponent implements AfterViewInit {
       });
       this.camera.lookAt(this.model.position);
       this.scene.add(this.model);
-      
+
       this.modelLoaded.emit();
       this.animate(); // Start animation only after model is loaded
     }, undefined, (error) => {
-      
+
     });
   }
 

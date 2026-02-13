@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, provideHttpClient } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { SeoUpdateInterceptor } from './core/interceptors/seo-update.interceptor';
@@ -36,6 +35,7 @@ import { ImageModalComponent } from './shared/modal/image-modal/image-modal.comp
 import { CartModalComponent } from './shared/modal/cart-modal/cart-modal.component';
 import { AuthModalComponent } from './shared/modal/auth-modal/auth-modal.component';
 import { NotificationModalComponent } from './shared/modal/notification-modal/notification-modal.component';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 
@@ -62,27 +62,27 @@ export function HttpLoaderFactory(http: any) {
 
 @NgModule({
   declarations: [
-    AppComponent, 
-    HeaderComponent, 
-    HeroComponent, 
-    HeroGlassComponent, 
-    CategoriesComponent, 
- 
-    SpecialOfferComponent, 
-    BestSellersComponent, 
-    BrandsComponent, 
-    ContactsComponent, 
-    FooterComponent, 
- 
-    AboutComponent, 
-    BaseModalComponent, 
-    ImageModalComponent, 
-    CartModalComponent, 
+    AppComponent,
+    HeaderComponent,
+    HeroComponent,
+    HeroGlassComponent,
+    CategoriesComponent,
+
+    SpecialOfferComponent,
+    BestSellersComponent,
+    BrandsComponent,
+    ContactsComponent,
+    FooterComponent,
+
+    AboutComponent,
+    BaseModalComponent,
+    ImageModalComponent,
+    CartModalComponent,
     AuthModalComponent,
-    NotificationModalComponent, 
-    Bag3dFirstComponent, 
-    IconComponent, 
- 
+    NotificationModalComponent,
+    Bag3dFirstComponent,
+    IconComponent,
+
     FavoritesComponent,
     MyOrdersComponent,
     ContactFormComponent,
@@ -91,13 +91,11 @@ export function HttpLoaderFactory(http: any) {
     PaymentSuccessComponent,
     PaymentErrorComponent
   ],
-      imports: [
-    BrowserModule, 
-    BrowserAnimationsModule, 
-    HttpClientModule, 
-    FormsModule, 
+  imports: [
+    BrowserModule,
+    FormsModule,
     ReactiveFormsModule,
-    RouterModule, 
+    RouterModule,
     AppRoutingModule,
     MatIconModule,
     MatButtonModule,
@@ -106,17 +104,18 @@ export function HttpLoaderFactory(http: any) {
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
-        deps: [HttpClientModule]
+        deps: [HttpClient]
       }
     })
   ],
   providers: [
-    provideAnimationsAsync(),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: SeoUpdateInterceptor, multi: true },
     ThemeService,
-    PaymentSettingsService
+    PaymentSettingsService,
+    provideHttpClient(),
+    provideNoopAnimations()
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

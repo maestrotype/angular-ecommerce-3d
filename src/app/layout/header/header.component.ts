@@ -1,4 +1,5 @@
-import { Component, ViewChild, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { CartService } from '../../core/services/cart.service';
@@ -18,7 +19,7 @@ import { Theme } from '../../core/themes/theme.model';
 export class HeaderComponent implements OnInit, OnDestroy {
   @ViewChild('searchInput') searchInput!: ElementRef;
   @ViewChild('mobileSearchInput') mobileSearchInput!: ElementRef;
-  
+
   isMobileMenuOpen = false;
   isSearchOpen = false;
   searchTerm = '';
@@ -37,7 +38,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   showCart = true;
   showProfile = true;
   logoUrl: string | null = null;
-  
+
   // Theme switching
   themes: Theme[] = [];
   currentTheme = 'default';
@@ -53,7 +54,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private favoritesService: FavoritesService,
     private headerService: HeaderService,
     private modalService: ModalService,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
   ngOnInit(): void {
@@ -62,47 +64,56 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.loadFavoritesCount();
     this.loadThemes();
     this.checkScreenSize();
-    
-    // Check theme when window regains focus (returning from admin)
-    window.addEventListener('focus', () => {
-      const actualTheme = this.themeService.getCurrentTheme().id;
-      if (this.currentTheme !== actualTheme) {
-        this.currentTheme = actualTheme;
-        // Force reapply theme to DOM
-        this.themeService.setTheme(actualTheme);
-      }
-    });
-    
-    // Also check when tab becomes visible (returning from admin)
-    document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) {
+
+    if (isPlatformBrowser(this.platformId)) {
+      // Check theme when window regains focus (returning from admin)
+      window.addEventListener('focus', () => {
         const actualTheme = this.themeService.getCurrentTheme().id;
         if (this.currentTheme !== actualTheme) {
           this.currentTheme = actualTheme;
           // Force reapply theme to DOM
           this.themeService.setTheme(actualTheme);
         }
-      }
-    });
-    
+      });
+
+      // Also check when tab becomes visible (returning from admin)
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+          const actualTheme = this.themeService.getCurrentTheme().id;
+          if (this.currentTheme !== actualTheme) {
+            this.currentTheme = actualTheme;
+            // Force reapply theme to DOM
+            this.themeService.setTheme(actualTheme);
+          }
+        }
+      });
+
+      document.addEventListener('click', this.onDocumentClick.bind(this));
+
+      window.addEventListener('resize', this.checkScreenSize.bind(this));
+    }
+
     this.searchTerm = '';
     this.searchResults = [];
-    
-    document.addEventListener('click', this.onDocumentClick.bind(this));
-    
-    window.addEventListener('resize', this.checkScreenSize.bind(this));
   }
 
   ngOnDestroy(): void {
     this.cartSubscription.unsubscribe();
     this.favoritesSubscription.unsubscribe();
     this.themeSubscription.unsubscribe();
-    document.removeEventListener('click', this.onDocumentClick.bind(this));
-    window.removeEventListener('resize', this.checkScreenSize.bind(this));
+
+    if (isPlatformBrowser(this.platformId)) {
+      document.removeEventListener('click', this.onDocumentClick.bind(this));
+      window.removeEventListener('resize', this.checkScreenSize.bind(this));
+    }
   }
 
   private checkScreenSize(): void {
-    this.isMobile = window.innerWidth <= 768;
+    if (isPlatformBrowser(this.platformId)) {
+      this.isMobile = window.innerWidth <= 768;
+    } else {
+      this.isMobile = false; // Default to desktop on server
+    }
   }
 
   private onDocumentClick(event: MouseEvent): void {
@@ -110,13 +121,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const searchInput = (event.target as Element).closest('.desktop-search, .mobile-search');
     const searchResults = (event.target as Element).closest('.search-results');
     const themeSwitcher = (event.target as Element).closest('.theme-switcher');
-    
+
     if (!searchIcon && !searchInput && !searchResults) {
       this.isSearchOpen = false;
       this.searchTerm = '';
       this.searchResults = [];
     }
-    
+
     // Close theme menus when clicking outside
     if (!themeSwitcher) {
       this.showThemeMenu = false;
@@ -153,19 +164,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
       count => this.favoritesCount = count
     );
   }
-  
+
   private loadThemes(): void {
     this.themes = this.themeService.getAllThemes();
-    
+
     // Get current theme immediately
     this.currentTheme = this.themeService.getCurrentTheme().id;
-    
+
     // Subscribe to theme changes
     this.themeSubscription = this.themeService.currentTheme$.subscribe(theme => {
       this.currentTheme = theme.id;
     });
   }
-  
+
   toggleThemeMenu(): void {
     this.showThemeMenu = !this.showThemeMenu;
   }
@@ -175,7 +186,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (!this.enableNewThemeSwitcher) { return; }
     this.showNewThemeMenu = !this.showNewThemeMenu;
   }
-  
+
   changeTheme(themeId: string): void {
     this.themeService.setTheme(themeId);
     this.showThemeMenu = false;
@@ -208,7 +219,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.searchResults = results;
         },
         error: (error) => {
-          
+
           this.searchResults = [];
         }
       });
@@ -297,19 +308,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (element) {
       const headerHeight = 80; // Fixed header height
       const elementPosition = element.offsetTop - headerHeight;
-      
-      window.scrollTo({
-        top: elementPosition,
-        behavior: 'smooth'
-      });
+
+      if (isPlatformBrowser(this.platformId)) {
+        window.scrollTo({
+          top: elementPosition,
+          behavior: 'smooth'
+        });
+      }
     } else {
-      
+
     }
   }
 
   navigateToUrl(url: string): void {
     if (url.startsWith('http')) {
-      window.open(url, '_blank');
+      if (isPlatformBrowser(this.platformId)) {
+        window.open(url, '_blank');
+      }
     } else {
       this.router.navigate([url]);
     }
@@ -340,7 +355,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.searchResults = [];
     } else {
       // External link
-      window.open(menuItem.url, '_blank');
+      if (isPlatformBrowser(this.platformId)) {
+        window.open(menuItem.url, '_blank');
+      }
     }
   }
 }
