@@ -7,8 +7,10 @@
     "build": "ng build --configuration production",
     "build:prod": "ng build --configuration production",
     "build:gh": "ng build --configuration production --base-href=/angular-ecommerce-3d/",
-    "serve:ssr": "node run-ssr-server.js",
+    "serve:ssr": "node server-simple.mjs",
     "build:ssr": "ng build && ng run angular-ecommerce-3d:server:production",
+    "build:ssr:dev": "ng build && ng run angular-ecommerce-3d:server",
+    "serve:ssr:dev": "npm run build:ssr:dev && node server-simple.mjs",
     "dev:ssr": "npm run build:ssr && npm run serve:ssr",
     "deploy": "npm run build:gh && npx angular-cli-ghpages --dir=dist/angular-ecommerce-3d"
   },

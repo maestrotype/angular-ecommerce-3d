@@ -2,18 +2,18 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { Product } from 'src/shared/models/product.model';
-import { environment } from "src/environments/environment.prod";
+import { environment } from "src/environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
   private readonly API_URL = environment.apiUrl;
-  
+
   private cartSubject = new BehaviorSubject<Product[]>([]);
   cart$ = this.cartSubject.asObservable();
-  
-  constructor(private http: HttpClient) {}
+
+  constructor(private http: HttpClient) { }
 
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(`${this.API_URL}/products`);
@@ -22,11 +22,11 @@ export class ProductService {
   getProductById(id: number): Observable<Product> {
     return this.http.get<Product>(`${this.API_URL}/products/${id}`);
   }
-  
+
   getSpecialOffers(): Observable<Product[]> {
     return this.http.get<Product[]>(`${this.API_URL}/products?isSpecial=true`);
   }
-  
+
   getBestSellers(): Observable<Product[]> {
     return this.http.get<Product[]>(`${this.API_URL}/products?sort=rating&limit=4`);
   }

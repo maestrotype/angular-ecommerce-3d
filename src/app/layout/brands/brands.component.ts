@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Section } from 'src/shared/models/section.model';
+import { CommonModule } from '@angular/common';
 
 interface Brand {
     id: number;
@@ -11,7 +12,9 @@ interface Brand {
 @Component({
     selector: 'app-brands',
     templateUrl: './brands.component.html',
-    styleUrls: ['./brands.component.scss']
+    styleUrls: ['./brands.component.scss'],
+    standalone: true,
+    imports: [CommonModule]
 })
 export class BrandsComponent implements OnInit {
     @Input() data!: Section;

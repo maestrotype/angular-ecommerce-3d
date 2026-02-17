@@ -5,11 +5,13 @@ import { Section } from 'src/shared/models/section.model';
 @Component({
     selector: 'app-hero-glass',
     templateUrl: './hero-glass.component.html',
-    styleUrls: ['./hero-glass.component.scss']
+    styleUrls: ['./hero-glass.component.scss'],
+    standalone: true,
+    imports: []
 })
 export class HeroGlassComponent implements OnInit {
     @Input() data!: Section;
-    constructor(private router: Router) {}
+    constructor(private router: Router) { }
     modelReady = false;
 
     ngOnInit(): void {

@@ -1,5 +1,5 @@
 <div *ngIf="!isAdminRoute()">
-  <app-header></app-header>
+  <app-header ngSkipHydration></app-header>
 </div>
 
 <main>
@@ -7,11 +7,10 @@
 </main>
 
 <div *ngIf="!isAdminRoute()">
-  <app-footer></app-footer>
+  <app-footer ngSkipHydration></app-footer>
 </div>
 
 <!-- Modal Container -->
 <div *ngIf="!isAdminRoute()">
   <app-base-modal></app-base-modal>
 </div>
-

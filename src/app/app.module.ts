@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { HttpClient, provideHttpClient } from '@angular/common/http';
+import { NgModule, APP_ID } from '@angular/core';
+import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { SeoUpdateInterceptor } from './core/interceptors/seo-update.interceptor';
@@ -35,7 +35,6 @@ import { ImageModalComponent } from './shared/modal/image-modal/image-modal.comp
 import { CartModalComponent } from './shared/modal/cart-modal/cart-modal.component';
 import { AuthModalComponent } from './shared/modal/auth-modal/auth-modal.component';
 import { NotificationModalComponent } from './shared/modal/notification-modal/notification-modal.component';
-import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 
@@ -63,14 +62,6 @@ export function HttpLoaderFactory(http: any) {
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent,
-    HeroComponent,
-    HeroGlassComponent,
-    CategoriesComponent,
-
-    SpecialOfferComponent,
-    BestSellersComponent,
-    BrandsComponent,
     ContactsComponent,
     FooterComponent,
 
@@ -95,7 +86,6 @@ export function HttpLoaderFactory(http: any) {
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule,
     AppRoutingModule,
     MatIconModule,
     MatButtonModule,
@@ -109,12 +99,14 @@ export function HttpLoaderFactory(http: any) {
     })
   ],
   providers: [
+    { provide: APP_ID, useValue: 'angular-ecommerce-3d' },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: SeoUpdateInterceptor, multi: true },
     ThemeService,
     PaymentSettingsService,
-    provideHttpClient(),
-    provideNoopAnimations()
+    provideHttpClient(withFetch()),
+    provideClientHydration(),
+    provideAnimationsAsync()
   ],
   bootstrap: [AppComponent]
 })

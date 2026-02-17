@@ -5,11 +5,13 @@ import { Section } from 'src/shared/models/section.model';
 @Component({
     selector: 'app-hero',
     templateUrl: './hero.component.html',
-    styleUrls: ['./hero.component.scss']
+    styleUrls: ['./hero.component.scss'],
+    standalone: true,
+    imports: []
 })
 export class HeroComponent {
     @Input() data!: Section;
-    constructor(private router: Router) {}
+    constructor(private router: Router) { }
     modelReady = false;
 
     onShopNow(): void {

@@ -13,6 +13,7 @@ import { PaymentErrorComponent } from './pages/payment-error/payment-error.compo
 
 
 const routes: Routes = [
+  { path: '', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
   { path: 'home', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) },
   { path: 'shop', loadChildren: () => import('./pages/shop/shop.module').then(m => m.ShopModule) },
   { path: 'about', component: AboutComponent },
@@ -25,7 +26,6 @@ const routes: Routes = [
   { path: 'payment/success', component: PaymentSuccessComponent },
   { path: 'payment/error', component: PaymentErrorComponent },
 
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
   {
     path: 'admin',
     loadChildren: () => import('../admin/admin.module').then(m => m.AdminModule)
@@ -36,8 +36,9 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes, {
     onSameUrlNavigation: 'reload',
-    scrollPositionRestoration: 'top' // Automatically scroll to top on route change
+    scrollPositionRestoration: 'top', // Automatically scroll to top on route change
+    initialNavigation: 'enabledBlocking'
   })],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

@@ -4,28 +4,20 @@ import {
   OnInit,
   ViewChild,
   ViewContainerRef,
-  ComponentFactoryResolver,
   Type
 } from '@angular/core';
 
-import { HeroComponent } from '../../layout/hero/hero.component';
-import { HeroGlassComponent } from '../../layout/hero-glass/hero-glass.component';
-import { BestSellersComponent } from '../../layout/best-sellers/best-sellers.component';
-import { CategoriesComponent } from '../../layout/categories/categories.component';
-import { SpecialOfferComponent } from '../../layout/special-offer/special-offer.component';
-import { BrandsComponent } from '../../layout/brands/brands.component';
-import { ContactsComponent } from '../../pages/contacts/contacts.component';
-import { AboutComponent } from '../../pages/about/about.component';
-
-const sectionComponentMap: { [key: string]: Type<any> } = {
-  hero: HeroComponent,
-  'hero-glass': HeroGlassComponent,
-  'best-sellers': BestSellersComponent,
-  categories: CategoriesComponent,
-  'special-offer': SpecialOfferComponent,
-  brands: BrandsComponent,
-  contacts: ContactsComponent,
-  about: AboutComponent,
+// Lazy import map — breaks the circular dependency with AppModule.
+// Components are loaded on demand instead of at module initialization time.
+const sectionComponentMap: { [key: string]: () => Promise<Type<any>> } = {
+  hero: () => import('../../layout/hero/hero.component').then(m => m.HeroComponent),
+  'hero-glass': () => import('../../layout/hero-glass/hero-glass.component').then(m => m.HeroGlassComponent),
+  'best-sellers': () => import('../../layout/best-sellers/best-sellers.component').then(m => m.BestSellersComponent),
+  categories: () => import('../../layout/categories/categories.component').then(m => m.CategoriesComponent),
+  'special-offer': () => import('../../layout/special-offer/special-offer.component').then(m => m.SpecialOfferComponent),
+  brands: () => import('../../layout/brands/brands.component').then(m => m.BrandsComponent),
+  contacts: () => import('../../pages/contacts/contacts.component').then(m => m.ContactsComponent),
+  about: () => import('../../pages/about/about.component').then(m => m.AboutComponent),
 };
 
 @Component({
@@ -37,18 +29,16 @@ export class SectionRendererComponent implements OnInit {
   @Input() section: any;
   @ViewChild('container', { read: ViewContainerRef, static: true }) container!: ViewContainerRef;
 
-  constructor(private resolver: ComponentFactoryResolver) {}
-
   ngOnInit() {
     this.renderSection();
   }
 
-  renderSection() {
+  async renderSection() {
     this.container.clear();
-    const componentType = sectionComponentMap[this.section?.type];
-    if (componentType) {
-      const factory = this.resolver.resolveComponentFactory(componentType);
-      const componentRef = this.container.createComponent(factory);
+    const loader = sectionComponentMap[this.section?.type];
+    if (loader) {
+      const componentType = await loader();
+      const componentRef = this.container.createComponent(componentType);
       if ('data' in componentRef.instance) {
         componentRef.instance.data = this.section;
       }

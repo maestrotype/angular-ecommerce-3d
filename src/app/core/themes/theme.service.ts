@@ -1,4 +1,4 @@
-import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject, afterNextRender } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 import { Theme } from './theme.model';
@@ -17,15 +17,12 @@ export class ThemeService {
   public adminTheme$ = this.adminThemeSubject.asObservable();
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-    this.initializeTheme();
+    afterNextRender(() => {
+      this.initializeTheme();
+    });
   }
 
   private initializeTheme(): void {
-    if (!isPlatformBrowser(this.platformId)) {
-      // On server, just use default theme
-      return;
-    }
-
     const savedFrontend = localStorage.getItem('selected-theme');
     const savedAdmin = localStorage.getItem('selected-theme-admin');
 

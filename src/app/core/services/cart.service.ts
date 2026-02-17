@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { Order } from 'src/shared/models/order.model';
 import { CreateOrderRequest } from 'src/shared/models/create-order-request.model';
 import { CartItem } from 'src/shared/models/cart-item.model';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'

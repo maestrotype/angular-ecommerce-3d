@@ -1,51 +1,48 @@
 <!-- Skeleton loading for page sections -->
 <div *ngIf="sectionsLoading" class="skeleton-container">
-  <div *ngFor="let skeleton of skeletonSections; let i = index"
-       class="skeleton-section"
-       [class.hero-skeleton]="skeleton.type === 'hero'"
-       [class.content-skeleton]="skeleton.type === 'content'"
-       [style.height]="skeleton.height"
-       [style.animation-delay]="skeleton.delay + 'ms'">
+    <div *ngFor="let skeleton of skeletonSections; let i = index" class="skeleton-section"
+        [class.hero-skeleton]="skeleton.type === 'hero'" [class.content-skeleton]="skeleton.type === 'content'"
+        [style.height]="skeleton.height" [style.animation-delay]="skeleton.delay + 'ms'">
 
-    <!-- Hero section skeleton -->
-    <div *ngIf="skeleton.type === 'hero'" class="skeleton-hero">
-      <div class="skeleton-hero-content">
-        <div class="skeleton-badge"></div>
-        <div class="skeleton-hero-title"></div>
-        <div class="skeleton-hero-subtitle"></div>
-        <div class="skeleton-hero-description"></div>
-        <div class="skeleton-hero-description"></div>
-        <div class="skeleton-cta-button"></div>
-      </div>
-      <div class="skeleton-hero-image">
-        <div class="skeleton-3d-model"></div>
-      </div>
-    </div>
+        <!-- Hero section skeleton -->
+        <div *ngIf="skeleton.type === 'hero'" class="skeleton-hero">
+            <div class="skeleton-hero-content">
+                <div class="skeleton-badge"></div>
+                <div class="skeleton-hero-title"></div>
+                <div class="skeleton-hero-subtitle"></div>
+                <div class="skeleton-hero-description"></div>
+                <div class="skeleton-hero-description"></div>
+                <div class="skeleton-cta-button"></div>
+            </div>
+            <div class="skeleton-hero-image">
+                <div class="skeleton-3d-model"></div>
+            </div>
+        </div>
 
-    <!-- Content section skeleton -->
-    <div *ngIf="skeleton.type === 'content'" class="skeleton-content">
-      <div class="skeleton-content-header">
-        <div class="skeleton-section-title"></div>
-        <div class="skeleton-section-subtitle"></div>
-      </div>
-      <div class="skeleton-content-body">
-        <div class="skeleton-text-line"></div>
-        <div class="skeleton-text-line short"></div>
-        <div class="skeleton-text-line medium"></div>
-        <div class="skeleton-text-line"></div>
-        <div class="skeleton-text-line short"></div>
-        <div class="skeleton-text-line"></div>
-      </div>
-      <div class="skeleton-content-footer">
-        <div class="skeleton-button"></div>
-      </div>
+        <!-- Content section skeleton -->
+        <div *ngIf="skeleton.type === 'content'" class="skeleton-content">
+            <div class="skeleton-content-header">
+                <div class="skeleton-section-title"></div>
+                <div class="skeleton-section-subtitle"></div>
+            </div>
+            <div class="skeleton-content-body">
+                <div class="skeleton-text-line"></div>
+                <div class="skeleton-text-line short"></div>
+                <div class="skeleton-text-line medium"></div>
+                <div class="skeleton-text-line"></div>
+                <div class="skeleton-text-line short"></div>
+                <div class="skeleton-text-line"></div>
+            </div>
+            <div class="skeleton-content-footer">
+                <div class="skeleton-button"></div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <!-- Actual page sections when loaded -->
 <ng-container *ngIf="!sectionsLoading">
-  <ng-container *ngFor="let section of sections">
-    <app-section-renderer [section]="section"></app-section-renderer>
-  </ng-container>
+    <ng-container *ngFor="let section of sections">
+        <app-section-renderer [section]="section" ngSkipHydration></app-section-renderer>
+    </ng-container>
 </ng-container>

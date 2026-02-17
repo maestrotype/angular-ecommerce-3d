@@ -4,75 +4,65 @@
       <img *ngIf="logoUrl" [src]="logoUrl" alt="Logo" class="logo-image">
       <span *ngIf="!logoUrl">🛒 3D Store</span>
     </div>
-    
+
     <!-- Desktop Navigation -->
     <nav class="nav" [class.nav-compressed]="isSearchOpen">
-      <a *ngFor="let item of menuItems" 
-         (click)="handleMenuClick(item)" 
-         class="nav-link"
-         [class.hidden]="!canAccessMenuItem(item)">
-        {{ item.title }}
-      </a>
+      <ng-container *ngFor="let item of menuItems">
+        <a *ngIf="item.url.startsWith('/')" [routerLink]="item.url" class="nav-link"
+          [class.hidden]="!canAccessMenuItem(item)">
+          {{ item.title }}
+        </a>
+        <a *ngIf="item.url.startsWith('#')" (click)="handleMenuClick(item)" class="nav-link"
+          [class.hidden]="!canAccessMenuItem(item)">
+          {{ item.title }}
+        </a>
+      </ng-container>
     </nav>
-    
+
     <!-- Desktop Search -->
     <div class="desktop-search" [class.active]="isSearchOpen" *ngIf="showSearch">
-      <input 
-        #searchInput
-        type="text" 
-        placeholder="Search products..."
-        class="search-input"
-        [(ngModel)]="searchTerm"
-        (input)="onSearch()"
-        (keyup.enter)="performSearch()"
-      />
+      <input #searchInput type="text" placeholder="Search products..." class="search-input" [(ngModel)]="searchTerm"
+        (input)="onSearch()" (keyup.enter)="performSearch()" />
     </div>
-    
+
     <!-- Mobile Search -->
     <div class="mobile-search" *ngIf="showSearch">
-      <input 
-        #mobileSearchInput
-        type="text" 
-        placeholder="Search..."
-        class="mobile-search-input"
-        [(ngModel)]="searchTerm"
-        (input)="onSearch()"
-        (keyup.enter)="performSearch()"
-      />
+      <input #mobileSearchInput type="text" placeholder="Search..." class="mobile-search-input" [(ngModel)]="searchTerm"
+        (input)="onSearch()" (keyup.enter)="performSearch()" />
     </div>
-    
+
     <div class="user-actions">
       <span class="search-icon" (click)="toggleSearch()" *ngIf="showSearch && !isMobile">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M21 21L16.66 16.66" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M21 21L16.66 16.66" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" />
           <path
             d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </span>
-      
+
       <a class="favorites" (click)="openFavoritesPage()" *ngIf="!isMobile">
-        <app-icon name="heart" />
+        <app-icon name="heart"></app-icon>
         <span class="favorites-count" *ngIf="favoritesCount > 0">{{ favoritesCount }}</span>
       </a>
-      
+
       <a class="cart" (click)="openCartModal()" *ngIf="showCart && !isMobile">
-        <app-icon name="shopping-cart" />
+        <app-icon name="shopping-cart"></app-icon>
         <span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span>
       </a>
       <!-- Theme Switcher (old) -->
       <div class="theme-switcher" *ngIf="!isMobile && !enableNewThemeSwitcher">
         <button class="theme-toggle" (click)="toggleThemeMenu()">
           <svg width="26" height="26" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </button>
-        
+
         <div class="theme-menu" *ngIf="showThemeMenu">
-          <button 
-            *ngFor="let theme of themes"
-            class="theme-option"
-            [class.active]="currentTheme === theme.id"
+          <button *ngFor="let theme of themes" class="theme-option" [class.active]="currentTheme === theme.id"
             (click)="changeTheme(theme.id)">
             {{ theme.name }}
           </button>
@@ -83,36 +73,39 @@
       <div class="theme-switcher" *ngIf="!isMobile && enableNewThemeSwitcher">
         <button class="theme-switcher__toggle" (click)="toggleNewThemeMenu()" aria-label="Theme switcher">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 4v2m0 12v2m8-8h-2M6 12H4m12.364 6.364l-1.414-1.414M7.05 7.05L5.636 5.636m12.728 0l-1.414 1.414M7.05 16.95l-1.414 1.414M12 8a4 4 0 100 8 4 4 0 000-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path
+              d="M12 4v2m0 12v2m8-8h-2M6 12H4m12.364 6.364l-1.414-1.414M7.05 7.05L5.636 5.636m12.728 0l-1.414 1.414M7.05 16.95l-1.414 1.414M12 8a4 4 0 100 8 4 4 0 000-8z"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </button>
         <div class="theme-switcher__popover" *ngIf="showNewThemeMenu">
-          <button 
-            class="theme-switcher__option" 
-            *ngFor="let theme of themes"
-            (click)="changeTheme(theme.id)"
+          <button class="theme-switcher__option" *ngFor="let theme of themes" (click)="changeTheme(theme.id)"
             type="button">
             <span class="theme-switcher__swatch">
               <ng-container [ngSwitch]="theme.id">
-                <svg *ngSwitchCase="'default'" width="24" height="16" viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="0" y="0" width="24" height="16" fill="var(--surface-2)"/>
-                  <rect x="0" y="8" width="24" height="8" fill="var(--color-primary)"/>
+                <svg *ngSwitchCase="'default'" width="24" height="16" viewBox="0 0 24 16"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <rect x="0" y="0" width="24" height="16" fill="var(--surface-2)" />
+                  <rect x="0" y="8" width="24" height="8" fill="var(--color-primary)" />
                 </svg>
-                <svg *ngSwitchCase="'dark'" width="24" height="16" viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="0" y="0" width="24" height="16" fill="#111827"/>
-                  <circle cx="18" cy="5" r="3" fill="#f59e0b"/>
+                <svg *ngSwitchCase="'dark'" width="24" height="16" viewBox="0 0 24 16"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <rect x="0" y="0" width="24" height="16" fill="#111827" />
+                  <circle cx="18" cy="5" r="3" fill="#f59e0b" />
                 </svg>
-                <svg *ngSwitchCase="'glass'" width="24" height="16" viewBox="0 0 24 16" xmlns="http://www.w3.org/2000/svg">
+                <svg *ngSwitchCase="'glass'" width="24" height="16" viewBox="0 0 24 16"
+                  xmlns="http://www.w3.org/2000/svg">
                   <defs>
                     <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0%" stop-color="rgba(255,255,255,.4)"/>
-                      <stop offset="100%" stop-color="rgba(255,255,255,.2)"/>
+                      <stop offset="0%" stop-color="rgba(255,255,255,.4)" />
+                      <stop offset="100%" stop-color="rgba(255,255,255,.2)" />
                     </linearGradient>
                   </defs>
-                  <rect x="0" y="0" width="24" height="16" fill="url(#g1)"/>
-                  <rect x="0" y="0" width="24" height="16" stroke="var(--border)" fill="none"/>
+                  <rect x="0" y="0" width="24" height="16" fill="url(#g1)" />
+                  <rect x="0" y="0" width="24" height="16" stroke="var(--border)" fill="none" />
                 </svg>
-                <span *ngSwitchDefault style="display:block;width:24px;height:16px;background:var(--color-primary);"></span>
+                <span *ngSwitchDefault
+                  style="display:block;width:24px;height:16px;background:var(--color-primary);"></span>
               </ng-container>
             </span>
             <span class="theme-switcher__label">{{ theme.name }}</span>
@@ -120,7 +113,7 @@
           </button>
         </div>
       </div>
-      
+
       <span class="profile-icon" (click)="openAuthModal()" *ngIf="showProfile && !isMobile">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -131,7 +124,7 @@
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </span>
-      
+
       <!-- Mobile Hamburger Button -->
       <button class="hamburger" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
         <span></span>
@@ -143,17 +136,15 @@
 </header>
 
 <!-- Search Results Dropdown -->
-<div class="search-results" *ngIf="searchResults.length > 0 && searchTerm" [class.active]="isSearchOpen || searchTerm" (click)="$event.stopPropagation()">
+<div class="search-results" *ngIf="searchResults.length > 0 && searchTerm" [class.active]="isSearchOpen || searchTerm"
+  (click)="$event.stopPropagation()">
   <div class="search-results-container">
     <div class="search-results-header">
       <span>Search Results ({{ searchResults.length }})</span>
     </div>
     <div class="search-results-list">
-      <div 
-        *ngFor="let product of searchResults.slice(0, 5)" 
-        class="search-result-item"
-        (click)="goToProduct(product.id)"
-      >
+      <div *ngFor="let product of searchResults.slice(0, 5)" class="search-result-item"
+        (click)="goToProduct(product.id)">
         <img [src]="product.imageUrl" [alt]="product.name" class="result-image">
         <div class="result-info">
           <h4 class="result-name">{{ product.name }}</h4>
@@ -178,16 +169,16 @@
   <div class="mobile-menu-header">
     <button class="close-btn" (click)="closeMobileMenu()">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" />
+        <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" />
       </svg>
     </button>
   </div>
-  
+
   <nav class="mobile-nav">
-    <a *ngFor="let item of menuItems" 
-       (click)="handleMenuClick(item)"
-       [class.hidden]="!canAccessMenuItem(item)">
+    <a *ngFor="let item of menuItems" (click)="handleMenuClick(item)" [class.hidden]="!canAccessMenuItem(item)">
       {{ item.title }}
     </a>
   </nav>
