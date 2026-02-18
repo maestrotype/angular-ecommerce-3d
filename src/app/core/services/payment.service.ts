@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { environment } from '../../../environments/environment.prod';
+import { environment } from '../../../environments/environment';
 import { Payment, PaymentRequest, PaymentResponse, PaymentStatus } from '../../../shared/models/payment.model';
 import { NotificationService } from './notification.service';
 
@@ -15,15 +15,15 @@ export class PaymentService {
   constructor(
     private http: HttpClient,
     private notificationService: NotificationService
-  ) {}
+  ) { }
 
   createPayment(paymentRequest: PaymentRequest): Observable<PaymentResponse> {
     return this.http.post<PaymentResponse>(`${this.apiUrl}`, paymentRequest)
       .pipe(
         map(response => response),
         catchError(error => {
-          
-          
+
+
           // Show user-friendly error notification
           if (error.status === 404) {
             this.notificationService.showError('Payment service is not available. Please try again later.');
@@ -34,7 +34,7 @@ export class PaymentService {
           } else {
             this.notificationService.showError('Failed to create payment. Please try again.');
           }
-          
+
           return throwError(() => new Error('Failed to create payment'));
         })
       );
@@ -44,7 +44,7 @@ export class PaymentService {
     return this.http.get<Payment>(`${this.apiUrl}/${id}`)
       .pipe(
         catchError(error => {
-          
+
           this.notificationService.showError('Failed to fetch payment details.');
           return throwError(() => new Error('Failed to fetch payment'));
         })
@@ -55,7 +55,7 @@ export class PaymentService {
     return this.http.get<Payment[]>(`${this.apiUrl}/order/${orderId}`)
       .pipe(
         catchError(error => {
-          
+
           return throwError(() => new Error('Failed to fetch payments for order'));
         })
       );
@@ -68,7 +68,7 @@ export class PaymentService {
       .pipe(
         map(response => response.status),
         catchError(error => {
-          
+
           return throwError(() => new Error('Failed to fetch payment status'));
         })
       );
@@ -125,7 +125,7 @@ export class PaymentService {
     return this.http.get<Payment[]>(`${this.apiUrl}`)
       .pipe(
         catchError(error => {
-          
+
           this.notificationService.showError('Failed to fetch payments.');
           return throwError(() => new Error('Failed to fetch payments'));
         })
@@ -136,7 +136,7 @@ export class PaymentService {
     return this.http.get<any>(`${this.apiUrl}/stats/overview`)
       .pipe(
         catchError(error => {
-          
+
           this.notificationService.showError('Failed to fetch payment statistics.');
           return throwError(() => new Error('Failed to fetch payment stats'));
         })
@@ -145,7 +145,7 @@ export class PaymentService {
 
   searchPayments(filters: any = {}): Observable<Payment[]> {
     let params = new URLSearchParams();
-    
+
     if (filters.status && filters.status !== 'all') {
       params.set('status', filters.status);
     }
@@ -171,7 +171,7 @@ export class PaymentService {
     return this.http.get<Payment[]>(`${this.apiUrl}/search?${params.toString()}`)
       .pipe(
         catchError(error => {
-          
+
           this.notificationService.showError('Failed to search payments.');
           return throwError(() => new Error('Failed to search payments'));
         })
@@ -182,7 +182,7 @@ export class PaymentService {
     return this.http.put<Payment>(`${this.apiUrl}/${paymentId}/status`, { status, notes })
       .pipe(
         catchError(error => {
-          
+
           this.notificationService.showError('Failed to update payment status.');
           return throwError(() => new Error('Failed to update payment status'));
         })

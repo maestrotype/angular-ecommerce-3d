@@ -2,7 +2,7 @@
   <app-header ngSkipHydration></app-header>
 </div>
 
-<main>
+<main [class.admin-main]="isAdminRoute()">
   <router-outlet></router-outlet>
 </main>
 

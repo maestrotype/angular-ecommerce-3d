@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, catchError, of } from 'rxjs';
-import { environment } from '../../../environments/environment.prod';
+import { environment } from '../../../environments/environment';
 
 export interface Message {
   id: number;
@@ -64,13 +64,13 @@ export interface PaginatedResponse<T> {
 export class MessageService {
   private apiUrl = `${environment.apiUrl}/messages`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   createMessage(messageData: CreateMessageDto): Observable<ApiResponse<Message>> {
     return this.http.post<ApiResponse<Message>>(this.apiUrl, messageData)
       .pipe(
         catchError(error => {
-          
+
           return of({
             success: false,
             error: 'Failed to send message'
@@ -81,7 +81,7 @@ export class MessageService {
 
   getAllMessages(filters: MessageFilters = {}): Observable<PaginatedResponse<Message>> {
     let params = new HttpParams();
-    
+
     if (filters.status) {
       params = params.set('status', filters.status);
     }
@@ -98,7 +98,7 @@ export class MessageService {
     return this.http.get<PaginatedResponse<Message>>(this.apiUrl, { params })
       .pipe(
         catchError(error => {
-          
+
           return of({
             data: [],
             count: 0,
@@ -114,7 +114,7 @@ export class MessageService {
     return this.http.get<ApiResponse<Message>>(`${this.apiUrl}/${id}`)
       .pipe(
         catchError(error => {
-          
+
           return of({
             success: false,
             error: 'Failed to fetch message'
@@ -127,7 +127,7 @@ export class MessageService {
     return this.http.put<ApiResponse<Message>>(`${this.apiUrl}/${id}`, updateData)
       .pipe(
         catchError(error => {
-          
+
           return of({
             success: false,
             error: 'Failed to update message'
@@ -140,7 +140,7 @@ export class MessageService {
     return this.http.delete<ApiResponse>(`${this.apiUrl}/${id}`)
       .pipe(
         catchError(error => {
-          
+
           return of({
             success: false,
             error: 'Failed to delete message'
@@ -151,7 +151,7 @@ export class MessageService {
 
   getMessagesCount(filters: MessageFilters = {}): Observable<ApiResponse<{ count: number }>> {
     let params = new HttpParams();
-    
+
     if (filters.status) {
       params = params.set('status', filters.status);
     }
@@ -162,7 +162,7 @@ export class MessageService {
     return this.http.get<ApiResponse<{ count: number }>>(`${this.apiUrl}/count`, { params })
       .pipe(
         catchError(error => {
-          
+
           return of({
             success: false,
             data: { count: 0 }
@@ -175,7 +175,7 @@ export class MessageService {
     return this.http.get<ApiResponse<{ count: number }>>(`${this.apiUrl}/unread`)
       .pipe(
         catchError(error => {
-          
+
           return of({
             success: false,
             data: { count: 0 }

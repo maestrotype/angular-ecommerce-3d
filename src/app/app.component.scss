@@ -1,6 +1,11 @@
 main {
     padding-top: 80px;
     min-height: calc(100vh - 80px);
+
+    &.admin-main {
+        padding-top: 0;
+        min-height: 100vh;
+    }
 }
 
 // Minimum height considering header

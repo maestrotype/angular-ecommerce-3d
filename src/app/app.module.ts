@@ -53,6 +53,12 @@ import { SharedModule } from './shared/shared.module';
 // Services
 import { ThemeService } from './core/themes/theme.service';
 import { PaymentSettingsService } from './core/services/payment-settings.service';
+import { ApiConfigService } from './core/services/api-config.service';
+import { APP_INITIALIZER } from '@angular/core';
+
+export function initializeApp(apiConfigService: ApiConfigService) {
+  return () => apiConfigService.init();
+}
 
 export function HttpLoaderFactory(http: any) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -109,6 +115,12 @@ export function HttpLoaderFactory(http: any) {
     { provide: APP_ID, useValue: 'angular-ecommerce-3d' },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: SeoUpdateInterceptor, multi: true },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeApp,
+      deps: [ApiConfigService],
+      multi: true
+    },
     ThemeService,
     PaymentSettingsService,
     provideHttpClient(withFetch()),
