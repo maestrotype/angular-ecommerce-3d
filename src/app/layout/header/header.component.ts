@@ -33,11 +33,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   // Header customization
   headerSettings: HeaderSettings | null = null;
-  menuItems: MenuItem[] = [];
+  menuItems: MenuItem[] = []; // Initialize empty, load from API
   showSearch = true;
   showCart = true;
   showProfile = true;
   logoUrl: string | null = null;
+
+  // Fallback menu items in case API fails completely
+  private readonly FALLBACK_MENU_ITEMS: MenuItem[] = [
+    { title: 'Home', url: '/home', access: 'all', isActive: true },
+    { title: 'Shop', url: '/shop', access: 'all', isActive: true },
+    { title: 'About', url: '/about', access: 'all', isActive: true },
+    { title: 'Contacts', url: '/contacts', access: 'all', isActive: true },
+    { title: 'Admin Panel', url: '/admin', access: 'admin', isActive: true }
+  ];
 
   // Theme switching
   themes: Theme[] = [];
@@ -137,19 +146,36 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private loadHeaderCustomization(): void {
     // Load header settings
-    this.headerService.getHeaderSettings().subscribe(settings => {
-      this.headerSettings = settings;
-      if (settings) {
-        this.logoUrl = settings.logoUrl || null;
-        this.showSearch = settings.showSearch !== false;
-        this.showCart = settings.showCart !== false;
-        this.showProfile = settings.showProfile !== false;
+    this.headerService.getHeaderSettings().subscribe({
+      next: settings => {
+        if (settings) {
+          this.headerSettings = settings;
+          this.logoUrl = settings.logoUrl || null;
+          this.showSearch = settings.showSearch !== false;
+          this.showCart = settings.showCart !== false;
+          this.showProfile = settings.showProfile !== false;
+        }
+      },
+      error: err => {
+        console.error('Error loading header settings:', err);
       }
     });
 
     // Load menu items
-    this.headerService.getMenuItems().subscribe(items => {
-      this.menuItems = items;
+    this.headerService.getMenuItems().subscribe({
+      next: items => {
+        if (items && items.length > 0) {
+          console.log('Menu items loaded from API:', items);
+          this.menuItems = items;
+        } else {
+          console.warn('API returned empty menu, using fallback.');
+          this.menuItems = this.FALLBACK_MENU_ITEMS;
+        }
+      },
+      error: err => {
+        console.error('Error loading menu items, using fallback:', err);
+        this.menuItems = this.FALLBACK_MENU_ITEMS;
+      }
     });
   }
 

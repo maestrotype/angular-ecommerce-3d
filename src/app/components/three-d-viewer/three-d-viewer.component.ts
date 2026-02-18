@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ElementRef, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, CommonModule } from '@angular/common';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
@@ -7,7 +7,9 @@ import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.j
 @Component({
   selector: 'app-three-d-viewer',
   template: '<div #container style="width: 100%; height: 100%;"></div>',
-  styleUrls: ['./three-d-viewer.component.scss']
+  styleUrls: ['./three-d-viewer.component.scss'],
+  standalone: true,
+  imports: [CommonModule]
 })
 export class ThreeDViewerComponent implements AfterViewInit {
   @ViewChild('container') container!: ElementRef;

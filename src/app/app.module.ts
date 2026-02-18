@@ -63,6 +63,7 @@ export function HttpLoaderFactory(http: any) {
   declarations: [
     AppComponent,
     ContactsComponent,
+    HeaderComponent,
     FooterComponent,
 
     AboutComponent,
@@ -90,6 +91,12 @@ export function HttpLoaderFactory(http: any) {
     MatIconModule,
     MatButtonModule,
     SharedModule,
+    HeroComponent,
+    HeroGlassComponent,
+    CategoriesComponent,
+    SpecialOfferComponent,
+    BestSellersComponent,
+    BrandsComponent,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

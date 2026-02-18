@@ -1,9 +1,15 @@
+:host {
+  display: block;
+  z-index: 999;
+  position: relative;
+}
+
 .header {
   height: 80px;
   width: 100%;
   display: flex;
   justify-content: space-around;
-  background: var(--header-bg);
+  background: var(--header-bg, #ffffff);
   backdrop-filter: var(--header-backdrop-filter);
   color: var(--header-text);
   position: fixed;
@@ -63,19 +69,19 @@
     display: flex;
     gap: 20px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     &.nav-compressed {
       gap: 10px;
       opacity: 0;
       visibility: hidden;
       transform: translateX(-20px);
-      
+
       a {
         padding: 8px 12px;
         font-size: 0.9em;
       }
     }
-    
+
     a {
       position: relative;
       color: var(--header-link);
@@ -100,29 +106,30 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: linear-gradient(135deg, 
-          rgba(255, 255, 255, 0.2) 0%,
-          rgba(255, 255, 255, 0.1) 50%,
-          rgba(255, 255, 255, 0.05) 100%);
+        background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.2) 0%,
+            rgba(255, 255, 255, 0.1) 50%,
+            rgba(255, 255, 255, 0.05) 100%);
         border-radius: var(--radius-md, 12px);
         border: 1px solid rgba(255, 255, 255, 0.2);
         opacity: 0;
         transform: scale(0.95);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         backdrop-filter: blur(10px);
-        box-shadow: 
+        box-shadow:
           0 8px 32px rgba(0, 0, 0, 0.1),
           inset 0 1px 0 rgba(255, 255, 255, 0.3);
       }
 
-      &:hover, &:active {
+      &:hover,
+      &:active {
         color: var(--header-link-hover);
         transform: translateY(-2px);
         filter: none;
-        
+
         &::before {
           transform: scale(1);
-          box-shadow: 
+          box-shadow:
             0 12px 40px rgba(0, 0, 0, 0.15),
             inset 0 1px 0 rgba(255, 255, 255, 0.4),
             inset 0 -1px 0 rgba(0, 0, 0, 0.1);
@@ -131,10 +138,10 @@
 
       &:active {
         transform: translateY(0px);
-        
+
         &::before {
           transform: scale(0.98);
-          box-shadow: 
+          box-shadow:
             0 6px 20px rgba(0, 0, 0, 0.2),
             inset 0 1px 0 rgba(255, 255, 255, 0.3),
             inset 0 -1px 0 rgba(0, 0, 0, 0.15);
@@ -143,17 +150,17 @@
 
       &.active {
         color: #333;
-        
+
         &::before {
           opacity: 1;
           transform: scale(1);
-          background: linear-gradient(135deg, 
-            rgba(0, 122, 255, 0.2) 0%,
-            rgba(0, 122, 255, 0.1) 50%,
-            rgba(0, 122, 255, 0.05) 100%);
+          background: linear-gradient(135deg,
+              rgba(0, 122, 255, 0.2) 0%,
+              rgba(0, 122, 255, 0.1) 50%,
+              rgba(0, 122, 255, 0.05) 100%);
           border: 1px solid var(--header-accent-30, rgba(0, 122, 255, 0.3));
           backdrop-filter: blur(20px);
-          box-shadow: 
+          box-shadow:
             0 8px 32px rgba(0, 122, 255, 0.2),
             inset 0 1px 0 rgba(255, 255, 255, 0.4),
             inset 0 -1px 0 rgba(0, 122, 255, 0.1);
@@ -202,7 +209,7 @@
       backdrop-filter: blur(10px);
       outline: none;
       transition: all 0.3s ease;
-      
+
       &:focus {
         border-color: var(--header-accent, #007AFF);
         box-shadow: 0 0 0 3px var(--header-accent-10, rgba(0, 122, 255, 0.1));
@@ -290,7 +297,7 @@
 
   .theme-switcher {
     position: relative;
-    
+
     .theme-menu {
       position: absolute;
       top: 100%;
@@ -303,7 +310,7 @@
       z-index: 1000;
       min-width: 120px;
       overflow: hidden;
-      
+
       .theme-option {
         display: block;
         width: 100%;
@@ -316,11 +323,11 @@
         font-size: 14px;
         color: var(--text-primary);
         color: #fff;
-        
+
         &:hover {
           background: var(--surface-2, rgba(0, 0, 0, 0.05));
         }
-        
+
         &.active {
           background: var(--header-accent, #007AFF);
           color: var(--on-accent, #fff);
@@ -511,7 +518,7 @@
       padding: 8px;
       border-radius: 8px;
       transition: background-color 0.3s ease;
-      
+
       &:hover {
         background-color: rgba(0, 0, 0, 0.1);
       }
@@ -567,14 +574,14 @@
     .desktop-search {
       display: none;
     }
-    
+
     .mobile-search {
       display: flex;
       flex: 1;
       margin: 0 15px;
       max-width: 200px;
     }
-  
+
     .header-container {
       padding: 0 1rem;
     }
@@ -583,7 +590,7 @@
       .hamburger {
         display: flex;
       }
-      
+
       .cart,
       .profile-icon {
         display: none;

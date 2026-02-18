@@ -3,11 +3,10 @@ import { CommonModule } from '@angular/common';
 import { ThreeDViewerComponent } from './three-d-viewer.component';
 
 @NgModule({
-  declarations: [
-    ThreeDViewerComponent
-  ],
+  declarations: [],
   imports: [
-    CommonModule
+    CommonModule,
+    ThreeDViewerComponent
   ],
   exports: [
     ThreeDViewerComponent
