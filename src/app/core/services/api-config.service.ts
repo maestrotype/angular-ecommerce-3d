@@ -19,7 +19,7 @@ export class ApiConfigService {
             const hostname = window.location.hostname;
 
             if (hostname === 'localhost' || hostname === '127.0.0.1') {
-                console.log('Checking local backend availability...');
+                // Check local backend availability
 
                 try {
                     // Try to ping the local health check or just a simple GET
@@ -36,9 +36,9 @@ export class ApiConfigService {
                             })
                         )
                     );
-                    console.log('Local backend is active. Using:', environment.apiUrl);
+                    // console.log('Local backend is active. Using:', environment.apiUrl);
                 } catch (error) {
-                    console.warn('Local backend unreachable. Switching to fallback API:', (environment as any).fallbackApiUrl);
+                    // console.warn('Local backend unreachable. Switching to fallback API:', (environment as any).fallbackApiUrl);
                     if ((environment as any).fallbackApiUrl) {
                         (environment as any).apiUrl = (environment as any).fallbackApiUrl;
                     }
