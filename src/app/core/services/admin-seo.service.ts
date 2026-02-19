@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { environment } from '../../../environments/environment.prod';
+import { environment } from '../../../environments/environment';
 
 export interface SeoSettings {
   id: number;
@@ -48,7 +48,7 @@ export class AdminSeoService {
   private readonly apiUrl = `${environment.apiUrl}/seo`;
   private seoSettings$ = new BehaviorSubject<SeoSettings | null>(null);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getSeoSettings(): Observable<SeoSettings> {
     return this.http.get<{ success: boolean; data: SeoSettings }>(`${this.apiUrl}/settings`).pipe(
@@ -60,7 +60,7 @@ export class AdminSeoService {
         throw new Error('Failed to get SEO settings');
       }),
       catchError(error => {
-        
+
         throw error;
       })
     );
@@ -76,7 +76,7 @@ export class AdminSeoService {
         throw new Error('Failed to update SEO settings');
       }),
       catchError(error => {
-        
+
         throw error;
       })
     );
@@ -91,7 +91,7 @@ export class AdminSeoService {
         throw new Error('Failed to generate sitemap');
       }),
       catchError(error => {
-        
+
         throw error;
       })
     );
@@ -106,7 +106,7 @@ export class AdminSeoService {
         throw new Error('Failed to get robots.txt');
       }),
       catchError(error => {
-        
+
         throw error;
       })
     );
@@ -121,7 +121,7 @@ export class AdminSeoService {
         throw new Error('Failed to update robots.txt');
       }),
       catchError(error => {
-        
+
         throw error;
       })
     );

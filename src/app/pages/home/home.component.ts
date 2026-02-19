@@ -1,9 +1,9 @@
-// Importing required dependencies and interfaces
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { ProductService } from '../../core/services/product.service';
 import { Product } from 'src/shared/models/product.model';
 import { SectionService } from 'src/admin/services/section.service';
 import { Section } from 'src/shared/models/section.model';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-home',
@@ -14,12 +14,12 @@ export class HomeComponent implements OnInit {
   sections: Section[] = [];
   bestSellers: Product[] = [];
   specialOffer: Product | undefined;
-  
+
   // Loading states for different content sections
   sectionsLoading = true;
   bestSellersLoading = true;
   specialOfferLoading = true;
-  
+
   // Enhanced skeleton data for better user experience during loading
   skeletonSections = [
     { type: 'hero', height: '600px', delay: 0 },
@@ -29,14 +29,15 @@ export class HomeComponent implements OnInit {
   skeletonProducts = Array(4).fill(null);
 
   constructor(
-    private productService: ProductService, 
-    private sectionService: SectionService
-  ) {}
+    private productService: ProductService,
+    private sectionService: SectionService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) { }
 
   ngOnInit() {
     // Load critical content first (above-the-fold sections)
     this.loadSections();
-    
+
     // Load secondary content in parallel
     this.loadBestSellers();
     this.loadSpecialOffers();
@@ -54,7 +55,7 @@ export class HomeComponent implements OnInit {
         this.sectionsLoading = false;
       },
       error: (err) => {
-        
+        console.error('Error loading sections', err);
         this.sectionsLoading = false;
       }
     });
@@ -71,7 +72,7 @@ export class HomeComponent implements OnInit {
         this.bestSellersLoading = false;
       },
       error: (err) => {
-        
+        console.error('Error loading best sellers', err);
         this.bestSellersLoading = false;
       }
     });
@@ -88,7 +89,7 @@ export class HomeComponent implements OnInit {
         this.specialOfferLoading = false;
       },
       error: (err) => {
-        
+        console.error('Error loading special offers', err);
         this.specialOfferLoading = false;
       }
     });
@@ -98,12 +99,14 @@ export class HomeComponent implements OnInit {
    * Smooth scroll to specific section
    */
   scrollToSection(sectionId: string): void {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-      });
+    if (isPlatformBrowser(this.platformId)) {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
     }
   }
 }

@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 import { Theme } from '../../../core/themes/theme.model';
 import { ThemeService } from '../../../core/themes/theme.service';
@@ -17,7 +18,10 @@ export class ThemeSelectorComponent implements OnInit, OnDestroy {
   private hoverTimeout: any;
   private drawerContent?: HTMLElement;
 
-  constructor(private themeService: ThemeService) { }
+  constructor(
+    private themeService: ThemeService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) { }
 
   ngOnInit(): void {
     this.themes = this.themeService.getAllThemes();
@@ -30,7 +34,9 @@ export class ThemeSelectorComponent implements OnInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    this.drawerContent = document.querySelector('.mat-drawer-content') as HTMLElement;
+    if (isPlatformBrowser(this.platformId)) {
+      this.drawerContent = document.querySelector('.mat-drawer-content') as HTMLElement;
+    }
   }
 
   ngOnDestroy(): void {

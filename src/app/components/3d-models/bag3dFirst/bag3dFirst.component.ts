@@ -1,4 +1,5 @@
-import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
@@ -14,10 +15,15 @@ export class Bag3dFirstComponent implements AfterViewInit {
   private renderer!: THREE.WebGLRenderer;
   private model!: THREE.Object3D;
 
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
+
   ngAfterViewInit() {
-    this.initThree();
-    this.loadModel();
-    this.animate();
+    // Only initialize Three.js in browser (not on server)
+    if (isPlatformBrowser(this.platformId)) {
+      this.initThree();
+      this.loadModel();
+      this.animate();
+    }
   }
 
   private initThree() {
@@ -54,7 +60,7 @@ export class Bag3dFirstComponent implements AfterViewInit {
       this.model = gltf.scene;
       this.model.position.set(0, 0, 0);
       this.model.scale.set(9, 9, 9); // Scale as set by you
-      
+
       const box = new THREE.Box3().setFromObject(this.model);
       box.getCenter(this.model.position);
       this.model.position.multiplyScalar(-1);
@@ -69,9 +75,9 @@ export class Bag3dFirstComponent implements AfterViewInit {
       });
       this.camera.lookAt(this.model.position);
       this.scene.add(this.model);
-      
+
     }, undefined, (error) => {
-      
+
     });
   }
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { loadStripe, Stripe, StripeElements, StripeCardElement } from '@stripe/stripe-js';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments/environment';
 import { Observable, from, of, timer, Subject } from 'rxjs';
 import { map, catchError, switchMap, takeUntil } from 'rxjs/operators';
 
@@ -54,9 +54,9 @@ export class StripeElementsComponent implements OnInit, OnDestroy {
 
   private initializeStripe(): void {
     this.setLoading(true);
-    
-    
-    
+
+
+
     if (!this.publishableKey || this.publishableKey === 'pk_test_51Oq...') {
       this.paymentError.emit('Valid Stripe publishable key is required. Please configure it in admin settings.');
       this.setLoading(false);
@@ -71,7 +71,7 @@ export class StripeElementsComponent implements OnInit, OnDestroy {
           throw new Error('Failed to load Stripe');
         }
         this.stripe = stripe;
-        
+
         // Wait for DOM to be ready using RxJS timer
         return timer(100);
       }),
@@ -111,9 +111,9 @@ export class StripeElementsComponent implements OnInit, OnDestroy {
 
         // Mount card element
         if (this.cardElement && this.cardElement.nativeElement) {
-          
+
           this.card!.mount(this.cardElement.nativeElement);
-          
+
         } else {
           throw new Error('Card element DOM not ready');
         }

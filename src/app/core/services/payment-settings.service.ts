@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments/environment';
 
 export interface PaymentSettings {
   stripeEnabled: boolean;
@@ -26,7 +27,10 @@ export interface PaymentSettings {
 })
 export class PaymentSettingsService {
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) { }
 
   getPaymentSettings(): Observable<PaymentSettings> {
     // Primary source: backend settings (grouped)
@@ -46,13 +50,15 @@ export class PaymentSettingsService {
   }
 
   private getLocalPaymentSettings(): PaymentSettings {
-    try {
-      const stored = localStorage.getItem('paymentSettings');
-      if (stored) {
-        return JSON.parse(stored);
+    if (isPlatformBrowser(this.platformId)) {
+      try {
+        const stored = localStorage.getItem('paymentSettings');
+        if (stored) {
+          return JSON.parse(stored);
+        }
+      } catch (error) {
+        // Silent fallback
       }
-    } catch (error) {
-      // Silent fallback
     }
 
     // Default fallback
@@ -75,12 +81,14 @@ export class PaymentSettingsService {
   }
 
   private setLocalPaymentSettings(settings: PaymentSettings): void {
-    try {
-      localStorage.setItem('paymentSettings', JSON.stringify(settings));
-    } catch {}
+    if (isPlatformBrowser(this.platformId)) {
+      try {
+        localStorage.setItem('paymentSettings', JSON.stringify(settings));
+      } catch { }
+    }
   }
 
-  getEnabledPaymentMethods(): Observable<Array<{id: string, name: string, icon: string, description: string}>> {
+  getEnabledPaymentMethods(): Observable<Array<{ id: string, name: string, icon: string, description: string }>> {
     return this.getPaymentSettings().pipe(
       map(settings => {
         const methods = [];

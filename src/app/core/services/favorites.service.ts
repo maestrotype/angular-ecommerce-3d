@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 import { Product } from 'src/shared/models/product.model';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,21 +11,24 @@ import { environment } from 'src/environments/environment.prod';
 export class FavoritesService {
   private readonly API_URL = environment.apiUrl;
   private readonly STORAGE_KEY = 'favorites';
-  
+
   // Reactive state management using BehaviorSubject
   private favoritesSubject = new BehaviorSubject<Product[]>([]);
   public favorites$ = this.favoritesSubject.asObservable();
-  
+
   // Computed observables
   public favoritesCount$ = this.favorites$.pipe(
     map(favorites => favorites.length)
   );
-  
+
   public isFavorite$ = (productId: number) => this.favorites$.pipe(
     map(favorites => favorites.some(fav => fav.id === productId))
   );
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
     this.loadFavoritesFromStorage();
   }
 
@@ -34,11 +38,11 @@ export class FavoritesService {
   addToFavorites(product: Product): void {
     const currentFavorites = this.favoritesSubject.value;
     const isAlreadyFavorite = currentFavorites.some(fav => fav.id === product.id);
-    
+
     if (!isAlreadyFavorite) {
       const updatedFavorites = [...currentFavorites, { ...product, isFavorite: true }];
       this.updateFavorites(updatedFavorites);
-      
+
       // Sync with backend if user is authenticated
       this.syncWithBackend(product.id, 'add');
     }
@@ -51,7 +55,7 @@ export class FavoritesService {
     const currentFavorites = this.favoritesSubject.value;
     const updatedFavorites = currentFavorites.filter(fav => fav.id !== productId);
     this.updateFavorites(updatedFavorites);
-    
+
     // Sync with backend if user is authenticated
     this.syncWithBackend(productId, 'remove');
   }
@@ -61,7 +65,7 @@ export class FavoritesService {
    */
   toggleFavorite(product: Product): void {
     const isFavorite = this.favoritesSubject.value.some(fav => fav.id === product.id);
-    
+
     if (isFavorite) {
       this.removeFromFavorites(product.id);
     } else {
@@ -102,6 +106,10 @@ export class FavoritesService {
    * Load favorites from localStorage
    */
   private loadFavoritesFromStorage(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return; // Skip on server-side
+    }
+
     try {
       const stored = localStorage.getItem(this.STORAGE_KEY);
       if (stored) {
@@ -109,7 +117,7 @@ export class FavoritesService {
         this.favoritesSubject.next(favorites);
       }
     } catch (error) {
-      
+
     }
   }
 
@@ -117,10 +125,14 @@ export class FavoritesService {
    * Save favorites to localStorage
    */
   private saveFavoritesToStorage(favorites: Product[]): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return; // Skip on server-side
+    }
+
     try {
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(favorites));
     } catch (error) {
-      
+
     }
   }
 

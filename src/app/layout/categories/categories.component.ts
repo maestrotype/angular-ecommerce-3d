@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Section } from 'src/shared/models/section.model';
+import { CommonModule } from '@angular/common';
 
 interface CategoryDisplay {
     id?: number;
@@ -13,7 +14,9 @@ interface CategoryDisplay {
 @Component({
     selector: 'app-categories',
     templateUrl: './categories.component.html',
-    styleUrls: ['./categories.component.scss']
+    styleUrls: ['./categories.component.scss'],
+    standalone: true,
+    imports: [CommonModule]
 })
 export class CategoriesComponent implements OnInit {
     @Input() data!: Section;
@@ -43,8 +46,8 @@ export class CategoriesComponent implements OnInit {
 
     navigateToCategory(category: CategoryDisplay): void {
         const slug = category.slug || category.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-        this.router.navigate(['/shop'], { 
-            queryParams: { category: slug } 
+        this.router.navigate(['/shop'], {
+            queryParams: { category: slug }
         });
     }
 }

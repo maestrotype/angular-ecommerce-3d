@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject, afterNextRender } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 import { Theme } from './theme.model';
 import { AVAILABLE_THEMES, DEFAULT_THEME_ID } from './theme-config';
@@ -15,8 +16,10 @@ export class ThemeService {
   private adminThemeSubject = new BehaviorSubject<Theme | null>(null);
   public adminTheme$ = this.adminThemeSubject.asObservable();
 
-  constructor() {
-    this.initializeTheme();
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    afterNextRender(() => {
+      this.initializeTheme();
+    });
   }
 
   private initializeTheme(): void {
@@ -50,12 +53,14 @@ export class ThemeService {
     const theme = this.getThemeById(themeId);
 
     if (!theme) {
-      
+
       return;
     }
 
-    const storageKey = area === 'admin' ? 'selected-theme-admin' : 'selected-theme';
-    localStorage.setItem(storageKey, themeId);
+    if (isPlatformBrowser(this.platformId)) {
+      const storageKey = area === 'admin' ? 'selected-theme-admin' : 'selected-theme';
+      localStorage.setItem(storageKey, themeId);
+    }
 
     if (area === 'admin') {
       this.adminThemeSubject.next(theme);
@@ -68,6 +73,10 @@ export class ThemeService {
 
   private applyTheme(theme: Theme, area: Area = 'frontend'): void {
     if (!theme || !theme.id) {
+      return;
+    }
+
+    if (!isPlatformBrowser(this.platformId)) {
       return;
     }
 
@@ -87,6 +96,10 @@ export class ThemeService {
   }
 
   clearTheme(area: Area = 'frontend'): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     if (area === 'admin') {
       document.body.removeAttribute('data-theme');
       localStorage.removeItem('selected-theme-admin');

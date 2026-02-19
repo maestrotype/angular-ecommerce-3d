@@ -1,7 +1,6 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { NgModule, APP_ID } from '@angular/core';
+import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { SeoUpdateInterceptor } from './core/interceptors/seo-update.interceptor';
@@ -54,6 +53,12 @@ import { SharedModule } from './shared/shared.module';
 // Services
 import { ThemeService } from './core/themes/theme.service';
 import { PaymentSettingsService } from './core/services/payment-settings.service';
+import { ApiConfigService } from './core/services/api-config.service';
+import { APP_INITIALIZER } from '@angular/core';
+
+export function initializeApp(apiConfigService: ApiConfigService) {
+  return () => apiConfigService.init();
+}
 
 export function HttpLoaderFactory(http: any) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -62,27 +67,20 @@ export function HttpLoaderFactory(http: any) {
 
 @NgModule({
   declarations: [
-    AppComponent, 
-    HeaderComponent, 
-    HeroComponent, 
-    HeroGlassComponent, 
-    CategoriesComponent, 
- 
-    SpecialOfferComponent, 
-    BestSellersComponent, 
-    BrandsComponent, 
-    ContactsComponent, 
-    FooterComponent, 
- 
-    AboutComponent, 
-    BaseModalComponent, 
-    ImageModalComponent, 
-    CartModalComponent, 
+    AppComponent,
+    ContactsComponent,
+    HeaderComponent,
+    FooterComponent,
+
+    AboutComponent,
+    BaseModalComponent,
+    ImageModalComponent,
+    CartModalComponent,
     AuthModalComponent,
-    NotificationModalComponent, 
-    Bag3dFirstComponent, 
-    IconComponent, 
- 
+    NotificationModalComponent,
+    Bag3dFirstComponent,
+    IconComponent,
+
     FavoritesComponent,
     MyOrdersComponent,
     ContactFormComponent,
@@ -91,32 +89,44 @@ export function HttpLoaderFactory(http: any) {
     PaymentSuccessComponent,
     PaymentErrorComponent
   ],
-      imports: [
-    BrowserModule, 
-    BrowserAnimationsModule, 
-    HttpClientModule, 
-    FormsModule, 
+  imports: [
+    BrowserModule,
+    FormsModule,
     ReactiveFormsModule,
-    RouterModule, 
     AppRoutingModule,
     MatIconModule,
     MatButtonModule,
     SharedModule,
+    HeroComponent,
+    HeroGlassComponent,
+    CategoriesComponent,
+    SpecialOfferComponent,
+    BestSellersComponent,
+    BrandsComponent,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
-        deps: [HttpClientModule]
+        deps: [HttpClient]
       }
     })
   ],
   providers: [
-    provideAnimationsAsync(),
+    { provide: APP_ID, useValue: 'angular-ecommerce-3d' },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: SeoUpdateInterceptor, multi: true },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeApp,
+      deps: [ApiConfigService],
+      multi: true
+    },
     ThemeService,
-    PaymentSettingsService
+    PaymentSettingsService,
+    provideHttpClient(withFetch()),
+    provideClientHydration(),
+    provideAnimationsAsync()
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

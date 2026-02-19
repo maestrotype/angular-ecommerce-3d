@@ -7,6 +7,11 @@
     "build": "ng build --configuration production",
     "build:prod": "ng build --configuration production",
     "build:gh": "ng build --configuration production --base-href=/angular-ecommerce-3d/",
+    "serve:ssr": "node server-simple.mjs",
+    "build:ssr": "ng build && ng run angular-ecommerce-3d:server:production",
+    "build:ssr:dev": "ng build && ng run angular-ecommerce-3d:server",
+    "serve:ssr:dev": "npm run build:ssr:dev && node server-simple.mjs",
+    "dev:ssr": "npm run build:ssr && npm run serve:ssr",
     "deploy": "npm run build:gh && npx angular-cli-ghpages --dir=dist/angular-ecommerce-3d"
   },
   "dependencies": {
@@ -19,10 +24,13 @@
     "@angular/material": "^17.3.10",
     "@angular/platform-browser": "^17.3.0",
     "@angular/platform-browser-dynamic": "^17.3.0",
+    "@angular/platform-server": "^17.3.12",
     "@angular/router": "^17.3.0",
+    "@angular/ssr": "^17.3.17",
     "@ngx-translate/core": "^16.0.4",
     "@ngx-translate/http-loader": "^16.0.1",
     "@stripe/stripe-js": "^7.8.0",
+    "express": "^4.22.1",
     "rxjs": "^7.8.1",
     "three": "^0.158.0",
     "zone.js": "^0.14.2"
@@ -30,9 +38,11 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.3.12",
     "@angular/cli": "^17.3.0",
-    "@angular/compiler-cli": "^17.3.0",
+    "@types/express": "^4.17.25",
+    "@types/node": "^20.0.0",
     "@types/three": "^0.158.0",
     "angular-cli-ghpages": "^2.0.3",
+    "ts-node": "^10.9.2",
     "typescript": "^5.2.2",
     "webpack": "^5.92.1"
   }

@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angular 3D E-Commerce - Marketing Showcase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .content {
+            padding: 60px 40px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .stat-number {
+            font-size: 3em;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        h2 {
+            font-size: 2.5em;
+            margin: 60px 0 30px 0;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        h3 {
+            font-size: 1.8em;
+            margin: 40px 0 20px 0;
+            color: #764ba2;
+        }
+
+        .section-intro {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 40px;
+            line-height: 1.8;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .gallery-item {
+            background: #f8f9fa;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item img,
+        .gallery-item video {
+            width: 100%;
+            height: auto;
+            display: block;
+            cursor: pointer;
+        }
+
+        .gallery-caption {
+            padding: 20px;
+            background: white;
+        }
+
+        .gallery-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .gallery-description {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #667eea;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .video-container {
+            position: relative;
+            background: #000;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: auto;
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: rgba(102, 126, 234, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .play-overlay:hover {
+            background: rgba(118, 75, 162, 0.9);
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .play-overlay::after {
+            content: '▶';
+            color: white;
+            font-size: 30px;
+            margin-left: 5px;
+        }
+
+        footer {
+            background: #2d3748;
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #764ba2;
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img,
+        .lightbox video {
+            max-width: 95%;
+            max-height: 95%;
+            object-fit: contain;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                padding: 40px 20px;
+            }
+
+            .content {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>🛍️ Angular 3D E-Commerce</h1>
+            <p class="subtitle">Professional Marketing Materials Showcase</p>
+        </header>
+
+        <div class="content">
+            <div class="stats">
+                <div class="stat-card">
+                    <span class="stat-number">15</span>
+                    <span class="stat-label">Screenshots</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">4</span>
+                    <span class="stat-label">Video Demos</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">Coverage</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">HD</span>
+                    <span class="stat-label">Quality</span>
+                </div>
+            </div>
+
+            <p class="section-intro">
+                Complete set of professional marketing materials for the Angular 3D E-Commerce project,
+                ready for marketplace sale on <strong>ThemeForest</strong>, <strong>TemplateMonster</strong>,
+                <strong>CodeCanyon</strong>, and similar platforms. All screenshots are high-resolution
+                and videos demonstrate real functionality.
+            </p>
+
+            <!-- VIDEOS SECTION -->
+            <h2>🎥 Video Demonstrations</h2>
+            <p class="section-intro">
+                Professional video recordings showcasing key features and user journeys
+            </p>
+
+            <div class="gallery">
+                <div class="gallery-item">
+                    <div class="video-container">
+                        <video loop muted playsinline onclick="openLightbox(this)">
+                            <source src="videos/01_main_user_journey.webp" type="video/webp">
+                        </video>
+                        <div class="play-overlay" onclick="playVideo(this)"></div>
+                    </div>
+                    <div class="gallery-caption">
+                        <div class="gallery-title">Main User Journey</div>
+                        <div class="gallery-description">
+                            Complete e-commerce flow: Browse → 3D Product → Add to Cart → Checkout
+                        </div>
+                        <span class="badge">2-3 min</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="video-container">
+                        <video loop muted playsinline onclick="openLightbox(this)">
+                            <source src="videos/02_3d_product_viewer.webp" type="video/webp">
+                        </video>
+                        <div class="play-overlay" onclick="playVideo(this)"></div>
+                    </div>
+                    <div class="gallery-caption">
+                        <div class="gallery-title">3D Product Viewer Demo</div>
+                        <div class="gallery-description">
+                            Interactive 3D model rotation, zoom, and exploration
+                        </div>
+                        <span class="badge">30 sec</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="video-container">
+                        <video loop muted playsinline onclick="openLightbox(this)">
+                            <source src="videos/03_add_to_cart_flow.webp" type="video/webp">
+                        </video>
+                        <div class="play-overlay" onclick="playVideo(this)"></div>
+                    </div>
+                    <div class="gallery-caption">
+                        <div class="gallery-title">Add to Cart Flow</div>
+                        <div class="gallery-description">
+                            Shopping cart interaction and item management
+                        </div>
+                        <span class="badge">1 min</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <div class="video-container">
+                        <video loop muted playsinline onclick="openLightbox(this)">
+                            <source src="videos/04_authentication_flow.webp" type="video/webp">
+                        </video>
+                        <div class="play-overlay" onclick="playVideo(this)"></div>
+                    </div>
+                    <div class="gallery-caption">
+                        <div class="gallery-title">Authentication Flow</div>
+                        <div class="gallery-description">
+                            User login and registration process
+                        </div>
+                        <span class="badge">1 min</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FRONTEND SCREENSHOTS -->
+            <h2>📸 Frontend Screenshots</h2>
+            <h3>User-Facing Pages (10 screenshots)</h3>
+
+            <div class="gallery">
+                <div class="gallery-item">
+                    <img src="screenshots/frontend/01_home_page_1770372854180.png" alt="Home Page"
+                        onclick="openLightbox(this)">
+                    <div class="gallery-caption">
+                        <div class="gallery-title">Home Page</div>
+                        <div class="gallery-description">Hero section with 3D product showcase and call-to-action</div>
+                        <span class="badge">Hero Section</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <img src="screenshots/frontend/02_shop_catalog_1770372975943.png" alt="Shop Catalog"
+                        onclick="openLightbox(this)">
+                    <div class="gallery-caption">
+                        <div class="gallery-title">Shop Catalog</div>
+                        <div class="gallery-description">Product grid with filtering and sorting capabilities</div>
+                        <span class="badge">Product Listing</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <img src="screenshots/frontend/03_product_detail_3d.png" alt="Product Detail"
+                        onclick="openLightbox(this)">
+                    <div class="gallery-caption">
+                        <div class="gallery-title">Product Detail with 3D Viewer</div>
+                        <div class="gallery-description">Interactive 3D model viewer with product information</div>
+                        <span class="badge">3D Feature</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <img src="screenshots/frontend/04_shopping_cart_1770374583431.png" alt="Shopping Cart"
+                        onclick="openLightbox(this)">
+                    <div class="gallery-caption">
+                        <div class="gallery-title">Shopping Cart</div>
+                        <div class="gallery-description">Cart modal with product summary and totals</div>
+                        <span class="badge">E-Commerce</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <img src="screenshots/frontend/05_checkout_1770375485286.png" alt="Checkout"
+                        onclick="openLightbox(this)">
+                    <div class="gallery-caption">
+                        <div class="gallery-title">Checkout Page</div>
+                        <div class="gallery-description">Order summary and customer information forms</div>
+                        <span class="badge">Checkout</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <img src="screenshots/frontend/06_payment_1770375527322.png" alt="Payment"
+                        onclick="openLightbox(this)">
+                    <div class="gallery-caption">
+                        <div class="gallery-title">Payment Page</div>
+                        <div class="gallery-description">Stripe integration for secure payment processing</div>
+                        <span class="badge">Stripe</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <img src="screenshots/frontend/07_favorites_1770375544710.png" alt="Favorites"
+                        onclick="openLightbox(this)">
+                    <div class="gallery-caption">
+                        <div class="gallery-title">Favorites Page</div>
+                        <div class="gallery-description">User's saved products and wishlist</div>
+                        <span class="badge">Wishlist</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <img src="screenshots/frontend/08_my_orders_1770375586419.png" alt="My Orders"
+                        onclick="openLightbox(this)">
+                    <div class="gallery-caption">
+                        <div class="gallery-title">My Orders</div>
+                        <div class="gallery-description">Order history and tracking information</div>
+                        <span class="badge">Order History</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <img src="screenshots/frontend/09_about_1770375598839.png" alt="About" onclick="openLightbox(this)">
+                    <div class="gallery-caption">
+                        <div class="gallery-title">About Page</div>
+                        <div class="gallery-description">Company information and story</div>
+                        <span class="badge">Info Page</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <img src="screenshots/frontend/10_contacts_1770375616848.png" alt="Contacts"
+                        onclick="openLightbox(this)">
+                    <div class="gallery-caption">
+                        <div class="gallery-title">Contacts Page</div>
+                        <div class="gallery-description">Contact information and form</div>
+                        <span class="badge">Contact</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- THEME VARIATIONS -->
+            <h3>🎨 Theme Variations (2 screenshots)</h3>
+            <p class="section-intro">The application supports multiple color themes, providing users with choice and
+                flexibility.</p>
+
+            <div class="gallery">
+                <div class="gallery-item">
+                    <img src="screenshots/themes/light_theme_home.png" alt="Light Theme Home"
+                        onclick="openLightbox(this)">
+                    <div class="gallery-caption">
+                        <div class="gallery-title">Light Theme - Home Page</div>
+                        <div class="gallery-description">Clean, bright interface with soft gradients and excellent
+                            readability</div>
+                        <span class="badge">Light Mode</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <img src="screenshots/themes/light_theme_shop.png" alt="Light Theme Shop"
+                        onclick="openLightbox(this)">
+                    <div class="gallery-caption">
+                        <div class="gallery-title">Light Theme - Shop Catalog</div>
+                        <div class="gallery-description">Product showcase with light color palette for enhanced
+                            visibility</div>
+                        <span class="badge">Light Mode</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AUTHENTICATION -->
+            <h3>Authentication</h3>
+            <div class="gallery">
+                <div class="gallery-item">
+                    <img src="screenshots/auth/login_modal_1770375678814.png" alt="Login Modal"
+                        onclick="openLightbox(this)">
+                    <div class="gallery-caption">
+                        <div class="gallery-title">Login Modal</div>
+                        <div class="gallery-description">Clean authentication interface with login/register tabs</div>
+                        <span class="badge">Auth</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADMIN PANEL -->
+            <h3>Admin Panel (2 screenshots)</h3>
+            <div class="gallery">
+                <div class="gallery-item">
+                    <img src="screenshots/admin/admin_login_1770375707044.png" alt="Admin Login"
+                        onclick="openLightbox(this)">
+                    <div class="gallery-caption">
+                        <div class="gallery-title">Admin Login</div>
+                        <div class="gallery-description">Dedicated admin authentication page</div>
+                        <span class="badge">Admin</span>
+                    </div>
+                </div>
+
+                <div class="gallery-item">
+                    <img src="screenshots/admin/admin_dashboard_1770376975619.png" alt="Admin Dashboard"
+                        onclick="openLightbox(this)">
+                    <div class="gallery-caption">
+                        <div class="gallery-title">Admin Dashboard</div>
+                        <div class="gallery-description">Analytics: 16 Products, 128 Orders, 890 Users, $10,126 Revenue
+                        </div>
+                        <span class="badge">Dashboard</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <h3>Ready for Marketplace 🚀</h3>
+            <p style="margin-top: 10px; opacity: 0.8;">
+                All materials are professionally created and organized for easy upload to marketplaces
+            </p>
+            <div class="footer-links">
+                <a href="#" class="footer-link">ThemeForest</a>
+                <a href="#" class="footer-link">TemplateMonster</a>
+                <a href="#" class="footer-link">CodeCanyon</a>
+                <a href="#" class="footer-link">Creative Market</a>
+            </div>
+            <p style="margin-top: 30px; font-size: 0.9em; opacity: 0.6;">
+                Created: February 2026 | Total Size: ~75MB | Quality: HD
+            </p>
+        </footer>
+    </div>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <img id="lightbox-img" style="display:none;">
+        <video id="lightbox-video" controls style="display:none;"></video>
+    </div>
+
+    <script>
+        function playVideo(overlay) {
+            const videoContainer = overlay.parentElement;
+            const video = videoContainer.querySelector('video');
+
+            if (video.paused) {
+                video.play();
+                overlay.style.display = 'none';
+            }
+        }
+
+        // Auto-hide play button when video starts playing
+        document.querySelectorAll('video').forEach(video => {
+            video.addEventListener('play', function () {
+                const overlay = this.parentElement.querySelector('.play-overlay');
+                if (overlay) overlay.style.display = 'none';
+            });
+
+            video.addEventListener('pause', function () {
+                const overlay = this.parentElement.querySelector('.play-overlay');
+                if (overlay) overlay.style.display = 'flex';
+            });
+        });
+
+        function openLightbox(element) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            const lightboxVideo = document.getElementById('lightbox-video');
+
+            if (element.tagName === 'IMG') {
+                lightboxImg.src = element.src;
+                lightboxImg.style.display = 'block';
+                lightboxVideo.style.display = 'none';
+            } else if (element.tagName === 'VIDEO') {
+                lightboxVideo.src = element.querySelector('source').src;
+                lightboxVideo.style.display = 'block';
+                lightboxImg.style.display = 'none';
+                lightboxVideo.play();
+            }
+
+            lightbox.classList.add('active');
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxVideo = document.getElementById('lightbox-video');
+
+            lightbox.classList.remove('active');
+            lightboxVideo.pause();
+        }
+
+        // Close lightbox on ESC key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        });
+    </script>
+</body>
+
+</html>

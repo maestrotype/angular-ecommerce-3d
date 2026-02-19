@@ -1,5 +1,6 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { ThemeService } from './core/themes/theme.service';
@@ -17,7 +18,8 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     private themeService: ThemeService,
-    private frontendSeoService: FrontendSeoService
+    private frontendSeoService: FrontendSeoService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
     // Clear data-theme from body immediately when frontend loads (from admin)
     // But only if we're not in admin route
@@ -25,9 +27,9 @@ export class AppComponent implements OnInit {
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
         this.adminRoute = event.url.startsWith('/admin');
-        
+
         // Only clear admin theme if we're switching to frontend
-        if (!this.adminRoute) {
+        if (!this.adminRoute && isPlatformBrowser(this.platformId)) {
           document.body.removeAttribute('data-theme');
         }
       });
@@ -35,20 +37,22 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     // Watch for data-theme changes on body and remove them
-    // But only if we're not in admin route
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
-          const body = mutation.target as HTMLElement;
-          if (body.tagName === 'BODY' && body.getAttribute('data-theme') === 'dark' && !this.adminRoute) {
-            body.removeAttribute('data-theme');
+    // But only if we're not in admin route (browser only)
+    if (isPlatformBrowser(this.platformId)) {
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+            const body = mutation.target as HTMLElement;
+            if (body.tagName === 'BODY' && body.getAttribute('data-theme') === 'dark' && !this.adminRoute) {
+              body.removeAttribute('data-theme');
+            }
           }
-        }
+        });
       });
-    });
-    
-    observer.observe(document.body, { attributes: true, attributeFilter: ['data-theme'] });
-    
+
+      observer.observe(document.body, { attributes: true, attributeFilter: ['data-theme'] });
+    }
+
     // Load and apply SEO settings from backend
     this.frontendSeoService.reloadSeoSettings().subscribe();
   }

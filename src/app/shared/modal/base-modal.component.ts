@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { ModalService, ModalConfig } from '../../core/services/modal.service';
 import { Subscription } from 'rxjs';
 
@@ -11,7 +12,10 @@ export class BaseModalComponent implements OnInit, OnDestroy {
   modalStack: ModalConfig[] = [];
   private subscription: Subscription = new Subscription();
 
-  constructor(private modalService: ModalService) {}
+  constructor(
+    private modalService: ModalService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) { }
 
   ngOnInit(): void {
     this.subscription.add(
@@ -24,7 +28,9 @@ export class BaseModalComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
-    document.body.classList.remove('modal-open');
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.classList.remove('modal-open');
+    }
   }
 
   @HostListener('document:keydown.escape', ['$event'])
@@ -50,6 +56,10 @@ export class BaseModalComponent implements OnInit, OnDestroy {
   }
 
   private updateBodyClass(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
     if (this.modalStack.length > 0) {
       document.body.classList.add('modal-open');
     } else {

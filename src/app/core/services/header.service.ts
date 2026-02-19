@@ -1,9 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID, makeStateKey, TransferState } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
-import { environment } from '../../../environments/environment.prod';
+import { map, catchError, tap } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
+import { isPlatformBrowser } from '@angular/common';
 
+const HEADER_KEY = makeStateKey<HeaderSection[]>('header_sections');
 
 export interface MenuItem {
   title: string;
@@ -34,21 +36,37 @@ export interface HeaderSection {
 export class HeaderService {
   private apiUrl = `${environment.apiUrl}/sections`;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private state: TransferState,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) { }
 
   getHeaderSection(): Observable<HeaderSection | null> {
+    if (this.state.hasKey(HEADER_KEY)) {
+      const sections = this.state.get(HEADER_KEY, []);
+      return of(this.processSections(sections));
+    }
+
     return this.http.get<HeaderSection[]>(this.apiUrl).pipe(
-      map(sections => {
-        const headerSection = sections.find(section => 
-          section.type === 'header' && section.isActive
-        );
-        return headerSection || null;
+      tap(sections => {
+        if (!isPlatformBrowser(this.platformId)) {
+          this.state.set(HEADER_KEY, sections);
+        }
       }),
+      map(sections => this.processSections(sections)),
       catchError(error => {
-        
+        console.error('Error loading header section:', error);
         return of(this.getDefaultHeaderSection());
       })
     );
+  }
+
+  private processSections(sections: HeaderSection[]): HeaderSection | null {
+    const headerSection = sections.find(section =>
+      section.type === 'header' && section.isActive
+    );
+    return headerSection || null;
   }
 
   getMenuItems(): Observable<MenuItem[]> {
@@ -72,7 +90,7 @@ export class HeaderService {
     return this.getHeaderSettings().pipe(
       map(settings => {
         if (!settings) return true; // Default to showing if no settings
-        
+
         switch (elementType) {
           case 'search':
             return settings.showSearch !== false;
@@ -89,7 +107,7 @@ export class HeaderService {
 
   canAccessMenuItem(menuItem: MenuItem, userRole?: string): boolean {
     if (!menuItem.isActive) return false;
-    
+
     switch (menuItem.access) {
       case 'all':
         return true;
@@ -155,4 +173,4 @@ export class HeaderService {
       }
     ];
   }
-} 
+}
