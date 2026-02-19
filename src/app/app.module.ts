@@ -54,7 +54,8 @@ import { SharedModule } from './shared/shared.module';
 import { ThemeService } from './core/themes/theme.service';
 import { PaymentSettingsService } from './core/services/payment-settings.service';
 import { ApiConfigService } from './core/services/api-config.service';
-import { APP_INITIALIZER } from '@angular/core';
+import { APP_INITIALIZER, isDevMode } from '@angular/core';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 export function initializeApp(apiConfigService: ApiConfigService) {
   return () => apiConfigService.init();
@@ -109,6 +110,12 @@ export function HttpLoaderFactory(http: any) {
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
+    }),
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
     })
   ],
   providers: [

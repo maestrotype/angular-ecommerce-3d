@@ -8,11 +8,12 @@
     "build:prod": "ng build --configuration production",
     "build:gh": "ng build --configuration production --base-href=/angular-ecommerce-3d/",
     "serve:ssr": "node server-simple.mjs",
-    "build:ssr": "ng build && ng run angular-ecommerce-3d:server:production",
-    "build:ssr:dev": "ng build && ng run angular-ecommerce-3d:server",
-    "serve:ssr:dev": "npm run build:ssr:dev && node server-simple.mjs",
-    "dev:ssr": "npm run build:ssr && npm run serve:ssr",
-    "deploy": "npm run build:gh && npx angular-cli-ghpages --dir=dist/angular-ecommerce-3d"
+    "build:ssr:prod": "ng build --configuration production",
+    "serve:ssr:prod": "NODE_ENV=production node server-simple.mjs",
+    "test": "jest",
+    "e2e": "playwright test",
+    "deploy:csr": "npm run build:gh && npx angular-cli-ghpages --dir=dist/angular-ecommerce-3d",
+    "deploy:ssr": "echo 'To deploy SSR: 1. Build: npm run build:ssr:prod 2. Push dist/ to Node.js/Docker host 3. Run: npm run serve:ssr:prod'"
   },
   "dependencies": {
     "@angular/animations": "^17.3.0",
@@ -26,6 +27,7 @@
     "@angular/platform-browser-dynamic": "^17.3.0",
     "@angular/platform-server": "^17.3.12",
     "@angular/router": "^17.3.0",
+    "@angular/service-worker": "^17.3.0",
     "@angular/ssr": "^17.3.17",
     "@ngx-translate/core": "^16.0.4",
     "@ngx-translate/http-loader": "^16.0.1",
@@ -38,10 +40,16 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.3.12",
     "@angular/cli": "^17.3.0",
+    "@angular/compiler-cli": "^17.3.12",
+    "@playwright/test": "^1.58.2",
     "@types/express": "^4.17.25",
+    "@types/jest": "^29.5.12",
     "@types/node": "^20.0.0",
     "@types/three": "^0.158.0",
     "angular-cli-ghpages": "^2.0.3",
+    "jest": "^29.7.0",
+    "jest-preset-angular": "^14.0.0",
+    "playwright": "^1.58.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.2.2",
     "webpack": "^5.92.1"
