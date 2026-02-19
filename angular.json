@@ -22,7 +22,8 @@
               "src/favicon.ico",
               "src/assets",
               "src/.nojekyll",
-              "src/404.html"
+              "src/404.html",
+              "src/manifest.webmanifest"
             ],
             "styles": [
               "src/admin/styles/material-theme.scss",
@@ -34,7 +35,9 @@
               "fonts": {
                 "inline": false
               }
-            }
+            },
+            "serviceWorker": true,
+            "ngswConfigPath": "ngsw-config.json"
           },
           "configurations": {
             "production": {
