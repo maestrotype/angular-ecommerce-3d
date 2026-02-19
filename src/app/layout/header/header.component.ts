@@ -165,7 +165,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.headerService.getMenuItems().subscribe({
       next: items => {
         if (items && items.length > 0) {
-          console.log('Menu items loaded from API:', items);
           this.menuItems = items;
         } else {
           console.warn('API returned empty menu, using fallback.');

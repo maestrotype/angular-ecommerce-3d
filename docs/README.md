@@ -1,197 +1,32 @@
-# 📚 Documentation Index
+# Developer Documentation
 
-Welcome to the Angular E-commerce 3D Platform documentation!
+Technical reference for the Angular 17+ 3D E-commerce Platform.
 
----
+## Documentation Modules
 
-## 🚀 Getting Started
+1. **[Quick Start Guide](GETTING_STARTED.md)**
+   System requirements, environment configuration, and local deployment instructions.
 
-### For First-Time Users
+2. **[Core Architecture](ARCHITECTURE.md)**
+   Technical overview of the SSR engine, hydration strategy, and backend service layer.
 
-1. **[Quick Start Guide](QUICK_START.md)** ⚡ *Start here!*
-   - Get running in 5-10 minutes
-   - Step-by-step setup
-   - First login instructions
+3. **[Customization & Branding](CUSTOMIZATION.md)**
+   Guide on theme tokens, 3D viewer configuration, and localization.
 
-2. **[Installation Guide](INSTALLATION.md)** 📦
-   - Detailed installation instructions
-   - Development and production setup
-   - Docker installation
-   - Troubleshooting
+4. **[API Reference](BACKEND_API.md)**
+   Overview of the NestJS REST API, authentication guards, and DTO structures.
 
----
+5. **[Admin Dashboard Guide](ADMIN_GUIDE.md)**
+   Operational guide for managing products, categories, and SEO settings via the Admin UI.
 
-## 👨‍💼 Using the Platform
+6. **[Troubleshooting](TROUBLESHOOTING.md)**
+   Common issues related to SSR hydration, 3D rendering, and database connectivity.
 
-### Admin & Management
-
-3. **[Admin Panel Manual](ADMIN_MANUAL.md)** 🎛️
-   - Complete admin guide
-   - Product management
-   - Order management
-   - User management
-   - 3D model uploads
-   - Settings configuration
-
-4. **[Payment Setup Guide](PAYMENT_SETUP.md)** 💳
-   - Stripe configuration
-   - PayPal setup
-   - LiqPay integration
-   - Testing payments
-   - Production deployment
+## Technical Stack
+- **Frontend**: Angular 17 (Standalone Components, SSR, Signals-ready architecture).
+- **3D Engine**: Three.js with GLTFLoader and Meshopt decoder support.
+- **Backend**: NestJS 10 (TypeORM, JWT, Passport).
+- **Database**: PostgreSQL (Relational).
 
 ---
-
-## 🎨 Customization
-
-5. **[Customization Guide](CUSTOMIZATION.md)** 🖌️
-   - Change logo and branding
-   - Customize colors and themes
-   - Modify text content
-   - Add new pages
-   - 3D viewer settings
-   - Internationalization
-
----
-
-## 📖 Reference
-
-6. **[FAQ - Frequently Asked Questions](FAQ.md)** ❓
-   - 88+ answered questions
-   - Installation help
-   - Product management
-   - 3D models
-   - Payments & orders
-   - Troubleshooting
-   - Performance optimization
-
-7. **[Support Policy](SUPPORT.md)** 🆘
-   - What's included
-   - How to get help
-   - Response times
-   - Extended support options
-   - Bug reporting
-
----
-
-## 📂 Documentation Map
-
-```
-docs/
-├── README.md (this file)         # Documentation index
-├── QUICK_START.md                # 5-minute setup guide
-├── INSTALLATION.md               # Detailed installation
-├── ADMIN_MANUAL.md               # Admin panel guide
-├── CUSTOMIZATION.md              # Customization guide  
-├── PAYMENT_SETUP.md              # Payment setup
-├── FAQ.md                        # 88+ FAQs
-└── SUPPORT.md                    # Support policy
-```
-
----
-
-## 🎯 Quick Links by Task
-
-### I want to...
-
-**Get started quickly**
-→ [Quick Start Guide](QUICK_START.md)
-
-**Install on my server**
-→ [Installation Guide](INSTALLATION.md)
-
-**Add products**
-→ [Admin Manual - Managing Products](ADMIN_MANUAL.md#managing-products)
-
-**Upload 3D models**
-→ [Admin Manual - 3D Model Upload](ADMIN_MANUAL.md#step-5-3d-model-upload)
-
-**Set up payments**
-→ [Payment Setup Guide](PAYMENT_SETUP.md)
-
-**Change the logo**
-→ [Customization - Logo](CUSTOMIZATION.md#changing-logo--branding)
-
-**Change colors/theme**
-→ [Customization - Colors](CUSTOMIZATION.md#customizing-colors--themes)
-
-**Manage orders**
-→ [Admin Manual - Managing Orders](ADMIN_MANUAL.md#managing-orders)
-
-**Fix an error**
-→ [FAQ - Troubleshooting](FAQ.md#troubleshooting)
-
-**Contact support**
-→ [Support Policy](SUPPORT.md)
-
----
-
-## 📊 Documentation Stats
-
-- **Total Pages**: 7
-- **Total Words**: ~30,000
-- **FAQ Items**: 88+
-- **Screenshots**: [To be added]
-- **Last Updated**: January 2026
-
----
-
-## 🔍 Search Tips
-
-Can't find what you're looking for?
-
-1. **Check the FAQ first** - [FAQ.md](FAQ.md) has 88+ answered questions
-2. **Use browser search** - Press Ctrl+F (Windows) or Cmd+F (Mac)
-3. **Check index above** - Navigate by task
-4. **Contact support** - [Support Policy](SUPPORT.md)
-
----
-
-## 📱 Additional Resources
-
-### Video Tutorials
-- [Coming soon] Installation walkthrough
-- [Coming soon] Product upload demo
-- [Coming soon] 3D model setup
-
-### External Links
-- [Angular Documentation](https://angular.io/docs)
-- [NestJS Documentation](https://docs.nestjs.com/)
-- [Three.js Documentation](https://threejs.org/docs/)
-- [Stripe Documentation](https://stripe.com/docs)
-- [PayPal Developer Docs](https://developer.paypal.com/docs/)
-
----
-
-## 🆕 What's New
-
-**Version 1.0.0** (January 2026)
-- ✅ Initial documentation release
-- ✅ All 7 core guides completed
-- ✅ 88+ FAQ items
-- ✅ Complete installation guides
-- ✅ Payment setup documentation
-
----
-
-## 🤝 Contributing
-
-Found an error in documentation? Have suggestions?
-
-📧 Email: support@angular-ecommerce3d.com
-
-We appreciate your feedback to improve documentation!
-
----
-
-## 📜 License
-
-This documentation is provided with the Angular E-commerce 3D Platform.
-
-**Copyright © 2026 Angular E-commerce 3D**
-
----
-
-**Happy building! 🚀**
-
-If you have any questions, check the [FAQ](FAQ.md) or [contact support](SUPPORT.md).
+*For high-level project information, refer to the root [README.md](../README.md).*

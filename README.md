@@ -40,12 +40,19 @@
 - **Auto Optimization** - WebP conversion, compression
 - **Cloudinary Storage** - CDN delivery
 
+### ⚡ Performance & Core
+- **Server-Side Rendering (SSR)** - Full Angular Universal integration for SEO and speed
+- **Hydration Support** - Smooth transition from server to client-side interactivity
+- **Dynamic API Fallback** - Intelligent backend detection with automatic failover to Production
+- **Optimized SEO** - Dynamic meta tags, canonical URLs, and automated sitemap generation
+- **Type-Safe Architecture** - Strictly typed TypeScript 5.x throughout
+
 ### 🛠️ Admin Panel
 - **Dashboard** - Sales analytics, charts
 - **Product Management** - CRUD, 3D model upload
 - **Order Management** - Status tracking
 - **User Management** - Roles, permissions
-- **SEO Settings** - Meta tags, sitemap
+- **SEO & Search Console** - Site-wide metadata, sitemap, robots.txt management
 
 ---
 
