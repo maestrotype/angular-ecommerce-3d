@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { Product } from 'src/shared/models/product.model';
 import { ProductService } from 'src/app/core/services/product.service';
@@ -17,21 +18,28 @@ import { SharedModule } from 'src/app/shared/shared.module';
 export class SpecialOfferComponent implements OnInit {
     @Input() data!: Section;
     specialOffers: Product[] = [];
-    constructor(private router: Router, private productService: ProductService) { }
+    constructor(
+        private router: Router,
+        private productService: ProductService,
+        @Inject(PLATFORM_ID) private platformId: Object
+    ) { }
 
     ngOnInit(): void {
         this.productService.getSpecialOffers().subscribe({
             next: (products) => this.specialOffers = products,
             error: (err) => {
-
-                alert('Error loading special offers.');
+                if (isPlatformBrowser(this.platformId)) {
+                    alert('Error loading special offers.');
+                }
             }
         });
     }
 
     onShopNow(): void {
         this.router.navigate(['/shop']).then(() => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (isPlatformBrowser(this.platformId)) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
         });
     }
 }

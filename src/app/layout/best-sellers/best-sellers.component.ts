@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { Product } from 'src/shared/models/product.model';
 import { ProductService } from '../../core/services/product.service';
@@ -32,7 +33,8 @@ export class BestSellersComponent implements OnInit {
         private router: Router,
         private productService: ProductService,
         private cartService: CartService,
-        private notificationService: NotificationService
+        private notificationService: NotificationService,
+        @Inject(PLATFORM_ID) private platformId: Object
     ) { }
 
     ngOnInit(): void {
@@ -58,7 +60,9 @@ export class BestSellersComponent implements OnInit {
 
     goToProductDetail(productId: number): void {
         this.router.navigate(['/product', productId]).then(() => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (isPlatformBrowser(this.platformId)) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
         });
     }
 

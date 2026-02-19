@@ -60,6 +60,27 @@ npm run serve:ssr:dev
 ```
 This script triggers a multi-stage build using `@angular-devkit/build-angular:server` and executes the node-rendered bundle via `server-simple.mjs`.
 
+## Deployment
+
+The project supports multiple deployment architectures. Choose the one that matches your hosting provider.
+
+### 🚀 Recommended: SSR + PWA (Cloud/Node.js)
+Ideal for maximum SEO and mobile performance.
+```bash
+npm run deploy
+```
+*Creates both browser and server bundles in `dist/`. Ready for deployment to platforms like Render, Railway, or VPS.*
+
+### ☁️ Legacy: CSR (GitHub Pages)
+For static hosting without Server-Side Rendering.
+```bash
+npm run deploy:legacy
+```
+
+### 🎯 Component-Specific Builds
+- **Just SSR**: `npm run deploy:ssr`
+- **Just PWA (CSR)**: `npm run deploy:pwa`
+
 ## Database Management
 TypeORM handles the schema synchronization. In production, use manual migrations:
 ```bash
