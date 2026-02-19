@@ -69,12 +69,16 @@ Perfect for:
 - **Error Handling** - User-friendly messages
 - **Glassmorphism Effects** - Modern design aesthetics
 
-### 🚀 Performance & SEO
+### ⚡ Performance & Core (NEW in v1.1.0)
+- **Server-Side Rendering (SSR)** - Full Angular Universal integration for SEO and speed
+- **Hydration Support** - Smooth transition from server to client-side interactivity
+- **Dynamic API Fallback** - Intelligent backend detection with automatic failover to Production
+- **Optimized SEO** - Dynamic meta tags, canonical URLs, and automated sitemap generation
+- **Type-Safe Architecture** - Strictly typed TypeScript 5.x throughout
+
+### 🚀 Legacy Performance & SEO
 - **Lazy Loading** - Optimized resource loading
 - **Code Splitting** - Faster page loads
-- **SEO Optimized** - Search engine friendly
-- **Meta Tags** - Social media sharing ready
-- **Sitemap Generation** - Better indexing
 - **Image Optimization** - Fast loading times
 
 ---
@@ -384,7 +388,13 @@ See `TROUBLESHOOTING.md` for solutions to common problems.
 
 ## 🔄 Changelog
 
-### Version 1.0.0 (February 2026)
+### Version 1.1.0 (February 2026)
+- 🚀 **Full SSR & Hydration Support** - Blazing fast initial load and SEO
+- 🔄 **Dynamic API Fallback System** - Smart failover from Local to Production
+- 🛠️ **Refined Admin Panel** - Improved layout and SEO controls
+- 🐛 **Bug Fixes** - Resolved header and 3D viewer initialization issues
+
+### Version 1.0.0 (January 2026)
 - ✨ Initial release
 - 🎨 Interactive 3D product viewer
 - 🛒 Complete e-commerce functionality
