@@ -1,22 +1,32 @@
-# Developer Documentation Index
+# Developer Documentation
 
-This directory contains comprehensive technical documentation for the **Angular 3D E-commerce Platform**.
+Technical reference for the Angular 17+ 3D E-commerce Platform.
 
-## 📖 Available Guides
+## Documentation Modules
 
-1.  **[Getting Started](GETTING_STARTED.md)**
-    *   Installation, environment variables, and initial setup.
-2.  **[Technical Architecture](ARCHITECTURE.md)**
-    *   Overview of the technical stack, SSR implementation, and system design.
-3.  **[Customization Guide](CUSTOMIZATION.md)**
-    *   How to change themes, branding, and upload 3D models.
-4.  **[Backend API Reference](BACKEND_API.md)**
-    *   Details on the NestJS API endpoints, DTOs, and Swagger integration.
+1. **[Quick Start Guide](GETTING_STARTED.md)**
+   System requirements, environment configuration, and local deployment instructions.
 
-## 🚀 Key Technical Features
-- **Frontend**: Angular 17+ (Standalone, SSR, Three.js)
-- **Backend**: NestJS 10+ (TypeORM, PostgreSQL)
-- **Deployment**: Docker-ready, Render/Heroku support.
+2. **[Core Architecture](ARCHITECTURE.md)**
+   Technical overview of the SSR engine, hydration strategy, and backend service layer.
+
+3. **[Customization & Branding](CUSTOMIZATION.md)**
+   Guide on theme tokens, 3D viewer configuration, and localization.
+
+4. **[API Reference](BACKEND_API.md)**
+   Overview of the NestJS REST API, authentication guards, and DTO structures.
+
+5. **[Admin Dashboard Guide](ADMIN_GUIDE.md)**
+   Operational guide for managing products, categories, and SEO settings via the Admin UI.
+
+6. **[Troubleshooting](TROUBLESHOOTING.md)**
+   Common issues related to SSR hydration, 3D rendering, and database connectivity.
+
+## Technical Stack
+- **Frontend**: Angular 17 (Standalone Components, SSR, Signals-ready architecture).
+- **3D Engine**: Three.js with GLTFLoader and Meshopt decoder support.
+- **Backend**: NestJS 10 (TypeORM, JWT, Passport).
+- **Database**: PostgreSQL (Relational).
 
 ---
-*For general project overview, see the root [README.md](../README.md).*
+*For high-level project information, refer to the root [README.md](../README.md).*

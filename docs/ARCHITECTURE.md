@@ -1,51 +1,52 @@
-# Project Architecture
+# Technical Architecture
 
-The **Angular 3D E-commerce Platform** is a full-stack application designed for high performance, SEO friendliness, and visual impact.
+A technical overview of the platform's architecture, including rendering lifecycles and service layer patterns.
 
-## 🏗 High-Level Architecture
+## System Interaction Flow
+
+The platform utilizes a hybrid rendering approach, leveraging Angular SSR for initial document delivery and client-side Three.js for interactive 3D rendering.
 
 ```mermaid
-graph TD
-    User((User Browser))
-    SSR[Angular SSR Engine]
-    Angular[Angular Frontend]
-    Nest[NestJS Backend]
-    DB[(PostgreSQL)]
-    Cloudinary[Cloudinary/CDN]
-    Stripe[Stripe API]
+sequenceDiagram
+    participant B as Browser
+    participant S as Express (SSR Engine)
+    participant A as NestJS API
+    participant D as PostgreSQL
 
-    User <--> SSR
-    SSR <--> Nest
-    Angular <--> Nest
-    Nest <--> DB
-    Nest <--> Cloudinary
-    Nest <--> Stripe
+    B->>S: GET /product/:id
+    S->>A: GET /api/products/:id
+    A->>D: Query Product
+    D-->>A: Data
+    A-->>S: JSON Data
+    S->>S: Angular Universal Rendering
+    S-->>B: Rendered HTML (Hydration Ready)
+    B->>B: Client Hydration (Angular)
+    B->>B: Initialize Three.js Engine
+    B->>B: Load .GLB Model (Meshopt Decoder)
 ```
 
-## 💻 Frontend (Angular 17+)
+## Frontend Internals (Angular 17)
 
-### Key Technologies
-- **Angular SSR (Universal)**: Pre-renders pages on the server for instant loading and SEO.
-- **Three.js**: Handles the rendering of 3D models in the browser.
-- **Hydration**: Uses Angular's modern hydration for a flicker-free transition from server to client.
-- **Standalone Components**: Modular architecture for better maintenance.
+### Rendering & Hydration
+- **CommonEngine**: Utilized within `server.ts` to execute the application bundle on the server.
+- **Client Hydration**: Implemented via `provideClientHydration()` in `AppModule`. This prevents "flicker" by reusing the server-rendered DOM.
+- **Platform-Specific Logic**: Critical browser-only features (Three.js, window events) are guarded using `isPlatformBrowser(platformId)`.
 
-### Core Modules
-- `AppModule`: The main entry point.
-- `CoreModule`: Services, guards, and interceptors (Singleton).
-- `SharedModule`: Reusable UI components, modals, and directives.
+### 3D Execution Environment
+- **Engine**: Three.js r158.
+- **Decoder**: `meshopt_decoder` is utilized for efficient geometry decompression of GLB models.
+- **Lighting Model**: A combination of `AmbientLight` and `DirectionalLight` (with `PCFSoftShadowMap` support on desktop) ensures high-fidelity product presentation.
 
-## ⚙️ Backend (NestJS 10+)
+## Backend Service Layer (NestJS 10)
 
-### Key Technologies
-- **TypeORM**: Database abstraction layer supporting PostgreSQL.
-- **Passport/JWT**: Secure authentication system.
-- **Swagger**: Automated API documentation (available at `/api/docs`).
+### Reactive Pattern
+The backend utilizes RxJS `Observable` streams within services (e.g., `AuthService`) to handle complex asynchronous operations like password hashing (`bcrypt`), database persistence (`TypeORM`), and event notifications.
 
-### Module Structure
-Each feature (Products, Orders, Auth) is encapsulated in its own module following NestJS best practices.
+### Authentication Strategy
+- **JWT**: Stateless authentication using signed tokens.
+- **Passpost**: Implements specific strategies for secure route protection.
+- **DTOs**: Strict input validation using `class-validator` and `ValidationPipe`.
 
-## 🚀 Performance Optimizations
-1. **Lazy Loading**: Only loads code for the current route.
-2. **Dynamic API Fallback**: Smart detection of backend availability.
-3. **Image Transformation**: Auto-WebP conversion for faster image delivery.
+## Data Architecture
+- **TypeORM Registry**: Centralized entity management for consistent schema synchronization.
+- **Storage**: Integrated support for local file storage (uploads/) and Cloudinary CDN failover.

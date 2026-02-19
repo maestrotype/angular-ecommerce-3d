@@ -1,38 +1,55 @@
-# Backend API Reference
+# Backend API Architecture
 
-The backend is built with NestJS and provides a robust REST API for both the frontend and the admin panel.
+Technical reference for the NestJS-based REST API.
 
-## 📖 Interactive Documentation (Swagger)
+## API Specification
 
-The project includes built-in Swagger documentation. 
-1. Start the backend: `npm run start:dev` (locally) or deploy to a server.
-2. Navigate to: `http://localhost:3002/api/docs`
+The API follows RESTful principles and is fully documented via Swagger.
+- **Local Access**: `http://localhost:3002/api/docs`
+- **Prefix**: All endpoints are prefixed with `/api`.
 
-You will see a list of all endpoints, their expected payloads (DTOs), and response formats.
+## Authentication & Security
 
-## 🔑 Authentication
+### Authorization Header
+All protected routes require a JSON Web Token (JWT).
+```http
+Authorization: Bearer <JWT_TOKEN>
+```
 
-Most endpoints require a JWT token in the `Authorization` header:
-`Authorization: Bearer <your-token>`
+### Authentication Guards
+- **JwtAuthGuard**: Validates the presence and integrity of the JWT.
+- **RolesGuard**: Verifies permissions (e.g., `admin` role) using the `@Roles()` decorator.
 
-Login via: `POST /api/auth/login`
+## Core Modules & Endpoints
 
-## 📦 Core Endpoints
+### Authentication (`/auth`)
+- `POST /auth/register`: Public registration (returns token).
+- `POST /auth/login`: Identity verification.
+- `GET /auth/profile`: Retrieves current user context (requires JWT).
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/products` | GET | List all products (with pagination & filters) |
-| `/api/products/:id` | GET | Get product details including 3D model path |
-| `/api/orders` | POST | Create a new order (requires Auth) |
-| `/api/sections` | GET | Fetch dynamic content for home/header |
-| `/api/seo` | GET | Site-wide SEO settings |
+### Products (`/products`)
+- `GET /products`: Paginated product list with search/category support.
+- `POST /products`: Multi-part request for product metadata and 3D assets (Admin only).
+- `DELETE /products/:id`: Cascading deletion of product assets.
 
-## 🚀 Advanced Features
+### Orders (`/orders`)
+- `GET /orders`: Fetch order history for the authenticated user.
+- `POST /orders`: Checkout initialization.
 
-### AI Background Removal
-Endpoint: `POST /api/upload-module/remove-bg`
-Uses the configured Remove.bg API key to process images dynamically.
+### Sections & Content (`/sections`)
+- `GET /sections`: Fetch dynamic homepage components and 3D scene settings.
+- `PUT /sections/:id`: Update dynamic section content (Admin only).
 
-### Health Check
-Endpoint: `GET /api/health`
-Used by the frontend's **Dynamic API Fallback** to check backend availability.
+## Data Validation (DTOs)
+
+The backend utilizes `class-validator` for strict payload verification.
+- **Transform**: Incoming payloads are automatically transformed to DTO instances via `ValidationPipe({ transform: true })`.
+- **Validation**: Rejects requests with malformed or unwhitelisted properties to prevent overposting attacks.
+
+## Integration Services
+
+### Dynamic SEO Service
+The `SeoService` dynamically serves meta-tags and site-wide configuration based on the current entity (Product/Category), optimized for high-performance indexing.
+
+### Health & Monitoring
+- `GET /health`: System heartbeat endpoint used by the frontend for dynamic service detection.

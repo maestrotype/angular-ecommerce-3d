@@ -1,69 +1,69 @@
-# Getting Started Guide
+# Getting Started
 
-Welcome to the **Angular 3D E-commerce Platform**! This guide will help you get the project up and running in your development environment.
+This document details the configuration and deployment steps required to initialize the development and production environments.
 
-## 🏁 Prerequisites
+## System Dependencies
 
-Ensure you have the following installed:
-- **Node.js**: v18.x or higher (v20 recommended)
-- **npm**: v9.x or higher
-- **PostgreSQL**: v14.x or higher
-- **Angular CLI**: v17.x
+| Component | Requirement |
+|-----------|-------------|
+| Node.js | v18.13.0+ (LTS recommended) |
+| npm | v9.0.0+ |
+| PostgreSQL | v14.0+ |
+| Angular CLI | v17.0+ |
 
-## 📥 Installation
+## Installation
 
-1. **Clone and Install Dependencies**:
-   ```bash
-   git clone <your-repo-url>
-   cd angular-ecommerce-3d
-   npm install
-   ```
-
-2. **Backend Setup**:
-   ```bash
-   cd backend
-   npm install
-   ```
-
-## ⚙️ Environment Configuration
-
-### Backend (`backend/.env`)
-Create a `.env` file in the `backend/` directory:
-```env
-DB_HOST=localhost
-DB_PORT=5432
-DB_USERNAME=postgres
-DB_PASSWORD=your_password
-DB_DATABASE=ecommerce_db
-JWT_SECRET=your_super_secret_key
-STRIPE_SECRET_KEY=sk_test_...
+### 1. Initialize Workspace
+```bash
+git clone <repository-url>
+cd angular-ecommerce-3d
+npm install
 ```
 
-### Frontend (`src/environments/environment.ts`)
-The project uses an **Intelligent API Fallback**. By default, it tries to connect to `http://localhost:3002/api`. If it's not available, it automatically switches to the production fallback.
-
-## 🚀 Running the Project
-
-### Development Mode (CSR)
-This is for standard client-side development:
+### 2. Configure Backend
 ```bash
-# Terminal 1: Backend
+cd backend
+npm install
+cp .env.example .env # Ensure variables are correctly mapped
+```
+
+## Environment Configuration
+
+### Backend (.env)
+The NestJS backend requires a `.env` file for database connectivity and security.
+- `DB_HOST`: Database host address.
+- `DB_PORT`: Default is 5432.
+- `DB_PASSWORD`: Password for the PostgreSQL user.
+- `JWT_SECRET`: Secret key for signing authentication tokens.
+
+### Frontend (environment.ts)
+The application implements an **Initial API Verification** logic via `ApiConfigService`. 
+- `apiUrl`: Target local endpoint (`http://localhost:3002/api`).
+- `fallbackApiUrl`: Production endpoint for failover when local services are unreachable during development.
+
+## Execution
+
+### Development (Client-Side Rendering)
+Standard development mode with HMR (Hot Module Replacement) support.
+```bash
+# Terminal 1: API Service
 cd backend && npm run start:dev
 
-# Terminal 2: Frontend
+# Terminal 2: UI Service
 npm start
 ```
 
-### SSR Mode (Server-Side Rendering)
-To test the production-like SSR behavior locally:
+### SSR Verification (Local)
+To validate Server-Side Rendering and Hydration behavior before deployment:
 ```bash
 npm run serve:ssr:dev
 ```
-This command builds both the frontend and the server and starts the SSR engine on `http://localhost:4000` (or similar).
+This script triggers a multi-stage build using `@angular-devkit/build-angular:server` and executes the node-rendered bundle via `server-simple.mjs`.
 
-## 🗄️ Database Migrations
-The project uses TypeORM. Migrations run automatically on startup in development mode, but you can manage them manually:
+## Database Management
+TypeORM handles the schema synchronization. In production, use manual migrations:
 ```bash
 cd backend
 npm run migration:run
 ```
+Default Admin Credentials: `admin@example.com` / `admin123`.
