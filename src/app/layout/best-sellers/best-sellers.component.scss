@@ -9,7 +9,7 @@
     .section-wrapper {
         max-width: 1200px;
         margin: 0 auto;
-        padding: 0 20px;
+        padding: 0 15px; // Reduced from 20px to save space on Fold 6
     }
 
     .section-header {
@@ -41,6 +41,15 @@
         gap: 30px;
         max-width: 1200px;
         margin: 0 auto;
+        justify-content: center; // Ensure centering if only 1 card
+    }
+
+    // Ultra-narrow screens like Fold 6 (323px)
+    @media (max-width: 350px) {
+        .products-grid {
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 15px;
+        }
     }
 }
 
@@ -104,7 +113,7 @@
     .product-card {
         background: rgba(255, 255, 255, 0.1);
         border: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 
+        box-shadow:
             0 8px 32px rgba(0, 0, 0, 0.1),
             0 2px 8px rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(20px);
@@ -114,7 +123,7 @@
         &:hover {
             background: rgba(255, 255, 255, 0.15);
             border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 
+            box-shadow:
                 0 20px 40px rgba(0, 0, 0, 0.15),
                 0 8px 16px rgba(255, 255, 255, 0.2);
             transform: translateY(-8px) scale(1.02);
@@ -169,12 +178,12 @@
             .product-rating {
                 .star {
                     color: rgba(251, 191, 36, 0.7);
-                    
+
                     &:hover {
                         color: #fbbf24;
                         text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
                     }
-                    
+
                     &.filled {
                         color: #fbbf24;
                         text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
