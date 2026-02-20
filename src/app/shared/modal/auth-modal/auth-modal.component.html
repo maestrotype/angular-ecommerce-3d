@@ -98,6 +98,28 @@
         {{ loading ? 'Registering...' : 'Register' }}
       </button>
       <div *ngIf="error" class="error-message">{{ error }}</div>
+
+      <!-- Social Login Section -->
+      <div class="social-auth">
+        <div class="social-divider">
+          <span>OR</span>
+        </div>
+        <div class="social-buttons">
+          <button type="button" class="social-btn google" (click)="signInWithGoogle()" title="Continue with Google">
+            <mat-icon svgIcon="google"></mat-icon>
+          </button>
+          <button type="button" class="social-btn facebook" (click)="signInWithFacebook()"
+            title="Continue with Facebook">
+            <mat-icon svgIcon="facebook"></mat-icon>
+          </button>
+          <button type="button" class="social-btn github" (click)="signInWithGithub()" title="Continue with GitHub">
+            <mat-icon svgIcon="github"></mat-icon>
+          </button>
+          <button type="button" class="social-btn apple" (click)="signInWithApple()" title="Continue with Apple">
+            <mat-icon svgIcon="apple"></mat-icon>
+          </button>
+        </div>
+      </div>
     </form>
   </div>
 </div>

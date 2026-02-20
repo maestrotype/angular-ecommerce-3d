@@ -308,6 +308,103 @@
   font-size: var(--font-size-sm);
 }
 
+/* Social Authentication Styles */
+.social-auth {
+  margin-top: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+
+  .social-divider {
+    position: relative;
+    text-align: center;
+    margin: var(--spacing-sm) 0;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 42%;
+      height: 1px;
+      background: var(--color-border-primary);
+      opacity: 0.6;
+    }
+
+    &::before {
+      left: 0;
+    }
+
+    &::after {
+      right: 0;
+    }
+
+    span {
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 0 var(--spacing-sm);
+      background: transparent;
+    }
+  }
+
+  .social-buttons {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-sm);
+
+    .social-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md, 8px);
+      border: 1px solid var(--color-border-primary);
+      background: var(--auth-btn-secondary, rgba(255, 255, 255, 0.05));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      color: var(--color-text-primary);
+
+      mat-icon {
+        width: 24px;
+        height: 24px;
+        font-size: 24px;
+      }
+
+      &:hover {
+        background: var(--color-surface-secondary);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-sm);
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+      }
+
+      &.google:hover {
+        color: #DB4437;
+        border-color: #DB4437;
+      }
+
+      &.facebook:hover {
+        color: #4267B2;
+        border-color: #4267B2;
+      }
+
+      &.github:hover {
+        color: #333;
+        border-color: #333;
+      }
+
+      &.apple:hover {
+        color: #000;
+        border-color: #000;
+      }
+    }
+  }
+}
+
 /* Theme refinements */
 [data-theme='dark'] .auth-modal {
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.35);
