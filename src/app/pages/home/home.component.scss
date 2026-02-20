@@ -1,6 +1,10 @@
 // Styling the home page to match Figma design
 .home {
   padding: 20px;
+
+  @media (max-width: 768px) {
+    padding: 10px 0; // Reduce horizontal padding to 0, use vertical only
+  }
 }
 
 .banner {
@@ -22,21 +26,21 @@
 
   .shop-now {
     padding: 12px 24px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 100%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
     backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255,255,255,0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 8px;
     color: #1e293b;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.4);
-    
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+
     &:hover {
-      background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 100%);
-      border-color: rgba(255,255,255,0.4);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%);
+      border-color: rgba(255, 255, 255, 0.4);
       transform: translateY(-2px);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.5);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.5);
     }
   }
 }
@@ -290,6 +294,7 @@
   0% {
     background-position: -200% 0;
   }
+
   100% {
     background-position: 200% 0;
   }
@@ -297,16 +302,17 @@
 
 // Staggered animation for multiple skeleton elements
 .skeleton-section {
-  &:nth-child(1) .skeleton-hero-content > *,
-  &:nth-child(1) .skeleton-content-header > * {
+
+  &:nth-child(1) .skeleton-hero-content>*,
+  &:nth-child(1) .skeleton-content-header>* {
     animation-delay: 0s;
   }
-  
-  &:nth-child(2) .skeleton-content-header > * {
+
+  &:nth-child(2) .skeleton-content-header>* {
     animation-delay: 0.2s;
   }
-  
-  &:nth-child(3) .skeleton-content-header > * {
+
+  &:nth-child(3) .skeleton-content-header>* {
     animation-delay: 0.4s;
   }
 }
@@ -334,7 +340,7 @@
 
       .skeleton-hero-description {
         width: 100%;
-        
+
         &:nth-child(2) {
           width: 80%;
         }
@@ -375,7 +381,7 @@
     &.hero-skeleton {
       background: linear-gradient(135deg, var(--bg-primary, #1a1a1a) 0%, var(--bg-secondary, #2d2d2d) 100%);
     }
-    
+
     &.content-skeleton {
       background: var(--bg-primary, #1a1a1a);
     }
@@ -402,7 +408,7 @@
     &.hero-skeleton {
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
     }
-    
+
     &.content-skeleton {
       background: rgba(255, 255, 255, 0.05);
     }

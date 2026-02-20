@@ -648,8 +648,13 @@
   position: fixed;
   top: 0;
   right: 0;
-  width: 85%;
+  width: 90%; // Balanced width for typical mobile
   max-width: 400px;
+
+  @media (max-width: 350px) {
+    width: 100%; // Take full width on Fold 6 to avoid clipping theme buttons
+  }
+
   height: 100vh;
   background: var(--header-bg);
   backdrop-filter: blur(30px) saturate(180%);
@@ -670,8 +675,18 @@
   .mobile-menu-header {
     padding: 20px 25px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+
+    .mobile-menu-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      color: var(--text-primary, #111);
+      margin: 0;
+      font-weight: 800;
+    }
 
     .close-btn {
       background: rgba(0, 0, 0, 0.05);
@@ -695,10 +710,10 @@
 
   .mobile-nav {
     flex: 1;
-    padding: 0 25px 40px;
+    padding: 20px 20px 40px; // Reduced side padding from 25px
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 28px;
     overflow-y: auto;
 
     .mobile-menu-section {
@@ -706,17 +721,7 @@
       flex-direction: column;
       gap: 12px;
 
-      // Corrected selector (removed over-nesting)
-      .mobile-menu-title,
-      h3.mobile-menu-title {
-        font-size: 0.85rem;
-        text-transform: uppercase;
-        letter-spacing: 2.5px;
-        color: var(--text-primary, #111);
-        margin: 0 0 8px 5px;
-        font-weight: 800;
-        display: block;
-      }
+      // Header title already covers the "Menu" label
     }
 
     .mobile-nav-link {
@@ -724,10 +729,11 @@
       font-weight: 600;
       color: var(--text-primary);
       text-decoration: none;
-      padding: 10px 5px;
+      padding: 12px 0;
       transition: all 0.3s ease;
       position: relative;
       display: block;
+      text-align: left; // Back to left alignment
 
       &:active {
         color: var(--color-primary);
@@ -752,26 +758,21 @@
 
       .theme-chips {
         display: flex;
-        flex-wrap: nowrap; // Force single line
-        overflow-x: auto; // Allow scroll if really narrow, but try to fit
-        gap: 5px;
-        scrollbar-width: none; // Hide scrollbar
-
-        &::-webkit-scrollbar {
-          display: none;
-        }
+        flex-wrap: wrap; // Important for Fold 6 to avoid clipping
+        gap: 8px;
+        padding-bottom: 4px;
 
         button {
           background: var(--surface-2, rgba(255, 255, 255, 0.2));
           border: 1px solid rgba(0, 0, 0, 0.08);
-          padding: 6px 10px; // Even smaller padding
+          padding: 8px 12px;
           border-radius: 20px;
           color: var(--text-primary);
-          font-size: 0.75rem; // Slightly smaller font
+          font-size: 0.75rem;
           cursor: pointer;
           transition: all 0.3s ease;
-          flex: 1 0 auto; // Don't shrink, allow taking space
-          min-width: 70px; // Smaller min-width
+          flex: 0 1 auto;
+          min-width: 75px;
           text-align: center;
           white-space: nowrap;
 
@@ -786,7 +787,7 @@
     }
 
     .mobile-auth-section {
-      margin-top: auto;
+      margin-top: 40px; // Use fixed spacing instead of auto to raise the button
       padding-top: 20px;
       border-top: 1px solid rgba(0, 0, 0, 0.08);
 
