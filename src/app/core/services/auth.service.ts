@@ -22,6 +22,10 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.apiUrl}/register`, { name, email, password });
   }
 
+  socialLogin(provider: string, idToken: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/social-login`, { provider, idToken });
+  }
+
   logout() {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('token');

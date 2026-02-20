@@ -10,6 +10,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { SocialLoginModule } from '@abacritt/angularx-social-login';
+import { socialAuthConfig } from './core/configs/social-auth.config';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -98,6 +100,7 @@ export function HttpLoaderFactory(http: any) {
     MatIconModule,
     MatButtonModule,
     SharedModule,
+    SocialLoginModule,
     HeroComponent,
     HeroGlassComponent,
     CategoriesComponent,
@@ -130,6 +133,10 @@ export function HttpLoaderFactory(http: any) {
     },
     ThemeService,
     PaymentSettingsService,
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: socialAuthConfig
+    },
     provideHttpClient(withFetch()),
     provideClientHydration(),
     provideAnimationsAsync()
