@@ -10,6 +10,7 @@ import { Product } from 'src/shared/models/product.model';
 import { ModalService } from '../../core/services/modal.service';
 import { ThemeService } from '../../core/themes/theme.service';
 import { Theme } from '../../core/themes/theme.model';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -64,6 +65,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private headerService: HeaderService,
     private modalService: ModalService,
     private themeService: ThemeService,
+    private authService: AuthService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
@@ -360,10 +362,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   canAccessMenuItem(menuItem: MenuItem): boolean {
-    // For now, we'll assume user is not admin
-    // In a real app, you'd get this from auth service
-    const userRole = 'user'; // This should come from auth service
-    return this.headerService.canAccessMenuItem(menuItem, userRole);
+    if (menuItem.url.includes('admin')) {
+      const user = this.authService.getUser();
+      return user && user.role === 'admin';
+    }
+    return true;
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.authService.getToken();
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/home']);
+    this.closeMobileMenu();
   }
 
   handleMenuClick(menuItem: MenuItem): void {
