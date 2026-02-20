@@ -69,17 +69,17 @@
     box-shadow: var(--color-shadow-light, 0 2px 8px rgba(0, 0, 0, 0.1));
     border: 1px solid var(--color-border-primary, #e5e7eb);
     height: fit-content;
-    
+
     &.default-theme {
       background: var(--color-surface-primary, #ffffff);
       border-color: var(--color-border-primary, #e5e7eb);
     }
-    
+
     &.dark-theme {
       background: var(--color-surface-secondary, #f9fafb);
       border-color: var(--color-border-secondary, #e5e7eb);
     }
-    
+
     &.glass-theme {
       background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(10px);
@@ -91,7 +91,7 @@
       font-size: 1.5rem;
       font-weight: 600;
       color: var(--color-text-primary, #333333);
-      border-bottom: 2px solid var(--color-primary, #667eea);
+      border-bottom: 2px solid var(--color-primary);
       padding-bottom: 0.5rem;
       text-align: center;
     }
@@ -199,17 +199,17 @@
     padding: 2rem;
     box-shadow: var(--color-shadow-light, 0 2px 8px rgba(0, 0, 0, 0.1));
     border: 1px solid var(--color-border-primary, #e5e7eb);
-    
+
     &.default-theme {
       background: var(--color-surface-primary, #ffffff);
       border-color: var(--color-border-primary, #e5e7eb);
     }
-    
+
     &.dark-theme {
       background: var(--color-surface-secondary, #f9fafb);
       border-color: var(--color-border-secondary, #e5e7eb);
     }
-    
+
     &.glass-theme {
       background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(10px);
@@ -250,7 +250,8 @@
         color: var(--color-text-primary, #333333);
       }
 
-      input, textarea {
+      input,
+      textarea {
         width: 100%;
         padding: 0.75rem;
         border: 2px solid var(--color-border-primary, #e5e7eb);
@@ -430,7 +431,7 @@
       padding: 1rem 2rem;
       border: none;
       border-radius: 12px;
-      background: linear-gradient(135deg, var(--color-primary, #667eea), var(--color-secondary, #764ba2));
+      background: var(--button-primary-bg, linear-gradient(135deg, var(--color-primary), var(--color-secondary)));
       color: white;
       font-size: 1.1rem;
       font-weight: 600;
@@ -482,8 +483,9 @@
       gap: 2rem;
     }
 
-    .order-summary, .checkout-form {
+    .order-summary,
+    .checkout-form {
       padding: 1.5rem;
     }
   }
-} 
+}
