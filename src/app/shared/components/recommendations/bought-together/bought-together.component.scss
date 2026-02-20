@@ -351,6 +351,7 @@
     0% {
       background-position: -200% 0;
     }
+
     100% {
       background-position: 200% 0;
     }
@@ -414,6 +415,64 @@
   }
 }
 
+:host-context([data-theme="glass"]) .bought-together {
+  background: var(--bought-together-bg);
+
+  .recommendations-header {
+    .recommendations-title {
+      color: var(--text-primary);
+      text-shadow: 0 2px 4px rgba(255, 255, 255, 0.1);
+    }
+
+    .recommendations-subtitle {
+      color: var(--text-secondary);
+    }
+  }
+
+  .product-card {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .product-image {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .product-info {
+      .product-name {
+        color: var(--text-primary);
+      }
+
+      .product-footer {
+        .product-price {
+          .current-price {
+            color: var(--text-primary);
+          }
+        }
+
+        .cart-btn {
+          background: rgba(99, 102, 241, 0.8);
+          color: white;
+          backdrop-filter: blur(10px);
+
+          &:hover {
+            background: rgba(99, 102, 241, 1);
+          }
+        }
+      }
+    }
+  }
+}
+
 // Dark theme styles
 [data-theme="dark"] .bought-together {
   .product-card {
@@ -469,12 +528,12 @@
       .product-rating {
         .star {
           color: rgba(251, 191, 36, 0.7);
-          
+
           &:hover {
             color: #fbbf24;
             text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
           }
-          
+
           &.filled {
             color: #fbbf24;
             text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
@@ -531,4 +590,4 @@
       }
     }
   }
-} 
+}

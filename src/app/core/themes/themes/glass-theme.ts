@@ -45,17 +45,17 @@ export const glassTheme: Theme = {
     'info-hover': '#1e88e5',
 
     // Background Colors
-    'bg-primary': 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-    'bg-secondary': 'rgba(255, 255, 255, 0.1)',
-    'bg-tertiary': 'rgba(255, 255, 255, 0.05)',
+    'bg-primary': 'linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 100%)',
+    'bg-secondary': 'rgba(255, 255, 255, 0.15)',
+    'bg-tertiary': 'rgba(255, 255, 255, 0.08)',
     'bg-hover': 'rgba(255, 255, 255, 0.2)',
-    'bg-overlay': 'rgba(0, 0, 0, 0.3)',
+    'bg-overlay': 'rgba(0, 0, 0, 0.2)',
 
     // Surface Colors
-    'surface-primary': 'rgba(255, 255, 255, 0.15)',
-    'surface-secondary': 'rgba(255, 255, 255, 0.12)',
-    'surface-tertiary': 'rgba(255, 255, 255, 0.02)',
-    'surface-hover': 'rgba(255, 255, 255, 0.2)',
+    'surface-primary': 'rgba(255, 255, 255, 0.4)',
+    'surface-secondary': 'rgba(255, 255, 255, 0.25)',
+    'surface-tertiary': 'rgba(255, 255, 255, 0.1)',
+    'surface-hover': 'rgba(255, 255, 255, 0.3)',
 
     // Text Colors
     'text-primary': '#1e293b',
@@ -198,8 +198,8 @@ export const glassTheme: Theme = {
     'color-text-secondary': '#475569',
     'color-text-inverse': '#ffffff',
     'color-primary': '#6366f1',
-    'color-surface-primary': 'rgba(102, 126, 234, 0.25)',
-    'color-surface-secondary': 'rgba(102, 126, 234, 0.2)',
-    'color-border-primary': 'rgba(102, 126, 234, 0.3)'
+    'color-surface-primary': 'rgba(255, 255, 240, 0.3)', // Light warm glass
+    'color-surface-secondary': 'rgba(255, 255, 255, 0.2)',
+    'color-border-primary': 'rgba(255, 255, 255, 0.4)'
   }
 }; 
