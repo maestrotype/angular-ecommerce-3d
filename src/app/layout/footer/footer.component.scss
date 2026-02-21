@@ -1,3 +1,7 @@
+:host {
+    display: block;
+}
+
 .footer {
     background: var(--footer-bg);
     backdrop-filter: var(--footer-backdrop-filter);
@@ -6,7 +10,7 @@
     display: block;
     border-top: 1px solid rgba(255, 255, 255, 0.2);
     position: relative;
-    
+
     &::before {
         content: '';
         position: absolute;
@@ -14,18 +18,15 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: linear-gradient(135deg, 
-            rgba(248, 250, 252, 0.85), 
-            rgba(226, 232, 240, 0.75) 30%, 
-            rgba(203, 213, 225, 0.85) 70%, 
-            rgba(186, 200, 216, 0.9));
+        background: linear-gradient(135deg,
+                rgba(248, 250, 252, 0.85),
+                rgba(226, 232, 240, 0.75) 30%,
+                rgba(203, 213, 225, 0.85) 70%,
+                rgba(186, 200, 216, 0.9));
         pointer-events: none;
         z-index: -1;
     }
 
-    .footer-mobile {
-        display: none;
-    }
 
     .container {
         max-width: 1200px;
@@ -46,6 +47,7 @@
             align-items: center;
             gap: 0.5rem;
             margin-bottom: 1rem;
+
             .logo-icon {
                 width: 32px;
                 height: 32px;
@@ -129,6 +131,80 @@
     }
 }
 
+.footer-mobile {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .footer-mobile {
+        display: flex;
+        height: calc(65px + env(safe-area-inset-bottom));
+        width: 100%;
+        justify-content: space-around;
+        align-items: center;
+        padding-bottom: env(safe-area-inset-bottom);
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 99999;
+        /* Higher z-index to be absolutely sure */
+        background: var(--footer-bg, rgba(255, 255, 255, 0.95));
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.1);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+        will-change: transform, opacity;
+
+        &.footer-hidden {
+            transform: translateY(110%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .favorites-link,
+        .profile-icon,
+        .cart {
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+
+            &:active {
+                transform: scale(0.9);
+                opacity: 0.7;
+            }
+        }
+
+        .cart {
+            position: relative;
+
+            span {
+                position: absolute;
+                top: 0;
+                right: 0;
+                background: var(--color-primary, #6366f1);
+                color: white;
+                border-radius: 50%;
+                padding: 2px 6px;
+                font-size: 0.7rem;
+                font-weight: 700;
+                min-width: 18px;
+                height: 18px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 2px solid var(--color-surface-primary, white);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                z-index: 2;
+            }
+        }
+    }
+}
+
 @media (max-width: 768px) {
     .footer {
         padding: 40px 0 20px;
@@ -137,42 +213,6 @@
             display: none;
         }
 
-        .footer-mobile {
-            display: flex;
-            height: 60px;
-            width: 100%;
-            justify-content: space-around;
-            align-items: center;
-            position: fixed;
-            bottom: 0;
-            z-index: 2;
-            background: var(--color-surface-primary, rgba(255, 255, 255, 0.95));
-            backdrop-filter: blur(10px);
-            .cart {
-                display: flex;
-                align-items: center;
-                position: relative;
-                color: var(--color-text-primary, #333);
-                span {
-                  position: absolute;
-                  top: -14px;
-                  right: -24px;
-                  background: linear-gradient(135deg, #ff6347 0%, #ff4500 100%);
-                  color: white;
-                  border-radius: 50%;
-                  padding: 0.125rem 0.375rem;
-                  font-size: 0.75rem;
-                  font-weight: 600;
-                  min-width: 10px;
-                  text-align: center;
-                  border: 2px solid rgba(255, 255, 255, 0.9);
-                  box-shadow: 
-                    0 4px 12px rgba(255, 99, 71, 0.4),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-                  z-index: 2;
-                }
-              }
-        }
 
         .container {
             padding: 0 1rem;
