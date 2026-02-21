@@ -4,174 +4,184 @@
 
 /* Default theme variables */
 :root {
-  /* Default theme variables */
-  --hero-bg-gradient: linear-gradient(135deg,
-      rgba(248, 250, 252, 0.85) 0%,
-      rgba(241, 245, 249, 0.8) 30%,
-      rgba(226, 232, 240, 0.75) 70%,
-      rgba(203, 213, 225, 0.8) 100%);
+        /* Default theme variables */
+        --hero-bg-gradient: linear-gradient(135deg,
+                        rgba(248, 250, 252, 0.85) 0%,
+                        rgba(241, 245, 249, 0.8) 30%,
+                        rgba(226, 232, 240, 0.75) 70%,
+                        rgba(203, 213, 225, 0.8) 100%);
 
-  --hero-backdrop-filter: blur(25px) saturate(180%);
-  --hero-text-color: #1e293b;
-  --hero-accent-color: #3b82f6;
+        --hero-backdrop-filter: blur(25px) saturate(180%);
+        --hero-text-color: #1e293b;
+        --hero-accent-color: #3b82f6;
 
-  /* Special Offer section - Default theme */
-  --special-offer-bg: linear-gradient(135deg,
-      rgba(255, 255, 255, 0.9) 0%, image.png rgba(248, 250, 252, 0.8) 30%,
-      rgba(241, 245, 249, 0.7) 70%,
-      rgba(226, 232, 240, 0.8) 100%);
+        /* Global Text Colors */
+        --text-primary: #1e293b;
+        --text-secondary: #64748b;
 
-  --special-offer-backdrop-filter: blur(20px);
-  --special-offer-text: #1e293b;
-  --special-offer-accent: #3b82f6;
+        /* Special Offer section - Default theme */
+        --special-offer-bg: linear-gradient(135deg,
+                        rgba(255, 255, 255, 0.9) 0%, image.png rgba(248, 250, 252, 0.8) 30%,
+                        rgba(241, 245, 249, 0.7) 70%,
+                        rgba(226, 232, 240, 0.8) 100%);
 
-  /* Categories section - Default theme */
-  --categories-bg: #ffffff;
-  --categories-text: #1e293b;
-  --categories-card-bg: #ffffff;
-  --categories-card-hover: #f8fafc;
-  --categories-card-border: #e2e8f0;
-  --categories-icon-filter: none;
+        --special-offer-backdrop-filter: blur(20px);
+        --special-offer-text: #1e293b;
+        --special-offer-accent: #3b82f6;
 
-  /* Footer section - Default theme */
-  --footer-bg: linear-gradient(135deg,
-      #f8fafcd9,
-      #e2e8f0bf 30%,
-      #cbd5e1d9 70%,
-      #bac8d8e6);
-  --footer-backdrop-filter: blur(20px);
-  --footer-text: #1e293b;
-  --footer-link: #64748b;
-  --footer-link-hover: #1e293b;
-  --footer-will-change: transform;
-  --footer-transform: translateZ(0);
+        /* Categories section - Default theme */
+        --categories-bg: #ffffff;
+        --categories-text: #1e293b;
+        --categories-card-bg: #ffffff;
+        --categories-card-hover: #f8fafc;
+        --categories-card-border: #e2e8f0;
+        --categories-icon-filter: none;
 
-  /* About section - Default theme */
-  --about-bg: #ffffff;
-  --about-text: #1e293b;
-  --about-title: #1e293b;
-  --about-subtitle: #64748b;
-  --about-button-bg: #ef4444;
-  --about-button-hover: #dc2626;
-  --auth-tab-text: #1e293b;
-  --auth-tab-active: #333;
-  --auth-tab-inactive: #64748b;
-  --auth-tab-hover: #64748b;
+        /* Footer section - Default theme */
+        --footer-bg: linear-gradient(135deg,
+                        #f8fafcd9,
+                        #e2e8f0bf 30%,
+                        #cbd5e1d9 70%,
+                        #bac8d8e6);
+        --footer-backdrop-filter: blur(20px);
+        --footer-text: #1e293b;
+        --footer-link: #64748b;
+        --footer-link-hover: #1e293b;
+        --footer-will-change: transform;
+        --footer-transform: translateZ(0);
 
-  /* Brands section - Default theme */
-  --brands-bg: #f8fafc;
-  --brands-text: #1e293b;
-  --brands-logo-opacity: 0.7;
-  --brands-logo-hover-opacity: 1;
-  --brands-logo-filter: none;
-  --brands-logo-hover-filter: none;
+        /* About section - Default theme */
+        --about-bg: #ffffff;
+        --about-text: #1e293b;
+        --about-title: #1e293b;
+        --about-subtitle: #64748b;
+        --about-button-bg: #ef4444;
+        --about-button-hover: #dc2626;
+        --auth-tab-text: #1e293b;
+        --auth-tab-active: #333;
+        --auth-tab-inactive: #64748b;
+        --auth-tab-hover: #64748b;
 
-  /* Contacts section - Default theme */
-  --contacts-bg: #ffffff;
-  --contacts-text: #1e293b;
-  --contacts-title: #1e293b;
-  --contacts-subtitle: #64748b;
-  --contacts-card-bg: #f8fafc;
-  --contacts-card-text: #1e293b;
-  --contacts-input-bg: #ffffff;
-  --contacts-input-text: #1e293b;
-  --contacts-button-bg: #3b82f6;
-  --contacts-button-hover: #2563eb;
+        /* Brands section - Default theme */
+        --brands-bg: #f8fafc;
+        --brands-text: #1e293b;
+        --brands-logo-opacity: 0.7;
+        --brands-logo-hover-opacity: 1;
+        --brands-logo-filter: none;
+        --brands-logo-hover-filter: none;
 
-  /* Header section - Default theme */
-  --header-bg: rgba(255, 255, 255, 0.95);
-  --header-backdrop-filter: blur(10px);
-  --header-text: #1e293b;
-  --header-link: #64748b;
-  --header-link-hover: #1e293b;
-  --header-search-bg: rgba(255, 255, 255, 0.9);
-  --header-search-text: #1e293b;
+        /* Contacts section - Default theme */
+        --contacts-bg: #ffffff;
+        --contacts-text: #1e293b;
+        --contacts-title: #1e293b;
+        --contacts-subtitle: #64748b;
+        --contacts-card-bg: #f8fafc;
+        --contacts-card-text: #1e293b;
+        --contacts-input-bg: #ffffff;
+        --contacts-input-text: #1e293b;
+        --contacts-button-bg: #3b82f6;
+        --contacts-button-hover: #2563eb;
 
-  /* Product Detail section - Default theme */
-  --product-detail-bg: #f8f9fa;
-  --product-detail-card-bg: #ffffff;
-  --product-detail-card-border: 1px solid #e5e7eb;
-  --product-detail-main-view-bg: #ffffff;
-  --product-detail-main-view-border: 1px solid #e5e7eb;
-  --product-detail-thumb-bg: #ffffff;
-  --product-detail-thumb-border: 2px solid transparent;
-  --product-detail-thumb-selected-border: 2px solid #007bff;
+        /* Header section - Default theme */
+        --header-bg: rgba(255, 255, 255, 0.95);
+        --header-backdrop-filter: blur(10px);
+        --header-text: #1e293b;
+        --header-link: #64748b;
+        --header-link-hover: #1e293b;
+        --header-search-bg: rgba(255, 255, 255, 0.9);
+        --header-search-text: #1e293b;
 
-  /* Product Stepper - Default theme */
-  --product-stepper-bg: #ffffff;
-  --product-stepper-border: 1px solid #e5e7eb;
-  --product-stepper-radius: 10px;
-  --product-stepper-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-  --product-stepper-btn-bg: #f9fafb;
-  --product-stepper-btn-hover: #f3f4f6;
-  --product-stepper-value-color: #111827;
+        /* RGB Variables for transparencies */
+        --header-bg-rgb: 255, 255, 255;
+        --header-text-rgb: 30, 41, 59;
+        --footer-bg-rgb: 255, 255, 255;
+        --footer-text-rgb: 30, 41, 59;
 
-  /* Glass Style Buttons - Default theme */
-  --glass-btn-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
-  --glass-btn-border: 1px solid rgba(255, 255, 255, 0.3);
-  --glass-btn-color: #1e293b;
-  --glass-btn-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  --glass-btn-hover-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%);
-  --glass-btn-hover-border: 1px solid rgba(255, 255, 255, 0.4);
-  --glass-btn-hover-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        /* Product Detail section - Default theme */
+        --product-detail-bg: #f8f9fa;
+        --product-detail-card-bg: #ffffff;
+        --product-detail-card-border: 1px solid #e5e7eb;
+        --product-detail-main-view-bg: #ffffff;
+        --product-detail-main-view-border: 1px solid #e5e7eb;
+        --product-detail-thumb-bg: #ffffff;
+        --product-detail-thumb-border: 2px solid transparent;
+        --product-detail-thumb-selected-border: 2px solid #007bff;
 
-  /* Best Sellers section - Default theme */
-  --best-sellers-bg: #ffffff;
-  --best-sellers-text: #1e293b;
-  --best-sellers-subtitle: #64748b;
+        /* Product Stepper - Default theme */
+        --product-stepper-bg: #ffffff;
+        --product-stepper-border: 1px solid #e5e7eb;
+        --product-stepper-radius: 10px;
+        --product-stepper-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        --product-stepper-btn-bg: #f9fafb;
+        --product-stepper-btn-hover: #f3f4f6;
+        --product-stepper-value-color: #111827;
 
-  /* Favorites section - Default theme */
-  --favorites-bg: #f8fafc;
-  --favorites-text: #1e293b;
-  --favorites-header-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --favorites-header-text: #ffffff;
-  --favorites-header-overlay: rgba(255, 255, 255, 0.1);
-  --favorites-header-blur: blur(0px);
-  --favorites-back-btn-bg: rgba(255, 255, 255, 0.2);
-  --favorites-back-btn-text: #ffffff;
-  --favorites-back-btn-border: rgba(255, 255, 255, 0.3);
-  --favorites-back-btn-blur: blur(10px);
-  --favorites-back-btn-hover-bg: rgba(255, 255, 255, 0.3);
-  --favorites-back-btn-hover-border: rgba(255, 255, 255, 0.5);
-  --favorites-title-size: 2.5rem;
-  --favorites-title-weight: 700;
-  --favorites-heart-color: #ff6b6b;
-  --favorites-subtitle-size: 1.1rem;
-  --favorites-subtitle-opacity: 0.9;
-  --favorites-top-bar-bg: #ffffff;
-  --favorites-top-bar-text: #333333;
-  --favorites-clear-btn-bg: #6c757d;
-  --favorites-clear-btn-text: #ffffff;
-  --favorites-clear-btn-hover-bg: #5a6268;
-  --favorites-card-bg: rgba(255, 255, 255, 0.65);
-  --favorites-card-shadow: 0 8px 32px rgba(31, 38, 135, 0.08);
-  --favorites-card-blur: blur(12px);
-  --favorites-card-border: rgba(255, 255, 255, 0.18);
-  --favorites-card-hover-shadow: 0 20px 40px rgba(31, 38, 135, 0.13);
-  --favorites-card-hover-bg: rgba(255, 255, 255, 0.95);
-  --favorites-product-name-color: #333333;
-  --favorites-product-category-color: #667eea;
-  --favorites-product-price-color: #667eea;
-  --favorites-add-to-cart-bg: rgba(255, 255, 255, 0.7);
-  --favorites-add-to-cart-text: #333333;
-  --favorites-add-to-cart-hover-bg: rgba(255, 255, 255, 0.95);
+        /* Glass Style Buttons - Default theme */
+        --glass-btn-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
+        --glass-btn-border: 1px solid rgba(255, 255, 255, 0.3);
+        --glass-btn-color: #1e293b;
+        --glass-btn-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        --glass-btn-hover-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%);
+        --glass-btn-hover-border: 1px solid rgba(255, 255, 255, 0.4);
+        --glass-btn-hover-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.5);
 
-  /* Surface variables - Different for different elements */
-  --surface-primary: #ffffff;
-  --surface-secondary: #f8f9fa;
-  --surface-tertiary: #e9ecef;
-  --surface-hover: #f1f3f4;
+        /* Best Sellers section - Default theme */
+        --best-sellers-bg: #ffffff;
+        --best-sellers-text: #1e293b;
+        --best-sellers-subtitle: #64748b;
 
-  /* Text variables */
-  --text-primary: #1e293b;
-  --text-secondary: #f8fafc;
-  --text-tertiary: #94a3b8;
-  --text-inverse: #ffffff;
+        /* Favorites section - Default theme */
+        --favorites-bg: #f8fafc;
+        --favorites-text: #1e293b;
+        --favorites-header-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --favorites-header-text: #ffffff;
+        --favorites-header-overlay: rgba(255, 255, 255, 0.1);
+        --favorites-header-blur: blur(0px);
+        --favorites-back-btn-bg: rgba(255, 255, 255, 0.2);
+        --favorites-back-btn-text: #ffffff;
+        --favorites-back-btn-border: rgba(255, 255, 255, 0.3);
+        --favorites-back-btn-blur: blur(10px);
+        --favorites-back-btn-hover-bg: rgba(255, 255, 255, 0.3);
+        --favorites-back-btn-hover-border: rgba(255, 255, 255, 0.5);
+        --favorites-title-size: 2.5rem;
+        --favorites-title-weight: 700;
+        --favorites-heart-color: #ff6b6b;
+        --favorites-subtitle-size: 1.1rem;
+        --favorites-subtitle-opacity: 0.9;
+        --favorites-top-bar-bg: #ffffff;
+        --favorites-top-bar-text: #333333;
+        --favorites-clear-btn-bg: #6c757d;
+        --favorites-clear-btn-text: #ffffff;
+        --favorites-clear-btn-hover-bg: #5a6268;
+        --favorites-card-bg: rgba(255, 255, 255, 0.65);
+        --favorites-card-shadow: 0 8px 32px rgba(31, 38, 135, 0.08);
+        --favorites-card-blur: blur(12px);
+        --favorites-card-border: rgba(255, 255, 255, 0.18);
+        --favorites-card-hover-shadow: 0 20px 40px rgba(31, 38, 135, 0.13);
+        --favorites-card-hover-bg: rgba(255, 255, 255, 0.95);
+        --favorites-product-name-color: #333333;
+        --favorites-product-category-color: #667eea;
+        --favorites-product-price-color: #667eea;
+        --favorites-add-to-cart-bg: rgba(255, 255, 255, 0.7);
+        --favorites-add-to-cart-text: #333333;
+        --favorites-add-to-cart-hover-bg: rgba(255, 255, 255, 0.95);
 
-  /* Border variables */
-  --border-primary: #e5e7eb;
-  --border-secondary: #f3f4f6;
-  --border-focus: #6366f1;
+        /* Surface variables - Different for different elements */
+        --surface-primary: #ffffff;
+        --surface-secondary: #f8f9fa;
+        --surface-tertiary: #e9ecef;
+        --surface-hover: #f1f3f4;
+
+        /* Text variables */
+        --text-primary: #1e293b;
+        --text-secondary: #64748b;
+        --text-tertiary: #94a3b8;
+        --text-inverse: #ffffff;
+
+        /* Border variables */
+        --border-primary: #e5e7eb;
+        --border-secondary: #f3f4f6;
+        --border-focus: #6366f1;
 }
 
 /* ==========================================================================
@@ -179,227 +189,240 @@
    ========================================================================== */
 
 [data-theme="dark"] {
-  /* Dark theme variables */
-  --hero-bg-gradient: linear-gradient(135deg,
-      #1e293b 0%,
-      #334155 50%,
-      #475569 100%);
+        /* Dark theme variables */
+        --hero-bg-gradient: linear-gradient(135deg,
+                        #1e293b 0%,
+                        #334155 50%,
+                        #475569 100%);
 
-  --hero-backdrop-filter: blur(20px);
-  --hero-text-color: #f8fafc;
-  --hero-accent-color: #60a5fa;
+        --hero-backdrop-filter: blur(20px);
+        --hero-text-color: #f8fafc;
+        --hero-accent-color: #60a5fa;
 
-  /* Special Offer section - Dark theme */
-  --special-offer-bg: linear-gradient(135deg,
-      rgba(15, 23, 42, 0.95) 0%,
-      rgba(30, 41, 59, 0.9) 30%,
-      rgba(51, 65, 85, 0.85) 70%,
-      rgba(71, 85, 105, 0.9) 100%);
+        /* Global Text Colors */
+        --text-primary: #f8fafc;
+        --text-secondary: #cbd5e1;
 
-  --special-offer-backdrop-filter: blur(20px);
-  --special-offer-text: #f8fafc;
-  --special-offer-accent: #60a5fa;
+        /* Special Offer section - Dark theme */
+        --special-offer-bg: linear-gradient(135deg,
+                        rgba(15, 23, 42, 0.95) 0%,
+                        rgba(30, 41, 59, 0.9) 30%,
+                        rgba(51, 65, 85, 0.85) 70%,
+                        rgba(71, 85, 105, 0.9) 100%);
 
-  /* Categories section - Dark theme (admin palette) - light grey icons */
-  --categories-bg: #1e293b;
-  --categories-text: #f8fafc;
-  --categories-card-bg: #334155;
-  --categories-card-hover: #475569;
-  --categories-card-border: #475569;
-  --categories-icon-filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(80%) contrast(100%);
+        --special-offer-backdrop-filter: blur(20px);
+        --special-offer-text: #f8fafc;
+        --special-offer-accent: #60a5fa;
 
-  /* Footer section - Dark theme (admin palette) - semi-transparent with dark text */
-  --footer-bg: rgba(255, 255, 255, 0.35);
-  --footer-backdrop-filter: blur(15px) saturate(180%);
-  --footer-text: #1e293b;
-  --footer-link: #475569;
-  --footer-link-hover: #1e293b;
+        /* Categories section - Dark theme (admin palette) - light grey icons */
+        --categories-bg: #1e293b;
+        --categories-text: #f8fafc;
+        --categories-card-bg: #334155;
+        --categories-card-hover: #475569;
+        --categories-card-border: #475569;
+        --categories-icon-filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(80%) contrast(100%);
 
-  /* About section - Dark theme (admin palette) */
-  --about-bg: #1e293b;
-  --about-text: #f8fafc;
-  --about-title: #ffffff;
-  --about-subtitle: #cbd5e1;
-  --about-button-bg: #ef4444;
-  --about-button-hover: #dc2626;
-  --auth-tab-text: #f8fafc;
-  --auth-tab-active: #cbd5e1;
-  --auth-tab-inactive: #64748b;
-  --auth-tab-hover: #cbd5e1;
+        /* Footer section - Dark theme (admin palette) - semi-transparent with dark text */
+        --footer-bg: rgba(255, 255, 255, 0.35);
+        --footer-backdrop-filter: blur(15px) saturate(180%);
+        --footer-text: #1e293b;
+        --footer-link: #475569;
+        --footer-link-hover: #0f172a;
+        --footer-text-rgb: 30, 41, 59;
 
-  /* Brands section - Dark theme (admin palette) - light grey text */
-  --brands-bg: #334155;
-  --brands-text: #cbd5e1;
-  --brands-logo-opacity: 1;
-  --brands-logo-hover-opacity: 1;
-  --brands-logo-filter: brightness(0) invert(1);
-  --brands-logo-hover-filter: brightness(0) invert(1);
+        /* About section - Dark theme (admin palette) */
+        --about-bg: #1e293b;
+        --about-text: #f8fafc;
+        --about-title: #ffffff;
+        --about-subtitle: #cbd5e1;
+        --about-button-bg: #ef4444;
+        --about-button-hover: #dc2626;
+        --auth-tab-text: #f8fafc;
+        --auth-tab-active: #cbd5e1;
+        --auth-tab-inactive: #64748b;
+        --auth-tab-hover: #cbd5e1;
 
-  /* Contacts section - Dark theme (admin palette) - same as categories cards */
-  --contacts-bg: #334155;
-  --contacts-text: #f8fafc;
-  --contacts-title: #ffffff;
-  --contacts-subtitle: #cbd5e1;
-  --contacts-card-bg: #374151;
-  --contacts-card-text: #f8fafc;
-  --contacts-input-bg: rgba(255, 255, 255, 0.35);
-  --contacts-input-text: #1e293b;
-  --contacts-button-bg: #60a5fa;
-  --contacts-button-hover: #3b82f6;
+        /* Brands section - Dark theme (admin palette) - light grey text */
+        --brands-bg: #334155;
+        --brands-text: #cbd5e1;
+        --brands-logo-opacity: 1;
+        --brands-logo-hover-opacity: 1;
+        --brands-logo-filter: brightness(0) invert(1);
+        --brands-logo-hover-filter: brightness(0) invert(1);
 
-  /* Header section - Dark theme (admin palette) - semi-transparent like contact form */
-  --header-bg: rgba(255, 255, 255, 0.35);
-  --header-backdrop-filter: blur(15px) saturate(180%);
-  --header-link: #bebfc7;
-  --header-link-hover: #f8fafc;
-  --header-search-bg: rgba(255, 255, 255, 0.5);
-  --header-search-text: #1e293b;
+        /* Contacts section - Dark theme (admin palette) - same as categories cards */
+        --contacts-bg: #334155;
+        --contacts-text: #f8fafc;
+        --contacts-title: #ffffff;
+        --contacts-subtitle: #cbd5e1;
+        --contacts-card-bg: #374151;
+        --contacts-card-text: #f8fafc;
+        --contacts-input-bg: rgba(255, 255, 255, 0.35);
+        --contacts-input-text: #1e293b;
+        --contacts-button-bg: #60a5fa;
+        --contacts-button-hover: #3b82f6;
 
-  /* Product Detail section - Dark theme */
-  --product-detail-bg: #0f172a;
-  --product-detail-card-bg: #1e293b;
-  --product-detail-card-border: 1px solid #334155;
-  --product-detail-main-view-bg: #1e293b;
-  --product-detail-main-view-border: 1px solid #334155;
-  --product-detail-thumb-bg: #1e293b;
-  --product-detail-thumb-border: 2px solid transparent;
-  --product-detail-thumb-selected-border: 2px solid #007bff;
+        /* Header section - Dark theme (admin palette) - semi-transparent like contact form */
+        --header-bg: rgba(255, 255, 255, 0.3);
+        --header-backdrop-filter: blur(20px) saturate(180%);
+        --header-text: #1e293b;
+        --header-link: #475569;
+        --header-link-hover: #0f172a;
+        --header-search-bg: rgba(255, 255, 255, 0.2);
+        --header-search-text: #1e293b;
+        --header-text-rgb: 30, 41, 59;
 
-  /* Product Text Colors - Dark theme */
-  --product-title-color: #f8fafc;
-  --product-meta-color: #cbd5e1;
-  --product-price-color: #60a5fa;
-  --product-description-color: #e2e8f0;
-  --product-specs-label-color: #cbd5e1;
-  --product-specs-value-color: #f1f5f9;
+        /* RGB Variables for transparencies (Dark Theme) */
+        --header-bg-rgb: 255, 255, 255;
+        --header-text-rgb: 30, 41, 59;
+        --footer-bg-rgb: 255, 255, 255;
+        --footer-text-rgb: 30, 41, 59;
 
-  /* Breadcrumb and Navigation - Dark theme */
-  --breadcrumb-color: #cbd5e1;
-  --breadcrumb-link-color: #cbd5e1;
-  --breadcrumb-link-hover-color: #60a5fa;
-  --breadcrumb-current-color: #f8fafc;
+        /* Product Detail section - Dark theme */
+        --product-detail-bg: #0f172a;
+        --product-detail-card-bg: #1e293b;
+        --product-detail-card-border: 1px solid #334155;
+        --product-detail-main-view-bg: #1e293b;
+        --product-detail-main-view-border: 1px solid #334155;
+        --product-detail-thumb-bg: #1e293b;
+        --product-detail-thumb-border: 2px solid transparent;
+        --product-detail-thumb-selected-border: 2px solid #007bff;
 
-  /* Similar Products - Dark theme */
-  --similar-products-title-color: #f8fafc;
-  --similar-products-subtitle-color: #cbd5e1;
-  --similar-products-bg: #0f172a;
-  --similar-products-card-bg: #1e293b;
-  --similar-products-card-border: 1px solid #334155;
-  --similar-products-card-text: #f8fafc;
-  --similar-products-card-price: #60a5fa;
+        /* Product Text Colors - Dark theme */
+        --product-title-color: #f8fafc;
+        --product-meta-color: #cbd5e1;
+        --product-price-color: #60a5fa;
+        --product-description-color: #e2e8f0;
+        --product-specs-label-color: #cbd5e1;
+        --product-specs-value-color: #f1f5f9;
 
-  /* Bought Together - Dark theme */
-  --bought-together-title-color: #f8fafc;
-  --bought-together-subtitle-color: #cbd5e1;
-  --bought-together-bg: #0f172a;
-  --bought-together-card-bg: #1e293b;
-  --bought-together-card-border: 1px solid #334155;
-  --bought-together-card-text: #f8fafc;
-  --bought-together-card-price: #60a5fa;
+        /* Breadcrumb and Navigation - Dark theme */
+        --breadcrumb-color: #cbd5e1;
+        --breadcrumb-link-color: #cbd5e1;
+        --breadcrumb-link-hover-color: #60a5fa;
+        --breadcrumb-current-color: #f8fafc;
 
-  /* Product Stepper - Dark theme */
-  --product-stepper-bg: #334155;
-  --product-stepper-border: 1px solid #475569;
-  --product-stepper-radius: 10px;
-  --product-stepper-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --product-stepper-btn-bg: #475569;
-  --product-stepper-btn-hover: #64748b;
-  --product-stepper-btn-color: #f8fafc;
-  --product-stepper-value-color: #f8fafc;
+        /* Similar Products - Dark theme */
+        --similar-products-title-color: #f8fafc;
+        --similar-products-subtitle-color: #cbd5e1;
+        --similar-products-bg: #0f172a;
+        --similar-products-card-bg: #1e293b;
+        --similar-products-card-border: 1px solid #334155;
+        --similar-products-card-text: #f8fafc;
+        --similar-products-card-price: #60a5fa;
 
-  /* Glass Style Buttons - Dark theme */
-  --glass-btn-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-  --glass-btn-border: 1px solid rgba(255, 255, 255, 0.2);
-  --glass-btn-color: #f8fafc;
-  --glass-btn-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  --glass-btn-hover-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%);
-  --glass-btn-hover-border: 1px solid rgba(255, 255, 255, 0.3);
-  --glass-btn-hover-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        /* Bought Together - Dark theme */
+        --bought-together-title-color: #f8fafc;
+        --bought-together-subtitle-color: #cbd5e1;
+        --bought-together-bg: #0f172a;
+        --bought-together-card-bg: #1e293b;
+        --bought-together-card-border: 1px solid #334155;
+        --bought-together-card-text: #f8fafc;
+        --bought-together-card-price: #60a5fa;
 
-  /* Product Tabs - Dark theme */
-  --product-tabs-bg: #1e293b;
-  --product-tabs-border: 1px solid #334155;
-  --product-tabs-radius: 12px;
-  --product-tabs-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-  --product-tabs-nav-bg: #334155;
-  --product-tabs-nav-border: 1px solid #475569;
-  --product-tabs-active-bg: #475569;
-  --product-tabs-active-color: #f8fafc;
-  --product-tabs-active-border: #60a5fa;
-  --product-tabs-hover-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-  --product-tabs-hover-color: #e2e8f0;
-  --product-tabs-text-color: #cbd5e1;
-  --product-tabs-content-color: #f1f5f9;
+        /* Product Stepper - Dark theme */
+        --product-stepper-bg: #334155;
+        --product-stepper-border: 1px solid #475569;
+        --product-stepper-radius: 10px;
+        --product-stepper-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        --product-stepper-btn-bg: #475569;
+        --product-stepper-btn-hover: #64748b;
+        --product-stepper-btn-color: #f8fafc;
+        --product-stepper-value-color: #f8fafc;
 
-  /* Delivery Options - Dark theme */
-  --delivery-option-bg: #334155;
-  --delivery-option-border: 1px solid #475569;
-  --delivery-option-text: #f8fafc;
-  --delivery-option-title: #ffffff;
-  --delivery-option-subtitle: #cbd5e1;
+        /* Glass Style Buttons - Dark theme */
+        --glass-btn-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+        --glass-btn-border: 1px solid rgba(255, 255, 255, 0.2);
+        --glass-btn-color: #f8fafc;
+        --glass-btn-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        --glass-btn-hover-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%);
+        --glass-btn-hover-border: 1px solid rgba(255, 255, 255, 0.3);
+        --glass-btn-hover-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 
-  /* Best Sellers section - Dark theme (admin palette) - white subtitle */
-  --best-sellers-bg: #475569;
-  --best-sellers-text: #f8fafc;
-  --best-sellers-subtitle: #ffffff;
+        /* Product Tabs - Dark theme */
+        --product-tabs-bg: #1e293b;
+        --product-tabs-border: 1px solid #334155;
+        --product-tabs-radius: 12px;
+        --product-tabs-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        --product-tabs-nav-bg: #334155;
+        --product-tabs-nav-border: 1px solid #475569;
+        --product-tabs-active-bg: #475569;
+        --product-tabs-active-color: #f8fafc;
+        --product-tabs-active-border: #60a5fa;
+        --product-tabs-hover-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+        --product-tabs-hover-color: #e2e8f0;
+        --product-tabs-text-color: #cbd5e1;
+        --product-tabs-content-color: #f1f5f9;
 
-  /* Favorites section - Dark theme */
-  --favorites-bg: #0f172a;
-  --favorites-text: #f8fafc;
-  --favorites-header-bg: linear-gradient(135deg, #334155 0%, #475569 100%);
-  --favorites-header-text: #f8fafc;
-  --favorites-header-overlay: rgba(0, 0, 0, 0.2);
-  --favorites-header-blur: blur(10px);
-  --favorites-back-btn-bg: rgba(255, 255, 255, 0.1);
-  --favorites-back-btn-text: #f8fafc;
-  --favorites-back-btn-border: rgba(255, 255, 255, 0.2);
-  --favorites-back-btn-blur: blur(15px);
-  --favorites-back-btn-hover-bg: rgba(255, 255, 255, 0.2);
-  --favorites-back-btn-hover-border: rgba(255, 255, 255, 0.3);
-  --favorites-title-size: 2.5rem;
-  --favorites-title-weight: 700;
-  --favorites-heart-color: #ff6b6b;
-  --favorites-subtitle-size: 1.1rem;
-  --favorites-subtitle-opacity: 0.9;
-  --favorites-top-bar-bg: #334155;
-  --favorites-top-bar-text: #f8fafc;
-  --favorites-clear-btn-bg: #6c757d;
-  --favorites-clear-btn-text: #ffffff;
-  --favorites-clear-btn-hover-bg: #5a6268;
-  --favorites-card-bg: #374151;
-  --favorites-card-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  --favorites-card-blur: blur(15px);
-  --favorites-card-border: rgba(255, 255, 255, 0.1);
-  --favorites-card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-  --favorites-card-hover-bg: #4b5563;
-  --favorites-product-name-color: #f8fafc;
-  --favorites-product-category-color: #60a5fa;
-  --favorites-product-price-color: #60a5fa;
-  --favorites-add-to-cart-bg: rgba(255, 255, 255, 0.1);
-  --favorites-add-to-cart-text: #f8fafc;
-  --favorites-add-to-cart-hover-bg: rgba(255, 255, 255, 0.2);
+        /* Delivery Options - Dark theme */
+        --delivery-option-bg: #334155;
+        --delivery-option-border: 1px solid #475569;
+        --delivery-option-text: #f8fafc;
+        --delivery-option-title: #ffffff;
+        --delivery-option-subtitle: #cbd5e1;
 
-  /* Surface variables - Different for different elements */
-  --surface-primary: #1e293b;
-  --surface-secondary: #334155;
-  --surface-tertiary: #475569;
-  --surface-hover: #3b82f6;
+        /* Best Sellers section - Dark theme (admin palette) - white subtitle */
+        --best-sellers-bg: #475569;
+        --best-sellers-text: #f8fafc;
+        --best-sellers-subtitle: #ffffff;
 
-  /* Button specific variables */
-  --button-primary-bg: #6366f1;
-  --button-primary-text: #ffffff;
-  --button-primary-border: #6366f1;
+        /* Favorites section - Dark theme */
+        --favorites-bg: #0f172a;
+        --favorites-text: #f8fafc;
+        --favorites-header-bg: linear-gradient(135deg, #334155 0%, #475569 100%);
+        --favorites-header-text: #f8fafc;
+        --favorites-header-overlay: rgba(0, 0, 0, 0.2);
+        --favorites-header-blur: blur(10px);
+        --favorites-back-btn-bg: rgba(255, 255, 255, 0.1);
+        --favorites-back-btn-text: #f8fafc;
+        --favorites-back-btn-border: rgba(255, 255, 255, 0.2);
+        --favorites-back-btn-blur: blur(15px);
+        --favorites-back-btn-hover-bg: rgba(255, 255, 255, 0.2);
+        --favorites-back-btn-hover-border: rgba(255, 255, 255, 0.3);
+        --favorites-title-size: 2.5rem;
+        --favorites-title-weight: 700;
+        --favorites-heart-color: #ff6b6b;
+        --favorites-subtitle-size: 1.1rem;
+        --favorites-subtitle-opacity: 0.9;
+        --favorites-top-bar-bg: #334155;
+        --favorites-top-bar-text: #f8fafc;
+        --favorites-clear-btn-bg: #6c757d;
+        --favorites-clear-btn-text: #ffffff;
+        --favorites-clear-btn-hover-bg: #5a6268;
+        --favorites-card-bg: #374151;
+        --favorites-card-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        --favorites-card-blur: blur(15px);
+        --favorites-card-border: rgba(255, 255, 255, 0.1);
+        --favorites-card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        --favorites-card-hover-bg: #4b5563;
+        --favorites-product-name-color: #f8fafc;
+        --favorites-product-category-color: #60a5fa;
+        --favorites-product-price-color: #60a5fa;
+        --favorites-add-to-cart-bg: rgba(255, 255, 255, 0.1);
+        --favorites-add-to-cart-text: #f8fafc;
+        --favorites-add-to-cart-hover-bg: rgba(255, 255, 255, 0.2);
 
-  /* Text variables */
-  --text-primary: #f8fafc;
-  --text-secondary: #cbd5e1;
-  --text-tertiary: #94a3b8;
-  --text-inverse: #0f172a;
+        /* Surface variables - Different for different elements */
+        --surface-primary: #1e293b;
+        --surface-secondary: #334155;
+        --surface-tertiary: #475569;
+        --surface-hover: #3b82f6;
 
-  /* Border variables */
-  --border-primary: #475569;
-  --border-secondary: #334155;
-  --border-focus: #60a5fa;
+        /* Button specific variables */
+        --button-primary-bg: #6366f1;
+        --button-primary-text: #ffffff;
+        --button-primary-border: #6366f1;
+
+        /* Text variables */
+        --text-primary: #f8fafc;
+        --text-secondary: #cbd5e1;
+        --text-tertiary: #94a3b8;
+        --text-inverse: #0f172a;
+
+        /* Border variables */
+        --border-primary: #475569;
+        --border-secondary: #334155;
+        --border-focus: #60a5fa;
 }
 
 /* ==========================================================================
@@ -407,142 +430,142 @@
    ========================================================================== */
 
 [data-theme="glass"] {
-  /* Glass theme variables */
-  --hero-bg-gradient: linear-gradient(135deg,
-      rgba(255, 255, 255, 0.45) 0%,
-      rgba(255, 255, 255, 0.25) 30%,
-      rgba(255, 255, 255, 0.15) 70%,
-      rgba(255, 255, 255, 0.05) 100%);
+        /* Glass theme variables */
+        --hero-bg-gradient: linear-gradient(135deg,
+                        rgba(255, 255, 255, 0.45) 0%,
+                        rgba(255, 255, 255, 0.25) 30%,
+                        rgba(255, 255, 255, 0.15) 70%,
+                        rgba(255, 255, 255, 0.05) 100%);
 
-  --hero-backdrop-filter: blur(25px) saturate(180%);
-  --hero-text-color: #1e293b;
-  --hero-accent-color: #6366f1;
+        --hero-backdrop-filter: blur(25px) saturate(180%);
+        --hero-text-color: #1e293b;
+        --hero-accent-color: #6366f1;
 
-  /* Special Offer section - Light glass */
-  --special-offer-bg: linear-gradient(135deg,
-      rgba(255, 255, 255, 0.4) 0%,
-      rgba(255, 255, 255, 0.2) 30%,
-      rgba(255, 255, 255, 0.15) 70%,
-      rgba(255, 255, 255, 0.1) 100%);
+        /* Special Offer section - Light glass */
+        --special-offer-bg: linear-gradient(135deg,
+                        rgba(255, 255, 255, 0.4) 0%,
+                        rgba(255, 255, 255, 0.2) 30%,
+                        rgba(255, 255, 255, 0.15) 70%,
+                        rgba(255, 255, 255, 0.1) 100%);
 
-  --special-offer-backdrop-filter: blur(25px) saturate(180%);
-  --special-offer-text: #1e293b;
-  --special-offer-accent: #6366f1;
+        --special-offer-backdrop-filter: blur(25px) saturate(180%);
+        --special-offer-text: #1e293b;
+        --special-offer-accent: #6366f1;
 
-  /* Categories section - Glass theme */
-  --categories-bg: rgba(255, 255, 255, 0.3);
-  --categories-text: #1e293b;
-  --categories-card-bg: rgba(255, 255, 255, 0.15);
-  --categories-card-hover: rgba(255, 255, 255, 0.25);
-  --categories-card-border: rgba(255, 255, 255, 0.2);
-  --categories-icon-filter: none;
+        /* Categories section - Glass theme */
+        --categories-bg: rgba(255, 255, 255, 0.3);
+        --categories-text: #1e293b;
+        --categories-card-bg: rgba(255, 255, 255, 0.15);
+        --categories-card-hover: rgba(255, 255, 255, 0.25);
+        --categories-card-border: rgba(255, 255, 255, 0.2);
+        --categories-icon-filter: none;
 
-  /* Footer section - Glass theme */
-  --footer-bg: linear-gradient(135deg,
-      rgba(255, 255, 255, 0.4) 0%,
-      rgba(255, 255, 255, 0.2) 100%);
-  --footer-text: #1e293b;
-  --footer-link: #475569;
-  --footer-link-hover: #1e293b;
+        /* Footer section - Glass theme */
+        --footer-bg: linear-gradient(135deg,
+                        rgba(255, 255, 255, 0.4) 0%,
+                        rgba(255, 255, 255, 0.2) 100%);
+        --footer-text: #1e293b;
+        --footer-link: #475569;
+        --footer-link-hover: #1e293b;
 
-  /* About section - Glass theme */
-  --about-bg: rgba(255, 255, 255, 0.3);
-  --about-text: #1e293b;
-  --about-title: #1e293b;
-  --about-subtitle: #475569;
-  --about-button-bg: #ef4444;
-  --about-button-hover: #dc2626;
+        /* About section - Glass theme */
+        --about-bg: rgba(255, 255, 255, 0.3);
+        --about-text: #1e293b;
+        --about-title: #1e293b;
+        --about-subtitle: #475569;
+        --about-button-bg: #ef4444;
+        --about-button-hover: #dc2626;
 
-  /* Brands section - Glass theme */
-  --brands-bg: rgba(255, 255, 255, 0.3);
-  --brands-text: #1e293b;
-  --brands-logo-opacity: 0.6;
-  --brands-logo-hover-opacity: 1;
-  --brands-logo-filter: grayscale(100%);
-  --brands-logo-hover-filter: grayscale(0%);
+        /* Brands section - Glass theme */
+        --brands-bg: rgba(255, 255, 255, 0.3);
+        --brands-text: #1e293b;
+        --brands-logo-opacity: 0.6;
+        --brands-logo-hover-opacity: 1;
+        --brands-logo-filter: grayscale(100%);
+        --brands-logo-hover-filter: grayscale(0%);
 
-  /* Contacts section - Glass theme */
-  --contacts-bg: rgba(255, 255, 255, 0.3);
-  --contacts-text: #1e293b;
-  --contacts-title: #1e293b;
-  --contacts-subtitle: #475569;
-  --contacts-card-bg: rgba(255, 255, 255, 0.3);
-  --contacts-card-text: #1e293b;
-  --contacts-input-bg: rgba(255, 255, 255, 0.5);
-  --contacts-input-text: #1e293b;
-  --contacts-button-bg: #6366f1;
-  --contacts-button-hover: #4f46e5;
+        /* Contacts section - Glass theme */
+        --contacts-bg: rgba(255, 255, 255, 0.3);
+        --contacts-text: #1e293b;
+        --contacts-title: #1e293b;
+        --contacts-subtitle: #475569;
+        --contacts-card-bg: rgba(255, 255, 255, 0.3);
+        --contacts-card-text: #1e293b;
+        --contacts-input-bg: rgba(255, 255, 255, 0.5);
+        --contacts-input-text: #1e293b;
+        --contacts-button-bg: #6366f1;
+        --contacts-button-hover: #4f46e5;
 
-  /* Header section - Glass theme */
-  --header-bg: rgba(255, 255, 255, 0.4);
-  --header-link: #475569;
-  --header-link-hover: #1e293b;
-  --header-search-bg: rgba(255, 255, 255, 0.5);
-  --header-search-text: #1e293b;
+        /* Header section - Glass theme */
+        --header-bg: rgba(255, 255, 255, 0.4);
+        --header-link: #475569;
+        --header-link-hover: #1e293b;
+        --header-search-bg: rgba(255, 255, 255, 0.5);
+        --header-search-text: #1e293b;
 
-  /* Best Sellers section - Glass theme */
-  --best-sellers-bg: rgba(255, 255, 255, 0.3);
-  --best-sellers-text: #1e293b;
-  --best-sellers-will-change: transform;
-  --best-sellers-transform: translateZ(0);
+        /* Best Sellers section - Glass theme */
+        --best-sellers-bg: rgba(255, 255, 255, 0.3);
+        --best-sellers-text: #1e293b;
+        --best-sellers-will-change: transform;
+        --best-sellers-transform: translateZ(0);
 
-  --similar-products-bg: rgba(255, 255, 255, 0.3);
+        --similar-products-bg: rgba(255, 255, 255, 0.3);
 
-  /* Favorites section - Glass theme */
-  --favorites-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.2) 100%);
-  --favorites-text: #1e293b;
-  --favorites-header-bg: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
-  --favorites-header-text: #1e293b;
-  --favorites-header-overlay: rgba(255, 255, 255, 0.1);
-  --favorites-header-blur: blur(20px);
-  --favorites-back-btn-bg: rgba(255, 255, 255, 0.25);
-  --favorites-back-btn-text: #1e293b;
-  --favorites-back-btn-border: rgba(255, 255, 255, 0.3);
-  --favorites-back-btn-blur: blur(15px);
-  --favorites-back-btn-hover-bg: rgba(255, 255, 255, 0.35);
-  --favorites-back-btn-hover-border: rgba(255, 255, 255, 0.5);
-  --favorites-title-size: 2.5rem;
-  --favorites-title-weight: 700;
-  --favorites-heart-color: #ff6b6b;
-  --favorites-subtitle-size: 1.1rem;
-  --favorites-subtitle-opacity: 0.9;
-  --favorites-top-bar-bg: rgba(255, 255, 255, 0.2);
-  --favorites-top-bar-text: #1e293b;
-  --favorites-clear-btn-bg: rgba(108, 117, 125, 0.8);
-  --favorites-clear-btn-text: #ffffff;
-  --favorites-clear-btn-hover-bg: rgba(90, 98, 104, 0.9);
-  --favorites-card-bg: rgba(255, 255, 255, 0.15);
-  --favorites-card-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  --favorites-card-blur: blur(20px);
-  --favorites-card-border: rgba(255, 255, 255, 0.2);
-  --favorites-card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-  --favorites-card-hover-bg: rgba(255, 255, 255, 0.25);
-  --favorites-product-name-color: #1e293b;
-  --favorites-product-category-color: #6366f1;
-  --favorites-product-price-color: #6366f1;
-  --favorites-add-to-cart-bg: rgba(255, 255, 255, 0.2);
-  --favorites-add-to-cart-text: #1e293b;
-  --favorites-add-to-cart-hover-bg: rgba(255, 255, 255, 0.3);
+        /* Favorites section - Glass theme */
+        --favorites-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.2) 100%);
+        --favorites-text: #1e293b;
+        --favorites-header-bg: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+        --favorites-header-text: #1e293b;
+        --favorites-header-overlay: rgba(255, 255, 255, 0.1);
+        --favorites-header-blur: blur(20px);
+        --favorites-back-btn-bg: rgba(255, 255, 255, 0.25);
+        --favorites-back-btn-text: #1e293b;
+        --favorites-back-btn-border: rgba(255, 255, 255, 0.3);
+        --favorites-back-btn-blur: blur(15px);
+        --favorites-back-btn-hover-bg: rgba(255, 255, 255, 0.35);
+        --favorites-back-btn-hover-border: rgba(255, 255, 255, 0.5);
+        --favorites-title-size: 2.5rem;
+        --favorites-title-weight: 700;
+        --favorites-heart-color: #ff6b6b;
+        --favorites-subtitle-size: 1.1rem;
+        --favorites-subtitle-opacity: 0.9;
+        --favorites-top-bar-bg: rgba(255, 255, 255, 0.2);
+        --favorites-top-bar-text: #1e293b;
+        --favorites-clear-btn-bg: rgba(108, 117, 125, 0.8);
+        --favorites-clear-btn-text: #ffffff;
+        --favorites-clear-btn-hover-bg: rgba(90, 98, 104, 0.9);
+        --favorites-card-bg: rgba(255, 255, 255, 0.15);
+        --favorites-card-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        --favorites-card-blur: blur(20px);
+        --favorites-card-border: rgba(255, 255, 255, 0.2);
+        --favorites-card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        --favorites-card-hover-bg: rgba(255, 255, 255, 0.25);
+        --favorites-product-name-color: #1e293b;
+        --favorites-product-category-color: #6366f1;
+        --favorites-product-price-color: #6366f1;
+        --favorites-add-to-cart-bg: rgba(255, 255, 255, 0.2);
+        --favorites-add-to-cart-text: #1e293b;
+        --favorites-add-to-cart-hover-bg: rgba(255, 255, 255, 0.3);
 
-  /* Surface variables - Glass effect */
-  --surface-primary: rgba(255, 255, 255, 0.4);
-  --surface-secondary: rgba(255, 255, 255, 0.25);
-  --surface-tertiary: rgba(255, 255, 255, 0.1);
-  --surface-hover: rgba(255, 255, 255, 0.3);
+        /* Surface variables - Glass effect */
+        --surface-primary: rgba(255, 255, 255, 0.4);
+        --surface-secondary: rgba(255, 255, 255, 0.25);
+        --surface-tertiary: rgba(255, 255, 255, 0.1);
+        --surface-hover: rgba(255, 255, 255, 0.3);
 
-  /* Button specific variables - Glass morphism style */
-  --button-primary-bg: rgba(255, 255, 255, 0.25);
-  --button-primary-text: #1e293b;
-  --button-primary-border: rgba(255, 255, 255, 0.5);
+        /* Button specific variables - Glass morphism style */
+        --button-primary-bg: rgba(255, 255, 255, 0.25);
+        --button-primary-text: #1e293b;
+        --button-primary-border: rgba(255, 255, 255, 0.5);
 
-  /* Text variables */
-  --text-primary: #1e293b;
-  --text-secondary: #475569;
-  --text-tertiary: #64748b;
-  --text-inverse: #ffffff;
+        /* Text variables */
+        --text-primary: #1e293b;
+        --text-secondary: #475569;
+        --text-tertiary: #64748b;
+        --text-inverse: #ffffff;
 
-  /* Border variables */
-  --border-primary: rgba(255, 255, 255, 0.3);
-  --border-secondary: rgba(255, 255, 255, 0.2);
-  --border-focus: #6366f1;
+        /* Border variables */
+        --border-primary: rgba(255, 255, 255, 0.3);
+        --border-secondary: rgba(255, 255, 255, 0.2);
+        --border-focus: #6366f1;
 }

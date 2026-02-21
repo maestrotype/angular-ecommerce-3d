@@ -18,9 +18,11 @@
     width: 200px;
     position: relative;
     bottom: 0px;
+
     @media (max-width: 768px) {
         bottom: 0;
     }
+
     &:hover {
         background: #dc2626;
         transform: translateY(-2px);
@@ -54,19 +56,15 @@
     .hero-text {
         .badge {
             display: inline-block;
+            background: var(--color-primary, #ef4444);
             color: #FFF;
+            padding: 0.5rem 1rem;
             border-radius: 20px;
-            font-size: 12rem;
+            font-size: 0.75rem;
             font-weight: 600;
-            letter-spacing: 0.05em;
-            backdrop-filter: blur(10px);
-            filter: blur(2px);
-            position: absolute;
-            right: 6rem;
-            top: 36rem;
-            transform: rotate(-22deg);
-            text-shadow: 6px 5px 22px rgba(0, 0, 0, 0.2);
-            z-index: 0;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            width: fit-content;
         }
 
         .hero-title {
@@ -76,6 +74,7 @@
             color: #1e293b;
             margin-bottom: 1.5rem;
             position: relative;
+
             .highlight {
                 color: #ef4444;
             }
@@ -83,7 +82,8 @@
 
         .hero-subtitle {
             font-size: 1.125rem;
-            color: #64748b;
+            color: #475569;
+            font-weight: 500;
             line-height: 1.6;
             margin-bottom: 2.5rem;
             max-width: 400px;
@@ -92,6 +92,7 @@
 
     .hero-image {
         display: block;
+
         // position: relative;
         // bottom: 210px;
         &::before {
@@ -122,7 +123,7 @@
             &:hover .floating-product {
                 transform: rotateY(-6deg) scale(1.05);
             }
-    
+
             .floating-product {
                 position: absolute;
                 transform: rotateY(-12deg);
@@ -174,10 +175,11 @@
                     }
                 }
             }
+
             .floating-product.hidden {
                 opacity: 0;
                 visibility: hidden;
-              }
+            }
         }
     }
 
@@ -266,6 +268,7 @@
             .badge {
                 display: none;
             }
+
             .hero-title {
                 font-size: 2.5rem;
             }

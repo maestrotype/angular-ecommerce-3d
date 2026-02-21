@@ -32,6 +32,6 @@ export class ProductService {
   }
 
   searchProducts(searchTerm: string): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.API_URL}/products?search=${encodeURIComponent(searchTerm)}`);
+    return this.http.get<Product[]>(`${this.API_URL}/products/search?search=${encodeURIComponent(searchTerm)}`);
   }
 }
