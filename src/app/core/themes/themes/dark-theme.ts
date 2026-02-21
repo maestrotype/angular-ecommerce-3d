@@ -6,57 +6,57 @@ export const darkTheme: Theme = {
   description: 'Dark theme with high contrast and modern aesthetics',
   colors: {
     // Primary Colors
-    primary: '#4f46e5',
-    'primary-light': '#6366f1',
-    'primary-dark': '#3730a3',
+    primary: '#6366f1',
+    'primary-light': '#818cf8',
+    'primary-dark': '#4f46e5',
     'primary-hover': '#4338ca',
-    
+
     // Secondary Colors
     secondary: '#7c3aed',
     'secondary-light': '#8b5cf6',
     'secondary-dark': '#5b21b6',
     'secondary-hover': '#6d28d9',
-    
+
     // Accent Colors
     accent: '#ec4899',
     'accent-light': '#f472b6',
     'accent-dark': '#be185d',
     'accent-hover': '#db2777',
-    
+
     // Semantic Colors
     success: '#10b981',
     'success-light': '#34d399',
     'success-dark': '#059669',
     'success-hover': '#059669',
-    
+
     warning: '#f59e0b',
     'warning-light': '#fbbf24',
     'warning-dark': '#d97706',
     'warning-hover': '#d97706',
-    
+
     error: '#ef4444',
     'error-light': '#f87171',
     'error-dark': '#dc2626',
     'error-hover': '#dc2626',
-    
-    info: '#3b82f6',
-    'info-light': '#60a5fa',
-    'info-dark': '#2563eb',
-    'info-hover': '#2563eb',
-    
+
+    info: '#60a5fa',
+    'info-light': '#93c5fd',
+    'info-dark': '#3b82f6',
+    'info-hover': '#3b82f6',
+
     // Background Colors
     'bg-primary': '#0f172a',
     'bg-secondary': '#1e293b',
     'bg-tertiary': '#334155',
     'bg-hover': '#1e40af',
     'bg-overlay': 'rgba(0, 0, 0, 0.7)',
-    
+
     // Surface Colors
     'surface-primary': '#1e293b',
     'surface-secondary': '#334155',
     'surface-tertiary': '#475569',
     'surface-hover': '#3b82f6',
-    
+
     // Text Colors
     'text-primary': '#f8fafc',
     'text-secondary': '#cbd5e1',
@@ -64,18 +64,18 @@ export const darkTheme: Theme = {
     'text-disabled': '#64748b',
     'text-inverse': '#0f172a',
     'text-accent': '#4f46e5',
-    
+
     // Border Colors
     'border-primary': '#475569',
     'border-secondary': '#334155',
     'border-tertiary': '#1e293b',
     'border-focus': '#3b82f6',
-    
+
     // Shadow Colors
     'shadow-light': 'rgba(0, 0, 0, 0.3)',
     'shadow-medium': 'rgba(0, 0, 0, 0.4)',
     'shadow-heavy': 'rgba(0, 0, 0, 0.6)',
-    
+
     // Special Button Colors
     'auth-button-primary': '#6366f1',
     'auth-button-hover': '#4f46e5',
@@ -83,7 +83,7 @@ export const darkTheme: Theme = {
     'special-offer-button': '#6366f1',
     'special-offer-button-hover': '#4f46e5',
     'special-offer-button-shadow': 'rgba(99, 102, 241, 0.3)',
-    
+
     // Modal Colors
     'modal-bg': '#1f2937',
     'modal-header-bg': '#111827',
@@ -108,7 +108,7 @@ export const darkTheme: Theme = {
     'font-family-primary': "'Poppins', 'Segoe UI', sans-serif",
     'font-family-secondary': "'Nunito', 'Helvetica Neue', sans-serif",
     'font-family-mono': "'Monaco', 'Menlo', 'Ubuntu Mono', monospace",
-    
+
     // Font Sizes
     'font-size-xs': '0.75rem',
     'font-size-sm': '0.875rem',
@@ -117,20 +117,20 @@ export const darkTheme: Theme = {
     'font-size-xl': '1.25rem',
     'font-size-xxl': '1.5rem',
     'font-size-xxxl': '2rem',
-    
+
     // Font Weights
     'font-weight-light': '300',
     'font-weight-normal': '400',
     'font-weight-medium': '500',
     'font-weight-semibold': '600',
     'font-weight-bold': '700',
-    
+
     // Line Heights
     'line-height-tight': '1.2',
     'line-height-normal': '1.4',
     'line-height-relaxed': '1.6',
     'line-height-loose': '1.8',
-    
+
     // Spacing
     'spacing-xs': '0.25rem',
     'spacing-sm': '0.5rem',
@@ -139,7 +139,7 @@ export const darkTheme: Theme = {
     'spacing-xl': '2rem',
     'spacing-xxl': '3rem',
     'spacing-xxxl': '4rem',
-    
+
     // Border Radius
     'radius-xs': '0.125rem',
     'radius-sm': '0.25rem',
@@ -148,7 +148,7 @@ export const darkTheme: Theme = {
     'radius-xl': '1rem',
     'radius-xxl': '1.5rem',
     'radius-full': '9999px',
-    
+
     // Shadows
     'shadow-xs': '0 1px 3px rgba(0, 0, 0, 0.3)',
     'shadow-sm': '0 2px 4px rgba(0, 0, 0, 0.3)',
@@ -156,7 +156,7 @@ export const darkTheme: Theme = {
     'shadow-lg': '0 8px 16px rgba(0, 0, 0, 0.3)',
     'shadow-xl': '0 12px 24px rgba(0, 0, 0, 0.4)',
     'shadow-xxl': '0 16px 32px rgba(0, 0, 0, 0.5)',
-    
+
     // Z-Index
     'z-index-dropdown': '1000',
     'z-index-sticky': '1020',
@@ -166,12 +166,12 @@ export const darkTheme: Theme = {
     'z-index-popover': '1060',
     'z-index-tooltip': '1070',
     'z-index-toast': '1080',
-    
+
     // Transitions
     'transition-fast': '0.15s ease',
     'transition-normal': '0.3s ease',
     'transition-slow': '0.5s ease',
-    
+
     // Auth Modal Variables
     'auth-modal-bg': '#1f2937',
     'auth-modal-shadow': '0 20px 40px rgba(0, 0, 0, 0.5)',
@@ -191,7 +191,7 @@ export const darkTheme: Theme = {
     'auth-btn-secondary': '#374151',
     'auth-btn-secondary-text': '#f3f4f6',
     'auth-btn-secondary-border': '1px solid #6b7280',
-    
+
     // Additional CSS variables for compatibility
     'color-text-tertiary': '#9ca3af',
     'color-text-primary': '#f8fafc',

@@ -9,3 +9,77 @@ main {
 }
 
 // Minimum height considering header
+
+/* Mobile Bottom Navigation */
+.footer-mobile {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .footer-mobile {
+        display: flex;
+        height: calc(65px + env(safe-area-inset-bottom));
+        width: 100vw;
+        justify-content: space-around;
+        align-items: center;
+        padding-bottom: env(safe-area-inset-bottom);
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: var(--footer-bg, rgba(255, 255, 255, 0.95));
+        backdrop-filter: var(--footer-backdrop-filter, blur(20px) saturate(180%));
+        -webkit-backdrop-filter: var(--footer-backdrop-filter, blur(20px) saturate(180%));
+        border-top: 1px solid rgba(var(--text-primary-rgb, 255, 255, 255), 0.1);
+        box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.1);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+        will-change: transform, opacity;
+
+        &.footer-hidden {
+            transform: translateY(110%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .favorites-link,
+        .profile-icon,
+        .cart {
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--footer-text, #1a1a1a);
+            cursor: pointer;
+            transition: all 0.2s ease;
+
+            &:active {
+                transform: scale(0.9);
+                opacity: 0.7;
+            }
+        }
+
+        .cart {
+            position: relative;
+
+            span {
+                position: absolute;
+                top: 0;
+                right: 0;
+                background: var(--color-primary, #6366f1);
+                color: white;
+                border-radius: 50%;
+                padding: 2px 6px;
+                font-size: 0.7rem;
+                font-weight: 700;
+                min-width: 18px;
+                height: 18px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 2px solid white;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                z-index: 2;
+            }
+        }
+    }
+}

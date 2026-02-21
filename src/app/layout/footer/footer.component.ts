@@ -1,7 +1,6 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription, Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 import { ModalService } from '../../core/services/modal.service';
 import { CartService } from '../../core/services/cart.service';
 import { FavoritesService } from '../../core/services/favorites.service';
@@ -16,25 +15,15 @@ import { FavoritesService } from '../../core/services/favorites.service';
 export class FooterComponent implements OnInit, OnDestroy {
   cartCount = 0;
   favoritesCount = 0;
-  isHidden = false;
   private cartSubscription: Subscription = new Subscription();
   private favoritesSubscription: Subscription = new Subscription();
-  private scrollSubject = new Subject<void>();
-  private lastScrollTop = 0;
 
   constructor(
     private modalService: ModalService,
     private cartService: CartService,
     private favoritesService: FavoritesService,
     private router: Router
-  ) {
-    // Debounce scroll stop logic
-    this.scrollSubject.pipe(
-      debounceTime(150) // Show footer back after 150ms of no scrolling
-    ).subscribe(() => {
-      this.isHidden = false;
-    });
-  }
+  ) { }
 
   ngOnInit(): void {
     this.cartSubscription = this.cartService.getTotalCount().subscribe(
@@ -49,25 +38,6 @@ export class FooterComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.cartSubscription.unsubscribe();
     this.favoritesSubscription.unsubscribe();
-    this.scrollSubject.complete();
-  }
-
-  @HostListener('window:scroll')
-  onWindowScroll() {
-    const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-    // Minimal movement check to avoid flickering on iOS rubber banding
-    if (Math.abs(currentScrollTop - this.lastScrollTop) < 5) return;
-
-    // While scrolling, hide footer
-    if (!this.isHidden) {
-      this.isHidden = true;
-    }
-
-    // Emit to scroll subject to trigger "scroll stopped" detection
-    this.scrollSubject.next();
-
-    this.lastScrollTop = currentScrollTop;
   }
 
   openAuthModal(): void {
