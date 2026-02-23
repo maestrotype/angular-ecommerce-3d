@@ -52,7 +52,8 @@ export class CartModalComponent {
   updateQuantity(itemId: number, change: number): void {
     const item = this.cartItems.find(i => i.productId === itemId);
     if (item) {
-      item.quantity = Math.max(1, item.quantity + change);
+      const newQuantity = Math.max(1, item.quantity + change);
+      this.cartService.updateQuantity(itemId, newQuantity);
     }
   }
 

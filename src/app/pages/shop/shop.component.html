@@ -1,256 +1,224 @@
 <div class="shop" id="shop">
-    <!-- Header Section -->
-    <div class="shop-header">
-      <div class="container">
-        <div class="header-content">
-          <span class="section-subtitle">PRODUCT CATALOG</span>
-          <h1 class="section-title">
-            DISCOVER YOUR<br />
-            <span class="highlight">PERFECT STYLE</span>
-          </h1>
-          <div class="wrap-model">
-            <app-three-d-viewer [modelPath]="'assets/models/shoes/shoes1.glb'" [scale]="[9, 9, 9]" [position]="[0, 0, 0]" loading="lazy"></app-three-d-viewer>
-          </div>
-          <p class="section-description">
-            Explore our curated collection of premium products designed for the modern lifestyle.
-          </p>
+  <!-- Header Section -->
+  <div class="shop-header">
+    <div class="container">
+      <div class="header-content">
+        <span class="section-subtitle">PRODUCT CATALOG</span>
+        <h1 class="section-title">
+          DISCOVER YOUR<br />
+          <span class="highlight">PERFECT STYLE</span>
+        </h1>
+        <div class="wrap-model">
+          <app-three-d-viewer [modelPath]="'assets/models/shoes/shoes1.glb'" [scale]="[9, 9, 9]" [position]="[0, 0, 0]"
+            loading="lazy"></app-three-d-viewer>
         </div>
+        <p class="section-description">
+          Explore our curated collection of premium products designed for the modern lifestyle.
+        </p>
       </div>
     </div>
+  </div>
 
-    <!-- Filter Sidebar -->
-    <div class="filter-sidebar" [class.open]="isFilterSidebarOpen">
-      <div class="sidebar-content">
-        <div class="sidebar-header">
-          <h3>Filters</h3>
-          <button class="close-btn" (click)="toggleFilterSidebar()">×</button>
-        </div>
-        
-        <div class="filter-section">
-          <h4>Categories</h4>
-          <div class="category-list">
-            <label *ngFor="let category of filterCategories" class="category-item">
-              <input type="checkbox" [value]="category.id" [(ngModel)]="category.selected">
-              <span class="checkmark"></span>
-              <span class="category-name">{{ category.name }}</span>
-              <span class="category-count">({{ category.count }})</span>
-            </label>
-          </div>
-        </div>
-
-        <div class="filter-section">
-          <h4>Price</h4>
-          <div class="price-range">
-            <div class="price-inputs">
-              <input type="number" [(ngModel)]="minPrice" placeholder="Min" class="price-input">
-              <span class="price-separator">-</span>
-              <input type="number" [(ngModel)]="maxPrice" placeholder="Max" class="price-input">
-            </div>
-            <div class="price-display">Price: ${{ minPrice || 0 }} – ${{ maxPrice || 1000 }}</div>
-          </div>
-        </div>
-
-        <button class="filter-apply-btn" (click)="applyFilters()">FILTER</button>
+  <!-- Filter Sidebar -->
+  <div class="filter-sidebar" [class.open]="isFilterSidebarOpen">
+    <div class="sidebar-content">
+      <div class="sidebar-header">
+        <h3>Filters</h3>
+        <button class="close-btn" (click)="toggleFilterSidebar()">×</button>
       </div>
-    </div>
 
-    <!-- Filter Overlay -->
-    <div class="filter-overlay" [class.open]="isFilterSidebarOpen" (click)="toggleFilterSidebar()"></div>
-  
-    <!-- Filters and Sort Bar -->
-    <div class="filters-sort-bar">
-      <div class="container">
-        <div class="filters-sort-content">
-          <!-- Left side -->
-          <div class="filters-left">
-            <button class="filter-btn" (click)="toggleFilterSidebar()">
-              <span class="hamburger-icon">☰</span>
-              FILTER
-            </button>
-            <span class="sort-label">Sort by :</span>
-            <app-custom-dropdown 
-              class="sort-dropdown"
-              [options]="sortOptions"
-              [selectedValue]="sortBy"
-              placeholder="Select sorting"
-              (valueChange)="onSortChange($event)">
-            </app-custom-dropdown>
-          </div>
-
-          <!-- Middle -->
-          <div class="filters-middle">
-            <label class="sale-checkbox">
-              <input type="checkbox" [(ngModel)]="showOnlyOnSale">
-              <span class="checkmark"></span>
-              Show only products on sale
-            </label>
-            <span class="show-label">Show :</span>
-            <app-custom-dropdown 
-              class="show-dropdown"
-              [options]="itemsPerPageOptions"
-              [selectedValue]="itemsPerPage.toString()"
-              placeholder="Select items"
-              (valueChange)="onItemsPerPageChange($event)">
-            </app-custom-dropdown>
-          </div>
-
-          <!-- Right side - View toggles -->
-          <div class="view-toggles">
-            <button class="view-btn" [class.active]="viewMode === 'list'" (click)="changeViewMode('list')">
-              <span class="view-icon">☰</span>
-            </button>
-            <button class="view-btn" [class.active]="viewMode === 'grid-2'" (click)="changeViewMode('grid-2')">
-              <span class="view-icon">||</span>
-            </button>
-            <button class="view-btn" [class.active]="viewMode === 'grid-3'" (click)="changeViewMode('grid-3')">
-              <span class="view-icon">|||</span>
-            </button>
-            <button class="view-btn" [class.active]="viewMode === 'grid-4'" (click)="changeViewMode('grid-4')">
-              <span class="view-icon">||||</span>
-            </button>
-          </div>
+      <div class="filter-section">
+        <h4>Categories</h4>
+        <div class="category-list">
+          <label *ngFor="let category of filterCategories" class="category-item">
+            <input type="checkbox" [value]="category.id" [(ngModel)]="category.selected">
+            <span class="checkmark"></span>
+            <span class="category-name">{{ category.name }}</span>
+            <span class="category-count">({{ category.count }})</span>
+          </label>
         </div>
       </div>
+
+      <div class="filter-section">
+        <h4>Price</h4>
+        <div class="price-range">
+          <div class="price-inputs">
+            <input type="number" [(ngModel)]="minPrice" placeholder="Min" class="price-input">
+            <span class="price-separator">-</span>
+            <input type="number" [(ngModel)]="maxPrice" placeholder="Max" class="price-input">
+          </div>
+          <div class="price-display">Price: ${{ minPrice || 0 }} – ${{ maxPrice || 1000 }}</div>
+        </div>
+      </div>
+
+      <button class="filter-apply-btn" (click)="applyFilters()">FILTER</button>
     </div>
-  
-    <!-- Products Section -->
-    <div class="products-section">
-      <div class="container">
-        <div class="products-grid" [class]="'view-' + viewMode">
-          <div 
-            *ngFor="let product of paginatedProducts; trackBy: trackByProductId" 
-            class="product-card"
-            [class.out-of-stock]="product?.stock !== undefined && product.stock <= 0"
-            (click)="goToProductDetail(product.id)"
-          >
-            <div class="product-image">
-              <img [src]="product.imageUrl" [alt]="product.name" loading="lazy" />
+  </div>
 
-              <!-- Product Overlay with Quick View and Favorite -->
-              <div class="product-overlay">
-                <div class="overlay-actions">
-                  <!-- Quick View Button -->
-                  <button class="action-btn quick-view-btn"
-                          (click)="quickView(product)"
-                          title="Quick View">
-                    <span class="material-icons">visibility</span>
-                  </button>
+  <!-- Filter Overlay -->
+  <div class="filter-overlay" [class.open]="isFilterSidebarOpen" (click)="toggleFilterSidebar()"></div>
 
-                  <!-- Favorite Button -->
-                  <button class="action-btn favorite-btn"
-                          (click)="onFavoriteToggled($event)"
-                          title="Add to Favorites"
-                          [class.is-favorite]="product.isFavorite">
-                    <span class="material-icons">favorite_border</span>
-                    <span class="material-icons filled">favorite</span>
-                  </button>
-                </div>
-              </div>
-
-              <!-- Special Offer Badge -->
-              <div class="special-badge" *ngIf="product.isSpecial">
-                SPECIAL OFFER
-              </div>
-
-              <!-- New Badge -->
-              <div class="new-badge" *ngIf="product.isNew">
-                NEW
-              </div>
-
-              <!-- Out of Stock Badge -->
-              <div class="out-of-stock-badge" *ngIf="product?.stock !== undefined && product.stock <= 0">
-                OUT OF STOCK
-              </div>
-
-              <!-- Discount Badge -->
-              <div class="discount-badge" *ngIf="product.discount">
-                -{{ product.discount }}%
-              </div>
-            </div>
-            
-            <div class="product-info">
-              <h3 class="product-name">{{ product.name }}</h3>
-
-              <div class="product-rating">
-                <div class="stars">
-                  <span class="star"
-                        *ngFor="let star of [1,2,3,4,5]; let i = index"
-                        [class.filled]="i < Math.floor(product.rating || 0)"
-                        (click)="rateProduct(product, i + 1)"
-                        title="Rate {{ i + 1 }} stars">
-                    ⭐
-                  </span>
-                </div>
-                <span class="rating-value">({{ product.rating || 0 }})</span>
-                <span class="rating-count" *ngIf="product.ratingCount">({{ product.ratingCount }} reviews)</span>
-                <span class="product-category">{{ product.category }}</span>
-              </div>
-
-              <div class="product-footer">
-                <div class="product-price">
-                  <div class="price-main">
-                    <span class="current-price">${{ product.price }}</span>
-                    <span class="original-price" *ngIf="product.originalPrice">${{ product.originalPrice }}</span>
-                  </div>
-                </div>
-
-                <!-- Cart Button - Always Visible -->
-                <button class="cart-btn"
-                        (click)="addToCart(product, $event)"
-                        title="Add to Cart">
-                  <span class="material-icons">shopping_cart</span>
-                </button>
-              </div>
-
-              <!-- Stock Indicator -->
-              <div class="stock-indicator" *ngIf="product?.stock !== undefined && product.stock > 0 && product.stock <= 5">
-                Only {{ product.stock }} left in stock!
-              </div>
-            </div>
-          </div>
+  <!-- Filters and Sort Bar -->
+  <div class="filters-sort-bar">
+    <div class="container">
+      <div class="filters-sort-content">
+        <!-- Left side -->
+        <div class="filters-left">
+          <button class="filter-btn" (click)="toggleFilterSidebar()">
+            <span class="hamburger-icon">☰</span>
+            FILTER
+          </button>
+          <span class="sort-label">Sort by :</span>
+          <app-custom-dropdown class="sort-dropdown" [options]="sortOptions" [selectedValue]="sortBy"
+            placeholder="Select sorting" (valueChange)="onSortChange($event)">
+          </app-custom-dropdown>
         </div>
 
-        <!-- Pagination -->
-        <div class="pagination" *ngIf="totalPages > 1">
-          <button 
-            type="button"
-            class="page-btn" 
-            (click)="prevPage()" 
-            [disabled]="currentPage === 1"
-            [attr.aria-label]="'Previous page'"
-          >
-            &laquo;
-          </button>
-          
-          <button 
-            type="button"
-            class="page-btn" 
-            *ngFor="let page of [].constructor(totalPages); let i = index" 
-            [class.active]="currentPage === (i+1)"
-            (click)="goToPage(i+1)"
-            [attr.aria-label]="'Go to page ' + (i+1)"
-          >
-            {{ i+1 }}
-          </button>
-          
-          <button 
-            type="button"
-            class="page-btn" 
-            (click)="nextPage()" 
-            [disabled]="currentPage === totalPages"
-            [attr.aria-label]="'Next page'"
-          >
-            &raquo;
-          </button>
+        <!-- Middle -->
+        <div class="filters-middle">
+          <label class="sale-checkbox">
+            <input type="checkbox" [(ngModel)]="showOnlyOnSale">
+            <span class="checkmark"></span>
+            Show only products on sale
+          </label>
+          <span class="show-label">Show :</span>
+          <app-custom-dropdown class="show-dropdown" [options]="itemsPerPageOptions"
+            [selectedValue]="itemsPerPage.toString()" placeholder="Select items"
+            (valueChange)="onItemsPerPageChange($event)">
+          </app-custom-dropdown>
         </div>
-  
-        <!-- No Products Message -->
-        <div *ngIf="filteredProducts.length === 0" class="no-products">
-          <div class="no-products-content">
-            <p class="no-products-message">No products found matching your criteria.</p>
-            <p class="no-products-suggestion">Try adjusting your search or filters.</p>
-          </div>
+
+        <!-- Right side - View toggles -->
+        <div class="view-toggles">
+          <button class="view-btn" [class.active]="viewMode === 'list'" (click)="changeViewMode('list')">
+            <span class="view-icon">☰</span>
+          </button>
+          <button class="view-btn" [class.active]="viewMode === 'grid-2'" (click)="changeViewMode('grid-2')">
+            <span class="view-icon">||</span>
+          </button>
+          <button class="view-btn" [class.active]="viewMode === 'grid-3'" (click)="changeViewMode('grid-3')">
+            <span class="view-icon">|||</span>
+          </button>
+          <button class="view-btn" [class.active]="viewMode === 'grid-4'" (click)="changeViewMode('grid-4')">
+            <span class="view-icon">||||</span>
+          </button>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Products Section -->
+  <div class="products-section">
+    <div class="container">
+      <div class="products-grid" [class]="'view-' + viewMode">
+        <div *ngFor="let product of paginatedProducts; trackBy: trackByProductId" class="product-card"
+          [class.out-of-stock]="product?.stock !== undefined && product.stock <= 0"
+          (click)="goToProductDetail(product.id)">
+          <div class="product-image">
+            <img [src]="product.imageUrl" [alt]="product.name" loading="lazy" />
+
+            <!-- Product Overlay with Quick View and Favorite -->
+            <div class="product-overlay">
+              <div class="overlay-actions">
+                <!-- Quick View Button -->
+                <button class="action-btn quick-view-btn" (click)="quickView(product)" title="Quick View">
+                  <span class="material-icons">visibility</span>
+                </button>
+
+                <!-- Favorite Button -->
+                <button class="action-btn favorite-btn" (click)="onFavoriteToggled(product, $event)"
+                  title="Add to Favorites" [class.is-favorite]="product.isFavorite">
+                  <span class="material-icons">favorite_border</span>
+                  <span class="material-icons filled">favorite</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Special Offer Badge -->
+            <div class="special-badge" *ngIf="product.isSpecial">
+              SPECIAL OFFER
+            </div>
+
+            <!-- New Badge -->
+            <div class="new-badge" *ngIf="product.isNew">
+              NEW
+            </div>
+
+            <!-- Out of Stock Badge -->
+            <div class="out-of-stock-badge" *ngIf="product?.stock !== undefined && product.stock <= 0">
+              OUT OF STOCK
+            </div>
+
+            <!-- Discount Badge -->
+            <div class="discount-badge" *ngIf="product.discount">
+              -{{ product.discount }}%
+            </div>
+          </div>
+
+          <div class="product-info">
+            <h3 class="product-name">{{ product.name }}</h3>
+
+            <div class="product-rating">
+              <div class="stars">
+                <span class="star" *ngFor="let star of [1,2,3,4,5]; let i = index"
+                  [class.filled]="i < Math.floor(product.rating || 0)" (click)="rateProduct(product, i + 1)"
+                  title="Rate {{ i + 1 }} stars">
+                  ⭐
+                </span>
+              </div>
+              <span class="rating-value">({{ product.rating || 0 }})</span>
+              <span class="rating-count" *ngIf="product.ratingCount">({{ product.ratingCount }} reviews)</span>
+              <span class="product-category">{{ product.category }}</span>
+            </div>
+
+            <div class="product-footer">
+              <div class="product-price">
+                <div class="price-main">
+                  <span class="current-price">${{ product.price }}</span>
+                  <span class="original-price" *ngIf="product.originalPrice">${{ product.originalPrice }}</span>
+                </div>
+              </div>
+
+              <!-- Cart Button - Always Visible -->
+              <button class="cart-btn" (click)="addToCart(product, $event)" title="Add to Cart">
+                <span class="material-icons">shopping_cart</span>
+              </button>
+            </div>
+
+            <!-- Stock Indicator -->
+            <div class="stock-indicator"
+              *ngIf="product?.stock !== undefined && product.stock > 0 && product.stock <= 5">
+              Only {{ product.stock }} left in stock!
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination" *ngIf="totalPages > 1">
+        <button type="button" class="page-btn" (click)="prevPage()" [disabled]="currentPage === 1"
+          [attr.aria-label]="'Previous page'">
+          &laquo;
+        </button>
+
+        <button type="button" class="page-btn" *ngFor="let page of [].constructor(totalPages); let i = index"
+          [class.active]="currentPage === (i+1)" (click)="goToPage(i+1)" [attr.aria-label]="'Go to page ' + (i+1)">
+          {{ i+1 }}
+        </button>
+
+        <button type="button" class="page-btn" (click)="nextPage()" [disabled]="currentPage === totalPages"
+          [attr.aria-label]="'Next page'">
+          &raquo;
+        </button>
+      </div>
+
+      <!-- No Products Message -->
+      <div *ngIf="filteredProducts.length === 0" class="no-products">
+        <div class="no-products-content">
+          <p class="no-products-message">No products found matching your criteria.</p>
+          <p class="no-products-suggestion">Try adjusting your search or filters.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

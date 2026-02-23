@@ -149,7 +149,7 @@
       }
 
       &.active {
-        color: #333;
+        color: var(--header-link-active, #007AFF);
 
         &::before {
           opacity: 1;
@@ -386,10 +386,10 @@
 
   .search-results-header {
     padding: 8px 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(var(--header-text-rgb, 0, 0, 0), 0.1);
     margin-bottom: 12px;
     font-weight: 600;
-    color: #333;
+    color: var(--header-text, #fff);
   }
 
   .search-results-list {
@@ -407,7 +407,7 @@
     margin-bottom: 8px;
 
     &:hover {
-      background: rgba(0, 122, 255, 0.1);
+      background: rgba(var(--header-text-rgb, 255, 255, 255), 0.1);
       transform: translateX(5px);
     }
 
@@ -426,20 +426,20 @@
         margin: 0 0 4px 0;
         font-size: 14px;
         font-weight: 600;
-        color: #333;
+        color: var(--header-text, #fff);
       }
 
       .result-price {
         margin: 0 0 2px 0;
         font-size: 12px;
-        color: #1e3a8a;
-        /* Dark Navy Blue for high contrast */
+        color: #3b82f6;
+        /* Bright blue that works on both dark and light */
         font-weight: 700;
       }
 
       .result-category {
         font-size: 11px;
-        color: #666;
+        color: rgba(var(--header-text-rgb, 0, 0, 0), 0.7);
         text-transform: uppercase;
         letter-spacing: 0.5px;
       }
@@ -448,7 +448,7 @@
 
   .search-results-footer {
     padding-top: 12px;
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(var(--header-text-rgb, 0, 0, 0), 0.1);
     text-align: center;
 
     .view-all-btn {
@@ -626,8 +626,8 @@
         z-index: 10001;
 
         span {
-          background: var(--header-text, #1e293b);
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+          background: var(--header-text, #ffffff);
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         }
       }
     }
@@ -690,27 +690,39 @@
       font-size: 0.85rem;
       text-transform: uppercase;
       letter-spacing: 2.5px;
-      color: var(--footer-text, #1a1a1a);
+      color: var(--header-text);
       margin: 0;
       font-weight: 800;
     }
 
     .close-btn {
-      background: rgba(0, 0, 0, 0.05);
+      background: transparent;
       border: none;
       width: 40px;
       height: 40px;
-      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      color: var(--text-primary);
+      color: var(--header-text);
       transition: all 0.3s ease;
 
+      svg {
+        line {
+          stroke: var(--header-text);
+          stroke-width: 2.5;
+          transition: stroke 0.3s ease;
+        }
+      }
+
       &:hover {
-        background: rgba(255, 255, 255, 0.1);
         transform: scale(1.1);
+
+        svg {
+          line {
+            stroke: var(--color-primary);
+          }
+        }
       }
     }
   }
@@ -734,7 +746,7 @@
     .mobile-nav-link {
       font-size: 1.4rem;
       font-weight: 600;
-      color: var(--text-primary);
+      color: var(--header-text);
       text-decoration: none;
       padding: 12px 0;
       transition: all 0.3s ease;
@@ -749,7 +761,7 @@
     }
 
     .mobile-theme-selector {
-      background: rgba(0, 0, 0, 0.04);
+      background: rgba(var(--header-text-rgb, 0, 0, 0), 0.04);
       padding: 12px; // Even more compact
       border-radius: 16px;
       display: flex;
@@ -759,8 +771,9 @@
       .selector-label {
         font-size: 0.85rem;
         font-weight: 600;
-        color: var(--text-primary);
+        color: var(--header-text);
         opacity: 0.8;
+        text-align: center;
       }
 
       .theme-chips {
@@ -768,10 +781,12 @@
         flex-wrap: wrap; // Important for Fold 6 to avoid clipping
         gap: 8px;
         padding-bottom: 4px;
+        justify-content: center;
+        align-items: center;
 
         button {
-          background: var(--surface-2, rgba(255, 255, 255, 0.2));
-          border: 1px solid rgba(0, 0, 0, 0.08);
+          background: var(--surface-2, rgba(var(--header-text-rgb, 255, 255, 255), 0.1));
+          border: 1px solid rgba(var(--header-text-rgb, 0, 0, 0), 0.08);
           padding: 8px 12px;
           border-radius: 20px;
           color: var(--text-primary);
@@ -784,24 +799,24 @@
           white-space: nowrap;
 
           &.active {
-            background: var(--header-accent, #1e293b);
+            background: var(--header-accent, #007AFF);
             color: white;
-            box-shadow: 0 4px 12px rgba(30, 41, 59, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
           }
 
           &:not(.active) {
-            background: rgba(var(--header-text-rgb, 30, 41, 59), 0.08);
-            color: var(--header-text, #1e293b);
-            border: 1px solid rgba(var(--header-text-rgb, 30, 41, 59), 0.05);
+            background: rgba(var(--header-text-rgb, 255, 255, 255), 0.08);
+            color: var(--header-text, #ffffff);
+            border: 1px solid rgba(var(--header-text-rgb, 255, 255, 255), 0.05);
           }
         }
       }
     }
 
     .mobile-auth-section {
-      margin-top: 40px; // Use fixed spacing instead of auto to raise the button
+      margin-top: 40px;
       padding-top: 20px;
-      border-top: 1px solid rgba(0, 0, 0, 0.08);
+      border-top: 1px solid rgba(var(--header-text-rgb, 0, 0, 0), 0.08);
 
       .mobile-auth-btn {
         width: 100%;
@@ -820,8 +835,8 @@
         }
 
         &.secondary {
-          background: rgba(0, 0, 0, 0.05);
-          color: var(--text-primary);
+          background: rgba(var(--header-text-rgb, 255, 255, 255), 0.1);
+          color: var(--header-text);
         }
       }
 
@@ -833,7 +848,7 @@
 
         .user-name {
           font-weight: 600;
-          color: var(--text-primary);
+          color: var(--header-text);
           font-size: 0.9rem;
         }
       }

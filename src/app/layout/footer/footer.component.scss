@@ -59,12 +59,12 @@
             .logo-text {
                 font-size: 1.5rem;
                 font-weight: 700;
-                color: var(--color-text-primary, #1A1A1A);
+                color: var(--footer-text);
             }
         }
 
         .footer-description {
-            color: var(--color-text-primary, #1A1A1A);
+            color: var(--footer-text);
             line-height: 1.6;
             margin-bottom: 2rem;
         }

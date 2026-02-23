@@ -222,13 +222,14 @@
         --categories-card-border: #475569;
         --categories-icon-filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(80%) contrast(100%);
 
-        /* Footer section - Dark theme (admin palette) - semi-transparent with dark text */
-        --footer-bg: rgba(255, 255, 255, 0.35);
+        /* Footer section - Dark theme (admin palette) - semi-transparent with light text */
+        --footer-bg: rgba(15, 23, 42, 0.7);
         --footer-backdrop-filter: blur(15px) saturate(180%);
-        --footer-text: #1e293b;
-        --footer-link: #475569;
-        --footer-link-hover: #0f172a;
-        --footer-text-rgb: 30, 41, 59;
+        --footer-text: #ffffff;
+        --footer-link: rgba(255, 255, 255, 0.8);
+        --footer-link-hover: #ffffff;
+        --footer-text-rgb: 255, 255, 255;
+        --footer-bg-rgb: 15, 23, 42;
 
         /* About section - Dark theme (admin palette) */
         --about-bg: #1e293b;
@@ -262,21 +263,18 @@
         --contacts-button-bg: #60a5fa;
         --contacts-button-hover: #3b82f6;
 
-        /* Header section - Dark theme (admin palette) - semi-transparent like contact form */
-        --header-bg: rgba(255, 255, 255, 0.3);
+        /* Header section - Dark theme (admin palette) - semi-transparent dark */
+        --header-bg: rgba(15, 23, 42, 0.7);
         --header-backdrop-filter: blur(20px) saturate(180%);
-        --header-text: #1e293b;
-        --header-link: #475569;
-        --header-link-hover: #0f172a;
-        --header-search-bg: rgba(255, 255, 255, 0.2);
-        --header-search-text: #1e293b;
-        --header-text-rgb: 30, 41, 59;
-
-        /* RGB Variables for transparencies (Dark Theme) */
-        --header-bg-rgb: 255, 255, 255;
-        --header-text-rgb: 30, 41, 59;
-        --footer-bg-rgb: 255, 255, 255;
-        --footer-text-rgb: 30, 41, 59;
+        --header-text: #ffffff;
+        --header-link: rgba(255, 255, 255, 0.8);
+        --header-link-hover: #ffffff;
+        --header-search-bg: rgba(255, 255, 255, 0.1);
+        --header-search-text: #ffffff;
+        --header-text-rgb: 255, 255, 255;
+        --header-bg-rgb: 15, 23, 42;
+        --footer-bg-rgb: 15, 23, 42;
+        --footer-text-rgb: 255, 255, 255;
 
         /* Product Detail section - Dark theme */
         --product-detail-bg: #0f172a;
