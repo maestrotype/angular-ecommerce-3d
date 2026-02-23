@@ -42,3 +42,36 @@ If adding new product attributes:
 1. **Backend**: Update the `Product` entity and the corresponding `CreateProductDto` in `backend/src/products/`.
 2. **Frontend**: Update the `Product` interface in `src/shared/models/product.model.ts`.
 3. The Angular `ProductService` will automatically map the new fields during the next HTTP request.
+
+## Social Login Configuration (Google & Facebook)
+
+This project uses `@abacritt/angularx-social-login` to handle social authentication. For the social login buttons to work on the frontend, you must provide your own valid API credentials. Out of the box, the code contains placeholder strings to protect your API limits and security.
+
+### Step 1: Obtain API Keys
+- **Google Client ID:** Go to the [Google Cloud Console](https://console.cloud.google.com/), create a new project, configure the OAuth consent screen, and create an OAuth 2.0 "Client ID" specifically for a "Web Application". Ensure your domain is added to the authorized origins.
+- **Facebook App ID:** Go to the [Facebook Developers Portal](https://developers.facebook.com/), create a new app, set up "Facebook Login" for web, and copy the "App ID".
+
+### Step 2: Configure the Frontend
+1. Open the configuration file located at `src/app/core/configs/social-auth.config.ts`.
+2. Locate the `GoogleLoginProvider` and `FacebookLoginProvider` initialization scopes.
+3. Replace the placeholder strings (`'YOUR_GOOGLE_CLIENT_ID'` and `'YOUR_FACEBOOK_APP_ID'`) with your actual keys:
+
+```typescript
+export const socialAuthConfig: SocialAuthServiceConfig = {
+    autoLogin: false,
+    providers: [
+        {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider('YOUR_ACTUAL_GOOGLE_CLIENT_ID_HERE')
+        },
+        {
+            id: FacebookLoginProvider.PROVIDER_ID,
+            provider: new FacebookLoginProvider('YOUR_ACTUAL_FACEBOOK_APP_ID_HERE')
+        }
+    ],
+    onError: (err) => {
+        console.error('Social Auth Error:', err);
+    }
+};
+```
+4. Rebuild and restart the application (`npm run build` / `npm run serve:ssr:angular-ecommerce-3d`). The social login buttons in the auth modal will now successfully launch the Google and Facebook provider popups and capture user data.

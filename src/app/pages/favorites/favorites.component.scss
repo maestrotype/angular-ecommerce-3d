@@ -4,7 +4,6 @@
    ========================================================================== */
 
 .favorites-page {
-  padding: 80px 0;
   background: var(--favorites-bg, var(--color-surface-primary, #ffffff));
   color: var(--favorites-text, var(--text-primary, #1e293b));
   font-family: Inter, sans-serif;
@@ -14,7 +13,7 @@
   .section-wrapper {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 30px 20px;
+    padding: 80px 20px;
     background-color: var(--favorites-section-wrapper);
   }
 
@@ -92,7 +91,7 @@
       top: 0px;
       transform: translateY(-50%);
       background: rgba(255, 255, 255, 0.25);
-      color: #ffffff;
+      color: var(--text-secondary);
       border: 2px solid rgba(255, 255, 255, 0.5);
       border-radius: 16px;
       font-size: 16px;
@@ -104,7 +103,6 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
       padding: 7px;
 
       &:hover {
@@ -135,7 +133,7 @@
       font-size: var(--favorites-subtitle-size, 1.1rem);
       opacity: var(--favorites-subtitle-opacity, 0.9);
       margin: 0;
-      color: var(--favorites-header-text);
+      color: var(--color-text-primary);
       text-shadow: 0 1px 2px rgba(0, 0, 0, .3);
     }
   }
@@ -263,10 +261,8 @@
 
 @media (max-width: 768px) {
   .favorites-page {
-    padding: 60px 0;
-
     .section-wrapper {
-      padding: 0 1rem;
+      padding: 80px 1rem;
     }
 
     .favorites-header {
