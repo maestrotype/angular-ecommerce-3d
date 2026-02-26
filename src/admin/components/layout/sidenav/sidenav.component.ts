@@ -23,7 +23,7 @@ export class SidenavComponent {
     { label: "PRODUCTS", route: "/admin/products", icon: "inventory" },
     { label: "CATEGORIES", route: "/admin/categories", icon: "category" },
     {
-      label: "ORDERS",
+      label: "ADMIN_NAV_ORDERS",
       route: "/admin/orders",
       icon: "shopping_cart",
       badge: 0,
@@ -39,7 +39,7 @@ export class SidenavComponent {
     private router: Router,
     private authService: AuthService,
     private orderService: OrderService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadPendingOrdersCount();

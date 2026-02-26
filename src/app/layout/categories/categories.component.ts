@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Section } from 'src/shared/models/section.model';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface CategoryDisplay {
     id?: number;
@@ -16,7 +17,7 @@ interface CategoryDisplay {
     templateUrl: './categories.component.html',
     styleUrls: ['./categories.component.scss'],
     standalone: true,
-    imports: [CommonModule]
+    imports: [CommonModule, TranslateModule]
 })
 export class CategoriesComponent implements OnInit {
     @Input() data!: Section;

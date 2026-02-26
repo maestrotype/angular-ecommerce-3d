@@ -7,6 +7,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ThreeDViewerModule } from '../../components/three-d-viewer/three-d-viewer.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 const routes: Routes = [
   { path: '', component: ShopComponent }
@@ -23,6 +24,7 @@ const routes: Routes = [
     MatIconModule,
     MatButtonModule,
     ThreeDViewerModule,
+    TranslateModule,
     RouterModule.forChild(routes)
   ]
 })

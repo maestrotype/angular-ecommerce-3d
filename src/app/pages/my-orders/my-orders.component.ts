@@ -20,6 +20,8 @@ type OrderDto = {
   totalAmount?: number;
 };
 
+import { TranslateService } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-my-orders',
   templateUrl: './my-orders.component.html',
@@ -35,7 +37,8 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
   constructor(
     private http: HttpClient,
     private router: Router,
-  ) {}
+    private translate: TranslateService
+  ) { }
 
   ngOnInit(): void {
     this.loadOrders();
@@ -60,7 +63,7 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
           this.isLoading = false;
         },
         error: () => {
-          this.error = 'Failed to load orders. Please try again later.';
+          this.error = this.translate.instant('ORDERS.ERROR_LOADING');
           this.isLoading = false;
         }
       });
@@ -76,8 +79,11 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
   }
 
   getStatusLabel(status?: string): string {
-    if (!status) return 'pending';
-    return status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+    if (!status) return this.translate.instant('ORDERS.STATUS.PENDING');
+    const key = `ORDERS.STATUS.${status.toUpperCase()}`;
+    const translated = this.translate.instant(key);
+    // If translation key doesn't exist, return original status capitalized
+    return translated !== key ? translated : status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
   }
 
   goShop(): void {

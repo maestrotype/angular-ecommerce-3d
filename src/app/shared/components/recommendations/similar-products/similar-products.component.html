@@ -1,7 +1,7 @@
 <div class="similar-products" *ngIf="similarProducts.length > 0 || loading || error">
   <div class="recommendations-header" *ngIf="showTitle">
-    <h3 class="recommendations-title">{{ title }}</h3>
-    <p class="recommendations-subtitle">You might also like these products</p>
+    <h3 class="recommendations-title">{{ title || ('PRODUCT.SECTIONS.SIMILAR' | translate) }}</h3>
+    <p class="recommendations-subtitle">{{ 'PRODUCT.SECTIONS.SIMILAR_SUBTITLE' | translate }}</p>
   </div>
 
   <!-- Loading State -->
@@ -20,23 +20,19 @@
   <div class="error-state" *ngIf="error && !loading">
     <div class="error-content">
       <div class="error-icon">⚠️</div>
-      <h4 class="error-title">Unable to Load Similar Products</h4>
-      <p class="error-message">We're having trouble loading similar products right now.</p>
+      <h4 class="error-title">{{ 'PRODUCT.ERRORS.LOAD_SIMILAR_FAILED' | translate }}</h4>
+      <p class="error-message">{{ 'PRODUCT.ERRORS.LOAD_FAILED_MSG' | translate }}</p>
       <button class="retry-button" (click)="retryLoad()">
         <span class="retry-icon">🔄</span>
-        Try Again
+        {{ 'PAYMENT.STATUS.RETRY' | translate }}
       </button>
     </div>
   </div>
 
   <!-- Products Grid -->
   <div class="products-grid" *ngIf="!loading && !error && similarProducts.length > 0">
-    <div 
-      class="product-card" 
-      *ngFor="let product of similarProducts; trackBy: trackByProductId"
-      (click)="onProductClick(product)"
-      [class.out-of-stock]="product?.stock !== undefined && product.stock <= 0"
-    >
+    <div class="product-card" *ngFor="let product of similarProducts; trackBy: trackByProductId"
+      (click)="onProductClick(product)" [class.out-of-stock]="product?.stock !== undefined && product.stock <= 0">
       <div class="product-image">
         <img [src]="product.imageUrl" [alt]="product.name" loading="lazy" />
 
@@ -44,17 +40,14 @@
         <div class="product-overlay">
           <div class="overlay-actions">
             <!-- Quick View Button -->
-            <button class="action-btn quick-view-btn"
-                    (click)="quickView(product)"
-                    title="Quick View">
+            <button class="action-btn quick-view-btn" (click)="quickView(product)"
+              [title]="'PRODUCT.ACTIONS.QUICK_VIEW' | translate">
               <span class="material-icons">visibility</span>
             </button>
 
             <!-- Favorite Button -->
-            <button class="action-btn favorite-btn"
-                    (click)="onFavoriteToggled($event)"
-                    title="Add to Favorites"
-                    [class.is-favorite]="product.isFavorite">
+            <button class="action-btn favorite-btn" (click)="onFavoriteToggled($event)"
+              [title]="'SHOP.PRODUCT.ADD_TO_FAVORITES' | translate" [class.is-favorite]="product.isFavorite">
               <span class="material-icons">favorite_border</span>
               <span class="material-icons filled">favorite</span>
             </button>
@@ -63,17 +56,17 @@
 
         <!-- Special Offer Badge -->
         <div class="special-badge" *ngIf="product.isSpecial">
-          SPECIAL OFFER
+          {{ 'PRODUCT.BADGES.SPECIAL' | translate }}
         </div>
 
         <!-- New Badge -->
         <div class="new-badge" *ngIf="product.isNew">
-          NEW
+          {{ 'PRODUCT.BADGES.NEW' | translate }}
         </div>
 
         <!-- Out of Stock Badge -->
         <div class="out-of-stock-badge" *ngIf="product?.stock !== undefined && product.stock <= 0">
-          OUT OF STOCK
+          {{ 'PRODUCT.STOCK.OUT_OF_STOCK' | translate }}
         </div>
 
         <!-- Discount Badge -->
@@ -81,22 +74,21 @@
           -{{ product.discount }}%
         </div>
       </div>
-      
+
       <div class="product-info">
         <h3 class="product-name">{{ product.name }}</h3>
 
         <div class="product-rating">
           <div class="stars">
-            <span class="star"
-                  *ngFor="let star of [1,2,3,4,5]; let i = index"
-                  [class.filled]="i < Math.floor(product.rating || 0)"
-                  (click)="rateProduct(product, i + 1)"
-                  title="Rate {{ i + 1 }} stars">
+            <span class="star" *ngFor="let star of [1,2,3,4,5]; let i = index"
+              [class.filled]="i < Math.floor(product.rating || 0)" (click)="rateProduct(product, i + 1)"
+              [title]="('SHOP.PRODUCT.RATE' | translate) + ' ' + (i + 1) + ' ' + ('SHOP.PRODUCT.STARS' | translate)">
               ⭐
             </span>
           </div>
           <span class="rating-value">({{ product.rating || 0 }})</span>
-          <span class="rating-count" *ngIf="product.ratingCount">({{ product.ratingCount }} reviews)</span>
+          <span class="rating-count" *ngIf="product.ratingCount">({{ product.ratingCount }} {{ 'SHOP.PRODUCT.REVIEWS' |
+            translate }})</span>
           <span class="product-category">{{ product.category }}</span>
         </div>
 
@@ -109,16 +101,15 @@
           </div>
 
           <!-- Cart Button - Always Visible -->
-          <button class="cart-btn"
-                  (click)="addToCart(product, $event)"
-                  title="Add to Cart">
+          <button class="cart-btn" (click)="addToCart(product, $event)"
+            [title]="'PRODUCT.ACTIONS.ADD_TO_CART' | translate">
             <span class="material-icons">shopping_cart</span>
           </button>
         </div>
 
         <!-- Stock Indicator -->
         <div class="stock-indicator" *ngIf="product?.stock !== undefined && product.stock > 0 && product.stock <= 5">
-          Only {{ product.stock }} left in stock!
+          {{ 'PRODUCT.STOCK.ONLY_LEFT' | translate:{count: product.stock} }}
         </div>
       </div>
     </div>
@@ -128,8 +119,8 @@
   <div class="empty-state" *ngIf="!loading && !error && similarProducts.length === 0">
     <div class="empty-content">
       <div class="empty-icon">🔍</div>
-      <h4 class="empty-title">No Similar Products Found</h4>
-      <p class="empty-message">We couldn't find any similar products for this item.</p>
+      <h4 class="empty-title">{{ 'PRODUCT.EMPTY.NO_SIMILAR' | translate }}</h4>
+      <p class="empty-message">{{ 'PRODUCT.EMPTY.NO_SIMILAR_MSG' | translate }}</p>
     </div>
   </div>
-</div> 
+</div>

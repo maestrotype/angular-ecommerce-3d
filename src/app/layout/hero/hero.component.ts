@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { Section } from 'src/shared/models/section.model';
 
 @Component({
@@ -7,7 +9,7 @@ import { Section } from 'src/shared/models/section.model';
     templateUrl: './hero.component.html',
     styleUrls: ['./hero.component.scss'],
     standalone: true,
-    imports: []
+    imports: [CommonModule, TranslateModule]
 })
 export class HeroComponent {
     @Input() data!: Section;

@@ -3,60 +3,43 @@
     <div class="error-icon">
       <mat-icon>error</mat-icon>
     </div>
-    
-    <h1 class="error-title">Payment Failed</h1>
+
+    <h1 class="error-title">{{ 'PAYMENT.STATUS.FAILED_TITLE' | translate }}</h1>
     <p class="error-message">{{ errorMessage }}</p>
-    
+
     <div class="payment-details" [class]="getThemeClass('payment-details')" *ngIf="orderId || amount">
       <div class="detail-row" *ngIf="orderId">
-        <span class="detail-label">Order ID:</span>
+        <span class="detail-label">{{ 'PAYMENT.INFO.ORDER_ID' | translate }}:</span>
         <span class="detail-value">#{{ orderId }}</span>
       </div>
-      
+
       <div class="detail-row" *ngIf="amount">
-        <span class="detail-label">Amount:</span>
+        <span class="detail-label">{{ 'MODALS.CART.TOTAL' | translate }}:</span>
         <span class="detail-value">${{ amount.toFixed(2) }}</span>
       </div>
     </div>
-    
+
     <div class="error-actions">
-      <button 
-        mat-raised-button 
-        color="primary" 
-        class="action-btn primary-btn"
-        (click)="tryAgain()"
-      >
-        Try Again
+      <button mat-raised-button color="primary" class="action-btn primary-btn" (click)="tryAgain()">
+        {{ 'PAYMENT.STATUS.RETRY' | translate }}
       </button>
-      
-      <button 
-        mat-stroked-button 
-        class="action-btn secondary-btn"
-        (click)="goToCart()"
-      >
-        Go to Cart
+
+      <button mat-stroked-button class="action-btn secondary-btn" (click)="goToCart()">
+        {{ 'PAYMENT.ERROR_PAGE.GO_TO_CART' | translate }}
       </button>
-      
-      <button 
-        mat-stroked-button 
-        class="action-btn secondary-btn"
-        (click)="contactSupport()"
-      >
-        Contact Support
+
+      <button mat-stroked-button class="action-btn secondary-btn" (click)="contactSupport()">
+        {{ 'PAYMENT.ERROR_PAGE.CONTACT_SUPPORT' | translate }}
       </button>
-      
-      <button 
-        mat-stroked-button 
-        class="action-btn secondary-btn"
-        (click)="goToHome()"
-      >
-        Go to Home
+
+      <button mat-stroked-button class="action-btn secondary-btn" (click)="goToHome()">
+        {{ 'PAYMENT.SUCCESS_PAGE.GO_HOME' | translate }}
       </button>
     </div>
-    
+
     <div class="error-info">
-      <p>If the problem persists, please contact our support team.</p>
-      <p>Your order has not been charged.</p>
+      <p>{{ 'PAYMENT.ERROR_PAGE.INFO' | translate }}</p>
+      <p>{{ 'PAYMENT.ERROR_PAGE.NOT_CHARGED' | translate }}</p>
     </div>
   </div>
-</div> 
+</div>

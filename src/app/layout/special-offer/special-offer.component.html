@@ -3,17 +3,19 @@
         <div class="offer-content">
             <div class="offer-image">
                 <div class="sale-badge">
-                    SALE<br>
+                    {{ 'HOME.SPECIAL_OFFER.BADGE' | translate }}<br>
                     <span class="discount">30%</span>
                 </div>
-                <img [src]="data?.imageUrl" alt="Special Offer Bag" class="product-image" loading="lazy">
+                <img [src]="data?.imageUrl" [alt]="'HOME.SPECIAL_OFFER.TITLE_DEFAULT' | translate" class="product-image"
+                    loading="lazy">
             </div>
 
             <div class="offer-text">
-                <h2 class="offer-title">{{ data?.title || "Special Offer" }}</h2>
-                <p class="offer-subtitle">{{ data?.subtitle || "Only this week: Up to 40% off" }}</p>
+                <h2 class="offer-title">{{ data?.title || ('HOME.SPECIAL_OFFER.TITLE_DEFAULT' | translate) }}</h2>
+                <p class="offer-subtitle">{{ data?.subtitle || ('HOME.SPECIAL_OFFER.SUBTITLE_DEFAULT' | translate) }}
+                </p>
                 <button class="shop-button" (click)="onShopNow()">
-                    SHOP NOW
+                    {{ 'HOME.SPECIAL_OFFER.SHOP_NOW' | translate }}
                 </button>
             </div>
         </div>

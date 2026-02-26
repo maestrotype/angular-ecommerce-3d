@@ -3,14 +3,14 @@
   <div class="product-header">
     <div class="container">
       <button class="back-btn glass-theme" (click)="goBack()">
-        ← Back to Shop
+        {{ 'PRODUCT.BACK_BTN' | translate }}
       </button>
       <nav class="breadcrumb">
-        <a class="breadcrumb-link" (click)="navigateToHome()">Home</a> /
-        <a class="breadcrumb-link" (click)="navigateToShop()">Shop</a> /
+        <a class="breadcrumb-link" (click)="navigateToHome()">{{ 'PRODUCT.BREADCRUMBS.HOME' | translate }}</a> /
+        <a class="breadcrumb-link" (click)="navigateToShop()">{{ 'PRODUCT.BREADCRUMBS.SHOP' | translate }}</a> /
         <a class="breadcrumb-link" (click)="navigateToCategory()">{{
           product.category
-        }}</a>
+          }}</a>
         /
         <span class="current">{{ product.name }}</span>
       </nav>
@@ -23,60 +23,29 @@
       <div class="product-grid">
         <div class="product-detail-main">
           <div class="main-view">
-            <div
-              *ngIf="product?.stock !== undefined && product.stock <= 0"
-              class="out-of-stock-badge"
-            >
-              OUT OF STOCK
+            <div *ngIf="product?.stock !== undefined && product.stock <= 0" class="out-of-stock-badge">
+              {{ 'PRODUCT.STOCK.OUT_OF_STOCK' | translate }}
             </div>
-            <img
-              *ngIf="selectedType === 'image' && product?.images?.length"
-              [src]="product.images[selectedImageIndex]"
-              (click)="onImageClicked()"
-              alt="Product image"
-              class="main-image"
-            />
-            <app-three-d-viewer
-              *ngIf="selectedType === '3d' && product?.model3dUrl"
-              [modelPath]="product.model3dUrl"
-              class="main-3d-viewer"
-              [previewOnly]="false"
-              [scale]="[9, 9, 9]"
-              [position]="[0, 0, 0]"
-            ></app-three-d-viewer>
+            <img *ngIf="selectedType === 'image' && product?.images?.length" [src]="product.images[selectedImageIndex]"
+              (click)="onImageClicked()" alt="Product image" class="main-image" />
+            <app-three-d-viewer *ngIf="selectedType === '3d' && product?.model3dUrl" [modelPath]="product.model3dUrl"
+              class="main-3d-viewer" [previewOnly]="false" [scale]="[9, 9, 9]"
+              [position]="[0, 0, 0]"></app-three-d-viewer>
           </div>
 
           <div class="thumbnails">
-            <img
-              *ngFor="let img of product?.images; let i = index"
-              [src]="img"
-              [class.selected]="
+            <img *ngFor="let img of product?.images; let i = index" [src]="img" [class.selected]="
                 selectedType === 'image' && selectedImageIndex === i
-              "
-              (click)="onThumbnailSelected('image', i)"
-              alt="Product thumbnail"
-              class="thumb-image"
-            />
-            <app-three-d-viewer
-              *ngIf="product?.model3dUrl"
-              [modelPath]="product.model3dUrl"
-              class="thumb-3d"
-              [class.selected]="selectedType === '3d'"
-              (click)="onThumbnailSelected('3d')"
-              [previewOnly]="true"
-              [scale]="[9, 9, 9]"
-              [position]="[0, 0, 0]"
-            ></app-three-d-viewer>
+              " (click)="onThumbnailSelected('image', i)" alt="Product thumbnail" class="thumb-image" />
+            <app-three-d-viewer *ngIf="product?.model3dUrl" [modelPath]="product.model3dUrl" class="thumb-3d"
+              [class.selected]="selectedType === '3d'" (click)="onThumbnailSelected('3d')" [previewOnly]="true"
+              [scale]="[9, 9, 9]" [position]="[0, 0, 0]"></app-three-d-viewer>
           </div>
         </div>
         <div class="product-detail-info">
           <!-- Product Info Component -->
-          <app-product-info
-            [product]="product"
-            [quantity]="quantity"
-            (quantityChanged)="onQuantityChanged($event)"
-            (addToCart)="onAddToCart()"
-          >
+          <app-product-info [product]="product" [quantity]="quantity" (quantityChanged)="onQuantityChanged($event)"
+            (addToCart)="onAddToCart()">
           </app-product-info>
           <!-- Product Tabs Component -->
           <app-product-tabs [product]="product"></app-product-tabs>
@@ -85,23 +54,15 @@
 
       <!-- Similar Products Section -->
       <div class="similar-products-section">
-        <app-similar-products
-          [product]="product"
-          [limit]="4"
-          [showTitle]="true"
-          title="Similar Products"
-        >
+        <app-similar-products [product]="product" [limit]="4" [showTitle]="true"
+          [title]="'PRODUCT.SECTIONS.SIMILAR' | translate">
         </app-similar-products>
       </div>
 
       <!-- Bought Together Section -->
       <div class="bought-together-section">
-        <app-bought-together
-          [product]="product"
-          [limit]="4"
-          [showTitle]="true"
-          title="Frequently Bought Together"
-        >
+        <app-bought-together [product]="product" [limit]="4" [showTitle]="true"
+          [title]="'PRODUCT.SECTIONS.BOUGHT_TOGETHER' | translate">
         </app-bought-together>
       </div>
     </div>
@@ -112,7 +73,7 @@
 <div class="loading" *ngIf="loading">
   <div class="container">
     <div class="loading-content">
-      <p>Loading product details...</p>
+      <p>{{ 'PRODUCT.LOADING' | translate }}</p>
     </div>
   </div>
 </div>
@@ -121,10 +82,10 @@
 <div class="not-found" *ngIf="!loading && !product">
   <div class="container">
     <div class="not-found-content">
-      <h2>Product Not Found</h2>
-      <p>The product you're looking for doesn't exist.</p>
+      <h2>{{ 'PRODUCT.NOT_FOUND.TITLE' | translate }}</h2>
+      <p>{{ 'PRODUCT.NOT_FOUND.MSG' | translate }}</p>
       <button class="back-btn glass-theme" (click)="goBack()">
-        Back to Shop
+        {{ 'PRODUCT.BACK_BTN' | translate }}
       </button>
     </div>
   </div>

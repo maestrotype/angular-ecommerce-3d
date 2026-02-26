@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Section } from 'src/shared/models/section.model';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface Brand {
     id: number;
@@ -14,7 +15,7 @@ interface Brand {
     templateUrl: './brands.component.html',
     styleUrls: ['./brands.component.scss'],
     standalone: true,
-    imports: [CommonModule]
+    imports: [CommonModule, TranslateModule]
 })
 export class BrandsComponent implements OnInit {
     @Input() data!: Section;

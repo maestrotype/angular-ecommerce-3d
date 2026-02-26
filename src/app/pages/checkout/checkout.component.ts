@@ -10,6 +10,7 @@ import { NotificationService } from '../../core/services/notification.service';
 import { ModalService } from '../../core/services/modal.service';
 import { ThemeService } from '../../core/themes/theme.service';
 import { PaymentSettingsService } from '../../core/services/payment-settings.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-checkout',
@@ -18,13 +19,13 @@ import { PaymentSettingsService } from '../../core/services/payment-settings.ser
 })
 export class CheckoutComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-  
+
   checkoutForm: FormGroup;
   cartItems: CartItem[] = [];
   totalPrice = 0;
   isLoading = false;
-  
-  paymentMethods: Array<{id: string, name: string, icon: string, description: string}> = [];
+
+  paymentMethods: Array<{ id: string, name: string, icon: string, description: string }> = [];
   selectedPaymentMethod = 'liqpay';
   currentTheme = 'default';
 
@@ -35,7 +36,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private modalService: ModalService,
     private themeService: ThemeService,
-    private paymentSettingsService: PaymentSettingsService
+    private paymentSettingsService: PaymentSettingsService,
+    private translate: TranslateService
   ) {
     this.checkoutForm = this.fb.group({
       customerName: ['', [Validators.required, Validators.minLength(2)]],
@@ -69,14 +71,14 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
 
   private loadPaymentMethods(): void {
-    
-    
+
+
     this.paymentSettingsService.getEnabledPaymentMethods().pipe(
       takeUntil(this.destroy$)
     ).subscribe(methods => {
-      
+
       this.paymentMethods = methods;
-      
+
       // Get default payment method from settings
       this.paymentSettingsService.getPaymentSettings().pipe(
         takeUntil(this.destroy$)
@@ -84,10 +86,10 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         // Set default payment method if available and valid
         if (settings.defaultPaymentMethod && methods.some(m => m.id === settings.defaultPaymentMethod)) {
           this.selectedPaymentMethod = settings.defaultPaymentMethod;
-          
+
         } else if (methods.length > 0) {
           this.selectedPaymentMethod = methods[0].id;
-          
+
         }
       });
     });
@@ -102,9 +104,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     ).subscribe(([items, total]) => {
       this.cartItems = items;
       this.totalPrice = total;
-      
 
-      
+
+
       if (items.length === 0) {
         this.router.navigate(['/shop']);
       }
@@ -118,7 +120,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   onSubmit(): void {
     if (this.checkoutForm.valid && this.cartItems.length > 0) {
       this.isLoading = true;
-      
+
       const orderData: CreateOrderRequest = {
         customerName: String(this.checkoutForm.value.customerName),
         customerEmail: String(this.checkoutForm.value.customerEmail),
@@ -146,21 +148,21 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       ).subscribe({
         next: (order: Order) => {
           this.isLoading = false;
-          this.notificationService.showSuccess('Order created successfully!');
-          
+          this.notificationService.showSuccess(this.translate.instant('CHECKOUT.ERRORS.ORDER_SUCCESS'));
+
           // Store order data for payment page
           localStorage.setItem(`order_${order.id}`, JSON.stringify(orderData));
-          
+
           // Redirect to payment page
           this.router.navigate(['/payment', order.id]);
         },
         error: (error) => {
           this.isLoading = false;
-          this.notificationService.showError('Failed to create order. Please try again.');
+          this.notificationService.showError(this.translate.instant('CHECKOUT.ERRORS.ORDER_FAILED'));
         }
       });
     } else {
-      this.notificationService.showError('Please fill in all required fields.');
+      this.notificationService.showError(this.translate.instant('CHECKOUT.ERRORS.FILL_REQUIRED'));
     }
   }
 
@@ -175,11 +177,15 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   getFieldError(fieldName: string): string {
     const field = this.checkoutForm.get(fieldName);
     if (field?.errors && field?.touched) {
-      if (field.errors['required']) return 'This field is required';
-      if (field.errors['email']) return 'Please enter a valid email';
-      if (field.errors['minlength']) return `Minimum length is ${field.errors['minlength'].requiredLength} characters`;
-      if (field.errors['pattern']) return 'Please enter a valid format';
+      if (field.errors['required']) return this.translate.instant('CHECKOUT.ERRORS.REQUIRED');
+      if (field.errors['email']) return this.translate.instant('CHECKOUT.ERRORS.INVALID_EMAIL');
+      if (field.errors['minlength']) {
+        return this.translate.instant('CHECKOUT.ERRORS.MIN_LENGTH', {
+          requiredLength: field.errors['minlength'].requiredLength
+        });
+      }
+      if (field.errors['pattern']) return this.translate.instant('CHECKOUT.ERRORS.INVALID_FORMAT');
     }
     return '';
   }
-} 
+}

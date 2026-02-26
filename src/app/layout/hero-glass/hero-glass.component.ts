@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { Section } from 'src/shared/models/section.model';
 import { ThreeDViewerComponent } from '../../components/three-d-viewer/three-d-viewer.component';
 
@@ -9,7 +10,7 @@ import { ThreeDViewerComponent } from '../../components/three-d-viewer/three-d-v
     templateUrl: './hero-glass.component.html',
     styleUrls: ['./hero-glass.component.scss'],
     standalone: true,
-    imports: [CommonModule, RouterModule, ThreeDViewerComponent]
+    imports: [CommonModule, RouterModule, ThreeDViewerComponent, TranslateModule]
 })
 export class HeroGlassComponent implements OnInit {
     @Input() data!: Section;

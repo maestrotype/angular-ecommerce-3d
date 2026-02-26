@@ -15,6 +15,7 @@ import { FavoritesService } from '../../core/services/favorites.service';
 export class FooterComponent implements OnInit, OnDestroy {
   cartCount = 0;
   favoritesCount = 0;
+  currentYear = new Date().getFullYear();
   private cartSubscription: Subscription = new Subscription();
   private favoritesSubscription: Subscription = new Subscription();
 

@@ -9,13 +9,14 @@ import { NotificationService } from '../../core/services/notification.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-best-sellers',
     templateUrl: './best-sellers.component.html',
     styleUrls: ['./best-sellers.component.scss'],
     standalone: true,
-    imports: [CommonModule, RouterModule, SharedModule]
+    imports: [CommonModule, RouterModule, SharedModule, TranslateModule]
 })
 export class BestSellersComponent implements OnInit {
     @Input() data!: Section;

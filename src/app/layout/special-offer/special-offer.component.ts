@@ -7,13 +7,14 @@ import { Section } from 'src/shared/models/section.model';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-special-offer',
     templateUrl: './special-offer.component.html',
     styleUrls: ['./special-offer.component.scss'],
     standalone: true,
-    imports: [CommonModule, RouterModule, SharedModule]
+    imports: [CommonModule, RouterModule, SharedModule, TranslateModule]
 })
 export class SpecialOfferComponent implements OnInit {
     @Input() data!: Section;
