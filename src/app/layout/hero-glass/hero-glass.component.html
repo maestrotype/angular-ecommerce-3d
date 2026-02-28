@@ -5,11 +5,12 @@
     <div class="hero-content">
       <div class="hero-text">
         <h1 class="hero-title">
-          {{ data?.title || ('HOME.HERO.TITLE_DEFAULT' | translate) }}<br />
-          <span class="highlight">{{ data?.subtitle || ('HOME.HERO.SUBTITLE_DEFAULT' | translate) }}</span>
+          {{ (data?.title | localized) || ('HOME.HERO.TITLE_DEFAULT' | translate) }}<br />
+          <span class="highlight">{{ (data?.subtitle | localized) || ('HOME.HERO.SUBTITLE_DEFAULT' | translate)
+            }}</span>
         </h1>
         <p class="hero-subtitle">
-          {{ data?.content || ('HOME.HERO.CONTENT_DEFAULT' | translate) }}
+          {{ (data?.content | localized) || ('HOME.HERO.CONTENT_DEFAULT' | translate) }}
         </p>
         <div class="wrap-btn">
           <button class="cta-button-glass" (click)="onShopNow()">{{ 'HOME.HERO.SHOP_NOW' | translate }}</button>

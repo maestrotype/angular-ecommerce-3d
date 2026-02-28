@@ -43,7 +43,7 @@ export class ProductListComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private errorHandler: ErrorHandlerService,
     private translate: TranslateService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadProducts();
@@ -65,7 +65,7 @@ export class ProductListComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-        
+
         this.error = "Failed to load products. Please try again.";
         this.isLoading = false;
         this.errorHandler.showError({
@@ -121,7 +121,11 @@ export class ProductListComponent implements OnInit {
   }
 
   deleteProduct(product: Product): void {
-    this.confirmationService.confirmDelete(product.name).subscribe(confirmed => {
+    const productName = typeof product.name === 'string'
+      ? product.name
+      : (product.name['en'] || Object.values(product.name)[0] || 'Product');
+
+    this.confirmationService.confirmDelete(productName).subscribe(confirmed => {
       if (confirmed) {
         this.productService.deleteProduct(product.id).subscribe({
           next: () => {

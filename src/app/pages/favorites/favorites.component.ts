@@ -5,6 +5,7 @@ import { Product } from 'src/shared/models/product.model';
 import { FavoritesService } from '../../core/services/favorites.service';
 import { CartService } from '../../core/services/cart.service';
 import { TranslateService } from '@ngx-translate/core';
+import { getLocalizedString } from '../../../shared/utils/localization.util';
 
 @Component({
   selector: 'app-favorites',
@@ -80,7 +81,8 @@ export class FavoritesComponent implements OnInit, OnDestroy {
    * Clear all favorites
    */
   onClearFavorites(): void {
-    if (confirm(this.translate.instant('FAVORITES.CLEAR_CONFIRM_MSG'))) {
+    const confirmMsg = this.translate.instant('FAVORITES.CLEAR_CONFIRM_MSG');
+    if (confirm(confirmMsg)) {
       this.favoritesService.clearFavorites();
     }
   }

@@ -3,11 +3,11 @@
     <div class="about-content">
       <div class="about-text">
         <h1 class="about-title">
-          {{ data?.title }}<br />
-          <span class="highlight">{{ data?.content }}</span>
+          {{ data?.title | localized }}<br />
+          <span class="highlight">{{ data?.content | localized }}</span>
         </h1>
         <p class="about-subtitle">
-          {{ data?.settings?.subtitle }}
+          {{ data?.settings?.subtitle | localized }}
         </p>
       </div>
 

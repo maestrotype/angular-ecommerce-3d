@@ -1,9 +1,11 @@
 <section id="best-sellers" class="best-sellers">
     <div class="section-wrapper">
         <div class="section-header">
-            <span class="section-subtitle">{{ data?.subtitle || ('HOME.BEST_SELLERS.SUBTITLE_DEFAULT' | translate)
+            <span class="section-subtitle">{{ (data?.subtitle | localized) || ('HOME.BEST_SELLERS.SUBTITLE_DEFAULT' |
+                translate)
                 }}</span>
-            <h2 class="section-title">{{ data?.title || ('HOME.BEST_SELLERS.TITLE_DEFAULT' | translate) }}</h2>
+            <h2 class="section-title">{{ (data?.title | localized) || ('HOME.BEST_SELLERS.TITLE_DEFAULT' | translate) }}
+            </h2>
         </div>
 
         <div class="products-grid" *ngIf="bestSellersProducts.length > 0">
@@ -40,7 +42,7 @@
                 </div>
 
                 <div class="product-info">
-                    <h3 class="product-name">{{ product.name }}</h3>
+                    <h3 class="product-name">{{ product.name | localized }}</h3>
 
                     <div class="product-footer">
                         <div class="product-price">

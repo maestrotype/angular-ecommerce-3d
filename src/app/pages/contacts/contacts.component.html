@@ -2,8 +2,8 @@
   <div class="container">
     <div class="contact-content">
       <div class="contact-info">
-        <h2>{{ 'CONTACTS.TITLE' | translate }}</h2>
-        <p>{{ 'CONTACTS.SUBTITLE' | translate }}</p>
+        <h2>{{ (data?.title | localized) || ('CONTACTS.TITLE' | translate) }}</h2>
+        <p>{{ (data?.subtitle | localized) || ('CONTACTS.SUBTITLE' | translate) }}</p>
         <div class="contact-details">
           <div class="contact-item">
             <span class="icon icon-mail"></span>

@@ -10,11 +10,11 @@
       <ng-container *ngFor="let item of menuItems">
         <a *ngIf="item.url.startsWith('/')" [routerLink]="item.url" class="nav-link"
           [class.hidden]="!canAccessMenuItem(item)">
-          {{ item.title }}
+          {{ item.title | localized }}
         </a>
         <a *ngIf="item.url.startsWith('#')" (click)="handleMenuClick(item)" class="nav-link"
           [class.hidden]="!canAccessMenuItem(item)">
-          {{ item.title }}
+          {{ item.title | localized }}
         </a>
       </ng-container>
     </nav>
@@ -170,7 +170,7 @@
         (click)="goToProduct(product.id)">
         <img [src]="product.imageUrl" [alt]="product.name" class="result-image">
         <div class="result-info">
-          <h4 class="result-name">{{ product.name }}</h4>
+          <h4 class="result-name">{{ product.name | localized }}</h4>
           <p class="result-price">${{ product.price }}</p>
           <span class="result-category">{{ product.category }}</span>
         </div>
@@ -205,7 +205,7 @@
     <div class="mobile-menu-section">
       <ng-container *ngFor="let item of menuItems">
         <a *ngIf="canAccessMenuItem(item)" (click)="handleMenuClick(item)" class="mobile-nav-link">
-          {{ 'HEADER.NAV.' + (item.title | uppercase | replaceSpaces) | translate }}
+          {{ item.title | localized }}
         </a>
       </ng-container>
     </div>

@@ -8,14 +8,14 @@ export class Section {
   @Column({ type: 'varchar' })
   type: string; // 'hero', 'about', etc.
 
-  @Column()
-  title: string;
+  @Column('json', { nullable: true })
+  title: any;
 
-  @Column({ type: 'varchar', default: '', nullable: true })
-  subtitle: string;
+  @Column('json', { nullable: true })
+  subtitle: any;
 
-  @Column('text', { nullable: true })
-  content: string;
+  @Column('json', { nullable: true })
+  content: any;
 
   @Column({ nullable: true })
   imageUrl: string;

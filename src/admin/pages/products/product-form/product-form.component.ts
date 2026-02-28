@@ -14,6 +14,9 @@ import { ProcessingOptions, ProcessedImageResult } from "../../../components/ui/
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { environment } from 'src/environments/environment';
 
+import { LocalizedString } from "../../../../shared/models/localized-string.model";
+import { getLocalizedString } from "../../../../shared/utils/localization.util";
+
 @Component({
   selector: "app-product-form",
   templateUrl: "./product-form.component.html",
@@ -32,7 +35,7 @@ export class ProductFormComponent implements OnInit {
   isUploading3d = false;
   dragging3d = false;
   categories: Category[] = [];
-  
+
   imageProcessingOptions: ProcessingOptions = {
     removeBackground: true,
     optimize: true
@@ -63,12 +66,16 @@ export class ProductFormComponent implements OnInit {
 
   createForm(): FormGroup {
     return this.fb.group({
-      name: ["", [Validators.required, Validators.minLength(2)]],
+      name_en: ["", [Validators.required, Validators.minLength(2)]],
+      name_ru: [""],
+      name_ua: [""],
       category: ["", [Validators.required]],
       price: [0, [Validators.required, Validators.min(0.01)]],
       stock: [0, [Validators.required, Validators.min(0)]],
       imageUrl: [""],
-      description: ["", [Validators.required, Validators.minLength(10)]],
+      description_en: ["", [Validators.required, Validators.minLength(10)]],
+      description_ru: [""],
+      description_ua: [""],
       specifications: this.fb.array([]),
     });
   }
@@ -83,7 +90,7 @@ export class ProductFormComponent implements OnInit {
         this.categories = categories;
       },
       error: (error) => {
-        
+
         this.snackBar.open('Failed to load categories list', "Close", {
           duration: 5000,
         });
@@ -92,7 +99,10 @@ export class ProductFormComponent implements OnInit {
   }
 
   getCategoryValue(category: Category): string {
-    return category.slug || category.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+    const name = typeof category.name === 'string'
+      ? category.name
+      : (category.name as LocalizedString).en || '';
+    return category.slug || name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
   }
 
   onDragOver(event: DragEvent): void {
@@ -103,7 +113,7 @@ export class ProductFormComponent implements OnInit {
   onDrop(event: DragEvent): void {
     event.preventDefault();
     event.stopPropagation();
-    
+
     const files = event.dataTransfer?.files;
     if (files && files.length > 0) {
       this.handleFiles(files);
@@ -112,8 +122,8 @@ export class ProductFormComponent implements OnInit {
 
   private handleFiles(files: FileList): void {
     const fileArray = Array.from(files);
-    const imageFiles = fileArray.filter(file => 
-      file.type.startsWith('image/') && 
+    const imageFiles = fileArray.filter(file =>
+      file.type.startsWith('image/') &&
       ['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)
     );
 
@@ -129,7 +139,7 @@ export class ProductFormComponent implements OnInit {
 
   private uploadImages(files: File[]): void {
     this.isUploading = true;
-    
+
     files.forEach(file => {
       if (this.imageProcessingOptions.removeBackground || this.imageProcessingOptions.optimize) {
         this.processAndUploadImage(file);
@@ -150,7 +160,7 @@ export class ProductFormComponent implements OnInit {
         next: (response) => {
           this.imageUrls.push(response.url);
           this.isUploading = false;
-          
+
           if (response.processed) {
             const processingDetails = [];
             if (this.imageProcessingOptions.removeBackground) {
@@ -159,7 +169,7 @@ export class ProductFormComponent implements OnInit {
             if (this.imageProcessingOptions.optimize) {
               processingDetails.push('optimized');
             }
-            
+
             this.snackBar.open(`Image ${processingDetails.join(' and ')} successfully!`, "Close", {
               duration: 3000,
             });
@@ -170,20 +180,20 @@ export class ProductFormComponent implements OnInit {
           }
         },
         error: (error) => {
-          
+
           this.isUploading = false;
-          
+
           let errorMessage = 'Failed to process image';
           if (error.error?.message) {
             errorMessage = error.error.message;
           } else if (error.message) {
             errorMessage = error.message;
           }
-          
+
           this.snackBar.open(errorMessage, "Close", {
             duration: 5000,
           });
-          
+
           // Fallback to direct upload
           this.snackBar.open('Uploading original file without processing...', "Close", {
             duration: 3000,
@@ -204,7 +214,7 @@ export class ProductFormComponent implements OnInit {
           this.isUploading = false;
         },
         error: (error) => {
-          
+
           this.isUploading = false;
           this.snackBar.open('Failed to upload image', "Close", {
             duration: 5000,
@@ -229,8 +239,8 @@ export class ProductFormComponent implements OnInit {
     const files: FileList = event.target.files;
     if (!files || files.length === 0) return;
 
-    const imageFiles = Array.from(files).filter(file => 
-      file.type.match(/image\/(png|jpg|jpeg)/) && 
+    const imageFiles = Array.from(files).filter(file =>
+      file.type.match(/image\/(png|jpg|jpeg)/) &&
       file.size <= 5 * 1024 * 1024
     );
 
@@ -292,7 +302,7 @@ export class ProductFormComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-        
+
         this.snackBar.open('Failed to load product data', "Close", {
           duration: 5000,
         });
@@ -303,12 +313,16 @@ export class ProductFormComponent implements OnInit {
 
   populateForm(product: Product): void {
     this.productForm.patchValue({
-      name: product.name,
+      name_en: this.getLocalizedValue(product.name, 'en'),
+      name_ru: this.getLocalizedValue(product.name, 'ru'),
+      name_ua: this.getLocalizedValue(product.name, 'ua'),
       category: product.category,
       price: product.price,
       stock: product.stock,
       imageUrl: product.imageUrl,
-      description: product.description,
+      description_en: this.getLocalizedValue(product.description, 'en'),
+      description_ru: this.getLocalizedValue(product.description, 'ru'),
+      description_ua: this.getLocalizedValue(product.description, 'ua'),
     });
 
     if (product.images && product.images.length > 0) {
@@ -355,10 +369,12 @@ export class ProductFormComponent implements OnInit {
     }
 
     this.isLoading = true;
-    const formValue = this.productForm.value;
+    const rawFormValue = this.productForm.value;
+    const formValue = this.packLocalizedFields(rawFormValue);
 
     const specifications: { [key: string]: string } = {};
-    formValue.specifications.forEach((spec: any) => {
+    rawFormValue.specifications.forEach((spec: any) => {
+      // specifications handling remains same but using rawFormValue
       if (spec.key && spec.value) {
         specifications[spec.key] = spec.value;
       }
@@ -371,7 +387,7 @@ export class ProductFormComponent implements OnInit {
       specifications,
       model3dUrl: this.model3dUrl,
     };
-
+    // rest of onSubmit ... navigations etc
     if (this.isEditMode) {
       this.productService.updateProduct(this.productId!, productData).subscribe({
         next: (product) => {
@@ -381,12 +397,12 @@ export class ProductFormComponent implements OnInit {
         },
         error: (error) => {
           this.isLoading = false;
-          
+
           this.snackBar.open('Error updating product', 'Close', { duration: 3000 });
         }
       });
     } else {
-      this.productService.createProduct(productData).subscribe({
+      this.productService.createProduct(productData as any).subscribe({
         next: (product) => {
           this.isLoading = false;
           this.snackBar.open('Product created successfully!', 'Close', { duration: 3000 });
@@ -394,11 +410,39 @@ export class ProductFormComponent implements OnInit {
         },
         error: (error) => {
           this.isLoading = false;
-          
+
           this.snackBar.open('Error creating product', 'Close', { duration: 3000 });
         }
       });
     }
+  }
+
+  getLocalizedValue(value: any, lang: string): string {
+    if (!value) return '';
+    if (typeof value === 'string') return lang === 'en' ? value : '';
+    return value[lang] || '';
+  }
+
+  private packLocalizedFields(formValue: any): any {
+    const data = { ...formValue };
+
+    data.name = {
+      en: formValue.name_en,
+      ru: formValue.name_ru,
+      ua: formValue.name_ua
+    };
+
+    data.description = {
+      en: formValue.description_en,
+      ru: formValue.description_ru,
+      ua: formValue.description_ua
+    };
+
+    // Cleanup temporary fields
+    delete data.name_en; delete data.name_ru; delete data.name_ua;
+    delete data.description_en; delete data.description_ru; delete data.description_ua;
+
+    return data;
   }
 
   private markFormGroupTouched(formGroup: FormGroup): void {
@@ -413,22 +457,18 @@ export class ProductFormComponent implements OnInit {
     });
   }
 
+  // legacy methods kept for compatibility if called otherwise
   createProduct(productData: ProductCreateRequest): void {
+    // ... same as before
     this.productService.createProduct(productData).subscribe({
       next: (product) => {
-        
         this.isLoading = false;
-        this.snackBar.open("Product created successfully!", "Close", {
-          duration: 3000,
-        });
+        this.snackBar.open("Product created successfully!", "Close", { duration: 3000 });
         this.router.navigate(["/admin/products"]);
       },
       error: (err) => {
-        
         this.isLoading = false;
-        this.snackBar.open("Error creating product", "Close", {
-          duration: 5000,
-        });
+        this.snackBar.open("Error creating product", "Close", { duration: 5000 });
       },
     });
   }
@@ -436,19 +476,13 @@ export class ProductFormComponent implements OnInit {
   updateProduct(id: number, productData: ProductUpdateRequest): void {
     this.productService.updateProduct(id, productData).subscribe({
       next: (product) => {
-        
         this.isLoading = false;
-        this.snackBar.open("Product updated successfully!", "Close", {
-          duration: 3000,
-        });
+        this.snackBar.open("Product updated successfully!", "Close", { duration: 3000 });
         this.router.navigate(["/admin/products"]);
       },
       error: (err) => {
-        
         this.isLoading = false;
-        this.snackBar.open("Error updating product", "Close", {
-          duration: 5000,
-        });
+        this.snackBar.open("Error updating product", "Close", { duration: 5000 });
       },
     });
   }

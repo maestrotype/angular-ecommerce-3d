@@ -8,6 +8,7 @@ import { FrontendSeoService } from './core/services/frontend-seo.service';
 import { CartService } from './core/services/cart.service';
 import { FavoritesService } from './core/services/favorites.service';
 import { ModalService } from './core/services/modal.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -34,8 +35,16 @@ export class AppComponent implements OnInit, OnDestroy {
     private cartService: CartService,
     private favoritesService: FavoritesService,
     private modalService: ModalService,
+    private translate: TranslateService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
+    // Initialize localization
+    this.translate.setDefaultLang('en');
+    const browserLang = isPlatformBrowser(this.platformId)
+      ? localStorage.getItem('preferredLanguage') || this.translate.getBrowserLang() || 'en'
+      : 'en';
+    this.translate.use(browserLang.match(/en|ru|ua/) ? browserLang : 'en');
+
     // Debounce scroll stop logic
     this.scrollSubject.pipe(
       debounceTime(150)

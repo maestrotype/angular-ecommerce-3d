@@ -2,10 +2,13 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Section } from 'src/shared/models/section.model';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { LocalizedPipe } from 'src/app/shared/pipes/localized.pipe';
+
+import { LocalizedString } from 'src/shared/models/localized-string.model';
 
 interface Brand {
     id: number;
-    name: string;
+    name: string | LocalizedString;
     logo: string;
     isActive?: boolean;
 }
@@ -15,7 +18,7 @@ interface Brand {
     templateUrl: './brands.component.html',
     styleUrls: ['./brands.component.scss'],
     standalone: true,
-    imports: [CommonModule, TranslateModule]
+    imports: [CommonModule, TranslateModule, LocalizedPipe]
 })
 export class BrandsComponent implements OnInit {
     @Input() data!: Section;

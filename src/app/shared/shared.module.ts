@@ -15,6 +15,7 @@ import { StripeTestComponent } from '../pages/stripe-test/stripe-test.component'
 import { SectionRendererComponent } from '../components/section-renderer/section-renderer.component';
 import { NotificationBadgeComponent } from './components/notification-badge/notification-badge.component';
 import { ReplaceSpacesPipe } from './pipes/replace-spaces.pipe';
+import { LocalizedPipe } from './pipes/localized.pipe';
 
 @NgModule({
   declarations: [
@@ -27,13 +28,14 @@ import { ReplaceSpacesPipe } from './pipes/replace-spaces.pipe';
     StripeElementsComponent,
     StripeTestComponent,
     SectionRendererComponent,
-    NotificationBadgeComponent,
-    ReplaceSpacesPipe
+    ReplaceSpacesPipe,
+    NotificationBadgeComponent
   ],
   imports: [
     CommonModule,
     MatIconModule,
-    TranslateModule
+    TranslateModule,
+    LocalizedPipe
   ],
   providers: [
     DecimalPipe
@@ -51,6 +53,7 @@ import { ReplaceSpacesPipe } from './pipes/replace-spaces.pipe';
     SectionRendererComponent,
     NotificationBadgeComponent,
     ReplaceSpacesPipe,
+    LocalizedPipe,
     TranslateModule
   ]
 })

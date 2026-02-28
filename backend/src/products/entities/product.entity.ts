@@ -12,8 +12,8 @@ export class Product {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 255 })
-  name: string;
+  @Column('jsonb', { nullable: true })
+  name: any;
 
   @Column({ length: 100 })
   category: string;
@@ -24,8 +24,8 @@ export class Product {
   @Column('int', { default: 0 })
   stock: number;
 
-  @Column('text')
-  description: string;
+  @Column('jsonb', { nullable: true })
+  description: any;
 
   @Column({ length: 500, nullable: true })
   imageUrl: string;

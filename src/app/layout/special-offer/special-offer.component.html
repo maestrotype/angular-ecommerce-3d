@@ -6,13 +6,16 @@
                     {{ 'HOME.SPECIAL_OFFER.BADGE' | translate }}<br>
                     <span class="discount">30%</span>
                 </div>
-                <img [src]="data?.imageUrl" [alt]="'HOME.SPECIAL_OFFER.TITLE_DEFAULT' | translate" class="product-image"
-                    loading="lazy">
+                <img [src]="data?.imageUrl"
+                    [alt]="(data?.alt | localized) || ('HOME.SPECIAL_OFFER.TITLE_DEFAULT' | translate)"
+                    class="product-image" loading="lazy">
             </div>
 
             <div class="offer-text">
-                <h2 class="offer-title">{{ data?.title || ('HOME.SPECIAL_OFFER.TITLE_DEFAULT' | translate) }}</h2>
-                <p class="offer-subtitle">{{ data?.subtitle || ('HOME.SPECIAL_OFFER.SUBTITLE_DEFAULT' | translate) }}
+                <h2 class="offer-title">{{ (data?.title | localized) || ('HOME.SPECIAL_OFFER.TITLE_DEFAULT' | translate)
+                    }}</h2>
+                <p class="offer-subtitle">{{ (data?.subtitle | localized) || ('HOME.SPECIAL_OFFER.SUBTITLE_DEFAULT' |
+                    translate) }}
                 </p>
                 <button class="shop-button" (click)="onShopNow()">
                     {{ 'HOME.SPECIAL_OFFER.SHOP_NOW' | translate }}

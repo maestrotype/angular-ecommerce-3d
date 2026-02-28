@@ -16,13 +16,28 @@
       <mat-card-content class="form-content">
         <!-- Basic Information Grid -->
         <div class="form-grid">
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>{{ 'PRODUCT_NAME' | translate }}</mat-label>
-            <input matInput formControlName="name" [placeholder]="'PRODUCT_NAME_PLACEHOLDER' | translate" />
-            <mat-error *ngIf="productForm.get('name')?.hasError('required')">
-              {{ 'PRODUCT_NAME_REQUIRED' | translate }}
-            </mat-error>
-          </mat-form-field>
+          <div class="localization-group">
+            <label class="group-label">{{ 'PRODUCT_NAME' | translate }}</label>
+            <div class="lang-fields">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>EN</mat-label>
+                <input matInput formControlName="name_en" [placeholder]="'PRODUCT_NAME_PLACEHOLDER' | translate" />
+                <mat-error *ngIf="productForm.get('name_en')?.hasError('required')">
+                  {{ 'PRODUCT_NAME_REQUIRED' | translate }}
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>RU</mat-label>
+                <input matInput formControlName="name_ru" [placeholder]="'PRODUCT_NAME_PLACEHOLDER' | translate" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>UA</mat-label>
+                <input matInput formControlName="name_ua" [placeholder]="'PRODUCT_NAME_PLACEHOLDER' | translate" />
+              </mat-form-field>
+            </div>
+          </div>
 
           <mat-form-field appearance="outline" class="form-field">
             <mat-label>{{ 'CATEGORY' | translate }}</mat-label>
@@ -66,13 +81,14 @@
         <div class="image-upload-grid">
           <div class="upload-section">
             <label class="section-label">{{ 'PRODUCT_IMAGE' | translate }}</label>
-            
+
             <!-- Upload Area -->
             <div class="upload-area">
               <input type="file" #fileInput (change)="onFilesSelected($event)" accept="image/png,image/jpeg,image/jpg"
                 multiple style="display: none" />
-              
-              <div class="drop-zone" (click)="fileInput.click()" (dragover)="onDragOver($event)" (drop)="onDrop($event)">
+
+              <div class="drop-zone" (click)="fileInput.click()" (dragover)="onDragOver($event)"
+                (drop)="onDrop($event)">
                 <div class="upload-content">
                   <mat-icon class="upload-icon">cloud_upload</mat-icon>
                   <h3>Upload Images</h3>
@@ -104,16 +120,12 @@
             <!-- Processing Options -->
             <div class="processing-options">
               <div class="options-grid">
-                <mat-slide-toggle 
-                  [(ngModel)]="imageProcessingOptions.removeBackground"
-                  [ngModelOptions]="{standalone: true}"
-                  color="primary">
+                <mat-slide-toggle [(ngModel)]="imageProcessingOptions.removeBackground"
+                  [ngModelOptions]="{standalone: true}" color="primary">
                   Remove Background
                 </mat-slide-toggle>
-                
-                <mat-slide-toggle 
-                  [(ngModel)]="imageProcessingOptions.optimize"
-                  [ngModelOptions]="{standalone: true}"
+
+                <mat-slide-toggle [(ngModel)]="imageProcessingOptions.optimize" [ngModelOptions]="{standalone: true}"
                   color="primary">
                   Optimize Image
                 </mat-slide-toggle>
@@ -151,15 +163,30 @@
           </mat-card-content>
         </mat-card>
 
-        <div class="form-row">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>{{ 'DESCRIPTION' | translate }}</mat-label>
-            <textarea matInput formControlName="description" rows="4"
-              [placeholder]="'DESCRIPTION_PLACEHOLDER' | translate"></textarea>
-            <mat-error *ngIf="productForm.get('description')?.hasError('required')">
-              {{ 'DESCRIPTION_REQUIRED' | translate }}
-            </mat-error>
-          </mat-form-field>
+        <div class="localization-group">
+          <label class="group-label">{{ 'DESCRIPTION' | translate }}</label>
+          <div class="lang-fields">
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>EN</mat-label>
+              <textarea matInput formControlName="description_en" rows="4"
+                [placeholder]="'DESCRIPTION_PLACEHOLDER' | translate"></textarea>
+              <mat-error *ngIf="productForm.get('description_en')?.hasError('required')">
+                {{ 'DESCRIPTION_REQUIRED' | translate }}
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>RU</mat-label>
+              <textarea matInput formControlName="description_ru" rows="4"
+                [placeholder]="'DESCRIPTION_PLACEHOLDER' | translate"></textarea>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>UA</mat-label>
+              <textarea matInput formControlName="description_ua" rows="4"
+                [placeholder]="'DESCRIPTION_PLACEHOLDER' | translate"></textarea>
+            </mat-form-field>
+          </div>
         </div>
       </mat-card-content>
     </mat-card>

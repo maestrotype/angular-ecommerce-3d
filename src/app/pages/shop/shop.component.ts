@@ -7,6 +7,7 @@ import { FavoritesService } from '../../core/services/favorites.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { OptimizationService } from '../../core/services/optimization.service';
 import { TranslateService } from '@ngx-translate/core';
+import { getLocalizedString } from '../../../shared/utils/localization.util';
 import { Product } from 'src/shared/models/product.model';
 import { Category } from 'src/shared/models/category.model';
 import { CartItem } from 'src/shared/models/cart-item.model';
@@ -239,10 +240,11 @@ export class ShopComponent implements OnInit, OnDestroy {
     // Filter by search term
     if (this.searchTerm) {
       const searchLower = this.searchTerm.toLowerCase();
-      filtered = filtered.filter(product =>
-        product.name.toLowerCase().includes(searchLower) ||
-        product.description?.toLowerCase().includes(searchLower)
-      );
+      filtered = filtered.filter(product => {
+        const name = getLocalizedString(product.name, this.translate.currentLang).toLowerCase();
+        const description = getLocalizedString(product.description, this.translate.currentLang).toLowerCase();
+        return name.includes(searchLower) || description.includes(searchLower);
+      });
     }
 
     // Filter by price range
@@ -271,7 +273,9 @@ export class ShopComponent implements OnInit, OnDestroy {
         // Since Product doesn't have createdAt, sort by id (assuming higher id = newer)
         return products.sort((a, b) => b.id - a.id);
       case 'name':
-        return products.sort((a, b) => a.name.localeCompare(b.name));
+        return products.sort((a, b) =>
+          getLocalizedString(a.name, this.translate.currentLang).localeCompare(getLocalizedString(b.name, this.translate.currentLang))
+        );
       case 'price-low':
         return products.sort((a, b) => a.price - b.price);
       case 'price-high':
@@ -325,21 +329,20 @@ export class ShopComponent implements OnInit, OnDestroy {
 
     const cartItem: CartItem = {
       productId: product.id,
-      name: product.name,
+      name: getLocalizedString(product.name, this.translate.currentLang),
       price: product.price,
       quantity: 1,
       imageUrl: product.imageUrl
     };
 
     this.cartService.addToCart(cartItem);
-    this.notificationService.showSuccess(this.translate.instant('SHOP.NOTIFICATIONS.ADDED_TO_CART', { name: product.name }));
+    this.notificationService.showSuccess(this.translate.instant('SHOP.NOTIFICATIONS.ADDED_TO_CART', { name: getLocalizedString(product.name, this.translate.currentLang) }));
   }
 
   trackByProductId(index: number, product: Product): number {
     return product.id;
   }
 
-  // Add method to update counts when filters change
   private updateCategoryCounts(): void {
     this.filterCategories.forEach(filterCategory => {
       const count = this.products.filter(product => product.category === filterCategory.id).length;

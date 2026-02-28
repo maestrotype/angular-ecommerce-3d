@@ -47,7 +47,7 @@ export class SidenavComponent {
 
   loadPendingOrdersCount(): void {
     this.orderService.getPendingOrdersCount().subscribe(count => {
-      const ordersNav = this.navItems.find(item => item.label === "ORDERS");
+      const ordersNav = this.navItems.find(item => item.label === "ADMIN_NAV_ORDERS");
       if (ordersNav) {
         ordersNav.badge = count;
       }

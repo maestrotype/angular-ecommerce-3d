@@ -1,7 +1,7 @@
 <div [class]="cardClasses + (product?.stock !== undefined && product.stock <= 0 ? ' out-of-stock' : '')"
   (click)="onProductClick()">
   <div class="product-image">
-    <img [src]="product.imageUrl" [alt]="product.name" />
+    <img [src]="product.imageUrl" [alt]="product.name | localized" />
 
     <!-- Top overlay with favorite button and cart icon -->
     <div class="product-overlay top">
@@ -32,7 +32,7 @@
     </div>
 
     <!-- Product name -->
-    <h3 class="product-name">{{ product.name }}</h3>
+    <h3 class="product-name">{{ product.name | localized }}</h3>
 
     <!-- Product code -->
     <div class="product-code" *ngIf="product.id">
@@ -50,7 +50,7 @@
 
     <!-- Description for list layout -->
     <p *ngIf="layout === 'list' && product.description" class="product-description">
-      {{ product.description }}
+      {{ product.description | localized }}
     </p>
 
     <!-- Product footer with prices and actions -->

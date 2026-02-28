@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Section } from 'src/shared/models/section.model';
+import { LocalizedPipe } from '../../shared/pipes/localized.pipe';
 
 @Component({
     selector: 'app-hero',
     templateUrl: './hero.component.html',
     styleUrls: ['./hero.component.scss'],
     standalone: true,
-    imports: [CommonModule, TranslateModule]
+    imports: [CommonModule, TranslateModule, LocalizedPipe]
 })
 export class HeroComponent {
     @Input() data!: Section;

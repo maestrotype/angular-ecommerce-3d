@@ -5,8 +5,8 @@ export class Category {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @Column({ unique: true })
-  name: string;
+  @Column('jsonb', { nullable: true })
+  name: any;
 
   @Column({ unique: true, nullable: true })
   slug: string;
@@ -14,8 +14,8 @@ export class Category {
   @Column({ nullable: true })
   icon: string;
 
-  @Column({ nullable: true })
-  description: string;
+  @Column('jsonb', { nullable: true })
+  description: any;
 
   @Column({ default: true })
   isActive: boolean;

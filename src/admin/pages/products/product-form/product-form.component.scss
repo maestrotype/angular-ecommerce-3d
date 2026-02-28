@@ -463,3 +463,33 @@
     }
   }
   
+.localization-group {
+  margin-bottom: 24px;
+  grid-column: 1 / -1;
+  
+  .group-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--admin-text-primary, #ccc);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 4px;
+  }
+  
+  .lang-fields {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+    }
+    
+    .mat-form-field {
+      width: 100%;
+    }
+  }
+}

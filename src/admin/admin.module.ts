@@ -74,7 +74,7 @@ import { ConfirmationService } from './services/confirmation.service';
 import { PaymentService } from './services/payment.service';
 
 // Interceptors
-import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -163,11 +163,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ErrorHandlerService,
     ConfirmationService,
     PaymentService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    }
+
   ]
 })
 export class AdminModule { }

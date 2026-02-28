@@ -4,12 +4,13 @@
       <div class="hero-text">
         <div class="badge">{{ 'HOME.HERO.BADGE' | translate }}</div>
         <h1 class="hero-title">
-          {{ data?.title || ('HOME.HERO.TITLE_DEFAULT' | translate) }}<br />
-          <span class="highlight">{{ data?.subtitle || ('HOME.HERO.SUBTITLE_DEFAULT' | translate) }}</span>
+          {{ (data?.title | localized) || ('HOME.HERO.TITLE_DEFAULT' | translate) }}<br />
+          <span class="highlight">{{ (data?.subtitle | localized) || ('HOME.HERO.SUBTITLE_DEFAULT' | translate)
+            }}</span>
         </h1>
         <p class="hero-subtitle">
           {{
-          data?.content || ('HOME.HERO.CONTENT_DEFAULT' | translate)
+          (data?.content | localized) || ('HOME.HERO.CONTENT_DEFAULT' | translate)
           }}
         </p>
       </div>

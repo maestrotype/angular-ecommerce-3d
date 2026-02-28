@@ -263,14 +263,14 @@
         --contacts-button-hover: #3b82f6;
 
         /* Header section - Dark theme (admin palette) - semi-transparent like contact form */
-        --header-bg: rgba(255, 255, 255, 0.3);
+        --header-bg: rgba(15, 23, 42, 0.8);
         --header-backdrop-filter: blur(20px) saturate(180%);
-        --header-text: #1e293b;
-        --header-link: #475569;
-        --header-link-hover: #0f172a;
-        --header-search-bg: rgba(255, 255, 255, 0.2);
-        --header-search-text: #1e293b;
-        --header-text-rgb: 30, 41, 59;
+        --header-text: #f8fafc;
+        --header-link: #cbd5e1;
+        --header-link-hover: #ffffff;
+        --header-search-bg: rgba(255, 255, 255, 0.1);
+        --header-search-text: #f8fafc;
+        --header-text-rgb: 248, 250, 252;
 
         /* RGB Variables for transparencies (Dark Theme) */
         --header-bg-rgb: 255, 255, 255;
@@ -497,11 +497,14 @@
         --contacts-button-hover: #4f46e5;
 
         /* Header section - Glass theme */
-        --header-bg: rgba(255, 255, 255, 0.4);
-        --header-link: #475569;
-        --header-link-hover: #1e293b;
-        --header-search-bg: rgba(255, 255, 255, 0.5);
-        --header-search-text: #1e293b;
+        --header-bg: rgba(255, 255, 255, 0.15);
+        --header-backdrop-filter: blur(20px) saturate(180%);
+        --header-text: #ffffff;
+        --header-link: rgba(255, 255, 255, 0.8);
+        --header-link-hover: #ffffff;
+        --header-search-bg: rgba(255, 255, 255, 0.1);
+        --header-search-text: #ffffff;
+        --header-text-rgb: 255, 255, 255;
 
         /* Best Sellers section - Glass theme */
         --best-sellers-bg: rgba(255, 255, 255, 0.3);

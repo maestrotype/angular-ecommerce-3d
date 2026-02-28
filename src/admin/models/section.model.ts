@@ -1,6 +1,8 @@
 
+import { LocalizedString } from '../../shared/models/localized-string.model';
+
 export interface MenuItem {
-  title: string;
+  title: string | LocalizedString;
   url: string;
   access: 'all' | 'admin' | 'closed';
   isActive: boolean;
@@ -26,9 +28,9 @@ export interface HeaderSettings {
 export interface Section {
   id: number;
   type: string;
-  title: string;
-  subtitle: string;
-  content?: string;
+  title: string | LocalizedString;
+  subtitle: string | LocalizedString;
+  content?: string | LocalizedString;
   imageUrl?: string;
   order: number;
   isActive: boolean;
@@ -42,9 +44,9 @@ export interface Section {
 
 export interface CreateSectionDto {
   type: string;
-  title: string;
-  subtitle?: string;
-  content?: string;
+  title: string | LocalizedString;
+  subtitle?: string | LocalizedString;
+  content?: string | LocalizedString;
   imageUrl?: string;
   isActive?: boolean;
   settings?: HeaderSettings | Record<string, any>;
@@ -55,9 +57,9 @@ export interface CreateSectionDto {
 
 export interface UpdateSectionDto {
   type?: string;
-  title?: string;
-  subtitle?: string;
-  content?: string;
+  title?: string | LocalizedString;
+  subtitle?: string | LocalizedString;
+  content?: string | LocalizedString;
   imageUrl?: string;
   isActive?: boolean;
   settings?: HeaderSettings | Record<string, any>;
