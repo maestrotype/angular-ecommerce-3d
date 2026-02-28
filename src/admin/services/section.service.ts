@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Section, CreateSectionDto, UpdateSectionDto, ReorderSectionsDto } from '../models/section.model';
-import { environment } from '../../environments/environment.prod';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ import { environment } from '../../environments/environment.prod';
 export class SectionService {
   private apiUrl = `${environment.apiUrl}/sections`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getSections(): Observable<Section[]> {
     return this.http.get<Section[]>(`${this.apiUrl}/admin`);
@@ -44,10 +44,10 @@ export class SectionService {
     return this.http.post<Section[]>(`${this.apiUrl}/reorder`, { sectionIds });
   }
 
-  uploadImage(file: File): Observable<{url: string}> {
+  uploadImage(file: File): Observable<{ url: string }> {
     const formData = new FormData();
     formData.append('image', file);
-    return this.http.post<{url: string}>(`${environment.apiUrl}/uploads/section-image`, formData);
+    return this.http.post<{ url: string }>(`${environment.apiUrl}/uploads/section-image`, formData);
   }
 
   upload3dModel(file: File): Observable<{ url: string }> {
