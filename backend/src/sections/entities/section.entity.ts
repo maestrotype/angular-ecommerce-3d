@@ -8,13 +8,13 @@ export class Section {
   @Column({ type: 'varchar' })
   type: string; // 'hero', 'about', etc.
 
-  @Column('json', { nullable: true })
+  @Column('jsonb', { nullable: true })
   title: any;
 
-  @Column('json', { nullable: true })
+  @Column('jsonb', { nullable: true })
   subtitle: any;
 
-  @Column('json', { nullable: true })
+  @Column('jsonb', { nullable: true })
   content: any;
 
   @Column({ nullable: true })
@@ -26,7 +26,7 @@ export class Section {
   @Column({ default: true })
   isActive: boolean;
 
-  @Column('json', { nullable: true })
+  @Column('jsonb', { nullable: true })
   settings: Record<string, any>;
 
   @Column({ nullable: true })

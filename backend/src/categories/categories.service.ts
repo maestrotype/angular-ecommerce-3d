@@ -7,6 +7,7 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Section } from '../sections/entities/section.entity';
 import { Observable, from, throwError } from 'rxjs';
 import { map, switchMap, catchError } from 'rxjs/operators';
+import { extractString, generateSlug } from '../common/utils/localization.util';
 
 @Injectable()
 export class CategoriesService {
@@ -15,7 +16,7 @@ export class CategoriesService {
     private categoryRepository: Repository<Category>,
     @InjectRepository(Section)
     private sectionRepository: Repository<Section>,
-  ) {}
+  ) { }
 
   findAll(): Observable<Category[]> {
     return from(this.categoryRepository.find({ order: { createdAt: 'DESC' } })).pipe(
@@ -44,11 +45,11 @@ export class CategoriesService {
   create(dto: CreateCategoryDto): Observable<Category> {
     // Generate slug from name if not provided
     if (!dto.slug) {
-      dto.slug = dto.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+      dto.slug = generateSlug(dto.name);
     }
-    
+
     const category = this.categoryRepository.create(dto);
-    
+
     return from(this.categoryRepository.save(category)).pipe(
       switchMap(savedCategory => {
         // Sync with sections
@@ -68,11 +69,11 @@ export class CategoriesService {
       switchMap(category => {
         // Generate slug from name if not provided
         if (dto.name && !dto.slug) {
-          dto.slug = dto.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+          dto.slug = generateSlug(dto.name);
         }
-        
+
         Object.assign(category, dto);
-        
+
         return from(this.categoryRepository.save(category)).pipe(
           switchMap(updatedCategory => {
             // Sync with sections
@@ -108,7 +109,7 @@ export class CategoriesService {
 
   syncWithSections(): Observable<void> {
     // Get all active categories
-    return from(this.categoryRepository.find({ 
+    return from(this.categoryRepository.find({
       where: { isActive: true },
       order: { createdAt: 'ASC' }
     })).pipe(
@@ -124,33 +125,34 @@ export class CategoriesService {
 
             // Transform categories to section format with proper slug and icon
             const sectionCategories = categories.map(cat => {
-              const slug = cat.slug || cat.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-              let icon = cat.icon;
-              
+              const slug = cat.slug || generateSlug(cat.name);
+              let iconValue = cat.icon;
+
               // Set default icons based on category name
-              if (!icon) {
-                switch (cat.name.toLowerCase()) {
+              if (!iconValue) {
+                const nameStr = extractString(cat.name).toLowerCase();
+                switch (nameStr) {
                   case 'shoes':
-                    icon = 'assets/icons/shoes.svg';
+                    iconValue = 'assets/icons/shoes.svg';
                     break;
                   case 'handbags':
-                    icon = 'assets/icons/handbags.svg';
+                    iconValue = 'assets/icons/handbags.svg';
                     break;
                   case 'clothing':
-                    icon = 'assets/icons/clothing.svg';
+                    iconValue = 'assets/icons/clothing.svg';
                     break;
                   case 'auto':
-                    icon = 'assets/icons/auto.svg';
+                    iconValue = 'assets/icons/auto.svg';
                     break;
                   default:
-                    icon = 'assets/icons/default-category.svg';
+                    iconValue = 'assets/icons/default-category.svg';
                 }
               }
 
               return {
                 name: cat.name,
                 slug: slug,
-                icon: icon,
+                icon: iconValue,
                 isActive: cat.isActive
               };
             });
