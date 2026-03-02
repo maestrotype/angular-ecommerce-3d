@@ -181,7 +181,8 @@
   <nav class="mobile-nav">
     <div class="mobile-menu-section">
       <ng-container *ngFor="let item of menuItems">
-        <a *ngIf="canAccessMenuItem(item)" (click)="handleMenuClick(item)" class="mobile-nav-link">
+        <a *ngIf="canAccessMenuItem(item)" [routerLink]="item.url" (click)="closeMobileMenu()" class="mobile-nav-link"
+          routerLinkActive="active">
           {{ item.title }}
         </a>
       </ng-container>

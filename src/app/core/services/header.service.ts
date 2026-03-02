@@ -2,7 +2,7 @@ import { Injectable, Inject, PLATFORM_ID, makeStateKey, TransferState } from '@a
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
+import { environment } from 'src/environments/environment';
 import { isPlatformBrowser } from '@angular/common';
 
 const HEADER_KEY = makeStateKey<HeaderSection[]>('header_sections');

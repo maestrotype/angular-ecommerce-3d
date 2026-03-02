@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Message, CreateMessageDto, UpdateMessageDto, ReplyMessageDto } from '../models/message.model';
-import { environment } from '../../environments/environment';
+import { environment } from 'src/environments/environment';
 
 interface ApiResponse<T> {
   success: boolean;

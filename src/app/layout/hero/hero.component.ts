@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Section } from 'src/shared/models/section.model';
 
@@ -7,7 +8,7 @@ import { Section } from 'src/shared/models/section.model';
     templateUrl: './hero.component.html',
     styleUrls: ['./hero.component.scss'],
     standalone: true,
-    imports: []
+    imports: [CommonModule]
 })
 export class HeroComponent {
     @Input() data!: Section;
