@@ -2,6 +2,7 @@ import { Component, Input, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { Product } from 'src/shared/models/product.model';
+import { extractString } from 'src/shared/models/localization.model';
 import { ProductService } from '../../core/services/product.service';
 import { Section } from 'src/shared/models/section.model';
 import { CartService } from '../../core/services/cart.service';
@@ -76,7 +77,7 @@ export class BestSellersComponent implements OnInit {
             discount: product.discount
         };
         this.cartService.addToCart(cartItem);
-        this.notificationService.showSuccess(`Added ${product.name} to cart!`);
+        this.notificationService.showSuccess(`Added ${extractString(product.name)} to cart!`);
 
     }
 
@@ -113,7 +114,7 @@ export class BestSellersComponent implements OnInit {
         this.updateProductRating(product);
 
         // Show success message
-        this.notificationService.showSuccess(`Rated ${product.name} with ${rating} stars!`);
+        this.notificationService.showSuccess(`Rated ${extractString(product.name)} with ${rating} stars!`);
 
 
     }

@@ -262,21 +262,22 @@
         --contacts-button-bg: #60a5fa;
         --contacts-button-hover: #3b82f6;
 
-        /* Header section - Dark theme (admin palette) - semi-transparent like contact form */
-        --header-bg: rgba(255, 255, 255, 0.3);
+        /* Header section - Dark theme - dark background with light text */
+        --header-bg: rgba(15, 23, 42, 0.85);
         --header-backdrop-filter: blur(20px) saturate(180%);
-        --header-text: #1e293b;
-        --header-link: #475569;
-        --header-link-hover: #0f172a;
-        --header-search-bg: rgba(255, 255, 255, 0.2);
-        --header-search-text: #1e293b;
-        --header-text-rgb: 30, 41, 59;
+        --header-text: #f8fafc;
+        --header-link: #cbd5e1;
+        --header-link-hover: #ffffff;
+        --header-search-bg: rgba(255, 255, 255, 0.1);
+        --header-search-text: #f8fafc;
+        --header-text-rgb: 248, 250, 252;
 
         /* RGB Variables for transparencies (Dark Theme) */
-        --header-bg-rgb: 255, 255, 255;
-        --header-text-rgb: 30, 41, 59;
-        --footer-bg-rgb: 255, 255, 255;
-        --footer-text-rgb: 30, 41, 59;
+        --header-bg-rgb: 15, 23, 42;
+        --header-text-rgb: 248, 250, 252;
+        --footer-bg-rgb: 15, 23, 42;
+        --footer-text-rgb: 248, 250, 252;
+
 
         /* Product Detail section - Dark theme */
         --product-detail-bg: #0f172a;

@@ -1,8 +1,9 @@
 import { RecommendationType } from '../entities/product-recommendation.entity';
+import { Localizable } from '../../common/interfaces/localization.interface';
 
 export class RecommendationProductDto {
   id: number;
-  name: string;
+  name: Localizable;
   price: number;
   imageUrl: string;
   category: string;

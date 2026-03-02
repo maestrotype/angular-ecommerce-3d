@@ -1,9 +1,11 @@
+import { Localizable } from './localization.model';
+
 export interface Section {
   id: number;
   type: string; // 'hero', 'about', 'promo', ...
-  title: string;
-  subtitle?: string;
-  content?: string;
+  title: Localizable;
+  subtitle?: Localizable;
+  content?: Localizable;
   imageUrl?: string;
   order: number;
   isActive: boolean;

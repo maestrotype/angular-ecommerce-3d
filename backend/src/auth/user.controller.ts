@@ -8,6 +8,7 @@ import {
     Body,
     UseGuards,
     ParseIntPipe,
+    DefaultValuePipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -15,14 +16,14 @@ import { AdminGuard } from './guards/admin.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('users')
-// @UseGuards(JwtAuthGuard, AdminGuard)
+@UseGuards(JwtAuthGuard, AdminGuard)
 export class UserController {
     constructor(private readonly authService: AuthService) { }
 
     @Get()
     async findAll(
-        @Query('page') page: number = 1,
-        @Query('limit') limit: number = 10
+        @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+        @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number
     ) {
         return this.authService.findAllPaginated(page, limit);
     }

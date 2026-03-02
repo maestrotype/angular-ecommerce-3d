@@ -7,6 +7,7 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Section } from '../sections/entities/section.entity';
 import { Observable, from, throwError } from 'rxjs';
 import { map, switchMap, catchError } from 'rxjs/operators';
+import { extractString, normalizeLocalization } from '../common/utils/localization.util';
 
 @Injectable()
 export class CategoriesService {
@@ -15,7 +16,7 @@ export class CategoriesService {
     private categoryRepository: Repository<Category>,
     @InjectRepository(Section)
     private sectionRepository: Repository<Section>,
-  ) {}
+  ) { }
 
   findAll(): Observable<Category[]> {
     return from(this.categoryRepository.find({ order: { createdAt: 'DESC' } })).pipe(
@@ -44,13 +45,20 @@ export class CategoriesService {
   create(dto: CreateCategoryDto): Observable<Category> {
     // Generate slug from name if not provided
     if (!dto.slug) {
-      dto.slug = dto.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+      const nameString = extractString(dto.name);
+      dto.slug = nameString.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
     }
-    
-    const category = this.categoryRepository.create(dto);
-    
-    return from(this.categoryRepository.save(category)).pipe(
-      switchMap(savedCategory => {
+
+    // Normalize localized fields
+    dto.name = normalizeLocalization(dto.name);
+    if (dto.description) {
+      dto.description = normalizeLocalization(dto.description);
+    }
+
+    const category = this.categoryRepository.create(dto as any);
+
+    return from(this.categoryRepository.save(category as any) as Promise<Category>).pipe(
+      switchMap((savedCategory: Category) => {
         // Sync with sections
         return from(this.syncWithSections()).pipe(
           map(() => savedCategory)
@@ -68,13 +76,22 @@ export class CategoriesService {
       switchMap(category => {
         // Generate slug from name if not provided
         if (dto.name && !dto.slug) {
-          dto.slug = dto.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+          const nameString = extractString(dto.name);
+          dto.slug = nameString.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
         }
-        
+
+        // Normalize localized fields if provided
+        if (dto.name) {
+          dto.name = normalizeLocalization(dto.name);
+        }
+        if (dto.description) {
+          dto.description = normalizeLocalization(dto.description);
+        }
+
         Object.assign(category, dto);
-        
-        return from(this.categoryRepository.save(category)).pipe(
-          switchMap(updatedCategory => {
+
+        return from(this.categoryRepository.save(category as any) as Promise<Category>).pipe(
+          switchMap((updatedCategory: Category) => {
             // Sync with sections
             return from(this.syncWithSections()).pipe(
               map(() => updatedCategory)
@@ -108,7 +125,7 @@ export class CategoriesService {
 
   syncWithSections(): Observable<void> {
     // Get all active categories
-    return from(this.categoryRepository.find({ 
+    return from(this.categoryRepository.find({
       where: { isActive: true },
       order: { createdAt: 'ASC' }
     })).pipe(
@@ -124,12 +141,14 @@ export class CategoriesService {
 
             // Transform categories to section format with proper slug and icon
             const sectionCategories = categories.map(cat => {
-              const slug = cat.slug || cat.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+              const nameString = extractString(cat.name);
+              const slug = cat.slug || nameString.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
               let icon = cat.icon;
-              
+
               // Set default icons based on category name
               if (!icon) {
-                switch (cat.name.toLowerCase()) {
+                const nameLower = nameString.toLowerCase();
+                switch (nameLower) {
                   case 'shoes':
                     icon = 'assets/icons/shoes.svg';
                     break;
@@ -161,7 +180,7 @@ export class CategoriesService {
               categories: sectionCategories
             };
 
-            return from(this.sectionRepository.save(categoriesSection)).pipe(
+            return from(this.sectionRepository.save(categoriesSection as any) as Promise<Section>).pipe(
               map(() => void 0)
             );
           }),

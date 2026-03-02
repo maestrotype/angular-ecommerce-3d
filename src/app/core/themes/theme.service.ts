@@ -1,4 +1,4 @@
-import { Injectable, PLATFORM_ID, Inject, afterNextRender } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 import { Theme } from './theme.model';
@@ -17,9 +17,10 @@ export class ThemeService {
   public adminTheme$ = this.adminThemeSubject.asObservable();
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-    afterNextRender(() => {
+    // Apply saved theme immediately on browser (guards against SSR)
+    if (isPlatformBrowser(this.platformId)) {
       this.initializeTheme();
-    });
+    }
   }
 
   private initializeTheme(): void {

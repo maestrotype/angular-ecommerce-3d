@@ -8,13 +8,14 @@ import { UpdateSectionDto } from './dto/update-section.dto';
 import { ReorderSectionsDto } from './dto/reorder-sections.dto';
 import { Observable, from, throwError } from 'rxjs';
 import { map, switchMap, catchError } from 'rxjs/operators';
+import { normalizeLocalization } from '../common/utils/localization.util';
 
 @Injectable()
 export class SectionsService {
   constructor(
     @InjectRepository(Section)
     private sectionRepository: Repository<Section>,
-  ) {}
+  ) { }
 
   create(createSectionDto: CreateSectionDto): Observable<Section> {
     return from(this.sectionRepository
@@ -23,12 +24,21 @@ export class SectionsService {
       .getRawOne()
     ).pipe(
       switchMap(maxOrderResult => {
+        // Normalize localized fields
+        createSectionDto.title = normalizeLocalization(createSectionDto.title);
+        if (createSectionDto.subtitle) {
+          createSectionDto.subtitle = normalizeLocalization(createSectionDto.subtitle);
+        }
+        if (createSectionDto.content) {
+          createSectionDto.content = normalizeLocalization(createSectionDto.content);
+        }
+
         const section = this.sectionRepository.create({
           ...createSectionDto,
           order: createSectionDto.order ?? (maxOrderResult.maxOrder || 0) + 1,
-        });
+        } as any);
 
-        return from(this.sectionRepository.save(section));
+        return from(this.sectionRepository.save(section as any) as Promise<Section>);
       }),
       catchError(error => {
         console.error('[SectionsService] Create error:', error);
@@ -78,8 +88,19 @@ export class SectionsService {
   update(id: number, updateSectionDto: UpdateSectionDto): Observable<Section> {
     return this.findOne(id).pipe(
       switchMap(section => {
+        // Normalize localized fields if provided
+        if (updateSectionDto.title) {
+          updateSectionDto.title = normalizeLocalization(updateSectionDto.title);
+        }
+        if (updateSectionDto.subtitle) {
+          updateSectionDto.subtitle = normalizeLocalization(updateSectionDto.subtitle);
+        }
+        if (updateSectionDto.content) {
+          updateSectionDto.content = normalizeLocalization(updateSectionDto.content);
+        }
+
         Object.assign(section, updateSectionDto);
-        return from(this.sectionRepository.save(section));
+        return from(this.sectionRepository.save(section as any) as Promise<Section>);
       }),
       catchError(error => {
         console.error('[SectionsService] Update error:', error);
@@ -103,7 +124,7 @@ export class SectionsService {
     return this.findOne(id).pipe(
       switchMap(section => {
         section.isActive = !section.isActive;
-        return from(this.sectionRepository.save(section));
+        return from(this.sectionRepository.save(section as any) as Promise<Section>);
       }),
       catchError(error => {
         console.error('[SectionsService] Toggle active error:', error);
@@ -115,7 +136,7 @@ export class SectionsService {
   reorder(reorderSectionsDto: ReorderSectionsDto): Observable<Section[]> {
     const { sectionIds } = reorderSectionsDto;
 
-    return from(sectionIds.map((sectionId, index) => 
+    return from(sectionIds.map((sectionId, index) =>
       this.sectionRepository.update(sectionId, { order: index + 1 })
     )).pipe(
       switchMap(() => this.findAll()),

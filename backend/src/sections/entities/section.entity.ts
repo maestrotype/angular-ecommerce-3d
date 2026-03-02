@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { LocalizedString } from '../../common/interfaces/localization.interface';
 
 @Entity('sections')
 export class Section {
@@ -8,14 +9,14 @@ export class Section {
   @Column({ type: 'varchar' })
   type: string; // 'hero', 'about', etc.
 
-  @Column()
-  title: string;
+  @Column('jsonb', { nullable: true })
+  title: LocalizedString;
 
-  @Column({ type: 'varchar', default: '', nullable: true })
-  subtitle: string;
+  @Column('jsonb', { nullable: true })
+  subtitle: LocalizedString;
 
-  @Column('text', { nullable: true })
-  content: string;
+  @Column('jsonb', { nullable: true })
+  content: LocalizedString;
 
   @Column({ nullable: true })
   imageUrl: string;

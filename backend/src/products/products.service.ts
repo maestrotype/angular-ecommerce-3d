@@ -1,6 +1,6 @@
 
 import { Injectable, NotFoundException, BadRequestException, InternalServerErrorException } from '@nestjs/common';
-import { MoreThan, Like } from 'typeorm';
+import { MoreThan, Raw } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Observable, from, throwError, of } from 'rxjs';
@@ -9,6 +9,7 @@ import { Product } from './entities/product.entity';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { NotificationsService } from '../notifications/notifications.service';
+import { extractString, normalizeLocalization } from '../common/utils/localization.util';
 
 @Injectable()
 export class ProductsService {
@@ -19,13 +20,19 @@ export class ProductsService {
     @InjectRepository(Product)
     private productRepository: Repository<Product>,
     private notificationsService: NotificationsService,
-  ) {}
+  ) { }
 
   create(createProductDto: CreateProductDto): Observable<Product> {
-    const product = this.productRepository.create(createProductDto);
-    
-    return from(this.productRepository.save(product)).pipe(
-      switchMap(savedProduct => 
+    // Normalize localized fields
+    createProductDto.name = normalizeLocalization(createProductDto.name);
+    if (createProductDto.description) {
+      createProductDto.description = normalizeLocalization(createProductDto.description);
+    }
+
+    const product = this.productRepository.create(createProductDto as any);
+
+    return from(this.productRepository.save(product as any) as Promise<Product>).pipe(
+      switchMap((savedProduct: Product) =>
         this.checkAndNotifyLowStock(savedProduct).pipe(
           map(() => savedProduct)
         )
@@ -71,10 +78,18 @@ export class ProductsService {
   update(id: number, updateProductDto: UpdateProductDto): Observable<Product> {
     return this.findOne(id).pipe(
       switchMap(product => {
+        // Normalize localized fields if provided
+        if (updateProductDto.name) {
+          updateProductDto.name = normalizeLocalization(updateProductDto.name);
+        }
+        if (updateProductDto.description) {
+          updateProductDto.description = normalizeLocalization(updateProductDto.description);
+        }
+
         Object.assign(product, updateProductDto);
-        return from(this.productRepository.save(product));
+        return from(this.productRepository.save(product as any) as Promise<Product>);
       }),
-      switchMap(updatedProduct => 
+      switchMap((updatedProduct: Product) =>
         this.checkAndNotifyLowStock(updatedProduct).pipe(
           map(() => updatedProduct)
         )
@@ -117,14 +132,15 @@ export class ProductsService {
   decreaseStock(productId: number, quantity: number): Observable<Product> {
     return this.findOne(productId).pipe(
       switchMap(product => {
+        const productName = extractString(product.name);
         if (product.stock < quantity) {
-          throw new BadRequestException(`Insufficient stock for product ${product.name}`);
+          throw new BadRequestException(`Insufficient stock for product ${productName}`);
         }
-        
+
         product.stock -= quantity;
-        return from(this.productRepository.save(product));
+        return from(this.productRepository.save(product as any) as Promise<Product>);
       }),
-      switchMap(updatedProduct => 
+      switchMap((updatedProduct: Product) =>
         this.checkAndNotifyLowStock(updatedProduct).pipe(
           map(() => updatedProduct)
         )
@@ -134,22 +150,23 @@ export class ProductsService {
   }
 
   private checkAndNotifyLowStock(product: Product): Observable<void> {
+    const productName = extractString(product.name);
     // Only notify if stock is below threshold and we haven't already notified for this product
     if (product.stock <= this.LOW_STOCK_THRESHOLD && !this.lowStockNotified.has(product.id)) {
-      return this.notificationsService.createLowStockNotification(product.name, product.stock).pipe(
+      return this.notificationsService.createLowStockNotification(productName, product.stock).pipe(
         tap(() => this.lowStockNotified.add(product.id)),
         map(() => void 0)
       );
     }
-    
+
     return of(void 0);
   }
 
   searchProducts(searchTerm: string): Observable<Product[]> {
     return from(this.productRepository.find({
       where: [
-        { name: Like(`%${searchTerm}%`), stock: MoreThan(0) },
-        { description: Like(`%${searchTerm}%`), stock: MoreThan(0) }
+        { name: Raw(alias => `${alias}::text ILIKE :term`, { term: `%${searchTerm}%` }), stock: MoreThan(0) },
+        { description: Raw(alias => `${alias}::text ILIKE :term`, { term: `%${searchTerm}%` }), stock: MoreThan(0) }
       ],
       order: { createdAt: 'DESC' },
     })).pipe(

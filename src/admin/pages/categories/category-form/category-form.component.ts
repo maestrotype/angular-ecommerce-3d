@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { CategoryService } from "../../../services/category.service";
 import { Category } from "../../../models/category.model";
+import { extractString } from 'src/shared/models/localization.model';
 
 @Component({
   selector: "app-category-form",
@@ -44,8 +45,8 @@ export class CategoryFormComponent implements OnInit {
     this.categoryService.getCategoryById(id).subscribe({
       next: (category) => {
         this.categoryForm.patchValue({
-          name: category.name,
-          description: category.description,
+          name: extractString(category.name),
+          description: extractString(category.description),
         });
         this.isLoading = false;
       },

@@ -9,6 +9,7 @@ import { SectionService } from '../../../services/section.service';
 import { Section, CreateSectionDto, UpdateSectionDto, MenuItem } from '../../../models/section.model';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ImageUploadComponent } from '../../../components/ui/image-upload/image-upload.component';
+import { extractString } from 'src/shared/models/localization.model';
 
 @Component({
   selector: 'app-section-form',
@@ -17,7 +18,7 @@ import { ImageUploadComponent } from '../../../components/ui/image-upload/image-
 })
 export class SectionFormComponent implements AfterViewInit {
   @ViewChildren(ImageUploadComponent) imageUploadComponents!: QueryList<ImageUploadComponent>;
-  
+
   sectionForm: FormGroup;
   isEditMode: boolean;
   loading = false;
@@ -87,7 +88,7 @@ export class SectionFormComponent implements AfterViewInit {
 
   private createForm(): FormGroup {
     const section = this.data?.section;
-    
+
     // Map database type to display type
     let displayType = section?.type || 'hero';
     if (section?.type === 'categories') {
@@ -96,9 +97,9 @@ export class SectionFormComponent implements AfterViewInit {
 
     return this.fb.group({
       type: [displayType, Validators.required],
-      title: [section?.title || '', Validators.required],
-      subtitle: [section?.subtitle || ''],
-      content: [section?.content || ''],
+      title: [extractString(section?.title) || '', Validators.required],
+      subtitle: [extractString(section?.subtitle) || ''],
+      content: [extractString(section?.content) || ''],
       imageUrl: [section?.imageUrl || ''],
       isActive: [section?.isActive ?? true],
       model3dUrl: [section?.model3dUrl || ''],
@@ -112,7 +113,7 @@ export class SectionFormComponent implements AfterViewInit {
       menu: this.fb.array(
         (section?.settings?.menu || []).map((item: MenuItem) =>
           this.fb.group({
-            title: [item.title, Validators.required],
+            title: [extractString(item.title), Validators.required],
             url: [item.url, Validators.required],
             access: [item.access || 'all', Validators.required],
             isActive: [item.isActive ?? true],
@@ -123,7 +124,7 @@ export class SectionFormComponent implements AfterViewInit {
       categories: this.fb.array(
         (section?.settings?.categories || []).map((category: any) =>
           this.fb.group({
-            name: [category.name, Validators.required],
+            name: [extractString(category.name), Validators.required],
             slug: [category.slug || '', Validators.required],
             icon: [category.icon],
             isActive: [category.isActive ?? true]
@@ -240,7 +241,7 @@ export class SectionFormComponent implements AfterViewInit {
         if (response?.url) {
           const iconUrl = response.url;
           this.categories.at(index).patchValue({ icon: iconUrl });
-          
+
           // Find the corresponding image upload component and notify it
           const imageUploadComponents = this.imageUploadComponents.toArray();
           if (imageUploadComponents[index + 1]) { // +1 because first component is for logo
@@ -250,7 +251,7 @@ export class SectionFormComponent implements AfterViewInit {
         this.uploadingCategoryIcon = false;
       },
       error: (error) => {
-        
+
         this.snackBar.open('Error uploading category icon', 'Close', { duration: 3000 });
         this.uploadingCategoryIcon = false;
       }
@@ -300,7 +301,7 @@ export class SectionFormComponent implements AfterViewInit {
     if (!this.model3dFile) {
       return of(this.sectionForm.value.model3dUrl || null);
     }
-    
+
     this.uploading3d = true;
     return this.sectionService.upload3dModel(this.model3dFile).pipe(
       map(response => {
@@ -390,7 +391,7 @@ export class SectionFormComponent implements AfterViewInit {
             },
             error: (error) => {
               this.loading = false;
-              
+
               this.snackBar.open('Error updating section', 'Close', { duration: 3000 });
             }
           });
@@ -403,7 +404,7 @@ export class SectionFormComponent implements AfterViewInit {
             },
             error: (error) => {
               this.loading = false;
-              
+
               this.snackBar.open('Error creating section', 'Close', { duration: 3000 });
             }
           });
@@ -411,7 +412,7 @@ export class SectionFormComponent implements AfterViewInit {
       },
       error: (error) => {
         this.loading = false;
-        
+
         this.snackBar.open('Error processing section', 'Close', { duration: 3000 });
       }
     });

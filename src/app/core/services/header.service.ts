@@ -1,4 +1,5 @@
 import { Injectable, Inject, PLATFORM_ID, makeStateKey, TransferState } from '@angular/core';
+import { Localizable } from '../../../shared/models/localization.model';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
@@ -8,7 +9,7 @@ import { isPlatformBrowser } from '@angular/common';
 const HEADER_KEY = makeStateKey<HeaderSection[]>('header_sections');
 
 export interface MenuItem {
-  title: string;
+  title: Localizable;
   url: string;
   access: 'all' | 'admin' | 'closed';
   isActive: boolean;
@@ -25,7 +26,7 @@ export interface HeaderSettings {
 export interface HeaderSection {
   id: number;
   type: string;
-  title: string;
+  title: Localizable;
   settings?: HeaderSettings;
   isActive: boolean;
 }
@@ -124,7 +125,7 @@ export class HeaderService {
     return {
       id: 1,
       type: 'header',
-      title: 'Default Header',
+      title: { en: 'Default Header' },
       isActive: true,
       settings: this.getDefaultHeaderSettings()
     };
@@ -142,31 +143,31 @@ export class HeaderService {
   private getDefaultMenuItems(): MenuItem[] {
     return [
       {
-        title: 'Home',
+        title: { en: 'Home' },
         url: '/home',
         access: 'all',
         isActive: true
       },
       {
-        title: 'Shop',
+        title: { en: 'Shop' },
         url: '/shop',
         access: 'all',
         isActive: true
       },
       {
-        title: 'About',
+        title: { en: 'About' },
         url: '/about',
         access: 'all',
         isActive: true
       },
       {
-        title: 'Contacts',
+        title: { en: 'Contacts' },
         url: '/contacts',
         access: 'all',
         isActive: true
       },
       {
-        title: 'Admin Panel',
+        title: { en: 'Admin Panel' },
         url: '/admin',
         access: 'admin',
         isActive: true

@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { Product } from 'src/shared/models/product.model';
+import { extractString } from 'src/shared/models/localization.model';
 import { FavoritesService } from '../../core/services/favorites.service';
 import { CartService } from '../../core/services/cart.service';
 
@@ -13,14 +14,14 @@ import { CartService } from '../../core/services/cart.service';
 export class FavoritesComponent implements OnInit, OnDestroy {
   favorites: Product[] = [];
   isLoading = false;
-  
+
   private destroy$ = new Subject<void>();
 
   constructor(
     private favoritesService: FavoritesService,
     private cartService: CartService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadFavorites();
@@ -36,7 +37,7 @@ export class FavoritesComponent implements OnInit, OnDestroy {
    */
   private loadFavorites(): void {
     this.isLoading = true;
-    
+
     this.favoritesService.favorites$
       .pipe(takeUntil(this.destroy$))
       .subscribe(favorites => {
@@ -61,9 +62,10 @@ export class FavoritesComponent implements OnInit, OnDestroy {
       name: product.name,
       price: Number(product.discount ? product.price * (1 - product.discount / 100) : product.price), // Convert to number
       imageUrl: product.imageUrl,
-      discount: product.discount
+      discount: product.discount,
+      quantity: 1
     };
-    
+
     this.cartService.addToCart(cartItem);
   }
 

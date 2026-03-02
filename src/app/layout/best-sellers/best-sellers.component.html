@@ -1,27 +1,25 @@
 <section id="best-sellers" class="best-sellers">
     <div class="section-wrapper">
         <div class="section-header">
-            <span class="section-subtitle">{{ data?.subtitle || "TOP PRODUCTS" }}</span>
-            <h2 class="section-title">{{ data?.title || "Best Sellers" }}</h2>
+            <span class="section-subtitle">{{ data?.subtitle | loc }}</span>
+            <h2 class="section-title">{{ data?.title | loc }}</h2>
         </div>
 
         <div class="products-grid" *ngIf="bestSellersProducts.length > 0">
-            <div 
-                class="product-card animate-in" 
-                *ngFor="let product of bestSellersProducts; trackBy: trackByProductId"
+            <div class="product-card animate-in" *ngFor="let product of bestSellersProducts; trackBy: trackByProductId"
                 (click)="goToProductDetail(product.id)"
                 [class.out-of-stock]="product?.stock !== undefined && product.stock <= 0">
                 <div class="product-image">
-                    <img [src]="product.imageUrl" [alt]="product.name" loading="lazy" />
-                    
+                    <img [src]="product.imageUrl" [alt]="product.name | loc" loading="lazy" />
+
                     <div class="product-overlay">
                         <div class="overlay-actions">
-                            <button class="action-btn" (click)="goToProductDetail(product.id); $event.stopPropagation()">
+                            <button class="action-btn"
+                                (click)="goToProductDetail(product.id); $event.stopPropagation()">
                                 <span class="material-icons">visibility</span>
                             </button>
-                            <button class="action-btn favorite-btn" 
-                                    [class.is-favorite]="isFavorite(product.id)"
-                                    (click)="toggleFavorite(product); $event.stopPropagation()">
+                            <button class="action-btn favorite-btn" [class.is-favorite]="isFavorite(product.id)"
+                                (click)="toggleFavorite(product); $event.stopPropagation()">
                                 <span class="material-icons">favorite_border</span>
                                 <span class="material-icons filled">favorite</span>
                             </button>
@@ -40,13 +38,14 @@
                 </div>
 
                 <div class="product-info">
-                    <h3 class="product-name">{{ product.name }}</h3>
-                    
+                    <h3 class="product-name">{{ product.name | loc }}</h3>
+
                     <div class="product-footer">
                         <div class="product-price">
                             <div class="price-main">
                                 <span class="current-price">${{ product.price }}</span>
-                                <span class="original-price" *ngIf="product.originalPrice">${{ product.originalPrice }}</span>
+                                <span class="original-price" *ngIf="product.originalPrice">${{ product.originalPrice
+                                    }}</span>
                             </div>
                         </div>
                         <div class="product-category">{{ product.category }}</div>

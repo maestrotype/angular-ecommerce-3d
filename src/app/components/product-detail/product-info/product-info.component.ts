@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Product } from 'src/shared/models/product.model';
+import { extractString } from 'src/shared/models/localization.model';
 import { CartService } from '../../../core/services/cart.service';
 import { FavoritesService } from '../../../core/services/favorites.service';
 import { NotificationService } from '../../../core/services/notification.service';
@@ -53,7 +54,7 @@ export class ProductInfoComponent {
       this.cartService.addToCart(cartItem);
     }
 
-    this.notificationService.showSuccess(`Added ${this.quantity} ${this.product.name} to cart!`);
+    this.notificationService.showSuccess(`Added ${this.quantity} ${extractString(this.product.name)} to cart!`);
   }
 
   getDiscountedPrice(): number {
@@ -72,20 +73,20 @@ export class ProductInfoComponent {
    * Handle favorite toggle events
    */
   onFavoriteToggled(event: { product: Product; isFavorite: boolean }): void {
-    
+
   }
 
   /**
    * Get key specifications to display in summary
    */
-  getKeySpecs(): Array<{key: string, value: string}> {
+  getKeySpecs(): Array<{ key: string, value: string }> {
     if (!this.product?.specifications) {
       return [];
     }
-    
+
     const specs = this.product.specifications;
     const keySpecs = ['Material', 'Color', 'Size', 'Weight', 'Brand'];
-    
+
     return keySpecs
       .filter(key => specs[key as keyof typeof specs])
       .map(key => ({

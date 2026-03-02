@@ -6,14 +6,15 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { LocalizedString } from '../../common/interfaces/localization.interface';
 
 @Entity('products')
 export class Product {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 255 })
-  name: string;
+  @Column('jsonb', { nullable: true })
+  name: LocalizedString;
 
   @Column({ length: 100 })
   category: string;
@@ -24,8 +25,8 @@ export class Product {
   @Column('int', { default: 0 })
   stock: number;
 
-  @Column('text')
-  description: string;
+  @Column('jsonb', { nullable: true })
+  description: LocalizedString;
 
   @Column({ length: 500, nullable: true })
   imageUrl: string;

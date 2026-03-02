@@ -1,13 +1,15 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Section } from 'src/shared/models/section.model';
+import { CommonModule } from '@angular/common';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @Component({
     selector: 'app-hero',
     templateUrl: './hero.component.html',
     styleUrls: ['./hero.component.scss'],
     standalone: true,
-    imports: []
+    imports: [CommonModule, SharedModule]
 })
 export class HeroComponent {
     @Input() data!: Section;

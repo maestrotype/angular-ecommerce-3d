@@ -3,8 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../core/services/product.service';
 import { ModalService } from '../../core/services/modal.service';
 import { Product } from 'src/shared/models/product.model';
+import { extractString } from 'src/shared/models/localization.model';
 import { CartService } from 'src/app/core/services/cart.service';
 import { ViewportScroller } from '@angular/common';
+import { NotificationService } from 'src/app/core/services/notification.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -24,45 +26,46 @@ export class ProductDetailComponent implements OnInit {
     private productService: ProductService,
     private cartService: CartService,
     private modalService: ModalService,
-    private viewportScroller: ViewportScroller
+    private viewportScroller: ViewportScroller,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
     // Subscribe to route params to handle navigation between products
     this.route.paramMap.subscribe(params => {
       const id = Number(params.get('id'));
-      
-      
+
+
       // Scroll to top immediately when route changes
       this.viewportScroller.scrollToPosition([0, 0]);
-      
+
       if (id) {
         this.loading = true;
         this.product = undefined; // Clear previous product
-        
+
         this.productService.getProductById(id).subscribe({
           next: (product) => {
-            
+
             this.product = product;
             this.loading = false;
             // Reset view state
             this.selectedType = 'image';
             this.selectedImageIndex = 0;
             this.quantity = 1;
-            
+
             // Ensure we're scrolled to top after product loads
             setTimeout(() => {
               this.viewportScroller.scrollToPosition([0, 0]);
             }, 100);
           },
           error: (error) => {
-            
+
             this.loading = false;
             this.router.navigate(['/shop']);
           }
         });
       } else {
-        
+
         this.router.navigate(['/shop']);
       }
     });
@@ -87,7 +90,7 @@ export class ProductDetailComponent implements OnInit {
         data: {
           images: this.product.images,
           currentIndex: this.selectedImageIndex,
-          productName: this.product.name
+          productName: extractString(this.product.name)
         },
         options: {
           closeOnBackdrop: true,
@@ -109,9 +112,11 @@ export class ProductDetailComponent implements OnInit {
         name: this.product.name,
         price: Number(this.product.price), // Convert to number
         imageUrl: this.product.imageUrl,
-        discount: this.product.discount
+        discount: this.product.discount,
+        quantity: this.quantity
       };
       this.cartService.addToCart(cartItem);
+      this.notificationService.showSuccess(`Added ${this.quantity} ${extractString(this.product.name)} to cart!`);
       this.modalService.openModal({
         id: 'cart-modal',
         type: 'cart',
@@ -139,8 +144,8 @@ export class ProductDetailComponent implements OnInit {
 
   navigateToCategory(): void {
     if (this.product) {
-      this.router.navigate(['/shop'], { 
-        queryParams: { category: this.product.category } 
+      this.router.navigate(['/shop'], {
+        queryParams: { category: this.product.category }
       });
     }
   }

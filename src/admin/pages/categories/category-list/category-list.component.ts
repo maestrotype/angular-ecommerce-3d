@@ -10,6 +10,7 @@ import { CategoryService } from "src/app/core/services/category.service";
 import { ConfirmationService } from "../../../services/confirmation.service";
 import { ErrorHandlerService } from "../../../services/error-handler.service";
 import { TranslateService } from '@ngx-translate/core';
+import { extractString } from 'src/shared/models/localization.model';
 
 
 @Component({
@@ -35,7 +36,7 @@ export class CategoryListComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private errorHandler: ErrorHandlerService,
     private translate: TranslateService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadCategories();
@@ -82,7 +83,8 @@ export class CategoryListComponent implements OnInit {
   }
 
   deleteCategory(category: Category): void {
-    this.confirmationService.confirmDelete(category.name).subscribe(confirmed => {
+    const categoryName = extractString(category.name);
+    this.confirmationService.confirmDelete(categoryName).subscribe(confirmed => {
       if (confirmed) {
         this.categoryService.deleteCategory(category.id).subscribe({
           next: () => {

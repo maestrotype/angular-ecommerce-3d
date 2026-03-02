@@ -13,6 +13,7 @@ import { StripeElementsComponent } from './components/stripe-elements/stripe-ele
 import { StripeTestComponent } from '../pages/stripe-test/stripe-test.component';
 import { SectionRendererComponent } from '../components/section-renderer/section-renderer.component';
 import { NotificationBadgeComponent } from './components/notification-badge/notification-badge.component';
+import { LocPipe } from './pipes/loc.pipe';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { NotificationBadgeComponent } from './components/notification-badge/noti
     StripeElementsComponent,
     StripeTestComponent,
     SectionRendererComponent,
-    NotificationBadgeComponent
+    NotificationBadgeComponent,
+    LocPipe
   ],
   imports: [
     CommonModule,
@@ -45,7 +47,8 @@ import { NotificationBadgeComponent } from './components/notification-badge/noti
     StripeElementsComponent,
     StripeTestComponent,
     SectionRendererComponent,
-    NotificationBadgeComponent
+    NotificationBadgeComponent,
+    LocPipe
   ]
 })
 export class SharedModule { } 

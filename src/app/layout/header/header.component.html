@@ -10,11 +10,11 @@
       <ng-container *ngFor="let item of menuItems">
         <a *ngIf="item.url.startsWith('/')" [routerLink]="item.url" class="nav-link"
           [class.hidden]="!canAccessMenuItem(item)">
-          {{ item.title }}
+          {{ item.title | loc }}
         </a>
         <a *ngIf="item.url.startsWith('#')" (click)="handleMenuClick(item)" class="nav-link"
           [class.hidden]="!canAccessMenuItem(item)">
-          {{ item.title }}
+          {{ item.title | loc }}
         </a>
       </ng-container>
     </nav>
@@ -145,9 +145,9 @@
     <div class="search-results-list">
       <div *ngFor="let product of searchResults.slice(0, 5)" class="search-result-item"
         (click)="goToProduct(product.id)">
-        <img [src]="product.imageUrl" [alt]="product.name" class="result-image">
+        <img [src]="product.imageUrl" [alt]="product.name | loc" class="result-image">
         <div class="result-info">
-          <h4 class="result-name">{{ product.name }}</h4>
+          <h4 class="result-name">{{ product.name | loc }}</h4>
           <p class="result-price">${{ product.price }}</p>
           <span class="result-category">{{ product.category }}</span>
         </div>
@@ -182,7 +182,7 @@
     <div class="mobile-menu-section">
       <ng-container *ngFor="let item of menuItems">
         <a *ngIf="canAccessMenuItem(item)" (click)="handleMenuClick(item)" class="mobile-nav-link">
-          {{ item.title }}
+          {{ item.title | loc }}
         </a>
       </ng-container>
     </div>

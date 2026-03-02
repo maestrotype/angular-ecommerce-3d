@@ -1,21 +1,19 @@
 
 import { IsEnum, IsNotEmpty, IsString, IsOptional, IsBoolean, IsNumber, IsObject } from 'class-validator';
+import { Localizable } from '../../common/interfaces/localization.interface';
 
 export class CreateSectionDto {
   @IsString()
   type: string;
 
-  @IsNotEmpty()
-  @IsString()
-  title: string;
+  @IsOptional()
+  title?: Localizable;
 
   @IsOptional()
-  @IsString()
-  subtitle?: string;
+  subtitle?: Localizable;
 
   @IsOptional()
-  @IsString()
-  content?: string;
+  content?: Localizable;
 
   @IsOptional()
   @IsString()

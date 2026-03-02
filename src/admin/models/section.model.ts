@@ -1,4 +1,6 @@
 
+import { Localizable } from '../../shared/models/localization.model';
+
 export interface MenuItem {
   title: string;
   url: string;
@@ -26,9 +28,9 @@ export interface HeaderSettings {
 export interface Section {
   id: number;
   type: string;
-  title: string;
-  subtitle: string;
-  content?: string;
+  title: Localizable;
+  subtitle: Localizable;
+  content?: Localizable;
   imageUrl?: string;
   order: number;
   isActive: boolean;
@@ -42,9 +44,9 @@ export interface Section {
 
 export interface CreateSectionDto {
   type: string;
-  title: string;
-  subtitle?: string;
-  content?: string;
+  title: Localizable;
+  subtitle?: Localizable;
+  content?: Localizable;
   imageUrl?: string;
   isActive?: boolean;
   settings?: HeaderSettings | Record<string, any>;
@@ -55,9 +57,9 @@ export interface CreateSectionDto {
 
 export interface UpdateSectionDto {
   type?: string;
-  title?: string;
-  subtitle?: string;
-  content?: string;
+  title?: Localizable;
+  subtitle?: Localizable;
+  content?: Localizable;
   imageUrl?: string;
   isActive?: boolean;
   settings?: HeaderSettings | Record<string, any>;

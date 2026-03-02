@@ -1,9 +1,11 @@
+import { Localizable } from './localization.model';
+
 export interface Category {
     id: string;
-    name: string;
+    name: Localizable;
     slug?: string;
     icon?: string;
-    description?: string;
+    description?: Localizable;
     isActive?: boolean;
     createdAt?: Date;
     updatedAt?: Date;

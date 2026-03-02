@@ -1,8 +1,9 @@
 import { IsString, IsOptional, IsBoolean } from 'class-validator';
+import { Localizable } from '../../common/interfaces/localization.interface';
 
 export class CreateCategoryDto {
-  @IsString()
-  name: string;
+  @IsOptional()
+  name: Localizable;
 
   @IsOptional()
   @IsString()
@@ -13,8 +14,7 @@ export class CreateCategoryDto {
   icon?: string;
 
   @IsOptional()
-  @IsString()
-  description?: string;
+  description?: Localizable;
 
   @IsOptional()
   @IsBoolean()

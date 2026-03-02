@@ -11,25 +11,25 @@ export class NotificationsService {
   constructor(
     @InjectRepository(Notification)
     private notificationRepository: Repository<Notification>,
-  ) {}
+  ) { }
 
   create(createNotificationDto: CreateNotificationDto): Observable<Notification> {
     const notification = this.notificationRepository.create(createNotificationDto);
-    
-    return from(this.notificationRepository.save(notification)).pipe(
+
+    return from(this.notificationRepository.save(notification as any) as Promise<Notification>).pipe(
       catchError(error => throwError(() => new Error(`Failed to create notification: ${error.message}`)))
     );
   }
 
   findAll(userId?: number): Observable<Notification[]> {
     const query = this.notificationRepository.createQueryBuilder('notification');
-    
+
     if (userId) {
       query.where('notification.userId = :userId OR notification.userId IS NULL', { userId });
     } else {
       query.where('notification.userId IS NULL');
     }
-    
+
     return from(query
       .orderBy('notification.createdAt', 'DESC')
       .getMany()
@@ -41,13 +41,13 @@ export class NotificationsService {
   findUnread(userId?: number): Observable<Notification[]> {
     const query = this.notificationRepository.createQueryBuilder('notification')
       .where('notification.status = :status', { status: NotificationStatus.UNREAD });
-    
+
     if (userId) {
       query.andWhere('notification.userId = :userId OR notification.userId IS NULL', { userId });
     } else {
       query.andWhere('notification.userId IS NULL');
     }
-    
+
     return from(query
       .orderBy('notification.createdAt', 'DESC')
       .getMany()
@@ -74,13 +74,13 @@ export class NotificationsService {
       .update(Notification)
       .set({ status: NotificationStatus.READ })
       .where('status = :status', { status: NotificationStatus.UNREAD });
-    
+
     if (userId) {
       query.andWhere('userId = :userId OR userId IS NULL', { userId });
     } else {
       query.andWhere('userId IS NULL');
     }
-    
+
     return from(query.execute()).pipe(
       map(() => void 0),
       catchError(error => throwError(() => new Error(`Failed to mark all notifications as read: ${error.message}`)))
@@ -90,13 +90,13 @@ export class NotificationsService {
   getUnreadCount(userId?: number): Observable<number> {
     const query = this.notificationRepository.createQueryBuilder('notification')
       .where('notification.status = :status', { status: NotificationStatus.UNREAD });
-    
+
     if (userId) {
       query.andWhere('notification.userId = :userId OR notification.userId IS NULL', { userId });
     } else {
       query.andWhere('notification.userId IS NULL');
     }
-    
+
     return from(query.getCount()).pipe(
       catchError(error => throwError(() => new Error(`Failed to get unread count: ${error.message}`)))
     );

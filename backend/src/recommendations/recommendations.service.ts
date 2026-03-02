@@ -7,13 +7,13 @@ import { ProductRecommendation, RecommendationType } from './entities/product-re
 import { Product } from '../products/entities/product.entity';
 import { Order } from '../orders/entities/order.entity';
 import { RecommendationProductDto } from './dto/recommendation-response.dto';
-import { 
-  ProductWithScore, 
-  ProductId, 
-  Category, 
-  PriceRange, 
+import {
+  ProductWithScore,
+  ProductId,
+  Category,
+  PriceRange,
   UserPreferences,
-  SimilarityWeights 
+  SimilarityWeights
 } from './types/recommendation.types';
 import {
   calculatePriceRange,
@@ -33,6 +33,7 @@ import {
   getUserFriendlyMessage
 } from './utils/error.utils';
 import { RecommendationErrorType } from './types/error.types';
+import { extractString } from '../common/utils/localization.util';
 
 @Injectable()
 export class RecommendationsService {
@@ -46,14 +47,14 @@ export class RecommendationsService {
     private readonly productRepository: Repository<Product>,
     @InjectRepository(Order)
     private readonly orderRepository: Repository<Order>,
-  ) {}
+  ) { }
 
   /**
    * Get similar products based on category, price, rating, and features
    */
   getSimilarProducts(productId: ProductId, limit: number = this.config.defaultLimit): Observable<ProductWithScore[]> {
     console.log('Getting similar products for productId:', productId, 'limit:', limit);
-    
+
     return from(this.productRepository.findOne({ where: { id: productId } })).pipe(
       switchMap(targetProduct => {
         if (!targetProduct) {
@@ -61,15 +62,16 @@ export class RecommendationsService {
           return this.getPopularProducts(limit);
         }
 
-        console.log('Target product found:', targetProduct.name, 'category:', targetProduct.category);
-        
+        const productName = extractString(targetProduct.name);
+        console.log('Target product found:', productName, 'category:', targetProduct.category);
+
         // Find products from the same category with similar price range
         const priceRange = Number(targetProduct.price) * 0.3; // 30% price range
         const minPrice = Number(targetProduct.price) - priceRange;
         const maxPrice = Number(targetProduct.price) + priceRange;
-        
+
         console.log('Looking for similar products in category:', targetProduct.category, 'price range:', minPrice, '-', maxPrice);
-        
+
         return from(this.productRepository.createQueryBuilder('product')
           .where('product.category = :category', { category: targetProduct.category })
           .andWhere('product.id != :productId', { productId })
@@ -98,7 +100,7 @@ export class RecommendationsService {
             if (similarProducts.length < limit) {
               const needed = limit - similarProducts.length;
               console.log('Need', needed, 'more products, adding popular products from other categories');
-              
+
               return from(this.productRepository.find({
                 where: {
                   category: Not(targetProduct.category), // Different category
@@ -140,7 +142,7 @@ export class RecommendationsService {
    */
   getBoughtTogetherProducts(productId: ProductId, limit: number = this.config.defaultLimit): Observable<ProductWithScore[]> {
     console.log('Getting bought together products for productId:', productId, 'limit:', limit);
-    
+
     return from(this.productRepository.findOne({ where: { id: productId } })).pipe(
       switchMap(targetProduct => {
         if (!targetProduct) {
@@ -148,8 +150,9 @@ export class RecommendationsService {
           return this.getPopularProducts(limit);
         }
 
-        console.log('Target product found:', targetProduct.name, 'category:', targetProduct.category);
-        
+        const productName = extractString(targetProduct.name);
+        console.log('Target product found:', productName, 'category:', targetProduct.category);
+
         // For "bought together", we want products from DIFFERENT categories
         // This simulates complementary products that customers buy together
         return from(this.productRepository.find({
@@ -179,7 +182,7 @@ export class RecommendationsService {
             if (complementaryProducts.length < limit) {
               const needed = limit - complementaryProducts.length;
               console.log('Need', needed, 'more products, adding popular products');
-              
+
               return from(this.productRepository.find({
                 where: {
                   id: Not(productId)
@@ -240,9 +243,9 @@ export class RecommendationsService {
   updateRecommendations(): Observable<{ message: string; updatedCount: number }> {
     return from(this.productRepository.find()).pipe(
       switchMap(products => this.generateAllRecommendations(products)),
-      map(recommendations => ({ 
-        message: 'Recommendations updated successfully', 
-        updatedCount: recommendations.length 
+      map(recommendations => ({
+        message: 'Recommendations updated successfully',
+        updatedCount: recommendations.length
       })),
       this.handleRecommendationError('Failed to update recommendations', 'update_recommendations')
     );
@@ -283,14 +286,14 @@ export class RecommendationsService {
 
   private findSimilarProducts(product: Product, limit: number): Observable<{ targetProduct: Product; products: Product[] }> {
     const priceRange = calculatePriceRange(product.price, this.config.priceRangePercentage);
-    
+
     return from(this.productRepository
       .createQueryBuilder('p')
       .where('p.category = :category', { category: product.category })
       .andWhere('p.id != :productId', { productId: product.id })
-      .andWhere('p.price BETWEEN :minPrice AND :maxPrice', { 
-        minPrice: priceRange.min, 
-        maxPrice: priceRange.max 
+      .andWhere('p.price BETWEEN :minPrice AND :maxPrice', {
+        minPrice: priceRange.min,
+        maxPrice: priceRange.max
       })
       .orderBy('p.rating', 'DESC')
       .addOrderBy('p.createdAt', 'DESC')
@@ -311,7 +314,7 @@ export class RecommendationsService {
 
   private findOrdersWithProduct(productId: ProductId): Observable<Order[]> {
     return from(this.orderRepository.find()).pipe(
-      map(orders => orders.filter(order => 
+      map(orders => orders.filter(order =>
         order.items.some(item => item.productId === productId)
       )),
       catchError(error => {
@@ -328,14 +331,14 @@ export class RecommendationsService {
   private extractBoughtTogetherProducts(orders: Order[], targetProductId: ProductId): ProductId[] {
     try {
       const boughtTogetherMap = new Map<ProductId, number>();
-      
+
       orders.forEach(order => {
         const hasTargetProduct = order.items.some(item => item.productId === targetProductId);
         if (hasTargetProduct) {
           order.items.forEach(item => {
             if (item.productId !== targetProductId) {
               boughtTogetherMap.set(
-                item.productId, 
+                item.productId,
                 (boughtTogetherMap.get(item.productId) || 0) + item.quantity
               );
             }
@@ -418,7 +421,7 @@ export class RecommendationsService {
           // Category preferences - using a default category since it's not in the item
           const category = 'general';
           categoryPreferences.set(category, (categoryPreferences.get(category) || 0) + item.quantity);
-          
+
           // Price preferences (grouped by $50 ranges)
           const priceRange = Math.floor(item.price / 50) * 50;
           pricePreferences.set(priceRange, (pricePreferences.get(priceRange) || 0) + item.quantity);
@@ -485,7 +488,7 @@ export class RecommendationsService {
 
   private getPopularProducts(limit: number): Observable<ProductWithScore[]> {
     console.log('Getting popular products, limit:', limit);
-    
+
     return from(this.productRepository.find({
       order: { rating: 'DESC' },
       take: limit
@@ -562,10 +565,10 @@ export class RecommendationsService {
   private generateAllRecommendations(products: Product[]): Observable<ProductRecommendation[]> {
     try {
       const recommendations: ProductRecommendation[] = [];
-      
+
       products.forEach(product => {
-        const similarProducts = products.filter(p => 
-          p.id !== product.id && 
+        const similarProducts = products.filter(p =>
+          p.id !== product.id &&
           p.category === product.category &&
           Math.abs(p.price - product.price) <= product.price * this.config.priceRangePercentage
         ).slice(0, 5);
@@ -602,19 +605,19 @@ export class RecommendationsService {
   }
 
   private handleRecommendationError<T>(message: string, context: string) {
-    return (source: Observable<T>): Observable<T> => 
+    return (source: Observable<T>): Observable<T> =>
       source.pipe(
         catchError(error => {
           if (error instanceof HttpException) {
             return throwError(() => error);
           }
-          
+
           const recommendationError = createRecommendationError(
             RecommendationErrorType.ALGORITHM_ERROR,
             `${message}: ${error.message}`,
             { context, originalError: error.message }
           );
-          
+
           logRecommendationError(recommendationError);
           return throwError(() => new HttpException(
             getUserFriendlyMessage(recommendationError),
@@ -636,7 +639,7 @@ export class RecommendationsService {
       isSpecial: product.isSpecial,
       score
     };
-    
+
     console.log('Mapped product to DTO:', dto);
     return dto;
   }
@@ -646,34 +649,34 @@ export class RecommendationsService {
    */
   private calculateSimilarityScore(targetProduct: Product, candidateProduct: Product): number {
     let score = 0;
-    
+
     // Same category gets high score
     if (targetProduct.category === candidateProduct.category) {
       score += 50;
     }
-    
+
     // Similar price range gets points
     const targetPrice = Number(targetProduct.price);
     const candidatePrice = Number(candidateProduct.price);
     const priceDiff = Math.abs(targetPrice - candidatePrice);
     const priceRange = targetPrice * 0.3; // 30% range
-    
+
     if (priceDiff <= priceRange) {
       score += 30;
     } else if (priceDiff <= priceRange * 2) {
       score += 15;
     }
-    
+
     // Rating bonus
     if (candidateProduct.rating) {
       score += candidateProduct.rating * 2;
     }
-    
+
     // Special product bonus
     if (candidateProduct.isSpecial) {
       score += 10;
     }
-    
+
     return Math.min(score, 100); // Cap at 100
   }
 
@@ -682,32 +685,32 @@ export class RecommendationsService {
    */
   private calculateComplementaryScore(targetProduct: Product, candidateProduct: Product): number {
     let score = 0;
-    
+
     // Different category is preferred for complementary products
     if (targetProduct.category !== candidateProduct.category) {
       score += 40;
     }
-    
+
     // Rating is important for complementary products
     if (candidateProduct.rating) {
       score += candidateProduct.rating * 3;
     }
-    
+
     // Special products are more likely to be bought together
     if (candidateProduct.isSpecial) {
       score += 20;
     }
-    
+
     // Price complementarity - not too expensive compared to main product
     const targetPrice = Number(targetProduct.price);
     const candidatePrice = Number(candidateProduct.price);
-    
+
     if (candidatePrice <= targetPrice * 0.5) {
       score += 20; // Cheaper complementary products are good
     } else if (candidatePrice <= targetPrice) {
       score += 10;
     }
-    
+
     return Math.min(score, 100); // Cap at 100
   }
 } 

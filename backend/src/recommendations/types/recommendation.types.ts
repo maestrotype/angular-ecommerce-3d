@@ -1,4 +1,5 @@
 // Core recommendation types
+import { Localizable } from '../../common/interfaces/localization.interface';
 export type ProductId = number;
 export type Category = string;
 export type Score = number;
@@ -39,7 +40,7 @@ export type RecommendationResult<T> = {
 // Product with recommendation score
 export type ProductWithScore = {
   id: ProductId;
-  name: string;
+  name: Localizable;
   price: number;
   imageUrl: string;
   category: Category;

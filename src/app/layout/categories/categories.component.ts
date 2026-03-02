@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Section } from 'src/shared/models/section.model';
 import { CommonModule } from '@angular/common';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { extractString } from 'src/shared/models/localization.model';
 
 interface CategoryDisplay {
     id?: number;
@@ -16,7 +18,7 @@ interface CategoryDisplay {
     templateUrl: './categories.component.html',
     styleUrls: ['./categories.component.scss'],
     standalone: true,
-    imports: [CommonModule]
+    imports: [CommonModule, SharedModule]
 })
 export class CategoriesComponent implements OnInit {
     @Input() data!: Section;
@@ -36,7 +38,7 @@ export class CategoriesComponent implements OnInit {
                     id: index + 1,
                     name: cat.name,
                     icon: cat.icon || 'assets/icons/default-category.svg',
-                    slug: cat.slug || cat.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
+                    slug: cat.slug || extractString(cat.name).toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
                     isActive: cat.isActive
                 }));
         } else {
@@ -45,7 +47,7 @@ export class CategoriesComponent implements OnInit {
     }
 
     navigateToCategory(category: CategoryDisplay): void {
-        const slug = category.slug || category.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+        const slug = category.slug || extractString(category.name).toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
         this.router.navigate(['/shop'], {
             queryParams: { category: slug }
         });

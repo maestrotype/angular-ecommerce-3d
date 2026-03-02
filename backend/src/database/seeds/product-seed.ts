@@ -4,7 +4,7 @@ import { Product } from '../../products/entities/product.entity';
 
 export async function seedProducts(dataSource: DataSource) {
   const productRepository = dataSource.getRepository(Product);
-  
+
   const existingProducts = await productRepository.count();
   if (existingProducts > 0) {
     console.log('Products already seeded');
@@ -13,11 +13,11 @@ export async function seedProducts(dataSource: DataSource) {
 
   const sampleProducts = [
     {
-      name: 'Wireless Bluetooth Headphones',
+      name: { en: 'Wireless Bluetooth Headphones' },
       category: 'electronics',
       price: 99.99,
       stock: 50,
-      description: 'High-quality wireless headphones with noise cancellation and 30-hour battery life.',
+      description: { en: 'High-quality wireless headphones with noise cancellation and 30-hour battery life.' },
       imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500',
       specifications: {
         brand: 'TechCorp',
@@ -31,11 +31,11 @@ export async function seedProducts(dataSource: DataSource) {
       features: ['Noise Cancellation', 'Quick Charge', 'Voice Assistant']
     },
     {
-      name: 'Organic Cotton T-Shirt',
+      name: { en: 'Organic Cotton T-Shirt' },
       category: 'clothing',
       price: 24.99,
       stock: 100,
-      description: 'Comfortable organic cotton t-shirt in various colors and sizes.',
+      description: { en: 'Comfortable organic cotton t-shirt in various colors and sizes.' },
       imageUrl: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500',
       specifications: {
         material: '100% Organic Cotton',
@@ -46,11 +46,11 @@ export async function seedProducts(dataSource: DataSource) {
       features: ['Organic Material', 'Comfortable Fit', 'Eco-Friendly']
     },
     {
-      name: 'The Complete Guide to JavaScript',
+      name: { en: 'The Complete Guide to JavaScript' },
       category: 'books',
       price: 39.99,
       stock: 25,
-      description: 'Comprehensive guide to modern JavaScript programming with practical examples.',
+      description: { en: 'Comprehensive guide to modern JavaScript programming with practical examples.' },
       imageUrl: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500',
       specifications: {
         author: 'John Developer',
@@ -62,11 +62,11 @@ export async function seedProducts(dataSource: DataSource) {
       features: ['ES6+ Features', 'Practical Examples', 'Advanced Concepts']
     },
     {
-      name: 'Smart Garden Watering System',
+      name: { en: 'Smart Garden Watering System' },
       category: 'home',
       price: 149.99,
       stock: 15,
-      description: 'Automated watering system for your garden with smartphone app control.',
+      description: { en: 'Automated watering system for your garden with smartphone app control.' },
       imageUrl: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=500',
       specifications: {
         coverage: 'Up to 20 plants',
@@ -79,11 +79,11 @@ export async function seedProducts(dataSource: DataSource) {
       features: ['App Control', 'Water Scheduling', 'Weather Integration']
     },
     {
-      name: 'Professional Yoga Mat',
+      name: { en: 'Professional Yoga Mat' },
       category: 'sports',
       price: 79.99,
       stock: 30,
-      description: 'Non-slip yoga mat made from eco-friendly materials with excellent grip.',
+      description: { en: 'Non-slip yoga mat made from eco-friendly materials with excellent grip.' },
       imageUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=500',
       specifications: {
         thickness: '6mm',

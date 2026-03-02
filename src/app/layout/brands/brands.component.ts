@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Section } from 'src/shared/models/section.model';
 import { CommonModule } from '@angular/common';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 interface Brand {
     id: number;
@@ -14,7 +15,7 @@ interface Brand {
     templateUrl: './brands.component.html',
     styleUrls: ['./brands.component.scss'],
     standalone: true,
-    imports: [CommonModule]
+    imports: [CommonModule, SharedModule]
 })
 export class BrandsComponent implements OnInit {
     @Input() data!: Section;
@@ -54,6 +55,9 @@ export class BrandsComponent implements OnInit {
     constructor() { }
 
     ngOnInit(): void {
+        // The provided edit snippet was syntactically incorrect and referenced undefined variables/services.
+        // As per instructions, the code must remain syntactically correct.
+        // Therefore, the malformed edit has been omitted.
         this.loadBrands();
     }
 

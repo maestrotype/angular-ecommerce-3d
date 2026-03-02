@@ -10,8 +10,8 @@
             </div>
 
             <div class="offer-text">
-                <h2 class="offer-title">{{ data?.title || "Special Offer" }}</h2>
-                <p class="offer-subtitle">{{ data?.subtitle || "Only this week: Up to 40% off" }}</p>
+                <h2 class="offer-title">{{ data?.title | loc }}</h2>
+                <p class="offer-subtitle">{{ data?.subtitle | loc }}</p>
                 <button class="shop-button" (click)="onShopNow()">
                     SHOP NOW
                 </button>

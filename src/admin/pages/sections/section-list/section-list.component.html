@@ -1,4 +1,3 @@
-
 <app-list-container>
   <div list-header class="header-section">
     <h1>{{ 'MAIN_PAGE_SECTIONS' | translate }}</h1>
@@ -7,112 +6,105 @@
       <span class="button-text">{{ 'ADD_SECTION' | translate }}</span>
     </button>
   </div>
-  
+
   <app-admin-table [loading]="loading" [dataSource]="dataSource" [displayedColumns]="displayedColumns">
-    <table mat-table [dataSource]="dataSource" class="sections-table" 
-           cdkDropList (cdkDropListDropped)="drop($event)" matSort>
-        
-        <ng-container matColumnDef="order">
-          <th mat-header-cell *matHeaderCellDef>{{ 'ORDER' | translate }}</th>
-          <td mat-cell *matCellDef="let section">
-            <div class="drag-handle" cdkDragHandle>
-              <mat-icon>drag_indicator</mat-icon>
-              {{ section.order }}
-            </div>
-          </td>
-        </ng-container>
-  
-        <ng-container matColumnDef="title">
-          <th mat-header-cell *matHeaderCellDef>{{ 'TITLE' | translate }}</th>
-          <td mat-cell *matCellDef="let section">{{ section.title }}</td>
-        </ng-container>
-  
-        <ng-container matColumnDef="type">
-          <th mat-header-cell *matHeaderCellDef>{{ 'TYPE' | translate }}</th>
-          <td mat-cell *matCellDef="let section">
-            <mat-chip selected>{{ section.type | titlecase }}</mat-chip>
-          </td>
-        </ng-container>
-  
-        <ng-container matColumnDef="isActive">
-          <th mat-header-cell *matHeaderCellDef>{{ 'STATUS' | translate }}</th>
-          <td mat-cell *matCellDef="let section">
-            <mat-slide-toggle [checked]="section.isActive" 
-                              (change)="toggleSection(section)">
-            </mat-slide-toggle>
-          </td>
-        </ng-container>
-  
-        <ng-container matColumnDef="createdAt">
-          <th mat-header-cell *matHeaderCellDef>{{ 'CREATED' | translate }}</th>
-          <td mat-cell *matCellDef="let section">{{ section.createdAt | date:'short' }}</td>
-        </ng-container>
-  
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>{{ 'ACTIONS' | translate }}</th>
-          <td mat-cell *matCellDef="let section">
-            <button mat-icon-button color="primary" (click)="editSection(section)" matTooltip="Edit">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button color="warn" (click)="deleteSection(section)" matTooltip="Delete">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </td>
-        </ng-container>
-  
+    <table mat-table [dataSource]="dataSource" class="sections-table" cdkDropList (cdkDropListDropped)="drop($event)"
+      matSort>
+
+      <ng-container matColumnDef="order">
+        <th mat-header-cell *matHeaderCellDef>{{ 'ORDER' | translate }}</th>
+        <td mat-cell *matCellDef="let section">
+          <div class="drag-handle" cdkDragHandle>
+            <mat-icon>drag_indicator</mat-icon>
+            {{ section.order }}
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef>{{ 'TITLE' | translate }}</th>
+        <td mat-cell *matCellDef="let section">{{ section.title | loc }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <th mat-header-cell *matHeaderCellDef>{{ 'TYPE' | translate }}</th>
+        <td mat-cell *matCellDef="let section">
+          <mat-chip selected>{{ section.type | titlecase }}</mat-chip>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="isActive">
+        <th mat-header-cell *matHeaderCellDef>{{ 'STATUS' | translate }}</th>
+        <td mat-cell *matCellDef="let section">
+          <mat-slide-toggle [checked]="section.isActive" (change)="toggleSection(section)">
+          </mat-slide-toggle>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef>{{ 'CREATED' | translate }}</th>
+        <td mat-cell *matCellDef="let section">{{ section.createdAt | date:'short' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>{{ 'ACTIONS' | translate }}</th>
+        <td mat-cell *matCellDef="let section">
+          <button mat-icon-button color="primary" (click)="editSection(section)" matTooltip="Edit">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteSection(section)" matTooltip="Delete">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;" cdkDrag></tr>
     </table>
   </app-admin-table>
 
-    <!-- Mobile Card View -->
-    <div class="mobile-view">
-      <div class="sections-grid" cdkDropList (cdkDropListDropped)="drop($event)">
-        <div *ngFor="let section of dataSource.data; let i = index" 
-             class="section-card" cdkDrag>
-          
-          <div class="card-header">
-            <div class="drag-handle" cdkDragHandle>
-              <mat-icon>drag_indicator</mat-icon>
-              <span class="order-number">{{ section.order }}</span>
-            </div>
-            <mat-slide-toggle [checked]="section.isActive" 
-                              (change)="toggleSection(section)"
-                              class="status-toggle">
-            </mat-slide-toggle>
+  <!-- Mobile Card View -->
+  <div class="mobile-view">
+    <div class="sections-grid" cdkDropList (cdkDropListDropped)="drop($event)">
+      <div *ngFor="let section of dataSource.data; let i = index" class="section-card" cdkDrag>
+
+        <div class="card-header">
+          <div class="drag-handle" cdkDragHandle>
+            <mat-icon>drag_indicator</mat-icon>
+            <span class="order-number">{{ section.order }}</span>
+          </div>
+          <mat-slide-toggle [checked]="section.isActive" (change)="toggleSection(section)" class="status-toggle">
+          </mat-slide-toggle>
+        </div>
+
+        <div class="card-content">
+          <div class="section-title">
+            <h3>{{ section.title | loc }}</h3>
           </div>
 
-          <div class="card-content">
-            <div class="section-title">
-              <h3>{{ section.title }}</h3>
-            </div>
-            
-            <div class="section-type">
-              <mat-chip selected>{{ section.type | titlecase }}</mat-chip>
-            </div>
-            
-            <div class="section-date">
-              <mat-icon>schedule</mat-icon>
-              <span>{{ section.createdAt | date:'short' }}</span>
-            </div>
+          <div class="section-type">
+            <mat-chip selected>{{ section.type | titlecase }}</mat-chip>
           </div>
 
-          <div class="card-actions">
-            <button mat-icon-button color="primary" (click)="editSection(section)" 
-                    class="action-button">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button color="warn" (click)="deleteSection(section)" 
-                    class="action-button">
-              <mat-icon>delete</mat-icon>
-            </button>
+          <div class="section-date">
+            <mat-icon>schedule</mat-icon>
+            <span>{{ section.createdAt | date:'short' }}</span>
           </div>
+        </div>
+
+        <div class="card-actions">
+          <button mat-icon-button color="primary" (click)="editSection(section)" class="action-button">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteSection(section)" class="action-button">
+            <mat-icon>delete</mat-icon>
+          </button>
         </div>
       </div>
     </div>
-  
+  </div>
+
   <div *ngIf="!loading && dataSource.data.length === 0" class="no-data">
     <p>{{ 'NO_SECTIONS_FOUND' | translate }}</p>
   </div>
 </app-list-container>
-  

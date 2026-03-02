@@ -11,11 +11,11 @@ import {
   IsUrl,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
+import { Localizable } from '../../common/interfaces/localization.interface';
 
 export class CreateProductDto {
-  @IsString()
-  @MaxLength(255)
-  name: string;
+  @IsOptional()
+  name: Localizable;
 
   @IsString()
   @MaxLength(100)
@@ -31,8 +31,8 @@ export class CreateProductDto {
   @Transform(({ value }) => parseInt(value))
   stock: number;
 
-  @IsString()
-  description: string;
+  @IsOptional()
+  description: Localizable;
 
   @IsOptional()
   @IsString()

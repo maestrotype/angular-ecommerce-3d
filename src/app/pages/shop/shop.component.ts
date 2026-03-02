@@ -9,6 +9,7 @@ import { OptimizationService } from '../../core/services/optimization.service';
 import { Product } from 'src/shared/models/product.model';
 import { Category } from 'src/shared/models/category.model';
 import { CartItem } from 'src/shared/models/cart-item.model';
+import { Localizable, extractString } from 'src/shared/models/localization.model';
 import { Subject, takeUntil } from 'rxjs';
 
 interface DropdownOption {
@@ -32,7 +33,7 @@ export class ShopComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   filteredProducts: Product[] = [];
   categories: Category[] = [];
-  
+
   // Filter and sort properties
   searchTerm: string = '';
   selectedCategory: string = 'all';
@@ -41,16 +42,16 @@ export class ShopComponent implements OnInit, OnDestroy {
   itemsPerPage: number = 18;
   totalPages: number = 1;
   paginatedProducts: Product[] = [];
-  
+
   // View mode
   viewMode: 'list' | 'grid-2' | 'grid-3' | 'grid-4' = 'grid-4';
-  
+
   // Filter sidebar properties
   isFilterSidebarOpen = false;
   minPrice: number | null = null;
   maxPrice: number | null = null;
   showOnlyOnSale = false;
-  
+
   // Filter categories for sidebar - will be populated from API
   filterCategories: FilterCategory[] = [];
 
@@ -88,7 +89,7 @@ export class ShopComponent implements OnInit, OnDestroy {
     private optimizationService: OptimizationService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadProducts();
@@ -107,18 +108,21 @@ export class ShopComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (categories) => {
           this.categories = categories;
-          
+
           // Update dropdown options
           this.categoryOptions = [
             { value: 'all', label: 'All categories' },
-            ...categories.map(cat => ({ value: cat.name, label: cat.name }))
+            ...categories.map(cat => ({
+              value: extractString(cat.name),
+              label: extractString(cat.name)
+            }))
           ];
-          
+
           // Update filter categories with real data and counts
           this.updateFilterCategories();
         },
         error: (error) => {
-          
+
         }
       });
   }
@@ -126,10 +130,11 @@ export class ShopComponent implements OnInit, OnDestroy {
   private updateFilterCategories(): void {
     // Create filter categories from real categories and count products
     this.filterCategories = this.categories.map(category => {
-      const count = this.products.filter(product => product.category === category.name).length;
+      const categoryName = extractString(category.name);
+      const count = this.products.filter(product => extractString(product.category) === categoryName).length;
       return {
-        id: category.name,
-        name: category.name,
+        id: categoryName,
+        name: categoryName,
         count: count,
         selected: false
       };
@@ -147,7 +152,7 @@ export class ShopComponent implements OnInit, OnDestroy {
           this.applyFilters();
         },
         error: (error) => {
-          
+
           this.notificationService.showError('Failed to load products');
         }
       });
@@ -192,7 +197,7 @@ export class ShopComponent implements OnInit, OnDestroy {
   applyFilters(): void {
     // Update category counts
     this.updateCategoryCounts();
-    
+
     // Sync selectedCategory with sidebar selections
     const selectedCategories = this.filterCategories.filter(cat => cat.selected).map(cat => cat.id);
     if (selectedCategories.length === 1) {
@@ -201,10 +206,10 @@ export class ShopComponent implements OnInit, OnDestroy {
       this.selectedCategory = 'all';
     }
     // If multiple categories selected, keep current selectedCategory but filter by all selected
-    
+
     // Close sidebar
     this.isFilterSidebarOpen = false;
-    
+
     // Trigger product filtering
     this.filterProducts();
   }
@@ -219,18 +224,18 @@ export class ShopComponent implements OnInit, OnDestroy {
     // Filter by selected categories from sidebar
     const selectedCategories = this.filterCategories.filter(cat => cat.selected).map(cat => cat.id);
     if (selectedCategories.length > 0) {
-      filtered = filtered.filter(product => selectedCategories.includes(product.category || ''));
+      filtered = filtered.filter(product => selectedCategories.includes(extractString(product.category) || ''));
     } else if (this.selectedCategory !== 'all') {
       // Fallback to dropdown category filter
-      filtered = filtered.filter(product => product.category === this.selectedCategory);
+      filtered = filtered.filter(product => extractString(product.category) === this.selectedCategory);
     }
 
     // Filter by search term
     if (this.searchTerm) {
       const searchLower = this.searchTerm.toLowerCase();
-      filtered = filtered.filter(product => 
-        product.name.toLowerCase().includes(searchLower) ||
-        product.description?.toLowerCase().includes(searchLower)
+      filtered = filtered.filter(product =>
+        extractString(product.name).toLowerCase().includes(searchLower) ||
+        extractString(product.description).toLowerCase().includes(searchLower)
       );
     }
 
@@ -260,7 +265,7 @@ export class ShopComponent implements OnInit, OnDestroy {
         // Since Product doesn't have createdAt, sort by id (assuming higher id = newer)
         return products.sort((a, b) => b.id - a.id);
       case 'name':
-        return products.sort((a, b) => a.name.localeCompare(b.name));
+        return products.sort((a, b) => extractString(a.name).localeCompare(extractString(b.name)));
       case 'price-low':
         return products.sort((a, b) => a.price - b.price);
       case 'price-high':
@@ -287,7 +292,7 @@ export class ShopComponent implements OnInit, OnDestroy {
     if (this.searchTerm) {
       queryParams.search = this.searchTerm;
     }
-    
+
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams,
@@ -301,7 +306,7 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   quickView(product: Product): void {
     // Implement quick view functionality
-    
+
   }
 
   onFavoriteToggled(event: Event): void {
@@ -311,7 +316,7 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   addToCart(product: Product, event: Event): void {
     event.stopPropagation();
-    
+
     const cartItem: CartItem = {
       productId: product.id,
       name: product.name,
@@ -321,7 +326,7 @@ export class ShopComponent implements OnInit, OnDestroy {
     };
 
     this.cartService.addToCart(cartItem);
-    this.notificationService.showSuccess(`${product.name} added to cart`);
+    this.notificationService.showSuccess(`${extractString(product.name)} added to cart`);
   }
 
   trackByProductId(index: number, product: Product): number {
@@ -331,7 +336,7 @@ export class ShopComponent implements OnInit, OnDestroy {
   // Add method to update counts when filters change
   private updateCategoryCounts(): void {
     this.filterCategories.forEach(filterCategory => {
-      const count = this.products.filter(product => product.category === filterCategory.id).length;
+      const count = this.products.filter(product => extractString(product.category) === filterCategory.id).length;
       filterCategory.count = count;
     });
   }
