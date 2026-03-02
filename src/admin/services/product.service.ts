@@ -16,7 +16,7 @@ import { environment } from 'src/environments/environment';
 export class ProductService {
   private readonly API_URL = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   private getHeaders(): HttpHeaders {
     return new HttpHeaders({
@@ -25,7 +25,7 @@ export class ProductService {
   }
 
   private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("adminToken");
     return new HttpHeaders({
       "Content-Type": "application/json",
       Authorization: token ? `Bearer ${token}` : "",
@@ -33,7 +33,7 @@ export class ProductService {
   }
 
   private getUploadHeaders(): HttpHeaders {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("adminToken");
     return new HttpHeaders({
       Authorization: token ? `Bearer ${token}` : "",
     });

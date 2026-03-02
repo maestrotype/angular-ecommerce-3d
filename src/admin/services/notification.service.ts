@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, interval } from 'rxjs';
 import { switchMap, catchError, map } from 'rxjs/operators';
-import { environment } from '../../environments/environment.prod';
+import { environment } from '../../environments/environment';
 
 export interface Notification {
   id: number;
@@ -22,7 +22,7 @@ export class NotificationService {
   private apiUrl = environment.apiUrl + '/notifications';
   private notificationsSubject = new BehaviorSubject<Notification[]>([]);
   private unreadCountSubject = new BehaviorSubject<number>(0);
-  
+
   public notifications$ = this.notificationsSubject.asObservable();
   public unreadCount$ = this.unreadCountSubject.asObservable();
 
@@ -35,7 +35,7 @@ export class NotificationService {
     interval(10000).pipe(
       switchMap(() => this.loadNotifications()),
       catchError(error => {
-        
+
         return [];
       })
     ).subscribe();
@@ -44,7 +44,7 @@ export class NotificationService {
   loadNotifications(): Observable<Notification[]> {
     return this.http.get<Notification[]>(this.apiUrl).pipe(
       catchError(error => {
-        
+
         return [];
       })
     );
@@ -54,7 +54,7 @@ export class NotificationService {
     return this.http.get<{ count: number }>(`${this.apiUrl}/unread/count`).pipe(
       map(res => res.count),
       catchError(error => {
-        
+
         return [0];
       })
     );
@@ -63,7 +63,7 @@ export class NotificationService {
   markAsRead(id: number): Observable<Notification> {
     return this.http.patch<Notification>(`${this.apiUrl}/${id}/read`, {}).pipe(
       catchError(error => {
-        
+
         this.updateLocalNotificationStatus(id, 'read');
         throw error;
       })
@@ -73,7 +73,7 @@ export class NotificationService {
   markAllAsRead(): Observable<any> {
     return this.http.patch(`${this.apiUrl}/read-all`, {}).pipe(
       catchError(error => {
-        
+
         this.updateAllLocalNotificationsStatus('read');
         throw error;
       })
@@ -81,7 +81,7 @@ export class NotificationService {
   }
 
   private updateLocalNotificationStatus(id: number, status: 'read' | 'unread'): void {
-    const notifications = this.notificationsSubject.value.map(n => 
+    const notifications = this.notificationsSubject.value.map(n =>
       n.id === id ? { ...n, status } : n
     );
     this.notificationsSubject.next(notifications);

@@ -9,13 +9,16 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if (isPlatformBrowser(this.platformId)) {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('adminToken') || localStorage.getItem('token');
       if (token) {
+        console.log('AuthInterceptor: Attaching token to', request.url);
         request = request.clone({
           setHeaders: {
             Authorization: `Bearer ${token}`
           }
         });
+      } else {
+        console.warn('AuthInterceptor: No token found in localStorage');
       }
     }
     return next.handle(request);

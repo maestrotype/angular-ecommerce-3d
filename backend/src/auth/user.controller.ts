@@ -21,10 +21,10 @@ export class UserController {
 
     @Get()
     async findAll(
-        @Query('page') page: number = 1,
-        @Query('limit') limit: number = 10
+        @Query('page') page: string = '1',
+        @Query('limit') limit: string = '10'
     ) {
-        return this.authService.findAllPaginated(page, limit);
+        return this.authService.findAllPaginated(parseInt(page), parseInt(limit));
     }
 
     @Get(':id')
