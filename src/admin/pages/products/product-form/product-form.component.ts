@@ -12,7 +12,7 @@ import { CategoryService } from "../../../services/category.service";
 import { Category } from "../../../models/category.model";
 import { ProcessingOptions, ProcessedImageResult } from "../../../components/ui/image-processor/image-processor.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: "app-product-form",
@@ -32,7 +32,7 @@ export class ProductFormComponent implements OnInit {
   isUploading3d = false;
   dragging3d = false;
   categories: Category[] = [];
-  
+
   imageProcessingOptions: ProcessingOptions = {
     removeBackground: true,
     optimize: true
@@ -83,7 +83,7 @@ export class ProductFormComponent implements OnInit {
         this.categories = categories;
       },
       error: (error) => {
-        
+
         this.snackBar.open('Failed to load categories list', "Close", {
           duration: 5000,
         });
@@ -103,7 +103,7 @@ export class ProductFormComponent implements OnInit {
   onDrop(event: DragEvent): void {
     event.preventDefault();
     event.stopPropagation();
-    
+
     const files = event.dataTransfer?.files;
     if (files && files.length > 0) {
       this.handleFiles(files);
@@ -112,8 +112,8 @@ export class ProductFormComponent implements OnInit {
 
   private handleFiles(files: FileList): void {
     const fileArray = Array.from(files);
-    const imageFiles = fileArray.filter(file => 
-      file.type.startsWith('image/') && 
+    const imageFiles = fileArray.filter(file =>
+      file.type.startsWith('image/') &&
       ['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)
     );
 
@@ -129,7 +129,7 @@ export class ProductFormComponent implements OnInit {
 
   private uploadImages(files: File[]): void {
     this.isUploading = true;
-    
+
     files.forEach(file => {
       if (this.imageProcessingOptions.removeBackground || this.imageProcessingOptions.optimize) {
         this.processAndUploadImage(file);
@@ -150,7 +150,7 @@ export class ProductFormComponent implements OnInit {
         next: (response) => {
           this.imageUrls.push(response.url);
           this.isUploading = false;
-          
+
           if (response.processed) {
             const processingDetails = [];
             if (this.imageProcessingOptions.removeBackground) {
@@ -159,7 +159,7 @@ export class ProductFormComponent implements OnInit {
             if (this.imageProcessingOptions.optimize) {
               processingDetails.push('optimized');
             }
-            
+
             this.snackBar.open(`Image ${processingDetails.join(' and ')} successfully!`, "Close", {
               duration: 3000,
             });
@@ -170,20 +170,20 @@ export class ProductFormComponent implements OnInit {
           }
         },
         error: (error) => {
-          
+
           this.isUploading = false;
-          
+
           let errorMessage = 'Failed to process image';
           if (error.error?.message) {
             errorMessage = error.error.message;
           } else if (error.message) {
             errorMessage = error.message;
           }
-          
+
           this.snackBar.open(errorMessage, "Close", {
             duration: 5000,
           });
-          
+
           // Fallback to direct upload
           this.snackBar.open('Uploading original file without processing...', "Close", {
             duration: 3000,
@@ -204,7 +204,7 @@ export class ProductFormComponent implements OnInit {
           this.isUploading = false;
         },
         error: (error) => {
-          
+
           this.isUploading = false;
           this.snackBar.open('Failed to upload image', "Close", {
             duration: 5000,
@@ -229,8 +229,8 @@ export class ProductFormComponent implements OnInit {
     const files: FileList = event.target.files;
     if (!files || files.length === 0) return;
 
-    const imageFiles = Array.from(files).filter(file => 
-      file.type.match(/image\/(png|jpg|jpeg)/) && 
+    const imageFiles = Array.from(files).filter(file =>
+      file.type.match(/image\/(png|jpg|jpeg)/) &&
       file.size <= 5 * 1024 * 1024
     );
 
@@ -292,7 +292,7 @@ export class ProductFormComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-        
+
         this.snackBar.open('Failed to load product data', "Close", {
           duration: 5000,
         });
@@ -381,7 +381,7 @@ export class ProductFormComponent implements OnInit {
         },
         error: (error) => {
           this.isLoading = false;
-          
+
           this.snackBar.open('Error updating product', 'Close', { duration: 3000 });
         }
       });
@@ -394,7 +394,7 @@ export class ProductFormComponent implements OnInit {
         },
         error: (error) => {
           this.isLoading = false;
-          
+
           this.snackBar.open('Error creating product', 'Close', { duration: 3000 });
         }
       });
@@ -416,7 +416,7 @@ export class ProductFormComponent implements OnInit {
   createProduct(productData: ProductCreateRequest): void {
     this.productService.createProduct(productData).subscribe({
       next: (product) => {
-        
+
         this.isLoading = false;
         this.snackBar.open("Product created successfully!", "Close", {
           duration: 3000,
@@ -424,7 +424,7 @@ export class ProductFormComponent implements OnInit {
         this.router.navigate(["/admin/products"]);
       },
       error: (err) => {
-        
+
         this.isLoading = false;
         this.snackBar.open("Error creating product", "Close", {
           duration: 5000,
@@ -436,7 +436,7 @@ export class ProductFormComponent implements OnInit {
   updateProduct(id: number, productData: ProductUpdateRequest): void {
     this.productService.updateProduct(id, productData).subscribe({
       next: (product) => {
-        
+
         this.isLoading = false;
         this.snackBar.open("Product updated successfully!", "Close", {
           duration: 3000,
@@ -444,7 +444,7 @@ export class ProductFormComponent implements OnInit {
         this.router.navigate(["/admin/products"]);
       },
       error: (err) => {
-        
+
         this.isLoading = false;
         this.snackBar.open("Error updating product", "Close", {
           duration: 5000,

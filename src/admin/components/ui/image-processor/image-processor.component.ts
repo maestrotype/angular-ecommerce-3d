@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../../environments/environment';
 import { ErrorHandlerService } from '../../../services/error-handler.service';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil, catchError, finalize } from 'rxjs/operators';
@@ -33,7 +33,7 @@ export class ImageProcessorComponent implements OnDestroy {
     removeBackground: true,
     optimize: true
   };
-  
+
   @Output() fileSelected = new EventEmitter<File>();
   @Output() fileProcessed = new EventEmitter<ProcessedImageResult>();
   @Output() processingError = new EventEmitter<string>();
@@ -48,7 +48,7 @@ export class ImageProcessorComponent implements OnDestroy {
   constructor(
     private http: HttpClient,
     private errorHandler: ErrorHandlerService
-  ) {}
+  ) { }
 
   ngOnDestroy(): void {
     this.destroy$.next();

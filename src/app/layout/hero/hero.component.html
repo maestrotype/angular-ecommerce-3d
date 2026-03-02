@@ -4,12 +4,13 @@
       <div class="hero-text">
         <div class="badge">NEW ARRIVAL</div>
         <h1 class="hero-title">
-          {{ (data?.title && data?.title !== '') ? data?.title : "DISCOVER YOUR" }}<br />
-          <span class="highlight">{{ (data?.subtitle && data?.subtitle !== '') ? data?.subtitle : "NEW STYLE" }}</span>
+          {{ (data?.title && data?.title.trim() !== '') ? data?.title : "DISCOVER YOUR" }}<br />
+          <span class="highlight">{{ (data?.subtitle && data?.subtitle.trim() !== '') ? data?.subtitle : "NEW STYLE"
+            }}</span>
         </h1>
         <p class="hero-subtitle">
           {{
-          (data?.content && data?.content !== '') ? data?.content :
+          (data?.content && data?.content.trim() !== '') ? data?.content :
           "Explore our latest interactive 3D collection."
           }}
         </p>

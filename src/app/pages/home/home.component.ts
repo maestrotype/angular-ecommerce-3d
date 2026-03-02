@@ -1,4 +1,6 @@
 import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { take, timeout, catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 import { ProductService } from '../../core/services/product.service';
 import { Product } from 'src/shared/models/product.model';
 import { SectionService } from 'src/admin/services/section.service';
@@ -49,13 +51,22 @@ export class HomeComponent implements OnInit {
    */
   private loadSections(): void {
     this.sectionsLoading = true;
-    this.sectionService.getActiveSections().subscribe({
+    this.sectionService.getActiveSections().pipe(
+      take(1),
+      timeout(15000),
+      catchError(err => {
+        console.error('Error loading sections', err);
+        return of([]);
+      })
+    ).subscribe({
       next: (sections) => {
-        this.sections = sections.sort((a, b) => a.order - b.order);
+        this.sections = (sections || []).sort((a, b) => (a.order || 0) - (b.order || 0));
         this.sectionsLoading = false;
       },
-      error: (err) => {
-        console.error('Error loading sections', err);
+      error: () => {
+        this.sectionsLoading = false;
+      },
+      complete: () => {
         this.sectionsLoading = false;
       }
     });
@@ -66,13 +77,22 @@ export class HomeComponent implements OnInit {
    */
   private loadBestSellers(): void {
     this.bestSellersLoading = true;
-    this.productService.getBestSellers().subscribe({
+    this.productService.getBestSellers().pipe(
+      take(1),
+      timeout(10000),
+      catchError(err => {
+        console.error('Error loading best sellers', err);
+        return of([]);
+      })
+    ).subscribe({
       next: (products) => {
         this.bestSellers = products;
         this.bestSellersLoading = false;
       },
-      error: (err) => {
-        console.error('Error loading best sellers', err);
+      error: () => {
+        this.bestSellersLoading = false;
+      },
+      complete: () => {
         this.bestSellersLoading = false;
       }
     });
@@ -83,13 +103,22 @@ export class HomeComponent implements OnInit {
    */
   private loadSpecialOffers(): void {
     this.specialOfferLoading = true;
-    this.productService.getSpecialOffers().subscribe({
+    this.productService.getSpecialOffers().pipe(
+      take(1),
+      timeout(10000),
+      catchError(err => {
+        console.error('Error loading special offers', err);
+        return of([]);
+      })
+    ).subscribe({
       next: (products) => {
         this.specialOffer = products[0];
         this.specialOfferLoading = false;
       },
-      error: (err) => {
-        console.error('Error loading special offers', err);
+      error: () => {
+        this.specialOfferLoading = false;
+      },
+      complete: () => {
         this.specialOfferLoading = false;
       }
     });
