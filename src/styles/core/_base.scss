@@ -26,10 +26,12 @@ body {
   font-family: var(--font-family-primary);
   font-size: var(--font-size-md);
   line-height: var(--line-height-normal);
-  color: var(--mdc-form-field-label-text-color);
+  color: var(--text-primary);
+  background-color: var(--surface-primary);
   margin: 0;
   padding: 0;
   min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* ==========================================================================
@@ -37,23 +39,45 @@ body {
    ========================================================================== */
 
 /* Headings */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   @include heading(1);
   margin: 0 0 var(--spacing-md) 0;
 }
 
-h1 { @include heading(1); }
-h2 { @include heading(2); }
-h3 { @include heading(3); }
-h4 { @include heading(4); }
-h5 { @include heading(5); }
-h6 { @include heading(6); }
+h1 {
+  @include heading(1);
+}
+
+h2 {
+  @include heading(2);
+}
+
+h3 {
+  @include heading(3);
+}
+
+h4 {
+  @include heading(4);
+}
+
+h5 {
+  @include heading(5);
+}
+
+h6 {
+  @include heading(6);
+}
 
 /* Paragraphs */
 p {
   @include text('md', 'normal');
   margin: 0 0 var(--spacing-md) 0;
-  
+
   &:last-child {
     margin-bottom: 0;
   }
@@ -64,11 +88,11 @@ a {
   color: var(--color-primary);
   text-decoration: none;
   transition: color var(--transition-fast);
-  
+
   &:hover {
     color: var(--color-primary-hover);
   }
-  
+
   &:focus-visible {
     outline: 2px solid var(--color-border-focus);
     outline-offset: 2px;
@@ -76,10 +100,11 @@ a {
 }
 
 /* Lists */
-ul, ol {
+ul,
+ol {
   margin: 0 0 var(--spacing-md) 0;
   padding-left: var(--spacing-lg);
-  
+
   li {
     margin-bottom: var(--spacing-xs);
   }
@@ -102,7 +127,7 @@ button {
   border: none;
   cursor: pointer;
   padding: 0;
-  
+
   &:focus-visible {
     outline: 2px solid var(--color-border-focus);
     outline-offset: 2px;
@@ -110,7 +135,9 @@ button {
 }
 
 /* Form elements */
-input, textarea, select {
+input,
+textarea,
+select {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -129,6 +156,7 @@ input, textarea, select {
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -157,48 +185,48 @@ input, textarea, select {
     box-shadow: none !important;
     text-shadow: none !important;
   }
-  
+
   a,
   a:visited {
     text-decoration: underline;
   }
-  
+
   a[href]:after {
     content: " (" attr(href) ")";
   }
-  
+
   abbr[title]:after {
     content: " (" attr(title) ")";
   }
-  
+
   pre,
   blockquote {
     border: 1px solid #999;
     page-break-inside: avoid;
   }
-  
+
   thead {
     display: table-header-group;
   }
-  
+
   tr,
   img {
     page-break-inside: avoid;
   }
-  
+
   img {
     max-width: 100%;
   }
-  
+
   p,
   h2,
   h3 {
     orphans: 3;
     widows: 3;
   }
-  
+
   h2,
   h3 {
     page-break-after: avoid;
   }
-} 
+}

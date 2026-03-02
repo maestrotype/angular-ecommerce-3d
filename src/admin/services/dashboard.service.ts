@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable, forkJoin, of } from "rxjs";
 import { catchError, map } from "rxjs/operators";
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environments/environment';
 import { Product } from 'src/shared/models/product.model';
 import { Order } from 'src/shared/models/order.model';
 
