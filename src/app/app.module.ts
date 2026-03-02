@@ -1,6 +1,6 @@
 import { NgModule, APP_ID } from '@angular/core';
 import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
-import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { SeoUpdateInterceptor } from './core/interceptors/seo-update.interceptor';
@@ -137,7 +137,7 @@ export function HttpLoaderFactory(http: any) {
       provide: 'SocialAuthServiceConfig',
       useValue: socialAuthConfig
     },
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch(), withInterceptorsFromDi()),
     provideClientHydration(),
     provideAnimationsAsync()
   ],

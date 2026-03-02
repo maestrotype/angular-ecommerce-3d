@@ -16,7 +16,7 @@ export class OrdersService {
     private orderRepository: Repository<Order>,
     private notificationsService: NotificationsService,
     private productsService: ProductsService,
-  ) {}
+  ) { }
 
   create(createOrderDto: CreateOrderDto): Observable<Order> {
     // First, check if all products have sufficient stock
@@ -44,7 +44,7 @@ export class OrdersService {
         switchMap(() => {
           // All products have sufficient stock, proceed with order creation
           const order = this.orderRepository.create(createOrderDto);
-          
+
           return from(this.orderRepository.save(order)).pipe(
             switchMap(savedOrder => {
               // Decrease stock for each item in the order
@@ -56,19 +56,19 @@ export class OrdersService {
                   );
                 }
               }
-              
+
               // Create notification for new order
               const notification = this.notificationsService.createOrderNotification(
-                savedOrder.id, 
+                savedOrder.id,
                 createOrderDto.customerName
               );
-              
+
               // Combine all operations
               const operations = [...stockUpdates, notification];
               if (operations.length === 0) {
                 return of(savedOrder);
               }
-              
+
               return forkJoin(operations).pipe(
                 map(() => savedOrder)
               );
@@ -83,15 +83,15 @@ export class OrdersService {
     } else {
       // No items to check, create order directly
       const order = this.orderRepository.create(createOrderDto);
-      
+
       return from(this.orderRepository.save(order)).pipe(
         switchMap(savedOrder => {
           // Create notification for new order
           const notification = this.notificationsService.createOrderNotification(
-            savedOrder.id, 
+            savedOrder.id,
             createOrderDto.customerName
           );
-          
+
           return notification.pipe(
             map(() => savedOrder)
           );
@@ -107,10 +107,16 @@ export class OrdersService {
     );
   }
 
-  findAll(): Observable<Order[]> {
-    return from(this.orderRepository.find({
+  findAll(status?: string): Observable<Order[]> {
+    const findOptions: any = {
       order: { createdAt: 'DESC' }
-    })).pipe(
+    };
+
+    if (status) {
+      findOptions.where = { status: status.toLowerCase() };
+    }
+
+    return from(this.orderRepository.find(findOptions)).pipe(
       catchError(error => throwError(() => new InternalServerErrorException(`Failed to get orders: ${error.message}`)))
     );
   }
@@ -143,7 +149,7 @@ export class OrdersService {
             message: `Order #${id} status changed to ${updateOrderDto.status}`,
             data: { orderId: id, newStatus: updateOrderDto.status, oldStatus: order.status }
           });
-          
+
           return notification.pipe(
             switchMap(() => {
               Object.assign(order, updateOrderDto);
@@ -151,7 +157,7 @@ export class OrdersService {
             })
           );
         }
-        
+
         Object.assign(order, updateOrderDto);
         return from(this.orderRepository.save(order));
       }),

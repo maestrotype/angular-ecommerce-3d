@@ -1,10 +1,5 @@
-<mat-toolbar color="primary" class="admin-header">
-  <button
-    mat-icon-button
-    class="menu-button"
-    (click)="toggleSidenav.emit()"
-    aria-label="Toggle sidenav"
-  >
+<mat-toolbar class="admin-header">
+  <button mat-icon-button class="menu-button" (click)="toggleSidenav.emit()" aria-label="Toggle sidenav">
     <mat-icon>menu</mat-icon>
   </button>
 
@@ -13,47 +8,32 @@
   <span class="spacer"></span>
 
   <div class="header-actions">
-    <button
-      mat-icon-button
-      [routerLink]="'/home'"
-      [matTooltip]="'GO_TO_STOREFRONT' | translate"
-    >
+    <button mat-icon-button [routerLink]="'/home'" [matTooltip]="'GO_TO_STOREFRONT' | translate">
       <mat-icon>storefront</mat-icon>
     </button>
 
     <!-- Theme Toggle -->
-    <button
-      mat-icon-button
-      (click)="toggleTheme()"
-      [matTooltip]="
+    <button mat-icon-button (click)="toggleTheme()" [matTooltip]="
         currentTheme === 'dark' ? 'Switch to Light Theme' : 
         currentTheme === 'light' ? 'Switch to Glass Theme' : 
         currentTheme === 'glass' ? 'Switch to Dark Glass Theme' :
         'Switch to Dark Theme'
-      "
-    >
+      ">
       <mat-icon>
-        {{ currentTheme === 'dark' ? 'light_mode' : 
-           currentTheme === 'light' ? 'blur_on' : 
-           currentTheme === 'glass' ? 'nights_stay' :
-           'dark_mode' }}
+        {{ currentTheme === 'dark' ? 'light_mode' :
+        currentTheme === 'light' ? 'blur_on' :
+        currentTheme === 'glass' ? 'nights_stay' :
+        'dark_mode' }}
       </mat-icon>
     </button>
 
     <!-- Notifications -->
-    <button
-      mat-icon-button
-      [matMenuTriggerFor]="notificationMenu"
-      #notificationMenuTrigger="matMenuTrigger"
-      class="notification-button"
-    >
+    <button mat-icon-button [matMenuTriggerFor]="notificationMenu" #notificationMenuTrigger="matMenuTrigger"
+      class="notification-button">
     </button>
 
-    <app-notification-badge
-      [count]="unreadCount"
-      [pulse]="unreadCount > 0"
-      (onClick)="openNotificationMenu()"
-    ></app-notification-badge>
+    <app-notification-badge [count]="unreadCount" [pulse]="unreadCount > 0"
+      (onClick)="openNotificationMenu()"></app-notification-badge>
 
     <!-- User Menu -->
     <button mat-icon-button [matMenuTriggerFor]="userMenu">
@@ -66,27 +46,14 @@
 <mat-menu #notificationMenu="matMenu" class="notification-menu" yPosition="below" xPosition="after">
   <div class="notification-header">
     <span class="notification-title">{{ "NOTIFICATIONS" | translate }}</span>
-    <button
-      mat-button
-      class="mark-all-read"
-      (click)="markAllAsRead()"
-      *ngIf="unreadCount > 0"
-    >
+    <button mat-button class="mark-all-read" (click)="markAllAsRead()" *ngIf="unreadCount > 0">
       <span>Mark all as read</span>
     </button>
   </div>
 
-  <div
-    class="notification-list"
-    *ngIf="notifications.length > 0; else noNotifications"
-  >
-    <button
-      mat-menu-item
-      class="notification-item"
-      [class.unread]="notification.status === 'unread'"
-      (click)="onNotificationClick(notification)"
-      *ngFor="let notification of notifications"
-    >
+  <div class="notification-list" *ngIf="notifications.length > 0; else noNotifications">
+    <button mat-menu-item class="notification-item" [class.unread]="notification.status === 'unread'"
+      (click)="onNotificationClick(notification)" *ngFor="let notification of notifications">
       <div class="notification-content">
         <div class="notification-icon">
           <mat-icon>
@@ -100,10 +67,7 @@
             {{ getRelativeTime(notification.createdAt) }}
           </div>
         </div>
-        <div
-          class="notification-status"
-          *ngIf="notification.status === 'unread'"
-        >
+        <div class="notification-status" *ngIf="notification.status === 'unread'">
           <div class="unread-dot"></div>
         </div>
       </div>
