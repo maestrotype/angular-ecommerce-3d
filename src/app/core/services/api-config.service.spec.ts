@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { ApiConfigService } from './api-config.service';
-import { environment } from '../../../environments/environment';
+import { environment } from 'src/environments/environment';
 
 describe('ApiConfigService', () => {
     let service: ApiConfigService;
