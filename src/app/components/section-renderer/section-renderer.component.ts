@@ -42,6 +42,9 @@ export class SectionRendererComponent implements OnInit {
       if ('data' in componentRef.instance) {
         componentRef.instance.data = this.section;
       }
+      // Force change detection to ensure data is picked up
+      componentRef.changeDetectorRef.markForCheck();
+      componentRef.changeDetectorRef.detectChanges();
     }
   }
-} 
+}

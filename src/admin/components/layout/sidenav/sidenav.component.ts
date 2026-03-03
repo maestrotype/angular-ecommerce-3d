@@ -7,7 +7,6 @@ interface NavItem {
   label: string;
   route: string;
   icon: string;
-  badge?: number;
 }
 
 @Component({
@@ -26,7 +25,6 @@ export class SidenavComponent {
       label: "ADMIN_NAV_ORDERS",
       route: "/admin/orders",
       icon: "shopping_cart",
-      badge: 0,
     },
     { label: "USERS", route: "/admin/users", icon: "people" },
     { label: "MESSAGES", route: "/admin/messages", icon: "email" },
@@ -42,17 +40,8 @@ export class SidenavComponent {
   ) { }
 
   ngOnInit(): void {
-    this.loadPendingOrdersCount();
   }
 
-  loadPendingOrdersCount(): void {
-    this.orderService.getPendingOrdersCount().subscribe(count => {
-      const ordersNav = this.navItems.find(item => item.label === "ADMIN_NAV_ORDERS");
-      if (ordersNav) {
-        ordersNav.badge = count;
-      }
-    });
-  }
 
   onNavItemClick(): void {
     if (window.innerWidth <= 768) {
