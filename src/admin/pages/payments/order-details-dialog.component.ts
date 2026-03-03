@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../environments/environment';
 
 export interface OrderDetails {
   id: number;
@@ -66,11 +66,11 @@ export class OrderDetailsDialogComponent {
         return this.mapOrderToDetails(order);
       }),
       catchError(error => {
-        
+
         // If orders endpoint fails, try to get from payments endpoint
         return this.http.get<{ success: boolean; data: any[]; message?: string }>(`${environment.apiUrl}/payments/order/${this.data.orderId}`).pipe(
           map(paymentResponse => {
-            
+
             if (paymentResponse.success && paymentResponse.data.length > 0) {
               const payment = paymentResponse.data[0];
               // Create mock order details from payment data
@@ -101,7 +101,7 @@ export class OrderDetailsDialogComponent {
             return null;
           }),
           catchError(paymentError => {
-            
+
             return of(null);
           })
         );
@@ -124,13 +124,13 @@ export class OrderDetailsDialogComponent {
   private mapOrderToDetails(order: any): OrderDetails {
     const items = Array.isArray(order.items)
       ? order.items.map((it: any, idx: number) => ({
-          id: idx + 1,
-          productId: Number(it.productId) || 0,
-          productName: String(it.name || `Product ${idx + 1}`),
-          quantity: Number(it.quantity) || 0,
-          unitPrice: Number(it.price) || 0,
-          totalPrice: (Number(it.price) || 0) * (Number(it.quantity) || 0),
-        }))
+        id: idx + 1,
+        productId: Number(it.productId) || 0,
+        productName: String(it.name || `Product ${idx + 1}`),
+        quantity: Number(it.quantity) || 0,
+        unitPrice: Number(it.price) || 0,
+        totalPrice: (Number(it.price) || 0) * (Number(it.quantity) || 0),
+      }))
       : [];
 
     return {

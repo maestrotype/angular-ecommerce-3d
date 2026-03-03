@@ -75,7 +75,6 @@ import { PaymentService } from './services/payment.service';
 
 // Interceptors
 
-
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -162,8 +161,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     SectionService,
     ErrorHandlerService,
     ConfirmationService,
-    PaymentService,
-
+    PaymentService
   ]
 })
 export class AdminModule { }

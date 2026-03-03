@@ -1,6 +1,6 @@
 
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -13,7 +13,7 @@ import { OrderStats } from 'src/shared/models/order-stats.model';
 export class OrderService {
   private apiUrl = environment.apiUrl + '/orders';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getOrders(): Observable<Order[]> {
     return this.http.get<Order[]>(this.apiUrl);
@@ -24,8 +24,13 @@ export class OrderService {
   }
 
   getPendingOrdersCount(): Observable<number> {
-    return this.http.get<{ total: number }>(`${this.apiUrl}?status=Pending`).pipe(
-      map(res => res.total)
+    return this.http.get<any>(`${this.apiUrl}?status=Pending`).pipe(
+      map(res => {
+        if (Array.isArray(res)) {
+          return res.length;
+        }
+        return res.total || 0;
+      })
     );
   }
 

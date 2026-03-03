@@ -60,28 +60,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
         // Only clear admin theme if we're switching to frontend
         if (!this.adminRoute && isPlatformBrowser(this.platformId)) {
-          document.body.removeAttribute('data-theme');
+          // Logic moved to ThemeService for better management
         }
       });
   }
 
   ngOnInit(): void {
-    // Watch for data-theme changes on body and remove them
-    // But only if we're not in admin route (browser only)
-    if (isPlatformBrowser(this.platformId)) {
-      const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
-            const body = mutation.target as HTMLElement;
-            if (body.tagName === 'BODY' && body.getAttribute('data-theme') === 'dark' && !this.adminRoute) {
-              body.removeAttribute('data-theme');
-            }
-          }
-        });
-      });
-
-      observer.observe(document.body, { attributes: true, attributeFilter: ['data-theme'] });
-    }
+    // Theme management is now handled by ThemeService
 
     // Load and apply SEO settings from backend
     this.frontendSeoService.reloadSeoSettings().subscribe();

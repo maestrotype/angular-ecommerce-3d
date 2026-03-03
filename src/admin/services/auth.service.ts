@@ -3,14 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { User, AuthResponse, LoginCredentials, RegisterCredentials } from '../../shared/models/user.model';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
-  
+
   private apiUrl = environment.apiUrl + '/auth';
 
   constructor(private http: HttpClient) {
@@ -25,7 +25,7 @@ export class AuthService {
           this.setSession(response);
         }),
         catchError(error => {
-          
+
           throw error;
         })
       );
@@ -39,22 +39,22 @@ export class AuthService {
           this.setSession(response);
         }),
         catchError(error => {
-          
+
           throw error;
         })
       );
   }
 
   logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('token_expiry');
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('adminUser');
+    localStorage.removeItem('adminTokenExpiry');
     this.currentUserSubject.next(null);
   }
 
   isAuthenticated(): boolean {
-    const token = localStorage.getItem('token');
-    const expiry = localStorage.getItem('token_expiry');
+    const token = localStorage.getItem('adminToken');
+    const expiry = localStorage.getItem('adminTokenExpiry');
     if (!token || !expiry) {
       return false;
     }
@@ -71,20 +71,20 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    return localStorage.getItem('token');
+    return localStorage.getItem('adminToken');
   }
 
   private setSession(authResult: AuthResponse): void {
     const expiresAt = new Date().getTime() + (authResult.expiresIn * 1000);
-    localStorage.setItem('token', authResult.token);
-    localStorage.setItem('user', JSON.stringify(authResult.user));
-    localStorage.setItem('token_expiry', expiresAt.toString());
+    localStorage.setItem('adminToken', authResult.token);
+    localStorage.setItem('adminUser', JSON.stringify(authResult.user));
+    localStorage.setItem('adminTokenExpiry', expiresAt.toString());
     this.currentUserSubject.next(authResult.user);
   }
 
   private checkExistingToken(): void {
     if (this.isAuthenticated()) {
-      const userStr = localStorage.getItem('user');
+      const userStr = localStorage.getItem('adminUser');
       if (userStr) {
         const user = JSON.parse(userStr) as User;
         this.currentUserSubject.next(user);

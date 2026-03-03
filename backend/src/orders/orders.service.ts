@@ -108,10 +108,16 @@ export class OrdersService {
     );
   }
 
-  findAll(): Observable<Order[]> {
-    return from(this.orderRepository.find({
+  findAll(status?: string): Observable<Order[]> {
+    const findOptions: any = {
       order: { createdAt: 'DESC' }
-    })).pipe(
+    };
+
+    if (status) {
+      findOptions.where = { status: status.toLowerCase() };
+    }
+
+    return from(this.orderRepository.find(findOptions)).pipe(
       catchError(error => throwError(() => new InternalServerErrorException(`Failed to get orders: ${error.message}`)))
     );
   }

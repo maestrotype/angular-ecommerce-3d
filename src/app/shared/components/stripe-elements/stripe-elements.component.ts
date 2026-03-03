@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { loadStripe, Stripe, StripeElements, StripeCardElement } from '@stripe/stripe-js';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../../environments/environment';
 import { Observable, from, of, timer, Subject } from 'rxjs';
 import { map, catchError, switchMap, takeUntil } from 'rxjs/operators';
 

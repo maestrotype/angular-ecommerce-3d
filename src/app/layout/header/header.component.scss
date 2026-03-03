@@ -149,7 +149,7 @@
       }
 
       &.active {
-        color: #333;
+        color: var(--header-link-hover, #007AFF);
 
         &::before {
           opacity: 1;
@@ -325,7 +325,6 @@
         transition: all 0.2s ease;
         font-size: 14px;
         color: var(--text-primary);
-        color: #fff;
 
         &:hover {
           background: var(--surface-2, rgba(0, 0, 0, 0.05));
@@ -423,7 +422,7 @@
     span {
       width: 25px;
       height: 3px;
-      background: var(--header-text, #1e293b);
+      background: var(--header-text);
       margin: 3px 0;
       transition: all 0.3s ease;
       border-radius: 2px;
@@ -697,7 +696,7 @@
         z-index: 10001;
 
         span {
-          background: var(--header-text, #1e293b);
+          background: var(--header-text);
           box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
       }
@@ -761,7 +760,7 @@
       font-size: 0.85rem;
       text-transform: uppercase;
       letter-spacing: 2.5px;
-      color: var(--footer-text, #1a1a1a);
+      color: var(--header-text);
       margin: 0;
       font-weight: 800;
     }
@@ -805,7 +804,7 @@
     .mobile-nav-link {
       font-size: 1.4rem;
       font-weight: 600;
-      color: var(--text-primary);
+      color: var(--header-text);
       text-decoration: none;
       padding: 12px 0;
       transition: all 0.3s ease;
@@ -820,8 +819,8 @@
     }
 
     .mobile-theme-selector {
-      background: rgba(0, 0, 0, 0.04);
-      padding: 12px; // Even more compact
+      background: rgba(var(--header-text-rgb), 0.05);
+      padding: 12px;
       border-radius: 16px;
       display: flex;
       flex-direction: column;
@@ -855,15 +854,15 @@
           white-space: nowrap;
 
           &.active {
-            background: var(--header-accent, #1e293b);
-            color: white;
-            box-shadow: 0 4px 12px rgba(30, 41, 59, 0.2);
+            background: var(--header-link-hover, #007AFF);
+            color: var(--header-bg, #fff);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
           }
 
           &:not(.active) {
-            background: rgba(var(--header-text-rgb, 30, 41, 59), 0.08);
-            color: var(--header-text, #1e293b);
-            border: 1px solid rgba(var(--header-text-rgb, 30, 41, 59), 0.05);
+            background: rgba(var(--header-text-rgb), 0.1);
+            color: var(--header-text);
+            border: 1px solid rgba(var(--header-text-rgb), 0.1);
           }
         }
       }
@@ -891,8 +890,8 @@
         }
 
         &.secondary {
-          background: rgba(0, 0, 0, 0.05);
-          color: var(--text-primary);
+          background: rgba(var(--header-text-rgb), 0.1);
+          color: var(--header-text);
         }
       }
 
@@ -904,10 +903,19 @@
 
         .user-name {
           font-weight: 600;
-          color: var(--text-primary);
+          color: var(--header-text);
           font-size: 0.9rem;
         }
       }
+    }
+  }
+}
+
+// Extra-small devices adjustment
+@media (max-width: 380px) {
+  .header .logo {
+    span {
+      display: none;
     }
   }
 }

@@ -4,22 +4,19 @@
       <div class="hero-text">
         <div class="badge">{{ 'HOME.HERO.BADGE' | translate }}</div>
         <h1 class="hero-title">
-          {{ (data?.title | localized) || ('HOME.HERO.TITLE_DEFAULT' | translate) }}<br />
-          <span class="highlight">{{ (data?.subtitle | localized) || ('HOME.HERO.SUBTITLE_DEFAULT' | translate)
-            }}</span>
+          {{ (data?.title | localized) || "DISCOVER YOUR" }}<br />
+          <span class="highlight">{{ (data?.subtitle | localized) || "NEW STYLE" }}</span>
         </h1>
         <p class="hero-subtitle">
-          {{
-          (data?.content | localized) || ('HOME.HERO.CONTENT_DEFAULT' | translate)
-          }}
+          {{ (data?.content | localized) || "Explore our latest interactive 3D collection." }}
         </p>
       </div>
 
       <div class="hero-image">
         <div class="product-showcase">
           <div class="floating-product" [class.hidden]="modelReady">
-            <img *ngIf="data?.showImage && data?.imageUrl" [src]="data?.imageUrl"
-              [alt]="'HOME.HERO.ALT_TEXT' | translate" class="featured-product" loading="lazy" />
+            <img *ngIf="data?.showImage && data?.imageUrl" [src]="data?.imageUrl" alt="Featured Handbag"
+              class="featured-product" loading="lazy" />
             <!-- Decorative elements -->
             <div class="decoration decoration-1"></div>
             <div class="decoration decoration-2"></div>

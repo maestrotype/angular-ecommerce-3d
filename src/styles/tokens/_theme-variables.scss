@@ -21,7 +21,7 @@
 
         /* Special Offer section - Default theme */
         --special-offer-bg: linear-gradient(135deg,
-                        rgba(255, 255, 255, 0.9) 0%, image.png rgba(248, 250, 252, 0.8) 30%,
+                        rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.8) 30%,
                         rgba(241, 245, 249, 0.7) 70%,
                         rgba(226, 232, 240, 0.8) 100%);
 
@@ -270,13 +270,12 @@
         --header-link-hover: #ffffff;
         --header-search-bg: rgba(255, 255, 255, 0.1);
         --header-search-text: #f8fafc;
-        --header-text-rgb: 248, 250, 252;
 
         /* RGB Variables for transparencies (Dark Theme) */
-        --header-bg-rgb: 255, 255, 255;
-        --header-text-rgb: 30, 41, 59;
-        --footer-bg-rgb: 255, 255, 255;
-        --footer-text-rgb: 30, 41, 59;
+        --header-bg-rgb: 15, 23, 42;
+        --header-text-rgb: 248, 250, 252;
+        --footer-bg-rgb: 15, 23, 42;
+        --footer-text-rgb: 248, 250, 252;
 
         /* Product Detail section - Dark theme */
         --product-detail-bg: #0f172a;

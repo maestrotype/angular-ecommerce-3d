@@ -64,7 +64,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   currentTheme = 'default';
   showThemeMenu = false;
   // Feature flag for new theme switcher UI (keeps old one by default)
-  enableNewThemeSwitcher = true;
+  enableNewThemeSwitcher = false;
   showNewThemeMenu = false;
 
   constructor(
