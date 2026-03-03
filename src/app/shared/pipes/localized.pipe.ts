@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { LocalizedString } from '../../../shared/models/localized-string.model';
+import { LocalizedString } from '@shared/models/localized-string.model';
 
 @Pipe({
     name: 'localized',

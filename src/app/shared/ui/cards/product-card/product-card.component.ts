@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { ViewportScroller } from '@angular/common';
-import { Product } from 'src/shared/models/product.model';
+import { Product } from '@shared/models/product.model';
 
 @Component({
   selector: 'app-product-card',
@@ -20,7 +20,7 @@ export class ProductCardComponent {
   constructor(
     private router: Router,
     private viewportScroller: ViewportScroller
-  ) {}
+  ) { }
 
   onProductClick(): void {
     // Navigate to product page and scroll to top
@@ -58,20 +58,20 @@ export class ProductCardComponent {
   onQuickView(event: Event): void {
     event.stopPropagation();
     // TODO: Implement quick view functionality
-    
+
   }
 
   get cardClasses(): string {
     const classes = ['product-card'];
-    
+
     if (this.layout === 'list') {
       classes.push('list-card');
     }
-    
+
     if (this.product.isSpecial) {
       classes.push('special-offer');
     }
-    
+
     return classes.join(' ');
   }
 } 

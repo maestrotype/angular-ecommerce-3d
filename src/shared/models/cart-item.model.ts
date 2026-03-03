@@ -1,4 +1,4 @@
-import { LocalizedString } from './localized-string.model';
+import { LocalizedString } from '@shared/models/localized-string.model';
 
 export interface CartItem {
   productId: number;
