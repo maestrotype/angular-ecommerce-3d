@@ -1,5 +1,6 @@
 import { Injectable, Inject, PLATFORM_ID, makeStateKey, TransferState } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { LocalizedString } from 'src/shared/models/localized-string.model';
 import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
@@ -8,7 +9,7 @@ import { isPlatformBrowser } from '@angular/common';
 const HEADER_KEY = makeStateKey<HeaderSection[]>('header_sections');
 
 export interface MenuItem {
-  title: string;
+  title: string | LocalizedString;
   url: string;
   access: 'all' | 'admin' | 'closed';
   isActive: boolean;
@@ -25,7 +26,7 @@ export interface HeaderSettings {
 export interface HeaderSection {
   id: number;
   type: string;
-  title: string;
+  title: string | LocalizedString;
   settings?: HeaderSettings;
   isActive: boolean;
 }

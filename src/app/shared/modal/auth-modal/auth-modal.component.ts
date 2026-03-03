@@ -5,6 +5,7 @@ import { ModalConfig } from '../../../core/services/modal.service';
 import { SocialAuthService, GoogleLoginProvider, FacebookLoginProvider, SocialUser } from '@abacritt/angularx-social-login';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-auth-modal',
@@ -48,7 +49,8 @@ export class AuthModalComponent {
     private router: Router,
     private socialAuthService: SocialAuthService,
     private iconRegistry: MatIconRegistry,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private translate: TranslateService
   ) {
     this.user = this.authService.getUser();
     this.registerSocialIcons();
@@ -72,7 +74,7 @@ export class AuthModalComponent {
       },
       error: (err) => {
         this.loading = false;
-        this.error = err.error?.message || `Social login (${socialUser.provider}) error`;
+        this.error = err.error?.message || this.translate.instant('MODALS.AUTH.ERRORS.SOCIAL_ERROR', { provider: socialUser.provider });
       }
     });
   }
@@ -87,12 +89,12 @@ export class AuthModalComponent {
 
   signInWithGithub(): void {
     // Placeholder (simulated)
-    this.error = 'GitHub integration coming soon (requires Client ID)';
+    this.error = this.translate.instant('MODALS.AUTH.ERRORS.GITHUB_COMING_SOON');
   }
 
   signInWithApple(): void {
     // Placeholder (simulated)
-    this.error = 'Apple integration coming soon (requires Developer ID)';
+    this.error = this.translate.instant('MODALS.AUTH.ERRORS.APPLE_COMING_SOON');
   }
 
   private registerSocialIcons(): void {
@@ -142,16 +144,16 @@ export class AuthModalComponent {
   // Password validation
   private validatePassword(password: string): { valid: boolean; message: string } {
     if (password.length < 8) {
-      return { valid: false, message: 'Password must be at least 8 characters' };
+      return { valid: false, message: this.translate.instant('MODALS.AUTH.ERRORS.PASSWORD_MIN_LENGTH') };
     }
     if (!/[A-Z]/.test(password)) {
-      return { valid: false, message: 'Password must contain an uppercase letter' };
+      return { valid: false, message: this.translate.instant('MODALS.AUTH.ERRORS.PASSWORD_UPPERCASE') };
     }
     if (!/[a-z]/.test(password)) {
-      return { valid: false, message: 'Password must contain a lowercase letter' };
+      return { valid: false, message: this.translate.instant('MODALS.AUTH.ERRORS.PASSWORD_LOWERCASE') };
     }
     if (!/[0-9]/.test(password)) {
-      return { valid: false, message: 'Password must contain a number' };
+      return { valid: false, message: this.translate.instant('MODALS.AUTH.ERRORS.PASSWORD_NUMBER') };
     }
     return { valid: true, message: '' };
   }
@@ -161,16 +163,16 @@ export class AuthModalComponent {
     switch (field) {
       case 'name':
         if (!this.registerForm.name || this.registerForm.name.trim().length < 2) {
-          this.fieldErrors.name = 'Name must be at least 2 characters';
+          this.fieldErrors.name = this.translate.instant('MODALS.AUTH.ERRORS.NAME_MIN_LENGTH');
         } else {
           delete this.fieldErrors.name;
         }
         break;
       case 'email':
         if (!this.registerForm.email) {
-          this.fieldErrors.email = 'Email is required';
+          this.fieldErrors.email = this.translate.instant('MODALS.AUTH.ERRORS.EMAIL_REQUIRED');
         } else if (!this.validateEmail(this.registerForm.email)) {
-          this.fieldErrors.email = 'Please enter a valid email';
+          this.fieldErrors.email = this.translate.instant('MODALS.AUTH.ERRORS.EMAIL_INVALID');
         } else {
           delete this.fieldErrors.email;
         }
@@ -185,7 +187,7 @@ export class AuthModalComponent {
         break;
       case 'confirmPassword':
         if (this.registerForm.password !== this.registerForm.confirmPassword) {
-          this.fieldErrors.confirmPassword = 'Passwords do not match';
+          this.fieldErrors.confirmPassword = this.translate.instant('MODALS.AUTH.ERRORS.PASSWORDS_MISMATCH');
         } else {
           delete this.fieldErrors.confirmPassword;
         }
@@ -218,18 +220,18 @@ export class AuthModalComponent {
     const percentage = (strength / maxStrength) * 100;
 
     if (percentage <= 40) {
-      this.passwordStrength = { class: 'weak', text: 'Weak', percentage };
+      this.passwordStrength = { class: 'weak', text: this.translate.instant('MODALS.AUTH.STRENGTH.WEAK'), percentage };
     } else if (percentage <= 70) {
-      this.passwordStrength = { class: 'medium', text: 'Medium', percentage };
+      this.passwordStrength = { class: 'medium', text: this.translate.instant('MODALS.AUTH.STRENGTH.MEDIUM'), percentage };
     } else {
-      this.passwordStrength = { class: 'strong', text: 'Strong', percentage };
+      this.passwordStrength = { class: 'strong', text: this.translate.instant('MODALS.AUTH.STRENGTH.STRONG'), percentage };
     }
   }
 
   onLogin(): void {
     this.error = '';
     if (!this.loginForm.email || !this.loginForm.password) {
-      this.error = 'Enter email and password';
+      this.error = this.translate.instant('MODALS.AUTH.ERRORS.REQUIRED_EMAIL_PASSWORD');
       return;
     }
     this.loading = true;
@@ -241,7 +243,7 @@ export class AuthModalComponent {
       },
       error: (err) => {
         this.loading = false;
-        this.error = err.error?.message || 'Authorization Error';
+        this.error = err.error?.message || this.translate.instant('MODALS.AUTH.ERRORS.AUTH_ERROR');
       }
     });
   }
@@ -255,16 +257,16 @@ export class AuthModalComponent {
 
     // Validate name
     if (!this.registerForm.name || this.registerForm.name.trim().length < 2) {
-      this.fieldErrors.name = 'Name must be at least 2 characters';
+      this.fieldErrors.name = this.translate.instant('MODALS.AUTH.ERRORS.NAME_MIN_LENGTH');
       hasErrors = true;
     }
 
     // Validate email
     if (!this.registerForm.email) {
-      this.fieldErrors.email = 'Email is required';
+      this.fieldErrors.email = this.translate.instant('MODALS.AUTH.ERRORS.EMAIL_REQUIRED');
       hasErrors = true;
     } else if (!this.validateEmail(this.registerForm.email)) {
-      this.fieldErrors.email = 'Please enter a valid email';
+      this.fieldErrors.email = this.translate.instant('MODALS.AUTH.ERRORS.EMAIL_INVALID');
       hasErrors = true;
     }
 
@@ -277,7 +279,7 @@ export class AuthModalComponent {
 
     // Validate confirm password
     if (this.registerForm.password !== this.registerForm.confirmPassword) {
-      this.fieldErrors.confirmPassword = 'Passwords do not match';
+      this.fieldErrors.confirmPassword = this.translate.instant('MODALS.AUTH.ERRORS.PASSWORDS_MISMATCH');
       hasErrors = true;
     }
 
@@ -300,11 +302,11 @@ export class AuthModalComponent {
       },
       error: (err) => {
         this.loading = false;
-        const errorMessage = err.error?.message || 'Registration Error';
+        const errorMessage = err.error?.message || this.translate.instant('MODALS.AUTH.ERRORS.REG_ERROR');
 
         // Handle specific errors
         if (errorMessage.includes('already registered') || errorMessage.includes('Email already')) {
-          this.fieldErrors.email = 'This email is already registered';
+          this.fieldErrors.email = this.translate.instant('MODALS.AUTH.ERRORS.EMAIL_ALREADY_REGISTERED');
         } else {
           this.error = errorMessage;
         }

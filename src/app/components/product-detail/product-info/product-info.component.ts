@@ -3,6 +3,8 @@ import { Product } from 'src/shared/models/product.model';
 import { CartService } from '../../../core/services/cart.service';
 import { FavoritesService } from '../../../core/services/favorites.service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { TranslateService } from '@ngx-translate/core';
+import { getLocalizedString } from '../../../../shared/utils/localization.util';
 
 @Component({
   selector: 'app-product-info',
@@ -18,7 +20,8 @@ export class ProductInfoComponent {
   constructor(
     private cartService: CartService,
     private favoritesService: FavoritesService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private translate: TranslateService
   ) { }
 
   incrementQuantity(): void {
@@ -53,7 +56,8 @@ export class ProductInfoComponent {
       this.cartService.addToCart(cartItem);
     }
 
-    this.notificationService.showSuccess(`Added ${this.quantity} ${this.product.name} to cart!`);
+    const productName = getLocalizedString(this.product.name, this.translate.currentLang);
+    this.notificationService.showSuccess(`Added ${this.quantity} ${productName} to cart!`);
   }
 
   getDiscountedPrice(): number {
@@ -72,20 +76,20 @@ export class ProductInfoComponent {
    * Handle favorite toggle events
    */
   onFavoriteToggled(event: { product: Product; isFavorite: boolean }): void {
-    
+
   }
 
   /**
    * Get key specifications to display in summary
    */
-  getKeySpecs(): Array<{key: string, value: string}> {
+  getKeySpecs(): Array<{ key: string, value: string }> {
     if (!this.product?.specifications) {
       return [];
     }
-    
+
     const specs = this.product.specifications;
     const keySpecs = ['Material', 'Color', 'Size', 'Weight', 'Brand'];
-    
+
     return keySpecs
       .filter(key => specs[key as keyof typeof specs])
       .map(key => ({

@@ -40,9 +40,21 @@ export class AuthService {
     }
   }
 
+  isAuthenticated(): boolean {
+    if (isPlatformBrowser(this.platformId)) {
+      return !!localStorage.getItem('token') || !!localStorage.getItem('adminToken');
+    }
+    return false;
+  }
+
+  isAdmin(): boolean {
+    const user = this.getUser();
+    return user && user.role === 'admin';
+  }
+
   getToken(): string | null {
     if (isPlatformBrowser(this.platformId)) {
-      return localStorage.getItem('token');
+      return localStorage.getItem('token') || localStorage.getItem('adminToken');
     }
     return null;
   }
@@ -50,7 +62,10 @@ export class AuthService {
   getUser(): any {
     if (isPlatformBrowser(this.platformId)) {
       const user = localStorage.getItem('user');
-      return user ? JSON.parse(user) : null;
+      if (user) return JSON.parse(user);
+
+      const adminUser = localStorage.getItem('adminUser');
+      if (adminUser) return JSON.parse(adminUser);
     }
     return null;
   }

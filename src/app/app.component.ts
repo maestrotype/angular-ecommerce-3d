@@ -8,6 +8,7 @@ import { FrontendSeoService } from './core/services/frontend-seo.service';
 import { CartService } from './core/services/cart.service';
 import { FavoritesService } from './core/services/favorites.service';
 import { ModalService } from './core/services/modal.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -34,8 +35,16 @@ export class AppComponent implements OnInit, OnDestroy {
     private cartService: CartService,
     private favoritesService: FavoritesService,
     private modalService: ModalService,
+    private translate: TranslateService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
+    // Initialize localization
+    this.translate.setDefaultLang('en');
+    const browserLang = isPlatformBrowser(this.platformId)
+      ? localStorage.getItem('preferredLanguage') || this.translate.getBrowserLang() || 'en'
+      : 'en';
+    this.translate.use(browserLang.match(/en|ru|ua/) ? browserLang : 'en');
+
     // Debounce scroll stop logic
     this.scrollSubject.pipe(
       debounceTime(150)
@@ -51,28 +60,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
         // Only clear admin theme if we're switching to frontend
         if (!this.adminRoute && isPlatformBrowser(this.platformId)) {
-          document.body.removeAttribute('data-theme');
+          // Logic moved to ThemeService for better management
         }
       });
   }
 
   ngOnInit(): void {
-    // Watch for data-theme changes on body and remove them
-    // But only if we're not in admin route (browser only)
-    if (isPlatformBrowser(this.platformId)) {
-      const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
-            const body = mutation.target as HTMLElement;
-            if (body.tagName === 'BODY' && body.getAttribute('data-theme') === 'dark' && !this.adminRoute) {
-              body.removeAttribute('data-theme');
-            }
-          }
-        });
-      });
-
-      observer.observe(document.body, { attributes: true, attributeFilter: ['data-theme'] });
-    }
+    // Theme management is now handled by ThemeService
 
     // Load and apply SEO settings from backend
     this.frontendSeoService.reloadSeoSettings().subscribe();

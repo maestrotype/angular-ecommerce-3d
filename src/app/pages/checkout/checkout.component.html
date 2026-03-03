@@ -3,17 +3,17 @@
     <div class="checkout-header">
       <button class="back-btn glass-theme" (click)="goBackToCart()">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-          <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2"/>
+          <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" />
         </svg>
-        Back to Cart
+        {{ 'CHECKOUT.HEADER.BACK_TO_CART' | translate }}
       </button>
-      <h1>Checkout</h1>
+      <h1>{{ 'CHECKOUT.HEADER.TITLE' | translate }}</h1>
     </div>
 
     <div class="checkout-content">
       <!-- Order Summary -->
-                   <div [class]="getThemeClass('order-summary')">
-        <h2>Order Summary</h2>
+      <div [class]="getThemeClass('order-summary')">
+        <h2>{{ 'CHECKOUT.SUMMARY.TITLE' | translate }}</h2>
         <div class="cart-items">
           <div *ngFor="let item of cartItems" class="cart-item">
             <div class="item-image">
@@ -22,60 +22,52 @@
             <div class="item-details">
               <h3 class="item-name">{{ item.name }}</h3>
               <p class="item-price theme-price">${{ item.price | number:'1.2-2' }}</p>
-              <span class="item-quantity">Qty: {{ item.quantity }}</span>
+              <span class="item-quantity">{{ 'CHECKOUT.SUMMARY.QTY' | translate }}: {{ item.quantity }}</span>
             </div>
             <div class="item-total">
               <span class="theme-price">${{ (item.price * item.quantity) | number:'1.2-2' }}</span>
             </div>
           </div>
         </div>
-        
+
         <div class="order-total">
           <div class="total-line">
-            <span>Subtotal:</span>
+            <span>{{ 'MODALS.CART.SUBTOTAL' | translate }}:</span>
             <span class="theme-price">${{ totalPrice | number:'1.2-2' }}</span>
           </div>
           <div class="total-line">
-            <span>Shipping:</span>
-            <span class="theme-price">Free</span>
+            <span>{{ 'CHECKOUT.SUMMARY.SHIPPING' | translate }}:</span>
+            <span class="theme-price">{{ 'CHECKOUT.SUMMARY.FREE' | translate }}</span>
           </div>
           <div class="total-line total-final">
-            <span>Total:</span>
+            <span>{{ 'MODALS.CART.TOTAL' | translate }}:</span>
             <span class="theme-price">${{ totalPrice | number:'1.2-2' }}</span>
           </div>
         </div>
       </div>
 
       <!-- Checkout Form -->
-                     <div [class]="getThemeClass('checkout-form')">
+      <div [class]="getThemeClass('checkout-form')">
         <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
           <!-- Customer Information -->
           <div class="form-section">
-            <h3>Customer Information</h3>
+            <h3>{{ 'CHECKOUT.FORM.CUSTOMER_INFO' | translate }}</h3>
             <div class="form-row">
               <div class="form-group">
-                <label for="customerName">Full Name *</label>
-                <input
-                  id="customerName"
-                  type="text"
-                  formControlName="customerName"
+                <label for="customerName">{{ 'CHECKOUT.FORM.NAME_LABEL' | translate }}</label>
+                <input id="customerName" type="text" formControlName="customerName"
                   [class.error]="checkoutForm.get('customerName')?.invalid && checkoutForm.get('customerName')?.touched"
-                  placeholder="Enter your full name"
-                />
+                  [placeholder]="'CHECKOUT.FORM.NAME_PLACEHOLDER' | translate" />
                 <span class="error-message" *ngIf="getFieldError('customerName')">
                   {{ getFieldError('customerName') }}
                 </span>
               </div>
-              
+
               <div class="form-group">
-                <label for="customerEmail">Email *</label>
-                <input
-                  id="customerEmail"
-                  type="email"
-                  formControlName="customerEmail"
+                <label for="customerEmail">{{ 'CHECKOUT.FORM.EMAIL_LABEL' | translate }}</label>
+                <input id="customerEmail" type="email" formControlName="customerEmail"
                   [class.error]="checkoutForm.get('customerEmail')?.invalid && checkoutForm.get('customerEmail')?.touched"
-                  placeholder="Enter your email"
-                />
+                  [placeholder]="'CHECKOUT.FORM.EMAIL_PLACEHOLDER' | translate" />
                 <span class="error-message" *ngIf="getFieldError('customerEmail')">
                   {{ getFieldError('customerEmail') }}
                 </span>
@@ -83,14 +75,10 @@
             </div>
 
             <div class="form-group">
-              <label for="customerPhone">Phone *</label>
-              <input
-                id="customerPhone"
-                type="tel"
-                formControlName="customerPhone"
+              <label for="customerPhone">{{ 'CHECKOUT.FORM.PHONE_LABEL' | translate }}</label>
+              <input id="customerPhone" type="tel" formControlName="customerPhone"
                 [class.error]="checkoutForm.get('customerPhone')?.invalid && checkoutForm.get('customerPhone')?.touched"
-                placeholder="+380 XX XXX XX XX"
-              />
+                placeholder="+380 XX XXX XX XX" />
               <span class="error-message" *ngIf="getFieldError('customerPhone')">
                 {{ getFieldError('customerPhone') }}
               </span>
@@ -99,16 +87,12 @@
 
           <!-- Shipping Information -->
           <div class="form-section">
-            <h3>Shipping Information</h3>
+            <h3>{{ 'CHECKOUT.FORM.SHIPPING_INFO' | translate }}</h3>
             <div class="form-group">
-              <label for="shippingAddress">Shipping Address *</label>
-              <textarea
-                id="shippingAddress"
-                formControlName="shippingAddress"
+              <label for="shippingAddress">{{ 'CHECKOUT.FORM.ADDRESS_LABEL' | translate }}</label>
+              <textarea id="shippingAddress" formControlName="shippingAddress"
                 [class.error]="checkoutForm.get('shippingAddress')?.invalid && checkoutForm.get('shippingAddress')?.touched"
-                placeholder="Enter your complete shipping address"
-                rows="3"
-              ></textarea>
+                [placeholder]="'CHECKOUT.FORM.ADDRESS_PLACEHOLDER' | translate" rows="3"></textarea>
               <span class="error-message" *ngIf="getFieldError('shippingAddress')">
                 {{ getFieldError('shippingAddress') }}
               </span>
@@ -116,28 +100,20 @@
 
             <div class="form-row">
               <div class="form-group">
-                <label for="city">City *</label>
-                <input
-                  id="city"
-                  type="text"
-                  formControlName="city"
+                <label for="city">{{ 'CHECKOUT.FORM.CITY_LABEL' | translate }}</label>
+                <input id="city" type="text" formControlName="city"
                   [class.error]="checkoutForm.get('city')?.invalid && checkoutForm.get('city')?.touched"
-                  placeholder="Enter city"
-                />
+                  [placeholder]="'CHECKOUT.FORM.CITY_PLACEHOLDER' | translate" />
                 <span class="error-message" *ngIf="getFieldError('city')">
                   {{ getFieldError('city') }}
                 </span>
               </div>
-              
+
               <div class="form-group">
-                <label for="postalCode">Postal Code *</label>
-                <input
-                  id="postalCode"
-                  type="text"
-                  formControlName="postalCode"
+                <label for="postalCode">{{ 'CHECKOUT.FORM.POSTAL_LABEL' | translate }}</label>
+                <input id="postalCode" type="text" formControlName="postalCode"
                   [class.error]="checkoutForm.get('postalCode')?.invalid && checkoutForm.get('postalCode')?.touched"
-                  placeholder="Enter postal code"
-                />
+                  [placeholder]="'CHECKOUT.FORM.POSTAL_PLACEHOLDER' | translate" />
                 <span class="error-message" *ngIf="getFieldError('postalCode')">
                   {{ getFieldError('postalCode') }}
                 </span>
@@ -145,14 +121,10 @@
             </div>
 
             <div class="form-group">
-              <label for="country">Country *</label>
-              <input
-                id="country"
-                type="text"
-                formControlName="country"
+              <label for="country">{{ 'CHECKOUT.FORM.COUNTRY_LABEL' | translate }}</label>
+              <input id="country" type="text" formControlName="country"
                 [class.error]="checkoutForm.get('country')?.invalid && checkoutForm.get('country')?.touched"
-                placeholder="Enter country"
-              />
+                [placeholder]="'CHECKOUT.FORM.COUNTRY_PLACEHOLDER' | translate" />
               <span class="error-message" *ngIf="getFieldError('country')">
                 {{ getFieldError('country') }}
               </span>
@@ -161,14 +133,10 @@
 
           <!-- Payment Method -->
           <div class="form-section">
-            <h3>Payment Method</h3>
+            <h3>{{ 'CHECKOUT.FORM.PAYMENT_METHOD' | translate }}</h3>
             <div class="payment-methods">
-              <div
-                *ngFor="let method of paymentMethods"
-                class="payment-method"
-                [class.selected]="selectedPaymentMethod === method.id"
-                (click)="onPaymentMethodChange(method.id)"
-              >
+              <div *ngFor="let method of paymentMethods" class="payment-method"
+                [class.selected]="selectedPaymentMethod === method.id" (click)="onPaymentMethodChange(method.id)">
                 <div class="method-icon">
                   <mat-icon>{{ method.icon }}</mat-icon>
                 </div>
@@ -180,7 +148,7 @@
                   <div class="radio-circle" [class.selected]="selectedPaymentMethod === method.id"></div>
                 </div>
               </div>
-              
+
               <!-- No payment methods available -->
               <div *ngIf="paymentMethods.length === 0" class="no-payment-methods">
                 <div class="warning-icon">
@@ -196,31 +164,25 @@
 
           <!-- Additional Notes -->
           <div class="form-section">
-            <h3>Additional Notes</h3>
+            <h3>{{ 'CHECKOUT.FORM.NOTES_TITLE' | translate }}</h3>
             <div class="form-group">
-              <label for="notes">Order Notes (Optional)</label>
-              <textarea
-                id="notes"
-                formControlName="notes"
-                placeholder="Any special instructions or notes for your order"
-                rows="3"
-              ></textarea>
+              <label for="notes">{{ 'CHECKOUT.FORM.NOTES_LABEL' | translate }}</label>
+              <textarea id="notes" formControlName="notes" [placeholder]="'CHECKOUT.FORM.NOTES_PLACEHOLDER' | translate"
+                rows="3"></textarea>
             </div>
           </div>
 
           <!-- Submit Button -->
           <div class="form-actions">
-            <button
-              type="submit"
-              [class]="getThemeClass('submit-btn')"
-              [disabled]="checkoutForm.invalid || isLoading"
-            >
-              <span *ngIf="!isLoading">Place Order - ${{ totalPrice | number:'1.2-2' }}</span>
-              <span *ngIf="isLoading">Processing...</span>
+            <button type="submit" [class]="getThemeClass('submit-btn')" [disabled]="checkoutForm.invalid || isLoading">
+              <span *ngIf="!isLoading">
+                {{ 'CHECKOUT.FORM.SUBMIT_LABEL' | translate:{price: totalPrice | number:'1.2-2'} }}
+              </span>
+              <span *ngIf="isLoading">{{ 'CHECKOUT.FORM.PROCESSING' | translate }}</span>
             </button>
           </div>
         </form>
       </div>
     </div>
   </div>
-</div> 
+</div>

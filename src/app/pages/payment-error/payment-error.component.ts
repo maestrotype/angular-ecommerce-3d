@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ThemeService } from '../../core/themes/theme.service';
 import { Theme } from '../../core/themes/theme.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-payment-error',
@@ -10,15 +11,16 @@ import { Theme } from '../../core/themes/theme.model';
 })
 export class PaymentErrorComponent implements OnInit {
   currentTheme = 'default';
-  errorMessage: string = 'Payment processing failed';
+  errorMessage: string = '';
   orderId: string | null = null;
   amount: number | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private themeService: ThemeService
-  ) {}
+    private themeService: ThemeService,
+    private translate: TranslateService
+  ) { }
 
   ngOnInit(): void {
     this.loadTheme();
@@ -33,7 +35,7 @@ export class PaymentErrorComponent implements OnInit {
 
   private loadErrorData(): void {
     // Get data from route params
-    this.errorMessage = this.route.snapshot.queryParamMap.get('error') || 'Payment processing failed';
+    this.errorMessage = this.route.snapshot.queryParamMap.get('error') || this.translate.instant('PAYMENT.ERROR_PAGE.DEFAULT_ERROR');
     this.orderId = this.route.snapshot.queryParamMap.get('orderId');
     const amountStr = this.route.snapshot.queryParamMap.get('amount');
     this.amount = amountStr ? parseFloat(amountStr) : null;

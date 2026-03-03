@@ -1,8 +1,8 @@
-import { IsString, IsOptional, IsBoolean } from 'class-validator';
+import { IsString, IsOptional, IsBoolean, IsObject } from 'class-validator';
 
 export class CreateCategoryDto {
-  @IsString()
-  name: string;
+  @IsObject()
+  name: any;
 
   @IsOptional()
   @IsString()
@@ -13,8 +13,8 @@ export class CreateCategoryDto {
   icon?: string;
 
   @IsOptional()
-  @IsString()
-  description?: string;
+  @IsObject()
+  description?: any;
 
   @IsOptional()
   @IsBoolean()

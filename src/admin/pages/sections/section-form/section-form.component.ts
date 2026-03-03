@@ -7,6 +7,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SectionService } from '../../../services/section.service';
 import { Section, CreateSectionDto, UpdateSectionDto, MenuItem } from '../../../models/section.model';
+import { LocalizedString } from '../../../../shared/models/localized-string.model';
+import { getLocalizedString } from '../../../../shared/utils/localization.util';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ImageUploadComponent } from '../../../components/ui/image-upload/image-upload.component';
 
@@ -17,7 +19,7 @@ import { ImageUploadComponent } from '../../../components/ui/image-upload/image-
 })
 export class SectionFormComponent implements AfterViewInit {
   @ViewChildren(ImageUploadComponent) imageUploadComponents!: QueryList<ImageUploadComponent>;
-  
+
   sectionForm: FormGroup;
   isEditMode: boolean;
   loading = false;
@@ -87,7 +89,7 @@ export class SectionFormComponent implements AfterViewInit {
 
   private createForm(): FormGroup {
     const section = this.data?.section;
-    
+
     // Map database type to display type
     let displayType = section?.type || 'hero';
     if (section?.type === 'categories') {
@@ -96,9 +98,15 @@ export class SectionFormComponent implements AfterViewInit {
 
     return this.fb.group({
       type: [displayType, Validators.required],
-      title: [section?.title || '', Validators.required],
-      subtitle: [section?.subtitle || ''],
-      content: [section?.content || ''],
+      title_en: [this.getLocalizedValue(section?.title, 'en') || '', Validators.required],
+      title_ru: [this.getLocalizedValue(section?.title, 'ru') || ''],
+      title_ua: [this.getLocalizedValue(section?.title, 'ua') || ''],
+      subtitle_en: [this.getLocalizedValue(section?.subtitle, 'en') || ''],
+      subtitle_ru: [this.getLocalizedValue(section?.subtitle, 'ru') || ''],
+      subtitle_ua: [this.getLocalizedValue(section?.subtitle, 'ua') || ''],
+      content_en: [this.getLocalizedValue(section?.content, 'en') || ''],
+      content_ru: [this.getLocalizedValue(section?.content, 'ru') || ''],
+      content_ua: [this.getLocalizedValue(section?.content, 'ua') || ''],
       imageUrl: [section?.imageUrl || ''],
       isActive: [section?.isActive ?? true],
       model3dUrl: [section?.model3dUrl || ''],
@@ -240,7 +248,7 @@ export class SectionFormComponent implements AfterViewInit {
         if (response?.url) {
           const iconUrl = response.url;
           this.categories.at(index).patchValue({ icon: iconUrl });
-          
+
           // Find the corresponding image upload component and notify it
           const imageUploadComponents = this.imageUploadComponents.toArray();
           if (imageUploadComponents[index + 1]) { // +1 because first component is for logo
@@ -250,7 +258,7 @@ export class SectionFormComponent implements AfterViewInit {
         this.uploadingCategoryIcon = false;
       },
       error: (error) => {
-        
+
         this.snackBar.open('Error uploading category icon', 'Close', { duration: 3000 });
         this.uploadingCategoryIcon = false;
       }
@@ -300,7 +308,7 @@ export class SectionFormComponent implements AfterViewInit {
     if (!this.model3dFile) {
       return of(this.sectionForm.value.model3dUrl || null);
     }
-    
+
     this.uploading3d = true;
     return this.sectionService.upload3dModel(this.model3dFile).pipe(
       map(response => {
@@ -328,16 +336,17 @@ export class SectionFormComponent implements AfterViewInit {
 
     this.upload3dIfSelected().subscribe({
       next: (model3dUrl) => {
-        const formValue = this.sectionForm.value;
+        const rawFormValue = this.sectionForm.value;
+        const formValue = this.packLocalizedFields(rawFormValue);
 
         let formData: any;
 
         if (formValue.type === 'header') {
           formData = {
             type: formValue.type,
-            title: formValue.title || 'Header',
-            subtitle: formValue.subtitle || '',
-            content: formValue.content || '',
+            title: formValue.title,
+            subtitle: formValue.subtitle,
+            content: formValue.content,
             imageUrl: formValue.imageUrl || '',
             isActive: formValue.isActive,
             model3dUrl: model3dUrl || '',
@@ -351,16 +360,16 @@ export class SectionFormComponent implements AfterViewInit {
               menu: formValue.menu || [],
               categories: (formValue.categories || []).map((cat: any) => ({
                 ...cat,
-                slug: cat.slug || cat.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+                slug: cat.slug || getLocalizedString(cat.name).toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
               }))
             }
           };
         } else if (formValue.type === 'categories') {
           formData = {
             type: 'categories',
-            title: formValue.title || 'Categories',
-            subtitle: formValue.subtitle || '',
-            content: formValue.content || '',
+            title: formValue.title,
+            subtitle: formValue.subtitle,
+            content: formValue.content,
             imageUrl: formValue.imageUrl || '',
             isActive: formValue.isActive,
             model3dUrl: model3dUrl || '',
@@ -369,14 +378,24 @@ export class SectionFormComponent implements AfterViewInit {
             settings: {
               categories: (formValue.categories || []).map((cat: any) => ({
                 ...cat,
-                slug: cat.slug || cat.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+                slug: cat.slug || getLocalizedString(cat.name).toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
               }))
             }
           };
         } else {
-          const { logoUrl, showSearch, showCart, showProfile, menu, categories, ...sectionData } = formValue;
+          const {
+            logoUrl, showSearch, showCart, showProfile, menu, categories,
+            title_en, title_ru, title_ua,
+            subtitle_en, subtitle_ru, subtitle_ua,
+            content_en, content_ru, content_ua,
+            ...sectionData
+          } = rawFormValue;
+
           formData = {
             ...sectionData,
+            title: formValue.title,
+            subtitle: formValue.subtitle,
+            content: formValue.content,
             model3dUrl: model3dUrl || ''
           };
         }
@@ -390,7 +409,7 @@ export class SectionFormComponent implements AfterViewInit {
             },
             error: (error) => {
               this.loading = false;
-              
+
               this.snackBar.open('Error updating section', 'Close', { duration: 3000 });
             }
           });
@@ -403,7 +422,7 @@ export class SectionFormComponent implements AfterViewInit {
             },
             error: (error) => {
               this.loading = false;
-              
+
               this.snackBar.open('Error creating section', 'Close', { duration: 3000 });
             }
           });
@@ -411,7 +430,7 @@ export class SectionFormComponent implements AfterViewInit {
       },
       error: (error) => {
         this.loading = false;
-        
+
         this.snackBar.open('Error processing section', 'Close', { duration: 3000 });
       }
     });
@@ -419,5 +438,40 @@ export class SectionFormComponent implements AfterViewInit {
 
   onCancel(): void {
     this.dialogRef.close();
+  }
+
+  getLocalizedValue(value: any, lang: string): string {
+    if (!value) return '';
+    if (typeof value === 'string') return lang === 'en' ? value : '';
+    return value[lang] || '';
+  }
+
+  private packLocalizedFields(formValue: any): any {
+    const data = { ...formValue };
+
+    data.title = {
+      en: formValue.title_en,
+      ru: formValue.title_ru,
+      ua: formValue.title_ua
+    };
+
+    data.subtitle = {
+      en: formValue.subtitle_en,
+      ru: formValue.subtitle_ru,
+      ua: formValue.subtitle_ua
+    };
+
+    data.content = {
+      en: formValue.content_en,
+      ru: formValue.content_ru,
+      ua: formValue.content_ua
+    };
+
+    // Cleanup temporary fields
+    delete data.title_en; delete data.title_ru; delete data.title_ua;
+    delete data.subtitle_en; delete data.subtitle_ru; delete data.subtitle_ua;
+    delete data.content_en; delete data.content_ru; delete data.content_ua;
+
+    return data;
   }
 }

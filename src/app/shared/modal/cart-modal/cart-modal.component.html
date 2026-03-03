@@ -1,56 +1,58 @@
 <div class="cart-modal">
-    <div class="cart-header">
-      <h2>Cart</h2>
+  <div class="cart-header">
+    <h2>{{ 'MODALS.CART.TITLE' | translate }}</h2>
+  </div>
+
+  <div class="cart-content">
+    <div *ngIf="cartItems.length === 0" class="empty-cart">
+      <p>{{ 'MODALS.CART.EMPTY_MESSAGE' | translate }}</p>
+      <button class="continue-shopping-btn glass-theme" (click)="onClose()">
+        {{ 'MODALS.CART.CONTINUE_SHOPPING' | translate }}
+      </button>
     </div>
-  
-    <div class="cart-content">
-      <div *ngIf="cartItems.length === 0" class="empty-cart">
-        <p>Your cart is empty</p>
-        <button class="continue-shopping-btn glass-theme" (click)="onClose()">
-          Continue Shopping
+
+    <div *ngIf="cartItems.length > 0" class="cart-items">
+      <div *ngFor="let item of cartItems" class="cart-item">
+        <div class="item-image">
+          <img [src]="item.imageUrl" [alt]="item.name | localized" />
+        </div>
+
+        <div class="item-details">
+          <h3 class="item-name">{{ item.name | localized }}</h3>
+          <p class="item-price theme-price">${{ item.price | number:'1.2-2' }}</p>
+
+          <div class="quantity-controls">
+            <button class="quantity-btn glass-theme" (click)="updateQuantity(item.productId, -1)">-</button>
+            <span>{{ item.quantity }}</span>
+            <button class="quantity-btn glass-theme" (click)="updateQuantity(item.productId, 1)">+</button>
+          </div>
+        </div>
+
+        <button class="remove-btn glass-theme" (click)="removeItem(item.productId)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" />
+          </svg>
         </button>
-      </div>
-  
-      <div *ngIf="cartItems.length > 0" class="cart-items">
-        <div *ngFor="let item of cartItems" class="cart-item">
-          <div class="item-image">
-            <img [src]="item.imageUrl" [alt]="item.name" />
-          </div>
-          
-          <div class="item-details">
-            <h3 class="item-name">{{ item.name }}</h3>
-            <p class="item-price theme-price">${{ item.price | number:'1.2-2' }}</p>
-            
-            <div class="quantity-controls">
-              <button class="quantity-btn glass-theme" (click)="updateQuantity(item.productId, -1)">-</button>
-              <span>{{ item.quantity }}</span>
-              <button class="quantity-btn glass-theme" (click)="updateQuantity(item.productId, 1)">+</button>
-            </div>
-          </div>
-          
-          <button class="remove-btn glass-theme" (click)="removeItem(item.productId)">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-  
-    <div *ngIf="cartItems.length > 0" class="cart-footer">
-      <div class="total-section">
-        <div class="total-price">
-          <strong class="theme-price">Total: ${{ totalPrice | number:'1.2-2' }}</strong>
-        </div>
-        
-        <div class="checkout-actions">
-          <button class="continue-btn glass-theme" (click)="onClose()">
-            Continue Shopping
-          </button>
-          <button class="checkout-btn glass-theme" (click)="checkout()">
-            Place Order
-          </button>
-        </div>
       </div>
     </div>
   </div>
+
+  <div *ngIf="cartItems.length > 0" class="cart-footer">
+    <div class="total-section">
+      <div class="total-price">
+        <strong class="theme-price">
+          {{ 'MODALS.CART.TOTAL_DISPLAY' | translate:{price: totalPrice | number:'1.2-2'} }}
+        </strong>
+      </div>
+
+      <div class="checkout-actions">
+        <button class="continue-btn glass-theme" (click)="onClose()">
+          {{ 'MODALS.CART.CONTINUE_SHOPPING' | translate }}
+        </button>
+        <button class="checkout-btn glass-theme" (click)="checkout()">
+          {{ 'MODALS.CART.PLACE_ORDER' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

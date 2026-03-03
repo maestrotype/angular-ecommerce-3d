@@ -1,8 +1,30 @@
 <header class="header">
   <div class="header-container">
     <div class="logo" (click)="goHome()" style="cursor: pointer;">
-      <img *ngIf="logoUrl" [src]="logoUrl" alt="Logo" class="logo-image">
-      <span *ngIf="!logoUrl">🛒 3D Store</span>
+      <svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg"
+        class="logo-image">
+        <defs>
+          <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
+          </linearGradient>
+          <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#6B7280;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#374151;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <g transform="translate(10,15)">
+          <polygon points="0,15 15,0 30,15 15,30" fill="url(#gradient1)" opacity="0.9" />
+          <polygon points="15,0 30,15 30,30 15,15" fill="url(#gradient1)" opacity="0.7" />
+          <polygon points="0,15 15,0 15,15 0,30" fill="url(#gradient1)" opacity="0.5" />
+        </g>
+        <text x="55" y="25" font-family="Arial, sans-serif" font-size="24" font-weight="bold"
+          fill="currentColor">3D</text>
+        <text x="55" y="45" font-family="Arial, sans-serif" font-size="18" font-weight="normal" fill="currentColor"
+          letter-spacing="1px">Store</text>
+        <circle cx="140" cy="20" r="3" fill="#3B82F6" opacity="0.6" />
+        <circle cx="150" cy="30" r="2" fill="#6B7280" opacity="0.4" />
+      </svg>
     </div>
 
     <!-- Desktop Navigation -->
@@ -10,25 +32,25 @@
       <ng-container *ngFor="let item of menuItems">
         <a *ngIf="item.url.startsWith('/')" [routerLink]="item.url" class="nav-link"
           [class.hidden]="!canAccessMenuItem(item)">
-          {{ item.title }}
+          {{ item.title | localized }}
         </a>
         <a *ngIf="item.url.startsWith('#')" (click)="handleMenuClick(item)" class="nav-link"
           [class.hidden]="!canAccessMenuItem(item)">
-          {{ item.title }}
+          {{ item.title | localized }}
         </a>
       </ng-container>
     </nav>
 
     <!-- Desktop Search -->
     <div class="desktop-search" [class.active]="isSearchOpen" *ngIf="showSearch">
-      <input #searchInput type="text" placeholder="Search products..." class="search-input" [(ngModel)]="searchTerm"
-        (input)="onSearch()" (keyup.enter)="performSearch()" />
+      <input #searchInput type="text" [placeholder]="'HEADER.SEARCH_PLACEHOLDER' | translate" class="search-input"
+        [(ngModel)]="searchTerm" (input)="onSearch()" (keyup.enter)="performSearch()" />
     </div>
 
     <!-- Mobile Search -->
     <div class="mobile-search" *ngIf="showSearch">
-      <input #mobileSearchInput type="text" placeholder="Search..." class="mobile-search-input" [(ngModel)]="searchTerm"
-        (input)="onSearch()" (keyup.enter)="performSearch()" />
+      <input #mobileSearchInput type="text" [placeholder]="'HEADER.SEARCH_PLACEHOLDER' | translate"
+        class="mobile-search-input" [(ngModel)]="searchTerm" (input)="onSearch()" (keyup.enter)="performSearch()" />
     </div>
 
     <div class="user-actions">
@@ -51,8 +73,8 @@
         <app-icon name="shopping-cart"></app-icon>
         <span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span>
       </a>
-      <!-- Theme Switcher (old) -->
-      <div class="theme-switcher" *ngIf="!isMobile && !enableNewThemeSwitcher">
+      <!-- Theme Switcher -->
+      <div class="theme-switcher" *ngIf="!isMobile">
         <button class="theme-toggle" (click)="toggleThemeMenu()">
           <svg width="26" height="26" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -64,56 +86,34 @@
         <div class="theme-menu" *ngIf="showThemeMenu">
           <button *ngFor="let theme of themes" class="theme-option" [class.active]="currentTheme === theme.id"
             (click)="changeTheme(theme.id)">
-            {{ theme.name }}
+            {{ theme.name | translate }}
           </button>
         </div>
       </div>
 
-      <!-- Theme Switcher (new, behind flag) -->
-      <div class="theme-switcher" *ngIf="!isMobile && enableNewThemeSwitcher">
-        <button class="theme-switcher__toggle" (click)="toggleNewThemeMenu()" aria-label="Theme switcher">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Language Switcher -->
+      <div class="lang-switcher" *ngIf="!isMobile">
+        <button class="lang-switcher__toggle" (click)="toggleLangMenu()" aria-label="Language switcher">
+          <!-- Small globe icon -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
-              d="M12 4v2m0 12v2m8-8h-2M6 12H4m12.364 6.364l-1.414-1.414M7.05 7.05L5.636 5.636m12.728 0l-1.414 1.414M7.05 16.95l-1.414 1.414M12 8a4 4 0 100 8 4 4 0 000-8z"
+              d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M2 12H22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path
+              d="M12 2C14.5013 4.73835 15.9228 8.29203 16 12C15.9228 15.708 14.5013 19.2616 12 22C9.49872 19.2616 8.07725 15.708 8 12C8.07725 8.29203 9.49872 4.73835 12 2Z"
               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
+          <span class="current-lang">{{ currentLang | uppercase }}</span>
         </button>
-        <div class="theme-switcher__popover" *ngIf="showNewThemeMenu">
-          <button class="theme-switcher__option" *ngFor="let theme of themes" (click)="changeTheme(theme.id)"
+        <div class="lang-switcher__popover" *ngIf="showLangMenu">
+          <button class="lang-switcher__option" *ngFor="let lang of languages" (click)="changeLanguage(lang.code)"
             type="button">
-            <span class="theme-switcher__swatch">
-              <ng-container [ngSwitch]="theme.id">
-                <svg *ngSwitchCase="'default'" width="24" height="16" viewBox="0 0 24 16"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <rect x="0" y="0" width="24" height="16" fill="var(--surface-2)" />
-                  <rect x="0" y="8" width="24" height="8" fill="var(--color-primary)" />
-                </svg>
-                <svg *ngSwitchCase="'dark'" width="24" height="16" viewBox="0 0 24 16"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <rect x="0" y="0" width="24" height="16" fill="#111827" />
-                  <circle cx="18" cy="5" r="3" fill="#f59e0b" />
-                </svg>
-                <svg *ngSwitchCase="'glass'" width="24" height="16" viewBox="0 0 24 16"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0%" stop-color="rgba(255,255,255,.4)" />
-                      <stop offset="100%" stop-color="rgba(255,255,255,.2)" />
-                    </linearGradient>
-                  </defs>
-                  <rect x="0" y="0" width="24" height="16" fill="url(#g1)" />
-                  <rect x="0" y="0" width="24" height="16" stroke="var(--border)" fill="none" />
-                </svg>
-                <span *ngSwitchDefault
-                  style="display:block;width:24px;height:16px;background:var(--color-primary);"></span>
-              </ng-container>
-            </span>
-            <span class="theme-switcher__label">{{ theme.name }}</span>
-            <span class="theme-switcher__check" *ngIf="currentTheme === theme.id">✔</span>
+            <span class="lang-switcher__label">{{ lang.label }}</span>
+            <span class="lang-switcher__check" *ngIf="currentLang === lang.code">✔</span>
           </button>
         </div>
       </div>
-
       <span class="profile-icon" (click)="openAuthModal()" *ngIf="showProfile && !isMobile">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -140,14 +140,14 @@
   (click)="$event.stopPropagation()">
   <div class="search-results-container">
     <div class="search-results-header">
-      <span>Search Results ({{ searchResults.length }})</span>
+      <span>{{ 'HEADER.SEARCH_RESULTS' | translate }} ({{ searchResults.length }})</span>
     </div>
     <div class="search-results-list">
       <div *ngFor="let product of searchResults.slice(0, 5)" class="search-result-item"
         (click)="goToProduct(product.id)">
         <img [src]="product.imageUrl" [alt]="product.name" class="result-image">
         <div class="result-info">
-          <h4 class="result-name">{{ product.name }}</h4>
+          <h4 class="result-name">{{ product.name | localized }}</h4>
           <p class="result-price">${{ product.price }}</p>
           <span class="result-category">{{ product.category }}</span>
         </div>
@@ -155,7 +155,7 @@
     </div>
     <div class="search-results-footer" *ngIf="searchResults.length > 5">
       <button class="view-all-btn" (click)="viewAllResults()">
-        View All Results ({{ searchResults.length }})
+        {{ 'HEADER.VIEW_ALL_RESULTS' | translate }} ({{ searchResults.length }})
       </button>
     </div>
   </div>
@@ -167,7 +167,7 @@
 <!-- Mobile Menu -->
 <div class="mobile-menu" [class.active]="isMobileMenuOpen">
   <div class="mobile-menu-header">
-    <h3 class="mobile-menu-title">Menu</h3>
+    <h3 class="mobile-menu-title">{{ 'HEADER.MENU' | translate }}</h3>
     <button class="close-btn" (click)="closeMobileMenu()">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -190,11 +190,21 @@
 
     <div class="mobile-menu-section">
       <div class="mobile-theme-selector">
-        <span class="selector-label">Theme</span>
+        <span class="selector-label">{{ 'HEADER.THEME' | translate }}</span>
         <div class="theme-chips">
           <button *ngFor="let theme of themes" [class.active]="currentTheme === theme.id"
             (click)="changeTheme(theme.id)">
-            {{ theme.name }}
+            {{ 'HEADER.THEMES.' + (theme.id | uppercase) | translate }}
+          </button>
+        </div>
+      </div>
+
+      <div class="mobile-theme-selector" style="margin-top: 10px;">
+        <span class="selector-label">{{ 'HEADER.LANGUAGE' | translate }}</span>
+        <div class="theme-chips">
+          <button *ngFor="let lang of languages" [class.active]="currentLang === lang.code"
+            (click)="changeLanguage(lang.code)">
+            {{ lang.label }}
           </button>
         </div>
       </div>
@@ -202,12 +212,12 @@
 
     <div class="mobile-menu-section mobile-auth-section">
       <button *ngIf="!isLoggedIn()" (click)="openAuthModal(); closeMobileMenu()" class="mobile-auth-btn primary">
-        Login / Register
+        {{ 'HEADER.LOGIN_REGISTER' | translate }}
       </button>
       <div *ngIf="isLoggedIn()" class="user-info">
-        <span class="user-name">Welcome!</span>
+        <span class="user-name">{{ 'HEADER.WELCOME' | translate }}</span>
         <button (click)="logout()" class="mobile-auth-btn secondary">
-          Logout
+          {{ 'HEADER.LOGOUT' | translate }}
         </button>
       </div>
     </div>

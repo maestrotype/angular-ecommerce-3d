@@ -21,7 +21,7 @@
 
         /* Special Offer section - Default theme */
         --special-offer-bg: linear-gradient(135deg,
-                        rgba(255, 255, 255, 0.9) 0%, image.png rgba(248, 250, 252, 0.8) 30%,
+                        rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.8) 30%,
                         rgba(241, 245, 249, 0.7) 70%,
                         rgba(226, 232, 240, 0.8) 100%);
 
@@ -496,11 +496,14 @@
         --contacts-button-hover: #4f46e5;
 
         /* Header section - Glass theme */
-        --header-bg: rgba(255, 255, 255, 0.4);
-        --header-link: #475569;
-        --header-link-hover: #1e293b;
-        --header-search-bg: rgba(255, 255, 255, 0.5);
-        --header-search-text: #1e293b;
+        --header-bg: rgba(255, 255, 255, 0.15);
+        --header-backdrop-filter: blur(20px) saturate(180%);
+        --header-text: #ffffff;
+        --header-link: rgba(255, 255, 255, 0.8);
+        --header-link-hover: #ffffff;
+        --header-search-bg: rgba(255, 255, 255, 0.1);
+        --header-search-text: #ffffff;
+        --header-text-rgb: 255, 255, 255;
 
         /* Best Sellers section - Glass theme */
         --best-sellers-bg: rgba(255, 255, 255, 0.3);

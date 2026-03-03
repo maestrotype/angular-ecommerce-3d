@@ -11,6 +11,7 @@ import { ModalService } from '../../core/services/modal.service';
 import { ThemeService } from '../../core/themes/theme.service';
 import { Theme } from '../../core/themes/theme.model';
 import { AuthService } from '../../core/services/auth.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-header',
@@ -40,6 +41,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
   showProfile = true;
   logoUrl: string | null = null;
 
+  // Language customization
+  languages = [
+    { code: 'en', label: 'EN' },
+    { code: 'ru', label: 'RU' },
+    { code: 'ua', label: 'UA' }
+  ];
+  currentLang = 'en';
+  showLangMenu = false;
+
   // Fallback menu items in case API fails completely
   private readonly FALLBACK_MENU_ITEMS: MenuItem[] = [
     { title: 'Home', url: '/home', access: 'all', isActive: true },
@@ -54,7 +64,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   currentTheme = 'default';
   showThemeMenu = false;
   // Feature flag for new theme switcher UI (keeps old one by default)
-  enableNewThemeSwitcher = true;
+  enableNewThemeSwitcher = false;
   showNewThemeMenu = false;
 
   constructor(
@@ -66,8 +76,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private modalService: ModalService,
     private themeService: ThemeService,
     private authService: AuthService,
+    public translate: TranslateService,
     @Inject(PLATFORM_ID) private platformId: Object
-  ) { }
+  ) {
+    // Initialize default language
+    this.currentLang = this.translate.currentLang || this.translate.getDefaultLang() || 'en';
+  }
 
   ngOnInit(): void {
     this.loadHeaderCustomization();
@@ -132,6 +146,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const searchInput = (event.target as Element).closest('.desktop-search, .mobile-search');
     const searchResults = (event.target as Element).closest('.search-results');
     const themeSwitcher = (event.target as Element).closest('.theme-switcher');
+    const langSwitcher = (event.target as Element).closest('.lang-switcher');
 
     if (!searchIcon && !searchInput && !searchResults) {
       this.isSearchOpen = false;
@@ -143,6 +158,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (!themeSwitcher) {
       this.showThemeMenu = false;
       this.showNewThemeMenu = false;
+    }
+
+    // Close language menu when clicking outside
+    if (!langSwitcher) {
+      this.showLangMenu = false;
     }
   }
 
@@ -218,6 +238,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.themeService.setTheme(themeId);
     this.showThemeMenu = false;
     this.showNewThemeMenu = false;
+  }
+
+  toggleLangMenu(): void {
+    this.showLangMenu = !this.showLangMenu;
+  }
+
+  changeLanguage(langCode: string): void {
+    this.currentLang = langCode;
+    this.translate.use(langCode);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('preferredLanguage', langCode);
+    }
+    this.showLangMenu = false;
   }
 
   toggleMobileMenu() {

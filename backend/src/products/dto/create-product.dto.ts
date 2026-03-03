@@ -13,9 +13,8 @@ import {
 import { Transform } from 'class-transformer';
 
 export class CreateProductDto {
-  @IsString()
-  @MaxLength(255)
-  name: string;
+  @IsObject()
+  name: any;
 
   @IsString()
   @MaxLength(100)
@@ -31,8 +30,8 @@ export class CreateProductDto {
   @Transform(({ value }) => parseInt(value))
   stock: number;
 
-  @IsString()
-  description: string;
+  @IsObject()
+  description: any;
 
   @IsOptional()
   @IsString()

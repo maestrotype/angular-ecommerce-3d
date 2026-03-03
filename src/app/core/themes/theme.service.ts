@@ -23,20 +23,24 @@ export class ThemeService {
   }
 
   private initializeTheme(): void {
-    const savedFrontend = localStorage.getItem('selected-theme');
-    const savedAdmin = localStorage.getItem('selected-theme-admin');
+    if (!isPlatformBrowser(this.platformId)) return;
 
+    // Load frontend theme
+    const savedFrontend = localStorage.getItem('selected-theme');
     const frontendTheme = savedFrontend ? this.getThemeById(savedFrontend) : this.getThemeById(DEFAULT_THEME_ID);
+
     if (frontendTheme) {
-      this.applyTheme(frontendTheme, 'frontend');
       this.currentThemeSubject.next(frontendTheme);
+      this.applyTheme(frontendTheme, 'frontend');
     }
 
+    // Load admin theme
+    const savedAdmin = localStorage.getItem('selected-theme-admin');
     if (savedAdmin) {
       const adminTheme = this.getThemeById(savedAdmin);
       if (adminTheme) {
-        this.applyTheme(adminTheme, 'admin');
         this.adminThemeSubject.next(adminTheme);
+        this.applyTheme(adminTheme, 'admin');
       }
     }
   }
@@ -51,11 +55,7 @@ export class ThemeService {
 
   setTheme(themeId: string, area: Area = 'frontend'): void {
     const theme = this.getThemeById(themeId);
-
-    if (!theme) {
-
-      return;
-    }
+    if (!theme) return;
 
     if (isPlatformBrowser(this.platformId)) {
       const storageKey = area === 'admin' ? 'selected-theme-admin' : 'selected-theme';
@@ -72,18 +72,18 @@ export class ThemeService {
   }
 
   private applyTheme(theme: Theme, area: Area = 'frontend'): void {
-    if (!theme || !theme.id) {
+    if (!theme || !theme.id || !isPlatformBrowser(this.platformId)) {
       return;
     }
 
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
+    const themeId = theme.id;
 
     if (area === 'admin') {
-      document.body.setAttribute('data-theme', theme.id);
+      document.body.setAttribute('data-theme', themeId);
     } else {
-      document.documentElement.setAttribute('data-theme', theme.id);
+      // For frontend, apply to both for maximum compatibility across different CSS selectors
+      document.documentElement.setAttribute('data-theme', themeId);
+      document.body.setAttribute('data-theme', themeId);
     }
   }
 

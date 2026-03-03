@@ -2,10 +2,10 @@
   <div class="auth-header">
     <div class="auth-tabs">
       <button class="auth-tab" [class.active]="currentView === 'login'" (click)="switchView('login')">
-        Login
+        {{ 'MODALS.AUTH.TABS.LOGIN' | translate }}
       </button>
       <button class="auth-tab" [class.active]="currentView === 'register'" (click)="switchView('register')">
-        Register
+        {{ 'MODALS.AUTH.TABS.REGISTER' | translate }}
       </button>
     </div>
   </div>
@@ -18,38 +18,40 @@
         <div class="profile-header">
           <div class="avatar">{{ (user.name || user.email || '?').charAt(0) | uppercase }}</div>
           <div class="info">
-            <div class="name">{{ user.name || 'User' }}</div>
+            <div class="name">{{ user.name || ('MODALS.AUTH.PROFILE.DEFAULT_USER' | translate) }}</div>
             <div class="email">{{ user.email }}</div>
           </div>
         </div>
         <div class="divider"></div>
         <div class="profile-actions">
-          <button class="btn btn-primary" (click)="goToMyOrders()">My Orders</button>
-          <button class="btn btn-ghost danger" (click)="logout()">Logout</button>
+          <button class="btn btn-primary" (click)="goToMyOrders()">{{ 'MODALS.AUTH.PROFILE.MY_ORDERS' | translate
+            }}</button>
+          <button class="btn btn-ghost danger" (click)="logout()">{{ 'MODALS.AUTH.PROFILE.LOGOUT' | translate
+            }}</button>
         </div>
       </div>
       <!-- Login Form when user is not logged in -->
       <ng-template #loginFormTpl>
         <form (ngSubmit)="onLogin()" class="auth-form">
           <div class="form-group">
-            <label for="login-email">Email</label>
+            <label for="login-email">{{ 'MODALS.AUTH.LABELS.EMAIL' | translate }}</label>
             <input id="login-email" type="email" [(ngModel)]="loginForm.email" name="email" required
-              placeholder="Enter your email" />
+              [placeholder]="'MODALS.AUTH.PLACEHOLDERS.EMAIL' | translate" />
           </div>
 
           <div class="form-group">
-            <label for="login-password">Password</label>
+            <label for="login-password">{{ 'MODALS.AUTH.LABELS.PASSWORD' | translate }}</label>
             <input id="login-password" type="password" [(ngModel)]="loginForm.password" name="password" required
-              placeholder="Enter your password" />
+              [placeholder]="'MODALS.AUTH.PLACEHOLDERS.PASSWORD' | translate" />
           </div>
 
           <button type="submit" class="auth-submit-btn" [disabled]="loading">
-            {{ loading ? 'Logging in...' : 'Login' }}
+            {{ loading ? ('MODALS.AUTH.BUTTONS.LOGGING_IN' | translate) : ('MODALS.AUTH.BUTTONS.LOGIN' | translate) }}
           </button>
           <div *ngIf="error" class="error-message">{{ error }}</div>
 
           <div class="auth-links">
-            <a href="#" class="forgot-password-link">Forgot password?</a>
+            <a href="#" class="forgot-password-link">{{ 'MODALS.AUTH.LINKS.FORGOT_PASSWORD' | translate }}</a>
           </div>
         </form>
       </ng-template>
@@ -58,23 +60,24 @@
     <!-- Register Tab Content (unchanged) -->
     <form *ngIf="currentView === 'register'" (ngSubmit)="onRegister()" class="auth-form">
       <div class="form-group" [class.has-error]="fieldErrors.name">
-        <label for="register-name">Name</label>
+        <label for="register-name">{{ 'MODALS.AUTH.LABELS.NAME' | translate }}</label>
         <input id="register-name" type="text" [(ngModel)]="registerForm.name" name="name" required
-          placeholder="Enter your name" (blur)="validateField('name')" />
+          [placeholder]="'MODALS.AUTH.PLACEHOLDERS.NAME' | translate" (blur)="validateField('name')" />
         <span class="field-error" *ngIf="fieldErrors.name">{{ fieldErrors.name }}</span>
       </div>
 
       <div class="form-group" [class.has-error]="fieldErrors.email">
-        <label for="register-email">Email</label>
+        <label for="register-email">{{ 'MODALS.AUTH.LABELS.EMAIL' | translate }}</label>
         <input id="register-email" type="email" [(ngModel)]="registerForm.email" name="email" required
-          placeholder="Enter your email" (blur)="validateField('email')" />
+          [placeholder]="'MODALS.AUTH.PLACEHOLDERS.EMAIL' | translate" (blur)="validateField('email')" />
         <span class="field-error" *ngIf="fieldErrors.email">{{ fieldErrors.email }}</span>
       </div>
 
       <div class="form-group" [class.has-error]="fieldErrors.password">
-        <label for="register-password">Password</label>
+        <label for="register-password">{{ 'MODALS.AUTH.LABELS.PASSWORD' | translate }}</label>
         <input id="register-password" type="password" [(ngModel)]="registerForm.password" name="password" required
-          placeholder="Enter your password" (blur)="validateField('password')" (input)="checkPasswordStrength()" />
+          [placeholder]="'MODALS.AUTH.PLACEHOLDERS.PASSWORD' | translate" (blur)="validateField('password')"
+          (input)="checkPasswordStrength()" />
         <div class="password-strength" *ngIf="registerForm.password && passwordStrength">
           <div class="strength-bar-container">
             <div class="strength-bar" [class.weak]="passwordStrength.class === 'weak'"
@@ -88,34 +91,38 @@
       </div>
 
       <div class="form-group" [class.has-error]="fieldErrors.confirmPassword">
-        <label for="register-confirm-password">Confirm password</label>
+        <label for="register-confirm-password">{{ 'MODALS.AUTH.LABELS.CONFIRM_PASSWORD' | translate }}</label>
         <input id="register-confirm-password" type="password" [(ngModel)]="registerForm.confirmPassword"
-          name="confirmPassword" required placeholder="Confirm password" (blur)="validateField('confirmPassword')" />
+          name="confirmPassword" required [placeholder]="'MODALS.AUTH.LABELS.CONFIRM_PASSWORD' | translate"
+          (blur)="validateField('confirmPassword')" />
         <span class="field-error" *ngIf="fieldErrors.confirmPassword">{{ fieldErrors.confirmPassword }}</span>
       </div>
 
       <button type="submit" class="auth-submit-btn" [disabled]="loading">
-        {{ loading ? 'Registering...' : 'Register' }}
+        {{ loading ? ('MODALS.AUTH.BUTTONS.REGISTERING' | translate) : ('MODALS.AUTH.BUTTONS.REGISTER' | translate) }}
       </button>
       <div *ngIf="error" class="error-message">{{ error }}</div>
 
       <!-- Social Login Section -->
       <div class="social-auth">
         <div class="social-divider">
-          <span>OR</span>
+          <span>{{ 'MODALS.AUTH.DIVIDER.OR' | translate }}</span>
         </div>
         <div class="social-buttons">
-          <button type="button" class="social-btn google" (click)="signInWithGoogle()" title="Continue with Google">
+          <button type="button" class="social-btn google" (click)="signInWithGoogle()"
+            [title]="'MODALS.AUTH.SOCIAL.GOOGLE' | translate">
             <mat-icon svgIcon="google"></mat-icon>
           </button>
           <button type="button" class="social-btn facebook" (click)="signInWithFacebook()"
-            title="Continue with Facebook">
+            [title]="'MODALS.AUTH.SOCIAL.FACEBOOK' | translate">
             <mat-icon svgIcon="facebook"></mat-icon>
           </button>
-          <button type="button" class="social-btn github" (click)="signInWithGithub()" title="Continue with GitHub">
+          <button type="button" class="social-btn github" (click)="signInWithGithub()"
+            [title]="'MODALS.AUTH.SOCIAL.GITHUB' | translate">
             <mat-icon svgIcon="github"></mat-icon>
           </button>
-          <button type="button" class="social-btn apple" (click)="signInWithApple()" title="Continue with Apple">
+          <button type="button" class="social-btn apple" (click)="signInWithApple()"
+            [title]="'MODALS.AUTH.SOCIAL.APPLE' | translate">
             <mat-icon svgIcon="apple"></mat-icon>
           </button>
         </div>

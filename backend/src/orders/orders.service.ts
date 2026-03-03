@@ -8,6 +8,7 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { NotificationsService } from '../notifications/notifications.service';
 import { ProductsService } from '../products/products.service';
+import { extractString } from '../common/utils/localization.util';
 
 @Injectable()
 export class OrdersService {
@@ -28,7 +29,7 @@ export class OrdersService {
             this.productsService.findOne(item.productId).pipe(
               map(product => {
                 if (product.stock < item.quantity) {
-                  throw new BadRequestException(`Insufficient stock for product ${product.name}. Available: ${product.stock}, Requested: ${item.quantity}`);
+                  throw new BadRequestException(`Insufficient stock for product ${extractString(product.name)}. Available: ${product.stock}, Requested: ${item.quantity}`);
                 }
                 return { product, item };
               })

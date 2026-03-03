@@ -9,13 +9,16 @@ import { NotificationService } from '../../core/services/notification.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { getLocalizedString } from '../../../shared/utils/localization.util';
+import { LocalizedPipe } from '../../shared/pipes/localized.pipe';
 
 @Component({
     selector: 'app-best-sellers',
     templateUrl: './best-sellers.component.html',
     styleUrls: ['./best-sellers.component.scss'],
     standalone: true,
-    imports: [CommonModule, RouterModule, SharedModule]
+    imports: [CommonModule, RouterModule, SharedModule, TranslateModule, LocalizedPipe]
 })
 export class BestSellersComponent implements OnInit {
     @Input() data!: Section;
@@ -34,6 +37,7 @@ export class BestSellersComponent implements OnInit {
         private productService: ProductService,
         private cartService: CartService,
         private notificationService: NotificationService,
+        private translate: TranslateService,
         @Inject(PLATFORM_ID) private platformId: Object
     ) { }
 
@@ -76,7 +80,8 @@ export class BestSellersComponent implements OnInit {
             discount: product.discount
         };
         this.cartService.addToCart(cartItem);
-        this.notificationService.showSuccess(`Added ${product.name} to cart!`);
+        const productName = getLocalizedString(product.name, this.translate.currentLang);
+        this.notificationService.showSuccess(`Added ${productName} to cart!`);
 
     }
 
@@ -113,7 +118,8 @@ export class BestSellersComponent implements OnInit {
         this.updateProductRating(product);
 
         // Show success message
-        this.notificationService.showSuccess(`Rated ${product.name} with ${rating} stars!`);
+        const productName = getLocalizedString(product.name, this.translate.currentLang);
+        this.notificationService.showSuccess(`Rated ${productName} with ${rating} stars!`);
 
 
     }

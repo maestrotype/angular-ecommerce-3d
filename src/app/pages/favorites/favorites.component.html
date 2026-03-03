@@ -4,14 +4,14 @@
     <div class="favorites-header">
       <div class="header-content">
         <button class="back-btn" (click)="goBack()">
-          ← Back to Shop
+          {{ 'FAVORITES.BACK_TO_SHOP' | translate }}
         </button>
         <h1 class="page-title">
           <span class="heart-icon">❤️</span>
-          My Favorites
+          {{ 'FAVORITES.TITLE' | translate }}
         </h1>
         <p class="page-subtitle">
-          Your saved items for later
+          {{ 'FAVORITES.SUBTITLE' | translate }}
         </p>
       </div>
     </div>
@@ -22,16 +22,16 @@
         <!-- Loading State -->
         <div *ngIf="isLoading" class="loading-state">
           <div class="loading-spinner"></div>
-          <p>Loading your favorites...</p>
+          <p>{{ 'FAVORITES.LOADING' | translate }}</p>
         </div>
 
         <!-- Empty State -->
         <div *ngIf="!isLoading && favorites.length === 0" class="empty-state">
           <div class="empty-icon">💔</div>
-          <h2>No favorites yet</h2>
-          <p>Start exploring our products and add your favorites!</p>
+          <h2>{{ 'FAVORITES.EMPTY_TITLE' | translate }}</h2>
+          <p>{{ 'FAVORITES.EMPTY_MSG' | translate }}</p>
           <button class="shop-now-btn" (click)="onShopNow()">
-            Explore Products
+            {{ 'FAVORITES.EXPLORE_BTN' | translate }}
           </button>
         </div>
 
@@ -40,34 +40,26 @@
           <!-- Actions Bar -->
           <div class="actions-bar">
             <div class="favorites-count">
-              {{ favorites.length }} item{{ favorites.length !== 1 ? 's' : '' }} in favorites
+              {{ 'FAVORITES.ITEMS_COUNT' | translate: { count: favorites.length } }}
             </div>
-            <button 
-              class="clear-all-btn" 
-              (click)="onClearFavorites()"
-              [disabled]="favorites.length === 0"
-            >
-              Clear All
+            <button class="clear-all-btn" (click)="onClearFavorites()" [disabled]="favorites.length === 0">
+              {{ 'FAVORITES.CLEAR_ALL' | translate }}
             </button>
           </div>
 
           <!-- Products Grid -->
           <div class="products-grid">
-            <div 
-              *ngFor="let product of favorites" 
-              class="product-card animate-in"
-              (click)="onProductClick(product)"
-            >
+            <div *ngFor="let product of favorites" class="product-card animate-in" (click)="onProductClick(product)">
               <div class="product-image">
                 <img [src]="product.imageUrl" [alt]="product.name" loading="lazy" />
-                
+
                 <div class="product-overlay">
                   <div class="overlay-actions">
                     <button class="action-btn" (click)="onProductClick(product); $event.stopPropagation()">
                       <span class="material-icons">visibility</span>
                     </button>
-                    <button class="action-btn favorite-btn is-favorite" 
-                            (click)="onRemoveFavorite(product); $event.stopPropagation()">
+                    <button class="action-btn favorite-btn is-favorite"
+                      (click)="onRemoveFavorite(product); $event.stopPropagation()">
                       <span class="material-icons">favorite</span>
                     </button>
                     <button class="action-btn" (click)="onAddToCart(product); $event.stopPropagation()">
@@ -79,7 +71,7 @@
 
               <div class="product-info">
                 <h3 class="product-name">{{ product.name }}</h3>
-                
+
                 <div class="product-footer">
                   <div class="product-price">
                     <div class="price-main">

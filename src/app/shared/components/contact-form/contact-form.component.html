@@ -1,66 +1,42 @@
 <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
   <div class="form-group">
-    <label for="senderName">Your Name</label>
-    <input
-      type="text"
-      id="senderName"
-      formControlName="senderName"
-      [class.invalid]="isFieldInvalid('senderName')"
-      placeholder="Your Name"
-    />
+    <label for="senderName">{{ 'CONTACTS.FIELDS.NAME' | translate }}</label>
+    <input type="text" id="senderName" formControlName="senderName" [class.invalid]="isFieldInvalid('senderName')"
+      [placeholder]="'CONTACTS.FORM.NAME' | translate" />
     <div class="error-message" *ngIf="isFieldInvalid('senderName')">
       {{ getErrorMessage('senderName') }}
     </div>
   </div>
 
   <div class="form-group">
-    <label for="senderEmail">Your Email</label>
-    <input
-      type="email"
-      id="senderEmail"
-      formControlName="senderEmail"
-      [class.invalid]="isFieldInvalid('senderEmail')"
-      placeholder="Your Email"
-    />
+    <label for="senderEmail">{{ 'CONTACTS.FIELDS.EMAIL' | translate }}</label>
+    <input type="email" id="senderEmail" formControlName="senderEmail" [class.invalid]="isFieldInvalid('senderEmail')"
+      [placeholder]="'CONTACTS.FORM.EMAIL' | translate" />
     <div class="error-message" *ngIf="isFieldInvalid('senderEmail')">
       {{ getErrorMessage('senderEmail') }}
     </div>
   </div>
 
   <div class="form-group">
-    <label for="subject">Subject</label>
-    <input
-      type="text"
-      id="subject"
-      formControlName="subject"
-      [class.invalid]="isFieldInvalid('subject')"
-      placeholder="Subject"
-    />
+    <label for="subject">{{ 'CONTACTS.FIELDS.SUBJECT' | translate }}</label>
+    <input type="text" id="subject" formControlName="subject" [class.invalid]="isFieldInvalid('subject')"
+      [placeholder]="'CONTACTS.FORM.SUBJECT' | translate" />
     <div class="error-message" *ngIf="isFieldInvalid('subject')">
       {{ getErrorMessage('subject') }}
     </div>
   </div>
 
   <div class="form-group">
-    <label for="message">Your Message</label>
-    <textarea
-      id="message"
-      formControlName="message"
-      [class.invalid]="isFieldInvalid('message')"
-      placeholder="Your Message"
-      rows="5"
-    ></textarea>
+    <label for="message">{{ 'CONTACTS.FIELDS.MESSAGE' | translate }}</label>
+    <textarea id="message" formControlName="message" [class.invalid]="isFieldInvalid('message')"
+      [placeholder]="'CONTACTS.FORM.MESSAGE' | translate" rows="5"></textarea>
     <div class="error-message" *ngIf="isFieldInvalid('message')">
       {{ getErrorMessage('message') }}
     </div>
   </div>
 
-  <button 
-    type="submit" 
-    class="cta-button-glass"
-    [disabled]="isSubmitting || contactForm.invalid"
-  >
-    <span *ngIf="!isSubmitting">SEND MESSAGE</span>
-    <span *ngIf="isSubmitting">SENDING...</span>
+  <button type="submit" class="cta-button-glass" [disabled]="isSubmitting || contactForm.invalid">
+    <span *ngIf="!isSubmitting">{{ 'CONTACTS.FORM.SEND' | translate }}</span>
+    <span *ngIf="isSubmitting">{{ 'CONTACTS.FORM.SENDING' | translate }}</span>
   </button>
-</form> 
+</form>

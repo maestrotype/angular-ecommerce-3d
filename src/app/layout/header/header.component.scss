@@ -325,7 +325,6 @@
         transition: all 0.2s ease;
         font-size: 14px;
         color: var(--text-primary);
-        color: #fff;
 
         &:hover {
           background: var(--surface-2, rgba(0, 0, 0, 0.05));
@@ -335,6 +334,77 @@
           background: var(--header-accent, #007AFF);
           color: var(--on-accent, #fff);
         }
+      }
+    }
+  }
+
+  .lang-switcher {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    &__toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: transparent;
+      border: none;
+      color: var(--header-link);
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 8px 12px;
+      border-radius: 20px;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: var(--surface-2, rgba(0, 0, 0, 0.05));
+        color: var(--color-primary);
+      }
+
+      .current-lang {
+        letter-spacing: 0.5px;
+      }
+    }
+
+    &__popover {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: var(--header-bg, #fff);
+      border: 1px solid var(--border, rgba(0, 0, 0, 0.1));
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      padding: 8px;
+      min-width: 140px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    &__option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 10px 12px;
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--header-text);
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+
+      &:hover {
+        background: var(--surface-2, rgba(0, 0, 0, 0.05));
+      }
+
+      .lang-switcher__check {
+        color: var(--color-primary, #007AFF);
+        font-weight: bold;
       }
     }
   }
@@ -837,6 +907,15 @@
           font-size: 0.9rem;
         }
       }
+    }
+  }
+}
+
+// Extra-small devices adjustment
+@media (max-width: 380px) {
+  .header .logo {
+    span {
+      display: none;
     }
   }
 }

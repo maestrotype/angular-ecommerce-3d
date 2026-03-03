@@ -6,16 +6,16 @@ export class CreateSectionDto {
   type: string;
 
   @IsNotEmpty()
-  @IsString()
-  title: string;
+  @IsObject()
+  title: any;
 
   @IsOptional()
-  @IsString()
-  subtitle?: string;
+  @IsObject()
+  subtitle?: any;
 
   @IsOptional()
-  @IsString()
-  content?: string;
+  @IsObject()
+  content?: any;
 
   @IsOptional()
   @IsString()

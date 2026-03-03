@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
 import { BaseButtonComponent } from './ui/buttons/base-button/base-button.component';
 import { ProductCardComponent } from './ui/cards/product-card/product-card.component';
@@ -13,6 +14,8 @@ import { StripeElementsComponent } from './components/stripe-elements/stripe-ele
 import { StripeTestComponent } from '../pages/stripe-test/stripe-test.component';
 import { SectionRendererComponent } from '../components/section-renderer/section-renderer.component';
 import { NotificationBadgeComponent } from './components/notification-badge/notification-badge.component';
+import { ReplaceSpacesPipe } from './pipes/replace-spaces.pipe';
+import { LocalizedPipe } from './pipes/localized.pipe';
 
 @NgModule({
   declarations: [
@@ -25,11 +28,14 @@ import { NotificationBadgeComponent } from './components/notification-badge/noti
     StripeElementsComponent,
     StripeTestComponent,
     SectionRendererComponent,
+    ReplaceSpacesPipe,
     NotificationBadgeComponent
   ],
   imports: [
     CommonModule,
-    MatIconModule
+    MatIconModule,
+    TranslateModule,
+    LocalizedPipe
   ],
   providers: [
     DecimalPipe
@@ -45,7 +51,10 @@ import { NotificationBadgeComponent } from './components/notification-badge/noti
     StripeElementsComponent,
     StripeTestComponent,
     SectionRendererComponent,
-    NotificationBadgeComponent
+    NotificationBadgeComponent,
+    ReplaceSpacesPipe,
+    LocalizedPipe,
+    TranslateModule
   ]
 })
 export class SharedModule { } 

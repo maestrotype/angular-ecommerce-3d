@@ -1,14 +1,18 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { Section } from 'src/shared/models/section.model';
+import { LocalizedPipe } from '../../shared/pipes/localized.pipe';
+
+import { ThreeDViewerComponent } from '../../components/three-d-viewer/three-d-viewer.component';
 
 @Component({
     selector: 'app-hero',
     templateUrl: './hero.component.html',
     styleUrls: ['./hero.component.scss'],
     standalone: true,
-    imports: [CommonModule]
+    imports: [CommonModule, TranslateModule, ThreeDViewerComponent, LocalizedPipe]
 })
 export class HeroComponent {
     @Input() data!: Section;

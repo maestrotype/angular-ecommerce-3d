@@ -4,6 +4,8 @@ import { Subject, takeUntil } from 'rxjs';
 import { Product } from 'src/shared/models/product.model';
 import { FavoritesService } from '../../core/services/favorites.service';
 import { CartService } from '../../core/services/cart.service';
+import { TranslateService } from '@ngx-translate/core';
+import { getLocalizedString } from '../../../shared/utils/localization.util';
 
 @Component({
   selector: 'app-favorites',
@@ -13,14 +15,15 @@ import { CartService } from '../../core/services/cart.service';
 export class FavoritesComponent implements OnInit, OnDestroy {
   favorites: Product[] = [];
   isLoading = false;
-  
+
   private destroy$ = new Subject<void>();
 
   constructor(
     private favoritesService: FavoritesService,
     private cartService: CartService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private translate: TranslateService
+  ) { }
 
   ngOnInit(): void {
     this.loadFavorites();
@@ -36,7 +39,7 @@ export class FavoritesComponent implements OnInit, OnDestroy {
    */
   private loadFavorites(): void {
     this.isLoading = true;
-    
+
     this.favoritesService.favorites$
       .pipe(takeUntil(this.destroy$))
       .subscribe(favorites => {
@@ -63,7 +66,7 @@ export class FavoritesComponent implements OnInit, OnDestroy {
       imageUrl: product.imageUrl,
       discount: product.discount
     };
-    
+
     this.cartService.addToCart(cartItem);
   }
 
@@ -78,7 +81,8 @@ export class FavoritesComponent implements OnInit, OnDestroy {
    * Clear all favorites
    */
   onClearFavorites(): void {
-    if (confirm('Are you sure you want to remove all favorites?')) {
+    const confirmMsg = this.translate.instant('FAVORITES.CLEAR_CONFIRM_MSG');
+    if (confirm(confirmMsg)) {
       this.favoritesService.clearFavorites();
     }
   }

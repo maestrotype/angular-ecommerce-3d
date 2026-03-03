@@ -1,9 +1,12 @@
+import { LocalizedString } from './localized-string.model';
+
 export interface Section {
   id: number;
   type: string; // 'hero', 'about', 'promo', ...
-  title: string;
-  subtitle?: string;
-  content?: string;
+  title: string | LocalizedString;
+  subtitle?: string | LocalizedString;
+  content?: string | LocalizedString;
+  alt?: string | LocalizedString;
   imageUrl?: string;
   order: number;
   isActive: boolean;

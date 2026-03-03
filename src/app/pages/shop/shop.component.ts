@@ -6,6 +6,8 @@ import { CartService } from '../../core/services/cart.service';
 import { FavoritesService } from '../../core/services/favorites.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { OptimizationService } from '../../core/services/optimization.service';
+import { TranslateService } from '@ngx-translate/core';
+import { getLocalizedString } from '../../../shared/utils/localization.util';
 import { Product } from 'src/shared/models/product.model';
 import { Category } from 'src/shared/models/category.model';
 import { CartItem } from 'src/shared/models/cart-item.model';
@@ -32,7 +34,7 @@ export class ShopComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   filteredProducts: Product[] = [];
   categories: Category[] = [];
-  
+
   // Filter and sort properties
   searchTerm: string = '';
   selectedCategory: string = 'all';
@@ -41,32 +43,22 @@ export class ShopComponent implements OnInit, OnDestroy {
   itemsPerPage: number = 18;
   totalPages: number = 1;
   paginatedProducts: Product[] = [];
-  
+
   // View mode
   viewMode: 'list' | 'grid-2' | 'grid-3' | 'grid-4' = 'grid-4';
-  
+
   // Filter sidebar properties
   isFilterSidebarOpen = false;
   minPrice: number | null = null;
   maxPrice: number | null = null;
   showOnlyOnSale = false;
-  
+
   // Filter categories for sidebar - will be populated from API
   filterCategories: FilterCategory[] = [];
 
-  // Dropdown options - will be populated from API
-  categoryOptions: DropdownOption[] = [
-    { value: 'all', label: 'All categories' }
-  ];
-
-  sortOptions: DropdownOption[] = [
-    { value: 'latest', label: 'Latest' },
-    { value: 'name', label: 'Name' },
-    { value: 'price-low', label: 'Price: Low to High' },
-    { value: 'price-high', label: 'Price: High to Low' },
-    { value: 'rating', label: 'Rating' }
-  ];
-
+  // Dropdown options
+  categoryOptions: DropdownOption[] = [];
+  sortOptions: DropdownOption[] = [];
   itemsPerPageOptions: DropdownOption[] = [
     { value: '12', label: '12' },
     { value: '18', label: '18' },
@@ -86,14 +78,32 @@ export class ShopComponent implements OnInit, OnDestroy {
     private favoritesService: FavoritesService,
     private notificationService: NotificationService,
     private optimizationService: OptimizationService,
+    private translate: TranslateService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
+    this.initOptions();
     this.loadProducts();
     this.loadCategories();
     this.setupRouteParams();
+
+    // Refresh options on lang change
+    this.translate.onLangChange.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.initOptions();
+      this.loadCategories(); // To refresh "All categories" label
+    });
+  }
+
+  private initOptions(): void {
+    this.sortOptions = [
+      { value: 'latest', label: this.translate.instant('SHOP.SORT.LATEST') },
+      { value: 'name', label: this.translate.instant('SHOP.SORT.NAME') },
+      { value: 'price-low', label: this.translate.instant('SHOP.SORT.PRICE_LOW') },
+      { value: 'price-high', label: this.translate.instant('SHOP.SORT.PRICE_HIGH') },
+      { value: 'rating', label: this.translate.instant('SHOP.SORT.RATING') }
+    ];
   }
 
   ngOnDestroy(): void {
@@ -107,18 +117,20 @@ export class ShopComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (categories) => {
           this.categories = categories;
-          
+
           // Update dropdown options
-          this.categoryOptions = [
-            { value: 'all', label: 'All categories' },
-            ...categories.map(cat => ({ value: cat.name, label: cat.name }))
-          ];
-          
+          this.translate.get('SHOP.FILTERS.ALL_CATEGORIES').pipe(takeUntil(this.destroy$)).subscribe(label => {
+            this.categoryOptions = [
+              { value: 'all', label: label },
+              ...categories.map(cat => ({ value: cat.name, label: cat.name }))
+            ];
+          });
+
           // Update filter categories with real data and counts
           this.updateFilterCategories();
         },
         error: (error) => {
-          
+
         }
       });
   }
@@ -147,8 +159,8 @@ export class ShopComponent implements OnInit, OnDestroy {
           this.applyFilters();
         },
         error: (error) => {
-          
-          this.notificationService.showError('Failed to load products');
+
+          this.notificationService.showError(this.translate.instant('SHOP.NOTIFICATIONS.ERROR_LOADING'));
         }
       });
   }
@@ -192,7 +204,7 @@ export class ShopComponent implements OnInit, OnDestroy {
   applyFilters(): void {
     // Update category counts
     this.updateCategoryCounts();
-    
+
     // Sync selectedCategory with sidebar selections
     const selectedCategories = this.filterCategories.filter(cat => cat.selected).map(cat => cat.id);
     if (selectedCategories.length === 1) {
@@ -201,10 +213,10 @@ export class ShopComponent implements OnInit, OnDestroy {
       this.selectedCategory = 'all';
     }
     // If multiple categories selected, keep current selectedCategory but filter by all selected
-    
+
     // Close sidebar
     this.isFilterSidebarOpen = false;
-    
+
     // Trigger product filtering
     this.filterProducts();
   }
@@ -228,10 +240,11 @@ export class ShopComponent implements OnInit, OnDestroy {
     // Filter by search term
     if (this.searchTerm) {
       const searchLower = this.searchTerm.toLowerCase();
-      filtered = filtered.filter(product => 
-        product.name.toLowerCase().includes(searchLower) ||
-        product.description?.toLowerCase().includes(searchLower)
-      );
+      filtered = filtered.filter(product => {
+        const name = getLocalizedString(product.name, this.translate.currentLang).toLowerCase();
+        const description = getLocalizedString(product.description, this.translate.currentLang).toLowerCase();
+        return name.includes(searchLower) || description.includes(searchLower);
+      });
     }
 
     // Filter by price range
@@ -260,7 +273,9 @@ export class ShopComponent implements OnInit, OnDestroy {
         // Since Product doesn't have createdAt, sort by id (assuming higher id = newer)
         return products.sort((a, b) => b.id - a.id);
       case 'name':
-        return products.sort((a, b) => a.name.localeCompare(b.name));
+        return products.sort((a, b) =>
+          getLocalizedString(a.name, this.translate.currentLang).localeCompare(getLocalizedString(b.name, this.translate.currentLang))
+        );
       case 'price-low':
         return products.sort((a, b) => a.price - b.price);
       case 'price-high':
@@ -287,7 +302,7 @@ export class ShopComponent implements OnInit, OnDestroy {
     if (this.searchTerm) {
       queryParams.search = this.searchTerm;
     }
-    
+
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams,
@@ -301,7 +316,7 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   quickView(product: Product): void {
     // Implement quick view functionality
-    
+
   }
 
   onFavoriteToggled(event: Event): void {
@@ -311,24 +326,23 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   addToCart(product: Product, event: Event): void {
     event.stopPropagation();
-    
+
     const cartItem: CartItem = {
       productId: product.id,
-      name: product.name,
+      name: getLocalizedString(product.name, this.translate.currentLang),
       price: product.price,
       quantity: 1,
       imageUrl: product.imageUrl
     };
 
     this.cartService.addToCart(cartItem);
-    this.notificationService.showSuccess(`${product.name} added to cart`);
+    this.notificationService.showSuccess(this.translate.instant('SHOP.NOTIFICATIONS.ADDED_TO_CART', { name: getLocalizedString(product.name, this.translate.currentLang) }));
   }
 
   trackByProductId(index: number, product: Product): number {
     return product.id;
   }
 
-  // Add method to update counts when filters change
   private updateCategoryCounts(): void {
     this.filterCategories.forEach(filterCategory => {
       const count = this.products.filter(product => product.category === filterCategory.id).length;
