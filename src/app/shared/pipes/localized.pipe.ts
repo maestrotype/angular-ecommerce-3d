@@ -11,6 +11,7 @@ export class LocalizedPipe implements PipeTransform {
     constructor(private translate: TranslateService) { }
 
     transform(value: any): string {
+        console.log('LocalizedPipe transform, value:', value);
         if (!value) return '';
 
         // If it's a simple string, return it as is (legacy support)

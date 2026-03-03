@@ -6,6 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { LocalizedString } from 'src/shared/models/localized-string.model';
 import { LocalizedPipe } from '../../shared/pipes/localized.pipe';
 import { getLocalizedString } from '../../../shared/utils/localization.util';
+import { CategoryService } from '../../core/services/category.service';
 
 interface CategoryDisplay {
     id?: number;
@@ -26,7 +27,7 @@ export class CategoriesComponent implements OnInit {
     @Input() data!: Section;
     categories: CategoryDisplay[] = [];
 
-    constructor(private router: Router) { }
+    constructor(private router: Router, private categoryService: CategoryService) { }
 
     ngOnInit(): void {
         this.loadCategories();
@@ -35,8 +36,8 @@ export class CategoriesComponent implements OnInit {
     private loadCategories(): void {
         if (this.data?.settings?.categories && this.data.settings.categories.length > 0) {
             this.categories = this.data.settings.categories
-                .filter(cat => cat.isActive !== false)
-                .map((cat, index) => {
+                .filter((cat: any) => cat.isActive !== false)
+                .map((cat: any, index: number) => {
                     const name = getLocalizedString(cat.name);
                     return {
                         id: index + 1,
@@ -47,7 +48,23 @@ export class CategoriesComponent implements OnInit {
                     };
                 });
         } else {
-            this.categories = [];
+            // Fallback: load active categories directly from the categories API
+            this.categoryService.getAllCategories().subscribe({
+                next: (cats) => {
+                    this.categories = cats
+                        .filter(cat => cat.isActive !== false)
+                        .map(cat => ({
+                            id: Number(cat.id),
+                            name: cat.name,
+                            icon: (cat as any).icon || 'assets/icons/default-category.svg',
+                            slug: (cat as any).slug || getLocalizedString(cat.name).toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
+                            isActive: cat.isActive
+                        }));
+                },
+                error: (err) => {
+                    console.error('Error loading categories from API:', err);
+                }
+            });
         }
     }
 

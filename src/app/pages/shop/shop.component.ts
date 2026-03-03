@@ -122,7 +122,10 @@ export class ShopComponent implements OnInit, OnDestroy {
           this.translate.get('SHOP.FILTERS.ALL_CATEGORIES').pipe(takeUntil(this.destroy$)).subscribe(label => {
             this.categoryOptions = [
               { value: 'all', label: label },
-              ...categories.map(cat => ({ value: cat.name, label: cat.name }))
+              ...categories.map(cat => {
+                const name = getLocalizedString(cat.name, this.translate.currentLang);
+                return { value: name, label: name };
+              })
             ];
           });
 
@@ -138,10 +141,11 @@ export class ShopComponent implements OnInit, OnDestroy {
   private updateFilterCategories(): void {
     // Create filter categories from real categories and count products
     this.filterCategories = this.categories.map(category => {
-      const count = this.products.filter(product => product.category === category.name).length;
+      const name = getLocalizedString(category.name, this.translate.currentLang);
+      const count = this.products.filter(product => product.category === name).length;
       return {
-        id: category.name,
-        name: category.name,
+        id: name,
+        name: name,
         count: count,
         selected: false
       };
