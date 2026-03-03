@@ -25,7 +25,23 @@
   "DASHBOARD": "Dashboard",
   "LOADING_DASHBOARD_DATA": "Loading dashboard data...",
   "PRODUCTS": "Products",
-  "ORDERS": "Orders",
+  "ADMIN_NAV_ORDERS": "Orders",
+  "ORDERS": {
+    "TITLE": "My Orders",
+    "BACK_BTN": "← Back to Shop",
+    "STATUS_LOADING": "Loading...",
+    "EMPTY_MSG": "No orders yet",
+    "EMPTY_BTN": "Start Shopping",
+    "COUNT_SUFFIX": "items",
+    "ERROR_LOADING": "Failed to load orders. Please try again later.",
+    "STATUS": {
+      "PENDING": "Pending",
+      "PAID": "Paid",
+      "SHIPPED": "Shipped",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled"
+    }
+  },
   "USERS": "Users",
   "CATEGORIES": "Categories",
   "SELECT_CATEGORIES": "Select Categories",
@@ -308,7 +324,50 @@
   "SEARCH_PAYMENTS_PLACEHOLDER": "Search by order ID, customer email...",
   "NO_PAYMENTS_FOUND": "No payments found",
   "LOADING_PAYMENTS": "Loading payments...",
-  "CHECKOUT": "Checkout",
+  "CHECKOUT": {
+    "HEADER": {
+      "BACK_TO_CART": "Back to Cart",
+      "TITLE": "Checkout"
+    },
+    "SUMMARY": {
+      "TITLE": "Order Summary",
+      "QTY": "Qty",
+      "SHIPPING": "Shipping",
+      "FREE": "Free"
+    },
+    "FORM": {
+      "CUSTOMER_INFO": "Customer Information",
+      "NAME_LABEL": "Full Name *",
+      "NAME_PLACEHOLDER": "Enter your full name",
+      "EMAIL_LABEL": "Email *",
+      "EMAIL_PLACEHOLDER": "Enter your email",
+      "PHONE_LABEL": "Phone *",
+      "SHIPPING_INFO": "Shipping Information",
+      "ADDRESS_LABEL": "Shipping Address *",
+      "ADDRESS_PLACEHOLDER": "Enter your complete shipping address",
+      "CITY_LABEL": "City *",
+      "CITY_PLACEHOLDER": "Enter city",
+      "POSTAL_LABEL": "Postal Code *",
+      "POSTAL_PLACEHOLDER": "Enter postal code",
+      "COUNTRY_LABEL": "Country *",
+      "COUNTRY_PLACEHOLDER": "Enter country",
+      "PAYMENT_METHOD": "Payment Method",
+      "NOTES_TITLE": "Additional Notes",
+      "NOTES_LABEL": "Order Notes (Optional)",
+      "NOTES_PLACEHOLDER": "Any special instructions or notes for your order",
+      "SUBMIT_LABEL": "Place Order - ${{price}}",
+      "PROCESSING": "Processing..."
+    },
+    "ERRORS": {
+      "REQUIRED": "This field is required",
+      "INVALID_EMAIL": "Please enter a valid email",
+      "MIN_LENGTH": "Minimum length is {{requiredLength}} characters",
+      "INVALID_FORMAT": "Please enter a valid format",
+      "ORDER_SUCCESS": "Order created successfully!",
+      "ORDER_FAILED": "Failed to create order. Please try again.",
+      "FILL_REQUIRED": "Please fill in all required fields."
+    }
+  },
   "ORDER_SUMMARY": "Order Summary",
   "CUSTOMER_INFORMATION": "Customer Information",
   "SHIPPING_INFORMATION": "Shipping Information",
@@ -432,5 +491,387 @@
   "CLIENT_SECRET_FROM_PAYPAL_DEVELOPER": "Client Secret from PayPal Developer",
   "IN_PROGRESS": "In Progress",
   "CLOSED": "Closed",
-  "ANSWERED": "Answered"
+  "ANSWERED": "Answered",
+  "HEADER": {
+    "SEARCH_PLACEHOLDER": "Search products...",
+    "SEARCH_RESULTS": "Search Results",
+    "VIEW_ALL_RESULTS": "View All Results",
+    "MENU": "Menu",
+    "NAV": {
+      "HOME": "Home",
+      "SHOP": "Shop",
+      "ABOUT": "About",
+      "CONTACTS": "Contacts",
+      "ADMIN_PANEL": "Admin Panel"
+    },
+    "THEME": "Theme",
+    "THEMES": {
+      "DEFAULT": "Light",
+      "DARK": "Dark",
+      "GLASS": "Glass"
+    },
+    "LANGUAGE": "Language",
+    "LOGIN_REGISTER": "Login / Register",
+    "WELCOME": "Welcome!",
+    "LOGOUT": "Logout",
+    "LOGO_ALT": "Store Logo"
+  },
+  "FOOTER": {
+    "LOGO_TEXT": "🛒 3D Store",
+    "DESCRIPTION": "Explore fashion with a new dimension.",
+    "QUICK_LINKS": "Quick Links",
+    "CATEGORIES": "Categories",
+    "SUPPORT": "Support",
+    "CAT_SHOES": "Shoes",
+    "CAT_HANDBAGS": "Handbags",
+    "CAT_CLOTHING": "Clothing",
+    "CAT_ACCESSORIES": "Accessories",
+    "HELP_CENTER": "Help Center",
+    "SHIPPING_INFO": "Shipping Info",
+    "RETURNS": "Returns",
+    "SIZE_GUIDE": "Size Guide",
+    "COPYRIGHT": "All rights reserved.",
+    "SOCIAL_INSTAGRAM": "Instagram",
+    "SOCIAL_FACEBOOK": "Facebook",
+    "SOCIAL_TWITTER": "Twitter"
+  },
+  "HOME": {
+    "HERO": {
+      "BADGE": "NEW ARRIVAL",
+      "TITLE_DEFAULT": "DISCOVER YOUR",
+      "SUBTITLE_DEFAULT": "NEW STYLE",
+      "CONTENT_DEFAULT": "Explore our latest interactive 3D collection.",
+      "SHOP_NOW": "SHOP NOW",
+      "ALT_TEXT": "Featured Product"
+    },
+    "CATEGORIES": {
+      "TITLE": "Shop by Category"
+    },
+    "BEST_SELLERS": {
+      "SUBTITLE_DEFAULT": "TOP PRODUCTS",
+      "TITLE_DEFAULT": "Best Sellers",
+      "BADGE_SPECIAL": "Special",
+      "BADGE_NEW": "New",
+      "BADGE_OUT_OF_STOCK": "Out of Stock"
+    },
+    "SPECIAL_OFFER": {
+      "BADGE": "SALE",
+      "TITLE_DEFAULT": "Special Offer",
+      "SUBTITLE_DEFAULT": "Only this week: Up to 40% off",
+      "SHOP_NOW": "SHOP NOW"
+    },
+    "BRANDS": {
+      "TITLE": "Trusted by Leading Brands"
+    }
+  },
+  "SHOP": {
+    "HEADER": {
+      "SUBTITLE": "PRODUCT CATALOG",
+      "TITLE_PART1": "DISCOVER YOUR",
+      "TITLE_PART2": "PERFECT STYLE",
+      "DESCRIPTION": "Explore our curated collection of premium products designed for the modern lifestyle."
+    },
+    "FILTERS": {
+      "TITLE": "Filters",
+      "CATEGORIES": "Categories",
+      "PRICE": "Price",
+      "MIN": "Min",
+      "MAX": "Max",
+      "PRICE_DISPLAY": "Price: ${{min}} – ${{max}}",
+      "APPLY": "FILTER",
+      "TOGGLE": "FILTER",
+      "ALL_CATEGORIES": "All categories",
+      "ON_SALE": "Show only products on sale"
+    },
+    "SORT": {
+      "LABEL": "Sort by :",
+      "PLACEHOLDER": "Select sorting",
+      "LATEST": "Latest",
+      "NAME": "Name",
+      "PRICE_LOW": "Price: Low to High",
+      "PRICE_HIGH": "Price: High to Low",
+      "RATING": "Rating"
+    },
+    "SHOW": {
+      "LABEL": "Show :",
+      "PLACEHOLDER": "Select items"
+    },
+    "PRODUCT": {
+      "QUICK_VIEW": "Quick View",
+      "ADD_TO_FAVORITES": "Add to Favorites",
+      "RATE": "Rate",
+      "STARS": "stars",
+      "REVIEWS": "reviews",
+      "ADD_TO_CART": "Add to Cart",
+      "LOW_STOCK": "Only {{count}} left in stock!"
+    },
+    "PAGINATION": {
+      "PREV": "Previous page",
+      "GO_TO_PAGE": "Go to page",
+      "NEXT": "Next page"
+    },
+    "NO_PRODUCTS": {
+      "MESSAGE": "No products found matching your criteria.",
+      "SUGGESTION": "Try adjusting your search or filters."
+    },
+    "NOTIFICATIONS": {
+      "ERROR_LOADING": "Failed to load products",
+      "ADDED_TO_CART": "{{name}} added to cart"
+    }
+  },
+  "MODALS": {
+    "CART": {
+      "TITLE": "Cart",
+      "EMPTY_MESSAGE": "Your cart is empty",
+      "CONTINUE_SHOPPING": "Continue Shopping",
+      "TOTAL_DISPLAY": "Total: ${{price}}",
+      "PLACE_ORDER": "Place Order"
+    },
+    "AUTH": {
+      "TABS": {
+        "LOGIN": "Login",
+        "REGISTER": "Register"
+      },
+      "PROFILE": {
+        "DEFAULT_USER": "User",
+        "MY_ORDERS": "My Orders",
+        "LOGOUT": "Logout"
+      },
+      "LABELS": {
+        "EMAIL": "Email",
+        "PASSWORD": "Password",
+        "NAME": "Name",
+        "CONFIRM_PASSWORD": "Confirm Password"
+      },
+      "PLACEHOLDERS": {
+        "EMAIL": "Enter your email",
+        "PASSWORD": "Enter your password",
+        "NAME": "Enter your name"
+      },
+      "BUTTONS": {
+        "LOGIN": "Login",
+        "LOGGING_IN": "Logging in...",
+        "REGISTER": "Register",
+        "REGISTERING": "Registering..."
+      },
+      "LINKS": {
+        "FORGOT_PASSWORD": "Forgot password?"
+      },
+      "DIVIDER": {
+        "OR": "OR"
+      },
+      "SOCIAL": {
+        "GOOGLE": "Continue with Google",
+        "FACEBOOK": "Continue with Facebook",
+        "GITHUB": "Continue with GitHub",
+        "APPLE": "Continue with Apple"
+      }
+    },
+    "IMAGE": {
+      "COUNTER": "{{current}} of {{total}}",
+      "PREVIOUS": "Previous image",
+      "NEXT": "Next image",
+      "THUMBNAIL": "thumbnail"
+    }
+  },
+  "PAYMENT": {
+    "HEADER": {
+      "BACK_TO_CHECKOUT": "Back to Checkout",
+      "TITLE": "Payment Processing"
+    },
+    "LOADING": {
+      "CREATING": "Creating Payment...",
+      "WAIT": "Please wait while we prepare your payment"
+    },
+    "INFO": {
+      "ORDER_SUMMARY": "Order Summary",
+      "ORDER_ID": "Order ID",
+      "STATUS": "Status",
+      "PENDING": "Pending Payment"
+    },
+    "METHODS": {
+      "SELECTED": "Selected Payment Method",
+      "LIQPAY_DESC": "Secure online payment",
+      "STRIPE_DESC": "Pay with card using Stripe",
+      "PAYPAL_DESC": "Pay with PayPal"
+    },
+    "ACTIONS": {
+      "PAY_NOW": "Pay Now",
+      "PROCESSING": "Processing...",
+      "INIT_STRIPE": "Initialize Stripe Payment",
+      "INIT_STRIPE_PROMPT": "Click 'Initialize Stripe Payment' to continue",
+      "CREATING_INTENT": "Creating PaymentIntent...",
+      "STRIPE_INFO": "Click 'Initialize Stripe Payment' to set up your card payment",
+      "CARD_INFO": "Card Information",
+      "PAY_WITH_CARD": "Pay with Card",
+      "PAY_WITH_PAYPAL": "Pay with PayPal",
+      "CREATING_PAYPAL": "Creating PayPal Payment...",
+      "REDIRECTING_PAYPAL": "Redirecting to PayPal...",
+      "CANCEL_PAYMENT": "Cancel Payment",
+      "RETRY_PAYMENT": "Retry Payment"
+    },
+    "STATUS": {
+      "TITLE": "Payment Status",
+      "PAYMENT_ID": "Payment ID",
+      "METHOD": "Method",
+      "CREATED": "Created",
+      "IN_PROGRESS": "Payment in Progress",
+      "WAIT_PROGRESS": "Your payment is being processed. Please wait...",
+      "SUCCESS_TITLE": "Payment Successful!",
+      "SUCCESS_MESSAGE": "Your order has been confirmed and payment received.",
+      "SUCCESS_MSG": "Payment completed successfully!",
+      "COMPLETED_SUCCESS": "Payment completed successfully!",
+      "STRIPE_METHOD_SUCCESS": "Payment method created successfully! Processing payment...",
+      "STRIPE_INTENT_SUCCESS": "Stripe PaymentIntent created successfully!",
+      "STRIPE_INIT_SUCCESS": "Stripe payment initialized successfully!",
+      "VIEW_DETAILS": "View Order Details",
+      "FAILED_TITLE": "Payment Failed",
+      "FAILED_MESSAGE": "Unfortunately, your payment could not be processed.",
+      "RETRY": "Try Again",
+      "CANCEL": "Cancel"
+    },
+    "MODALS": {
+      "CANCEL_TITLE": "Cancel Payment",
+      "CANCEL_MSG": "Are you sure you want to cancel this payment?",
+      "CANCEL_ACTION": "Cancel"
+    },
+    "ERRORS": {
+      "INVALID_ORDER_ID": "Invalid order ID",
+      "METHOD_NOT_ENABLED": "Payment method {{method}} is not enabled yet.",
+      "STRIPE_LOAD_FAILED": "Stripe.js failed to load.",
+      "STRIPE_INIT_FAILED": "Failed to initialize Stripe.",
+      "STRIPE_NOT_READY": "Stripe not ready. Please wait for initialization.",
+      "CONFIRM_FAILED": "Payment confirmation failed. Please try again.",
+      "ORDER_DATA_NOT_FOUND": "Order data not found",
+      "CREATION_FAILED": "Failed to create payment. Please try again.",
+      "STATUS_TIMEOUT": "Payment status check timeout. Please contact support.",
+      "FAILED_MSG": "Payment failed. Please try again.",
+      "PAYPAL_URL_FAILED": "Failed to get PayPal approval URL",
+      "STRIPE_PAYMENT_FAILED": "Payment failed: {{error}}",
+      "MIN_AMOUNT": "Order amount ${{amount}} is below minimum ${{min}} required by Stripe.",
+      "STRIPE_INTENT_FAILED": "Failed to create Stripe PaymentIntent"
+    },
+    "NOTIFICATIONS": {
+      "MOCK_STRIPE_LOADED": "Mock Stripe Elements loaded (Test Mode). Click Pay with Card to simulate payment.",
+      "STRIPE_LOADED": "Stripe Elements loaded. Enter your card details and click Pay with Card."
+    },
+    "SUCCESS_PAGE": {
+      "MESSAGE": "Your payment has been processed successfully.",
+      "CONTINUE_SHOPPING": "Continue Shopping",
+      "GO_HOME": "Go to Home",
+      "EMAIL_INFO": "You will receive a confirmation email shortly.",
+      "THANK_YOU": "Thank you for your purchase!"
+    },
+    "ERROR_PAGE": {
+      "INFO": "If the problem persists, please contact our support team.",
+      "NOT_CHARGED": "Your order has not been charged.",
+      "GO_TO_CART": "Go to Cart",
+      "CONTACT_SUPPORT": "Contact Support",
+      "DEFAULT_ERROR": "Payment processing failed"
+    }
+  },
+  "FAVORITES": {
+    "BACK_TO_SHOP": "← Back to Shop",
+    "TITLE": "My Favorites",
+    "SUBTITLE": "Your saved items for later",
+    "LOADING": "Loading your favorites...",
+    "EMPTY_TITLE": "No favorites yet",
+    "EMPTY_MSG": "Start exploring our products and add your favorites!",
+    "EXPLORE_BTN": "Explore Products",
+    "CLEAR_ALL": "Clear All",
+    "ITEMS_COUNT": "{{count}} items in favorites",
+    "CLEAR_CONFIRM_MSG": "Are you sure you want to remove all favorites?"
+  },
+  "CONTACTS": {
+    "TITLE": "Get in Touch",
+    "SUBTITLE": "Have questions? We'd love to hear from you.",
+    "FIELDS": {
+      "NAME": "Your Name",
+      "EMAIL": "Your Email",
+      "SUBJECT": "Subject",
+      "MESSAGE": "Your Message"
+    },
+    "FORM": {
+      "NAME": "Your Name",
+      "EMAIL": "Your Email",
+      "SUBJECT": "Subject",
+      "MESSAGE": "Your Message",
+      "SEND": "SEND MESSAGE",
+      "SENDING": "SENDING..."
+    },
+    "SUCCESS": {
+      "TITLE": "Message Sent",
+      "MSG": "Thank you for your message. We will get back to you soon!"
+    },
+    "ERROR": {
+      "TITLE": "Error",
+      "MSG": "Failed to send message. Please try again."
+    },
+    "ERRORS": {
+      "REQUIRED": "{{field}} is required",
+      "EMAIL": "Please enter a valid email address",
+      "MINLENGTH": "{{field}} must be at least {{min}} characters",
+      "MAXLENGTH": "{{field}} must be no more than {{max}} characters"
+    }
+  },
+  "PRODUCT": {
+    "CARD": {
+      "CODE": "Product Code"
+    },
+    "ACTIONS": {
+      "QUICK_VIEW": "Quick View",
+      "ADD_TO_CART": "Add to Cart"
+    },
+    "STOCK": {
+      "ONLY_LEFT": "Only {{count}} left in stock!",
+      "OUT_OF_STOCK": "OUT OF STOCK",
+      "COUNT": "In stock: {{count}}"
+    },
+    "BADGES": {
+      "SPECIAL": "SPECIAL OFFER",
+      "NEW": "NEW"
+    },
+    "ERRORS": {
+      "LOAD_SIMILAR_FAILED": "Unable to Load Similar Products",
+      "LOAD_BOUGHT_TOGETHER_FAILED": "Unable to Load Frequently Bought Together",
+      "LOAD_FAILED_MSG": "We're having trouble loading products right now."
+    },
+    "EMPTY": {
+      "NO_SIMILAR": "No Similar Products Found",
+      "NO_SIMILAR_MSG": "We couldn't find any similar products for this item.",
+      "NO_BOUGHT_TOGETHER": "No Frequently Bought Together Found",
+      "NO_BOUGHT_TOGETHER_MSG": "We couldn't find any frequently bought together products for this item."
+    },
+    "SECTIONS": {
+      "SIMILAR_SUBTITLE": "You might also like these products",
+      "BOUGHT_TOGETHER_SUBTITLE": "Customers frequently buy these together",
+      "SIMILAR": "Similar Products",
+      "BOUGHT_TOGETHER": "Frequently Bought Together"
+    },
+    "BACK_BTN": "← Back to Shop",
+    "BREADCRUMBS": {
+      "HOME": "Home",
+      "SHOP": "Shop"
+    },
+    "LOADING": "Loading product details...",
+    "NOT_FOUND": {
+      "TITLE": "Product Not Found",
+      "MSG": "The product you're looking for doesn't exist."
+    },
+    "TABS": {
+      "DESCRIPTION": "Description",
+      "CHARACTERISTICS": "Characteristics",
+      "DELIVERY": "Delivery and Payment"
+    },
+    "PECULIARITIES": "Peculiarities:",
+    "TECHNICAL_SPECS": "Technical specifications",
+    "DELIVERY_INFO": {
+      "STANDARD": "🚚 Standard shipping",
+      "STANDARD_EST": "3-5 business days • Free from $50",
+      "EXPRESS": "⚡ Express delivery",
+      "EXPRESS_EST": "1-2 business days • $15",
+      "PAYMENT_METHODS": "💳 Payment methods",
+      "METHODS_LIST": "Visa, MasterCard, PayPal, Apple Pay"
+    }
+  }
 }
