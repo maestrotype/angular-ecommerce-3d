@@ -43,6 +43,7 @@
 <!-- Actual page sections when loaded -->
 <ng-container *ngIf="!sectionsLoading">
     <ng-container *ngFor="let section of sections">
-        <app-section-renderer [section]="section" ngSkipHydration></app-section-renderer>
+        <app-section-renderer *ngIf="section.type !== 'header'" [section]="section"
+            ngSkipHydration></app-section-renderer>
     </ng-container>
 </ng-container>

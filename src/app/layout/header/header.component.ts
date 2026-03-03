@@ -55,7 +55,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     { title: 'Home', url: '/home', access: 'all', isActive: true },
     { title: 'Shop', url: '/shop', access: 'all', isActive: true },
     { title: 'About', url: '#about', access: 'all', isActive: true },
-    { title: 'Contacts', url: '/contacts', access: 'all', isActive: true },
+    { title: 'Contacts', url: '#contacts', access: 'all', isActive: true },
     { title: 'Admin Panel', url: '/admin', access: 'admin', isActive: true }
   ];
 
