@@ -346,7 +346,7 @@
   }
 
   // Glass theme styles for cards
-  [data-theme="glass"] .product-card {
+  [data-admin-theme="glass"] .product-card {
     background: rgba(255, 255, 255, 0.25);
     border: 1px solid rgba(255, 255, 255, 0.4);
     box-shadow: 
@@ -372,7 +372,7 @@
   }
 
   // Dark Glass theme styles for cards
-  [data-theme="dark-glass"] .product-card {
+  [data-admin-theme="dark-glass"] .product-card {
     background: rgba(70, 65, 60, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 

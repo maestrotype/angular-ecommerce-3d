@@ -79,7 +79,7 @@ export class ThemeService {
     const themeId = theme.id;
 
     if (area === 'admin') {
-      document.body.setAttribute('data-theme', themeId);
+      document.body.setAttribute('data-admin-theme', themeId);
     } else {
       // For frontend, apply to both for maximum compatibility across different CSS selectors
       document.documentElement.setAttribute('data-theme', themeId);
@@ -101,7 +101,7 @@ export class ThemeService {
     }
 
     if (area === 'admin') {
-      document.body.removeAttribute('data-theme');
+      document.body.removeAttribute('data-admin-theme');
       localStorage.removeItem('selected-theme-admin');
       this.adminThemeSubject.next(null);
     } else {

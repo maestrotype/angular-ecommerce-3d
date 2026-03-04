@@ -8,7 +8,7 @@
               border-color var(--admin-transition-normal);
   
   // Dark Glass theme - ensure white text
-  [data-theme="dark-glass"] & {
+  [data-admin-theme="dark-glass"] & {
     color: rgba(255, 255, 255, 1);
     background-color: transparent;
   }
@@ -19,13 +19,13 @@
     background-color: transparent;
     
     // Glass theme - remove border
-    [data-theme="glass"] & {
+    [data-admin-theme="glass"] & {
       border-bottom: 1px solid rgba(255, 255, 255, 0.15);
       background: transparent;
     }
     
     // Dark Glass theme
-    [data-theme="dark-glass"] & {
+    [data-admin-theme="dark-glass"] & {
       border-bottom: 1px solid rgba(255, 255, 255, 0.15);
       background: transparent;
     }
@@ -67,7 +67,7 @@
         color: var(--admin-text-inverse);
         
         // Dark Glass theme - brighter active item
-        [data-theme="dark-glass"] & {
+        [data-admin-theme="dark-glass"] & {
           background: rgba(138, 180, 248, 0.3);
           box-shadow: 
             0 0 15px rgba(138, 180, 248, 0.3),
@@ -78,7 +78,7 @@
           color: var(--admin-text-inverse);
           
           // Dark Glass theme - white text
-          [data-theme="dark-glass"] & {
+          [data-admin-theme="dark-glass"] & {
             color: rgba(255, 255, 255, 1);
           }
           
@@ -86,7 +86,7 @@
             color: var(--admin-text-inverse);
             
             // Dark Glass theme - white icons
-            [data-theme="dark-glass"] & {
+            [data-admin-theme="dark-glass"] & {
               color: rgba(255, 255, 255, 1);
             }
           }
@@ -102,7 +102,7 @@
         transition: color var(--admin-transition-normal);
         
         // Dark Glass theme - white text
-        [data-theme="dark-glass"] & {
+        [data-admin-theme="dark-glass"] & {
           color: rgba(255, 255, 255, 0.95);
         }
         
@@ -112,7 +112,7 @@
           transition: color var(--admin-transition-normal);
           
           // Dark Glass theme - white icons
-          [data-theme="dark-glass"] & {
+          [data-admin-theme="dark-glass"] & {
             color: rgba(255, 255, 255, 0.7);
           }
         }
@@ -142,13 +142,13 @@
     background-color: transparent;
     
     // Glass theme - remove border
-    [data-theme="glass"] & {
+    [data-admin-theme="glass"] & {
       border-top: 1px solid rgba(255, 255, 255, 0.15);
       background: transparent;
     }
     
     // Dark Glass theme
-    [data-theme="dark-glass"] & {
+    [data-admin-theme="dark-glass"] & {
       border-top: 1px solid rgba(255, 255, 255, 0.15);
       background: transparent;
       
@@ -258,7 +258,7 @@
 }
 
 // Dark Glass theme - fix active/focus text color for Material list items
-:host-context([data-theme="dark-glass"]) {
+:host-context([data-admin-theme="dark-glass"]) {
   .mat-mdc-list-item,
   .mat-mdc-nav-list .mat-mdc-list-item {
     &:active,
@@ -285,7 +285,7 @@
 }
 
 // Dark Glass theme - fix active/focus text color for Material list items
-:host-context([data-theme="dark-glass"]) {
+:host-context([data-admin-theme="dark-glass"]) {
   .mat-mdc-list-item,
   .mat-mdc-nav-list .mat-mdc-list-item {
     &:active,

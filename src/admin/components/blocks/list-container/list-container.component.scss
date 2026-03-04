@@ -9,7 +9,7 @@
   }
   
   // Dark Glass theme - white text + transparent
-  [data-theme="dark-glass"] .list {
+  [data-admin-theme="dark-glass"] .list {
     color: rgba(255, 255, 255, 1);
     background-color: transparent;
     box-shadow: none;
@@ -59,8 +59,8 @@
   }
   
   // Dark Glass theme - white titles
-  [data-theme="dark-glass"] .list__title,
-  [data-theme="dark-glass"] h1 {
+  [data-admin-theme="dark-glass"] .list__title,
+  [data-admin-theme="dark-glass"] h1 {
     color: rgba(255, 255, 255, 0.95);
   }
 
@@ -120,7 +120,7 @@
     width: 100%;
   }
 
-  [data-theme="glass"] .list {
+  [data-admin-theme="glass"] .list {
     background: rgba(255, 255, 255, 0.2);
     border-radius: 28px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.20), 0 1.5px 12px rgba(120,180,255,0.10), inset 0 1px 0 rgba(255,255,255,0.7);
@@ -128,9 +128,9 @@
     -webkit-backdrop-filter: blur(40px) saturate(200%);
   }
 
-  [data-theme="glass"] .list__header,
-  [data-theme="glass"] .list__filters,
-  [data-theme="glass"] .filter-section {
+  [data-admin-theme="glass"] .list__header,
+  [data-admin-theme="glass"] .list__filters,
+  [data-admin-theme="glass"] .filter-section {
     position: relative;
     z-index: 1;
     background: transparent;
@@ -138,22 +138,22 @@
     padding-right: 0;
   }
 
-  [data-theme="glass"] .list__filters {
+  [data-admin-theme="glass"] .list__filters {
     margin-top: 24px;
     margin-bottom: 32px;
     padding-bottom: 16px;
   }
   
   // Dark Glass theme - remove backgrounds
-  [data-theme="dark-glass"] .list__header,
-  [data-theme="dark-glass"] .list__filters,
-  [data-theme="dark-glass"] .filter-section,
-  [data-theme="dark-glass"] .header-section {
+  [data-admin-theme="dark-glass"] .list__header,
+  [data-admin-theme="dark-glass"] .list__filters,
+  [data-admin-theme="dark-glass"] .filter-section,
+  [data-admin-theme="dark-glass"] .header-section {
     background: transparent;
     background-color: transparent;
   }
 
-  [data-theme="glass"] .stats-cards .stat-card {
+  [data-admin-theme="glass"] .stats-cards .stat-card {
     background: rgba(248, 250, 252, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.5);
     box-shadow: 
@@ -165,14 +165,14 @@
   }
   
   // Dark Glass theme - LIGHT GRAY-BROWN (liquid glass)
-  [data-theme="dark-glass"] .list {
+  [data-admin-theme="dark-glass"] .list {
     background: rgba(90, 85, 80, 0.62);
     border-radius: 28px;
     border: 1.5px solid rgba(255,255,255,0.18);
     box-shadow: 0 16px 60px 0 rgba(0,0,0,0.35), 0 2px 24px rgba(255, 180, 120, 0.10), inset 0 1px 0 rgba(255,255,255,0.34), inset 0 0 60px rgba(255,255,255,0.03);
   }
   
-  [data-theme="dark-glass"] .stats-cards .stat-card {
+  [data-admin-theme="dark-glass"] .stats-cards .stat-card {
     background: rgba(70, 65, 60, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow: 

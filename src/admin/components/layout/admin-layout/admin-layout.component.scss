@@ -16,13 +16,13 @@
 
   // Glass theme effects - iOS/macOS style
   // Styles are defined globally in _admin-theme-material.scss
-  [data-theme="glass"] & {
+  [data-admin-theme="glass"] & {
     // Component-specific overrides only
     box-shadow: none;
   }
 
   // Dark Glass theme
-  [data-theme="dark-glass"] & {
+  [data-admin-theme="dark-glass"] & {
     background-color: transparent;
     box-shadow: none;
     color: rgba(255, 255, 255, 1);
@@ -37,11 +37,11 @@
   transition: background-color var(--admin-transition-normal), color var(--admin-transition-normal);
   overflow: hidden;
 
-  [data-theme="glass"] & {
+  [data-admin-theme="glass"] & {
     background: transparent;
   }
 
-  [data-theme="dark-glass"] & {
+  [data-admin-theme="dark-glass"] & {
     background: transparent;
     color: rgba(255, 255, 255, 1);
   }
@@ -64,12 +64,12 @@
   -ms-overflow-style: none;       // Edge/IE
 
   // Glass theme - keep it simple
-  [data-theme="glass"] & {
+  [data-admin-theme="glass"] & {
     background: transparent;
   }
 
   // Dark Glass theme
-  [data-theme="dark-glass"] & {
+  [data-admin-theme="dark-glass"] & {
     background: transparent;
     color: rgba(255, 255, 255, 1);
   }

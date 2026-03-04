@@ -77,7 +77,7 @@
     }
     
     // For dark theme, use lighter accent
-    [data-theme="dark"] & {
+    [data-admin-theme="dark"] & {
       &.mat-mdc-header-cell,
       &.mat-mdc-cell {
         color: var(--admin-primary-light);
@@ -85,7 +85,7 @@
     }
     
     // For glass theme, use primary color
-    [data-theme="glass"] & {
+    [data-admin-theme="glass"] & {
       &.mat-mdc-header-cell,
       &.mat-mdc-cell {
         color: var(--admin-border-focus);
@@ -99,11 +99,11 @@
     font-weight: var(--admin-font-weight-medium);
     color: var(--admin-primary);
     
-    [data-theme="dark"] & {
+    [data-admin-theme="dark"] & {
       color: var(--admin-primary-light);
     }
     
-    [data-theme="glass"] & {
+    [data-admin-theme="glass"] & {
       color: var(--admin-border-focus);
     }
   }

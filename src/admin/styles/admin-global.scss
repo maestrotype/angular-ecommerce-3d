@@ -19,7 +19,7 @@ body {
   transition: background-color var(--admin-transition-normal), color var(--admin-transition-normal);
   
   // Glass theme background - bright blue like macOS/iOS
-  [data-theme="glass"] & {
+  [data-admin-theme="glass"] & {
     min-height: 100vh;
     position: relative;
     background: linear-gradient(
@@ -69,7 +69,7 @@ body {
   }
   
   // Dark Glass theme background - VERY DARK with warm sunset colors like iOS26
-  [data-theme="dark-glass"] & {
+  [data-admin-theme="dark-glass"] & {
     min-height: 100vh;
     position: relative;
     background: linear-gradient(
@@ -164,7 +164,7 @@ button {
               box-shadow var(--admin-transition-normal);
   
   // Glass theme effects
-  [data-theme="glass"] & {
+  [data-admin-theme="glass"] & {
     background: var(--admin-bg-card);
     border: 1px solid var(--admin-border-primary);
     border-radius: 28px;
@@ -198,7 +198,7 @@ button {
     border-bottom-color: var(--admin-border-primary);
   }
 
-  [data-theme="glass"] & {
+  [data-admin-theme="glass"] & {
     backdrop-filter: blur(20px) saturate(160%);
     border: 1px solid var(--admin-border-secondary);
     border-radius: 24px;
@@ -221,7 +221,7 @@ button {
     color: var(--admin-text-primary);
     
     // Glass theme improvements
-    [data-theme="glass"] & {
+    [data-admin-theme="glass"] & {
       background: var(--admin-glass-surface-muted);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
@@ -269,7 +269,7 @@ button {
   color: var(--admin-text-primary);
   border: 1px solid var(--admin-border-primary);
 
-  [data-theme="glass"] & {
+  [data-admin-theme="glass"] & {
     background: var(--admin-glass-surface-muted);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
@@ -293,7 +293,7 @@ button {
   border-bottom: 1px solid var(--admin-border-primary);
   
   // Glass theme improvements
-  [data-theme="glass"] & {
+  [data-admin-theme="glass"] & {
     background: var(--admin-glass-surface-soft);
     backdrop-filter: blur(18px) saturate(180%);
     -webkit-backdrop-filter: blur(18px) saturate(180%);
@@ -309,7 +309,7 @@ button {
   border-right: 1px solid var(--admin-border-primary);
   
   // Glass theme improvements
-  [data-theme="glass"] & {
+  [data-admin-theme="glass"] & {
     background: var(--admin-glass-surface-muted);
     backdrop-filter: blur(20px) saturate(160%);
     -webkit-backdrop-filter: blur(20px) saturate(160%);

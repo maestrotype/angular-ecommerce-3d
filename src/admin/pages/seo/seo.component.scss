@@ -16,7 +16,7 @@
 }
 
 // Dark glass theme - white text
-[data-theme="dark-glass"] {
+[data-admin-theme="dark-glass"] {
   // Headers and text
   .seo-header h1,
   .form-section h3,
@@ -29,7 +29,7 @@
   }
 }
 
-:host-context([data-theme="dark-glass"]) {
+:host-context([data-admin-theme="dark-glass"]) {
   // Headers and text
   .seo-header h1,
   .form-section h3,

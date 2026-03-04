@@ -313,7 +313,7 @@
 }
 
 // Dark Glass theme - notification menu
-[data-theme="dark-glass"] {
+[data-admin-theme="dark-glass"] {
   .notification-menu.mat-mdc-menu-panel {
     .notification-header {
       background: rgba(90, 85, 80, 0.5);
@@ -422,7 +422,7 @@
 }
 
 // Light theme - notification menu enhancements
-[data-theme="light"] {
+[data-admin-theme="light"] {
   .notification-menu.mat-mdc-menu-panel {
     .notification-header {
       background: rgba(255, 255, 255, 0.98);
@@ -460,14 +460,14 @@
   }
 }
 
-[data-theme="light"] {
+[data-admin-theme="light"] {
   .admin-header {
     background-color: #fff;
   }
 }
 
 // Dark theme - notification menu enhancements
-[data-theme="dark"] {
+[data-admin-theme="dark"] {
   .notification-menu.mat-mdc-menu-panel {
     .notification-header {
       background: rgba(31, 41, 55, 0.98);
@@ -507,7 +507,7 @@
 }
 
 // Glass theme - notification menu enhancements
-[data-theme="glass"] {
+[data-admin-theme="glass"] {
   .notification-menu.mat-mdc-menu-panel {
     .notification-header {
       background: rgba(255, 255, 255, 0.4);
@@ -627,14 +627,14 @@
 
 @media (max-width: 480px) {
   // Light theme - white header
-  [data-theme="light"] {
+  [data-admin-theme="light"] {
     .admin-header {
       border-bottom: 1px solid #e5e7eb;
     }
   }
   
   // Dark theme - dark header
-  [data-theme="dark"] {
+  [data-admin-theme="dark"] {
     .admin-header {
       border-bottom: 1px solid #374151;
     }
