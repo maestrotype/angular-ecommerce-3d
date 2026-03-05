@@ -14,6 +14,7 @@
       </mat-error>
     </mat-form-field>
 
+    <!-- ═══════════════════ HEADER SECTION ═══════════════════ -->
     <ng-container *ngIf="sectionForm.get('type').value === 'header'">
       <app-image-upload [label]="'HEADER_LOGO_URL' | translate" [placeholder]="'UPLOAD_IMAGE_HINT' | translate"
         formControlName="logoUrl" (fileSelected)="onLogoFileSelected($event)" (fileUploaded)="onLogoUploaded($event)"
@@ -81,7 +82,10 @@
       </div>
     </ng-container>
 
+    <!-- ═══════════════════ ALL OTHER SECTIONS ═══════════════════ -->
     <ng-container *ngIf="sectionForm.get('type').value !== 'header'">
+
+      <!-- Localized Title -->
       <div class="localization-group">
         <label class="group-label">{{ 'TITLE' | translate }}</label>
         <div class="lang-fields">
@@ -101,6 +105,7 @@
         </div>
       </div>
 
+      <!-- Localized Subtitle -->
       <div class="localization-group">
         <label class="group-label">{{ 'SUBTITLE' | translate }}</label>
         <div class="lang-fields">
@@ -119,7 +124,7 @@
         </div>
       </div>
 
-      <!-- Content field only for non-categories sections -->
+      <!-- Localized Content (not for categories) -->
       <div class="localization-group" *ngIf="sectionForm.get('type').value !== 'categories'">
         <label class="group-label">{{ 'CONTENT' | translate }}</label>
         <div class="lang-fields">
@@ -138,7 +143,7 @@
         </div>
       </div>
 
-      <!-- Categories Section Special Block -->
+      <!-- ═══════════════════ CATEGORIES SECTION BLOCK ═══════════════════ -->
       <ng-container *ngIf="sectionForm.get('type').value === 'categories'">
         <div class="categories-block">
           <label class="categories-label">{{ 'CATEGORIES' | translate }}</label>
@@ -174,8 +179,6 @@
                 </div>
               </div>
             </div>
-            <mat-divider *ngFor="let category of categories.controls; let i = index"
-              [class.hidden]="i === categories.length - 1"></mat-divider>
           </div>
           <button mat-stroked-button type="button" (click)="addCategory()" class="add-category-btn">
             <mat-icon>add</mat-icon> {{ 'ADD_CATEGORY' | translate }}
@@ -183,7 +186,137 @@
         </div>
       </ng-container>
 
-      <!-- Image upload only for non-categories sections -->
+      <!-- ═══════════════════ ABOUT SECTION BLOCK ═══════════════════ -->
+      <ng-container *ngIf="sectionForm.get('type').value === 'about'">
+
+        <!-- Stats -->
+        <div class="about-block">
+          <label class="group-label about-block-label">
+            <mat-icon>bar_chart</mat-icon> Статистика (Stats)
+          </label>
+          <div class="about-hint">Числовые показатели — выводятся в нижней полосе секции</div>
+
+          <div formArrayName="stats" cdkDropList (cdkDropListDropped)="dropStat($event)" class="about-array-list">
+            <div *ngFor="let stat of stats.controls; let i = index" [formGroupName]="i" class="about-item-block"
+              cdkDrag>
+              <div class="drag-handle" cdkDragHandle>
+                <mat-icon>drag_indicator</mat-icon>
+              </div>
+              <div class="about-item-content">
+                <mat-form-field appearance="outline" class="about-value-field">
+                  <mat-label>Значение (5+, 10K+)</mat-label>
+                  <input matInput formControlName="value" placeholder="100+">
+                  <mat-error *ngIf="stat.get('value')?.hasError('required')">Required</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="about-lang-field">
+                  <mat-label>Label EN</mat-label>
+                  <input matInput formControlName="label_en" placeholder="Years">
+                  <mat-error *ngIf="stat.get('label_en')?.hasError('required')">Required</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="about-lang-field">
+                  <mat-label>Label RU</mat-label>
+                  <input matInput formControlName="label_ru" placeholder="Лет">
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="about-lang-field">
+                  <mat-label>Label UA</mat-label>
+                  <input matInput formControlName="label_ua" placeholder="Років">
+                </mat-form-field>
+                <button mat-icon-button color="warn" type="button" (click)="removeStat(i)" matTooltip="Удалить">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          <button mat-stroked-button type="button" (click)="addStat()" class="about-add-btn">
+            <mat-icon>add</mat-icon> Добавить показатель
+          </button>
+        </div>
+
+        <!-- Features -->
+        <div class="about-block">
+          <label class="group-label about-block-label">
+            <mat-icon>check_circle</mat-icon> Преимущества (Features)
+          </label>
+          <div class="about-hint">Список ключевых преимуществ с иконкой</div>
+
+          <div formArrayName="features" cdkDropList (cdkDropListDropped)="dropFeature($event)" class="about-array-list">
+            <div *ngFor="let feature of features.controls; let i = index" [formGroupName]="i" class="about-item-block"
+              cdkDrag>
+              <div class="drag-handle" cdkDragHandle>
+                <mat-icon>drag_indicator</mat-icon>
+              </div>
+              <div class="about-item-content about-feature-content">
+                <mat-form-field appearance="outline" class="about-icon-field">
+                  <mat-label>Material Icon (Fallback)</mat-label>
+                  <mat-select formControlName="icon">
+                    <mat-option *ngFor="let icon of availableIcons" [value]="icon">
+                      <mat-icon style="vertical-align: middle; margin-right: 8px;">{{ icon }}</mat-icon>
+                      {{ icon }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <div class="about-feature-upload">
+                  <app-image-upload [label]="'Custom Icon (SVG/PNG)'" [placeholder]="'Upload icon'"
+                    [formControlName]="'iconUrl'" (fileSelected)="onFeatureIconSelected($event, i)"
+                    (fileUploaded)="onFeatureIconUploaded($event, i)">
+                  </app-image-upload>
+                </div>
+                <mat-form-field appearance="outline" class="about-lang-field">
+                  <mat-label>Text EN</mat-label>
+                  <input matInput formControlName="text_en" placeholder="Premium quality">
+                  <mat-error *ngIf="feature.get('text_en')?.hasError('required')">Required</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="about-lang-field">
+                  <mat-label>Text RU</mat-label>
+                  <input matInput formControlName="text_ru" placeholder="Премиум качество">
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="about-lang-field">
+                  <mat-label>Text UA</mat-label>
+                  <input matInput formControlName="text_ua" placeholder="Преміум якість">
+                </mat-form-field>
+                <button mat-icon-button color="warn" type="button" (click)="removeFeature(i)" matTooltip="Удалить">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+          <button mat-stroked-button type="button" (click)="addFeature()" class="about-add-btn">
+            <mat-icon>add</mat-icon> Добавить преимущество
+          </button>
+        </div>
+
+        <!-- CTA Button -->
+        <div class="about-block">
+          <label class="group-label about-block-label">
+            <mat-icon>ads_click</mat-icon> Кнопка (CTA)
+          </label>
+          <div class="localization-group" style="margin-top: 12px;">
+            <label class="group-label" style="font-size: 0.8rem; opacity: 0.7;">Текст кнопки</label>
+            <div class="lang-fields">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>EN</mat-label>
+                <input matInput formControlName="cta_label_en" placeholder="Shop Now">
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>RU</mat-label>
+                <input matInput formControlName="cta_label_ru" placeholder="В магазин">
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>UA</mat-label>
+                <input matInput formControlName="cta_label_ua" placeholder="До магазину">
+              </mat-form-field>
+            </div>
+          </div>
+          <mat-form-field appearance="outline" class="full-width" style="margin-top: 8px;">
+            <mat-label>URL кнопки</mat-label>
+            <input matInput formControlName="cta_url" placeholder="/shop">
+            <mat-hint>Например: /shop, /catalog, #contacts</mat-hint>
+          </mat-form-field>
+        </div>
+
+      </ng-container>
+
+      <!-- ═══════════════════ IMAGE & 3D (not for categories) ═══════════════════ -->
       <ng-container *ngIf="sectionForm.get('type').value !== 'categories'">
         <app-image-upload [label]="'SECTION_IMAGE' | translate" [placeholder]="'UPLOAD_IMAGE_HINT' | translate"
           formControlName="imageUrl" (fileSelected)="onImageFileSelected($event)"
@@ -243,4 +376,5 @@
       }}
     </button>
   </div>
+
 </div>

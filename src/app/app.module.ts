@@ -52,6 +52,7 @@ import { PaymentErrorComponent } from './pages/payment-error/payment-error.compo
 
 // Shared Module
 import { SharedModule } from './shared/shared.module';
+import { ThreeDViewerModule } from './components/three-d-viewer/three-d-viewer.module';
 
 // Services
 import { ThemeService } from './core/themes/theme.service';
@@ -109,6 +110,7 @@ export function HttpLoaderFactory(http: any) {
     SpecialOfferComponent,
     BestSellersComponent,
     BrandsComponent,
+    ThreeDViewerModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

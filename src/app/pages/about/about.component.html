@@ -1,30 +1,84 @@
 <section class="about" id="about">
+  <!-- Background decorative elements -->
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
+
   <div class="container">
-    <div class="about-content">
+    <div class="about-grid">
+
+      <!-- ── LEFT: Text Content ────────────────────────────────── -->
       <div class="about-text">
-        <h1 class="about-title">
-          {{ data?.title | localized }}<br />
-          <span class="highlight">{{ data?.content | localized }}</span>
-        </h1>
-        <p class="about-subtitle">
-          {{ data?.settings?.subtitle | localized }}
-        </p>
+
+        <!-- Badge -->
+        <div class="about-badge">
+          <span class="material-icons badge-icon">workspace_premium</span>
+          {{ data?.subtitle | localized }}
+        </div>
+
+        <!-- Main Title -->
+        <h2 class="about-title">
+          {{ data?.title | localized }}
+          <span class="title-accent" *ngIf="data?.content">{{ data?.content | localized }}</span>
+        </h2>
+
+        <!-- Features List -->
+        <ul class="features-list" *ngIf="features.length > 0">
+          <li class="feature-item" *ngFor="let feature of features">
+            <span class="feature-icon" *ngIf="feature.iconUrl; else matIcon">
+              <img [src]="feature.iconUrl" [alt]="feature.text_en" class="custom-icon">
+            </span>
+            <ng-template #matIcon>
+              <span class="feature-icon material-icons">{{ feature.icon }}</span>
+            </ng-template>
+            <span class="feature-text">{{ feature.text_en }}</span>
+          </li>
+        </ul>
+
+        <!-- CTA Button -->
+        <button class="cta-button" (click)="onCtaClick()"
+          *ngIf="data?.settings?.ctaLabel?.en || data?.settings?.ctaLabel">
+          <span class="material-icons cta-icon">arrow_forward</span>
+          {{ data?.settings?.ctaLabel | localized }}
+        </button>
+
       </div>
 
-      <div class="about-image">
-        <div class="product-showcase">
-          <div class="floating-product">
-            <img *ngIf="data?.showImage && data?.imageUrl" [src]="data?.imageUrl" alt="Featured Handbag"
-              class="featured-product" loading="lazy" />
-            <!-- Decorative elements -->
-            <div class="decoration decoration-1"></div>
-            <div class="decoration decoration-2"></div>
-            <div class="decoration decoration-3"></div>
+      <!-- ── RIGHT: Visual ─────────────────────────────────────── -->
+      <div class="about-visual">
+        <div class="visual-wrapper">
+          <!-- Image -->
+          <div class="image-container" *ngIf="data?.showImage && data?.imageUrl">
+            <img [src]="data?.imageUrl" alt="About us" class="about-image" loading="lazy" />
+            <!-- Decorative floating blobs -->
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+            <div class="blob blob-3"></div>
           </div>
-          <div class="wrap-model">
-            <app-three-d-viewer *ngIf="data?.show3d && data?.model3dUrl" [modelPath]="data?.model3dUrl"
-              [scale]="[9, 9, 9]" [position]="[0, 0, 0]"></app-three-d-viewer>
+
+          <!-- 3D Model -->
+          <div class="model-container" *ngIf="data?.show3d && data?.model3dUrl">
+            <app-three-d-viewer [modelPath]="data?.model3dUrl" [scale]="[9, 9, 9]" [position]="[0, 0, 0]">
+            </app-three-d-viewer>
           </div>
+
+          <!-- Floating stat badge (first stat) -->
+          <div class="floating-badge" *ngIf="stats.length > 0">
+            <span class="floating-value">{{ animatedStats[0]?.display || stats[0]?.value }}</span>
+            <span class="floating-label">{{ stats[0]?.label_en }}</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Stats Bar ─────────────────────────────────────────────── -->
+  <div class="stats-bar" *ngIf="stats.length > 0">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card" *ngFor="let stat of stats; let i = index">
+          <span class="stat-value">{{ animatedStats[i]?.display || stat.value }}</span>
+          <span class="stat-label">{{ stat.label_en }}</span>
         </div>
       </div>
     </div>

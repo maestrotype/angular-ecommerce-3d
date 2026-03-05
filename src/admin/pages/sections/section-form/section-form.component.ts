@@ -50,6 +50,13 @@ export class SectionFormComponent implements AfterViewInit {
     { value: 'closed', label: 'HEADER_MENU_ACCESS_CLOSED' }
   ];
 
+  // Material icons available for features
+  availableIcons = [
+    'verified', 'local_shipping', 'support_agent', 'star', 'favorite',
+    'workspace_premium', 'thumb_up', 'security', 'eco', 'bolt',
+    'handshake', 'diamond', 'rocket_launch', 'public', 'spa'
+  ];
+
   availableSections: Section[] = [];
 
   constructor(
@@ -71,14 +78,7 @@ export class SectionFormComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // Subscribe to changes in the imageUploadComponents QueryList
-    this.imageUploadComponents.changes.subscribe(() => {
-      // This will be called whenever the QueryList changes,
-      // allowing you to access the newly added ImageUploadComponent instances.
-      // For example, if you need to re-initialize them or update their state.
-      // This is a placeholder; you might need to implement specific logic here
-      // if you have specific initialization needs for the image upload components.
-    });
+    this.imageUploadComponents.changes.subscribe(() => { });
   }
 
   private loadAvailableSections(): void {
@@ -90,11 +90,12 @@ export class SectionFormComponent implements AfterViewInit {
   private createForm(): FormGroup {
     const section = this.data?.section;
 
-    // Map database type to display type
     let displayType = section?.type || 'hero';
     if (section?.type === 'categories') {
-      displayType = 'categories'; // Use the value from sectionTypes
+      displayType = 'categories';
     }
+
+    const settings = section?.settings || {};
 
     return this.fb.group({
       type: [displayType, Validators.required],
@@ -113,12 +114,13 @@ export class SectionFormComponent implements AfterViewInit {
       show3d: [section?.show3d ?? false],
       showImage: [section?.showImage ?? true],
 
-      logoUrl: [section?.settings?.logoUrl || ''],
-      showSearch: [section?.settings?.showSearch ?? true],
-      showCart: [section?.settings?.showCart ?? true],
-      showProfile: [section?.settings?.showProfile ?? true],
+      // Header-specific fields
+      logoUrl: [settings?.logoUrl || ''],
+      showSearch: [settings?.showSearch ?? true],
+      showCart: [settings?.showCart ?? true],
+      showProfile: [settings?.showProfile ?? true],
       menu: this.fb.array(
-        (section?.settings?.menu || []).map((item: MenuItem) =>
+        (settings?.menu || []).map((item: MenuItem) =>
           this.fb.group({
             title: [item.title, Validators.required],
             url: [item.url, Validators.required],
@@ -129,7 +131,7 @@ export class SectionFormComponent implements AfterViewInit {
         )
       ),
       categories: this.fb.array(
-        (section?.settings?.categories || []).map((category: any) =>
+        (settings?.categories || []).map((category: any) =>
           this.fb.group({
             name: [category.name, Validators.required],
             slug: [category.slug || '', Validators.required],
@@ -137,9 +139,38 @@ export class SectionFormComponent implements AfterViewInit {
             isActive: [category.isActive ?? true]
           })
         )
+      ),
+
+      // About-specific fields
+      cta_label_en: [this.getLocalizedValue((settings as any)?.ctaLabel, 'en') || ''],
+      cta_label_ru: [this.getLocalizedValue((settings as any)?.ctaLabel, 'ru') || ''],
+      cta_label_ua: [this.getLocalizedValue((settings as any)?.ctaLabel, 'ua') || ''],
+      cta_url: [(settings as any)?.ctaUrl || '/shop'],
+      stats: this.fb.array(
+        ((settings as any)?.stats || []).map((stat: any) =>
+          this.fb.group({
+            value: [stat.value || '', Validators.required],
+            label_en: [stat.label_en || '', Validators.required],
+            label_ru: [stat.label_ru || ''],
+            label_ua: [stat.label_ua || '']
+          })
+        )
+      ),
+      features: this.fb.array(
+        ((settings as any)?.features || []).map((feature: any) =>
+          this.fb.group({
+            icon: [feature.icon || 'verified'],
+            iconUrl: [feature.iconUrl || ''],
+            text_en: [feature.text_en || '', Validators.required],
+            text_ru: [feature.text_ru || ''],
+            text_ua: [feature.text_ua || '']
+          })
+        )
       )
     });
   }
+
+  // ─── FormArray Getters ────────────────────────────────────────────────
 
   get menu(): FormArray {
     return this.sectionForm.get('menu') as FormArray;
@@ -148,6 +179,16 @@ export class SectionFormComponent implements AfterViewInit {
   get categories(): FormArray {
     return this.sectionForm.get('categories') as FormArray;
   }
+
+  get stats(): FormArray {
+    return this.sectionForm.get('stats') as FormArray;
+  }
+
+  get features(): FormArray {
+    return this.sectionForm.get('features') as FormArray;
+  }
+
+  // ─── Header menu ─────────────────────────────────────────────────────
 
   addMenuItem() {
     this.menu.push(this.fb.group({
@@ -159,6 +200,16 @@ export class SectionFormComponent implements AfterViewInit {
     }));
   }
 
+  removeMenuItem(index: number) {
+    this.menu.removeAt(index);
+  }
+
+  dropMenuItem(event: CdkDragDrop<FormArray>) {
+    moveItemInArray(this.menu.controls, event.previousIndex, event.currentIndex);
+  }
+
+  // ─── Categories ───────────────────────────────────────────────────────
+
   addCategory() {
     this.categories.push(this.fb.group({
       name: ['', Validators.required],
@@ -168,21 +219,54 @@ export class SectionFormComponent implements AfterViewInit {
     }));
   }
 
-  removeMenuItem(index: number) {
-    this.menu.removeAt(index);
-  }
-
   removeCategory(index: number) {
     this.categories.removeAt(index);
-  }
-
-  dropMenuItem(event: CdkDragDrop<FormArray>) {
-    moveItemInArray(this.menu.controls, event.previousIndex, event.currentIndex);
   }
 
   dropCategory(event: CdkDragDrop<FormArray>) {
     moveItemInArray(this.categories.controls, event.previousIndex, event.currentIndex);
   }
+
+  // ─── About Stats ──────────────────────────────────────────────────────
+
+  addStat() {
+    this.stats.push(this.fb.group({
+      value: ['', Validators.required],
+      label_en: ['', Validators.required],
+      label_ru: [''],
+      label_ua: ['']
+    }));
+  }
+
+  removeStat(index: number) {
+    this.stats.removeAt(index);
+  }
+
+  dropStat(event: CdkDragDrop<FormArray>) {
+    moveItemInArray(this.stats.controls, event.previousIndex, event.currentIndex);
+  }
+
+  // ─── About Features ───────────────────────────────────────────────────
+
+  addFeature() {
+    this.features.push(this.fb.group({
+      icon: ['verified'],
+      iconUrl: [''],
+      text_en: ['', Validators.required],
+      text_ru: [''],
+      text_ua: ['']
+    }));
+  }
+
+  removeFeature(index: number) {
+    this.features.removeAt(index);
+  }
+
+  dropFeature(event: CdkDragDrop<FormArray>) {
+    moveItemInArray(this.features.controls, event.previousIndex, event.currentIndex);
+  }
+
+  // ─── Section select helper ────────────────────────────────────────────
 
   onSectionSelect(index: number, sectionId: number | null) {
     const menuItem = this.menu.at(index);
@@ -196,6 +280,8 @@ export class SectionFormComponent implements AfterViewInit {
     }
   }
 
+  // ─── Image uploads ───────────────────────────────────────────────────
+
   onImageFileSelected(file: File): void {
     this.uploadingImage = true;
     this.sectionService.uploadImage(file).subscribe({
@@ -207,7 +293,7 @@ export class SectionFormComponent implements AfterViewInit {
         }
         this.uploadingImage = false;
       },
-      error: (error) => {
+      error: () => {
         this.uploadingImage = false;
         this.snackBar.open('Error uploading image', 'Close', { duration: 3000 });
       }
@@ -229,7 +315,7 @@ export class SectionFormComponent implements AfterViewInit {
         }
         this.uploadingLogo = false;
       },
-      error: (error) => {
+      error: () => {
         this.uploadingLogo = false;
         this.snackBar.open('Error uploading logo', 'Close', { duration: 3000 });
       }
@@ -249,16 +335,14 @@ export class SectionFormComponent implements AfterViewInit {
           const iconUrl = response.url;
           this.categories.at(index).patchValue({ icon: iconUrl });
 
-          // Find the corresponding image upload component and notify it
           const imageUploadComponents = this.imageUploadComponents.toArray();
-          if (imageUploadComponents[index + 1]) { // +1 because first component is for logo
+          if (imageUploadComponents[index + 1]) {
             imageUploadComponents[index + 1].onUploadSuccess(iconUrl);
           }
         }
         this.uploadingCategoryIcon = false;
       },
-      error: (error) => {
-
+      error: () => {
         this.snackBar.open('Error uploading category icon', 'Close', { duration: 3000 });
         this.uploadingCategoryIcon = false;
       }
@@ -269,9 +353,35 @@ export class SectionFormComponent implements AfterViewInit {
     this.categories.at(index).patchValue({ icon: url });
   }
 
+  onFeatureIconSelected(file: File, index: number): void {
+    this.uploadingCategoryIcon = true; // Reusing flag for simplicity or add specific
+    this.sectionService.uploadImage(file).subscribe({
+      next: (response) => {
+        if (response?.url) {
+          this.features.at(index).patchValue({ iconUrl: response.url });
+        }
+        this.uploadingCategoryIcon = false;
+      },
+      error: () => {
+        this.snackBar.open('Error uploading feature icon', 'Close', { duration: 3000 });
+        this.uploadingCategoryIcon = false;
+      }
+    });
+  }
+
+  onFeatureIconUploaded(url: string, index: number): void {
+    this.features.at(index).patchValue({ iconUrl: url });
+  }
+
+  removeFeatureIcon(index: number): void {
+    this.features.at(index).patchValue({ iconUrl: '' });
+  }
+
   removeCategoryIcon(index: number): void {
     this.categories.at(index).patchValue({ icon: '' });
   }
+
+  // ─── 3D Model ─────────────────────────────────────────────────────────
 
   on3dFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -329,6 +439,8 @@ export class SectionFormComponent implements AfterViewInit {
     );
   }
 
+  // ─── Submit ───────────────────────────────────────────────────────────
+
   onSubmit(): void {
     if (this.sectionForm.invalid) return;
 
@@ -382,9 +494,43 @@ export class SectionFormComponent implements AfterViewInit {
               }))
             }
           };
+        } else if (formValue.type === 'about') {
+          formData = {
+            type: 'about',
+            title: formValue.title,
+            subtitle: formValue.subtitle,
+            content: formValue.content,
+            imageUrl: formValue.imageUrl || '',
+            isActive: formValue.isActive,
+            model3dUrl: model3dUrl || '',
+            show3d: formValue.show3d || false,
+            showImage: formValue.showImage || true,
+            settings: {
+              ctaLabel: {
+                en: rawFormValue.cta_label_en || '',
+                ru: rawFormValue.cta_label_ru || '',
+                ua: rawFormValue.cta_label_ua || ''
+              },
+              ctaUrl: rawFormValue.cta_url || '/shop',
+              stats: (rawFormValue.stats || []).map((s: any) => ({
+                value: s.value,
+                label_en: s.label_en,
+                label_ru: s.label_ru,
+                label_ua: s.label_ua
+              })),
+              features: (rawFormValue.features || []).map((f: any) => ({
+                icon: f.icon,
+                iconUrl: f.iconUrl,
+                text_en: f.text_en,
+                text_ru: f.text_ru,
+                text_ua: f.text_ua
+              }))
+            }
+          };
         } else {
           const {
             logoUrl, showSearch, showCart, showProfile, menu, categories,
+            stats, features, cta_label_en, cta_label_ru, cta_label_ua, cta_url,
             title_en, title_ru, title_ua,
             subtitle_en, subtitle_ru, subtitle_ua,
             content_en, content_ru, content_ua,
@@ -407,9 +553,8 @@ export class SectionFormComponent implements AfterViewInit {
               this.snackBar.open('Section updated successfully', 'Close', { duration: 3000 });
               this.dialogRef.close(result);
             },
-            error: (error) => {
+            error: () => {
               this.loading = false;
-
               this.snackBar.open('Error updating section', 'Close', { duration: 3000 });
             }
           });
@@ -420,17 +565,15 @@ export class SectionFormComponent implements AfterViewInit {
               this.snackBar.open('Section created successfully', 'Close', { duration: 3000 });
               this.dialogRef.close(result);
             },
-            error: (error) => {
+            error: () => {
               this.loading = false;
-
               this.snackBar.open('Error creating section', 'Close', { duration: 3000 });
             }
           });
         }
       },
-      error: (error) => {
+      error: () => {
         this.loading = false;
-
         this.snackBar.open('Error processing section', 'Close', { duration: 3000 });
       }
     });
@@ -439,6 +582,8 @@ export class SectionFormComponent implements AfterViewInit {
   onCancel(): void {
     this.dialogRef.close();
   }
+
+  // ─── Helpers ──────────────────────────────────────────────────────────
 
   getLocalizedValue(value: any, lang: string): string {
     if (!value) return '';
@@ -467,7 +612,6 @@ export class SectionFormComponent implements AfterViewInit {
       ua: formValue.content_ua
     };
 
-    // Cleanup temporary fields
     delete data.title_en; delete data.title_ru; delete data.title_ua;
     delete data.subtitle_en; delete data.subtitle_ru; delete data.subtitle_ua;
     delete data.content_en; delete data.content_ru; delete data.content_ua;
