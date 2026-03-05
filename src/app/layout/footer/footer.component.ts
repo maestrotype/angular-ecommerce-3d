@@ -70,4 +70,8 @@ export class FooterComponent implements OnInit, OnDestroy {
   openFavoritesPage(): void {
     this.router.navigate(['/favorites']);
   }
+
+  goHome() {
+    this.router.navigate(['/home']);
+  }
 }

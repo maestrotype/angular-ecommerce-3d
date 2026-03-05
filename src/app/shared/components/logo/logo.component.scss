@@ -1,0 +1,16 @@
+:host {
+    display: inline-block;
+}
+
+.logo-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: currentColor;
+}
+
+.logo-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}

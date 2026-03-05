@@ -14,6 +14,7 @@ import { StripeElementsComponent } from './components/stripe-elements/stripe-ele
 import { StripeTestComponent } from '../pages/stripe-test/stripe-test.component';
 import { SectionRendererComponent } from '../components/section-renderer/section-renderer.component';
 import { NotificationBadgeComponent } from './components/notification-badge/notification-badge.component';
+import { LogoComponent } from './components/logo/logo.component';
 import { ReplaceSpacesPipe } from '@app-shared/pipes/replace-spaces.pipe';
 import { LocalizedPipe } from '@app-shared/pipes/localized.pipe';
 
@@ -29,7 +30,8 @@ import { LocalizedPipe } from '@app-shared/pipes/localized.pipe';
     StripeTestComponent,
     SectionRendererComponent,
     ReplaceSpacesPipe,
-    NotificationBadgeComponent
+    NotificationBadgeComponent,
+    LogoComponent
   ],
   imports: [
     CommonModule,
@@ -52,6 +54,7 @@ import { LocalizedPipe } from '@app-shared/pipes/localized.pipe';
     StripeTestComponent,
     SectionRendererComponent,
     NotificationBadgeComponent,
+    LogoComponent,
     ReplaceSpacesPipe,
     LocalizedPipe,
     TranslateModule
