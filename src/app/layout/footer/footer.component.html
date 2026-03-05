@@ -3,8 +3,8 @@
     <!-- Main Footer Content -->
     <div class="footer-content">
       <div class="footer-column">
-        <div class="footer-logo">
-          <span class="logo-text">{{ 'FOOTER.LOGO_TEXT' | translate }}</span>
+        <div class="footer-logo" (click)="goHome()" style="cursor: pointer;">
+          <app-logo [height]="45" [showText]="true"></app-logo>
         </div>
         <p class="footer-description">
           {{ 'FOOTER.DESCRIPTION' | translate }}
@@ -49,7 +49,7 @@
     <div class="footer-bottom">
       <div class="footer-bottom-content">
         <p class="copyright">
-          © {{ currentYear }} {{ 'FOOTER.LOGO_TEXT' | translate }}. {{ 'FOOTER.COPYRIGHT' | translate }}
+          © {{ currentYear }} 3D Store. {{ 'FOOTER.COPYRIGHT' | translate }}
         </p>
 
         <div class="social-links">
