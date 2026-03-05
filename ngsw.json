@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1772722302927,
+  "timestamp": 1772728826867,
   "index": "/angular-ecommerce-3d/index.html",
   "assetGroups": [
     {
@@ -21,11 +21,11 @@
         "/angular-ecommerce-3d/994.718c81ef11fa2ce0.js",
         "/angular-ecommerce-3d/common.d7a75cb04dd24c2a.js",
         "/angular-ecommerce-3d/index.html",
-        "/angular-ecommerce-3d/main.7440c7e767f9d31f.js",
+        "/angular-ecommerce-3d/main.c9d2e8a6382fe5b2.js",
         "/angular-ecommerce-3d/manifest.webmanifest",
         "/angular-ecommerce-3d/polyfills.a527a9cc31db9a9d.js",
-        "/angular-ecommerce-3d/runtime.be04c545b8623c1a.js",
-        "/angular-ecommerce-3d/styles.61f5b41a6f60f5a3.css"
+        "/angular-ecommerce-3d/runtime.6bfbf7e816cbb57b.js",
+        "/angular-ecommerce-3d/styles.73046624724e0754.css"
       ],
       "patterns": []
     },
@@ -172,12 +172,12 @@
     "/angular-ecommerce-3d/assets/models/people/Unka.glb": "86c756b78aa0564e8b74f43b9a4fcef40f225a0e",
     "/angular-ecommerce-3d/assets/models/shoes/shoes1.glb": "6c07b477b7e6675ae2f9f262c06d4ce22728aa25",
     "/angular-ecommerce-3d/common.d7a75cb04dd24c2a.js": "0eca2f0193b546eb53da0b0c2f15f7cb7b27cfc6",
-    "/angular-ecommerce-3d/index.html": "4b365bf55c30a97396b84cbc0070b0077d3cf018",
-    "/angular-ecommerce-3d/main.7440c7e767f9d31f.js": "93073ade200e8b322e34e893b744fb984e72bf33",
+    "/angular-ecommerce-3d/index.html": "1e1408cd2e66fafbf0aa4387ff6a082e1875e412",
+    "/angular-ecommerce-3d/main.c9d2e8a6382fe5b2.js": "f9885a8b156c44e2fa980597bb306a0e8bde742d",
     "/angular-ecommerce-3d/manifest.webmanifest": "68e4e874611f558407b7642b0fe602db24978dcb",
     "/angular-ecommerce-3d/polyfills.a527a9cc31db9a9d.js": "75b41ca06c59053b7d23f357a4cbbd22f58c0a66",
-    "/angular-ecommerce-3d/runtime.be04c545b8623c1a.js": "e82a7bf4a4d25fd53da6a18cc549ee52e9786376",
-    "/angular-ecommerce-3d/styles.61f5b41a6f60f5a3.css": "c7e79950ba641a3ff2e368eff65dff4a79d41e47"
+    "/angular-ecommerce-3d/runtime.6bfbf7e816cbb57b.js": "f4a8847bcef4a356746ee05901a5c4c367fa5d3d",
+    "/angular-ecommerce-3d/styles.73046624724e0754.css": "2c826238efae93f8f4b6524ab5d05a7b19bed0b3"
   },
   "navigationUrls": [
     {
