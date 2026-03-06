@@ -183,8 +183,50 @@
         </div>
       </ng-container>
 
-      <!-- Image upload only for non-categories sections -->
-      <ng-container *ngIf="sectionForm.get('type').value !== 'categories'">
+      <!-- Brands Section Special Block -->
+      <ng-container *ngIf="sectionForm.get('type').value === 'brands'">
+        <div class="categories-block">
+          <label class="categories-label">{{ 'BRANDS' | translate }}</label>
+          <div formArrayName="brands" cdkDropList (cdkDropListDropped)="dropBrand($event)" class="categories-list">
+            <div *ngFor="let brand of brands.controls; let i = index" [formGroupName]="i" class="category-item-block"
+              cdkDrag>
+              <div class="drag-handle" cdkDragHandle>
+                <mat-icon>drag_indicator</mat-icon>
+              </div>
+              <div class="category-item-content">
+                <mat-form-field appearance="outline" class="category-name-field">
+                  <mat-label>{{ 'BRAND_NAME' | translate }}</mat-label>
+                  <input matInput formControlName="name">
+                </mat-form-field>
+                <app-image-upload [label]="'BRAND_LOGO' | translate"
+                  [placeholder]="'UPLOAD_BRAND_LOGO_HINT' | translate" [formControlName]="'logo'"
+                  (fileSelected)="onBrandLogoSelected($event, i)" (fileUploaded)="onBrandLogoUploaded($event, i)"
+                  [disabled]="uploadingBrandLogo">
+                </app-image-upload>
+                <div class="category-controls">
+                  <mat-slide-toggle formControlName="isActive" class="category-active-toggle">
+                    <span class="mobile-only">{{ 'ACTIVE' | translate }}</span>
+                    <span class="desktop-only">{{ 'ACTIVE' | translate }}</span>
+                  </mat-slide-toggle>
+                  <button mat-icon-button color="warn" type="button" (click)="removeBrand(i)" class="delete-btn"
+                    matTooltip="{{ 'DELETE' | translate }}">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <mat-divider *ngFor="let brand of brands.controls; let i = index"
+              [class.hidden]="i === brands.length - 1"></mat-divider>
+          </div>
+          <button mat-stroked-button type="button" (click)="addBrand()" class="add-category-btn">
+            <mat-icon>add</mat-icon> {{ 'ADD_BRAND' | translate }}
+          </button>
+        </div>
+      </ng-container>
+
+      <!-- Image upload only for non-complex sections -->
+      <ng-container
+        *ngIf="sectionForm.get('type').value !== 'categories' && sectionForm.get('type').value !== 'brands' && sectionForm.get('type').value !== 'best-sellers'">
         <app-image-upload [label]="'SECTION_IMAGE' | translate" [placeholder]="'UPLOAD_IMAGE_HINT' | translate"
           formControlName="imageUrl" (fileSelected)="onImageFileSelected($event)"
           (fileUploaded)="onImageUploaded($event)" [disabled]="uploadingImage">
@@ -192,7 +234,8 @@
 
         <mat-slide-toggle formControlName="showImage">{{ 'SHOW_IMAGE' | translate }}</mat-slide-toggle>
 
-        <div class="model3d-upload-section full-width">
+        <div class="model3d-upload-section full-width"
+          *ngIf="sectionForm.get('type').value !== 'brands' && sectionForm.get('type').value !== 'categories'">
           <label class="upload-label">3D Model (.glb)</label>
           <div class="upload-area" [class.has-file]="model3dFile || model3dUrl">
             <div *ngIf="!(model3dFile || model3dUrl)" class="upload-placeholder">
@@ -222,7 +265,9 @@
             </button>
           </div>
         </div>
-        <mat-slide-toggle formControlName="show3d" class="active-toggle">{{ 'SHOW_3D_MODEL' | translate
+        <mat-slide-toggle formControlName="show3d" class="active-toggle"
+          *ngIf="sectionForm.get('type').value !== 'brands' && sectionForm.get('type').value !== 'categories'">{{
+          'SHOW_3D_MODEL' | translate
           }}</mat-slide-toggle>
       </ng-container>
 
@@ -235,7 +280,7 @@
     <button mat-button (click)="onCancel()" [disabled]="loading || uploadingImage || uploadingLogo">{{ 'CANCEL' |
       translate }}</button>
     <button mat-raised-button color="primary" (click)="onSubmit()"
-      [disabled]="sectionForm.invalid || loading || uploadingImage || uploadingLogo">
+      [disabled]="loading || uploadingImage || uploadingLogo || uploadingCategoryIcon || uploadingBrandLogo || uploading3d">
       <mat-icon *ngIf="loading">hourglass_empty</mat-icon>
       {{ loading
       ? ('SAVING' | translate)
