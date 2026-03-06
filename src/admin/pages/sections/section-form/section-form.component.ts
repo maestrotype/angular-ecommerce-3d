@@ -26,6 +26,7 @@ export class SectionFormComponent implements AfterViewInit {
   uploadingImage = false;
   uploadingLogo = false;
   uploadingCategoryIcon = false;
+  uploadingBrandLogo = false;
 
   model3dFile: File | null = null;
   model3dUrl: string | null = null;
@@ -98,7 +99,7 @@ export class SectionFormComponent implements AfterViewInit {
 
     return this.fb.group({
       type: [displayType, Validators.required],
-      title_en: [this.getLocalizedValue(section?.title, 'en') || '', Validators.required],
+      title_en: [this.getLocalizedValue(section?.title, 'en') || '', (displayType === 'header' || displayType === 'brands' || displayType === 'categories') ? [] : [Validators.required]],
       title_ru: [this.getLocalizedValue(section?.title, 'ru') || ''],
       title_ua: [this.getLocalizedValue(section?.title, 'ua') || ''],
       subtitle_en: [this.getLocalizedValue(section?.subtitle, 'en') || ''],
@@ -137,6 +138,15 @@ export class SectionFormComponent implements AfterViewInit {
             isActive: [category.isActive ?? true]
           })
         )
+      ),
+      brands: this.fb.array(
+        (section?.settings?.brands || []).map((brand: any) =>
+          this.fb.group({
+            name: [brand.name, Validators.required],
+            logo: [brand.logo || ''],
+            isActive: [brand.isActive ?? true]
+          })
+        )
       )
     });
   }
@@ -147,6 +157,10 @@ export class SectionFormComponent implements AfterViewInit {
 
   get categories(): FormArray {
     return this.sectionForm.get('categories') as FormArray;
+  }
+
+  get brands(): FormArray {
+    return this.sectionForm.get('brands') as FormArray;
   }
 
   addMenuItem() {
@@ -168,6 +182,14 @@ export class SectionFormComponent implements AfterViewInit {
     }));
   }
 
+  addBrand() {
+    this.brands.push(this.fb.group({
+      name: ['', Validators.required],
+      logo: [''],
+      isActive: [true]
+    }));
+  }
+
   removeMenuItem(index: number) {
     this.menu.removeAt(index);
   }
@@ -176,12 +198,20 @@ export class SectionFormComponent implements AfterViewInit {
     this.categories.removeAt(index);
   }
 
+  removeBrand(index: number) {
+    this.brands.removeAt(index);
+  }
+
   dropMenuItem(event: CdkDragDrop<FormArray>) {
     moveItemInArray(this.menu.controls, event.previousIndex, event.currentIndex);
   }
 
   dropCategory(event: CdkDragDrop<FormArray>) {
     moveItemInArray(this.categories.controls, event.previousIndex, event.currentIndex);
+  }
+
+  dropBrand(event: CdkDragDrop<FormArray>) {
+    moveItemInArray(this.brands.controls, event.previousIndex, event.currentIndex);
   }
 
   onSectionSelect(index: number, sectionId: number | null) {
@@ -273,6 +303,36 @@ export class SectionFormComponent implements AfterViewInit {
     this.categories.at(index).patchValue({ icon: '' });
   }
 
+  onBrandLogoSelected(file: File, index: number): void {
+    this.uploadingBrandLogo = true;
+    this.sectionService.uploadImage(file).subscribe({
+      next: (response) => {
+        if (response?.url) {
+          const logoUrl = response.url;
+          this.brands.at(index).patchValue({ logo: logoUrl });
+
+          // Notify the image upload component
+          const imageUploadComponents = this.imageUploadComponents.toArray();
+          // Offset logic: Find by index among specific components if needed, or rely on index
+          // This logic depends on the HTML structure. First is logo, then categories, then brands.
+        }
+        this.uploadingBrandLogo = false;
+      },
+      error: (error) => {
+        this.snackBar.open('Error uploading brand logo', 'Close', { duration: 3000 });
+        this.uploadingBrandLogo = false;
+      }
+    });
+  }
+
+  onBrandLogoUploaded(url: string, index: number): void {
+    this.brands.at(index).patchValue({ logo: url });
+  }
+
+  removeBrandLogo(index: number): void {
+    this.brands.at(index).patchValue({ logo: '' });
+  }
+
   on3dFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
@@ -330,7 +390,11 @@ export class SectionFormComponent implements AfterViewInit {
   }
 
   onSubmit(): void {
-    if (this.sectionForm.invalid) return;
+    if (this.sectionForm.invalid) {
+      this.sectionForm.markAllAsTouched();
+      this.snackBar.open('Please fill in all required fields correctly', 'Close', { duration: 3000 });
+      return;
+    }
 
     this.loading = true;
 
@@ -382,9 +446,26 @@ export class SectionFormComponent implements AfterViewInit {
               }))
             }
           };
+        } else if (formValue.type === 'brands') {
+          formData = {
+            type: 'brands',
+            title: formValue.title,
+            subtitle: formValue.subtitle,
+            content: formValue.content,
+            imageUrl: '',
+            isActive: formValue.isActive,
+            model3dUrl: '',
+            show3d: false,
+            showImage: false,
+            settings: {
+              brands: (formValue.brands || []).map((brand: any) => ({
+                ...brand
+              }))
+            }
+          };
         } else {
           const {
-            logoUrl, showSearch, showCart, showProfile, menu, categories,
+            logoUrl, showSearch, showCart, showProfile, menu, categories, brands,
             title_en, title_ru, title_ua,
             subtitle_en, subtitle_ru, subtitle_ua,
             content_en, content_ru, content_ua,

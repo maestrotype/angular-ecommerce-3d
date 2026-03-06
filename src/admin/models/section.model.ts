@@ -15,6 +15,13 @@ export interface CategoryItem {
   isActive: boolean;
 }
 
+export interface BrandItem {
+  id?: number;
+  name: string | LocalizedString;
+  logo: string;
+  isActive?: boolean;
+}
+
 export interface HeaderSettings {
   logoUrl?: string;
   showSearch?: boolean;
@@ -22,6 +29,7 @@ export interface HeaderSettings {
   showProfile?: boolean;
   menu?: MenuItem[];
   categories?: CategoryItem[];
+  brands?: BrandItem[];
   selectedCategories?: number[];
 }
 

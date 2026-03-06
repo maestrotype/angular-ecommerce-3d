@@ -8,6 +8,8 @@ import { ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { NotificationService, Notification } from '../../../services/notification.service';
 
+import { ThemeService } from '../../../../app/core/themes/theme.service';
+
 @Component({
   selector: 'app-admin-header',
   templateUrl: './header.component.html',
@@ -17,23 +19,26 @@ import { NotificationService, Notification } from '../../../services/notificatio
 export class HeaderComponent implements OnInit, OnDestroy {
   @Output() toggleSidenav = new EventEmitter<void>();
   @ViewChild('notificationMenuTrigger') notificationMenuTrigger!: MatMenuTrigger;
-  
+
   private destroy$ = new Subject<void>();
   notifications: Notification[] = [];
   unreadCount = 0;
-  currentTheme: 'light' | 'dark' | 'glass' | 'dark-glass' = 'dark'; // Default to dark theme
+  currentTheme: string = 'dark';
 
   constructor(
     private router: Router,
     private authService: AuthService,
-    private notificationService: NotificationService
-  ) {}
+    private notificationService: NotificationService,
+    private themeService: ThemeService
+  ) { }
 
   ngOnInit(): void {
-    // Load theme preference from localStorage
-    const savedTheme = localStorage.getItem('adminTheme') as 'light' | 'dark' | 'glass' | null;
-    this.currentTheme = savedTheme || 'dark'; // Default to dark if no saved theme
-    this.applyTheme();
+    // Sync with ThemeService
+    this.themeService.adminTheme$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(theme => {
+        this.currentTheme = theme.id;
+      });
 
     // Load notifications on initialization
     this.notificationService.loadNotifications()
@@ -71,25 +76,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   toggleTheme(): void {
-    // Cycle through themes: dark -> light -> glass -> dark-glass -> dark
-    if (this.currentTheme === 'dark') {
-      this.currentTheme = 'light';
-    } else if (this.currentTheme === 'light') {
-      this.currentTheme = 'glass';
-    } else if (this.currentTheme === 'glass') {
-      this.currentTheme = 'dark-glass';
-    } else {
-      this.currentTheme = 'dark';
-    }
-    this.applyTheme();
-    
-    // Save theme preference
-    localStorage.setItem('adminTheme', this.currentTheme);
-  }
-
-  private applyTheme(): void {
-    // Apply theme to documentElement instead of body for consistency with frontend
-    document.documentElement.setAttribute('data-theme', this.currentTheme);
+    this.themeService.toggleAdminTheme();
   }
 
   openNotificationMenu(): void {
@@ -107,7 +94,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   onNotificationClick(notification: Notification): void {
     // Close the menu first
     this.closeNotificationMenu();
-    
+
     if (notification.status === 'unread') {
       this.notificationService.markAsRead(notification.id).pipe(
         switchMap(() => this.notificationService.loadNotifications())

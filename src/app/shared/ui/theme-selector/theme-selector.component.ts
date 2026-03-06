@@ -24,7 +24,7 @@ export class ThemeSelectorComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.themes = this.themeService.getAllThemes();
+    this.themes = this.themeService.getThemesByArea('frontend');
 
     this.themeService.currentTheme$
       .pipe(takeUntil(this.destroy$))

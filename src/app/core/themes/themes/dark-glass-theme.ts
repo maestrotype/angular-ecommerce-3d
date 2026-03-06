@@ -1,0 +1,171 @@
+import { Theme } from '../theme.model';
+
+export const darkGlassTheme: Theme = {
+    id: 'dark-glass',
+    name: 'Dark Glass',
+    description: 'Warm dark background with liquid glass effect',
+    colors: {
+        // Primary Colors
+        primary: '#8ab4f8',
+        'primary-light': '#aecbfa',
+        'primary-dark': '#669df6',
+        'primary-hover': '#7cb3f9',
+
+        // Secondary Colors
+        secondary: '#f28b82',
+        'secondary-light': '#f5aba5',
+        'secondary-dark': '#ee675c',
+        'secondary-hover': '#f0796f',
+
+        // Accent Colors
+        accent: '#fdd663',
+        'accent-light': '#fee491',
+        'accent-dark': '#fbc02d',
+        'accent-hover': '#fcc934',
+
+        // Semantic Colors
+        success: '#81c995',
+        'success-light': '#a8dab5',
+        'success-dark': '#5bb974',
+        'success-hover': '#6ec086',
+
+        warning: '#ffb03b',
+        'warning-light': '#ffc670',
+        'warning-dark': '#f5a000',
+        'warning-hover': '#ffac1a',
+
+        error: '#f28b82',
+        'error-light': '#f5aba5',
+        'error-dark': '#ee675c',
+        'error-hover': '#f0796f',
+
+        info: '#8ab4f8',
+        'info-light': '#aecbfa',
+        'info-dark': '#669df6',
+        'info-hover': '#7cb3f9',
+
+        // Background Colors - Warm Dark Tone
+        'bg-primary': '#1a1c1e',
+        'bg-secondary': '#202124',
+        'bg-tertiary': '#282a2d',
+        'bg-hover': 'rgba(255, 255, 255, 0.08)',
+        'bg-overlay': 'rgba(0, 0, 0, 0.7)',
+
+        // Surface Colors - Translucent for Glass Effect
+        'surface-primary': 'rgba(32, 33, 36, 0.85)',
+        'surface-secondary': 'rgba(40, 42, 45, 0.7)',
+        'surface-tertiary': 'rgba(60, 64, 67, 0.5)',
+        'surface-hover': 'rgba(255, 255, 255, 0.1)',
+
+        // Text Colors
+        'text-primary': 'rgba(255, 255, 255, 0.95)',
+        'text-secondary': 'rgba(255, 255, 255, 0.7)',
+        'text-tertiary': 'rgba(255, 255, 255, 0.5)',
+        'text-disabled': 'rgba(255, 255, 255, 0.38)',
+        'text-inverse': '#202124',
+        'text-accent': '#8ab4f8',
+
+        // Border Colors
+        'border-primary': 'rgba(255, 255, 255, 0.12)',
+        'border-secondary': 'rgba(255, 255, 255, 0.08)',
+        'border-tertiary': 'rgba(255, 255, 255, 0.04)',
+        'border-focus': '#8ab4f8',
+
+        // Shadow Colors
+        'shadow-light': 'rgba(0, 0, 0, 0.3)',
+        'shadow-medium': 'rgba(0, 0, 0, 0.45)',
+        'shadow-heavy': 'rgba(0, 0, 0, 0.6)',
+
+        // Special Button Colors
+        'auth-button-primary': '#f28b82'
+    },
+    layout: {
+        'container-max-width': '1200px',
+        'container-padding': '0 20px',
+        'grid-columns-desktop': 4,
+        'grid-columns-tablet': 3,
+        'grid-columns-mobile': 2,
+        'grid-gap': '1rem',
+        'cards-border-radius': '20px',
+        'cards-shadow': '0 8px 32px rgba(0, 0, 0, 0.3)',
+        'cards-padding': '1.5rem'
+    },
+    components: {
+        'font-family-primary': "'Open Sans', sans-serif",
+        'font-family-secondary': "'Lato', sans-serif",
+        'font-family-mono': "monospace",
+        'font-size-xs': '0.75rem',
+        'font-size-sm': '0.875rem',
+        'font-size-md': '1rem',
+        'font-size-lg': '1.125rem',
+        'font-size-xl': '1.25rem',
+        'font-size-xxl': '1.5rem',
+        'font-size-xxxl': '2rem',
+        'font-weight-light': '300',
+        'font-weight-normal': '400',
+        'font-weight-medium': '500',
+        'font-weight-semibold': '600',
+        'font-weight-bold': '700',
+        'line-height-tight': '1.2',
+        'line-height-normal': '1.4',
+        'line-height-relaxed': '1.6',
+        'line-height-loose': '1.8',
+        'spacing-xs': '0.25rem',
+        'spacing-sm': '0.5rem',
+        'spacing-md': '1rem',
+        'spacing-lg': '1.5rem',
+        'spacing-xl': '2rem',
+        'spacing-xxl': '3rem',
+        'spacing-xxxl': '4rem',
+        'radius-xs': '4px',
+        'radius-sm': '8px',
+        'radius-md': '12px',
+        'radius-lg': '16px',
+        'radius-xl': '20px',
+        'radius-xxl': '24px',
+        'radius-full': '9999px',
+        'shadow-xs': '0 2px 4px rgba(0,0,0,0.1)',
+        'shadow-sm': '0 4px 8px rgba(0,0,0,0.15)',
+        'shadow-md': '0 8px 16px rgba(0,0,0,0.2)',
+        'shadow-lg': '0 12px 24px rgba(0,0,0,0.25)',
+        'shadow-xl': '0 20px 40px rgba(0,0,0,0.3)',
+        'shadow-xxl': '0 32px 64px rgba(0,0,0,0.4)',
+        'z-index-dropdown': '1000',
+        'z-index-sticky': '1020',
+        'z-index-fixed': '1030',
+        'z-index-modal-backdrop': '1040',
+        'z-index-modal': '1050',
+        'z-index-popover': '1060',
+        'z-index-tooltip': '1070',
+        'z-index-toast': '1080',
+        'transition-fast': '0.1s ease',
+        'transition-normal': '0.25s ease',
+        'transition-slow': '0.4s ease',
+        'auth-modal-bg': 'rgba(32, 33, 36, 0.9)',
+        'auth-modal-shadow': '0 24px 48px rgba(0, 0, 0, 0.5)',
+        'auth-modal-border': '1px solid rgba(255, 255, 255, 0.1)',
+        'auth-header-bg': 'rgba(40, 42, 45, 0.95)',
+        'auth-header-border': '1px solid rgba(255, 255, 255, 0.1)',
+        'auth-tab-inactive': 'rgba(255, 255, 255, 0.5)',
+        'auth-tab-active': '#8ab4f8',
+        'auth-tab-active-bg': 'rgba(138, 180, 248, 0.15)',
+        'auth-tab-hover': 'rgba(255, 255, 255, 0.8)',
+        'auth-tab-hover-bg': 'rgba(255, 255, 255, 0.05)',
+        'auth-content-bg': 'transparent',
+        'auth-input-bg': 'rgba(0, 0, 0, 0.2)',
+        'auth-input-border': '1px solid rgba(255, 255, 255, 0.1)',
+        'auth-input-focus': '#8ab4f8',
+        'auth-btn-primary': 'linear-gradient(135deg, #8ab4f8 0%, #aecbfa 100%)',
+        'auth-btn-secondary': 'rgba(255, 255, 255, 0.05)',
+        'auth-btn-secondary-text': 'rgba(255, 255, 255, 0.7)',
+        'auth-btn-secondary-border': '1px solid rgba(255, 255, 255, 0.1)',
+        'color-text-tertiary': 'rgba(255, 255, 255, 0.5)',
+        'color-text-primary': 'rgba(255, 255, 255, 0.95)',
+        'color-text-secondary': 'rgba(255, 255, 255, 0.7)',
+        'color-text-inverse': '#202124',
+        'color-primary': '#8ab4f8',
+        'color-surface-primary': 'rgba(32, 33, 36, 0.85)',
+        'color-surface-secondary': 'rgba(40, 42, 45, 0.7)',
+        'color-border-primary': 'rgba(255, 255, 255, 0.12)'
+    }
+};
