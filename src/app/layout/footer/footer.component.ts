@@ -1,17 +1,29 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { ModalService } from '../../core/services/modal.service';
 import { CartService } from '../../core/services/cart.service';
 import { FavoritesService } from '../../core/services/favorites.service';
+import { LogoComponent } from '../../shared/components/logo/logo.component';
+import { IconComponent } from '../../shared/icon/icon.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { SharedModule } from '../../shared/shared.module';
 
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.scss']
+  styleUrls: ['./footer.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    LogoComponent,
+    IconComponent,
+    TranslateModule,
+    SharedModule // For LocalizedPipe and others
+  ]
 })
-
-
 export class FooterComponent implements OnInit, OnDestroy {
   cartCount = 0;
   favoritesCount = 0;

@@ -1,83 +1,96 @@
 import { Theme } from '../theme.model';
 
-export const defaultThemeNew: Theme = {
-  id: 'default',
-  name: 'Default',
+export const lightTheme: Theme = {
+  id: 'light',
+  name: 'Light',
   description: 'Clean modern design with blue primary colors',
   colors: {
     // Primary Colors
     primary: '#667eea',
-    'primary-light': '#8b9df0',
-    'primary-dark': '#4a5fd8',
-    'primary-hover': '#5a6fd8',
-    
+    'primary-light': '#8E9EFB',
+    'primary-dark': '#4856B7',
+    'primary-hover': '#1e3a8a',
+
     // Secondary Colors
     secondary: '#764ba2',
-    'secondary-light': '#9a6bb8',
-    'secondary-dark': '#5d3a7f',
-    'secondary-hover': '#6a4190',
-    
+    'secondary-light': '#9D73C9',
+    'secondary-dark': '#55347B',
+    'secondary-hover': '#1e3a8a',
+
     // Accent Colors
-    accent: '#f093fb',
-    'accent-light': '#f4b0fc',
-    'accent-dark': '#e66ff0',
-    'accent-hover': '#ed7ff5',
-    
+    accent: '#ff6b6b',
+    'accent-light': '#ff8787',
+    'accent-dark': '#fa5252',
+    'accent-hover': '#f03e3e',
+
     // Semantic Colors
-    success: '#4caf50',
-    'success-light': '#66bb6a',
-    'success-dark': '#388e3c',
-    'success-hover': '#43a047',
-    
-    warning: '#ff9800',
-    'warning-light': '#ffb74d',
-    'warning-dark': '#f57c00',
-    'warning-hover': '#ff8f00',
-    
-    error: '#f44336',
-    'error-light': '#ef5350',
-    'error-dark': '#d32f2f',
-    'error-hover': '#e53935',
-    
-    info: '#2196f3',
-    'info-light': '#42a5f5',
-    'info-dark': '#1976d2',
-    'info-hover': '#1e88e5',
-    
+    success: '#38b000',
+    'success-light': '#70e000',
+    'success-dark': '#008000',
+    'success-hover': '#007000',
+
+    warning: '#fca311',
+    'warning-light': '#ffb703',
+    'warning-dark': '#e85d04',
+    'warning-hover': '#d00000',
+
+    error: '#d00000',
+    'error-light': '#ff4d6d',
+    'error-dark': '#800f2f',
+    'error-hover': '#590d22',
+
+    info: '#00b4d8',
+    'info-light': '#90e0ef',
+    'info-dark': '#0077b6',
+    'info-hover': '#03045e',
+
     // Background Colors
-    'bg-primary': '#f8f9fa',
-    'bg-secondary': '#ffffff',
-    'bg-tertiary': '#e9ecef',
-    'bg-hover': '#e3f2fd',
+    'bg-primary': '#f8fafc',
+    'bg-secondary': '#f1f5f9',
+    'bg-tertiary': '#e2e8f0',
+    'bg-hover': 'rgba(0, 0, 0, 0.05)',
     'bg-overlay': 'rgba(0, 0, 0, 0.5)',
-    
+
     // Surface Colors
     'surface-primary': '#ffffff',
-    'surface-secondary': '#f8f9fa',
-    'surface-tertiary': '#e9ecef',
-    'surface-hover': '#f1f3f4',
-    
+    'surface-secondary': '#f8fafc',
+    'surface-tertiary': '#f1f5f9',
+    'surface-hover': '#f1f5f9',
+
     // Text Colors
-    'text-primary': '#333333',
-    'text-secondary': '#666666',
-    'text-tertiary': '#999999',
-    'text-disabled': '#bdbdbd',
+    'text-primary': '#1e293b',
+    'text-secondary': '#64748b',
+    'text-tertiary': '#94a3b8',
+    'text-disabled': '#cbd5e1',
     'text-inverse': '#ffffff',
     'text-accent': '#667eea',
-    
+
     // Border Colors
-    'border-primary': '#e0e0e0',
-    'border-secondary': '#f0f0f0',
-    'border-tertiary': '#f5f5f5',
-    'border-focus': '#1976d2',
-    
+    'border-primary': '#e2e8f0',
+    'border-secondary': '#f1f5f9',
+    'border-tertiary': '#f8fafc',
+    'border-focus': '#6366f1',
+
     // Shadow Colors
-    'shadow-light': 'rgba(0, 0, 0, 0.1)',
-    'shadow-medium': 'rgba(0, 0, 0, 0.15)',
-    'shadow-heavy': 'rgba(0, 0, 0, 0.25)',
-    
+    'shadow-light': 'rgba(0, 0, 0, 0.05)',
+    'shadow-medium': 'rgba(0, 0, 0, 0.1)',
+    'shadow-heavy': 'rgba(0, 0, 0, 0.2)',
+
     // Special Button Colors
-    'auth-button-primary': '#e74c3c'
+    'auth-button-primary': '#667eea',
+    'auth-button-hover': '#764ba2',
+    'auth-button-shadow': 'rgba(102, 126, 234, 0.25)',
+    'special-offer-button': '#667eea',
+    'special-offer-button-hover': '#764ba2',
+    'special-offer-button-shadow': 'rgba(102, 126, 234, 0.25)',
+
+    // Modal Colors
+    'modal-bg': '#ffffff',
+    'modal-header-bg': '#f8fafc',
+    'modal-border': '#e5e7eb',
+    'input-bg': '#ffffff',
+    'input-border': '#d1d5db',
+    'input-focus-border': '#6366f1'
   },
   layout: {
     'container-max-width': '1200px',
@@ -85,17 +98,17 @@ export const defaultThemeNew: Theme = {
     'grid-columns-desktop': 4,
     'grid-columns-tablet': 3,
     'grid-columns-mobile': 2,
-    'grid-gap': '1rem',
+    'grid-gap': '1.5rem',
     'cards-border-radius': '12px',
-    'cards-shadow': '0 2px 8px rgba(0, 0, 0, 0.1)',
-    'cards-padding': '1rem'
+    'cards-shadow': '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+    'cards-padding': '1.5rem'
   },
   components: {
     // Typography
-    'font-family-primary': "'Open Sans', 'Segoe UI', 'Roboto', sans-serif",
-    'font-family-secondary': "'Lato', 'Helvetica Neue', sans-serif",
-    'font-family-mono': "'Monaco', 'Menlo', 'Ubuntu Mono', monospace",
-    
+    'font-family-primary': "'Inter', sans-serif",
+    'font-family-secondary': "'Inter', sans-serif",
+    'font-family-mono': "'Fira Code', monospace",
+
     // Font Sizes
     'font-size-xs': '0.75rem',
     'font-size-sm': '0.875rem',
@@ -104,20 +117,20 @@ export const defaultThemeNew: Theme = {
     'font-size-xl': '1.25rem',
     'font-size-xxl': '1.5rem',
     'font-size-xxxl': '2rem',
-    
+
     // Font Weights
     'font-weight-light': '300',
     'font-weight-normal': '400',
     'font-weight-medium': '500',
     'font-weight-semibold': '600',
     'font-weight-bold': '700',
-    
+
     // Line Heights
     'line-height-tight': '1.2',
-    'line-height-normal': '1.4',
-    'line-height-relaxed': '1.6',
-    'line-height-loose': '1.8',
-    
+    'line-height-normal': '1.5',
+    'line-height-relaxed': '1.75',
+    'line-height-loose': '2',
+
     // Spacing
     'spacing-xs': '0.25rem',
     'spacing-sm': '0.5rem',
@@ -126,7 +139,7 @@ export const defaultThemeNew: Theme = {
     'spacing-xl': '2rem',
     'spacing-xxl': '3rem',
     'spacing-xxxl': '4rem',
-    
+
     // Border Radius
     'radius-xs': '0.125rem',
     'radius-sm': '0.25rem',
@@ -135,15 +148,15 @@ export const defaultThemeNew: Theme = {
     'radius-xl': '1rem',
     'radius-xxl': '1.5rem',
     'radius-full': '9999px',
-    
+
     // Shadows
-    'shadow-xs': '0 1px 3px rgba(0, 0, 0, 0.1)',
-    'shadow-sm': '0 2px 4px rgba(0, 0, 0, 0.1)',
-    'shadow-md': '0 4px 8px rgba(0, 0, 0, 0.1)',
-    'shadow-lg': '0 8px 16px rgba(0, 0, 0, 0.1)',
-    'shadow-xl': '0 12px 24px rgba(0, 0, 0, 0.15)',
-    'shadow-xxl': '0 16px 32px rgba(0, 0, 0, 0.2)',
-    
+    'shadow-xs': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+    'shadow-sm': '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+    'shadow-md': '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+    'shadow-lg': '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+    'shadow-xl': '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+    'shadow-xxl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+
     // Z-Index
     'z-index-dropdown': '1000',
     'z-index-sticky': '1020',
@@ -153,40 +166,40 @@ export const defaultThemeNew: Theme = {
     'z-index-popover': '1060',
     'z-index-tooltip': '1070',
     'z-index-toast': '1080',
-    
+
     // Transitions
-    'transition-fast': '0.15s ease',
-    'transition-normal': '0.3s ease',
-    'transition-slow': '0.5s ease',
-    
+    'transition-fast': '150ms cubic-bezier(0.4, 0, 0.2, 1)',
+    'transition-normal': '300ms cubic-bezier(0.4, 0, 0.2, 1)',
+    'transition-slow': '500ms cubic-bezier(0.4, 0, 0.2, 1)',
+
     // Auth Modal Variables
     'auth-modal-bg': '#ffffff',
-    'auth-modal-shadow': '0 20px 40px rgba(0, 0, 0, 0.1)',
-    'auth-modal-border': '1px solid #e0e0e0',
-    'auth-header-bg': '#f8f9fa',
-    'auth-header-border': '1px solid #e0e0e0',
-    'auth-tab-inactive': '#666666',
-    'auth-tab-active': '#667eea',
-    'auth-tab-active-bg': '#e3f2fd',
-    'auth-tab-hover': '#333333',
-    'auth-tab-hover-bg': '#f1f3f4',
+    'auth-modal-shadow': '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+    'auth-modal-border': 'none',
+    'auth-header-bg': '#f8fafc',
+    'auth-header-border': '1px solid #e2e8f0',
+    'auth-tab-inactive': '#64748b',
+    'auth-tab-active': '#1e293b',
+    'auth-tab-active-bg': '#f1f5f9',
+    'auth-tab-hover': '#475569',
+    'auth-tab-hover-bg': '#f8fafc',
     'auth-content-bg': '#ffffff',
     'auth-input-bg': '#ffffff',
-    'auth-input-border': '1px solid #e0e0e0',
-    'auth-input-focus': '#667eea',
+    'auth-input-border': '1px solid #d1d5db',
+    'auth-input-focus': '#6366f1',
     'auth-btn-primary': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    'auth-btn-secondary': '#f8f9fa',
-    'auth-btn-secondary-text': '#666666',
-    'auth-btn-secondary-border': '1px solid #e0e0e0',
-    
+    'auth-btn-secondary': '#f1f5f9',
+    'auth-btn-secondary-text': '#475569',
+    'auth-btn-secondary-border': '1px solid #e2e8f0',
+
     // Additional CSS variables for compatibility
-    'color-text-tertiary': '#999999',
-    'color-text-primary': '#333333',
-    'color-text-secondary': '#666666',
+    'color-text-tertiary': '#94a3b8',
+    'color-text-primary': '#1e293b',
+    'color-text-secondary': '#64748b',
     'color-text-inverse': '#ffffff',
     'color-primary': '#667eea',
     'color-surface-primary': '#ffffff',
-    'color-surface-secondary': '#f8f9fa',
-    'color-border-primary': '#e0e0e0'
+    'color-surface-secondary': '#f8fafc',
+    'color-border-primary': '#e2e8f0'
   }
-}; 
+};

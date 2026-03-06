@@ -137,7 +137,34 @@ export class SectionFormComponent implements AfterViewInit {
             isActive: [category.isActive ?? true]
           })
         )
-      )
+      ),
+
+      // About section fields
+      stats: this.fb.array(
+        ((section?.settings as any)?.stats || []).map((stat: any) =>
+          this.fb.group({
+            value: [stat.value || '', Validators.required],
+            label_en: [this.getLocalizedValue(stat.label, 'en') || '', Validators.required],
+            label_ru: [this.getLocalizedValue(stat.label, 'ru') || ''],
+            label_ua: [this.getLocalizedValue(stat.label, 'ua') || '']
+          })
+        )
+      ),
+      features: this.fb.array(
+        ((section?.settings as any)?.features || []).map((feature: any) =>
+          this.fb.group({
+            icon: [feature.icon || 'star'], // Material icon name
+            iconUrl: [feature.iconUrl || ''], // Custom SVG/Image URL
+            text_en: [this.getLocalizedValue(feature.text, 'en') || '', Validators.required],
+            text_ru: [this.getLocalizedValue(feature.text, 'ru') || ''],
+            text_ua: [this.getLocalizedValue(feature.text, 'ua') || '']
+          })
+        )
+      ),
+      ctaLabel_en: [this.getLocalizedValue((section?.settings as any)?.cta?.label, 'en') || ''],
+      ctaLabel_ru: [this.getLocalizedValue((section?.settings as any)?.cta?.label, 'ru') || ''],
+      ctaLabel_ua: [this.getLocalizedValue((section?.settings as any)?.cta?.label, 'ua') || ''],
+      ctaUrl: [(section?.settings as any)?.cta?.url || '']
     });
   }
 
@@ -147,6 +174,14 @@ export class SectionFormComponent implements AfterViewInit {
 
   get categories(): FormArray {
     return this.sectionForm.get('categories') as FormArray;
+  }
+
+  get stats(): FormArray {
+    return this.sectionForm.get('stats') as FormArray;
+  }
+
+  get features(): FormArray {
+    return this.sectionForm.get('features') as FormArray;
   }
 
   addMenuItem() {
@@ -168,6 +203,25 @@ export class SectionFormComponent implements AfterViewInit {
     }));
   }
 
+  addStat() {
+    this.stats.push(this.fb.group({
+      value: ['', Validators.required],
+      label_en: ['', Validators.required],
+      label_ru: [''],
+      label_ua: ['']
+    }));
+  }
+
+  addFeature() {
+    this.features.push(this.fb.group({
+      icon: ['star'],
+      iconUrl: [''],
+      text_en: ['', Validators.required],
+      text_ru: [''],
+      text_ua: ['']
+    }));
+  }
+
   removeMenuItem(index: number) {
     this.menu.removeAt(index);
   }
@@ -176,12 +230,28 @@ export class SectionFormComponent implements AfterViewInit {
     this.categories.removeAt(index);
   }
 
+  removeStat(index: number) {
+    this.stats.removeAt(index);
+  }
+
+  removeFeature(index: number) {
+    this.features.removeAt(index);
+  }
+
   dropMenuItem(event: CdkDragDrop<FormArray>) {
     moveItemInArray(this.menu.controls, event.previousIndex, event.currentIndex);
   }
 
   dropCategory(event: CdkDragDrop<FormArray>) {
     moveItemInArray(this.categories.controls, event.previousIndex, event.currentIndex);
+  }
+
+  dropStat(event: CdkDragDrop<FormArray>) {
+    moveItemInArray(this.stats.controls, event.previousIndex, event.currentIndex);
+  }
+
+  dropFeature(event: CdkDragDrop<FormArray>) {
+    moveItemInArray(this.features.controls, event.previousIndex, event.currentIndex);
   }
 
   onSectionSelect(index: number, sectionId: number | null) {
@@ -265,12 +335,33 @@ export class SectionFormComponent implements AfterViewInit {
     });
   }
 
-  onCategoryIconUploaded(url: string, index: number): void {
-    this.categories.at(index).patchValue({ icon: url });
-  }
-
   removeCategoryIcon(index: number): void {
     this.categories.at(index).patchValue({ icon: '' });
+  }
+
+  onFeatureIconSelected(file: File, index: number): void {
+    this.uploadingCategoryIcon = true;
+    this.sectionService.uploadImage(file).subscribe({
+      next: (response) => {
+        if (response?.url) {
+          const iconUrl = response.url;
+          this.features.at(index).patchValue({ iconUrl });
+        }
+        this.uploadingCategoryIcon = false;
+      },
+      error: (error) => {
+        this.snackBar.open('Error uploading feature icon', 'Close', { duration: 3000 });
+        this.uploadingCategoryIcon = false;
+      }
+    });
+  }
+
+  onFeatureIconUploaded(url: string, index: number): void {
+    this.features.at(index).patchValue({ iconUrl: url });
+  }
+
+  removeFeatureIcon(index: number): void {
+    this.features.at(index).patchValue({ iconUrl: '' });
   }
 
   on3dFileSelected(event: Event): void {
@@ -380,6 +471,34 @@ export class SectionFormComponent implements AfterViewInit {
                 ...cat,
                 slug: cat.slug || getLocalizedString(cat.name).toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
               }))
+            }
+          };
+        } else if (formValue.type === 'about') {
+          formData = {
+            type: 'about',
+            title: formValue.title,
+            subtitle: formValue.subtitle,
+            content: formValue.content,
+            imageUrl: formValue.imageUrl || '',
+            isActive: formValue.isActive,
+            model3dUrl: model3dUrl || '',
+            show3d: formValue.show3d || false,
+            showImage: formValue.showImage || true,
+            settings: {
+              subtitle: formValue.subtitle, // Duplicated for layout flexibility
+              stats: (formValue.stats || []).map((s: any) => ({
+                value: s.value,
+                label: { en: s.label_en, ru: s.label_ru, ua: s.label_ua }
+              })),
+              features: (formValue.features || []).map((f: any) => ({
+                icon: f.icon,
+                iconUrl: f.iconUrl,
+                text: { en: f.text_en, ru: f.text_ru, ua: f.text_ua }
+              })),
+              cta: {
+                label: { en: formValue.ctaLabel_en, ru: formValue.ctaLabel_ru, ua: formValue.ctaLabel_ua },
+                url: formValue.ctaUrl
+              }
             }
           };
         } else {

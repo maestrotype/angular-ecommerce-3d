@@ -1,31 +1,65 @@
 <section class="about" id="about">
   <div class="container">
-    <div class="about-content">
-      <div class="about-text">
-        <h1 class="about-title">
-          {{ data?.title | localized }}<br />
-          <span class="highlight">{{ data?.content | localized }}</span>
-        </h1>
-        <p class="about-subtitle">
-          {{ data?.settings?.subtitle | localized }}
-        </p>
-      </div>
+    <div class="about-grid">
+      <!-- Left Column: Content -->
+      <div class="about-content">
+        <div class="section-badge">{{ 'ABOUT.BADGE' | translate }}</div>
+        <h2 class="about-title">
+          {{ data?.title | localized }}
+          <span class="highlight">{{ data?.subtitle | localized }}</span>
+        </h2>
 
-      <div class="about-image">
-        <div class="product-showcase">
-          <div class="floating-product">
-            <img *ngIf="data?.showImage && data?.imageUrl" [src]="data?.imageUrl" alt="Featured Handbag"
-              class="featured-product" loading="lazy" />
-            <!-- Decorative elements -->
-            <div class="decoration decoration-1"></div>
-            <div class="decoration decoration-2"></div>
-            <div class="decoration decoration-3"></div>
-          </div>
-          <div class="wrap-model">
-            <app-three-d-viewer *ngIf="data?.show3d && data?.model3dUrl" [modelPath]="data?.model3dUrl"
-              [scale]="[9, 9, 9]" [position]="[0, 0, 0]"></app-three-d-viewer>
+        <p class="about-description">
+          {{ data?.content | localized }}
+        </p>
+
+        <div class="features-list" *ngIf="features.length > 0">
+          <div class="feature-item" *ngFor="let feature of features">
+            <div class="feature-icon">
+              <mat-icon *ngIf="!feature.iconUrl">{{ feature.icon || 'check_circle' }}</mat-icon>
+              <img *ngIf="feature.iconUrl" [src]="feature.iconUrl" [alt]="feature.text | localized">
+            </div>
+            <div class="feature-text">
+              {{ feature.text | localized }}
+            </div>
           </div>
         </div>
+
+        <div class="about-actions" *ngIf="cta">
+          <a [href]="cta.url" class="btn btn-primary cta-button">
+            {{ cta.label | localized }}
+            <mat-icon>arrow_forward</mat-icon>
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Column: Visuals -->
+      <div class="about-visual">
+        <div class="visual-container">
+          <!-- 3D Viewer if enabled -->
+          <div class="model-wrapper" *ngIf="data?.show3d && data?.model3dUrl">
+            <app-three-d-viewer [modelPath]="data?.model3dUrl" [scale]="[10, 10, 10]"
+              [position]="[0, 0, 0]"></app-three-d-viewer>
+          </div>
+
+          <!-- Image fallback/overlay -->
+          <div class="image-wrapper" *ngIf="data?.showImage && data?.imageUrl"
+            [class.overlay]="data?.show3d && data?.model3dUrl">
+            <img [src]="data?.imageUrl" [alt]="data?.title | localized" class="main-image">
+          </div>
+
+          <!-- Decorative elements -->
+          <div class="decoration blob-1"></div>
+          <div class="decoration blob-2"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Stats Bar -->
+    <div class="stats-bar" *ngIf="stats.length > 0">
+      <div class="stat-item" *ngFor="let stat of stats">
+        <div class="stat-value" #statValue>0</div>
+        <div class="stat-label">{{ stat.label | localized }}</div>
       </div>
     </div>
   </div>

@@ -1,11 +1,13 @@
 import { Component, Input, OnInit, Inject, PLATFORM_ID, makeStateKey, TransferState } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { HttpClient } from '@angular/common/http';
-import { isPlatformBrowser } from '@angular/common';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { isPlatformBrowser, CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-icon',
   templateUrl: './icon.component.html',
+  standalone: true,
+  imports: [CommonModule, HttpClientModule]
 })
 export class IconComponent implements OnInit {
   @Input() name!: string;
@@ -41,9 +43,6 @@ export class IconComponent implements OnInit {
     }
 
     const iconPath = `assets/icons/${this.name}.svg`;
-    // On server, we might need a full URL or absolute path, but HttpClient (withFetch) 
-    // in Angular 17 SSR often handles assets if configured. 
-    // To be safe, let's assume it works or falls back.
 
     this.http.get(iconPath, { responseType: 'text' }).subscribe({
       next: (svgContent) => {

@@ -2,7 +2,7 @@ import { Injectable, PLATFORM_ID, Inject, afterNextRender } from '@angular/core'
 import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 import { Theme } from './theme.model';
-import { AVAILABLE_THEMES, DEFAULT_THEME_ID } from './theme-config';
+import { AVAILABLE_THEMES, DEFAULT_THEME_ID, FRONTEND_THEMES, ADMIN_THEMES } from './theme-config';
 
 type Area = 'frontend' | 'admin';
 
@@ -51,6 +51,14 @@ export class ThemeService {
 
   getAllThemes(): Theme[] {
     return AVAILABLE_THEMES;
+  }
+
+  getFrontendThemes(): Theme[] {
+    return FRONTEND_THEMES;
+  }
+
+  getAdminThemes(): Theme[] {
+    return ADMIN_THEMES;
   }
 
   setTheme(themeId: string, area: Area = 'frontend'): void {

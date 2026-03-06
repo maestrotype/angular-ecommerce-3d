@@ -826,14 +826,14 @@
     transition: color 0.3s ease;
   }
 
-  /* Active tab - primary color (голубой) */
+  /* Active tab - primary color (blue) */
   .mat-mdc-tab-group.mat-mdc-tab-group .mat-mdc-tab.mat-mdc-tab-active,
   .mat-mdc-tab-header.mat-mdc-tab-header .mat-mdc-tab.mat-mdc-tab-active,
   .mat-mdc-tab.mat-mdc-tab.mat-mdc-tab-active {
     color: var(--admin-primary);
   }
 
-  /* Hover - primary color (голубой) */
+  /* Hover - primary color (blue) */
   .mat-mdc-tab-group.mat-mdc-tab-group .mat-mdc-tab.mat-mdc-tab:hover,
   .mat-mdc-tab-header.mat-mdc-tab-header .mat-mdc-tab.mat-mdc-tab:hover {
     color: var(--admin-primary);
@@ -845,7 +845,7 @@
     color: inherit;
   }
 
-  /* Tab indicator - primary color (голубой) */
+  /* Tab indicator - primary color (blue) */
   .mat-mdc-tab-header.mat-mdc-tab-header .mdc-tab-indicator__content--underline,
   .mat-mdc-tab-header.mat-mdc-tab-header .mat-mdc-tab-indicator .mdc-tab-indicator__content {
     border-color: var(--admin-primary);

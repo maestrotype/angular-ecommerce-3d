@@ -65,7 +65,7 @@
             type="button" [class.active]="currentTheme === theme.id">
             <span class="theme-switcher__swatch">
               <ng-container [ngSwitch]="theme.id">
-                <svg *ngSwitchCase="'default'" width="24" height="16" viewBox="0 0 24 16"
+                <svg *ngSwitchCase="'light'" width="24" height="16" viewBox="0 0 24 16"
                   xmlns="http://www.w3.org/2000/svg">
                   <rect x="0" y="0" width="24" height="16" fill="var(--surface-2)" />
                   <rect x="0" y="8" width="24" height="8" fill="var(--color-primary)" />

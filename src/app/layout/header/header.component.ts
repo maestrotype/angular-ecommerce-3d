@@ -1,22 +1,35 @@
 import { Component, ViewChild, ElementRef, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { CartService } from '../../core/services/cart.service';
 import { FavoritesService } from '../../core/services/favorites.service';
 import { ProductService } from '../../core/services/product.service';
 import { HeaderService, MenuItem, HeaderSettings } from '../../core/services/header.service';
-import { Product } from 'src/shared/models/product.model';
 import { ModalService } from '../../core/services/modal.service';
 import { ThemeService } from '../../core/themes/theme.service';
 import { Theme } from '../../core/themes/theme.model';
 import { AuthService } from '../../core/services/auth.service';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { SharedModule } from '../../shared/shared.module';
+import { LogoComponent } from '../../shared/components/logo/logo.component';
+import { IconComponent } from '../../shared/icon/icon.component';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    TranslateModule,
+    SharedModule,
+    LogoComponent,
+    IconComponent
+  ]
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   @ViewChild('searchInput') searchInput!: ElementRef;
@@ -61,7 +74,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   // Theme switching
   themes: Theme[] = [];
-  currentTheme = 'default';
+  currentTheme = 'light';
   showThemeMenu = false;
   // Feature flag for new theme switcher UI (keeps old one by default)
   enableNewThemeSwitcher = false;
@@ -114,7 +127,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       });
 
       document.addEventListener('click', this.onDocumentClick.bind(this));
-
       window.addEventListener('resize', this.checkScreenSize.bind(this));
     }
 
@@ -189,7 +201,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         if (items && items.length > 0) {
           this.menuItems = items;
         } else {
-          console.warn('API returned empty menu, using fallback.');
           this.menuItems = this.FALLBACK_MENU_ITEMS;
         }
       },
@@ -213,7 +224,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   private loadThemes(): void {
-    this.themes = this.themeService.getAllThemes();
+    this.themes = this.themeService.getFrontendThemes();
 
     // Get current theme immediately
     this.currentTheme = this.themeService.getCurrentTheme().id;
@@ -279,7 +290,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.searchResults = results;
         },
         error: (error) => {
-
+          console.error('Search error:', error);
           this.searchResults = [];
         }
       });
@@ -376,7 +387,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         });
       }
     } else {
-
+      console.warn(`Element with id ${elementId} not found`);
     }
   }
 

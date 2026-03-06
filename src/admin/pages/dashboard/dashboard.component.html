@@ -24,7 +24,7 @@
         <div class="stat-content">
           <mat-icon class="stat-icon orders">shopping_cart</mat-icon>
           <div class="stat-info">
-            <h3>{{ 'ORDERS' | translate }}</h3>
+            <h3>{{ 'ADMIN_NAV_ORDERS' | translate }}</h3>
             <p class="stat-number">{{ formatNumber(dashboardData.orders) }}</p>
           </div>
         </div>
@@ -84,7 +84,8 @@
     <h2>{{ 'RECENT_PAYMENT_ISSUES' | translate }}</h2>
     <mat-card class="errors-card">
       <mat-card-content>
-        <div class="errors-list" *ngIf="dashboardData.paymentErrors && dashboardData.paymentErrors.length > 0; else noErrors">
+        <div class="errors-list"
+          *ngIf="dashboardData.paymentErrors && dashboardData.paymentErrors.length > 0; else noErrors">
           <div *ngFor="let error of dashboardData.paymentErrors" class="error-item">
             <div class="error-icon">
               <mat-icon>error</mat-icon>

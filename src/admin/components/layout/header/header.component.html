@@ -14,22 +14,22 @@
 
     <!-- Theme Toggle -->
     <button mat-icon-button (click)="toggleTheme()" [matTooltip]="
-        currentTheme === 'dark' ? 'Switch to Light Theme' : 
-        currentTheme === 'light' ? 'Switch to Glass Theme' : 
-        currentTheme === 'glass' ? 'Switch to Dark Glass Theme' :
-        'Switch to Dark Theme'
-      ">
-      <mat-icon>
-        {{ currentTheme === 'dark' ? 'light_mode' :
+                currentTheme === 'dark' ? 'Switch to Light Mode' : 
+                currentTheme === 'light' ? 'Switch to Glass Mode' : 
+                currentTheme === 'glass' ? 'Switch to Dark Glass Mode' :
+                'Switch to Dark Mode'" class="theme-toggle-btn">
+      <mat-icon>{{
+        currentTheme === 'dark' ? 'light_mode' :
         currentTheme === 'light' ? 'blur_on' :
-        currentTheme === 'glass' ? 'nights_stay' :
-        'dark_mode' }}
-      </mat-icon>
+        currentTheme === 'glass' ? 'visibility' :
+        'nightlight_round'
+        }}</mat-icon>
     </button>
 
     <!-- Notifications -->
     <button mat-icon-button [matMenuTriggerFor]="notificationMenu" #notificationMenuTrigger="matMenuTrigger"
       class="notification-button">
+      <mat-icon>notifications</mat-icon>
     </button>
 
     <app-notification-badge [count]="unreadCount" [pulse]="unreadCount > 0"

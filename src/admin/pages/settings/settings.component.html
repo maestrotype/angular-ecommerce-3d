@@ -4,7 +4,7 @@
     <mat-spinner diameter="50"></mat-spinner>
     <span>{{ 'LOADING_SETTINGS' | translate }}</span>
   </div>
-  
+
   <div class="settings-header">
     <h1 class="page-title">{{ 'SETTINGS' | translate }}</h1>
     <p class="page-subtitle">{{ 'CONFIGURE_SETTINGS' | translate }}</p>
@@ -25,7 +25,7 @@
               <mat-label>{{ 'SITE_NAME' | translate }}</mat-label>
               <input matInput formControlName="siteName" placeholder="{{ 'ENTER_SITE_NAME' | translate }}">
               <mat-icon matSuffix>business</mat-icon>
-                              <mat-error *ngIf="generalForm.get('siteName')?.hasError('required')">
+              <mat-error *ngIf="generalForm.get('siteName')?.hasError('required')">
                 {{ 'SITE_NAME_IS_REQUIRED' | translate }}
               </mat-error>
             </mat-form-field>
@@ -85,8 +85,8 @@
             <mat-label>{{ 'LANGUAGE' | translate }}</mat-label>
             <mat-select formControlName="language" (selectionChange)="onLanguageChange($event.value)">
               <mat-option value="en">English</mat-option>
-              <mat-option value="ru">Русский</mat-option>
-              <mat-option value="ua">Українська</mat-option>
+              <mat-option value="ru">Russian</mat-option>
+              <mat-option value="ua">Ukrainian</mat-option>
             </mat-select>
             <mat-icon matSuffix>language</mat-icon>
           </mat-form-field>
@@ -259,7 +259,7 @@
 
       <mat-card-content>
         <form [formGroup]="paymentForm" (ngSubmit)="onSavePayment()" class="settings-form">
-          
+
           <!-- Stripe Settings -->
           <div class="payment-gateway-section">
             <h3>{{ 'STRIPE' | translate }}</h3>
@@ -268,7 +268,7 @@
                 {{ 'ENABLE_STRIPE' | translate }}
               </mat-slide-toggle>
             </div>
-            
+
             <div class="form-row" *ngIf="paymentForm.get('stripeEnabled')?.value">
               <mat-slide-toggle formControlName="stripeTestMode" color="accent">
                 {{ 'TEST_MODE' | translate }}
@@ -286,7 +286,8 @@
             <div class="form-row" *ngIf="paymentForm.get('stripeEnabled')?.value">
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>{{ 'STRIPE_SECRET_KEY' | translate }}</mat-label>
-                <input matInput formControlName="stripeSecretKey" placeholder="sk_test_... or sk_live_..." type="password">
+                <input matInput formControlName="stripeSecretKey" placeholder="sk_test_... or sk_live_..."
+                  type="password">
                 <mat-icon matSuffix>lock</mat-icon>
               </mat-form-field>
             </div>
@@ -308,7 +309,7 @@
                 {{ 'ENABLE_LIQPAY' | translate }}
               </mat-slide-toggle>
             </div>
-            
+
             <div class="form-row" *ngIf="paymentForm.get('liqpayEnabled')?.value">
               <mat-slide-toggle formControlName="liqpayTestMode" color="accent">
                 {{ 'TEST_MODE' | translate }}
@@ -326,7 +327,8 @@
             <div class="form-row" *ngIf="paymentForm.get('liqpayEnabled')?.value">
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>{{ 'LIQPAY_PRIVATE_KEY' | translate }}</mat-label>
-                <input matInput formControlName="liqpayPrivateKey" placeholder="iqpb_test_... or iqpb_live_..." type="password">
+                <input matInput formControlName="liqpayPrivateKey" placeholder="iqpb_test_... or iqpb_live_..."
+                  type="password">
                 <mat-icon matSuffix>lock</mat-icon>
               </mat-form-field>
             </div>
@@ -340,7 +342,7 @@
                 {{ 'ENABLE_PAYPAL' | translate }}
               </mat-slide-toggle>
             </div>
-            
+
             <div class="form-row" *ngIf="paymentForm.get('paypalEnabled')?.value">
               <mat-slide-toggle formControlName="paypalTestMode" color="accent">
                 {{ 'TEST_MODE' | translate }}
@@ -350,7 +352,8 @@
             <div class="form-row" *ngIf="paymentForm.get('paypalEnabled')?.value">
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>{{ 'PAYPAL_CLIENT_ID' | translate }}</mat-label>
-                <input matInput formControlName="paypalClientId" placeholder="{{ 'CLIENT_ID_FROM_PAYPAL_DEVELOPER' | translate }}">
+                <input matInput formControlName="paypalClientId"
+                  placeholder="{{ 'CLIENT_ID_FROM_PAYPAL_DEVELOPER' | translate }}">
                 <mat-icon matSuffix>account_circle</mat-icon>
               </mat-form-field>
             </div>
@@ -358,7 +361,8 @@
             <div class="form-row" *ngIf="paymentForm.get('paypalEnabled')?.value">
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>{{ 'PAYPAL_CLIENT_SECRET' | translate }}</mat-label>
-                <input matInput formControlName="paypalClientSecret" placeholder="{{ 'CLIENT_SECRET_FROM_PAYPAL_DEVELOPER' | translate }}" type="password">
+                <input matInput formControlName="paypalClientSecret"
+                  placeholder="{{ 'CLIENT_SECRET_FROM_PAYPAL_DEVELOPER' | translate }}" type="password">
                 <mat-icon matSuffix>lock</mat-icon>
               </mat-form-field>
             </div>
@@ -369,9 +373,12 @@
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>{{ 'DEFAULT_PAYMENT_METHOD' | translate }}</mat-label>
               <mat-select formControlName="defaultPaymentMethod">
-                <mat-option value="stripe" *ngIf="paymentForm.get('stripeEnabled')?.value">{{ 'STRIPE' | translate }}</mat-option>
-                <mat-option value="liqpay" *ngIf="paymentForm.get('liqpayEnabled')?.value">{{ 'LIQPAY' | translate }}</mat-option>
-                <mat-option value="paypal" *ngIf="paymentForm.get('paypalEnabled')?.value">{{ 'PAYPAL' | translate }}</mat-option>
+                <mat-option value="stripe" *ngIf="paymentForm.get('stripeEnabled')?.value">{{ 'STRIPE' | translate
+                  }}</mat-option>
+                <mat-option value="liqpay" *ngIf="paymentForm.get('liqpayEnabled')?.value">{{ 'LIQPAY' | translate
+                  }}</mat-option>
+                <mat-option value="paypal" *ngIf="paymentForm.get('paypalEnabled')?.value">{{ 'PAYPAL' | translate
+                  }}</mat-option>
               </mat-select>
               <mat-icon matSuffix>payment</mat-icon>
             </mat-form-field>

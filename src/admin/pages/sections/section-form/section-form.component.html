@@ -37,9 +37,9 @@
                 <input matInput formControlName="url" placeholder="/shop, /about, #contacts">
               </mat-form-field>
               <mat-form-field appearance="outline" class="menu-section-field">
-                <mat-label>Секция</mat-label>
+                <mat-label>{{ 'SECTION' | translate }}</mat-label>
                 <mat-select (selectionChange)="onSectionSelect(i, $event.value)" [value]="item.get('sectionId')?.value">
-                  <mat-option [value]="null">Ввести вручную</mat-option>
+                  <mat-option [value]="null">{{ 'ENTER_MANUALLY' | translate }}</mat-option>
                   <mat-option *ngFor="let section of availableSections" [value]="section.id">
                     {{ section.type }}
                   </mat-option>
@@ -55,11 +55,11 @@
               </mat-form-field>
               <div class="menu-controls">
                 <mat-slide-toggle formControlName="isActive" class="menu-active-toggle">
-                  <span class="mobile-only">Активен</span>
+                  <span class="mobile-only">{{ 'ACTIVE' | translate }}</span>
                   <span class="desktop-only">{{ 'HEADER_MENU_ACTIVE' | translate }}</span>
                 </mat-slide-toggle>
                 <button mat-icon-button color="warn" type="button" (click)="removeMenuItem(i)" class="delete-btn"
-                  matTooltip="Удалить">
+                  [matTooltip]="'DELETE' | translate">
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>
@@ -164,11 +164,11 @@
                 </app-image-upload>
                 <div class="category-controls">
                   <mat-slide-toggle formControlName="isActive" class="category-active-toggle">
-                    <span class="mobile-only">Активна</span>
+                    <span class="mobile-only">{{ 'ACTIVE' | translate }}</span>
                     <span class="desktop-only">{{ 'CATEGORY_ACTIVE' | translate }}</span>
                   </mat-slide-toggle>
                   <button mat-icon-button color="warn" type="button" (click)="removeCategory(i)" class="delete-btn"
-                    matTooltip="Удалить">
+                    [matTooltip]="'DELETE' | translate">
                     <mat-icon>delete</mat-icon>
                   </button>
                 </div>
@@ -182,6 +182,126 @@
           </button>
         </div>
       </ng-container>
+
+      <!-- About Section Block -->
+      <div *ngIf="sectionForm.get('type')?.value === 'about'" class="about-block">
+        <div class="form-section">
+          <div class="section-header">
+            <h3>{{ 'STATISTICS_STATS' | translate }}</h3>
+            <button mat-stroked-button color="primary" type="button" (click)="addStat()">
+              <mat-icon>add</mat-icon> {{ 'ADD_STAT' | translate }}
+            </button>
+          </div>
+
+          <div cdkDropList (cdkDropListDropped)="dropStat($event)" class="drag-list">
+            <div *ngFor="let stat of stats.controls; let i = index" [formGroupName]="i" class="drag-item" cdkDrag>
+              <div class="drag-handle" cdkDragHandle>
+                <mat-icon>drag_indicator</mat-icon>
+              </div>
+
+              <div class="stat-row">
+                <mat-form-field appearance="outline" class="stat-value">
+                  <mat-label>{{ 'VALUE_EX_500' | translate }}</mat-label>
+                  <input matInput formControlName="value">
+                </mat-form-field>
+
+                <div class="lang-fields-row">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Label (EN)</mat-label>
+                    <input matInput formControlName="label_en">
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Label (RU)</mat-label>
+                    <input matInput formControlName="label_ru">
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Label (UA)</mat-label>
+                    <input matInput formControlName="label_ua">
+                  </mat-form-field>
+                </div>
+
+                <button mat-icon-button color="warn" (click)="removeStat(i)" type="button">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="form-section">
+          <div class="section-header">
+            <h3>{{ 'FEATURES' | translate }}</h3>
+            <button mat-stroked-button color="primary" type="button" (click)="addFeature()">
+              <mat-icon>add</mat-icon> {{ 'ADD_FEATURE' | translate }}
+            </button>
+          </div>
+
+          <div cdkDropList (cdkDropListDropped)="dropFeature($event)" class="drag-list">
+            <div *ngFor="let feature of features.controls; let i = index" [formGroupName]="i" class="drag-item" cdkDrag>
+              <div class="drag-handle" cdkDragHandle>
+                <mat-icon>drag_indicator</mat-icon>
+              </div>
+
+              <div class="feature-row">
+                <div class="feature-icons">
+                  <mat-form-field appearance="outline" class="feature-icon-name">
+                    <mat-label>Material Icon</mat-label>
+                    <input matInput formControlName="icon">
+                  </mat-form-field>
+                  <app-image-upload [currentImageUrl]="feature.get('iconUrl')?.value" label="Custom Icon"
+                    (imageUploaded)="onFeatureIconUploaded($event, i)" (imageRemoved)="removeFeatureIcon(i)">
+                  </app-image-upload>
+                </div>
+
+                <div class="lang-fields-row">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Text (EN)</mat-label>
+                    <input matInput formControlName="text_en">
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Text (RU)</mat-label>
+                    <input matInput formControlName="text_ru">
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Text (UA)</mat-label>
+                    <input matInput formControlName="text_ua">
+                  </mat-form-field>
+                </div>
+
+                <button mat-icon-button color="warn" (click)="removeFeature(i)" type="button">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="form-section">
+          <h3>{{ 'CTA_BUTTON' | translate }}</h3>
+          <div class="lang-fields-row">
+            <mat-form-field appearance="outline">
+              <mat-label>CTA Label (EN)</mat-label>
+              <input matInput formControlName="ctaLabel_en">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>CTA Label (RU)</mat-label>
+              <input matInput formControlName="ctaLabel_ru">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>CTA Label (UA)</mat-label>
+              <input matInput formControlName="ctaLabel_ua">
+            </mat-form-field>
+          </div>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>CTA URL</mat-label>
+            <input matInput formControlName="ctaUrl">
+          </mat-form-field>
+        </div>
+      </div>
 
       <!-- Image upload only for non-categories sections -->
       <ng-container *ngIf="sectionForm.get('type').value !== 'categories'">

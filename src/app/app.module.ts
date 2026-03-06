@@ -73,17 +73,13 @@ export function HttpLoaderFactory(http: any) {
   declarations: [
     AppComponent,
     ContactsComponent,
-    HeaderComponent,
-    FooterComponent,
 
-    AboutComponent,
     BaseModalComponent,
     ImageModalComponent,
     CartModalComponent,
     AuthModalComponent,
     NotificationModalComponent,
     Bag3dFirstComponent,
-    IconComponent,
 
     FavoritesComponent,
     MyOrdersComponent,
@@ -109,6 +105,9 @@ export function HttpLoaderFactory(http: any) {
     SpecialOfferComponent,
     BestSellersComponent,
     BrandsComponent,
+    AboutComponent,
+    HeaderComponent,
+    FooterComponent,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

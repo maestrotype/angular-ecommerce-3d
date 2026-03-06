@@ -30,14 +30,14 @@ import { LocalizedPipe } from '@app-shared/pipes/localized.pipe';
     StripeTestComponent,
     SectionRendererComponent,
     ReplaceSpacesPipe,
-    NotificationBadgeComponent,
-    LogoComponent
+    NotificationBadgeComponent
   ],
   imports: [
     CommonModule,
     MatIconModule,
     TranslateModule,
-    LocalizedPipe
+    LocalizedPipe,
+    LogoComponent
   ],
   providers: [
     DecimalPipe
@@ -60,4 +60,4 @@ import { LocalizedPipe } from '@app-shared/pipes/localized.pipe';
     TranslateModule
   ]
 })
-export class SharedModule { } 
+export class SharedModule { }
