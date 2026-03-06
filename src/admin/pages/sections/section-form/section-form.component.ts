@@ -98,7 +98,7 @@ export class SectionFormComponent implements AfterViewInit {
 
     return this.fb.group({
       type: [displayType, Validators.required],
-      title_en: [this.getLocalizedValue(section?.title, 'en') || '', Validators.required],
+      title_en: [this.getLocalizedValue(section?.title, 'en') || '', displayType === 'header' ? [] : [Validators.required]],
       title_ru: [this.getLocalizedValue(section?.title, 'ru') || ''],
       title_ua: [this.getLocalizedValue(section?.title, 'ua') || ''],
       subtitle_en: [this.getLocalizedValue(section?.subtitle, 'en') || ''],
@@ -330,7 +330,11 @@ export class SectionFormComponent implements AfterViewInit {
   }
 
   onSubmit(): void {
-    if (this.sectionForm.invalid) return;
+    if (this.sectionForm.invalid) {
+      this.sectionForm.markAllAsTouched();
+      this.snackBar.open('Please fill in all required fields correctly', 'Close', { duration: 3000 });
+      return;
+    }
 
     this.loading = true;
 

@@ -235,6 +235,8 @@
   "SECTION_TYPE": "Section type",
   "HERO_SECTION": "Hero Section",
   "CONTENT": "Content",
+  "SECTION": "Section",
+  "MANUAL_ENTRY": "Manual Entry",
   "SECTION_IMAGE": "Section Image",
   "UPLOAD_IMAGE_HINT": "Click to upload or drag image here",
   "IMAGE_SIZE_HINT": "Maximum file size: 5MB | Formats: JPG, PNG, GIF",
