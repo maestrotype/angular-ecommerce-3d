@@ -1,10 +1,10 @@
 import { Injectable, PLATFORM_ID, Inject, afterNextRender } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 import { Theme } from './theme.model';
 import { AVAILABLE_THEMES, DEFAULT_THEME_ID } from './theme-config';
 
-type Area = 'frontend' | 'admin';
+export type Area = 'frontend' | 'admin';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class ThemeService {
   private currentThemeSubject = new BehaviorSubject<Theme>(this.getThemeById(DEFAULT_THEME_ID));
   public currentTheme$ = this.currentThemeSubject.asObservable();
 
-  private adminThemeSubject = new BehaviorSubject<Theme | null>(null);
+  private adminThemeSubject = new BehaviorSubject<Theme>(this.getThemeById(DEFAULT_THEME_ID));
   public adminTheme$ = this.adminThemeSubject.asObservable();
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
@@ -28,38 +28,43 @@ export class ThemeService {
     // Load frontend theme
     const savedFrontend = localStorage.getItem('selected-theme');
     const frontendTheme = savedFrontend ? this.getThemeById(savedFrontend) : this.getThemeById(DEFAULT_THEME_ID);
-
-    if (frontendTheme) {
-      this.currentThemeSubject.next(frontendTheme);
-      this.applyTheme(frontendTheme, 'frontend');
-    }
+    this.currentThemeSubject.next(frontendTheme);
+    this.applyTheme(frontendTheme, 'frontend');
 
     // Load admin theme
-    const savedAdmin = localStorage.getItem('selected-theme-admin');
-    if (savedAdmin) {
-      const adminTheme = this.getThemeById(savedAdmin);
-      if (adminTheme) {
-        this.adminThemeSubject.next(adminTheme);
-        this.applyTheme(adminTheme, 'admin');
-      }
-    }
+    const savedAdmin = localStorage.getItem('selected-theme-admin') || localStorage.getItem('adminTheme');
+    const adminTheme = savedAdmin ? this.getThemeById(savedAdmin) : this.getThemeById(DEFAULT_THEME_ID);
+    this.adminThemeSubject.next(adminTheme);
+    this.applyTheme(adminTheme, 'admin');
   }
 
   getThemeById(themeId: string): Theme {
-    return AVAILABLE_THEMES.find(theme => theme.id === themeId) || AVAILABLE_THEMES[0];
+    return AVAILABLE_THEMES.find(theme => theme.id === themeId) ||
+      AVAILABLE_THEMES.find(theme => theme.id === DEFAULT_THEME_ID) ||
+      AVAILABLE_THEMES[0];
   }
 
-  getAllThemes(): Theme[] {
+  /**
+   * Returns themes filtered by area.
+   * Frontend: 3 themes (light, dark, glass)
+   * Admin: 4 themes (light, dark, glass, dark-glass)
+   */
+  getThemesByArea(area: Area): Theme[] {
+    if (area === 'frontend') {
+      return AVAILABLE_THEMES.filter(t => t.id !== 'dark-glass');
+    }
     return AVAILABLE_THEMES;
   }
 
   setTheme(themeId: string, area: Area = 'frontend'): void {
     const theme = this.getThemeById(themeId);
-    if (!theme) return;
 
     if (isPlatformBrowser(this.platformId)) {
       const storageKey = area === 'admin' ? 'selected-theme-admin' : 'selected-theme';
       localStorage.setItem(storageKey, themeId);
+      if (area === 'admin') {
+        localStorage.setItem('adminTheme', themeId); // Compatibility with old key
+      }
     }
 
     if (area === 'admin') {
@@ -78,38 +83,25 @@ export class ThemeService {
 
     const themeId = theme.id;
 
-    if (area === 'admin') {
-      document.body.setAttribute('data-theme', themeId);
-    } else {
-      // For frontend, apply to both for maximum compatibility across different CSS selectors
-      document.documentElement.setAttribute('data-theme', themeId);
-      document.body.setAttribute('data-theme', themeId);
-    }
+    // Apply to both for maximum compatibility, but prioritize area logic if needed
+    document.documentElement.setAttribute('data-theme', themeId);
+    document.body.setAttribute('data-theme', themeId);
   }
 
   getCurrentTheme(): Theme {
     return this.currentThemeSubject.value;
   }
 
-  getCurrentAdminTheme(): Theme | null {
+  getCurrentAdminTheme(): Theme {
     return this.adminThemeSubject.value;
   }
 
-  clearTheme(area: Area = 'frontend'): void {
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
-
-    if (area === 'admin') {
-      document.body.removeAttribute('data-theme');
-      localStorage.removeItem('selected-theme-admin');
-      this.adminThemeSubject.next(null);
-    } else {
-      document.documentElement.removeAttribute('data-theme');
-      localStorage.removeItem('selected-theme');
-      const fallback = this.getThemeById(DEFAULT_THEME_ID);
-      this.currentThemeSubject.next(fallback);
-      this.applyTheme(fallback, 'frontend');
-    }
+  toggleAdminTheme(): void {
+    const adminThemes = this.getThemesByArea('admin');
+    const current = this.getCurrentAdminTheme();
+    const currentIndex = adminThemes.findIndex(t => t.id === current.id);
+    const nextIndex = (currentIndex + 1) % adminThemes.length;
+    const nextTheme = adminThemes[nextIndex];
+    this.setTheme(nextTheme.id, 'admin');
   }
 }

@@ -61,7 +61,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   // Theme switching
   themes: Theme[] = [];
-  currentTheme = 'default';
+  currentTheme = 'light';
   showThemeMenu = false;
   // Feature flag for new theme switcher UI (keeps old one by default)
   enableNewThemeSwitcher = false;
@@ -213,7 +213,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   private loadThemes(): void {
-    this.themes = this.themeService.getAllThemes();
+    this.themes = this.themeService.getThemesByArea('frontend');
 
     // Get current theme immediately
     this.currentTheme = this.themeService.getCurrentTheme().id;
