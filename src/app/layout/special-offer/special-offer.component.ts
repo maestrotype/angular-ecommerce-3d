@@ -9,13 +9,14 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LocalizedPipe } from '../../shared/pipes/localized.pipe';
+import { ImageUrlPipe } from '../../shared/pipes/image-url.pipe';
 
 @Component({
     selector: 'app-special-offer',
     templateUrl: './special-offer.component.html',
     styleUrls: ['./special-offer.component.scss'],
     standalone: true,
-    imports: [CommonModule, RouterModule, SharedModule, TranslateModule, LocalizedPipe]
+    imports: [CommonModule, RouterModule, SharedModule, TranslateModule, LocalizedPipe, ImageUrlPipe]
 })
 export class SpecialOfferComponent implements OnInit {
     @Input() data!: Section;

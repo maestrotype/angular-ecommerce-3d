@@ -43,7 +43,7 @@ export class ImageProcessingService {
         contentType: 'image/jpeg'
       });
       formData.append('size', 'auto');
-      
+
       return from(axios.post(
         imageProcessingConfig.removeBgApiUrl,
         formData,
@@ -57,8 +57,11 @@ export class ImageProcessingService {
       )).pipe(
         map(response => Buffer.from(response.data)),
         catchError(error => {
-          this.logger.error('Remove.bg API error:', error.response?.data || error.message);
-          return throwError(() => new Error('Failed to remove background'));
+          const detailedError = error.response?.data ?
+            (Buffer.isBuffer(error.response.data) ? error.response.data.toString() : JSON.stringify(error.response.data)) :
+            error.message;
+          this.logger.error(`Remove.bg API error: ${detailedError}`);
+          return throwError(() => new Error(`Failed to remove background: ${detailedError}`));
         })
       );
     } catch (error) {

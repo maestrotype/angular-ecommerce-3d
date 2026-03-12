@@ -17,6 +17,7 @@ import { NotificationBadgeComponent } from './components/notification-badge/noti
 import { LogoComponent } from './components/logo/logo.component';
 import { ReplaceSpacesPipe } from '@app-shared/pipes/replace-spaces.pipe';
 import { LocalizedPipe } from '@app-shared/pipes/localized.pipe';
+import { ImageUrlPipe } from '@app-shared/pipes/image-url.pipe';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { LocalizedPipe } from '@app-shared/pipes/localized.pipe';
     CommonModule,
     MatIconModule,
     TranslateModule,
-    LocalizedPipe
+    LocalizedPipe,
+    ImageUrlPipe
   ],
   providers: [
     DecimalPipe
@@ -57,6 +59,7 @@ import { LocalizedPipe } from '@app-shared/pipes/localized.pipe';
     LogoComponent,
     ReplaceSpacesPipe,
     LocalizedPipe,
+    ImageUrlPipe,
     TranslateModule
   ]
 })
