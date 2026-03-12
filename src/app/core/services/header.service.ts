@@ -46,6 +46,10 @@ export class HeaderService {
   getHeaderSection(): Observable<HeaderSection | null> {
     if (this.state.hasKey(HEADER_KEY)) {
       const sections = this.state.get(HEADER_KEY, []);
+      // Clear the state after reading to allow fresh fetches later if needed
+      if (isPlatformBrowser(this.platformId)) {
+        this.state.remove(HEADER_KEY);
+      }
       return of(this.processSections(sections));
     }
 

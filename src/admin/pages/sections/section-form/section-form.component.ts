@@ -203,15 +203,37 @@ export class SectionFormComponent implements AfterViewInit {
   }
 
   dropMenuItem(event: CdkDragDrop<FormArray>) {
-    moveItemInArray(this.menu.controls, event.previousIndex, event.currentIndex);
+    const dir = event.previousIndex > event.currentIndex ? -1 : 1;
+    const from = event.previousIndex;
+    const to = event.currentIndex;
+
+    if (from === to) return;
+
+    const control = this.menu.at(from);
+    this.menu.removeAt(from);
+    this.menu.insert(to, control);
   }
 
   dropCategory(event: CdkDragDrop<FormArray>) {
-    moveItemInArray(this.categories.controls, event.previousIndex, event.currentIndex);
+    const from = event.previousIndex;
+    const to = event.currentIndex;
+
+    if (from === to) return;
+
+    const control = this.categories.at(from);
+    this.categories.removeAt(from);
+    this.categories.insert(to, control);
   }
 
   dropBrand(event: CdkDragDrop<FormArray>) {
-    moveItemInArray(this.brands.controls, event.previousIndex, event.currentIndex);
+    const from = event.previousIndex;
+    const to = event.currentIndex;
+
+    if (from === to) return;
+
+    const control = this.brands.at(from);
+    this.brands.removeAt(from);
+    this.brands.insert(to, control);
   }
 
   onSectionSelect(index: number, sectionId: number | null) {
