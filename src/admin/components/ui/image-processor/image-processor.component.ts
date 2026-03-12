@@ -39,6 +39,7 @@ export class ImageProcessorComponent implements OnDestroy {
   @Output() processingError = new EventEmitter<string>();
 
   isProcessing = false;
+  isNewUpload = false;
   selectedFile: File | null = null;
   previewUrl: string | null = null;
   processedUrl: string | null = null;
@@ -50,6 +51,14 @@ export class ImageProcessorComponent implements OnDestroy {
     private errorHandler: ErrorHandlerService
   ) { }
 
+  ngOnInit(): void {
+    if (this.control.value) {
+      this.processedUrl = this.control.value;
+      this.previewUrl = this.control.value;
+      this.isNewUpload = false;
+    }
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -59,6 +68,7 @@ export class ImageProcessorComponent implements OnDestroy {
     const file = event.target.files[0];
     if (file) {
       this.selectedFile = file;
+      this.isNewUpload = true;
       this.fileSelected.emit(file);
       this.createPreview(file);
       this.processImage();
@@ -101,8 +111,9 @@ export class ImageProcessorComponent implements OnDestroy {
       if (result) {
         this.processedUrl = result.url;
         this.control.setValue(result.url);
+
+
         this.fileProcessed.emit(result);
-        this.errorHandler.showSuccess('Image processed successfully!');
       }
     });
   }
@@ -111,6 +122,7 @@ export class ImageProcessorComponent implements OnDestroy {
     this.selectedFile = null;
     this.previewUrl = null;
     this.processedUrl = null;
+    this.isNewUpload = false;
     this.control.setValue('');
   }
 

@@ -6,7 +6,7 @@
                     {{ 'HOME.SPECIAL_OFFER.BADGE' | translate }}<br>
                     <span class="discount">30%</span>
                 </div>
-                <img [src]="data?.imageUrl"
+                <img [src]="data?.imageUrl | imageUrl"
                     [alt]="(data?.alt | localized) || ('HOME.SPECIAL_OFFER.TITLE_DEFAULT' | translate)"
                     class="product-image" loading="lazy">
             </div>

@@ -24,8 +24,13 @@ export class CategoryFormComponent implements OnInit {
     private categoryService: CategoryService
   ) {
     this.categoryForm = this.fb.group({
-      name: ["", [Validators.required, Validators.minLength(2)]],
-      description: [""],
+      name_en: ["", [Validators.required, Validators.minLength(2)]],
+      name_ru: [""],
+      name_ua: [""],
+      description_en: [""],
+      description_ru: [""],
+      description_ua: [""],
+      icon: [""],
     });
   }
 
@@ -44,8 +49,13 @@ export class CategoryFormComponent implements OnInit {
     this.categoryService.getCategoryById(id).subscribe({
       next: (category) => {
         this.categoryForm.patchValue({
-          name: category.name,
-          description: category.description,
+          name_en: this.getLocalizedValue(category.name, 'en'),
+          name_ru: this.getLocalizedValue(category.name, 'ru'),
+          name_ua: this.getLocalizedValue(category.name, 'ua'),
+          description_en: this.getLocalizedValue(category.description, 'en'),
+          description_ru: this.getLocalizedValue(category.description, 'ru'),
+          description_ua: this.getLocalizedValue(category.description, 'ua'),
+          icon: category.icon || '',
         });
         this.isLoading = false;
       },
@@ -68,9 +78,22 @@ export class CategoryFormComponent implements OnInit {
 
     this.isLoading = true;
     const formValue = this.categoryForm.value;
+    const packedData = {
+      name: {
+        en: formValue.name_en,
+        ru: formValue.name_ru,
+        ua: formValue.name_ua
+      },
+      description: {
+        en: formValue.description_en,
+        ru: formValue.description_ru,
+        ua: formValue.description_ua
+      },
+      icon: formValue.icon
+    };
 
     if (this.isEditMode && this.categoryId) {
-      this.categoryService.updateCategory(this.categoryId, formValue).subscribe({
+      this.categoryService.updateCategory(this.categoryId, packedData).subscribe({
         next: () => {
           this.snackBar.open("Category updated successfully!", "Close", {
             duration: 3000,
@@ -85,7 +108,7 @@ export class CategoryFormComponent implements OnInit {
         },
       });
     } else {
-      this.categoryService.createCategory(formValue).subscribe({
+      this.categoryService.createCategory(packedData).subscribe({
         next: () => {
           this.snackBar.open("Category created successfully!", "Close", {
             duration: 3000,
@@ -104,5 +127,24 @@ export class CategoryFormComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(["/admin/categories"]);
+  }
+
+  getLocalizedValue(value: any, lang: string): string {
+    if (value && typeof value === 'object' && value[lang]) {
+      return value[lang];
+    }
+    if (typeof value === 'string' && lang === 'en') {
+      return value;
+    }
+    return '';
+  }
+
+  onImageProcessed(result: any): void {
+  }
+
+  onImageError(error: string): void {
+    this.snackBar.open(error, "Close", {
+      duration: 5000,
+    });
   }
 }

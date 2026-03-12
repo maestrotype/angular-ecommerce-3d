@@ -13,24 +13,54 @@
         <mat-card-title>{{ 'CATEGORY_INFO' | translate }}</mat-card-title>
       </mat-card-header>
       <mat-card-content class="form-content">
-        <div class="form-row">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>{{ 'CATEGORY_NAME' | translate }}</mat-label>
-            <input matInput formControlName="name" placeholder="Enter category name" />
-            <mat-error *ngIf="categoryForm.get('name')?.hasError('required')">
-              {{ 'CATEGORY_NAME_REQUIRED' | translate }}
-            </mat-error>
-            <mat-error *ngIf="categoryForm.get('name')?.hasError('minlength')">
-              {{ 'CATEGORY_NAME_MINLENGTH' | translate }}
-            </mat-error>
-          </mat-form-field>
+        <div class="localization-group">
+          <label class="group-label">{{ 'CATEGORY_NAME' | translate }}</label>
+          <div class="lang-fields">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>EN</mat-label>
+              <input matInput formControlName="name_en" placeholder="English name" />
+              <mat-error *ngIf="categoryForm.get('name_en')?.hasError('required')">
+                {{ 'CATEGORY_NAME_REQUIRED' | translate }}
+              </mat-error>
+              <mat-error *ngIf="categoryForm.get('name_en')?.hasError('minlength')">
+                {{ 'CATEGORY_NAME_MINLENGTH' | translate }}
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>RU</mat-label>
+              <input matInput formControlName="name_ru" placeholder="Russian name" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>UA</mat-label>
+              <input matInput formControlName="name_ua" placeholder="Ukrainian name" />
+            </mat-form-field>
+          </div>
         </div>
-        <div class="form-row">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>{{ 'DESCRIPTION' | translate }}</mat-label>
-            <textarea matInput formControlName="description" rows="3"
-              placeholder="Enter category description"></textarea>
-          </mat-form-field>
+
+        <div class="localization-group">
+          <label class="group-label">{{ 'DESCRIPTION' | translate }}</label>
+          <div class="lang-fields">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>EN</mat-label>
+              <textarea matInput formControlName="description_en" rows="3" placeholder="English description"></textarea>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>RU</mat-label>
+              <textarea matInput formControlName="description_ru" rows="3" placeholder="Russian description"></textarea>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>UA</mat-label>
+              <textarea matInput formControlName="description_ua" rows="3"
+                placeholder="Ukrainian description"></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="image-upload-section">
+          <label class="group-label">{{ 'CATEGORY_ICON' | translate }}</label>
+          <app-image-processor [control]="$any(categoryForm.get('icon'))" [label]="'Upload Category Icon'"
+            [processingOptions]="{ removeBackground: true, optimize: true }" (fileProcessed)="onImageProcessed($event)"
+            (processingError)="onImageError($event)">
+          </app-image-processor>
         </div>
       </mat-card-content>
     </mat-card>

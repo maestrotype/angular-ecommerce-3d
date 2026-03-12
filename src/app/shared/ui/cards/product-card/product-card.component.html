@@ -1,7 +1,7 @@
 <div [class]="cardClasses + (product?.stock !== undefined && product.stock <= 0 ? ' out-of-stock' : '')"
   (click)="onProductClick()">
   <div class="product-image">
-    <img [src]="product.imageUrl" [alt]="product.name | localized" />
+    <img [src]="product.imageUrl | imageUrl" [alt]="product.name | localized" />
 
     <!-- Top overlay with favorite button and cart icon -->
     <div class="product-overlay top">

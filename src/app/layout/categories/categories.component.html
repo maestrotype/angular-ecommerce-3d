@@ -8,7 +8,7 @@
         <div class="categories-grid">
             <div class="category-card" *ngFor="let category of categories" (click)="navigateToCategory(category)">
                 <div class="category-icon">
-                    <img [src]="category.icon" [alt]="category.name | localized" loading="lazy">
+                    <img [src]="category.icon | imageUrl" [alt]="category.name | localized" loading="lazy">
                 </div>
                 <h3 class="category-name">{{ category.name | localized }}</h3>
             </div>

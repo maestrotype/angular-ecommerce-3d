@@ -12,13 +12,14 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { getLocalizedString } from '../../../shared/utils/localization.util';
 import { LocalizedPipe } from '../../shared/pipes/localized.pipe';
+import { ImageUrlPipe } from '../../shared/pipes/image-url.pipe';
 
 @Component({
     selector: 'app-best-sellers',
     templateUrl: './best-sellers.component.html',
     styleUrls: ['./best-sellers.component.scss'],
     standalone: true,
-    imports: [CommonModule, RouterModule, SharedModule, TranslateModule, LocalizedPipe]
+    imports: [CommonModule, RouterModule, SharedModule, TranslateModule, LocalizedPipe, ImageUrlPipe]
 })
 export class BestSellersComponent implements OnInit {
     @Input() data!: Section;
