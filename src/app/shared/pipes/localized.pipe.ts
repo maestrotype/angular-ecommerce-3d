@@ -5,13 +5,12 @@ import { LocalizedString } from '@shared/models/localized-string.model';
 @Pipe({
     name: 'localized',
     standalone: true,
-    pure: false // Necessary because currentLang can change
+    pure: false
 })
 export class LocalizedPipe implements PipeTransform {
     constructor(private translate: TranslateService) { }
 
     transform(value: any): string {
-        console.log('LocalizedPipe transform, value:', value);
         if (!value) return '';
 
         // If it's a simple string, return it as is (legacy support)

@@ -27,6 +27,23 @@ export class SectionFormComponent implements AfterViewInit {
   uploadingLogo = false;
   uploadingCategoryIcon = false;
   uploadingBrandLogo = false;
+  private _activeMenuLang = localStorage.getItem('admin_menu_lang') || 'en';
+  get activeMenuLang() { return this._activeMenuLang; }
+  set activeMenuLang(val: string) {
+    if (this._activeMenuLang !== val) {
+      console.log(`[SectionFormComponent] Language changing from ${this._activeMenuLang} to ${val}`);
+      this._activeMenuLang = val;
+      localStorage.setItem('admin_menu_lang', val);
+    }
+  }
+
+  onLangChange(lang: string) {
+    this.activeMenuLang = lang;
+  }
+
+  trackByFn(index: number) {
+    return index;
+  }
 
   model3dFile: File | null = null;
   model3dUrl: string | null = null;
@@ -119,15 +136,29 @@ export class SectionFormComponent implements AfterViewInit {
       showCart: [section?.settings?.showCart ?? true],
       showProfile: [section?.settings?.showProfile ?? true],
       menu: this.fb.array(
-        (section?.settings?.menu || []).map((item: MenuItem) =>
-          this.fb.group({
-            title: [item.title, Validators.required],
+        (section?.settings?.menu || []).map((item: MenuItem) => {
+          let titleObj: LocalizedString;
+          if (typeof item.title === 'string') {
+            titleObj = { en: item.title, ru: item.title, ua: item.title };
+          } else {
+            titleObj = {
+              en: item.title?.en || '',
+              ru: item.title?.ru || '',
+              ua: item.title?.ua || ''
+            };
+          }
+          return this.fb.group({
+            title: this.fb.group({
+              en: [titleObj.en],
+              ru: [titleObj.ru],
+              ua: [titleObj.ua]
+            }),
             url: [item.url, Validators.required],
             access: [item.access || 'all', Validators.required],
             isActive: [item.isActive ?? true],
             sectionId: [item['sectionId'] || null]
-          })
-        )
+          });
+        })
       ),
       categories: this.fb.array(
         (section?.settings?.categories || []).map((category: any) =>
@@ -165,7 +196,11 @@ export class SectionFormComponent implements AfterViewInit {
 
   addMenuItem() {
     this.menu.push(this.fb.group({
-      title: ['', Validators.required],
+      title: this.fb.group({
+        en: ['', Validators.required],
+        ru: [''],
+        ua: ['']
+      }),
       url: ['', Validators.required],
       access: ['all', Validators.required],
       isActive: [true],
@@ -424,6 +459,7 @@ export class SectionFormComponent implements AfterViewInit {
       next: (model3dUrl) => {
         const rawFormValue = this.sectionForm.value;
         const formValue = this.packLocalizedFields(rawFormValue);
+        console.log('[SectionFormComponent] Submitting form data:', formValue);
 
         let formData: any;
 
@@ -443,7 +479,14 @@ export class SectionFormComponent implements AfterViewInit {
               showSearch: formValue.showSearch ?? true,
               showCart: formValue.showCart ?? true,
               showProfile: formValue.showProfile ?? true,
-              menu: formValue.menu || [],
+              menu: (formValue.menu || []).map((item: any) => ({
+                ...item,
+                title: {
+                  en: item.title?.en || '',
+                  ru: item.title?.ru || '',
+                  ua: item.title?.ua || ''
+                }
+              })),
               categories: (formValue.categories || []).map((cat: any) => ({
                 ...cat,
                 slug: cat.slug || getLocalizedString(cat.name).toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
