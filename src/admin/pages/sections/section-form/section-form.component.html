@@ -14,7 +14,7 @@
       </mat-error>
     </mat-form-field>
 
-    <ng-container *ngIf="sectionForm.get('type').value === 'header'">
+    <div [hidden]="sectionForm.get('type').value !== 'header'">
       <app-image-upload [label]="'HEADER_LOGO_URL' | translate" [placeholder]="'UPLOAD_IMAGE_HINT' | translate"
         formControlName="logoUrl" (fileSelected)="onLogoFileSelected($event)" (fileUploaded)="onLogoUploaded($event)"
         [disabled]="uploadingLogo">
@@ -23,15 +23,26 @@
       <div class="header-menu-block">
         <label class="header-menu-label">{{ 'HEADER_MENU' | translate }}</label>
         <div formArrayName="menu" cdkDropList (cdkDropListDropped)="dropMenuItem($event)" class="menu-list">
-          <div *ngFor="let item of menu.controls; let i = index" [formGroupName]="i" class="menu-item-block" cdkDrag>
+          <div *ngFor="let item of menu.controls; let i = index; trackBy: trackByFn" [formGroupName]="i"
+            class="menu-item-block" cdkDrag>
             <div class="drag-handle" cdkDragHandle>
               <mat-icon>drag_indicator</mat-icon>
             </div>
             <div class="menu-item-content">
-              <mat-form-field appearance="outline" class="menu-title-field">
-                <mat-label>{{ 'HEADER_MENU_TITLE' | translate }}</mat-label>
-                <input matInput formControlName="title">
-              </mat-form-field>
+              <div formGroupName="title" class="menu-title-field">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ 'HEADER_MENU_TITLE' | translate }} (EN)</mat-label>
+                  <input matInput formControlName="en">
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ 'HEADER_MENU_TITLE' | translate }} (RU)</mat-label>
+                  <input matInput formControlName="ru">
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ 'HEADER_MENU_TITLE' | translate }} (UA)</mat-label>
+                  <input matInput formControlName="ua">
+                </mat-form-field>
+              </div>
               <mat-form-field appearance="outline" class="menu-url-field">
                 <mat-label>{{ 'HEADER_MENU_URL' | translate }}</mat-label>
                 <input matInput formControlName="url" placeholder="/shop, /about, #contacts">
@@ -79,201 +90,201 @@
         <mat-slide-toggle formControlName="showProfile">{{ 'HEADER_SHOW_PROFILE' | translate }}</mat-slide-toggle>
         <mat-slide-toggle formControlName="isActive">{{ 'SECTION_ACTIVE' | translate }}</mat-slide-toggle>
       </div>
-    </ng-container>
+    </div>
 
-    <ng-container *ngIf="sectionForm.get('type').value !== 'header'">
-      <div class="localization-group">
-        <label class="group-label">{{ 'TITLE' | translate }}</label>
-        <div class="lang-fields">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>EN</mat-label>
-            <input matInput formControlName="title_en" placeholder="English title">
-            <mat-error *ngIf="sectionForm.get('title_en')?.hasError('required')">Required</mat-error>
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>RU</mat-label>
-            <input matInput formControlName="title_ru" placeholder="Russian title">
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>UA</mat-label>
-            <input matInput formControlName="title_ua" placeholder="Ukrainian title">
-          </mat-form-field>
+      <ng-container *ngIf="sectionForm.get('type').value !== 'header'">
+        <div class="localization-group">
+          <label class="group-label">{{ 'TITLE' | translate }}</label>
+          <div class="lang-fields">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>EN</mat-label>
+              <input matInput formControlName="title_en" placeholder="English title">
+              <mat-error *ngIf="sectionForm.get('title_en')?.hasError('required')">Required</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>RU</mat-label>
+              <input matInput formControlName="title_ru" placeholder="Russian title">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>UA</mat-label>
+              <input matInput formControlName="title_ua" placeholder="Ukrainian title">
+            </mat-form-field>
+          </div>
         </div>
-      </div>
 
-      <div class="localization-group">
-        <label class="group-label">{{ 'SUBTITLE' | translate }}</label>
-        <div class="lang-fields">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>EN</mat-label>
-            <input matInput formControlName="subtitle_en" placeholder="English subtitle">
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>RU</mat-label>
-            <input matInput formControlName="subtitle_ru" placeholder="Russian subtitle">
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>UA</mat-label>
-            <input matInput formControlName="subtitle_ua" placeholder="Ukrainian subtitle">
-          </mat-form-field>
+        <div class="localization-group">
+          <label class="group-label">{{ 'SUBTITLE' | translate }}</label>
+          <div class="lang-fields">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>EN</mat-label>
+              <input matInput formControlName="subtitle_en" placeholder="English subtitle">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>RU</mat-label>
+              <input matInput formControlName="subtitle_ru" placeholder="Russian subtitle">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>UA</mat-label>
+              <input matInput formControlName="subtitle_ua" placeholder="Ukrainian subtitle">
+            </mat-form-field>
+          </div>
         </div>
-      </div>
 
-      <!-- Content field only for non-categories sections -->
-      <div class="localization-group" *ngIf="sectionForm.get('type').value !== 'categories'">
-        <label class="group-label">{{ 'CONTENT' | translate }}</label>
-        <div class="lang-fields">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>EN</mat-label>
-            <textarea matInput formControlName="content_en" rows="3" placeholder="English content"></textarea>
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>RU</mat-label>
-            <textarea matInput formControlName="content_ru" rows="3" placeholder="Russian content"></textarea>
-          </mat-form-field>
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>UA</mat-label>
-            <textarea matInput formControlName="content_ua" rows="3" placeholder="Ukrainian content"></textarea>
-          </mat-form-field>
+        <!-- Content field only for non-categories sections -->
+        <div class="localization-group" *ngIf="sectionForm.get('type').value !== 'categories'">
+          <label class="group-label">{{ 'CONTENT' | translate }}</label>
+          <div class="lang-fields">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>EN</mat-label>
+              <textarea matInput formControlName="content_en" rows="3" placeholder="English content"></textarea>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>RU</mat-label>
+              <textarea matInput formControlName="content_ru" rows="3" placeholder="Russian content"></textarea>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>UA</mat-label>
+              <textarea matInput formControlName="content_ua" rows="3" placeholder="Ukrainian content"></textarea>
+            </mat-form-field>
+          </div>
         </div>
-      </div>
 
-      <!-- Categories Section Special Block -->
-      <ng-container *ngIf="sectionForm.get('type').value === 'categories'">
-        <div class="categories-block">
-          <label class="categories-label">{{ 'CATEGORIES' | translate }}</label>
-          <div formArrayName="categories" cdkDropList (cdkDropListDropped)="dropCategory($event)"
-            class="categories-list">
-            <div *ngFor="let category of categories.controls; let i = index" [formGroupName]="i"
-              class="category-item-block" cdkDrag>
-              <div class="drag-handle" cdkDragHandle>
-                <mat-icon>drag_indicator</mat-icon>
-              </div>
-              <div class="category-item-content">
-                <mat-form-field appearance="outline" class="category-name-field">
-                  <mat-label>{{ 'CATEGORY_NAME' | translate }}</mat-label>
-                  <input matInput formControlName="name">
-                </mat-form-field>
-                <mat-form-field appearance="outline" class="category-slug-field">
-                  <mat-label>{{ 'CATEGORY_SLUG' | translate }}</mat-label>
-                  <input matInput formControlName="slug" placeholder="shoes, handbags, clothing">
-                </mat-form-field>
-                <app-image-upload [label]="'CATEGORY_ICON' | translate" [placeholder]="'UPLOAD_ICON_HINT' | translate"
-                  [formControlName]="'icon'" (fileSelected)="onCategoryIconSelected($event, i)"
-                  (fileUploaded)="onCategoryIconUploaded($event, i)" [disabled]="uploadingCategoryIcon">
-                </app-image-upload>
-                <div class="category-controls">
-                  <mat-slide-toggle formControlName="isActive" class="category-active-toggle">
-                    <span class="mobile-only">{{ 'ACTIVE' | translate }}</span>
-                    <span class="desktop-only">{{ 'CATEGORY_ACTIVE' | translate }}</span>
-                  </mat-slide-toggle>
-                  <button mat-icon-button color="warn" type="button" (click)="removeCategory(i)" class="delete-btn"
-                    matTooltip="{{ 'DELETE' | translate }}">
-                    <mat-icon>delete</mat-icon>
-                  </button>
+        <!-- Categories Section Special Block -->
+        <ng-container *ngIf="sectionForm.get('type').value === 'categories'">
+          <div class="categories-block">
+            <label class="categories-label">{{ 'CATEGORIES' | translate }}</label>
+            <div formArrayName="categories" cdkDropList (cdkDropListDropped)="dropCategory($event)"
+              class="categories-list">
+              <div *ngFor="let category of categories.controls; let i = index" [formGroupName]="i"
+                class="category-item-block" cdkDrag>
+                <div class="drag-handle" cdkDragHandle>
+                  <mat-icon>drag_indicator</mat-icon>
+                </div>
+                <div class="category-item-content">
+                  <mat-form-field appearance="outline" class="category-name-field">
+                    <mat-label>{{ 'CATEGORY_NAME' | translate }}</mat-label>
+                    <input matInput formControlName="name">
+                  </mat-form-field>
+                  <mat-form-field appearance="outline" class="category-slug-field">
+                    <mat-label>{{ 'CATEGORY_SLUG' | translate }}</mat-label>
+                    <input matInput formControlName="slug" placeholder="shoes, handbags, clothing">
+                  </mat-form-field>
+                  <app-image-upload [label]="'CATEGORY_ICON' | translate" [placeholder]="'UPLOAD_ICON_HINT' | translate"
+                    [formControlName]="'icon'" (fileSelected)="onCategoryIconSelected($event, i)"
+                    (fileUploaded)="onCategoryIconUploaded($event, i)" [disabled]="uploadingCategoryIcon">
+                  </app-image-upload>
+                  <div class="category-controls">
+                    <mat-slide-toggle formControlName="isActive" class="category-active-toggle">
+                      <span class="mobile-only">{{ 'ACTIVE' | translate }}</span>
+                      <span class="desktop-only">{{ 'CATEGORY_ACTIVE' | translate }}</span>
+                    </mat-slide-toggle>
+                    <button mat-icon-button color="warn" type="button" (click)="removeCategory(i)" class="delete-btn"
+                      matTooltip="{{ 'DELETE' | translate }}">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
                 </div>
               </div>
+              <mat-divider *ngFor="let category of categories.controls; let i = index"
+                [class.hidden]="i === categories.length - 1"></mat-divider>
             </div>
-            <mat-divider *ngFor="let category of categories.controls; let i = index"
-              [class.hidden]="i === categories.length - 1"></mat-divider>
-          </div>
-          <button mat-stroked-button type="button" (click)="addCategory()" class="add-category-btn">
-            <mat-icon>add</mat-icon> {{ 'ADD_CATEGORY' | translate }}
-          </button>
-        </div>
-      </ng-container>
-
-      <!-- Brands Section Special Block -->
-      <ng-container *ngIf="sectionForm.get('type').value === 'brands'">
-        <div class="categories-block">
-          <label class="categories-label">{{ 'BRANDS' | translate }}</label>
-          <div formArrayName="brands" cdkDropList (cdkDropListDropped)="dropBrand($event)" class="categories-list">
-            <div *ngFor="let brand of brands.controls; let i = index" [formGroupName]="i" class="category-item-block"
-              cdkDrag>
-              <div class="drag-handle" cdkDragHandle>
-                <mat-icon>drag_indicator</mat-icon>
-              </div>
-              <div class="category-item-content">
-                <mat-form-field appearance="outline" class="category-name-field">
-                  <mat-label>{{ 'BRAND_NAME' | translate }}</mat-label>
-                  <input matInput formControlName="name">
-                </mat-form-field>
-                <app-image-upload [label]="'BRAND_LOGO' | translate"
-                  [placeholder]="'UPLOAD_BRAND_LOGO_HINT' | translate" [formControlName]="'logo'"
-                  (fileSelected)="onBrandLogoSelected($event, i)" (fileUploaded)="onBrandLogoUploaded($event, i)"
-                  [disabled]="uploadingBrandLogo">
-                </app-image-upload>
-                <div class="category-controls">
-                  <mat-slide-toggle formControlName="isActive" class="category-active-toggle">
-                    <span class="mobile-only">{{ 'ACTIVE' | translate }}</span>
-                    <span class="desktop-only">{{ 'ACTIVE' | translate }}</span>
-                  </mat-slide-toggle>
-                  <button mat-icon-button color="warn" type="button" (click)="removeBrand(i)" class="delete-btn"
-                    matTooltip="{{ 'DELETE' | translate }}">
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                </div>
-              </div>
-            </div>
-            <mat-divider *ngFor="let brand of brands.controls; let i = index"
-              [class.hidden]="i === brands.length - 1"></mat-divider>
-          </div>
-          <button mat-stroked-button type="button" (click)="addBrand()" class="add-category-btn">
-            <mat-icon>add</mat-icon> {{ 'ADD_BRAND' | translate }}
-          </button>
-        </div>
-      </ng-container>
-
-      <!-- Image upload only for non-complex sections -->
-      <ng-container
-        *ngIf="sectionForm.get('type').value !== 'categories' && sectionForm.get('type').value !== 'brands' && sectionForm.get('type').value !== 'best-sellers'">
-        <app-image-upload [label]="'SECTION_IMAGE' | translate" [placeholder]="'UPLOAD_IMAGE_HINT' | translate"
-          formControlName="imageUrl" (fileSelected)="onImageFileSelected($event)"
-          (fileUploaded)="onImageUploaded($event)" [disabled]="uploadingImage">
-        </app-image-upload>
-
-        <mat-slide-toggle formControlName="showImage">{{ 'SHOW_IMAGE' | translate }}</mat-slide-toggle>
-
-        <div class="model3d-upload-section full-width"
-          *ngIf="sectionForm.get('type').value !== 'brands' && sectionForm.get('type').value !== 'categories'">
-          <label class="upload-label">3D Model (.glb)</label>
-          <div class="upload-area" [class.has-file]="model3dFile || model3dUrl">
-            <div *ngIf="!(model3dFile || model3dUrl)" class="upload-placeholder">
-              <mat-icon>cloud_upload</mat-icon>
-              <p>{{ 'UPLOAD_3D_HINT' | translate }}</p>
-              <small>{{ 'MODEL_3D_SIZE_HINT' | translate }}</small>
-            </div>
-            <div *ngIf="model3dFile || model3dUrl" class="model3d-preview">
-              <mat-icon>view_in_ar</mat-icon>
-              <span>{{ model3dFileName || (model3dUrl ? model3dUrl.split('/').pop() : '') }}</span>
-              <button type="button" mat-icon-button (click)="remove3dModel()" class="remove-btn">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
-            <input type="file" #file3dInput (change)="on3dFileSelected($event)" accept=".glb" class="file-input"
-              [disabled]="uploading3d" />
-            <button type="button" mat-stroked-button (click)="file3dInput.click()" [disabled]="uploading3d"
-              class="upload-btn">
-              <mat-icon *ngIf="!uploading3d">add</mat-icon>
-              <mat-icon *ngIf="uploading3d" class="spinning">hourglass_empty</mat-icon>
-              {{ uploading3d
-              ? ('UPLOADING' | translate)
-              : (model3dFile || model3dUrl
-              ? ('CHANGE_3D_MODEL' | translate)
-              : ('SELECT_3D_MODEL' | translate))
-              }}
+            <button mat-stroked-button type="button" (click)="addCategory()" class="add-category-btn">
+              <mat-icon>add</mat-icon> {{ 'ADD_CATEGORY' | translate }}
             </button>
           </div>
-        </div>
-        <mat-slide-toggle formControlName="show3d" class="active-toggle"
-          *ngIf="sectionForm.get('type').value !== 'brands' && sectionForm.get('type').value !== 'categories'">{{
-          'SHOW_3D_MODEL' | translate
+        </ng-container>
+
+        <!-- Brands Section Special Block -->
+        <ng-container *ngIf="sectionForm.get('type').value === 'brands'">
+          <div class="categories-block">
+            <label class="categories-label">{{ 'BRANDS' | translate }}</label>
+            <div formArrayName="brands" cdkDropList (cdkDropListDropped)="dropBrand($event)" class="categories-list">
+              <div *ngFor="let brand of brands.controls; let i = index" [formGroupName]="i" class="category-item-block"
+                cdkDrag>
+                <div class="drag-handle" cdkDragHandle>
+                  <mat-icon>drag_indicator</mat-icon>
+                </div>
+                <div class="category-item-content">
+                  <mat-form-field appearance="outline" class="category-name-field">
+                    <mat-label>{{ 'BRAND_NAME' | translate }}</mat-label>
+                    <input matInput formControlName="name">
+                  </mat-form-field>
+                  <app-image-upload [label]="'BRAND_LOGO' | translate"
+                    [placeholder]="'UPLOAD_BRAND_LOGO_HINT' | translate" [formControlName]="'logo'"
+                    (fileSelected)="onBrandLogoSelected($event, i)" (fileUploaded)="onBrandLogoUploaded($event, i)"
+                    [disabled]="uploadingBrandLogo">
+                  </app-image-upload>
+                  <div class="category-controls">
+                    <mat-slide-toggle formControlName="isActive" class="category-active-toggle">
+                      <span class="mobile-only">{{ 'ACTIVE' | translate }}</span>
+                      <span class="desktop-only">{{ 'ACTIVE' | translate }}</span>
+                    </mat-slide-toggle>
+                    <button mat-icon-button color="warn" type="button" (click)="removeBrand(i)" class="delete-btn"
+                      matTooltip="{{ 'DELETE' | translate }}">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <mat-divider *ngFor="let brand of brands.controls; let i = index"
+                [class.hidden]="i === brands.length - 1"></mat-divider>
+            </div>
+            <button mat-stroked-button type="button" (click)="addBrand()" class="add-category-btn">
+              <mat-icon>add</mat-icon> {{ 'ADD_BRAND' | translate }}
+            </button>
+          </div>
+        </ng-container>
+
+        <!-- Image upload only for non-complex sections -->
+        <ng-container
+          *ngIf="sectionForm.get('type').value !== 'categories' && sectionForm.get('type').value !== 'brands' && sectionForm.get('type').value !== 'best-sellers'">
+          <app-image-upload [label]="'SECTION_IMAGE' | translate" [placeholder]="'UPLOAD_IMAGE_HINT' | translate"
+            formControlName="imageUrl" (fileSelected)="onImageFileSelected($event)"
+            (fileUploaded)="onImageUploaded($event)" [disabled]="uploadingImage">
+          </app-image-upload>
+
+          <mat-slide-toggle formControlName="showImage">{{ 'SHOW_IMAGE' | translate }}</mat-slide-toggle>
+
+          <div class="model3d-upload-section full-width"
+            *ngIf="sectionForm.get('type').value !== 'brands' && sectionForm.get('type').value !== 'categories'">
+            <label class="upload-label">3D Model (.glb)</label>
+            <div class="upload-area" [class.has-file]="model3dFile || model3dUrl">
+              <div *ngIf="!(model3dFile || model3dUrl)" class="upload-placeholder">
+                <mat-icon>cloud_upload</mat-icon>
+                <p>{{ 'UPLOAD_3D_HINT' | translate }}</p>
+                <small>{{ 'MODEL_3D_SIZE_HINT' | translate }}</small>
+              </div>
+              <div *ngIf="model3dFile || model3dUrl" class="model3d-preview">
+                <mat-icon>view_in_ar</mat-icon>
+                <span>{{ model3dFileName || (model3dUrl ? model3dUrl.split('/').pop() : '') }}</span>
+                <button type="button" mat-icon-button (click)="remove3dModel()" class="remove-btn">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+              <input type="file" #file3dInput (change)="on3dFileSelected($event)" accept=".glb" class="file-input"
+                [disabled]="uploading3d" />
+              <button type="button" mat-stroked-button (click)="file3dInput.click()" [disabled]="uploading3d"
+                class="upload-btn">
+                <mat-icon *ngIf="!uploading3d">add</mat-icon>
+                <mat-icon *ngIf="uploading3d" class="spinning">hourglass_empty</mat-icon>
+                {{ uploading3d
+                ? ('UPLOADING' | translate)
+                : (model3dFile || model3dUrl
+                ? ('CHANGE_3D_MODEL' | translate)
+                : ('SELECT_3D_MODEL' | translate))
+                }}
+              </button>
+            </div>
+          </div>
+          <mat-slide-toggle formControlName="show3d" class="active-toggle"
+            *ngIf="sectionForm.get('type').value !== 'brands' && sectionForm.get('type').value !== 'categories'">{{
+            'SHOW_3D_MODEL' | translate
+            }}</mat-slide-toggle>
+        </ng-container>
+
+        <mat-slide-toggle formControlName="isActive" class="active-toggle">{{ 'SECTION_ACTIVE' | translate
           }}</mat-slide-toggle>
       </ng-container>
-
-      <mat-slide-toggle formControlName="isActive" class="active-toggle">{{ 'SECTION_ACTIVE' | translate
-        }}</mat-slide-toggle>
-    </ng-container>
   </form>
 
   <div mat-dialog-actions class="actions">

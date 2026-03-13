@@ -27,6 +27,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { LayoutModule } from '@angular/cdk/layout';
 import { AdminRoutingModule } from './admin-routing.module';
@@ -143,6 +144,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatDividerModule,
     MatTooltipModule,
     MatSlideToggleModule,
+    MatButtonToggleModule,
     DragDropModule,
     LayoutModule,
     TranslateModule.forChild({
