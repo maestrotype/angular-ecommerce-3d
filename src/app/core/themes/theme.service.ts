@@ -17,9 +17,9 @@ export class ThemeService {
   public adminTheme$ = this.adminThemeSubject.asObservable();
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-    afterNextRender(() => {
+    if (isPlatformBrowser(this.platformId)) {
       this.initializeTheme();
-    });
+    }
   }
 
   private initializeTheme(): void {
