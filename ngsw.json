@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1773403688998,
+  "timestamp": 1773467453065,
   "index": "/angular-ecommerce-3d/index.html",
   "assetGroups": [
     {
@@ -21,7 +21,7 @@
         "/angular-ecommerce-3d/994.718c81ef11fa2ce0.js",
         "/angular-ecommerce-3d/common.d7a75cb04dd24c2a.js",
         "/angular-ecommerce-3d/index.html",
-        "/angular-ecommerce-3d/main.2256a44852dc6a7f.js",
+        "/angular-ecommerce-3d/main.67166ef3c7c8cb19.js",
         "/angular-ecommerce-3d/manifest.webmanifest",
         "/angular-ecommerce-3d/polyfills.a527a9cc31db9a9d.js",
         "/angular-ecommerce-3d/runtime.93192901ae0edded.js",
@@ -172,8 +172,8 @@
     "/angular-ecommerce-3d/assets/models/people/Unka.glb": "86c756b78aa0564e8b74f43b9a4fcef40f225a0e",
     "/angular-ecommerce-3d/assets/models/shoes/shoes1.glb": "6c07b477b7e6675ae2f9f262c06d4ce22728aa25",
     "/angular-ecommerce-3d/common.d7a75cb04dd24c2a.js": "0eca2f0193b546eb53da0b0c2f15f7cb7b27cfc6",
-    "/angular-ecommerce-3d/index.html": "b6a74b3a0afb13a449186c47224fea5fe7ea16c7",
-    "/angular-ecommerce-3d/main.2256a44852dc6a7f.js": "4f960e0c949af7bac41b4cc2950ed0aeade638da",
+    "/angular-ecommerce-3d/index.html": "d1690cf25eb98d116ccac9ea8895cac90d2071fc",
+    "/angular-ecommerce-3d/main.67166ef3c7c8cb19.js": "898cb57e599252d0c97786082a524ec561eb57b1",
     "/angular-ecommerce-3d/manifest.webmanifest": "68e4e874611f558407b7642b0fe602db24978dcb",
     "/angular-ecommerce-3d/polyfills.a527a9cc31db9a9d.js": "75b41ca06c59053b7d23f357a4cbbd22f58c0a66",
     "/angular-ecommerce-3d/runtime.93192901ae0edded.js": "80ba2f119a58d9a35361d3a1954b9bfca4afad70",

@@ -4,6 +4,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  
+  <script>
+    (function() {
+      try {
+        const savedTheme = localStorage.getItem('selected-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      } catch (e) {}
+    })();
+  </script>
 
   <!-- SEO Meta Tags (will be updated dynamically) -->
   <title>3D Store - Modern E-commerce with 3D Visualization</title>
@@ -86,6 +95,6 @@
 <body class="mat-typography">
   <app-root></app-root>
   <noscript>Please enable JavaScript to continue using this application.</noscript>
-<script src="runtime.93192901ae0edded.js" type="module"></script><script src="polyfills.a527a9cc31db9a9d.js" type="module"></script><script src="main.2256a44852dc6a7f.js" type="module"></script></body>
+<script src="runtime.93192901ae0edded.js" type="module"></script><script src="polyfills.a527a9cc31db9a9d.js" type="module"></script><script src="main.67166ef3c7c8cb19.js" type="module"></script></body>
 
 </html>
