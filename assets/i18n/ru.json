@@ -616,7 +616,9 @@
     },
     "NOTIFICATIONS": {
       "ERROR_LOADING": "Ошибка при загрузке товаров",
-      "ADDED_TO_CART": "{{name}} добавлен в корзину"
+      "ADDED_TO_CART": "{{name}} добавлен в корзину",
+      "ADDED_TO_FAVORITES": "{{name}} добавлено в избранное",
+      "REMOVED_FROM_FAVORITES": "{{name}} удалено из избранного"
     }
   },
   "MODALS": {

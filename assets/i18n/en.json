@@ -623,7 +623,9 @@
     },
     "NOTIFICATIONS": {
       "ERROR_LOADING": "Failed to load products",
-      "ADDED_TO_CART": "{{name}} added to cart"
+      "ADDED_TO_CART": "{{name}} added to cart",
+      "ADDED_TO_FAVORITES": "{{name}} added to favorites",
+      "REMOVED_FROM_FAVORITES": "{{name}} removed from favorites"
     }
   },
   "MODALS": {
