@@ -4,6 +4,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  
+  <script>
+    (function() {
+      try {
+        const savedTheme = localStorage.getItem('selected-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      } catch (e) {}
+    })();
+  </script>
 
   <!-- SEO Meta Tags (will be updated dynamically) -->
   <title>3D Store - Modern E-commerce with 3D Visualization</title>
