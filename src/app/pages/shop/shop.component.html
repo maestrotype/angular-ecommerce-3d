@@ -131,7 +131,7 @@
                 </button>
 
                 <!-- Favorite Button -->
-                <button class="action-btn favorite-btn" (click)="onFavoriteToggled($event)"
+                <button class="action-btn favorite-btn" (click)="onFavoriteToggled($event, product)"
                   [title]="'SHOP.PRODUCT.ADD_TO_FAVORITES' | translate" [class.is-favorite]="product.isFavorite">
                   <span class="material-icons">favorite_border</span>
                   <span class="material-icons filled">favorite</span>

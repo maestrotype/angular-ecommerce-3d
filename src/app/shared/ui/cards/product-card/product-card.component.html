@@ -4,7 +4,7 @@
     <img [src]="product.imageUrl | imageUrl" [alt]="product.name | localized" />
 
     <!-- Top overlay with favorite button and cart icon -->
-    <div class="product-overlay top">
+    <div class="product-overlay top" (click)="$event.stopPropagation()">
       <div class="overlay-actions">
         <button class="cart-icon-btn" (click)="onAddToCart($event)" title="Add to Cart">
           🛒

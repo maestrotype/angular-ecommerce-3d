@@ -323,9 +323,16 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   }
 
-  onFavoriteToggled(event: Event): void {
+  onFavoriteToggled(event: Event, product: Product): void {
     event.stopPropagation();
-    // Implement favorite toggle functionality
+    event.preventDefault();
+    
+    this.favoritesService.toggleFavorite(product);
+    product.isFavorite = !product.isFavorite; // Locally toggle for immediate UI feedback
+    
+    const messageKey = product.isFavorite ? 'SHOP.NOTIFICATIONS.ADDED_TO_FAVORITES' : 'SHOP.NOTIFICATIONS.REMOVED_FROM_FAVORITES';
+    const productName = getLocalizedString(product.name, this.translate.currentLang);
+    this.notificationService.showSuccess(this.translate.instant(messageKey, { name: productName }));
   }
 
   addToCart(product: Product, event: Event): void {

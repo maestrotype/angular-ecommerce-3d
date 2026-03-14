@@ -13,6 +13,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { getLocalizedString } from '../../../shared/utils/localization.util';
 import { LocalizedPipe } from '../../shared/pipes/localized.pipe';
 import { ImageUrlPipe } from '../../shared/pipes/image-url.pipe';
+import { FavoritesService } from '../../core/services/favorites.service';
 
 @Component({
     selector: 'app-best-sellers',
@@ -39,6 +40,7 @@ export class BestSellersComponent implements OnInit {
         private cartService: CartService,
         private notificationService: NotificationService,
         private translate: TranslateService,
+        private favoritesService: FavoritesService,
         @Inject(PLATFORM_ID) private platformId: Object
     ) { }
 
@@ -92,13 +94,21 @@ export class BestSellersComponent implements OnInit {
     }
 
     isFavorite(productId: number): boolean {
-        // TODO: Implement favorite service
-        return false;
+        return this.favoritesService.isFavorite(productId);
     }
 
     toggleFavorite(product: Product): void {
-        // TODO: Implement favorite service
-
+        this.favoritesService.toggleFavorite(product);
+        const name = getLocalizedString(product.name, this.translate.currentLang);
+        const isFavorite = this.isFavorite(product.id);
+        
+        const messageKey = isFavorite 
+            ? 'SHOP.NOTIFICATIONS.ADDED_TO_FAVORITES' 
+            : 'SHOP.NOTIFICATIONS.REMOVED_FROM_FAVORITES';
+        
+        this.translate.get(messageKey, { name }).subscribe(msg => {
+            this.notificationService.showSuccess(msg);
+        });
     }
 
     // Rating functionality
