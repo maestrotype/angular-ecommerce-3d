@@ -677,6 +677,38 @@
     border-bottom: 1px solid #334155;
   }
 
+  .filters-sort-bar {
+    background: rgba(30, 41, 59, 0.8);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+    .filters-sort-content {
+      .filters-left {
+        .filter-btn, .sort-label, .sort-dropdown {
+          color: #f8fafc;
+          border-color: rgba(255, 255, 255, 0.2);
+        }
+      }
+      .filters-middle {
+        .show-label, .show-dropdown {
+          color: #f8fafc;
+          border-color: rgba(255, 255, 255, 0.2);
+        }
+        .sale-checkbox span:not(.checkmark) {
+          color: #f8fafc;
+        }
+      }
+      .view-toggles .view-btn {
+        border-color: rgba(255, 255, 255, 0.2);
+        color: #f8fafc;
+        
+        &.active, &:hover {
+          border-color: var(--color-primary, #3b82f6);
+          color: var(--color-primary, #3b82f6);
+        }
+      }
+    }
+  }
+
   .products-section {
     .product-card {
       background: #1e293b;
