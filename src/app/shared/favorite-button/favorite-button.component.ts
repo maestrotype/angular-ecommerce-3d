@@ -42,6 +42,7 @@ export class FavoriteButtonComponent implements OnInit, OnDestroy {
    */
   onFavoriteClick(event: Event): void {
     event.stopPropagation(); // Prevent event bubbling
+    event.preventDefault();  // Prevent default action
     
     if (!this.product) return;
     
