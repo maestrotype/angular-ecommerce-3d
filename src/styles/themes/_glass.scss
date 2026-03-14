@@ -4,17 +4,22 @@
    ========================================================================== */
 
 [data-theme="glass"] {
-  /* Background gradient for glass theme - removed to prevent conflicts */
+  /* Dynamic iOS-style Air-Blue/Gray Gradient Background for Glass Theme */
+  background: linear-gradient(-45deg, #e0f2fe, #bae6fd, #f1f5f9, #e2e8f0) !important;
+  background-size: 400% 400% !important;
+  background-attachment: fixed !important;
+  animation: glassGradient 15s ease infinite;
+  color: #1e293b;
   min-height: 100vh;
   --theme-switcher-bg: rgba(206, 208, 212, 0.8);
   /* Favorites page glass theme */
-  --favorites-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --favorites-bg: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(226,232,240,0.6) 100%);
   --favorites-header-bg: rgba(255, 255, 255, 0.1);
-  --favorites-header-text: #ffffff;
+  --favorites-header-text: #1e293b;
   --favorites-header-overlay: rgba(255, 255, 255, 0.05);
   --favorites-header-blur: blur(20px);
   --favorites-back-btn-bg: rgba(255, 255, 255, 0.15);
-  --favorites-back-btn-text: #ffffff;
+  --favorites-back-btn-text: #1e293b;
   --favorites-back-btn-border: rgba(255, 255, 255, 0.3);
   --favorites-back-btn-blur: blur(15px);
   --favorites-back-btn-hover-bg: rgba(255, 255, 255, 0.25);
@@ -164,17 +169,40 @@
     }
 
     .shop-button {
-      background: rgba(255, 255, 255, 0.25);
-      border: 1.5px solid rgba(255, 255, 255, 0.5);
-      color: #334155;
-      backdrop-filter: blur(12px) saturate(180%);
-      box-shadow: 0 8px 32px rgba(51, 65, 85, 0.10), 0 1.5px 8px rgba(0, 0, 0, 0.08);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-top: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 50px;
+      padding: 14px 40px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: #1e293b;
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      box-shadow: 
+        inset 0 4px 6px rgba(255, 255, 255, 0.5), /* Inner top highlight */
+        inset 0 -4px 6px rgba(255, 255, 255, 0.1), /* Inner bottom highlight */
+        0 8px 32px rgba(31, 38, 135, 0.1), /* Drop shadow */
+        0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 
       &:hover {
-        background: rgba(99, 102, 241, 0.18);
-        color: #6366f1;
-        box-shadow: 0 12px 40px rgba(99, 102, 241, 0.18);
-        border-color: #6366f1;
+        background: rgba(255, 255, 255, 0.2);
+        box-shadow: 
+          inset 0 4px 8px rgba(255, 255, 255, 0.7),
+          inset 0 -4px 8px rgba(255, 255, 255, 0.15), 
+          0 12px 40px rgba(31, 38, 135, 0.15),
+          0 8px 16px rgba(0, 0, 0, 0.08);
+        transform: translateY(-2px);
+      }
+
+      &:active {
+        transform: translateY(1px);
+        box-shadow: 
+          inset 0 2px 4px rgba(255, 255, 255, 0.4), 
+          inset 0 -2px 4px rgba(255, 255, 255, 0.05),
+          0 4px 16px rgba(31, 38, 135, 0.1);
       }
     }
 
@@ -207,7 +235,7 @@
 
   /* Favorites page glass theme */
   body .favorites-page {
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
+    background: transparent;
     color: #1e293b;
   }
 
