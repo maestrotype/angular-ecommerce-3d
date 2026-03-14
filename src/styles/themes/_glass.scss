@@ -168,43 +168,7 @@
       color: #64748b;
     }
 
-    .shop-button {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-top: 1px solid rgba(255, 255, 255, 0.6);
-      border-radius: 50px;
-      padding: 14px 40px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      color: #1e293b;
-      backdrop-filter: blur(24px) saturate(180%);
-      -webkit-backdrop-filter: blur(24px) saturate(180%);
-      box-shadow: 
-        inset 0 4px 6px rgba(255, 255, 255, 0.5), /* Inner top highlight */
-        inset 0 -4px 6px rgba(255, 255, 255, 0.1), /* Inner bottom highlight */
-        0 8px 32px rgba(31, 38, 135, 0.1), /* Drop shadow */
-        0 4px 12px rgba(0, 0, 0, 0.05);
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.2);
-        box-shadow: 
-          inset 0 4px 8px rgba(255, 255, 255, 0.7),
-          inset 0 -4px 8px rgba(255, 255, 255, 0.15), 
-          0 12px 40px rgba(31, 38, 135, 0.15),
-          0 8px 16px rgba(0, 0, 0, 0.08);
-        transform: translateY(-2px);
-      }
-
-      &:active {
-        transform: translateY(1px);
-        box-shadow: 
-          inset 0 2px 4px rgba(255, 255, 255, 0.4), 
-          inset 0 -2px 4px rgba(255, 255, 255, 0.05),
-          0 4px 16px rgba(31, 38, 135, 0.1);
-      }
-    }
+    /* Special offer glass styling is now handled via CSS variables in _theme-variables.scss */
 
     /* Remove the pink radial gradient overlay */
     &::before {
@@ -213,10 +177,10 @@
   }
   
   /* Glass effect for auth modal - removed duplicate styles */
-  /* Auth modal styles are now handled by ThemeService CSS variables */
-  
-  /* Ensure auth modal has proper background for glass theme */
-  .modal-backdrop {
+  /* Auth modal styles are now## Verification
+- [x] Test theme persistence after page reload.
+- [x] Verify high-contrast liquid bubble appearance on Special Offer.
+- [x] Check hover states for all themes (no important).l-backdrop {
     background: rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
