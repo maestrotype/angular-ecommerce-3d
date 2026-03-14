@@ -114,8 +114,8 @@
 
         .shop-button {
             background: var(--special-offer-accent);
-            color: var(--color-text-inverse);
-            border: none;
+            color: var(--color-special-offer-button-text, var(--color-text-inverse));
+            border: var(--special-offer-button-border, 1px solid transparent);
             padding: var(--spacing-md) var(--spacing-xxl);
             font-size: var(--font-size-lg);
             font-weight: var(--font-weight-bold);
@@ -123,10 +123,17 @@
             text-transform: uppercase;
             cursor: pointer;
             transition: all var(--transition-normal);
-            border-radius: var(--radius-md, 8px);
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
+            border-radius: 9999px;
+            box-shadow: var(--color-special-offer-button-shadow, 0 6px 20px rgba(99, 102, 241, 0.3));
+            backdrop-filter: var(--special-offer-button-blur, none);
+            -webkit-backdrop-filter: var(--special-offer-button-blur, none);
             position: relative;
             overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            /* Special offer glass styling is now handled via CSS variables in _theme-variables.scss */
+            // Overrides removed as they are now variable-driven in the component
 
             &::before {
                 content: '';

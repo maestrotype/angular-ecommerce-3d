@@ -25,17 +25,25 @@ export class ThemeService {
   private initializeTheme(): void {
     if (!isPlatformBrowser(this.platformId)) return;
 
+    // Detect current area
+    const isAdminArea = window.location.pathname.startsWith('/admin');
+
     // Load frontend theme
     const savedFrontend = localStorage.getItem('selected-theme');
     const frontendTheme = savedFrontend ? this.getThemeById(savedFrontend) : this.getThemeById(DEFAULT_THEME_ID);
     this.currentThemeSubject.next(frontendTheme);
-    this.applyTheme(frontendTheme, 'frontend');
 
     // Load admin theme
     const savedAdmin = localStorage.getItem('selected-theme-admin') || localStorage.getItem('adminTheme');
     const adminTheme = savedAdmin ? this.getThemeById(savedAdmin) : this.getThemeById(DEFAULT_THEME_ID);
     this.adminThemeSubject.next(adminTheme);
-    this.applyTheme(adminTheme, 'admin');
+
+    // Apply only the relevant theme to the DOM
+    if (isAdminArea) {
+      this.applyTheme(adminTheme, 'admin');
+    } else {
+      this.applyTheme(frontendTheme, 'frontend');
+    }
   }
 
   getThemeById(themeId: string): Theme {
