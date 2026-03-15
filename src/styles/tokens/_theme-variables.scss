@@ -131,8 +131,12 @@
         --glass-btn-hover-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.5);
 
         /* Best Sellers section - Default theme */
-        --best-sellers-bg: #ffffff;
-        --best-sellers-text: #1e293b;
+        --best-sellers-bg: linear-gradient(
+                        135deg,
+                        #f9fafb 0%,
+                        #e5edf7 45%,
+                        #dbeafe 100%);
+        --best-sellers-text: #0f172a;
         --best-sellers-subtitle: #64748b;
 
         /* Favorites section - Default theme */
@@ -370,10 +374,17 @@
         --delivery-option-title: #ffffff;
         --delivery-option-subtitle: #cbd5e1;
 
-        /* Best Sellers section - Dark theme (admin palette) - white subtitle */
-        --best-sellers-bg: #475569;
-        --best-sellers-text: #f8fafc;
-        --best-sellers-subtitle: #ffffff;
+        /* Best Sellers section - Dark theme (admin palette) - richer gradient */
+        --best-sellers-bg: radial-gradient(circle at 0% 0%,
+                        rgba(96, 165, 250, 0.25) 0%,
+                        transparent 55%),
+                        linear-gradient(135deg,
+                        #020617 0%,
+                        #0b1120 35%,
+                        #111827 70%,
+                        #020617 100%);
+        --best-sellers-text: #e5e7eb;
+        --best-sellers-subtitle: #bfdbfe;
 
         /* Favorites section - Dark theme */
         --favorites-bg: #0f172a;
@@ -603,9 +614,15 @@
         --delivery-option-subtitle: #475569;
 
         /* Best Sellers section - Glass theme */
-        --best-sellers-bg: rgba(255, 255, 255, 0.15);
-        --best-sellers-text: #1e293b;
-        --best-sellers-subtitle: #475569;
+        --best-sellers-bg: radial-gradient(circle at 0% 0%,
+                        rgba(129, 140, 248, 0.25) 0%,
+                        transparent 55%),
+                        linear-gradient(135deg,
+                        rgba(255, 255, 255, 0.35) 0%,
+                        rgba(255, 255, 255, 0.18) 40%,
+                        rgba(255, 255, 255, 0.08) 100%);
+        --best-sellers-text: #0f172a;
+        --best-sellers-subtitle: #4b5563;
 
         /* Favorites section - Glass theme */
         --favorites-bg: rgba(255, 255, 255, 0.15);
