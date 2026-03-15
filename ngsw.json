@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1773505545011,
+  "timestamp": 1773558545803,
   "index": "/angular-ecommerce-3d/index.html",
   "assetGroups": [
     {
@@ -111,8 +111,8 @@
     "/angular-ecommerce-3d/972.3689b53b1f2ba03d.js": "ec6491835179b86137eaf37a16b9da6d5e000a74",
     "/angular-ecommerce-3d/976.4052907b06195e12.js": "e5920b5f9225070a8d15fc7aa3fd9dcffeb55866",
     "/angular-ecommerce-3d/994.718c81ef11fa2ce0.js": "9fc35bea3930fc094ee44fadfcb0fbccda3f5ca9",
-    "/angular-ecommerce-3d/assets/i18n/en.json": "9919ee7ed389d92bcf2711e8d61ede3416820e7c",
-    "/angular-ecommerce-3d/assets/i18n/ru.json": "5e9c867aee22d4049ce760a65fee0725069d3ea0",
+    "/angular-ecommerce-3d/assets/i18n/en.json": "8e226d5d668718124bb3012dc4e585b02948671f",
+    "/angular-ecommerce-3d/assets/i18n/ru.json": "f0f8fc5ddcbce707a445bfffa337ff2a0763f362",
     "/angular-ecommerce-3d/assets/i18n/ua.json": "bdcab12f6a2f052f4ee60a60ce2abaac79a67e7d",
     "/angular-ecommerce-3d/assets/icons/chanel.svg": "7ceca51ac54978f9680333ef2143f68310125687",
     "/angular-ecommerce-3d/assets/icons/clothing.svg": "2ff771e172bb5d4b86c15b25a3d2cb6c62ee312b",
