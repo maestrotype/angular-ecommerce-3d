@@ -31,7 +31,7 @@
 
     .back-btn {
       background: rgba(255, 255, 255, 0.1);
-      color: var(--text-secondary);
+      color: var(--header-text);
       border: 1px solid rgba(255, 255, 255, 0.3);
 
       &:hover {
@@ -97,7 +97,7 @@
     background: var(--color-surface-secondary, #f8f9fa);
     color: var(--color-text-primary, #333);
     border: 1px solid var(--color-border-primary, #dee2e6);
-    padding: 0.5rem 1rem;
+    padding: 0.2rem 0.1rem;
     border-radius: 6px;
     font-weight: 500;
     font-size: 0.9rem;

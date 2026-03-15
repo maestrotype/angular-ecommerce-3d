@@ -787,7 +787,7 @@
         font-size: 1.5rem;
         line-height: 1;
         cursor: pointer;
-        color: white;
+        color: var(--header-text);
         padding: 0;
         border-radius: 4px;
         flex-shrink: 0;
@@ -1391,7 +1391,7 @@
           font-size: 1.5rem;
           background: #ef4444;
           border: none;
-          color: white;
+          color: var(--header-text);
           padding: 0;
           border-radius: 4px;
           display: flex;
