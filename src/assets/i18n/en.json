@@ -513,7 +513,7 @@
     },
     "THEME": "Theme",
     "THEMES": {
-      "DEFAULT": "Light",
+      "LIGHT": "Light",
       "DARK": "Dark",
       "GLASS": "Glass"
     },
