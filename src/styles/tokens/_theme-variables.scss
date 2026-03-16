@@ -191,6 +191,9 @@
         --border-primary: #e5e7eb;
         --border-secondary: #f3f4f6;
         --border-focus: #6366f1;
+
+        /* CARD COMPONENT */
+        --card-radius: 0px;
 }
 
 /* ==========================================================================
@@ -432,17 +435,19 @@
         --button-primary-bg: #6366f1;
         --button-primary-text: #ffffff;
         --button-primary-border: #6366f1;
-
         /* Text variables */
-        --text-primary: #1e293b;
-        --text-secondary: #475569;
-        --text-tertiary: #64748b;
+        --text-primary: #f8fafc;
+        --text-secondary: #cbd5e1;
+        --text-tertiary: #94a3b8;
         --text-inverse: #ffffff;
 
         /* Border variables */
         --border-primary: rgba(255, 255, 255, 0.4);
         --border-secondary: rgba(255, 255, 255, 0.2);
         --border-focus: #6366f1;
+
+        /* CARD COMPONENT */
+        --card-radius: 8px;
 }
 
 /* ==========================================================================
@@ -681,4 +686,7 @@
         --border-primary: rgba(255, 255, 255, 0.5);
         --border-secondary: rgba(255, 255, 255, 0.3);
         --border-focus: #6366f1;
+
+        /* CARD COMPONENT */
+        --card-radius: 20px;
 }
