@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1773569424872,
+  "timestamp": 1773668225547,
   "index": "/angular-ecommerce-3d/index.html",
   "assetGroups": [
     {
@@ -21,11 +21,11 @@
         "/angular-ecommerce-3d/994.718c81ef11fa2ce0.js",
         "/angular-ecommerce-3d/common.d7a75cb04dd24c2a.js",
         "/angular-ecommerce-3d/index.html",
-        "/angular-ecommerce-3d/main.bb80bd9ce7015daf.js",
+        "/angular-ecommerce-3d/main.10f56759e9535cc6.js",
         "/angular-ecommerce-3d/manifest.webmanifest",
         "/angular-ecommerce-3d/polyfills.a527a9cc31db9a9d.js",
         "/angular-ecommerce-3d/runtime.2fee8db40243da63.js",
-        "/angular-ecommerce-3d/styles.f98ce35c7aeb0fce.css"
+        "/angular-ecommerce-3d/styles.090610b3053dcea3.css"
       ],
       "patterns": []
     },
@@ -172,12 +172,12 @@
     "/angular-ecommerce-3d/assets/models/people/Unka.glb": "86c756b78aa0564e8b74f43b9a4fcef40f225a0e",
     "/angular-ecommerce-3d/assets/models/shoes/shoes1.glb": "6c07b477b7e6675ae2f9f262c06d4ce22728aa25",
     "/angular-ecommerce-3d/common.d7a75cb04dd24c2a.js": "0eca2f0193b546eb53da0b0c2f15f7cb7b27cfc6",
-    "/angular-ecommerce-3d/index.html": "38d26645ef9388d107a7f02aa4342a71187c425f",
-    "/angular-ecommerce-3d/main.bb80bd9ce7015daf.js": "6f80ca2a8073507202a8c4eb6793456473a40117",
+    "/angular-ecommerce-3d/index.html": "82bcdedafb0fe8ff2ffc028e4ea9218bca3a384b",
+    "/angular-ecommerce-3d/main.10f56759e9535cc6.js": "a72020d96552945c5f5aba3e90c643d554cb25c3",
     "/angular-ecommerce-3d/manifest.webmanifest": "68e4e874611f558407b7642b0fe602db24978dcb",
     "/angular-ecommerce-3d/polyfills.a527a9cc31db9a9d.js": "75b41ca06c59053b7d23f357a4cbbd22f58c0a66",
     "/angular-ecommerce-3d/runtime.2fee8db40243da63.js": "7fcd602da554106984ad9e982d3edb4abd722087",
-    "/angular-ecommerce-3d/styles.f98ce35c7aeb0fce.css": "bbaaeeb00be1660165d88c67661159e17c4891c4"
+    "/angular-ecommerce-3d/styles.090610b3053dcea3.css": "810e6ab1b16dd1e52579cc3ee5d1940e5aa63824"
   },
   "navigationUrls": [
     {
