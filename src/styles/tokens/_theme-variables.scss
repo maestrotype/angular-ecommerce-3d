@@ -191,6 +191,9 @@
         --border-primary: #e5e7eb;
         --border-secondary: #f3f4f6;
         --border-focus: #6366f1;
+
+        /* CARD COMPONENT */
+        --card-radius: 0px;
 }
 
 /* ==========================================================================
@@ -443,6 +446,9 @@
         --border-primary: rgba(255, 255, 255, 0.4);
         --border-secondary: rgba(255, 255, 255, 0.2);
         --border-focus: #6366f1;
+
+        /* CARD COMPONENT */
+        --card-radius: 8px;
 }
 
 /* ==========================================================================
@@ -681,4 +687,7 @@
         --border-primary: rgba(255, 255, 255, 0.5);
         --border-secondary: rgba(255, 255, 255, 0.3);
         --border-focus: #6366f1;
+
+        /* CARD COMPONENT */
+        --card-radius: 20px;
 }

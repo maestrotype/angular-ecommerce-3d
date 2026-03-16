@@ -6,14 +6,16 @@
 .product-card {
   background: #ffffff;
   border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  border-radius: var(--card-radius, 8px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: all 0.3s ease;
   position: relative;
   cursor: pointer;
   width: 100%;
-  min-width: 280px;
+  min-width: 250px; /* Centering for Fold 6 */
+  display: flex;
+  flex-direction: column;
   
   opacity: 1;
   transform: translateY(0);
@@ -175,6 +177,12 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
+    border-top: 1px solid #e5e7eb; /* Simple footer divider */
+    flex-grow: 1;
+
+    [data-theme="dark"] & {
+      border-top-color: #334155;
+    }
 
     .product-name {
       font-size: 16px;
@@ -243,24 +251,21 @@
   }
 }
 
-// Grid layout improvements for wider cards
+// Grid layout improvements
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 24px;
   padding: 20px;
+  justify-items: center; /* Center cards in grid */
 }
 
 // Responsive adjustments
 @media (max-width: 768px) {
   .products-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 16px;
     padding: 16px;
-  }
-  
-  .product-card {
-    min-width: 260px;
   }
 }
 
