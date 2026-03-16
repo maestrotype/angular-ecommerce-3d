@@ -89,9 +89,10 @@
 }
 
 @media (max-width: 768px) {
-  .admin-sidenav {
+  .admin-container .admin-sidenav {
     width: 280px;
-    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+    background-color: transparent;
+    box-shadow: none;
   }
 
   .admin-main {

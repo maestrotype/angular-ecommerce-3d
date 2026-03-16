@@ -8,7 +8,7 @@
   <span class="spacer"></span>
 
   <div class="header-actions">
-    <button mat-icon-button [routerLink]="'/home'" [matTooltip]="'GO_TO_STOREFRONT' | translate">
+    <button mat-icon-button [routerLink]="'/home'" [matTooltip]="'GO_TO_STOREFRONT' | translate" *ngIf="!isMobile">
       <mat-icon>storefront</mat-icon>
     </button>
 
@@ -18,7 +18,7 @@
         currentTheme === 'light' ? 'Switch to Glass Theme' : 
         currentTheme === 'glass' ? 'Switch to Dark Glass Theme' :
         'Switch to Dark Theme'
-      ">
+      " *ngIf="!isMobile">
       <mat-icon>
         {{ currentTheme === 'dark' ? 'light_mode' :
         currentTheme === 'light' ? 'blur_on' :

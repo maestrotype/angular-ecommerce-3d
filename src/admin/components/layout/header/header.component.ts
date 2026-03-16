@@ -1,5 +1,5 @@
-
-import { Component, EventEmitter, Output, OnInit, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Output, OnInit, OnDestroy, ViewEncapsulation, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil, switchMap } from 'rxjs/operators';
@@ -22,14 +22,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
   notifications: Notification[] = [];
-  unreadCount = 0;
+   unreadCount = 0;
   currentTheme: string = 'dark';
+  isMobile: boolean = false;
 
   constructor(
     private router: Router,
     private authService: AuthService,
     private notificationService: NotificationService,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
   ngOnInit(): void {
@@ -39,6 +41,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .subscribe(theme => {
         this.currentTheme = theme.id;
       });
+
+    this.checkScreenSize();
+    if (isPlatformBrowser(this.platformId)) {
+      window.addEventListener('resize', this.checkScreenSize.bind(this));
+    }
 
     // Load notifications on initialization
     this.notificationService.loadNotifications()
@@ -73,6 +80,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    if (isPlatformBrowser(this.platformId)) {
+      window.removeEventListener('resize', this.checkScreenSize.bind(this));
+    }
+  }
+
+  private checkScreenSize(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.isMobile = window.innerWidth <= 768;
+    }
   }
 
   toggleTheme(): void {
