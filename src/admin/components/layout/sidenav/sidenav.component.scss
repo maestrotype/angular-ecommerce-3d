@@ -1,312 +1,266 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
 .admin-sidenav {
-  background-color: transparent;
-  background-color: var(--admin-bg-card);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--admin-bg-card, #ffffff);
   color: var(--admin-text-primary);
-  box-shadow: none;
-  transition: background-color var(--admin-transition-normal), 
-              color var(--admin-transition-normal),
-              border-color var(--admin-transition-normal);
-  
-  // Dark Glass theme - ensure white text
-  [data-theme="dark-glass"] & {
-    color: rgba(255, 255, 255, 1);
-    background-color: transparent;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  &::-webkit-scrollbar {
+    width: 0px;
   }
-  
-  .sidenav-header {
-    padding: var(--admin-spacing-lg);
-    border-bottom: 1px solid var(--admin-border-primary);
-    background-color: transparent;
-    
-    // Glass theme - remove border
-    [data-theme="glass"] & {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-      background: transparent;
-    }
-    
-    // Dark Glass theme
-    [data-theme="dark-glass"] & {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-      background: transparent;
-    }
-    
-    .logo {
-      font-size: var(--admin-font-size-lg);
-      font-weight: var(--admin-font-weight-bold);
+
+  // Mobile Premium Look
+  @media (max-width: 768px) {
+    background: var(--header-bg, rgba(255, 255, 255, 0.95));
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    box-shadow: -10px 0 50px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Mobile Header */
+  .sidenav-header-mobile {
+    padding: 20px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(var(--admin-primary-rgb, 0, 0, 0), 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+
+    .menu-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      font-weight: 800;
       color: var(--admin-text-primary);
-      text-decoration: none;
+    }
+
+    .close-btn {
+      background: rgba(0, 0, 0, 0.05);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
-      gap: var(--admin-spacing-sm);
-      
-      mat-icon {
-        color: var(--admin-primary);
-      }
-    }
-  }
-  
-  .nav-list {
-    padding: var(--admin-spacing-md) 0;
-    
-    .nav-item.nav-item {
-      margin: 0 var(--admin-spacing-sm);
-      border-radius: var(--admin-border-radius-sm);
-      transition: background-color var(--admin-transition-normal);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-      
-      &:hover {
-        background-color: var(--admin-bg-hover);
-      }
-      
-      &:last-child {
-        border-bottom: none;
-      }
-      
-      &.active {
-        background-color: var(--admin-primary);
-        color: var(--admin-text-inverse);
-        
-        // Dark Glass theme - brighter active item
-        [data-theme="dark-glass"] & {
-          background: rgba(138, 180, 248, 0.3);
-          box-shadow: 
-            0 0 15px rgba(138, 180, 248, 0.3),
-            inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        }
-        
-        .nav-link {
-          color: var(--admin-text-inverse);
-          
-          // Dark Glass theme - white text
-          [data-theme="dark-glass"] & {
-            color: rgba(255, 255, 255, 1);
-          }
-          
-          mat-icon {
-            color: var(--admin-text-inverse);
-            
-            // Dark Glass theme - white icons
-            [data-theme="dark-glass"] & {
-              color: rgba(255, 255, 255, 1);
-            }
-          }
-        }
-      }
-      
-      .nav-link {
-        display: flex;
-        align-items: center;
-        padding: var(--admin-spacing-md);
-        color: var(--admin-text-primary);
-        text-decoration: none;
-        transition: color var(--admin-transition-normal);
-        
-        // Dark Glass theme - white text
-        [data-theme="dark-glass"] & {
-          color: rgba(255, 255, 255, 0.95);
-        }
-        
-        mat-icon {
-          margin-right: var(--admin-spacing-md);
-          color: var(--admin-text-secondary);
-          transition: color var(--admin-transition-normal);
-          
-          // Dark Glass theme - white icons
-          [data-theme="dark-glass"] & {
-            color: rgba(255, 255, 255, 0.7);
-          }
-        }
-        
-        .nav-label {
-          font-weight: var(--admin-font-weight-medium);
-        }
-        
-        .nav-badge {
-          margin-left: auto;
-          background-color: var(--admin-error);
-          color: var(--admin-text-inverse);
-          font-size: var(--admin-font-size-xs);
-          font-weight: var(--admin-font-weight-bold);
-          padding: 2px 6px;
-          border-radius: 10px;
-          min-width: 18px;
-          text-align: center;
-        }
-      }
-    }
-  }
-  
-  .sidenav-footer {
-    padding: var(--admin-spacing-md);
-    border-top: 1px solid var(--admin-border-primary);
-    background-color: transparent;
-    
-    // Glass theme - remove border
-    [data-theme="glass"] & {
-      border-top: 1px solid rgba(255, 255, 255, 0.15);
-      background: transparent;
-    }
-    
-    // Dark Glass theme
-    [data-theme="dark-glass"] & {
-      border-top: 1px solid rgba(255, 255, 255, 0.15);
-      background: transparent;
-      
-      // Logout button - transparent, no background
-      button {
-        background: transparent;
-        color: rgba(255, 255, 255, 0.9);
-        
-        &:hover {
-          background: rgba(255, 255, 255, 0.1);
-        }
-        
-        mat-icon {
-          color: rgba(255, 255, 255, 0.7);
-        }
-      }
-    }
-    
-    .logout-button, button {
-      width: 100%;
-      background: transparent;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
       color: var(--admin-text-primary);
-      text-align: left;
-      padding: var(--admin-spacing-md);
-      border-radius: var(--admin-border-radius-sm);
-      transition: background-color var(--admin-transition-normal);
-      
-      &:hover {
-        background-color: transparent;
-      }
-      
-      mat-icon {
-        margin-right: var(--admin-spacing-md);
-        color: var(--admin-text-secondary);
-      }
-    }
-    
-    button.logout-btn {
-      background: transparent;
-      box-shadow: none;
-      border: none;
-      color: inherit;
-      padding: var(--admin-spacing-md);
-      text-align: left;
-      transition: background-color var(--admin-transition-normal);
 
       &:hover {
-        background-color: transparent;
+        background: rgba(0, 0, 0, 0.1);
+        transform: rotate(90deg);
       }
 
       mat-icon {
-        color: var(--admin-text-secondary);
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
       }
     }
   }
-}
 
-// Responsive design
-@media (max-width: 768px) {
-  .admin-sidenav {
-    .sidenav-header {
-      padding: var(--admin-spacing-md);
-      
-      .logo {
-        font-size: var(--admin-font-size-md);
+  .sidenav-nav {
+    flex: 1;
+    padding: 0 15px;
+
+    a {
+      margin-bottom: 8px;
+      border-radius: 12px;
+      height: 52px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      color: var(--admin-text-primary);
+      position: relative;
+      overflow: hidden;
+
+      mat-icon {
+        color: var(--admin-text-secondary);
+        transition: color 0.3s ease;
+      }
+
+      &:hover {
+        background-color: var(--admin-bg-hover, rgba(0, 0, 0, 0.04));
+        transform: translateX(5px);
+      }
+
+      &.active {
+        background: rgba(var(--admin-primary-rgb, 99, 102, 241), 0.1);
+        color: var(--admin-primary);
+        font-weight: 600;
+
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 15%;
+          height: 70%;
+          width: 4px;
+          background: var(--admin-primary);
+          border-radius: 0 4px 4px 0;
+        }
+
+        mat-icon {
+          color: var(--admin-primary);
+        }
+
+        ::ng-deep .mdc-list-item__primary-text {
+          color: var(--admin-primary);
+          font-weight: 600;
+        }
       }
     }
-    
-    .nav-list {
-      .nav-item {
-        margin: 0 var(--admin-spacing-xs);
-        
-        .nav-link {
-          padding: var(--admin-spacing-sm) var(--admin-spacing-md);
-          
-          .nav-label {
-            font-size: var(--admin-font-size-sm);
+  }
+
+  /* Extra sections for Mobile (Theme/Lang) */
+  .sidenav-extra-sections {
+    padding: 30px 25px;
+    background: rgba(0, 0, 0, 0.02);
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+
+    .mobile-section {
+      .section-label {
+        display: block;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        font-weight: 700;
+        color: var(--admin-text-secondary);
+        margin-bottom: 12px;
+      }
+
+      .theme-chips {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        width: 100%;
+
+        .chip-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 38px;
+          padding: 0 10px;
+          border-radius: 12px;
+          border: 1px solid rgba(var(--admin-primary-rgb, 99, 102, 241), 0.1);
+          background: rgba(var(--admin-primary-rgb, 99, 102, 241), 0.05);
+          color: var(--admin-text-primary);
+          font-size: 11px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          cursor: pointer;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          white-space: nowrap;
+
+          &:hover {
+            background: rgba(var(--admin-primary-rgb, 99, 102, 241), 0.1);
+            border-color: var(--admin-primary);
+            transform: translateY(-1px);
+          }
+
+          &.active {
+            background: var(--admin-primary, #6366f1);
+            color: #ffffff;
+            border-color: var(--admin-primary);
+            box-shadow: 0 4px 12px rgba(var(--admin-primary-rgb, 99, 102, 241), 0.3);
+          }
+
+          &.storefront-btn {
+             grid-column: span 3;
+             height: 48px;
+             margin-top: 4px;
+             background: rgba(var(--admin-primary-rgb, 99, 102, 241), 0.1);
+             border: 1px dashed var(--admin-primary);
+             color: var(--admin-primary);
+             font-size: 13px;
+             gap: 8px;
+
+             mat-icon {
+               font-size: 18px;
+               width: 18px;
+               height: 18px;
+             }
+
+             &:hover {
+               background: var(--admin-primary);
+               color: #fff;
+               border-style: solid;
+             }
           }
         }
       }
     }
   }
-}
 
-@media (max-width: 480px) {
-  .admin-sidenav {
-    .sidenav-header {
-      padding: var(--admin-spacing-sm);
-      
-      .logo {
-        font-size: var(--admin-font-size-sm);
+  .sidenav-footer {
+    padding: 20px 25px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+
+    .logout-btn {
+      width: 100%;
+      justify-content: flex-start;
+      border-radius: 12px;
+      padding: 12px 15px;
+      color: #ef4444;
+      font-weight: 600;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: rgba(239, 68, 68, 0.1);
+        transform: translateY(-2px);
+      }
+
+      mat-icon {
+        margin-right: 12px;
+        color: #ef4444;
       }
     }
-    
-    .nav-list {
-      .nav-item {
-        .nav-link {
-          padding: var(--admin-spacing-sm);
-          
-          mat-icon {
-            margin-right: var(--admin-spacing-sm);
-          }
+  }
+}
+
+/* Theme specific overrides for mobile menu */
+[data-theme="dark"], [data-theme="dark-glass"] {
+  .admin-sidenav {
+    @media (max-width: 768px) {
+      background: rgba(15, 23, 42, 0.95);
+      border-left: 1px solid rgba(255, 255, 255, 0.05);
+
+      .sidenav-header-mobile {
+        background: rgba(255, 255, 255, 0.03);
+        border-bottom-color: rgba(255, 255, 255, 0.05);
+
+        .close-btn {
+          background: rgba(255, 255, 255, 0.05);
+          &:hover { background: rgba(255, 255, 255, 0.1); }
         }
       }
-    }
-  }
-}
 
-// Dark Glass theme - fix active/focus text color for Material list items
-:host-context([data-theme="dark-glass"]) {
-  .mat-mdc-list-item,
-  .mat-mdc-nav-list .mat-mdc-list-item {
-    &:active,
-    &:focus,
-    &.cdk-keyboard-focused,
-    &.cdk-program-focused {
-      .mdc-list-item__primary-text,
-      .mat-mdc-list-item-title,
-      .mat-mdc-list-item-unscoped-content {
-        color: rgba(255, 255, 255, 0.95);
+      .chip-btn {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: #fff;
+
+        &.active {
+          background: var(--admin-primary, #6366f1);
+        }
       }
       
-      .mat-mdc-list-item-icon,
-      mat-icon {
-        color: rgba(255, 255, 255, 0.8);
+      .sidenav-extra-sections {
+        background: rgba(255, 255, 255, 0.01);
+        border-top-color: rgba(255, 255, 255, 0.05);
       }
     }
-  }
-  
-  // Ensure text stays white on all states
-  .mdc-list-item__primary-text {
-    color: rgba(255, 255, 255, 0.95);
-  }
-}
-
-// Dark Glass theme - fix active/focus text color for Material list items
-:host-context([data-theme="dark-glass"]) {
-  .mat-mdc-list-item,
-  .mat-mdc-nav-list .mat-mdc-list-item {
-    &:active,
-    &:focus,
-    &.cdk-keyboard-focused,
-    &.cdk-program-focused {
-      .mdc-list-item__primary-text,
-      .mat-mdc-list-item-title,
-      .mat-mdc-list-item-unscoped-content {
-        color: rgba(255, 255, 255, 0.95);
-      }
-      
-      .mat-mdc-list-item-icon,
-      mat-icon {
-        color: rgba(255, 255, 255, 0.8);
-      }
-    }
-  }
-  
-  // Ensure text stays white on all states
-  .mdc-list-item__primary-text {
-    color: rgba(255, 255, 255, 0.95);
   }
 }

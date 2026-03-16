@@ -1,7 +1,13 @@
-import { Component, Output, EventEmitter } from "@angular/core";
+import { Component, Output, EventEmitter, OnInit, OnDestroy, Inject, PLATFORM_ID, ViewEncapsulation } from "@angular/core";
+import { isPlatformBrowser } from '@angular/common';
 import { Router } from "@angular/router";
 import { AuthService } from "../../../services/auth.service";
 import { OrderService } from "../../../services/order.service";
+import { ThemeService } from "../../../../app/core/themes/theme.service";
+import { TranslateService } from "@ngx-translate/core";
+import { Theme } from "../../../../app/core/themes/theme.model";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 interface NavItem {
   label: string;
@@ -13,9 +19,25 @@ interface NavItem {
   selector: "app-admin-sidenav",
   templateUrl: "./sidenav.component.html",
   styleUrls: ["./sidenav.component.scss"],
+  encapsulation: ViewEncapsulation.None,
 })
-export class SidenavComponent {
+export class SidenavComponent implements OnInit, OnDestroy {
   @Output() closeSidenav = new EventEmitter<void>();
+
+  private destroy$ = new Subject<void>();
+  isMobile = false;
+
+  // Language customization
+  languages = [
+    { code: 'en', label: 'EN' },
+    { code: 'ru', label: 'RU' },
+    { code: 'ua', label: 'UA' }
+  ];
+  currentLang = 'en';
+
+  // Theme switching
+  themes: Theme[] = [];
+  currentTheme = 'light';
 
   navItems: NavItem[] = [
     { label: "DASHBOARD", route: "/admin/dashboard", icon: "dashboard" },
@@ -36,10 +58,58 @@ export class SidenavComponent {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private orderService: OrderService
-  ) { }
+    private orderService: OrderService,
+    private themeService: ThemeService,
+    public translate: TranslateService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    this.currentLang = this.translate.currentLang || this.translate.getDefaultLang() || 'en';
+  }
 
   ngOnInit(): void {
+    this.checkScreenSize();
+    this.loadThemes();
+
+    if (isPlatformBrowser(this.platformId)) {
+      window.addEventListener('resize', this.checkScreenSize.bind(this));
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    if (isPlatformBrowser(this.platformId)) {
+      window.removeEventListener('resize', this.checkScreenSize.bind(this));
+    }
+  }
+
+  private checkScreenSize(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.isMobile = window.innerWidth <= 768;
+    }
+  }
+
+  private loadThemes(): void {
+    this.themes = this.themeService.getThemesByArea('admin');
+    this.currentTheme = this.themeService.getCurrentAdminTheme().id;
+
+    this.themeService.adminTheme$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(theme => {
+        this.currentTheme = theme.id;
+      });
+  }
+
+  changeTheme(themeId: string): void {
+    this.themeService.setTheme(themeId, 'admin');
+  }
+
+  changeLanguage(langCode: string): void {
+    this.currentLang = langCode;
+    this.translate.use(langCode);
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('preferredLanguage', langCode);
+    }
   }
 
 
