@@ -30,6 +30,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { LayoutModule } from '@angular/cdk/layout';
+import { BaseChartDirective } from 'ng2-charts';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminLayoutComponent } from './components/layout/admin-layout/admin-layout.component';
 import { AdminLoginComponent } from './pages/login/admin-login.component';
@@ -147,6 +148,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatButtonToggleModule,
     DragDropModule,
     LayoutModule,
+    BaseChartDirective, // Added for dashboard charts
     TranslateModule.forChild({
       loader: {
         provide: TranslateLoader,
