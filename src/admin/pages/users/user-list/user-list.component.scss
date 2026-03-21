@@ -95,11 +95,11 @@
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        background-color: var(--admin-bg-secondary);
+        background-color: var(--admin-avatar-bg);
         display: flex;
         align-items: center;
         justify-content: center;
-        color: var(--admin-text-secondary);
+        color: var(--admin-avatar-color);
 
         mat-icon {
           font-size: 24px;
@@ -107,6 +107,7 @@
           height: 24px;
         }
       }
+
 
       .user-name {
         font-weight: var(--admin-font-weight-medium);

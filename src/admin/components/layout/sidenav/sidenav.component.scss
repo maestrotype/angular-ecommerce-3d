@@ -213,18 +213,18 @@
       justify-content: flex-start;
       border-radius: 12px;
       padding: 12px 15px;
-      color: #ef4444;
+      color: var(--admin-primary);
       font-weight: 600;
       transition: all 0.3s ease;
 
       &:hover {
-        background: rgba(239, 68, 68, 0.1);
+        background: rgba(var(--admin-primary-rgb, 59, 130, 246), 0.1);
         transform: translateY(-2px);
       }
 
       mat-icon {
         margin-right: 12px;
-        color: #ef4444;
+        color: var(--admin-primary);
       }
     }
   }
