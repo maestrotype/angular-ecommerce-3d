@@ -106,6 +106,8 @@
   "BLOCK_USER": "Block user",
   "DELETE_USER": "Delete user",
   "REVENUE": "Revenue",
+  "SALES_ACTIVITY": "Sales Activity",
+  "TOP_SELLING_PRODUCTS": "Top Selling Products",
   "LOADING": "Loading...",
   "RETRY": "Retry",
   "RECEIVE_EMAIL_NOTIFICATIONS": "Receive notifications via email",

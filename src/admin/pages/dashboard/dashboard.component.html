@@ -80,6 +80,72 @@
     </mat-card>
   </div>
 
+  <div class="charts-section" *ngIf="!isLoading">
+    <div class="charts-grid">
+      <mat-card class="chart-card sales-main">
+        <mat-card-header>
+          <div class="header-text">
+            <mat-card-title>{{ 'SALES_ACTIVITY' | translate }}</mat-card-title>
+            <div class="card-subtitle-small">{{ 'LAST_7_DAYS' | translate }}</div>
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="chart-wrapper">
+            <canvas baseChart
+              [data]="salesChartData"
+              [options]="salesChartOptions"
+              [type]="'line'">
+            </canvas>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="chart-card top-products">
+        <mat-card-header>
+          <div class="header-text">
+            <mat-card-title>{{ 'TOP_SELLING_PRODUCTS' | translate }}</mat-card-title>
+            <div class="card-subtitle-small">Performance metric</div>
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="top-products-list">
+             <div class="product-item">
+               <div class="product-meta">
+                 <span class="name">Premium Sneakers</span>
+                 <span class="percent">35%</span>
+               </div>
+               <div class="progress-bar-minimal"><div class="fill" style="width: 35%"></div></div>
+             </div>
+
+             <div class="product-item">
+               <div class="product-meta">
+                 <span class="name">Leather Bag</span>
+                 <span class="percent">28%</span>
+               </div>
+               <div class="progress-bar-minimal"><div class="fill" style="width: 28%"></div></div>
+             </div>
+
+             <div class="product-item">
+               <div class="product-meta">
+                 <span class="name">Winter Coat</span>
+                 <span class="percent">22%</span>
+               </div>
+               <div class="progress-bar-minimal"><div class="fill" style="width: 22%"></div></div>
+             </div>
+
+             <div class="product-item">
+               <div class="product-meta">
+                 <span class="name">Luxury Watch</span>
+                 <span class="percent">15%</span>
+               </div>
+               <div class="progress-bar-minimal"><div class="fill" style="width: 15%"></div></div>
+             </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
   <div class="payment-errors-section" *ngIf="!isLoading">
     <h2>{{ 'RECENT_PAYMENT_ISSUES' | translate }}</h2>
     <mat-card class="errors-card">
