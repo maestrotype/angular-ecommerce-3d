@@ -19,36 +19,40 @@
   --admin-input-label: #6b7280;
   --admin-text-label: #6b7280;
   --admin-input-focus-border: var(--admin-primary);
-  --admin-danger: #ef4444;
+  --admin-danger: #3b82f6; // Changed from red to blue
   --add-btn: #313638;
   --add-btn-hover: #3a464b;
   --mat-card-subtitle-text-color: #111827;
 
   // Background Colors - Light Theme
-  --admin-bg-primary: #eaeaea;
-  --admin-bg-secondary: #eaeaea;
-  --admin-bg-tertiary: #fafafa;
-  --admin-bg-card: #f0f2f5;
-  --admin-table-bg: #fafafa;
-  --admin-table-border: #a0a0a0;
-  --admin-table-header-bg: #e5e7eb;
-  --admin-bg-hover: #e8f4f8;
-  --admin-bg-overlay: rgba(0, 0, 0, 0.5);
+  --admin-bg-primary: #f0f2f5;
+  --admin-bg-secondary: #f0f2f5;
+  --admin-bg-tertiary: #ffffff;
+  --admin-bg-card: #ffffff;
+  --admin-table-bg: #ffffff;
+  --admin-table-border: #e5e7eb;
+  --admin-table-header-bg: #f8fafc;
+  --admin-bg-hover: rgba(59, 130, 246, 0.05);
+  --admin-bg-overlay: rgba(0, 0, 0, 0.3);
   --admin-basic-bg: #ffffff;
-  --admin-order-list-card-bg: #f8fafc;
+  --admin-order-list-card-bg: #ffffff;
   
   // Text Colors - Light Theme
-  --admin-text-primary: #212121;
-  --admin-text-secondary: #757575;
-  --admin-text-disabled: #bdbdbd;
+  --admin-text-primary: #111827;
+  --admin-text-secondary: #6b7280;
+  --admin-text-disabled: #9ca3af;
   --admin-text-inverse: #ffffff;
   
   // Border Colors - Light Theme
-  --admin-border-primary: #d0d0d0;
-  --admin-border-secondary: #c0c0c0;
-  --admin-border-focus: #1976d2;
-  --admin-border-error: #f44336;
+  --admin-border-primary: #e5e7eb;
+  --admin-border-secondary: #f3f4f6;
+  --admin-border-focus: #3b82f6;
+  --admin-border-error: #3b82f6; // Changed from red to blue
   
+  // Custom Avatar Variables
+  --admin-avatar-bg: rgba(59, 130, 246, 0.1); 
+  --admin-avatar-color: #3b82f6;
+
   // Ensure MDC card container tokens are transparent in light theme
   --mdc-elevated-card-container-color: transparent;
   --mdc-filled-card-container-color: transparent;
@@ -61,4 +65,5 @@
   --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
   --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
 }
+
   

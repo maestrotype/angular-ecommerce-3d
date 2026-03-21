@@ -258,6 +258,43 @@
     filter: brightness(.95);
   }
 
+  /* Override Warn (Red) with Primary Blue as requested */
+  .mat-mdc-button.mat-warn, 
+  .mat-mdc-icon-button.mat-warn,
+  .mat-mdc-raised-button.mat-warn,
+  .mat-mdc-unelevated-button.mat-warn,
+  .mat-mdc-fab.mat-warn,
+  .mat-mdc-mini-fab.mat-warn {
+    --mdc-icon-button-icon-color: var(--admin-primary) !important;
+    --mat-icon-button-state-layer-color: var(--admin-primary) !important;
+    color: var(--admin-primary) !important;
+    
+    mat-icon {
+      color: var(--admin-primary) !important;
+    }
+    
+    .mdc-button__label, .mdc-button__icon {
+      color: var(--admin-primary) !important;
+    }
+  }
+
+  /* Force Slide Toggle to Primary Blue */
+  .mat-mdc-slide-toggle.mat-accent {
+    --mdc-switch-selected-focus-state-layer-color: var(--admin-primary);
+    --mdc-switch-selected-handle-color: var(--admin-primary);
+    --mdc-switch-selected-hover-state-layer-color: var(--admin-primary);
+    --mdc-switch-selected-pressed-state-layer-color: var(--admin-primary);
+    --mdc-switch-selected-focus-track-color: var(--admin-primary);
+    --mdc-switch-selected-hover-track-color: var(--admin-primary);
+    --mdc-switch-selected-pressed-track-color: var(--admin-primary);
+    --mdc-switch-selected-track-color: var(--admin-primary);
+    opacity: 0.8;
+    
+    &.mat-mdc-slide-toggle-checked {
+      opacity: 1;
+    }
+  }
+
   /* outlined / secondary */
   .mat-mdc-stroked-button {
     border-color: var(--admin-input-border);
