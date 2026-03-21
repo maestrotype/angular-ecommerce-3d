@@ -1,65 +1,78 @@
-<div class="login-container">
-  <mat-card class="login-card">
-    <mat-card-header>
-      <mat-card-title>Admin Login</mat-card-title>
-      <mat-card-subtitle>Sign in to access admin panel</mat-card-subtitle>
-    </mat-card-header>
+<div class="login-page">
+  <!-- Aurora Background Layers -->
+  <div class="background-decor">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
 
-    <mat-card-content>
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Email</mat-label>
-          <input
-            matInput
-            type="email"
-            formControlName="email"
-            placeholder="admin@example.com"
-          />
-          <mat-icon matSuffix>email</mat-icon>
-          <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
-            Email is required
-          </mat-error>
-          <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
-            Please enter a valid email
-          </mat-error>
-        </mat-form-field>
+  <div class="login-container">
+    <mat-card class="login-card">
+      <div class="login-header">
+        <div class="logo-wrapper">
+          <mat-icon class="brand-icon">security</mat-icon>
+        </div>
+        <mat-card-title>{{ 'ADMIN_LOGIN_TITLE' | translate }}</mat-card-title>
+        <mat-card-subtitle>{{ 'ADMIN_LOGIN_SUBTITLE' | translate }}</mat-card-subtitle>
+      </div>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Password</mat-label>
-          <input
-            matInput
-            [type]="hidePassword ? 'password' : 'text'"
-            formControlName="password"
-          />
+      <mat-card-content>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'EMAIL' | translate }}</mat-label>
+            <input
+              matInput
+              type="email"
+              formControlName="email"
+              placeholder="admin@example.com"
+            />
+            <mat-icon matSuffix>email</mat-icon>
+            <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
+              {{ 'EMAIL_REQUIRED' | translate }}
+            </mat-error>
+            <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
+              {{ 'CHECKOUT.ERRORS.INVALID_EMAIL' | translate }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>{{ 'PASSWORD' | translate }}</mat-label>
+            <input
+              matInput
+              [type]="hidePassword ? 'password' : 'text'"
+              formControlName="password"
+            />
+            <button
+              mat-icon-button
+              matSuffix
+              (click)="hidePassword = !hidePassword"
+              type="button"
+              tabindex="-1"
+            >
+              <mat-icon>{{
+                hidePassword ? "visibility_off" : "visibility"
+              }}</mat-icon>
+            </button>
+            <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+              {{ 'PASSWORD_REQUIRED' | translate }}
+            </mat-error>
+            <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')">
+              {{ 'PASSWORD_MINLENGTH' | translate }}
+            </mat-error>
+          </mat-form-field>
+
           <button
-            mat-icon-button
-            matSuffix
-            (click)="hidePassword = !hidePassword"
-            type="button"
+            mat-flat-button
+            color="primary"
+            type="submit"
+            [disabled]="loginForm.invalid || isLoading"
+            class="login-button"
           >
-            <mat-icon>{{
-              hidePassword ? "visibility_off" : "visibility"
-            }}</mat-icon>
+            <mat-icon *ngIf="isLoading" class="spinning">refresh</mat-icon>
+            {{ (isLoading ? 'SIGNING_IN' : 'SIGN_IN') | translate }}
           </button>
-          <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
-            Password is required
-          </mat-error>
-          <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')">
-            Password must be at least 6 characters
-          </mat-error>
-        </mat-form-field>
-
-        <button
-          mat-raised-button
-          color="primary"
-          type="submit"
-          [disabled]="loginForm.invalid || isLoading"
-          class="login-button"
-        >
-          <mat-icon *ngIf="isLoading" class="spinning">refresh</mat-icon>
-          {{ isLoading ? "Signing in..." : "Sign In" }}
-        </button>
-      </form>
-    </mat-card-content>
-  </mat-card>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>

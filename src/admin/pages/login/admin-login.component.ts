@@ -39,6 +39,8 @@ export class AdminLoginComponent {
       this.authService.login(credentials).subscribe({
         next: (response) => {
           this.isLoading = false;
+          // Note: Ideally use TranslateService for snackbar too, but for now we keep it simple
+          // as we don't have TranslateService injected here.
           this.snackBar.open('Login successful!', 'Close', { duration: 3000 });
           this.router.navigate(['/admin/dashboard']);
         },
@@ -47,7 +49,6 @@ export class AdminLoginComponent {
           this.snackBar.open('Login failed. Please check your credentials.', 'Close', { 
             duration: 5000 
           });
-          
         }
       });
     }

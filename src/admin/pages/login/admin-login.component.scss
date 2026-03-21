@@ -1,40 +1,190 @@
+.login-page {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-color: var(--admin-bg-primary, #09090b);
+  padding: 24px;
+}
+
+// Background Aurora Effect
+.background-decor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.15;
+    animation: move 20s infinite alternate cubic-bezier(0.45, 0.05, 0.55, 0.95);
+    
+    [data-theme="light"] & {
+      opacity: 0.1;
+    }
+  }
+
+  .blob-1 {
+    width: 400px;
+    height: 400px;
+    background: var(--admin-primary, #3b82f6);
+    top: -100px;
+    left: -100px;
+  }
+
+  .blob-2 {
+    width: 500px;
+    height: 500px;
+    background: #a855f7; // Purple
+    bottom: -150px;
+    right: -100px;
+    animation-delay: -5s;
+    animation-duration: 25s;
+  }
+
+  .blob-3 {
+    width: 300px;
+    height: 300px;
+    background: #0ea5e9; // Sky
+    top: 50%;
+    left: 40%;
+    animation-delay: -10s;
+  }
+}
+
 .login-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 420px;
+  animation: slideUp 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.login-card {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 28px;
+  padding: 40px 32px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+  transition: all 0.3s ease;
+
+  [data-theme="light"] & {
+    background: rgba(255, 255, 255, 0.75);
+    border-color: rgba(0, 0, 0, 0.05);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+
+  mat-card-content {
+    padding: 0;
+  }
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 32px;
+
+  .logo-wrapper {
+    width: 68px;
+    height: 68px;
+    background: linear-gradient(135deg, var(--admin-primary, #3b82f6), #2563eb);
+    border-radius: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    background-color: var(--mat-sidenav-content-background-color);
-    padding: 20px;
-  }
-  .mat-mdc-card-title {
-    color: var(--mat-card-subtitle-text-color);
-  }
-  .login-card {
-    width: 100%;
-    max-width: 400px;
+    margin: 0 auto 24px;
+    box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    .brand-icon {
+      color: white;
+      font-size: 34px;
+      width: 34px;
+      height: 34px;
+    }
   }
 
-  .login-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  mat-card-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.6px;
+    color: var(--admin-text-primary);
+    margin: 0 0 8px !important;
+    line-height: 1.2;
   }
+
+  mat-card-subtitle {
+     font-size: 0.95rem;
+     color: var(--admin-text-secondary);
+     margin: 0;
+     font-weight: 500;
+     opacity: 0.7;
+  }
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 
   .full-width {
     width: 100%;
   }
+}
 
-  .login-button {
-    height: 48px;
-    font-size: 16px;
+.login-button {
+  margin-top: 24px;
+  height: 56px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 1.05rem;
+  background: linear-gradient(90deg, var(--admin-primary, #3b82f6), #1d4ed8);
+  color: white;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+
+  &:hover:not(:disabled) {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 24px rgba(59, 130, 246, 0.4);
+    filter: brightness(1.15);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(-1px) scale(1);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    background: #3f3f46;
   }
 
   .spinning {
     animation: spin 1s linear infinite;
-    margin-right: 8px;
+    margin-right: 10px;
+    display: inline-block;
   }
+}
 
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
+@keyframes move {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(120px, 60px) scale(1.15) rotate(10deg); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
