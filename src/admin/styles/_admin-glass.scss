@@ -28,16 +28,14 @@
   --admin-glass-inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
 
   // Background Colors - Glass Theme (translucent for glass effect)
-  --admin-bg-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --admin-bg-primary: #667eeacc;
-  --admin-bg-glass: #b2b2ff;
-  --admin-bg-secondary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --admin-bg-secondary: #764ba2cc;   
+  --admin-bg-primary: #3b82f6cc; // Blue 500
+  --admin-bg-glass: rgba(239, 246, 255, 0.5);
+  --admin-bg-secondary: rgba(248, 250, 252, 0.4);   
   --admin-product-card-bg: rgba(255, 255, 255, 0.1);
   --admin-bg-tertiary: rgba(250, 250, 250, 0.15);
-  --admin-bg-card: rgba(240, 242, 245, 0.25);
-  --admin-header-bg: #c1cfff;
-  --admin-bg-hover: rgba(232, 244, 248, 0.3);
+  --admin-bg-card: rgba(255, 255, 255, 0.2);
+  --admin-header-bg: rgba(241, 245, 249, 0.85);
+  --admin-bg-hover: rgba(59, 130, 246, 0.1);
   --admin-back-btn: rgba(54, 63, 66, 0.3);
   --admin-submit-btn: #3b82f6;
   --admin-submit-btn-hover: #2563eb;
@@ -51,13 +49,13 @@
   // Table colors - translucent for glass effect
   --admin-basic-bg: rgba(255, 255, 255, 0.2);
   --admin-basic-translucent: rgba(255, 255, 255, 0.5);
-  --admin-dark-translucent: rgba(255, 255, 255, 0.4);
-  --admin-light-translucent: rgba(255, 255, 255, 0.7);
-  --admin-table-bg: rgba(250, 250, 250, 0.15);
-  --admin-table-border: rgba(160, 160, 160, 0.3);
-  --admin-table-header-bg: rgb(184 200 237 / 50%);
-  --admin-table-even-bg: #dbe6ff80;
-  --admin-table-row-bg: #93b6ff  cc;    
+  --admin-dark-translucent: rgba(0, 0, 0, 0.1);
+  --admin-light-translucent: rgba(255, 255, 255, 0.75);
+  --admin-table-bg: rgba(250, 250, 250, 0.1);
+  --admin-table-border: rgba(59, 130, 246, 0.1);
+  --admin-table-header-bg: rgba(219, 234, 254, 0.6);
+  --admin-table-even-bg: rgba(248, 250, 252, 0.4);
+  --admin-table-row-bg: rgba(255, 255, 255, 0.35);    
   --admin-bg-container: #d7e1ff; 
   --dashboard-stat-card-bg: rgba(248, 250, 252, 0.2);
   
