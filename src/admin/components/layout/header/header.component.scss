@@ -469,42 +469,73 @@
 // Dark theme - notification menu enhancements
 [data-theme="dark"] {
   .notification-menu.mat-mdc-menu-panel {
+    background-color: var(--admin-bg-secondary);
+    border: 1px solid var(--admin-border-primary);
+    box-shadow: var(--admin-card-shadow);
+
     .notification-header {
-      background: rgba(31, 41, 55, 0.98);
-      border-bottom-color: #374151;
+      background: var(--admin-bg-tertiary);
+      border-bottom-color: var(--admin-border-primary);
       
       .notification-title {
-        color: #ffffff;
+        color: var(--admin-text-primary);
       }
       
       button.mark-all-read.mat-mdc-button {
-        background-color: var(--admin-button-muted);
+        background-color: var(--admin-primary);
+        color: #ffffff;
         
         &:hover {
-          background-color: var(--admin-button-muted-hover);
+          background-color: var(--admin-primary-hover);
         }
       }
     }
     
     .notification-list {
-      background: #111827;
+      background: var(--admin-bg-secondary);
+      
+      &::-webkit-scrollbar-thumb {
+        background: var(--admin-border-primary);
+      }
     }
     
     .notification-item {
-      background-color: #1f2937;
-      border-color: #374151;
+      background-color: var(--admin-bg-tertiary);
+      border-color: var(--admin-border-secondary);
       
       &::after {
-        background: linear-gradient(90deg, transparent, #374151, transparent);
+        background: linear-gradient(90deg, transparent, var(--admin-border-primary), transparent);
       }
       
       &:hover {
-        background-color: #374151;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        background-color: var(--admin-bg-hover);
+        border-color: var(--admin-primary);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+
+      .notification-content {
+        .notification-text {
+          .notification-title {
+            color: var(--admin-text-primary);
+          }
+          .notification-message {
+            color: var(--admin-text-secondary);
+          }
+        }
+      }
+    }
+
+    .notification-actions {
+      background-color: var(--admin-bg-tertiary);
+      border-top-color: var(--admin-border-primary);
+      
+      button {
+        color: var(--admin-text-primary);
       }
     }
   }
 }
+
 
 // Glass theme - notification menu enhancements
 [data-theme="glass"] {
