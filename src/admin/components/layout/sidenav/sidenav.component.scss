@@ -231,18 +231,60 @@
 }
 
 /* Theme specific overrides for mobile menu */
-[data-theme="dark"], [data-theme="dark-glass"] {
+[data-theme="dark"] {
   .admin-sidenav {
     @media (max-width: 768px) {
-      background: rgba(15, 23, 42, 0.95);
+      background: #0f1115; // Matches Zinc dark palette
       border-left: 1px solid rgba(255, 255, 255, 0.05);
 
       .sidenav-header-mobile {
         background: rgba(255, 255, 255, 0.03);
         border-bottom-color: rgba(255, 255, 255, 0.05);
+      }
+    }
+  }
+}
 
+[data-theme="glass"] {
+  .admin-sidenav {
+    @media (max-width: 768px) {
+      background: rgba(241, 245, 249, 0.92);
+      backdrop-filter: blur(25px) saturate(180%);
+      -webkit-backdrop-filter: blur(25px) saturate(180%);
+    }
+  }
+}
+
+[data-theme="dark-glass"] {
+  .admin-sidenav {
+    @media (max-width: 768px) {
+      background: rgba(30, 28, 26, 0.95); // Darker warm gray for dark glass mobile
+      border-left: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(30px) saturate(160%);
+      -webkit-backdrop-filter: blur(30px) saturate(160%);
+
+      .sidenav-header-mobile {
+        background: rgba(255, 255, 255, 0.05);
+        border-bottom-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .sidenav-extra-sections {
+        background: rgba(255, 255, 255, 0.02);
+        border-top-color: rgba(255, 255, 255, 0.08);
+      }
+    }
+  }
+}
+
+/* Common overrides for both dark-ish variants */
+[data-theme="dark"], [data-theme="dark-glass"] {
+  .admin-sidenav {
+    @media (max-width: 768px) {
+      .sidenav-header-mobile {
+        .menu-title { color: #fff; }
         .close-btn {
           background: rgba(255, 255, 255, 0.05);
+          color: #fff;
           &:hover { background: rgba(255, 255, 255, 0.1); }
         }
       }
@@ -253,13 +295,12 @@
         color: #fff;
 
         &.active {
-          background: var(--admin-primary, #6366f1);
+          background: var(--admin-primary, #3b82f6);
         }
       }
       
-      .sidenav-extra-sections {
-        background: rgba(255, 255, 255, 0.01);
-        border-top-color: rgba(255, 255, 255, 0.05);
+      .mobile-section .section-label {
+        color: rgba(255, 255, 255, 0.6);
       }
     }
   }
