@@ -348,7 +348,7 @@ body {
 
 /* Snackbar Styles */
 .success-snackbar {
-    background: #4caf50;
+    background: var(--admin-success, #4caf50);
     color: white;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
@@ -359,7 +359,7 @@ body {
 }
 
 .error-snackbar {
-    background: #f44336;
+    background: var(--admin-error, #f44336);
     color: white;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
@@ -370,7 +370,7 @@ body {
 }
 
 .warning-snackbar {
-    background: #ff9800;
+    background: var(--admin-warning, #ff9800);
     color: white;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
@@ -379,6 +379,7 @@ body {
 .warning-snackbar .mat-simple-snackbar-action {
     color: white;
 }
+
 
 /* Global dark theme input fixes */
 [data-theme='dark'] .mat-mdc-text-field-wrapper,

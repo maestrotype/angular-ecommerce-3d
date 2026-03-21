@@ -1,96 +1,146 @@
 [data-theme='dark'] {
-    /* Mapped to admin variables for consistency */
-    --color-bg: var(--admin-bg-primary, #0f172a);
-    --color-text: var(--admin-text-primary, #e2e8f0);
-    --color-primary: var(--admin-primary, #2563eb);
-    --color-surface: var(--admin-bg-card, #1e293b);
-  
-    background-color: var(--color-bg);
-    color: var(--color-text);
-  
-    a {
-      color: var(--color-primary);
-    }
+  /* ==========================================================================
+     ADMIN DARK THEME: Neutral/Zinc Palette (Grey-focused)
+     Refined for high contrast, depth and modern aesthetics.
+     ========================================================================== */
 
-    p {
-      color: var(--color-text);
-    }
-  // Background Colors - Dark Theme
-  --admin-bg-primary: #121212;
-  --admin-bg-secondary: #1e1e1e;
-  --admin-bg-tertiary: #2d2d2d;
-  --admin-bg-card: #1f2937;
-  --admin-header-bg: #2d2d2d;
-  --admin-table-header-bg: #252525;
-  --admin-table-bg: #2d2d2d;
-  --admin-table-border: #404040;
-  --admin-bg-hover: #2d2d2d;
-  --admin-back-btn: #2d2d2d;
-  --admin-bg-overlay: rgba(255, 255, 255, 0.1);
-  --dashboard-stat-card-bg: #1e1e1e;
+  // Base Colors - Zinc Palette (Neutral Greys)
+  --admin-bg-primary: #09090b;     // Zinc 950 (Main Background)
+  --admin-bg-secondary: #0f0f12;   // Deeper Neutral (Sidebar / Header)
+  --admin-bg-tertiary: #18181b;    // Zinc 900 (Inner surfaces)
+  --admin-bg-card: #0f0f12;        // Card Background
+  --admin-bg-hover: rgba(255, 255, 255, 0.04);
   
-  // Text Colors - Dark Theme
-  --admin-text-primary: #ffffff;
-  --admin-text-secondary: #b0b0b0;
-  --admin-text-disabled: #666666;
+  --admin-header-bg: #0f0f12;
+  --admin-bg-overlay: rgba(0, 0, 0, 0.8);
+  
+  // Text Colors
+  --admin-text-primary: #fafafa;   // Zinc 50
+  --admin-text-secondary: #a1a1aa; // Zinc 400
+  --admin-text-tertiary: #71717a;  // Zinc 500
+  --admin-text-disabled: #3f3f46;  // Zinc 700
   --admin-text-inverse: #000000;
   
-  // Border Colors - Dark Theme
-  --admin-border-primary: #404040;
-  --admin-border-secondary: #333333;
-  --admin-border-focus: #42a5f5;
-  --admin-border-error: #f44336;
+  // Semantic / Accents (Keep some dark blue/indigo vibe but more muted)
+  --admin-primary: #3b82f6;        // Blue 500
+  --admin-primary-hover: #60a5fa;  // Blue 400
+  --admin-secondary: #71717a;
   
-  // Order Details Dark Theme
-  --admin-popup-bg: #1f2937;
-  --admin-order-detail-header-bg: #374151;
-  --admin-table-header-bg: #252525;
-  // --admin-table-even-bg: #1f2937;
-  --admin-table-even-bg: #252525;
-  --admin-table-row-bg: #93b6ff  cc;    
-  --admin-table-row-bg: #2d2d2d; 
-  --admin-basic-bg: #2d2d2d;
-  --admin-order-detail-border: #404040;
-  --admin-order-detail-text-primary: #ffffff;
-  --admin-order-detail-text-secondary: #9ca3af;
-  --admin-order-detail-text-label: #9ca3af;
-  --admin-order-detail-price-color: #4caf50;
-  --admin-order-detail-total-color: #4caf50;
+  --admin-success: #22c55e;        // Green 500
+  --admin-warning: #f59e0b;        // Amber 500
+  --admin-error: #ef4444;          // Red 500
+  --admin-info: #3b82f6;
   
-  // Order List Dark Theme
-  --admin-order-list-bg: #1f2937;
-  --admin-order-list-card-bg: #374151;
-  --admin-order-list-border: #404040;
-  --admin-order-list-text-primary: #ffffff;
-  --admin-order-list-text-secondary: #9ca3af;
-  --admin-order-list-text-label: #9ca3af;
-  --admin-order-list-header-bg: #374151;
-  --admin-order-list-row-hover: #374151;
-  --admin-order-list-pagination-bg: #2d2d2d;
-  --admin-order-list-pagination-border: #404040;
-  
-  // Common Order Status Colors (shared between list and detail)
-  --admin-order-status-pending: #ff9800;
-  --admin-order-status-processing: #2196f3;
-  --admin-order-status-shipped: #4caf50;
-  --admin-order-status-delivered: #4caf50;
-  --admin-order-status-cancelled: #f44336;
+  // Borders
+  --admin-border-primary: rgba(255, 255, 255, 0.06);
+  --admin-border-secondary: rgba(255, 255, 255, 0.03);
+  --admin-border-focus: #3b82f6;
+  --admin-border-error: #ef4444;
 
-  // Material Design List item variables (dark theme)
+  // Effects & Depth
+  --admin-card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
+  // Keep a hint of blue in the gradient for "depth"
+  --admin-card-gradient: linear-gradient(135deg, #18181b 0%, #09090b 100%);
+  --admin-surface-glow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+
+  /* Dropdown Panel Fix */
+  --admin-select-panel-bg: #18181b;
+
+  /* Mappings for legacy or cross-theme variables */
+  --color-bg: var(--admin-bg-primary);
+  --color-text: var(--admin-text-primary);
+  --color-primary: var(--admin-primary);
+  --color-surface: var(--admin-bg-card);
+  
+  background-color: var(--color-bg);
+  color: var(--color-text);
+
+  a {
+    color: var(--admin-primary);
+  }
+
+  p {
+    color: var(--color-text);
+  }
+
+  // Table Specifics
+  --admin-table-header-bg: #18181b;
+  --admin-table-bg: #09090b;
+  --admin-table-border: var(--admin-border-primary);
+  --admin-table-even-bg: #0c0c0e;
+  --admin-table-row-bg: transparent;
+  
+  // Order Detail / List Overrides
+  --admin-popup-bg: #18181b;
+  --admin-order-detail-header-bg: #18181b;
+  --admin-order-detail-card-bg: #0f0f12;
+  --admin-order-detail-text-primary: #fafafa;
+  --admin-order-detail-text-secondary: #a1a1aa;
+  --admin-order-detail-price-color: var(--admin-success);
+  
+  --admin-order-list-bg: #09090b;
+  --admin-order-list-card-bg: #18181b;
+  --admin-order-list-header-bg: #18181b;
+  --admin-order-list-row-hover: rgba(255, 255, 255, 0.02);
+
+  // Common Order Status Colors
+  --admin-order-status-pending: #f59e0b;
+  --admin-order-status-processing: #3b82f6;
+  --admin-order-status-shipped: #22c55e;
+  --admin-order-status-delivered: #22c55e;
+  --admin-order-status-cancelled: #ef4444;
+
+  /* ==========================================================================
+     MATERIAL COMPONENT DEPTH ADJUSTMENTS
+     ========================================================================== */
+     
+  .mat-mdc-card, .mat-card {
+    background: var(--admin-card-gradient) !important;
+    border: 1px solid var(--admin-border-primary) !important;
+    box-shadow: var(--admin-card-shadow) !important;
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      border-radius: inherit;
+      box-shadow: var(--admin-surface-glow);
+    }
+  }
+
+  /* Material Select & Menu Overrides for Dark Theme */
+  .mat-mdc-select-panel, .mat-select-panel {
+    background-color: var(--admin-select-panel-bg) !important;
+    border: 1px solid var(--admin-border-primary) !important;
+  }
+
+  .mat-mdc-option, .mat-option {
+    color: var(--admin-text-primary) !important;
+    background-color: transparent !important;
+    
+    &:hover:not(.mdc-list-item--disabled) {
+      background-color: var(--admin-bg-hover) !important;
+    }
+    
+    &.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+      background-color: rgba(59, 130, 246, 0.1) !important;
+      .mdc-list-item__primary-text {
+        color: var(--admin-primary) !important;
+      }
+    }
+  }
+
+  /* Material Design List item variables (dark theme) */
   --mdc-list-list-item-label-text-color: var(--admin-text-primary);
   --mdc-list-list-item-supporting-text-color: var(--admin-text-secondary);
   --mdc-list-list-item-disabled-text-color: var(--admin-text-disabled);
   --mdc-list-list-item-leading-icon-color: var(--admin-text-secondary);
   --mdc-list-list-item-trailing-icon-color: var(--admin-text-secondary);
-  // MDC list hover tokens (dark)
-  --mdc-list-list-item-hover-label-text-color: var(--admin-text-primary);
-  --mdc-list-list-item-hover-state-layer-color: transparent;
-  --mdc-list-list-item-hover-state-layer-opacity: 0;
-  --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
-  --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
-  // Ensure MDC card container tokens are transparent in dark theme
+  
+  /* Ensure MDC card container tokens are transparent to allow our gradients to show */
   --mdc-elevated-card-container-color: transparent;
   --mdc-filled-card-container-color: transparent;
   --mdc-outlined-card-container-color: transparent;
 }
-  
