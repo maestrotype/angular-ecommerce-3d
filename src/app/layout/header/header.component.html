@@ -150,7 +150,7 @@
     <div class="search-results-list">
       <div *ngFor="let product of searchResults.slice(0, 5)" class="search-result-item"
         (click)="goToProduct(product.id)">
-        <img [src]="product.imageUrl" [alt]="product.name" class="result-image">
+        <img [src]="product.imageUrl" [alt]="product.name | localized" class="result-image">
         <div class="result-info">
           <h4 class="result-name">{{ product.name | localized }}</h4>
           <p class="result-price">${{ product.price }}</p>

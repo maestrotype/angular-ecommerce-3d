@@ -43,7 +43,7 @@
             <mat-label>{{ 'CATEGORY' | translate }}</mat-label>
             <mat-select formControlName="category">
               <mat-option *ngFor="let category of categories" [value]="getCategoryValue(category)">
-                {{ category.name }}
+                {{ category.name | localized }}
               </mat-option>
             </mat-select>
             <mat-error *ngIf="productForm.get('category')?.hasError('required')">

@@ -15,7 +15,7 @@
     <!-- Description Tab -->
     <div class="tab-panel" *ngIf="activeTab === 'description'">
       <div class="description-content">
-        <p>{{ product.description }}</p>
+        <p>{{ product.description | localized }}</p>
         <div class="features" *ngIf="product.features">
           <h3>{{ 'PRODUCT.PECULIARITIES' | translate }}</h3>
           <ul>

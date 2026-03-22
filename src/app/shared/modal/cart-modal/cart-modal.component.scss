@@ -5,13 +5,13 @@
   
     .cart-header {
       padding: 1.5rem 2rem;
-      border-bottom: 1px solid #eee;
-      background: #f8f9fa;
+      border-bottom: 1px solid var(--border-primary);
+      background: var(--surface-secondary);
   
       h2 {
         margin: 0;
         font-size: 1.5rem;
-        color: #333;
+        color: var(--text-primary);
       }
     }
   
@@ -25,7 +25,7 @@
         padding: 2rem 0;
   
         p {
-          color: #666;
+          color: var(--text-secondary);
           margin-bottom: 1.5rem;
         }
       }
@@ -36,7 +36,7 @@
           align-items: center;
           gap: 1rem;
           padding: 1rem 0;
-          border-bottom: 1px solid #eee;
+          border-bottom: 1px solid var(--border-secondary);
   
           &:last-child {
             border-bottom: none;
@@ -48,7 +48,7 @@
             height: 60px;
             border-radius: 8px;
             overflow: hidden;
-            background: #f8f9fa;
+            background: var(--surface-tertiary);
   
             img {
               width: 100%;
@@ -64,7 +64,7 @@
               margin: 0 0 0.5rem 0;
               font-size: 1rem;
               font-weight: 500;
-              color: #333;
+              color: var(--text-primary);
             }
   
             .quantity-controls {
@@ -84,16 +84,16 @@
     }
   
     .cart-footer {
-      border-top: 1px solid #eee;
+      border-top: 1px solid var(--border-primary);
       padding: 1.5rem 2rem;
-      background: #f8f9fa;
+      background: var(--surface-secondary);
   
       .total-section {
         .total-price {
           text-align: right;
           margin-bottom: 1rem;
           font-size: 1.25rem;
-          color: #333;
+          color: var(--text-primary);
         }
   
         .checkout-actions {
