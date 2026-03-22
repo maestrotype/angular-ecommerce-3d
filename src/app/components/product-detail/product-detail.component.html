@@ -22,15 +22,28 @@
     <div class="container">
       <div class="product-grid">
         <div class="product-detail-main">
-          <div class="main-view">
+          <div class="main-view" (click)="onImageClicked()">
             <div *ngIf="product?.stock !== undefined && product.stock <= 0" class="out-of-stock-badge">
               {{ 'PRODUCT.STOCK.OUT_OF_STOCK' | translate }}
             </div>
             <img *ngIf="selectedType === 'image' && product?.images?.length" [src]="product.images[selectedImageIndex]"
-              (click)="onImageClicked()" alt="Product image" class="main-image" />
+              alt="Product image" class="main-image" />
             <app-three-d-viewer *ngIf="selectedType === '3d' && product?.model3dUrl" [modelPath]="product.model3dUrl"
               class="main-3d-viewer" [previewOnly]="false" [scale]="[9, 9, 9]"
-              [position]="[0, 0, 0]"></app-three-d-viewer>
+              [position]="[0, 0, 0]" (click)="$event.stopPropagation()"></app-three-d-viewer>
+            <!-- Expand overlay -->
+            <div class="expand-overlay">
+              <div class="expand-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <polyline points="9 21 3 21 3 15"></polyline>
+                  <line x1="21" y1="3" x2="14" y2="10"></line>
+                  <line x1="3" y1="21" x2="10" y2="14"></line>
+                </svg>
+                <span>{{ selectedType === '3d' ? 'Відкрити 3D модель' : 'Переглянути фото' }}</span>
+              </div>
+            </div>
           </div>
 
           <div class="thumbnails">

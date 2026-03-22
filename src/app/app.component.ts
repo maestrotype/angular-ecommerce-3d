@@ -106,4 +106,8 @@ export class AppComponent implements OnInit, OnDestroy {
   isAdminRoute(): boolean {
     return this.adminRoute;
   }
+
+  isViewerRoute(): boolean {
+    return this.router.url.startsWith('/viewer');
+  }
 }

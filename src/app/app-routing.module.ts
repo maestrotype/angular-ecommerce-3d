@@ -25,6 +25,7 @@ const routes: Routes = [
   { path: 'payment/:id', component: PaymentComponent },
   { path: 'payment/success', component: PaymentSuccessComponent },
   { path: 'payment/error', component: PaymentErrorComponent },
+  { path: 'viewer', loadComponent: () => import('./components/product-viewer/product-viewer.component').then(m => m.ProductViewerComponent) },
 
   {
     path: 'admin',
