@@ -1,7 +1,8 @@
-import { Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ElementRef, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ElementRef, Inject, PLATFORM_ID, HostListener, OnDestroy } from '@angular/core';
 import { isPlatformBrowser, CommonModule } from '@angular/common';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 
 @Component({
@@ -11,16 +12,18 @@ import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.j
   standalone: true,
   imports: [CommonModule]
 })
-export class ThreeDViewerComponent implements AfterViewInit {
+export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   @ViewChild('container') container!: ElementRef;
   @Input() modelPath!: string; // Input for model file path
   @Input() scale: [number, number, number] = [1, 1, 1]; // Default scale, can be overridden
   @Input() position: [number, number, number] = [0, 0, 0]; // Default position, can be overridden
+  @Input() previewOnly = false; // Disable controls for previews
   @Output() modelLoaded = new EventEmitter<void>();
 
   private scene!: THREE.Scene;
   private camera!: THREE.PerspectiveCamera;
   private renderer!: THREE.WebGLRenderer;
+  private controls!: OrbitControls;
   private model!: THREE.Object3D;
   private lastFrameTime = 0;
   private isMobile = false;
@@ -36,6 +39,21 @@ export class ThreeDViewerComponent implements AfterViewInit {
     if (isPlatformBrowser(this.platformId)) {
       this.initThree();
       this.loadModel();
+    }
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    if (!isPlatformBrowser(this.platformId) || !this.renderer) return;
+    const container = this.container.nativeElement;
+    this.camera.aspect = container.clientWidth / container.clientHeight;
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(container.clientWidth, container.clientHeight);
+  }
+
+  ngOnDestroy() {
+    if (this.renderer) {
+      this.renderer.dispose();
     }
   }
 
@@ -67,6 +85,23 @@ export class ThreeDViewerComponent implements AfterViewInit {
     directionalLight.shadow.mapSize.width = 4096;
     directionalLight.shadow.mapSize.height = 4096;
     this.scene.add(directionalLight);
+
+    // OrbitControls for manual rotation and zooming
+    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    this.controls.enableDamping = true;
+    this.controls.dampingFactor = 0.05;
+    this.controls.screenSpacePanning = false;
+    this.controls.minDistance = 5;
+    this.controls.maxDistance = 20;
+    this.controls.maxPolarAngle = Math.PI / 1.5; // Limit vertical rotation
+    this.controls.autoRotate = true;
+    this.controls.autoRotateSpeed = 2.0;
+
+    if (this.previewOnly) {
+      this.controls.enableRotate = false;
+      this.controls.enableZoom = false;
+      this.controls.enablePan = false;
+    }
   }
 
   private loadModel() {
@@ -105,8 +140,8 @@ export class ThreeDViewerComponent implements AfterViewInit {
 
     if (delta > 33) { // ~30 FPS
       this.lastFrameTime = now;
-      if (this.model) {
-        this.model.rotation.y += 0.01;
+      if (this.controls) {
+        this.controls.update();
       }
       this.renderer.render(this.scene, this.camera);
     }

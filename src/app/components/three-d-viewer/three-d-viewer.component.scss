@@ -1,9 +1,15 @@
 :host {
     display: block;
-    width: 412px;
-    height: 420px;
-  }
-  #container {
     width: 100%;
     height: 100%;
+    
+    #container {
+      width: 100%;
+      height: 100%;
+      cursor: grab;
+      
+      &:active {
+        cursor: grabbing;
+      }
+    }
   }
