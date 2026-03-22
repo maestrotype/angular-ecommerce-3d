@@ -3,12 +3,13 @@ import { isPlatformBrowser, CommonModule } from '@angular/common';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { TranslateModule } from '@ngx-translate/core';
 import { fixBackendUrl } from '../../core/utils/url-helper';
 
 @Component({
   selector: 'app-three-d-viewer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   template: `
     <div class="viewer-host">
       <!-- Luxury 3D Loader -->
@@ -31,7 +32,7 @@ import { fixBackendUrl } from '../../core/utils/url-helper';
           <div class="particle p6"></div>
         </div>
         <div class="loader-info">
-          <div class="loader-title">Завантаження 3D моделі</div>
+          <div class="loader-title">{{ 'VIEWER.LOADING' | translate }}</div>
           <div class="progress-track">
             <div class="progress-fill" [style.width.%]="loadingProgress"></div>
             <div class="progress-glow" [style.left.%]="loadingProgress"></div>
@@ -45,7 +46,7 @@ import { fixBackendUrl } from '../../core/utils/url-helper';
 
       <!-- Controls hint -->
       <div class="controls-hint" *ngIf="!isLoading && !previewOnly">
-        <div class="hint-badge">🖱 Перетягни для обертання · Скрол для зуму</div>
+        <div class="hint-badge">{{ 'VIEWER.THREED_HINT' | translate }}</div>
       </div>
     </div>
   `,

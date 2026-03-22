@@ -689,6 +689,16 @@
       "THUMBNAIL": "thumbnail"
     }
   },
+  "VIEWER": {
+    "BACK": "Back",
+    "PHOTO": "Photo",
+    "MODEL_3D": "3D",
+    "HINT": "Scroll to zoom · Double click to toggle zoom · Drag to pan",
+    "THREED_HINT": "Drag to rotate · Scroll to zoom",
+    "EXPAND_3D": "Open 3D model",
+    "EXPAND_PHOTO": "View photo",
+    "LOADING": "Loading 3D model..."
+  },
   "PAYMENT": {
     "HEADER": {
       "BACK_TO_CHECKOUT": "Back to Checkout",

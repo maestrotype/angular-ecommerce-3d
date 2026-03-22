@@ -223,10 +223,15 @@
   }
 }
 
+.main-image {
+  cursor: pointer;
+}
+
 // Expand overlay - appears on hover
 [class*="product-detail"] .main-view,
 .main-view {
-  cursor: pointer;
+  // Container itself doesn't trigger navigation anymore, specific children do
+  cursor: default;
 
   .expand-overlay {
     position: absolute;
@@ -254,6 +259,9 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 12px;
     padding: 0.75rem 1.25rem;
+    pointer-events: auto;
+    cursor: pointer;
+    z-index: 10;
 
     span {
       color: #fff;

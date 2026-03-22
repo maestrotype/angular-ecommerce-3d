@@ -7,7 +7,7 @@
         stroke-linecap="round" stroke-linejoin="round">
         <polyline points="15 18 9 12 15 6"></polyline>
       </svg>
-      <span>Назад</span>
+      <span>{{ 'VIEWER.BACK' | translate }}</span>
     </button>
 
     <div class="viewer-title">
@@ -23,7 +23,7 @@
           <circle cx="8.5" cy="8.5" r="1.5"></circle>
           <polyline points="21 15 16 10 5 21"></polyline>
         </svg>
-        Фото
+        {{ 'VIEWER.PHOTO' | translate }}
       </button>
       <button class="tab-btn" [class.active]="mode === '3d'" (click)="setMode('3d')">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -32,7 +32,7 @@
           <path d="M2 17l10 5 10-5"></path>
           <path d="M2 12l10 5 10-5"></path>
         </svg>
-        3D
+        {{ 'VIEWER.MODEL_3D' | translate }}
       </button>
     </div>
   </header>
@@ -79,7 +79,7 @@
 
     <!-- Hint -->
     <div class="image-hint">
-      <span>Scroll to zoom · Double click to toggle zoom · Drag to pan</span>
+      <span>{{ 'VIEWER.HINT' | translate }}</span>
     </div>
   </div>
 
@@ -119,7 +119,7 @@
             <path d="M2 17l10 5 10-5"></path>
             <path d="M2 12l10 5 10-5"></path>
           </svg>
-          <span>3D</span>
+          <span>{{ 'VIEWER.MODEL_3D' | translate }}</span>
         </div>
       </div>
     </div>
