@@ -1,4 +1,4 @@
-<div *ngIf="!isAdminRoute()">
+<div *ngIf="!isAdminRoute() && !isViewerRoute()">
   <app-header ngSkipHydration></app-header>
 </div>
 
@@ -6,17 +6,17 @@
   <router-outlet></router-outlet>
 </main>
 
-<div *ngIf="!isAdminRoute()">
+<div *ngIf="!isAdminRoute() && !isViewerRoute()">
   <app-footer ngSkipHydration></app-footer>
 </div>
 
 <!-- Modal Container -->
-<div *ngIf="!isAdminRoute()">
+<div *ngIf="!isAdminRoute() && !isViewerRoute()">
   <app-base-modal></app-base-modal>
 </div>
 
 <!-- Mobile Navigation -->
-<div *ngIf="!isAdminRoute()" class="footer-mobile" [class.footer-hidden]="isHidden">
+<div *ngIf="!isAdminRoute() && !isViewerRoute()" class="footer-mobile" [class.footer-hidden]="isHidden">
   <div (click)="openFavoritesPage()" class="favorites-link" [attr.aria-label]="'HEADER.NAV.FAVORITES' | translate">
     <app-icon name="heart" stroke="currentColor"></app-icon>
     <span class="favorites-count" *ngIf="favoritesCount > 0">{{ favoritesCount }}</span>

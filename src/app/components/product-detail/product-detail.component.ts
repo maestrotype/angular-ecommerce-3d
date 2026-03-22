@@ -82,23 +82,27 @@ export class ProductDetailComponent implements OnInit {
     this.selectedImageIndex = index;
   }
 
+
   onImageClicked(): void {
-    if (this.product && this.product.images) {
-      this.modalService.openModal({
-        id: 'product-image-modal',
-        type: 'image',
-        data: {
-          images: this.product.images,
-          currentIndex: this.selectedImageIndex,
-          productName: this.product.name
-        },
-        options: {
-          closeOnBackdrop: true,
-          closeOnEscape: true,
-          showCloseButton: true
-        }
-      });
+    if (!this.product) return;
+    const productId = this.route.snapshot.paramMap.get('id');
+    const queryParams: any = {
+      productId,
+      mode: this.selectedType,
+      index: this.selectedImageIndex,
+      name: encodeURIComponent(typeof this.product.name === 'object'
+        ? getLocalizedString(this.product.name, this.translate.currentLang)
+        : (this.product.name || ''))
+    };
+
+    if (this.product.images?.length) {
+      queryParams['images'] = encodeURIComponent(JSON.stringify(this.product.images));
     }
+    if (this.product.model3dUrl) {
+      queryParams['model'] = encodeURIComponent(this.product.model3dUrl);
+    }
+
+    this.router.navigate(['/viewer'], { queryParams });
   }
 
   onQuantityChanged(newQuantity: number): void {
