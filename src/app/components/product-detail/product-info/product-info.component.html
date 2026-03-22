@@ -1,6 +1,6 @@
 <div class="product-info">
   <div class="title-row">
-    <h1 class="product-title">{{ product.name }}</h1>
+    <h1 class="product-title">{{ product.name | localized }}</h1>
     <div class="favorite-inline">
       <app-favorite-button [product]="product" size="small" [showText]="false"
         (favoriteToggled)="onFavoriteToggled($event)">

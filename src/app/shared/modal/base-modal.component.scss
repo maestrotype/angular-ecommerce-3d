@@ -45,9 +45,9 @@
 
   .modal-content {
     position: relative;
-    background: var(--color-surface-primary, #ffffff);
+    background: var(--surface-primary);
     border-radius: 16px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
     animation: modalSlideIn 0.3s ease-out;
     max-width: 90vw;
     max-height: 90vh;
@@ -91,26 +91,27 @@
 
   .modal-close-btn {
     position: absolute;
-    top: 8px;
-    right: 9px;
+    top: 12px;
+    right: 12px;
     z-index: 10;
-    color: rgba(0, 0, 0, 0.7);
+    color: var(--text-primary);
     border: none;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.2s ease;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(4px);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--surface-tertiary);
+    border: 1px solid var(--border-primary);
 
     &:hover {
-      transform: scale(1.1);
-      background: rgba(255, 255, 255, 1);
-      color: rgba(0, 0, 0, 0.9);
+      transform: scale(1.05);
+      background: var(--surface-hover);
+      color: var(--text-inverse);
+      border-color: transparent;
     }
 
     // Special styling for image modals (center it vertically in the dark header)

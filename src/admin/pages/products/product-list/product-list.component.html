@@ -12,9 +12,9 @@
       <mat-label>{{ 'CATEGORY' | translate }}</mat-label>
       <mat-select [placeholder]="'CATEGORY' | translate" (selectionChange)="filterByCategory($event)">
         <mat-option value="">{{ 'CATEGORIES_ALL' | translate }}</mat-option>
-        <mat-option value="shoes">{{ 'SHOES' | translate }}</mat-option>
-        <mat-option value="handbags">{{ 'HANDBAGS' | translate }}</mat-option>
-        <mat-option value="clothing">{{ 'CLOTHING' | translate }}</mat-option>
+        <mat-option *ngFor="let cat of categories" [value]="getCategoryValue(cat)">
+          {{ cat.name | localized }}
+        </mat-option>
       </mat-select>
     </mat-form-field>
 
@@ -62,7 +62,7 @@
       <ng-container matColumnDef="category">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'CATEGORY' | translate}}</th>
         <td mat-cell *matCellDef="let product">
-          <mat-chip>{{ product.category }}</mat-chip>
+          <mat-chip>{{ getCategoryNameBySlug(product.category) | localized }}</mat-chip>
         </td>
       </ng-container>
 
@@ -128,7 +128,7 @@
             </div>
 
             <div class="product-category">
-              <mat-chip>{{ product.category }}</mat-chip>
+              <mat-chip>{{ getCategoryNameBySlug(product.category) | localized }}</mat-chip>
             </div>
 
             <div class="product-price">

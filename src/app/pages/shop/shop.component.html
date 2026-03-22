@@ -119,7 +119,7 @@
           [class.out-of-stock]="product?.stock !== undefined && product.stock <= 0"
           (click)="goToProductDetail(product.id)">
           <div class="product-image">
-            <img [src]="product.imageUrl" [alt]="product.name" loading="lazy" />
+            <img [src]="product.imageUrl" [alt]="product.name | localized" loading="lazy" />
 
             <!-- Product Overlay with Quick View and Favorite -->
             <div class="product-overlay">
@@ -161,7 +161,7 @@
           </div>
 
           <div class="product-info">
-            <h3 class="product-name">{{ product.name }}</h3>
+            <h3 class="product-name">{{ product.name | localized }}</h3>
 
             <div class="product-rating">
               <div class="stars">

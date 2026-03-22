@@ -51,7 +51,7 @@
           <div class="products-grid">
             <div *ngFor="let product of favorites" class="product-card animate-in" (click)="onProductClick(product)">
               <div class="product-image">
-                <img [src]="product.imageUrl" [alt]="product.name" loading="lazy" />
+                <img [src]="product.imageUrl" [alt]="product.name | localized" loading="lazy" />
 
                 <div class="product-overlay">
                   <div class="overlay-actions">
@@ -70,7 +70,7 @@
               </div>
 
               <div class="product-info">
-                <h3 class="product-name">{{ product.name }}</h3>
+                <h3 class="product-name">{{ product.name | localized }}</h3>
 
                 <div class="product-footer">
                   <div class="product-price">

@@ -9,6 +9,8 @@ import { Product } from "../../../models/product.model";
 import { ProductService } from "../../../services/product.service";
 import { ConfirmationService } from "../../../services/confirmation.service";
 import { ErrorHandlerService } from "../../../services/error-handler.service";
+import { CategoryService } from "../../../services/category.service";
+import { Category } from "../../../models/category.model";
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -30,6 +32,7 @@ export class ProductListComponent implements OnInit {
   isLoading = false;
   error: string | null = null;
   allProducts: Product[] = [];
+  categories: Category[] = [];
   searchTerm = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -40,6 +43,7 @@ export class ProductListComponent implements OnInit {
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private productService: ProductService,
+    private categoryService: CategoryService,
     private confirmationService: ConfirmationService,
     private errorHandler: ErrorHandlerService,
     private translate: TranslateService
@@ -47,6 +51,7 @@ export class ProductListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProducts();
+    this.loadCategories();
   }
 
   ngAfterViewInit(): void {
@@ -77,6 +82,17 @@ export class ProductListComponent implements OnInit {
     });
   }
 
+  loadCategories(): void {
+    this.categoryService.getAllCategories().subscribe({
+      next: (categories) => {
+        this.categories = categories;
+      },
+      error: (error) => {
+        console.error('Error loading categories:', error);
+      }
+    });
+  }
+
   onSearch(): void {
     this.dataSource.filter = this.searchTerm.trim().toLowerCase();
     if (this.dataSource.paginator) {
@@ -101,11 +117,24 @@ export class ProductListComponent implements OnInit {
     }
   }
 
+  getCategoryValue(category: any): string {
+    if (!category) return '';
+    const name = typeof category.name === 'string'
+      ? category.name
+      : category.name.en || '';
+    return category.slug || name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+  }
+
+  getCategoryNameBySlug(slug: string): any {
+    const category = this.categories.find(c => this.getCategoryValue(c) === slug);
+    return category ? category.name : slug;
+  }
+
   filterByCategory(event: any): void {
-    const category = event.value;
-    if (category) {
+    const categorySlug = event.value;
+    if (categorySlug) {
       this.dataSource.data = this.allProducts.filter(
-        (p) => p.category === category
+        (p) => p.category === categorySlug
       );
     } else {
       this.dataSource.data = this.allProducts;

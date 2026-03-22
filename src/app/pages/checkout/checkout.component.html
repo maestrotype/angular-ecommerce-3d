@@ -17,10 +17,10 @@
         <div class="cart-items">
           <div *ngFor="let item of cartItems" class="cart-item">
             <div class="item-image">
-              <img [src]="item.imageUrl" [alt]="item.name" />
+              <img [src]="item.imageUrl" [alt]="item.name | localized" />
             </div>
             <div class="item-details">
-              <h3 class="item-name">{{ item.name }}</h3>
+              <h3 class="item-name">{{ item.name | localized }}</h3>
               <p class="item-price theme-price">${{ item.price | number:'1.2-2' }}</p>
               <span class="item-quantity">{{ 'CHECKOUT.SUMMARY.QTY' | translate }}: {{ item.quantity }}</span>
             </div>
