@@ -2,6 +2,7 @@ import { Component, AfterViewInit, ViewChild, ElementRef, Inject, PLATFORM_ID } 
 import { isPlatformBrowser } from '@angular/common';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { fixBackendUrl } from '../../../core/utils/url-helper';
 
 @Component({
   selector: 'app-bag3dFirst',
@@ -56,7 +57,18 @@ export class Bag3dFirstComponent implements AfterViewInit {
 
   private loadModel() {
     const loader = new GLTFLoader();
-    loader.load('assets/models/bag1.glb', (gltf) => { // Updated file name to bag1.glb
+    
+    // Resolve relative path using base URI for production environments
+    let modelPath = fixBackendUrl('assets/models/bag/bag1.glb'); // Corrected path to include bag folder
+    if (isPlatformBrowser(this.platformId)) {
+      const base = document.baseURI;
+      if (base) {
+        const baseUrl = base.endsWith('/') ? base : base + '/';
+        modelPath = baseUrl + modelPath;
+      }
+    }
+    
+    loader.load(modelPath, (gltf) => {
       this.model = gltf.scene;
       this.model.position.set(0, 0, 0);
       this.model.scale.set(9, 9, 9); // Scale as set by you

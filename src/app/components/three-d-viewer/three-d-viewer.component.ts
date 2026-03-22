@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
+import { fixBackendUrl } from '../../core/utils/url-helper';
 
 @Component({
   selector: 'app-three-d-viewer',
@@ -107,7 +108,20 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   private loadModel() {
     const loader = new GLTFLoader();
     loader.setMeshoptDecoder(MeshoptDecoder);
-    loader.load(this.modelPath, (gltf) => {
+
+    // Resolve relative path using base URI for production environments like GitHub Pages
+    let finalPath = fixBackendUrl(this.modelPath);
+    if (isPlatformBrowser(this.platformId) && !finalPath.startsWith('http') && !finalPath.startsWith('//')) {
+      const base = document.baseURI;
+      if (base) {
+        // Ensure base ends with slash and finalPath doesn't start with slash for correct joining
+        const baseUrl = base.endsWith('/') ? base : base + '/';
+        const modelUrl = finalPath.startsWith('/') ? finalPath.substring(1) : finalPath;
+        finalPath = baseUrl + modelUrl;
+      }
+    }
+
+    loader.load(finalPath, (gltf) => {
       this.model = gltf.scene;
       this.model.position.set(this.position[0], this.position[1], this.position[2]);
       this.model.scale.set(this.scale[0], this.scale[1], this.scale[2]);
