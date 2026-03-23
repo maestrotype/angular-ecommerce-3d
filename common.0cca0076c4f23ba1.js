@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkangular_ecommerce_3d=self.webpackChunkangular_ecommerce_3d||[]).push([[76],{5926:(s,a,e)=>{e.d(a,{B:()=>r});var n=e(177),c=e(4987),t=e(4438);let r=(()=>{class _{static \u0275fac=function(o){return new(o||_)};static \u0275mod=t.$C({type:_});static \u0275inj=t.G2t({imports:[n.MD,c.g]})}return _})()}}]);
