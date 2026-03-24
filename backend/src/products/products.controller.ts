@@ -15,9 +15,9 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { ProductsService } from "./products.service";
 import { CreateProductDto } from "./dto/create-product.dto";
 import { UpdateProductDto } from "./dto/update-product.dto";
-// Using specific Cloudinary configurations instead of diskStorage
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 import { storage } from '../config/multer-cloudinary.config';
-import { productStorage3d } from '../config/multer-cloudinary-product-3d.config';
 
 @Controller("products")
 export class ProductsController {
@@ -41,11 +41,6 @@ export class ProductsController {
     return this.productsService.findFeatured();
   }
 
-  @Get("search")
-  searchProducts(@Query("search") searchTerm: string) {
-    return this.productsService.searchProducts(searchTerm);
-  }
-
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.productsService.findOne(+id);
@@ -62,10 +57,7 @@ export class ProductsController {
   }
 
   @Post('upload')
-  @UseInterceptors(FileInterceptor('image', { 
-    storage,
-    limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit for images
-  }))
+  @UseInterceptors(FileInterceptor('image', { storage }))
   async uploadImage(@UploadedFile() file: Express.Multer.File) {
     if (!file) {
       throw new BadRequestException('No file uploaded');
@@ -74,23 +66,20 @@ export class ProductsController {
   }
 
   @Post('upload-3d')
-  @UseInterceptors(FileInterceptor('model', { 
-    storage: productStorage3d,
-    limits: { fileSize: 100 * 1024 * 1024 } // 100MB limit for 3D models
+  @UseInterceptors(FileInterceptor('model', {
+    storage: diskStorage({
+      destination: './uploads/products-3d',
+      filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+        cb(null, `product3d-${uniqueSuffix}.glb`);
+      }
+    })
   }))
   async upload3dModel(@UploadedFile() file: Express.Multer.File) {
     if (!file) {
       throw new BadRequestException('No file uploaded');
     }
 
-    try {
-      // Cloudinary returns the secure URL in file.path
-      console.log('3D Upload successful:', file.path);
-      return { url: file.path };
-    } catch (error) {
-      console.error('3D Upload error details:', error);
-      throw new BadRequestException(`Cloudinary upload failed: ${error.message}`);
-    }
+    return { url: `/uploads/products-3d/${file.filename}` };
   }
 }
-
