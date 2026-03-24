@@ -7,6 +7,6 @@ export const productStorage3d = new CloudinaryStorage({
     folder: 'products-3d',
     resource_type: 'raw', // Important for .glb!
     allowed_formats: ['glb'],
-    public_id: `product3d-${Date.now()}`,
+    public_id: `product3d-${Date.now()}.glb`,
   }),
 });

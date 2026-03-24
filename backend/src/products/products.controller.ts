@@ -62,7 +62,10 @@ export class ProductsController {
   }
 
   @Post('upload')
-  @UseInterceptors(FileInterceptor('image', { storage }))
+  @UseInterceptors(FileInterceptor('image', { 
+    storage,
+    limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit for images
+  }))
   async uploadImage(@UploadedFile() file: Express.Multer.File) {
     if (!file) {
       throw new BadRequestException('No file uploaded');
@@ -71,14 +74,23 @@ export class ProductsController {
   }
 
   @Post('upload-3d')
-  @UseInterceptors(FileInterceptor('model', { storage: productStorage3d }))
+  @UseInterceptors(FileInterceptor('model', { 
+    storage: productStorage3d,
+    limits: { fileSize: 50 * 1024 * 1024 } // 50MB limit for 3D models
+  }))
   async upload3dModel(@UploadedFile() file: Express.Multer.File) {
     if (!file) {
       throw new BadRequestException('No file uploaded');
     }
 
-    // Cloudinary returns the secure URL in file.path
-    return { url: file.path };
+    try {
+      // Cloudinary returns the secure URL in file.path
+      console.log('3D Upload successful:', file.path);
+      return { url: file.path };
+    } catch (error) {
+      console.error('3D Upload error details:', error);
+      throw new BadRequestException(`Cloudinary upload failed: ${error.message}`);
+    }
   }
 }
 
