@@ -54,7 +54,10 @@ import { fixBackendUrl } from '../../core/utils/url-helper';
   `,
   styles: [`
     :host { display: block; width: 100%; height: 100%; }
-    .viewer-host { position: relative; width: 100%; height: 100%; overflow: hidden; }
+    .viewer-host { 
+      position: relative; width: 100%; height: 100%; overflow: hidden; 
+      touch-action: pinch-zoom pan-x pan-y; /* Allow pinch zoom and scrolling */
+    }
 
     /* Canvas */
     .three-canvas { width: 100%; height: 100%; opacity: 0; transition: opacity 0.8s ease; }
@@ -264,12 +267,28 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.05;
-    this.controls.autoRotate = this.autoRotate && !this.previewOnly;
+    this.controls.autoRotate = this.autoRotate;
     this.controls.autoRotateSpeed = 1.5;
+
+    if (this.isMobile) {
+      // Restore zoom on mobile per user request (pinch-to-zoom)
+      this.controls.enableZoom = true;
+      // Note: We used to lock vertical rotation here, 
+      // but user prefers full rotation (can rotate with fingers without blocking scroll)
+    }
+
     if (this.previewOnly) {
       this.controls.enableZoom = false;
       this.controls.enablePan = false;
       this.controls.enableRotate = false;
+    } else {
+      // If not preview only, we might want to block wheel zoom specifically 
+      // but keep pinch zoom (which is handled via touch events)
+      this.renderer.domElement.addEventListener('wheel', (e) => {
+        // Only block if it's a 'scroll' action, not a pinch-zoom (though wheel is usually just wheel)
+        // This effectively disables mouse wheel zooming while enableZoom is true for pinch gestures
+        e.stopImmediatePropagation();
+      }, { passive: false });
     }
   }
 
@@ -309,7 +328,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
         const fov = this.camera.fov * (Math.PI / 180);
         let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
         
-        cameraZ *= 1.4; // Comfort margin
+        cameraZ *= 2.0; // Increased multiplier to make model look smaller (fit better on screen)
         this.camera.position.z = cameraZ;
         
         if (this.controls) {

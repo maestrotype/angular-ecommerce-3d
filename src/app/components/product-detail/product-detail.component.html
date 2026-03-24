@@ -53,7 +53,7 @@
               " (click)="onThumbnailSelected('image', i)" alt="Product thumbnail" class="thumb-image" />
             <app-three-d-viewer *ngIf="product?.model3dUrl" [modelPath]="product.model3dUrl" class="thumb-3d"
               [class.selected]="selectedType === '3d'" (click)="onThumbnailSelected('3d')" [previewOnly]="true"
-              [scale]="[9, 9, 9]" [position]="[0, 0, 0]"></app-three-d-viewer>
+              [scale]="[9, 9, 9]" [position]="[0, 0, 0]" [autoRotate]="true"></app-three-d-viewer>
           </div>
         </div>
         <div class="product-detail-info">
