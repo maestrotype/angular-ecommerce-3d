@@ -3,15 +3,16 @@
   <div class="product-header">
     <div class="container">
       <button class="back-btn glass-theme" (click)="goBack()">
-        {{ 'PRODUCT.BACK_BTN' | translate }}
+        <app-icon name="arrow-left" [width]="16" [height]="16"></app-icon>
+        <span class="btn-text">{{ 'PRODUCT.BACK_BTN' | translate }}</span>
       </button>
       <nav class="breadcrumb">
-        <a class="breadcrumb-link" (click)="navigateToHome()">{{ 'PRODUCT.BREADCRUMBS.HOME' | translate }}</a> /
-        <a class="breadcrumb-link" (click)="navigateToShop()">{{ 'PRODUCT.BREADCRUMBS.SHOP' | translate }}</a> /
-        <a class="breadcrumb-link" (click)="navigateToCategory()">{{
-          product.category
-          }}</a>
-        /
+        <a class="breadcrumb-link" (click)="navigateToHome()">{{ 'PRODUCT.BREADCRUMBS.HOME' | translate }}</a>
+        <span class="breadcrumb-separator">/</span>
+        <a class="breadcrumb-link" (click)="navigateToShop()">{{ 'PRODUCT.BREADCRUMBS.SHOP' | translate }}</a>
+        <span class="breadcrumb-separator">/</span>
+        <a class="breadcrumb-link" (click)="navigateToCategory()">{{ product.category }}</a>
+        <span class="breadcrumb-separator">/</span>
         <span class="current">{{ product.name | localized }}</span>
       </nav>
     </div>

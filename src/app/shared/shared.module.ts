@@ -15,6 +15,7 @@ import { StripeTestComponent } from '../pages/stripe-test/stripe-test.component'
 import { SectionRendererComponent } from '../components/section-renderer/section-renderer.component';
 import { NotificationBadgeComponent } from './components/notification-badge/notification-badge.component';
 import { LogoComponent } from './components/logo/logo.component';
+import { IconComponent } from './icon/icon.component';
 import { ReplaceSpacesPipe } from '@app-shared/pipes/replace-spaces.pipe';
 import { LocalizedPipe } from '@app-shared/pipes/localized.pipe';
 import { ImageUrlPipe } from '@app-shared/pipes/image-url.pipe';
@@ -32,7 +33,8 @@ import { ImageUrlPipe } from '@app-shared/pipes/image-url.pipe';
     SectionRendererComponent,
     ReplaceSpacesPipe,
     NotificationBadgeComponent,
-    LogoComponent
+    LogoComponent,
+    IconComponent
   ],
   imports: [
     CommonModule,
@@ -57,6 +59,7 @@ import { ImageUrlPipe } from '@app-shared/pipes/image-url.pipe';
     SectionRendererComponent,
     NotificationBadgeComponent,
     LogoComponent,
+    IconComponent,
     ReplaceSpacesPipe,
     LocalizedPipe,
     ImageUrlPipe,

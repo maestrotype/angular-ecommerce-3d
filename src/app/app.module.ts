@@ -30,7 +30,6 @@ import { Bag3dFirstComponent } from './components/3d-models/bag3dFirst/bag3dFirs
 import { ContactsComponent } from './pages/contacts/contacts.component';
 import { ContactFormComponent } from './shared/components/contact-form/contact-form.component';
 import { AboutComponent } from './pages/about/about.component';
-import { IconComponent } from './shared/icon/icon.component';
 
 // Modal Components
 import { BaseModalComponent } from './shared/modal/base-modal.component';
@@ -83,7 +82,6 @@ export function HttpLoaderFactory(http: any) {
     AuthModalComponent,
     NotificationModalComponent,
     Bag3dFirstComponent,
-    IconComponent,
 
     FavoritesComponent,
     MyOrdersComponent,

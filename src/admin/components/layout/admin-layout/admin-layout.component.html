@@ -1,6 +1,6 @@
 
 <mat-sidenav-container class="admin-container">
-    <mat-sidenav #drawer class="admin-sidenav" fixedInViewport 
+    <mat-sidenav #drawer class="admin-sidenav" 
                  [mode]="isMobile ? 'over' : 'side'" 
                  [opened]="!isMobile">
       <app-admin-sidenav (closeSidenav)="drawer.close()"></app-admin-sidenav>

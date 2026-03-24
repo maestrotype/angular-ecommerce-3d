@@ -1,7 +1,9 @@
 import { Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ElementRef, Inject, PLATFORM_ID, HostListener, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { isPlatformBrowser, CommonModule } from '@angular/common';
+import { isPlatformBrowser, CommonModule, Location } from '@angular/common';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { TranslateModule } from '@ngx-translate/core';
 import { fixBackendUrl } from '../../core/utils/url-helper';
@@ -185,6 +187,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   @Input() scale: [number, number, number] = [1, 1, 1];
   @Input() position: [number, number, number] = [0, 0, 0];
   @Input() previewOnly = false;
+  @Input() autoRotate = true;
   @Output() modelLoaded = new EventEmitter<void>();
 
   isLoading = true;
@@ -197,10 +200,12 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   private model!: THREE.Object3D;
   private animId!: number;
   private isMobile = false;
+  private isDestroyed = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private location: Location
   ) {
     if (isPlatformBrowser(this.platformId)) {
       this.isMobile = /Mobi|Android/i.test(navigator.userAgent);
@@ -259,7 +264,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.05;
-    this.controls.autoRotate = !this.previewOnly;
+    this.controls.autoRotate = this.autoRotate && !this.previewOnly;
     this.controls.autoRotateSpeed = 1.5;
     if (this.previewOnly) {
       this.controls.enableZoom = false;
@@ -270,12 +275,25 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
 
   private loadModel() {
     const loader = new GLTFLoader();
-    const url = fixBackendUrl(this.modelPath);
+    
+    // Add MeshoptDecoder and DRACOLoader
+    loader.setMeshoptDecoder(MeshoptDecoder);
+    
+    // Configure Draco Loader
+    // We point to the public unpkg decoder path, as it's the most reliable without local draco files
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
+    loader.setDRACOLoader(dracoLoader);
+    
+    let url = fixBackendUrl(this.modelPath);
+    if (url && !url.startsWith('http')) {
+      url = this.location.prepareExternalUrl(url);
+    }
 
     loader.load(
       url,
       (gltf) => {
-        if (!this.scene) return;
+        if (this.isDestroyed || !this.scene) return;
         if (this.model) this.scene.remove(this.model);
 
         this.model = gltf.scene;
@@ -285,10 +303,38 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
         this.model.scale.set(this.scale[0], this.scale[1], this.scale[2]);
         this.model.position.add(new THREE.Vector3(...this.position));
 
+        // Automatic camera distance based on model size to prevent clipping
+        const size = box.getSize(new THREE.Vector3());
+        const maxDim = Math.max(size.x * this.scale[0], size.y * this.scale[1], size.z * this.scale[2]);
+        const fov = this.camera.fov * (Math.PI / 180);
+        let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
+        
+        cameraZ *= 1.4; // Comfort margin
+        this.camera.position.z = cameraZ;
+        
+        if (this.controls) {
+          this.controls.minDistance = cameraZ * 0.2;
+          this.controls.maxDistance = cameraZ * 5;
+          this.controls.update();
+        }
+
         this.model.traverse((child) => {
           if ((child as THREE.Mesh).isMesh) {
-            child.castShadow = !this.isMobile;
-            child.receiveShadow = !this.isMobile;
+            const mesh = child as THREE.Mesh;
+            mesh.castShadow = !this.isMobile;
+            mesh.receiveShadow = !this.isMobile;
+
+            // Fix for Three.js uniform/shader errors where name is null
+            if (!mesh.name) mesh.name = 'mesh_' + Math.random().toString(36).substr(2, 9);
+            
+            if (mesh.material) {
+              const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+              materials.forEach(mat => {
+                if (mat && !mat.name) {
+                  mat.name = 'mat_' + Math.random().toString(36).substr(2, 9);
+                }
+              });
+            }
           }
         });
 
@@ -299,21 +345,23 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
         this.animate();
       },
       (xhr) => {
+        if (this.isDestroyed) return;
         if (xhr.lengthComputable) {
           this.loadingProgress = Math.round((xhr.loaded / xhr.total) * 100);
           this.cdr.detectChanges();
         }
       },
       (err) => {
+        if (this.isDestroyed) return;
         console.error('3D load error:', err);
         this.isLoading = false;
         this.cdr.detectChanges();
-        this.animate();
       }
     );
   }
 
   private animate = () => {
+    if (this.isDestroyed) return;
     this.animId = requestAnimationFrame(this.animate);
     if (this.controls) this.controls.update();
     if (this.renderer && this.scene && this.camera) {
@@ -322,6 +370,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   };
 
   ngOnDestroy() {
+    this.isDestroyed = true;
     cancelAnimationFrame(this.animId);
     if (this.controls) this.controls.dispose();
     if (this.renderer) {

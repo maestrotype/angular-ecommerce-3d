@@ -150,11 +150,15 @@
                 {{ isUploading3d ? 'Uploading...' : 'Upload 3D Model' }}
               </button>
               <div *ngIf="model3dUrl" class="model3d-preview">
-                <span>{{ model3dUrl.split('/').pop() }}</span>
-                <button mat-icon-button type="button" (click)="remove3dModel()">
-                  <mat-icon>delete</mat-icon>
-                </button>
-                <app-three-d-viewer [modelPath]="model3dUrl"></app-three-d-viewer>
+                <div class="preview-header">
+                  <mat-icon color="primary">check_circle</mat-icon>
+                  <span>{{ model3dUrl.split('/').pop() }}</span>
+                  <button mat-icon-button type="button" color="warn" (click)="remove3dModel()" matTooltip="Remove 3D Model">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+                <!-- 3D Viewer directly inside the form -->
+                <app-three-d-viewer [modelPath]="model3dUrl" [autoRotate]="true" [previewOnly]="false"></app-three-d-viewer>
               </div>
               <div *ngIf="!model3dUrl" class="model3d-placeholder">
                 <p>Drag & drop .glb file here or click to upload</p>

@@ -15,9 +15,9 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { ProductsService } from "./products.service";
 import { CreateProductDto } from "./dto/create-product.dto";
 import { UpdateProductDto } from "./dto/update-product.dto";
-import { diskStorage } from 'multer';
-import { extname } from 'path';
+// Using specific Cloudinary configurations instead of diskStorage
 import { storage } from '../config/multer-cloudinary.config';
+import { productStorage3d } from '../config/multer-cloudinary-product-3d.config';
 
 @Controller("products")
 export class ProductsController {
@@ -71,20 +71,14 @@ export class ProductsController {
   }
 
   @Post('upload-3d')
-  @UseInterceptors(FileInterceptor('model', {
-    storage: diskStorage({
-      destination: './uploads/products-3d',
-      filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-        cb(null, `product3d-${uniqueSuffix}.glb`);
-      }
-    })
-  }))
+  @UseInterceptors(FileInterceptor('model', { storage: productStorage3d }))
   async upload3dModel(@UploadedFile() file: Express.Multer.File) {
     if (!file) {
       throw new BadRequestException('No file uploaded');
     }
 
-    return { url: `/uploads/products-3d/${file.filename}` };
+    // Cloudinary returns the secure URL in file.path
+    return { url: file.path };
   }
 }
+

@@ -412,14 +412,28 @@
       border-color: #1976d2;
     }
     .model3d-preview {
-      margin-top: 1rem;
+      margin-top: 1.5rem;
       display: flex;
+      flex-direction: column;
       align-items: center;
       gap: 1rem;
+      
+      .preview-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 500;
+        color: #e5e7eb;
+      }
+      
       app-three-d-viewer {
-        width: 120px;
-        height: 120px;
-        display: inline-block;
+        width: 250px;
+        height: 250px;
+        display: block;
+        border-radius: 12px;
+        background: rgba(0, 0, 0, 0.2);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        overflow: hidden;
       }
     }
     .model3d-placeholder {
