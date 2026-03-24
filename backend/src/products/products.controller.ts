@@ -76,7 +76,7 @@ export class ProductsController {
   @Post('upload-3d')
   @UseInterceptors(FileInterceptor('model', { 
     storage: productStorage3d,
-    limits: { fileSize: 50 * 1024 * 1024 } // 50MB limit for 3D models
+    limits: { fileSize: 100 * 1024 * 1024 } // 100MB limit for 3D models
   }))
   async upload3dModel(@UploadedFile() file: Express.Multer.File) {
     if (!file) {

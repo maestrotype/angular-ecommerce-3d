@@ -13,9 +13,14 @@ import { AppModule } from "./app.module";
 import { join } from "path";
 import { AllExceptionsFilter } from "./common/filters/http-exception.filter";
 import { LoggingInterceptor } from "./common/interceptors/logging.interceptor";
+import { json, urlencoded } from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  
+  // Increase payload limits for 3D models and images
+  app.use(json({ limit: '100mb' }));
+  app.use(urlencoded({ extended: true, limit: '100mb' }));
 
   // Ensure /uploads exists
   const uploadPath = join(__dirname, "..", "uploads");
