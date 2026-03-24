@@ -134,30 +134,62 @@
           </div>
         </div>
 
-        <mat-card class="form-card">
+        <mat-card class="form-card model3d-card">
           <mat-card-header>
             <mat-card-title>
-              <mat-icon>view_in_ar</mat-icon>
-              3D Model (.glb)
+              <div class="title-section">
+                <div class="title-with-icon">
+                  <mat-icon class="title-icon">view_in_ar</mat-icon>
+                  <span>3D Experience</span>
+                </div>
+                <div class="card-subtitle">Upload .glb assets for immersive viewing</div>
+              </div>
             </mat-card-title>
           </mat-card-header>
+          
           <mat-card-content>
-            <div class="model3d-upload-area" (drop)="on3dDrop($event)" (dragover)="on3dDragOver($event)"
-              (dragleave)="on3dDragLeave($event)" [class.dragging]="dragging3d">
+            <div class="model3d-upload-zone" 
+                 [class.has-model]="!!model3dUrl"
+                 [class.dragging]="dragging3d"
+                 (drop)="on3dDrop($event)" 
+                 (dragover)="on3dDragOver($event)"
+                 (dragleave)="on3dDragLeave($event)">
+              
               <input type="file" #file3dInput (change)="on3dFileSelected($event)" accept=".glb" style="display: none" />
-              <button mat-stroked-button type="button" (click)="file3dInput.click()" [disabled]="isUploading3d">
-                <mat-icon>cloud_upload</mat-icon>
-                {{ isUploading3d ? 'Uploading...' : 'Upload 3D Model' }}
-              </button>
-              <div *ngIf="model3dUrl" class="model3d-preview">
-                <span>{{ model3dUrl.split('/').pop() }}</span>
-                <button mat-icon-button type="button" (click)="remove3dModel()">
-                  <mat-icon>delete</mat-icon>
+              
+              <!-- State: No Model -->
+              <div *ngIf="!model3dUrl" class="upload-placeholder" (click)="file3dInput.click()">
+                <div class="placeholder-icon">
+                  <mat-icon>upload_file</mat-icon>
+                </div>
+                <h3>Drag & Drop 3D Model</h3>
+                <p>Support for GLB format up to 50MB</p>
+                <button mat-flat-button color="primary" type="button" class="browse-btn">
+                  Browse Files
                 </button>
-                <app-three-d-viewer [modelPath]="model3dUrl"></app-three-d-viewer>
               </div>
-              <div *ngIf="!model3dUrl" class="model3d-placeholder">
-                <p>Drag & drop .glb file here or click to upload</p>
+
+              <!-- State: Model Loaded -->
+              <div *ngIf="model3dUrl" class="model-active-view">
+                <div class="viewer-container-glass">
+                  <app-three-d-viewer [modelPath]="model3dUrl" [autoRotate]="true" [previewOnly]="false"></app-three-d-viewer>
+                  
+                  <div class="viewer-controls-overlay">
+                    <div class="model-info-pill">
+                      <mat-icon>description</mat-icon>
+                      <span class="filename-text">{{ model3dUrl.split('/').pop() }}</span>
+                    </div>
+                    <button mat-icon-button color="warn" type="button" (click)="remove3dModel()" matTooltip="Remove 3D Model" class="remove-btn-overlay">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Loading state (if applicable) -->
+              <div *ngIf="isUploading3d" class="uploading-overlay">
+                <mat-spinner diameter="40"></mat-spinner>
+                <span>Uploading to Cloudinary...</span>
               </div>
             </div>
           </mat-card-content>

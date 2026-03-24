@@ -65,6 +65,7 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
 import { SearchBarComponent } from './components/ui/search-bar/search-bar.component';
 import { StatCardComponent } from './components/ui/stat-card/stat-card.component';
 import { SharedModule } from '../app/shared/shared.module';
+import { ThreeDViewerComponent } from '../app/components/three-d-viewer/three-d-viewer.component';
 
 // Services
 import { NotificationService } from './services/notification.service';
@@ -157,6 +158,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     }),
     SharedModule,
+    ThreeDViewerComponent,
   ],
   providers: [
     NotificationService,

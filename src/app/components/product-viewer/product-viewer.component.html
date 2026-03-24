@@ -112,14 +112,15 @@
         [class.active]="mode === '3d'"
         (click)="setMode('3d')"
       >
-        <div class="thumb-3d-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-            <path d="M2 17l10 5 10-5"></path>
-            <path d="M2 12l10 5 10-5"></path>
-          </svg>
-          <span>{{ 'VIEWER.MODEL_3D' | translate }}</span>
+        <div class="thumb-3d-container">
+          <app-three-d-viewer
+            [modelPath]="model3dUrl"
+            [scale]="[9, 9, 9]"
+            [position]="[0, 0, 0]"
+            [previewOnly]="true"
+            [autoRotate]="true"
+          ></app-three-d-viewer>
+          <div class="thumb-3d-badge">3D</div>
         </div>
       </div>
     </div>

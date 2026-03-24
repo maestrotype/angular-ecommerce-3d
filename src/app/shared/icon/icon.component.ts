@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, Inject, PLATFORM_ID, makeStateKey, TransferState } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, Location } from '@angular/common';
 
 @Component({
   selector: 'app-icon',
@@ -22,6 +22,7 @@ export class IconComponent implements OnInit {
     private sanitizer: DomSanitizer,
     private http: HttpClient,
     private transferState: TransferState,
+    private location: Location,
     @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
@@ -41,17 +42,29 @@ export class IconComponent implements OnInit {
     }
 
     const iconPath = `assets/icons/${this.name}.svg`;
-    // On server, we might need a full URL or absolute path, but HttpClient (withFetch) 
-    // in Angular 17 SSR often handles assets if configured. 
-    // To be safe, let's assume it works or falls back.
+    // For GitHub Pages or subdirectory hosting, we MUST use prepareExternalUrl
+    const finalPath = this.location.prepareExternalUrl(iconPath);
 
-    this.http.get(iconPath, { responseType: 'text' }).subscribe({
-      next: (svgContent) => {
-        const sanitized = svgContent.replace(/<svg([^>]*)>/, `<svg$1 width="${this.width}" height="${this.height}" fill="${this.fill}" stroke="${this.stroke}" stroke-width="${this.strokeWidth}" class="${this.class}">`);
-        this.svgContent = this.sanitizer.bypassSecurityTrustHtml(sanitized);
+    this.http.get(finalPath, { responseType: 'text' }).subscribe({
+      next: (svgContent: string) => {
+        // Strip everything before the first <svg tag (like XML declarations)
+        const svgStartIndex = svgContent.toLowerCase().indexOf('<svg');
+        if (svgStartIndex === -1) {
+          console.error(`Invalid SVG content for icon ${this.name}`);
+          return;
+        }
+        
+        const cleanSvg = svgContent.substring(svgStartIndex);
+        // Stripping the opening <svg ...> tag while preserving inner content
+        const innerContent = cleanSvg.replace(/<svg[^>]*>/i, '');
+        
+        // Construct the new SVG with our desired attributes
+        const finalSvg = `<svg width="${this.width}" height="${this.height}" viewBox="0 0 24 24" fill="${this.fill}" stroke="${this.stroke}" stroke-width="${this.strokeWidth}" class="${this.class}">${innerContent}`;
+        
+        this.svgContent = this.sanitizer.bypassSecurityTrustHtml(finalSvg);
 
         if (!isPlatformBrowser(this.platformId)) {
-          this.transferState.set(key, sanitized);
+          this.transferState.set(key, finalSvg);
         }
       },
       error: (error) => {
