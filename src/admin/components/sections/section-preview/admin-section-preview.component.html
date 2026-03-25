@@ -1,13 +1,10 @@
 <!-- Multi-section mode (Full Page Preview) -->
 <ng-container *ngIf="sections && sections.length > 0">
-  <div class="full-page-preview" 
-       [class.force-desktop]="mode === 'desktop'" 
-       [class.mode-tablet]="mode === 'tablet'"
-       [class.mode-mobile]="mode === 'mobile'"
-       [attr.data-mode]="mode">
+  <div class="full-page-preview">
     <app-section-renderer 
       *ngFor="let s of sections; let i = index" 
       [section]="s" 
+      [mode]="mode"
       [key]="renderKey + '_' + i"
       [class.focused-section]="s.id === activeSectionId">
     </app-section-renderer>
@@ -16,11 +13,8 @@
 
 <!-- Single-section mode (Editor Focus) -->
 <ng-container *ngIf="(!sections || sections.length === 0) && sectionData">
-  <div [class.force-desktop]="mode === 'desktop'" 
-       [class.mode-tablet]="mode === 'tablet'"
-       [class.mode-mobile]="mode === 'mobile'"
-       [attr.data-mode]="mode">
-    <app-section-renderer [section]="sectionData" [key]="renderKey"></app-section-renderer>
+  <div class="full-page-preview">
+    <app-section-renderer [section]="sectionData" [mode]="mode" [key]="renderKey"></app-section-renderer>
   </div>
 </ng-container>
 

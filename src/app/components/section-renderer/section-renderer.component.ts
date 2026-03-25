@@ -31,6 +31,7 @@ const sectionComponentMap: { [key: string]: () => Promise<Type<any>> } = {
 })
 export class SectionRendererComponent implements OnInit, OnChanges {
   @Input() section: any;
+  @Input() mode: 'desktop' | 'tablet' | 'mobile' = 'desktop';
   @ViewChild('container', { read: ViewContainerRef, static: true }) container!: ViewContainerRef;
 
   ngOnInit() {
@@ -38,7 +39,8 @@ export class SectionRendererComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['section'] && !changes['section'].firstChange) {
+    if ((changes['section'] && !changes['section'].firstChange) || 
+        (changes['mode'] && !changes['mode'].firstChange)) {
       this.renderSection();
     }
   }
@@ -53,8 +55,14 @@ export class SectionRendererComponent implements OnInit, OnChanges {
       const componentRef = this.container.createComponent(componentType);
       
       // Pass the entire section object to the component's data input
+      // Inject previewMode so children can override isMobile logic
+      const dataWithMode = { 
+        ...this.section, 
+        previewMode: this.mode 
+      };
+
       if ('data' in componentRef.instance) {
-        componentRef.instance.data = this.section;
+        componentRef.instance.data = dataWithMode;
       }
       
       // Force change detection

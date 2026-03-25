@@ -125,6 +125,16 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['data'] && this.data) {
+      // Force mobile state if coming from Architect Preview
+      if (this.data.previewMode) {
+        this.isMobile = this.data.previewMode === 'mobile' || this.data.previewMode === 'tablet';
+        
+        // Also ensure Hamburger is closed initially
+        if (changes['data'].firstChange) {
+          this.isMobileMenuOpen = false;
+        }
+      }
+
       if (this.data.settings) {
         const settings = this.data.settings;
         this.logoUrl = settings.logoUrl || null;
@@ -147,6 +157,12 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private checkScreenSize(): void {
+    // If we're in architect preview mode, respect the mode passed in rather than window size
+    if (this.data?.previewMode) {
+      this.isMobile = this.data.previewMode === 'mobile' || this.data.previewMode === 'tablet';
+      return;
+    }
+
     if (isPlatformBrowser(this.platformId)) {
       this.isMobile = window.innerWidth <= 768;
     } else {
