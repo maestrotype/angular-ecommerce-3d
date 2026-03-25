@@ -31,6 +31,7 @@ export class SectionListComponent implements OnInit {
   showPicker = false;
   previewData: any = null;
   selectedPreviewSection: Section | null = null;
+  previewMode: 'desktop' | 'tablet' | 'mobile' = 'desktop';
 
   constructor(
     private sectionService: SectionService,
@@ -159,5 +160,9 @@ export class SectionListComponent implements OnInit {
         this.loadSections();
       }
     });
+  }
+
+  setPreviewMode(mode: 'desktop' | 'tablet' | 'mobile'): void {
+    this.previewMode = mode;
   }
 }

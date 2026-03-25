@@ -227,36 +227,65 @@
         [data-theme="light"] & { background: #f8fafc; }
 
         .preview-header {
-          padding: 16px 24px;
+          padding: 12px 20px;
           border-bottom: 1px solid var(--admin-border-primary);
           display: flex;
           justify-content: space-between;
           align-items: center;
-          background: rgba(0,0,0,0.3);
-          backdrop-filter: blur(10px);
+          background: rgba(0,0,0,0.4);
+          backdrop-filter: blur(15px);
 
-          h3 {
-            margin: 0;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            font-weight: 800;
-            color: var(--admin-primary);
+          .header-main-title {
             display: flex;
             align-items: center;
-            gap: 10px;
-            letter-spacing: 0.08em;
-            mat-icon { font-size: 18px; width: 18px; height: 18px; }
+            gap: 12px;
+            
+            h3 {
+              margin: 0;
+              font-size: 0.9rem;
+              font-weight: 700;
+              color: #fff;
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              letter-spacing: 0.5px;
+              mat-icon { font-size: 18px; width: 18px; height: 18px; opacity: 0.8; }
+            }
+            
+            .view-status-badge {
+              font-size: 0.7rem;
+              font-weight: 700;
+              padding: 2px 8px;
+              background: rgba(var(--admin-primary-rgb), 0.15);
+              color: var(--admin-primary);
+              border-radius: 6px;
+              text-transform: uppercase;
+            }
           }
 
-          .view-status-badge {
-            font-size: 0.7rem;
-            font-weight: 700;
-            padding: 4px 10px;
-            background: rgba(var(--admin-primary-rgb), 0.1);
-            color: var(--admin-primary);
-            border-radius: 20px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+          .device-switcher {
+            display: flex;
+            gap: 4px;
+            
+            button {
+              width: 34px; 
+              height: 34px; 
+              color: rgba(255, 255, 255, 0.4);
+              transition: all 0.2s ease;
+              
+              mat-icon { font-size: 18px; width: 18px; height: 18px; }
+              
+              &.active {
+                color: var(--admin-primary);
+                background: none;
+                box-shadow: none;
+              }
+              
+              &:hover:not(.active) {
+                color: rgba(255, 255, 255, 0.9);
+                background: rgba(255, 255, 255, 0.05);
+              }
+            }
           }
         }
 
@@ -482,8 +511,8 @@
     border-radius: 12px;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
     padding: 12px 24px;
-    display: grid !important; // Must be grid to show columns
-    grid-template-columns: 60px 120px 1fr; // Same as original but simplified (no status/actions)
+    display: grid !important;
+    grid-template-columns: 80px 140px 1fr 100px 120px; 
     align-items: center;
     gap: 16px;
     z-index: 1000 !important;
@@ -520,9 +549,11 @@
       text-align: center;
     }
     
-    // Hide buttons and toggles in the floating preview
-    .col-status, .col-actions, mat-icon:not(.drag-indicator) { display: none !important; }
-    .drag-indicator { opacity: 1; color: var(--admin-primary); }
+    // Show everything in the floating preview for clarity
+    .col-status, .col-actions, .btn-group { display: flex !important; margin-left: auto; }
+    button, mat-icon { display: inline-flex !important; opacity: 1 !important; visibility: visible !important; }
+    
+    .drag-indicator { color: var(--admin-primary); }
   }
 
   .cdk-drag-placeholder {

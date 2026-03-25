@@ -1,32 +1,43 @@
 :host {
-  display: block;
-  // Dynamic scale variables
-  --preview-desktop-width: 1200px;
-  --preview-scale: 0.42;
+  display: grid;
+  grid-template-columns: 100%;
+  place-items: start center;
   
-  // MATCH THE HOST WIDTH TO SCALED VISUAL WIDTH
-  // This allows the parent (Grid/Flex) to center the host competently.
-  width: calc(var(--preview-desktop-width) * var(--preview-scale));
+  --preview-width-raw: 1200px;
+  --preview-scale: 0.42;
+
+  &[data-mode="tablet"] {
+    --preview-width-raw: 768px;
+    --preview-scale: 0.6;
+  }
+  &[data-mode="mobile"] {
+    --preview-width-raw: 375px;
+    --preview-scale: 0.85;
+  }
+  
+  // HOST DIMENSIONS: math-matched to visual width.
+  // We use height: min-content to try and collapse the phantom space.
+  width: calc(var(--preview-width-raw) * var(--preview-scale));
+  height: fit-content;
   margin: 0 auto; 
-  min-width: 0;
-  overflow: visible;
+  overflow: hidden; // This is the key to stopping "infinite scroll"
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .full-page-preview {
   display: flex;
   flex-direction: column;
-  flex-shrink: 0;
-  width: var(--preview-desktop-width);
-  min-width: var(--preview-desktop-width);
+  width: var(--preview-width-raw);
+  min-width: var(--preview-width-raw);
   
-  // Scale from top-left so it fits exactly into the host box
   transform: scale(var(--preview-scale));
-  transform-origin: top left;
+  transform-origin: top center;
   
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   background: white;
   border-radius: 8px;
   box-shadow: 0 40px 100px rgba(0,0,0,0.6);
-  margin-bottom: 300px;
+  margin-bottom: -500%; // Pull up to clear scale ghost height
   flex-shrink: 0;
 
   [data-theme="dark"] &, [data-theme="dark-glass"] & {
@@ -36,7 +47,7 @@
   app-section-renderer {
     margin: 0;
     border-bottom: 1px dashed rgba(var(--admin-primary-rgb), 0.2);
-    transform: none; // Reset scaling as parents handles it
+    transform: none;
     width: 100%;
     min-width: 100%;
     box-shadow: none;
@@ -85,16 +96,21 @@
 
 // Single-section mode (Editor Focus)
 :host-context(.editor-preview-canvas) {
-  --preview-scale: 0.45;
-  width: calc(var(--preview-desktop-width) * var(--preview-scale));
+  --preview-scale: 0.45; // Base scale for editor
+  
+  &[data-mode="tablet"] { --preview-scale: 0.65; }
+  &[data-mode="mobile"] { --preview-scale: 0.85; }
+
+  width: calc(var(--preview-width-raw) * var(--preview-scale));
 }
 
 app-section-renderer {
   display: block;
-  width: var(--preview-desktop-width);
-  min-width: var(--preview-desktop-width);
+  width: var(--preview-width-raw);
+  min-width: var(--preview-width-raw);
   transform: scale(var(--preview-scale));
   transform-origin: top left;
+  transition: transform 0.3s ease, width 0.3s ease;
   background: #1a1a1a; 
   border-radius: 8px;
   box-shadow: 0 40px 100px rgba(0,0,0,0.6);

@@ -8,7 +8,8 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 export class AdminSectionPreviewComponent implements OnChanges {
   @Input() sectionData: any;
   @Input() sections: any[] = [];
-  @Input() activeSectionId: string | null = null; // New input for highlighting
+  @Input() activeSectionId: string | null = null;
+  @Input() mode: 'desktop' | 'tablet' | 'mobile' = 'desktop';
   
   // We use a counter to force re-render if needed
   renderKey = 0;

@@ -144,14 +144,28 @@
           <div class="preview-side-card">
             
             <div class="preview-header">
-              <h3><mat-icon>devices</mat-icon> {{ 'SITE_ARCHITECT_VIEW' | translate }}</h3>
-              <span class="view-status-badge">{{ dataSource.data.length }} {{ 'SECTIONS' | translate }}</span>
+              <div class="header-main-title">
+                <h3><mat-icon>devices</mat-icon> {{ 'SITE_ARCHITECT_VIEW' | translate }}</h3>
+                <span class="view-status-badge">{{ dataSource.data.length }} {{ 'SECTIONS' | translate }}</span>
+              </div>
+              <div class="device-switcher">
+                <button mat-icon-button [class.active]="previewMode === 'desktop'" (click)="setPreviewMode('desktop')" matTooltip="Desktop">
+                  <mat-icon>desktop_windows</mat-icon>
+                </button>
+                <button mat-icon-button [class.active]="previewMode === 'tablet'" (click)="setPreviewMode('tablet')" matTooltip="Tablet">
+                  <mat-icon>tablet_mac</mat-icon>
+                </button>
+                <button mat-icon-button [class.active]="previewMode === 'mobile'" (click)="setPreviewMode('mobile')" matTooltip="Mobile">
+                  <mat-icon>phone_iphone</mat-icon>
+                </button>
+              </div>
             </div>
 
             <div class="preview-content">
                <app-admin-section-preview 
                  [sections]="dataSource.data"
-                 [activeSectionId]="selectedPreviewSection?.id">
+                 [activeSectionId]="selectedPreviewSection?.id"
+                 [mode]="previewMode">
                </app-admin-section-preview>
             </div>
           </div>
