@@ -115,9 +115,9 @@ export class SectionsService {
   reorder(reorderSectionsDto: ReorderSectionsDto): Observable<Section[]> {
     const { sectionIds } = reorderSectionsDto;
 
-    return from(sectionIds.map((sectionId, index) => 
+    return from(Promise.all(sectionIds.map((sectionId, index) => 
       this.sectionRepository.update(sectionId, { order: index + 1 })
-    )).pipe(
+    ))).pipe(
       switchMap(() => this.findAll()),
       catchError(error => {
         console.error('[SectionsService] Reorder error:', error);

@@ -124,13 +124,13 @@
 }
 
 .sections-page-wrapper {
-  padding: 24px;
-  max-width: 1600px;
-  margin: 0 auto;
+  padding: 0 24px 24px; // Removed top padding
+  width: 100%;
+  margin: 0;
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 16px; // Reduced gap
 
   .page-header {
     display: flex;
@@ -175,13 +175,10 @@
 
   .layout-body {
     display: flex;
-    gap: 24px;
+    gap: 16px; // Reduced from 24px
     flex: 1;
     min-height: 0; // Crucial for flex child scrolling
 
-    &.preview-active {
-      // Logic handled by base flex properties
-    }
 
     .list-container-side {
       flex: 1 1 50%; // Take at least half if possible
@@ -203,13 +200,13 @@
     }
 
     .preview-container-side {
-      flex: 0 1 600px; // Grow up to 600px but don't squeeze the list
+      flex: 0 0 500px; // Fixed width for preview to avoid excessive growth
       min-width: 400px;
       display: flex;
       flex-direction: column;
       position: sticky;
-      top: 24px;
-      height: calc(100vh - 150px);
+      top: 16px;
+      height: calc(100vh - 120px);
       z-index: 2;
 
       &.is-empty { opacity: 0.5; }
@@ -294,7 +291,7 @@
           overflow-y: auto;
           overflow-x: auto; 
           background: #0f1115; 
-          padding: 60px 0; // Removed horizontal padding to allow full centered width
+          padding: 20px 0; // Reduced from 60px to remove the large gap inside the preview card
           display: grid;
           place-items: start center; // MODERN CENTERING
           position: relative;
@@ -322,7 +319,7 @@
             font-size: 80px; 
             width: 80px; 
             height: 80px; 
-            margin-bottom: 32px; 
+            margin-bottom: 16px; // Reduced from 32px
             opacity: 0.1;
             color: var(--admin-primary);
             filter: drop-shadow(0 0 20px rgba(var(--admin-primary-rgb), 0.2));

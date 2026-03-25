@@ -3,6 +3,7 @@
   <div class="full-page-preview">
     <app-section-renderer 
       *ngFor="let s of sections; let i = index" 
+      [hidden]="!s.isActive"
       [section]="s" 
       [mode]="mode"
       [key]="renderKey + '_' + i"

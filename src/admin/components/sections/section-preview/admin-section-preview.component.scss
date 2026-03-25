@@ -37,8 +37,8 @@
   background: white;
   border-radius: 8px;
   box-shadow: 0 40px 100px rgba(0,0,0,0.6);
-  margin-bottom: -120%; // Gently clear scale ghost area
-  padding-bottom: 600px; // Massive spacer to ensure Footer is in view on long pages
+  margin-bottom: -150%; // Increased negative margin to collapse more phantom space from scaling
+  padding-bottom: 50px; // Reduced padding
   flex-shrink: 0;
 
   [data-theme="dark"] &, [data-theme="dark-glass"] & {
