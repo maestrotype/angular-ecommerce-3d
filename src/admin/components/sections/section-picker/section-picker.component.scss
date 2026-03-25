@@ -1,0 +1,103 @@
+.section-picker {
+  padding: 24px;
+  background: var(--admin-bg-card);
+  border-radius: 16px;
+  max-width: 900px;
+  margin: 0 auto;
+
+  .picker-title {
+    margin-bottom: 24px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--admin-text-primary);
+    text-align: center;
+  }
+
+  .picker-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .picker-item {
+    position: relative;
+    padding: 24px;
+    background: var(--admin-bg-secondary);
+    border: 1px solid var(--admin-border-primary);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    overflow: hidden;
+
+    &:hover {
+      transform: translateY(-4px);
+      border-color: var(--admin-primary);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+      background: var(--admin-bg-hover);
+
+      .icon-container {
+        color: var(--admin-primary);
+        transform: scale(1.1);
+      }
+
+      .hover-overlay {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .icon-container {
+      font-size: 48px;
+      color: var(--admin-text-secondary);
+      transition: all 0.3s ease;
+      
+      mat-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 48px;
+      }
+    }
+
+    .text-container {
+      text-align: center;
+      
+      .label {
+        font-weight: 500;
+        color: var(--admin-text-primary);
+        display: block;
+      }
+    }
+
+    .hover-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, var(--admin-primary), transparent);
+      height: 40%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 8px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+      pointer-events: none;
+
+      mat-icon {
+        color: white;
+      }
+    }
+  }
+}
+
+// Dark glass specific overrides
+[data-theme='dark-glass'] .picker-item {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-color: rgba(255, 255, 255, 0.1);
+}

@@ -1,0 +1,22 @@
+<!-- Multi-section mode (Full Page Preview) -->
+<ng-container *ngIf="sections && sections.length > 0">
+  <div class="full-page-preview">
+    <app-section-renderer 
+      *ngFor="let s of sections; let i = index" 
+      [section]="s" 
+      [key]="renderKey + '_' + i"
+      [class.focused-section]="s.id === activeSectionId">
+    </app-section-renderer>
+  </div>
+</ng-container>
+
+<!-- Single-section mode (Editor Focus) -->
+<ng-container *ngIf="(!sections || sections.length === 0) && sectionData">
+  <app-section-renderer [section]="sectionData" [key]="renderKey"></app-section-renderer>
+</ng-container>
+
+<!-- Empty State -->
+<div *ngIf="!sectionData && (!sections || sections.length === 0)" class="empty-preview">
+  <mat-icon>dvr</mat-icon>
+  <p>{{ 'SELECT_SECTION_TO_PREVIEW' | translate }}</p>
+</div>

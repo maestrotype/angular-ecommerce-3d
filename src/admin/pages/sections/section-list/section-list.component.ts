@@ -9,6 +9,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { SectionService } from '../../../services/section.service';
 import { SectionFormComponent } from '../section-form/section-form.component';
 import { Section } from '../../../models/section.model';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-section-list',
@@ -22,6 +23,14 @@ export class SectionListComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('editorDrawer') editorDrawer!: MatSidenav;
+
+  isEditorOpen = false;
+  editingSection: Section | null = null;
+  editorMode: 'add' | 'edit' = 'add';
+  showPicker = false;
+  previewData: any = null;
+  selectedPreviewSection: Section | null = null;
 
   constructor(
     private sectionService: SectionService,
@@ -59,30 +68,50 @@ export class SectionListComponent implements OnInit {
     });
   }
 
-  addSection(): void {
-    const dialogRef = this.dialog.open(SectionFormComponent, {
-      panelClass: 'section-dialog-panel',
-      data: {}
-    });
+  selectForPreview(section: Section): void {
+    if (this.isEditorOpen) return;
+    this.selectedPreviewSection = this.selectedPreviewSection?.id === section.id ? null : section;
+  }
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.loadSections();
-      }
-    });
+  addSection(): void {
+    this.editorMode = 'add';
+    this.editingSection = null;
+    this.showPicker = true;
+    this.previewData = null;
+    this.isEditorOpen = true;
+    this.editorDrawer.open();
+  }
+
+  onSectionTypeSelected(type: string): void {
+    this.showPicker = false;
+    this.editingSection = { type } as any; // Temporary object for form
+    this.previewData = { type };
   }
 
   editSection(section: Section): void {
-    const dialogRef = this.dialog.open(SectionFormComponent, {
-      panelClass: 'section-dialog-panel',
-      data: { section }
-    });
+    this.editorMode = 'edit';
+    this.editingSection = section;
+    this.showPicker = false;
+    this.previewData = { ...section };
+    this.selectedPreviewSection = null; // Close main preview if editing
+    this.isEditorOpen = true;
+    this.editorDrawer.open();
+  }
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.loadSections();
-      }
-    });
+  onFormChanged(data: any): void {
+    this.previewData = data;
+  }
+
+  onFormSaved(): void {
+    this.closeEditor();
+    this.loadSections();
+  }
+
+  closeEditor(): void {
+    this.isEditorOpen = false;
+    this.editingSection = null;
+    this.previewData = null;
+    this.editorDrawer.close();
   }
 
   toggleSection(section: Section): void {

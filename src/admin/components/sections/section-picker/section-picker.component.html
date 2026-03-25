@@ -1,0 +1,19 @@
+<div class="section-picker">
+  <h3 class="picker-title">{{ 'CHOOSE_SECTION_TYPE' | translate }}</h3>
+  <div class="picker-grid">
+    <div *ngFor="let type of sectionTypes" 
+         class="picker-item" 
+         (click)="selectSection(type.value)"
+         [matTooltip]="type.description">
+      <div class="icon-container">
+        <mat-icon>{{ type.icon }}</mat-icon>
+      </div>
+      <div class="text-container">
+        <span class="label">{{ type.label | translate }}</span>
+      </div>
+      <div class="hover-overlay">
+        <mat-icon>add_circle_outline</mat-icon>
+      </div>
+    </div>
+  </div>
+</div>

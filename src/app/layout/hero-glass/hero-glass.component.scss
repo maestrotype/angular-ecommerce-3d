@@ -33,17 +33,18 @@
 
   .hero-content {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr); // More robust 2-column grid
     gap: 4rem;
     align-items: center;
-    justify-content: center;
     margin: 0 auto;
     width: 100%;
-    max-width: 1400px;
+    max-width: 1200px;
     z-index: 1;
+    position: relative;
   }
 
   .hero-text {
+    grid-column: 1; // Explicitly first column
     min-width: 300px;
     display: flex;
     flex-direction: column;
@@ -137,6 +138,7 @@
   }
 
   .hero-image {
+    grid-column: 2; // Explicitly second column
     display: flex;
     justify-content: center;
     align-items: center;

@@ -2,6 +2,8 @@ import {
   Component,
   Input,
   OnInit,
+  OnChanges,
+  SimpleChanges,
   ViewChild,
   ViewContainerRef,
   Type
@@ -10,6 +12,8 @@ import {
 // Lazy import map — breaks the circular dependency with AppModule.
 // Components are loaded on demand instead of at module initialization time.
 const sectionComponentMap: { [key: string]: () => Promise<Type<any>> } = {
+  header: () => import('../../layout/header/header.component').then(m => m.HeaderComponent),
+  footer: () => import('../../layout/footer/footer.component').then(m => m.FooterComponent),
   hero: () => import('../../layout/hero/hero.component').then(m => m.HeroComponent),
   'hero-glass': () => import('../../layout/hero-glass/hero-glass.component').then(m => m.HeroGlassComponent),
   'best-sellers': () => import('../../layout/best-sellers/best-sellers.component').then(m => m.BestSellersComponent),
@@ -25,7 +29,7 @@ const sectionComponentMap: { [key: string]: () => Promise<Type<any>> } = {
   templateUrl: './section-renderer.component.html',
   styleUrls: ['./section-renderer.component.scss']
 })
-export class SectionRendererComponent implements OnInit {
+export class SectionRendererComponent implements OnInit, OnChanges {
   @Input() section: any;
   @ViewChild('container', { read: ViewContainerRef, static: true }) container!: ViewContainerRef;
 
@@ -33,16 +37,27 @@ export class SectionRendererComponent implements OnInit {
     this.renderSection();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['section'] && !changes['section'].firstChange) {
+      this.renderSection();
+    }
+  }
+
   async renderSection() {
+    if (!this.section || !this.container) return;
+    
     this.container.clear();
     const loader = sectionComponentMap[this.section?.type];
     if (loader) {
       const componentType = await loader();
       const componentRef = this.container.createComponent(componentType);
+      
+      // Pass the entire section object to the component's data input
       if ('data' in componentRef.instance) {
         componentRef.instance.data = this.section;
       }
-      // Force change detection to ensure data is picked up
+      
+      // Force change detection
       componentRef.changeDetectorRef.markForCheck();
       componentRef.changeDetectorRef.detectChanges();
     }

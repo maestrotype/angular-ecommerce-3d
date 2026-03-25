@@ -1,5 +1,5 @@
 
-import { Component, Inject, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
+import { Component, Inject, ViewChildren, QueryList, AfterViewInit, Input, Output, EventEmitter, Optional, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { forkJoin, of, Observable, throwError } from 'rxjs';
 import { switchMap, catchError, finalize, map } from 'rxjs/operators';
@@ -17,7 +17,13 @@ import { ImageUploadComponent } from '../../../components/ui/image-upload/image-
   templateUrl: './section-form.component.html',
   styleUrls: ['./section-form.component.scss']
 })
-export class SectionFormComponent implements AfterViewInit {
+export class SectionFormComponent implements AfterViewInit, OnInit {
+  @Input() data: { section: Section | null } = { section: null };
+  @Input() isDrawerMode = false;
+
+  @Output() formChanged = new EventEmitter<any>();
+  @Output() saved = new EventEmitter<any>();
+  @Output() cancelled = new EventEmitter<void>();
   @ViewChildren(ImageUploadComponent) imageUploadComponents!: QueryList<ImageUploadComponent>;
 
   sectionForm: FormGroup;
@@ -74,18 +80,32 @@ export class SectionFormComponent implements AfterViewInit {
     private fb: FormBuilder,
     private sectionService: SectionService,
     private snackBar: MatSnackBar,
-    public dialogRef: MatDialogRef<SectionFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { section: Section | null }
+    @Optional() public dialogRef: MatDialogRef<SectionFormComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: { section: Section | null }
   ) {
-    this.isEditMode = !!data.section;
-    this.sectionForm = this.createForm();
+    this.sectionForm = this.fb.group({}); // Temp init
+    this.isEditMode = false;
+  }
 
-    if (this.isEditMode && this.data.section?.model3dUrl) {
-      this.model3dUrl = this.data.section.model3dUrl;
-      this.model3dFileName = this.data.section.model3dUrl.split('/').pop() || null;
+  ngOnInit(): void {
+    const dataSource = this.isDrawerMode ? this.data : this.dialogData;
+    this.isEditMode = !!dataSource?.section;
+    this.sectionForm = this.createForm(dataSource?.section);
+
+    if (this.isEditMode && dataSource?.section?.model3dUrl) {
+      this.model3dUrl = dataSource.section.model3dUrl;
+      this.model3dFileName = dataSource.section.model3dUrl.split('/').pop() || null;
     }
 
     this.loadAvailableSections();
+
+    // Live Sync for Preview
+    this.sectionForm.valueChanges.subscribe(val => {
+      const packed = this.packLocalizedFields(val);
+      // Ensure other fields from val are preserved
+      const previewData = { ...val, ...packed };
+      this.formChanged.emit(previewData);
+    });
   }
 
   ngAfterViewInit(): void {
@@ -105,8 +125,7 @@ export class SectionFormComponent implements AfterViewInit {
     });
   }
 
-  private createForm(): FormGroup {
-    const section = this.data?.section;
+  private createForm(section?: Section | null): FormGroup {
 
     // Map database type to display type
     let displayType = section?.type || 'hero';
@@ -529,33 +548,26 @@ export class SectionFormComponent implements AfterViewInit {
             }
           };
         } else {
-          const {
-            logoUrl, showSearch, showCart, showProfile, menu, categories, brands,
-            title_en, title_ru, title_ua,
-            subtitle_en, subtitle_ru, subtitle_ua,
-            content_en, content_ru, content_ua,
-            ...sectionData
-          } = rawFormValue;
-
           formData = {
-            ...sectionData,
-            title: formValue.title,
-            subtitle: formValue.subtitle,
-            content: formValue.content,
+            ...formValue,
             model3dUrl: model3dUrl || ''
           };
         }
 
-        if (this.isEditMode && this.data.section?.id) {
-          this.sectionService.updateSection(this.data.section.id, formData).subscribe({
+        const dataSource = this.isDrawerMode ? this.data : this.dialogData;
+        if (this.isEditMode && dataSource?.section?.id) {
+          this.sectionService.updateSection(dataSource.section.id, formData).subscribe({
             next: (result) => {
               this.loading = false;
               this.snackBar.open('Section updated successfully', 'Close', { duration: 3000 });
-              this.dialogRef.close(result);
+              if (this.isDrawerMode) {
+                this.saved.emit(result);
+              } else {
+                this.dialogRef.close(result);
+              }
             },
             error: (error) => {
               this.loading = false;
-
               this.snackBar.open('Error updating section', 'Close', { duration: 3000 });
             }
           });
@@ -564,11 +576,14 @@ export class SectionFormComponent implements AfterViewInit {
             next: (result) => {
               this.loading = false;
               this.snackBar.open('Section created successfully', 'Close', { duration: 3000 });
-              this.dialogRef.close(result);
+              if (this.isDrawerMode) {
+                this.saved.emit(result);
+              } else {
+                this.dialogRef.close(result);
+              }
             },
             error: (error) => {
               this.loading = false;
-
               this.snackBar.open('Error creating section', 'Close', { duration: 3000 });
             }
           });
@@ -576,14 +591,17 @@ export class SectionFormComponent implements AfterViewInit {
       },
       error: (error) => {
         this.loading = false;
-
         this.snackBar.open('Error processing section', 'Close', { duration: 3000 });
       }
     });
   }
 
   onCancel(): void {
-    this.dialogRef.close();
+    if (this.isDrawerMode) {
+      this.cancelled.emit();
+    } else {
+      this.dialogRef.close();
+    }
   }
 
   getLocalizedValue(value: any, lang: string): string {

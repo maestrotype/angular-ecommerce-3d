@@ -49,11 +49,12 @@
 
     .hero-content {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, 1fr);
         align-items: center;
     }
 
     .hero-text {
+        grid-column: 1;
         .badge {
             display: inline-block;
             background: var(--color-primary, #ef4444);
@@ -91,6 +92,7 @@
     }
 
     .hero-image {
+        grid-column: 2;
         display: block;
 
         // position: relative;

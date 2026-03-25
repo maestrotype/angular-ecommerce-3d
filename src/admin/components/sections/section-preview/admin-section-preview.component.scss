@@ -1,0 +1,106 @@
+:host {
+  display: block;
+  // Dynamic scale variables
+  --preview-desktop-width: 1200px;
+  --preview-scale: 0.42;
+  
+  // MATCH THE HOST WIDTH TO SCALED VISUAL WIDTH
+  // This allows the parent (Grid/Flex) to center the host competently.
+  width: calc(var(--preview-desktop-width) * var(--preview-scale));
+  margin: 0 auto; 
+  min-width: 0;
+  overflow: visible;
+}
+
+.full-page-preview {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: var(--preview-desktop-width);
+  min-width: var(--preview-desktop-width);
+  
+  // Scale from top-left so it fits exactly into the host box
+  transform: scale(var(--preview-scale));
+  transform-origin: top left;
+  
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+  margin-bottom: 300px;
+  flex-shrink: 0;
+
+  [data-theme="dark"] &, [data-theme="dark-glass"] & {
+    background: #1a1a1a;
+  }
+
+  app-section-renderer {
+    margin: 0;
+    border-bottom: 1px dashed rgba(var(--admin-primary-rgb), 0.2);
+    transform: none; // Reset scaling as parents handles it
+    width: 100%;
+    min-width: 100%;
+    box-shadow: none;
+    
+    &.focused-section {
+      position: relative;
+      z-index: 10;
+      box-shadow: 0 0 0 4px var(--admin-primary), 0 0 40px rgba(var(--admin-primary-rgb), 0.4);
+      border-bottom: none;
+      
+      &::before {
+        content: 'SELECTED';
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 4px 12px;
+        background: var(--admin-primary);
+        color: white;
+        font-size: 12px;
+        font-weight: 800;
+        border-radius: 4px;
+        z-index: 20;
+      }
+    }
+  }
+}
+
+.empty-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: rgba(255,255,255,0.3); 
+  gap: 16px;
+  padding: 40px;
+
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    opacity: 0.5;
+  }
+  p { margin: 0; font-weight: 600; font-size: 0.9rem; }
+}
+
+// Single-section mode (Editor Focus)
+:host-context(.editor-preview-canvas) {
+  --preview-scale: 0.45;
+  width: calc(var(--preview-desktop-width) * var(--preview-scale));
+}
+
+app-section-renderer {
+  display: block;
+  width: var(--preview-desktop-width);
+  min-width: var(--preview-desktop-width);
+  transform: scale(var(--preview-scale));
+  transform-origin: top left;
+  background: #1a1a1a; 
+  border-radius: 8px;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+  margin-bottom: 40px;
+  flex-shrink: 0;
+
+  // Ensure internal content is visible
+  color: white; 
+}

@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, OnDestroy, Inject, PLATFORM_ID, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
@@ -18,7 +18,8 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() data: any; // Support for Architect Live Preview
   @ViewChild('searchInput') searchInput!: ElementRef;
   @ViewChild('mobileSearchInput') mobileSearchInput!: ElementRef;
 
@@ -120,6 +121,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.searchTerm = '';
     this.searchResults = [];
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data'] && this.data) {
+      if (this.data.settings) {
+        const settings = this.data.settings;
+        this.logoUrl = settings.logoUrl || null;
+        this.showSearch = settings.showSearch !== false;
+        this.showCart = settings.showCart !== false;
+        this.showProfile = settings.showProfile !== false;
+      }
+    }
   }
 
   ngOnDestroy(): void {
