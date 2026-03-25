@@ -694,10 +694,12 @@
     "PHOTO": "Photo",
     "MODEL_3D": "3D",
     "HINT": "Scroll to zoom · Double click to toggle zoom · Drag to pan",
-    "THREED_HINT": "Drag to rotate · Scroll to zoom",
-    "EXPAND_3D": "Open 3D model",
-    "EXPAND_PHOTO": "View photo",
-    "LOADING": "Loading 3D model..."
+    "LOADING": "Loading 3D Scene",
+    "THREED_HINT": "Pinch to zoom, drag to rotate",
+    "EXPAND_3D": "View 3D Model",
+    "EXPAND_PHOTO": "View Full Photo",
+    "LOAD_ERROR": "3D Load Error",
+    "ERROR_DESCRIPTION": "The 3D model could not be loaded. This might be due to a missing file or a temporary server issue."
   },
   "PAYMENT": {
     "HEADER": {

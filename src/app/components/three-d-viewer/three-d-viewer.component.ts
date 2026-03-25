@@ -5,8 +5,9 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { fixBackendUrl } from '../../core/utils/url-helper';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-three-d-viewer',
@@ -44,7 +45,20 @@ import { fixBackendUrl } from '../../core/utils/url-helper';
       </div>
 
       <!-- Canvas -->
-      <div #container class="three-canvas" [class.ready]="!isLoading"></div>
+      <div #container class="three-canvas" [class.ready]="!isLoading && !hasError"></div>
+
+      <!-- Error Fallback -->
+      <div class="error-overlay" *ngIf="hasError">
+        <div class="error-content">
+          <svg class="error-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+          </svg>
+          <div class="error-title">{{ 'VIEWER.LOAD_ERROR' | translate }}</div>
+          <div class="error-text">{{ 'VIEWER.ERROR_DESCRIPTION' | translate }}</div>
+        </div>
+      </div>
 
       <!-- Controls hint -->
       <div class="controls-hint" *ngIf="!isLoading && !previewOnly">
@@ -182,6 +196,31 @@ import { fixBackendUrl } from '../../core/utils/url-helper';
       color: rgba(255,255,255,0.5); font-size: 0.75rem;
       padding: 0.4rem 1rem; white-space: nowrap;
     }
+
+    /* Error Overlay */
+    .error-overlay {
+      position: absolute; inset: 0; z-index: 5;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(15, 10, 30, 0.9); backdrop-filter: blur(8px);
+      padding: 2rem; text-align: center;
+    }
+    .error-content {
+      display: flex; flex-direction: column; align-items: center; gap: 1rem;
+      max-width: 280px;
+    }
+    .error-icon { color: rgba(239, 68, 68, 0.6); margin-bottom: 0.5rem; }
+    .error-title {
+      font-weight: 600; font-size: 1rem; color: #fff;
+      letter-spacing: 0.02em;
+    }
+    .error-text {
+      font-size: 0.8rem; line-height: 1.5;
+      color: rgba(255, 255, 255, 0.5);
+    }
+    
+    :host-context([data-theme="dark"]) .error-overlay {
+      background: rgba(0, 0, 0, 0.6);
+    }
   `]
 })
 export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
@@ -194,6 +233,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   @Output() modelLoaded = new EventEmitter<void>();
 
   isLoading = true;
+  hasError = false;
   loadingProgress = 0;
 
   private scene!: THREE.Scene;
@@ -208,7 +248,9 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private cdr: ChangeDetectorRef,
-    private location: Location
+    private location: Location,
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) {
     if (isPlatformBrowser(this.platformId)) {
       this.isMobile = /Mobi|Android/i.test(navigator.userAgent);
@@ -374,7 +416,19 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
         if (this.isDestroyed) return;
         console.error('3D load error:', err);
         this.isLoading = false;
+        this.hasError = true;
         this.cdr.detectChanges();
+        
+        const errorObj = err as any;
+        let errMsg = errorObj?.message || 'Unknown error';
+        if (errorObj?.target?.status === 404) errMsg = 'File not found (404)';
+        
+        // Show error notification dynamically
+        const title = this.translate.instant('VIEWER.LOAD_ERROR') || '3D Load Error';
+        this.snackBar.open(`${title}: ${errMsg}`, 'Close', {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
       }
     );
   }

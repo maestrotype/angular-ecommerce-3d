@@ -39,6 +39,16 @@
   --admin-button: linear-gradient(45deg, #306BCB, #CF6679);
   --admin-button-muted: #607d8b;
   --admin-button-muted-hover: #546e7a;
+
+  // New Standardized Action Button Variables
+  --admin-submit-btn: #3b82f6;
+  --admin-submit-btn-hover: #2563eb;
+  --admin-submit-btn-disabled: #9ca3af;
+  --admin-submit-btn-text: #ffffff;
+  
+  --admin-cancel-btn: #6b7280;
+  --admin-cancel-btn-hover: #4b5563;
+  --admin-cancel-btn-text: #ffffff;
   
   // Background Colors - Light Theme (Default)
   --admin-bg-primary: #ffffff;
