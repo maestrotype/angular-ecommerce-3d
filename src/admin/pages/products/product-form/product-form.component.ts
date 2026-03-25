@@ -266,11 +266,18 @@ export class ProductFormComponent implements OnInit {
       next: (res) => {
         this.model3dUrl = res.url;
         this.isUploading3d = false;
+        this.snackBar.open('3D model uploaded successfully!', 'Close', { duration: 3000 });
       },
       error: () => {
         this.isUploading3d = false;
+        this.snackBar.open('Failed to upload 3D model', 'Close', { duration: 5000, panelClass: 'error-snackbar' });
       },
     });
+  }
+
+  onModelLoaded(): void {
+    // No longer showing success notification on auto-load to avoid annoyance
+    // Success on manual upload (on3dFileSelected) is kept
   }
 
   on3dDragOver(event: DragEvent) {

@@ -126,25 +126,27 @@
     border-top: 1px solid #404040;
     
     .cancel-button {
-      background-color: #6b7280;
-      color: #ffffff;
-      border: 1px solid #9ca3af;
+      background-color: var(--admin-cancel-btn, #6b7280);
+      color: var(--admin-cancel-btn-text, #ffffff);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       
       &:hover {
-        background-color: #9ca3af;
+        background-color: var(--admin-cancel-btn-hover, #4b5563);
       }
     }
     
     .submit-button {
-      background-color: var(--admin-submit-btn) ;
-      color: #ffffff ;
+      background-color: var(--admin-submit-btn, #3b82f6);
+      color: var(--admin-submit-btn-text, #ffffff);
+      min-width: 140px;
       
       &:hover:not(:disabled) {
-        background-color: var(--admin-submit-btn-hover) ;
+        background-color: var(--admin-submit-btn-hover, #2563eb);
       }
       
       &:disabled {
-        background-color: var(--admin-submit-btn-disabled) ;
+        background-color: var(--admin-submit-btn-disabled, #9ca3af);
+        opacity: 0.6;
         cursor: not-allowed;
       }
     }
