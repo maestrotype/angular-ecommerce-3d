@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, OnInit, OnDestroy, Inject, PLATFORM_ID, ViewEncapsulation } from "@angular/core";
+import { Component, Output, EventEmitter, OnInit, OnDestroy, Inject, PLATFORM_ID } from "@angular/core";
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from "@angular/router";
 import { AuthService } from "../../../services/auth.service";
@@ -6,8 +6,9 @@ import { OrderService } from "../../../services/order.service";
 import { ThemeService } from "../../../../app/core/themes/theme.service";
 import { TranslateService } from "@ngx-translate/core";
 import { Theme } from "../../../../app/core/themes/theme.model";
-import { Subject } from "rxjs";
+import { Subject, Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { User } from "../../../../shared/models/user.model";
 
 interface NavItem {
   label: string;
@@ -18,14 +19,14 @@ interface NavItem {
 @Component({
   selector: "app-admin-sidenav",
   templateUrl: "./sidenav.component.html",
-  styleUrls: ["./sidenav.component.scss"],
-  encapsulation: ViewEncapsulation.None,
+  styleUrls: ["./sidenav.component.scss"]
 })
 export class SidenavComponent implements OnInit, OnDestroy {
   @Output() closeSidenav = new EventEmitter<void>();
 
   private destroy$ = new Subject<void>();
   isMobile = false;
+  user$: Observable<User | null>;
 
   // Language customization
   languages = [
@@ -64,6 +65,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.currentLang = this.translate.currentLang || this.translate.getDefaultLang() || 'en';
+    this.user$ = this.authService.currentUser$;
   }
 
   ngOnInit(): void {

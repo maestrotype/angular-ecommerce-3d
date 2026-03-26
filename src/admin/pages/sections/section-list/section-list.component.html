@@ -38,16 +38,19 @@
         </div>
 
         <div class="editor-preview-canvas">
+          <!-- Overlay to prevent pointer interference during resize -->
+          <div class="resizing-overlay" *ngIf="isResizing"></div>
+
           <div class="preview-toolbar">
             <div class="device-toggles">
-              <mat-icon [class.active]="true">desktop_windows</mat-icon>
-              <mat-icon>tablet_mac</mat-icon>
-              <mat-icon>phone_iphone</mat-icon>
+              <mat-icon [class.active]="previewMode === 'desktop'" (click)="setPreviewMode('desktop')">desktop_windows</mat-icon>
+              <mat-icon [class.active]="previewMode === 'tablet'" (click)="setPreviewMode('tablet')">tablet_mac</mat-icon>
+              <mat-icon [class.active]="previewMode === 'mobile'" (click)="setPreviewMode('mobile')">phone_iphone</mat-icon>
             </div>
             <span class="preview-label">{{ 'LIVE_PREVIEW' | translate }}</span>
             <div class="spacer"></div>
           </div>
-          <div class="preview-scroll-area">
+          <div class="preview-scroll-area" [class.desktop]="previewMode === 'desktop'" [class.tablet]="previewMode === 'tablet'" [class.mobile]="previewMode === 'mobile'">
             <app-admin-section-preview [sectionData]="previewData" [isEditorMode]="true"></app-admin-section-preview>
           </div>
         </div>

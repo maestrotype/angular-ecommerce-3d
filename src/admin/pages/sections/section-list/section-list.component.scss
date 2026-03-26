@@ -1,3 +1,10 @@
+:host-context(body.resizing-active) {
+  * {
+    cursor: col-resize !important;
+    user-select: none !important;
+  }
+}
+
 .admin-drawer-container {
   height: 100%;
   background: transparent;
@@ -68,6 +75,23 @@
       &::-webkit-scrollbar-thumb { background: var(--admin-border-primary); border-radius: 3px; }
     }
 
+    .resizing-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      cursor: col-resize;
+      pointer-events: none; // Invisible by default
+    }
+
+    :host-context(body.resizing-active) {
+      .resizing-overlay {
+        pointer-events: auto; // Active when resizing
+      }
+    }
+
     .resizer-handle {
       width: 8px;
       height: 100%;
@@ -128,11 +152,37 @@
 
       .preview-scroll-area {
         flex: 1;
-        overflow: auto;
         padding: 40px;
+        overflow-y: auto;
         display: flex;
         justify-content: center;
+        align-items: flex-start;
+        background: rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
         
+        &.tablet {
+          padding: 40px 20px;
+          app-admin-section-preview {
+            width: 768px !important;
+            max-width: 100%;
+          }
+        }
+
+        &.mobile {
+          padding: 40px 10px;
+          app-admin-section-preview {
+            width: 375px !important;
+            max-width: 100%;
+          }
+        }
+
+        &.desktop {
+          app-admin-section-preview {
+            width: 100%;
+            max-width: 1200px;
+          }
+        }
+
         app-admin-section-preview {
           width: 100%;
           max-width: 1200px;
@@ -476,6 +526,25 @@
     }
 
     .col-actions {
+      .device-toggles {
+      display: flex;
+      gap: 16px;
+      margin-right: 24px;
+
+      mat-icon {
+        cursor: pointer;
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+        color: var(--admin-text-secondary);
+        transition: color 0.2s;
+
+        &:hover { color: var(--admin-text-primary); }
+        &.active {
+          color: var(--admin-primary);
+        }
+      }
+    }
       .btn-group {
         display: flex;
         gap: 4px;

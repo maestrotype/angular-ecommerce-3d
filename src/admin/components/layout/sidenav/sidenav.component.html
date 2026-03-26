@@ -1,49 +1,77 @@
-<div class="admin-sidenav">
-  <div class="sidenav-header-mobile" *ngIf="isMobile">
-    <span class="menu-title">{{ 'MENU' | translate }}</span>
+<div class="sidenav-wrapper">
+  <!-- Mobile Header -->
+  <div class="sidenav-header-mobile lg:hidden" *ngIf="isMobile">
+    <span class="menu-title">Admin Panel</span>
     <button class="close-btn" (click)="closeSidenav.emit()">
       <mat-icon>close</mat-icon>
     </button>
   </div>
 
-  <mat-nav-list class="sidenav-nav">
-    <a mat-list-item *ngFor="let item of navItems" [routerLink]="item.route" routerLinkActive="active"
-      (click)="onNavItemClick()">
-      <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-      <span matListItemTitle>{{ item.label | translate }}</span>
-    </a>
-  </mat-nav-list>
+  <div class="sidenav-header" *ngIf="!isMobile">
+    <div class="logo">
+      <mat-icon class="logo-icon">view_in_ar</mat-icon>
+      <span class="logo-text">3D Store</span>
+    </div>
+  </div>
 
-  <div class="sidenav-extra-sections" *ngIf="isMobile">
-    <div class="mobile-section">
-      <span class="section-label">{{ 'THEME' | translate }}</span>
-      <div class="theme-chips">
-        <button *ngFor="let theme of themes" class="chip-btn" [class.active]="currentTheme === theme.id"
-          (click)="changeTheme(theme.id)">
-          {{ theme.name }}
-        </button>
+  <div class="sidenav-nav">
+    <div class="user-info" *ngIf="user$ | async as user">
+      <div class="avatar" *ngIf="!user.avatar">
+        <mat-icon>account_circle</mat-icon>
+      </div>
+      <div class="avatar" *ngIf="user.avatar">
+        <img [src]="user.avatar" [alt]="user.name">
+      </div>
+      <div class="user-info-text">
+        <div class="user-name">{{ user.name }}</div>
+        <div class="user-role">{{ (user.role === 'admin' ? 'ROLE_ADMIN' : 'ROLE_USER') | translate }}</div>
       </div>
     </div>
 
+    <mat-nav-list>
+      <a mat-list-item 
+         *ngFor="let item of navItems" 
+         [routerLink]="item.route" 
+         routerLinkActive="active" 
+         [routerLinkActiveOptions]="{exact: item.route === '/admin/dashboard'}"
+         (click)="onNavItemClick()">
+        <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+        <span matListItemTitle>{{ item.label | translate }}</span>
+      </a>
+    </mat-nav-list>
+  </div>
+
+  <!-- Mobile Extra Sections (Themes & Languages) -->
+  <div class="sidenav-extra-sections" *ngIf="isMobile">
     <div class="mobile-section">
-      <span class="section-label">{{ 'LANGUAGE' | translate }}</span>
+      <span class="section-label">Language</span>
       <div class="theme-chips">
-        <button *ngFor="let lang of languages" class="chip-btn" [class.active]="currentLang === lang.code"
-          (click)="changeLanguage(lang.code)">
+        <button class="chip-btn" 
+                *ngFor="let lang of languages" 
+                [class.active]="currentLang === lang.code"
+                (click)="changeLanguage(lang.code)">
           {{ lang.label }}
         </button>
       </div>
     </div>
 
     <div class="mobile-section">
-      <span class="section-label">{{ 'GO_TO_STOREFRONT' | translate }}</span>
+      <span class="section-label">Theme</span>
       <div class="theme-chips">
-        <a mat-button class="chip-btn storefront-btn" [routerLink]="'/home'">
-          <mat-icon>storefront</mat-icon>
-          {{ 'GO_TO_STOREFRONT' | translate }}
-        </a>
+        <button class="chip-btn" 
+                *ngFor="let theme of themes" 
+                [class.active]="currentTheme === theme.id"
+                (click)="changeTheme(theme.id)">
+          {{ theme.name }}
+        </button>
       </div>
     </div>
   </div>
 
+  <div class="sidenav-footer">
+    <button mat-button class="logout-btn" (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      <span class="logout-text">{{ 'LOGOUT' | translate }}</span>
+    </button>
+  </div>
 </div>

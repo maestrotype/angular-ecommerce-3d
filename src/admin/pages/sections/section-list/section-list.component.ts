@@ -33,6 +33,8 @@ export class SectionListComponent implements OnInit, AfterViewInit {
   previewMode: 'desktop' | 'tablet' | 'mobile' = 'desktop';
   sidebarWidth = 540;
   private isResizing = false;
+  private initialMouseX = 0;
+  private initialSidebarWidth = 540;
 
   constructor(
     private sectionService: SectionService,
@@ -52,19 +54,30 @@ export class SectionListComponent implements OnInit, AfterViewInit {
 
   onMouseDown(event: MouseEvent): void {
     this.isResizing = true;
+    this.initialMouseX = event.clientX;
+    this.initialSidebarWidth = this.sidebarWidth;
+    document.body.classList.add('resizing-active');
     event.preventDefault();
   }
 
   private onMouseMove(event: MouseEvent): void {
     if (!this.isResizing) return;
-    const newWidth = event.clientX;
-    if (newWidth > 300 && newWidth < 1200) {
-      this.sidebarWidth = newWidth;
-    }
+    
+    // Smooth frame-based update
+    requestAnimationFrame(() => {
+      const deltaX = event.clientX - this.initialMouseX;
+      const newWidth = this.initialSidebarWidth + deltaX;
+      if (newWidth > 300 && newWidth < 1200) {
+        this.sidebarWidth = newWidth;
+      }
+    });
   }
 
   private onMouseUp(): void {
-    this.isResizing = false;
+    if (this.isResizing) {
+      this.isResizing = false;
+      document.body.classList.remove('resizing-active');
+    }
   }
 
   ngAfterViewInit(): void {
