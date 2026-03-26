@@ -1,5 +1,4 @@
-
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -9,19 +8,33 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { SectionService } from '../../../services/section.service';
 import { SectionFormComponent } from '../section-form/section-form.component';
 import { Section } from '../../../models/section.model';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-section-list',
   templateUrl: './section-list.component.html',
   styleUrls: ['./section-list.component.scss']
 })
-export class SectionListComponent implements OnInit {
+export class SectionListComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['order', 'type', 'title', 'isActive', 'createdAt', 'actions'];
   dataSource = new MatTableDataSource<Section>();
   loading = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('editorDrawer') editorDrawer!: MatSidenav;
+
+  isEditorOpen = false;
+  editingSection: Section | null = null;
+  editorMode: 'add' | 'edit' = 'add';
+  showPicker = false;
+  previewData: any = null;
+  selectedPreviewSection: Section | null = null;
+  previewMode: 'desktop' | 'tablet' | 'mobile' = 'desktop';
+  sidebarWidth = 540;
+  private isResizing = false;
+  private initialMouseX = 0;
+  private initialSidebarWidth = 540;
 
   constructor(
     private sectionService: SectionService,
@@ -31,6 +44,40 @@ export class SectionListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadSections();
+    this.initResizeListeners();
+  }
+
+  private initResizeListeners(): void {
+    window.addEventListener('mousemove', (e) => this.onMouseMove(e));
+    window.addEventListener('mouseup', () => this.onMouseUp());
+  }
+
+  onMouseDown(event: MouseEvent): void {
+    this.isResizing = true;
+    this.initialMouseX = event.clientX;
+    this.initialSidebarWidth = this.sidebarWidth;
+    document.body.classList.add('resizing-active');
+    event.preventDefault();
+  }
+
+  private onMouseMove(event: MouseEvent): void {
+    if (!this.isResizing) return;
+    
+    // Smooth frame-based update
+    requestAnimationFrame(() => {
+      const deltaX = event.clientX - this.initialMouseX;
+      const newWidth = this.initialSidebarWidth + deltaX;
+      if (newWidth > 300 && newWidth < 1200) {
+        this.sidebarWidth = newWidth;
+      }
+    });
+  }
+
+  private onMouseUp(): void {
+    if (this.isResizing) {
+      this.isResizing = false;
+      document.body.classList.remove('resizing-active');
+    }
   }
 
   ngAfterViewInit(): void {
@@ -59,30 +106,50 @@ export class SectionListComponent implements OnInit {
     });
   }
 
-  addSection(): void {
-    const dialogRef = this.dialog.open(SectionFormComponent, {
-      panelClass: 'section-dialog-panel',
-      data: {}
-    });
+  selectForPreview(section: Section): void {
+    if (this.isEditorOpen) return;
+    this.selectedPreviewSection = this.selectedPreviewSection?.id === section.id ? null : section;
+  }
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.loadSections();
-      }
-    });
+  addSection(): void {
+    this.editorMode = 'add';
+    this.editingSection = null;
+    this.showPicker = true;
+    this.previewData = null;
+    this.isEditorOpen = true;
+    this.editorDrawer.open();
+  }
+
+  onSectionTypeSelected(type: string): void {
+    this.showPicker = false;
+    this.editingSection = { type } as any; // Temporary object for form
+    this.previewData = { type };
   }
 
   editSection(section: Section): void {
-    const dialogRef = this.dialog.open(SectionFormComponent, {
-      panelClass: 'section-dialog-panel',
-      data: { section }
-    });
+    this.editorMode = 'edit';
+    this.editingSection = section;
+    this.showPicker = false;
+    this.previewData = { ...section };
+    this.selectedPreviewSection = null; // Close main preview if editing
+    this.isEditorOpen = true;
+    this.editorDrawer.open();
+  }
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.loadSections();
-      }
-    });
+  onFormChanged(data: any): void {
+    this.previewData = data;
+  }
+
+  onFormSaved(): void {
+    this.closeEditor();
+    this.loadSections();
+  }
+
+  closeEditor(): void {
+    this.isEditorOpen = false;
+    this.editingSection = null;
+    this.previewData = null;
+    this.editorDrawer.close();
   }
 
   toggleSection(section: Section): void {
@@ -130,5 +197,9 @@ export class SectionListComponent implements OnInit {
         this.loadSections();
       }
     });
+  }
+
+  setPreviewMode(mode: 'desktop' | 'tablet' | 'mobile'): void {
+    this.previewMode = mode;
   }
 }

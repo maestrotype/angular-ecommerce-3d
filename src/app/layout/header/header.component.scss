@@ -2,6 +2,46 @@
   display: block;
   z-index: 999;
   position: relative;
+
+  // --- SITE ARCHITECT PREVIEW OVERRIDES ---
+  
+  // 1. DESKTOP MODE
+  :host-context(.force-desktop) & {
+    .header {
+      .nav { display: flex !important; }
+      .hamburger { display: none !important; }
+      .user-actions {
+        display: flex !important;
+        .search-icon, .favorites, .cart, .theme-switcher, .profile-icon { display: inline-flex !important; }
+      }
+    }
+    .mobile-menu, .mobile-menu-overlay { display: none !important; }
+  }
+
+  // 2. TABLET/MOBILE MODES (Show Mobile UX)
+  :host-context(.mode-tablet) &, :host-context(.mode-mobile) & {
+    .header {
+      .nav { display: none !important; }
+      .hamburger { display: block !important; }
+      .user-actions {
+        .favorites, .cart, .theme-switcher, .profile-icon, .search-icon { display: none !important; }
+      }
+    }
+    // Ensure mobile menu is allowed to show
+  }
+
+  // 3. UNIVERSAL ARCHITECT OVERRIDE: 
+  // Disable fixed positioning so it follows reordering flow
+  :host-context(app-admin-section-preview) & {
+    .header {
+      position: relative;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      margin: 0;
+    }
+  }
 }
 
 .header {

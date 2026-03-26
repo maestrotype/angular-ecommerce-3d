@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ModalService } from '../../core/services/modal.service';
@@ -12,7 +12,8 @@ import { FavoritesService } from '../../core/services/favorites.service';
 })
 
 
-export class FooterComponent implements OnInit, OnDestroy {
+export class FooterComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() data: any; // Support for Architect Live Preview
   cartCount = 0;
   favoritesCount = 0;
   currentYear = new Date().getFullYear();
@@ -34,6 +35,12 @@ export class FooterComponent implements OnInit, OnDestroy {
     this.favoritesSubscription = this.favoritesService.favoritesCount$.subscribe(
       count => this.favoritesCount = count
     );
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data'] && this.data) {
+      // Future footer live preview logic can go here
+    }
   }
 
   ngOnDestroy(): void {

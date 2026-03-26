@@ -28,6 +28,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatTabsModule } from '@angular/material/tabs';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { LayoutModule } from '@angular/cdk/layout';
 import { BaseChartDirective } from 'ng2-charts';
@@ -64,6 +65,8 @@ import { ErrorDialogComponent } from './components/error-dialog/error-dialog.com
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { SearchBarComponent } from './components/ui/search-bar/search-bar.component';
 import { StatCardComponent } from './components/ui/stat-card/stat-card.component';
+import { SectionPickerComponent } from './components/sections/section-picker/section-picker.component';
+import { AdminSectionPreviewComponent } from './components/sections/section-preview/admin-section-preview.component';
 import { SharedModule } from '../app/shared/shared.module';
 import { ThreeDViewerComponent } from '../app/components/three-d-viewer/three-d-viewer.component';
 
@@ -114,6 +117,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ConfirmationDialogComponent,
     SearchBarComponent,
     StatCardComponent,
+    SectionPickerComponent,
+    AdminSectionPreviewComponent
   ],
   imports: [
     CommonModule,
@@ -149,6 +154,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatButtonToggleModule,
     DragDropModule,
     LayoutModule,
+    MatTabsModule,
     BaseChartDirective, // Added for dashboard charts
     TranslateModule.forChild({
       loader: {

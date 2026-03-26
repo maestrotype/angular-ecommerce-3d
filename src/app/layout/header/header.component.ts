@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, OnDestroy, Inject, PLATFORM_ID, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
@@ -18,7 +18,8 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() data: any; // Support for Architect Live Preview
   @ViewChild('searchInput') searchInput!: ElementRef;
   @ViewChild('mobileSearchInput') mobileSearchInput!: ElementRef;
 
@@ -122,6 +123,28 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.searchResults = [];
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data'] && this.data) {
+      // Force mobile state if coming from Architect Preview
+      if (this.data.previewMode) {
+        this.isMobile = this.data.previewMode === 'mobile' || this.data.previewMode === 'tablet';
+        
+        // Also ensure Hamburger is closed initially
+        if (changes['data'].firstChange) {
+          this.isMobileMenuOpen = false;
+        }
+      }
+
+      if (this.data.settings) {
+        const settings = this.data.settings;
+        this.logoUrl = settings.logoUrl || null;
+        this.showSearch = settings.showSearch !== false;
+        this.showCart = settings.showCart !== false;
+        this.showProfile = settings.showProfile !== false;
+      }
+    }
+  }
+
   ngOnDestroy(): void {
     this.cartSubscription.unsubscribe();
     this.favoritesSubscription.unsubscribe();
@@ -134,6 +157,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   private checkScreenSize(): void {
+    // If we're in architect preview mode, respect the mode passed in rather than window size
+    if (this.data?.previewMode) {
+      this.isMobile = this.data.previewMode === 'mobile' || this.data.previewMode === 'tablet';
+      return;
+    }
+
     if (isPlatformBrowser(this.platformId)) {
       this.isMobile = window.innerWidth <= 768;
     } else {

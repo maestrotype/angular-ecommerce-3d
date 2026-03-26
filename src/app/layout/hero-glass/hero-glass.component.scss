@@ -8,6 +8,35 @@
   position: relative;
   overflow: hidden;
 
+  // FORCE DESKTOP VIEW (2-column)
+  :host-context(.force-desktop) & {
+    grid-template-columns: 1.2fr 0.8fr !important;
+    .hero-content {
+      grid-column: 1 !important;
+      text-align: left !important;
+      align-items: flex-start !important;
+    }
+    .hero-visual {
+      grid-column: 2 !important;
+      display: flex !important;
+    }
+  }
+
+  // FORCE MOBILE VIEW (1-column stacked)
+  :host-context(.mode-tablet) &, :host-context(.mode-mobile) & {
+    grid-template-columns: 1fr !important;
+    .hero-content {
+      grid-column: 1 !important;
+      text-align: center !important;
+      align-items: center !important;
+      padding-top: 40px !important;
+    }
+    .hero-visual {
+      grid-column: 1 !important;
+      height: 300px !important;
+    }
+  }
+
   .new-arrival-bg {
     position: absolute;
     top: 7vw;
@@ -33,17 +62,18 @@
 
   .hero-content {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr); // More robust 2-column grid
     gap: 4rem;
     align-items: center;
-    justify-content: center;
     margin: 0 auto;
     width: 100%;
-    max-width: 1400px;
+    max-width: 1200px;
     z-index: 1;
+    position: relative;
   }
 
   .hero-text {
+    grid-column: 1; // Explicitly first column
     min-width: 300px;
     display: flex;
     flex-direction: column;
@@ -137,6 +167,7 @@
   }
 
   .hero-image {
+    grid-column: 2; // Explicitly second column
     display: flex;
     justify-content: center;
     align-items: center;

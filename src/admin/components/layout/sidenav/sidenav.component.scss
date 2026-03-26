@@ -3,13 +3,16 @@
   height: 100%;
 }
 
-.admin-sidenav {
+.sidenav-wrapper {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: var(--admin-bg-card, #ffffff);
+  background-color: var(--admin-bg-secondary, #0f0f12) !important;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-right: 1px solid var(--admin-border-primary, rgba(255, 255, 255, 0.1));
   color: var(--admin-text-primary);
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   overflow-y: auto;
   overflow-x: hidden;
 
@@ -25,7 +28,85 @@
     box-shadow: -10px 0 50px rgba(0, 0, 0, 0.2);
   }
 
-  /* Mobile Header */
+  /* Desktop Header / Logo */
+  .sidenav-header {
+    padding: 30px 25px;
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      
+      .logo-icon {
+        font-size: 32px;
+        width: 32px;
+        height: 32px;
+        color: var(--admin-primary);
+        filter: drop-shadow(0 0 8px rgba(var(--admin-primary-rgb, 59, 130, 246), 0.4));
+      }
+      
+      .logo-text {
+        font-size: 20px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        background: linear-gradient(135deg, #ffffff, var(--admin-primary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
+  }
+
+  .sidenav-nav {
+    flex: 1;
+    padding: 0 15px;
+
+    .user-info {
+      padding: 15px;
+      margin-bottom: 25px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+
+      .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: var(--admin-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        box-shadow: 0 4px 12px rgba(var(--admin-primary-rgb, 59, 130, 246), 0.3);
+
+        mat-icon {
+          font-size: 24px;
+          width: 24px;
+          height: 24px;
+        }
+      }
+
+      .user-info-text {
+        display: flex;
+        flex-direction: column;
+
+        .user-name {
+          font-size: 14px;
+          font-weight: 700;
+          color: var(--admin-text-primary);
+        }
+
+        .user-role {
+          font-size: 11px;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          color: var(--admin-text-secondary);
+          opacity: 0.7;
+        }
+      }
+    }
   .sidenav-header-mobile {
     padding: 20px 25px;
     display: flex;
@@ -69,52 +150,53 @@
     }
   }
 
-  .sidenav-nav {
-    flex: 1;
-    padding: 0 15px;
+    mat-nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
 
-    a {
-      margin-bottom: 8px;
-      border-radius: 12px;
-      height: 52px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      color: var(--admin-text-primary);
-      position: relative;
-      overflow: hidden;
-
-      mat-icon {
-        color: var(--admin-text-secondary);
-        transition: color 0.3s ease;
-      }
-
-      &:hover {
-        background-color: var(--admin-bg-hover, rgba(0, 0, 0, 0.04));
-        transform: translateX(5px);
-      }
-
-      &.active {
-        background: rgba(var(--admin-primary-rgb, 99, 102, 241), 0.1);
-        color: var(--admin-primary);
-        font-weight: 600;
-
-        &::before {
-          content: '';
-          position: absolute;
-          left: 0;
-          top: 15%;
-          height: 70%;
-          width: 4px;
-          background: var(--admin-primary);
-          border-radius: 0 4px 4px 0;
-        }
+      a {
+        margin-bottom: 4px;
+        border-radius: 12px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        color: var(--admin-text-primary);
+        position: relative;
+        overflow: hidden;
+        padding: 0 16px !important;
 
         mat-icon {
-          color: var(--admin-primary);
+          color: var(--admin-text-secondary);
+          transition: color 0.3s ease;
+          margin-right: 12px;
         }
 
-        ::ng-deep .mdc-list-item__primary-text {
+        &:hover {
+          background-color: var(--admin-bg-hover, rgba(255, 255, 255, 0.05));
+          transform: translateX(5px);
+        }
+
+        &.active {
+          background: rgba(var(--admin-primary-rgb, 59, 130, 246), 0.15);
           color: var(--admin-primary);
           font-weight: 600;
+
+          &::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 20%;
+            height: 60%;
+            width: 4px;
+            background: var(--admin-primary);
+            border-radius: 0 4px 4px 0;
+          }
+
+          mat-icon {
+            color: var(--admin-primary);
+          }
         }
       }
     }
@@ -232,7 +314,7 @@
 
 /* Theme specific overrides for mobile menu */
 [data-theme="dark"] {
-  .admin-sidenav {
+  .sidenav-wrapper {
     @media (max-width: 768px) {
       background: #0f1115; // Matches Zinc dark palette
       border-left: 1px solid rgba(255, 255, 255, 0.05);
@@ -246,7 +328,7 @@
 }
 
 [data-theme="glass"] {
-  .admin-sidenav {
+  .sidenav-wrapper {
     @media (max-width: 768px) {
       background: rgba(241, 245, 249, 0.92);
       backdrop-filter: blur(25px) saturate(180%);
@@ -256,7 +338,7 @@
 }
 
 [data-theme="dark-glass"] {
-  .admin-sidenav {
+  .sidenav-wrapper {
     @media (max-width: 768px) {
       background: rgba(30, 28, 26, 0.95); // Darker warm gray for dark glass mobile
       border-left: 1px solid rgba(255, 255, 255, 0.1);
@@ -278,7 +360,7 @@
 
 /* Common overrides for both dark-ish variants */
 [data-theme="dark"], [data-theme="dark-glass"] {
-  .admin-sidenav {
+  .sidenav-wrapper {
     @media (max-width: 768px) {
       .sidenav-header-mobile {
         .menu-title { color: #fff; }
