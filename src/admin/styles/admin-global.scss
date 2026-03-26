@@ -6,6 +6,20 @@
 // Reset and Base
 * {
   box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+/* Webkit Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
 }
 
 body {
@@ -17,6 +31,7 @@ body {
   margin: 0;
   padding: 0;
   transition: background-color var(--admin-transition-normal), color var(--admin-transition-normal);
+  overflow: hidden !important;
 
   // Glass theme background - bright blue like macOS/iOS
   [data-theme="glass"] & {
