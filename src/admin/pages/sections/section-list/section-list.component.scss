@@ -3,8 +3,7 @@
   background: transparent;
 
   .editor-drawer {
-    width: 90vw;
-    max-width: 1400px;
+    width: 100%;
     background: var(--admin-bg-card);
     border-left: 1px solid var(--admin-border-primary);
     box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
@@ -54,16 +53,46 @@
     overflow: hidden;
 
     .editor-sidebar {
-      width: 480px;
-      min-width: 420px;
+      width: 540px; // Default, will be overridden by [style.width.px]
+      min-width: 400px;
+      max-width: 800px;
       height: 100%;
-      border-right: 1px solid var(--admin-border-primary);
+      border-right: none; // Handled by resizer
       overflow-y: auto;
       background: var(--admin-bg-card);
-      padding: 0; // Padding is now handled inside SectionFormComponent
+      padding: 0; 
+      position: relative;
+      z-index: 1;
 
       &::-webkit-scrollbar { width: 6px; }
       &::-webkit-scrollbar-thumb { background: var(--admin-border-primary); border-radius: 3px; }
+    }
+
+    .resizer-handle {
+      width: 8px;
+      height: 100%;
+      cursor: col-resize;
+      background: var(--admin-border-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, width 0.2s;
+      z-index: 10;
+      position: relative;
+      margin: 0 -4px; // Overlap for easier clicking
+
+      &:hover, &:active {
+        background: var(--admin-primary);
+        width: 10px;
+        .handle-line { background: white; }
+      }
+
+      .handle-line {
+        width: 2px;
+        height: 30px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 1px;
+      }
     }
 
     .editor-preview-canvas {
@@ -109,13 +138,13 @@
           max-width: 1200px;
           height: fit-content;
           min-height: 400px;
-          background: white; // THE ACTUAL WEBSITE PREVIEW IS WHITE
+          background: #ffffff; // Default white
           box-shadow: 0 20px 50px rgba(0,0,0,0.5);
           border-radius: 4px;
           overflow: hidden;
 
           [data-theme="dark"] &, [data-theme="dark-glass"] & {
-             background: #1a1a1a; // BUT NOT IN DARK THEME!
+             background: #1a1a1a !important; 
           }
         }
       }

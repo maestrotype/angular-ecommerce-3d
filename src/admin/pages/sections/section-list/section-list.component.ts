@@ -1,5 +1,4 @@
-
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -16,7 +15,7 @@ import { MatSidenav } from '@angular/material/sidenav';
   templateUrl: './section-list.component.html',
   styleUrls: ['./section-list.component.scss']
 })
-export class SectionListComponent implements OnInit {
+export class SectionListComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['order', 'type', 'title', 'isActive', 'createdAt', 'actions'];
   dataSource = new MatTableDataSource<Section>();
   loading = false;
@@ -32,6 +31,8 @@ export class SectionListComponent implements OnInit {
   previewData: any = null;
   selectedPreviewSection: Section | null = null;
   previewMode: 'desktop' | 'tablet' | 'mobile' = 'desktop';
+  sidebarWidth = 540;
+  private isResizing = false;
 
   constructor(
     private sectionService: SectionService,
@@ -41,6 +42,29 @@ export class SectionListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadSections();
+    this.initResizeListeners();
+  }
+
+  private initResizeListeners(): void {
+    window.addEventListener('mousemove', (e) => this.onMouseMove(e));
+    window.addEventListener('mouseup', () => this.onMouseUp());
+  }
+
+  onMouseDown(event: MouseEvent): void {
+    this.isResizing = true;
+    event.preventDefault();
+  }
+
+  private onMouseMove(event: MouseEvent): void {
+    if (!this.isResizing) return;
+    const newWidth = event.clientX;
+    if (newWidth > 300 && newWidth < 1200) {
+      this.sidebarWidth = newWidth;
+    }
+  }
+
+  private onMouseUp(): void {
+    this.isResizing = false;
   }
 
   ngAfterViewInit(): void {

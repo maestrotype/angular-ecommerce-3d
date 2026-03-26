@@ -14,7 +14,7 @@
 
 <!-- Single-section mode (Editor Focus) -->
 <ng-container *ngIf="(!sections || sections.length === 0) && sectionData">
-  <div class="full-page-preview">
+  <div class="full-page-preview" [class.editor-mode]="isEditorMode">
     <app-section-renderer [section]="sectionData" [mode]="mode" [key]="renderKey"></app-section-renderer>
   </div>
 </ng-container>

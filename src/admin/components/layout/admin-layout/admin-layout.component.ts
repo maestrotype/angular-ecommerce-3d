@@ -1,4 +1,3 @@
-
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 

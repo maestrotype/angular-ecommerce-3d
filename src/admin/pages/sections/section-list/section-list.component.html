@@ -21,10 +21,9 @@
         *ngIf="editorMode === 'add' && showPicker"
         (sectionSelected)="onSectionTypeSelected($event)">
       </app-section-picker>
-
       <!-- Full Editor -->
       <div class="full-editor" *ngIf="!showPicker">
-        <div class="editor-sidebar">
+        <div class="editor-sidebar" [style.width.px]="sidebarWidth">
           <app-section-form 
             [data]="{ section: editingSection }" 
             [isDrawerMode]="true"
@@ -33,23 +32,28 @@
             (cancelled)="closeEditor()">
           </app-section-form>
         </div>
-          <div class="editor-preview-canvas">
-            <div class="preview-toolbar">
-              <div class="device-toggles">
-                <mat-icon [class.active]="true">desktop_windows</mat-icon>
-                <mat-icon>tablet_mac</mat-icon>
-                <mat-icon>phone_iphone</mat-icon>
-              </div>
-              <span class="preview-label">{{ 'LIVE_PREVIEW' | translate }}</span>
-              <div class="spacer"></div>
+        
+        <div class="resizer-handle" (mousedown)="onMouseDown($event)">
+          <div class="handle-line"></div>
+        </div>
+
+        <div class="editor-preview-canvas">
+          <div class="preview-toolbar">
+            <div class="device-toggles">
+              <mat-icon [class.active]="true">desktop_windows</mat-icon>
+              <mat-icon>tablet_mac</mat-icon>
+              <mat-icon>phone_iphone</mat-icon>
             </div>
-            <div class="preview-scroll-area">
-              <app-admin-section-preview [sectionData]="previewData"></app-admin-section-preview>
-            </div>
+            <span class="preview-label">{{ 'LIVE_PREVIEW' | translate }}</span>
+            <div class="spacer"></div>
+          </div>
+          <div class="preview-scroll-area">
+            <app-admin-section-preview [sectionData]="previewData" [isEditorMode]="true"></app-admin-section-preview>
           </div>
         </div>
       </div>
-    </mat-drawer>
+    </div>
+  </mat-drawer>
 
   <mat-drawer-content>
     <div class="sections-page-wrapper">

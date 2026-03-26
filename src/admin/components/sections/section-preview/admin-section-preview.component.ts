@@ -8,7 +8,8 @@ import { Component, Input, OnChanges, SimpleChanges, HostBinding } from '@angula
 export class AdminSectionPreviewComponent implements OnChanges {
   @Input() sectionData: any;
   @Input() sections: any[] = [];
-  @Input() activeSectionId: string | null = null;
+  @Input() activeSectionId: number | null = null;
+  @Input() isEditorMode = false; // New flag to force editor-specific styles
   @Input() mode: 'desktop' | 'tablet' | 'mobile' = 'desktop';
 
   @HostBinding('attr.data-mode') get dataMode() { return this.mode; }

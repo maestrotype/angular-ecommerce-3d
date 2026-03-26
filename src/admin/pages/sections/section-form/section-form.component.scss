@@ -6,34 +6,36 @@
   color: var(--admin-text-primary);
 
   &.drawer-mode {
-    padding: 32px 40px; // Back to 40px but with better internal layout
+    padding: 32px; 
     height: 100%;
-    overflow-y: auto;
+    overflow-y: auto; 
     display: flex;
     flex-direction: column;
 
     ::ngDeep .mat-tab-header {
-      margin: 0 -40px; // Span full width of drawer
-      padding: 0 40px;
+      margin: 0 -32px; 
+      padding: 0 32px;
       border-bottom: 1px solid var(--admin-border-primary);
     }
   }
 
   .form-header {
-    padding: 16px 0; // Internal padding handled by .form-wrapper
+    padding: 0; // Use parent padding
     margin-bottom: 24px;
     border-bottom: 2px solid var(--admin-border-primary);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: transparent; // Let wrapper background show
-    min-height: 70px;
+    background: transparent; 
+    min-height: 60px;
+    width: 100%;
 
     .title-row {
       display: flex;
       align-items: center;
       gap: 16px;
-      overflow: hidden;
+      flex: 1;
+      min-width: 0;
 
       h2 {
         margin: 0;
