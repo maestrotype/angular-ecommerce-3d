@@ -1,14 +1,15 @@
 <!-- Multi-section mode (Full Page Preview) -->
 <ng-container *ngIf="sections && sections.length > 0">
   <div class="full-page-preview">
-    <app-section-renderer 
-      *ngFor="let s of sections; let i = index" 
-      [hidden]="!s.isActive"
-      [section]="s" 
-      [mode]="mode"
-      [key]="renderKey + '_' + i"
-      [class.focused-section]="s.id === activeSectionId">
-    </app-section-renderer>
+    <ng-container *ngFor="let s of (sections || []); let i = index">
+      <app-section-renderer 
+        *ngIf="s.isActive"
+        [section]="s" 
+        [mode]="mode"
+        [key]="renderKey + '_' + i"
+        [class.focused-section]="s.id === activeSectionId">
+      </app-section-renderer>
+    </ng-container>
   </div>
 </ng-container>
 

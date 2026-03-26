@@ -67,6 +67,36 @@
     color: var(--color-accent);
 }
 
+/* Universal Scrollbar Styling - Force on ALL elements */
+* {
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent !important;
+}
+
+::-webkit-scrollbar {
+  width: 6px !important;
+  height: 6px !important;
+}
+::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-radius: 10px !important;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* Specifically hide on main layout if desired, but making it minimal is usually better */
+mat-sidenav-content, .mat-drawer-content {
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important;  /* IE and Edge */
+}
+mat-sidenav-content::-webkit-scrollbar, .mat-drawer-content::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari and Opera */
+}
+
 /* Cart modal specific glass theme styles */
 .glass-theme.quantity-btn {
     background: var(--color-surface-primary, rgba(255, 255, 255, 0.1));
