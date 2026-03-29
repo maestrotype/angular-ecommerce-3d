@@ -22,12 +22,12 @@ export class SectionListComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild('editorDrawer') editorDrawer!: MatSidenav;
 
   isEditorOpen = false;
   editingSection: Section | null = null;
   editorMode: 'add' | 'edit' = 'add';
   showPicker = false;
+  activeMenuLang: 'en' | 'ru' | 'ua' = 'en';
   previewData: any = null;
   selectedPreviewSection: Section | null = null;
   previewMode: 'desktop' | 'tablet' | 'mobile' = 'desktop';
@@ -117,7 +117,6 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     this.showPicker = true;
     this.previewData = null;
     this.isEditorOpen = true;
-    this.editorDrawer.open();
   }
 
   onSectionTypeSelected(type: string): void {
@@ -133,7 +132,6 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     this.previewData = { ...section };
     this.selectedPreviewSection = null; // Close main preview if editing
     this.isEditorOpen = true;
-    this.editorDrawer.open();
   }
 
   onFormChanged(data: any): void {
@@ -149,7 +147,6 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     this.isEditorOpen = false;
     this.editingSection = null;
     this.previewData = null;
-    this.editorDrawer.close();
   }
 
   toggleSection(section: Section): void {

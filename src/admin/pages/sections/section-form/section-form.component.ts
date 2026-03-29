@@ -34,14 +34,14 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
   uploadingCategoryIcon = false;
   uploadingBrandLogo = false;
   private _activeMenuLang = localStorage.getItem('admin_menu_lang') || 'en';
-  get activeMenuLang() { return this._activeMenuLang; }
-  set activeMenuLang(val: string) {
-    if (this._activeMenuLang !== val) {
-      console.log(`[SectionFormComponent] Language changing from ${this._activeMenuLang} to ${val}`);
+  @Input() set activeMenuLang(val: string) {
+    if (val && this._activeMenuLang !== val) {
+      console.log(`[SectionFormComponent] Language changing to ${val}`);
       this._activeMenuLang = val;
       localStorage.setItem('admin_menu_lang', val);
     }
   }
+  get activeMenuLang() { return this._activeMenuLang; }
 
   onLangChange(lang: string) {
     this.activeMenuLang = lang;
@@ -182,7 +182,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
       categories: this.fb.array(
         (section?.settings?.categories || []).map((category: any) =>
           this.fb.group({
-            name: [category.name, Validators.required],
+            name: [this.getLocalizedValue(category.name, 'en'), Validators.required],
             slug: [category.slug || '', Validators.required],
             icon: [category.icon],
             isActive: [category.isActive ?? true]
@@ -192,7 +192,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
       brands: this.fb.array(
         (section?.settings?.brands || []).map((brand: any) =>
           this.fb.group({
-            name: [brand.name, Validators.required],
+            name: [this.getLocalizedValue(brand.name, 'en'), Validators.required],
             logo: [brand.logo || ''],
             isActive: [brand.isActive ?? true]
           })
@@ -505,10 +505,6 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
                   ru: item.title?.ru || '',
                   ua: item.title?.ua || ''
                 }
-              })),
-              categories: (formValue.categories || []).map((cat: any) => ({
-                ...cat,
-                slug: cat.slug || getLocalizedString(cat.name).toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
               }))
             }
           };
@@ -526,6 +522,11 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
             settings: {
               categories: (formValue.categories || []).map((cat: any) => ({
                 ...cat,
+                name: {
+                  en: cat.name || '',
+                  ru: cat.name || '',
+                  ua: cat.name || ''
+                },
                 slug: cat.slug || getLocalizedString(cat.name).toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
               }))
             }
@@ -543,7 +544,12 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
             showImage: false,
             settings: {
               brands: (formValue.brands || []).map((brand: any) => ({
-                ...brand
+                ...brand,
+                name: {
+                  en: brand.name || '',
+                  ru: brand.name || '',
+                  ua: brand.name || ''
+                }
               }))
             }
           };
