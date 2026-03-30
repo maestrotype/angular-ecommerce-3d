@@ -1,16 +1,7 @@
 <div class="form-wrapper" [class.drawer-mode]="isDrawerMode">
-  <div class="form-header" *ngIf="isDrawerMode">
-    <div class="title-row">
-      <h2>{{ (isEditMode ? 'EDIT_SECTION' : 'ADD_SECTION') | translate }}</h2>
-      <span class="type-badge">{{ sectionForm.get('type')?.value }}</span>
-    </div>
-    <div class="header-actions">
-      <mat-chip-listbox>
-        <mat-chip-option [selected]="activeMenuLang === 'en'" (click)="onLangChange('en')">EN</mat-chip-option>
-        <mat-chip-option [selected]="activeMenuLang === 'ru'" (click)="onLangChange('ru')">RU</mat-chip-option>
-        <mat-chip-option [selected]="activeMenuLang === 'ua'" (click)="onLangChange('ua')">UA</mat-chip-option>
-      </mat-chip-listbox>
-    </div>
+  <!-- Hidden header in drawer mode to avoid redundancy -->
+  <div class="form-header" *ngIf="isDrawerMode && false">
+    ...
   </div>
 
   <h2 mat-dialog-title *ngIf="!isDrawerMode">
@@ -19,144 +10,44 @@
 
   <form [formGroup]="sectionForm" (ngSubmit)="onSubmit()" class="section-form-scroller">
     <div [class.mat-dialog-content]="!isDrawerMode" class="form-body">
-      <mat-tab-group animationDuration="250ms" color="primary">
-        
-        <!-- TAB 1: CONTENT -->
-        <mat-tab>
-          <ng-template mat-tab-label>
-            <mat-icon class="tab-icon">text_fields</mat-icon>
-            <span class="tab-label">{{ 'CONTENT' | translate }}</span>
-          </ng-template>
-          <div class="tab-content">
-            <div class="form-grid">
-              <!-- Title (Localized) -->
-              <div class="form-field-group">
-                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'en'">
-                  <mat-label>{{ 'TITLE_EN' | translate }}</mat-label>
-                  <input matInput formControlName="title_en" placeholder="Enter title (EN)">
-                </mat-form-field>
-                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ru'">
-                  <mat-label>{{ 'TITLE_RU' | translate }}</mat-label>
-                  <input matInput formControlName="title_ru" placeholder="Enter title (RU)">
-                </mat-form-field>
-                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ua'">
-                  <mat-label>{{ 'TITLE_UA' | translate }}</mat-label>
-                  <input matInput formControlName="title_ua" placeholder="Enter title (UA)">
-                </mat-form-field>
-              </div>
-
-              <!-- Subtitle (Localized) -->
-              <div class="form-field-group">
-                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'en'">
-                  <mat-label>{{ 'SUBTITLE_EN' | translate }}</mat-label>
-                  <input matInput formControlName="subtitle_en" placeholder="Enter subtitle (EN)">
-                </mat-form-field>
-                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ru'">
-                  <mat-label>{{ 'SUBTITLE_RU' | translate }}</mat-label>
-                  <input matInput formControlName="subtitle_ru" placeholder="Enter subtitle (RU)">
-                </mat-form-field>
-                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ua'">
-                  <mat-label>{{ 'SUBTITLE_UA' | translate }}</mat-label>
-                  <input matInput formControlName="subtitle_ua" placeholder="Enter subtitle (UA)">
-                </mat-form-field>
-              </div>
-
-              <!-- Content/Description (Localized) -->
-              <div class="form-field-group">
-                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'en'">
-                  <mat-label>{{ 'CONTENT_EN' | translate }}</mat-label>
-                  <textarea matInput formControlName="content_en" placeholder="Enter description (EN)" rows="4"></textarea>
-                </mat-form-field>
-                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ru'">
-                  <mat-label>{{ 'CONTENT_RU' | translate }}</mat-label>
-                  <textarea matInput formControlName="content_ru" placeholder="Enter description (RU)" rows="4"></textarea>
-                </mat-form-field>
-                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ua'">
-                  <mat-label>{{ 'CONTENT_UA' | translate }}</mat-label>
-                  <textarea matInput formControlName="content_ua" placeholder="Enter description (UA)" rows="4"></textarea>
-                </mat-form-field>
-              </div>
-            </div>
-          </div>
-        </mat-tab>
-
-        <!-- TAB 2: MEDIA (IMAGE & 3D) -->
-        <mat-tab>
-          <ng-template mat-tab-label>
-            <mat-icon class="tab-icon">image</mat-icon>
-            <span class="tab-label">{{ 'MEDIA' | translate }}</span>
-          </ng-template>
-          <div class="tab-content">
-            <div class="media-section">
-              <div class="toggle-group">
-                <mat-slide-toggle formControlName="showImage">{{ 'SHOW_IMAGE' | translate }}</mat-slide-toggle>
-                <mat-slide-toggle formControlName="show3d">{{ 'SHOW_3D_MODEL' | translate }}</mat-slide-toggle>
-              </div>
-
-              <div class="media-upload-grid">
-                <!-- Image Upload -->
-                <div class="upload-box" *ngIf="sectionForm.get('showImage')?.value">
+      <ng-container [ngSwitch]="sectionForm.get('type')?.value">
+        <!-- HEADER SPECIALIZED FORM -->
+        <mat-tab-group *ngSwitchCase="'header'" animationDuration="250ms" color="primary">
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="tab-icon">branding_watermark</mat-icon>
+              <span class="tab-label">Logo & Settings</span>
+            </ng-template>
+            <div class="tab-content">
+              <div class="header-special-grid">
+                <div class="logo-upload-section">
                   <app-image-upload 
-                    [currentImageUrl]="sectionForm.get('imageUrl')?.value"
-                    label="SECTION_IMAGE"
-                    (imageUploaded)="onImageUploaded($event)">
+                    [currentImageUrl]="sectionForm.get('logoUrl')?.value"
+                    label="LOGO_IMAGE"
+                    (imageUploaded)="onLogoUploaded($event)">
                   </app-image-upload>
                 </div>
-
-                <!-- 3D Upload -->
-                <div class="upload-box" *ngIf="sectionForm.get('show3d')?.value">
-                  <div class="threed-upload-container" (click)="fileInput.click()">
-                    <input type="file" #fileInput (change)="on3dFileSelected($event)" accept=".glb" hidden>
-                    
-                    <div class="no-model" *ngIf="!model3dFileName">
-                      <mat-icon>3d_rotation</mat-icon>
-                      <p>{{ 'SELECT_3D_MODEL' | translate }}</p>
-                      <span class="hint">{{ 'ONLY_GLB' | translate }}</span>
-                    </div>
-
-                    <div class="model-info" *ngIf="model3dFileName">
-                      <mat-icon color="primary">view_in_ar</mat-icon>
-                      <div class="file-details">
-                        <span class="file-name">{{ model3dFileName }}</span>
-                        <span class="status-badge" *ngIf="uploading3d">{{ 'UPLOADING' | translate }}...</span>
-                        <span class="status-badge ready" *ngIf="!uploading3d">{{ 'READY_TO_SAVE' | translate }}</span>
-                      </div>
-                      <button mat-icon-button color="warn" (click)="remove3dModel($event)" type="button">
-                        <mat-icon>close</mat-icon>
-                      </button>
-                    </div>
+                
+                <div class="settings-toggles-card">
+                  <h4>{{ 'HEADER_UTILITIES' | translate }}</h4>
+                  <div class="toggle-list">
+                    <mat-slide-toggle formControlName="showSearch">Search Icon</mat-slide-toggle>
+                    <mat-slide-toggle formControlName="showCart">Cart Icon</mat-slide-toggle>
+                    <mat-slide-toggle formControlName="showProfile">User Profile</mat-slide-toggle>
+                    <mat-divider></mat-divider>
+                    <mat-slide-toggle formControlName="isActive" color="primary">Header Active</mat-slide-toggle>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </mat-tab>
+          </mat-tab>
 
-        <!-- TAB 3: COMPONENTS / SPECIALIZED -->
-        <mat-tab *ngIf="sectionForm.get('type')?.value === 'header' || sectionForm.get('type')?.value === 'categories' || sectionForm.get('type')?.value === 'brands'">
-          <ng-template mat-tab-label>
-            <mat-icon class="tab-icon">extension</mat-icon>
-            <span class="tab-label">{{ 'COMPONENTS' | translate }}</span>
-          </ng-template>
-          <div class="tab-content">
-            <!-- HEADER: MENU -->
-            <div *ngIf="sectionForm.get('type')?.value === 'header'">
-              <div class="header-logo-upload">
-                <app-image-upload 
-                  [currentImageUrl]="sectionForm.get('logoUrl')?.value"
-                  label="LOGO_IMAGE"
-                  (imageUploaded)="onLogoUploaded($event)">
-                </app-image-upload>
-              </div>
-
-              <div class="header-toggles">
-                <mat-slide-toggle formControlName="showSearch">Search</mat-slide-toggle>
-                <mat-slide-toggle formControlName="showCart">Cart</mat-slide-toggle>
-                <mat-slide-toggle formControlName="showProfile">Profile</mat-slide-toggle>
-              </div>
-              
-              <mat-divider></mat-divider>
-              
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="tab-icon">menu</mat-icon>
+              <span class="tab-label">Menu Navigation</span>
+            </ng-template>
+            <div class="tab-content">
               <div class="dynamic-list">
                 <div class="list-header">
                   <h4>{{ 'MENU_ITEMS' | translate }}</h4>
@@ -207,125 +98,172 @@
                 </div>
               </div>
             </div>
+          </mat-tab>
+        </mat-tab-group>
 
-            <!-- CATEGORIES: LIST -->
-            <div *ngIf="sectionForm.get('type')?.value === 'categories'">
-               <div class="dynamic-list">
+        <!-- DEFAULT FORM (FOR OTHER SECTIONS) -->
+        <mat-tab-group *ngSwitchDefault animationDuration="250ms" color="primary">
+          <!-- TAB: CONTENT -->
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="tab-icon">text_fields</mat-icon>
+              <span class="tab-label">{{ 'CONTENT' | translate }}</span>
+            </ng-template>
+            <div class="tab-content">
+              <div class="form-grid">
+                <!-- Title (Localized) -->
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'en'">
+                  <mat-label>{{ 'TITLE_EN' | translate }}</mat-label>
+                  <input matInput formControlName="title_en" placeholder="Enter title (EN)">
+                </mat-form-field>
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ru'">
+                  <mat-label>{{ 'TITLE_RU' | translate }}</mat-label>
+                  <input matInput formControlName="title_ru" placeholder="Enter title (RU)">
+                </mat-form-field>
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ua'">
+                  <mat-label>{{ 'TITLE_UA' | translate }}</mat-label>
+                  <input matInput formControlName="title_ua" placeholder="Enter title (UA)">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'en'">
+                  <mat-label>{{ 'SUBTITLE_EN' | translate }}</mat-label>
+                  <input matInput formControlName="subtitle_en" placeholder="Enter subtitle (EN)">
+                </mat-form-field>
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ru'">
+                  <mat-label>{{ 'SUBTITLE_RU' | translate }}</mat-label>
+                  <input matInput formControlName="subtitle_ru" placeholder="Enter subtitle (RU)">
+                </mat-form-field>
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ua'">
+                  <mat-label>{{ 'SUBTITLE_UA' | translate }}</mat-label>
+                  <input matInput formControlName="subtitle_ua" placeholder="Enter subtitle (UA)">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'en'">
+                  <mat-label>{{ 'CONTENT_EN' | translate }}</mat-label>
+                  <textarea matInput formControlName="content_en" placeholder="Description (EN)" rows="4"></textarea>
+                </mat-form-field>
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ru'">
+                  <mat-label>{{ 'CONTENT_RU' | translate }}</mat-label>
+                  <textarea matInput formControlName="content_ru" placeholder="Description (RU)" rows="4"></textarea>
+                </mat-form-field>
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ua'">
+                  <mat-label>{{ 'CONTENT_UA' | translate }}</mat-label>
+                  <textarea matInput formControlName="content_ua" placeholder="Description (UA)" rows="4"></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-tab>
+
+          <!-- TAB: MEDIA -->
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="tab-icon">image</mat-icon>
+              <span class="tab-label">{{ 'MEDIA' | translate }}</span>
+            </ng-template>
+            <div class="tab-content">
+              <div class="media-section">
+                <div class="toggle-group">
+                  <mat-slide-toggle formControlName="showImage">{{ 'SHOW_IMAGE' | translate }}</mat-slide-toggle>
+                  <mat-slide-toggle formControlName="show3d">{{ 'SHOW_3D_MODEL' | translate }}</mat-slide-toggle>
+                </div>
+
+                <div class="media-upload-grid">
+                  <app-image-upload *ngIf="sectionForm.get('showImage')?.value"
+                    [currentImageUrl]="sectionForm.get('imageUrl')?.value"
+                    label="SECTION_IMAGE"
+                    (imageUploaded)="onImageUploaded($event)">
+                  </app-image-upload>
+
+                  <div class="threed-upload-container" *ngIf="sectionForm.get('show3d')?.value" (click)="fileInput.click()">
+                    <input type="file" #fileInput (change)="on3dFileSelected($event)" accept=".glb" hidden>
+                    <div class="no-model" *ngIf="!model3dFileName">
+                      <mat-icon>3d_rotation</mat-icon>
+                      <p>{{ 'SELECT_3D_MODEL' | translate }}</p>
+                    </div>
+                    <div class="model-info" *ngIf="model3dFileName">
+                      <mat-icon color="primary">view_in_ar</mat-icon>
+                      <span class="file-name">{{ model3dFileName }}</span>
+                      <button mat-icon-button color="warn" (click)="remove3dModel($event)" type="button">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+
+          <!-- TAB: SPECIAL (CATEGORIES/BRANDS) -->
+          <mat-tab *ngIf="sectionForm.get('type')?.value === 'categories' || sectionForm.get('type')?.value === 'brands'">
+            <ng-template mat-tab-label>
+              <mat-icon class="tab-icon">extension</mat-icon>
+              <span class="tab-label">{{ 'COMPONENTS' | translate }}</span>
+            </ng-template>
+            <div class="tab-content">
+              <!-- CATEGORIES -->
+              <div *ngIf="sectionForm.get('type')?.value === 'categories'" class="dynamic-list">
                 <div class="list-header">
                   <h4>{{ 'CATEGORIES' | translate }}</h4>
                   <button mat-button color="primary" type="button" (click)="addCategory()">
-                    <mat-icon>add</mat-icon>
-                    {{ 'ADD_CATEGORY' | translate }}
+                    <mat-icon>add</mat-icon> {{ 'ADD_CATEGORY' | translate }}
                   </button>
                 </div>
-
                 <div cdkDropList (cdkDropListDropped)="dropCategory($event)" class="cdk-list">
                   <div *ngFor="let cat of categories.controls; let i = index" cdkDrag class="cdk-item">
-                    <mat-icon cdkDragHandle class="drag-handle">drag_indicator</mat-icon>
                     <div [formGroup]="$any(cat)" class="item-form vertical">
                       <div class="item-row">
-                        <mat-form-field appearance="outline">
-                          <mat-label>Name</mat-label>
-                          <input matInput formControlName="name" placeholder="Name">
-                        </mat-form-field>
-                        <mat-form-field appearance="outline">
-                          <mat-label>Slug</mat-label>
-                          <input matInput formControlName="slug" [placeholder]="'auto-generated' | translate">
-                        </mat-form-field>
-                        <button mat-icon-button color="warn" (click)="removeCategory(i)" type="button">
-                          <mat-icon>delete</mat-icon>
-                        </button>
+                        <mat-form-field appearance="outline"><mat-label>Name</mat-label><input matInput formControlName="name"></mat-form-field>
+                        <mat-form-field appearance="outline"><mat-label>Slug</mat-label><input matInput formControlName="slug"></mat-form-field>
+                        <button mat-icon-button color="warn" (click)="removeCategory(i)" type="button"><mat-icon>delete</mat-icon></button>
                       </div>
-                      <div class="item-row upload-only">
-                        <app-image-upload 
-                          [currentImageUrl]="cat.get('icon')?.value"
-                          label="Icon"
-                          (imageUploaded)="onCategoryIconUploaded($event, i)">
-                        </app-image-upload>
-                      </div>
+                      <app-image-upload [currentImageUrl]="cat.get('icon')?.value" label="Icon" (imageUploaded)="onCategoryIconUploaded($event, i)"></app-image-upload>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-
-            <!-- BRANDS: LIST -->
-            <div *ngIf="sectionForm.get('type')?.value === 'brands'">
-              <div class="dynamic-list">
+              <!-- BRANDS -->
+              <div *ngIf="sectionForm.get('type')?.value === 'brands'" class="dynamic-list">
                 <div class="list-header">
                   <h4>{{ 'BRANDS' | translate }}</h4>
                   <button mat-button color="primary" type="button" (click)="addBrand()">
-                    <mat-icon>add</mat-icon>
-                    {{ 'ADD_BRAND' | translate }}
+                    <mat-icon>add</mat-icon> {{ 'ADD_BRAND' | translate }}
                   </button>
                 </div>
-
                 <div cdkDropList (cdkDropListDropped)="dropBrand($event)" class="cdk-list">
                   <div *ngFor="let brand of brands.controls; let i = index" cdkDrag class="cdk-item">
-                    <mat-icon cdkDragHandle class="drag-handle">drag_indicator</mat-icon>
                     <div [formGroup]="$any(brand)" class="item-form vertical">
                       <div class="item-row">
-                        <mat-form-field appearance="outline">
-                          <mat-label>Brand Name</mat-label>
-                          <input matInput formControlName="name" placeholder="Brand Name">
-                        </mat-form-field>
-                        <button mat-icon-button color="warn" (click)="removeBrand(i)" type="button">
-                          <mat-icon>delete</mat-icon>
-                        </button>
+                        <mat-form-field appearance="outline"><mat-label>Brand Name</mat-label><input matInput formControlName="name"></mat-form-field>
+                        <button mat-icon-button color="warn" (click)="removeBrand(i)" type="button"><mat-icon>delete</mat-icon></button>
                       </div>
-                      <div class="item-row upload-only">
-                        <app-image-upload 
-                          [currentImageUrl]="brand.get('logo')?.value"
-                          label="Logo"
-                          (imageUploaded)="onBrandLogoUploaded($event, i)">
-                        </app-image-upload>
-                      </div>
+                      <app-image-upload [currentImageUrl]="brand.get('logo')?.value" label="Logo" (imageUploaded)="onBrandLogoUploaded($event, i)"></app-image-upload>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </mat-tab>
+          </mat-tab>
 
-        <!-- TAB 4: SETTINGS (ADVANCED) -->
-        <mat-tab>
-          <ng-template mat-tab-label>
-            <mat-icon class="tab-icon">settings</mat-icon>
-            <span class="tab-label">{{ 'SETTINGS' | translate }}</span>
-          </ng-template>
-          <div class="tab-content">
-            <div class="form-grid">
-              <mat-form-field appearance="outline">
-                <mat-label>{{ 'SECTION_TYPE' | translate }}</mat-label>
-                <mat-select formControlName="type">
-                  <mat-option *ngFor="let type of sectionTypes" [value]="type.value">
-                    {{ type.label | translate }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-
-              <mat-slide-toggle formControlName="isActive" color="primary">
-                {{ 'ACTIVE_ON_SITE' | translate }}
-              </mat-slide-toggle>
-
-              <mat-divider></mat-divider>
-              
-              <div class="advanced-info">
-                <h4>{{ 'ADVANCED_DETAILS' | translate }}</h4>
-                <div class="info-row">
-                  <span>Type identifier:</span>
-                  <code>{{ sectionForm.get('type')?.value }}</code>
-                </div>
-                <div class="info-row" *ngIf="isEditMode">
-                  <span>Database ID:</span>
-                  <code>{{ (isDrawerMode ? data?.section?.id : dialogData?.section?.id) }}</code>
-                </div>
+          <!-- TAB: SETTINGS -->
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="tab-icon">settings</mat-icon>
+              <span class="tab-label">{{ 'SETTINGS' | translate }}</span>
+            </ng-template>
+            <div class="tab-content">
+              <div class="form-grid">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'SECTION_TYPE' | translate }}</mat-label>
+                  <mat-select formControlName="type">
+                    <mat-option *ngFor="let type of sectionTypes" [value]="type.value">{{ type.label | translate }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-slide-toggle formControlName="isActive" color="primary">{{ 'ACTIVE_ON_SITE' | translate }}</mat-slide-toggle>
               </div>
             </div>
-          </div>
-        </mat-tab>
-      </mat-tab-group>
+          </mat-tab>
+        </mat-tab-group>
+      </ng-container>
     </div>
 
     <div [class.mat-dialog-actions]="!isDrawerMode" [class.form-actions-drawer]="isDrawerMode" align="end" class="form-footer">

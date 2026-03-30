@@ -377,38 +377,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.searchResults = [];
   }
 
-  scrollToSection(sectionId: string): void {
-    if (this.router.url !== '/home') {
-      this.router.navigate(['/home']).then(() => {
-        setTimeout(() => {
-          this.scrollToElement(sectionId);
-        }, 300);
-      });
-    } else {
-      setTimeout(() => {
-        this.scrollToElement(sectionId);
-      }, 100);
-    }
-    this.closeMobileMenu();
-  }
-
-  private scrollToElement(elementId: string): void {
-    const element = document.getElementById(elementId);
-    if (element) {
-      const headerHeight = 80; // Fixed header height
-      const elementPosition = element.offsetTop - headerHeight;
-
-      if (isPlatformBrowser(this.platformId)) {
-        window.scrollTo({
-          top: elementPosition,
-          behavior: 'smooth'
-        });
-      }
-    } else {
-
-    }
-  }
-
   navigateToUrl(url: string): void {
     if (url.startsWith('http')) {
       if (isPlatformBrowser(this.platformId)) {
@@ -441,23 +409,64 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.closeMobileMenu();
   }
 
-  handleMenuClick(menuItem: MenuItem): void {
+  handleMenuClick(menuItem: MenuItem, event?: MouseEvent): void {
+    // Only close search and mobile menu
+    this.isSearchOpen = false;
+    this.closeMobileMenu();
+    
+    console.log('[Header] Menu click:', menuItem.url);
+
     if (menuItem.url.startsWith('#')) {
-      // Internal anchor link - scroll to section
       const sectionId = menuItem.url.substring(1);
       this.scrollToSection(sectionId);
     } else if (menuItem.url.startsWith('/')) {
-      // Internal route
       this.router.navigate([menuItem.url]);
-      this.closeMobileMenu();
-      this.isSearchOpen = false;
       this.searchTerm = '';
       this.searchResults = [];
     } else {
-      // External link
       if (isPlatformBrowser(this.platformId)) {
         window.open(menuItem.url, '_blank');
       }
     }
+  }
+
+  scrollToSection(sectionId: string): void {
+    console.log('[Header] Scroll to section:', sectionId);
+    if (this.router.url !== '/home') {
+      this.router.navigate(['/home']).then(() => {
+        this.scrollToElement(sectionId);
+      });
+    } else {
+      this.scrollToElement(sectionId);
+    }
+  }
+
+  private scrollToElement(elementId: string): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    let retries = 0;
+    const maxRetries = 20;
+
+    const tryScroll = () => {
+      const element = document.getElementById(elementId);
+      console.log(`[Header] Retry ${retries}: Finding element '${elementId}'...`, element ? 'Found' : 'Not Found');
+      
+      if (element) {
+        // Use scrollIntoView which is more robust
+        // No manual window.scrollBy here to avoid flickering
+        // We rely on scroll-margin-top in CSS for the offset
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      } else if (retries < maxRetries) {
+        retries++;
+        setTimeout(tryScroll, 150);
+      } else {
+        console.warn(`[Header] Could not find element with ID: ${elementId} after ${maxRetries} retries`);
+      }
+    };
+
+    tryScroll();
   }
 }

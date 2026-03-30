@@ -1,14 +1,22 @@
 <!-- Multi-section mode (Full Page Preview) -->
 <ng-container *ngIf="sections && sections.length > 0">
   <div class="full-page-preview">
-    <ng-container *ngFor="let s of (sections || []); let i = index">
-      <app-section-renderer 
-        *ngIf="s.isActive"
-        [section]="s" 
-        [mode]="mode"
-        [key]="renderKey + '_' + i"
-        [class.focused-section]="s.id === activeSectionId">
-      </app-section-renderer>
+    <ng-container *ngFor="let s of renderingSections; let i = index">
+      <div class="architect-section-wrapper" 
+           [class.active]="s.id === activeSectionId"
+           (click)="onSectionClick(s, $event)">
+        <div class="section-badge">{{ s.type | titlecase }}</div>
+        <div class="section-overlay">
+          <mat-icon>edit</mat-icon>
+          <span>Click to Edit</span>
+        </div>
+        <app-section-renderer 
+          *ngIf="s.isActive"
+          [section]="s" 
+          [mode]="mode"
+          [key]="renderKey + '_' + i">
+        </app-section-renderer>
+      </div>
     </ng-container>
   </div>
 </ng-container>
