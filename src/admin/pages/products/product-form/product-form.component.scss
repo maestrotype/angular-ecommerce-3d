@@ -522,6 +522,83 @@
       height: 100%;
       min-height: 400px;
       
+      .legacy-model-warning {
+        padding: 24px;
+        border: 2px solid rgba(251, 191, 36, 0.5);
+        border-radius: 14px;
+        background: rgba(251, 191, 36, 0.06);
+        backdrop-filter: blur(6px);
+        margin: 16px;
+
+        .warning-body {
+          display: flex;
+          align-items: flex-start;
+          gap: 14px;
+          margin-bottom: 20px;
+
+          .warn-icon {
+            font-size: 28px;
+            width: 28px;
+            height: 28px;
+            color: #fbbf24;
+            flex-shrink: 0;
+            margin-top: 2px;
+          }
+
+          .warn-text {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+
+            strong {
+              font-size: 1rem;
+              font-weight: 700;
+              color: #fde68a;
+              letter-spacing: 0.02em;
+            }
+
+            span {
+              font-size: 0.875rem;
+              color: #d1d5db;
+              line-height: 1.55;
+            }
+          }
+        }
+
+        .warning-actions {
+          display: flex;
+          gap: 12px;
+          align-items: center;
+          flex-wrap: wrap;
+
+          button[mat-flat-button] {
+            background: #fbbf24;
+            color: #1f2937;
+            font-weight: 600;
+            border-radius: 8px;
+            padding: 0 20px;
+            height: 40px;
+
+            mat-icon { margin-right: 6px; }
+
+            &:hover {
+              background: #f59e0b;
+            }
+          }
+
+          button[mat-stroked-button] {
+            border-color: rgba(251, 191, 36, 0.5);
+            color: #fde68a;
+            border-radius: 8px;
+            height: 40px;
+          }
+
+          button[mat-icon-button] {
+            color: #f87171;
+          }
+        }
+      }
+
       .viewer-container-glass {
         position: relative;
         width: 100%;
@@ -587,6 +664,7 @@
         }
       }
     }
+
 
     .uploading-overlay {
       position: absolute;

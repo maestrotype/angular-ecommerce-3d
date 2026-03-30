@@ -2,7 +2,6 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
-import { map } from 'rxjs/operators';
 import {
   Product,
   ProductCreateRequest,
@@ -139,21 +138,13 @@ export class ProductService {
     );
   }
 
-  upload3dModel(file: File): Observable<{ url: string }> {
+  upload3dModel(file: File): Observable<{ url: string; publicId: string }> {
     const formData = new FormData();
     formData.append('model', file);
-    return this.http.post<{ url: string }>(
-      `${this.API_URL}/products/upload-3d`,
+    // Uses UploadsController endpoint which stores on Cloudinary (environment-independent)
+    return this.http.post<{ url: string; publicId: string }>(
+      `${this.API_URL}/uploads/product-3d-model`,
       formData
-    ).pipe(
-      map(res => {
-        if (res.url && !res.url.startsWith('http')) {
-          // Remove /api if present
-          const apiBase = this.API_URL.replace(/\/api$/, '');
-          return { url: apiBase + res.url };
-        }
-        return res;
-      })
     );
   }
 }

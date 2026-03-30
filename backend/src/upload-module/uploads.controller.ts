@@ -31,10 +31,12 @@ function createCloudinaryUpload(folder: string, resourceType: "image" | "raw" | 
       {
         folder,
         resource_type: resourceType,
+        chunk_size: 6000000, // 6MB chunks to support large files > 10MB
       },
       (error, result) => {
         if (error) {
-          observer.error(new BadRequestException("Cloudinary upload failed"));
+          console.error("Cloudinary upload error details:", error);
+          observer.error(new BadRequestException(`Cloudinary upload failed: ${error.message || JSON.stringify(error)}`));
         } else {
           observer.next(result);
           observer.complete();
@@ -173,7 +175,8 @@ export class UploadsController {
             console.error("Failed to delete temp file:", unlinkError);
           }
         }
-        return throwError(() => new BadRequestException("3D model optimization or upload failed"));
+        const message = error?.message || "3D model optimization or upload failed";
+        return throwError(() => new BadRequestException(message));
       })
     );
   }
