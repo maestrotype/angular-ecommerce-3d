@@ -3,6 +3,7 @@
   z-index: 999;
   position: relative;
 
+
   // --- SITE ARCHITECT PREVIEW OVERRIDES ---
   
   // 1. DESKTOP MODE
@@ -614,11 +615,13 @@
   z-index: 9998;
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
   transition: all 0.3s ease;
 
   &.active {
     opacity: 1;
     visibility: visible;
+    pointer-events: auto; // Enable only when active
   }
 }
 

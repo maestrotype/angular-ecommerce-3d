@@ -247,20 +247,3 @@
 
   width: calc(var(--preview-width-raw) * var(--preview-scale));
 }
-
-app-section-renderer {
-  display: block;
-  width: var(--preview-width-raw);
-  min-width: var(--preview-width-raw);
-  transform: scale(var(--preview-scale));
-  transform-origin: top left;
-  transition: transform 0.3s ease, width 0.3s ease;
-  background: #1a1a1a; 
-  border-radius: 8px;
-  box-shadow: 0 40px 100px rgba(0,0,0,0.6);
-  margin-bottom: 40px;
-  flex-shrink: 0;
-
-  // Ensure internal content is visible
-  color: white; 
-}

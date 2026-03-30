@@ -1,20 +1,4 @@
 
-/* Universal Scrollbar & Overflow Fix */
-html, body {
-  height: 100%;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
-}
-
-::-webkit-scrollbar {
-  display: none;
-}
-
-* {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
 
 @import './_admin-material-base';
 @import './_admin-theme-material';

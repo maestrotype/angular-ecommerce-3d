@@ -11,8 +11,11 @@
           [class.hidden]="!canAccessMenuItem(item)">
           {{ item.title | localized }}
         </a>
-        <a *ngIf="item.url.startsWith('#')" (click)="handleMenuClick(item)" class="nav-link"
-          [class.hidden]="!canAccessMenuItem(item)">
+        <a *ngIf="item.url.startsWith('#')" 
+           href="javascript:void(0)"
+           (click)="handleMenuClick(item, $event)" 
+           class="nav-link"
+           [class.hidden]="!canAccessMenuItem(item)">
           {{ item.title | localized }}
         </a>
       </ng-container>
@@ -186,8 +189,17 @@
   <nav class="mobile-nav">
     <div class="mobile-menu-section">
       <ng-container *ngFor="let item of menuItems">
-        <a *ngIf="canAccessMenuItem(item)" [routerLink]="item.url" (click)="closeMobileMenu()" class="mobile-nav-link"
-          routerLinkActive="active">
+        <!-- Regular Router Links -->
+        <a *ngIf="canAccessMenuItem(item) && item.url.startsWith('/')" 
+           [routerLink]="item.url" (click)="closeMobileMenu()" 
+           class="mobile-nav-link" routerLinkActive="active">
+          {{ item.title | localized }}
+        </a>
+        <!-- Anchor Links -->
+        <a *ngIf="canAccessMenuItem(item) && item.url.startsWith('#')" 
+           href="javascript:void(0)"
+           (click)="handleMenuClick(item, $event)" 
+           class="mobile-nav-link">
           {{ item.title | localized }}
         </a>
       </ng-container>
