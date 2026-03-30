@@ -171,6 +171,8 @@
 
               <!-- State: Model Loaded -->
               <div *ngIf="model3dUrl" class="model-active-view">
+
+                <!-- 3D Viewer -->
                 <div class="viewer-container-glass">
                   <app-three-d-viewer [modelPath]="model3dUrl" [autoRotate]="true" [previewOnly]="false" (modelLoaded)="onModelLoaded()"></app-three-d-viewer>
                   

@@ -13,6 +13,7 @@ import { Category } from "../../../models/category.model";
 import { ProcessingOptions, ProcessedImageResult } from "../../../components/ui/image-processor/image-processor.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { environment } from '../../../../environments/environment';
+import { isLegacyLocalUrl } from '../../../../app/core/utils/url-helper';
 
 import { LocalizedString } from "../../../../shared/models/localized-string.model";
 import { getLocalizedString } from "../../../../shared/utils/localization.util";
@@ -32,8 +33,13 @@ export class ProductFormComponent implements OnInit {
   imageUrls: string[] = [];
   model3dFile: File | null = null;
   model3dUrl: string | null = null;
+  model3dPublicId: string | null = null;
   isUploading3d = false;
   dragging3d = false;
+
+  get model3dUrlIsLegacy(): boolean {
+    return false;
+  }
   categories: Category[] = [];
 
   imageProcessingOptions: ProcessingOptions = {
@@ -260,17 +266,31 @@ export class ProductFormComponent implements OnInit {
 
   on3dFileSelected(event: any): void {
     const file = event.target.files[0];
-    if (!file || !file.name.endsWith(".glb")) return;
+    if (!file) return;
+    if (!file.name.endsWith('.glb')) {
+      this.snackBar.open('Only GLB format is supported. Please convert your model first.', 'Close', { duration: 5000 });
+      return;
+    }
+    if (file.size > 100 * 1024 * 1024) {
+      this.snackBar.open(`File too large: ${(file.size / 1024 / 1024).toFixed(1)} MB (max 100 MB)`, 'Close', { duration: 5000 });
+      return;
+    }
     this.isUploading3d = true;
     this.productService.upload3dModel(file).subscribe({
       next: (res) => {
         this.model3dUrl = res.url;
+        this.model3dPublicId = res.publicId || null;
         this.isUploading3d = false;
-        this.snackBar.open('3D model uploaded successfully!', 'Close', { duration: 3000 });
+        this.snackBar.open('3D model uploaded to Cloudinary ✓', 'Close', { duration: 3000 });
       },
-      error: () => {
+      error: (err) => {
         this.isUploading3d = false;
-        this.snackBar.open('Failed to upload 3D model', 'Close', { duration: 5000, panelClass: 'error-snackbar' });
+        const status = err?.status ? ` [HTTP ${err.status}]` : '';
+        const serverMsg = err?.error?.message || err?.message || 'Unknown error';
+        this.snackBar.open(`3D upload failed${status}: ${serverMsg}`, 'Close', {
+          duration: 8000,
+          panelClass: 'error-snackbar'
+        });
       },
     });
   }
@@ -309,9 +329,11 @@ export class ProductFormComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-
-        this.snackBar.open('Failed to load product data', "Close", {
-          duration: 5000,
+        const status = err?.status ? ` [HTTP ${err.status}]` : '';
+        const serverMsg = err?.error?.message || err?.message || 'Unknown error';
+        this.snackBar.open(`Failed to load product${status}: ${serverMsg}`, 'Close', {
+          duration: 7000,
+          panelClass: 'error-snackbar'
         });
         this.isLoading = false;
       },
@@ -341,6 +363,7 @@ export class ProductFormComponent implements OnInit {
     }
 
     this.model3dUrl = product.model3dUrl || null;
+    this.model3dPublicId = (product as any).model3dPublicId || null;
 
     // Clear existing specifications
     while (this.specificationsArray.length !== 0) {
@@ -393,32 +416,41 @@ export class ProductFormComponent implements OnInit {
       images: this.imageUrls,
       specifications,
       model3dUrl: this.model3dUrl,
+      model3dPublicId: this.model3dPublicId,
     };
     // rest of onSubmit ... navigations etc
     if (this.isEditMode) {
       this.productService.updateProduct(this.productId!, productData).subscribe({
-        next: (product) => {
+        next: () => {
           this.isLoading = false;
           this.snackBar.open('Product updated successfully!', 'Close', { duration: 3000 });
           this.router.navigate(['/admin/products']);
         },
-        error: (error) => {
+        error: (err) => {
           this.isLoading = false;
-
-          this.snackBar.open('Error updating product', 'Close', { duration: 3000 });
+          const status = err?.status ? ` [HTTP ${err.status}]` : '';
+          const serverMsg = err?.error?.message || err?.message || 'Unknown error';
+          this.snackBar.open(`Error updating product${status}: ${serverMsg}`, 'Close', {
+            duration: 7000,
+            panelClass: 'error-snackbar'
+          });
         }
       });
     } else {
       this.productService.createProduct(productData as any).subscribe({
-        next: (product) => {
+        next: () => {
           this.isLoading = false;
           this.snackBar.open('Product created successfully!', 'Close', { duration: 3000 });
           this.router.navigate(['/admin/products']);
         },
-        error: (error) => {
+        error: (err) => {
           this.isLoading = false;
-
-          this.snackBar.open('Error creating product', 'Close', { duration: 3000 });
+          const status = err?.status ? ` [HTTP ${err.status}]` : '';
+          const serverMsg = err?.error?.message || err?.message || 'Unknown error';
+          this.snackBar.open(`Error creating product${status}: ${serverMsg}`, 'Close', {
+            duration: 7000,
+            panelClass: 'error-snackbar'
+          });
         }
       });
     }

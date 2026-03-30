@@ -15,9 +15,11 @@ import { SeoModule } from './seo/seo.module';
 import { PaymentsModule } from './payments/payments.module';
 import { RecommendationsModule } from './recommendations/recommendations.module';
 import { SettingsModule } from './settings/settings.module';
+import { HealthController } from './health/health.controller';
 // import { ServeStaticModule } from '@nestjs/serve-static';
 // import { join } from 'path';
 @Module({
+  controllers: [HealthController],
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
