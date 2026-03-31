@@ -418,17 +418,6 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
         this.isLoading = false;
         this.hasError = true;
         this.cdr.detectChanges();
-        
-        const errorObj = err as any;
-        let errMsg = errorObj?.message || 'Unknown error';
-        if (errorObj?.target?.status === 404) errMsg = 'File not found (404)';
-        
-        // Show error notification dynamically
-        const title = this.translate.instant('VIEWER.LOAD_ERROR') || '3D Load Error';
-        this.snackBar.open(`${title}: ${errMsg}`, 'Close', {
-          duration: 5000,
-          panelClass: ['error-snackbar']
-        });
       }
     );
   }

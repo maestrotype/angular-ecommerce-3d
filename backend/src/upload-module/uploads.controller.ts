@@ -9,20 +9,14 @@ import {
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import { v4 as uuidv4 } from "uuid";
-import { readFileSync, unlinkSync } from "fs";
+import { readFileSync, unlinkSync, existsSync, mkdirSync, writeFileSync } from "fs";
 import * as os from "os";
+import { join } from "path";
 import { v2 as cloudinary } from "cloudinary";
 import { ImageProcessingService } from "../services/image-processing.service";
 import { Observable, from, throwError, bindNodeCallback, of } from 'rxjs';
 import { map, catchError, tap, switchMap } from 'rxjs/operators';
 
-// GLB optimization function
-function optimizeGLB(inputPath: string, outputPath: string): Observable<void> {
-  // Implementation for GLB optimization
-  // This would typically use gltf-transform or similar library
-  console.log(`Optimizing GLB from ${inputPath} to ${outputPath}`);
-  return of(void 0);
-}
 
 // Helper function to create Cloudinary upload observable
 function createCloudinaryUpload(folder: string, resourceType: "image" | "raw" | "video" | "auto", buffer: Buffer): Observable<any> {
@@ -32,6 +26,7 @@ function createCloudinaryUpload(folder: string, resourceType: "image" | "raw" | 
         folder,
         resource_type: resourceType,
         chunk_size: 6000000, // 6MB chunks to support large files > 10MB
+        timeout: 600000, // 10 minutes timeout for large files on slow connections
       },
       (error, result) => {
         if (error) {
@@ -114,27 +109,58 @@ export class UploadsController {
       return throwError(() => new BadRequestException("No file uploaded"));
     }
 
-    const modelBuffer = readFileSync(file.path);
+    // Cloudinary Free Tier has a strictly enforced 10MB limit for raw files.
+    if (file.size <= 10 * 1024 * 1024) {
+      const uploadPromise = new Promise<any>((resolve, reject) => {
+        cloudinary.uploader.upload_large(file.path, {
+          folder: "section-3d-models",
+          resource_type: "raw",
+          chunk_size: 6000000,
+          timeout: 600000
+        }, (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        });
+      });
 
-    return createCloudinaryUpload("section-3d-models", "raw", modelBuffer).pipe(
-      map((result: any) => {
-        unlinkSync(file.path);
-        return {
-          url: result.secure_url,
-          publicId: result.public_id,
-        };
-      }),
-      catchError(error => {
-        if (file.path) {
-          try {
-            unlinkSync(file.path);
-          } catch (unlinkError) {
-            console.error("Failed to delete temp file:", unlinkError);
-          }
-        }
-        return throwError(() => new BadRequestException("3D model upload failed"));
-      })
-    );
+      return from(uploadPromise).pipe(
+        map((result: any) => {
+          try { unlinkSync(file.path); } catch (e) {}
+          return {
+            url: result.secure_url,
+            publicId: result.public_id,
+          };
+        }),
+        catchError(error => {
+          try { unlinkSync(file.path); } catch (e) {}
+          const message = error?.message || "3D section model upload failed";
+          return throwError(() => new BadRequestException(message));
+        })
+      );
+    } else {
+      // Fallback: File is > 10MB. Keep it on local disk.
+      const finalDir = join(__dirname, "..", "..", "uploads", "sections-3d");
+      if (!existsSync(finalDir)) {
+        mkdirSync(finalDir, { recursive: true });
+      }
+      
+      const finalFileName = `section3d-${Date.now()}-${Math.round(Math.random() * 1e9)}.glb`;
+      const finalPath = join(finalDir, finalFileName);
+      
+      const buffer = readFileSync(file.path);
+      writeFileSync(finalPath, buffer);
+      
+      try { unlinkSync(file.path); } catch (e) {}
+      
+      const serverUrl = process.env.NODE_ENV === 'production' 
+        ? 'https://angular-ecommerce-backend.onrender.com' 
+        : 'http://localhost:3002';
+
+      return of({
+        url: `${serverUrl}/uploads/sections-3d/${finalFileName}`,
+        publicId: finalPath,
+      });
+    }
   }
 
   @Post("product-3d-model")
@@ -157,28 +183,63 @@ export class UploadsController {
       return throwError(() => new BadRequestException("No file uploaded"));
     }
 
-    const modelBuffer = readFileSync(file.path);
+    // Cloudinary Free Tier has a strictly enforced 10MB limit for raw files.
+    // If the file is smaller than 10MB, upload strictly to Cloudinary for permanent storage.
+    // If the file is larger than 10MB, fallback to local disk storage.
+    if (file.size <= 10 * 1024 * 1024) {
+      const uploadPromise = new Promise<any>((resolve, reject) => {
+        cloudinary.uploader.upload_large(file.path, {
+          folder: "product-3d-models",
+          resource_type: "raw",
+          chunk_size: 6000000,
+          timeout: 600000
+        }, (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        });
+      });
 
-    return createCloudinaryUpload("product-3d-models", "raw", modelBuffer).pipe(
-      map((result: any) => {
-        unlinkSync(file.path);
-        return {
-          url: result.secure_url,
-          publicId: result.public_id,
-        };
-      }),
-      catchError(error => {
-        if (file.path) {
-          try {
-            unlinkSync(file.path);
-          } catch (unlinkError) {
-            console.error("Failed to delete temp file:", unlinkError);
-          }
-        }
-        const message = error?.message || "3D model optimization or upload failed";
-        return throwError(() => new BadRequestException(message));
-      })
-    );
+      return from(uploadPromise).pipe(
+        map((result: any) => {
+          try { unlinkSync(file.path); } catch (e) {}
+          return {
+            url: result.secure_url,
+            publicId: result.public_id,
+          };
+        }),
+        catchError(error => {
+          try { unlinkSync(file.path); } catch (e) {}
+          const message = error?.message || "3D model Cloudinary upload failed";
+          return throwError(() => new BadRequestException(message));
+        })
+      );
+    } else {
+      // Fallback: File is > 10MB. Keep it on local disk.
+      // Move it from temp directory to proper uploads directory
+      const finalDir = join(__dirname, "..", "..", "uploads", "products-3d");
+      if (!existsSync(finalDir)) {
+        mkdirSync(finalDir, { recursive: true });
+      }
+      
+      const finalFileName = `product3d-${Date.now()}-${Math.round(Math.random() * 1e9)}.glb`;
+      const finalPath = join(finalDir, finalFileName);
+      
+      // Copy from temp to final destination
+      const buffer = readFileSync(file.path);
+      writeFileSync(finalPath, buffer);
+      
+      // Clean up temp file
+      try { unlinkSync(file.path); } catch (e) {}
+      
+      const serverUrl = process.env.NODE_ENV === 'production' 
+        ? 'https://angular-ecommerce-backend.onrender.com' 
+        : 'http://localhost:3002';
+
+      return of({
+        url: `${serverUrl}/uploads/products-3d/${finalFileName}`,
+        publicId: finalPath, // Use local path as publicId for deletion reference
+      });
+    }
   }
 
   @Post("process-image")
