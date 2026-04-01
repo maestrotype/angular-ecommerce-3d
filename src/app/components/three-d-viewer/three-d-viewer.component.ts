@@ -312,11 +312,22 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     this.controls.autoRotate = this.autoRotate;
     this.controls.autoRotateSpeed = 1.5;
 
-    if (this.isMobile) {
-      // Restore zoom on mobile per user request (pinch-to-zoom)
+    // Default to zoom disabled to allow page scroll
+    this.controls.enableZoom = false;
+
+    // Enable zoom only after user starts interacting (rotating / panning)
+    this.controls.addEventListener('start', () => {
       this.controls.enableZoom = true;
-      // Note: We used to lock vertical rotation here, 
-      // but user prefers full rotation (can rotate with fingers without blocking scroll)
+    });
+
+    if (this.isMobile) {
+      // Allow 1-finger scrolling by taking rotation away from ONE finger
+      this.controls.touches.ONE = null;
+      // Assign TWO to DOLLY_PAN (Zoom/Pan) as usual
+      this.controls.touches.TWO = THREE.TOUCH.DOLLY_PAN;
+      
+      // We'll use a custom listener for 3-finger rotation as OrbitControls doesn't native support it
+      this.setupThreeFingerRotation();
     }
 
     if (this.previewOnly) {
@@ -430,6 +441,52 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
       this.renderer.render(this.scene, this.camera);
     }
   };
+
+  @HostListener('mouseleave')
+  onMouseLeave() {
+    if (this.controls && !this.previewOnly) {
+      this.controls.enableZoom = false;
+    }
+  }
+
+  private setupThreeFingerRotation() {
+    const el = this.renderer.domElement;
+    let lastX = 0;
+    let lastY = 0;
+
+    el.addEventListener('touchstart', (e: TouchEvent) => {
+      if (e.touches.length === 3) {
+        lastX = e.touches[0].pageX;
+        lastY = e.touches[0].pageY;
+        // Block page scroll when 3 fingers are down
+        e.preventDefault();
+      }
+    }, { passive: false });
+
+    el.addEventListener('touchmove', (e: TouchEvent) => {
+      if (e.touches.length === 3) {
+        const deltaX = e.touches[0].pageX - lastX;
+        const deltaY = e.touches[0].pageY - lastY;
+        
+        lastX = e.touches[0].pageX;
+        lastY = e.touches[0].pageY;
+
+        // Manually update OrbitControls rotation
+        // We use the rotation logic similar to ONE finger
+        const rotateScale = 0.5;
+        (this.controls as any).rotateLeft(2 * Math.PI * deltaX / el.clientWidth * rotateScale);
+        (this.controls as any).rotateUp(2 * Math.PI * deltaY / el.clientHeight * rotateScale);
+        this.controls.update();
+
+        
+        // Block page scroll
+        e.preventDefault();
+        // Also enable zoom now that they started rotating
+        this.controls.enableZoom = true;
+      }
+    }, { passive: false });
+  }
+
 
   ngOnDestroy() {
     this.isDestroyed = true;
