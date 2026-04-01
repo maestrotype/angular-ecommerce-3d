@@ -744,9 +744,10 @@
     "BACK": "Back",
     "PHOTO": "Photo",
     "MODEL_3D": "3D",
-    "HINT": "Scroll to zoom · Double click to toggle zoom · Drag to pan",
+    "HINT": "Rotate model to enable zoom · Page scroll over viewer",
     "LOADING": "Loading 3D Scene",
-    "THREED_HINT": "Pinch to zoom, drag to rotate",
+    "THREED_HINT": "3-finger swipe to rotate, 1-finger swipe to scroll page",
+
     "EXPAND_3D": "View 3D Model",
     "EXPAND_PHOTO": "View Full Photo",
     "LOAD_ERROR": "3D Load Error",
