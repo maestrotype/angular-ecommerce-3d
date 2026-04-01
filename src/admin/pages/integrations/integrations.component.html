@@ -1,0 +1,203 @@
+<div class="integrations-container">
+  <!-- Global Loading Indicator -->
+  <div *ngIf="isLoading" class="global-loading-overlay">
+    <mat-spinner diameter="50"></mat-spinner>
+    <span>{{ 'LOADING_INTEGRATIONS' | translate }}</span>
+  </div>
+  
+  <div class="integrations-header">
+    <h1 class="page-title">{{ 'INTEGRATIONS' | translate }}</h1>
+    <p class="page-subtitle">{{ 'CONFIGURE_EXTERNAL_API_KEYS' | translate }}</p>
+  </div>
+
+  <div class="integrations-content">
+    
+    <!-- Cloudinary Integration Card -->
+    <mat-card class="integration-card">
+      <mat-card-header>
+        <div mat-card-avatar class="integration-icon cloudinary-icon"></div>
+        <mat-card-title>Cloudinary</mat-card-title>
+        <mat-card-subtitle>{{ 'CLOUDINARY_DESC' | translate }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="cloudinaryForm" (ngSubmit)="onSaveCloudinary()" class="integration-form">
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'CLOUD_NAME' | translate }}</mat-label>
+              <input matInput formControlName="cloudName" placeholder="Enter Cloud Name">
+              <mat-icon matSuffix>cloud</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'API_KEY' | translate }}</mat-label>
+              <input matInput formControlName="apiKey" placeholder="Enter API Key">
+              <mat-icon matSuffix>vpn_key</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'API_SECRET' | translate }}</mat-label>
+              <input matInput formControlName="apiSecret" type="password" placeholder="Enter API Secret">
+              <mat-icon matSuffix>lock</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="form-actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="cloudinaryForm.invalid || isLoading">
+              <mat-icon>save</mat-icon>
+              {{ 'SAVE_CLOUDINARY' | translate }}
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Tripo3D Integration Card -->
+    <mat-card class="integration-card secondary-card">
+      <mat-card-header>
+        <div mat-card-avatar class="integration-icon tripo-icon"></div>
+        <mat-card-title>Tripo3D (AI Generation)</mat-card-title>
+        <mat-card-subtitle>{{ 'TRIPO3D_DESC' | translate }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="info-banner">
+          <mat-icon>info</mat-icon>
+          <p>{{ 'TRIPO3D_INFO_TEXT' | translate }} 
+             <a href="https://tripo3d.ai/" target="_blank" class="external-link">{{ 'REGISTER_ON_TRIPO3D' | translate }}</a>
+          </p>
+        </div>
+
+        <form [formGroup]="tripoForm" (ngSubmit)="onSaveTripo()" class="integration-form">
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Tripo3D API Key</mat-label>
+              <input matInput formControlName="apiKey" placeholder="Enter Tripo3D API Key" type="password">
+              <mat-icon matSuffix>smart_toy</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="form-actions">
+            <button mat-raised-button color="accent" type="submit" [disabled]="tripoForm.invalid || isLoading">
+              <mat-icon>auto_awesome</mat-icon>
+              {{ 'SAVE_TRIPO3D' | translate }}
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Stripe Integration Card -->
+    <mat-card class="integration-card">
+      <mat-card-header>
+        <div mat-card-avatar class="integration-icon stripe-icon"></div>
+        <mat-card-title>Stripe Payments</mat-card-title>
+        <mat-card-subtitle>{{ 'STRIPE_INTEGRATION_DESC' | translate }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="stripeForm" (ngSubmit)="onSaveStripe()" class="integration-form">
+          <div class="toggle-row">
+            <mat-slide-toggle formControlName="stripeEnabled" color="primary">
+              {{ 'ENABLE_STRIPE' | translate }}
+            </mat-slide-toggle>
+            
+            <mat-slide-toggle formControlName="stripeTestMode" color="accent" *ngIf="stripeForm.get('stripeEnabled')?.value">
+              {{ 'TEST_MODE' | translate }}
+            </mat-slide-toggle>
+          </div>
+
+          <ng-container *ngIf="stripeForm.get('stripeEnabled')?.value">
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>{{ 'STRIPE_PUBLISHABLE_KEY' | translate }}</mat-label>
+                <input matInput formControlName="stripePublishableKey" placeholder="pk_...">
+                <mat-icon matSuffix>vpn_key</mat-icon>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>{{ 'STRIPE_SECRET_KEY' | translate }}</mat-label>
+                <input matInput formControlName="stripeSecretKey" type="password" placeholder="sk_...">
+                <mat-icon matSuffix>lock</mat-icon>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Webhook Secret</mat-label>
+                <input matInput formControlName="stripeWebhookSecret" type="password" placeholder="whsec_...">
+                <mat-icon matSuffix>webhook</mat-icon>
+              </mat-form-field>
+            </div>
+          </ng-container>
+
+          <div class="form-actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="stripeForm.invalid || isLoading">
+              <mat-icon>credit_card</mat-icon>
+              {{ 'SAVE_STRIPE' | translate }}
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Email / SMTP Integration Card -->
+    <mat-card class="integration-card">
+      <mat-card-header>
+        <div mat-card-avatar class="integration-icon email-icon"></div>
+        <mat-card-title>{{ 'EMAIL_SMTP_SERVER' | translate }}</mat-card-title>
+        <mat-card-subtitle>{{ 'SMTP_INTEGRATION_DESC' | translate }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="smtpForm" (ngSubmit)="onSaveSMTP()" class="integration-form">
+          <div class="form-row flex-row">
+            <mat-form-field appearance="outline" class="flex-3">
+              <mat-label>SMTP Host</mat-label>
+              <input matInput formControlName="host" placeholder="smtp.gmail.com">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="flex-1">
+              <mat-label>Port</mat-label>
+              <input matInput formControlName="port" type="number">
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Username / Email</mat-label>
+              <input matInput formControlName="user">
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Password</mat-label>
+              <input matInput formControlName="pass" type="password">
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>From Email</mat-label>
+              <input matInput formControlName="fromEmail" placeholder="noreply@example.com">
+            </mat-form-field>
+          </div>
+
+          <div class="form-actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="smtpForm.invalid || isLoading">
+              <mat-icon>mail</mat-icon>
+              {{ 'SAVE_SMTP' | translate }}
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+</div>

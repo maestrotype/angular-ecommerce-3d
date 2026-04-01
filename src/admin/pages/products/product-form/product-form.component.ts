@@ -14,6 +14,11 @@ import { ProcessingOptions, ProcessedImageResult } from "../../../components/ui/
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { environment } from '../../../../environments/environment';
 import { isLegacyLocalUrl } from '../../../../app/core/utils/url-helper';
+import { SettingsService } from "../../../services/settings.service";
+import { OnboardingDialogComponent } from "../../../components/shared/onboarding-dialog/onboarding-dialog.component";
+import { MatDialog } from "@angular/material/dialog";
+
+
 
 import { LocalizedString } from "../../../../shared/models/localized-string.model";
 import { getLocalizedString } from "../../../../shared/utils/localization.util";
@@ -54,7 +59,9 @@ export class ProductFormComponent implements OnInit {
     private productService: ProductService,
     private categoryService: CategoryService,
     private snackBar: MatSnackBar,
-    private http: HttpClient
+    private http: HttpClient,
+    private settingsService: SettingsService,
+    private dialog: MatDialog
   ) {
     this.productForm = this.createForm();
   }
@@ -96,13 +103,53 @@ export class ProductFormComponent implements OnInit {
         this.categories = categories;
       },
       error: (error) => {
-
         this.snackBar.open('Failed to load categories list', "Close", {
-          duration: 5000,
+          duration: 3000
         });
       }
     });
   }
+
+  generateAi3dModel(): void {
+    this.isLoading = true;
+    this.settingsService.getSettings().subscribe({
+      next: (settings) => {
+        this.isLoading = false;
+        const tripoKey = settings.tripo3d?.apiKey;
+        
+        if (!tripoKey || tripoKey.includes('****')) {
+          this.showTripoOnboarding();
+        } else {
+          // TODO: Implement actual Tripo3D generation call
+          this.snackBar.open('AI Generation started... (Prototype logic)', 'Close', { duration: 3000 });
+        }
+      },
+      error: () => {
+        this.isLoading = false;
+        this.snackBar.open('Failed to verify Tripo3D settings', 'Close', { duration: 3000 });
+      }
+    });
+  }
+
+  private showTripoOnboarding(): void {
+    const dialogRef = this.dialog.open(OnboardingDialogComponent, {
+      width: '500px',
+      data: {
+        title: 'TRIPO3D_DESC',
+        message: 'TRIPO3D_INFO_TEXT',
+        actionLabel: 'REGISTER_ON_TRIPO3D',
+        externalLink: 'https://www.tripo3d.ai/',
+        icon: 'auto_awesome'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'setup') {
+        this.router.navigate(['/admin/integrations']);
+      }
+    });
+  }
+
 
   getCategoryValue(category: Category): string {
     const name = typeof category.name === 'string'

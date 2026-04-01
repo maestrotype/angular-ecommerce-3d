@@ -52,6 +52,10 @@ import { SectionFormComponent } from './pages/sections/section-form/section-form
 import { PaymentsComponent } from './pages/payments/payments.component';
 import { PaymentDetailsDialogComponent } from './pages/payments/payment-details-dialog.component';
 import { OrderDetailsDialogComponent } from './pages/payments/order-details-dialog.component';
+import { IntegrationsComponent } from './pages/integrations/integrations.component';
+import { OnboardingDialogComponent } from './components/shared/onboarding-dialog/onboarding-dialog.component';
+
+
 // Shared Components
 import { DataTableComponent } from './components/blocks/data-table/data-table.component';
 import { ListContainerComponent } from './components/blocks/list-container/list-container.component';
@@ -104,6 +108,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     PaymentsComponent,
     PaymentDetailsDialogComponent,
     OrderDetailsDialogComponent,
+    IntegrationsComponent,
+    OnboardingDialogComponent,
+
+
 
     UserListComponent,
     UserEditDialogComponent,

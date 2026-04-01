@@ -752,3 +752,52 @@
     }
   }
 }
+
+.ai-divider {
+  margin: 12px 0;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+
+  &::before, &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.ai-gen-btn {
+  width: 100%;
+  margin-top: 8px !important;
+  border-color: rgba(168, 85, 247, 0.4) !important;
+  background: rgba(168, 85, 247, 0.05) !important;
+  color: #a855f7 !important;
+  height: 48px !important;
+  border-radius: 12px !important;
+  
+  mat-icon {
+    margin-right: 8px;
+    color: #a855f7;
+  }
+
+  &:hover {
+    background: rgba(168, 85, 247, 0.1) !important;
+    border-color: #a855f7 !important;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-color: transparent !important;
+    color: rgba(255, 255, 255, 0.3) !important;
+  }
+}
+
+
