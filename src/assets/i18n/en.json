@@ -90,8 +90,11 @@
   "API_KEY": "API Key",
   "API_SECRET": "API Secret",
   "AI_GENERATE_3D_MODEL": "AI Generate 3D Model",
-
-
+  "AI_PROCESSING": "AI Processing...",
+  "AI_STATUS_BUILDING": "AI is building your 3D model...",
+  "AI_TIP": "Tip: Professional models can take 2-5 minutes. Don't close this page!",
+  "AI_MODEL_READY": "AI Model ready! Downloading to server...",
+  "RECOVER_AI_MODEL": "Recover from AI History",
 
   "ADD_PRODUCT": "Add Product",
   "EDIT_PRODUCT": "Edit Product",

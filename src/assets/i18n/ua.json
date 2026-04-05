@@ -73,8 +73,12 @@
   "CLOUD_NAME": "Ім'я хмари (Cloud Name)",
   "API_KEY": "Ключ API (API Key)",
   "API_SECRET": "Секретний ключ (API Secret)",
-  "AI_GENERATE_3D_MODEL": "AI Генерація 3D Моделі",
-
+  "AI_GENERATE_3D_MODEL": "Генерація 3D моделі через AI",
+  "AI_PROCESSING": "AI Генерація...",
+  "AI_STATUS_BUILDING": "AI створює вашу 3D модель...",
+  "AI_TIP": "Порада: Генерація може зайняти 2-5 хвилин. Не закривайте сторінку!",
+  "AI_MODEL_READY": "AI модель готова! Завантаження на сервер...",
+  "RECOVER_AI_MODEL": "Відновити з історії AI",
 
   "ADD_PRODUCT": "Додати товар",
   "EDIT_PRODUCT": "Редагувати товар",

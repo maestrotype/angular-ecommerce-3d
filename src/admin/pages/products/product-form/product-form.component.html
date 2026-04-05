@@ -158,23 +158,75 @@
               <input type="file" #file3dInput (change)="on3dFileSelected($event)" accept=".glb" style="display: none" />
               
               <!-- State: No Model -->
-              <div *ngIf="!model3dUrl" class="upload-placeholder" (click)="file3dInput.click()">
-                <div class="placeholder-icon">
-                  <mat-icon>upload_file</mat-icon>
-                </div>
-                <h3>Drag & Drop 3D Model</h3>
-                <p>Support for GLB format up to 50MB</p>
-                <button mat-flat-button color="primary" type="button" class="browse-btn">
-                  Browse Files
-                </button>
-                <div class="ai-divider">or</div>
-                <button mat-stroked-button color="accent" type="button" class="ai-gen-btn" (click)="$event.stopPropagation(); generateAi3dModel()" [disabled]="isLoading">
-                  <mat-icon>auto_awesome</mat-icon>
-                  {{ 'AI_GENERATE_3D_MODEL' | translate }}
-                </button>
+              <div *ngIf="!model3dUrl" class="upload-placeholder" (click)="!isAiGenerating && file3dInput.click()">
+                
+                <input type="file" id="aiSourceImageInput" (change)="onAiSourceImageSelected($event)" accept="image/*" style="display: none" />
 
+                <div class="placeholder-icon" [class.ai-active]="isAiGenerating">
+                  <mat-icon *ngIf="!isAiGenerating">upload_file</mat-icon>
+                  <mat-icon *ngIf="isAiGenerating" class="spinning">auto_awesome</mat-icon>
+                </div>
+                
+                <div *ngIf="!isAiGenerating">
+                  <h3>Drag & Drop 3D Model</h3>
+                  <p>Support for GLB format up to 50MB</p>
+                  <button mat-flat-button color="primary" type="button" class="browse-btn">
+                    Browse Files
+                  </button>
+                  <div class="ai-divider">or</div>
+                  <button mat-stroked-button color="accent" type="button" class="ai-gen-btn" (click)="$event.stopPropagation(); generateAi3dModel()" [disabled]="isLoading">
+                    <mat-icon>auto_awesome</mat-icon>
+                    {{ 'AI_GENERATE_3D_MODEL' | translate }}
+                  </button>
+
+                  <button mat-button type="button" class="ai-recover-btn" (click)="$event.stopPropagation(); showRecentAiTasks()" [disabled]="isLoading">
+                    <mat-icon>history</mat-icon>
+                    {{ 'RECOVER_AI_MODEL' | translate }}
+                  </button>
+                </div>
+
+                <!-- AI Recovery List -->
+                <div *ngIf="showRecoveryList" class="ai-recovery-list" (click)="$event.stopPropagation()">
+                  <div class="recovery-header">
+                    <h3>Recent AI Tasks</h3>
+                    <button mat-icon-button (click)="showRecoveryList = false"><mat-icon>close</mat-icon></button>
+                  </div>
+                  <div class="recovery-items">
+                    <div *ngFor="let task of recentAiTasks" class="recovery-item" [class.success]="task.status === 'success'" (click)="recoverAiTask(task)">
+                      <div class="task-info">
+                        <span class="task-date">{{ task.created_at | date:'short' }}</span>
+                        <span class="task-type">{{ task.type }}</span>
+                      </div>
+                      <div class="task-status">
+                        <mat-icon *ngIf="task.status === 'success'">check_circle</mat-icon>
+                        <mat-icon *ngIf="task.status === 'running'" class="spinning">sync</mat-icon>
+                        <mat-icon *ngIf="task.status === 'failed'">error</mat-icon>
+                        {{ task.status }}
+                      </div>
+                    </div>
+                    <div *ngIf="recentAiTasks.length === 0" class="no-tasks">No recent tasks found</div>
+                  </div>
+                </div>
+
+                <!-- AI Progress State -->
+
+                <div *ngIf="isAiGenerating" class="ai-progress-container">
+                  <h3 class="ai-status-title">AI is building your 3D model...</h3>
+                  <div class="ai-progress-wrapper" [matTooltip]="aiStatusMessage">
+                    <div class="ai-progress-bar">
+                      <div class="ai-progress-fill" [style.width.%]="aiProgress"></div>
+                    </div>
+                    <span class="ai-percent">{{ aiProgress }}%</span>
+                  </div>
+                  <p class="ai-status-info">
+                    <mat-icon>info</mat-icon>
+                    {{ aiStatusMessage }}
+                  </p>
+                  <p class="ai-tip">Tip: Professional models can take 2-5 minutes. Don't close this page!</p>
+                </div>
 
               </div>
+
 
               <!-- State: Model Loaded -->
               <div *ngIf="model3dUrl" class="model-active-view">
@@ -278,10 +330,8 @@
         <mat-icon *ngIf="isLoading" class="spinning">refresh</mat-icon>
         {{
         isLoading
-        ? ('SAVING' | translate)
-        : isEditMode
-        ? ('UPDATE_PRODUCT' | translate)
-        : ('CREATE_PRODUCT' | translate)
+          ? (model3dUrl ? ('SAVING' | translate) : ('AI_PROCESSING' | translate))
+          : (isEditMode ? ('UPDATE_PRODUCT' | translate) : ('CREATE_PRODUCT' | translate))
         }}
       </button>
     </div>

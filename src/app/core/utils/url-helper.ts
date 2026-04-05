@@ -42,7 +42,8 @@ export function fixBackendUrl(url: string | undefined): string {
     return url;
   }
 
-  const backendBaseUrl = environment.apiUrl.replace('/api', '').replace(/\/$/, '');
+  const apiBase = environment.apiUrl;
+  const backendBaseUrl = apiBase.endsWith('/api') ? apiBase.substring(0, apiBase.length - 4) : apiBase;
 
   let resultUrl = url;
   if (url.includes('localhost:3002')) {
