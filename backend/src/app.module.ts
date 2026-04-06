@@ -15,6 +15,7 @@ import { SeoModule } from './seo/seo.module';
 import { PaymentsModule } from './payments/payments.module';
 import { RecommendationsModule } from './recommendations/recommendations.module';
 import { SettingsModule } from './settings/settings.module';
+import { Tripo3dModule } from './tripo3d/tripo3d.module';
 import { HealthController } from './health/health.controller';
 // import { ServeStaticModule } from '@nestjs/serve-static';
 // import { join } from 'path';
@@ -40,7 +41,8 @@ import { HealthController } from './health/health.controller';
     SeoModule,
     PaymentsModule,
     RecommendationsModule,
-    SettingsModule
+    SettingsModule,
+    Tripo3dModule
   ],
 })
 export class AppModule {}

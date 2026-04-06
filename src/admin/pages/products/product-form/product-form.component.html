@@ -158,15 +158,38 @@
               <input type="file" #file3dInput (change)="on3dFileSelected($event)" accept=".glb" style="display: none" />
               
               <!-- State: No Model -->
-              <div *ngIf="!model3dUrl" class="upload-placeholder" (click)="file3dInput.click()">
-                <div class="placeholder-icon">
+              <div *ngIf="!model3dUrl" class="upload-placeholder">
+                <div class="placeholder-icon" (click)="file3dInput.click()">
                   <mat-icon>upload_file</mat-icon>
                 </div>
                 <h3>Drag & Drop 3D Model</h3>
                 <p>Support for GLB format up to 50MB</p>
-                <button mat-flat-button color="primary" type="button" class="browse-btn">
-                  Browse Files
-                </button>
+                
+                <div class="upload-actions">
+                  <button mat-flat-button color="primary" type="button" class="browse-btn" (click)="file3dInput.click()">
+                    Browse Files
+                  </button>
+                  
+                  <div class="ai-divider">
+                    <span>OR</span>
+                  </div>
+
+                  <button mat-raised-button color="accent" type="button" class="ai-gen-btn" 
+                          (click)="generateAi3dModel()" [disabled]="isAiGenerating || isUploading3d">
+                    <mat-icon *ngIf="!isAiGenerating">auto_awesome</mat-icon>
+                    <mat-spinner *ngIf="isAiGenerating" diameter="20" class="mini-spinner"></mat-spinner>
+                    {{ isAiGenerating ? 'AI Generating...' : 'Generate with AI' }}
+                  </button>
+                </div>
+
+                <!-- AI Progress Indicator -->
+                <div *ngIf="isAiGenerating" class="ai-progress-container">
+                  <mat-progress-bar mode="determinate" [value]="aiProgress"></mat-progress-bar>
+                  <div class="ai-status-text">
+                    <span class="status-label">{{ aiStatus }}</span>
+                    <span class="percentage">{{ aiProgress }}%</span>
+                  </div>
+                </div>
               </div>
 
               <!-- State: Model Loaded -->
@@ -204,9 +227,6 @@
               <mat-label>EN</mat-label>
               <textarea matInput formControlName="description_en" rows="4"
                 [placeholder]="'DESCRIPTION_PLACEHOLDER' | translate"></textarea>
-              <mat-error *ngIf="productForm.get('description_en')?.hasError('required')">
-                {{ 'DESCRIPTION_REQUIRED' | translate }}
-              </mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="form-field">

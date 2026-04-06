@@ -35,6 +35,10 @@ export class ProductFormComponent implements OnInit {
   model3dUrl: string | null = null;
   model3dPublicId: string | null = null;
   isUploading3d = false;
+  isAiGenerating = false;
+  aiStatus = '';
+  aiProgress = 0;
+  taskId: string | null = null;
   dragging3d = false;
 
   get model3dUrlIsLegacy(): boolean {
@@ -79,7 +83,7 @@ export class ProductFormComponent implements OnInit {
       price: [0, [Validators.required, Validators.min(0.01)]],
       stock: [0, [Validators.required, Validators.min(0)]],
       imageUrl: [""],
-      description_en: ["", [Validators.required, Validators.minLength(10)]],
+      description_en: [""],
       description_ru: [""],
       description_ua: [""],
       specifications: this.fb.array([]),
@@ -293,6 +297,91 @@ export class ProductFormComponent implements OnInit {
         });
       },
     });
+  }
+
+  generateAi3dModel(): void {
+    if (this.isAiGenerating) return;
+
+    // 1. Check if we have source images
+    if (this.imageUrls.length === 0) {
+      this.snackBar.open('Please upload at least one product image first to use as a source for AI generation.', 'Close', {
+        duration: 5000,
+        panelClass: 'info-snackbar'
+      });
+      return;
+    }
+
+    const sourceImage = this.imageUrls[0];
+    this.isAiGenerating = true;
+    this.aiStatus = 'Initializing AI generation...';
+    this.aiProgress = 5;
+
+    this.snackBar.open('Starting AI model generation. This may take 2-5 minutes.', 'Close', { duration: 4000 });
+
+    // Bridge to backend (endpoint needs to be restored)
+    this.http.post<{taskId: string}>(`${environment.apiUrl}/tripo-api/generate`, { 
+      imageUrl: sourceImage,
+      productId: this.productId 
+    }).subscribe({
+      next: (res) => {
+        this.taskId = res.taskId;
+        this.aiStatus = 'Processing on Tripo3D servers...';
+        this.aiProgress = 15;
+        this.pollAiStatus();
+      },
+      error: (err) => {
+        this.isAiGenerating = false;
+        this.aiStatus = '';
+        const errorMsg = err?.error?.message || err?.message || 'Unknown error';
+        this.snackBar.open(`AI Generation failed: ${errorMsg}. Ensure you have credits and the backend is running.`, 'Close', { 
+          duration: 7000,
+          panelClass: 'error-snackbar'
+        });
+      }
+    });
+  }
+
+  private pollAiStatus(): void {
+    if (!this.taskId || !this.isAiGenerating) return;
+
+    const pollInterval = setInterval(() => {
+      this.http.get<{status: string, progress: number, modelUrl?: string}>(`${environment.apiUrl}/tripo-api/status/${this.taskId}`)
+        .subscribe({
+          next: (res) => {
+            this.aiProgress = res.progress || this.aiProgress;
+            
+            if (res.status === 'success' || res.status === 'completed') {
+              clearInterval(pollInterval);
+              this.aiStatus = 'Generation 100% complete!';
+              this.aiProgress = 100;
+              
+              if (res.modelUrl) {
+                this.model3dUrl = res.modelUrl;
+                this.snackBar.open('AI 3D Model created and loaded successfully! ✓', 'Close', { duration: 5000 });
+              }
+              
+              setTimeout(() => {
+                this.isAiGenerating = false;
+                this.aiStatus = '';
+              }, 3000);
+            } else if (res.status === 'failed') {
+              clearInterval(pollInterval);
+              this.isAiGenerating = false;
+              this.aiStatus = '';
+              this.snackBar.open('AI Generation failed on server. Try again with a clearer image.', 'Close', { duration: 7000 });
+            } else {
+              // Update status based on progress
+              if (this.aiProgress < 30) this.aiStatus = 'Analyzing product geometry...';
+              else if (this.aiProgress < 60) this.aiStatus = 'Generating mesh and textures...';
+              else if (this.aiProgress < 90) this.aiStatus = 'Finalizing 3D model assets...';
+            }
+          },
+          error: (err) => {
+            // Don't stop on single transient error, but alert user
+            console.error('Polling error:', err);
+          }
+        });
+    }, 5000); // Poll every 5 seconds
   }
 
   onModelLoaded(): void {
