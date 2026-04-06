@@ -6,7 +6,7 @@
   flex-direction: column;
   gap: 20px;
   overflow: hidden;
-  background: #0f1115;
+  background: var(--admin-bg-primary);
 
   .page-header {
     display: flex;
@@ -14,15 +14,20 @@
     align-items: center;
     flex-shrink: 0;
 
-    h1 { margin: 0; font-size: 1.75rem; font-weight: 800; color: #fff; }
+    h1 { margin: 0; font-size: 1.75rem; font-weight: 800; color: var(--admin-text-primary); }
     
     .new-section-btn {
       height: 44px;
       padding: 0 20px;
       border-radius: 10px;
       font-weight: 700;
-      background: rgba(255,255,255,0.08);
-      color: #fff;
+      background: var(--admin-bg-secondary);
+      color: var(--admin-text-primary);
+      border: 1px solid var(--admin-border-primary);
+      
+      &:hover {
+        background: var(--admin-bg-hover);
+      }
     }
   }
 
@@ -35,8 +40,8 @@
 
     .list-container-side {
       position: relative;
-      background: #111;
-      border: 1px solid rgba(255,255,255,0.1);
+      background: var(--admin-bg-secondary);
+      border: 1px solid var(--admin-border-primary);
       border-radius: 20px;
       display: flex;
       flex-direction: column;
@@ -55,11 +60,11 @@
       .list-table-header {
         display: flex;
         padding: 16px 24px;
-        background: rgba(255,255,255,0.02);
-        border-bottom: 1px solid rgba(255,255,255,0.1);
+        background: var(--admin-bg-hover);
+        border-bottom: 1px solid var(--admin-border-primary);
         font-size: 0.7rem;
         font-weight: 700;
-        color: rgba(255,255,255,0.4);
+        color: var(--admin-text-secondary);
         letter-spacing: 1px;
         
         div { flex-shrink: 0; }
@@ -75,16 +80,21 @@
         overflow-y: auto;
 
         &::-webkit-scrollbar { width: 4px; }
-        &::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); }
+        &::-webkit-scrollbar-thumb { background: var(--admin-border-primary); }
 
         .list-row-item {
           display: flex;
           padding: 12px 24px;
           align-items: center;
-          border-bottom: 1px solid rgba(255,255,255,0.05);
+          border-bottom: 1px solid var(--admin-border-secondary);
           transition: background 0.2s;
 
-          &:hover { background: rgba(255,255,255,0.03); }
+          &:hover { background: var(--admin-bg-hover); }
+
+          &.active {
+            background: var(--admin-bg-hover);
+            border-left: 3px solid var(--admin-primary);
+          }
 
           div { flex-shrink: 0; }
           .col-order { 
@@ -92,17 +102,17 @@
             display: flex; 
             align-items: center; 
             gap: 12px;
-            color: rgba(255,255,255,0.3);
-            .order-num { color: #fff; font-weight: 600; }
+            color: var(--admin-text-secondary);
+            .order-num { color: var(--admin-text-primary); font-weight: 600; }
           }
           .col-type { 
             width: var(--col-type-w); 
-            .type-link { color: #3b82f6; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; }
+            .type-link { color: var(--admin-primary); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; }
           }
           .col-title { 
             flex: 1; 
             overflow: hidden;
-            .title-text { color: #fff; font-weight: 700; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+            .title-text { color: var(--admin-text-primary); font-weight: 700; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
           }
           .col-status { width: var(--col-status-w); display: flex; justify-content: center; }
           .col-actions { 
@@ -110,7 +120,7 @@
             display: flex; 
             justify-content: center; 
             gap: 4px;
-            button { color: #3b82f6; &.mat-warn { color: #ef4444; } }
+            button { color: var(--admin-primary); &.mat-warn { color: var(--admin-error); } }
           }
         }
       }
@@ -122,37 +132,37 @@
         flex-direction: column;
         overflow: hidden;
         animation: slideInLeft 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        background: #111;
+        background: var(--admin-bg-secondary);
 
         .drawer-header {
           height: 70px;
           display: flex;
           align-items: center;
           padding: 0 24px;
-          background: rgba(255,255,255,0.02);
-          border-bottom: 1px solid rgba(255,255,255,0.1);
+          background: var(--admin-bg-hover);
+          border-bottom: 1px solid var(--admin-border-primary);
           gap: 16px;
           flex-shrink: 0;
 
           .back-btn { 
-            background: transparent !important; color: #fff; border-radius: 50%;
+            background: transparent !important; color: var(--admin-text-primary); border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             width: 40px; height: 40px; padding: 0;
             mat-icon { margin: 0; font-size: 24px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
-            &:hover { background: rgba(255,255,255,0.1) !important; }
+            &:hover { background: var(--admin-bg-hover) !important; }
           }
           .header-title {
             flex: 1; min-width: 0; display: flex; flex-direction: column;
-            h2 { margin: 0; font-size: 1.1rem; font-weight: 800; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-            .editing-name { font-size: 0.8rem; color: #3b82f6; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+            h2 { margin: 0; font-size: 1.1rem; font-weight: 800; color: var(--admin-text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+            .editing-name { font-size: 0.8rem; color: var(--admin-primary); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
           }
           .drawer-lang-switcher {
             margin-right: 12px;
             ::ng-deep .mat-mdc-chip-listbox-wrapper { gap: 4px; }
             ::ng-deep .mat-mdc-standard-chip {
               min-height: 28px; padding: 0 8px; font-size: 0.75rem; font-weight: 700;
-              background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.6);
-              &.mat-mdc-chip-selected { background: #3b82f6 !important; color: #fff !important; }
+              background: var(--admin-bg-secondary); color: var(--admin-text-secondary);
+              &.mat-mdc-chip-selected { background: var(--admin-primary) !important; color: var(--admin-text-inverse) !important; }
             }
           }
         }
@@ -160,10 +170,10 @@
         .editor-form-wrapper {
           flex: 1;
           overflow-y: auto;
-          background: #0f1115;
+          background: var(--admin-bg-primary);
           padding-bottom: 40px;
           &::-webkit-scrollbar { width: 6px; }
-          &::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+          &::-webkit-scrollbar-thumb { background: var(--admin-border-primary); border-radius: 3px; }
         }
       }
 
@@ -174,7 +184,7 @@
         width: 6px;
         cursor: col-resize;
         z-index: 100;
-        &:hover { background: #3b82f6; }
+        &:hover { background: var(--admin-primary); }
       }
     }
 
@@ -184,8 +194,8 @@
       min-width: 0;
 
       .architect-card {
-        background: #111;
-        border: 1px solid rgba(255,255,255,0.1);
+        background: var(--admin-bg-secondary);
+        border: 1px solid var(--admin-border-primary);
         border-radius: 20px;
         flex: 1;
         display: flex;
@@ -194,24 +204,24 @@
 
         .architect-header {
           padding: 12px 20px;
-          border-bottom: 1px solid rgba(255,255,255,0.1);
+          border-bottom: 1px solid var(--admin-border-primary);
           display: flex;
           justify-content: space-between;
           align-items: center;
-          background: rgba(0,0,0,0.2);
+          background: var(--admin-bg-hover);
           
-          h3 { margin: 0; font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.4); display: flex; align-items: center; gap: 8px; }
+          h3 { margin: 0; font-size: 0.8rem; font-weight: 700; color: var(--admin-text-secondary); display: flex; align-items: center; gap: 8px; }
           .device-switcher {
             display: flex;
             gap: 4px;
-            button { color: rgba(255, 255, 255, 0.4); &.active { color: #3b82f6; } }
+            button { color: var(--admin-text-secondary); &.active { color: var(--admin-primary); } }
           }
         }
 
         .architect-content {
           flex: 1;
           overflow-y: auto;
-          background: #0f1115;
+          background: var(--admin-bg-primary);
           display: flex;
           flex-direction: column;
           align-items: center;
