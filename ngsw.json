@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1775459418371,
+  "timestamp": 1775573655238,
   "index": "/angular-ecommerce-3d/index.html",
   "assetGroups": [
     {
@@ -12,21 +12,22 @@
       },
       "urls": [
         "/angular-ecommerce-3d/186.db6ce941b5ae7921.js",
-        "/angular-ecommerce-3d/50.a1cd6d83c5d56383.js",
+        "/angular-ecommerce-3d/351.b95a28a8be192771.js",
+        "/angular-ecommerce-3d/363.1ee5ca8907ea7d9d.js",
+        "/angular-ecommerce-3d/50.61b866d0de0117c9.js",
         "/angular-ecommerce-3d/642.630818a0c97d4766.js",
         "/angular-ecommerce-3d/7.3113bfa45413a267.js",
         "/angular-ecommerce-3d/8.bc8aacd64927459a.js",
-        "/angular-ecommerce-3d/863.4de2507bde46a10c.js",
-        "/angular-ecommerce-3d/917.6b05ac55a1e9572e.js",
-        "/angular-ecommerce-3d/976.f7d734f2e0ebac95.js",
+        "/angular-ecommerce-3d/880.a99b86d1ad1e0a21.js",
+        "/angular-ecommerce-3d/976.378e11d83ab2cb2d.js",
         "/angular-ecommerce-3d/994.718c81ef11fa2ce0.js",
-        "/angular-ecommerce-3d/common.433685367822dfb8.js",
+        "/angular-ecommerce-3d/common.7ebdb48eda5dd0f4.js",
         "/angular-ecommerce-3d/index.html",
-        "/angular-ecommerce-3d/main.29fd2a33e3ce3a74.js",
+        "/angular-ecommerce-3d/main.16446a3e9b1e055f.js",
         "/angular-ecommerce-3d/manifest.webmanifest",
         "/angular-ecommerce-3d/polyfills.a527a9cc31db9a9d.js",
-        "/angular-ecommerce-3d/runtime.29434df862efd749.js",
-        "/angular-ecommerce-3d/styles.067b52186c385819.css"
+        "/angular-ecommerce-3d/runtime.28d6a7fc71d0b3b7.js",
+        "/angular-ecommerce-3d/styles.2c601e508ad8f26f.css"
       ],
       "patterns": []
     },
@@ -106,20 +107,36 @@
       "patterns": []
     }
   ],
-  "dataGroups": [],
+  "dataGroups": [
+    {
+      "name": "api",
+      "patterns": [
+        "\\/api\\/.*"
+      ],
+      "strategy": "freshness",
+      "maxSize": 0,
+      "maxAge": 0,
+      "timeoutMs": 0,
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "version": 1
+    }
+  ],
   "hashTable": {
     "/angular-ecommerce-3d/186.db6ce941b5ae7921.js": "5d12a254b42ae51aba9b978d12b4066fe669ad42",
-    "/angular-ecommerce-3d/50.a1cd6d83c5d56383.js": "1651f3fcfebfc406731df7aa8952a6bd1abce982",
+    "/angular-ecommerce-3d/351.b95a28a8be192771.js": "b0d5ef4bf00598c62ec039d01c5bd630cd09a85a",
+    "/angular-ecommerce-3d/363.1ee5ca8907ea7d9d.js": "a957b32ea87cfeeb73aba280c54b3fd51c98ee06",
+    "/angular-ecommerce-3d/50.61b866d0de0117c9.js": "b86749677b7a06524d656acf23dd3a8f2bbb2cb7",
     "/angular-ecommerce-3d/642.630818a0c97d4766.js": "e870c83872d595a2032159ff201ed882809f4cf5",
     "/angular-ecommerce-3d/7.3113bfa45413a267.js": "c95ed74d010bd3bd18379f50d26d97d0630dd112",
     "/angular-ecommerce-3d/8.bc8aacd64927459a.js": "60b2184d692790f518e7a24993a8a17e9030ef5b",
-    "/angular-ecommerce-3d/863.4de2507bde46a10c.js": "ef8b5d1bd67ff2099a53149fab6873dc6eb2fffb",
-    "/angular-ecommerce-3d/917.6b05ac55a1e9572e.js": "7a4e8ab3b87163c7bf8c341cf0d871766b6ba41d",
-    "/angular-ecommerce-3d/976.f7d734f2e0ebac95.js": "4f6746f31306b9835c4878cd16a7ddc98b713ca4",
+    "/angular-ecommerce-3d/880.a99b86d1ad1e0a21.js": "a3770c2f1e43f5b2ac624864e8ca097b1baa49f9",
+    "/angular-ecommerce-3d/976.378e11d83ab2cb2d.js": "a09fd4f437380a80623cf6b7ced6b34094e0015f",
     "/angular-ecommerce-3d/994.718c81ef11fa2ce0.js": "9fc35bea3930fc094ee44fadfcb0fbccda3f5ca9",
-    "/angular-ecommerce-3d/assets/i18n/en.json": "6811c3cf53b51eba235f4879ee357580f9f987c8",
-    "/angular-ecommerce-3d/assets/i18n/ru.json": "05cd894be8bc73c062c6b50665da4a3a0a6009f8",
-    "/angular-ecommerce-3d/assets/i18n/ua.json": "2fbbff59bbc9895021f4de1ec767620f29bff2e8",
+    "/angular-ecommerce-3d/assets/i18n/en.json": "dfd8b36096c62f4270552d97274ae3b3f9266f6f",
+    "/angular-ecommerce-3d/assets/i18n/ru.json": "cd35ad265215635b0aacc0778d02600ac442a3c6",
+    "/angular-ecommerce-3d/assets/i18n/ua.json": "d8844f5465785d7da1144174c7f0a9f5a25b7d0f",
     "/angular-ecommerce-3d/assets/icons/apple-touch-icon.png": "f912963bdc6d5a38d8f1dd0afbaab2ce8d657acb",
     "/angular-ecommerce-3d/assets/icons/arrow-left.svg": "b66ba95cd42b9b8ff5c24e6f6d6844594b0a3aa6",
     "/angular-ecommerce-3d/assets/icons/chanel.svg": "7ceca51ac54978f9680333ef2143f68310125687",
@@ -181,13 +198,13 @@
     "/angular-ecommerce-3d/assets/models/bag/bag4.glb": "c6654fdd284ed2a289d97973b23a30dd5463322a",
     "/angular-ecommerce-3d/assets/models/people/Unka.glb": "86c756b78aa0564e8b74f43b9a4fcef40f225a0e",
     "/angular-ecommerce-3d/assets/models/shoes/shoes1.glb": "6c07b477b7e6675ae2f9f262c06d4ce22728aa25",
-    "/angular-ecommerce-3d/common.433685367822dfb8.js": "7fa4c7d0bb7ef4447bf204030df0fbb6c7b8ec47",
-    "/angular-ecommerce-3d/index.html": "4ffeb3f11acd5c2883d55c3f46472884d1380551",
-    "/angular-ecommerce-3d/main.29fd2a33e3ce3a74.js": "996995eff267dbe3817c1f341ed66cfdc1b2cb5e",
+    "/angular-ecommerce-3d/common.7ebdb48eda5dd0f4.js": "241c011b8c247cd713fd3762a7f65f72fd79cce5",
+    "/angular-ecommerce-3d/index.html": "d26d4a73b0add05809efcc66473c35f59d5d9329",
+    "/angular-ecommerce-3d/main.16446a3e9b1e055f.js": "f39c7d158afd83755267b8034a2112beb7e1c689",
     "/angular-ecommerce-3d/manifest.webmanifest": "68e4e874611f558407b7642b0fe602db24978dcb",
     "/angular-ecommerce-3d/polyfills.a527a9cc31db9a9d.js": "75b41ca06c59053b7d23f357a4cbbd22f58c0a66",
-    "/angular-ecommerce-3d/runtime.29434df862efd749.js": "fc7cc04cba618cdde8d424dfd18d63871e389c4a",
-    "/angular-ecommerce-3d/styles.067b52186c385819.css": "0ec9a492a2c0470b3174d5298007135351c850f3"
+    "/angular-ecommerce-3d/runtime.28d6a7fc71d0b3b7.js": "6551a7d75bcf19be932f3a25b9a3260a77a3d1e7",
+    "/angular-ecommerce-3d/styles.2c601e508ad8f26f.css": "48174a01d69f634969749010ca758dc1d93822f9"
   },
   "navigationUrls": [
     {
@@ -196,15 +213,19 @@
     },
     {
       "positive": false,
-      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+      "regex": "^\\/api\\/.*$"
     },
     {
       "positive": false,
-      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+      "regex": "^\\/auth\\/.*$"
     },
     {
       "positive": false,
-      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+      "regex": "^\\/(?:.+\\/)?[^/]*[^/]ngsw-bypass$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*&ngsw-bypass$"
     }
   ],
   "navigationRequestStrategy": "performance"
