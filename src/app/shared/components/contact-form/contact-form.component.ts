@@ -3,10 +3,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService, CreateMessageDto } from '../../../core/services/message.service';
 import { ModalService } from '../../../core/services/modal.service';
 
-import { TranslateService } from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-contact-form',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, TranslateModule],
   templateUrl: './contact-form.component.html',
   styleUrls: ['./contact-form.component.scss']
 })

@@ -9,7 +9,10 @@ import {
   UpdatePaymentSettingsDto, 
   UpdateGeneralSettingsDto,
   UpdateSecuritySettingsDto,
-  UpdateNotificationSettingsDto 
+  UpdateNotificationSettingsDto,
+  UpdateCloudinarySettingsDto,
+  UpdateTripo3DSettingsDto,
+  UpdateSMTPSettingsDto
 } from './dto/update-settings.dto';
 
 @Injectable()
@@ -48,13 +51,18 @@ export class SettingsService {
     ).pipe(
       switchMap(async (existingSetting) => {
         if (existingSetting) {
+          // If the new value is a masked placeholder, do not overwrite the actual secret in the database.
+          // This prevents the UI from accidentally corrupting credentials during a full form save.
+          if (this.isMasked(updateSettingsDto.value)) {
+            return existingSetting;
+          }
           // Update existing setting
           Object.assign(existingSetting, updateSettingsDto);
-          return await this.settingsRepository.save(existingSetting);
+          return await this.settingsRepository.save(existingSetting) as Settings;
         } else {
           // Create new setting
           const newSetting = this.settingsRepository.create(updateSettingsDto);
-          return await this.settingsRepository.save(newSetting);
+          return await this.settingsRepository.save(newSetting) as Settings;
         }
       }),
       catchError((error) => {
@@ -176,6 +184,123 @@ export class SettingsService {
     );
   }
 
+  // Update Cloudinary settings
+  updateCloudinarySettings(settings: UpdateCloudinarySettingsDto): Observable<any> {
+    const updates: Observable<Settings>[] = [];
+    
+    Object.entries(settings).forEach(([key, value]) => {
+      if (value !== undefined) {
+        const updateDto: UpdateSettingsDto = {
+          key: `cloudinary.${key}`,
+          value: String(value),
+          type: 'string',
+          category: 'cloudinary',
+          description: `Cloudinary setting: ${key}`
+        };
+        updates.push(this.updateSetting(updateDto));
+      }
+    });
+
+    return from(updates).pipe(
+      mergeMap(updateObservable => updateObservable),
+      toArray(),
+      map(() => ({ success: true, message: 'Cloudinary settings updated' })),
+      catchError((error) => {
+        console.error('Error updating cloudinary settings:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  // Update Tripo3D settings
+  updateTripo3DSettings(settings: UpdateTripo3DSettingsDto): Observable<any> {
+    const updates: Observable<Settings>[] = [];
+    
+    Object.entries(settings).forEach(([key, value]) => {
+      if (value !== undefined) {
+        const updateDto: UpdateSettingsDto = {
+          key: `tripo3d.${key}`,
+          value: String(value),
+          type: 'string',
+          category: 'tripo3d',
+          description: `Tripo3D setting: ${key}`
+        };
+        updates.push(this.updateSetting(updateDto));
+      }
+    });
+
+    return from(updates).pipe(
+      mergeMap(updateObservable => updateObservable),
+      toArray(),
+      map(() => ({ success: true, message: 'Tripo3D settings updated' })),
+      catchError((error) => {
+        console.error('Error updating tripo3d settings:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  // Update SMTP settings
+  updateSMTPSettings(settings: UpdateSMTPSettingsDto): Observable<any> {
+    const updates: Observable<Settings>[] = [];
+    
+    Object.entries(settings).forEach(([key, value]) => {
+      if (value !== undefined) {
+        const updateDto: UpdateSettingsDto = {
+          key: `smtp.${key}`,
+          value: String(value),
+          type: typeof value === 'number' ? 'number' : 'string',
+          category: 'smtp',
+          description: `SMTP setting: ${key}`
+        };
+        updates.push(this.updateSetting(updateDto));
+      }
+    });
+
+    return from(updates).pipe(
+      mergeMap(updateObservable => updateObservable),
+      toArray(),
+      map(() => ({ success: true, message: 'SMTP settings updated' })),
+      catchError((error) => {
+        console.error('Error updating SMTP settings:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  // Get all settings as grouped object with masked secrets
+  getSettingsGroupedSecure(): Observable<any> {
+    return this.getSettingsGrouped().pipe(
+      map((grouped) => {
+        const secure = JSON.parse(JSON.stringify(grouped));
+        
+        // Mask specific sensitive keys
+        const sensitiveKeys = [
+          { cat: 'payment', key: 'stripeSecretKey' },
+          { cat: 'payment', key: 'stripeWebhookSecret' },
+          { cat: 'payment', key: 'liqpayPrivateKey' },
+          { cat: 'payment', key: 'paypalClientSecret' },
+          { cat: 'cloudinary', key: 'apiSecret' },
+          { cat: 'tripo3d', key: 'apiKey' },
+          { cat: 'smtp', key: 'pass' }
+        ];
+
+        sensitiveKeys.forEach(({ cat, key }) => {
+          if (secure[cat] && secure[cat][key]) {
+            const val = String(secure[cat][key]);
+            if (val.length > 8) {
+              secure[cat][key] = val.slice(0, 4) + '****' + val.slice(-4);
+            } else {
+              secure[cat][key] = '********';
+            }
+          }
+        });
+
+        return secure;
+      })
+    );
+  }
+
   // Get all settings as grouped object
   getSettingsGrouped(): Observable<any> {
     return from(this.settingsRepository.find()).pipe(
@@ -264,7 +389,22 @@ export class SettingsService {
       { key: 'payment.paypalTestMode', value: 'true', type: 'boolean', category: 'payment', description: 'Enable PayPal test mode' },
       { key: 'payment.paypalClientId', value: '', type: 'string', category: 'payment', description: 'PayPal client ID' },
       { key: 'payment.paypalClientSecret', value: '', type: 'string', category: 'payment', description: 'PayPal client secret' },
-      { key: 'payment.defaultPaymentMethod', value: 'stripe', type: 'string', category: 'payment', description: 'Default payment method' }
+      { key: 'payment.defaultPaymentMethod', value: 'stripe', type: 'string', category: 'payment', description: 'Default payment method' },
+      
+      // Cloudinary settings
+      { key: 'cloudinary.cloudName', value: process.env.CLOUDINARY_CLOUD_NAME || '', type: 'string', category: 'cloudinary', description: 'Cloudinary cloud name' },
+      { key: 'cloudinary.apiKey', value: process.env.CLOUDINARY_API_KEY || '', type: 'string', category: 'cloudinary', description: 'Cloudinary API key' },
+      { key: 'cloudinary.apiSecret', value: process.env.CLOUDINARY_API_SECRET || '', type: 'string', category: 'cloudinary', description: 'Cloudinary API secret' },
+      
+      // Tripo3D settings
+      { key: 'tripo3d.apiKey', value: '', type: 'string', category: 'tripo3d', description: 'Tripo3D API key' },
+      
+      // SMTP settings
+      { key: 'smtp.host', value: process.env.SMTP_HOST || '', type: 'string', category: 'smtp', description: 'SMTP host' },
+      { key: 'smtp.port', value: process.env.SMTP_PORT || '587', type: 'number', category: 'smtp', description: 'SMTP port' },
+      { key: 'smtp.user', value: process.env.SMTP_USER || '', type: 'string', category: 'smtp', description: 'SMTP username' },
+      { key: 'smtp.pass', value: process.env.SMTP_PASS || '', type: 'string', category: 'smtp', description: 'SMTP password' },
+      { key: 'smtp.fromEmail', value: process.env.SMTP_FROM || '', type: 'string', category: 'smtp', description: 'SMTP from email' }
     ];
 
     // Process each setting and collect results
@@ -295,5 +435,17 @@ export class SettingsService {
         return throwError(() => error);
       })
     );
+  }
+
+  /**
+   * Checks if a string value is a masked placeholder (e.g., "abcd****wxyz" or "********").
+   * Masked values should not be saved back to the database as they are just UI representations.
+   */
+  private isMasked(value: string): boolean {
+    if (!value) return false;
+    const str = String(value);
+    // Matches the pattern used in getSettingsGroupedSecure: 4 chars + **** + 4 chars
+    // OR the fallback 8-star mask
+    return str.includes('****') || str === '********';
   }
 }

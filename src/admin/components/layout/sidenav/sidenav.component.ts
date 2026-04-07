@@ -54,7 +54,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
     { label: "PAGE_SECTIONS", route: "/admin/sections", icon: "view_module" },
     { label: "SEO", route: "/admin/seo", icon: "search" },
     { label: "PAYMENTS", route: "/admin/payments", icon: "payment" },
+    { label: "INTEGRATIONS", route: "/admin/integrations", icon: "extension" },
+    { label: "SETTINGS", route: "/admin/settings", icon: "settings" },
   ];
+
 
   constructor(
     private router: Router,

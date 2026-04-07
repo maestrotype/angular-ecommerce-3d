@@ -5,14 +5,14 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { fixBackendUrl } from '../../core/utils/url-helper';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-three-d-viewer',
   standalone: true,
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslateModule, MatSnackBarModule],
   template: `
     <div class="viewer-host">
       <!-- Luxury 3D Loader -->
@@ -490,7 +490,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.isDestroyed = true;
-    cancelAnimationFrame(this.animId);
+    if (this.animId) cancelAnimationFrame(this.animId);
     if (this.controls) this.controls.dispose();
     if (this.renderer) {
       this.renderer.dispose();

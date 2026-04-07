@@ -27,9 +27,7 @@ import { FooterComponent } from './layout/footer/footer.component';
 
 import { Bag3dFirstComponent } from './components/3d-models/bag3dFirst/bag3dFirst.component';
 
-import { ContactsComponent } from './pages/contacts/contacts.component';
 import { ContactFormComponent } from './shared/components/contact-form/contact-form.component';
-import { AboutComponent } from './pages/about/about.component';
 
 // Modal Components
 import { BaseModalComponent } from './shared/modal/base-modal.component';
@@ -51,6 +49,7 @@ import { PaymentErrorComponent } from './pages/payment-error/payment-error.compo
 
 // Shared Module
 import { SharedModule } from './shared/shared.module';
+import { ThreeDViewerComponent } from './components/three-d-viewer/three-d-viewer.component';
 
 // Services
 import { ThemeService } from './core/themes/theme.service';
@@ -71,11 +70,8 @@ export function HttpLoaderFactory(http: any) {
 @NgModule({
   declarations: [
     AppComponent,
-    ContactsComponent,
     HeaderComponent,
     FooterComponent,
-
-    AboutComponent,
     BaseModalComponent,
     ImageModalComponent,
     CartModalComponent,
@@ -85,7 +81,6 @@ export function HttpLoaderFactory(http: any) {
 
     FavoritesComponent,
     MyOrdersComponent,
-    ContactFormComponent,
     CheckoutComponent,
     PaymentComponent,
     PaymentSuccessComponent,
@@ -107,6 +102,7 @@ export function HttpLoaderFactory(http: any) {
     SpecialOfferComponent,
     BestSellersComponent,
     BrandsComponent,
+    ThreeDViewerComponent,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

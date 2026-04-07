@@ -17,6 +17,7 @@ import { RecommendationsModule } from './recommendations/recommendations.module'
 import { SettingsModule } from './settings/settings.module';
 import { Tripo3dModule } from './tripo3d/tripo3d.module';
 import { HealthController } from './health/health.controller';
+
 // import { ServeStaticModule } from '@nestjs/serve-static';
 // import { join } from 'path';
 @Module({

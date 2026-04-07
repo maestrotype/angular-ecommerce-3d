@@ -184,13 +184,58 @@
 
                 <!-- AI Progress Indicator -->
                 <div *ngIf="isAiGenerating" class="ai-progress-container">
-                  <mat-progress-bar mode="determinate" [value]="aiProgress"></mat-progress-bar>
-                  <div class="ai-status-text">
-                    <span class="status-label">{{ aiStatus }}</span>
-                    <span class="percentage">{{ aiProgress }}%</span>
+                  <div class="ai-status-title">{{ 'AI_GENERATE_3D_MODEL' | translate }}</div>
+                  <div class="ai-progress-wrapper">
+                    <div class="ai-progress-bar">
+                      <div class="ai-progress-fill" [style.width.%]="aiProgress"></div>
+                    </div>
+                    <span class="ai-percent">{{ aiProgress }}%</span>
+                  </div>
+                  <div class="ai-status-info">
+                    <mat-icon class="spinning" *ngIf="aiProgress < 100">refresh</mat-icon>
+                    <mat-icon *ngIf="aiProgress === 100">check_circle</mat-icon>
+                    <span>{{ aiStatusMessage }}</span>
+                  </div>
+                  <div class="ai-tip">{{ 'AI_TIP' | translate }}</div>
+                </div>
+
+                <!-- Recovery / History Link -->
+                <div *ngIf="!isAiGenerating && !model3dUrl" class="ai-recover-btn" (click)="showRecentAiTasks()">
+                  <mat-icon>history</mat-icon>
+                  <span>{{ 'RECOVER_AI_MODEL' | translate }}</span>
+                </div>
+
+                <!-- Recovery List Overlay -->
+                <div class="ai-recovery-list" *ngIf="showRecoveryList">
+                  <div class="recovery-header">
+                    <h3>Recent Generations</h3>
+                    <button mat-icon-button (click)="showRecoveryList = false">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </div>
+                  <div class="recovery-items">
+                    <div *ngFor="let task of recentAiTasks" class="recovery-item" 
+                         [class.success]="task.status === 'success'"
+                         (click)="recoverAiTask(task)">
+                      <div class="task-info">
+                        <span class="task-date">{{ task.created_at | date:'short' }}</span>
+                        <span class="task-type">Task ID: {{ task.task_id.substring(0, 8) }}...</span>
+                      </div>
+                      <div class="task-status">
+                        <mat-icon>{{ task.status === 'success' ? 'check_circle' : (task.status === 'failed' ? 'error' : 'schedule') }}</mat-icon>
+                        <span>{{ task.status }}</span>
+                      </div>
+                    </div>
+                    <div *ngIf="recentAiTasks.length === 0" class="no-tasks">
+                      No recent AI tasks found
+                    </div>
                   </div>
                 </div>
               </div>
+
+              <!-- Hidden input for AI source image -->
+              <input type="file" id="aiSourceImageInput" style="display: none" (change)="onAiSourceImageSelected($event)" accept="image/*">
+
 
               <!-- State: Model Loaded -->
               <div *ngIf="model3dUrl" class="model-active-view">
@@ -291,10 +336,8 @@
         <mat-icon *ngIf="isLoading" class="spinning">refresh</mat-icon>
         {{
         isLoading
-        ? ('SAVING' | translate)
-        : isEditMode
-        ? ('UPDATE_PRODUCT' | translate)
-        : ('CREATE_PRODUCT' | translate)
+          ? (model3dUrl ? ('SAVING' | translate) : ('AI_PROCESSING' | translate))
+          : (isEditMode ? ('UPDATE_PRODUCT' | translate) : ('CREATE_PRODUCT' | translate))
         }}
       </button>
     </div>
