@@ -542,7 +542,7 @@
             }
 
             .material-icons {
-              color: rgba(255, 255, 255, 0.9);
+              color: var(--color-text-primary, #1e293b);
             }
           }
         }

@@ -139,3 +139,46 @@ export class UpdateNotificationSettingsDto {
   @IsBoolean()
   systemUpdates?: boolean;
 }
+
+export class UpdateCloudinarySettingsDto {
+  @IsOptional()
+  @IsString()
+  cloudName?: string;
+
+  @IsOptional()
+  @IsString()
+  apiKey?: string;
+
+  @IsOptional()
+  @IsString()
+  apiSecret?: string;
+}
+
+export class UpdateTripo3DSettingsDto {
+  @IsOptional()
+  @IsString()
+  apiKey?: string;
+}
+
+export class UpdateSMTPSettingsDto {
+  @IsOptional()
+  @IsString()
+  host?: string;
+
+  @IsOptional()
+  @IsNumber()
+  port?: number;
+
+  @IsOptional()
+  @IsString()
+  user?: string;
+
+  @IsOptional()
+  @IsString()
+  pass?: string;
+
+  @IsOptional()
+  @IsString()
+  fromEmail?: string;
+}
+

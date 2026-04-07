@@ -1,4 +1,7 @@
-import { Controller, Get, Put, Post, Body, Param, HttpStatus, HttpCode } from '@nestjs/common';
+import { Controller, Get, Put, Post, Body, Param, HttpStatus, HttpCode, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { AdminGuard } from '../auth/guards/admin.guard';
+
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { SettingsService } from './settings.service';
@@ -7,10 +10,14 @@ import {
   UpdatePaymentSettingsDto, 
   UpdateGeneralSettingsDto,
   UpdateSecuritySettingsDto,
-  UpdateNotificationSettingsDto 
+  UpdateNotificationSettingsDto,
+  UpdateCloudinarySettingsDto,
+  UpdateTripo3DSettingsDto,
+  UpdateSMTPSettingsDto
 } from './dto/update-settings.dto';
 
 @Controller('settings')
+@UseGuards(JwtAuthGuard, AdminGuard)
 export class SettingsController {
   constructor(private readonly settingsService: SettingsService) {}
 
@@ -18,6 +25,16 @@ export class SettingsController {
   @Get()
   @HttpCode(HttpStatus.OK)
   getAllSettings(): Observable<any> {
+    return this.settingsService.getSettingsGrouped().pipe(
+      map((settings) => ({ success: true, data: settings })),
+      catchError((error) => of({ success: false, error: error.message }))
+    );
+  }
+
+  // Get raw grouped settings (internal/full)
+  @Get('raw')
+  @HttpCode(HttpStatus.OK)
+  getRawSettings(): Observable<any> {
     return this.settingsService.getSettingsGrouped().pipe(
       map((settings) => ({ success: true, data: settings })),
       catchError((error) => of({ success: false, error: error.message }))
@@ -90,6 +107,36 @@ export class SettingsController {
   updateNotificationSettings(@Body() settings: UpdateNotificationSettingsDto): Observable<any> {
     return this.settingsService.updateNotificationSettings(settings).pipe(
       map((result) => ({ success: true, data: result, message: 'Notification settings updated successfully' })),
+      catchError((error) => of({ success: false, error: error.message }))
+    );
+  }
+
+  // Update Cloudinary settings
+  @Put('cloudinary')
+  @HttpCode(HttpStatus.OK)
+  updateCloudinarySettings(@Body() settings: UpdateCloudinarySettingsDto): Observable<any> {
+    return this.settingsService.updateCloudinarySettings(settings).pipe(
+      map((result) => ({ success: true, data: result, message: 'Cloudinary settings updated successfully' })),
+      catchError((error) => of({ success: false, error: error.message }))
+    );
+  }
+
+  // Update Tripo3D settings
+  @Put('tripo3d')
+  @HttpCode(HttpStatus.OK)
+  updateTripo3DSettings(@Body() settings: UpdateTripo3DSettingsDto): Observable<any> {
+    return this.settingsService.updateTripo3DSettings(settings).pipe(
+      map((result) => ({ success: true, data: result, message: 'Tripo3D settings updated successfully' })),
+      catchError((error) => of({ success: false, error: error.message }))
+    );
+  }
+
+  // Update SMTP settings
+  @Put('smtp')
+  @HttpCode(HttpStatus.OK)
+  updateSMTPSettings(@Body() settings: UpdateSMTPSettingsDto): Observable<any> {
+    return this.settingsService.updateSMTPSettings(settings).pipe(
+      map((result) => ({ success: true, data: result, message: 'SMTP settings updated successfully' })),
       catchError((error) => of({ success: false, error: error.message }))
     );
   }

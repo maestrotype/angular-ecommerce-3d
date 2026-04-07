@@ -1,0 +1,14 @@
+import { Type } from '@angular/core';
+
+export const sectionComponentMap: { [key: string]: () => Promise<Type<any>> } = {
+  header: () => import('../../layout/header/header.component').then(m => m.HeaderComponent),
+  footer: () => import('../../layout/footer/footer.component').then(m => m.FooterComponent),
+  hero: () => import('../../layout/hero/hero.component').then(m => m.HeroComponent),
+  'hero-glass': () => import('../../layout/hero-glass/hero-glass.component').then(m => m.HeroGlassComponent),
+  'best-sellers': () => import('../../layout/best-sellers/best-sellers.component').then(m => m.BestSellersComponent),
+  categories: () => import('../../layout/categories/categories.component').then(m => m.CategoriesComponent),
+  'special-offer': () => import('../../layout/special-offer/special-offer.component').then(m => m.SpecialOfferComponent),
+  brands: () => import('../../layout/brands/brands.component').then(m => m.BrandsComponent),
+  contacts: () => import('../../pages/contacts/contacts.component').then(m => m.ContactsComponent),
+  about: () => import('../../pages/about/about.component').then(m => m.AboutComponent),
+};

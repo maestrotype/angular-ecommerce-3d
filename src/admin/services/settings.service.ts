@@ -45,11 +45,32 @@ export interface PaymentSettings {
   defaultPaymentMethod: string;
 }
 
+export interface CloudinarySettings {
+  cloudName: string;
+  apiKey: string;
+  apiSecret: string;
+}
+
+export interface Tripo3DSettings {
+  apiKey: string;
+}
+
+export interface SMTPSettings {
+  host: string;
+  port: number;
+  user: string;
+  pass: string;
+  fromEmail: string;
+}
+
 export interface AppSettings {
   general?: GeneralSettings;
   notifications?: NotificationSettings;
   security?: SecuritySettings;
   payment?: PaymentSettings;
+  cloudinary?: CloudinarySettings;
+  tripo3d?: Tripo3DSettings;
+  smtp?: SMTPSettings;
 }
 
 @Injectable({
@@ -76,8 +97,6 @@ export class SettingsService {
       })
     );
   }
-
-
 
   // Local storage methods removed - now using backend API
 
@@ -118,6 +137,21 @@ export class SettingsService {
         paypalClientId: '',
         paypalClientSecret: '',
         defaultPaymentMethod: 'stripe'
+      },
+      cloudinary: {
+        cloudName: '',
+        apiKey: '',
+        apiSecret: ''
+      },
+      tripo3d: {
+        apiKey: ''
+      },
+      smtp: {
+        host: '',
+        port: 587,
+        user: '',
+        pass: '',
+        fromEmail: ''
       }
     };
   }
@@ -126,7 +160,6 @@ export class SettingsService {
     return this.http.put<ApiResponse>(`${this.apiUrl}/general`, settings).pipe(
       map(response => response),
       catchError(error => {
-        
         throw error;
       })
     );
@@ -136,7 +169,6 @@ export class SettingsService {
     return this.http.put<ApiResponse>(`${this.apiUrl}/notifications`, settings).pipe(
       map(response => response),
       catchError(error => {
-        
         throw error;
       })
     );
@@ -146,7 +178,6 @@ export class SettingsService {
     return this.http.put<ApiResponse>(`${this.apiUrl}/security`, settings).pipe(
       map(response => response),
       catchError(error => {
-        
         throw error;
       })
     );
@@ -156,9 +187,36 @@ export class SettingsService {
     return this.http.put<ApiResponse>(`${this.apiUrl}/payment`, settings).pipe(
       map(response => response),
       catchError(error => {
-        
+        throw error;
+      })
+    );
+  }
+
+  updateCloudinarySettings(settings: CloudinarySettings): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(`${this.apiUrl}/cloudinary`, settings).pipe(
+      map(response => response),
+      catchError(error => {
+        throw error;
+      })
+    );
+  }
+
+  updateTripo3DSettings(settings: Tripo3DSettings): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(`${this.apiUrl}/tripo3d`, settings).pipe(
+      map(response => response),
+      catchError(error => {
+        throw error;
+      })
+    );
+  }
+
+  updateSMTPSettings(settings: SMTPSettings): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(`${this.apiUrl}/smtp`, settings).pipe(
+      map(response => response),
+      catchError(error => {
         throw error;
       })
     );
   }
 }
+

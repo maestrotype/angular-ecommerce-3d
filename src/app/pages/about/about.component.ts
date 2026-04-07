@@ -1,15 +1,25 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Section } from '@shared/models/section.model';
 import { SectionService } from 'src/admin/services/section.service';
-import { map } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
+
+import { CommonModule } from '@angular/common';
+import { ThreeDViewerComponent } from '../../components/three-d-viewer/three-d-viewer.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { LocalizedPipe } from '../../shared/pipes/localized.pipe';
+import { ImageUrlPipe } from '../../shared/pipes/image-url.pipe';
 
 @Component({
   selector: 'app-about',
+  standalone: true,
+  imports: [CommonModule, ThreeDViewerComponent, LocalizedPipe, ImageUrlPipe, TranslateModule],
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss']
 })
-export class AboutComponent implements OnInit {
+export class AboutComponent implements OnInit, OnDestroy {
   @Input() data?: Section;
+  private destroy$ = new Subject<void>();
 
   constructor(private sectionService: SectionService) { }
 
@@ -18,7 +28,8 @@ export class AboutComponent implements OnInit {
     if (!this.data) {
       console.log('AboutComponent: No data, fetching...');
       this.sectionService.getActiveSections().pipe(
-        map(sections => sections.find(s => s.type === 'about'))
+        map(sections => sections.find(s => s.type === 'about')),
+        takeUntil(this.destroy$)
       ).subscribe(section => {
         if (section) {
           console.log('AboutComponent: Found section:', section);
@@ -28,5 +39,11 @@ export class AboutComponent implements OnInit {
         }
       });
     }
+  }
+
+  ngOnDestroy() {
+    console.log('AboutComponent ngOnDestroy');
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

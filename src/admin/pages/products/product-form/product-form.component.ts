@@ -14,6 +14,13 @@ import { ProcessingOptions, ProcessedImageResult } from "../../../components/ui/
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { environment } from '../../../../environments/environment';
 import { isLegacyLocalUrl } from '../../../../app/core/utils/url-helper';
+import { SettingsService } from "../../../services/settings.service";
+import { OnboardingDialogComponent } from "../../../components/shared/onboarding-dialog/onboarding-dialog.component";
+import { MatDialog } from "@angular/material/dialog";
+import { AiGenerationService } from "../../../services/ai-generation.service";
+import { finalize } from "rxjs/operators";
+
+
 
 import { LocalizedString } from "../../../../shared/models/localized-string.model";
 import { getLocalizedString } from "../../../../shared/utils/localization.util";
@@ -32,10 +39,17 @@ export class ProductFormComponent implements OnInit {
   selectedImageUrl: string | null = null;
   imageUrls: string[] = [];
   model3dFile: File | null = null;
-  model3dUrl: string | null = null;
+  model3dUrl: string = '';
   model3dPublicId: string | null = null;
   isUploading3d = false;
   dragging3d = false;
+  // AI Generation State
+  isAiGenerating: boolean = false;
+  aiStatusMessage: string = '';
+  aiProgress: number = 0;
+  recentAiTasks: any[] = [];
+  showRecoveryList: boolean = false;
+  taskId: string | null = null;
 
   get model3dUrlIsLegacy(): boolean {
     return false;
@@ -54,7 +68,10 @@ export class ProductFormComponent implements OnInit {
     private productService: ProductService,
     private categoryService: CategoryService,
     private snackBar: MatSnackBar,
-    private http: HttpClient
+    private http: HttpClient,
+    private settingsService: SettingsService,
+    private dialog: MatDialog,
+    private aiService: AiGenerationService
   ) {
     this.productForm = this.createForm();
   }
@@ -79,7 +96,7 @@ export class ProductFormComponent implements OnInit {
       price: [0, [Validators.required, Validators.min(0.01)]],
       stock: [0, [Validators.required, Validators.min(0)]],
       imageUrl: [""],
-      description_en: ["", [Validators.required, Validators.minLength(10)]],
+      description_en: [""],
       description_ru: [""],
       description_ua: [""],
       specifications: this.fb.array([]),
@@ -96,13 +113,198 @@ export class ProductFormComponent implements OnInit {
         this.categories = categories;
       },
       error: (error) => {
-
         this.snackBar.open('Failed to load categories list', "Close", {
-          duration: 5000,
+          duration: 3000
         });
       }
     });
   }
+
+  generateAi3dModel(): void {
+    if (this.isLoading || this.isAiGenerating) return;
+
+    if (this.imageUrls.length === 0) {
+      // No images? Let the user upload one specifically for AI
+      const input = document.getElementById('aiSourceImageInput') as HTMLInputElement;
+      if (input) input.click();
+      return;
+    }
+
+    this.startAiProcess(this.imageUrls[0]);
+  }
+
+  showRecentAiTasks(): void {
+    if (this.isLoading) return;
+    
+    this.isLoading = true;
+    this.aiService.getRecentTasks(15).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        this.recentAiTasks = response.data || [];
+        this.showRecoveryList = true;
+      },
+      error: () => {
+        this.isLoading = false;
+        this.snackBar.open('Failed to fetch recent AI tasks', 'Close', { duration: 3000 });
+      }
+    });
+  }
+
+  recoverAiTask(task: any): void {
+    if (task.status !== 'success' || !task.result?.model) {
+      this.snackBar.open('This task is not finished yet or failed', 'Close', { duration: 3000 });
+      return;
+    }
+
+    this.showRecoveryList = false;
+    this.isAiGenerating = true;
+    this.finalizeAiModel(task.result.model, task.task_id);
+  }
+
+  onAiSourceImageSelected(event: any): void {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Use our existing upload logic but just for the AI source
+    this.isAiGenerating = true;
+    this.aiStatusMessage = 'Uploading source image...';
+    
+    // We upload it to get a URL that Tripo3D can access
+    this.productService.uploadImage(file).subscribe({
+      next: (response: any) => {
+        const imageUrl = response.url || response.path;
+        this.startAiProcess(imageUrl);
+      },
+      error: () => {
+        this.isAiGenerating = false;
+        this.snackBar.open('Failed to upload source image', 'Close', { duration: 3000 });
+      }
+    });
+  }
+
+  private startAiProcess(imageUrl: string): void {
+    this.isAiGenerating = true;
+    this.isLoading = true; // Still keep main isLoading to block other actions
+    this.aiStatusMessage = 'Verifying settings...';
+
+    this.settingsService.getSettings().subscribe({
+      next: (settings) => {
+        const tripoKey = settings.tripo3d?.apiKey;
+        
+        if (!tripoKey || tripoKey.trim() === '') {
+          this.isAiGenerating = false;
+          this.isLoading = false;
+          this.showTripoOnboarding();
+        } else {
+          this.startAiGeneration(imageUrl);
+        }
+      },
+      error: () => {
+        this.isAiGenerating = false;
+        this.isLoading = false;
+        this.snackBar.open('Failed to verify settings', 'Close', { duration: 3000 });
+      }
+    });
+  }
+
+  private startAiGeneration(imageUrl: string): void {
+    this.aiStatusMessage = 'Submitting task to AI...';
+    this.aiProgress = 0;
+    
+    this.aiService.generateModel(imageUrl).subscribe({
+      next: (response) => {
+        if (response.code === 0 && response.data.task_id) {
+          this.pollAiStatus(response.data.task_id);
+        } else {
+          this.resetAiState();
+          this.snackBar.open('AI Error: ' + response.message, 'Close', { duration: 5000 });
+        }
+      },
+      error: (err) => {
+        this.resetAiState();
+        const msg = err.error?.message || 'Generation failed to start';
+        this.snackBar.open(msg, 'Close', { duration: 5000 });
+      }
+    });
+  }
+
+  private pollAiStatus(taskId: string): void {
+    this.aiService.pollStatus(taskId).subscribe({
+      next: (status) => {
+        const data = status.data;
+        this.aiProgress = data.progress || 0;
+        const apiStatus = data.status || 'unknown';
+        
+        console.log(`[AI Polling] Task: ${taskId}, Status: ${apiStatus}, Progress: ${this.aiProgress}%`);
+
+        if (apiStatus === 'success' && data.result?.model) {
+          this.aiStatusMessage = 'Generation successful! Finalizing model...';
+          this.finalizeAiModel(data.result.model, taskId);
+        } else if (apiStatus === 'failed') {
+          this.resetAiState();
+          const errorMsg = status.message || 'Unknown AI error';
+          this.snackBar.open('AI Generation failed: ' + errorMsg, 'Close', { duration: 7000 });
+        } else {
+          // Show the actual API status like "running", "queued", etc.
+          const statusText = apiStatus.charAt(0).toUpperCase() + apiStatus.slice(1);
+          this.aiStatusMessage = `${statusText}: ${this.aiProgress}%...`;
+        }
+      },
+      error: (err) => {
+        console.error('[AI Polling] Request failed:', err);
+        // Don't reset immediately, maybe it's a temporary network glitch
+        // But if it's a 504/500, we should notify
+        const msg = err.error?.message || 'Server connection issue during polling';
+        this.aiStatusMessage = `Connection issue: retrying... (${msg})`;
+      }
+    });
+  }
+
+  private resetAiState(): void {
+    this.isAiGenerating = false;
+    this.isLoading = false;
+    this.aiStatusMessage = '';
+    this.aiProgress = 0;
+  }
+
+  private finalizeAiModel(modelUrl: string, taskId: string): void {
+    const filename = `ai-gen-${taskId}.glb`;
+    this.aiStatusMessage = 'Downloading model to your server...';
+    
+    this.aiService.downloadModel(modelUrl, filename).subscribe({
+      next: (response) => {
+        this.resetAiState();
+        if (response.path) {
+          this.model3dUrl = response.path;
+          this.snackBar.open('3D Model ready and saved!', 'Success', { duration: 5000 });
+        }
+      },
+      error: (err) => {
+        this.resetAiState();
+        this.snackBar.open('Failed to download model from AI service', 'Close', { duration: 5000 });
+      }
+    });
+  }
+
+  private showTripoOnboarding(): void {
+    const dialogRef = this.dialog.open(OnboardingDialogComponent, {
+      width: '500px',
+      data: {
+        title: 'TRIPO3D_DESC',
+        message: 'TRIPO3D_INFO_TEXT',
+        actionLabel: 'REGISTER_ON_TRIPO3D',
+        externalLink: 'https://www.tripo3d.ai/',
+        icon: 'auto_awesome'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'setup') {
+        this.router.navigate(['/admin/integrations']);
+      }
+    });
+  }
+
 
   getCategoryValue(category: Category): string {
     const name = typeof category.name === 'string'
