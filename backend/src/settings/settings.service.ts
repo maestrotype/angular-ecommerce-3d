@@ -11,7 +11,7 @@ import {
   UpdateSecuritySettingsDto,
   UpdateNotificationSettingsDto,
   UpdateCloudinarySettingsDto,
-  UpdateTripo3DSettingsDto,
+  UpdateAiSettingsDto,
   UpdateSMTPSettingsDto
 } from './dto/update-settings.dto';
 
@@ -212,18 +212,18 @@ export class SettingsService {
     );
   }
 
-  // Update Tripo3D settings
-  updateTripo3DSettings(settings: UpdateTripo3DSettingsDto): Observable<any> {
+  // Update AI settings
+  updateAiSettings(settings: UpdateAiSettingsDto): Observable<any> {
     const updates: Observable<Settings>[] = [];
     
     Object.entries(settings).forEach(([key, value]) => {
       if (value !== undefined) {
         const updateDto: UpdateSettingsDto = {
-          key: `tripo3d.${key}`,
+          key: `ai.${key}`,
           value: String(value),
           type: 'string',
-          category: 'tripo3d',
-          description: `Tripo3D setting: ${key}`
+          category: 'ai',
+          description: `AI setting: ${key}`
         };
         updates.push(this.updateSetting(updateDto));
       }
@@ -232,9 +232,9 @@ export class SettingsService {
     return from(updates).pipe(
       mergeMap(updateObservable => updateObservable),
       toArray(),
-      map(() => ({ success: true, message: 'Tripo3D settings updated' })),
+      map(() => ({ success: true, message: 'AI settings updated' })),
       catchError((error) => {
-        console.error('Error updating tripo3d settings:', error);
+        console.error('Error updating AI settings:', error);
         return throwError(() => error);
       })
     );
@@ -281,7 +281,10 @@ export class SettingsService {
           { cat: 'payment', key: 'liqpayPrivateKey' },
           { cat: 'payment', key: 'paypalClientSecret' },
           { cat: 'cloudinary', key: 'apiSecret' },
-          { cat: 'tripo3d', key: 'apiKey' },
+          { cat: 'ai', key: 'tripoApiKey' },
+          { cat: 'ai', key: 'meshyApiKey' },
+          { cat: 'ai', key: 'hunyuanApiKey' },
+          { cat: 'ai', key: 'lumaApiKey' },
           { cat: 'smtp', key: 'pass' }
         ];
 
@@ -396,8 +399,13 @@ export class SettingsService {
       { key: 'cloudinary.apiKey', value: process.env.CLOUDINARY_API_KEY || '', type: 'string', category: 'cloudinary', description: 'Cloudinary API key' },
       { key: 'cloudinary.apiSecret', value: process.env.CLOUDINARY_API_SECRET || '', type: 'string', category: 'cloudinary', description: 'Cloudinary API secret' },
       
-      // Tripo3D settings
-      { key: 'tripo3d.apiKey', value: '', type: 'string', category: 'tripo3d', description: 'Tripo3D API key' },
+      // AI settings
+      { key: 'ai.activeProvider', value: 'tripo3d', type: 'string', category: 'ai', description: 'Active AI Provider' },
+      { key: 'ai.tripoApiKey', value: '', type: 'string', category: 'ai', description: 'Tripo3D API key' },
+      { key: 'ai.meshyApiKey', value: '', type: 'string', category: 'ai', description: 'Meshy API key' },
+      { key: 'ai.hunyuanApiKey', value: '', type: 'string', category: 'ai', description: 'Hunyuan3D API key' },
+      { key: 'ai.lumaApiKey', value: '', type: 'string', category: 'ai', description: 'Luma AI API key' },
+      { key: 'ai.customUrl', value: '', type: 'string', category: 'ai', description: 'Custom Webhook URL' },
       
       // SMTP settings
       { key: 'smtp.host', value: process.env.SMTP_HOST || '', type: 'string', category: 'smtp', description: 'SMTP host' },

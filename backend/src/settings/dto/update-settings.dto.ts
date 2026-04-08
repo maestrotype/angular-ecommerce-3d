@@ -154,10 +154,30 @@ export class UpdateCloudinarySettingsDto {
   apiSecret?: string;
 }
 
-export class UpdateTripo3DSettingsDto {
+export class UpdateAiSettingsDto {
   @IsOptional()
   @IsString()
-  apiKey?: string;
+  activeProvider?: string;
+
+  @IsOptional()
+  @IsString()
+  tripoApiKey?: string;
+
+  @IsOptional()
+  @IsString()
+  meshyApiKey?: string;
+
+  @IsOptional()
+  @IsString()
+  hunyuanApiKey?: string;
+
+  @IsOptional()
+  @IsString()
+  lumaApiKey?: string;
+
+  @IsOptional()
+  @IsString()
+  customUrl?: string;
 }
 
 export class UpdateSMTPSettingsDto {

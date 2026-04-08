@@ -12,7 +12,7 @@ import {
   UpdateSecuritySettingsDto,
   UpdateNotificationSettingsDto,
   UpdateCloudinarySettingsDto,
-  UpdateTripo3DSettingsDto,
+  UpdateAiSettingsDto,
   UpdateSMTPSettingsDto
 } from './dto/update-settings.dto';
 
@@ -121,12 +121,12 @@ export class SettingsController {
     );
   }
 
-  // Update Tripo3D settings
-  @Put('tripo3d')
+  // Update AI Engine settings
+  @Put('ai')
   @HttpCode(HttpStatus.OK)
-  updateTripo3DSettings(@Body() settings: UpdateTripo3DSettingsDto): Observable<any> {
-    return this.settingsService.updateTripo3DSettings(settings).pipe(
-      map((result) => ({ success: true, data: result, message: 'Tripo3D settings updated successfully' })),
+  updateAiSettings(@Body() settings: UpdateAiSettingsDto): Observable<any> {
+    return this.settingsService.updateAiSettings(settings).pipe(
+      map((result) => ({ success: true, data: result, message: 'AI Engine settings updated successfully' })),
       catchError((error) => of({ success: false, error: error.message }))
     );
   }
