@@ -41,6 +41,12 @@ The application implements an **Initial API Verification** logic via `ApiConfigS
 - `apiUrl`: Target local endpoint (`http://localhost:3002/api`).
 - `fallbackApiUrl`: Production endpoint for failover when local services are unreachable during development.
 
+### Integrations (Admin Panel)
+The platform uses external services to enhance capabilities. Configure these in the Admin Panel (`/admin/integrations`):
+1. **Tripo3D (AI Generation)**: Requires a Tripo3D API Key (starts with `tsk_...`). Register at [platform.tripo3d.ai](https://platform.tripo3d.ai). Used for transforming 2D images to 3D `.glb` models.
+2. **Cloudinary**: For reliable remote asset hosting (Optional).
+3. **Stripe & SMTP**: For payments and email notifications.
+
 ## Execution
 
 ### Development (Client-Side Rendering)
