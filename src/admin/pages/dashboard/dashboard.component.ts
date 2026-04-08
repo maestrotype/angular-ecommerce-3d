@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ChartConfiguration, ChartOptions, ChartType, Chart, registerables } from 'chart.js';
 import { DashboardService } from '../../services/dashboard.service';
 import { ErrorHandlerService } from '../../services/error-handler.service';
+import { TranslateService } from '@ngx-translate/core';
 
 // Register Chart.js components
 Chart.register(...registerables);
@@ -76,7 +77,8 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private dashboardService: DashboardService,
-    private errorHandler: ErrorHandlerService
+    private errorHandler: ErrorHandlerService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -92,8 +94,8 @@ export class DashboardComponent implements OnInit {
       },
       error: (error) => {
         this.errorHandler.showError({
-          title: 'Error',
-          message: 'Failed to load dashboard data',
+          title: this.translate.instant('ERROR_TITLE'),
+          message: this.translate.instant('FAILED_TO_LOAD_DASHBOARD'),
           type: 'error'
         });
         this.isLoading = false;

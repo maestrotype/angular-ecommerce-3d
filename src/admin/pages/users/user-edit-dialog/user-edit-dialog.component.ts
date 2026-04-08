@@ -5,6 +5,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from '../../../services/user.service';
 import { User, UpdateUserRequest } from '../../../../shared/models/user.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-edit-dialog',
@@ -21,6 +22,7 @@ export class UserEditDialogComponent implements OnInit {
     private userService: UserService,
     private snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<UserEditDialogComponent>,
+    private translate: TranslateService,
     @Inject(MAT_DIALOG_DATA) public data: { user?: User }
   ) {
     this.isNewUser = !data?.user;
@@ -55,11 +57,11 @@ export class UserEditDialogComponent implements OnInit {
         };
         this.userService.createUser(createRequest).subscribe({
           next: (user) => {
-            this.snackBar.open('User created successfully', 'Close', { duration: 3000 });
+            this.snackBar.open(this.translate.instant('USER_CREATED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
             this.dialogRef.close(user);
           },
           error: (error) => {
-            this.snackBar.open('Error creating user', 'Close', { duration: 3000 });
+            this.snackBar.open(this.translate.instant('ERROR_CREATING_USER'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
             this.isLoading = false;
           }
         });
@@ -75,11 +77,11 @@ export class UserEditDialogComponent implements OnInit {
         };
         this.userService.updateUser(updateRequest.id, updateRequest).subscribe({
           next: (user) => {
-            this.snackBar.open('User updated successfully', 'Close', { duration: 3000 });
+            this.snackBar.open(this.translate.instant('USER_UPDATED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
             this.dialogRef.close(user);
           },
           error: (error) => {
-            this.snackBar.open('Error updating user', 'Close', { duration: 3000 });
+            this.snackBar.open(this.translate.instant('ERROR_UPDATING_USER'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
             this.isLoading = false;
           }
         });

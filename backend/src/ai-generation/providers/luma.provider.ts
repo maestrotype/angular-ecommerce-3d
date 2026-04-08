@@ -1,13 +1,17 @@
 import { Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common';
 import { SettingsService } from '../../settings/settings.service';
 import { firstValueFrom } from 'rxjs';
+import { HttpService } from '@nestjs/axios';
 import { AiGenerationProvider, AiTaskResult } from '../interfaces/ai-provider.interface';
 
 @Injectable()
 export class LumaAiProvider implements AiGenerationProvider {
   private readonly logger = new Logger(LumaAiProvider.name);
 
-  constructor(private settingsService: SettingsService) {}
+  constructor(
+    private settingsService: SettingsService,
+    private httpService: HttpService
+  ) {}
 
   get providerId(): string {
     return 'luma';
@@ -24,14 +28,15 @@ export class LumaAiProvider implements AiGenerationProvider {
   async generateTask(imageUrl: string): Promise<{ taskId: string }> {
     const apiKey = await this.getApiKey();
     this.logger.log(`Luma AI generateTask called for ${imageUrl}`);
-    throw new HttpException('Luma AI integration is pending implementation details', HttpStatus.NOT_IMPLEMENTED);
+    // Luma Genie API is in early access
+    throw new HttpException('Luma API integration is pending early-access documentation', HttpStatus.NOT_IMPLEMENTED);
   }
 
   async getTaskStatus(taskId: string): Promise<AiTaskResult> {
-    throw new HttpException('Luma AI integration is pending implementation details', HttpStatus.NOT_IMPLEMENTED);
+    throw new HttpException('Luma API integration is pending early-access documentation', HttpStatus.NOT_IMPLEMENTED);
   }
 
   async listTasks(): Promise<any> {
-    return { code: 0, data: [], message: 'Luma AI history not implemented' };
+    return { code: 0, data: [], message: 'Luma history not implemented' };
   }
 }

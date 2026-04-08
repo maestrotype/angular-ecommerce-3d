@@ -9,6 +9,7 @@ import { SectionService } from '../../../services/section.service';
 import { SectionFormComponent } from '../section-form/section-form.component';
 import { Section } from '../../../models/section.model';
 import { MatSidenav } from '@angular/material/sidenav';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-section-list',
@@ -39,7 +40,8 @@ export class SectionListComponent implements OnInit, AfterViewInit {
   constructor(
     private sectionService: SectionService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -92,17 +94,14 @@ export class SectionListComponent implements OnInit, AfterViewInit {
         this.dataSource.data = sections;
         this.loading = false;
       },
-      error: (error) => {
-        this.loading = false;
-        this.snackBar.open(
-          error?.status === 500
-            ? 'Server error: please check backend logs or try again later.'
-            : 'Error loading sections',
-          'Close',
-          { duration: 5000 }
-        );
-        
-      }
+        error: (error) => {
+          this.loading = false;
+          const errorMsg = error?.status === 500
+            ? this.translate.instant('SERVER_ERROR_LOGS_MSG')
+            : this.translate.instant('FAILED_TO_LOAD_SECTIONS');
+            
+          this.snackBar.open(errorMsg, this.translate.instant('CLOSE_BTN'), { duration: 5000 });
+        }
     });
   }
 
@@ -152,12 +151,12 @@ export class SectionListComponent implements OnInit, AfterViewInit {
   toggleSection(section: Section): void {
     this.sectionService.toggleSection(section.id).subscribe({
       next: () => {
-        this.snackBar.open(`Section ${section.isActive ? 'deactivated' : 'activated'}`, 'Close', { duration: 3000 });
+        const msg = section.isActive ? 'SECTION_DEACTIVATED' : 'SECTION_ACTIVATED';
+        this.snackBar.open(this.translate.instant(msg), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
         this.loadSections();
       },
       error: (error) => {
-        this.snackBar.open('Error updating section', 'Close', { duration: 3000 });
-        
+        this.snackBar.open(this.translate.instant('ERROR_UPDATING_SECTION'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
       }
     });
   }
@@ -166,12 +165,11 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     if (confirm('Are you sure you want to delete this section?')) {
       this.sectionService.deleteSection(section.id).subscribe({
         next: () => {
-          this.snackBar.open('Section deleted successfully', 'Close', { duration: 3000 });
+          this.snackBar.open(this.translate.instant('SECTION_DELETED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
           this.loadSections();
         },
         error: (error) => {
-          this.snackBar.open('Error deleting section', 'Close', { duration: 3000 });
-          
+          this.snackBar.open(this.translate.instant('ERROR_DELETING_SECTION'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
         }
       });
     }
@@ -186,10 +184,10 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     this.sectionService.reorderSections(sectionIds).subscribe({
       next: (sections) => {
         this.dataSource.data = sections;
-        this.snackBar.open('Sections reordered successfully', 'Close', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('SECTIONS_REORDERED'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
       },
       error: (error) => {
-        this.snackBar.open('Error reordering sections', 'Close', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('ERROR_REORDERING_SECTIONS'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
         
         this.loadSections();
       }

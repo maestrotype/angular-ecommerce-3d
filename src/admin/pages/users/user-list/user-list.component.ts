@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../../../services/user.service';
 import { User } from '../../../../shared/models/user.model';
 import { UserEditDialogComponent } from '../user-edit-dialog/user-edit-dialog.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-user-list',
@@ -26,7 +27,8 @@ export class UserListComponent implements OnInit, AfterViewInit {
   constructor(
     private userService: UserService,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -49,8 +51,8 @@ export class UserListComponent implements OnInit, AfterViewInit {
       },
       error: (error) => {
         
-        this.error = 'Failed to load users';
-        this.snackBar.open('Error loading users', 'Close', { duration: 3000 });
+        this.error = this.translate.instant('ERROR_LOADING_USERS');
+        this.snackBar.open(this.translate.instant('ERROR_LOADING_USERS'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
         this.isLoading = false;
       }
     });
@@ -106,15 +108,15 @@ export class UserListComponent implements OnInit, AfterViewInit {
     operation.subscribe({
       next: (updatedUser) => {
         this.snackBar.open(
-          `User ${isBlocked ? 'unblocked' : 'blocked'} successfully`,
-          'Close',
+          this.translate.instant(isBlocked ? 'USER_UNBLOCKED_SUCCESSFULLY' : 'USER_BLOCKED_SUCCESSFULLY'),
+          this.translate.instant('CLOSE_BTN'),
           { duration: 3000 }
         );
         this.loadUsers();
       },
       error: (error) => {
         
-        this.snackBar.open('Error updating user status', 'Close', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('ERROR_UPDATING_USER_STATUS'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
       }
     });
   }
@@ -124,12 +126,12 @@ export class UserListComponent implements OnInit, AfterViewInit {
 
     this.userService.changeUserRole(user.id, newRole).subscribe({
       next: (updatedUser) => {
-        this.snackBar.open(`User role changed to ${newRole}`, 'Close', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('USER_ROLE_CHANGED', { role: newRole }), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
         this.loadUsers();
       },
       error: (error) => {
         
-        this.snackBar.open('Error changing user role', 'Close', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('ERROR_CHANGING_USER_ROLE'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
       }
     });
   }
@@ -138,12 +140,12 @@ export class UserListComponent implements OnInit, AfterViewInit {
     if (confirm(`Are you sure you want to delete user ${user.name}?`)) {
       this.userService.deleteUser(user.id).subscribe({
         next: () => {
-          this.snackBar.open('User deleted successfully', 'Close', { duration: 3000 });
+          this.snackBar.open(this.translate.instant('USER_DELETED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
           this.loadUsers();
         },
         error: (error) => {
           
-          this.snackBar.open('Error deleting user', 'Close', { duration: 3000 });
+          this.snackBar.open(this.translate.instant('ERROR_DELETING_USER'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
         }
       });
     }

@@ -24,6 +24,7 @@ import { finalize } from "rxjs/operators";
 
 import { LocalizedString } from "../../../../shared/models/localized-string.model";
 import { getLocalizedString } from "../../../../shared/utils/localization.util";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-product-form",
@@ -71,7 +72,8 @@ export class ProductFormComponent implements OnInit {
     private http: HttpClient,
     private settingsService: SettingsService,
     private dialog: MatDialog,
-    private aiService: AiGenerationService
+    private aiService: AiGenerationService,
+    private translate: TranslateService
   ) {
     this.productForm = this.createForm();
   }
@@ -113,7 +115,7 @@ export class ProductFormComponent implements OnInit {
         this.categories = categories;
       },
       error: (error) => {
-        this.snackBar.open('Failed to load categories list', "Close", {
+        this.snackBar.open(this.translate.instant('FAILED_TO_LOAD_CATEGORIES'), this.translate.instant('CLOSE_BTN'), {
           duration: 3000
         });
       }
@@ -145,14 +147,14 @@ export class ProductFormComponent implements OnInit {
       },
       error: () => {
         this.isLoading = false;
-        this.snackBar.open('Failed to fetch recent AI tasks', 'Close', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('FAILED_TO_FETCH_AI_TASKS'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
       }
     });
   }
 
   recoverAiTask(task: any): void {
     if (task.status !== 'success' || !task.result?.model) {
-      this.snackBar.open('This task is not finished yet or failed', 'Close', { duration: 3000 });
+      this.snackBar.open(this.translate.instant('AI_TASK_NOT_FINISHED'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
       return;
     }
 
@@ -167,7 +169,7 @@ export class ProductFormComponent implements OnInit {
 
     // Use our existing upload logic but just for the AI source
     this.isAiGenerating = true;
-    this.aiStatusMessage = 'Uploading source image...';
+    this.aiStatusMessage = this.translate.instant('AI_UPLOADING_SOURCE');
     
     // We upload it to get a URL that Tripo3D can access
     this.productService.uploadImage(file).subscribe({
@@ -177,7 +179,7 @@ export class ProductFormComponent implements OnInit {
       },
       error: () => {
         this.isAiGenerating = false;
-        this.snackBar.open('Failed to upload source image', 'Close', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('FAILED_TO_UPLOAD_SOURCE_IMAGE'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
       }
     });
   }
@@ -185,7 +187,7 @@ export class ProductFormComponent implements OnInit {
   private startAiProcess(imageUrl: string): void {
     this.isAiGenerating = true;
     this.isLoading = true; // Still keep main isLoading to block other actions
-    this.aiStatusMessage = 'Verifying settings...';
+    this.aiStatusMessage = this.translate.instant('AI_VERIFYING_SETTINGS');
 
     this.settingsService.getSettings().subscribe({
       next: (settings) => {
@@ -202,13 +204,13 @@ export class ProductFormComponent implements OnInit {
       error: () => {
         this.isAiGenerating = false;
         this.isLoading = false;
-        this.snackBar.open('Failed to verify settings', 'Close', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('FAILED_TO_VERIFY_SETTINGS'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
       }
     });
   }
 
   private startAiGeneration(imageUrl: string): void {
-    this.aiStatusMessage = 'Submitting task to AI...';
+    this.aiStatusMessage = this.translate.instant('AI_SUBMITTING_TASK');
     this.aiProgress = 0;
     
     this.aiService.generateModel(imageUrl).subscribe({
@@ -217,13 +219,13 @@ export class ProductFormComponent implements OnInit {
           this.pollAiStatus(response.data.task_id);
         } else {
           this.resetAiState();
-          this.snackBar.open('AI Error: ' + response.message, 'Close', { duration: 5000 });
+          this.snackBar.open(this.translate.instant('AI_ERROR_PREFIX') + response.message, this.translate.instant('CLOSE_BTN'), { duration: 5000 });
         }
       },
       error: (err) => {
         this.resetAiState();
         const msg = err.error?.message || 'Generation failed to start';
-        this.snackBar.open(msg, 'Close', { duration: 5000 });
+        this.snackBar.open(msg, this.translate.instant('CLOSE_BTN'), { duration: 5000 });
       }
     });
   }
@@ -238,12 +240,12 @@ export class ProductFormComponent implements OnInit {
         console.log(`[AI Polling] Task: ${taskId}, Status: ${apiStatus}, Progress: ${this.aiProgress}%`);
 
         if (apiStatus === 'success' && data.result?.model) {
-          this.aiStatusMessage = 'Generation successful! Finalizing model...';
+          this.aiStatusMessage = this.translate.instant('AI_GENERATION_SUCCESS');
           this.finalizeAiModel(data.result.model, taskId);
         } else if (apiStatus === 'failed') {
           this.resetAiState();
           const errorMsg = status.message || 'Unknown AI error';
-          this.snackBar.open('AI Generation failed: ' + errorMsg, 'Close', { duration: 7000 });
+          this.snackBar.open(this.translate.instant('AI_GENERATION_FAILED_PREFIX') + errorMsg, this.translate.instant('CLOSE_BTN'), { duration: 7000 });
         } else {
           // Show the actual API status like "running", "queued", etc.
           const statusText = apiStatus.charAt(0).toUpperCase() + apiStatus.slice(1);
@@ -269,19 +271,19 @@ export class ProductFormComponent implements OnInit {
 
   private finalizeAiModel(modelUrl: string, taskId: string): void {
     const filename = `ai-gen-${taskId}.glb`;
-    this.aiStatusMessage = 'Downloading model to your server...';
+    this.aiStatusMessage = this.translate.instant('AI_DOWNLOADING_MODEL');
     
     this.aiService.downloadModel(modelUrl, filename).subscribe({
       next: (response) => {
         this.resetAiState();
         if (response.path) {
           this.model3dUrl = response.path;
-          this.snackBar.open('3D Model ready and saved!', 'Success', { duration: 5000 });
+          this.snackBar.open(this.translate.instant('MODEL_3D_READY_SAVED'), this.translate.instant('SUCCESS_BTN'), { duration: 5000 });
         }
       },
       error: (err) => {
         this.resetAiState();
-        this.snackBar.open('Failed to download model from AI service', 'Close', { duration: 5000 });
+        this.snackBar.open(this.translate.instant('FAILED_TO_DOWNLOAD_AI_MODEL'), this.translate.instant('CLOSE_BTN'), { duration: 5000 });
       }
     });
   }
@@ -336,7 +338,7 @@ export class ProductFormComponent implements OnInit {
     );
 
     if (imageFiles.length === 0) {
-      this.snackBar.open('Please select only JPG or PNG images', "Close", {
+      this.snackBar.open(this.translate.instant('ONLY_JPG_PNG'), this.translate.instant('CLOSE_BTN'), {
         duration: 3000,
       });
       return;
@@ -382,7 +384,7 @@ export class ProductFormComponent implements OnInit {
               duration: 3000,
             });
           } else {
-            this.snackBar.open('Image uploaded successfully!', "Close", {
+            this.snackBar.open(this.translate.instant('IMAGE_UPLOADED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), {
               duration: 3000,
             });
           }
@@ -403,7 +405,7 @@ export class ProductFormComponent implements OnInit {
           });
 
           // Fallback to direct upload
-          this.snackBar.open('Uploading original file without processing...', "Close", {
+          this.snackBar.open(this.translate.instant('UPLOADING_ORIGINAL'), this.translate.instant('CLOSE_BTN'), {
             duration: 3000,
           });
           this.uploadImageDirectly(file);
@@ -424,7 +426,7 @@ export class ProductFormComponent implements OnInit {
         error: (error) => {
 
           this.isUploading = false;
-          this.snackBar.open('Failed to upload image', "Close", {
+          this.snackBar.open(this.translate.instant('FAILED_TO_UPLOAD_IMAGE'), this.translate.instant('CLOSE_BTN'), {
             duration: 5000,
           });
         }
@@ -453,7 +455,7 @@ export class ProductFormComponent implements OnInit {
     );
 
     if (imageFiles.length === 0) {
-      this.snackBar.open('Please select only JPG or PNG images under 5MB', "Close", {
+      this.snackBar.open(this.translate.instant('ONLY_JPG_PNG_5MB'), this.translate.instant('CLOSE_BTN'), {
         duration: 3000,
       });
       return;
@@ -470,11 +472,11 @@ export class ProductFormComponent implements OnInit {
     const file = event.target.files[0];
     if (!file) return;
     if (!file.name.endsWith('.glb')) {
-      this.snackBar.open('Only GLB format is supported. Please convert your model first.', 'Close', { duration: 5000 });
+      this.snackBar.open(this.translate.instant('ONLY_GLB_FORMAT'), this.translate.instant('CLOSE_BTN'), { duration: 5000 });
       return;
     }
     if (file.size > 100 * 1024 * 1024) {
-      this.snackBar.open(`File too large: ${(file.size / 1024 / 1024).toFixed(1)} MB (max 100 MB)`, 'Close', { duration: 5000 });
+      this.snackBar.open(this.translate.instant('FILE_TOO_LARGE'), this.translate.instant('CLOSE_BTN'), { duration: 5000 });
       return;
     }
     this.isUploading3d = true;
@@ -483,13 +485,13 @@ export class ProductFormComponent implements OnInit {
         this.model3dUrl = res.url;
         this.model3dPublicId = res.publicId || null;
         this.isUploading3d = false;
-        this.snackBar.open('3D model uploaded to Cloudinary ✓', 'Close', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('MODEL_3D_UPLOADED'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
       },
       error: (err) => {
         this.isUploading3d = false;
         const status = err?.status ? ` [HTTP ${err.status}]` : '';
         const serverMsg = err?.error?.message || err?.message || 'Unknown error';
-        this.snackBar.open(`3D upload failed${status}: ${serverMsg}`, 'Close', {
+        this.snackBar.open(this.translate.instant('MODEL_3D_UPLOAD_FAILED') + status + ': ' + serverMsg, this.translate.instant('CLOSE_BTN'), {
           duration: 8000,
           panelClass: 'error-snackbar'
         });
@@ -533,7 +535,7 @@ export class ProductFormComponent implements OnInit {
       error: (err) => {
         const status = err?.status ? ` [HTTP ${err.status}]` : '';
         const serverMsg = err?.error?.message || err?.message || 'Unknown error';
-        this.snackBar.open(`Failed to load product${status}: ${serverMsg}`, 'Close', {
+        this.snackBar.open(this.translate.instant('FAILED_TO_LOAD_PRODUCT') + status + ': ' + serverMsg, this.translate.instant('CLOSE_BTN'), {
           duration: 7000,
           panelClass: 'error-snackbar'
         });
@@ -587,14 +589,14 @@ export class ProductFormComponent implements OnInit {
   onSubmit(): void {
     if (this.productForm.invalid) {
       this.markFormGroupTouched(this.productForm);
-      this.snackBar.open("Please fill in all required fields correctly", "Close", {
+      this.snackBar.open(this.translate.instant('FILL_REQUIRED_FIELDS'), this.translate.instant('CLOSE_BTN'), {
         duration: 3000,
       });
       return;
     }
 
     if (!this.imageUrls.length) {
-      this.snackBar.open("Please upload at least one image before submitting", "Close", {
+      this.snackBar.open(this.translate.instant('UPLOAD_IMAGE_BEFORE_SUBMIT'), this.translate.instant('CLOSE_BTN'), {
         duration: 3000,
       });
       return;
@@ -625,14 +627,14 @@ export class ProductFormComponent implements OnInit {
       this.productService.updateProduct(this.productId!, productData).subscribe({
         next: () => {
           this.isLoading = false;
-          this.snackBar.open('Product updated successfully!', 'Close', { duration: 3000 });
+          this.snackBar.open(this.translate.instant('PRODUCT_UPDATED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
           this.router.navigate(['/admin/products']);
         },
         error: (err) => {
           this.isLoading = false;
           const status = err?.status ? ` [HTTP ${err.status}]` : '';
           const serverMsg = err?.error?.message || err?.message || 'Unknown error';
-          this.snackBar.open(`Error updating product${status}: ${serverMsg}`, 'Close', {
+          this.snackBar.open(this.translate.instant('ERROR_UPDATING_PRODUCT') + status + ': ' + serverMsg, this.translate.instant('CLOSE_BTN'), {
             duration: 7000,
             panelClass: 'error-snackbar'
           });
@@ -642,14 +644,14 @@ export class ProductFormComponent implements OnInit {
       this.productService.createProduct(productData as any).subscribe({
         next: () => {
           this.isLoading = false;
-          this.snackBar.open('Product created successfully!', 'Close', { duration: 3000 });
+          this.snackBar.open(this.translate.instant('PRODUCT_CREATED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
           this.router.navigate(['/admin/products']);
         },
         error: (err) => {
           this.isLoading = false;
           const status = err?.status ? ` [HTTP ${err.status}]` : '';
           const serverMsg = err?.error?.message || err?.message || 'Unknown error';
-          this.snackBar.open(`Error creating product${status}: ${serverMsg}`, 'Close', {
+          this.snackBar.open(this.translate.instant('ERROR_CREATING_PRODUCT') + status + ': ' + serverMsg, this.translate.instant('CLOSE_BTN'), {
             duration: 7000,
             panelClass: 'error-snackbar'
           });
@@ -704,7 +706,7 @@ export class ProductFormComponent implements OnInit {
     this.productService.createProduct(productData).subscribe({
       next: (product) => {
         this.isLoading = false;
-        this.snackBar.open("Product created successfully!", "Close", { duration: 3000 });
+        this.snackBar.open(this.translate.instant('PRODUCT_CREATED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
         this.router.navigate(["/admin/products"]);
       },
       error: (err) => {
@@ -718,7 +720,7 @@ export class ProductFormComponent implements OnInit {
     this.productService.updateProduct(id, productData).subscribe({
       next: (product) => {
         this.isLoading = false;
-        this.snackBar.open("Product updated successfully!", "Close", { duration: 3000 });
+        this.snackBar.open(this.translate.instant('PRODUCT_UPDATED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
         this.router.navigate(["/admin/products"]);
       },
       error: (err) => {

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProfileService } from '../../services/profile.service';
 import { AuthService } from '../../services/auth.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-profile',
@@ -19,7 +20,8 @@ export class ProfileComponent implements OnInit {
     private fb: FormBuilder,
     private profileService: ProfileService,
     private authService: AuthService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) {
     this.profileForm = this.fb.group({
       name: ['', Validators.required],
@@ -58,14 +60,14 @@ export class ProfileComponent implements OnInit {
       
       this.profileService.updateProfile(profileData).subscribe({
         next: (response) => {
-          this.snackBar.open('Profile updated successfully', 'Close', {
+          this.snackBar.open(this.translate.instant('PROFILE_UPDATED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), {
             duration: 3000,
             panelClass: ['success-snackbar']
           });
           this.isLoading = false;
         },
         error: (error) => {
-          this.snackBar.open('Failed to update profile', 'Close', {
+          this.snackBar.open(this.translate.instant('FAILED_TO_UPDATE_PROFILE'), this.translate.instant('CLOSE_BTN'), {
             duration: 3000,
             panelClass: ['error-snackbar']
           });
@@ -85,7 +87,7 @@ export class ProfileComponent implements OnInit {
       
       this.profileService.changePassword(passwordData).subscribe({
         next: (response) => {
-          this.snackBar.open('Password changed successfully', 'Close', {
+          this.snackBar.open(this.translate.instant('PASSWORD_CHANGED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), {
             duration: 3000,
             panelClass: ['success-snackbar']
           });
@@ -93,7 +95,7 @@ export class ProfileComponent implements OnInit {
           this.isLoading = false;
         },
         error: (error) => {
-          this.snackBar.open('Failed to change password', 'Close', {
+          this.snackBar.open(this.translate.instant('FAILED_TO_CHANGE_PASSWORD'), this.translate.instant('CLOSE_BTN'), {
             duration: 3000,
             panelClass: ['error-snackbar']
           });

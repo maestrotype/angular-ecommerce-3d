@@ -146,7 +146,7 @@ export class SettingsComponent implements OnInit {
   onSaveGeneral(): void {
     try {
       if (!this.generalForm || !this.generalForm.valid) {
-        this.snackBar.open('Please fill in all required fields', 'Close', {
+        this.snackBar.open(this.translate.instant('FILL_REQUIRED_FIELDS'), this.translate.instant('CLOSE_BTN'), {
           duration: 3000,
           panelClass: ['error-snackbar']
         });
@@ -157,7 +157,7 @@ export class SettingsComponent implements OnInit {
       this.settingsService.updateGeneralSettings(this.generalForm.value).subscribe({
         next: (response) => {
           
-          this.snackBar.open('General settings updated successfully', 'Close', {
+          this.snackBar.open(this.translate.instant('GENERAL_SETTINGS_UPDATED'), this.translate.instant('CLOSE_BTN'), {
             duration: 3000,
             panelClass: ['success-snackbar']
           });
@@ -165,7 +165,7 @@ export class SettingsComponent implements OnInit {
         },
         error: (error) => {
           
-          this.snackBar.open(`Failed to update general settings: ${error.error?.message || error.message || 'Unknown error'}`, 'Close', {
+          this.snackBar.open(this.translate.instant('FAILED_TO_UPDATE_SETTINGS') + `: ${error.error?.message || error.message || 'Unknown error'}`, this.translate.instant('CLOSE_BTN'), {
             duration: 5000,
             panelClass: ['error-snackbar']
           });
@@ -174,7 +174,7 @@ export class SettingsComponent implements OnInit {
       });
     } catch (error) {
       
-      this.snackBar.open('Unexpected error occurred', 'Close', {
+      this.snackBar.open(this.translate.instant('UNEXPECTED_ERROR'), this.translate.instant('CLOSE_BTN'), {
         duration: 3000,
         panelClass: ['error-snackbar']
       });
@@ -185,7 +185,7 @@ export class SettingsComponent implements OnInit {
   onSaveNotifications(): void {
     try {
       if (!this.notificationForm) {
-        this.snackBar.open('Notification form not initialized', 'Close', {
+        this.snackBar.open(this.translate.instant('NOTIFICATION_FORM_NOT_INIT'), this.translate.instant('CLOSE_BTN'), {
           duration: 3000,
           panelClass: ['error-snackbar']
         });
@@ -196,7 +196,7 @@ export class SettingsComponent implements OnInit {
       this.settingsService.updateNotificationSettings(this.notificationForm.value).subscribe({
         next: (response) => {
           
-          this.snackBar.open('Notification settings updated successfully', 'Close', {
+          this.snackBar.open(this.translate.instant('NOTIFICATION_SETTINGS_UPDATED'), this.translate.instant('CLOSE_BTN'), {
             duration: 3000,
             panelClass: ['success-snackbar']
           });
@@ -204,7 +204,7 @@ export class SettingsComponent implements OnInit {
         },
         error: (error) => {
           
-          this.snackBar.open(`Failed to update notification settings: ${error.error?.message || error.message || 'Unknown error'}`, 'Close', {
+          this.snackBar.open(this.translate.instant('FAILED_TO_UPDATE_SETTINGS') + `: ${error.error?.message || error.message || 'Unknown error'}`, this.translate.instant('CLOSE_BTN'), {
             duration: 5000,
             panelClass: ['error-snackbar']
           });
@@ -213,7 +213,7 @@ export class SettingsComponent implements OnInit {
       });
     } catch (error) {
       
-      this.snackBar.open('Unexpected error occurred', 'Close', {
+      this.snackBar.open(this.translate.instant('UNEXPECTED_ERROR'), this.translate.instant('CLOSE_BTN'), {
         duration: 3000,
         panelClass: ['error-snackbar']
       });
@@ -224,7 +224,7 @@ export class SettingsComponent implements OnInit {
   onSaveSecurity(): void {
     try {
       if (!this.securityForm || !this.securityForm.valid) {
-        this.snackBar.open('Please fill in all required fields', 'Close', {
+        this.snackBar.open(this.translate.instant('FILL_REQUIRED_FIELDS'), this.translate.instant('CLOSE_BTN'), {
           duration: 3000,
           panelClass: ['error-snackbar']
         });
@@ -235,7 +235,7 @@ export class SettingsComponent implements OnInit {
       this.settingsService.updateSecuritySettings(this.securityForm.value).subscribe({
         next: (response) => {
           
-          this.snackBar.open('Security settings updated successfully', 'Close', {
+          this.snackBar.open(this.translate.instant('SECURITY_SETTINGS_UPDATED'), this.translate.instant('CLOSE_BTN'), {
             duration: 3000,
             panelClass: ['success-snackbar']
           });
@@ -243,7 +243,7 @@ export class SettingsComponent implements OnInit {
         },
         error: (error) => {
           
-          this.snackBar.open(`Failed to update security settings: ${error.error?.message || error.message || 'Unknown error'}`, 'Close', {
+          this.snackBar.open(this.translate.instant('FAILED_TO_UPDATE_SETTINGS') + `: ${error.error?.message || error.message || 'Unknown error'}`, this.translate.instant('CLOSE_BTN'), {
             duration: 5000,
             panelClass: ['error-snackbar']
           });
@@ -252,7 +252,7 @@ export class SettingsComponent implements OnInit {
       });
     } catch (error) {
       
-      this.snackBar.open('Unexpected error occurred', 'Close', {
+      this.snackBar.open(this.translate.instant('UNEXPECTED_ERROR'), this.translate.instant('CLOSE_BTN'), {
         duration: 3000,
         panelClass: ['error-snackbar']
       });
@@ -263,7 +263,7 @@ export class SettingsComponent implements OnInit {
   onSavePayment(): void {
     try {
       if (!this.paymentForm || !this.paymentForm.valid) {
-        this.snackBar.open('Please fill in all required fields', 'Close', {
+        this.snackBar.open(this.translate.instant('FILL_REQUIRED_FIELDS'), this.translate.instant('CLOSE_BTN'), {
           duration: 3000,
           panelClass: ['error-snackbar']
         });
@@ -274,7 +274,7 @@ export class SettingsComponent implements OnInit {
       this.settingsService.updatePaymentSettings(this.paymentForm.value).subscribe({
         next: (response) => {
           
-          this.snackBar.open('Payment settings updated successfully', 'Close', {
+          this.snackBar.open(this.translate.instant('PAYMENT_SETTINGS_UPDATED'), this.translate.instant('CLOSE_BTN'), {
             duration: 3000,
             panelClass: ['success-snackbar']
           });
@@ -282,7 +282,7 @@ export class SettingsComponent implements OnInit {
         },
         error: (error) => {
           
-          this.snackBar.open(`Failed to update payment settings: ${error.error?.message || error.message || 'Unknown error'}`, 'Close', {
+          this.snackBar.open(this.translate.instant('FAILED_TO_UPDATE_SETTINGS') + `: ${error.error?.message || error.message || 'Unknown error'}`, this.translate.instant('CLOSE_BTN'), {
             duration: 5000,
             panelClass: ['error-snackbar']
           });
@@ -291,7 +291,7 @@ export class SettingsComponent implements OnInit {
       });
     } catch (error) {
       
-      this.snackBar.open('Unexpected error occurred', 'Close', {
+      this.snackBar.open(this.translate.instant('UNEXPECTED_ERROR'), this.translate.instant('CLOSE_BTN'), {
         duration: 3000,
         panelClass: ['error-snackbar']
       });

@@ -2,6 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Order } from '../../../models/order.model';
 import { OrderService } from '../../../services/order.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-order-detail',
@@ -16,7 +17,8 @@ export class OrderDetailComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { orderId: number },
     private dialogRef: MatDialogRef<OrderDetailComponent>,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -31,7 +33,7 @@ export class OrderDetailComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        this.error = 'Failed to load order details';
+        this.error = this.translate.instant('ERROR_LOADING_ORDERS_MSG');
         this.loading = false;
         
       }

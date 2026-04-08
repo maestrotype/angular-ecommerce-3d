@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { CategoryService } from "../../../services/category.service";
 import { Category } from "../../../models/category.model";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
   selector: "app-category-form",
@@ -21,7 +22,8 @@ export class CategoryFormComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private translate: TranslateService
   ) {
     this.categoryForm = this.fb.group({
       name_en: ["", [Validators.required, Validators.minLength(2)]],
@@ -60,7 +62,7 @@ export class CategoryFormComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-        this.snackBar.open("Error loading category", "Close", {
+        this.snackBar.open(this.translate.instant('ERROR_LOADING_CATEGORY'), this.translate.instant('CLOSE_BTN'), {
           duration: 5000,
         });
         this.isLoading = false;
@@ -70,7 +72,7 @@ export class CategoryFormComponent implements OnInit {
 
   onSubmit(): void {
     if (this.categoryForm.invalid) {
-      this.snackBar.open("Please fill in all required fields", "Close", {
+      this.snackBar.open(this.translate.instant('FILL_REQUIRED_FIELDS'), this.translate.instant('CLOSE_BTN'), {
         duration: 3000,
       });
       return;
@@ -95,13 +97,13 @@ export class CategoryFormComponent implements OnInit {
     if (this.isEditMode && this.categoryId) {
       this.categoryService.updateCategory(this.categoryId, packedData).subscribe({
         next: () => {
-          this.snackBar.open("Category updated successfully!", "Close", {
+          this.snackBar.open(this.translate.instant('CATEGORY_UPDATED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), {
             duration: 3000,
           });
           this.router.navigate(["/admin/categories"]);
         },
         error: (err) => {
-          this.snackBar.open("Error updating category", "Close", {
+          this.snackBar.open(this.translate.instant('ERROR_UPDATING_CATEGORY'), this.translate.instant('CLOSE_BTN'), {
             duration: 5000,
           });
           this.isLoading = false;
@@ -110,13 +112,13 @@ export class CategoryFormComponent implements OnInit {
     } else {
       this.categoryService.createCategory(packedData).subscribe({
         next: () => {
-          this.snackBar.open("Category created successfully!", "Close", {
+          this.snackBar.open(this.translate.instant('CATEGORY_CREATED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), {
             duration: 3000,
           });
           this.router.navigate(["/admin/categories"]);
         },
         error: (err) => {
-          this.snackBar.open("Error creating category", "Close", {
+          this.snackBar.open(this.translate.instant('ERROR_CREATING_CATEGORY'), this.translate.instant('CLOSE_BTN'), {
             duration: 5000,
           });
           this.isLoading = false;
@@ -143,7 +145,7 @@ export class CategoryFormComponent implements OnInit {
   }
 
   onImageError(error: string): void {
-    this.snackBar.open(error, "Close", {
+    this.snackBar.open(error, this.translate.instant('CLOSE_BTN'), {
       duration: 5000,
     });
   }

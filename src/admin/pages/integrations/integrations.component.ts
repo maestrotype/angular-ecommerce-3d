@@ -145,13 +145,13 @@ export class IntegrationsComponent implements OnInit {
 
   private showSuccess(msgKey: string): void {
     this.translate.get(msgKey).subscribe(res => {
-      this.snackBar.open(res, 'OK', { duration: 3000, panelClass: ['success-snackbar'] });
+      this.snackBar.open(res, this.translate.instant('CLOSE_BTN'), { duration: 3000, panelClass: ['success-snackbar'] });
     });
   }
 
   private showError(msgKey: string): void {
     this.translate.get(msgKey).subscribe(res => {
-      this.snackBar.open(res, 'OK', { duration: 5000, panelClass: ['error-snackbar'] });
+      this.snackBar.open(res, this.translate.instant('CLOSE_BTN'), { duration: 5000, panelClass: ['error-snackbar'] });
     });
   }
 }
