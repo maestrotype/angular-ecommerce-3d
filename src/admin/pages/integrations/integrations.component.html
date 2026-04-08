@@ -58,37 +58,101 @@
       </mat-card-content>
     </mat-card>
 
-    <!-- Tripo3D Integration Card -->
+    <!-- AI Engine Integration Card -->
     <mat-card class="integration-card secondary-card">
       <mat-card-header>
         <div mat-card-avatar class="integration-icon tripo-icon"></div>
-        <mat-card-title>Tripo3D (AI Generation)</mat-card-title>
-        <mat-card-subtitle>{{ 'TRIPO3D_DESC' | translate }}</mat-card-subtitle>
+        <mat-card-title>AI 3D Generation Engine</mat-card-title>
+        <mat-card-subtitle>Select and configure your preferred AI 3D service</mat-card-subtitle>
       </mat-card-header>
 
       <mat-card-content>
-        <div class="info-banner">
-          <mat-icon>info</mat-icon>
-          <p>{{ 'TRIPO3D_INFO_TEXT' | translate }} 
-             <a href="https://tripo3d.ai/" target="_blank" class="external-link">{{ 'REGISTER_ON_TRIPO3D' | translate }}</a>
-          </p>
-        </div>
-
-        <form [formGroup]="tripoForm" (ngSubmit)="onSaveTripo()" class="integration-form">
+        <form [formGroup]="aiForm" (ngSubmit)="onSaveAi()" class="integration-form">
           <div class="form-row">
             <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Tripo3D API Key</mat-label>
-              <input matInput formControlName="apiKey" [type]="hideTripoApiKey ? 'password' : 'text'" placeholder="Enter Tripo3D API Key">
-              <button mat-icon-button matSuffix (click)="hideTripoApiKey = !hideTripoApiKey" [attr.aria-label]="'Hide key'" [attr.aria-pressed]="hideTripoApiKey">
-                <mat-icon>{{hideTripoApiKey ? 'visibility_off' : 'visibility'}}</mat-icon>
-              </button>
+              <mat-label>Active Provider</mat-label>
+              <mat-select formControlName="activeProvider">
+                <mat-option value="tripo3d">Tripo3D (High Quality, Paid)</mat-option>
+                <mat-option value="hunyuan3d">Hunyuan3D (Tencent)</mat-option>
+                <mat-option value="meshy">Meshy AI</mat-option>
+                <mat-option value="luma">Luma AI</mat-option>
+                <mat-option value="custom">Custom Webhook / Local Server</mat-option>
+              </mat-select>
             </mat-form-field>
           </div>
 
+          <!-- Tripo3D Form -->
+          <ng-container *ngIf="aiForm.get('activeProvider')?.value === 'tripo3d'">
+            <div class="info-banner"><mat-icon>info</mat-icon><p>Tripo3D key starts with tsk_...</p></div>
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Tripo3D API Key</mat-label>
+                <input matInput formControlName="tripoApiKey" [type]="hideTripoApiKey ? 'password' : 'text'" placeholder="Enter Tripo3D API Key">
+                <button mat-icon-button matSuffix type="button" (click)="hideTripoApiKey = !hideTripoApiKey">
+                  <mat-icon>{{hideTripoApiKey ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+          </ng-container>
+
+          <!-- Hunyuan3D Form -->
+          <ng-container *ngIf="aiForm.get('activeProvider')?.value === 'hunyuan3d'">
+            <div class="info-banner"><mat-icon>info</mat-icon><p>Hunyuan3D key from Tencent Cloud</p></div>
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Hunyuan3D API Key</mat-label>
+                <input matInput formControlName="hunyuanApiKey" [type]="hideHunyuanApiKey ? 'password' : 'text'" placeholder="Enter Hunyuan3D API Key">
+                <button mat-icon-button matSuffix type="button" (click)="hideHunyuanApiKey = !hideHunyuanApiKey">
+                  <mat-icon>{{hideHunyuanApiKey ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+          </ng-container>
+
+          <!-- Meshy Form -->
+          <ng-container *ngIf="aiForm.get('activeProvider')?.value === 'meshy'">
+            <div class="info-banner"><mat-icon>info</mat-icon><p>Meshy.ai key</p></div>
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Meshy API Key</mat-label>
+                <input matInput formControlName="meshyApiKey" [type]="hideMeshyApiKey ? 'password' : 'text'" placeholder="Enter Meshy API Key">
+                <button mat-icon-button matSuffix type="button" (click)="hideMeshyApiKey = !hideMeshyApiKey">
+                  <mat-icon>{{hideMeshyApiKey ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+          </ng-container>
+
+          <!-- Luma Form -->
+          <ng-container *ngIf="aiForm.get('activeProvider')?.value === 'luma'">
+            <div class="info-banner"><mat-icon>info</mat-icon><p>Luma Genie API Key</p></div>
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Luma AI API Key</mat-label>
+                <input matInput formControlName="lumaApiKey" [type]="hideLumaApiKey ? 'password' : 'text'" placeholder="Enter Luma API Key">
+                <button mat-icon-button matSuffix type="button" (click)="hideLumaApiKey = !hideLumaApiKey">
+                  <mat-icon>{{hideLumaApiKey ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+          </ng-container>
+
+          <!-- Custom Webhook Form -->
+          <ng-container *ngIf="aiForm.get('activeProvider')?.value === 'custom'">
+            <div class="info-banner"><mat-icon>info</mat-icon><p>URL of your self-hosted API compatible with the system</p></div>
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Custom Webhook URL</mat-label>
+                <input matInput formControlName="customUrl" placeholder="https://your-server.com/generate">
+                <mat-icon matSuffix>link</mat-icon>
+              </mat-form-field>
+            </div>
+          </ng-container>
+
           <div class="form-actions">
-            <button mat-raised-button color="accent" type="submit" [disabled]="tripoForm.invalid || isLoading">
+            <button mat-raised-button color="accent" type="submit" [disabled]="aiForm.invalid || isLoading">
               <mat-icon>auto_awesome</mat-icon>
-              {{ 'SAVE_TRIPO3D' | translate }}
+              Save Engine Settings
             </button>
           </div>
         </form>

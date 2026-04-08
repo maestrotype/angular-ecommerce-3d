@@ -189,9 +189,9 @@ export class ProductFormComponent implements OnInit {
 
     this.settingsService.getSettings().subscribe({
       next: (settings) => {
-        const tripoKey = settings.tripo3d?.apiKey;
+        const activeProvider = settings.ai?.activeProvider;
         
-        if (!tripoKey || tripoKey.trim() === '') {
+        if (!activeProvider) {
           this.isAiGenerating = false;
           this.isLoading = false;
           this.showTripoOnboarding();

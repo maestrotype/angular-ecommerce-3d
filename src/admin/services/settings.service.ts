@@ -51,8 +51,13 @@ export interface CloudinarySettings {
   apiSecret: string;
 }
 
-export interface Tripo3DSettings {
-  apiKey: string;
+export interface AiGenerationSettings {
+  activeProvider: string;
+  tripoApiKey: string;
+  meshyApiKey: string;
+  hunyuanApiKey: string;
+  lumaApiKey: string;
+  customUrl: string;
 }
 
 export interface SMTPSettings {
@@ -69,7 +74,7 @@ export interface AppSettings {
   security?: SecuritySettings;
   payment?: PaymentSettings;
   cloudinary?: CloudinarySettings;
-  tripo3d?: Tripo3DSettings;
+  ai?: AiGenerationSettings;
   smtp?: SMTPSettings;
 }
 
@@ -143,8 +148,13 @@ export class SettingsService {
         apiKey: '',
         apiSecret: ''
       },
-      tripo3d: {
-        apiKey: ''
+      ai: {
+        activeProvider: 'tripo3d',
+        tripoApiKey: '',
+        meshyApiKey: '',
+        hunyuanApiKey: '',
+        lumaApiKey: '',
+        customUrl: ''
       },
       smtp: {
         host: '',
@@ -201,8 +211,8 @@ export class SettingsService {
     );
   }
 
-  updateTripo3DSettings(settings: Tripo3DSettings): Observable<ApiResponse> {
-    return this.http.put<ApiResponse>(`${this.apiUrl}/tripo3d`, settings).pipe(
+  updateAiSettings(settings: AiGenerationSettings): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(`${this.apiUrl}/ai`, settings).pipe(
       map(response => response),
       catchError(error => {
         throw error;

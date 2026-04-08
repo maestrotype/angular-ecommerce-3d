@@ -1,31 +1,31 @@
 import { Controller, Post, Get, Body, Param, Logger, HttpCode, HttpStatus } from '@nestjs/common';
-import { Tripo3dService } from './tripo3d.service';
+import { AiGenerationService } from './ai-generation.service';
 
-@Controller('tripo-api')
-export class Tripo3dController {
-  private readonly logger = new Logger(Tripo3dController.name);
+@Controller('ai-generation')
+export class AiGenerationController {
+  private readonly logger = new Logger(AiGenerationController.name);
 
-  constructor(private readonly tripoService: Tripo3dService) {}
+  constructor(private readonly aiService: AiGenerationService) {}
 
   @Post('generate')
   @HttpCode(HttpStatus.OK)
   async generate(@Body('imageUrl') imageUrl: string) {
     this.logger.log(`Received generation request for ${imageUrl}`);
-    return this.tripoService.generateTask(imageUrl);
+    return this.aiService.generateTask(imageUrl);
   }
 
   @Get('status/:taskId')
   async getStatus(@Param('taskId') taskId: string) {
-    return this.tripoService.getTaskStatus(taskId);
+    return this.aiService.getTaskStatus(taskId);
   }
 
   @Get('history')
   async getHistory() {
-    return this.tripoService.listTasks();
+    return this.aiService.listTasks();
   }
 
   @Post('download')
   async download(@Body('url') url: string, @Body('filename') filename: string) {
-    return this.tripoService.downloadModel(url, filename);
+    return this.aiService.downloadModel(url, filename);
   }
 }

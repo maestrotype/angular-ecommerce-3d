@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { SettingsService, CloudinarySettings, Tripo3DSettings, SMTPSettings, PaymentSettings } from '../../services/settings.service';
+import { SettingsService, CloudinarySettings, AiGenerationSettings, SMTPSettings, PaymentSettings } from '../../services/settings.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { finalize } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
@@ -12,7 +12,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class IntegrationsComponent implements OnInit {
   cloudinaryForm: FormGroup;
-  tripoForm: FormGroup;
+  aiForm: FormGroup;
   smtpForm: FormGroup;
   stripeForm: FormGroup;
   isLoading = false;
@@ -20,6 +20,9 @@ export class IntegrationsComponent implements OnInit {
   // Visibility toggles
   hideCloudinarySecret = true;
   hideTripoApiKey = true;
+  hideMeshyApiKey = true;
+  hideHunyuanApiKey = true;
+  hideLumaApiKey = true;
   hideStripeSecret = true;
   hideStripeWebhook = true;
   hideSmtpPass = true;
@@ -36,8 +39,13 @@ export class IntegrationsComponent implements OnInit {
       apiSecret: ['', Validators.required]
     });
 
-    this.tripoForm = this.fb.group({
-      apiKey: ['', Validators.required]
+    this.aiForm = this.fb.group({
+      activeProvider: ['tripo3d', Validators.required],
+      tripoApiKey: [''],
+      meshyApiKey: [''],
+      hunyuanApiKey: [''],
+      lumaApiKey: [''],
+      customUrl: ['']
     });
 
     this.smtpForm = this.fb.group({
@@ -70,8 +78,8 @@ export class IntegrationsComponent implements OnInit {
           if (settings.cloudinary) {
             this.cloudinaryForm.patchValue(settings.cloudinary);
           }
-          if (settings.tripo3d) {
-            this.tripoForm.patchValue(settings.tripo3d);
+          if (settings.ai) {
+            this.aiForm.patchValue(settings.ai);
           }
           if (settings.smtp) {
             this.smtpForm.patchValue(settings.smtp);
@@ -97,9 +105,9 @@ export class IntegrationsComponent implements OnInit {
     this.saveSettings(this.settingsService.updateCloudinarySettings(this.cloudinaryForm.value), 'CLOUDINARY_SETTINGS_SAVED');
   }
 
-  onSaveTripo(): void {
-    if (this.tripoForm.invalid) return;
-    this.saveSettings(this.settingsService.updateTripo3DSettings(this.tripoForm.value), 'TRIPO3D_SETTINGS_SAVED');
+  onSaveAi(): void {
+    if (this.aiForm.invalid) return;
+    this.saveSettings(this.settingsService.updateAiSettings(this.aiForm.value), 'AI_SETTINGS_SAVED');
   }
 
   onSaveSMTP(): void {

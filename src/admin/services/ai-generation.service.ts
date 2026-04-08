@@ -29,7 +29,7 @@ export interface TripoStatusResponse {
   providedIn: 'root'
 })
 export class AiGenerationService {
-  private apiUrl = environment.apiUrl + '/tripo-api';
+  private apiUrl = environment.apiUrl + '/ai-generation';
 
   constructor(private http: HttpClient) {}
 
