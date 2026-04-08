@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AiGenerationService } from './ai-generation.service';
 import { AiGenerationController } from './ai-generation.controller';
 import { SettingsModule } from '../settings/settings.module';
+import { HttpModule } from '@nestjs/axios';
 
 // Providers
 import { Tripo3dProvider } from './providers/tripo3d.provider';
@@ -11,7 +12,7 @@ import { LumaAiProvider } from './providers/luma.provider';
 import { CustomProvider } from './providers/custom.provider';
 
 @Module({
-  imports: [SettingsModule],
+  imports: [SettingsModule, HttpModule],
   providers: [
     AiGenerationService,
     Tripo3dProvider,

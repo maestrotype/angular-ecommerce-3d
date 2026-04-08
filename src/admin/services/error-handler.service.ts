@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../components/error-dialog/error-dialog.component';
+import { TranslateService } from '@ngx-translate/core';
 
 export interface ErrorInfo {
   title: string;
@@ -19,7 +20,8 @@ export class ErrorHandlerService {
 
   constructor(
     private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private translate: TranslateService
   ) {}
 
   showError(error: ErrorInfo): void {
@@ -39,46 +41,46 @@ export class ErrorHandlerService {
 
     if (error.status === 413) {
       errorInfo = {
-        title: 'File too large',
-        message: 'File size exceeds the allowed limit (10MB). Please select a smaller file.',
+        title: this.translate.instant('FILE_TOO_LARGE_TITLE'),
+        message: this.translate.instant('FILE_TOO_LARGE_MSG'),
         type: 'error',
-        action: 'OK'
+        action: this.translate.instant('OK_BTN')
       };
     } else if (error.status === 415) {
       errorInfo = {
-        title: 'Unsupported format',
-        message: 'File format is not supported. Use JPG, PNG or WEBP files.',
+        title: this.translate.instant('UNSUPPORTED_FORMAT_TITLE'),
+        message: this.translate.instant('UNSUPPORTED_FORMAT_MSG'),
         type: 'error',
-        action: 'OK'
+        action: this.translate.instant('OK_BTN')
       };
     } else if (error.status === 401) {
       errorInfo = {
-        title: 'Authorization error',
-        message: 'Failed to authorize with background removal service. Check API settings.',
+        title: this.translate.instant('AUTH_ERROR_TITLE'),
+        message: this.translate.instant('AUTH_ERROR_MSG'),
         type: 'error',
-        action: 'Configure API'
+        action: this.translate.instant('CONFIGURE_API_BTN')
       };
     } else if (error.status === 429) {
       errorInfo = {
-        title: 'Rate limit exceeded',
-        message: 'Rate limit exceeded for background removal service. Try again later.',
+        title: this.translate.instant('RATE_LIMIT_TITLE'),
+        message: this.translate.instant('RATE_LIMIT_MSG'),
         type: 'warning',
-        action: 'Try later'
+        action: this.translate.instant('TRY_LATER_BTN')
       };
     } else if (error.status === 500) {
       errorInfo = {
-        title: 'Server error',
-        message: 'Internal server error occurred while processing image.',
+        title: this.translate.instant('SERVER_ERROR_TITLE'),
+        message: this.translate.instant('SERVER_ERROR_MSG'),
         type: 'error',
-        action: 'Retry'
+        action: this.translate.instant('RETRY_BTN')
       };
     } else {
       errorInfo = {
-        title: 'Processing error',
-        message: 'Failed to process image. Try again or contact administrator.',
+        title: this.translate.instant('PROCESSING_ERROR_TITLE'),
+        message: this.translate.instant('PROCESSING_ERROR_MSG'),
         details: error.message || 'Unknown error',
         type: 'error',
-        action: 'Retry'
+        action: this.translate.instant('RETRY_BTN')
       };
     }
 
@@ -87,11 +89,11 @@ export class ErrorHandlerService {
 
   showDatabaseError(error: any): void {
     const errorInfo: ErrorInfo = {
-      title: 'Database error',
-      message: 'Failed to perform database operation.',
+      title: this.translate.instant('DATABASE_ERROR_TITLE'),
+      message: this.translate.instant('DATABASE_ERROR_MSG'),
       details: error.message || 'Unknown database error',
       type: 'error',
-      action: 'Retry'
+      action: this.translate.instant('RETRY_BTN')
     };
 
     this.showErrorWithDialog(errorInfo);
@@ -99,11 +101,11 @@ export class ErrorHandlerService {
 
   showNetworkError(error: any): void {
     const errorInfo: ErrorInfo = {
-      title: 'Network error',
-      message: 'Failed to connect to server. Check internet connection.',
+      title: this.translate.instant('NETWORK_ERROR_TITLE'),
+      message: this.translate.instant('NETWORK_ERROR_MSG'),
       details: error.message || 'Network error',
       type: 'error',
-      action: 'Retry'
+      action: this.translate.instant('RETRY_BTN')
     };
 
     this.showErrorWithDialog(errorInfo);
@@ -111,11 +113,11 @@ export class ErrorHandlerService {
 
   showValidationError(errors: string[]): void {
     const errorInfo: ErrorInfo = {
-      title: 'Validation error',
-      message: 'Please fix the following errors:',
+      title: this.translate.instant('VALIDATION_ERROR_TITLE'),
+      message: this.translate.instant('VALIDATION_ERROR_MSG'),
       details: errors.join('\n'),
       type: 'warning',
-      action: 'Fix'
+      action: this.translate.instant('FIX_BTN')
     };
 
     this.showErrorWithDialog(errorInfo);
@@ -123,7 +125,7 @@ export class ErrorHandlerService {
 
   showSuccess(message: string): void {
     this.showSnackBar({
-      title: 'Success',
+      title: this.translate.instant('SUCCESS_TITLE'),
       message,
       type: 'success'
     });
@@ -131,7 +133,7 @@ export class ErrorHandlerService {
 
   showInfo(message: string): void {
     this.showSnackBar({
-      title: 'Information',
+      title: this.translate.instant('INFO_TITLE'),
       message,
       type: 'info'
     });
@@ -139,7 +141,7 @@ export class ErrorHandlerService {
 
   showWarning(message: string): void {
     this.showSnackBar({
-      title: 'Warning',
+      title: this.translate.instant('WARNING_TITLE'),
       message,
       type: 'warning'
     });
@@ -150,7 +152,7 @@ export class ErrorHandlerService {
     
     this.snackBar.open(
       `${error.title}: ${error.message}`,
-      error.action || 'Close',
+      error.action || this.translate.instant('CLOSE_BTN'),
       {
         duration,
         panelClass: [`admin-snackbar-${error.type}`]
@@ -165,19 +167,19 @@ export class ErrorHandlerService {
       this.showNetworkError(error);
     } else if (error.status >= 500) {
       this.showErrorWithDialog({
-        title: 'Server error',
-        message: 'Server error occurred. Try again later.',
+        title: this.translate.instant('SERVER_ERROR_TITLE'),
+        message: this.translate.instant('SERVER_ERROR_MSG'),
         details: error.message,
         type: 'error',
-        action: 'Retry'
+        action: this.translate.instant('RETRY_BTN')
       });
     } else {
       this.showErrorWithDialog({
-        title: 'Error',
-        message: 'An unexpected error occurred.',
+        title: this.translate.instant('ERROR_UPDATING_PRODUCT'), // Fallback generic title or specific if needed
+        message: this.translate.instant('UNEXPECTED_ERROR'),
         details: error.message,
         type: 'error',
-        action: 'Close'
+        action: this.translate.instant('CLOSE_BTN')
       });
     }
   }

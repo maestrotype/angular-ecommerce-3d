@@ -5,6 +5,7 @@ import { forkJoin, of, Observable, throwError } from 'rxjs';
 import { switchMap, catchError, finalize, map } from 'rxjs/operators';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { SectionService } from '../../../services/section.service';
 import { Section, CreateSectionDto, UpdateSectionDto, MenuItem } from '../../../models/section.model';
 import { LocalizedString } from '../../../../shared/models/localized-string.model';
@@ -80,6 +81,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     private fb: FormBuilder,
     private sectionService: SectionService,
     private snackBar: MatSnackBar,
+    private translate: TranslateService,
     @Optional() public dialogRef: MatDialogRef<SectionFormComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: { section: Section | null }
   ) {
@@ -315,7 +317,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
       },
       error: (error) => {
         this.uploadingImage = false;
-        this.snackBar.open('Error uploading image', 'Close', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('ERROR_UPLOADING_IMAGE'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
       }
     });
   }
@@ -337,7 +339,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
       },
       error: (error) => {
         this.uploadingLogo = false;
-        this.snackBar.open('Error uploading logo', 'Close', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('ERROR_UPLOADING_LOGO'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
       }
     });
   }
@@ -364,8 +366,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
         this.uploadingCategoryIcon = false;
       },
       error: (error) => {
-
-        this.snackBar.open('Error uploading category icon', 'Close', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('ERROR_UPLOADING_CATEGORY_ICON'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
         this.uploadingCategoryIcon = false;
       }
     });
@@ -395,7 +396,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
         this.uploadingBrandLogo = false;
       },
       error: (error) => {
-        this.snackBar.open('Error uploading brand logo', 'Close', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('ERROR_UPLOADING_BRAND_LOGO'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
         this.uploadingBrandLogo = false;
       }
     });
@@ -415,12 +416,12 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
       const file = input.files[0];
 
       if (!file.name.toLowerCase().endsWith('.glb')) {
-        this.snackBar.open('Please select a valid .glb 3D model file', 'Close', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('SELECT_VALID_GLB'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
         return;
       }
 
       if (file.size > 50 * 1024 * 1024) {
-        this.snackBar.open('3D model size must be less than 50MB', 'Close', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('MODEL_3D_SIZE_LIMIT'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
         return;
       }
 
@@ -459,7 +460,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
       }),
       catchError(error => {
         this.uploading3d = false;
-        this.snackBar.open('Error uploading 3D model', 'Close', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('ERROR_UPLOADING_3D_MODEL'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
         return throwError(() => error);
       })
     );
@@ -468,7 +469,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
   onSubmit(): void {
     if (this.sectionForm.invalid) {
       this.sectionForm.markAllAsTouched();
-      this.snackBar.open('Please fill in all required fields correctly', 'Close', { duration: 3000 });
+      this.snackBar.open(this.translate.instant('FILL_REQUIRED_FIELDS_SECTION'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
       return;
     }
 
@@ -565,7 +566,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
           this.sectionService.updateSection(dataSource.section.id, formData).subscribe({
             next: (result) => {
               this.loading = false;
-              this.snackBar.open('Section updated successfully', 'Close', { duration: 3000 });
+              this.snackBar.open(this.translate.instant('SECTION_UPDATED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
               if (this.isDrawerMode) {
                 this.saved.emit(result);
               } else {
@@ -574,14 +575,14 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
             },
             error: (error) => {
               this.loading = false;
-              this.snackBar.open('Error updating section', 'Close', { duration: 3000 });
+              this.snackBar.open(this.translate.instant('ERROR_UPDATING_SECTION'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
             }
           });
         } else {
           this.sectionService.createSection(formData).subscribe({
             next: (result) => {
               this.loading = false;
-              this.snackBar.open('Section created successfully', 'Close', { duration: 3000 });
+              this.snackBar.open(this.translate.instant('SECTION_CREATED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
               if (this.isDrawerMode) {
                 this.saved.emit(result);
               } else {
@@ -590,14 +591,14 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
             },
             error: (error) => {
               this.loading = false;
-              this.snackBar.open('Error creating section', 'Close', { duration: 3000 });
+              this.snackBar.open(this.translate.instant('ERROR_CREATING_SECTION'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
             }
           });
         }
       },
       error: (error) => {
         this.loading = false;
-        this.snackBar.open('Error processing section', 'Close', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('ERROR_PROCESSING_SECTION'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
       }
     });
   }

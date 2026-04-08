@@ -8,6 +8,7 @@ import { Payment } from '../../models/payment.model';
 import { ErrorHandlerService } from '../../services/error-handler.service';
 import { PaymentDetailsDialogComponent } from './payment-details-dialog.component';
 import { OrderDetailsDialogComponent } from './order-details-dialog.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-payments',
@@ -52,7 +53,8 @@ export class PaymentsComponent implements OnInit, OnDestroy {
     private paymentService: PaymentService,
     private fb: FormBuilder,
     private errorHandler: ErrorHandlerService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private translate: TranslateService
   ) {
     // Form will be initialized in ngOnInit
   }
@@ -344,9 +346,9 @@ export class PaymentsComponent implements OnInit, OnDestroy {
           
           // Reload payment stats to update success rate
           this.loadPaymentStats();
-          this.errorHandler?.showSuccess?.('Payment status updated successfully');
+          this.errorHandler?.showSuccess?.(this.translate.instant('PAYMENT_STATUS_UPDATED'));
         } else {
-          this.errorHandler?.handleGlobalError?.('Failed to update payment status');
+          this.errorHandler?.handleGlobalError?.(this.translate.instant('FAILED_TO_UPDATE_SETTINGS'));
         }
       },
       error: (error) => {

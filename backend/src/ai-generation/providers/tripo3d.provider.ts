@@ -1,6 +1,6 @@
 import { Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import axios from 'axios';
+import { HttpService } from '@nestjs/axios';
 import { SettingsService } from '../../settings/settings.service';
 import { firstValueFrom } from 'rxjs';
 import { AiGenerationProvider, AiTaskResult } from '../interfaces/ai-provider.interface';
@@ -12,7 +12,8 @@ export class Tripo3dProvider implements AiGenerationProvider {
 
   constructor(
     private configService: ConfigService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private httpService: HttpService
   ) {}
 
   get providerId(): string {
@@ -42,17 +43,19 @@ export class Tripo3dProvider implements AiGenerationProvider {
     const apiKey = await this.getApiKey();
 
     try {
-      const response = await axios.post(
-        `${this.baseUrl}/task`,
-        {
-          type: 'image_to_model',
-          file: {
-            type: imageUrl.toLowerCase().endsWith('.png') ? 'png' : 'jpg',
-            url: imageUrl
+      const response = await firstValueFrom(
+        this.httpService.post(
+          `${this.baseUrl}/task`,
+          {
+            type: 'image_to_model',
+            file: {
+              type: imageUrl.toLowerCase().endsWith('.png') ? 'png' : 'jpg',
+              url: imageUrl
+            },
+            model_version: 'v2.0-20240919'
           },
-          model_version: 'v2.0-20240919'
-        },
-        { headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' } }
+          { headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' } }
+        )
       );
       
       return { taskId: response.data.data.task_id };
@@ -65,9 +68,11 @@ export class Tripo3dProvider implements AiGenerationProvider {
     const apiKey = await this.getApiKey();
 
     try {
-      const response = await axios.get(`${this.baseUrl}/task/${taskId}`, {
-        headers: { Authorization: `Bearer ${apiKey}` },
-      });
+      const response = await firstValueFrom(
+        this.httpService.get(`${this.baseUrl}/task/${taskId}`, {
+          headers: { Authorization: `Bearer ${apiKey}` },
+        })
+      );
       
       const task = response.data.data;
       return {
@@ -86,13 +91,15 @@ export class Tripo3dProvider implements AiGenerationProvider {
     const url = `${this.baseUrl}/task`;
     
     try {
-      const response = await axios.get(url, {
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'Content-Type': 'application/json'
-        },
-        params: { limit: 20 }
-      });
+      const response = await firstValueFrom(
+        this.httpService.get(url, {
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Type': 'application/json'
+          },
+          params: { limit: 20 }
+        })
+      );
       
       return {
         code: 0,

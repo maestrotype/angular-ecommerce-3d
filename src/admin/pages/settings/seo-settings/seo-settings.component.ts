@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { AdminSeoService, SeoSettings, UpdateSeoSettingsDto } from '../../../../app/core/services/admin-seo.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-seo-settings',
@@ -22,7 +23,8 @@ export class SeoSettingsComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private seoService: AdminSeoService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) {
     this.seoForm = this.fb.group({
       siteName: ['', [Validators.required, Validators.maxLength(60)]],
@@ -85,7 +87,7 @@ export class SeoSettingsComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           
-          this.snackBar.open('Failed to load SEO settings', 'Close', {
+          this.snackBar.open(this.translate.instant('FAILED_TO_LOAD_SEO'), this.translate.instant('CLOSE_BTN'), {
             duration: 3000,
             panelClass: ['error-snackbar']
           });
@@ -105,7 +107,7 @@ export class SeoSettingsComponent implements OnInit, OnDestroy {
           next: (updatedSettings) => {
             this.currentSettings = updatedSettings;
             this.saving = false;
-            this.snackBar.open('SEO settings saved successfully', 'Close', {
+            this.snackBar.open(this.translate.instant('SEO_SETTINGS_SAVED_MSG'), this.translate.instant('CLOSE_BTN'), {
               duration: 3000,
               panelClass: ['success-snackbar']
             });
@@ -113,7 +115,7 @@ export class SeoSettingsComponent implements OnInit, OnDestroy {
           error: (error) => {
             
             this.saving = false;
-            this.snackBar.open('Failed to save SEO settings', 'Close', {
+            this.snackBar.open(this.translate.instant('FAILED_TO_SAVE_SEO'), this.translate.instant('CLOSE_BTN'), {
               duration: 3000,
               panelClass: ['error-snackbar']
             });
@@ -131,7 +133,7 @@ export class SeoSettingsComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (result) => {
             if (result.success) {
-              this.snackBar.open('Robots.txt updated successfully', 'Close', {
+              this.snackBar.open(this.translate.instant('ROBOTS_TXT_UPDATED'), this.translate.instant('CLOSE_BTN'), {
                 duration: 3000,
                 panelClass: ['success-snackbar']
               });
@@ -139,7 +141,7 @@ export class SeoSettingsComponent implements OnInit, OnDestroy {
           },
           error: (error) => {
             
-            this.snackBar.open('Failed to update robots.txt', 'Close', {
+            this.snackBar.open(this.translate.instant('FAILED_TO_UPDATE_ROBOTS'), this.translate.instant('CLOSE_BTN'), {
               duration: 3000,
               panelClass: ['error-snackbar']
             });
@@ -162,7 +164,7 @@ export class SeoSettingsComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           
-          this.snackBar.open('Failed to generate sitemap', 'Close', {
+          this.snackBar.open(this.translate.instant('FAILED_TO_GENERATE_SITEMAP'), this.translate.instant('CLOSE_BTN'), {
             duration: 3000,
             panelClass: ['error-snackbar']
           });
@@ -189,9 +191,9 @@ export class SeoSettingsComponent implements OnInit, OnDestroy {
   getFieldError(fieldName: string): string {
     const field = this.seoForm.get(fieldName);
     if (field?.errors) {
-      if (field.errors['required']) return 'This field is required';
-      if (field.errors['maxlength']) return `Maximum ${field.errors['maxlength'].requiredLength} characters`;
-      if (field.errors['pattern']) return 'Please enter a valid URL';
+      if (field.errors['required']) return this.translate.instant('FIELD_REQUIRED');
+      if (field.errors['maxlength']) return this.translate.instant('FIELD_MAX_LENGTH', { length: field.errors['maxlength'].requiredLength });
+      if (field.errors['pattern']) return this.translate.instant('FIELD_INVALID_URL');
     }
     return '';
   }

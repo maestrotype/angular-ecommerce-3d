@@ -6,6 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { OrderService } from '../../../services/order.service';
 import { OrderDetailComponent } from '../order-detail/order-detail.component';
+import { TranslateService } from '@ngx-translate/core';
 
 export interface Order {
   id: number;
@@ -44,7 +45,8 @@ export class OrderListComponent implements OnInit {
   constructor(
     private orderService: OrderService,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -67,8 +69,8 @@ export class OrderListComponent implements OnInit {
       },
       error: (error) => {
         
-        this.error = 'Failed to load orders';
-        this.snackBar.open('Error loading orders', 'Close', { duration: 3000 });
+        this.error = this.translate.instant('ERROR_LOADING_ORDERS_MSG');
+        this.snackBar.open(this.translate.instant('ERROR_LOADING_ORDERS_MSG'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
         this.isLoading = false;
       }
     });
@@ -111,12 +113,12 @@ export class OrderListComponent implements OnInit {
   updateOrderStatus(order: Order, newStatus: string): void {
     this.orderService.updateOrderStatus(order.id, newStatus).subscribe({
       next: () => {
-        this.snackBar.open('Order status updated successfully', 'Close', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('ORDER_STATUS_UPDATED'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
         this.loadOrders();
       },
       error: (error) => {
         
-        this.snackBar.open('Error updating order status', 'Close', { duration: 3000 });
+        this.snackBar.open(this.translate.instant('ERROR_UPDATING_ORDER_STATUS'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
       }
     });
   }
