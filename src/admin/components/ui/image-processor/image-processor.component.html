@@ -8,18 +8,18 @@
 
       <div class="upload-area">
         <mat-icon class="upload-icon">{{ isProcessing ? 'sync' : 'cloud_upload' }}</mat-icon>
-        <p class="upload-text">{{ isProcessing ? 'Processing your image...' : placeholder }}</p>
-        <p class="upload-hint">JPG, PNG, WEBP up to 10MB</p>
+        <p class="upload-text">{{ isProcessing ? ('IMAGE_PROCESSOR.PROCESSING' | translate) : placeholder }}</p>
+        <p class="upload-hint">{{ 'IMAGE_PROCESSOR.UPLOAD_HINT' | translate }}</p>
       </div>
     </div>
 
     <div class="processing-options" *ngIf="selectedFile || previewUrl">
       <mat-slide-toggle [(ngModel)]="processingOptions.removeBackground" [disabled]="isProcessing" color="primary">
-        Remove Background
+        {{ 'IMAGE_PROCESSOR.REMOVE_BG' | translate }}
       </mat-slide-toggle>
 
       <mat-slide-toggle [(ngModel)]="processingOptions.optimize" [disabled]="isProcessing" color="primary">
-        Optimize & Compress
+        {{ 'IMAGE_PROCESSOR.OPTIMIZE' | translate }}
       </mat-slide-toggle>
     </div>
   </div>
@@ -28,56 +28,56 @@
     <div class="preview-container" [class.single-preview]="!isNewUpload">
       <!-- Original Preview (Only for new uploads) -->
       <div class="original-preview" *ngIf="previewUrl && isNewUpload">
-        <h4>Original</h4>
+        <h4>{{ 'IMAGE_PROCESSOR.ORIGINAL' | translate }}</h4>
         <div class="image-container">
           <img [src]="previewUrl" [alt]="selectedFile?.name || 'Preview'" />
         </div>
         <div class="file-info" *ngIf="selectedFile">
-          <p><span>NAME</span> <strong>{{ selectedFile.name }}</strong></p>
-          <p><span>SIZE</span> <strong>{{ getFileSize(selectedFile.size) }}</strong></p>
-          <p><span>TYPE</span> <strong>{{ selectedFile.type }}</strong></p>
+          <p><span>{{ 'IMAGE_PROCESSOR.NAME' | translate }}</span> <strong>{{ selectedFile.name }}</strong></p>
+          <p><span>{{ 'IMAGE_PROCESSOR.SIZE' | translate }}</span> <strong>{{ getFileSize(selectedFile.size) }}</strong></p>
+          <p><span>{{ 'IMAGE_PROCESSOR.TYPE' | translate }}</span> <strong>{{ selectedFile.type }}</strong></p>
         </div>
       </div>
 
       <!-- Current Image (For existing, non-processed state) -->
       <div class="current-preview" *ngIf="processedUrl && !isNewUpload">
-        <h4>Current Image</h4>
+        <h4>{{ 'IMAGE_PROCESSOR.CURRENT_IMAGE' | translate }}</h4>
         <div class="image-container">
-          <img [src]="processedUrl | imageUrl" alt="Current image" />
+          <img [src]="processedUrl | imageUrl" [alt]="'IMAGE_PROCESSOR.CURRENT_IMAGE' | translate" />
         </div>
       </div>
 
       <!-- Processing State -->
       <div class="processing-preview" *ngIf="isProcessing">
-        <h4>Processing</h4>
+        <h4>{{ 'IMAGE_PROCESSOR.PROCESSING' | translate }}</h4>
         <div class="loading-container">
           <mat-spinner diameter="60" strokeWidth="3"></mat-spinner>
-          <p>Applying glass effects and transparency...</p>
+          <p>{{ 'IMAGE_PROCESSOR.APPLYING_EFFECTS' | translate }}</p>
         </div>
       </div>
 
       <!-- Processed Preview (Result) -->
       <div class="processed-preview" *ngIf="processedUrl && isNewUpload && !isProcessing">
-        <h4>Result</h4>
+        <h4>{{ 'IMAGE_PROCESSOR.RESULT' | translate }}</h4>
         <div class="image-container">
-          <img [src]="processedUrl" [alt]="'Processed result'" />
+          <img [src]="processedUrl" [alt]="'IMAGE_PROCESSOR.RESULT' | translate" />
         </div>
         <div class="file-info">
-          <p><span>FORMAT</span> <strong>PNG (Transparent)</strong></p>
-          <p><span>STATUS</span> <strong style="color: var(--admin-success)">PROCESSED</strong></p>
+          <p><span>{{ 'IMAGE_PROCESSOR.FORMAT' | translate }}</span> <strong>PNG (Transparent)</strong></p>
+          <p><span>{{ 'STATUS' | translate }}</span> <strong style="color: var(--admin-success)">{{ 'IMAGE_PROCESSOR.PROCESSED' | translate }}</strong></p>
         </div>
       </div>
     </div>
 
     <div class="actions" *ngIf="!isProcessing && (previewUrl || processedUrl)">
-      <button mat-flat-button color="warn" (click)="removeImage()">
+      <button mat-flat-button color="warn" type="button" (click)="removeImage()">
         <mat-icon>delete_outline</mat-icon>
-        Discard
+        {{ 'IMAGE_PROCESSOR.DISCARD' | translate }}
       </button>
 
-      <button mat-flat-button color="primary" (click)="processImage()" [disabled]="!selectedFile">
+      <button mat-flat-button color="primary" type="button" (click)="processImage()" [disabled]="!selectedFile">
         <mat-icon>refresh</mat-icon>
-        Reprocess
+        {{ 'IMAGE_PROCESSOR.REPROCESS' | translate }}
       </button>
     </div>
   </div>
