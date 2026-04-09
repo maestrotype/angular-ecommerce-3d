@@ -240,6 +240,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   private camera!: THREE.PerspectiveCamera;
   private renderer!: THREE.WebGLRenderer;
   private controls!: OrbitControls;
+  private resizeObserver!: ResizeObserver;
   private model!: THREE.Object3D;
   private animId!: number;
   private isMobile = false;
@@ -261,13 +262,20 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       this.initThree();
       if (this.modelPath) this.loadModel();
+      
+      // Use ResizeObserver instead of window resize for more accurate container dimensions
+      this.resizeObserver = new ResizeObserver(() => {
+        this.onResize();
+      });
+      this.resizeObserver.observe(this.container.nativeElement);
     }
   }
 
-  @HostListener('window:resize')
   onResize() {
     if (!isPlatformBrowser(this.platformId) || !this.renderer || !this.container) return;
     const el = this.container.nativeElement;
+    if (el.clientWidth === 0 || el.clientHeight === 0) return;
+    
     this.camera.aspect = el.clientWidth / el.clientHeight;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(el.clientWidth, el.clientHeight);
@@ -369,22 +377,37 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
         if (this.model) this.scene.remove(this.model);
 
         this.model = gltf.scene;
+        
+        // 1. Apply scale FIRST
+        this.model.scale.set(this.scale[0], this.scale[1], this.scale[2]);
+        this.model.updateMatrixWorld(true);
+
+        // 2. Calculate bounding box of the SCALED model
         const box = new THREE.Box3().setFromObject(this.model);
         const center = box.getCenter(new THREE.Vector3());
-        this.model.position.sub(center);
-        this.model.scale.set(this.scale[0], this.scale[1], this.scale[2]);
-        this.model.position.add(new THREE.Vector3(...this.position));
-
-        // Automatic camera distance based on model size to prevent clipping
         const size = box.getSize(new THREE.Vector3());
-        const maxDim = Math.max(size.x * this.scale[0], size.y * this.scale[1], size.z * this.scale[2]);
+        
+        // 3. Move the model so its true bounding box center aligns with the target position
+        this.model.position.x += (this.position[0] - center.x);
+        this.model.position.y += (this.position[1] - center.y);
+        this.model.position.z += (this.position[2] - center.z);
+        this.model.updateMatrixWorld(true);
+        
+        // 4. Update camera and controls based on the new scaled size
+        const maxDim = Math.max(size.x, size.y, size.z);
         const fov = this.camera.fov * (Math.PI / 180);
         let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
         
         cameraZ *= 2.0; // Increased multiplier to make model look smaller (fit better on screen)
-        this.camera.position.z = cameraZ;
+        this.camera.position.set(this.position[0], this.position[1], cameraZ);
+        
+        // Update clipping planes relative to model size to prevent viewport clipping
+        this.camera.near = maxDim * 0.01;
+        this.camera.far = maxDim * 100;
+        this.camera.updateProjectionMatrix();
         
         if (this.controls) {
+          this.controls.target.set(this.position[0], this.position[1], this.position[2]);
           this.controls.minDistance = cameraZ * 0.2;
           this.controls.maxDistance = cameraZ * 5;
           this.controls.update();
@@ -490,6 +513,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.isDestroyed = true;
+    if (this.resizeObserver) this.resizeObserver.disconnect();
     if (this.animId) cancelAnimationFrame(this.animId);
     if (this.controls) this.controls.dispose();
     if (this.renderer) {
