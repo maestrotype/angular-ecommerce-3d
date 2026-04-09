@@ -1,9 +1,8 @@
-import { Injectable, Logger, HttpException, HttpStatus, Inject } from '@nestjs/common';
+import { Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common';
 import { SettingsService } from '../settings/settings.service';
 import { firstValueFrom } from 'rxjs';
-import { join } from 'path';
-import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import axios from 'axios';
+import cloudinary from '../config/cloudinary.config';
 
 import { AiGenerationProvider } from './interfaces/ai-provider.interface';
 import { Tripo3dProvider } from './providers/tripo3d.provider';
@@ -85,30 +84,46 @@ export class AiGenerationService {
   }
 
   /**
-   * Generic method to download a model from any provider URL.
+   * Downloads a model from any provider URL and uploads it to Cloudinary.
    */
   async downloadModel(url: string, filename: string) {
     try {
-      this.logger.log(`Downloading model from ${url} to ${filename}`);
+      this.logger.log(`Downloading model from ${url} for permanent storage...`);
       const response = await axios.get(url, { responseType: 'arraybuffer' });
       const buffer = Buffer.from(response.data);
 
-      const uploadPath = join(__dirname, '..', '..', 'uploads', 'models');
-      if (!existsSync(uploadPath)) {
-        mkdirSync(uploadPath, { recursive: true });
-      }
+      this.logger.log(`Uploading model to Cloudinary (${buffer.length} bytes)...`);
 
-      const filePath = join(uploadPath, filename);
-      writeFileSync(filePath, buffer);
+      const uploadPromise = new Promise<any>((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            folder: 'product-3d-models',
+            resource_type: 'raw',
+            public_id: filename.replace('.glb', ''),
+            format: 'glb'
+          },
+          (error, result) => {
+            if (error) {
+              this.logger.error(`Cloudinary upload failed: ${error.message}`);
+              reject(error);
+            } else {
+              resolve(result);
+            }
+          }
+        );
+        uploadStream.end(buffer);
+      });
 
-      this.logger.log(`Model saved to ${filePath}`);
+      const result = await uploadPromise;
+      this.logger.log(`Model successfully archived at ${result.secure_url}`);
+
       return {
         success: true,
-        path: `/uploads/models/${filename}`
+        path: result.secure_url
       };
     } catch (error) {
-      this.logger.error(`Failed to download model: ${error.message}`);
-      throw new HttpException('Failed to download model', HttpStatus.INTERNAL_SERVER_ERROR);
+      this.logger.error(`Persistent upload failed: ${error.message}`);
+      throw new HttpException(`Persistent upload failed: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }
