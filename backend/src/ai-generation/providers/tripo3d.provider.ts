@@ -23,7 +23,7 @@ export class Tripo3dProvider implements AiGenerationProvider {
   private async getApiKey(): Promise<string> {
     try {
       // Note: In the new schema, we check ai.tripo3d.apiKey first, but let's fall back to tripo3d.apiKey
-      const newSetting = await firstValueFrom(this.settingsService.getSettingByKey('ai.tripo.apiKey')).catch(() => null);
+      const newSetting = await firstValueFrom(this.settingsService.getSettingByKey('ai.tripoApiKey')).catch(() => null);
       if (newSetting?.value?.trim()) return newSetting.value.trim();
 
       const oldSetting = await firstValueFrom(this.settingsService.getSettingByKey('tripo3d.apiKey')).catch(() => null);
