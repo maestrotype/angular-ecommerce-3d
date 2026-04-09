@@ -82,7 +82,8 @@ import { fixBackendUrl } from '../../core/utils/url-helper';
       position: absolute; inset: 0; z-index: 10;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center; gap: 2.5rem;
-      background: radial-gradient(ellipse at center, rgba(15,10,30,0.97) 0%, rgba(5,5,10,0.99) 100%);
+      background: var(--loader-bg, radial-gradient(ellipse at center, rgba(15,10,30,0.97) 0%, rgba(5,5,10,0.99) 100%));
+      transition: background 0.3s ease;
     }
 
     .loader-scene {
@@ -158,11 +159,11 @@ import { fixBackendUrl } from '../../core/utils/url-helper';
     .loader-info { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; width: 240px; }
     .loader-title {
       font-size: 0.9rem; font-weight: 600; letter-spacing: 0.05em;
-      color: rgba(196,181,253,0.9);
+      color: var(--loader-text, rgba(196,181,253,0.9));
       text-transform: uppercase;
     }
     .progress-track {
-      width: 100%; height: 4px; background: rgba(255,255,255,0.08);
+      width: 100%; height: 4px; background: var(--loader-track-bg, rgba(255,255,255,0.08));
       border-radius: 4px; position: relative; overflow: visible;
     }
     .progress-fill {
@@ -193,8 +194,13 @@ import { fixBackendUrl } from '../../core/utils/url-helper';
     .hint-badge {
       background: rgba(0,0,0,0.6); backdrop-filter: blur(10px);
       border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;
-      color: rgba(255,255,255,0.5); font-size: 0.75rem;
-      padding: 0.4rem 1rem; white-space: nowrap;
+      color: rgba(255,255,255,0.5); font-size: 0.65rem;
+      padding: 0.4rem 0.8rem; text-align: center;
+      max-width: 280px; line-height: 1.4;
+      
+      @media (min-width: 768px) {
+        font-size: 0.75rem; padding: 0.4rem 1rem;
+      }
     }
 
     /* Error Overlay */
@@ -218,6 +224,31 @@ import { fixBackendUrl } from '../../core/utils/url-helper';
       color: rgba(255, 255, 255, 0.5);
     }
     
+    
+    /* Theme support */
+    :host-context([data-theme="light"]) {
+      --loader-bg: radial-gradient(ellipse at center, rgba(255,255,255,0.98) 0%, rgba(240,242,245,1) 100%);
+      --loader-text: rgba(99,102,241,0.8);
+      --loader-track-bg: rgba(0,0,0,0.05);
+      
+      .loader-percent {
+        background: linear-gradient(135deg, #4f46e5, #818cf8);
+        -webkit-background-clip: text;
+      }
+      
+      .progress-glow { background: #6366f1; box-shadow: 0 0 12px 2px rgba(99,102,241,0.4); }
+      
+      .error-overlay { background: rgba(255, 255, 255, 0.95); }
+      .error-title { color: #1e1b4b; }
+      .error-text { color: #64748b; }
+      
+      .hint-badge {
+        background: rgba(255,255,255,0.7);
+        border: 1px solid rgba(0,0,0,0.05);
+        color: rgba(0,0,0,0.4);
+      }
+    }
+
     :host-context([data-theme="dark"]) .error-overlay {
       background: rgba(0, 0, 0, 0.6);
     }
