@@ -5,6 +5,7 @@ import shutil
 import time
 import requests
 import trimesh
+import numpy as np
 from fastapi import FastAPI, BackgroundTasks, HTTPException
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
@@ -63,7 +64,8 @@ async def run_instantmesh_generation(task_id: str, image_url: str):
             "python", "run_mps.py",
             "configs/instant-nerf-large.yaml",
             f"examples/input_{task_id}.png",
-            "--output_path", "outputs"
+            "--output_path", "outputs",
+            "--mesh_resolution", "384"
         ]
         
         process = await asyncio.create_subprocess_exec(
@@ -88,9 +90,18 @@ async def run_instantmesh_generation(task_id: str, image_url: str):
         glb_path = os.path.join(OUTPUT_DIR, f"{task_id}.glb")
         
         if os.path.exists(obj_path):
-            print(f"Converting {obj_path} to {glb_path}")
-            mesh = trimesh.load(obj_path)
-            mesh.export(glb_path, file_type='glb')
+            try:
+                mesh = trimesh.load(obj_path)
+                
+                # Fix orientation: rotate 90 degrees around X axis to make it horizontal
+                # InstantNeRF output often needs this for standard Y-up viewers
+                rotation = trimesh.transformations.rotation_matrix(np.pi/2, [1, 0, 0])
+                mesh.apply_transform(rotation)
+                
+                mesh.export(glb_path)
+                print(f"Successfully converted and rotated {obj_path} to {glb_path}")
+            except Exception as e:
+                raise Exception(f"Conversion failed: {str(e)}")
         else:
             raise Exception(f"Expected output mesh not found at {obj_path}")
 
