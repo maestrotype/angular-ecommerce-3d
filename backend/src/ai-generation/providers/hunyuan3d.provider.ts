@@ -18,7 +18,7 @@ export class Hunyuan3dProvider implements AiGenerationProvider {
   }
 
   private async getApiKey(): Promise<string> {
-    const setting = await firstValueFrom(this.settingsService.getSettingByKey('ai.hunyuan.apiKey')).catch(() => null);
+    const setting = await firstValueFrom(this.settingsService.getSettingByKey('ai.hunyuanApiKey')).catch(() => null);
     if (!setting?.value?.trim()) {
       throw new HttpException('Hunyuan3D API key not configured', HttpStatus.INTERNAL_SERVER_ERROR);
     }

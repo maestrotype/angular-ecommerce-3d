@@ -18,7 +18,7 @@ export class LumaAiProvider implements AiGenerationProvider {
   }
 
   private async getApiKey(): Promise<string> {
-    const setting = await firstValueFrom(this.settingsService.getSettingByKey('ai.luma.apiKey')).catch(() => null);
+    const setting = await firstValueFrom(this.settingsService.getSettingByKey('ai.lumaApiKey')).catch(() => null);
     if (!setting?.value?.trim()) {
       throw new HttpException('Luma AI API key not configured', HttpStatus.INTERNAL_SERVER_ERROR);
     }

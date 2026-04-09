@@ -18,7 +18,7 @@ export class MeshyProvider implements AiGenerationProvider {
   }
 
   private async getApiKey(): Promise<string> {
-    const setting = await firstValueFrom(this.settingsService.getSettingByKey('ai.meshy.apiKey')).catch(() => null);
+    const setting = await firstValueFrom(this.settingsService.getSettingByKey('ai.meshyApiKey')).catch(() => null);
     if (!setting?.value?.trim()) {
       throw new HttpException('Meshy API key not configured', HttpStatus.INTERNAL_SERVER_ERROR);
     }

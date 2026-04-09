@@ -18,7 +18,7 @@ export class CustomProvider implements AiGenerationProvider {
   }
 
   private async getWebhookUrl(): Promise<string> {
-    const setting = await firstValueFrom(this.settingsService.getSettingByKey('ai.custom.url')).catch(() => null);
+    const setting = await firstValueFrom(this.settingsService.getSettingByKey('ai.customUrl')).catch(() => null);
     if (!setting?.value?.trim()) {
       throw new HttpException('Custom Webhook URL not configured', HttpStatus.INTERNAL_SERVER_ERROR);
     }
