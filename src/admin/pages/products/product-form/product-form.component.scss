@@ -249,18 +249,19 @@
     .image-preview-grid {
       flex: 1;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 16px;
       margin-bottom: 20px;
-      min-height: 200px;
+      min-height: 220px;
 
       .preview-item {
         .preview-container {
           position: relative;
           border-radius: 8px;
           overflow: hidden;
-          aspect-ratio: 1;
+          aspect-ratio: 16 / 10;
           border: 2px solid #4b5563;
+          background: rgba(0, 0, 0, 0.2);
           transition: all 0.3s ease;
 
           &:hover {
@@ -275,7 +276,8 @@
           img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
+            padding: 8px;
           }
 
           .preview-overlay {
@@ -609,7 +611,7 @@
     .model-active-view {
       width: 100%;
       height: 100%;
-      min-height: 400px;
+      min-height: 500px;
       
       .legacy-model-warning {
         padding: 24px;
@@ -692,7 +694,7 @@
         position: relative;
         width: 100%;
         height: 100%;
-        min-height: 400px;
+        min-height: 500px;
         background: var(--admin-bg-hover);
 
         app-three-d-viewer {

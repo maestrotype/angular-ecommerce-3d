@@ -65,7 +65,7 @@ async def run_instantmesh_generation(task_id: str, image_url: str):
             "configs/instant-nerf-large.yaml",
             f"examples/input_{task_id}.png",
             "--output_path", "outputs",
-            "--mesh_resolution", "384"
+            "--mesh_resolution", "512"
         ]
         
         process = await asyncio.create_subprocess_exec(
