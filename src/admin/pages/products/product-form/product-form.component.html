@@ -91,11 +91,11 @@
                 (drop)="onDrop($event)">
                 <div class="upload-content">
                   <mat-icon class="upload-icon">cloud_upload</mat-icon>
-                  <h3>Upload Images</h3>
-                  <p>PNG, JPG files only. Multiple files allowed.</p>
+                  <h3>{{ 'PRODUCT_3D.UPLOAD_IMAGES' | translate }}</h3>
+                  <p>{{ 'PRODUCT_3D.IMAGES_HINT' | translate }}</p>
                   <button type="button" class="upload-button" mat-stroked-button [disabled]="isUploading">
                     <mat-icon>add_photo_alternate</mat-icon>
-                    {{ isUploading ? 'Uploading...' : 'Upload Images' }}
+                    {{ isUploading ? ('UPLOADING' | translate) : ('PRODUCT_3D.UPLOAD_IMAGES' | translate) }}
                   </button>
                 </div>
               </div>
@@ -122,12 +122,12 @@
               <div class="options-grid">
                 <mat-slide-toggle [(ngModel)]="imageProcessingOptions.removeBackground"
                   [ngModelOptions]="{standalone: true}" color="primary">
-                  Remove Background
+                  {{ 'PRODUCT_3D.BKG_REMOVE' | translate }}
                 </mat-slide-toggle>
 
                 <mat-slide-toggle [(ngModel)]="imageProcessingOptions.optimize" [ngModelOptions]="{standalone: true}"
                   color="primary">
-                  Optimize Image
+                  {{ 'PRODUCT_3D.BKG_OPTIMIZE' | translate }}
                 </mat-slide-toggle>
               </div>
             </div>
@@ -140,9 +140,9 @@
               <div class="title-section">
                 <div class="title-with-icon">
                   <mat-icon class="title-icon">view_in_ar</mat-icon>
-                  <span>3D Experience</span>
+                  <span>{{ 'PRODUCT_3D.EXPERIENCE' | translate }}</span>
                 </div>
-                <div class="card-subtitle">Upload .glb assets for immersive viewing</div>
+                <div class="card-subtitle">{{ 'PRODUCT_3D.SUBTITLE' | translate }}</div>
               </div>
             </mat-card-title>
           </mat-card-header>
@@ -157,28 +157,28 @@
               
               <input type="file" #file3dInput (change)="on3dFileSelected($event)" accept=".glb" style="display: none" />
               
-              <!-- State: No Model -->
+                <!-- State: No Model -->
               <div *ngIf="!model3dUrl" class="upload-placeholder">
                 <div class="placeholder-icon" (click)="file3dInput.click()">
                   <mat-icon>upload_file</mat-icon>
                 </div>
-                <h3>Drag & Drop 3D Model</h3>
-                <p>Support for GLB format up to 50MB</p>
+                <h3>{{ 'PRODUCT_3D.DRAG_DROP' | translate }}</h3>
+                <p>{{ 'PRODUCT_3D.SUPPORT_HINT' | translate }}</p>
                 
                 <div class="upload-actions">
                   <button mat-flat-button color="primary" type="button" class="browse-btn" (click)="file3dInput.click()">
-                    Browse Files
+                    {{ 'PRODUCT_3D.BROWSE_FILES' | translate }}
                   </button>
                   
                   <div class="ai-divider">
-                    <span>OR</span>
+                    <span>{{ 'PRODUCT_3D.OR' | translate }}</span>
                   </div>
 
                   <button mat-raised-button color="accent" type="button" class="ai-gen-btn" 
                           (click)="generateAi3dModel()" [disabled]="isAiGenerating || isUploading3d">
                     <mat-icon *ngIf="!isAiGenerating">auto_awesome</mat-icon>
                     <mat-spinner *ngIf="isAiGenerating" diameter="20" class="mini-spinner"></mat-spinner>
-                    {{ isAiGenerating ? 'AI Generating...' : 'Generate with AI' }}
+                    {{ isAiGenerating ? ('PRODUCT_3D.AI_GENERATING' | translate) : ('PRODUCT_3D.GENERATE_AI' | translate) }}
                   </button>
                 </div>
 
@@ -208,7 +208,7 @@
                 <!-- Recovery List Overlay -->
                 <div class="ai-recovery-list" *ngIf="showRecoveryList">
                   <div class="recovery-header">
-                    <h3>Recent Generations</h3>
+                    <h3>{{ 'PRODUCT_3D.RECENT_GENERATIONS' | translate }}</h3>
                     <button mat-icon-button (click)="showRecoveryList = false">
                       <mat-icon>close</mat-icon>
                     </button>
@@ -227,7 +227,7 @@
                       </div>
                     </div>
                     <div *ngIf="recentAiTasks.length === 0" class="no-tasks">
-                      No recent AI tasks found
+                      {{ 'PRODUCT_3D.NO_RECENT_TASKS' | translate }}
                     </div>
                   </div>
                 </div>
@@ -249,7 +249,7 @@
                       <mat-icon>description</mat-icon>
                       <span class="filename-text">{{ model3dUrl.split('/').pop() }}</span>
                     </div>
-                    <button mat-icon-button color="warn" type="button" (click)="remove3dModel()" matTooltip="Remove 3D Model" class="remove-btn-overlay">
+                    <button mat-icon-button color="warn" type="button" (click)="remove3dModel()" [matTooltip]="'PRODUCT_3D.REMOVE_MODEL' | translate" class="remove-btn-overlay">
                       <mat-icon>delete</mat-icon>
                     </button>
                   </div>
@@ -259,7 +259,7 @@
               <!-- Loading state (if applicable) -->
               <div *ngIf="isUploading3d" class="uploading-overlay">
                 <mat-spinner diameter="40"></mat-spinner>
-                <span>Uploading to Cloudinary...</span>
+                <span>{{ 'PRODUCT_3D.UPLOADING_CLOUDINARY' | translate }}</span>
               </div>
             </div>
           </mat-card-content>
