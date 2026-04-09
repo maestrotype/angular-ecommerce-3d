@@ -1,48 +1,65 @@
-# Local AI 3D Generation Setup Guide (InstantMesh)
+# Local AI 3D Generation Setup (Mac / Apple Silicon)
 
-This guide explains how to enable high-quality local 3D model generation using **InstantMesh** on your own hardware.
+This guide explains how to set up the high-performance **InstantMesh** (NeRF variant) local worker on your Mac (tested on M4 Max). This allows for free, private 3D generation directly in your admin panel.
 
 ## Prerequisites
-- **Hardware**: MacBook M1/M2/M3/M4 (Max/Ultra recommended).
-- **Software**: Python 3.10+, Git.
 
-## 1. Directory Structure
-To keep the project lightweight, we separate the **Code** from the **Heavy Model Weights**:
-- `local-ai-worker/`: Contains the FastAPI server and scripts (Lightweight).
-- `~/Documents/InstantMesh-Weights/`: Contains the model weights (~10GB, External).
+- **macOS** with Apple Silicon (M1/M2/M3/M4 Max recommended).
+- **Python 3.10+** (3.11/3.12 recommended).
+- **Git**.
 
-## 2. Installation (macOS)
-1. Open terminal in the `local-ai-worker` directory.
-2. Run the setup script:
-   ```bash
-   ./setup_mac.sh
-   ```
-3. Download the AI model weights:
-   ```bash
-   python download_weights.py
-   ```
-   *This will save the models to your Documents/InstantMesh-Weights folder.*
+## Installation
 
-## 3. Running the Worker
-1. Activate environment: `source venv/bin/activate`
-2. Start server: `python main.py`
-3. The worker will be available at `http://localhost:8000`.
+1.  **Clone the Worker**:
+    Navigate to the project root and enter the worker folder:
+    ```bash
+    cd local-ai-worker
+    ```
 
-## 4. Integration with Admin Panel
-1. Login to **Admin Panel -> Integrations**.
-2. Select **"Custom Provider / Local Server"** as the Active Provider.
-3. Enter the Webhook URL: `http://localhost:8000/generate`.
-4. Save Settings.
+2.  **Run Automated Setup**:
+    The provided script creates a virtual environment and installs all necessary Mac-optimized dependencies (including MPS support and 3D processing libraries):
+    ```bash
+    chmod +x setup_mac.sh
+    ./setup_mac.sh
+    ```
 
-## 5. Usage
-- Go to any Product.
-- Upload an image.
-- Click **"Generate with AI"**.
-- Your local machine will start processing (InstantMesh).
+3.  **Cloning the Core Model**:
+    Ensure you have cloned the official InstantMesh repository inside the `local-ai-worker` folder:
+    ```bash
+    git clone https://github.com/TencentARC/InstantMesh.git
+    ```
 
----
+4.  **Download Model Weights**:
+    Run the interactive downloader. It will save the heavy model weights (~10GB) to `~/Documents/InstantMesh-Weights` to keep your project folder small.
+    ```bash
+    python download_weights.py
+    ```
 
-## Deletion / Cleanup
-To remove all AI-related data:
-1. Delete the `local-ai-worker` folder in the project.
-2. Delete the `~/Documents/InstantMesh-Weights` folder to free up ~10GB of disk space.
+## Usage
+
+1.  **Activate Environment**:
+    ```bash
+    source venv/bin/activate
+    ```
+
+2.  **Start the Worker**:
+    ```bash
+    python main.py
+    ```
+    The server will start at `http://localhost:8000`.
+
+3.  **Configure Admin Panel**:
+    - Go to **Admin -> Integrations -> AI Providers**.
+    - Set **Active Provider** to `Custom Provider / Local Server`.
+    - Set the **Custom URL** to `http://localhost:8000/generate`.
+
+## Technical Notes (Optimization)
+
+- **Model Variant**: We use `instant-nerf-large.yaml` for stable Mac compatibility. It uses Marching Cubes for mesh extraction, which is highly efficient on CPU/MPS and does not require NVIDIA-specific libraries (like `nvdiffrast`).
+- **Conversion**: The worker automatically converts the raw `.obj` output to `.glb` using the `trimesh` library for seamless previewing in the browser.
+- **Hardware Acceleration**: The worker uses **Apple Silicon (MPS)** for the diffusion stage, ensuring significantly faster generation than CPU-only modes.
+
+## Troubleshooting
+
+- **Import Errors**: If you encounter `ModuleNotFoundError`, ensure you've run `./setup_mac.sh` after any major updates to install new dependencies.
+- **Performance**: High resolutions (e.g. over 256) will significantly increase generation time. The default is set to 256 for a good balance of quality and speed.
