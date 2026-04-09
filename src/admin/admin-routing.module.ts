@@ -15,6 +15,7 @@ import { MessageListComponent } from './pages/messages/message-list/message-list
 import { SectionListComponent } from './pages/sections/section-list/section-list.component';
 import { PaymentsComponent } from './pages/payments/payments.component';
 import { IntegrationsComponent } from './pages/integrations/integrations.component';
+import { UavMappingComponent } from './pages/uav-mapping/uav-mapping.component';
 
 
 const routes: Routes = [
@@ -47,6 +48,7 @@ const routes: Routes = [
       { path: 'sections', component: SectionListComponent },
       { path: 'payments', component: PaymentsComponent },
       { path: 'integrations', component: IntegrationsComponent },
+      { path: 'uav-mapping', component: UavMappingComponent },
 
       { 
         path: 'seo', 

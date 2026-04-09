@@ -1,0 +1,398 @@
+import { Component, OnDestroy, AfterViewInit, HostListener } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { TranslateModule } from '@ngx-translate/core';
+import { UavMappingService } from '../../services/uav-mapping.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { interval, Subscription } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import * as L from 'leaflet';
+
+export interface GeoBounds {
+  north: number;
+  south: number;
+  east: number;
+  west: number;
+}
+
+export interface LandmarkSummary {
+  railways: number;
+  rivers: number;
+  settlements: number;
+  buildings: number;
+  roads: number;
+  forests: number;
+  waterBodies: number;
+}
+
+@Component({
+  selector: 'app-uav-mapping',
+  standalone: true,
+  imports: [
+    CommonModule, FormsModule, MatCardModule, MatIconModule,
+    MatButtonModule, MatSlideToggleModule, MatProgressBarModule, TranslateModule
+  ],
+  templateUrl: './uav-mapping.component.html',
+  styleUrl: './uav-mapping.component.scss'
+})
+export class UavMappingComponent implements AfterViewInit, OnDestroy {
+  videoFile: File | null = null;
+  cropVideo: boolean = true;
+
+  isProcessing: boolean = false;
+  loadingProgress: number = 0;
+  taskId: string | null = null;
+  private pollSub: Subscription | null = null;
+
+  showResults: boolean = false;
+  selectedBounds: GeoBounds | null = null;
+  trajectoryStats: { points: number, distanceKm: number } | null = null;
+  landmarks: LandmarkSummary | null = null;
+  landmarksLoading: boolean = false;
+
+  // Area selection map
+  isDrawing: boolean = false;
+  private selectionMap: L.Map | null = null;
+  private selectionRect: L.Rectangle | null = null;
+  private drawStartLatLng: L.LatLng | null = null;
+
+  // Results map
+  private resultsMap: L.Map | null = null;
+  private animatedPolyline: L.Polyline | null = null;
+  private animationInterval: any = null;
+
+  constructor(
+    private uavService: UavMappingService,
+    private snackBar: MatSnackBar,
+    private http: HttpClient
+  ) {}
+
+  ngAfterViewInit() {
+    setTimeout(() => this.initSelectionMap(), 100);
+  }
+
+  // ─── Selection Map ───────────────────────────────────────────────────────────
+
+  private initSelectionMap() {
+    if (this.selectionMap) {
+      this.selectionMap.remove();
+    }
+
+    this.selectionMap = L.map('selectionMap', {
+      center: [48.5, 35.0],  // Default: Ukraine
+      zoom: 10
+    });
+
+    // ESRI World Imagery — free satellite tiles, no API key needed
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles © Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP',
+      maxZoom: 19
+    }).addTo(this.selectionMap);
+    
+    // ESRI Label overlay (so city & road names are still visible on satellite)
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '',
+      maxZoom: 19,
+      opacity: 0.8
+    }).addTo(this.selectionMap);
+    // Click handler for drawing
+    this.selectionMap.on('click', (e: L.LeafletMouseEvent) => {
+      if (!this.isDrawing) {
+        // First click: start rectangle
+        this.isDrawing = true;
+        this.drawStartLatLng = e.latlng;
+
+        if (this.selectionRect) {
+          this.selectionMap!.removeLayer(this.selectionRect);
+          this.selectionRect = null;
+        }
+
+        this.selectionRect = L.rectangle(
+          L.latLngBounds(e.latlng, e.latlng),
+          { color: '#6366f1', weight: 2, dashArray: '6 4', fillOpacity: 0.15, fillColor: '#6366f1' }
+        ).addTo(this.selectionMap!);
+
+      } else {
+        // Second click: finalize
+        if (this.selectionRect && this.drawStartLatLng) {
+          const bounds = this.selectionRect.getBounds();
+          this.selectedBounds = {
+            north: bounds.getNorth(),
+            south: bounds.getSouth(),
+            east: bounds.getEast(),
+            west: bounds.getWest()
+          };
+          this.isDrawing = false;
+          this.drawStartLatLng = null;
+          this.snackBar.open('Area selected! Upload a video and press Map Flight Path.', 'OK', { duration: 3000 });
+          // Query Overpass API for landmarks in the selected area
+          this.queryLandmarks(this.selectedBounds!);
+        }
+      }
+    });
+
+    // Mousemove: update rectangle while drawing
+    this.selectionMap.on('mousemove', (e: L.LeafletMouseEvent) => {
+      if (this.isDrawing && this.selectionRect && this.drawStartLatLng) {
+        this.selectionRect.setBounds(L.latLngBounds(this.drawStartLatLng, e.latlng));
+      }
+    });
+  }
+
+  clearSelection() {
+    this.selectedBounds = null;
+    this.landmarks = null;
+    this.isDrawing = false;
+    this.drawStartLatLng = null;
+    if (this.selectionRect && this.selectionMap) {
+      this.selectionMap.removeLayer(this.selectionRect);
+      this.selectionRect = null;
+    }
+  }
+
+  // ─── Video handling ──────────────────────────────────────────────────────────
+
+  onVideoSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) this.videoFile = file;
+  }
+
+  removeVideo(event: Event) {
+    event.stopPropagation();
+    this.videoFile = null;
+  }
+
+  getFileSize(bytes: number): string {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+  }
+
+  // ─── Processing ──────────────────────────────────────────────────────────────
+
+  startProcessing() {
+    if (!this.videoFile || !this.selectedBounds || this.isProcessing) return;
+
+    this.isProcessing = true;
+    this.loadingProgress = 0;
+
+    this.uavService.processVideo(this.videoFile, this.cropVideo, this.selectedBounds).subscribe({
+      next: (res) => {
+        this.taskId = res.task_id;
+        this.pollStatus();
+      },
+      error: (err) => {
+        this.isProcessing = false;
+        this.snackBar.open('Failed to start processing: ' + err.message, 'Close', { duration: 5000 });
+      }
+    });
+  }
+
+  private pollStatus() {
+    this.pollSub = interval(2000).subscribe(() => {
+      if (!this.taskId) return;
+
+      this.uavService.getTaskStatus(this.taskId).subscribe({
+        next: (status) => {
+          this.loadingProgress = status.progress || 0;
+
+          if (status.status === 'success') {
+            this.isProcessing = false;
+            if (this.pollSub) this.pollSub.unsubscribe();
+            this.snackBar.open('Mapping complete! GPS trajectory ready.', 'Close', { duration: 5000 });
+            this.showResults = true;
+            setTimeout(() => this.loadTrajectoryAndRender(status.model_url!), 150);
+
+          } else if (status.status === 'failed') {
+            this.isProcessing = false;
+            if (this.pollSub) this.pollSub.unsubscribe();
+            const msg = status.error || 'Unknown error';
+            this.snackBar.open('Mapping failed: ' + msg, 'Close', { duration: 10000 });
+          }
+        },
+        error: (err) => console.error('Poll error', err)
+      });
+    });
+  }
+
+  // ─── Results Map (GPS trajectory on OSM) ─────────────────────────────────────
+
+  private loadTrajectoryAndRender(trajectoryUrl: string) {
+    this.http.get<{ trajectory: [number, number][], geo_calibrated: boolean }>(trajectoryUrl).subscribe({
+      next: (res) => this.initResultsMap(res.trajectory, res.geo_calibrated),
+      error: () => this.snackBar.open('Failed to load trajectory data', 'Close', { duration: 5000 })
+    });
+  }
+
+  private initResultsMap(trajectory: [number, number][], geoCalibrated: boolean) {
+    if (this.resultsMap) this.resultsMap.remove();
+    if (this.animationInterval) clearInterval(this.animationInterval);
+
+    // Use real lat center, or fallback to Ukraine
+    const centerLat = this.selectedBounds ? (this.selectedBounds.north + this.selectedBounds.south) / 2 : 48.5;
+    const centerLng = this.selectedBounds ? (this.selectedBounds.east + this.selectedBounds.west) / 2 : 35.0;
+
+    this.resultsMap = L.map('mapContainer', {
+      center: [centerLat, centerLng],
+      zoom: 12
+    });
+
+    // ESRI satellite tiles for results map
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles © Esri',
+      maxZoom: 19
+    }).addTo(this.resultsMap);
+    
+    // Labels overlay
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '',
+      maxZoom: 19,
+      opacity: 0.85
+    }).addTo(this.resultsMap);
+
+    if (geoCalibrated && this.selectedBounds) {
+      // Draw selection area outline on results map
+      const b = this.selectedBounds;
+      L.rectangle([[b.south, b.west], [b.north, b.east]], {
+        color: '#6366f1', weight: 1.5, dashArray: '4 4', fillOpacity: 0, interactive: false
+      }).addTo(this.resultsMap);
+    }
+
+    // Trajectory comes in as [lat, lng] pairs already
+    const latLngs: L.LatLngTuple[] = trajectory.map(p => [p[0], p[1]]);
+
+    if (latLngs.length < 2) {
+      this.snackBar.open('Trajectory too short to display.', 'Close', { duration: 4000 });
+      return;
+    }
+
+    // Animated polyline
+    this.animatedPolyline = L.polyline([], {
+      color: '#f43f5e', weight: 5, opacity: 0.9, lineJoin: 'round'
+    }).addTo(this.resultsMap);
+
+    let idx = 0;
+    const step = Math.max(1, Math.ceil(latLngs.length / 60));
+    this.animationInterval = setInterval(() => {
+      if (idx >= latLngs.length) {
+        clearInterval(this.animationInterval);
+        return;
+      }
+      this.animatedPolyline!.setLatLngs(latLngs.slice(0, idx + 1));
+      idx += step;
+    }, 40);
+
+    // Vibrant start (green) and end (red) pin markers
+    const makePin = (color: string, label: string) => L.divIcon({
+      html: `<div style="
+        width:22px;height:32px;position:relative;
+        background:${color};border-radius:50% 50% 50% 0;transform:rotate(-45deg);
+        border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.5);
+      "><span style="
+        position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(45deg);
+        font-size:10px;font-weight:700;color:white;line-height:1;
+      ">${label}</span></div>`,
+      className: '',
+      iconSize: [22, 32],
+      iconAnchor: [11, 32]
+    });
+    
+    const greenPin = makePin('#22c55e', 'S');
+    const redPin   = makePin('#ef4444', 'E');
+
+    L.marker(latLngs[0], { icon: greenPin, draggable: true })
+      .addTo(this.resultsMap)
+      .bindPopup('<b>🟢 Takeoff Point</b><br>Drag to fine-tune alignment').openPopup();
+
+    L.marker(latLngs[latLngs.length - 1], { icon: redPin })
+      .addTo(this.resultsMap)
+      .bindPopup('<b>🔴 Landing Point</b>');
+
+    // Fit to path
+    this.resultsMap.fitBounds(L.polyline(latLngs).getBounds().pad(0.3));
+
+    // Compute approx GPS distance in km using Haversine
+    let totalKm = 0;
+    for (let i = 1; i < latLngs.length; i++) {
+      totalKm += this.haversineKm(latLngs[i - 1], latLngs[i]);
+    }
+    this.trajectoryStats = { points: latLngs.length, distanceKm: Math.round(totalKm * 10) / 10 };
+  }
+
+  private haversineKm(a: L.LatLngTuple, b: L.LatLngTuple): number {
+    const R = 6371;
+    const dLat = (b[0] - a[0]) * Math.PI / 180;
+    const dLng = (b[1] - a[1]) * Math.PI / 180;
+    const sin2 = Math.sin(dLat / 2) ** 2 + Math.cos(a[0] * Math.PI / 180) * Math.cos(b[0] * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(sin2), Math.sqrt(1 - sin2));
+  }
+
+  // ─── Overpass Landmarks Query ───────────────────────────────────────────────
+
+  private queryLandmarks(bounds: GeoBounds) {
+    this.landmarksLoading = true;
+    this.landmarks = null;
+    const bbox = `${bounds.south},${bounds.west},${bounds.north},${bounds.east}`;
+    // Compact Overpass QL: count railways, waterways, places, buildings, roads, forests
+    const query = `
+      [out:json][timeout:20];
+      (
+        way["railway"](${bbox});
+        way["waterway"](${bbox});
+        way["natural"="water"](${bbox});
+        node["place"~"village|town|city|hamlet"](${bbox});
+        way["building"](${bbox});
+        way["highway"~"primary|secondary|trunk"](${bbox});
+        way["natural"="wood"](${bbox});
+        way["landuse"="forest"](${bbox});
+      );
+      out tags;`;
+      
+    const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
+    
+    this.http.get<{ elements: any[] }>(url).subscribe({
+      next: (res) => {
+        this.landmarks = this.parseLandmarks(res.elements);
+        this.landmarksLoading = false;
+      },
+      error: () => {
+        this.landmarksLoading = false; // Fail silently — landmark info is non-critical
+      }
+    });
+  }
+
+  private parseLandmarks(elements: any[]): LandmarkSummary {
+    let railways = 0, rivers = 0, settlements = 0, buildings = 0, roads = 0, forests = 0, waterBodies = 0;
+    for (const el of elements) {
+      const t = el.tags || {};
+      if (t.railway) railways++;
+      if (t.waterway) rivers++;
+      if (t['natural'] === 'water') waterBodies++;
+      if (t.place) settlements++;
+      if (t.building) buildings++;
+      if (t.highway) roads++;
+      if (t['natural'] === 'wood' || t.landuse === 'forest') forests++;
+    }
+    return { railways, rivers, settlements, buildings, roads, forests, waterBodies };
+  }
+
+  closeResults() {
+    this.showResults = false;
+    this.trajectoryStats = null;
+    if (this.animationInterval) clearInterval(this.animationInterval);
+    if (this.resultsMap) { this.resultsMap.remove(); this.resultsMap = null; }
+    setTimeout(() => this.selectionMap?.invalidateSize(), 100);
+  }
+
+  ngOnDestroy() {
+    if (this.pollSub) this.pollSub.unsubscribe();
+    if (this.animationInterval) clearInterval(this.animationInterval);
+    if (this.selectionMap) this.selectionMap.remove();
+    if (this.resultsMap) this.resultsMap.remove();
+  }
+}

@@ -26,6 +26,7 @@
   "ROLE_ADMIN": "Administrator",
   "ROLE_USER": "User",
   "DASHBOARD": "Dashboard",
+  "UAV_MAPPING": "UAV Mapping",
   "LOADING_DASHBOARD_DATA": "Loading dashboard data...",
   "PRODUCTS": "Products",
   "ADMIN_NAV_ORDERS": "Orders",

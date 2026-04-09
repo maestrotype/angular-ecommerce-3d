@@ -55,6 +55,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     { label: "SEO", route: "/admin/seo", icon: "search" },
     { label: "PAYMENTS", route: "/admin/payments", icon: "payment" },
     { label: "INTEGRATIONS", route: "/admin/integrations", icon: "extension" },
+    { label: "UAV_MAPPING", route: "/admin/uav-mapping", icon: "map" },
     { label: "SETTINGS", route: "/admin/settings", icon: "settings" },
   ];
 

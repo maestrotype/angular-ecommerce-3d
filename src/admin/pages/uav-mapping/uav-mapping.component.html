@@ -1,0 +1,161 @@
+<div class="uav-mapping-container">
+  <div class="header-section">
+    <h2>{{ 'UAV_MAPPING' | translate }}</h2>
+    <p class="subtitle">Navigate the map, draw a rectangle over the drone's flight area, then upload your video to extract the GPS trajectory.</p>
+  </div>
+
+  <div class="main-layout">
+    <!-- Left panel: controls -->
+    <div class="controls-panel">
+      <!-- Video Upload Card -->
+      <mat-card class="admin-card glass-card upload-card">
+        <mat-card-header>
+          <div class="card-icon"><mat-icon>videocam</mat-icon></div>
+          <mat-card-title>Video Footage</mat-card-title>
+          <mat-card-subtitle>Raw or OSD Drone Video</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="upload-zone" [class.has-file]="videoFile" (click)="videoInput.click()">
+            <input type="file" #videoInput (change)="onVideoSelected($event)" accept="video/mp4,video/quicktime" hidden>
+            <div *ngIf="!videoFile" class="upload-placeholder">
+              <mat-icon>upload_file</mat-icon>
+              <h3>Select Video</h3>
+              <p>MP4, MOV up to 2GB</p>
+            </div>
+            <div *ngIf="videoFile" class="file-info">
+              <mat-icon class="file-icon">movie</mat-icon>
+              <div class="details">
+                <span class="filename">{{ videoFile.name }}</span>
+                <span class="filesize">{{ getFileSize(videoFile.size) }}</span>
+              </div>
+              <button mat-icon-button (click)="removeVideo($event)" color="warn">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div class="video-options" style="margin-top: 16px;">
+            <mat-slide-toggle [(ngModel)]="cropVideo" color="primary">
+              Crop OSD Interface
+            </mat-slide-toggle>
+            <p class="subtitle" style="font-size: 12px; margin-top: 8px;">Ignores outer 20% of video to remove drone UI overlays.</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Area selection info card -->
+      <mat-card class="admin-card glass-card info-card">
+        <mat-card-header>
+          <div class="card-icon"><mat-icon>crop_free</mat-icon></div>
+          <mat-card-title>Selected Area</mat-card-title>
+          <mat-card-subtitle>Rectangle drawn on the map</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngIf="!selectedBounds" class="no-selection-hint">
+            <mat-icon>touch_app</mat-icon>
+            <p>Click on the map to start drawing a rectangle. <br>Click again to finish.</p>
+          </div>
+          <div *ngIf="selectedBounds" class="bounds-display">
+            <div class="bounds-grid">
+              <div class="bound-item">
+                <span class="bound-label">North</span>
+                <span class="bound-value">{{ selectedBounds.north | number:'1.4-4' }}°</span>
+              </div>
+              <div class="bound-item">
+                <span class="bound-label">South</span>
+                <span class="bound-value">{{ selectedBounds.south | number:'1.4-4' }}°</span>
+              </div>
+              <div class="bound-item">
+                <span class="bound-label">West</span>
+                <span class="bound-value">{{ selectedBounds.west | number:'1.4-4' }}°</span>
+              </div>
+              <div class="bound-item">
+                <span class="bound-label">East</span>
+                <span class="bound-value">{{ selectedBounds.east | number:'1.4-4' }}°</span>
+              </div>
+            </div>
+
+            <!-- Landmarks panel -->
+            <div class="landmarks-section">
+              <div class="landmarks-title">
+                <mat-icon>layers</mat-icon> Terrain Features in Area
+              </div>
+              <div *ngIf="landmarksLoading" class="landmarks-loading">
+                <mat-icon class="spinning">sync</mat-icon> Scanning area...
+              </div>
+              <div *ngIf="!landmarksLoading && landmarks" class="landmark-chips">
+                <span *ngIf="landmarks.railways > 0" class="chip rail">🚂 Railways</span>
+                <span *ngIf="landmarks.rivers > 0" class="chip water">🏞 Rivers ({{ landmarks.rivers }})</span>
+                <span *ngIf="landmarks.waterBodies > 0" class="chip water">💧 Water bodies</span>
+                <span *ngIf="landmarks.settlements > 0" class="chip settlement">🏘 Settlements ({{ landmarks.settlements }})</span>
+                <span *ngIf="landmarks.buildings > 0" class="chip building">🏠 Buildings {{ landmarks.buildings > 100 ? '100+' : '(' + landmarks.buildings + ')' }}</span>
+                <span *ngIf="landmarks.roads > 0" class="chip road">🛣 Main Roads</span>
+                <span *ngIf="landmarks.forests > 0" class="chip forest">🌲 Forests / Woods</span>
+                <span *ngIf="landmarks.railways === 0 && landmarks.rivers === 0 && landmarks.settlements === 0 && landmarks.buildings === 0" class="chip none">⚠️ Sparse terrain — tracking may be less accurate</span>
+              </div>
+            </div>
+
+            <button mat-stroked-button (click)="clearSelection()" style="margin-top: 8px; width: 100%;">
+              <mat-icon>refresh</mat-icon> Clear & Re-draw
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Action button -->
+      <div class="actions-section">
+        <button mat-flat-button color="primary" class="process-btn"
+          [disabled]="!videoFile || !selectedBounds || isProcessing"
+          (click)="startProcessing()">
+          <mat-icon *ngIf="!isProcessing; else spinner">my_location</mat-icon>
+          <ng-template #spinner><mat-icon class="spinning">sync</mat-icon></ng-template>
+          {{ isProcessing ? 'Extracting trajectory...' : 'Map Flight Path' }}
+        </button>
+        <mat-progress-bar *ngIf="isProcessing" mode="indeterminate" style="margin-top: 12px; border-radius: 8px;"></mat-progress-bar>
+      </div>
+    </div>
+
+    <!-- Right panel: map -->
+    <div class="map-panel">
+      <div class="map-toolbar">
+        <span class="map-mode-label" *ngIf="!selectedBounds">
+          <mat-icon>info</mat-icon> Click to start selecting area
+        </span>
+        <span class="map-mode-label selected" *ngIf="selectedBounds">
+          <mat-icon>check_circle</mat-icon> Area selected
+        </span>
+      </div>
+      <div id="selectionMap" [class.drawing]="isDrawing"></div>
+    </div>
+  </div>
+
+  <!-- Results overlay (GPS trajectory on live map) -->
+  <div class="results-section" *ngIf="showResults">
+    <div class="results-header">
+      <span class="results-title"><mat-icon>route</mat-icon> Flight Trajectory</span>
+      <button mat-icon-button (click)="closeResults()"><mat-icon>close</mat-icon></button>
+    </div>
+    <div id="mapContainer"></div>
+
+    <!-- Stats -->
+    <div class="stats-panel" *ngIf="trajectoryStats">
+      <div class="stat-item">
+        <mat-icon>route</mat-icon>
+        <div>
+          <span class="stat-label">Track Points</span>
+          <span class="stat-value">{{ trajectoryStats.points }}</span>
+        </div>
+      </div>
+      <div class="stat-item">
+        <mat-icon>straighten</mat-icon>
+        <div>
+          <span class="stat-label">Est. Distance</span>
+          <span class="stat-value">{{ trajectoryStats.distanceKm }} km</span>
+        </div>
+      </div>
+      <div class="stat-item hint">
+        <mat-icon>info</mat-icon>
+        <span>Trajectory is shown on the real GPS map. <br>Drag the <strong style="color:#00ff00">green start marker</strong> to fine-tune alignment.</span>
+      </div>
+    </div>
+  </div>
+</div>

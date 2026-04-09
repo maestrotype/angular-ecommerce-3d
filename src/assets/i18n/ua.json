@@ -26,6 +26,7 @@
   "ROLE_ADMIN": "Адміністратор",
   "ROLE_USER": "Користувач",
   "DASHBOARD": "Панель керування",
+  "UAV_MAPPING": "Аерофотозйомка (БПЛА)",
   "LOADING_DASHBOARD_DATA": "Завантаження даних панелі керування...",
   "PRODUCTS": "Товари",
   "ADMIN_NAV_ORDERS": "Замовлення",

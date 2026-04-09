@@ -6,12 +6,23 @@ import time
 import requests
 import trimesh
 import numpy as np
-from fastapi import FastAPI, BackgroundTasks, HTTPException
+from fastapi import FastAPI, BackgroundTasks, HTTPException, File, UploadFile, Form
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+import json
+import uav_tracker
 from typing import Dict
 
 app = FastAPI(title="Local 3D AI Worker (InstantMesh Optimized)")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Ensure output directory exists
 OUTPUT_DIR = "outputs"
@@ -141,6 +152,79 @@ async def get_status(task_id: str):
 @app.get("/task/{task_id}")
 async def get_task_alias(task_id: str):
     return await get_status(task_id)
+
+async def run_uav_mapping(
+    task_id: str,
+    video_path: str,
+    crop_osd: bool,
+    geo_bounds: dict = None
+):
+    try:
+        tasks[task_id]["status"] = "running"
+        tasks[task_id]["progress"] = 10
+        print(f"Task {task_id}: Starting optical flow extraction on {video_path}")
+        
+        # Run the blocking tracker in a thread pool
+        trajectory = await asyncio.to_thread(
+            uav_tracker.extract_trajectory,
+            video_path, crop_osd, 1500, geo_bounds
+        )
+        
+        tasks[task_id]["progress"] = 80
+        
+        # Save output to JSON
+        output_json = os.path.join(OUTPUT_DIR, f"{task_id}_trajectory.json")
+        with open(output_json, 'w') as f:
+            json.dump({"trajectory": trajectory, "geo_calibrated": geo_bounds is not None}, f)
+            
+        tasks[task_id]["status"] = "success"
+        tasks[task_id]["progress"] = 100
+        tasks[task_id]["model_url"] = f"http://localhost:8000/outputs/{task_id}_trajectory.json"
+        
+    except Exception as e:
+        print(f"Error in UAV task {task_id}: {str(e)}")
+        tasks[task_id]["status"] = "failed"
+        tasks[task_id]["error"] = str(e)
+    finally:
+        # Cleanup temp video
+        if os.path.exists(video_path):
+            os.remove(video_path)
+
+@app.post("/uav-map")
+def process_uav_video(
+    background_tasks: BackgroundTasks,
+    video: UploadFile = File(...),
+    crop_osd: bool = Form(True),
+    bounds_north: float = Form(None),
+    bounds_south: float = Form(None),
+    bounds_east: float = Form(None),
+    bounds_west: float = Form(None)
+):
+    task_id = f"task_{int(time.time())}_{os.urandom(2).hex()}"
+    tasks[task_id] = {"status": "queued", "progress": 0}
+    
+    # Parse optional GPS bounds
+    geo_bounds = None
+    if all(v is not None for v in [bounds_north, bounds_south, bounds_east, bounds_west]):
+        geo_bounds = {
+            "north": bounds_north,
+            "south": bounds_south,
+            "east": bounds_east,
+            "west": bounds_west
+        }
+        print(f"Task {task_id}: GPS bounds provided: {geo_bounds}")
+    else:
+        print(f"Task {task_id}: No GPS bounds, trajectory will be in pixel space.")
+    
+    # Save video (synchronous, runs in threadpool since def not async)
+    temp_video_path = os.path.join("outputs", f"temp_{task_id}.mp4")
+    with open(temp_video_path, "wb") as buffer:
+        shutil.copyfileobj(video.file, buffer)
+        
+    # Launch background task
+    background_tasks.add_task(run_uav_mapping, task_id, temp_video_path, crop_osd, geo_bounds)
+    
+    return {"task_id": task_id, "status": "queued"}
 
 if __name__ == "__main__":
     import uvicorn
