@@ -99,17 +99,57 @@
         <div class="architect-header">
           <h3><mat-icon>visibility</mat-icon> SITE ARCHITECT</h3>
           <div class="device-switcher">
-            <button mat-icon-button [class.active]="previewMode === 'desktop'" (click)="setPreviewMode('desktop')"><mat-icon>desktop_windows</mat-icon></button>
-            <button mat-icon-button [class.active]="previewMode === 'tablet'" (click)="setPreviewMode('tablet')"><mat-icon>tablet_mac</mat-icon></button>
-            <button mat-icon-button [class.active]="previewMode === 'mobile'" (click)="setPreviewMode('mobile')"><mat-icon>smartphone</mat-icon></button>
+            <button mat-icon-button [class.active]="previewMode === 'desktop'" (click)="setPreviewMode('desktop')" matTooltip="Desktop"><mat-icon>desktop_windows</mat-icon></button>
+            <button mat-icon-button [class.active]="previewMode === 'tablet'" (click)="setPreviewMode('tablet')" matTooltip="Tablet"><mat-icon>tablet_mac</mat-icon></button>
+            <button mat-icon-button [class.active]="previewMode === 'mobile'" (click)="setPreviewMode('mobile')" matTooltip="Mobile"><mat-icon>smartphone</mat-icon></button>
           </div>
         </div>
         <div class="architect-content">
           <app-admin-section-preview 
             [sections]="dataSource.data" 
             [sectionData]="isEditorOpen ? previewData : null"
-            [mode]="previewMode">
+            [mode]="previewMode"
+            [theme]="themeMode"
+            (reordered)="onPreviewReorder($event)"
+            (sectionEdit)="editSection($event)"
+            (elementSelected)="onElementSelected($event)">
           </app-admin-section-preview>
+
+          <!-- PROPERTY ADJUST TOOLBAR -->
+          <div class="property-adjust-toolbar" *ngIf="selectedElementInfo" @fadeInOut>
+            <div class="toolbar-header">
+              <span class="selector">{{ selectedElementInfo.selector }}</span>
+              <button mat-icon-button (click)="selectedElementInfo = null" size="small"><mat-icon>close</mat-icon></button>
+            </div>
+            
+            <div class="tool-groups">
+              <div class="tool-group">
+                <span class="label">SPACING</span>
+                <div class="btn-row">
+                  <button mat-icon-button (click)="updateVisualOverride('margin-top', -5)"><mat-icon>expand_less</mat-icon></button>
+                  <button mat-icon-button (click)="updateVisualOverride('margin-top', 5)"><mat-icon>expand_more</mat-icon></button>
+                </div>
+              </div>
+    
+              <div class="tool-group">
+                <span class="label">TEXT</span>
+                <div class="btn-row">
+                  <button mat-icon-button (click)="updateVisualOverride('font-size', -2)"><mat-icon>text_fields</mat-icon> <small>-</small></button>
+                  <button mat-icon-button (click)="updateVisualOverride('font-size', 2)"><mat-icon>text_fields</mat-icon> <small>+</small></button>
+                </div>
+              </div>
+    
+              <div class="tool-group">
+                <span class="label">COLORS</span>
+                <div class="color-palette">
+                  <div class="color-swatch white" (click)="updateColorOverride('#ffffff')"></div>
+                  <div class="color-swatch primary" (click)="updateColorOverride('var(--admin-primary)')"></div>
+                  <div class="color-swatch accent" (click)="updateColorOverride('#ffcc00')"></div>
+                  <div class="color-swatch dark" (click)="updateColorOverride('#1a1a1a')"></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -14,4 +14,7 @@ export interface Section {
   model3dUrl?: string;
   show3d?: boolean;
   showImage?: boolean;
+  pageTarget?: string;
+  variant?: string;
+  anchorId?: string;
 }

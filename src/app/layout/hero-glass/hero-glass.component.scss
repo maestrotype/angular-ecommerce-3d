@@ -318,3 +318,19 @@
     .new-arrival-bg { font-size: 14vw; top: 12vw; left: 0vw; }
   }
 }
+// SECTION VARIANTS (Host overrides)
+:host(.variant-minimal) .hero {
+  background: #fdfdfd !important;
+  backdrop-filter: none !important;
+  .hero-title { color: #111 !important; }
+  .hero-subtitle { color: #666 !important; }
+  .glass-orb, .glass-particle, .color-spray, .new-arrival-bg { display: none !important; }
+  .cta-button-glass { background: #111; color: #fff; border: none; backdrop-filter: none; }
+}
+
+:host(.variant-dark) .hero {
+  background: #020617 !important;
+  .hero-title { color: #fff !important; }
+  .hero-subtitle { color: rgba(255,255,255,0.6) !important; }
+  .cta-button-glass { background: #fff; color: #000; border: none; }
+}

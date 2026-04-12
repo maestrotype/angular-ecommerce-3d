@@ -14,6 +14,24 @@ import { CartService } from '../../../../core/services/cart.service';
 })
 export class SimilarProductsComponent implements OnInit, OnDestroy {
   @Input() product!: Product;
+
+  @Input() set data(val: any) {
+    if (val?.context) {
+      this.product = val.context;
+      // Trigger reload if initialized
+      if (this.similarProducts.length === 0) {
+        this.loadSimilarProducts();
+      }
+    }
+    if (val?.settings) {
+       this.limit = val.settings.limit || this.limit;
+       this.showTitle = val.settings.showTitle ?? this.showTitle;
+    }
+    if (val?.title) {
+       // Handle localized title if needed
+       this.title = typeof val.title === 'string' ? val.title : val.title.en;
+    }
+  }
   @Input() limit: number = 4;
   @Input() showTitle: boolean = true;
   @Input() title: string = 'Similar Products';

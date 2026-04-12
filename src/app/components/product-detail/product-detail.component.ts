@@ -6,6 +6,8 @@ import { Product } from 'src/shared/models/product.model';
 import { CartService } from 'src/app/core/services/cart.service';
 import { ViewportScroller } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
+import { SectionService } from 'src/admin/services/section.service';
+import { Section } from 'src/shared/models/section.model';
 import { getLocalizedString } from '../../../shared/utils/localization.util';
 
 @Component({
@@ -19,6 +21,7 @@ export class ProductDetailComponent implements OnInit {
   selectedImageIndex: number = 0;
   quantity: number = 1;
   loading: boolean = true;
+  sections: Section[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -27,7 +30,8 @@ export class ProductDetailComponent implements OnInit {
     private cartService: CartService,
     private modalService: ModalService,
     private translate: TranslateService,
-    private viewportScroller: ViewportScroller
+    private viewportScroller: ViewportScroller,
+    private sectionService: SectionService
   ) { }
 
   ngOnInit(): void {
@@ -57,6 +61,8 @@ export class ProductDetailComponent implements OnInit {
             setTimeout(() => {
               this.viewportScroller.scrollToPosition([0, 0]);
             }, 100);
+
+            this.loadModularSections();
           },
           error: (error) => {
 
@@ -150,5 +156,11 @@ export class ProductDetailComponent implements OnInit {
         queryParams: { category: this.product.category }
       });
     }
+  }
+
+  private loadModularSections(): void {
+    this.sectionService.getActiveSections('product').subscribe(sections => {
+      this.sections = (sections || []).sort((a, b) => (a.order || 0) - (b.order || 0));
+    });
   }
 }

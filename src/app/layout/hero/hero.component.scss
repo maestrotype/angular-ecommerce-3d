@@ -221,6 +221,30 @@
     }
 }
 
+// SECTION VARIANTS (Host classes from SectionRenderer)
+:host(.variant-glass) .hero {
+  background: var(--hero-bg-glass, rgba(255, 255, 255, 0.4)) !important;
+  backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  .hero-title { color: #1e293b; text-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+  .cta-button { background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); color: white; }
+}
+
+:host(.variant-minimal) .hero {
+  background: #ffffff !important;
+  .hero-title { color: #000 !important; letter-spacing: -0.02em; }
+  .hero-subtitle { color: #666 !important; }
+  .bg-decoration, .decoration { display: none !important; }
+  .cta-button { border-radius: 0; background: #000; color: white; }
+}
+
+:host(.variant-dark) .hero {
+  background: #0f172a !important;
+  .hero-title { color: #f8fafc !important; }
+  .hero-subtitle { color: #94a3b8 !important; }
+  .cta-button { background: #3b82f6; color: white; &:hover { background: #2563eb; } }
+}
+
 @keyframes float {
 
     0%,

@@ -8,6 +8,13 @@ import { Product } from 'src/shared/models/product.model';
 })
 export class ProductTabsComponent {
   @Input() product!: Product;
+  
+  @Input() set data(val: any) {
+    if (val?.context) {
+      this.product = val.context;
+    }
+  }
+
   activeTab: string = 'description';
 
   setActiveTab(tab: string): void {

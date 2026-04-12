@@ -1,23 +1,76 @@
-<!-- Multi-section mode (Full Page Preview) -->
 <ng-container *ngIf="sections && sections.length > 0">
-  <div class="full-page-preview">
-    <ng-container *ngFor="let s of renderingSections; let i = index">
-      <div class="architect-section-wrapper" 
-           [class.active]="s.id === activeSectionId"
-           (click)="onSectionClick(s, $event)">
-        <div class="section-badge">{{ s.type | titlecase }}</div>
-        <div class="section-overlay">
-          <mat-icon>edit</mat-icon>
-          <span>Click to Edit</span>
-        </div>
-        <app-section-renderer 
-          *ngIf="s.isActive"
-          [section]="s" 
-          [mode]="mode"
-          [key]="renderKey + '_' + i">
-        </app-section-renderer>
+  <div class="full-page-preview" 
+       [attr.data-theme]="theme"
+       [class.inspecting]="isInspectionMode"
+       cdkDropList 
+       (cdkDropListDropped)="onDrop($event)"
+       (mousemove)="onPreviewMouseMove($event)"
+       (click)="onPreviewClick($event)"
+       (dblclick)="onPreviewDblClick($event)">
+    
+    <!-- Inspector Highlighter -->
+    <div class="inspector-highlight" 
+         *ngIf="isInspectionMode && inspectorBox"
+         [style.top.px]="inspectorBox.top"
+         [style.left.px]="inspectorBox.left"
+         [style.width.px]="inspectorBox.width"
+         [style.height.px]="inspectorBox.height">
+      <div class="selector-tag" *ngIf="selectedSelector">
+        <mat-icon>ads_click</mat-icon>
+        {{ selectedSelector }}
       </div>
-    </ng-container>
+    </div>
+
+    <!-- Inspector Instructions Overlay -->
+    <div class="inspector-hint-overlay" *ngIf="isInspectionMode && !selectedElement">
+      <div class="hint-pill">
+        <mat-icon>mouse</mat-icon>
+        <span>{{ 'PICK_ELEMENT_TO_STYLE' | translate }}</span>
+      </div>
+    </div>
+
+    <!-- Inspector Toolbar -->
+    <div class="inspector-controls">
+      <button mat-fab 
+              [color]="isInspectionMode ? 'primary' : 'basic'"
+              (click)="toggleInspectionMode()" 
+              [matTooltip]="(isInspectionMode ? 'EXIT_INSPECTION_MODE' : 'ENTER_INSPECTION_MODE') | translate">
+        <mat-icon>{{ isInspectionMode ? 'close' : 'design_services' }}</mat-icon>
+      </button>
+    </div>
+
+    <div class="architect-section-wrapper" 
+         *ngFor="let s of renderingSections; let i = index"
+         [class.active]="s.id === activeSectionId"
+         [class.inspecting]="isInspectionMode"
+         [attr.data-section-id]="s.id"
+         (click)="!isInspectionMode && onSectionClick(s, $event)"
+         cdkDrag>
+      
+      <!-- Drag Handle -->
+      <div class="drag-handle" cdkDragHandle>
+        <mat-icon>drag_indicator</mat-icon>
+      </div>
+
+      <div class="section-badge">{{ s.type | titlecase }}</div>
+      
+      <!-- Enhanced Overlay Card -->
+      <div class="section-overlay" (click)="onSectionClick(s, $event)">
+        <div class="edit-card-glass">
+          <div class="icon-circle">
+            <mat-icon>edit</mat-icon>
+          </div>
+          <span class="edit-text">{{ 'CLICK_TO_EDIT' | translate }}</span>
+        </div>
+      </div>
+
+      <app-section-renderer 
+        *ngIf="s.isActive"
+        [section]="s" 
+        [mode]="mode"
+        [refreshKey]="renderKey + '_' + i">
+      </app-section-renderer>
+    </div>
   </div>
 </ng-container>
 
