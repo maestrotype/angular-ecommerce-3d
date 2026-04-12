@@ -328,9 +328,40 @@
   .cta-button-glass { background: #111; color: #fff; border: none; backdrop-filter: none; }
 }
 
+:host(.variant-light-soft) .hero {
+  background: #f5f2eb !important; // Warm dimmer base
+  .hero-title { color: #2d3748 !important; }
+  .hero-subtitle { color: #4a5568 !important; }
+  .color-spray.bag-spray { background: radial-gradient(circle, rgba(237,137,54,0.3) 0%, rgba(237,137,54,0) 70%); }
+  .cta-button-glass { background: rgba(45, 55, 72, 0.8); color: white; border: none; }
+}
+
+:host(.variant-glass-clear) .hero {
+  background: rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(10px) saturate(120%) !important;
+  .hero-title { color: #ffffff !important; }
+  .hero-subtitle { color: rgba(255, 255, 255, 0.8) !important; }
+}
+
+:host(.variant-glass-deep) .hero {
+  background: rgba(10, 15, 30, 0.4) !important;
+  backdrop-filter: blur(40px) saturate(200%) !important;
+  .hero-title { color: #ffffff !important; text-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+  .hero-subtitle { color: rgba(255, 255, 255, 0.7) !important; }
+  .cta-button-glass { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; }
+}
+
 :host(.variant-dark) .hero {
   background: #020617 !important;
   .hero-title { color: #fff !important; }
   .hero-subtitle { color: rgba(255,255,255,0.6) !important; }
   .cta-button-glass { background: #fff; color: #000; border: none; }
+}
+
+:host(.variant-dark-soft) .hero {
+  background: #1e293b !important; // Slate 800
+  .hero-title { color: #e2e8f0 !important; }
+  .hero-subtitle { color: #94a3b8 !important; }
+  .color-spray { opacity: 0.15; } // Dimmer sprays for softer dark
+  .cta-button-glass { background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2); }
 }

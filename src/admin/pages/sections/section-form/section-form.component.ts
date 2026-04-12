@@ -82,9 +82,13 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
 
   variants = [
     { value: 'default', label: 'VARIANT_DEFAULT' },
+    { value: 'light-soft', label: 'VARIANT_LIGHT_SOFT' },
+    { value: 'dark', label: 'VARIANT_DARK' },
+    { value: 'dark-soft', label: 'VARIANT_DARK_SOFT' },
     { value: 'glass', label: 'VARIANT_GLASS' },
-    { value: 'minimal', label: 'VARIANT_MINIMAL' },
-    { value: 'dark', label: 'VARIANT_DARK' }
+    { value: 'glass-clear', label: 'VARIANT_GLASS_CLEAR' },
+    { value: 'glass-deep', label: 'VARIANT_GLASS_DEEP' },
+    { value: 'minimal', label: 'VARIANT_MINIMAL' }
   ];
 
   menuAccessOptions = [
@@ -517,6 +521,9 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
             model3dUrl: model3dUrl || '',
             show3d: formValue.show3d || false,
             showImage: formValue.showImage || true,
+            pageTarget: formValue.pageTarget || 'home',
+            variant: formValue.variant || 'default',
+            anchorId: formValue.anchorId || '',
             settings: {
               ...existingSettings,
               logoUrl: formValue.logoUrl || '',

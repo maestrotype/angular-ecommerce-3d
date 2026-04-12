@@ -16,19 +16,27 @@
           <mat-tab>
             <ng-template mat-tab-label>
               <mat-icon class="tab-icon">branding_watermark</mat-icon>
-              <span class="tab-label">Logo & Settings</span>
+              <span class="tab-label">{{ 'LOGO_AND_SETTINGS' | translate }}</span>
             </ng-template>
             <div class="tab-content">
               <div class="header-special-grid">
                 <div class="logo-upload-section">
                   <app-image-upload 
                     [currentImageUrl]="sectionForm.get('logoUrl')?.value"
-                    label="LOGO_IMAGE"
+                    [label]="'LOGO_IMAGE' | translate"
                     (imageUploaded)="onLogoUploaded($event)">
                   </app-image-upload>
                 </div>
                 
                 <div class="settings-toggles-card">
+                  <h4>{{ 'THEME_SETTINGS' | translate }}</h4>
+                  <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 24px;">
+                    <mat-label>{{ 'VISUAL_VARIANT' | translate }}</mat-label>
+                    <mat-select formControlName="variant">
+                      <mat-option *ngFor="let v of variants" [value]="v.value">{{ v.label | translate }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
                   <h4>{{ 'HEADER_UTILITIES' | translate }}</h4>
                   <div class="toggle-list">
                     <mat-slide-toggle formControlName="showSearch">{{ 'SHOW_SEARCH' | translate }}</mat-slide-toggle>
@@ -45,7 +53,7 @@
           <mat-tab>
             <ng-template mat-tab-label>
               <mat-icon class="tab-icon">menu</mat-icon>
-              <span class="tab-label">Menu Navigation</span>
+              <span class="tab-label">{{ 'MENU_NAVIGATION' | translate }}</span>
             </ng-template>
             <div class="tab-content">
               <div class="dynamic-list">

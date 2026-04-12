@@ -11,6 +11,7 @@
     <!-- Inspector Highlighter -->
     <div class="inspector-highlight" 
          *ngIf="isInspectionMode && inspectorBox"
+         [class.tag-bottom]="inspectorBox.top < 30"
          [style.top.px]="inspectorBox.top"
          [style.left.px]="inspectorBox.left"
          [style.width.px]="inspectorBox.width"

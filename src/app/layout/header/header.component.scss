@@ -987,11 +987,49 @@
   }
 }
 
-// Extra-small devices adjustment
-@media (max-width: 380px) {
-  .header .logo {
-    span {
-      display: none;
-    }
-  }
+// SECTION VARIANTS (Host classes from SectionRenderer)
+:host(.variant-glass) .header {
+  --header-bg: rgba(255, 255, 255, 0.4);
+  --header-text: #1e293b;
+  --header-link: #1e293b;
+  backdrop-filter: blur(20px) saturate(180%);
+}
+
+:host(.variant-glass-clear) .header {
+  --header-bg: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+}
+
+:host(.variant-glass-deep) .header {
+  --header-bg: rgba(15, 23, 42, 0.5);
+  --header-text: #ffffff;
+  --header-link: #ffffff;
+  backdrop-filter: blur(30px) saturate(150%);
+}
+
+:host(.variant-minimal) .header {
+  --header-bg: #ffffff;
+  --header-text: #111;
+  --header-link: #111;
+}
+
+:host(.variant-light-soft) .header {
+  --header-bg: #fdfbf7;
+  --header-text: #4338ca;
+  --header-link: #4338ca;
+}
+
+:host(.variant-dark) .header {
+  --header-bg: #0f172a;
+  --header-text: #f8fafc;
+  --header-link: #f8fafc;
+  --header-link-hover: #3b82f6;
+  .hamburger span { background: #f8fafc !important; }
+}
+
+:host(.variant-dark-soft) .header {
+  --header-bg: #27272a;
+  --header-text: #e4e4e7;
+  --header-link: #e4e4e7;
+  .hamburger span { background: #e4e4e7 !important; }
 }
