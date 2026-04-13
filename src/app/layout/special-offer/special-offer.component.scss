@@ -1,3 +1,9 @@
+:host {
+    container-type: inline-size;
+    display: block;
+    width: 100%;
+}
+
 .special-offer {
     padding: var(--spacing-xxxl) 0;
     background: var(--special-offer-bg);
@@ -175,7 +181,7 @@
     }
 }
 
-@media (max-width: 768px) {
+@container (max-width: 768px) {
     .special-offer {
         padding: 60px 0;
 
@@ -221,7 +227,7 @@
     }
 }
 
-@media (max-width: 480px) {
+@container (max-width: 480px) {
     .special-offer {
         .offer-text {
             .offer-title {

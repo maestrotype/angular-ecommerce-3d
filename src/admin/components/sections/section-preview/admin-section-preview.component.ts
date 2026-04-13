@@ -11,25 +11,32 @@ export class AdminSectionPreviewComponent implements OnChanges {
   @Input() sections: any[] = [];
   @Input() activeSectionId: number | null = null;
   @Input() isEditorMode = false;
-  @Input() mode: 'desktop' | 'tablet' | 'mobile' = 'desktop';
+  @Input() mode: 'desktop' | 'tablet' | 'mobile' | 'fold' = 'desktop';
   @Input() theme: 'light' | 'dark' | 'dark-glass' = 'dark-glass';
   @Output() sectionEdit = new EventEmitter<any>();
   @Output() reordered = new EventEmitter<any[]>();
-  @Output() elementSelected = new EventEmitter<{ selector: string, section: any }>();
+  @Output() elementSelected = new EventEmitter<any>();
 
   isInspectionMode = false;
   hoveredElement: HTMLElement | null = null;
-  selectedElement: HTMLElement | null = null;
+  selectedElement: any = null;
   selectedSelector: string | null = null;
-  inspectorBox: { top: number, left: number, width: number, height: number } | null = null;
+  inspectorBox: any = null;
+  isUnfolded = false;
 
   @HostBinding('attr.data-mode') get dataMode() { return this.mode; }
   @HostBinding('class.force-desktop') get forceDesktop() { return this.mode === 'desktop'; }
   @HostBinding('class.mode-tablet') get modeTablet() { return this.mode === 'tablet'; }
   @HostBinding('class.mode-mobile') get modeMobile() { return this.mode === 'mobile'; }
+  @HostBinding('class.mode-fold') get modeFold() { return this.mode === 'fold'; }
+  @HostBinding('class.unfolded') get isUnfoldedClass() { return this.isUnfolded; }
   
   renderKey = 0;
   computedSections: any[] = [];
+
+  toggleUnfold() {
+    this.isUnfolded = !this.isUnfolded;
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['sectionData'] || changes['sections']) {

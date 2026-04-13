@@ -84,7 +84,7 @@
     }
 
     // Ultra-narrow screens like Fold 6
-    @media (max-width: 480px) {
+    @container (max-width: 480px) {
         .products-grid {
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 15px;
@@ -229,7 +229,7 @@
     }
 }
 
-@media (max-width: 768px) {
+@container (max-width: 768px) {
     .best-sellers {
         padding: 60px 0;
 

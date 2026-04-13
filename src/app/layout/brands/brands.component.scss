@@ -1,3 +1,9 @@
+:host {
+    container-type: inline-size;
+    display: block;
+    width: 100%;
+}
+
 .brands {
     padding: 60px 0;
     background: var(--brands-bg);
@@ -53,7 +59,7 @@
     }
 }
 
-@media (max-width: 768px) {
+@container (max-width: 768px) {
     .brands {
         padding: 40px 0;
 

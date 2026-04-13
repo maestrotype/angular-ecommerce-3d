@@ -101,7 +101,8 @@
           <div class="device-switcher">
             <button mat-icon-button [class.active]="previewMode === 'desktop'" (click)="setPreviewMode('desktop')" matTooltip="Desktop"><mat-icon>desktop_windows</mat-icon></button>
             <button mat-icon-button [class.active]="previewMode === 'tablet'" (click)="setPreviewMode('tablet')" matTooltip="Tablet"><mat-icon>tablet_mac</mat-icon></button>
-            <button mat-icon-button [class.active]="previewMode === 'mobile'" (click)="setPreviewMode('mobile')" matTooltip="Mobile"><mat-icon>smartphone</mat-icon></button>
+            <button mat-icon-button [class.active]="previewMode === 'mobile'" (click)="setPreviewMode('mobile')" matTooltip="Smartphone (iPhone)"><mat-icon>smartphone</mat-icon></button>
+            <button mat-icon-button [class.active]="previewMode === 'fold'" (click)="setPreviewMode('fold')" matTooltip="Foldable (Galaxy Fold)"><mat-icon>devices</mat-icon></button>
           </div>
         </div>
         <div class="architect-content">

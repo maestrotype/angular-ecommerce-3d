@@ -1,35 +1,8 @@
 :host {
+    container-type: inline-size;
     display: block;
-
-    // FORCE DESKTOP VIEW IN SITE ARCHITECT PREVIEW
-    :host-context(.force-desktop) & {
-        .footer {
-            .footer-desktop { display: block !important; }
-            .footer-content {
-                grid-template-columns: 2fr 1.2fr 1.2fr 1.2fr !important;
-                text-align: left !important;
-            }
-            .footer-bottom-content {
-                flex-direction: row !important;
-                gap: 0 !important;
-            }
-        }
-    }
-
-    // FORCE MOBILE VIEW
-    :host-context(.mode-tablet) &, :host-context(.mode-mobile) & {
-        .footer {
-            .footer-content {
-                grid-template-columns: 1fr !important;
-                text-align: center !important;
-                gap: 30px !important;
-            }
-            .footer-bottom-content {
-                flex-direction: column !important;
-                gap: 15px !important;
-            }
-        }
-    }
+    width: 100%;
+    display: block;
 }
 
 .footer {
@@ -174,14 +147,9 @@
 
 
 
-@media (max-width: 768px) {
+@container (max-width: 768px) {
     .footer {
         padding: 40px 0 20px;
-
-        .footer-desktop {
-            display: none;
-        }
-
 
         .container {
             padding: 0 1rem;

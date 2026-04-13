@@ -8,39 +8,76 @@
 
   &[data-mode="tablet"] {
     --preview-width-raw: 768px;
+    --preview-height-raw: 1024px;
+    --preview-overflow: auto;
+    --vh: 10.24px;
     --preview-scale: 0.6;
   }
   &[data-mode="mobile"] {
     --preview-width-raw: 375px;
+    --preview-height-raw: 812px;
+    --preview-overflow: auto;
+    --vh: 8.12px;
+    --preview-scale: 0.8;
+  }
+  &[data-mode="fold"] {
+    --preview-width-raw: 323px;
+    --preview-height-raw: 700px;
+    --preview-overflow: auto;
+    --vh: 7px;
     --preview-scale: 0.85;
+
+    &.unfolded {
+        --preview-width-raw: 700px;
+        --preview-scale: 0.6;
+    }
   }
   
-  // HOST DIMENSIONS: math-matched to visual width.
   width: calc(var(--preview-width-raw) * var(--preview-scale));
-  height: fit-content;
+  height: calc(var(--preview-height-raw, 2000px) * var(--preview-scale));
   margin: 0 auto; 
-  overflow-y: visible; 
+  overflow: visible; 
   overflow-x: clip; 
-  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.device-emulator {
+  position: relative;
+  width: var(--preview-width-raw);
+  height: var(--preview-height-raw, auto);
+  transform: scale(var(--preview-scale));
+  transform-origin: top center;
+  overflow: hidden; // Clip content to phone frame
+  background: #000; // Force black background for phone frame
+  box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.1);
+  border-radius: 32px; // Modern phone curvature
+  border: 8px solid #1a1a1a; // Virtual bazel
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .full-page-preview {
   display: flex;
   flex-direction: column;
-  width: var(--preview-width-raw);
-  min-width: var(--preview-width-raw);
+  width: 100%;
+  height: 100%;
+  overflow-y: var(--preview-overflow, visible);
+  overflow-x: hidden;
   
-  transform: scale(var(--preview-scale));
-  transform-origin: top center;
+  // Hide scrollbar for more native phone feel
+  &::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   
   // High-precision "Phantom Space" collapse. 
-  // REMOVED to restore vertical scroll for dynamic content.
   margin-bottom: 0; 
   
   // Ensure we have some breathing room at the bottom
-  padding-bottom: 100px;
+  padding-bottom: 80px;
   flex-shrink: 0;
 
   &.editor-mode {
@@ -193,22 +230,36 @@
     }
   }
 
-  // --- INSPECTOR UI ---
+  .fold-controls {
+    position: absolute;
+    top: 50%;
+    right: -60px;
+    transform: translateY(-50%);
+    z-index: 12000;
+    
+    button {
+      background: var(--admin-primary);
+      color: white;
+      box-shadow: 0 4px 15px rgba(var(--admin-primary-rgb), 0.4);
+    }
+  }
+
+  // --- INSPECTOR UI (Now absolute inside emulator to scale) ---
   .inspector-controls {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    z-index: 1000;
+    position: absolute;
+    bottom: 90px; // Above the footer
+    right: 16px;
+    z-index: 11000;
   }
 
   .inspector-highlight {
-    position: fixed;
+    position: absolute; // Same as above
     border: 2px solid var(--admin-primary);
     background: rgba(var(--admin-primary-rgb), 0.1);
-    z-index: 1000;
+    z-index: 2500;
     pointer-events: none;
     transition: all 0.1s ease-out;
-    box-shadow: 0 0 0 1000px rgba(0,0,0,0.05);
+    box-shadow: 0 0 0 2000px rgba(0,0,0,0.2); // Scope shadow to emulator box
 
     .selector-tag {
       position: absolute;
@@ -265,6 +316,59 @@
       mat-icon { font-size: 20px; width: 20px; height: 20px; }
     }
   }
+
+  // --- MOCK MOBILE FOOTER (Floating HUD) ---
+  .mock-footer-mobile {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2000;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 70px; // Slightly taller for better touch targets
+    background: #0f172a; // Force solid dark background for the HUD bar
+    border-top: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 -20px 40px rgba(0, 0, 0, 0.6);
+    z-index: 10000; // Over Everything
+    pointer-events: auto;
+    display: flex;
+    padding-bottom: 5px;
+
+    .favorites-link, .profile-icon, .cart {
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff; // FORCE WHITE for the HUD icons
+      opacity: 0.85;
+      
+      mat-icon { font-size: 26px; width: 26px; height: 26px; }
+    }
+
+    .cart {
+      position: relative;
+      span {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: var(--color-primary, #6366f1);
+        color: white;
+        border-radius: 50%;
+        padding: 2px 6px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        min-width: 18px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid white;
+      }
+    }
+  }
 }
 
 @keyframes inspectorSlideDown {
@@ -299,100 +403,9 @@
 }
 
 // --- UNIVERSAL DEVICE SIMULATION (ELEMENT QUERIES) ---
-// We use :host(...) followed by ::ng-deep to globally override all sections
-:host(.mode-tablet) ::ng-deep, :host(.mode-mobile) ::ng-deep {
-    .container, .header-container, .footer-container { 
-      max-width: 100% !important; 
-      width: 100% !important;
-      padding: 0 16px !important;
-      margin: 0 !important;
-    }
-
-    // Universal Grid/Flex Stacking
-    .hero, .hero-content, .offer-content, .footer-content, .grid, [class*="grid-"], .row {
-      display: grid !important;
-      grid-template-columns: 1fr !important;
-      flex-direction: column !important;
-      gap: 2rem !important;
-      text-align: center !important;
-      align-items: center !important;
-    }
-
-    // --- HEADER MOBILE HUD FIX ---
-    .header {
-      .header-container {
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-        flex-wrap: nowrap !important;
-        width: 100% !important;
-        padding: 0 10px !important;
-      }
-      .mobile-search { 
-        display: flex !important; 
-        flex: 1 !important;
-        margin: 0 10px !important; 
-        max-width: 120px !important; 
-      }
-      .mobile-search-input {
-        width: 100% !important;
-        background: rgba(255,255,255,0.1) !important;
-        border: 1px solid rgba(255,255,255,0.2) !important;
-        border-radius: 99px !important;
-        padding: 5px 10px !important;
-        color: white !important;
-        font-size: 11px !important;
-      }
-      .user-actions {
-        display: flex !important;
-        align-items: center !important;
-        gap: 0 !important;
-        // Hide desktop icons but keep the container for the hamburger
-        .favorites, .cart, .theme-switcher, .profile-icon, .lang-switcher, .search-icon { 
-           display: none !important; 
-        }
-      }
-      .hamburger { 
-        display: flex !important; 
-        flex-direction: column !important;
-        justify-content: center !important;
-        gap: 4px !important;
-        margin-left: 5px !important;
-        padding: 5px !important;
-        
-        span {
-          display: block !important;
-          width: 20px !important;
-          height: 2px !important;
-          background: white !important;
-          border-radius: 2px !important;
-        }
-      }
-      .desktop-search, .nav { display: none !important; }
-    }
-
-    // Specific Visuals Placement (Always top for mobile)
-    .hero-visual, .hero-image, .offer-image, .footer-logo-section {
-      grid-column: 1 !important;
-      order: -1 !important;
-      width: 100% !important;
-    }
-    
-    .hero-content, .offer-text {
-      grid-column: 1 !important;
-      order: 1 !important;
-      padding: 20px 0 !important;
-    }
-
-    // Typography
-    h1, h2, .hero-title, .offer-title {
-      font-size: 2rem !important;
-      line-height: 1.1 !important;
-    }
-    p, .hero-subtitle, .offer-subtitle {
-      font-size: 0.9rem !important;
-    }
-}
+// Note: We no longer use global CSS overrides here. 
+// Instead, sections use CSS Container Queries (@container) 
+// to automatically respond to the wrapper width!
 
 .empty-preview {
   display: flex;

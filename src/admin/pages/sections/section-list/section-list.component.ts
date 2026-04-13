@@ -43,7 +43,7 @@ export class SectionListComponent implements OnInit, AfterViewInit {
   activeMenuLang: 'en' | 'ru' | 'ua' = 'en';
   previewData: any = null;
   selectedPreviewSection: Section | null = null;
-  previewMode: 'desktop' | 'tablet' | 'mobile' = 'desktop';
+  previewMode: 'desktop' | 'tablet' | 'mobile' | 'fold' = 'desktop';
   themeMode: 'light' | 'dark' | 'dark-glass' = 'dark-glass';
   selectedElementInfo: { selector: string, section: any } | null = null;
   sidebarWidth = 540;
@@ -229,7 +229,7 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     });
   }
 
-  setPreviewMode(mode: 'desktop' | 'tablet' | 'mobile'): void {
+  setPreviewMode(mode: 'desktop' | 'tablet' | 'mobile' | 'fold'): void {
     this.previewMode = mode;
     this.selectedElementInfo = null;
   }
