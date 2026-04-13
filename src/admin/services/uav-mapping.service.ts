@@ -13,6 +13,7 @@ export interface UavTaskStatus {
   progress: number;
   model_url?: string;
   error?: string;
+  text_analysis?: string;
 }
 
 @Injectable({
@@ -23,10 +24,18 @@ export class UavMappingService {
 
   constructor(private http: HttpClient) {}
 
-  processVideo(videoFile: File, cropOsd: boolean, bounds?: GeoBounds): Observable<UavMappingResponse> {
+  processVideo(videoFile: File, cropOsd: boolean, bounds?: GeoBounds, referenceImageFile?: File | null, prompt?: string): Observable<UavMappingResponse> {
     const formData = new FormData();
     formData.append('video', videoFile);
     formData.append('crop_osd', String(cropOsd));
+    
+    if (referenceImageFile) {
+      formData.append('reference_image', referenceImageFile);
+    }
+    
+    if (prompt && prompt.trim() !== '') {
+      formData.append('prompt_text', prompt.trim());
+    }
 
     if (bounds) {
       formData.append('bounds_north', String(bounds.north));

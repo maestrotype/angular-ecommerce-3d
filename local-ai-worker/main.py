@@ -12,7 +12,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import json
 import uav_tracker
-from typing import Dict
+import vlm_analyzer
+from typing import Dict, Optional
 
 app = FastAPI(title="Local 3D AI Worker (InstantMesh Optimized)")
 
@@ -157,14 +158,28 @@ async def run_uav_mapping(
     task_id: str,
     video_path: str,
     crop_osd: bool,
-    geo_bounds: dict = None
+    geo_bounds: Optional[dict] = None,
+    reference_image_path: Optional[str] = None,
+    prompt_text: Optional[str] = None
 ):
     try:
         tasks[task_id]["status"] = "running"
-        tasks[task_id]["progress"] = 10
-        print(f"Task {task_id}: Starting optical flow extraction on {video_path}")
+        tasks[task_id]["progress"] = 5
         
-        # Run the blocking tracker in a thread pool
+        # 1. Run AI Semantic Analysis in parallel (via LM Studio)
+        print(f"Task {task_id}: Triggering VLM Analysis via LM Studio")
+        # We run this in a thread because it makes a blocking HTTP request
+        text_analysis = await asyncio.to_thread(
+            vlm_analyzer.analyze_flight,
+            video_path,
+            reference_image_path,
+            prompt_text
+        )
+        
+        tasks[task_id]["progress"] = 30
+
+        # 2. Extract relative trajectory (Optical Flow)
+        print(f"Task {task_id}: Starting optical flow extraction on {video_path}")
         trajectory = await asyncio.to_thread(
             uav_tracker.extract_trajectory,
             video_path, crop_osd, 1500, geo_bounds
@@ -175,10 +190,15 @@ async def run_uav_mapping(
         # Save output to JSON
         output_json = os.path.join(OUTPUT_DIR, f"{task_id}_trajectory.json")
         with open(output_json, 'w') as f:
-            json.dump({"trajectory": trajectory, "geo_calibrated": geo_bounds is not None}, f)
+            json.dump({
+                "trajectory": trajectory, 
+                "geo_calibrated": geo_bounds is not None,
+                "text_analysis": text_analysis
+            }, f)
             
         tasks[task_id]["status"] = "success"
         tasks[task_id]["progress"] = 100
+        tasks[task_id]["text_analysis"] = text_analysis
         tasks[task_id]["model_url"] = f"http://localhost:8000/outputs/{task_id}_trajectory.json"
         
     except Exception as e:
@@ -186,9 +206,11 @@ async def run_uav_mapping(
         tasks[task_id]["status"] = "failed"
         tasks[task_id]["error"] = str(e)
     finally:
-        # Cleanup temp video
+        # Cleanup temp files
         if os.path.exists(video_path):
             os.remove(video_path)
+        if reference_image_path and os.path.exists(reference_image_path):
+            os.remove(reference_image_path)
 
 @app.post("/uav-map")
 def process_uav_video(
@@ -198,7 +220,9 @@ def process_uav_video(
     bounds_north: float = Form(None),
     bounds_south: float = Form(None),
     bounds_east: float = Form(None),
-    bounds_west: float = Form(None)
+    bounds_west: float = Form(None),
+    reference_image: Optional[UploadFile] = File(None),
+    prompt_text: Optional[str] = Form(None)
 ):
     task_id = f"task_{int(time.time())}_{os.urandom(2).hex()}"
     tasks[task_id] = {"status": "queued", "progress": 0}
@@ -221,8 +245,15 @@ def process_uav_video(
     with open(temp_video_path, "wb") as buffer:
         shutil.copyfileobj(video.file, buffer)
         
+    # Save optional reference image
+    temp_img_path = None
+    if reference_image:
+        temp_img_path = os.path.join("outputs", f"temp_{task_id}_{reference_image.filename}")
+        with open(temp_img_path, "wb") as buffer:
+            shutil.copyfileobj(reference_image.file, buffer)
+        
     # Launch background task
-    background_tasks.add_task(run_uav_mapping, task_id, temp_video_path, crop_osd, geo_bounds)
+    background_tasks.add_task(run_uav_mapping, task_id, temp_video_path, crop_osd, geo_bounds, temp_img_path, prompt_text)
     
     return {"task_id": task_id, "status": "queued"}
 

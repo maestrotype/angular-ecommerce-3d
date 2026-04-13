@@ -42,7 +42,9 @@ export interface LandmarkSummary {
 })
 export class UavMappingComponent implements AfterViewInit, OnDestroy {
   videoFile: File | null = null;
+  referenceImageFile: File | null = null;
   cropVideo: boolean = true;
+  taskPrompt: string = '';
 
   isProcessing: boolean = false;
   loadingProgress: number = 0;
@@ -54,6 +56,7 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
   trajectoryStats: { points: number, distanceKm: number } | null = null;
   landmarks: LandmarkSummary | null = null;
   landmarksLoading: boolean = false;
+  textAnalysis: string | null = null;
 
   // Area selection map
   isDrawing: boolean = false;
@@ -166,6 +169,16 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
     event.stopPropagation();
     this.videoFile = null;
   }
+  
+  onImageSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) this.referenceImageFile = file;
+  }
+  
+  removeImage(event: Event) {
+    event.stopPropagation();
+    this.referenceImageFile = null;
+  }
 
   getFileSize(bytes: number): string {
     if (bytes < 1024) return `${bytes} B`;
@@ -180,8 +193,9 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
 
     this.isProcessing = true;
     this.loadingProgress = 0;
+    this.textAnalysis = null;
 
-    this.uavService.processVideo(this.videoFile, this.cropVideo, this.selectedBounds).subscribe({
+    this.uavService.processVideo(this.videoFile, this.cropVideo, this.selectedBounds, this.referenceImageFile, this.taskPrompt).subscribe({
       next: (res) => {
         this.taskId = res.task_id;
         this.pollStatus();
@@ -206,6 +220,9 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
             if (this.pollSub) this.pollSub.unsubscribe();
             this.snackBar.open('Mapping complete! GPS trajectory ready.', 'Close', { duration: 5000 });
             this.showResults = true;
+            if (status.text_analysis) {
+              this.textAnalysis = status.text_analysis;
+            }
             setTimeout(() => this.loadTrajectoryAndRender(status.model_url!), 150);
 
           } else if (status.status === 'failed') {

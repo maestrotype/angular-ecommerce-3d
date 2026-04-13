@@ -181,13 +181,24 @@ def extract_trajectory(
         pixel_span_y = max(arr[:, 1].max() - arr[:, 1].min(), 1.0)
         max_pixel_span = max(pixel_span_x, pixel_span_y)
         
+        # Instead of stretching to 70% of the selected box (which could be 100km wide), 
+        # let's estimate a realistic physical distance based on drone dynamics.
+        # Assume average speed of 12 m/s.
+        est_fps = 30
+        duration_s = processed_frames / est_fps
+        est_distance_m = duration_s * 12.0 # roughly 12 m/s
+        
+        # Convert meters to roughly degrees (1 deg ~ 111.32 km)
+        est_distance_deg = (est_distance_m / 1000.0) / 111.32
+        
+        # We still respect the bounding box as the MAXIMUM allowed size so it doesn't overflow
         lat_span = geo_bounds["north"] - geo_bounds["south"]
         lng_span = geo_bounds["east"]  - geo_bounds["west"]
+        max_geo_span = max(lat_span, lng_span) * 0.9
         
-        # Scale uniformly so the largest axis = 70% of the selected area.
-        # This preserves the aspect ratio of the actual flight.
-        max_geo_span = max(lat_span, lng_span) * 0.7
-        scale = max_geo_span / max_pixel_span  # degrees per pixel
+        # Use the realistic distance, but cap it at the bounding box size
+        final_span_deg = min(est_distance_deg, max_geo_span)
+        scale = final_span_deg / max_pixel_span  # degrees per pixel
         
         # Center of selected area is treated as the midpoint of the trajectory
         center_lat = (geo_bounds["north"] + geo_bounds["south"]) / 2

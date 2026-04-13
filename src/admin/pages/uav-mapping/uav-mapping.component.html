@@ -33,11 +33,36 @@
               </button>
             </div>
           </div>
+          
+          <div class="upload-zone minor-zone" [class.has-file]="referenceImageFile" (click)="imageInput.click()" style="margin-top: 16px; padding: 12px;">
+            <input type="file" #imageInput (change)="onImageSelected($event)" accept="image/*" hidden>
+            <div *ngIf="!referenceImageFile" class="upload-placeholder">
+              <mat-icon style="font-size: 24px; width: 24px; height: 24px;">image_search</mat-icon>
+              <h3 style="font-size: 13px;">Reference Image (Optional)</h3>
+            </div>
+            <div *ngIf="referenceImageFile" class="file-info">
+              <mat-icon class="file-icon">image</mat-icon>
+              <div class="details">
+                <span class="filename">{{ referenceImageFile.name }}</span>
+              </div>
+              <button mat-icon-button (click)="removeImage($event)" color="warn">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+
           <div class="video-options" style="margin-top: 16px;">
             <mat-slide-toggle [(ngModel)]="cropVideo" color="primary">
               Crop OSD Interface
             </mat-slide-toggle>
             <p class="subtitle" style="font-size: 12px; margin-top: 8px;">Ignores outer 20% of video to remove drone UI overlays.</p>
+          </div>
+          
+          <div class="settings-group" style="margin-top: 16px;">
+            <label for="taskPrompt" style="display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">AI Hints (Optional)</label>
+            <textarea id="taskPrompt" [(ngModel)]="taskPrompt" 
+              placeholder="E.g., 'Look for a red brick house with a blue roof'"
+              class="ai-prompt-input"></textarea>
           </div>
         </mat-card-content>
       </mat-card>
@@ -156,6 +181,12 @@
         <mat-icon>info</mat-icon>
         <span>Trajectory is shown on the real GPS map. <br>Drag the <strong style="color:#00ff00">green start marker</strong> to fine-tune alignment.</span>
       </div>
+    </div>
+    
+    <!-- AI Text Analysis Results -->
+    <div class="ai-analysis-panel" *ngIf="textAnalysis">
+      <h3><mat-icon>psychology</mat-icon> AI Aerial Intelligence Report</h3>
+      <p class="ai-summary">{{textAnalysis}}</p>
     </div>
   </div>
 </div>

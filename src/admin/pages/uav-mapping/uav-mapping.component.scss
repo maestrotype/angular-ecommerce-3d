@@ -269,4 +269,57 @@
   /* ─── Animations ─────────────────────── */
   .spinning { animation: spin 1.2s linear infinite; }
   @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  
+  .ai-prompt-input {
+    width: 100%;
+    min-height: 70px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: white;
+    padding: 10px;
+    font-family: inherit;
+    font-size: 13px;
+    resize: vertical;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    
+    &:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      background: rgba(0, 0, 0, 0.3);
+    }
+    
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+    }
+  }
+
+  .ai-analysis-panel {
+    margin: 16px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    border-radius: 12px;
+    padding: 20px;
+    
+    h3 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 12px 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: #e879f9;
+      
+      mat-icon { font-size: 20px; height: 20px; width: 20px; }
+    }
+    
+    .ai-summary {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.9);
+      white-space: pre-wrap;
+    }
+  }
 }
