@@ -45,6 +45,7 @@ export class SectionListComponent implements OnInit, AfterViewInit {
   selectedPreviewSection: Section | null = null;
   previewMode: 'desktop' | 'tablet' | 'mobile' | 'fold' = 'desktop';
   themeMode: 'light' | 'dark' | 'dark-glass' = 'dark-glass';
+  isFoldExpanded = false;
   selectedElementInfo: { selector: string, section: any } | null = null;
   sidebarWidth = 540;
   private isResizing = false;
@@ -230,7 +231,12 @@ export class SectionListComponent implements OnInit, AfterViewInit {
   }
 
   setPreviewMode(mode: 'desktop' | 'tablet' | 'mobile' | 'fold'): void {
-    this.previewMode = mode;
+    if (mode === 'fold' && this.previewMode === 'fold') {
+      this.isFoldExpanded = !this.isFoldExpanded;
+    } else {
+      this.previewMode = mode;
+      this.isFoldExpanded = false;
+    }
     this.selectedElementInfo = null;
   }
 

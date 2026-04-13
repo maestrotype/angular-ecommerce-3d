@@ -29,7 +29,7 @@ export class AdminSectionPreviewComponent implements OnChanges {
   @HostBinding('class.mode-tablet') get modeTablet() { return this.mode === 'tablet'; }
   @HostBinding('class.mode-mobile') get modeMobile() { return this.mode === 'mobile'; }
   @HostBinding('class.mode-fold') get modeFold() { return this.mode === 'fold'; }
-  @HostBinding('class.unfolded') get isUnfoldedClass() { return this.isUnfolded; }
+  @HostBinding('class.is-expanded') @Input() isFoldExpanded = false;
   
   renderKey = 0;
   computedSections: any[] = [];

@@ -14,22 +14,22 @@
     --preview-scale: 0.6;
   }
   &[data-mode="mobile"] {
-    --preview-width-raw: 375px;
-    --preview-height-raw: 812px;
+    --preview-width-raw: 390px;
+    --preview-height-raw: 844px;
     --preview-overflow: auto;
-    --vh: 8.12px;
-    --preview-scale: 0.8;
+    --vh: 8.44px;
+    --preview-scale: 0.7;
   }
   &[data-mode="fold"] {
     --preview-width-raw: 323px;
     --preview-height-raw: 700px;
     --preview-overflow: auto;
     --vh: 7px;
-    --preview-scale: 0.85;
+    --preview-scale: 0.8;
 
-    &.unfolded {
+    &.is-expanded {
         --preview-width-raw: 700px;
-        --preview-scale: 0.6;
+        --preview-scale: 0.55;
     }
   }
   
@@ -329,23 +329,32 @@
     align-items: center;
     width: 100%;
     height: 70px; // Slightly taller for better touch targets
-    background: #0f172a; // Force solid dark background for the HUD bar
-    border-top: 2px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 -20px 40px rgba(0, 0, 0, 0.6);
-    z-index: 10000; // Over Everything
+    background: #000000; // Force Pure Black for maximum contrast
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.9);
+    z-index: 10000;
     pointer-events: auto;
     display: flex;
-    padding-bottom: 5px;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 10px 5px 10px;
 
     .favorites-link, .profile-icon, .cart {
-      padding: 12px;
+      flex: 1;
+      padding: 15px 10px;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      color: #ffffff; // FORCE WHITE for the HUD icons
-      opacity: 0.85;
+      color: #ffffff !important; // ABSOLUTE WHITE
+      opacity: 1;
       
-      mat-icon { font-size: 26px; width: 26px; height: 26px; }
+      mat-icon { 
+        font-size: 28px !important; 
+        width: 28px !important; 
+        height: 28px !important;
+        filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));
+      }
     }
 
     .cart {
