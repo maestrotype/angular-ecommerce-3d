@@ -1,0 +1,20 @@
+fastapi
+uvicorn
+python-multipart
+opencv-python-headless
+numpy
+pycolmap
+torch
+torchvision
+torchaudio
+requests
+geopandas
+shapely
+tqdm
+scipy
+matplotlib
+h5py
+lightglue @ git+https://github.com/cvg/LightGlue.git
+plyfile
+# diff-gaussian-rasterization  # Закомментировано: требует CUDA (NVIDIA), не работает на Mac M1/M2/M3/M4.
+
