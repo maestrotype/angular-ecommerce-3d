@@ -16,6 +16,7 @@ import { PaymentsModule } from './payments/payments.module';
 import { RecommendationsModule } from './recommendations/recommendations.module';
 import { SettingsModule } from './settings/settings.module';
 import { AiGenerationModule } from './ai-generation/ai-generation.module';
+import { UavMappingModule } from './uav-mapping/uav-mapping.module';
 import { HealthController } from './health/health.controller';
 
 // import { ServeStaticModule } from '@nestjs/serve-static';
@@ -43,7 +44,8 @@ import { HealthController } from './health/health.controller';
     PaymentsModule,
     RecommendationsModule,
     SettingsModule,
-    AiGenerationModule
+    AiGenerationModule,
+    UavMappingModule
   ],
 })
 export class AppModule {}

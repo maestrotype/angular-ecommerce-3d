@@ -48,6 +48,7 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
 
   isProcessing: boolean = false;
   loadingProgress: number = 0;
+  currentAction: string = '';
   taskId: string | null = null;
   private pollSub: Subscription | null = null;
 
@@ -57,12 +58,31 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
   landmarks: LandmarkSummary | null = null;
   landmarksLoading: boolean = false;
   textAnalysis: string | null = null;
+  confidence: number = 0;
 
   // Area selection map
   isDrawing: boolean = false;
   private selectionMap: L.Map | null = null;
   private selectionRect: L.Rectangle | null = null;
   private drawStartLatLng: L.LatLng | null = null;
+  private settlementMarkers: L.Marker[] = [];
+
+  @HostListener('window:paste', ['$event'])
+  onPaste(event: ClipboardEvent) {
+    const items = event.clipboardData?.items;
+    if (!items) return;
+    
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        const file = items[i].getAsFile();
+        if (file) {
+          this.referenceImageFile = file;
+          this.snackBar.open('Image pasted from clipboard!', 'OK', { duration: 2000 });
+          return; // Process only first image
+        }
+      }
+    }
+  }
 
   // Results map
   private resultsMap: L.Map | null = null;
@@ -156,6 +176,25 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
       this.selectionMap.removeLayer(this.selectionRect);
       this.selectionRect = null;
     }
+    this.settlementMarkers.forEach(m => this.selectionMap?.removeLayer(m));
+    this.settlementMarkers = [];
+  }
+
+  resetAll() {
+    this.videoFile = null;
+    this.referenceImageFile = null;
+    this.selectedBounds = null;
+    this.landmarks = null;
+    this.taskId = null;
+    this.isProcessing = false;
+    this.loadingProgress = 0;
+    this.currentAction = '';
+    this.showResults = false;
+    this.taskPrompt = '';
+    
+    this.clearSelection();
+    if (this.pollSub) this.pollSub.unsubscribe();
+    this.snackBar.open('All data cleared.', 'OK', { duration: 2000 });
   }
 
   // ─── Video handling ──────────────────────────────────────────────────────────
@@ -207,6 +246,22 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
     });
   }
 
+  stopProcessing() {
+    if (!this.taskId || !this.isProcessing) return;
+    
+    this.uavService.stopTask(this.taskId).subscribe({
+      next: () => {
+        this.isProcessing = false;
+        if (this.pollSub) this.pollSub.unsubscribe();
+        this.snackBar.open('Process stopped by user.', 'OK', { duration: 3000 });
+        this.currentAction = '🛑 Stopped';
+      },
+      error: (err) => {
+        this.snackBar.open('Failed to stop: ' + (err.message || 'Unknown error'), 'Close', { duration: 5000 });
+      }
+    });
+  }
+
   private pollStatus() {
     this.pollSub = interval(2000).subscribe(() => {
       if (!this.taskId) return;
@@ -214,6 +269,7 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
       this.uavService.getTaskStatus(this.taskId).subscribe({
         next: (status) => {
           this.loadingProgress = status.progress || 0;
+          this.currentAction = status.current_action || 'Processing...';
 
           if (status.status === 'success') {
             this.isProcessing = false;
@@ -240,10 +296,31 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
   // ─── Results Map (GPS trajectory on OSM) ─────────────────────────────────────
 
   private loadTrajectoryAndRender(trajectoryUrl: string) {
-    this.http.get<{ trajectory: [number, number][], geo_calibrated: boolean }>(trajectoryUrl).subscribe({
-      next: (res) => this.initResultsMap(res.trajectory, res.geo_calibrated),
+    this.http.get<{ trajectory: [number, number][], geo_calibrated: boolean, text_analysis?: string, confidence?: number }>(trajectoryUrl).subscribe({
+      next: (res) => {
+        if (res.text_analysis) this.textAnalysis = res.text_analysis;
+        if (res.confidence) this.confidence = res.confidence;
+        this.initResultsMap(res.trajectory, res.geo_calibrated);
+      },
       error: () => this.snackBar.open('Failed to load trajectory data', 'Close', { duration: 5000 })
     });
+  }
+
+  private calculateDistance(path: [number, number][]): number {
+    let dist = 0;
+    for (let i = 0; i < path.length - 1; i++) {
+      const p1 = path[i];
+      const p2 = path[i+1];
+      const R = 6371; // Earth radius in km
+      const dLat = (p2[0] - p1[0]) * Math.PI / 180;
+      const dLon = (p2[1] - p1[1]) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(p1[0] * Math.PI / 180) * Math.cos(p2[0] * Math.PI / 180) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      dist += R * c;
+    }
+    return Math.round(dist * 100) / 100;
   }
 
   private initResultsMap(trajectory: [number, number][], geoCalibrated: boolean) {
@@ -376,6 +453,21 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
       next: (res) => {
         this.landmarks = this.parseLandmarks(res.elements);
         this.landmarksLoading = false;
+        
+        // Add markers for settlements to help user orient
+        res.elements.filter(el => el.tags && el.tags.name && el.tags.place).forEach(place => {
+          const lat = place.lat || (place.center ? place.center.lat : null);
+          const lon = place.lon || (place.center ? place.center.lon : null);
+          if (lat && lon && this.selectionMap) {
+            const marker = L.marker([lat, lon], {
+              icon: L.divIcon({
+                html: `<div class="map-place-label">${place.tags.name}</div>`,
+                className: 'custom-place-icon'
+              })
+            }).addTo(this.selectionMap);
+            this.settlementMarkers.push(marker);
+          }
+        });
       },
       error: () => {
         this.landmarksLoading = false; // Fail silently — landmark info is non-critical

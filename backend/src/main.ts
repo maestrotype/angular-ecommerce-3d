@@ -18,9 +18,13 @@ import { json, urlencoded } from 'express';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   
-  // Increase payload limits for 3D models and images
-  app.use(json({ limit: '100mb' }));
-  app.use(urlencoded({ extended: true, limit: '100mb' }));
+  // Increase payload limits for heavy drone videos and 3D models
+  app.use(json({ limit: '500mb' }));
+  app.use(urlencoded({ extended: true, limit: '500mb' }));
+
+  const server = app.getHttpServer();
+  server.timeout = 600000; // 10 minutes for slow video uploads
+  server.keepAliveTimeout = 610000;
 
   // Ensure /uploads exists
   const uploadPath = join(__dirname, "..", "uploads");
