@@ -14,6 +14,22 @@ import { CartService } from '../../../../core/services/cart.service';
 })
 export class BoughtTogetherComponent implements OnInit, OnDestroy {
   @Input() product!: Product;
+
+  @Input() set data(val: any) {
+    if (val?.context) {
+      this.product = val.context;
+      if (this.boughtTogetherProducts.length === 0) {
+         this.loadBoughtTogetherProducts();
+      }
+    }
+    if (val?.settings) {
+       this.limit = val.settings.limit || this.limit;
+       this.showTitle = val.settings.showTitle ?? this.showTitle;
+    }
+    if (val?.title) {
+       this.title = typeof val.title === 'string' ? val.title : val.title.en;
+    }
+  }
   @Input() limit: number = 4;
   @Input() showTitle: boolean = true;
   @Input() title: string = 'Frequently Bought Together';

@@ -16,26 +16,34 @@
           <mat-tab>
             <ng-template mat-tab-label>
               <mat-icon class="tab-icon">branding_watermark</mat-icon>
-              <span class="tab-label">Logo & Settings</span>
+              <span class="tab-label">{{ 'LOGO_AND_SETTINGS' | translate }}</span>
             </ng-template>
             <div class="tab-content">
               <div class="header-special-grid">
                 <div class="logo-upload-section">
                   <app-image-upload 
                     [currentImageUrl]="sectionForm.get('logoUrl')?.value"
-                    label="LOGO_IMAGE"
+                    [label]="'LOGO_IMAGE' | translate"
                     (imageUploaded)="onLogoUploaded($event)">
                   </app-image-upload>
                 </div>
                 
                 <div class="settings-toggles-card">
+                  <h4>{{ 'THEME_SETTINGS' | translate }}</h4>
+                  <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 24px;">
+                    <mat-label>{{ 'VISUAL_VARIANT' | translate }}</mat-label>
+                    <mat-select formControlName="variant">
+                      <mat-option *ngFor="let v of variants" [value]="v.value">{{ v.label | translate }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
                   <h4>{{ 'HEADER_UTILITIES' | translate }}</h4>
                   <div class="toggle-list">
-                    <mat-slide-toggle formControlName="showSearch">Search Icon</mat-slide-toggle>
-                    <mat-slide-toggle formControlName="showCart">Cart Icon</mat-slide-toggle>
-                    <mat-slide-toggle formControlName="showProfile">User Profile</mat-slide-toggle>
+                    <mat-slide-toggle formControlName="showSearch">{{ 'SHOW_SEARCH' | translate }}</mat-slide-toggle>
+                    <mat-slide-toggle formControlName="showCart">{{ 'SHOW_CART' | translate }}</mat-slide-toggle>
+                    <mat-slide-toggle formControlName="showProfile">{{ 'SHOW_PROFILE' | translate }}</mat-slide-toggle>
                     <mat-divider></mat-divider>
-                    <mat-slide-toggle formControlName="isActive" color="primary">Header Active</mat-slide-toggle>
+                    <mat-slide-toggle formControlName="isActive" color="primary">{{ 'HEADER_ACTIVE' | translate }}</mat-slide-toggle>
                   </div>
                 </div>
               </div>
@@ -45,7 +53,7 @@
           <mat-tab>
             <ng-template mat-tab-label>
               <mat-icon class="tab-icon">menu</mat-icon>
-              <span class="tab-label">Menu Navigation</span>
+              <span class="tab-label">{{ 'MENU_NAVIGATION' | translate }}</span>
             </ng-template>
             <div class="tab-content">
               <div class="dynamic-list">
@@ -63,8 +71,8 @@
                     <div [formGroup]="$any(item)" class="item-form">
                       <div class="item-row">
                         <mat-form-field appearance="outline">
-                          <mat-label>Title ({{ activeMenuLang | uppercase }})</mat-label>
-                          <input matInput [formControl]="$any(item).get('title.' + activeMenuLang)" placeholder="Title">
+                          <mat-label>{{ 'MENU_ITEM_TITLE' | translate }} ({{ activeMenuLang | uppercase }})</mat-label>
+                          <input matInput [formControl]="$any(item).get('title.' + activeMenuLang)" [placeholder]="'MENU_ITEM_TITLE' | translate">
                         </mat-form-field>
                         <mat-form-field appearance="outline">
                           <mat-label>URL</mat-label>
@@ -76,16 +84,16 @@
                       </div>
                       <div class="item-row secondary">
                          <mat-form-field appearance="outline">
-                          <mat-label>Jump to Section</mat-label>
+                          <mat-label>{{ 'JUMP_TO_SECTION' | translate }}</mat-label>
                           <mat-select formControlName="sectionId" (selectionChange)="onSectionSelect(i, $event.value)">
-                            <mat-option [value]="null">Manual Entry</mat-option>
+                            <mat-option [value]="null">{{ 'MANUAL_ENTRY' | translate }}</mat-option>
                             <mat-option *ngFor="let s of availableSections" [value]="s.id">
                               {{ s.title | localized }} ({{ s.type }})
                             </mat-option>
                           </mat-select>
                         </mat-form-field>
                         <mat-form-field appearance="outline">
-                          <mat-label>Access</mat-label>
+                          <mat-label>{{ 'ACCESS_LEVEL' | translate }}</mat-label>
                           <mat-select formControlName="access">
                             <mat-option *ngFor="let opt of menuAccessOptions" [value]="opt.value">
                               {{ opt.label | translate }}
@@ -251,14 +259,39 @@
               <span class="tab-label">{{ 'SETTINGS' | translate }}</span>
             </ng-template>
             <div class="tab-content">
-              <div class="form-grid">
+              <div class="form-grid modular-settings">
                 <mat-form-field appearance="outline">
                   <mat-label>{{ 'SECTION_TYPE' | translate }}</mat-label>
                   <mat-select formControlName="type">
                     <mat-option *ngFor="let type of sectionTypes" [value]="type.value">{{ type.label | translate }}</mat-option>
                   </mat-select>
                 </mat-form-field>
-                <mat-slide-toggle formControlName="isActive" color="primary">{{ 'ACTIVE_ON_SITE' | translate }}</mat-slide-toggle>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'PAGE_TARGET' | translate }}</mat-label>
+                  <mat-select formControlName="pageTarget">
+                    <mat-option *ngFor="let target of pageTargets" [value]="target.value">{{ target.label | translate }}</mat-option>
+                  </mat-select>
+                  <mat-hint>{{ 'WHERE_SECTION_APPEAR' | translate }}</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'VISUAL_VARIANT' | translate }}</mat-label>
+                  <mat-select formControlName="variant">
+                    <mat-option *ngFor="let v of variants" [value]="v.value">{{ v.label | translate }}</mat-option>
+                  </mat-select>
+                  <mat-hint>{{ 'COMPONENT_STYLING_THEME' | translate }}</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'ANCHOR_ID' | translate }}</mat-label>
+                  <input matInput formControlName="anchorId" placeholder="e.g. features-section">
+                  <mat-hint>{{ 'SCROLL_NAV_HINT' | translate }}</mat-hint>
+                </mat-form-field>
+
+                <div class="toggle-row">
+                  <mat-slide-toggle formControlName="isActive" color="primary">{{ 'ACTIVE_ON_SITE' | translate }}</mat-slide-toggle>
+                </div>
               </div>
             </div>
           </mat-tab>

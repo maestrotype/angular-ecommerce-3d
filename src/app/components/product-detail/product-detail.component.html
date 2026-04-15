@@ -61,24 +61,26 @@
           <app-product-info [product]="product" [quantity]="quantity" (quantityChanged)="onQuantityChanged($event)"
             (addToCart)="onAddToCart()">
           </app-product-info>
-          <!-- Product Tabs Component -->
-          <app-product-tabs [product]="product"></app-product-tabs>
+          <!-- Dynamic Modular Sections (Product Info Area) -->
+          <ng-container *ngFor="let section of sections">
+            <app-section-renderer 
+              *ngIf="section.type === 'product-tabs'"
+              [section]="section"
+              [contextData]="product">
+            </app-section-renderer>
+          </ng-container>
         </div>
       </div>
 
-      <!-- Similar Products Section -->
-      <div class="similar-products-section">
-        <app-similar-products [product]="product" [limit]="4" [showTitle]="true"
-          [title]="'PRODUCT.SECTIONS.SIMILAR' | translate">
-        </app-similar-products>
-      </div>
-
-      <!-- Bought Together Section -->
-      <div class="bought-together-section">
-        <app-bought-together [product]="product" [limit]="4" [showTitle]="true"
-          [title]="'PRODUCT.SECTIONS.BOUGHT_TOGETHER' | translate">
-        </app-bought-together>
-      </div>
+      <!-- Dynamic Modular Sections (Full Width Area) -->
+      <ng-container *ngFor="let section of sections">
+        <div class="modular-section-wrapper" *ngIf="section.type !== 'product-tabs'">
+          <app-section-renderer 
+            [section]="section"
+            [contextData]="product">
+          </app-section-renderer>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>

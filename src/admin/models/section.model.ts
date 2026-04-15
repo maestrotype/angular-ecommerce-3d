@@ -46,6 +46,9 @@ export interface Section {
   model3dUrl?: string;
   show3d: boolean;
   showImage: boolean;
+  pageTarget: string;
+  variant: string;
+  anchorId?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -61,6 +64,9 @@ export interface CreateSectionDto {
   model3dUrl?: string;
   show3d?: boolean;
   showImage?: boolean;
+  pageTarget?: string;
+  variant?: string;
+  anchorId?: string;
 }
 
 export interface UpdateSectionDto {
@@ -74,6 +80,9 @@ export interface UpdateSectionDto {
   model3dUrl?: string;
   show3d?: boolean;
   showImage?: boolean;
+  pageTarget?: string;
+  variant?: string;
+  anchorId?: string;
 }
 
 export interface ReorderSectionsDto {

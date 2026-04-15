@@ -48,9 +48,14 @@ export class SectionsService {
     );
   }
 
-  findAllActive(): Observable<Section[]> {
+  findAllActive(pageTarget?: string): Observable<Section[]> {
+    const where: any = { isActive: true };
+    if (pageTarget) {
+      where.pageTarget = pageTarget;
+    }
+    
     return from(this.sectionRepository.find({
-      where: { isActive: true },
+      where,
       order: { order: 'ASC' },
     })).pipe(
       catchError(error => {

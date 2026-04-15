@@ -8,49 +8,87 @@
 
   &[data-mode="tablet"] {
     --preview-width-raw: 768px;
-    --preview-scale: 0.6;
+    --preview-height-raw: 1024px;
+    --preview-overflow: auto;
+    --vh: 10.24px;
+    --preview-scale: 0.55;
   }
   &[data-mode="mobile"] {
-    --preview-width-raw: 375px;
-    --preview-scale: 0.85;
+    --preview-width-raw: 390px;
+    --preview-height-raw: 780px;
+    --preview-overflow: auto;
+    --vh: 7.8px;
+    --preview-scale: 0.62;
+  }
+  &[data-mode="fold"] {
+    --preview-width-raw: 323px;
+    --preview-height-raw: 680px;
+    --preview-overflow: auto;
+    --vh: 6.8px;
+    --preview-scale: 0.65; // Further reduced to fit admin panel
+
+    &.is-expanded {
+        --preview-width-raw: 700px;
+        --preview-scale: 0.48;
+    }
   }
   
-  // HOST DIMENSIONS: math-matched to visual width.
-  // We use height: min-content to try and collapse the phantom space.
   width: calc(var(--preview-width-raw) * var(--preview-scale));
-  height: fit-content;
+  height: calc(var(--preview-height-raw, 2000px) * var(--preview-scale));
   margin: 0 auto; 
-  overflow: hidden; // This is the key to stopping "infinite scroll"
-  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: visible; 
+  overflow-x: clip; 
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.device-emulator {
+  position: relative;
+  width: var(--preview-width-raw);
+  height: var(--preview-height-raw, auto);
+  transform: scale(var(--preview-scale));
+  transform-origin: top center;
+  overflow: hidden; // Clip content to phone frame
+  background: #000; // Force black background for phone frame
+  box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.1);
+  border-radius: 32px; // Modern phone curvature
+  border: 8px solid #1a1a1a; // Virtual bazel
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .full-page-preview {
   display: flex;
   flex-direction: column;
-  width: var(--preview-width-raw);
-  min-width: var(--preview-width-raw);
+  width: 100%;
+  height: 100%;
+  overflow-y: var(--preview-overflow, visible);
+  overflow-x: hidden;
+  container-type: inline-size; // CRITICAL: Enable @container queries inside sections
   
-  transform: scale(var(--preview-scale));
-  transform-origin: top center;
+  // Hide scrollbar for more native phone feel
+  &::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  margin-bottom: -150%; 
-  padding-bottom: 50px; 
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  
+  // High-precision "Phantom Space" collapse. 
+  margin-bottom: 0; 
+  
+  // Reserve space at the bottom for mock footer on mobile/fold
+  padding-bottom: 80px;
   flex-shrink: 0;
+
+  // On mobile/fold modes, add extra bottom padding to account for 65px footer
+  :host([data-mode="mobile"]) &,
+  :host([data-mode="fold"]) & {
+    padding-bottom: 80px;
+  }
 
   &.editor-mode {
     background: transparent !important;
-    box-shadow: none !important;
-    border-radius: 0 !important;
-    
-    app-section-renderer {
-      background: transparent !important;
-      box-shadow: none !important;
-    }
-  }
-
-  [data-theme="dark"] &, [data-theme="dark-glass"] & {
-    background: #1a1a1a;
   }
 
   app-section-renderer {
@@ -67,13 +105,38 @@
     cursor: pointer;
     transition: all 0.3s ease;
     border: 2px solid transparent;
-    
+
+    // --- DRAG HANDLE ---
+    .drag-handle {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 30;
+      width: 36px;
+      height: 36px;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      cursor: grab;
+      opacity: 0;
+      transition: all 0.2s ease;
+      
+      &:hover { background: var(--admin-primary); transform: scale(1.1); }
+      &:active { cursor: grabbing; }
+    }
+
     &:hover {
       border-color: var(--admin-primary);
       z-index: 5;
       
       .section-overlay { opacity: 1; }
-      .section-badge { background: var(--admin-primary); }
+      .section-badge { background: var(--admin-primary); transform: translateX(5px); opacity: 1; }
+      .drag-handle { opacity: 1; }
     }
 
     &.active {
@@ -81,7 +144,7 @@
       box-shadow: 0 0 30px rgba(var(--admin-primary-rgb), 0.3);
       z-index: 10;
       
-      .section-badge { background: var(--admin-primary); font-weight: 800; }
+      .section-badge { background: var(--admin-primary); font-weight: 800; opacity: 1; }
     }
 
     .section-badge {
@@ -89,135 +152,277 @@
       top: 10px;
       left: 10px;
       z-index: 20;
-      padding: 4px 12px;
-      background: rgba(0,0,0,0.6);
+      padding: 6px 14px;
+      background: rgba(0,0,0,0.7);
       backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
       color: white;
-      font-size: 11px;
-      font-weight: 700;
+      font-size: 10px;
+      font-weight: 800;
       border-radius: 6px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
       pointer-events: none;
-      transition: all 0.2s ease;
+      opacity: 0.6; // Subtle visible state
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     .section-overlay {
       position: absolute;
-      inset: 0;
-      background: rgba(var(--admin-primary-rgb), 0.05);
+      // Compact floating button — top-right, not full cover
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.85);
+      width: auto;
+      height: auto;
+      background: none;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 8px;
       opacity: 0;
-      transition: all 0.3s ease;
-      z-index: 15;
-      pointer-events: none;
-      color: var(--admin-primary);
+      transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 9999;
+      cursor: pointer;
+      pointer-events: none; // Transparent by default — only clickable on hover
 
-      mat-icon { font-size: 32px; width: 32px; height: 32px; }
-      span { font-weight: 800; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; }
+      .edit-card-glass {
+        background: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(14px) saturate(160%);
+        -webkit-backdrop-filter: blur(14px) saturate(160%);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        padding: 12px 22px;
+        border-radius: 50px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.45);
+        white-space: nowrap;
+
+        .icon-circle {
+          width: 32px;
+          height: 32px;
+          background: var(--admin-primary);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          box-shadow: 0 0 12px rgba(var(--admin-primary-rgb), 0.5);
+          flex-shrink: 0;
+          
+          mat-icon { font-size: 18px; width: 18px; height: 18px; }
+        }
+
+        .edit-text {
+          color: white;
+          font-weight: 700;
+          font-size: 0.78rem;
+          letter-spacing: 1.5px;
+          text-transform: uppercase;
+          text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+      }
+    }
+
+    &:hover .section-overlay {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+      pointer-events: auto;
+    }
+
+    &.inspecting {
+      pointer-events: auto !important; // Ensure we can catch mouse events for deep children
+      .section-badge, .drag-handle, .section-overlay { display: none !important; }
+    }
+  }
+
+  .fold-controls {
+    position: absolute;
+    top: 50%;
+    right: -60px;
+    transform: translateY(-50%);
+    z-index: 12000;
+    
+    button {
+      background: var(--admin-primary);
+      color: white;
+      box-shadow: 0 4px 15px rgba(var(--admin-primary-rgb), 0.4);
+    }
+  }
+
+  // --- INSPECTOR UI (Now absolute inside emulator to scale) ---
+  .inspector-controls {
+    position: absolute;
+    bottom: 90px; // Above the footer
+    right: 16px;
+    z-index: 11000;
+  }
+
+  .inspector-highlight {
+    position: absolute; // Same as above
+    border: 2px solid var(--admin-primary);
+    background: rgba(var(--admin-primary-rgb), 0.1);
+    z-index: 2500;
+    pointer-events: none;
+    transition: all 0.1s ease-out;
+    box-shadow: 0 0 0 2000px rgba(0,0,0,0.2); // Scope shadow to emulator box
+
+    .selector-tag {
+      position: absolute;
+      top: -28px;
+      left: -2px;
+      background: var(--admin-primary);
+      color: white;
+      font-size: 11px;
+      padding: 4px 12px;
+      border-radius: 6px 6px 0 0;
+      white-space: nowrap;
+      font-weight: 800;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 -4px 10px rgba(0,0,0,0.2);
+
+      mat-icon { font-size: 14px !important; width: 14px !important; height: 14px !important; line-height: 14px !important; margin: 0; }
+    }
+
+    &.tag-bottom .selector-tag {
+      top: auto;
+      bottom: -28px;
+      border-radius: 0 0 6px 6px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+  }
+
+  .inspector-hint-overlay {
+    position: fixed;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2000;
+    pointer-events: none;
+    
+    .hint-pill {
+      background: var(--admin-primary);
+      color: white;
+      padding: 12px 32px;
+      border-radius: 99px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 15px 40px rgba(var(--admin-primary-rgb), 0.4);
+      animation: inspectorSlideDown 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      font-weight: 800;
+      font-size: 0.95rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      white-space: nowrap;
+
+      mat-icon { font-size: 20px; width: 20px; height: 20px; }
+    }
+  }
+
+}
+
+// --- MOCK MOBILE FOOTER ---
+// NOTE: .device-emulator now has [attr.data-theme]="theme" in HTML
+// so --footer-bg, --footer-text, etc. will resolve to the correct theme values.
+.mock-footer-mobile {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  height: 65px;
+  background: var(--footer-bg, rgba(15, 23, 42, 0.97));
+  backdrop-filter: var(--footer-backdrop-filter, blur(15px) saturate(180%));
+  -webkit-backdrop-filter: var(--footer-backdrop-filter, blur(15px) saturate(180%));
+  border-top: 1px solid rgba(128, 128, 128, 0.2);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.3);
+  pointer-events: auto;
+  padding: 0 10px env(safe-area-inset-bottom, 10px) 10px;
+
+  .favorites-link, .profile-icon, .cart {
+    flex: 1;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--footer-text, #f8fafc) !important;
+    opacity: 1;
+    
+    mat-icon { 
+      font-size: 26px !important; 
+      width: 26px !important; 
+      height: 26px !important;
+      filter: drop-shadow(0 0 4px rgba(255,255,255,0.2));
+    }
+  }
+
+  .cart {
+    position: relative;
+    span {
+      position: absolute;
+      top: 6px;
+      right: 18px;
+      background: var(--color-primary, #6366f1);
+      color: white;
+      border-radius: 50%;
+      padding: 2px 5px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      min-width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid black;
     }
   }
 }
 
-// --- UNIVERSAL DEVICE SIMULATION (ELEMENT QUERIES) ---
-// We use :host(...) followed by ::ng-deep to globally override all sections
-:host(.mode-tablet) ::ng-deep, :host(.mode-mobile) ::ng-deep {
-    .container, .header-container, .footer-container { 
-      max-width: 100% !important; 
-      width: 100% !important;
-      padding: 0 16px !important;
-      margin: 0 !important;
-    }
-
-    // Universal Grid/Flex Stacking
-    .hero, .hero-content, .offer-content, .footer-content, .grid, [class*="grid-"], .row {
-      display: grid !important;
-      grid-template-columns: 1fr !important;
-      flex-direction: column !important;
-      gap: 2rem !important;
-      text-align: center !important;
-      align-items: center !important;
-    }
-
-    // --- HEADER MOBILE HUD FIX ---
-    .header {
-      .header-container {
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-        flex-wrap: nowrap !important;
-        width: 100% !important;
-        padding: 0 10px !important;
-      }
-      .mobile-search { 
-        display: flex !important; 
-        flex: 1 !important;
-        margin: 0 10px !important; 
-        max-width: 120px !important; 
-      }
-      .mobile-search-input {
-        width: 100% !important;
-        background: rgba(255,255,255,0.1) !important;
-        border: 1px solid rgba(255,255,255,0.2) !important;
-        border-radius: 99px !important;
-        padding: 5px 10px !important;
-        color: white !important;
-        font-size: 11px !important;
-      }
-      .user-actions {
-        display: flex !important;
-        align-items: center !important;
-        gap: 0 !important;
-        // Hide desktop icons but keep the container for the hamburger
-        .favorites, .cart, .theme-switcher, .profile-icon, .lang-switcher, .search-icon { 
-           display: none !important; 
-        }
-      }
-      .hamburger { 
-        display: flex !important; 
-        flex-direction: column !important;
-        justify-content: center !important;
-        gap: 4px !important;
-        margin-left: 5px !important;
-        padding: 5px !important;
-        
-        span {
-          display: block !important;
-          width: 20px !important;
-          height: 2px !important;
-          background: white !important;
-          border-radius: 2px !important;
-        }
-      }
-      .desktop-search, .nav { display: none !important; }
-    }
-
-    // Specific Visuals Placement (Always top for mobile)
-    .hero-visual, .hero-image, .offer-image, .footer-logo-section {
-      grid-column: 1 !important;
-      order: -1 !important;
-      width: 100% !important;
-    }
-    
-    .hero-content, .offer-text {
-      grid-column: 1 !important;
-      order: 1 !important;
-      padding: 20px 0 !important;
-    }
-
-    // Typography
-    h1, h2, .hero-title, .offer-title {
-      font-size: 2rem !important;
-      line-height: 1.1 !important;
-    }
-    p, .hero-subtitle, .offer-subtitle {
-      font-size: 0.9rem !important;
-    }
+@keyframes inspectorSlideDown {
+  from { transform: translateY(-30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
+
+// CDK DRAG & DROP STYLES
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 12px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+              0 8px 10px 1px rgba(0, 0, 0, 0.14),
+              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  background: white;
+  z-index: 1000 !important;
+  pointer-events: none;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.1;
+  background: var(--admin-primary);
+  border: 2px dashed var(--admin-primary);
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.full-page-preview.cdk-drop-list-dragging .architect-section-wrapper:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+// --- UNIVERSAL DEVICE SIMULATION (ELEMENT QUERIES) ---
+// Note: We no longer use global CSS overrides here. 
+// Instead, sections use CSS Container Queries (@container) 
+// to automatically respond to the wrapper width!
 
 .empty-preview {
   display: flex;

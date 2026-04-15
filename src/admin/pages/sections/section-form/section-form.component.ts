@@ -58,15 +58,37 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
   uploading3d = false;
 
   sectionTypes = [
-    { value: 'header', label: 'Header Section' },
-    { value: 'hero', label: 'Hero Section' },
-    { value: 'hero-glass', label: 'Hero Glass Section' },
-    { value: 'best-sellers', label: 'Best Sellers Section' },
-    { value: 'categories', label: 'Categories Section' },
-    { value: 'special-offer', label: 'Special Offer Section' },
-    { value: 'brands', label: 'Brands Section' },
-    { value: 'contacts', label: 'Contacts Section' },
-    { value: 'about', label: 'About Section' }
+    { value: 'header', label: 'SECTION_TYPE_LABELS.HEADER' },
+    { value: 'hero', label: 'SECTION_TYPE_LABELS.HERO' },
+    { value: 'hero-glass', label: 'SECTION_TYPE_LABELS.HERO_GLASS' },
+    { value: 'best-sellers', label: 'SECTION_TYPE_LABELS.BEST_SELLERS' },
+    { value: 'categories', label: 'SECTION_TYPE_LABELS.CATEGORIES' },
+    { value: 'special-offer', label: 'SECTION_TYPE_LABELS.SPECIAL_OFFER' },
+    { value: 'brands', label: 'SECTION_TYPE_LABELS.BRANDS' },
+    { value: 'contacts', label: 'SECTION_TYPE_LABELS.CONTACTS' },
+    { value: 'about', label: 'SECTION_TYPE_LABELS.ABOUT' },
+    { value: 'product-tabs', label: 'SECTION_TYPE_LABELS.PRODUCT_TABS' },
+    { value: 'similar-products', label: 'SECTION_TYPE_LABELS.SIMILAR_PRODUCTS' },
+    { value: 'bought-together', label: 'SECTION_TYPE_LABELS.BOUGHT_TOGETHER' },
+    { value: 'html-content', label: 'SECTION_TYPE_LABELS.HTML_CONTENT' }
+  ];
+
+  pageTargets = [
+    { value: 'home', label: 'TARGET_HOME' },
+    { value: 'product', label: 'TARGET_PRODUCT' },
+    { value: 'shop', label: 'TARGET_SHOP' },
+    { value: 'custom', label: 'TARGET_CUSTOM' }
+  ];
+
+  variants = [
+    { value: 'default', label: 'VARIANT_DEFAULT' },
+    { value: 'light-soft', label: 'VARIANT_LIGHT_SOFT' },
+    { value: 'dark', label: 'VARIANT_DARK' },
+    { value: 'dark-soft', label: 'VARIANT_DARK_SOFT' },
+    { value: 'glass', label: 'VARIANT_GLASS' },
+    { value: 'glass-clear', label: 'VARIANT_GLASS_CLEAR' },
+    { value: 'glass-deep', label: 'VARIANT_GLASS_DEEP' },
+    { value: 'minimal', label: 'VARIANT_MINIMAL' }
   ];
 
   menuAccessOptions = [
@@ -151,6 +173,9 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
       model3dUrl: [section?.model3dUrl || ''],
       show3d: [section?.show3d ?? false],
       showImage: [section?.showImage ?? true],
+      pageTarget: [section?.pageTarget || 'home'],
+      variant: [section?.variant || 'default'],
+      anchorId: [section?.anchorId || ''],
 
       logoUrl: [section?.settings?.logoUrl || ''],
       showSearch: [section?.settings?.showSearch ?? true],
@@ -481,6 +506,8 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
         const formValue = this.packLocalizedFields(rawFormValue);
         console.log('[SectionFormComponent] Submitting form data:', formValue);
 
+        const dataSource = this.isDrawerMode ? this.data : this.dialogData;
+        const existingSettings = dataSource?.section?.settings || {};
         let formData: any;
 
         if (formValue.type === 'header') {
@@ -494,7 +521,11 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
             model3dUrl: model3dUrl || '',
             show3d: formValue.show3d || false,
             showImage: formValue.showImage || true,
+            pageTarget: formValue.pageTarget || 'home',
+            variant: formValue.variant || 'default',
+            anchorId: formValue.anchorId || '',
             settings: {
+              ...existingSettings,
               logoUrl: formValue.logoUrl || '',
               showSearch: formValue.showSearch ?? true,
               showCart: formValue.showCart ?? true,
@@ -521,6 +552,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
             show3d: formValue.show3d || false,
             showImage: formValue.showImage || true,
             settings: {
+              ...existingSettings,
               categories: (formValue.categories || []).map((cat: any) => ({
                 ...cat,
                 name: {
@@ -544,6 +576,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
             show3d: false,
             showImage: false,
             settings: {
+              ...existingSettings,
               brands: (formValue.brands || []).map((brand: any) => ({
                 ...brand,
                 name: {
@@ -557,11 +590,17 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
         } else {
           formData = {
             ...formValue,
+            pageTarget: formValue.pageTarget || 'home',
+            variant: formValue.variant || 'default',
+            anchorId: formValue.anchorId || '',
             model3dUrl: model3dUrl || ''
+            // NOTE: Explicitly NOT sending `settings` here so we don't accidentally trample
+            // visualOverrides set by the Site Architect toolbar during an active session!
           };
         }
 
-        const dataSource = this.isDrawerMode ? this.data : this.dialogData;
+        console.log('[DEBUG-FORM-SUBMIT] FormData immediately before pushing to service:', JSON.stringify(formData, null, 2));
+
         if (this.isEditMode && dataSource?.section?.id) {
           this.sectionService.updateSection(dataSource.section.id, formData).subscribe({
             next: (result) => {

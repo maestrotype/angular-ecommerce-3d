@@ -51,7 +51,7 @@ export class HomeComponent implements OnInit {
    */
   private loadSections(): void {
     this.sectionsLoading = true;
-    this.sectionService.getActiveSections().pipe(
+    this.sectionService.getActiveSections('home').pipe(
       take(1),
       timeout(15000),
       catchError(err => {

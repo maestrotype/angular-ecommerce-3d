@@ -26,8 +26,17 @@ export class Section {
   @Column({ default: true })
   isActive: boolean;
 
-  @Column('jsonb', { nullable: true })
+  @Column({ type: 'jsonb', nullable: true })
   settings: Record<string, any>;
+
+  @Column({ type: 'varchar', default: 'home' })
+  pageTarget: string; // 'home', 'product', 'about', or custom slug
+
+  @Column({ type: 'varchar', default: 'default' })
+  variant: string; // 'default', 'glass', 'minimal', etc.
+
+  @Column({ type: 'varchar', nullable: true })
+  anchorId: string; // For scroll-to-section navigation
 
   @Column({ nullable: true })
   model3dUrl: string;

@@ -211,10 +211,49 @@
           background: var(--admin-bg-hover);
           
           h3 { margin: 0; font-size: 0.8rem; font-weight: 700; color: var(--admin-text-secondary); display: flex; align-items: center; gap: 8px; }
+          
           .device-switcher {
             display: flex;
-            gap: 4px;
-            button { color: var(--admin-text-secondary); &.active { color: var(--admin-primary); } }
+            align-items: center;
+            gap: 6px;
+            background: rgba(0,0,0,0.2);
+            padding: 2px 6px;
+            border-radius: 99px;
+
+            .theme-pills {
+              display: flex;
+              gap: 2px;
+              
+              button {
+                width: 32px;
+                height: 32px;
+                min-width: 32px;
+                padding: 0;
+                line-height: 32px;
+                mat-icon { font-size: 18px; width: 18px; height: 18px; }
+                opacity: 0.5;
+                transition: all 0.2s ease;
+                
+                &.active { opacity: 1; color: var(--admin-primary); background: rgba(var(--admin-primary-rgb), 0.1); }
+              }
+            }
+
+            .divider-v {
+              width: 1px;
+              height: 18px;
+              background: rgba(255,255,255,0.1);
+              margin: 0 4px;
+            }
+
+            button {
+              width: 32px;
+              height: 32px;
+              min-width: 32px;
+              padding: 0;
+              color: var(--admin-text-secondary);
+              &.active { color: var(--admin-primary); background: rgba(var(--admin-primary-rgb), 0.1); }
+              mat-icon { font-size: 18px; width: 18px; height: 18px; }
+            }
           }
         }
 
@@ -225,11 +264,160 @@
           display: flex;
           flex-direction: column;
           align-items: center;
-          padding: 20px 0;
+          padding: 10px 0 40px; // Slightly less top padding, more bottom padding
+          position: relative;
+          
+          &::-webkit-scrollbar { width: 6px; }
+          &::-webkit-scrollbar-thumb { background: var(--admin-border-primary); border-radius: 3px; }
+        }
+
+        // --- PROPERTY ADJUST TOOLBAR ---
+        .property-adjust-toolbar {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          width: 240px;
+          background: rgba(30, 30, 30, 0.85);
+          backdrop-filter: blur(25px) saturate(160%);
+          -webkit-backdrop-filter: blur(25px) saturate(160%);
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          border-radius: 20px;
+          padding: 16px;
+          z-index: 2000;
+          box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+          color: white;
+
+          .toolbar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+
+            .selector {
+              font-family: 'JetBrains Mono', monospace;
+              font-size: 10px;
+              color: var(--admin-primary);
+              background: rgba(var(--admin-primary-rgb), 0.1);
+              padding: 2px 6px;
+              border-radius: 4px;
+              font-weight: 700;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              max-width: 140px;
+            }
+            button { width: 32px; height: 32px; mat-icon { font-size: 18px; } }
+          }
+
+          .tool-groups {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+
+            .tool-group {
+              .label {
+                display: block;
+                font-size: 9px;
+                font-weight: 800;
+                color: rgba(255,255,255,0.4);
+                letter-spacing: 1px;
+                margin-bottom: 6px;
+              }
+              
+              .btn-row {
+                display: flex;
+                gap: 6px;
+                
+                button {
+                  background: rgba(255,255,255,0.05);
+                  border: 1px solid rgba(255,255,255,0.1);
+                  width: 36px;
+                  height: 36px;
+                  min-width: 36px;
+                  padding: 0;
+                  border-radius: 8px;
+                  color: white;
+                  
+                  mat-icon { font-size: 18px; }
+                  small { margin-left: -2px; font-weight: 800; font-size: 8px; }
+                  
+                  &:hover { background: rgba(var(--admin-primary-rgb), 0.2); border-color: var(--admin-primary); }
+                }
+              }
+
+              .color-palette {
+                display: flex;
+                gap: 8px;
+                
+                .color-swatch {
+                  width: 24px;
+                  height: 24px;
+                  border-radius: 50%;
+                  cursor: pointer;
+                  border: 1px solid rgba(255,255,255,0.2);
+                  transition: all 0.2s ease;
+                  
+                  &:hover { transform: scale(1.2); border-color: white; }
+                  
+                  &.white { background: #ffffff; }
+                  &.primary { background: var(--admin-primary); }
+                  &.accent { background: #ffcc00; }
+                  &.dark { background: #1a1a1a; }
+                }
+              }
+            }
+          }
         }
       }
     }
   }
+}
+
+// CDK DRAG & DROP STYLES (Global levels)
+::ng-deep .cdk-drag-preview {
+  box-sizing: border-box;
+  background: var(--admin-bg-hover) !important;
+  border: 1px solid var(--admin-primary) !important;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 0 1px rgba(var(--admin-primary-rgb), 0.2);
+  display: flex !important;
+  align-items: center;
+  padding: 12px 24px;
+  width: auto;
+  min-width: 400px;
+  opacity: 0.95;
+  z-index: 5000 !important;
+
+  // Preserve column widths in preview
+  --col-order-w: 80px;
+  --col-type-w: 140px;
+  --col-status-w: 100px;
+  --col-actions-w: 120px;
+
+  div { flex-shrink: 0; }
+  .col-order { width: var(--col-order-w); display: flex; align-items: center; gap: 12px; color: var(--admin-text-secondary); .order-num { color: var(--admin-text-primary); font-weight: 600; } }
+  .col-type { width: var(--col-type-w); .type-link { color: var(--admin-primary); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; } }
+  .col-title { flex: 1; min-width: 100px; .title-text { color: var(--admin-text-primary); font-weight: 700; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } }
+  .col-status { width: var(--col-status-w); display: flex; justify-content: center; }
+  .col-actions { width: var(--col-actions-w); display: flex; justify-content: center; gap: 4px; button { color: var(--admin-primary); } }
+}
+
+::ng-deep .cdk-drag-placeholder {
+  opacity: 0.2;
+  background: rgba(var(--admin-primary-rgb), 0.1) !important;
+  border: 2px dashed var(--admin-primary) !important;
+  border-radius: 12px;
+  margin: 4px 10px;
+}
+
+::ng-deep .cdk-drag-animating {
+  transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.responsive-list.cdk-drop-list-dragging .list-row-item:not(.cdk-drag-placeholder) {
+  transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
 }
 
 @keyframes slideInLeft {

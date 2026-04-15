@@ -84,7 +84,7 @@
     }
 
     // Ultra-narrow screens like Fold 6
-    @media (max-width: 480px) {
+    @container (max-width: 480px) {
         .products-grid {
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 15px;
@@ -229,7 +229,7 @@
     }
 }
 
-@media (max-width: 768px) {
+@container (max-width: 768px) {
     .best-sellers {
         padding: 60px 0;
 
@@ -252,4 +252,69 @@
             }
         }
     }
+}
+
+// SECTION VARIANTS (Host classes from SectionRenderer)
+// Override CSS custom props rather than direct properties, since .best-sellers reads from vars.
+:host(.variant-light-soft) .best-sellers {
+  --best-sellers-bg: #fdfbf7;
+  --best-sellers-text: #1e293b;
+  --best-sellers-subtitle: #52525b;
+  .section-title { color: #4338ca; }
+}
+
+:host(.variant-glass-clear) .best-sellers {
+  --best-sellers-bg: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  .section-title { color: #0f172a; }
+}
+
+:host(.variant-glass-deep) .best-sellers {
+  --best-sellers-bg: rgba(10, 15, 30, 0.7);
+  --best-sellers-text: #ffffff;
+  --best-sellers-subtitle: rgba(255,255,255,0.6);
+  .product-card {
+    background: rgba(255,255,255,0.08) !important;
+    border-color: rgba(255,255,255,0.15) !important;
+  }
+}
+
+:host(.variant-minimal) .best-sellers {
+  --best-sellers-bg: #ffffff;
+  --best-sellers-text: #111111;
+  --best-sellers-subtitle: #666666;
+}
+
+:host(.variant-dark) .best-sellers {
+  --best-sellers-bg: #0f172a;
+  --best-sellers-text: #f8fafc;
+  --best-sellers-subtitle: #94a3b8;
+  .product-card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    .product-info {
+      background: #1e293b !important;
+      border-top-color: #334155 !important;
+      .product-name { color: #f1f5f9 !important; }
+      .product-footer .product-price .current-price { color: #f1f5f9 !important; }
+      .product-category { background: #334155 !important; color: #94a3b8 !important; }
+    }
+  }
+}
+
+:host(.variant-dark-soft) .best-sellers {
+  --best-sellers-bg: #27272a;
+  --best-sellers-text: #e4e4e7;
+  --best-sellers-subtitle: #a1a1aa;
+  .product-card {
+    background: #3f3f46 !important;
+    border-color: #52525b !important;
+    .product-info {
+      background: #3f3f46 !important;
+      border-top-color: #52525b !important;
+      .product-name { color: #e4e4e7 !important; }
+      .product-footer .product-price .current-price { color: #e4e4e7 !important; }
+      .product-category { background: #52525b !important; color: #a1a1aa !important; }
+    }
+  }
 }

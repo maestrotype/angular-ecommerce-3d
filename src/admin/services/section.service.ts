@@ -16,8 +16,12 @@ export class SectionService {
     return this.http.get<Section[]>(`${this.apiUrl}/admin`);
   }
 
-  getActiveSections(): Observable<Section[]> {
-    return this.http.get<Section[]>(this.apiUrl);
+  getActiveSections(pageTarget?: string): Observable<Section[]> {
+    const params: any = {};
+    if (pageTarget) {
+      params.pageTarget = pageTarget;
+    }
+    return this.http.get<Section[]>(this.apiUrl, { params });
   }
 
   getSection(id: number): Observable<Section> {

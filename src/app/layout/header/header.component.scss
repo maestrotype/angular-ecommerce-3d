@@ -1,37 +1,14 @@
 :host {
+    container-type: inline-size;
+    display: block;
+    width: 100%;
   display: block;
   z-index: 999;
   position: relative;
 
 
-  // --- SITE ARCHITECT PREVIEW OVERRIDES ---
-  
-  // 1. DESKTOP MODE
-  :host-context(.force-desktop) & {
-    .header {
-      .nav { display: flex !important; }
-      .hamburger { display: none !important; }
-      .user-actions {
-        display: flex !important;
-        .search-icon, .favorites, .cart, .theme-switcher, .profile-icon { display: inline-flex !important; }
-      }
-    }
-    .mobile-menu, .mobile-menu-overlay { display: none !important; }
-  }
+  // UNIVERSAL ARCHITECT OVERRIDE: 
 
-  // 2. TABLET/MOBILE MODES (Show Mobile UX)
-  :host-context(.mode-tablet) &, :host-context(.mode-mobile) & {
-    .header {
-      .nav { display: none !important; }
-      .hamburger { display: block !important; }
-      .user-actions {
-        .favorites, .cart, .theme-switcher, .profile-icon, .search-icon { display: none !important; }
-      }
-    }
-    // Ensure mobile menu is allowed to show
-  }
-
-  // 3. UNIVERSAL ARCHITECT OVERRIDE: 
   // Disable fixed positioning so it follows reordering flow
   :host-context(app-admin-section-preview) & {
     .header {
@@ -63,9 +40,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px;
+    max-width: 1240px;
     width: 100%;
-    padding: 0 10px;
+    padding: 0 20px;
     position: relative;
 
     &:after {
@@ -108,7 +85,11 @@
 
   .nav {
     display: flex;
-    gap: 20px;
+    gap: 12px; // Reduced from 20px for better fit
+    flex: 1;
+    justify-content: center;
+    margin: 0 20px;
+    min-width: 0; // Allow shrinking if space is very tight
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     &.nav-compressed {
@@ -293,8 +274,10 @@
 
   .user-actions {
     display: flex;
-    gap: 15px;
+    gap: 8px; // Reduced from 15px to fit more icons
     align-items: center;
+    flex-shrink: 0; // Prevent icons from shrinking or being pushed out
+    margin-left: 10px;
 
     .search-icon,
     .profile-icon,
@@ -610,7 +593,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   background: rgba(0, 0, 0, 0.5);
   z-index: 9998;
   opacity: 0;
@@ -631,7 +614,7 @@
   top: 0;
   right: 0;
   width: 90%;
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(20px);
   transform: translateX(100%);
@@ -707,7 +690,7 @@
 }
 
 // Desktop-only styles
-@media (min-width: 769px) {
+@container (min-width: 769px) {
   .header {
     .nav {
       display: flex;
@@ -726,7 +709,7 @@
 }
 
 // Mobile-only styles and overrides
-@media (max-width: 768px) {
+@container (max-width: 768px) {
   .header {
     .nav {
       display: none;
@@ -754,7 +737,8 @@
       .favorites,
       .cart,
       .theme-switcher,
-      .profile-icon {
+      .profile-icon,
+      .lang-switcher {
         display: none;
       }
 
@@ -778,7 +762,7 @@
     width: 100%;
     transform: none;
     border-radius: 0;
-    max-height: calc(100vh - 80px);
+    max-height: calc(calc(var(--vh, 1vh) * 100) - 80px);
     background: var(--header-bg);
     backdrop-filter: blur(20px);
     z-index: 10002;
@@ -793,11 +777,11 @@
   width: 90%; // Balanced width for typical mobile
   max-width: 400px;
 
-  @media (max-width: 350px) {
+  @container (max-width: 350px) {
     width: 100%; // Take full width on Fold 6 to avoid clipping theme buttons
   }
 
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
   background: var(--header-bg);
   backdrop-filter: blur(30px) saturate(180%);
   -webkit-backdrop-filter: blur(30px) saturate(180%);
@@ -979,7 +963,7 @@
 }
 
 // Extra-small devices adjustment
-@media (max-width: 380px) {
+@container (max-width: 380px) {
   .header .logo {
     span {
       display: none;
@@ -987,11 +971,62 @@
   }
 }
 
-// Extra-small devices adjustment
-@media (max-width: 380px) {
-  .header .logo {
-    span {
-      display: none;
+// Galaxy Fold & very narrow devices — prevents hamburger from being clipped by frame border-radius
+@container (max-width: 340px) {
+  .header {
+    .header-container {
+      padding: 0 6px; // Reduce from 15px to give hamburger room inside rounded frame
+    }
+
+    .mobile-search {
+      margin: 0 4px; // Tighter search margin
     }
   }
+}
+
+// SECTION VARIANTS (Host classes from SectionRenderer)
+:host(.variant-glass) .header {
+  --header-bg: rgba(255, 255, 255, 0.4);
+  --header-text: #1e293b;
+  --header-link: #1e293b;
+  backdrop-filter: blur(20px) saturate(180%);
+}
+
+:host(.variant-glass-clear) .header {
+  --header-bg: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+}
+
+:host(.variant-glass-deep) .header {
+  --header-bg: rgba(15, 23, 42, 0.5);
+  --header-text: #ffffff;
+  --header-link: #ffffff;
+  backdrop-filter: blur(30px) saturate(150%);
+}
+
+:host(.variant-minimal) .header {
+  --header-bg: #ffffff;
+  --header-text: #111;
+  --header-link: #111;
+}
+
+:host(.variant-light-soft) .header {
+  --header-bg: #fdfbf7;
+  --header-text: #4338ca;
+  --header-link: #4338ca;
+}
+
+:host(.variant-dark) .header {
+  --header-bg: #0f172a;
+  --header-text: #f8fafc;
+  --header-link: #f8fafc;
+  --header-link-hover: #3b82f6;
+  .hamburger span { background: #f8fafc !important; }
+}
+
+:host(.variant-dark-soft) .header {
+  --header-bg: #27272a;
+  --header-text: #e4e4e7;
+  --header-link: #e4e4e7;
+  .hamburger span { background: #e4e4e7 !important; }
 }

@@ -1,3 +1,9 @@
+:host {
+    container-type: inline-size;
+    display: block;
+    width: 100%;
+}
+
 .categories {
     padding: 80px 0;
     background: var(--categories-bg);
@@ -70,7 +76,7 @@
     }
 }
 
-@media (max-width: 768px) {
+@container (max-width: 768px) {
     .categories {
         padding: 60px 0;
 

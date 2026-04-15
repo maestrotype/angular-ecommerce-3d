@@ -8,6 +8,7 @@ import {
     Param,
     Delete,
     UseGuards,
+    Query,
   } from '@nestjs/common';
   import { SectionsService } from './sections.service';
   import { CreateSectionDto } from './dto/create-section.dto';
@@ -26,8 +27,8 @@ import {
     }
   
     @Get()
-    findAll() {
-      return this.sectionsService.findAllActive();
+    findAll(@Query('pageTarget') pageTarget?: string) {
+      return this.sectionsService.findAllActive(pageTarget);
     }
   
     @Get('admin')

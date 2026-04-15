@@ -44,4 +44,16 @@ export class CreateSectionDto {
   @IsOptional()
   @IsObject()
   settings?: Record<string, any>;
+
+  @IsOptional()
+  @IsString()
+  pageTarget?: string;
+
+  @IsOptional()
+  @IsString()
+  variant?: string;
+
+  @IsOptional()
+  @IsString()
+  anchorId?: string;
 }
