@@ -1,5 +1,5 @@
 <ng-container *ngIf="sections && sections.length > 0">
-  <div class="device-emulator">
+  <div class="device-emulator" [attr.data-theme]="theme">
     <div class="full-page-preview" 
          [attr.data-theme]="theme"
          [class.inspecting]="isInspectionMode"

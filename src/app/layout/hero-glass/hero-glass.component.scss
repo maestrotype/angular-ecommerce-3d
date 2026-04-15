@@ -290,6 +290,58 @@
     .color-spray.text-spray { width: 140px; height: 140px; left: 25%; }
     .new-arrival-bg { font-size: 14cqw; top: 12cqw; left: 0cqw; }
   }
+
+  @container (max-width: 500px) {
+    padding: 80px 0 40px;
+    min-height: auto;
+    
+    .hero-text {
+      min-width: 0; // CRITICAL: override the default 300px min-width
+      width: 100%;
+      .hero-title { font-size: 1.6rem; margin-bottom: 0.8rem; line-height: 1.2; }
+      .hero-subtitle { font-size: 0.9rem; margin-bottom: 1.5rem; max-width: 280px; }
+      .cta-button-glass { padding: 10px 20px; font-size: 0.9rem; }
+    }
+    
+    .hero-image {
+      .product-showcase .floating-product .featured-product { 
+        max-width: 240px; 
+        height: 160px; 
+      }
+    }
+
+    .new-arrival-bg { font-size: 18cqw; top: 15cqw; }
+    .glass-orb, .bg-decoration { opacity: 0.1; transform: scale(0.7); }
+  }
+
+  // Galaxy Fold & very narrow devices
+  @container (max-width: 400px) {
+    padding: 60px 0 80px; // Extra bottom padding compensates for footer bar
+    min-height: auto;
+
+    .container { padding: 0 1rem; } // Reduce horizontal padding
+
+    .hero-content {
+      gap: 1rem;
+    }
+
+    .hero-text {
+      min-width: 0; // Remove 300px constraint — fold is only 323px wide
+      width: 100%;
+      align-items: center;
+      text-align: center;
+
+      .hero-title { font-size: 1.35rem; line-height: 1.2; margin-bottom: 0.6rem; }
+      .hero-subtitle { font-size: 0.82rem; margin-bottom: 1rem; max-width: 100%; }
+      .wrap-btn { justify-content: center; }
+      .cta-button-glass { padding: 8px 18px; font-size: 0.82rem; }
+    }
+
+    // Hide heavy visuals to keep content readable
+    .hero-image { display: none; }
+    .glass-orb, .bg-decoration, .color-spray { display: none; }
+    .new-arrival-bg { display: none; }
+  }
 }
 // SECTION VARIANTS (Host overrides)
 :host(.variant-minimal) .hero {

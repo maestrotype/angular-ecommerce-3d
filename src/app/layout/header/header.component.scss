@@ -971,6 +971,19 @@
   }
 }
 
+// Galaxy Fold & very narrow devices — prevents hamburger from being clipped by frame border-radius
+@container (max-width: 340px) {
+  .header {
+    .header-container {
+      padding: 0 6px; // Reduce from 15px to give hamburger room inside rounded frame
+    }
+
+    .mobile-search {
+      margin: 0 4px; // Tighter search margin
+    }
+  }
+}
+
 // SECTION VARIANTS (Host classes from SectionRenderer)
 :host(.variant-glass) .header {
   --header-bg: rgba(255, 255, 255, 0.4);

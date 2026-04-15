@@ -264,8 +264,11 @@
           display: flex;
           flex-direction: column;
           align-items: center;
-          padding: 20px 0;
+          padding: 10px 0 40px; // Slightly less top padding, more bottom padding
           position: relative;
+          
+          &::-webkit-scrollbar { width: 6px; }
+          &::-webkit-scrollbar-thumb { background: var(--admin-border-primary); border-radius: 3px; }
         }
 
         // --- PROPERTY ADJUST TOOLBAR ---

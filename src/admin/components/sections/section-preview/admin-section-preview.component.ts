@@ -12,7 +12,7 @@ export class AdminSectionPreviewComponent implements OnChanges {
   @Input() activeSectionId: number | null = null;
   @Input() isEditorMode = false;
   @Input() mode: 'desktop' | 'tablet' | 'mobile' | 'fold' = 'desktop';
-  @Input() theme: 'light' | 'dark' | 'dark-glass' = 'dark-glass';
+  @Input() theme: 'default' | 'dark' | 'glass' = 'default';
   @Output() sectionEdit = new EventEmitter<any>();
   @Output() reordered = new EventEmitter<any[]>();
   @Output() elementSelected = new EventEmitter<any>();

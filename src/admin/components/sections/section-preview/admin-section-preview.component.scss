@@ -11,25 +11,25 @@
     --preview-height-raw: 1024px;
     --preview-overflow: auto;
     --vh: 10.24px;
-    --preview-scale: 0.6;
+    --preview-scale: 0.55;
   }
   &[data-mode="mobile"] {
     --preview-width-raw: 390px;
-    --preview-height-raw: 844px;
+    --preview-height-raw: 780px;
     --preview-overflow: auto;
-    --vh: 8.44px;
-    --preview-scale: 0.7;
+    --vh: 7.8px;
+    --preview-scale: 0.62;
   }
   &[data-mode="fold"] {
     --preview-width-raw: 323px;
-    --preview-height-raw: 700px;
+    --preview-height-raw: 680px;
     --preview-overflow: auto;
-    --vh: 7px;
-    --preview-scale: 0.8;
+    --vh: 6.8px;
+    --preview-scale: 0.65; // Further reduced to fit admin panel
 
     &.is-expanded {
         --preview-width-raw: 700px;
-        --preview-scale: 0.55;
+        --preview-scale: 0.48;
     }
   }
   
@@ -62,6 +62,7 @@
   height: 100%;
   overflow-y: var(--preview-overflow, visible);
   overflow-x: hidden;
+  container-type: inline-size; // CRITICAL: Enable @container queries inside sections
   
   // Hide scrollbar for more native phone feel
   &::-webkit-scrollbar {
@@ -76,9 +77,15 @@
   // High-precision "Phantom Space" collapse. 
   margin-bottom: 0; 
   
-  // Ensure we have some breathing room at the bottom
+  // Reserve space at the bottom for mock footer on mobile/fold
   padding-bottom: 80px;
   flex-shrink: 0;
+
+  // On mobile/fold modes, add extra bottom padding to account for 65px footer
+  :host([data-mode="mobile"]) &,
+  :host([data-mode="fold"]) & {
+    padding-bottom: 80px;
+  }
 
   &.editor-mode {
     background: transparent !important;
@@ -317,65 +324,66 @@
     }
   }
 
-  // --- MOCK MOBILE FOOTER (Floating HUD) ---
-  .mock-footer-mobile {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 2000;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 100%;
-    height: 70px; // Slightly taller for better touch targets
-    background: #000000; // Force Pure Black for maximum contrast
-    border-top: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.9);
-    z-index: 10000;
-    pointer-events: auto;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 0 10px 5px 10px;
+}
 
-    .favorites-link, .profile-icon, .cart {
-      flex: 1;
-      padding: 15px 10px;
+// --- MOCK MOBILE FOOTER ---
+// NOTE: .device-emulator now has [attr.data-theme]="theme" in HTML
+// so --footer-bg, --footer-text, etc. will resolve to the correct theme values.
+.mock-footer-mobile {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  height: 65px;
+  background: var(--footer-bg, rgba(15, 23, 42, 0.97));
+  backdrop-filter: var(--footer-backdrop-filter, blur(15px) saturate(180%));
+  -webkit-backdrop-filter: var(--footer-backdrop-filter, blur(15px) saturate(180%));
+  border-top: 1px solid rgba(128, 128, 128, 0.2);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.3);
+  pointer-events: auto;
+  padding: 0 10px env(safe-area-inset-bottom, 10px) 10px;
+
+  .favorites-link, .profile-icon, .cart {
+    flex: 1;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--footer-text, #f8fafc) !important;
+    opacity: 1;
+    
+    mat-icon { 
+      font-size: 26px !important; 
+      width: 26px !important; 
+      height: 26px !important;
+      filter: drop-shadow(0 0 4px rgba(255,255,255,0.2));
+    }
+  }
+
+  .cart {
+    position: relative;
+    span {
+      position: absolute;
+      top: 6px;
+      right: 18px;
+      background: var(--color-primary, #6366f1);
+      color: white;
+      border-radius: 50%;
+      padding: 2px 5px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      min-width: 16px;
+      height: 16px;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      color: #ffffff !important; // ABSOLUTE WHITE
-      opacity: 1;
-      
-      mat-icon { 
-        font-size: 28px !important; 
-        width: 28px !important; 
-        height: 28px !important;
-        filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));
-      }
-    }
-
-    .cart {
-      position: relative;
-      span {
-        position: absolute;
-        top: 0;
-        right: 0;
-        background: var(--color-primary, #6366f1);
-        color: white;
-        border-radius: 50%;
-        padding: 2px 6px;
-        font-size: 0.7rem;
-        font-weight: 700;
-        min-width: 18px;
-        height: 18px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 2px solid white;
-      }
+      border: 2px solid black;
     }
   }
 }

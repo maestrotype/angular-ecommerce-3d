@@ -44,7 +44,8 @@ export class SectionListComponent implements OnInit, AfterViewInit {
   previewData: any = null;
   selectedPreviewSection: Section | null = null;
   previewMode: 'desktop' | 'tablet' | 'mobile' | 'fold' = 'desktop';
-  themeMode: 'light' | 'dark' | 'dark-glass' = 'dark-glass';
+  // 'default' = [data-theme="default"] (light), 'dark' = [data-theme="dark"], 'glass' = [data-theme="glass"]
+  themeMode: 'default' | 'dark' | 'glass' = 'default';
   isFoldExpanded = false;
   selectedElementInfo: { selector: string, section: any } | null = null;
   sidebarWidth = 540;
@@ -62,6 +63,17 @@ export class SectionListComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.loadSections();
     this.initResizeListeners();
+    // Read the site's current active theme from document to make preview match
+    const docTheme = document.documentElement.getAttribute('data-theme') ||
+                     document.body.getAttribute('data-theme') || '';
+    // Map to supported preview themes: 'default' (light), 'dark', 'glass'
+    if (docTheme === 'dark') {
+      this.themeMode = 'dark';
+    } else if (docTheme === 'glass') {
+      this.themeMode = 'glass';
+    } else {
+      this.themeMode = 'default'; // Explicit 'default' to override any inherited dark vars
+    }
   }
 
   private initResizeListeners(): void {
@@ -240,7 +252,7 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     this.selectedElementInfo = null;
   }
 
-  setThemeMode(theme: 'light' | 'dark' | 'dark-glass'): void {
+  setThemeMode(theme: 'default' | 'dark' | 'glass'): void {
     this.themeMode = theme;
   }
 
