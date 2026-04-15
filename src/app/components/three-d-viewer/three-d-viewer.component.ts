@@ -15,32 +15,27 @@ import { fixBackendUrl } from '../../core/utils/url-helper';
   imports: [CommonModule, TranslateModule, MatSnackBarModule],
   template: `
     <div class="viewer-host">
-      <!-- Luxury 3D Loader -->
+      <!-- Clean Minimal 3D Loader -->
       <div class="loader-overlay" *ngIf="isLoading">
-        <div class="loader-scene">
-          <!-- Orbital rings -->
-          <div class="orbit-ring orbit-1"></div>
-          <div class="orbit-ring orbit-2"></div>
-          <div class="orbit-ring orbit-3"></div>
-          <!-- Center core -->
-          <div class="loader-core">
-            <div class="core-inner"></div>
+        <div class="loader-content">
+          <!-- CSS Wireframe Cube -->
+          <div class="cube-wrapper">
+            <div class="cube">
+              <div class="face front"></div>
+              <div class="face back"></div>
+              <div class="face right"></div>
+              <div class="face left"></div>
+              <div class="face top"></div>
+              <div class="face bottom"></div>
+            </div>
           </div>
-          <!-- Floating particles -->
-          <div class="particle p1"></div>
-          <div class="particle p2"></div>
-          <div class="particle p3"></div>
-          <div class="particle p4"></div>
-          <div class="particle p5"></div>
-          <div class="particle p6"></div>
-        </div>
-        <div class="loader-info">
-          <div class="loader-title">{{ 'VIEWER.LOADING' | translate }}</div>
-          <div class="progress-track">
-            <div class="progress-fill" [style.width.%]="loadingProgress"></div>
-            <div class="progress-glow" [style.left.%]="loadingProgress"></div>
+          <div class="loader-info">
+            <div class="loader-title">{{ 'VIEWER.LOADING' | translate }}</div>
+            <div class="progress-track">
+              <div class="progress-fill" [style.width.%]="loadingProgress"></div>
+            </div>
+            <div class="loader-percent">{{ loadingProgress }}%</div>
           </div>
-          <div class="loader-percent">{{ loadingProgress }}%</div>
         </div>
       </div>
 
@@ -49,14 +44,21 @@ import { fixBackendUrl } from '../../core/utils/url-helper';
 
       <!-- Error Fallback -->
       <div class="error-overlay" *ngIf="hasError">
-        <div class="error-content">
-          <svg class="error-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <div class="error-card">
+          <svg class="error-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
           </svg>
           <div class="error-title">{{ 'VIEWER.LOAD_ERROR' | translate }}</div>
-          <div class="error-text">{{ 'VIEWER.ERROR_DESCRIPTION' | translate }}</div>
+          <div class="error-text">
+            <ng-container *ngIf="isAiGeneration; else defaultError">
+              {{ 'VIEWER.AI_GENERATION_PENDING' | translate }}
+            </ng-container>
+            <ng-template #defaultError>
+              {{ 'VIEWER.ERROR_DESCRIPTION' | translate }}
+            </ng-template>
+          </div>
         </div>
       </div>
 
@@ -80,110 +82,72 @@ import { fixBackendUrl } from '../../core/utils/url-helper';
     /* ── LOADER ─────────────────────────────────────── */
     .loader-overlay {
       position: absolute; inset: 0; z-index: 10;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 2.5rem;
-      background: var(--loader-bg, radial-gradient(ellipse at center, rgba(15,10,30,0.97) 0%, rgba(5,5,10,0.99) 100%));
+      display: flex; align-items: center; justify-content: center;
+      background: var(--loader-bg, rgba(15, 23, 42, 0.9));
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       transition: background 0.3s ease;
     }
 
-    .loader-scene {
-      position: relative; width: 160px; height: 160px;
-      display: flex; align-items: center; justify-content: center;
+    .loader-content {
+      display: flex; flex-direction: column; align-items: center; gap: 2rem;
     }
 
-    /* Orbit rings */
-    .orbit-ring {
-      position: absolute; border-radius: 50%;
-      border: 2px solid transparent; animation: spin linear infinite;
+    /* Minimal CSS Wireframe Cube */
+    .cube-wrapper {
+      width: 60px; height: 60px;
+      perspective: 800px;
     }
-    .orbit-1 {
-      width: 160px; height: 160px;
-      border-top-color: rgba(99,102,241,0.9);
-      border-right-color: rgba(99,102,241,0.3);
-      animation-duration: 2s;
+    
+    .cube {
+      width: 100%; height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      animation: rotate 4s infinite linear;
     }
-    .orbit-2 {
-      width: 120px; height: 120px;
-      border-top-color: rgba(139,92,246,0.8);
-      border-left-color: rgba(139,92,246,0.2);
-      animation-duration: 1.5s; animation-direction: reverse;
+    
+    .face {
+      position: absolute;
+      width: 60px; height: 60px;
+      border: 1px solid var(--loader-primary, rgba(99, 102, 241, 0.5));
+      background: rgba(99, 102, 241, 0.05); /* Slight tint */
+      box-shadow: inset 0 0 10px rgba(99, 102, 241, 0.1);
     }
-    .orbit-3 {
-      width: 80px; height: 80px;
-      border-top-color: rgba(236,72,153,0.7);
-      border-right-color: rgba(236,72,153,0.15);
-      animation-duration: 1s;
-    }
+    
+    .front  { transform: translateZ(30px); }
+    .back   { transform: rotateY(180deg) translateZ(30px); }
+    .right  { transform: rotateY(90deg) translateZ(30px); }
+    .left   { transform: rotateY(-90deg) translateZ(30px); }
+    .top    { transform: rotateX(90deg) translateZ(30px); }
+    .bottom { transform: rotateX(-90deg) translateZ(30px); }
 
-    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-    /* Core */
-    .loader-core {
-      width: 40px; height: 40px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(139,92,246,1) 0%, rgba(99,102,241,0.6) 60%, transparent 100%);
-      box-shadow: 0 0 30px rgba(139,92,246,0.8), 0 0 60px rgba(99,102,241,0.4), inset 0 0 20px rgba(255,255,255,0.2);
-      animation: pulse 1.5s ease-in-out infinite;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .core-inner {
-      width: 16px; height: 16px; border-radius: 50%;
-      background: radial-gradient(circle, #fff 0%, rgba(196,181,253,0.8) 100%);
-      animation: pulse 1s ease-in-out infinite reverse;
-    }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.15); opacity: 0.85; }
-    }
-
-    /* Particles */
-    .particle {
-      position: absolute; width: 6px; height: 6px; border-radius: 50%;
-      background: rgba(196,181,253,0.9);
-      box-shadow: 0 0 8px rgba(196,181,253,0.8);
-      animation: orbit-particle linear infinite;
-    }
-    .p1 { animation-duration: 2s; animation-delay: 0s;    --r: 78px; width: 8px; height: 8px; background: rgba(99,102,241,1); }
-    .p2 { animation-duration: 2s; animation-delay: -0.33s; --r: 78px; }
-    .p3 { animation-duration: 2s; animation-delay: -0.66s; --r: 78px; }
-    .p4 { animation-duration: 1.5s; animation-delay: -0.25s; --r: 58px; width: 5px; height: 5px; background: rgba(139,92,246,1); }
-    .p5 { animation-duration: 1.5s; animation-delay: -0.75s; --r: 58px; width: 4px; height: 4px; }
-    .p6 { animation-duration: 1s;   animation-delay: -0.5s;  --r: 38px; width: 4px; height: 4px; background: rgba(236,72,153,1); }
-
-    @keyframes orbit-particle {
-      0%   { transform: rotate(0deg)   translateX(var(--r)) rotate(0deg); opacity: 1; }
-      50%  { opacity: 0.4; }
-      100% { transform: rotate(360deg) translateX(var(--r)) rotate(-360deg); opacity: 1; }
+    @keyframes rotate {
+      0% { transform: rotateX(0) rotateY(0) rotateZ(0); }
+      100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
     }
 
     /* Loader info */
-    .loader-info { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; width: 240px; }
+    .loader-info { 
+      display: flex; flex-direction: column; align-items: center; gap: 0.75rem; 
+      width: 200px; 
+    }
     .loader-title {
-      font-size: 0.9rem; font-weight: 600; letter-spacing: 0.05em;
-      color: var(--loader-text, rgba(196,181,253,0.9));
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em;
+      color: var(--loader-text, #94a3b8);
       text-transform: uppercase;
     }
     .progress-track {
-      width: 100%; height: 4px; background: var(--loader-track-bg, rgba(255,255,255,0.08));
-      border-radius: 4px; position: relative; overflow: visible;
+      width: 100%; height: 2px; background: var(--loader-track-bg, rgba(255,255,255,0.1));
+      border-radius: 2px; overflow: hidden;
     }
     .progress-fill {
-      height: 100%; border-radius: 4px;
-      background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+      height: 100%; border-radius: 2px;
+      background: var(--loader-primary, #6366f1);
       transition: width 0.3s ease;
     }
-    .progress-glow {
-      position: absolute; top: -5px;
-      width: 12px; height: 12px; border-radius: 50%;
-      background: #c4b5fd;
-      box-shadow: 0 0 12px 4px rgba(196,181,253,0.8);
-      transform: translateX(-50%);
-      transition: left 0.3s ease;
-      margin-left: -6px;
-    }
     .loader-percent {
-      font-size: 2rem; font-weight: 800;
-      background: linear-gradient(135deg, #6366f1, #c4b5fd);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      font-size: 1rem; font-weight: 500;
+      color: var(--loader-text-strong, #f8fafc);
     }
 
     /* Controls hint */
@@ -207,50 +171,51 @@ import { fixBackendUrl } from '../../core/utils/url-helper';
     .error-overlay {
       position: absolute; inset: 0; z-index: 5;
       display: flex; align-items: center; justify-content: center;
-      background: rgba(15, 10, 30, 0.9); backdrop-filter: blur(8px);
-      padding: 2rem; text-align: center;
+      background: var(--loader-bg, rgba(15, 23, 42, 0.9)); 
+      backdrop-filter: blur(8px);
+      padding: 1rem;
     }
-    .error-content {
-      display: flex; flex-direction: column; align-items: center; gap: 1rem;
-      max-width: 280px;
+    .error-card {
+      display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
+      background: var(--error-card-bg, rgba(255, 255, 255, 0.03));
+      border: 1px solid var(--error-card-border, rgba(255, 255, 255, 0.1));
+      border-radius: 16px;
+      padding: 2rem; text-align: center; max-width: 320px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     }
-    .error-icon { color: rgba(239, 68, 68, 0.6); margin-bottom: 0.5rem; }
+    .error-icon { 
+      color: var(--error-icon-color, #ef4444); 
+      opacity: 0.8;
+      margin-bottom: 0.5rem; 
+    }
     .error-title {
-      font-weight: 600; font-size: 1rem; color: #fff;
-      letter-spacing: 0.02em;
+      font-weight: 600; font-size: 1rem; 
+      color: var(--loader-text-strong, #f8fafc);
     }
     .error-text {
-      font-size: 0.8rem; line-height: 1.5;
-      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.85rem; line-height: 1.5;
+      color: var(--loader-text, #94a3b8);
     }
     
-    
-    /* Theme support */
-    :host-context([data-theme="light"]) {
-      --loader-bg: radial-gradient(ellipse at center, rgba(255,255,255,0.98) 0%, rgba(240,242,245,1) 100%);
-      --loader-text: rgba(99,102,241,0.8);
-      --loader-track-bg: rgba(0,0,0,0.05);
+    /* Theme support (Light / Default) */
+    :host-context([data-theme="light"]), 
+    :host-context([data-theme="default"]) {
+      --loader-bg: rgba(255, 255, 255, 0.85);
+      --loader-primary: rgba(99, 102, 241, 0.8); /* vivid indigo */
+      --loader-text: #64748b;
+      --loader-text-strong: #0f172a;
+      --loader-track-bg: rgba(0, 0, 0, 0.08);
       
-      .loader-percent {
-        background: linear-gradient(135deg, #4f46e5, #818cf8);
-        -webkit-background-clip: text;
+      --error-card-bg: #ffffff;
+      --error-card-border: rgba(0, 0, 0, 0.08);
+      
+      .face {
+        background: rgba(99, 102, 241, 0.03); 
+        box-shadow: none;
       }
-      
-      .progress-glow { background: #6366f1; box-shadow: 0 0 12px 2px rgba(99,102,241,0.4); }
-      
-      .error-overlay { background: rgba(255, 255, 255, 0.95); }
-      .error-title { color: #1e1b4b; }
-      .error-text { color: #64748b; }
-      
-      .hint-badge {
-        background: rgba(255,255,255,0.7);
-        border: 1px solid rgba(0,0,0,0.05);
-        color: rgba(0,0,0,0.4);
+      .error-card {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
       }
-    }
-
-    :host-context([data-theme="dark"]) .error-overlay {
-      background: rgba(0, 0, 0, 0.6);
     }
   `]
 })
@@ -266,6 +231,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   isLoading = true;
   hasError = false;
   loadingProgress = 0;
+  isAiGeneration = false;
 
   private scene!: THREE.Scene;
   private camera!: THREE.PerspectiveCamera;
@@ -400,6 +366,9 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     if (url && !url.startsWith('http')) {
       url = this.location.prepareExternalUrl(url);
     }
+
+    // Determine if it's an AI task based on ID pattern
+    this.isAiGeneration = !!this.modelPath && this.modelPath.includes('ai-gen-task');
 
     loader.load(
       url,

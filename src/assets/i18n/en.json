@@ -945,7 +945,8 @@
     "EXPAND_3D": "View 3D Model",
     "EXPAND_PHOTO": "View Full Photo",
     "LOAD_ERROR": "3D Load Error",
-    "ERROR_DESCRIPTION": "The 3D model could not be loaded. This might be due to a missing file or a temporary server issue."
+    "ERROR_DESCRIPTION": "The 3D model could not be loaded. This might be due to a missing file or a temporary server issue.",
+    "AI_GENERATION_PENDING": "This AI-generated model is still being processed or was not successfully uploaded. Please try again later."
   },
   "PAYMENT": {
     "HEADER": {
