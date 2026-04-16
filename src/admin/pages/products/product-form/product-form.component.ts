@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, HostListener } from "@angular/core";
 import { FormBuilder, FormGroup, Validators, FormArray } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
@@ -313,6 +313,19 @@ export class ProductFormComponent implements OnInit {
       ? category.name
       : (category.name as LocalizedString).en || '';
     return category.slug || name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+  }
+
+  @HostListener('window:paste', ['$event'])
+  onPaste(event: ClipboardEvent): void {
+    const files = event.clipboardData?.files;
+    if (files && files.length > 0) {
+      const fileArray = Array.from(files);
+      const imageFiles = fileArray.filter(file => file.type.startsWith('image/'));
+      if (imageFiles.length > 0) {
+        event.preventDefault(); // Prevent default browser paste behavior for images
+        this.uploadImages(imageFiles);
+      }
+    }
   }
 
   onDragOver(event: DragEvent): void {
