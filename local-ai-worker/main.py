@@ -112,19 +112,16 @@ async def run_instantmesh_generation(task_id: str, image_url: str, hq: bool = Fa
                 # Check if it's a scene (often happens when multiple parts/materials exist)
                 if isinstance(mesh, trimesh.Scene):
                     # Rotate all geometry in the scene
-                    rotation = trimesh.transformations.rotation_matrix(np.pi/2, [1, 0, 0])
+                    # Normal orientation fix: rotate -90 degrees around X axis
+                    rotation = trimesh.transformations.rotation_matrix(-np.pi/2, [1, 0, 0])
                     mesh.apply_transform(rotation)
-                    # We might want to fix chirality as well
-                    chirality = trimesh.transformations.scale_matrix(-1, [1, 0, 0])
-                    mesh.apply_transform(chirality)
                     # Use export with GLB format
                     glb_data = mesh.export(file_type='glb')
                     with open(glb_path, 'wb') as f:
                         f.write(glb_data)
                 else:
-                    # Fix orientation: rotate 90 degrees around X axis to make it horizontal
-                    # InstantNeRF output often needs this for standard Y-up viewers
-                    rotation = trimesh.transformations.rotation_matrix(np.pi/2, [1, 0, 0])
+                    # Fix orientation: rotate -90 degrees around X axis
+                    rotation = trimesh.transformations.rotation_matrix(-np.pi/2, [1, 0, 0])
                     mesh.apply_transform(rotation)
                     
                     # Fix chirality (mirror X) as InstantMesh/Zero123 often has inverted X
