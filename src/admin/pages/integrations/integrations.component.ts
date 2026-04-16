@@ -45,7 +45,8 @@ export class IntegrationsComponent implements OnInit {
       meshyApiKey: [''],
       hunyuanApiKey: [''],
       lumaApiKey: [''],
-      customUrl: ['']
+      customUrl: [''],
+      customUseHq: [false]
     });
 
     this.smtpForm = this.fb.group({

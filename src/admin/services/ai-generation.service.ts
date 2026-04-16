@@ -33,8 +33,8 @@ export class AiGenerationService {
 
   constructor(private http: HttpClient) {}
 
-  generateModel(imageUrl: string): Observable<TripoTaskResponse> {
-    return this.http.post<TripoTaskResponse>(`${this.apiUrl}/generate`, { imageUrl });
+  generateModel(imageUrl: string, isHq: boolean = false): Observable<TripoTaskResponse> {
+    return this.http.post<TripoTaskResponse>(`${this.apiUrl}/generate`, { imageUrl, isHq });
   }
 
   getTaskStatus(taskId: string): Observable<TripoStatusResponse> {

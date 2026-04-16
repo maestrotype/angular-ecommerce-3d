@@ -234,6 +234,7 @@
   "LUMA_API_KEY_LABEL": "Luma AI API Key",
   "CUSTOM_WEBHOOK_URL_INFO": "URL of your self-hosted API compatible with the system",
   "CUSTOM_WEBHOOK_URL_LABEL": "Custom Webhook URL",
+  "USE_HIGH_QUALITY_LOCAL": "High Quality mode",
   "SAVE_ENGINE_SETTINGS": "Save Engine Settings",
   "STRP_PAYMENTS": "Stripe Payments",
   "WEBHOOK_SECRET_LABEL": "Webhook Secret",

@@ -47,11 +47,20 @@ export class AiGenerationService {
     }
   }
 
-  async generateTask(imageUrl: string) {
+  async generateTask(imageUrl: string, isHq: boolean = false) {
     const provider = await this.getActiveProvider();
-    this.logger.log(`Delegating generateTask to ${provider.providerId}`);
     
-    const result = await provider.generateTask(imageUrl);
+    // If it's the custom provider, use the setting from the database for HQ mode
+    if (provider.providerId === 'custom') {
+      const hqSetting = await firstValueFrom(this.settingsService.getSettingByKey('ai.customUseHq')).catch(() => null);
+      if (hqSetting) {
+        isHq = hqSetting.value === 'true';
+      }
+    }
+
+    this.logger.log(`Delegating generateTask to ${provider.providerId} (HQ: ${isHq})`);
+    
+    const result = await provider.generateTask(imageUrl, isHq);
     return {
       code: 0,
       data: { task_id: result.taskId }, // Align with legacy frontend

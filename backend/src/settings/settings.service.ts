@@ -406,6 +406,7 @@ export class SettingsService {
       { key: 'ai.hunyuanApiKey', value: '', type: 'string', category: 'ai', description: 'Hunyuan3D API key' },
       { key: 'ai.lumaApiKey', value: '', type: 'string', category: 'ai', description: 'Luma AI API key' },
       { key: 'ai.customUrl', value: '', type: 'string', category: 'ai', description: 'Custom Webhook URL' },
+      { key: 'ai.customUseHq', value: 'false', type: 'boolean', category: 'ai', description: 'Use HQ mode for custom provider' },
       
       // SMTP settings
       { key: 'smtp.host', value: process.env.SMTP_HOST || '', type: 'string', category: 'smtp', description: 'SMTP host' },

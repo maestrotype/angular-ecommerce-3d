@@ -230,6 +230,7 @@
   "LUMA_API_KEY_LABEL": "API ключ Luma AI",
   "CUSTOM_WEBHOOK_URL_INFO": "URL вашего сервера, совместимого с системой",
   "CUSTOM_WEBHOOK_URL_LABEL": "URL вебхука",
+  "USE_HIGH_QUALITY_LOCAL": "Режим высокого качества",
   "SAVE_ENGINE_SETTINGS": "Сохранить настройки движка",
   "STRP_PAYMENTS": "Платежи Stripe",
   "WEBHOOK_SECRET_LABEL": "Секрет вебхука",

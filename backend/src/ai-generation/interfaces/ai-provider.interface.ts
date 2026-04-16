@@ -11,7 +11,7 @@ export abstract class AiGenerationProvider {
   abstract get providerId(): string;
   
   /** Submits an image for generation and returns a task ID */
-  abstract generateTask(imageUrl: string): Promise<{ taskId: string }>;
+  abstract generateTask(imageUrl: string, isHq?: boolean): Promise<{ taskId: string }>;
   
   /** Checks the status of a specific task */
   abstract getTaskStatus(taskId: string): Promise<AiTaskResult>;

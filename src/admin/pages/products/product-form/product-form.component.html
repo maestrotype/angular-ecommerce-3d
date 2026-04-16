@@ -174,11 +174,11 @@
                     <span>{{ 'PRODUCT_3D.OR' | translate }}</span>
                   </div>
 
-                  <button mat-raised-button color="accent" type="button" class="ai-gen-btn" 
-                          (click)="generateAi3dModel()" [disabled]="isAiGenerating || isUploading3d">
+                   <button mat-raised-button color="accent" type="button" class="ai-gen-btn" 
+                           (click)="generateAi3dModel()" [disabled]="isAiGenerating || isUploading3d">
                     <mat-icon *ngIf="!isAiGenerating">auto_awesome</mat-icon>
                     <mat-spinner *ngIf="isAiGenerating" diameter="20" class="mini-spinner"></mat-spinner>
-                    {{ isAiGenerating ? ('PRODUCT_3D.AI_GENERATING' | translate) : ('PRODUCT_3D.GENERATE_AI' | translate) }}
+                    <span *ngIf="!isAiGenerating">{{ 'PRODUCT_3D.GENERATE_AI' | translate }}</span>
                   </button>
                 </div>
 
@@ -233,7 +233,6 @@
                 </div>
               </div>
 
-              <!-- Hidden input for AI source image -->
               <input type="file" id="aiSourceImageInput" style="display: none" (change)="onAiSourceImageSelected($event)" accept="image/*">
 
 

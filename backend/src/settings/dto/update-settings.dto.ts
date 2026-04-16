@@ -178,6 +178,10 @@ export class UpdateAiSettingsDto {
   @IsOptional()
   @IsString()
   customUrl?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  customUseHq?: boolean;
 }
 
 export class UpdateSMTPSettingsDto {

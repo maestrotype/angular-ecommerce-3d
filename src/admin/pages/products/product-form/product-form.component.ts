@@ -163,6 +163,7 @@ export class ProductFormComponent implements OnInit {
     this.finalizeAiModel(task.result.model, task.task_id);
   }
 
+
   onAiSourceImageSelected(event: any): void {
     const file = event.target.files[0];
     if (!file) return;
@@ -241,7 +242,18 @@ export class ProductFormComponent implements OnInit {
 
         if (apiStatus === 'success' && data.result?.model) {
           this.aiStatusMessage = this.translate.instant('AI_GENERATION_SUCCESS');
-          this.finalizeAiModel(data.result.model, taskId);
+          
+          const modelUrl = data.result.model;
+          const isLocalModel = modelUrl.includes('localhost') || modelUrl.includes('127.0.0.1');
+
+          if (isLocalModel) {
+            // Local models are served directly from the worker and shouldn't be moved to Cloudinary
+            this.model3dUrl = modelUrl;
+            this.resetAiState();
+            this.snackBar.open('Model generated and loaded locally!', this.translate.instant('CLOSE_BTN'), { duration: 3000 });
+          } else {
+            this.finalizeAiModel(modelUrl, taskId);
+          }
         } else if (apiStatus === 'failed') {
           this.resetAiState();
           const errorMsg = status.message || 'Unknown AI error';
