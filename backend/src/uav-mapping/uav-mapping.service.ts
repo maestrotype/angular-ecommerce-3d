@@ -99,4 +99,28 @@ export class UavMappingBackendService {
       throw new HttpException('Failed to stop task', status);
     }
   }
+
+  /**
+   * Геолокация одиночного изображения.
+   * Geolocates a single image within a search area.
+   */
+  async geolocateImage(imageFile: Express.Multer.File, bounds: string) {
+    const formData = new FormData();
+    formData.append('image', fs.createReadStream(imageFile.path), imageFile.originalname);
+    formData.append('bounds', bounds);
+
+    try {
+      this.logger.log(`Forwarding image geolocation request to ${this.pythonWorkerUrl}`);
+      const response = await firstValueFrom(
+        this.httpService.post(`${this.pythonWorkerUrl}/geolocate-image`, formData, {
+          headers: { ...formData.getHeaders() },
+          timeout: 120000, // 2 minutes (increased for tile downloads & model init)
+        }),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Geolocation failed: ${error.message}`);
+      throw new HttpException('Geolocation service failed', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }

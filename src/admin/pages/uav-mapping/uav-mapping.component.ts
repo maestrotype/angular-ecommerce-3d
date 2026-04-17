@@ -227,6 +227,35 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
 
   // ─── Processing ──────────────────────────────────────────────────────────────
 
+  geolocateCurrentScreenshot() {
+    if (!this.referenceImageFile || !this.selectedBounds || this.isProcessing) return;
+
+    this.isProcessing = true;
+    this.loadingProgress = 10;
+    this.currentAction = 'Locating screenshot on map...';
+
+    this.uavService.geolocateImage(this.referenceImageFile, this.selectedBounds).subscribe({
+      next: (res) => {
+        this.isProcessing = false;
+        if (res.status === 'success') {
+          this.snackBar.open('Screenshot located! Placed pin on map.', 'Close', { duration: 5000 });
+          this.showResults = true;
+          this.confidence = res.confidence;
+          this.textAnalysis = `Screenshot successfully geolocated with ${(res.confidence * 100).toFixed(1)}% confidence. Location found at coordinates: ${res.lat.toFixed(6)}, ${res.lng.toFixed(6)}.`;
+          
+          // Render on map as a single point
+          setTimeout(() => this.initResultsMap([[res.lat, res.lng]], true), 150);
+        } else {
+          this.snackBar.open('Geolocation failed: ' + res.error, 'Close', { duration: 7000 });
+        }
+      },
+      error: (err) => {
+        this.isProcessing = false;
+        this.snackBar.open('API Error: ' + err.message, 'Close', { duration: 5000 });
+      }
+    });
+  }
+
   startProcessing() {
     if (!this.videoFile || !this.selectedBounds || this.isProcessing) return;
 
@@ -360,8 +389,23 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
     // Trajectory comes in as [lat, lng] pairs already
     const latLngs: L.LatLngTuple[] = trajectory.map(p => [p[0], p[1]]);
 
-    if (latLngs.length < 2) {
-      this.snackBar.open('Trajectory too short to display.', 'Close', { duration: 4000 });
+    if (latLngs.length === 0) {
+      this.snackBar.open('No coordinates available to display.', 'Close', { duration: 4000 });
+      return;
+    }
+
+    if (latLngs.length === 1) {
+      // Single geolocation point
+      L.marker(latLngs[0], { 
+        icon: L.divIcon({
+          html: '<div class="geolocate-pin">📍</div>',
+          className: 'custom-geo-icon'
+        }) 
+      }).addTo(this.resultsMap)
+        .bindPopup(`<b>📍 Located Position</b><br>Confidence: ${(this.confidence * 100).toFixed(1)}%`)
+        .openPopup();
+      
+      this.resultsMap.setView(latLngs[0], 17);
       return;
     }
 

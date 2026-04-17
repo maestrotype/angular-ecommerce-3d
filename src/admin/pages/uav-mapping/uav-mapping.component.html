@@ -134,7 +134,7 @@
         </mat-card-content>
       </mat-card>
 
-      <!-- Action button -->
+      <!-- Action buttons -->
       <div class="actions-section">
         <button mat-flat-button color="primary" class="process-btn"
           [disabled]="!videoFile || !selectedBounds || isProcessing"
@@ -143,6 +143,14 @@
           <ng-template #spinner><mat-icon class="spinning">sync</mat-icon></ng-template>
           {{ isProcessing ? 'Extracting trajectory...' : 'Map Flight Path' }}
         </button>
+
+        <button mat-stroked-button color="accent" class="process-btn secondary-btn"
+          [disabled]="!referenceImageFile || !selectedBounds || isProcessing"
+          (click)="geolocateCurrentScreenshot()" style="margin-top: 10px;">
+          <mat-icon>location_searching</mat-icon>
+          📍 Find screenshot on map
+        </button>
+
         <mat-progress-bar *ngIf="isProcessing" mode="determinate" [value]="loadingProgress" style="margin-top: 12px; border-radius: 8px;"></mat-progress-bar>
         <div *ngIf="isProcessing" class="status-action-text" style="font-size: 12px; color: var(--primary-color); margin-top: 6px; font-weight: 500; text-align: center;">
           <mat-icon style="font-size: 14px; width: 14px; height: 14px; vertical-align: middle;">sync</mat-icon> {{ currentAction }}

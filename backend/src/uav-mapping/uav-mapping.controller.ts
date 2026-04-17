@@ -6,9 +6,10 @@ import {
   Body, 
   UseInterceptors, 
   UploadedFiles, 
+  UploadedFile,
   Logger 
 } from '@nestjs/common';
-import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname, join } from 'path';
 import { UavMappingBackendService } from './uav-mapping.service';
@@ -66,5 +67,30 @@ export class UavMappingController {
   async stopTask(@Param('taskId') taskId: string) {
     this.logger.log(`Received request to stop task ${taskId}`);
     return this.uavService.stopTask(taskId);
+  }
+
+  /**
+   * Эндпоинт для геолокации скриншота.
+   * Endpoint for screenshot geolocation.
+   */
+  @Post('geolocate-image')
+  @UseInterceptors(FileInterceptor('image', {
+    storage: diskStorage({
+      destination: join(process.cwd(), 'uploads'),
+      filename: (req, file, cb) => {
+        const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
+        return cb(null, `geolocate_${randomName}${extname(file.originalname)}`);
+      }
+    }),
+    limits: { fileSize: 20 * 1024 * 1024 } // 20MB
+  }))
+  async geolocateImage(
+    @UploadedFile() file: Express.Multer.File,
+    @Body('bounds') bounds: string,
+  ) {
+    if (!file) {
+      throw new Error('Image file is required');
+    }
+    return this.uavService.geolocateImage(file, bounds);
   }
 }

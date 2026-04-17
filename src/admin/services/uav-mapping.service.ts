@@ -62,5 +62,12 @@ export class UavMappingService {
     console.log(`🛑 [UavMappingService] Requesting stop for taskId: "${taskId}"`);
     return this.http.post(`${this.apiUrl}/stop/${taskId}`, {});
   }
+
+  geolocateImage(imageFile: File, bounds: GeoBounds): Observable<any> {
+    const formData = new FormData();
+    formData.append('image', imageFile);
+    formData.append('bounds', JSON.stringify(bounds));
+    return this.http.post(`${this.apiUrl}/geolocate-image`, formData);
+  }
 }
 

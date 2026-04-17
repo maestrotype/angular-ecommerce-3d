@@ -24,6 +24,16 @@ import logging
 from pathlib import Path
 from typing import List, Optional, Dict, Any
 
+# Настройка логирования в файл для отладки
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s [%(levelname)s] %(message)s',
+    handlers=[
+        logging.FileHandler("outputs/worker.log"),
+        logging.StreamHandler()
+    ]
+)
+
 from utils.colmap_runner import ColmapRunner
 from utils.video2bev_pipeline import Video2BEVPipeline
 from utils.satellite_matcher import SatelliteMatcher
@@ -43,17 +53,109 @@ app.add_middleware(
 # Глобальные объекты (будут инициализированы в main)
 tasks = None
 active_processes: Dict[str, Process] = {}
+sat_matcher_global: Optional[SatelliteMatcher] = None
 
-# Мы инициализируем менеджер только при реальном запуске, 
-# чтобы избежать рекурсии при 'spawn' на macOS
 def get_tasks():
     global tasks
     if tasks is None:
-        # В случае spawn-процесса, он не должен создавать свой менеджер,
-        # он получит tasks как аргумент функции.
-        # Этот блок сработает только в главном процессе.
         return {} 
     return tasks
+
+def validate_video_quality(video_path: str) -> Dict[str, Any]:
+    """
+    Быстрая диагностика качества видео перед запуском тяжелого SfM.
+    Извлекает 5 кадров и проверяет количество стабильных признаков.
+    """
+    import cv2
+    import numpy as np
+    
+    cap = cv2.VideoCapture(video_path)
+    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    if total_frames < 10:
+        return {"valid": False, "error": "Video too short"}
+        
+    orb = cv2.ORB_create(nfeatures=1000)
+    features_counts = []
+    
+    # Проверяем 5 равномерно распределенных кадров
+    for i in range(5):
+        frame_idx = int(total_frames * (i / 5))
+        cap.set(cv2.CAP_PROP_POS_FRAMES, frame_idx)
+        ret, frame = cap.read()
+        if not ret: continue
+        
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        kpts = orb.detect(gray, None)
+        features_counts.append(len(kpts))
+        
+    cap.release()
+    
+    avg_features = np.mean(features_counts) if features_counts else 0
+    logging.info(f"Video diagnostic: avg features = {avg_features}")
+    
+    if avg_features < 150:
+        return {
+            "valid": False, 
+            "error": "Video is too noisy or blurry (avg features < 150). SfM will likely fail.",
+            "avg_features": avg_features
+        }
+        
+    return {"valid": True, "avg_features": avg_features}
+
+@app.post("/geolocate-image")
+async def geolocate_image(
+    image: UploadFile = File(...),
+    bounds: str = Form("{}")
+):
+    """
+    Находит GPS координаты скриншота на спутниковой карте.
+    """
+    logging.info(f"📍 [Python] Received geolocate request. Bounds: {bounds}")
+    task_id = str(uuid.uuid4())
+    work_dir = Path(f"outputs/geolocate_{task_id}")
+    work_dir.mkdir(parents=True, exist_ok=True)
+    
+    img_path = work_dir / image.filename
+    try:
+        content = await image.read()
+        with open(img_path, "wb") as f:
+            f.write(content)
+        logging.info(f"Saved request image to {img_path} ({len(content)} bytes)")
+    except Exception as e:
+        logging.error(f"Failed to save request image: {e}")
+        return {"status": "failed", "error": f"IO Error: {str(e)}"}
+        
+    try:
+        poly = json.loads(bounds)
+        
+        # Используем глобальный матчер, чтобы не грузить веса каждый раз
+        global sat_matcher_global
+        if sat_matcher_global is None:
+            logging.info("Initializing global SatelliteMatcher (first run)...")
+            sat_matcher_global = SatelliteMatcher()
+        
+        # Запускаем иерархический поиск (Scan Pass -> Focus Pass)
+        result = sat_matcher_global.hierarchical_geolocate(str(img_path), poly, str(work_dir))
+        
+        if result["status"] == "failed":
+            return {"status": "failed", "error": result["error"]}
+            
+        logging.info(f"Geolocation success: {result['lat']}, {result['lng']} (Conf: {result['confidence']})")
+        
+        return {
+            "status": "success",
+            "lat": result["lat"],
+            "lng": result["lng"],
+            "confidence": result["confidence"],
+            "task_id": task_id
+        }
+    except Exception as e:
+        logging.exception(f"Critical error in geolocate_image: {str(e)}")
+        if work_dir.exists():
+            try: shutil.rmtree(work_dir)
+            except: pass
+        return {"status": "failed", "error": f"Internal Error: {str(e)}"}
+        return {"status": "failed", "error": f"Internal Error: {str(e)}"}
 
 @app.post("/process-drone-video")
 async def process_drone_video(
@@ -143,14 +245,29 @@ def run_pipeline_sync(task_id: str, video_path: str, polygon_json: str, hints: s
             task_info.update({"progress": progress, "current_action": action})
             shared_tasks[task_id] = task_info
 
-        update_task_progress(5, "Initial processing...")
-        work_dir = os.path.dirname(video_path)
-        
+        update_task_progress(5, "Analyzing video quality...")
+        diagnostic = validate_video_quality(video_path)
+        if not diagnostic["valid"]:
+            logging.warning(f"Rejecting video: {diagnostic['error']}")
+            task_data = shared_tasks[task_id]
+            task_data.update({
+                "status": "failed", 
+                "progress": 100,
+                "error": diagnostic["error"],
+                "text_analysis": f"Диагностика: {diagnostic['error']}. Пожалуйста, используйте видео более высокого качества."
+            })
+            shared_tasks[task_id] = task_data
+            return
+
         # 1. SfM (COLMAP)
         update_task_progress(10, "Extracting keyframes from video...")
         
         runner = ColmapRunner(os.path.join(work_dir, "colmap"))
-        sat_matcher = SatelliteMatcher()
+        
+        # Используем глобальный матчер
+        global sat_matcher_global
+        if sat_matcher_global is None:
+            sat_matcher_global = SatelliteMatcher()
         
         try:
             # Парсим hints, если это JSON, иначе считаем пустым конфигом
@@ -182,11 +299,11 @@ def run_pipeline_sync(task_id: str, video_path: str, polygon_json: str, hints: s
                 
                 poly = json.loads(polygon_json)
                 sat_map_path = os.path.join(work_dir, "satellite_ref.jpg")
-                sat_matcher.download_satellite_base(poly, sat_map_path)
+                sat_matcher_global.download_satellite_base(poly, sat_map_path)
                 
                 update_task_progress(85, "Optimizing trajectory in WGS84...")
                 # Пытаемся привязать траекторию
-                trajectory = sat_matcher.align_trajectory(
+                trajectory = sat_matcher_global.align_trajectory(
                     relative_poses, poly, str(runner.images_path), sat_map_path
                 )
                 
