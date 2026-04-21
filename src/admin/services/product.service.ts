@@ -147,4 +147,12 @@ export class ProductService {
       formData
     );
   }
+
+  // New method to move local file to Cloudinary
+  archiveLocalModel(localPath: string): Observable<{ url: string; publicId: string }> {
+    return this.http.post<{ url: string; publicId: string }>(
+      `${this.API_URL}/uploads/archive-local`,
+      { path: localPath }
+    );
+  }
 }

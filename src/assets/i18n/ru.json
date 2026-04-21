@@ -283,7 +283,6 @@
     "BKG_REMOVE": "Удалить фон",
     "BKG_OPTIMIZE": "Оптимизировать"
   },
-
   "ADD_PRODUCT": "Добавить товар",
   "EDIT_PRODUCT": "Редактировать товар",
   "PRODUCT_NAME": "Название товара",
@@ -1145,5 +1144,12 @@
       "PAYMENT_METHODS": "💳 Способы оплаты",
       "METHODS_LIST": "Visa, MasterCard, PayPal, Apple Pay"
     }
-  }
+  },
+  "MODEL_ARCHIVED_SUCCESSFULLY": "3D-модель успешно архивирована в Cloudinary!",
+  "ARCHIVE_FAILED": "Не удалось архивировать модель. Проверьте логи сервера.",
+  "LOCAL_STORAGE_WARNING": "Эта модель хранится локально на сервере.",
+  "ARCHIVE_TO_CLOUDINARY": "Архивировать в Cloudinary",
+  "SECURITY_BLOCK": "Безопасность браузера заблокировала модель",
+  "MIXED_CONTENT_EXPLANATION": "Ваш браузер блокирует загрузку локальных ресурсов (HTTP) на защищенном сайте (HTTPS). Архивация модели в Cloudinary решит эту проблему навсегда.",
+  "FIX_NOW_ARCHIVE": "Исправить: Архивировать в Cloudinary"
 }

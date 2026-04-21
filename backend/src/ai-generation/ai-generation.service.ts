@@ -103,13 +103,15 @@ export class AiGenerationService {
 
       this.logger.log(`Uploading model to Cloudinary (${buffer.length} bytes)...`);
 
+      // Use upload_stream with chunk_size to support files > 10MB (Raw/GLB)
       const uploadPromise = new Promise<any>((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
           {
             folder: 'product-3d-models',
             resource_type: 'raw',
             public_id: filename.replace('.glb', ''),
-            format: 'glb'
+            chunk_size: 6000000, // 6MB chunks
+            timeout: 600000
           },
           (error, result) => {
             if (error) {

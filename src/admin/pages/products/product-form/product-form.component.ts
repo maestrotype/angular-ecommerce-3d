@@ -52,8 +52,17 @@ export class ProductFormComponent implements OnInit {
   showRecoveryList: boolean = false;
   taskId: string | null = null;
 
+  get model3dUrlIsLocal(): boolean {
+    return !!this.model3dUrl && (this.model3dUrl.includes('localhost') || this.model3dUrl.includes('127.0.0.1') || !!this.model3dPublicId?.startsWith('LOCAL:'));
+  }
+
+  get model3dUrlIsBlockedByMixedContent(): boolean {
+    // If we are on HTTPS but the model is HTTP Localhost
+    return window.location.protocol === 'https:' && this.model3dUrlIsLocal && !!this.model3dUrl?.startsWith('http:');
+  }
+
   get model3dUrlIsLegacy(): boolean {
-    return false;
+    return this.model3dUrlIsLocal;
   }
   categories: Category[] = [];
 
@@ -521,6 +530,28 @@ export class ProductFormComponent implements OnInit {
           panelClass: 'error-snackbar'
         });
       },
+    });
+  }
+
+  archiveLocalModel(): void {
+    if (!this.model3dPublicId || !this.model3dUrlIsLocal) return;
+    
+    // PublicId for local files starts with 'LOCAL:'
+    const localPath = this.model3dPublicId;
+    this.isUploading3d = true;
+    
+    this.productService.archiveLocalModel(localPath).subscribe({
+      next: (res) => {
+        this.model3dUrl = res.url;
+        this.model3dPublicId = res.publicId;
+        this.isUploading3d = false;
+        this.snackBar.open(this.translate.instant('MODEL_ARCHIVED_SUCCESSFULLY'), this.translate.instant('SUCCESS_BTN'), { duration: 5000 });
+      },
+      error: (err) => {
+        this.isUploading3d = false;
+        this.snackBar.open(this.translate.instant('ARCHIVE_FAILED'), this.translate.instant('CLOSE_BTN'), { duration: 5000 });
+        console.error('Archive error:', err);
+      }
     });
   }
 

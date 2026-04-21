@@ -1,4 +1,5 @@
-import { IsString, IsOptional, IsBoolean, IsNumber, IsObject } from 'class-validator';
+import { IsString, IsOptional, IsBoolean, IsNumber, IsObject, ValidateIf } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class UpdateSettingsDto {
   @IsString()
@@ -180,6 +181,11 @@ export class UpdateAiSettingsDto {
   customUrl?: string;
 
   @IsOptional()
+  @Transform(({ value }) => {
+    if (value === 'true') return true;
+    if (value === 'false') return false;
+    return value;
+  })
   @IsBoolean()
   customUseHq?: boolean;
 }

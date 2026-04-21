@@ -287,7 +287,6 @@
     "BKG_REMOVE": "Remove Background",
     "BKG_OPTIMIZE": "Optimize Image"
   },
-
   "ADD_PRODUCT": "Add Product",
   "EDIT_PRODUCT": "Edit Product",
   "PRODUCT_NAME": "Product Name",
@@ -942,7 +941,6 @@
     "HINT": "Rotate model to enable zoom · Page scroll over viewer",
     "LOADING": "Loading 3D Scene",
     "THREED_HINT": "3-finger swipe to rotate, 1-finger swipe to scroll page",
-
     "EXPAND_3D": "View 3D Model",
     "EXPAND_PHOTO": "View Full Photo",
     "LOAD_ERROR": "3D Load Error",
@@ -1148,5 +1146,12 @@
       "PAYMENT_METHODS": "💳 Payment methods",
       "METHODS_LIST": "Visa, MasterCard, PayPal, Apple Pay"
     }
-  }
+  },
+  "MODEL_ARCHIVED_SUCCESSFULLY": "3D Model successfully archived to Cloudinary!",
+  "ARCHIVE_FAILED": "Failed to archive model. Please check server logs.",
+  "LOCAL_STORAGE_WARNING": "This model is stored on the server's local disk.",
+  "ARCHIVE_TO_CLOUDINARY": "Archive to Cloudinary",
+  "SECURITY_BLOCK": "Browser Security Blocked This Model",
+  "MIXED_CONTENT_EXPLANATION": "Your browser blocks loading local assets (HTTP) while on this secure site (HTTPS). Archiving the model to Cloudinary will fix this permanently.",
+  "FIX_NOW_ARCHIVE": "Fix Now: Archive to Cloudinary"
 }

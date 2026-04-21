@@ -214,6 +214,7 @@ export class SettingsService {
 
   // Update AI settings
   updateAiSettings(settings: UpdateAiSettingsDto): Observable<any> {
+    console.log('[SettingsService] Updating AI settings with payload:', JSON.stringify(settings));
     const updates: Observable<Settings>[] = [];
     
     Object.entries(settings).forEach(([key, value]) => {
@@ -221,21 +222,39 @@ export class SettingsService {
         const updateDto: UpdateSettingsDto = {
           key: `ai.${key}`,
           value: String(value),
-          type: 'string',
+          type: typeof value === 'boolean' ? 'boolean' : 'string',
           category: 'ai',
           description: `AI setting: ${key}`
         };
+        
+        console.log(`[SettingsService] Queueing update for ${updateDto.key}`);
         updates.push(this.updateSetting(updateDto));
       }
     });
 
+    if (updates.length === 0) {
+      console.warn('[SettingsService] No AI settings provided for update');
+      return of({ success: true, message: 'No AI settings to update' });
+    }
+
     return from(updates).pipe(
-      mergeMap(updateObservable => updateObservable),
+      mergeMap(updateObservable => updateObservable.pipe(
+        catchError(err => {
+          console.error(`[SettingsService] Failed to update an AI setting component:`, err);
+          return throwError(() => err);
+        })
+      )),
       toArray(),
-      map(() => ({ success: true, message: 'AI settings updated' })),
+      map(() => {
+        console.log('[SettingsService] Successfully updated all AI setting components');
+        return { success: true, message: 'AI settings updated' };
+      }),
       catchError((error) => {
-        console.error('Error updating AI settings:', error);
-        return throwError(() => error);
+        console.error('[SettingsService] Final error updating AI settings:', error);
+        return throwError(() => ({
+          status: 400,
+          message: error.message || 'Error updating AI settings'
+        }));
       })
     );
   }

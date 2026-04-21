@@ -108,7 +108,22 @@ export class IntegrationsComponent implements OnInit {
 
   onSaveAi(): void {
     if (this.aiForm.invalid) return;
-    this.saveSettings(this.settingsService.updateAiSettings(this.aiForm.value), 'AI_SETTINGS_SAVED');
+    
+    // Clean data before sending to backend to avoid null validation errors
+    const rawValue = this.aiForm.value;
+    const cleanData: any = {};
+    
+    Object.keys(rawValue).forEach(key => {
+      const val = rawValue[key];
+      // Convert null/undefined to empty string for key fields, but keep boolean for customUseHq
+      if (key === 'customUseHq') {
+        cleanData[key] = !!val;
+      } else {
+        cleanData[key] = val !== null && val !== undefined ? String(val) : '';
+      }
+    });
+
+    this.saveSettings(this.settingsService.updateAiSettings(cleanData), 'AI_SETTINGS_SAVED');
   }
 
   onSaveSMTP(): void {
