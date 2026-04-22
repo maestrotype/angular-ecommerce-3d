@@ -7,6 +7,7 @@ import { AuthService } from '../../../services/auth.service';
 import { ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { NotificationService, Notification } from '../../../services/notification.service';
+import { TranslateService } from '@ngx-translate/core';
 
 import { ThemeService } from '../../../../app/core/themes/theme.service';
 
@@ -31,6 +32,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private notificationService: NotificationService,
     private themeService: ThemeService,
+    private translate: TranslateService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
@@ -158,10 +160,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const diffHours = Math.floor(diffMins / 60);
     const diffDays = Math.floor(diffHours / 24);
 
-    if (diffMins < 1) return 'just now';
-    if (diffMins < 60) return `${diffMins}m ago`;
-    if (diffHours < 24) return `${diffHours}h ago`;
-    return `${diffDays}d ago`;
+    if (diffMins < 1) return this.translate.instant('TIME.JUST_NOW');
+    if (diffMins < 60) return this.translate.instant('TIME.MINUTES_AGO', { minutes: diffMins });
+    if (diffHours < 24) return this.translate.instant('TIME.HOURS_AGO', { hours: diffHours });
+    return this.translate.instant('TIME.DAYS_AGO', { days: diffDays });
   }
 
   logout(): void {

@@ -131,8 +131,8 @@ export class PaymentsService {
         // Show error popup instead of logging
         this.notificationsService.create({
           type: 'system' as any,
-          title: 'Payment Error',
-          message: `Failed to create payment: ${error.message}`,
+          title: 'NOTIFICATION.PAYMENT_ERROR.TITLE',
+          message: 'NOTIFICATION.PAYMENT_ERROR.MESSAGE',
           data: { error: error.message, type: 'payment_creation_error' }
         });
         
@@ -183,8 +183,8 @@ export class PaymentsService {
         // Show error popup instead of logging
         this.notificationsService.create({
           type: 'system' as any,
-          title: 'Webhook Error',
-          message: `Failed to process LiqPay webhook: ${error.message}`,
+          title: 'NOTIFICATION.WEBHOOK_ERROR.TITLE',
+          message: 'NOTIFICATION.WEBHOOK_ERROR.MESSAGE',
           data: { error: error.message, type: 'webhook_error' }
         });
         return throwError(() => error);
@@ -235,8 +235,8 @@ export class PaymentsService {
         // Unknown status - show warning popup
         this.notificationsService.create({
           type: 'system' as any,
-          title: 'Unknown Payment Status',
-          message: `Unknown LiqPay status: ${status}`,
+          title: 'NOTIFICATION.UNKNOWN_PAYMENT_STATUS.TITLE',
+          message: 'NOTIFICATION.UNKNOWN_PAYMENT_STATUS.MESSAGE',
           data: { orderId: payment.orderId, status }
         });
         return of(void 0);

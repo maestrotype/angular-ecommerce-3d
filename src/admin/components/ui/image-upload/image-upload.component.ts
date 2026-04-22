@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-image-upload',
@@ -31,7 +32,10 @@ export class ImageUploadComponent implements ControlValueAccessor {
   private onChange = (value: string) => {};
   private onTouched = () => {};
 
-  constructor(private snackBar: MatSnackBar) {}
+  constructor(
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
+  ) {}
 
   writeValue(value: string): void {
     this.value = value;
@@ -78,12 +82,13 @@ export class ImageUploadComponent implements ControlValueAccessor {
     const validTypes = ['image/svg+xml', 'image/png', 'image/jpeg', 'image/jpg'];
     
     if (!validTypes.includes(file.type)) {
-      this.snackBar.open('Please select a valid image file (SVG, PNG, JPG)', 'Close', { duration: 3000 });
+      this.snackBar.open(this.translate.instant('INVALID_IMAGE_FORMAT'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
       return;
     }
 
     if (file.size > this.maxSize) {
-      this.snackBar.open(`File size must be less than ${this.maxSize / 1024 / 1024}MB`, 'Close', { duration: 3000 });
+      const sizeMB = this.maxSize / 1024 / 1024;
+      this.snackBar.open(this.translate.instant('FILE_SIZE_LIMIT', { size: sizeMB }), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
       return;
     }
 

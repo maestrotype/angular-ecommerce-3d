@@ -97,6 +97,6 @@ export class MeshyProvider implements AiGenerationProvider {
     const status = error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR;
     const message = error.response?.data?.message || error.message;
     this.logger.error(`Error in MeshyProvider.${context}: ${message}`);
-    throw new HttpException(`Meshy API Error: ${message}`, status);
+    throw new HttpException(`API_ERROR.MESHY_API_ERROR: ${message}`, status);
   }
 }

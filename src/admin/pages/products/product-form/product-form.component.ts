@@ -23,7 +23,7 @@ import { finalize } from "rxjs/operators";
 
 
 import { LocalizedString } from "../../../../shared/models/localized-string.model";
-import { getLocalizedString } from "../../../../shared/utils/localization.util";
+import { getLocalizedString, translateErrorMessage } from "../../../../shared/utils/localization.util";
 import { TranslateService } from "@ngx-translate/core";
 
 @Component({
@@ -229,12 +229,14 @@ export class ProductFormComponent implements OnInit {
           this.pollAiStatus(response.data.task_id);
         } else {
           this.resetAiState();
-          this.snackBar.open(this.translate.instant('AI_ERROR_PREFIX') + response.message, this.translate.instant('CLOSE_BTN'), { duration: 5000 });
+          const errorMsg = translateErrorMessage(response.message, this.translate);
+          this.snackBar.open(this.translate.instant('AI_ERROR_PREFIX') + errorMsg, this.translate.instant('CLOSE_BTN'), { duration: 5000 });
         }
       },
       error: (err) => {
         this.resetAiState();
-        const msg = err.error?.message || 'Generation failed to start';
+        const rawMsg = err.error?.message || 'Generation failed to start';
+        const msg = translateErrorMessage(rawMsg, this.translate);
         this.snackBar.open(msg, this.translate.instant('CLOSE_BTN'), { duration: 5000 });
       }
     });
@@ -265,7 +267,7 @@ export class ProductFormComponent implements OnInit {
           }
         } else if (apiStatus === 'failed') {
           this.resetAiState();
-          const errorMsg = status.message || 'Unknown AI error';
+          const errorMsg = translateErrorMessage(status.message || 'Unknown AI error', this.translate);
           this.snackBar.open(this.translate.instant('AI_GENERATION_FAILED_PREFIX') + errorMsg, this.translate.instant('CLOSE_BTN'), { duration: 7000 });
         } else {
           // Show the actual API status like "running", "queued", etc.
@@ -304,7 +306,8 @@ export class ProductFormComponent implements OnInit {
       },
       error: (err) => {
         this.resetAiState();
-        this.snackBar.open(this.translate.instant('FAILED_TO_DOWNLOAD_AI_MODEL'), this.translate.instant('CLOSE_BTN'), { duration: 5000 });
+        const errorMsg = translateErrorMessage(err.error?.message || 'FAILED_TO_DOWNLOAD_AI_MODEL', this.translate);
+        this.snackBar.open(errorMsg, this.translate.instant('CLOSE_BTN'), { duration: 5000 });
       }
     });
   }
@@ -429,7 +432,7 @@ export class ProductFormComponent implements OnInit {
 
           let errorMessage = 'Failed to process image';
           if (error.error?.message) {
-            errorMessage = error.error.message;
+            errorMessage = translateErrorMessage(error.error.message, this.translate);
           } else if (error.message) {
             errorMessage = error.message;
           }
@@ -524,8 +527,9 @@ export class ProductFormComponent implements OnInit {
       error: (err) => {
         this.isUploading3d = false;
         const status = err?.status ? ` [HTTP ${err.status}]` : '';
-        const serverMsg = err?.error?.message || err?.message || 'Unknown error';
-        this.snackBar.open(this.translate.instant('MODEL_3D_UPLOAD_FAILED') + status + ': ' + serverMsg, this.translate.instant('CLOSE_BTN'), {
+        const rawMsg = err?.error?.message || err?.message || 'Unknown error';
+        const errorMsg = translateErrorMessage(rawMsg, this.translate);
+        this.snackBar.open(this.translate.instant('MODEL_3D_UPLOAD_FAILED') + status + ': ' + errorMsg, this.translate.instant('CLOSE_BTN'), {
           duration: 8000,
           panelClass: 'error-snackbar'
         });
@@ -590,8 +594,9 @@ export class ProductFormComponent implements OnInit {
       },
       error: (err) => {
         const status = err?.status ? ` [HTTP ${err.status}]` : '';
-        const serverMsg = err?.error?.message || err?.message || 'Unknown error';
-        this.snackBar.open(this.translate.instant('FAILED_TO_LOAD_PRODUCT') + status + ': ' + serverMsg, this.translate.instant('CLOSE_BTN'), {
+        const rawMsg = err?.error?.message || err?.message || 'Unknown error';
+        const errorMsg = translateErrorMessage(rawMsg, this.translate);
+        this.snackBar.open(this.translate.instant('FAILED_TO_LOAD_PRODUCT') + status + ': ' + errorMsg, this.translate.instant('CLOSE_BTN'), {
           duration: 7000,
           panelClass: 'error-snackbar'
         });
@@ -689,8 +694,9 @@ export class ProductFormComponent implements OnInit {
         error: (err) => {
           this.isLoading = false;
           const status = err?.status ? ` [HTTP ${err.status}]` : '';
-          const serverMsg = err?.error?.message || err?.message || 'Unknown error';
-          this.snackBar.open(this.translate.instant('ERROR_UPDATING_PRODUCT') + status + ': ' + serverMsg, this.translate.instant('CLOSE_BTN'), {
+          const rawMsg = err?.error?.message || err?.message || 'Unknown error';
+          const errorMsg = translateErrorMessage(rawMsg, this.translate);
+          this.snackBar.open(this.translate.instant('ERROR_UPDATING_PRODUCT') + status + ': ' + errorMsg, this.translate.instant('CLOSE_BTN'), {
             duration: 7000,
             panelClass: 'error-snackbar'
           });
@@ -706,8 +712,9 @@ export class ProductFormComponent implements OnInit {
         error: (err) => {
           this.isLoading = false;
           const status = err?.status ? ` [HTTP ${err.status}]` : '';
-          const serverMsg = err?.error?.message || err?.message || 'Unknown error';
-          this.snackBar.open(this.translate.instant('ERROR_CREATING_PRODUCT') + status + ': ' + serverMsg, this.translate.instant('CLOSE_BTN'), {
+          const rawMsg = err?.error?.message || err?.message || 'Unknown error';
+          const errorMsg = translateErrorMessage(rawMsg, this.translate);
+          this.snackBar.open(this.translate.instant('ERROR_CREATING_PRODUCT') + status + ': ' + errorMsg, this.translate.instant('CLOSE_BTN'), {
             duration: 7000,
             panelClass: 'error-snackbar'
           });

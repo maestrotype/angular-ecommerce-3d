@@ -119,6 +119,6 @@ export class Tripo3dProvider implements AiGenerationProvider {
     const status = error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR;
     const message = error.response?.data?.message || error.message;
     this.logger.error(`Error in Tripo3dProvider.${context}: ${message}`);
-    throw new HttpException(`Tripo3D API Error: ${message}`, status);
+    throw new HttpException(`API_ERROR.TRIPO_API_ERROR: ${message}`, status);
   }
 }

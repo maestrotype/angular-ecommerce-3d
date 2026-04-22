@@ -24,7 +24,7 @@
               matInput
               type="email"
               formControlName="email"
-              placeholder="admin@example.com"
+              [placeholder]="'ADMIN_EMAIL_PLACEHOLDER' | translate"
             />
             <mat-icon matSuffix>email</mat-icon>
             <mat-error *ngIf="loginForm.get('email')?.hasError('required')">

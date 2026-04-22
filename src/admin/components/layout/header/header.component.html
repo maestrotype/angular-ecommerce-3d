@@ -47,7 +47,7 @@
   <div class="notification-header">
     <span class="notification-title">{{ "NOTIFICATIONS" | translate }}</span>
     <button mat-button class="mark-all-read" (click)="markAllAsRead()" *ngIf="unreadCount > 0">
-      <span>Mark all as read</span>
+      <span>{{ "MARK_ALL_READ" | translate }}</span>
     </button>
   </div>
 
@@ -61,8 +61,8 @@
           </mat-icon>
         </div>
         <div class="notification-text">
-          <div class="notification-title">{{ notification.title }}</div>
-          <div class="notification-message">{{ notification.message }}</div>
+          <div class="notification-title">{{ notification.title | translate:notification.data }}</div>
+          <div class="notification-message">{{ notification.message | translate:notification.data }}</div>
           <div class="notification-time">
             {{ getRelativeTime(notification.createdAt) }}
           </div>

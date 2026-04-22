@@ -1,4 +1,7 @@
 {
+  "LANG_EN": "English",
+  "LANG_RU": "Русский",
+  "LANG_UA": "Украинский",
   "ADMIN_PANEL": "Панель администратора",
   "ADMIN_DASHBOARD": "Панель управления",
   "SETTINGS": "Настройки",
@@ -19,8 +22,74 @@
   "EMAIL_NOTIFICATIONS": "Email уведомления",
   "ORDER_NOTIFICATIONS": "Уведомления о заказах",
   "NOTIFICATIONS": "Уведомления",
-  "STOCK_ALERTS": "Оповещения о запасах",
-  "USER_REGISTRATIONS": "Регистрации пользователей",
+  "MARK_ALL_READ": "Отметить все как прочитанные",
+  "NOTIFICATION": {
+    "ORDER_CREATED": {
+      "TITLE": "Получен новый заказ",
+      "MESSAGE": "Заказ #{{orderId}} от {{customerName}} был получен"
+    },
+    "ORDER_UPDATED": {
+      "TITLE": "Статус заказа обновлен",
+      "MESSAGE": "Статус заказа #{{orderId}} изменен на {{newStatus}}"
+    },
+    "LOW_STOCK": {
+      "TITLE": "Оповещение о низком запасе",
+      "MESSAGE": "В товаре {{productName}} заканчивается запас (осталось {{stock}})"
+    },
+    "NEW_USER": {
+      "TITLE": "Регистрация нового пользователя",
+      "MESSAGE": "{{userName}} ({{userEmail}}) зарегистрировался"
+    },
+    "PAYMENT_SUCCESS": {
+      "TITLE": "Оплата прошла успешно",
+      "MESSAGE": "Оплата по заказу #{{orderId}} завершена"
+    },
+    "PAYMENT_FAILED": {
+      "TITLE": "Ошибка оплаты",
+      "MESSAGE": "Оплата по заказу #{{orderId}} не удалась"
+    },
+    "ORDER_CONFIRMATION": {
+      "TITLE": "Подтверждение заказа",
+      "MESSAGE": "Заказ #{{orderId}} был подтвержден"
+    },
+    "ORDER_STATUS_UPDATE": {
+      "TITLE": "Статус заказа изменен",
+      "MESSAGE": "Статус заказа #{{orderId}} изменен с {{oldStatus}} на {{newStatus}}"
+    },
+    "PAYMENT_CREATED": {
+      "TITLE": "Платеж создан",
+      "MESSAGE": "Платеж по заказу #{{orderId}} создан"
+    },
+    "SYSTEM": {
+      "SENT_TITLE": "Уведомление отправлено",
+      "SENT_MESSAGE": "Уведомление {{type}} отправлено для заказа #{{orderId}}",
+      "ERROR_TITLE": "Ошибка уведомления",
+      "ERROR_MESSAGE": "Не удалось отправить уведомление для заказа #{{orderId}}: {{error}}"
+    },
+    "PAYMENT_ERROR": {
+      "TITLE": "Ошибка платежа",
+      "MESSAGE": "Не удалось создать платеж: {{error}}"
+    },
+    "WEBHOOK_ERROR": {
+      "TITLE": "Ошибка вебхука",
+      "MESSAGE": "Ошибка при обработке вебхука: {{error}}"
+    },
+    "UNKNOWN_PAYMENT_STATUS": {
+      "TITLE": "Неизвестный статус платежа",
+      "MESSAGE": "Получен неизвестный статус: {{status}} для заказа #{{orderId}}"
+    }
+  },
+  "TIME": {
+    "JUST_NOW": "Только что",
+    "MINUTES_AGO": "{{minutes}}мин назад",
+    "HOURS_AGO": "{{hours}}ч назад",
+    "DAYS_AGO": "{{days}}д назад"
+  },
+  "API_ERROR": {
+    "TRIPO_API_ERROR": "Ошибка Tripo3D API",
+    "HUNYUAN_API_ERROR": "Ошибка Hunyuan3D API",
+    "MESHY_API_ERROR": "Ошибка Meshy API"
+  },
   "LOGOUT": "Выйти",
   "LAST_7_DAYS": "Последние 7 дней",
   "ROLE_ADMIN": "Администратор",
@@ -201,6 +270,11 @@
   "NETWORK_ERROR_MSG": "Не удалось подключиться к серверу. Проверьте интернет-соединение.",
   "VALIDATION_ERROR_TITLE": "Ошибка валидации",
   "VALIDATION_ERROR_MSG": "Пожалуйста, исправьте следующие ошибки:",
+  "FIELD_REQUIRED": "Это поле обязательно для заполнения",
+  "FIELD_MAX_LENGTH": "Максимум {{length}} символов",
+  "FIELD_INVALID_FORMAT": "Неверный формат",
+  "INVALID_IMAGE_FORMAT": "Выберите корректный файл изображения (SVG, PNG, JPG)",
+  "FILE_SIZE_LIMIT": "Размер файла должен быть менее {{size}}МБ",
   "SUCCESS_TITLE": "Успех",
   "INFO_TITLE": "Информация",
   "WARNING_TITLE": "Предупреждение",
@@ -1151,5 +1225,19 @@
   "ARCHIVE_TO_CLOUDINARY": "Архивировать в Cloudinary",
   "SECURITY_BLOCK": "Безопасность браузера заблокировала модель",
   "MIXED_CONTENT_EXPLANATION": "Ваш браузер блокирует загрузку локальных ресурсов (HTTP) на защищенном сайте (HTTPS). Архивация модели в Cloudinary решит эту проблему навсегда.",
-  "FIX_NOW_ARCHIVE": "Исправить: Архивировать в Cloudinary"
+  "FIX_NOW_ARCHIVE": "Исправить: Архивировать в Cloudinary",
+  "SPEC_VALUE_PLACEHOLDER": "например, Nike, Красный",
+  "ADMIN_EMAIL_PLACEHOLDER": "admin@example.com",
+  "SITE_NAME_PLACEHOLDER": "Название вашего магазина",
+  "SITE_DESCRIPTION_PLACEHOLDER": "Краткое описание вашего магазина",
+  "SITE_KEYWORDS_PLACEHOLDER": "Ключевые слова через запятую",
+  "SITE_URL_PLACEHOLDER": "https://yourstore.com",
+  "DEFAULT_LANG_PLACEHOLDER": "ru",
+  "OG_IMAGE_PLACEHOLDER": "https://yourstore.com/images/og-default.jpg",
+  "TWITTER_HANDLE_PLACEHOLDER": "@yourstore",
+  "GOOGLE_ANALYTICS_PLACEHOLDER": "G-XXXXXXXXXX",
+  "GOOGLE_SEARCH_CONSOLE_PLACEHOLDER": "Контент мета-тега из Search Console",
+  "BING_WEBMASTER_TOOLS_PLACEHOLDER": "Контент мета-тега из Bing Webmaster Tools",
+  "ROBOTS_TXT_PLACEHOLDER": "User-agent: *&#10;Allow: /&#10;Disallow: /admin/",
+  "You don't have enough credit to create this task": "У вас недостаточно кредитов для создания этой задачи"
 }

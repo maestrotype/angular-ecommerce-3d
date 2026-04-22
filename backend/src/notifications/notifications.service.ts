@@ -106,8 +106,8 @@ export class NotificationsService {
   createOrderNotification(orderId: number, customerName: string): Observable<Notification> {
     return this.create({
       type: NotificationType.ORDER_CREATED,
-      title: 'New Order Received',
-      message: `Order #${orderId} from ${customerName} has been received`,
+      title: 'NOTIFICATION.ORDER_CREATED.TITLE',
+      message: 'NOTIFICATION.ORDER_CREATED.MESSAGE',
       data: { orderId, customerName }
     });
   }
@@ -115,8 +115,8 @@ export class NotificationsService {
   createLowStockNotification(productName: string, stock: number): Observable<Notification> {
     return this.create({
       type: NotificationType.LOW_STOCK,
-      title: 'Low Stock Alert',
-      message: `${productName} is running low on stock (${stock} remaining)`,
+      title: 'NOTIFICATION.LOW_STOCK.TITLE',
+      message: 'NOTIFICATION.LOW_STOCK.MESSAGE',
       data: { productName, stock }
     });
   }
@@ -124,8 +124,8 @@ export class NotificationsService {
   createNewUserNotification(userName: string, userEmail: string): Observable<Notification> {
     return this.create({
       type: NotificationType.NEW_USER,
-      title: 'New User Registration',
-      message: `${userName} (${userEmail}) has registered`,
+      title: 'NOTIFICATION.NEW_USER.TITLE',
+      message: 'NOTIFICATION.NEW_USER.MESSAGE',
       data: { userName, userEmail }
     });
   }
