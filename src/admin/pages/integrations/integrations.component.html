@@ -147,6 +147,12 @@
                 <mat-icon matSuffix>link</mat-icon>
               </mat-form-field>
             </div>
+            
+            <div class="form-row">
+              <mat-slide-toggle formControlName="customUseHq" color="primary">
+                {{ 'USE_HIGH_QUALITY_LOCAL' | translate }} (512px + Texture Baking)
+              </mat-slide-toggle>
+            </div>
           </ng-container>
 
           <div class="form-actions">

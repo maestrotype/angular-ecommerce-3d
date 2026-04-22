@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../services/auth.service';
+import { TranslateService } from '@ngx-translate/core';
+import { translateErrorMessage } from '../../../shared/utils/localization.util';
 
 @Component({
   selector: 'app-admin-login',
@@ -19,7 +21,8 @@ export class AdminLoginComponent {
     private fb: FormBuilder,
     private router: Router,
     private snackBar: MatSnackBar,
-    private authService: AuthService
+    private authService: AuthService,
+    private translate: TranslateService
   ) {
     this.loginForm = this.createForm();
   }
@@ -39,14 +42,14 @@ export class AdminLoginComponent {
       this.authService.login(credentials).subscribe({
         next: (response) => {
           this.isLoading = false;
-          // Note: Ideally use TranslateService for snackbar too, but for now we keep it simple
-          // as we don't have TranslateService injected here.
-          this.snackBar.open('Login successful!', 'Close', { duration: 3000 });
+          this.snackBar.open(this.translate.instant('LOGIN_SUCCESSFUL'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
           this.router.navigate(['/admin/dashboard']);
         },
         error: (error) => {
           this.isLoading = false;
-          this.snackBar.open('Login failed. Please check your credentials.', 'Close', { 
+          const rawMsg = error.error?.message || 'LOGIN_FAILED_MSG';
+          const msg = translateErrorMessage(rawMsg, this.translate);
+          this.snackBar.open(msg, this.translate.instant('CLOSE_BTN'), { 
             duration: 5000 
           });
         }

@@ -20,7 +20,7 @@
             <label class="group-label">{{ 'PRODUCT_NAME' | translate }}</label>
             <div class="lang-fields">
               <mat-form-field appearance="outline" class="form-field">
-                <mat-label>EN</mat-label>
+                <mat-label>{{ 'LANG_EN' | translate }}</mat-label>
                 <input matInput formControlName="name_en" [placeholder]="'PRODUCT_NAME_PLACEHOLDER' | translate" />
                 <mat-error *ngIf="productForm.get('name_en')?.hasError('required')">
                   {{ 'PRODUCT_NAME_REQUIRED' | translate }}
@@ -28,12 +28,12 @@
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="form-field">
-                <mat-label>RU</mat-label>
+                <mat-label>{{ 'LANG_RU' | translate }}</mat-label>
                 <input matInput formControlName="name_ru" [placeholder]="'PRODUCT_NAME_PLACEHOLDER' | translate" />
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="form-field">
-                <mat-label>UA</mat-label>
+                <mat-label>{{ 'LANG_UA' | translate }}</mat-label>
                 <input matInput formControlName="name_ua" [placeholder]="'PRODUCT_NAME_PLACEHOLDER' | translate" />
               </mat-form-field>
             </div>
@@ -174,11 +174,11 @@
                     <span>{{ 'PRODUCT_3D.OR' | translate }}</span>
                   </div>
 
-                  <button mat-raised-button color="accent" type="button" class="ai-gen-btn" 
-                          (click)="generateAi3dModel()" [disabled]="isAiGenerating || isUploading3d">
+                   <button mat-raised-button color="accent" type="button" class="ai-gen-btn" 
+                           (click)="generateAi3dModel()" [disabled]="isAiGenerating || isUploading3d">
                     <mat-icon *ngIf="!isAiGenerating">auto_awesome</mat-icon>
                     <mat-spinner *ngIf="isAiGenerating" diameter="20" class="mini-spinner"></mat-spinner>
-                    {{ isAiGenerating ? ('PRODUCT_3D.AI_GENERATING' | translate) : ('PRODUCT_3D.GENERATE_AI' | translate) }}
+                    <span *ngIf="!isAiGenerating">{{ 'PRODUCT_3D.GENERATE_AI' | translate }}</span>
                   </button>
                 </div>
 
@@ -233,7 +233,6 @@
                 </div>
               </div>
 
-              <!-- Hidden input for AI source image -->
               <input type="file" id="aiSourceImageInput" style="display: none" (change)="onAiSourceImageSelected($event)" accept="image/*">
 
 
@@ -245,12 +244,37 @@
                   <app-three-d-viewer [modelPath]="model3dUrl" [autoRotate]="true" [previewOnly]="false" (modelLoaded)="onModelLoaded()"></app-three-d-viewer>
                   
                   <div class="viewer-controls-overlay">
-                    <div class="model-info-pill">
-                      <mat-icon>description</mat-icon>
+                    <div class="model-info-pill" [class.local-pill]="model3dUrlIsLocal">
+                      <mat-icon>{{ model3dUrlIsLocal ? 'warning' : 'description' }}</mat-icon>
                       <span class="filename-text">{{ model3dUrl.split('/').pop() }}</span>
+                      <span *ngIf="model3dUrlIsLocal" class="local-label">(Local)</span>
                     </div>
+                    
+                    <button *ngIf="model3dUrlIsLocal" 
+                            mat-raised-button color="accent" type="button" 
+                            class="archive-btn-overlay"
+                            (click)="archiveLocalModel()" 
+                            [disabled]="isUploading3d"
+                            matTooltip="Move this local file to Cloudinary for permanent storage">
+                      <mat-icon *ngIf="!isUploading3d">cloud_upload</mat-icon>
+                      <mat-spinner *ngIf="isUploading3d" diameter="18" class="mini-spinner-inline"></mat-spinner>
+                      {{ 'ARCHIVE_TO_CLOUDINARY' | translate }}
+                    </button>
+
                     <button mat-icon-button color="warn" type="button" (click)="remove3dModel()" [matTooltip]="'PRODUCT_3D.REMOVE_MODEL' | translate" class="remove-btn-overlay">
                       <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+
+                  <!-- Critical Mixed Content Warning -->
+                  <div *ngIf="model3dUrlIsBlockedByMixedContent" class="mixed-content-banner">
+                    <mat-icon>security</mat-icon>
+                    <div class="banner-text">
+                      <strong>{{ 'SECURITY_BLOCK' | translate }}</strong>
+                      <p>{{ 'MIXED_CONTENT_EXPLANATION' | translate }}</p>
+                    </div>
+                    <button mat-flat-button color="warn" size="small" (click)="archiveLocalModel()">
+                      {{ 'FIX_NOW_ARCHIVE' | translate }}
                     </button>
                   </div>
                 </div>
@@ -269,19 +293,19 @@
           <label class="group-label">{{ 'DESCRIPTION' | translate }}</label>
           <div class="lang-fields">
             <mat-form-field appearance="outline" class="form-field">
-              <mat-label>EN</mat-label>
+              <mat-label>{{ 'LANG_EN' | translate }}</mat-label>
               <textarea matInput formControlName="description_en" rows="4"
                 [placeholder]="'DESCRIPTION_PLACEHOLDER' | translate"></textarea>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="form-field">
-              <mat-label>RU</mat-label>
+              <mat-label>{{ 'LANG_RU' | translate }}</mat-label>
               <textarea matInput formControlName="description_ru" rows="4"
                 [placeholder]="'DESCRIPTION_PLACEHOLDER' | translate"></textarea>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="form-field">
-              <mat-label>UA</mat-label>
+              <mat-label>{{ 'LANG_UA' | translate }}</mat-label>
               <textarea matInput formControlName="description_ua" rows="4"
                 [placeholder]="'DESCRIPTION_PLACEHOLDER' | translate"></textarea>
             </mat-form-field>
@@ -309,7 +333,7 @@
 
             <mat-form-field appearance="outline" class="spec-value">
               <mat-label>{{ 'VALUE' | translate }}</mat-label>
-              <input matInput formControlName="value" placeholder="e.g., Nike, Red" />
+              <input matInput formControlName="value" [placeholder]="'SPEC_VALUE_PLACEHOLDER' | translate" />
             </mat-form-field>
 
             <button mat-icon-button type="button" color="warn" (click)="removeSpecification(i)"

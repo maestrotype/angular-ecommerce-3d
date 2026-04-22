@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { AdminSeoService, SeoSettings, UpdateSeoSettingsDto } from '../../../app/core/services/admin-seo.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
+import { translateErrorMessage } from '../../../shared/utils/localization.util';
 
 @Component({
   selector: 'app-seo',
@@ -22,7 +24,8 @@ export class SeoComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private seoService: AdminSeoService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private translate: TranslateService
   ) {
     this.seoForm = this.fb.group({
       siteName: ['', [Validators.required, Validators.maxLength(60)]],
@@ -85,7 +88,7 @@ export class SeoComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           
-          this.snackBar.open('Failed to load SEO settings', 'Close', {
+          this.snackBar.open(this.translate.instant('FAILED_TO_LOAD_SEO'), this.translate.instant('CLOSE_BTN'), {
             duration: 3000,
             panelClass: ['error-snackbar']
           });
@@ -105,7 +108,7 @@ export class SeoComponent implements OnInit, OnDestroy {
           next: (updatedSettings) => {
             this.currentSettings = updatedSettings;
             this.saving = false;
-            this.snackBar.open('SEO settings saved successfully!', 'Close', {
+            this.snackBar.open(this.translate.instant('SEO_SETTINGS_SAVED_MSG'), this.translate.instant('CLOSE_BTN'), {
               duration: 3000,
               panelClass: ['success-snackbar']
             });
@@ -113,7 +116,9 @@ export class SeoComponent implements OnInit, OnDestroy {
           error: (error) => {
             
             this.saving = false;
-            this.snackBar.open('Failed to save SEO settings', 'Close', {
+            const rawMsg = error.error?.message || 'FAILED_TO_SAVE_SEO';
+            const msg = translateErrorMessage(rawMsg, this.translate);
+            this.snackBar.open(msg, this.translate.instant('CLOSE_BTN'), {
               duration: 3000,
               panelClass: ['error-snackbar']
             });
@@ -130,14 +135,14 @@ export class SeoComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: () => {
-            this.snackBar.open('Robots.txt updated successfully!', 'Close', {
+            this.snackBar.open(this.translate.instant('ROBOTS_TXT_UPDATED'), this.translate.instant('CLOSE_BTN'), {
               duration: 3000,
               panelClass: ['success-snackbar']
             });
           },
           error: (error) => {
             
-            this.snackBar.open('Failed to update robots.txt', 'Close', {
+            this.snackBar.open(this.translate.instant('FAILED_TO_UPDATE_ROBOTS'), this.translate.instant('CLOSE_BTN'), {
               duration: 3000,
               panelClass: ['error-snackbar']
             });
@@ -151,14 +156,15 @@ export class SeoComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (result) => {
-          this.snackBar.open(result.message, 'Close', {
+          const msg = translateErrorMessage(result.message, this.translate);
+          this.snackBar.open(msg, this.translate.instant('CLOSE_BTN'), {
             duration: 3000,
             panelClass: ['success-snackbar']
           });
         },
         error: (error) => {
           
-          this.snackBar.open('Failed to generate sitemap', 'Close', {
+          this.snackBar.open(this.translate.instant('FAILED_TO_GENERATE_SITEMAP'), this.translate.instant('CLOSE_BTN'), {
             duration: 3000,
             panelClass: ['error-snackbar']
           });
@@ -184,9 +190,9 @@ export class SeoComponent implements OnInit, OnDestroy {
   getFieldError(fieldName: string): string {
     const control = this.seoForm.get(fieldName);
     if (control?.errors) {
-      if (control.errors['required']) return 'This field is required';
-      if (control.errors['maxlength']) return `Maximum ${control.errors['maxlength'].requiredLength} characters`;
-      if (control.errors['pattern']) return 'Invalid format';
+      if (control.errors['required']) return this.translate.instant('FIELD_REQUIRED');
+      if (control.errors['maxlength']) return this.translate.instant('FIELD_MAX_LENGTH', { length: control.errors['maxlength'].requiredLength });
+      if (control.errors['pattern']) return this.translate.instant('FIELD_INVALID_FORMAT');
     }
     return '';
   }

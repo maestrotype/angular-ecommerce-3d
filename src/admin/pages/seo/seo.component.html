@@ -18,7 +18,7 @@
               <div class="form-row">
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>{{ 'SITE_NAME' | translate }}</mat-label>
-                  <input matInput formControlName="siteName" placeholder="Your Store Name">
+                  <input matInput formControlName="siteName" [placeholder]="'SITE_NAME_PLACEHOLDER' | translate">
                   <mat-hint>{{ getCharacterCount('siteName') }}/{{ getMaxLength('siteName') }}</mat-hint>
                   <mat-error *ngIf="!isFieldValid('siteName')">{{ getFieldError('siteName') }}</mat-error>
                 </mat-form-field>
@@ -28,7 +28,7 @@
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>{{ 'SITE_DESCRIPTION' | translate }}</mat-label>
                   <textarea matInput formControlName="siteDescription" 
-                           placeholder="Brief description of your store" 
+                           [placeholder]="'SITE_DESCRIPTION_PLACEHOLDER' | translate" 
                            rows="3"></textarea>
                   <mat-hint>{{ getCharacterCount('siteDescription') }}/{{ getMaxLength('siteDescription') }}</mat-hint>
                   <mat-error *ngIf="!isFieldValid('siteDescription')">{{ getFieldError('siteDescription') }}</mat-error>
@@ -39,7 +39,7 @@
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>{{ 'SITE_KEYWORDS' | translate }}</mat-label>
                   <textarea matInput formControlName="siteKeywords" 
-                           placeholder="Comma-separated keywords" 
+                           [placeholder]="'SITE_KEYWORDS_PLACEHOLDER' | translate" 
                            rows="2"></textarea>
                   <mat-hint>{{ getCharacterCount('siteKeywords') }}/{{ getMaxLength('siteKeywords') }}</mat-hint>
                   <mat-error *ngIf="!isFieldValid('siteKeywords')">{{ getFieldError('siteKeywords') }}</mat-error>
@@ -49,7 +49,7 @@
               <div class="form-row">
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>{{ 'SITE_URL' | translate }}</mat-label>
-                  <input matInput formControlName="siteUrl" placeholder="https://yourstore.com">
+                  <input matInput formControlName="siteUrl" [placeholder]="'SITE_URL_PLACEHOLDER' | translate">
                   <mat-error *ngIf="!isFieldValid('siteUrl')">{{ getFieldError('siteUrl') }}</mat-error>
                 </mat-form-field>
               </div>
@@ -57,7 +57,7 @@
               <div class="form-row">
                 <mat-form-field appearance="outline">
                   <mat-label>{{ 'DEFAULT_LANGUAGE' | translate }}</mat-label>
-                  <input matInput formControlName="defaultLanguage" placeholder="en">
+                  <input matInput formControlName="defaultLanguage" [placeholder]="'DEFAULT_LANG_PLACEHOLDER' | translate">
                   <mat-error *ngIf="!isFieldValid('defaultLanguage')">{{ getFieldError('defaultLanguage') }}</mat-error>
                 </mat-form-field>
               </div>
@@ -88,7 +88,7 @@
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>{{ 'DEFAULT_OG_IMAGE_URL' | translate }}</mat-label>
                   <input matInput formControlName="defaultOgImage" 
-                         placeholder="https://yourstore.com/images/og-default.jpg">
+                         [placeholder]="'OG_IMAGE_PLACEHOLDER' | translate">
                   <mat-hint>{{ 'DEFAULT_IMAGE_SOCIAL_SHARING' | translate }}</mat-hint>
                 </mat-form-field>
               </div>
@@ -96,7 +96,7 @@
               <div class="form-row">
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>{{ 'OG_SITE_NAME' | translate }}</mat-label>
-                  <input matInput formControlName="ogSiteName" placeholder="Your Store Name">
+                  <input matInput formControlName="ogSiteName" [placeholder]="'SITE_NAME_PLACEHOLDER' | translate">
                   <mat-hint>{{ getCharacterCount('ogSiteName') }}/{{ getMaxLength('ogSiteName') }}</mat-hint>
                 </mat-form-field>
               </div>
@@ -108,7 +108,7 @@
               <div class="form-row">
                 <mat-form-field appearance="outline">
                   <mat-label>{{ 'TWITTER_HANDLE' | translate }}</mat-label>
-                  <input matInput formControlName="twitterHandle" placeholder="@yourstore">
+                  <input matInput formControlName="twitterHandle" [placeholder]="'TWITTER_HANDLE_PLACEHOLDER' | translate">
                   <mat-hint>{{ getCharacterCount('twitterHandle') }}/{{ getMaxLength('twitterHandle') }}</mat-hint>
                 </mat-form-field>
               </div>
@@ -138,7 +138,7 @@
               <div class="form-row">
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>{{ 'GOOGLE_ANALYTICS_ID' | translate }}</mat-label>
-                  <input matInput formControlName="googleAnalyticsId" placeholder="G-XXXXXXXXXX">
+                  <input matInput formControlName="googleAnalyticsId" [placeholder]="'GOOGLE_ANALYTICS_PLACEHOLDER' | translate">
                   <mat-hint>{{ 'GOOGLE_ANALYTICS_MEASUREMENT_ID_HINT' | translate }}</mat-hint>
                 </mat-form-field>
               </div>
@@ -147,7 +147,7 @@
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>{{ 'GOOGLE_SEARCH_CONSOLE' | translate }}</mat-label>
                   <input matInput formControlName="googleSearchConsole" 
-                         placeholder="Meta tag content from Search Console">
+                         [placeholder]="'GOOGLE_SEARCH_CONSOLE_PLACEHOLDER' | translate">
                   <mat-hint>{{ 'GOOGLE_SEARCH_CONSOLE_META_TAG_HINT' | translate }}</mat-hint>
                 </mat-form-field>
               </div>
@@ -160,7 +160,7 @@
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>{{ 'BING_WEBMASTER_TOOLS' | translate }}</mat-label>
                   <input matInput formControlName="bingWebmasterTools" 
-                         placeholder="Meta tag content from Bing Webmaster Tools">
+                         [placeholder]="'BING_WEBMASTER_TOOLS_PLACEHOLDER' | translate">
                   <mat-hint>{{ 'BING_WEBMASTER_TOOLS_META_TAG_HINT' | translate }}</mat-hint>
                 </mat-form-field>
               </div>
@@ -209,7 +209,7 @@
                 <mat-form-field appearance="outline" class="full-width">
                   <mat-label>{{ 'ROBOTS_TXT_CONTENT' | translate }}</mat-label>
                   <textarea matInput [formControl]="robotsTxtForm.get('robotsTxtContent')" 
-                           placeholder="User-agent: *&#10;Allow: /&#10;Disallow: /admin/" 
+                           [placeholder]="'ROBOTS_TXT_PLACEHOLDER' | translate" 
                            rows="8"></textarea>
                   <mat-hint>{{ 'ROBOTS_TXT_CONTENT_HINT' | translate }}</mat-hint>
                 </mat-form-field>

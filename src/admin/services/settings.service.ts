@@ -58,6 +58,7 @@ export interface AiGenerationSettings {
   hunyuanApiKey: string;
   lumaApiKey: string;
   customUrl: string;
+  customUseHq: boolean;
 }
 
 export interface SMTPSettings {
@@ -154,7 +155,8 @@ export class SettingsService {
         meshyApiKey: '',
         hunyuanApiKey: '',
         lumaApiKey: '',
-        customUrl: ''
+        customUrl: '',
+        customUseHq: false
       },
       smtp: {
         host: '',

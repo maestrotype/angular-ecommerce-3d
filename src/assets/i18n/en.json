@@ -1,4 +1,7 @@
 {
+  "LANG_EN": "English",
+  "LANG_RU": "Russian",
+  "LANG_UA": "Ukrainian",
   "ADMIN_PANEL": "Admin Panel",
   "ADMIN_DASHBOARD": "Admin Dashboard",
   "SETTINGS": "Settings",
@@ -19,8 +22,74 @@
   "EMAIL_NOTIFICATIONS": "Email Notifications",
   "ORDER_NOTIFICATIONS": "Order Notifications",
   "NOTIFICATIONS": "Notifications",
-  "STOCK_ALERTS": "Stock Alerts",
-  "USER_REGISTRATIONS": "User Registrations",
+  "MARK_ALL_READ": "Mark all as read",
+  "NOTIFICATION": {
+    "ORDER_CREATED": {
+      "TITLE": "New Order Received",
+      "MESSAGE": "Order #{{orderId}} from {{customerName}} has been received"
+    },
+    "ORDER_UPDATED": {
+      "TITLE": "Order Status Updated",
+      "MESSAGE": "Order #{{orderId}} status changed to {{newStatus}}"
+    },
+    "LOW_STOCK": {
+      "TITLE": "Low Stock Alert",
+      "MESSAGE": "{{productName}} is running low on stock ({{stock}} remaining)"
+    },
+    "NEW_USER": {
+      "TITLE": "New User Registration",
+      "MESSAGE": "{{userName}} ({{userEmail}}) has registered"
+    },
+    "PAYMENT_SUCCESS": {
+      "TITLE": "Payment Successful",
+      "MESSAGE": "Payment completed for order #{{orderId}}"
+    },
+    "PAYMENT_FAILED": {
+      "TITLE": "Payment Failed",
+      "MESSAGE": "Payment failed for order #{{orderId}}"
+    },
+    "ORDER_CONFIRMATION": {
+      "TITLE": "Order Confirmation",
+      "MESSAGE": "Order #{{orderId}} has been confirmed"
+    },
+    "ORDER_STATUS_UPDATE": {
+      "TITLE": "Order Status Updated",
+      "MESSAGE": "Order #{{orderId}} status changed from {{oldStatus}} to {{newStatus}}"
+    },
+    "PAYMENT_CREATED": {
+      "TITLE": "Payment Created",
+      "MESSAGE": "Payment created for order #{{orderId}}"
+    },
+    "SYSTEM": {
+      "SENT_TITLE": "Notification Sent",
+      "SENT_MESSAGE": "{{type}} notification sent for order #{{orderId}}",
+      "ERROR_TITLE": "Notification Error",
+      "ERROR_MESSAGE": "Failed to send notification for order #{{orderId}}: {{error}}"
+    },
+    "PAYMENT_ERROR": {
+      "TITLE": "Payment Error",
+      "MESSAGE": "Failed to create payment: {{error}}"
+    },
+    "WEBHOOK_ERROR": {
+      "TITLE": "Webhook Error",
+      "MESSAGE": "Failed to process webhook: {{error}}"
+    },
+    "UNKNOWN_PAYMENT_STATUS": {
+      "TITLE": "Unknown Payment Status",
+      "MESSAGE": "Unknown status: {{status}} for order #{{orderId}}"
+    }
+  },
+  "TIME": {
+    "JUST_NOW": "Just now",
+    "MINUTES_AGO": "{{minutes}}m ago",
+    "HOURS_AGO": "{{hours}}h ago",
+    "DAYS_AGO": "{{days}}d ago"
+  },
+  "API_ERROR": {
+    "TRIPO_API_ERROR": "Tripo3D API Error",
+    "HUNYUAN_API_ERROR": "Hunyuan3D API Error",
+    "MESHY_API_ERROR": "Meshy API Error"
+  },
   "LOGOUT": "Logout",
   "LAST_7_DAYS": "Last 7 Days",
   "ROLE_ADMIN": "Administrator",
@@ -205,6 +274,11 @@
   "NETWORK_ERROR_MSG": "Failed to connect to server. Check internet connection.",
   "VALIDATION_ERROR_TITLE": "Validation error",
   "VALIDATION_ERROR_MSG": "Please fix the following errors:",
+  "FIELD_REQUIRED": "This field is required",
+  "FIELD_MAX_LENGTH": "Maximum {{length}} characters",
+  "FIELD_INVALID_FORMAT": "Invalid format",
+  "INVALID_IMAGE_FORMAT": "Please select a valid image file (SVG, PNG, JPG)",
+  "FILE_SIZE_LIMIT": "File size must be less than {{size}}MB",
   "SUCCESS_TITLE": "Success",
   "INFO_TITLE": "Information",
   "WARNING_TITLE": "Warning",
@@ -234,6 +308,7 @@
   "LUMA_API_KEY_LABEL": "Luma AI API Key",
   "CUSTOM_WEBHOOK_URL_INFO": "URL of your self-hosted API compatible with the system",
   "CUSTOM_WEBHOOK_URL_LABEL": "Custom Webhook URL",
+  "USE_HIGH_QUALITY_LOCAL": "High Quality mode",
   "SAVE_ENGINE_SETTINGS": "Save Engine Settings",
   "STRP_PAYMENTS": "Stripe Payments",
   "WEBHOOK_SECRET_LABEL": "Webhook Secret",
@@ -286,7 +361,6 @@
     "BKG_REMOVE": "Remove Background",
     "BKG_OPTIMIZE": "Optimize Image"
   },
-
   "ADD_PRODUCT": "Add Product",
   "EDIT_PRODUCT": "Edit Product",
   "PRODUCT_NAME": "Product Name",
@@ -989,7 +1063,6 @@
     "HINT": "Rotate model to enable zoom · Page scroll over viewer",
     "LOADING": "Loading 3D Scene",
     "THREED_HINT": "3-finger swipe to rotate, 1-finger swipe to scroll page",
-
     "EXPAND_3D": "View 3D Model",
     "EXPAND_PHOTO": "View Full Photo",
     "LOAD_ERROR": "3D Load Error",
@@ -1195,5 +1268,26 @@
       "PAYMENT_METHODS": "💳 Payment methods",
       "METHODS_LIST": "Visa, MasterCard, PayPal, Apple Pay"
     }
-  }
+  },
+  "MODEL_ARCHIVED_SUCCESSFULLY": "3D Model successfully archived to Cloudinary!",
+  "ARCHIVE_FAILED": "Failed to archive model. Please check server logs.",
+  "LOCAL_STORAGE_WARNING": "This model is stored on the server's local disk.",
+  "ARCHIVE_TO_CLOUDINARY": "Archive to Cloudinary",
+  "SECURITY_BLOCK": "Browser Security Blocked This Model",
+  "MIXED_CONTENT_EXPLANATION": "Your browser blocks loading local assets (HTTP) while on this secure site (HTTPS). Archiving the model to Cloudinary will fix this permanently.",
+  "FIX_NOW_ARCHIVE": "Fix Now: Archive to Cloudinary",
+  "SPEC_VALUE_PLACEHOLDER": "e.g., Nike, Red",
+  "ADMIN_EMAIL_PLACEHOLDER": "admin@example.com",
+  "SITE_NAME_PLACEHOLDER": "Your Store Name",
+  "SITE_DESCRIPTION_PLACEHOLDER": "Brief description of your store",
+  "SITE_KEYWORDS_PLACEHOLDER": "Comma-separated keywords",
+  "SITE_URL_PLACEHOLDER": "https://yourstore.com",
+  "DEFAULT_LANG_PLACEHOLDER": "en",
+  "OG_IMAGE_PLACEHOLDER": "https://yourstore.com/images/og-default.jpg",
+  "TWITTER_HANDLE_PLACEHOLDER": "@yourstore",
+  "GOOGLE_ANALYTICS_PLACEHOLDER": "G-XXXXXXXXXX",
+  "GOOGLE_SEARCH_CONSOLE_PLACEHOLDER": "Meta tag content from Search Console",
+  "BING_WEBMASTER_TOOLS_PLACEHOLDER": "Meta tag content from Bing Webmaster Tools",
+  "ROBOTS_TXT_PLACEHOLDER": "User-agent: *&#10;Allow: /&#10;Disallow: /admin/",
+  "You don't have enough credit to create this task": "You don't have enough credit to create this task"
 }

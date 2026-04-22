@@ -8,10 +8,20 @@ import trimesh
 import numpy as np
 from fastapi import FastAPI, BackgroundTasks, HTTPException
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Dict
 
 app = FastAPI(title="Local 3D AI Worker (InstantMesh Optimized)")
+
+# Add CORS middleware to allow WebGL viewer to fetch GLB files
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # In development allow all, or specify http://localhost:4200
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Ensure output directory exists
 OUTPUT_DIR = "outputs"
@@ -26,8 +36,9 @@ tasks: Dict[str, dict] = {}
 class GenerateRequest(BaseModel):
     image_url: str
     action: str = "generate"
+    hq: bool = False
 
-async def run_instantmesh_generation(task_id: str, image_url: str):
+async def run_instantmesh_generation(task_id: str, image_url: str, hq: bool = False):
     """
     Main pipeline for InstantMesh inference on Apple Silicon (MPS).
     1. Downloads the source image.
@@ -60,13 +71,17 @@ async def run_instantmesh_generation(task_id: str, image_url: str):
         # - script: run_mps.py
         # - config: configs/instant-nerf-large.yaml
         # - input: examples/input_{task_id}.png
+        resolution = "512" if hq else "256"
         cmd = [
             "python", "run_mps.py",
             "configs/instant-nerf-large.yaml",
             f"examples/input_{task_id}.png",
             "--output_path", "outputs",
-            "--mesh_resolution", "256" # lowered from 512 to stay under 10MB limit
+            "--mesh_resolution", resolution
         ]
+        
+        if hq:
+            cmd.append("--export_texmap")
         
         process = await asyncio.create_subprocess_exec(
             *cmd,
@@ -91,14 +106,29 @@ async def run_instantmesh_generation(task_id: str, image_url: str):
         
         if os.path.exists(obj_path):
             try:
-                mesh = trimesh.load(obj_path)
+                # trimesh load will automatically find materials/textures if they exist in the same folder
+                mesh = trimesh.load(obj_path, process=False)
                 
-                # Fix orientation: rotate 90 degrees around X axis to make it horizontal
-                # InstantNeRF output often needs this for standard Y-up viewers
-                rotation = trimesh.transformations.rotation_matrix(np.pi/2, [1, 0, 0])
-                mesh.apply_transform(rotation)
-                
-                mesh.export(glb_path)
+                # Check if it's a scene (often happens when multiple parts/materials exist)
+                if isinstance(mesh, trimesh.Scene):
+                    # Rotate all geometry in the scene
+                    # Normal orientation fix: rotate -90 degrees around X axis
+                    rotation = trimesh.transformations.rotation_matrix(-np.pi/2, [1, 0, 0])
+                    mesh.apply_transform(rotation)
+                    # Use export with GLB format
+                    glb_data = mesh.export(file_type='glb')
+                    with open(glb_path, 'wb') as f:
+                        f.write(glb_data)
+                else:
+                    # Fix orientation: rotate -90 degrees around X axis
+                    rotation = trimesh.transformations.rotation_matrix(-np.pi/2, [1, 0, 0])
+                    mesh.apply_transform(rotation)
+                    
+                    # Fix chirality (mirror X) as InstantMesh/Zero123 often has inverted X
+                    chirality = trimesh.transformations.scale_matrix(-1, [1, 0, 0])
+                    mesh.apply_transform(chirality)
+                    
+                    mesh.export(glb_path, 'glb')
                 print(f"Successfully converted and rotated {obj_path} to {glb_path}")
             except Exception as e:
                 raise Exception(f"Conversion failed: {str(e)}")
@@ -127,7 +157,7 @@ async def generate(request: GenerateRequest, background_tasks: BackgroundTasks):
     tasks[task_id] = {"status": "queued", "progress": 0}
     
     # Start the actual generation in the background
-    background_tasks.add_task(run_instantmesh_generation, task_id, request.image_url)
+    background_tasks.add_task(run_instantmesh_generation, task_id, request.image_url, request.hq)
     
     return {"task_id": task_id, "status": "queued"}
 

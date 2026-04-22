@@ -9,9 +9,9 @@ export class AiGenerationController {
 
   @Post('generate')
   @HttpCode(HttpStatus.OK)
-  async generate(@Body('imageUrl') imageUrl: string) {
-    this.logger.log(`Received generation request for ${imageUrl}`);
-    return this.aiService.generateTask(imageUrl);
+  async generate(@Body('imageUrl') imageUrl: string, @Body('isHq') isHq?: boolean) {
+    this.logger.log(`Received generation request for ${imageUrl} (HQ: ${isHq})`);
+    return this.aiService.generateTask(imageUrl, isHq);
   }
 
   @Get('status/:taskId')

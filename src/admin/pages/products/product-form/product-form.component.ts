@@ -23,7 +23,7 @@ import { finalize } from "rxjs/operators";
 
 
 import { LocalizedString } from "../../../../shared/models/localized-string.model";
-import { getLocalizedString } from "../../../../shared/utils/localization.util";
+import { getLocalizedString, translateErrorMessage } from "../../../../shared/utils/localization.util";
 import { TranslateService } from "@ngx-translate/core";
 
 @Component({
@@ -52,8 +52,17 @@ export class ProductFormComponent implements OnInit {
   showRecoveryList: boolean = false;
   taskId: string | null = null;
 
+  get model3dUrlIsLocal(): boolean {
+    return !!this.model3dUrl && (this.model3dUrl.includes('localhost') || this.model3dUrl.includes('127.0.0.1') || !!this.model3dPublicId?.startsWith('LOCAL:'));
+  }
+
+  get model3dUrlIsBlockedByMixedContent(): boolean {
+    // If we are on HTTPS but the model is HTTP Localhost
+    return window.location.protocol === 'https:' && this.model3dUrlIsLocal && !!this.model3dUrl?.startsWith('http:');
+  }
+
   get model3dUrlIsLegacy(): boolean {
-    return false;
+    return this.model3dUrlIsLocal;
   }
   categories: Category[] = [];
 
@@ -163,6 +172,7 @@ export class ProductFormComponent implements OnInit {
     this.finalizeAiModel(task.result.model, task.task_id);
   }
 
+
   onAiSourceImageSelected(event: any): void {
     const file = event.target.files[0];
     if (!file) return;
@@ -219,12 +229,14 @@ export class ProductFormComponent implements OnInit {
           this.pollAiStatus(response.data.task_id);
         } else {
           this.resetAiState();
-          this.snackBar.open(this.translate.instant('AI_ERROR_PREFIX') + response.message, this.translate.instant('CLOSE_BTN'), { duration: 5000 });
+          const errorMsg = translateErrorMessage(response.message, this.translate);
+          this.snackBar.open(this.translate.instant('AI_ERROR_PREFIX') + errorMsg, this.translate.instant('CLOSE_BTN'), { duration: 5000 });
         }
       },
       error: (err) => {
         this.resetAiState();
-        const msg = err.error?.message || 'Generation failed to start';
+        const rawMsg = err.error?.message || 'Generation failed to start';
+        const msg = translateErrorMessage(rawMsg, this.translate);
         this.snackBar.open(msg, this.translate.instant('CLOSE_BTN'), { duration: 5000 });
       }
     });
@@ -241,10 +253,21 @@ export class ProductFormComponent implements OnInit {
 
         if (apiStatus === 'success' && data.result?.model) {
           this.aiStatusMessage = this.translate.instant('AI_GENERATION_SUCCESS');
-          this.finalizeAiModel(data.result.model, taskId);
+          
+          const modelUrl = data.result.model;
+          const isLocalModel = modelUrl.includes('localhost') || modelUrl.includes('127.0.0.1');
+
+          if (isLocalModel) {
+            // Local models are served directly from the worker and shouldn't be moved to Cloudinary
+            this.model3dUrl = modelUrl;
+            this.resetAiState();
+            this.snackBar.open('Model generated and loaded locally!', this.translate.instant('CLOSE_BTN'), { duration: 3000 });
+          } else {
+            this.finalizeAiModel(modelUrl, taskId);
+          }
         } else if (apiStatus === 'failed') {
           this.resetAiState();
-          const errorMsg = status.message || 'Unknown AI error';
+          const errorMsg = translateErrorMessage(status.message || 'Unknown AI error', this.translate);
           this.snackBar.open(this.translate.instant('AI_GENERATION_FAILED_PREFIX') + errorMsg, this.translate.instant('CLOSE_BTN'), { duration: 7000 });
         } else {
           // Show the actual API status like "running", "queued", etc.
@@ -283,7 +306,8 @@ export class ProductFormComponent implements OnInit {
       },
       error: (err) => {
         this.resetAiState();
-        this.snackBar.open(this.translate.instant('FAILED_TO_DOWNLOAD_AI_MODEL'), this.translate.instant('CLOSE_BTN'), { duration: 5000 });
+        const errorMsg = translateErrorMessage(err.error?.message || 'FAILED_TO_DOWNLOAD_AI_MODEL', this.translate);
+        this.snackBar.open(errorMsg, this.translate.instant('CLOSE_BTN'), { duration: 5000 });
       }
     });
   }
@@ -408,7 +432,7 @@ export class ProductFormComponent implements OnInit {
 
           let errorMessage = 'Failed to process image';
           if (error.error?.message) {
-            errorMessage = error.error.message;
+            errorMessage = translateErrorMessage(error.error.message, this.translate);
           } else if (error.message) {
             errorMessage = error.message;
           }
@@ -503,12 +527,35 @@ export class ProductFormComponent implements OnInit {
       error: (err) => {
         this.isUploading3d = false;
         const status = err?.status ? ` [HTTP ${err.status}]` : '';
-        const serverMsg = err?.error?.message || err?.message || 'Unknown error';
-        this.snackBar.open(this.translate.instant('MODEL_3D_UPLOAD_FAILED') + status + ': ' + serverMsg, this.translate.instant('CLOSE_BTN'), {
+        const rawMsg = err?.error?.message || err?.message || 'Unknown error';
+        const errorMsg = translateErrorMessage(rawMsg, this.translate);
+        this.snackBar.open(this.translate.instant('MODEL_3D_UPLOAD_FAILED') + status + ': ' + errorMsg, this.translate.instant('CLOSE_BTN'), {
           duration: 8000,
           panelClass: 'error-snackbar'
         });
       },
+    });
+  }
+
+  archiveLocalModel(): void {
+    if (!this.model3dPublicId || !this.model3dUrlIsLocal) return;
+    
+    // PublicId for local files starts with 'LOCAL:'
+    const localPath = this.model3dPublicId;
+    this.isUploading3d = true;
+    
+    this.productService.archiveLocalModel(localPath).subscribe({
+      next: (res) => {
+        this.model3dUrl = res.url;
+        this.model3dPublicId = res.publicId;
+        this.isUploading3d = false;
+        this.snackBar.open(this.translate.instant('MODEL_ARCHIVED_SUCCESSFULLY'), this.translate.instant('SUCCESS_BTN'), { duration: 5000 });
+      },
+      error: (err) => {
+        this.isUploading3d = false;
+        this.snackBar.open(this.translate.instant('ARCHIVE_FAILED'), this.translate.instant('CLOSE_BTN'), { duration: 5000 });
+        console.error('Archive error:', err);
+      }
     });
   }
 
@@ -547,8 +594,9 @@ export class ProductFormComponent implements OnInit {
       },
       error: (err) => {
         const status = err?.status ? ` [HTTP ${err.status}]` : '';
-        const serverMsg = err?.error?.message || err?.message || 'Unknown error';
-        this.snackBar.open(this.translate.instant('FAILED_TO_LOAD_PRODUCT') + status + ': ' + serverMsg, this.translate.instant('CLOSE_BTN'), {
+        const rawMsg = err?.error?.message || err?.message || 'Unknown error';
+        const errorMsg = translateErrorMessage(rawMsg, this.translate);
+        this.snackBar.open(this.translate.instant('FAILED_TO_LOAD_PRODUCT') + status + ': ' + errorMsg, this.translate.instant('CLOSE_BTN'), {
           duration: 7000,
           panelClass: 'error-snackbar'
         });
@@ -646,8 +694,9 @@ export class ProductFormComponent implements OnInit {
         error: (err) => {
           this.isLoading = false;
           const status = err?.status ? ` [HTTP ${err.status}]` : '';
-          const serverMsg = err?.error?.message || err?.message || 'Unknown error';
-          this.snackBar.open(this.translate.instant('ERROR_UPDATING_PRODUCT') + status + ': ' + serverMsg, this.translate.instant('CLOSE_BTN'), {
+          const rawMsg = err?.error?.message || err?.message || 'Unknown error';
+          const errorMsg = translateErrorMessage(rawMsg, this.translate);
+          this.snackBar.open(this.translate.instant('ERROR_UPDATING_PRODUCT') + status + ': ' + errorMsg, this.translate.instant('CLOSE_BTN'), {
             duration: 7000,
             panelClass: 'error-snackbar'
           });
@@ -663,8 +712,9 @@ export class ProductFormComponent implements OnInit {
         error: (err) => {
           this.isLoading = false;
           const status = err?.status ? ` [HTTP ${err.status}]` : '';
-          const serverMsg = err?.error?.message || err?.message || 'Unknown error';
-          this.snackBar.open(this.translate.instant('ERROR_CREATING_PRODUCT') + status + ': ' + serverMsg, this.translate.instant('CLOSE_BTN'), {
+          const rawMsg = err?.error?.message || err?.message || 'Unknown error';
+          const errorMsg = translateErrorMessage(rawMsg, this.translate);
+          this.snackBar.open(this.translate.instant('ERROR_CREATING_PRODUCT') + status + ': ' + errorMsg, this.translate.instant('CLOSE_BTN'), {
             duration: 7000,
             panelClass: 'error-snackbar'
           });

@@ -25,13 +25,13 @@ export class CustomProvider implements AiGenerationProvider {
     return setting.value.trim();
   }
 
-  async generateTask(imageUrl: string): Promise<{ taskId: string }> {
+  async generateTask(imageUrl: string, isHq: boolean = false): Promise<{ taskId: string }> {
     const webhookUrl = await this.getWebhookUrl();
     try {
       const response = await firstValueFrom(
         this.httpService.post(
           webhookUrl,
-          { image_url: imageUrl, action: 'generate' },
+          { image_url: imageUrl, action: 'generate', hq: isHq },
           { headers: { 'Content-Type': 'application/json' } }
         )
       );

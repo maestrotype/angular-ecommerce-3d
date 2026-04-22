@@ -104,6 +104,6 @@ export class Hunyuan3dProvider implements AiGenerationProvider {
     const status = error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR;
     const message = error.response?.data?.Response?.Error?.Message || error.message;
     this.logger.error(`Error in Hunyuan3dProvider.${context}: ${message}`);
-    throw new HttpException(`Hunyuan3D API Error: ${message}`, status);
+    throw new HttpException(`API_ERROR.HUNYUAN_API_ERROR: ${message}`, status);
   }
 }

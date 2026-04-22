@@ -47,11 +47,20 @@ export class AiGenerationService {
     }
   }
 
-  async generateTask(imageUrl: string) {
+  async generateTask(imageUrl: string, isHq: boolean = false) {
     const provider = await this.getActiveProvider();
-    this.logger.log(`Delegating generateTask to ${provider.providerId}`);
     
-    const result = await provider.generateTask(imageUrl);
+    // If it's the custom provider, use the setting from the database for HQ mode
+    if (provider.providerId === 'custom') {
+      const hqSetting = await firstValueFrom(this.settingsService.getSettingByKey('ai.customUseHq')).catch(() => null);
+      if (hqSetting) {
+        isHq = hqSetting.value === 'true';
+      }
+    }
+
+    this.logger.log(`Delegating generateTask to ${provider.providerId} (HQ: ${isHq})`);
+    
+    const result = await provider.generateTask(imageUrl, isHq);
     return {
       code: 0,
       data: { task_id: result.taskId }, // Align with legacy frontend
@@ -94,13 +103,15 @@ export class AiGenerationService {
 
       this.logger.log(`Uploading model to Cloudinary (${buffer.length} bytes)...`);
 
+      // Use upload_stream with chunk_size to support files > 10MB (Raw/GLB)
       const uploadPromise = new Promise<any>((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
           {
             folder: 'product-3d-models',
             resource_type: 'raw',
             public_id: filename.replace('.glb', ''),
-            format: 'glb'
+            chunk_size: 6000000, // 6MB chunks
+            timeout: 600000
           },
           (error, result) => {
             if (error) {

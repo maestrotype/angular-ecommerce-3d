@@ -22,8 +22,8 @@ export class EmailService {
   sendPaymentSuccess(payment: Payment, order: Order): Observable<void> {
     const notificationData = {
       type: 'payment_success' as any,
-      title: 'Payment Successful',
-      message: `Payment completed for order #${order.id}`,
+      title: 'NOTIFICATION.PAYMENT_SUCCESS.TITLE',
+      message: 'NOTIFICATION.PAYMENT_SUCCESS.MESSAGE',
       data: {
         paymentId: payment.id,
         orderId: order.id,
@@ -38,8 +38,8 @@ export class EmailService {
         // Success notification sent - show popup
         this.notificationsService.create({
           type: 'system' as any,
-          title: 'Notification Sent',
-          message: `Payment success notification sent for order #${order.id}`,
+          title: 'NOTIFICATION.SYSTEM.SENT_TITLE',
+          message: 'NOTIFICATION.SYSTEM.SENT_MESSAGE',
           data: { orderId: order.id, type: 'payment_success' }
         });
       }),
@@ -47,9 +47,9 @@ export class EmailService {
         // Error occurred - show error popup
         this.notificationsService.create({
           type: 'system' as any,
-          title: 'Notification Error',
-          message: `Failed to send payment success notification: ${error.message}`,
-          data: { orderId: order.id, type: 'error' }
+          title: 'NOTIFICATION.SYSTEM.ERROR_TITLE',
+          message: 'NOTIFICATION.SYSTEM.ERROR_MESSAGE',
+          data: { orderId: order.id, type: 'error', error: error.message }
         });
         return throwError(() => new InternalServerErrorException(`Failed to send payment success notification: ${error.message}`));
       })
@@ -59,8 +59,8 @@ export class EmailService {
   sendPaymentFailed(payment: Payment, order: Order): Observable<void> {
     const notificationData = {
       type: 'payment_failed' as any,
-      title: 'Payment Failed',
-      message: `Payment failed for order #${order.id}`,
+      title: 'NOTIFICATION.PAYMENT_FAILED.TITLE',
+      message: 'NOTIFICATION.PAYMENT_FAILED.MESSAGE',
       data: {
         paymentId: payment.id,
         orderId: order.id,
@@ -76,8 +76,8 @@ export class EmailService {
         // Failed notification sent - show popup
         this.notificationsService.create({
           type: 'system' as any,
-          title: 'Notification Sent',
-          message: `Payment failed notification sent for order #${order.id}`,
+          title: 'NOTIFICATION.SYSTEM.SENT_TITLE',
+          message: 'NOTIFICATION.SYSTEM.SENT_MESSAGE',
           data: { orderId: order.id, type: 'payment_failed' }
         });
       }),
@@ -85,9 +85,9 @@ export class EmailService {
         // Error occurred - show error popup
         this.notificationsService.create({
           type: 'system' as any,
-          title: 'Notification Error',
-          message: `Failed to send payment failed notification: ${error.message}`,
-          data: { orderId: order.id, type: 'error' }
+          title: 'NOTIFICATION.SYSTEM.ERROR_TITLE',
+          message: 'NOTIFICATION.SYSTEM.ERROR_MESSAGE',
+          data: { orderId: order.id, type: 'error', error: error.message }
         });
         return throwError(() => new InternalServerErrorException(`Failed to send payment failed notification: ${error.message}`));
       })
@@ -97,8 +97,8 @@ export class EmailService {
   sendOrderConfirmation(order: Order): Observable<void> {
     const notificationData = {
       type: 'order_confirmation' as any,
-      title: 'Order Confirmation',
-      message: `Order #${order.id} has been confirmed`,
+      title: 'NOTIFICATION.ORDER_CONFIRMATION.TITLE',
+      message: 'NOTIFICATION.ORDER_CONFIRMATION.MESSAGE',
       data: {
         orderId: order.id,
         customerName: order.customerName,
@@ -113,8 +113,8 @@ export class EmailService {
         // Order confirmation sent - show popup
         this.notificationsService.create({
           type: 'system' as any,
-          title: 'Notification Sent',
-          message: `Order confirmation sent for order #${order.id}`,
+          title: 'NOTIFICATION.SYSTEM.SENT_TITLE',
+          message: 'NOTIFICATION.SYSTEM.SENT_MESSAGE',
           data: { orderId: order.id, type: 'order_confirmation' }
         });
       }),
@@ -122,9 +122,9 @@ export class EmailService {
         // Error occurred - show error popup
         this.notificationsService.create({
           type: 'system' as any,
-          title: 'Notification Error',
-          message: `Failed to send order confirmation: ${error.message}`,
-          data: { orderId: order.id, type: 'error' }
+          title: 'NOTIFICATION.SYSTEM.ERROR_TITLE',
+          message: 'NOTIFICATION.SYSTEM.ERROR_MESSAGE',
+          data: { orderId: order.id, type: 'error', error: error.message }
         });
         return throwError(() => new InternalServerErrorException(`Failed to send order confirmation: ${error.message}`));
       })
@@ -134,8 +134,8 @@ export class EmailService {
   sendOrderStatusUpdate(order: Order, oldStatus: string, newStatus: string): Observable<void> {
     const notificationData = {
       type: 'order_status_update' as any,
-      title: 'Order Status Updated',
-      message: `Order #${order.id} status changed from ${oldStatus} to ${newStatus}`,
+      title: 'NOTIFICATION.ORDER_STATUS_UPDATE.TITLE',
+      message: 'NOTIFICATION.ORDER_STATUS_UPDATE.MESSAGE',
       data: {
         orderId: order.id,
         oldStatus,
@@ -150,8 +150,8 @@ export class EmailService {
         // Status update sent - show popup
         this.notificationsService.create({
           type: 'system' as any,
-          title: 'Notification Sent',
-          message: `Order status update sent for order #${order.id}`,
+          title: 'NOTIFICATION.SYSTEM.SENT_TITLE',
+          message: 'NOTIFICATION.SYSTEM.SENT_MESSAGE',
           data: { orderId: order.id, type: 'order_status_update' }
         });
       }),
@@ -159,9 +159,9 @@ export class EmailService {
         // Error occurred - show error popup
         this.notificationsService.create({
           type: 'system' as any,
-          title: 'Notification Error',
-          message: `Failed to send status update: ${error.message}`,
-          data: { orderId: order.id, type: 'error' }
+          title: 'NOTIFICATION.SYSTEM.ERROR_TITLE',
+          message: 'NOTIFICATION.SYSTEM.ERROR_MESSAGE',
+          data: { orderId: order.id, type: 'error', error: error.message }
         });
         return throwError(() => new InternalServerErrorException(`Failed to send status update: ${error.message}`));
       })
@@ -171,8 +171,8 @@ export class EmailService {
   sendPaymentCreated(payment: Payment, order: Order): Observable<void> {
     const notificationData = {
       type: 'payment_created' as any,
-      title: 'Payment Created',
-      message: `Payment created for order #${order.id}`,
+      title: 'NOTIFICATION.PAYMENT_CREATED.TITLE',
+      message: 'NOTIFICATION.PAYMENT_CREATED.MESSAGE',
       data: {
         paymentId: payment.id,
         orderId: order.id,
@@ -187,8 +187,8 @@ export class EmailService {
         // Payment created notification sent - show popup
         this.notificationsService.create({
           type: 'system' as any,
-          title: 'Notification Sent',
-          message: `Payment created notification sent for order #${order.id}`,
+          title: 'NOTIFICATION.SYSTEM.SENT_TITLE',
+          message: 'NOTIFICATION.SYSTEM.SENT_MESSAGE',
           data: { orderId: order.id, type: 'payment_created' }
         });
       }),
@@ -196,9 +196,9 @@ export class EmailService {
         // Error occurred - show error popup
         this.notificationsService.create({
           type: 'system' as any,
-          title: 'Notification Error',
-          message: `Failed to send payment created notification: ${error.message}`,
-          data: { orderId: order.id, type: 'error' }
+          title: 'NOTIFICATION.SYSTEM.ERROR_TITLE',
+          message: 'NOTIFICATION.SYSTEM.ERROR_MESSAGE',
+          data: { orderId: order.id, type: 'error', error: error.message }
         });
         return throwError(() => new InternalServerErrorException(`Failed to send payment created notification: ${error.message}`));
       })

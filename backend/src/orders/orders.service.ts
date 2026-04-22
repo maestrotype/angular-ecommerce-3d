@@ -146,8 +146,8 @@ export class OrdersService {
         if (updateOrderDto.status && updateOrderDto.status !== order.status) {
           const notification = this.notificationsService.create({
             type: 'order_updated' as any,
-            title: 'Order Status Updated',
-            message: `Order #${id} status changed to ${updateOrderDto.status}`,
+            title: 'NOTIFICATION.ORDER_UPDATED.TITLE',
+            message: 'NOTIFICATION.ORDER_UPDATED.MESSAGE',
             data: { orderId: id, newStatus: updateOrderDto.status, oldStatus: order.status }
           });
 

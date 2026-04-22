@@ -109,8 +109,14 @@ export class UploadsController {
       return throwError(() => new BadRequestException("No file uploaded"));
     }
 
-    // Cloudinary Free Tier has a strictly enforced 10MB limit for raw files.
-    if (file.size <= 10 * 1024 * 1024) {
+    const isProduction = process.env.NODE_ENV === 'production';
+
+    // Cloudinary for small files, or forced for all in production
+    if (file.size <= 10 * 1024 * 1024 || isProduction) {
+      if (isProduction && file.size > 10 * 1024 * 1024) {
+        console.log(`[UploadsController] Large section-3d file (${(file.size/1024/1024).toFixed(1)}MB) detected in production. Enforcing chunked Cloudinary upload...`);
+      }
+
       const uploadPromise = new Promise<any>((resolve, reject) => {
         cloudinary.uploader.upload_large(file.path, {
           folder: "section-3d-models",
@@ -134,11 +140,11 @@ export class UploadsController {
         catchError(error => {
           try { unlinkSync(file.path); } catch (e) {}
           const message = error?.message || "3D section model upload failed";
-          return throwError(() => new BadRequestException(message));
+          return throwError(() => new BadRequestException(`Cloudinary upload failed: ${message}`));
         })
       );
     } else {
-      // Fallback: File is > 10MB. Keep it on local disk.
+      // Fallback: Local Storage (Dev mode only, > 10MB)
       const finalDir = join(__dirname, "..", "..", "uploads", "sections-3d");
       if (!existsSync(finalDir)) {
         mkdirSync(finalDir, { recursive: true });
@@ -183,10 +189,14 @@ export class UploadsController {
       return throwError(() => new BadRequestException("No file uploaded"));
     }
 
-    // Cloudinary Free Tier has a strictly enforced 10MB limit for raw files.
-    // If the file is smaller than 10MB, upload strictly to Cloudinary for permanent storage.
-    // If the file is larger than 10MB, fallback to local disk storage.
-    if (file.size <= 10 * 1024 * 1024) {
+    const isProduction = process.env.NODE_ENV === 'production';
+
+    // Cloudinary for small files, or forced for all in production to avoid ephemeral storage loss
+    if (file.size <= 10 * 1024 * 1024 || isProduction) {
+      if (isProduction && file.size > 10 * 1024 * 1024) {
+        console.log(`[UploadsController] Large product-3d file (${(file.size/1024/1024).toFixed(1)}MB) detected in production. Enforcing chunked Cloudinary upload...`);
+      }
+
       const uploadPromise = new Promise<any>((resolve, reject) => {
         cloudinary.uploader.upload_large(file.path, {
           folder: "product-3d-models",
@@ -210,11 +220,11 @@ export class UploadsController {
         catchError(error => {
           try { unlinkSync(file.path); } catch (e) {}
           const message = error?.message || "3D model Cloudinary upload failed";
-          return throwError(() => new BadRequestException(message));
+          return throwError(() => new BadRequestException(`Cloudinary upload failed: ${message}`));
         })
       );
     } else {
-      // Fallback: File is > 10MB. Keep it on local disk.
+      // Fallback: File is > 10MB in Dev mode. Keep it on local disk.
       // Move it from temp directory to proper uploads directory
       const finalDir = join(__dirname, "..", "..", "uploads", "products-3d");
       if (!existsSync(finalDir)) {
@@ -231,13 +241,11 @@ export class UploadsController {
       // Clean up temp file
       try { unlinkSync(file.path); } catch (e) {}
       
-      const serverUrl = process.env.NODE_ENV === 'production' 
-        ? 'https://angular-ecommerce-backend.onrender.com' 
-        : 'http://localhost:3002';
+      const serverUrl = 'http://localhost:3002'; // Local dev default
 
       return of({
         url: `${serverUrl}/uploads/products-3d/${finalFileName}`,
-        publicId: finalPath, // Use local path as publicId for deletion reference
+        publicId: `LOCAL:${finalPath}`, // Mark as local for frontend detection
       });
     }
   }
@@ -351,4 +359,47 @@ export class UploadsController {
       })
     );
   }
-}  
+
+  @Post("archive-local")
+  archiveLocalFile(@Body() body: { path: string; folder?: string }): Observable<{ url: string; publicId: string }> {
+    if (!body.path) {
+      return throwError(() => new BadRequestException("No path provided"));
+    }
+
+    // Path should be like 'LOCAL:/path/to/file.glb' or a raw path
+    const cleanPath = body.path.replace('LOCAL:', '');
+    
+    if (!existsSync(cleanPath)) {
+      console.error(`[UploadsController] Archive failed: File not found at ${cleanPath}`);
+      return throwError(() => new BadRequestException(`Local file not found: ${cleanPath}`));
+    }
+
+    const folder = body.folder || "product-3d-models";
+    
+    const uploadPromise = new Promise<any>((resolve, reject) => {
+      cloudinary.uploader.upload_large(cleanPath, {
+        folder,
+        resource_type: "raw",
+        chunk_size: 6000000,
+        timeout: 600000
+      }, (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      });
+    });
+
+    return from(uploadPromise).pipe(
+      map((result: any) => {
+        console.log(`[UploadsController] File successfully archived to Cloudinary: ${result.secure_url}`);
+        return {
+          url: result.secure_url,
+          publicId: result.public_id,
+        };
+      }),
+      catchError(error => {
+        console.error(`[UploadsController] Archive failed:`, error);
+        return throwError(() => new BadRequestException(error?.message || "Cloudinary archiving failed"));
+      })
+    );
+  }
+}
