@@ -180,6 +180,10 @@
                     <mat-spinner *ngIf="isAiGenerating" diameter="20" class="mini-spinner"></mat-spinner>
                     <span *ngIf="!isAiGenerating">{{ 'PRODUCT_3D.GENERATE_AI' | translate }}</span>
                   </button>
+                  <div class="active-engine-hint" *ngIf="!isAiGenerating">
+                    <mat-icon>settings_suggest</mat-icon>
+                    <span>{{ 'ACTIVE_ENGINE' | translate }}: {{ aiStatusMessage || ('CAR_LOADING' | translate) }}</span>
+                  </div>
                 </div>
 
                 <!-- AI Progress Indicator -->

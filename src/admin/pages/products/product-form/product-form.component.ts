@@ -96,6 +96,31 @@ export class ProductFormComponent implements OnInit {
         this.loadProduct(this.productId);
       }
     });
+    this.fetchActiveEngineName();
+  }
+
+  private fetchActiveEngineName(): void {
+    this.settingsService.getSettings().subscribe({
+      next: (settings) => {
+        const providerId = settings.ai?.activeProvider || 'tripo3d';
+        const key = providerId.toUpperCase();
+        // Map provider ID to translation key
+        const providerMap: any = {
+          'tripo3d': 'Tripo3D (High Quality Paid)',
+          'hunyuan3d': 'HUNYUAN_TENCENT',
+          'meshy': 'MESHY_AI',
+          'luma': 'LUMA_AI',
+          'unique3d': 'UNIQUE3D_LOCAL_HQ',
+          'hunyuan_v2': 'HUNYUAN_V2_CLOUD_FREE',
+          'custom': 'CUSTOM_WEBHOOK_LOCAL'
+        };
+        
+        const label = providerMap[providerId] || providerId;
+        this.translate.get(label).subscribe(translated => {
+          this.aiStatusMessage = translated;
+        });
+      }
+    });
   }
 
   createForm(): FormGroup {
@@ -288,8 +313,8 @@ export class ProductFormComponent implements OnInit {
   private resetAiState(): void {
     this.isAiGenerating = false;
     this.isLoading = false;
-    this.aiStatusMessage = '';
     this.aiProgress = 0;
+    this.fetchActiveEngineName(); // Restore engine name after generation
   }
 
   private finalizeAiModel(modelUrl: string, taskId: string): void {

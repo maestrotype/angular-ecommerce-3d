@@ -6,6 +6,7 @@ import { RecommendationsService, RecommendationProduct } from '../../../../core/
 import { Product } from 'src/shared/models/product.model';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { CartService } from '../../../../core/services/cart.service';
+import { AnalyticsService } from '../../../../core/services/analytics.service';
 
 @Component({
   selector: 'app-similar-products',
@@ -19,7 +20,7 @@ export class SimilarProductsComponent implements OnInit, OnDestroy {
     if (val?.context) {
       this.product = val.context;
       // Trigger reload if initialized
-      if (this.similarProducts.length === 0) {
+      if (!this.similarProducts || this.similarProducts.length === 0) {
         this.loadSimilarProducts();
       }
     }
@@ -37,7 +38,7 @@ export class SimilarProductsComponent implements OnInit, OnDestroy {
   @Input() title: string = 'Similar Products';
 
   similarProducts: RecommendationProduct[] = [];
-  loading: boolean = true;
+  loading: boolean = false;
   error: boolean = false;
   private destroy$ = new Subject<void>();
 
@@ -48,7 +49,8 @@ export class SimilarProductsComponent implements OnInit, OnDestroy {
     private recommendationsService: RecommendationsService,
     private router: Router,
     private notificationService: NotificationService,
-    private cartService: CartService
+    private cartService: CartService,
+    private analyticsService: AnalyticsService
   ) {}
 
   ngOnInit(): void {
@@ -95,6 +97,13 @@ export class SimilarProductsComponent implements OnInit, OnDestroy {
     this.cartService.addToCart(cartItem);
     this.notificationService.showSuccess(`Added ${product.name} to cart!`);
     
+    // Track add to cart event
+    this.analyticsService.trackEvent('recommendation_add_to_cart', {
+      product_id: product.id,
+      product_name: product.name,
+      recommendation_type: 'similar_products',
+      source_product_id: this.product.id
+    });
   }
 
   // Rating functionality
@@ -165,6 +174,14 @@ export class SimilarProductsComponent implements OnInit, OnDestroy {
               'No similar products found for this item.',
               3000
             );
+          } else {
+            // Track recommendation view
+            this.analyticsService.trackEvent('recommendation_view', {
+              recommendation_type: 'similar_products',
+              product_id: this.product.id,
+              recommended_count: products.length,
+              recommended_ids: products.map(p => p.id)
+            });
           }
         },
         error: (error) => {
@@ -206,6 +223,14 @@ export class SimilarProductsComponent implements OnInit, OnDestroy {
       
       
       
+      
+      // Track recommendation click
+      this.analyticsService.trackEvent('recommendation_click', {
+        product_id: productId,
+        product_name: product.name,
+        recommendation_type: 'similar_products',
+        source_product_id: this.product.id
+      });
       
       from(this.router.navigate(['/product', productId])).subscribe({
         next: (success) => {
