@@ -66,12 +66,20 @@ export class AiGenerationService {
 
     this.logger.log(`Delegating generateTask to ${provider.providerId} (HQ: ${isHq})`);
     
-    const result = await provider.generateTask(imageUrl, isHq);
-    return {
-      code: 0,
-      data: { task_id: result.taskId }, // Align with legacy frontend
-      message: 'success'
-    };
+    try {
+      const result = await provider.generateTask(imageUrl, isHq);
+      return {
+        code: 0,
+        data: { task_id: result.taskId }, // Align with legacy frontend
+        message: 'success'
+      };
+    } catch (error) {
+      this.logger.error(`Generation failed for ${provider.providerId}: ${error.message}`);
+      return {
+        code: 1,
+        message: error.message || 'AI generation service unreachable'
+      };
+    }
   }
 
   async getTaskStatus(taskId: string) {
@@ -85,11 +93,13 @@ export class AiGenerationService {
         task_id: result.taskId,
         status: result.status,
         progress: result.progress,
+        error: result.error,
+        localPath: result.localPath,
         result: {
           model: result.modelUrl || null
         }
       },
-      message: 'success'
+      message: result.error || 'success'
     };
   }
 
@@ -136,7 +146,8 @@ export class AiGenerationService {
 
       return {
         success: true,
-        path: result.secure_url
+        path: result.secure_url,
+        publicId: result.public_id
       };
     } catch (error) {
       this.logger.error(`Persistent upload failed: ${error.message}`);

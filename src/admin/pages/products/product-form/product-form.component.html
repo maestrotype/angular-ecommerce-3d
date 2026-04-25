@@ -166,23 +166,26 @@
                 <p>{{ 'PRODUCT_3D.SUPPORT_HINT' | translate }}</p>
                 
                 <div class="upload-actions">
-                  <button mat-flat-button color="primary" type="button" class="browse-btn" (click)="file3dInput.click()">
-                    {{ 'PRODUCT_3D.BROWSE_FILES' | translate }}
-                  </button>
-                  
-                  <div class="ai-divider">
-                    <span>{{ 'PRODUCT_3D.OR' | translate }}</span>
+                  <div class="action-buttons">
+                    <button mat-flat-button color="primary" type="button" class="action-btn browse-btn" (click)="file3dInput.click()">
+                      <mat-icon>upload_file</mat-icon>
+                      <span>{{ 'PRODUCT_3D.BROWSE_FILES' | translate }}</span>
+                    </button>
+                    
+                    <button mat-raised-button color="accent" type="button" class="action-btn ai-gen-btn" 
+                            (click)="generateAi3dModel()" [disabled]="isAiGenerating || isUploading3d">
+                      <mat-icon *ngIf="!isAiGenerating">auto_awesome</mat-icon>
+                      <mat-spinner *ngIf="isAiGenerating" diameter="20" class="mini-spinner"></mat-spinner>
+                      <span>{{ isAiGenerating ? ('AI_GENERATING' | translate) : ('PRODUCT_3D.GENERATE_AI' | translate) }}</span>
+                    </button>
                   </div>
 
-                   <button mat-raised-button color="accent" type="button" class="ai-gen-btn" 
-                           (click)="generateAi3dModel()" [disabled]="isAiGenerating || isUploading3d">
-                    <mat-icon *ngIf="!isAiGenerating">auto_awesome</mat-icon>
-                    <mat-spinner *ngIf="isAiGenerating" diameter="20" class="mini-spinner"></mat-spinner>
-                    <span *ngIf="!isAiGenerating">{{ 'PRODUCT_3D.GENERATE_AI' | translate }}</span>
-                  </button>
-                  <div class="active-engine-hint" *ngIf="!isAiGenerating">
-                    <mat-icon>settings_suggest</mat-icon>
-                    <span>{{ 'ACTIVE_ENGINE' | translate }}: {{ aiStatusMessage || ('CAR_LOADING' | translate) }}</span>
+                  <div class="engine-info-row" *ngIf="!isAiGenerating">
+                    <div class="engine-pill">
+                      <mat-icon>memory</mat-icon>
+                      <span>{{ 'ACTIVE_ENGINE' | translate }}:</span>
+                      <strong class="engine-name">{{ aiStatusMessage || ('CAR_LOADING' | translate) }}</strong>
+                    </div>
                   </div>
                 </div>
 

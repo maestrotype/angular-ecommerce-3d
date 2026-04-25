@@ -21,6 +21,8 @@ export interface TripoStatusResponse {
     result?: {
       model?: string;
     };
+    localPath?: string;
+    error?: string;
   };
   message: string;
 }
@@ -48,8 +50,8 @@ export class AiGenerationService {
     );
   }
 
-  downloadModel(url: string, filename: string): Observable<{ success: boolean; path: string }> {
-    return this.http.post<{ success: boolean; path: string }>(`${this.apiUrl}/download`, { url, filename });
+  downloadModel(url: string, filename: string): Observable<{ success: boolean; path: string; publicId?: string }> {
+    return this.http.post<{ success: boolean; path: string; publicId?: string }>(`${this.apiUrl}/download`, { url, filename });
   }
 
   getRecentTasks(limit: number = 10): Observable<any> {

@@ -60,6 +60,7 @@ export class Unique3dProvider implements AiGenerationProvider {
         status: data.status || 'running',
         progress: data.progress || 0,
         modelUrl: data.model_url || null,
+        localPath: data.local_path || null,
         error: data.error || null
       };
     } catch (error) {

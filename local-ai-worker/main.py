@@ -141,6 +141,7 @@ async def run_instantmesh_generation(task_id: str, image_url: str, hq: bool = Fa
         tasks[task_id]["status"] = "success"
         tasks[task_id]["progress"] = 100
         tasks[task_id]["model_url"] = f"http://localhost:8000/outputs/{task_id}.glb"
+        tasks[task_id]["local_path"] = os.path.abspath(glb_path)
         print(f"Task {task_id} completed successfully!")
 
     except Exception as e:
@@ -233,6 +234,7 @@ async def run_unique3d_generation(task_id: str, image_url: str, hq: bool = False
         tasks[task_id]["status"] = "success"
         tasks[task_id]["progress"] = 100
         tasks[task_id]["model_url"] = f"http://localhost:8000/outputs/{task_id}.glb"
+        tasks[task_id]["local_path"] = os.path.abspath(glb_path)
 
     except Exception as e:
         print(f"Error in Unique3D task {task_id}: {str(e)}")
@@ -281,8 +283,8 @@ async def run_hunyuanv2_generation(task_id: str, image_url: str, hq: bool = Fals
 
         # Use 'mini' for speed; 'full' for hq mode
         model_variant = "full" if hq else "mini"
-        steps = 30 if hq else 5
-        resolution = 256 if hq else 128
+        steps = 40 if hq else 15
+        resolution = 512 if hq else 256
 
         cmd = [
             "python", "hunyuan3d_inference.py",
@@ -328,6 +330,7 @@ async def run_hunyuanv2_generation(task_id: str, image_url: str, hq: bool = Fals
         tasks[task_id]["status"] = "success"
         tasks[task_id]["progress"] = 100
         tasks[task_id]["model_url"] = f"http://localhost:8000/outputs/{task_id}.glb"
+        tasks[task_id]["local_path"] = os.path.abspath(glb_path)
 
     except Exception as e:
         print(f"Error in Hunyuan3D-V2 task {task_id}: {str(e)}")

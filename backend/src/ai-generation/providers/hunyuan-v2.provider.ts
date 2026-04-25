@@ -56,6 +56,7 @@ export class HunyuanV2Provider implements AiGenerationProvider {
         status: data.status || 'running',
         progress: data.progress || 0,
         modelUrl: data.model_url || null,
+        localPath: data.local_path || null,
         error: data.error || null
       };
     } catch (error) {
