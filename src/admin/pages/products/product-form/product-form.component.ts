@@ -96,6 +96,31 @@ export class ProductFormComponent implements OnInit {
         this.loadProduct(this.productId);
       }
     });
+    this.fetchActiveEngineName();
+  }
+
+  private fetchActiveEngineName(): void {
+    this.settingsService.getSettings().subscribe({
+      next: (settings) => {
+        const providerId = settings.ai?.activeProvider || 'tripo3d';
+        const key = providerId.toUpperCase();
+        // Map provider ID to translation key
+        const providerMap: any = {
+          'tripo3d': 'Tripo3D (High Quality Paid)',
+          'hunyuan3d': 'HUNYUAN_TENCENT',
+          'meshy': 'MESHY_AI',
+          'luma': 'LUMA_AI',
+          'unique3d': 'UNIQUE3D_LOCAL_HQ',
+          'hunyuan_v2': 'HUNYUAN_V2_CLOUD_FREE',
+          'custom': 'CUSTOM_WEBHOOK_LOCAL'
+        };
+        
+        const label = providerMap[providerId] || providerId;
+        this.translate.get(label).subscribe(translated => {
+          this.aiStatusMessage = translated;
+        });
+      }
+    });
   }
 
   createForm(): FormGroup {
@@ -258,8 +283,10 @@ export class ProductFormComponent implements OnInit {
           const isLocalModel = modelUrl.includes('localhost') || modelUrl.includes('127.0.0.1');
 
           if (isLocalModel) {
-            // Local models are served directly from the worker and shouldn't be moved to Cloudinary
+            // Local models are served directly from the worker
             this.model3dUrl = modelUrl;
+            // PublicId for local files can be stored to allow archiving
+            this.model3dPublicId = (data as any).localPath ? 'LOCAL:' + (data as any).localPath : null;
             this.resetAiState();
             this.snackBar.open('Model generated and loaded locally!', this.translate.instant('CLOSE_BTN'), { duration: 3000 });
           } else {
@@ -267,7 +294,7 @@ export class ProductFormComponent implements OnInit {
           }
         } else if (apiStatus === 'failed') {
           this.resetAiState();
-          const errorMsg = translateErrorMessage(status.message || 'Unknown AI error', this.translate);
+          const errorMsg = translateErrorMessage((status as any).data?.error || status.message || 'Unknown AI error', this.translate);
           this.snackBar.open(this.translate.instant('AI_GENERATION_FAILED_PREFIX') + errorMsg, this.translate.instant('CLOSE_BTN'), { duration: 7000 });
         } else {
           // Show the actual API status like "running", "queued", etc.
@@ -288,8 +315,8 @@ export class ProductFormComponent implements OnInit {
   private resetAiState(): void {
     this.isAiGenerating = false;
     this.isLoading = false;
-    this.aiStatusMessage = '';
     this.aiProgress = 0;
+    this.fetchActiveEngineName(); // Restore engine name after generation
   }
 
   private finalizeAiModel(modelUrl: string, taskId: string): void {
@@ -297,10 +324,11 @@ export class ProductFormComponent implements OnInit {
     this.aiStatusMessage = this.translate.instant('AI_DOWNLOADING_MODEL');
     
     this.aiService.downloadModel(modelUrl, filename).subscribe({
-      next: (response) => {
+      next: (response: any) => {
         this.resetAiState();
         if (response.path) {
           this.model3dUrl = response.path;
+          this.model3dPublicId = response.publicId || null;
           this.snackBar.open(this.translate.instant('MODEL_3D_READY_SAVED'), this.translate.instant('SUCCESS_BTN'), { duration: 5000 });
         }
       },
@@ -538,25 +566,34 @@ export class ProductFormComponent implements OnInit {
   }
 
   archiveLocalModel(): void {
-    if (!this.model3dPublicId || !this.model3dUrlIsLocal) return;
+    if (!this.model3dUrl || !this.model3dUrlIsLocal) return;
     
-    // PublicId for local files starts with 'LOCAL:'
-    const localPath = this.model3dPublicId;
-    this.isUploading3d = true;
-    
-    this.productService.archiveLocalModel(localPath).subscribe({
-      next: (res) => {
-        this.model3dUrl = res.url;
-        this.model3dPublicId = res.publicId;
-        this.isUploading3d = false;
-        this.snackBar.open(this.translate.instant('MODEL_ARCHIVED_SUCCESSFULLY'), this.translate.instant('SUCCESS_BTN'), { duration: 5000 });
-      },
-      error: (err) => {
-        this.isUploading3d = false;
-        this.snackBar.open(this.translate.instant('ARCHIVE_FAILED'), this.translate.instant('CLOSE_BTN'), { duration: 5000 });
-        console.error('Archive error:', err);
-      }
-    });
+    // If it's a localhost URL from the worker, we use downloadModel to archive it
+    if (this.model3dUrl.includes('localhost:8000') || this.model3dUrl.includes('127.0.0.1:8000')) {
+      const taskId = this.model3dUrl.split('/').pop()?.replace('.glb', '') || 'unknown';
+      this.finalizeAiModel(this.model3dUrl, taskId);
+      return;
+    }
+
+    // Otherwise, if it has a LOCAL: path, use archive service
+    if (this.model3dPublicId?.startsWith('LOCAL:')) {
+      const localPath = this.model3dPublicId;
+      this.isUploading3d = true;
+      
+      this.productService.archiveLocalModel(localPath).subscribe({
+        next: (res) => {
+          this.model3dUrl = res.url;
+          this.model3dPublicId = res.publicId;
+          this.isUploading3d = false;
+          this.snackBar.open(this.translate.instant('MODEL_ARCHIVED_SUCCESSFULLY'), this.translate.instant('SUCCESS_BTN'), { duration: 5000 });
+        },
+        error: (err) => {
+          this.isUploading3d = false;
+          this.snackBar.open(this.translate.instant('ARCHIVE_FAILED'), this.translate.instant('CLOSE_BTN'), { duration: 5000 });
+          console.error('Archive error:', err);
+        }
+      });
+    }
   }
 
   onModelLoaded(): void {

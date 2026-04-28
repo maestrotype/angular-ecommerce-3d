@@ -4,6 +4,7 @@ export interface AiTaskResult {
   progress: number;
   modelUrl?: string; // The URL to download the generated .glb file
   error?: string;
+  localPath?: string; // The absolute path on the local worker
 }
 
 export abstract class AiGenerationProvider {

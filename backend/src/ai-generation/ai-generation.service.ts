@@ -4,12 +4,14 @@ import { firstValueFrom } from 'rxjs';
 import axios from 'axios';
 import cloudinary from '../config/cloudinary.config';
 
-import { AiGenerationProvider } from './interfaces/ai-provider.interface';
+import { AiGenerationProvider, AiTaskResult } from './interfaces/ai-provider.interface';
 import { Tripo3dProvider } from './providers/tripo3d.provider';
 import { Hunyuan3dProvider } from './providers/hunyuan3d.provider';
 import { MeshyProvider } from './providers/meshy.provider';
 import { LumaAiProvider } from './providers/luma.provider';
 import { CustomProvider } from './providers/custom.provider';
+import { Unique3dProvider } from './providers/unique3d.provider';
+import { HunyuanV2Provider } from './providers/hunyuan-v2.provider';
 
 @Injectable()
 export class AiGenerationService {
@@ -21,7 +23,9 @@ export class AiGenerationService {
     private hunyuan3dProvider: Hunyuan3dProvider,
     private meshyProvider: MeshyProvider,
     private lumaAiProvider: LumaAiProvider,
-    private customProvider: CustomProvider
+    private customProvider: CustomProvider,
+    private unique3dProvider: Unique3dProvider,
+    private hunyuanV2Provider: HunyuanV2Provider
   ) {}
 
   /**
@@ -37,6 +41,8 @@ export class AiGenerationService {
         case 'meshy': return this.meshyProvider;
         case 'luma': return this.lumaAiProvider;
         case 'custom': return this.customProvider;
+        case 'unique3d': return this.unique3dProvider;
+        case 'hunyuan_v2': return this.hunyuanV2Provider;
         case 'tripo3d':
         default:
           return this.tripo3dProvider;
@@ -60,12 +66,20 @@ export class AiGenerationService {
 
     this.logger.log(`Delegating generateTask to ${provider.providerId} (HQ: ${isHq})`);
     
-    const result = await provider.generateTask(imageUrl, isHq);
-    return {
-      code: 0,
-      data: { task_id: result.taskId }, // Align with legacy frontend
-      message: 'success'
-    };
+    try {
+      const result = await provider.generateTask(imageUrl, isHq);
+      return {
+        code: 0,
+        data: { task_id: result.taskId }, // Align with legacy frontend
+        message: 'success'
+      };
+    } catch (error) {
+      this.logger.error(`Generation failed for ${provider.providerId}: ${error.message}`);
+      return {
+        code: 1,
+        message: error.message || 'AI generation service unreachable'
+      };
+    }
   }
 
   async getTaskStatus(taskId: string) {
@@ -79,11 +93,13 @@ export class AiGenerationService {
         task_id: result.taskId,
         status: result.status,
         progress: result.progress,
+        error: result.error,
+        localPath: result.localPath,
         result: {
           model: result.modelUrl || null
         }
       },
-      message: 'success'
+      message: result.error || 'success'
     };
   }
 
@@ -130,7 +146,8 @@ export class AiGenerationService {
 
       return {
         success: true,
-        path: result.secure_url
+        path: result.secure_url,
+        publicId: result.public_id
       };
     } catch (error) {
       this.logger.error(`Persistent upload failed: ${error.message}`);

@@ -9,6 +9,7 @@ import { CartService } from './core/services/cart.service';
 import { FavoritesService } from './core/services/favorites.service';
 import { ModalService } from './core/services/modal.service';
 import { TranslateService } from '@ngx-translate/core';
+import { AnalyticsService } from './core/services/analytics.service';
 
 @Component({
   selector: 'app-root',
@@ -36,6 +37,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private favoritesService: FavoritesService,
     private modalService: ModalService,
     private translate: TranslateService,
+    private analyticsService: AnalyticsService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     // Initialize localization

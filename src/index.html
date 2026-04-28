@@ -95,6 +95,31 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#1976d2">
+  <!-- Unified Analytics SDK initialization -->
+  <script>
+    window.analytics_debug = true; // Enable console logging for analytics
+    
+    // Mock Umami/Amplitude if they don't exist yet for local development tracking
+    if (!window.umami) {
+      window.umami = {
+        track: function(name, data) {
+          if (window.analytics_debug) {
+            console.log('%c[Umami Mock]', 'color: #10b981; font-weight: bold', name, data);
+          }
+        }
+      };
+    }
+    
+    if (!window.amplitude) {
+      window.amplitude = {
+        track: function(name, data) {
+          if (window.analytics_debug) {
+            console.log('%c[Amplitude Mock]', 'color: #8b5cf6; font-weight: bold', name, data);
+          }
+        }
+      };
+    }
+  </script>
 </head>
 
 <body class="mat-typography">

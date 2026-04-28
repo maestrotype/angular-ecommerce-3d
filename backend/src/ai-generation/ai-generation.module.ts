@@ -10,6 +10,8 @@ import { Hunyuan3dProvider } from './providers/hunyuan3d.provider';
 import { MeshyProvider } from './providers/meshy.provider';
 import { LumaAiProvider } from './providers/luma.provider';
 import { CustomProvider } from './providers/custom.provider';
+import { Unique3dProvider } from './providers/unique3d.provider';
+import { HunyuanV2Provider } from './providers/hunyuan-v2.provider';
 
 @Module({
   imports: [SettingsModule, HttpModule],
@@ -19,7 +21,9 @@ import { CustomProvider } from './providers/custom.provider';
     Hunyuan3dProvider,
     MeshyProvider,
     LumaAiProvider,
-    CustomProvider
+    CustomProvider,
+    Unique3dProvider,
+    HunyuanV2Provider
   ],
   controllers: [AiGenerationController],
   exports: [AiGenerationService],
