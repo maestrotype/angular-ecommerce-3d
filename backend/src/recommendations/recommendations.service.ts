@@ -48,9 +48,6 @@ export class RecommendationsService {
     private readonly orderRepository: Repository<Order>,
   ) {}
 
-  /**
-   * Get similar products based on category, price, rating, and features
-   */
   getSimilarProducts(productId: ProductId, limit: number = this.config.defaultLimit): Observable<ProductWithScore[]> {
     console.log('Getting similar products for productId:', productId, 'limit:', limit);
     
@@ -63,25 +60,19 @@ export class RecommendationsService {
 
         console.log('Target product found:', targetProduct.name, 'category:', targetProduct.category);
         
-        // Find products from the same category with similar price range
-        const priceRange = Number(targetProduct.price) * 0.3; // 30% price range
-        const minPrice = Number(targetProduct.price) - priceRange;
-        const maxPrice = Number(targetProduct.price) + priceRange;
-        
-        console.log('Looking for similar products in category:', targetProduct.category, 'price range:', minPrice, '-', maxPrice);
-        
+        // Find products from the same category - no strict price restriction initially,
+        // we'll fetch more than needed and rank them
         return from(this.productRepository.createQueryBuilder('product')
           .where('product.category = :category', { category: targetProduct.category })
           .andWhere('product.id != :productId', { productId })
-          .andWhere('product.price BETWEEN :minPrice AND :maxPrice', { minPrice, maxPrice })
           .orderBy('product.rating', 'DESC')
           .addOrderBy('product.createdAt', 'DESC')
-          .take(limit)
+          .take(limit * 3) // fetch extra to sort by similarity
           .getMany()
         ).pipe(
           map(products => {
-            console.log('Found', products.length, 'similar products in same category');
-            return products.map(p => ({
+            console.log('Found', products.length, 'products in same category, sorting by similarity...');
+            const scoredProducts = products.map(p => ({
               id: p.id,
               name: p.name,
               price: p.price,
@@ -92,37 +83,15 @@ export class RecommendationsService {
               isSpecial: p.isSpecial,
               score: this.calculateSimilarityScore(targetProduct, p)
             }));
+            
+            // Sort by score descending and take the limit limit
+            return scoredProducts
+              .sort((a, b) => b.score - a.score)
+              .slice(0, limit);
           }),
           switchMap(similarProducts => {
-            // If we don't have enough similar products, fill with popular products from other categories
-            if (similarProducts.length < limit) {
-              const needed = limit - similarProducts.length;
-              console.log('Need', needed, 'more products, adding popular products from other categories');
-              
-              return from(this.productRepository.find({
-                where: {
-                  category: Not(targetProduct.category), // Different category
-                  id: Not(productId)
-                },
-                order: { rating: 'DESC' },
-                take: needed
-              })).pipe(
-                map(additionalProducts => {
-                  const additional = additionalProducts.map(p => ({
-                    id: p.id,
-                    name: p.name,
-                    price: p.price,
-                    imageUrl: p.imageUrl,
-                    category: p.category,
-                    rating: p.rating,
-                    discount: p.discount,
-                    isSpecial: p.isSpecial,
-                    score: (p.rating || 0) * 0.5 // Lower score for different category
-                  }));
-                  return [...similarProducts, ...additional];
-                })
-              );
-            }
+            // If we STILL don't have enough similar products after getting all from same category,
+            // we should not throw random products in. We will just return what we have in the same category!
             return of(similarProducts);
           })
         );
@@ -647,31 +616,40 @@ export class RecommendationsService {
   private calculateSimilarityScore(targetProduct: Product, candidateProduct: Product): number {
     let score = 0;
     
-    // Same category gets high score
+    // 1. Category holds the most weight
     if (targetProduct.category === candidateProduct.category) {
-      score += 50;
+      score += 40;
     }
     
-    // Similar price range gets points
+    // 2. Price similarity
     const targetPrice = Number(targetProduct.price);
     const candidatePrice = Number(candidateProduct.price);
-    const priceDiff = Math.abs(targetPrice - candidatePrice);
-    const priceRange = targetPrice * 0.3; // 30% range
-    
-    if (priceDiff <= priceRange) {
-      score += 30;
-    } else if (priceDiff <= priceRange * 2) {
-      score += 15;
+    if (targetPrice > 0) {
+      const priceDiffRatio = Math.abs(targetPrice - candidatePrice) / targetPrice;
+      if (priceDiffRatio <= 0.1) {
+        score += 25; // extremely close price
+      } else if (priceDiffRatio <= 0.25) {
+        score += 15; // somewhat close
+      } else if (priceDiffRatio <= 0.5) {
+        score += 5;
+      }
     }
     
-    // Rating bonus
+    // 3. Features overlap (if applicable)
+    if (targetProduct.features && candidateProduct.features && targetProduct.features.length > 0) {
+      const commonFeatures = targetProduct.features.filter(f => candidateProduct.features.includes(f));
+      const overlapRatio = commonFeatures.length / targetProduct.features.length;
+      score += overlapRatio * 20; // Up to 20 points for similar features
+    }
+
+    // 4. Rating bonus
     if (candidateProduct.rating) {
-      score += candidateProduct.rating * 2;
+      score += candidateProduct.rating * 2; // Up to 10 points
     }
     
-    // Special product bonus
+    // 5. Special product bonus
     if (candidateProduct.isSpecial) {
-      score += 10;
+      score += 5;
     }
     
     return Math.min(score, 100); // Cap at 100
