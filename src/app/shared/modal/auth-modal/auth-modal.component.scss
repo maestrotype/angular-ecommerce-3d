@@ -416,74 +416,191 @@
 
 /* Glass theme refinements */
 [data-theme='glass'] .auth-modal {
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.45); // More opaque for better readability
+  backdrop-filter: blur(35px) saturate(200%);
+  border: 1.5px solid #ffffff;
+  border-radius: 32px; // Matching product cards
+  box-shadow: 
+    0 40px 100px rgba(0, 0, 0, 0.08),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.5); // Inner glass rim
+  position: relative;
+  overflow: hidden;
+
+  // Technical HUD Top Strip
+  &::before {
+      content: '● AUTH SERVICE v.1.0';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 24px;
+      background: rgba(0, 0, 0, 0.04);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      font-size: 7px;
+      font-family: monospace;
+      color: var(--text-secondary); // Softer than border-focus
+      letter-spacing: 2.5px;
+      font-weight: 800;
+  }
 
   .auth-header {
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
+    background: transparent;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding-top: 24px; // Account for HUD strip
+    
+    .auth-tabs {
+        width: 100%;
+        .auth-tab {
+            color: var(--auth-tab-inactive);
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            padding: 20px;
+
+            &.active {
+                color: var(--auth-tab-active);
+                background: var(--auth-tab-active-bg);
+                
+                &::after {
+                    background: var(--border-focus);
+                    height: 3px;
+                }
+            }
+
+            &:hover:not(.active) {
+                background: rgba(255, 255, 255, 0.25);
+                color: var(--auth-tab-hover);
+            }
+        }
+    }
   }
 
   .auth-content {
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-  }
+    background: transparent;
+    padding: 2.5rem;
 
-  /* Fix text colors for glass theme - use dark text for readability */
-  .auth-form {
-    .form-group {
-      label {
-        color: #1e293b;
-        /* Dark text for labels */
-      }
+    .profile-summary {
+        .profile-header {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 1.5rem;
+            border-radius: 20px;
+            border: 1px solid #ffffff;
 
-      input {
-        color: #1e293b;
-        /* Dark text for input values */
+            .avatar {
+                background: var(--surface-primary);
+                border: 1.5px solid var(--border-focus);
+                color: var(--text-primary);
+                width: 56px;
+                height: 56px;
+                font-weight: 900;
+            }
 
-        &::placeholder {
-          color: #64748b;
-          /* Dark gray for placeholders */
+            .info {
+                .name { 
+                    color: var(--text-primary); // Inherited dark slate
+                    font-weight: 900; 
+                    font-size: 1.25rem;
+                }
+                .email { 
+                    color: var(--text-secondary); // Darker charcoal for readability
+                    font-weight: 700; 
+                    font-size: 0.95rem; // Slightly larger for better clarity
+                    opacity: 1;
+                }
+            }
         }
-      }
-    }
-  }
 
-  /* Fix profile text colors - use dark colors like in Contacts section */
-  .profile-summary {
-    .profile-header {
-      .info {
-        .name {
-          color: #1e293b;
-          /* Dark text for name - like product titles */
+        .divider {
+            background: rgba(0, 0, 0, 0.1);
+            margin: 2rem 0;
         }
 
-        .email {
-          color: #475569;
-          /* Dark gray for email - like product meta */
+        .profile-actions {
+            gap: 1rem;
+            .btn-ghost {
+                background: rgba(255, 255, 255, 0.7);
+                border: 1px solid var(--border-secondary);
+                color: var(--text-primary);
+                font-weight: 800;
+                height: 50px;
+                border-radius: 14px;
+
+                &:hover {
+                    background: #ffffff;
+                    border-color: var(--border-focus);
+                    transform: translateY(-2px);
+                }
+
+                &.danger {
+                    color: #ef4444;
+                    background: white;
+                    border: 1.5px solid rgba(239, 68, 68, 0.3);
+                    
+                    &:hover {
+                        background: #fee2e2;
+                        border-color: #ef4444;
+                    }
+                }
+            }
+
+            .btn-primary {
+                background: var(--text-primary); // Tactical Dark
+                color: var(--text-inverse);
+                font-weight: 800;
+                height: 50px;
+                border-radius: 14px;
+                
+                &:hover {
+                    background: #000;
+                    transform: translateY(-2px);
+                    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+                }
+            }
         }
-      }
     }
-  }
 
-  /* Fix button text colors */
-  .profile-actions {
-    .btn-ghost {
-      color: #475569;
-      /* Dark text for secondary buttons */
+    .auth-form {
+        .form-group {
+            label { 
+                color: var(--text-primary); 
+                font-weight: 800; 
+                font-size: 0.85rem; 
+                text-transform: uppercase; 
+                letter-spacing: 0.5px;
+            }
+            input {
+                background: white;
+                border: 1px solid var(--border-secondary);
+                color: var(--text-primary);
+                height: 50px;
+                border-radius: 14px;
+                padding: 0 1.25rem;
+                
+                &:focus {
+                    border-color: var(--border-focus);
+                    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.05);
+                }
+
+                &::placeholder { color: var(--text-tertiary); }
+            }
+        }
+
+        .auth-submit-btn {
+            background: var(--text-primary);
+            color: var(--text-inverse);
+            height: 55px;
+            border-radius: 14px;
+            font-weight: 900;
+            font-size: 1rem;
+            
+            &:hover {
+                background: #000;
+                transform: translateY(-2px);
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            }
+        }
     }
-  }
-
-  /* Fix avatar text color */
-  .profile-summary .profile-header .avatar {
-    color: #1e293b;
-    /* Dark text for avatar initials */
-  }
-
-  /* Add backdrop-filter for inputs */
-  input {
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
   }
 }
 

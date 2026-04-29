@@ -529,7 +529,7 @@
         --header-bg: rgba(255, 255, 255, 0.25);
         --header-backdrop-filter: blur(25px) saturate(180%);
         --header-text: #1e293b;
-        --header-link: #475569;
+        --header-link: #334155;
         --header-link-hover: #0f172a;
         --header-search-bg: rgba(255, 255, 255, 0.4);
         --header-search-text: #1e293b;
@@ -678,9 +678,31 @@
 
         /* Text variables */
         --text-primary: #1e293b;
-        --text-secondary: #475569;
-        --text-tertiary: #64748b;
+        --text-secondary: #2d3748;
+        --text-tertiary: #4b5563;
         --text-inverse: #ffffff;
+
+        /* Compatibility variables used in components */
+        --color-text-primary: #1e293b;
+        --color-text-secondary: #2d3748;
+        --color-text-tertiary: #4b5563;
+        --color-text-inverse: #ffffff;
+
+        /* Auth Modal section - Glass theme */
+        --auth-modal-bg: rgba(255, 255, 255, 0.45);
+        --auth-modal-shadow: 0 40px 100px rgba(0, 0, 0, 0.08);
+        --auth-modal-border: 1.5px solid #ffffff;
+        --auth-header-bg: transparent;
+        --auth-header-border: 1px solid rgba(0, 0, 0, 0.05);
+        --auth-tab-text: #2d3748;
+        --auth-tab-active: #1e293b;
+        --auth-tab-inactive: #4b5563;
+        --auth-tab-hover: #1e293b;
+        --auth-tab-active-bg: rgba(255, 255, 255, 0.3);
+        --auth-content-bg: transparent;
+        --auth-input-bg: #ffffff;
+        --auth-input-border: 1px solid rgba(0, 0, 0, 0.1);
+        --auth-btn-primary: #1e293b;
 
         /* Border variables */
         --border-primary: rgba(255, 255, 255, 0.5);

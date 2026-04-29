@@ -97,11 +97,19 @@
       opacity: 0;
       visibility: hidden;
       transform: translateX(-20px);
+    }
 
-      a {
-        padding: 8px 12px;
-        font-size: 0.9em;
-      }
+    @media (max-width: 1100px) {
+        gap: 4px;
+        margin: 0 10px;
+        
+        a {
+            padding: 8px 12px;
+            font-size: 0.85em;
+
+            &.admin-link span { display: none; } // Hide "Admin Panel" text on small desktop
+            &.admin-link mat-icon { margin: 0; }
+        }
     }
 
     a {
@@ -311,15 +319,23 @@
       background: var(--badge-bg, #ff6b6b);
       color: var(--badge-text, #fff);
       border-radius: 50%;
-      width: 20px;
-      height: 20px;
+      width: 18px; // Slightly smaller to avoid overlap
+      height: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 600;
-      min-width: 20px;
+      min-width: 18px;
       line-height: 1;
+    }
+
+    @media (max-width: 1100px) {
+        gap: 2px;
+        margin-left: 5px;
+        
+        .profile-icon span, .lang-switcher span { display: none; }
+        .theme-switcher span { display: none; }
     }
   }
 
