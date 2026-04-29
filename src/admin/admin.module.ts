@@ -54,6 +54,7 @@ import { PaymentDetailsDialogComponent } from './pages/payments/payment-details-
 import { OrderDetailsDialogComponent } from './pages/payments/order-details-dialog.component';
 import { IntegrationsComponent } from './pages/integrations/integrations.component';
 import { OnboardingDialogComponent } from './components/shared/onboarding-dialog/onboarding-dialog.component';
+import { AiWarningDialogComponent } from './components/shared/ai-warning-dialog/ai-warning-dialog.component';
 
 
 // Shared Components
@@ -110,6 +111,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     OrderDetailsDialogComponent,
     IntegrationsComponent,
     OnboardingDialogComponent,
+    AiWarningDialogComponent,
 
 
 

@@ -326,6 +326,16 @@
   "AI_TIP": "Tip: Professional models can take 2-5 minutes. Don't close this page!",
   "AI_MODEL_READY": "AI Model ready! Downloading to server...",
   "RECOVER_AI_MODEL": "Recover from AI History",
+  "AI_PROVIDER": {
+    "PROBLEMATIC_TITLE": "Configuration Issues",
+    "PROBLEMATIC_MSG": "The selected engine has technical limitations on the current server.",
+    "UNIQUE3D_INSTRUCTIONS": "The Unique3D engine requires the pytorch3d library, which is not supported on Apple Silicon (M1-M4) directly. This causes segmentation faults and worker crashes.\n\nRecommended actions:\n1. Use HunyuanV2 (it works locally on Mac).\n2. Run the AI worker in a Docker container.\n3. Use a remote Linux server with an NVIDIA GPU.",
+    "HUNYUAN_V1_INSTRUCTIONS": "Hunyuan3D V1 is legacy. We recommend using HunyuanV2 — it's faster and produces higher quality GLB models.",
+    "SWITCH_TO_WORKING": "Switch to HunyuanV2",
+    "CONTINUE_ANYWAY": "Try Anyway",
+    "LEGACY": "Legacy",
+    "INCOMPATIBLE": "Incompatible"
+  },
   "IMAGE_PROCESSOR": {
     "UPLOAD_HINT": "Up to 10MB (JPG, PNG, WEBP)",
     "REMOVE_BG": "Remove Background",
