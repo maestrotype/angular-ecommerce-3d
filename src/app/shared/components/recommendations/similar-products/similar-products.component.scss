@@ -519,161 +519,120 @@
 }
 
 :host-context([data-theme="glass"]) .similar-products {
-  background: var(--similar-products-bg);
+  background: transparent;
+  padding: 3rem 0;
 
   .recommendations-header {
+    margin-bottom: 3rem;
     .recommendations-title {
-      color: #ffffff;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      color: var(--text-primary); // Using primary text color from theme
+      font-size: 2.5rem;
+      font-weight: 900;
+      text-shadow: none;
     }
 
     .recommendations-subtitle {
-      color: rgba(255, 255, 255, 0.8);
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      font-weight: 600;
     }
   }
 
+  .products-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    max-width: 1400px;
+    
+    @media (max-width: 1200px) { grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 900px) { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 600px) { grid-template-columns: 1fr; }
+  }
+
   .product-card {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow:
-      0 8px 32px rgba(0, 0, 0, 0.1),
-      0 2px 8px rgba(255, 255, 255, 0.1);
+    background: var(--surface-primary);
+    border: 1px solid var(--border-primary);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border-radius: 24px;
+    height: auto;
+    padding: 0.5rem;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: rgba(255, 255, 255, 0.3);
-      box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.15),
-        0 8px 16px rgba(255, 255, 255, 0.2);
-      transform: translateY(-8px) scale(1.02);
+      background: var(--surface-hover);
+      border-color: var(--border-focus);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.06);
+      transform: translateY(-8px);
     }
 
     .product-image {
-      background-color: rgba(255, 255, 255, 0.05);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: var(--surface-tertiary);
+      border-radius: 20px;
+      margin-bottom: 0.5rem;
+      border-bottom: none;
 
       .product-overlay {
-        background: rgba(0, 0, 0, 0.4);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        background: var(--surface-tertiary);
+        backdrop-filter: blur(8px);
 
         .action-btn {
-          background: rgba(255, 255, 255, 0.2);
-          border: 1px solid rgba(255, 255, 255, 0.3);
-          backdrop-filter: blur(15px);
-          -webkit-backdrop-filter: blur(15px);
-          box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2);
-
+          background: var(--surface-primary);
+          border: 1px solid var(--border-secondary);
+          color: var(--text-primary);
+          
           &:hover {
-            background: rgba(255, 255, 255, 0.3);
-            border-color: rgba(255, 255, 255, 0.5);
-            box-shadow: 0 8px 24px rgba(255, 255, 255, 0.3);
-          }
-
-          .material-icons {
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--border-focus);
           }
         }
-      }
-
-      .special-badge,
-      .new-badge,
-      .out-of-stock-badge,
-      .discount-badge {
-        background: rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        color: #1e293b;
-        font-weight: 700;
       }
     }
 
     .product-info {
+        padding: 1rem 0.5rem;
       .product-name {
-        color: #1e293b;
-        font-weight: 700;
-        text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+        color: var(--text-primary);
+        font-weight: 800;
+        font-size: 1.1rem;
       }
 
       .product-rating {
         .star {
-          color: rgba(251, 191, 36, 0.7);
-
-          &:hover {
-            color: #fbbf24;
-            text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
-          }
-
-          &.filled {
-            color: #fbbf24;
-            text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
-          }
+          color: var(--text-tertiary);
+          &.filled { color: #fbbf24; } // Generic icon color is fine
         }
 
-        .rating-value,
-        .rating-count {
-          color: rgba(30, 41, 59, 0.8);
-        }
+        .rating-value, .rating-count { color: var(--text-secondary); }
 
         .product-category {
-          background: rgba(99, 102, 241, 0.2);
-          border: 1px solid rgba(99, 102, 241, 0.3);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          color: #6366f1;
+          background: var(--surface-secondary);
+          border: 1px solid var(--border-secondary);
+          color: var(--border-focus);
           font-weight: 700;
         }
       }
 
       .product-footer {
+        margin-top: 1.5rem;
         .product-price {
           .current-price {
-            color: #1e293b;
-            font-weight: 800;
-            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+            color: var(--product-price-color);
+            font-weight: 850;
+            font-size: 1.3rem;
           }
-
-          .original-price {
-            color: rgba(30, 41, 59, 0.6);
-          }
+          .original-price { color: var(--text-tertiary); }
         }
 
         .cart-btn {
-          background: rgba(99, 102, 241, 0.8);
-          border: 1px solid rgba(99, 102, 241, 0.9);
-          backdrop-filter: blur(15px);
-          -webkit-backdrop-filter: blur(15px);
-          box-shadow:
-            0 4px 16px rgba(99, 102, 241, 0.3),
-            0 2px 8px rgba(255, 255, 255, 0.2);
-
+          background: var(--text-primary);
+          border: none;
+          width: 44px;
+          height: 44px;
+          
           &:hover {
-            background: rgba(99, 102, 241, 0.9);
-            border-color: rgba(99, 102, 241, 1);
-            box-shadow:
-              0 8px 24px rgba(99, 102, 241, 0.4),
-              0 4px 12px rgba(255, 255, 255, 0.3);
-          }
-
-          .material-icons {
-            color: #ffffff;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            background: #000;
+            transform: scale(1.1);
           }
         }
-      }
-
-      .stock-indicator {
-        color: #ef4444;
-        background: rgba(239, 68, 68, 0.1);
-        padding: 4px 8px;
-        border-radius: 8px;
-        border: 1px solid rgba(239, 68, 68, 0.2);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
       }
     }
   }

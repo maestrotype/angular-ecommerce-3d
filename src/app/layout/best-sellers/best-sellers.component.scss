@@ -271,50 +271,50 @@
 
 :host(.variant-glass-deep) .best-sellers {
   --best-sellers-bg: rgba(10, 15, 30, 0.7);
-  --best-sellers-text: #ffffff;
-  --best-sellers-subtitle: rgba(255,255,255,0.6);
+  --best-sellers-text: var(--text-inverse);
+  --best-sellers-subtitle: var(--text-tertiary);
   .product-card {
-    background: rgba(255,255,255,0.08) !important;
-    border-color: rgba(255,255,255,0.15) !important;
+    background: var(--surface-tertiary);
+    border-color: var(--border-secondary);
   }
 }
 
 :host(.variant-minimal) .best-sellers {
-  --best-sellers-bg: #ffffff;
-  --best-sellers-text: #111111;
-  --best-sellers-subtitle: #666666;
+  --best-sellers-bg: var(--surface-primary);
+  --best-sellers-text: var(--text-primary);
+  --best-sellers-subtitle: var(--text-secondary);
 }
 
 :host(.variant-dark) .best-sellers {
   --best-sellers-bg: #0f172a;
-  --best-sellers-text: #f8fafc;
-  --best-sellers-subtitle: #94a3b8;
+  --best-sellers-text: var(--text-primary);
+  --best-sellers-subtitle: var(--text-secondary);
   .product-card {
-    background: #1e293b !important;
-    border-color: #334155 !important;
+    background: var(--surface-secondary);
+    border-color: var(--border-primary);
     .product-info {
-      background: #1e293b !important;
-      border-top-color: #334155 !important;
-      .product-name { color: #f1f5f9 !important; }
-      .product-footer .product-price .current-price { color: #f1f5f9 !important; }
-      .product-category { background: #334155 !important; color: #94a3b8 !important; }
+      background: var(--surface-secondary);
+      border-top-color: var(--border-primary);
+      .product-name { color: var(--text-primary); }
+      .product-footer .product-price .current-price { color: var(--text-primary); }
+      .product-category { background: var(--surface-tertiary); color: var(--text-secondary); }
     }
   }
 }
 
 :host(.variant-dark-soft) .best-sellers {
   --best-sellers-bg: #27272a;
-  --best-sellers-text: #e4e4e7;
-  --best-sellers-subtitle: #a1a1aa;
+  --best-sellers-text: var(--text-primary);
+  --best-sellers-subtitle: var(--text-secondary);
   .product-card {
-    background: #3f3f46 !important;
-    border-color: #52525b !important;
+    background: var(--surface-secondary);
+    border-color: var(--border-primary);
     .product-info {
-      background: #3f3f46 !important;
-      border-top-color: #52525b !important;
-      .product-name { color: #e4e4e7 !important; }
-      .product-footer .product-price .current-price { color: #e4e4e7 !important; }
-      .product-category { background: #52525b !important; color: #a1a1aa !important; }
+      background: var(--surface-secondary);
+      border-top-color: var(--border-primary);
+      .product-name { color: var(--text-primary); }
+      .product-footer .product-price .current-price { color: var(--text-primary); }
+      .product-category { background: var(--surface-tertiary); color: var(--text-secondary); }
     }
   }
 }
