@@ -18,6 +18,7 @@ import { SettingsService } from "../../../services/settings.service";
 import { OnboardingDialogComponent } from "../../../components/shared/onboarding-dialog/onboarding-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { AiGenerationService } from "../../../services/ai-generation.service";
+import { AiWarningDialogComponent } from "../../../components/shared/ai-warning-dialog/ai-warning-dialog.component";
 import { finalize } from "rxjs/operators";
 
 
@@ -219,6 +220,45 @@ export class ProductFormComponent implements OnInit {
     });
   }
 
+
+
+  private showAiWarningDialog(provider: string, imageUrl: string): void {
+    const isUnique3d = provider === 'unique3d';
+    
+    const dialogRef = this.dialog.open(AiWarningDialogComponent, {
+      width: '500px',
+      data: {
+        provider: provider,
+        title: 'AI_PROVIDER.PROBLEMATIC_TITLE',
+        message: 'AI_PROVIDER.PROBLEMATIC_MSG',
+        instructions: isUnique3d ? 'AI_PROVIDER.UNIQUE3D_INSTRUCTIONS' : 'AI_PROVIDER.HUNYUAN_V1_INSTRUCTIONS'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'switch') {
+        // Navigate to settings or ideally just update the setting to hunyuan_v2
+        this.isLoading = true;
+        this.aiStatusMessage = 'Switching engine...';
+        
+        this.settingsService.getSettings().subscribe(settings => {
+          if (settings.ai) {
+            settings.ai.activeProvider = 'hunyuan_v2';
+            this.settingsService.updateAiSettings(settings.ai).subscribe(() => {
+              this.isLoading = false;
+              this.snackBar.open('Switched to HunyuanV2!', 'OK', { duration: 3000 });
+              this.startAiGeneration(imageUrl);
+            });
+          }
+        });
+      } else if (result === 'continue') {
+        this.startAiGeneration(imageUrl);
+      } else {
+        this.resetAiState();
+      }
+    });
+  }
+
   private startAiProcess(imageUrl: string): void {
     this.isAiGenerating = true;
     this.isLoading = true; // Still keep main isLoading to block other actions
@@ -232,9 +272,15 @@ export class ProductFormComponent implements OnInit {
           this.isAiGenerating = false;
           this.isLoading = false;
           this.showTripoOnboarding();
-        } else {
-          this.startAiGeneration(imageUrl);
+          return;
         }
+
+        if (activeProvider === 'unique3d' || activeProvider === 'hunyuan3d') {
+          this.showAiWarningDialog(activeProvider, imageUrl);
+          return;
+        }
+
+        this.startAiGeneration(imageUrl);
       },
       error: () => {
         this.isAiGenerating = false;
