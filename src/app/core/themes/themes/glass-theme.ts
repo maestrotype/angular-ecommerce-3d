@@ -58,10 +58,10 @@ export const glassTheme: Theme = {
     'surface-hover': 'rgba(255, 255, 255, 0.3)',
 
     // Text Colors
-    'text-primary': '#1e293b',
-    'text-secondary': '#475569',
-    'text-tertiary': '#64748b',
-    'text-disabled': 'rgba(255, 255, 255, 0.4)',
+    'text-primary': '#0f172a', // Dynamic dark
+    'text-secondary': '#1e293b', // Dark slate
+    'text-tertiary': '#334155', // Darker gray
+    'text-disabled': 'rgba(0, 0, 0, 0.4)',
     'text-inverse': '#ffffff',
     'text-accent': '#667eea',
 
@@ -178,24 +178,24 @@ export const glassTheme: Theme = {
     'auth-modal-border': '1px solid rgba(102, 126, 234, 0.3)',
     'auth-header-bg': 'rgba(102, 126, 234, 0.2)',
     'auth-header-border': '1px solid rgba(102, 126, 234, 0.25)',
-    'auth-tab-inactive': '#475569',
-    'auth-tab-active': '#1e293b',
-    'auth-tab-active-bg': 'rgba(102, 126, 234, 0.3)',
-    'auth-tab-hover': '#64748b',
-    'auth-tab-hover-bg': 'rgba(102, 126, 234, 0.25)',
+    'auth-tab-inactive': '#334155',
+    'auth-tab-active': '#0f172a',
+    'auth-tab-active-bg': 'rgba(255, 255, 255, 0.4)',
+    'auth-tab-hover': '#1e293b',
+    'auth-tab-hover-bg': 'rgba(255, 255, 255, 0.25)',
     'auth-content-bg': 'rgba(102, 126, 234, 0.2)',
     'auth-input-bg': 'rgba(102, 126, 234, 0.25)',
     'auth-input-border': '1px solid rgba(102, 126, 234, 0.3)',
     'auth-input-focus': '#6366f1',
     'auth-btn-primary': 'linear-gradient(135deg, rgba(102, 126, 234, 0.35) 0%, rgba(102, 126, 234, 0.45) 100%)',
-    'auth-btn-secondary': 'rgba(102, 126, 234, 0.2)',
-    'auth-btn-secondary-text': '#475569',
-    'auth-btn-secondary-border': '1px solid rgba(102, 126, 234, 0.35)',
+    'auth-btn-secondary': 'rgba(255, 255, 255, 0.3)',
+    'auth-btn-secondary-text': '#1e293b',
+    'auth-btn-secondary-border': '1px solid rgba(0, 0, 0, 0.1)',
 
     // Additional CSS variables for compatibility
-    'color-text-tertiary': '#64748b',
-    'color-text-primary': '#1e293b',
-    'color-text-secondary': '#475569',
+    'color-text-tertiary': '#334155',
+    'color-text-primary': '#0f172a',
+    'color-text-secondary': '#1e293b',
     'color-text-inverse': '#ffffff',
     'color-primary': '#6366f1',
     'color-surface-primary': 'rgba(255, 255, 240, 0.3)', // Light warm glass
