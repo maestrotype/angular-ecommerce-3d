@@ -10,6 +10,22 @@
     --footer-link-hover: #0f172a;
     --footer-border: rgba(0, 0, 0, 0.05);
 
+    &.variant-light {
+        --footer-bg: #ffffff;
+        --footer-text: #1e293b;
+        --footer-link: #64748b;
+        --footer-link-hover: #0f172a;
+        --footer-border: rgba(0, 0, 0, 0.05);
+    }
+
+    &.variant-dark {
+        --footer-bg: #0f172a; // Match the global --color-surface-primary for dark theme
+        --footer-text: #f8fafc;
+        --footer-link: #94a3b8;
+        --footer-link-hover: #ffffff;
+        --footer-border: rgba(255, 255, 255, 0.1);
+    }
+
     &.variant-deep-dark {
         --footer-bg: #0a0a0c;
         --footer-text: #f8fafc;

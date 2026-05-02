@@ -84,11 +84,12 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
 
   variants = [
     { value: 'default', label: 'VARIANT_DEFAULT' },
-    { value: 'light-soft', label: 'VARIANT_LIGHT_SOFT' },
+    { value: 'light', label: 'VARIANT_LIGHT' },
     { value: 'dark', label: 'VARIANT_DARK' },
+    { value: 'glass', label: 'VARIANT_GLASS' },
+    { value: 'light-soft', label: 'VARIANT_LIGHT_SOFT' },
     { value: 'dark-soft', label: 'VARIANT_DARK_SOFT' },
     { value: 'deep-dark', label: 'VARIANT_DEEP_DARK' },
-    { value: 'glass', label: 'VARIANT_GLASS' },
     { value: 'glass-clear', label: 'VARIANT_GLASS_CLEAR' },
     { value: 'glass-deep', label: 'VARIANT_GLASS_DEEP' },
     { value: 'minimal', label: 'VARIANT_MINIMAL' }

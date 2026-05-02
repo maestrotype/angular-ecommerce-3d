@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, OnChanges, SimpleChanges, HostBinding } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ModalService } from '../../core/services/modal.service';
@@ -23,6 +23,11 @@ export class FooterComponent implements OnInit, OnDestroy, OnChanges {
   private cartSubscription: Subscription = new Subscription();
   private favoritesSubscription: Subscription = new Subscription();
   private footerSubscription: Subscription = new Subscription();
+
+  @HostBinding('class')
+  get variantClass(): string {
+    return this.data?.variant && this.data.variant !== 'default' ? `variant-${this.data.variant}` : '';
+  }
 
   constructor(
     private modalService: ModalService,
