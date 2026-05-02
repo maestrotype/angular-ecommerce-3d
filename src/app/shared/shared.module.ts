@@ -30,7 +30,6 @@ import { ImageUrlPipe } from '@app-shared/pipes/image-url.pipe';
     BoughtTogetherComponent,
     StripeElementsComponent,
     StripeTestComponent,
-    SectionRendererComponent,
     ReplaceSpacesPipe,
     NotificationBadgeComponent,
     LogoComponent,
@@ -41,8 +40,10 @@ import { ImageUrlPipe } from '@app-shared/pipes/image-url.pipe';
     MatIconModule,
     TranslateModule,
     LocalizedPipe,
-    ImageUrlPipe
+    ImageUrlPipe,
+    SectionRendererComponent
   ],
+
   providers: [
     DecimalPipe
   ],

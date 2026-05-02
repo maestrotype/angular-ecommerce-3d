@@ -11,6 +11,7 @@ import { SectionFormComponent } from '../section-form/section-form.component';
 import { Section } from '../../../models/section.model';
 import { MatSidenav } from '@angular/material/sidenav';
 import { TranslateService } from '@ngx-translate/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-section-list',
@@ -32,6 +33,8 @@ export class SectionListComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['order', 'type', 'title', 'isActive', 'createdAt', 'actions'];
   dataSource = new MatTableDataSource<Section>();
   loading = false;
+  hasHeader = false;
+  hasFooter = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -57,12 +60,28 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     private sectionService: SectionService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private route: ActivatedRoute
   ) {}
 
+
   ngOnInit(): void {
-    this.loadSections();
+    this.route.queryParams.subscribe(params => {
+      const target = params['pageTarget'];
+      const create = params['createIfMissing'];
+      
+      this.loadSections(() => {
+        if (target) {
+          this.filterByPageTarget(target);
+          if (create && this.dataSource.data.length === 0) {
+            this.addSectionWithTarget(target);
+          }
+        }
+      });
+    });
+    
     this.initResizeListeners();
+
     // Read the site's current active theme from document to make preview match
     const docTheme = document.documentElement.getAttribute('data-theme') ||
                      document.body.getAttribute('data-theme') || '';
@@ -120,6 +139,8 @@ export class SectionListComponent implements OnInit, AfterViewInit {
       next: (sections) => {
         // Spread to force a new array reference → triggers ngOnChanges in child components
         this.dataSource.data = [...sections];
+        this.hasHeader = sections.some(s => s.type === 'header');
+        this.hasFooter = sections.some(s => s.type === 'footer');
         this.loading = false;
         if (onLoaded) onLoaded();
       },
@@ -134,6 +155,24 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     });
   }
 
+  private filterByPageTarget(target: string): void {
+    this.dataSource.data = this.dataSource.data.filter(s => s.pageTarget === target || s.pageTarget === 'global');
+  }
+
+  private addSectionWithTarget(target: string): void {
+    this.editorMode = 'add';
+    this.editingSection = { pageTarget: target } as any;
+    this.isEditorOpen = true;
+  }
+
+  onSectionTypeSelected(type: string): void {
+    this.editorMode = 'add';
+    this.editingSection = { type, pageTarget: 'global' } as any;
+    this.isEditorOpen = true;
+    this.showPicker = false;
+    this.previewData = { type };
+  }
+
   selectForPreview(section: Section): void {
     if (this.isEditorOpen) return;
     this.selectedPreviewSection = this.selectedPreviewSection?.id === section.id ? null : section;
@@ -145,12 +184,6 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     this.showPicker = true;
     this.previewData = null;
     this.isEditorOpen = true;
-  }
-
-  onSectionTypeSelected(type: string): void {
-    this.showPicker = false;
-    this.editingSection = { type } as any; // Temporary object for form
-    this.previewData = { type };
   }
 
   editSection(section: Section): void {

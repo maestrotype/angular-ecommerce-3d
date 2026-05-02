@@ -108,6 +108,130 @@
             </div>
           </mat-tab>
         </mat-tab-group>
+        
+        <!-- FOOTER SPECIALIZED FORM -->
+        <mat-tab-group *ngSwitchCase="'footer'" animationDuration="250ms" color="primary">
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="tab-icon">share</mat-icon>
+              <span class="tab-label">{{ 'SOCIAL_LINKS' | translate }}</span>
+            </ng-template>
+            <div class="tab-content">
+              <div [formGroup]="$any(sectionForm.get('social'))" class="form-grid">
+                <mat-form-field appearance="outline">
+                  <mat-label>Instagram</mat-label>
+                  <input matInput formControlName="instagram" placeholder="https://instagram.com/...">
+                  <mat-icon matPrefix>link</mat-icon>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Facebook</mat-label>
+                  <input matInput formControlName="facebook" placeholder="https://facebook.com/...">
+                  <mat-icon matPrefix>link</mat-icon>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Twitter</mat-label>
+                  <input matInput formControlName="twitter" placeholder="https://twitter.com/...">
+                  <mat-icon matPrefix>link</mat-icon>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>YouTube</mat-label>
+                  <input matInput formControlName="youtube" placeholder="https://youtube.com/...">
+                  <mat-icon matPrefix>link</mat-icon>
+                </mat-form-field>
+              </div>
+              <div class="form-grid" style="margin-top: 20px;">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <mat-label>{{ 'COPYRIGHT_TEXT' | translate }}</mat-label>
+                  <input matInput formControlName="copyright" [placeholder]="'COPYRIGHT_TEXT' | translate">
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-tab>
+
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="tab-icon">view_column</mat-icon>
+              <span class="tab-label">{{ 'FOOTER_COLUMNS' | translate }}</span>
+            </ng-template>
+            <div class="tab-content">
+              <div class="dynamic-list">
+                <div class="list-header">
+                  <h4>{{ 'FOOTER_COLUMNS' | translate }}</h4>
+                  <button mat-button color="primary" type="button" (click)="addFooterColumn()">
+                    <mat-icon>add</mat-icon>
+                    {{ 'ADD_COLUMN' | translate }}
+                  </button>
+                </div>
+
+                <div cdkDropList (cdkDropListDropped)="dropFooterColumn($event)" class="cdk-list">
+                  <div *ngFor="let col of columns.controls; let i = index" cdkDrag class="cdk-item footer-column-item">
+                    <div [formGroup]="$any(col)" class="column-wrapper">
+                      <div class="column-header">
+                        <mat-icon cdkDragHandle class="drag-handle">drag_indicator</mat-icon>
+                        <mat-form-field appearance="outline" class="col-title-field">
+                          <mat-label>{{ 'COLUMN_TITLE' | translate }} ({{ activeMenuLang | uppercase }})</mat-label>
+                          <input matInput [formControl]="$any(col).get('title.' + activeMenuLang)" [placeholder]="'COLUMN_TITLE' | translate">
+                        </mat-form-field>
+                        <button mat-icon-button color="warn" (click)="removeFooterColumn(i)" type="button">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </div>
+
+                      <div class="links-sublist">
+                        <div class="sublist-header">
+                          <h5>{{ 'LINKS' | translate }}</h5>
+                          <button mat-button color="primary" type="button" size="small" (click)="addFooterLink(i)">
+                            <mat-icon>add</mat-icon> {{ 'ADD_LINK' | translate }}
+                          </button>
+                        </div>
+
+                        <div cdkDropList (cdkDropListDropped)="dropFooterLink(i, $event)" class="cdk-sublist">
+                          <div *ngFor="let link of getLinks(i).controls; let li = index" cdkDrag class="cdk-subitem">
+                            <mat-icon cdkDragHandle class="drag-handle-small">drag_indicator</mat-icon>
+                            <div [formGroup]="$any(link)" class="link-row">
+                              <mat-form-field appearance="outline" dense>
+                                <mat-label>{{ 'LABEL' | translate }} ({{ activeMenuLang | uppercase }})</mat-label>
+                                <input matInput [formControl]="$any(link).get('label.' + activeMenuLang)" placeholder="Label">
+                              </mat-form-field>
+                              <mat-form-field appearance="outline" dense>
+                                <mat-label>URL</mat-label>
+                                <input matInput formControlName="url" placeholder="/help">
+                              </mat-form-field>
+                              <button mat-icon-button color="warn" (click)="removeFooterLink(i, li)" type="button">
+                                <mat-icon>close</mat-icon>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+          
+          <!-- SETTINGS TAB (Same as default but for footer) -->
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="tab-icon">settings</mat-icon>
+              <span class="tab-label">{{ 'SETTINGS' | translate }}</span>
+            </ng-template>
+            <div class="tab-content">
+              <div class="form-grid modular-settings">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'VISUAL_VARIANT' | translate }}</mat-label>
+                  <mat-select formControlName="variant">
+                    <mat-option *ngFor="let v of variants" [value]="v.value">{{ v.label | translate }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <div class="toggle-row">
+                  <mat-slide-toggle formControlName="isActive" color="primary">{{ 'ACTIVE_ON_SITE' | translate }}</mat-slide-toggle>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
 
         <!-- DEFAULT FORM (FOR OTHER SECTIONS) -->
         <mat-tab-group *ngSwitchDefault animationDuration="250ms" color="primary">

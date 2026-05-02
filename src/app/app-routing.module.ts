@@ -31,7 +31,9 @@ const routes: Routes = [
     path: 'admin',
     loadChildren: () => import('../admin/admin.module').then(m => m.AdminModule)
   },
+  { path: ':slug', loadComponent: () => import('./pages/dynamic-page/dynamic-page.component').then(m => m.DynamicPageComponent) },
   { path: '**', redirectTo: '/home' }
+
 ];
 
 @NgModule({
