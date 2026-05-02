@@ -158,11 +158,22 @@
           }
           .drawer-lang-switcher {
             margin-right: 12px;
-            ::ng-deep .mat-mdc-chip-listbox-wrapper { gap: 4px; }
-            ::ng-deep .mat-mdc-standard-chip {
-              min-height: 28px; padding: 0 8px; font-size: 0.75rem; font-weight: 700;
-              background: var(--admin-bg-secondary); color: var(--admin-text-secondary);
-              &.mat-mdc-chip-selected { background: var(--admin-primary) !important; color: var(--admin-text-inverse) !important; }
+            ::ng-deep {
+              .mat-mdc-chip-listbox-wrapper { gap: 4px; }
+              mat-chip-listbox {
+                --mdc-chip-label-text-color: rgba(255, 255, 255, 0.7);
+              }
+              .mat-mdc-standard-chip {
+                min-height: 28px; padding: 0 8px; font-size: 0.75rem; font-weight: 700;
+                background: rgba(255, 255, 255, 0.1); 
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                
+                &.mat-mdc-chip-selected { 
+                  --mdc-chip-label-text-color: #ffffff;
+                  background: var(--admin-primary); 
+                  box-shadow: 0 0 12px rgba(var(--admin-primary-rgb), 0.4);
+                }
+              }
             }
           }
         }

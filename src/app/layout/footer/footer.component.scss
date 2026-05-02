@@ -1,8 +1,31 @@
 :host {
-    container-type: inline-size;
     display: block;
     width: 100%;
-    display: block;
+    container-type: inline-size;
+
+    // Default Variant (Light/Glass)
+    --footer-bg: linear-gradient(180deg, #f1f5f9 0%, #ffffff 100%);
+    --footer-text: #1e293b;
+    --footer-link: #64748b;
+    --footer-link-hover: #0f172a;
+    --footer-border: rgba(0, 0, 0, 0.05);
+
+    &.variant-deep-dark {
+        --footer-bg: #0a0a0c;
+        --footer-text: #f8fafc;
+        --footer-link: #94a3b8;
+        --footer-link-hover: #ffffff;
+        --footer-border: rgba(255, 255, 255, 0.05);
+    }
+
+    &.variant-glass {
+        --footer-bg: rgba(255, 255, 255, 0.7);
+        --footer-backdrop-filter: blur(20px) saturate(180%);
+        --footer-text: #1e293b;
+        --footer-link: #475569;
+        --footer-link-hover: #0f172a;
+        --footer-border: rgba(255, 255, 255, 0.3);
+    }
 }
 
 .footer {
@@ -12,7 +35,7 @@
     color: var(--footer-text);
     padding: 80px 0 40px;
     display: block;
-    border-top: 1px solid var(--border-primary, rgba(0, 0, 0, 0.1));
+    border-top: 1px solid var(--footer-border);
     position: relative;
     z-index: 10;
 

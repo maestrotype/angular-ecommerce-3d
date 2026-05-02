@@ -4,12 +4,15 @@ import { Subscription } from 'rxjs';
 import { ModalService } from '../../core/services/modal.service';
 import { CartService } from '../../core/services/cart.service';
 import { FavoritesService } from '../../core/services/favorites.service';
+import { SectionService } from '../../../admin/services/section.service';
+
 
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })
+
 
 
 export class FooterComponent implements OnInit, OnDestroy, OnChanges {
@@ -19,12 +22,14 @@ export class FooterComponent implements OnInit, OnDestroy, OnChanges {
   currentYear = new Date().getFullYear();
   private cartSubscription: Subscription = new Subscription();
   private favoritesSubscription: Subscription = new Subscription();
+  private footerSubscription: Subscription = new Subscription();
 
   constructor(
     private modalService: ModalService,
     private cartService: CartService,
     private favoritesService: FavoritesService,
-    private router: Router
+    private router: Router,
+    private sectionService: SectionService
   ) { }
 
   ngOnInit(): void {
@@ -35,6 +40,19 @@ export class FooterComponent implements OnInit, OnDestroy, OnChanges {
     this.favoritesSubscription = this.favoritesService.favoritesCount$.subscribe(
       count => this.favoritesCount = count
     );
+
+    if (!this.data) {
+      this.loadFooterData();
+    }
+  }
+
+  private loadFooterData(): void {
+    this.footerSubscription = this.sectionService.getSections().subscribe(sections => {
+      const footer = sections.find(s => s.type === 'footer');
+      if (footer) {
+        this.data = footer;
+      }
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {

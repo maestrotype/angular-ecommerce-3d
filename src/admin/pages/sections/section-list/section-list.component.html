@@ -53,6 +53,26 @@
               </button>
             </div>
           </div>
+          <!-- Virtual Footer Row (if missing) -->
+          <div class="list-row-item virtual-row" *ngIf="!hasFooter" (click)="onSectionTypeSelected('footer')">
+            <div class="col-order">
+              <span class="order-num">--</span>
+            </div>
+            <div class="col-type">
+              <span class="type-link">FOOTER</span>
+            </div>
+            <div class="col-title">
+              <span class="title-text muted">{{ 'FOOTER_NOT_CREATED' | translate }}</span>
+            </div>
+            <div class="col-status">
+              <span class="status-badge error">{{ 'MISSING' | translate }}</span>
+            </div>
+            <div class="col-actions">
+              <button mat-icon-button color="primary" matTooltip="{{ 'CREATE' | translate }}">
+                <mat-icon>add_circle_outline</mat-icon>
+              </button>
+            </div>
+          </div>
         </div>
       </ng-container>
 

@@ -70,8 +70,10 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     { value: 'product-tabs', label: 'SECTION_TYPE_LABELS.PRODUCT_TABS' },
     { value: 'similar-products', label: 'SECTION_TYPE_LABELS.SIMILAR_PRODUCTS' },
     { value: 'bought-together', label: 'SECTION_TYPE_LABELS.BOUGHT_TOGETHER' },
-    { value: 'html-content', label: 'SECTION_TYPE_LABELS.HTML_CONTENT' }
+    { value: 'html-content', label: 'SECTION_TYPE_LABELS.HTML_CONTENT' },
+    { value: 'footer', label: 'SECTION_TYPE_LABELS.FOOTER' }
   ];
+
 
   pageTargets = [
     { value: 'home', label: 'TARGET_HOME' },
@@ -85,6 +87,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     { value: 'light-soft', label: 'VARIANT_LIGHT_SOFT' },
     { value: 'dark', label: 'VARIANT_DARK' },
     { value: 'dark-soft', label: 'VARIANT_DARK_SOFT' },
+    { value: 'deep-dark', label: 'VARIANT_DEEP_DARK' },
     { value: 'glass', label: 'VARIANT_GLASS' },
     { value: 'glass-clear', label: 'VARIANT_GLASS_CLEAR' },
     { value: 'glass-deep', label: 'VARIANT_GLASS_DEEP' },
@@ -150,16 +153,18 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
   }
 
   private createForm(section?: Section | null): FormGroup {
-
     // Map database type to display type
     let displayType = section?.type || 'hero';
     if (section?.type === 'categories') {
       displayType = 'categories'; // Use the value from sectionTypes
     }
 
+    // Use a casted version of settings for easier access in TS
+    const settings = section?.settings as any;
+
     return this.fb.group({
       type: [displayType, Validators.required],
-      title_en: [this.getLocalizedValue(section?.title, 'en') || '', (displayType === 'header' || displayType === 'brands' || displayType === 'categories') ? [] : [Validators.required]],
+      title_en: [this.getLocalizedValue(section?.title, 'en') || '', (displayType === 'header' || displayType === 'brands' || displayType === 'categories' || displayType === 'footer') ? [] : [Validators.required]],
       title_ru: [this.getLocalizedValue(section?.title, 'ru') || ''],
       title_ua: [this.getLocalizedValue(section?.title, 'ua') || ''],
       subtitle_en: [this.getLocalizedValue(section?.subtitle, 'en') || ''],
@@ -177,12 +182,12 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
       variant: [section?.variant || 'default'],
       anchorId: [section?.anchorId || ''],
 
-      logoUrl: [section?.settings?.logoUrl || ''],
-      showSearch: [section?.settings?.showSearch ?? true],
-      showCart: [section?.settings?.showCart ?? true],
-      showProfile: [section?.settings?.showProfile ?? true],
+      logoUrl: [settings?.logoUrl || ''],
+      showSearch: [settings?.showSearch ?? true],
+      showCart: [settings?.showCart ?? true],
+      showProfile: [settings?.showProfile ?? true],
       menu: this.fb.array(
-        (section?.settings?.menu || []).map((item: MenuItem) => {
+        (settings?.menu || []).map((item: MenuItem) => {
           let titleObj: LocalizedString;
           if (typeof item.title === 'string') {
             titleObj = { en: item.title, ru: item.title, ua: item.title };
@@ -207,7 +212,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
         })
       ),
       categories: this.fb.array(
-        (section?.settings?.categories || []).map((category: any) =>
+        (settings?.categories || []).map((category: any) =>
           this.fb.group({
             name: [this.getLocalizedValue(category.name, 'en'), Validators.required],
             slug: [category.slug || '', Validators.required],
@@ -217,16 +222,96 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
         )
       ),
       brands: this.fb.array(
-        (section?.settings?.brands || []).map((brand: any) =>
+        (settings?.brands || []).map((brand: any) =>
           this.fb.group({
             name: [this.getLocalizedValue(brand.name, 'en'), Validators.required],
             logo: [brand.logo || ''],
             isActive: [brand.isActive ?? true]
           })
         )
+      ),
+      // Footer specific
+      social: this.fb.group({
+        instagram: [settings?.social?.instagram || ''],
+        facebook: [settings?.social?.facebook || ''],
+        twitter: [settings?.social?.twitter || ''],
+        youtube: [settings?.social?.youtube || '']
+      }),
+      copyright: [settings?.copyright || ''],
+      columns: this.fb.array(
+        (settings?.columns && settings.columns.length > 0 ? settings.columns : (displayType === 'footer' ? this.getDefaultFooterColumns() : [])).map((col: any) => {
+          let titleObj: LocalizedString;
+          if (typeof col.title === 'string') {
+            titleObj = { en: col.title, ru: col.title, ua: col.title };
+          } else {
+            titleObj = {
+              en: col.title?.en || '',
+              ru: col.title?.ru || '',
+              ua: col.title?.ua || ''
+            };
+          }
+          return this.fb.group({
+            title: this.fb.group({
+              en: [titleObj.en],
+              ru: [titleObj.ru],
+              ua: [titleObj.ua]
+            }),
+            links: this.fb.array((col.links || []).map((link: any) => {
+              let labelObj: LocalizedString;
+              if (typeof link.label === 'string') {
+                labelObj = { en: link.label, ru: link.label, ua: link.label };
+              } else {
+                labelObj = {
+                  en: link.label?.en || '',
+                  ru: link.label?.ru || '',
+                  ua: link.label?.ua || ''
+                };
+              }
+              return this.fb.group({
+                label: this.fb.group({
+                  en: [labelObj.en],
+                  ru: [labelObj.ru],
+                  ua: [labelObj.ua]
+                }),
+                url: [link.url || '', Validators.required]
+              });
+            }))
+          });
+        })
       )
     });
   }
+
+  private getDefaultFooterColumns(): any[] {
+    return [
+      {
+        title: { en: 'Quick Links', ru: 'Быстрые ссылки', ua: 'Швидкі посилання' },
+        links: [
+          { label: { en: 'Home', ru: 'Главная', ua: 'Головна' }, url: '/home' },
+          { label: { en: 'Shop', ru: 'Магазин', ua: 'Магазин' }, url: '/shop' },
+          { label: { en: 'About', ru: 'О нас', ua: 'Про нас' }, url: '/about' },
+          { label: { en: 'Contacts', ru: 'Контакты', ua: 'Контакти' }, url: '/contacts' }
+        ]
+      },
+      {
+        title: { en: 'Categories', ru: 'Категории', ua: 'Категорії' },
+        links: [
+          { label: { en: 'Shoes', ru: 'Обувь', ua: 'Взуття' }, url: '/shop?category=shoes' },
+          { label: { en: 'Handbags', ru: 'Сумки', ua: 'Сумки' }, url: '/shop?category=handbags' },
+          { label: { en: 'Clothing', ru: 'Одежда', ua: 'Одяг' }, url: '/shop?category=clothing' }
+        ]
+      },
+      {
+        title: { en: 'Support', ru: 'Поддержка', ua: 'Підтримка' },
+        links: [
+          { label: { en: 'Help Center', ru: 'Центр помощи', ua: 'Центр допомоги' }, url: '/help' },
+          { label: { en: 'Shipping Info', ru: 'Доставка', ua: 'Доставка' }, url: '/shipping' },
+          { label: { en: 'Returns', ru: 'Возвраты', ua: 'Повернення' }, url: '/returns' }
+        ]
+      }
+    ];
+  }
+
 
   get menu(): FormArray {
     return this.sectionForm.get('menu') as FormArray;
@@ -238,6 +323,55 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
 
   get brands(): FormArray {
     return this.sectionForm.get('brands') as FormArray;
+  }
+
+  get columns(): FormArray {
+    return this.sectionForm.get('columns') as FormArray;
+  }
+
+  getLinks(columnIndex: number): FormArray {
+    return this.columns.at(columnIndex).get('links') as FormArray;
+  }
+
+  addFooterColumn() {
+    this.columns.push(this.fb.group({
+      title: this.fb.group({
+        en: [''],
+        ru: [''],
+        ua: ['']
+      }),
+      links: this.fb.array([])
+    }));
+  }
+
+  removeFooterColumn(index: number) {
+    this.columns.removeAt(index);
+  }
+
+  addFooterLink(columnIndex: number) {
+    this.getLinks(columnIndex).push(this.fb.group({
+      label: this.fb.group({
+        en: [''],
+        ru: [''],
+        ua: ['']
+      }),
+      url: ['', Validators.required]
+    }));
+  }
+
+  removeFooterLink(columnIndex: number, linkIndex: number) {
+    this.getLinks(columnIndex).removeAt(linkIndex);
+  }
+
+  dropFooterColumn(event: CdkDragDrop<FormArray>) {
+    moveItemInArray(this.columns.controls, event.previousIndex, event.currentIndex);
+    this.columns.updateValueAndValidity();
+  }
+
+  dropFooterLink(columnIndex: number, event: CdkDragDrop<FormArray>) {
+    const links = this.getLinks(columnIndex);
+    moveItemInArray(links.controls, event.previousIndex, event.currentIndex);
+    links.updateValueAndValidity();
   }
 
   addMenuItem() {
@@ -585,6 +719,17 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
                   ua: brand.name || ''
                 }
               }))
+            }
+          };
+        } else if (formValue.type === 'footer') {
+          formData = {
+            ...formValue,
+            pageTarget: 'global', // Footer is usually global
+            settings: {
+              ...existingSettings,
+              social: formValue.social,
+              copyright: formValue.copyright,
+              columns: formValue.columns
             }
           };
         } else {

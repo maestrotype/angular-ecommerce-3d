@@ -59,6 +59,23 @@ export class AdminSectionPreviewComponent implements OnChanges {
     this.computedSections = this.sections.map(s => 
       s.id === this.sectionData.id ? { ...s, ...this.sectionData } : s
     );
+
+    // If no footer exists, add a placeholder for preview purposes
+    if (!this.computedSections.some(s => s.type === 'footer')) {
+      this.computedSections.push({
+        id: -1, // Special ID for placeholder
+        type: 'footer',
+        isActive: true,
+        order: 999,
+        pageTarget: 'global',
+        settings: {
+          columns: [
+            { title: { en: 'Demo Links', ru: 'Ссылки' }, links: [] }
+          ],
+          copyright: '© 2026 3D Store. Architect Preview Mode.'
+        }
+      });
+    }
   }
 
   get renderingSections(): any[] {

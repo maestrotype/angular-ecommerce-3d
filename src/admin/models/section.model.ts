@@ -33,6 +33,23 @@ export interface HeaderSettings {
   selectedCategories?: number[];
 }
 
+export interface FooterSettings {
+  social?: {
+    instagram?: string;
+    facebook?: string;
+    twitter?: string;
+    youtube?: string;
+  };
+  copyright?: string;
+  columns?: {
+    title: string | LocalizedString;
+    links: {
+      label: string | LocalizedString;
+      url: string;
+    }[];
+  }[];
+}
+
 export interface Section {
   id: number;
   type: string;
@@ -42,7 +59,7 @@ export interface Section {
   imageUrl?: string;
   order: number;
   isActive: boolean;
-  settings?: HeaderSettings | Record<string, any>;
+  settings?: HeaderSettings | FooterSettings | Record<string, any>;
   model3dUrl?: string;
   show3d: boolean;
   showImage: boolean;
@@ -60,7 +77,7 @@ export interface CreateSectionDto {
   content?: string | LocalizedString;
   imageUrl?: string;
   isActive?: boolean;
-  settings?: HeaderSettings | Record<string, any>;
+  settings?: HeaderSettings | FooterSettings | Record<string, any>;
   model3dUrl?: string;
   show3d?: boolean;
   showImage?: boolean;
@@ -76,7 +93,7 @@ export interface UpdateSectionDto {
   content?: string | LocalizedString;
   imageUrl?: string;
   isActive?: boolean;
-  settings?: HeaderSettings | Record<string, any>;
+  settings?: HeaderSettings | FooterSettings | Record<string, any>;
   model3dUrl?: string;
   show3d?: boolean;
   showImage?: boolean;

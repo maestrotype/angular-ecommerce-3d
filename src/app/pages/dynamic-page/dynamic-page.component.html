@@ -1,0 +1,13 @@
+
+<div class="dynamic-page-container">
+  <div *ngIf="loading" class="loading-overlay">
+    <div class="spinner"></div>
+  </div>
+
+  <div *ngIf="!loading" class="page-content">
+    <app-section-renderer 
+      *ngFor="let section of sections" 
+      [section]="section">
+    </app-section-renderer>
+  </div>
+</div>

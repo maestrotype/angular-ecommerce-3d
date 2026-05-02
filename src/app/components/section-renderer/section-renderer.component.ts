@@ -12,11 +12,16 @@ import {
 
 import { sectionComponentMap } from './section-map';
 
+import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-section-renderer',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './section-renderer.component.html',
   styleUrls: ['./section-renderer.component.scss']
 })
+
 export class SectionRendererComponent implements OnInit, OnChanges, OnDestroy {
   @Input() section: any;
   @Input() mode: 'desktop' | 'tablet' | 'mobile' = 'desktop';

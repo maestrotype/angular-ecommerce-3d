@@ -34,25 +34,24 @@
   }
   
   width: calc(var(--preview-width-raw) * var(--preview-scale));
-  height: calc(var(--preview-height-raw, 2000px) * var(--preview-scale));
+  height: calc(3500px * var(--preview-scale));
   margin: 0 auto; 
   overflow: visible; 
-  overflow-x: clip; 
-  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .device-emulator {
   position: relative;
   width: var(--preview-width-raw);
-  height: var(--preview-height-raw, auto);
+  height: 3500px; // Increased height to accommodate long pages
   transform: scale(var(--preview-scale));
   transform-origin: top center;
-  overflow: hidden; // Clip content to phone frame
-  background: #000; // Force black background for phone frame
+  overflow: hidden; 
+  background: #000;
   box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.1);
-  border-radius: 32px; // Modern phone curvature
-  border: 8px solid #1a1a1a; // Virtual bazel
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 32px; 
+  border: 8px solid #1a1a1a; 
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .full-page-preview {
@@ -60,9 +59,9 @@
   flex-direction: column;
   width: 100%;
   height: 100%;
-  overflow-y: var(--preview-overflow, visible);
+  overflow-y: auto; 
   overflow-x: hidden;
-  container-type: inline-size; // CRITICAL: Enable @container queries inside sections
+  container-type: inline-size;
   
   // Hide scrollbar for more native phone feel
   &::-webkit-scrollbar {
