@@ -682,38 +682,50 @@ export class ProductFormComponent implements OnInit {
   archiveLocalModel(): void {
     if (!this.model3dUrl || !this.model3dUrlIsLocal) return;
     
-    // If it's a localhost URL from the worker, we use downloadModel to archive it
-    if (this.model3dUrl.includes('localhost:8000') || this.model3dUrl.includes('127.0.0.1:8000')) {
-      const taskId = this.model3dUrl.split('/').pop()?.replace('.glb', '') || 'unknown';
-      this.finalizeAiModel(this.model3dUrl, taskId);
-      return;
-    }
+    this.isUploading3d = true;
+    this.snackBar.open(this.translate.instant('ARCHIVING_STARTED'), this.translate.instant('CLOSE_BTN'), { duration: 2000 });
 
-    // Otherwise, if it has a LOCAL: path, use archive service
-    if (this.model3dPublicId?.startsWith('LOCAL:')) {
-      const localPath = this.model3dPublicId;
-      this.isUploading3d = true;
-      
-      this.productService.archiveLocalModel(localPath).subscribe({
-        next: (res) => {
-          this.model3dUrl = res.url;
-          this.localModel3dUrl = res.localPath || null;
-          this.model3dPublicId = res.publicId;
-          this.isUploading3d = false;
-          this.snackBar.open(this.translate.instant('MODEL_ARCHIVED_SUCCESSFULLY'), this.translate.instant('SUCCESS_BTN'), { duration: 5000 });
-          
-          // Auto-save
-          if (this.isEditMode && this.productId) {
-            this.saveProductModelOnly();
+    // Universal Bridge Archiving:
+    // We try to fetch the file directly in the browser. If the browser can see it (e.g. it's on localhost),
+    // we can "bridge" it to the production server even if the server itself cannot see it.
+    this.http.get(this.model3dUrl, { responseType: 'blob' }).subscribe({
+      next: (blob) => {
+        const filename = this.model3dUrl.split('/').pop() || 'model.glb';
+        const file = new File([blob], filename, { type: 'model/gltf-binary' });
+        
+        this.productService.upload3dModel(file).subscribe({
+          next: (res) => {
+            this.applyModelChangesAndSave(res.url, res.localPath || null, res.publicId || null);
+            this.isUploading3d = false;
+            this.snackBar.open(this.translate.instant('MODEL_ARCHIVED_SUCCESSFULLY'), this.translate.instant('SUCCESS_BTN'), { duration: 5000 });
+          },
+          error: (err) => {
+            this.isUploading3d = false;
+            this.snackBar.open('Bridge archiving failed during upload: ' + (err.error?.message || err.message), 'Close', { duration: 5000 });
           }
-        },
-        error: (err) => {
+        });
+      },
+      error: () => {
+        // Fallback: If browser cannot fetch it (e.g. true 404 or CORS), try standard server-side archiving
+        if (this.model3dPublicId?.startsWith('LOCAL:')) {
+          const localPath = this.model3dPublicId;
+          this.productService.archiveLocalModel(localPath).subscribe({
+            next: (res) => {
+              this.applyModelChangesAndSave(res.url, res.localPath || null, res.publicId);
+              this.isUploading3d = false;
+              this.snackBar.open(this.translate.instant('MODEL_ARCHIVED_SUCCESSFULLY'), this.translate.instant('SUCCESS_BTN'), { duration: 5000 });
+            },
+            error: (err) => {
+              this.isUploading3d = false;
+              this.snackBar.open(this.translate.instant('ARCHIVE_FAILED') + ': ' + (err.error?.message || 'Server cannot find file'), this.translate.instant('CLOSE_BTN'), { duration: 5000 });
+            }
+          });
+        } else {
           this.isUploading3d = false;
-          this.snackBar.open(this.translate.instant('ARCHIVE_FAILED'), this.translate.instant('CLOSE_BTN'), { duration: 5000 });
-          console.error('Archive error:', err);
+          this.snackBar.open('Cannot archive: File not found locally or on server.', 'Close', { duration: 5000 });
         }
-      });
-    }
+      }
+    });
   }
 
   onModelLoaded(): void {
