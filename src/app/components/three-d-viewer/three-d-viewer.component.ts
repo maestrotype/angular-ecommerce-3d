@@ -423,9 +423,14 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
     loader.setDRACOLoader(dracoLoader);
     
-    this.isAiGeneration = !!this.modelPath && this.modelPath.includes('task_');
-
     const pathToLoad = this.isHdMode && this.hdModelPath ? this.hdModelPath : this.modelPath;
+    
+    this.isAiGeneration = !!pathToLoad && (
+      pathToLoad.includes('task_') || 
+      pathToLoad.includes('ai-gen') || 
+      pathToLoad.includes('product3d-ai')
+    );
+
     if (this.currentLoadedPath === pathToLoad) return;
     
     let url = fixBackendUrl(pathToLoad);

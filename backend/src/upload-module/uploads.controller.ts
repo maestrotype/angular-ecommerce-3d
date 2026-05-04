@@ -176,7 +176,9 @@ export class UploadsController {
         destination: os.tmpdir(),
         filename: (req, file, callback) => {
           const uniqueSuffix = uuidv4();
-          callback(null, `product-3d-${uniqueSuffix}`);
+          const isAi = file.originalname.toLowerCase().includes('ai-gen') || file.originalname.toLowerCase().includes('task_');
+          const prefix = isAi ? 'ai-gen-' : 'product-3d-';
+          callback(null, `${prefix}${uniqueSuffix}`);
         },
       }),
       limits: {
@@ -198,9 +200,13 @@ export class UploadsController {
       }
 
       const uploadPromise = new Promise<any>((resolve, reject) => {
+        const isAi = file.originalname.toLowerCase().includes('ai-gen') || file.originalname.toLowerCase().includes('task_');
+        const publicId = isAi ? `ai-gen-${uuidv4()}` : undefined;
+        
         cloudinary.uploader.upload_large(file.path, {
           folder: "product-3d-models",
           resource_type: "raw",
+          public_id: publicId,
           chunk_size: 6000000,
           timeout: 600000
         }, (error, result) => {
@@ -231,7 +237,9 @@ export class UploadsController {
         mkdirSync(finalDir, { recursive: true });
       }
       
-      const finalFileName = `product3d-${Date.now()}-${Math.round(Math.random() * 1e9)}.glb`;
+      const isAi = file.originalname.toLowerCase().includes('ai-gen') || file.originalname.toLowerCase().includes('task_');
+      const prefix = isAi ? 'ai-gen' : 'product3d';
+      const finalFileName = `${prefix}-${Date.now()}-${Math.round(Math.random() * 1e9)}.glb`;
       const finalPath = join(finalDir, finalFileName);
       
       // Copy from temp to final destination
@@ -377,9 +385,13 @@ export class UploadsController {
     const folder = body.folder || "product-3d-models";
     
     const uploadPromise = new Promise<any>((resolve, reject) => {
+      const isAi = cleanPath.toLowerCase().includes('ai-gen') || cleanPath.toLowerCase().includes('task_');
+      const publicId = isAi ? `ai-gen-${uuidv4()}` : undefined;
+
       cloudinary.uploader.upload_large(cleanPath, {
         folder,
         resource_type: "raw",
+        public_id: publicId,
         chunk_size: 6000000,
         timeout: 600000
       }, (error, result) => {

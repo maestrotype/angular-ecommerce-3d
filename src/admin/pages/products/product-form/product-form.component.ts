@@ -370,20 +370,85 @@ export class ProductFormComponent implements OnInit {
     const filename = `ai-gen-${taskId}.glb`;
     this.aiStatusMessage = this.translate.instant('AI_DOWNLOADING_MODEL');
     
-    this.aiService.downloadModel(modelUrl, filename).subscribe({
-      next: (response: any) => {
-        this.resetAiState();
-        if (response.path) {
-          this.model3dUrl = response.path;
-          this.localModel3dUrl = response.localPath || null;
-          this.model3dPublicId = response.publicId || null;
-          this.snackBar.open(this.translate.instant('MODEL_3D_READY_SAVED'), this.translate.instant('SUCCESS_BTN'), { duration: 5000 });
+    // Bridge Upload: If the URL is localhost, fetch it in the browser and upload as a file
+    const isLocalWorkerUrl = modelUrl.includes('localhost:8000') || modelUrl.includes('127.0.0.1:8000');
+    
+    if (isLocalWorkerUrl) {
+      this.http.get(modelUrl, { responseType: 'blob' }).subscribe({
+        next: (blob) => {
+          const file = new File([blob], filename, { type: 'model/gltf-binary' });
+          this.productService.upload3dModel(file).subscribe({
+            next: (res) => {
+              this.applyModelChangesAndSave(res.url, res.localPath || null, res.publicId || null);
+              this.resetAiState();
+            },
+            error: (err) => {
+              this.resetAiState();
+              this.snackBar.open('Bridge upload failed: ' + (err.error?.message || err.message), 'Close', { duration: 5000 });
+            }
+          });
+        },
+        error: (err) => {
+          this.resetAiState();
+          this.snackBar.open('Could not fetch model from local worker: ' + err.message, 'Close', { duration: 5000 });
         }
+      });
+    } else {
+      // Standard backend-to-backend download
+      this.aiService.downloadModel(modelUrl, filename).subscribe({
+        next: (response: any) => {
+          this.resetAiState();
+          if (response.path) {
+            this.applyModelChangesAndSave(response.path, response.localPath || null, response.publicId || null);
+          }
+        },
+        error: (err) => {
+          this.resetAiState();
+          const errorMsg = translateErrorMessage(err.error?.message || 'FAILED_TO_DOWNLOAD_AI_MODEL', this.translate);
+          this.snackBar.open(errorMsg, this.translate.instant('CLOSE_BTN'), { duration: 5000 });
+        }
+      });
+    }
+  }
+
+  private applyModelChangesAndSave(url: string, localPath: string | null, publicId: string | null): void {
+    this.model3dUrl = url;
+    this.localModel3dUrl = localPath;
+    this.model3dPublicId = publicId;
+    
+    this.snackBar.open(this.translate.instant('MODEL_3D_READY_SAVED'), this.translate.instant('SUCCESS_BTN'), { duration: 5000 });
+    
+    // Automatically save to DB if in edit mode
+    if (this.isEditMode && this.productId) {
+      this.saveProductModelOnly();
+    }
+  }
+
+  private saveProductModelOnly(): void {
+    const rawFormValue = this.productForm.value;
+    const formValue = this.packLocalizedFields(rawFormValue);
+    
+    const specifications: { [key: string]: string } = {};
+    rawFormValue.specifications.forEach((spec: any) => {
+      if (spec.key && spec.value) specifications[spec.key] = spec.value;
+    });
+
+    const productData = {
+      ...formValue,
+      imageUrl: this.imageUrls[0],
+      images: this.imageUrls,
+      specifications,
+      model3dUrl: this.model3dUrl,
+      localModel3dUrl: this.localModel3dUrl,
+      model3dPublicId: this.model3dPublicId,
+    };
+
+    this.productService.updateProduct(this.productId!, productData).subscribe({
+      next: () => {
+        console.log('Product 3D model state updated in DB');
       },
       error: (err) => {
-        this.resetAiState();
-        const errorMsg = translateErrorMessage(err.error?.message || 'FAILED_TO_DOWNLOAD_AI_MODEL', this.translate);
-        this.snackBar.open(errorMsg, this.translate.instant('CLOSE_BTN'), { duration: 5000 });
+        console.error('Failed to update product model state:', err);
       }
     });
   }
@@ -636,6 +701,11 @@ export class ProductFormComponent implements OnInit {
           this.model3dPublicId = res.publicId;
           this.isUploading3d = false;
           this.snackBar.open(this.translate.instant('MODEL_ARCHIVED_SUCCESSFULLY'), this.translate.instant('SUCCESS_BTN'), { duration: 5000 });
+          
+          // Auto-save
+          if (this.isEditMode && this.productId) {
+            this.saveProductModelOnly();
+          }
         },
         error: (err) => {
           this.isUploading3d = false;
