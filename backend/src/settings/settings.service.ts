@@ -383,6 +383,8 @@ export class SettingsService {
       { key: 'general.currency', value: 'USD', type: 'string', category: 'general', description: 'Default currency' },
       { key: 'general.timezone', value: 'UTC', type: 'string', category: 'general', description: 'Default timezone' },
       { key: 'general.language', value: 'en', type: 'string', category: 'general', description: 'Default language' },
+      { key: 'general.viewerDefaultQuality', value: 'optimized', type: 'string', category: 'general', description: 'Default 3D Viewer Quality' },
+
       
       // Security settings
       { key: 'security.twoFactorAuth', value: 'false', type: 'boolean', category: 'security', description: 'Enable two-factor authentication' },

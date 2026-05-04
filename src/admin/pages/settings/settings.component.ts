@@ -47,7 +47,8 @@ export class SettingsComponent implements OnInit {
         siteDescription: ['Admin panel for e-commerce management'],
         currency: ['USD', Validators.required],
         timezone: ['UTC', Validators.required],
-        language: ['en', Validators.required]
+        language: ['en', Validators.required],
+        viewerDefaultQuality: ['optimized', Validators.required]
       });
 
       this.notificationForm = this.fb.group({

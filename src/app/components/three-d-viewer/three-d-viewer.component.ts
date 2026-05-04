@@ -8,6 +8,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { fixBackendUrl } from '../../core/utils/url-helper';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-three-d-viewer',
@@ -60,6 +62,14 @@ import { fixBackendUrl } from '../../core/utils/url-helper';
             </ng-template>
           </div>
         </div>
+      </div>
+
+      <!-- HD Toggle Button -->
+      <div class="hd-toggle-container" *ngIf="hdModelPath && !isLoading && !hasError">
+        <button class="hd-toggle-btn" [class.active]="isHdMode" (click)="toggleHdMode()">
+          <span class="hd-icon">HD</span>
+          <span class="hd-text">{{ isHdMode ? 'HD On' : 'HD Off' }}</span>
+        </button>
       </div>
 
       <!-- Controls hint -->
@@ -196,6 +206,30 @@ import { fixBackendUrl } from '../../core/utils/url-helper';
       font-size: 0.85rem; line-height: 1.5;
       color: var(--loader-text, #94a3b8);
     }
+
+    /* HD Toggle */
+    .hd-toggle-container {
+      position: absolute; bottom: 1rem; right: 1rem; z-index: 20;
+    }
+    .hd-toggle-btn {
+      display: flex; align-items: center; gap: 0.5rem;
+      background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px;
+      color: #94a3b8; font-size: 0.75rem; font-weight: 600;
+      padding: 0.4rem 0.8rem; cursor: pointer; transition: all 0.2s ease;
+    }
+    .hd-toggle-btn:hover {
+      background: rgba(15, 23, 42, 0.8);
+      color: #f8fafc;
+    }
+    .hd-toggle-btn.active {
+      background: rgba(99, 102, 241, 0.2);
+      border-color: rgba(99, 102, 241, 0.5);
+      color: #818cf8;
+    }
+    .hd-icon {
+      font-weight: 800; font-size: 0.8rem; letter-spacing: 1px;
+    }
     
     /* Theme support (Light / Default) */
     :host-context([data-theme="light"]), 
@@ -222,6 +256,7 @@ import { fixBackendUrl } from '../../core/utils/url-helper';
 export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   @ViewChild('container') container!: ElementRef;
   @Input() modelPath!: string;
+  @Input() hdModelPath?: string;
   @Input() scale: [number, number, number] = [1, 1, 1];
   @Input() position: [number, number, number] = [0, 0, 0];
   @Input() previewOnly = false;
@@ -232,6 +267,9 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   hasError = false;
   loadingProgress = 0;
   isAiGeneration = false;
+  isHdMode = false;
+  private currentLoadedPath: string | null = null;
+  private isRetryingFallback = false;
 
   private scene!: THREE.Scene;
   private camera!: THREE.PerspectiveCamera;
@@ -248,7 +286,8 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private location: Location,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private http: HttpClient
   ) {
     if (isPlatformBrowser(this.platformId)) {
       this.isMobile = /Mobi|Android/i.test(navigator.userAgent);
@@ -258,7 +297,23 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.initThree();
-      if (this.modelPath) this.loadModel();
+      
+      // Determine default mode
+      if (this.modelPath && this.hdModelPath) {
+        this.http.get<any>(`${environment.apiUrl}/public-settings/general`).subscribe({
+          next: (res) => {
+            if (res.success && res.data.viewerDefaultQuality === 'hd') {
+              this.isHdMode = true;
+            }
+            this.loadModel();
+          },
+          error: () => {
+            this.loadModel();
+          }
+        });
+      } else if (this.modelPath) {
+        this.loadModel();
+      }
       
       // Use ResizeObserver instead of window resize for more accurate container dimensions
       this.resizeObserver = new ResizeObserver(() => {
@@ -266,6 +321,12 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
       });
       this.resizeObserver.observe(this.container.nativeElement);
     }
+  }
+
+  toggleHdMode() {
+    if (!this.hdModelPath) return;
+    this.isHdMode = !this.isHdMode;
+    this.loadModel();
   }
 
   onResize() {
@@ -362,82 +423,23 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
     loader.setDRACOLoader(dracoLoader);
     
-    let url = fixBackendUrl(this.modelPath);
+    this.isAiGeneration = !!this.modelPath && this.modelPath.includes('task_');
+
+    const pathToLoad = this.isHdMode && this.hdModelPath ? this.hdModelPath : this.modelPath;
+    if (this.currentLoadedPath === pathToLoad) return;
+    
+    let url = fixBackendUrl(pathToLoad);
     if (url && !url.startsWith('http')) {
       url = this.location.prepareExternalUrl(url);
     }
-
-    // Determine if it's an AI task based on ID pattern
-    this.isAiGeneration = !!this.modelPath && this.modelPath.includes('ai-gen-task');
+    
+    this.isLoading = true;
+    this.hasError = false;
 
     loader.load(
       url,
       (gltf) => {
-        if (this.isDestroyed || !this.scene) return;
-        if (this.model) this.scene.remove(this.model);
-
-        this.model = gltf.scene;
-        
-        // 1. Apply scale FIRST
-        this.model.scale.set(this.scale[0], this.scale[1], this.scale[2]);
-        this.model.updateMatrixWorld(true);
-
-        // 2. Calculate bounding box of the SCALED model
-        const box = new THREE.Box3().setFromObject(this.model);
-        const center = box.getCenter(new THREE.Vector3());
-        const size = box.getSize(new THREE.Vector3());
-        
-        // 3. Move the model so its true bounding box center aligns with the target position
-        this.model.position.x += (this.position[0] - center.x);
-        this.model.position.y += (this.position[1] - center.y);
-        this.model.position.z += (this.position[2] - center.z);
-        this.model.updateMatrixWorld(true);
-        
-        // 4. Update camera and controls based on the new scaled size
-        const maxDim = Math.max(size.x, size.y, size.z);
-        const fov = this.camera.fov * (Math.PI / 180);
-        let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
-        
-        cameraZ *= 2.0; // Increased multiplier to make model look smaller (fit better on screen)
-        this.camera.position.set(this.position[0], this.position[1], cameraZ);
-        
-        // Update clipping planes relative to model size to prevent viewport clipping
-        this.camera.near = maxDim * 0.01;
-        this.camera.far = maxDim * 100;
-        this.camera.updateProjectionMatrix();
-        
-        if (this.controls) {
-          this.controls.target.set(this.position[0], this.position[1], this.position[2]);
-          this.controls.minDistance = cameraZ * 0.2;
-          this.controls.maxDistance = cameraZ * 5;
-          this.controls.update();
-        }
-
-        this.model.traverse((child) => {
-          if ((child as THREE.Mesh).isMesh) {
-            const mesh = child as THREE.Mesh;
-            mesh.castShadow = !this.isMobile;
-            mesh.receiveShadow = !this.isMobile;
-
-            // Fix for Three.js uniform/shader errors where name is null
-            if (!mesh.name) mesh.name = 'mesh_' + Math.random().toString(36).substr(2, 9);
-            
-            if (mesh.material) {
-              const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-              materials.forEach(mat => {
-                if (mat && !mat.name) {
-                  mat.name = 'mat_' + Math.random().toString(36).substr(2, 9);
-                }
-              });
-            }
-          }
-        });
-
-        this.scene.add(this.model);
-        this.isLoading = false;
-        this.cdr.detectChanges();
-        this.modelLoaded.emit();
-        this.animate();
+        this.onLoadSuccess(gltf, pathToLoad);
       },
       (xhr) => {
         if (this.isDestroyed) return;
@@ -449,11 +451,133 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
       (err) => {
         if (this.isDestroyed) return;
         console.error('3D load error:', err);
+        
+        // Fallback: If we tried to load the HD local model and it failed (e.g. file missing on this specific environment),
+        // we can automatically fall back to the optimized Cloudinary model if it's different.
+        const hdPath = this.hdModelPath;
+        const sdPath = this.modelPath;
+        
+        if (this.isHdMode && hdPath && sdPath && hdPath !== sdPath) {
+          console.warn('HD model failed to load. Falling back to optimized version.');
+          this.isHdMode = false;
+          this.loadModel();
+          return;
+        }
+
+        // 2. Fallback: Localhost -> Production (for local development against production DB)
+        const isLocalHost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+        if (isLocalHost && url.includes('localhost:3002') && !this.isRetryingFallback) {
+          const prodBase = 'https://angular-ecommerce-backend.onrender.com';
+          const fallbackUrl = url.replace(/https?:\/\/localhost:3002/, prodBase);
+          
+          console.warn('Local asset missing on this machine. Attempting production fallback:', fallbackUrl);
+          this.isRetryingFallback = true;
+          this.isLoading = true; // Keep loading state
+          this.hasError = false;
+
+          // Attempt loading from production
+          loader.load(
+            fallbackUrl,
+            (gltf) => {
+              // Re-use the success logic (we should ideally refactor the success handler into a separate method)
+              // For now, let's just trigger a successful load by setting necessary flags
+              console.log('Production fallback successful!');
+              this.isRetryingFallback = false;
+              // We need to re-run the whole success logic. 
+              // To avoid duplication, I'll call loadModel with a flag or just use the same handler.
+              // Actually, the simplest way is to refactor the success callback.
+              this.onLoadSuccess(gltf, fallbackUrl);
+            },
+            (xhr) => {
+              if (xhr.lengthComputable) {
+                this.loadingProgress = Math.round((xhr.loaded / xhr.total) * 100);
+                this.cdr.detectChanges();
+              }
+            },
+            (err2) => {
+              console.error('Production fallback also failed:', err2);
+              this.isRetryingFallback = false;
+              this.isLoading = false;
+              this.hasError = true;
+              this.cdr.detectChanges();
+            }
+          );
+          return;
+        }
+
+        this.isRetryingFallback = false;
         this.isLoading = false;
         this.hasError = true;
         this.cdr.detectChanges();
       }
     );
+  }
+
+  private onLoadSuccess(gltf: any, url: string) {
+    if (this.isDestroyed || !this.scene) return;
+    if (this.model) this.scene.remove(this.model);
+
+    this.model = gltf.scene;
+    
+    // 1. Apply scale FIRST
+    this.model.scale.set(this.scale[0], this.scale[1], this.scale[2]);
+    
+    // Fix for AI models which are often exported upside down (180 deg) or Z-up
+    if (this.isAiGeneration) {
+      this.model.rotation.set(Math.PI, 0, 0); 
+    }
+
+    this.model.updateMatrixWorld(true);
+
+    const box = new THREE.Box3().setFromObject(this.model);
+    const center = box.getCenter(new THREE.Vector3());
+    const size = box.getSize(new THREE.Vector3());
+    
+    this.model.position.x += (this.position[0] - center.x);
+    this.model.position.y += (this.position[1] - center.y);
+    this.model.position.z += (this.position[2] - center.z);
+    this.model.updateMatrixWorld(true);
+    
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const fov = this.camera.fov * (Math.PI / 180);
+    let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
+    
+    cameraZ *= 2.0;
+    this.camera.position.set(this.position[0], this.position[1], cameraZ);
+    
+    this.camera.near = maxDim * 0.01;
+    this.camera.far = maxDim * 100;
+    this.camera.updateProjectionMatrix();
+    
+    if (this.controls) {
+      this.controls.target.set(this.position[0], this.position[1], this.position[2]);
+      this.controls.minDistance = cameraZ * 0.2;
+      this.controls.maxDistance = cameraZ * 5;
+      this.controls.update();
+    }
+
+    this.model.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        mesh.castShadow = !this.isMobile;
+        mesh.receiveShadow = !this.isMobile;
+        if (!mesh.name) mesh.name = 'mesh_' + Math.random().toString(36).substr(2, 9);
+        
+        if (mesh.material) {
+          const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+          materials.forEach(mat => {
+            if (mat && !mat.name) mat.name = 'mat_' + Math.random().toString(36).substr(2, 9);
+          });
+        }
+      }
+    });
+
+    this.scene.add(this.model);
+    this.currentLoadedPath = url;
+    this.isLoading = false;
+    this.cdr.detectChanges();
+    this.modelLoaded.emit();
+    this.animate();
   }
 
   private animate = () => {
