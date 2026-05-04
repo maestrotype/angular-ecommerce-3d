@@ -1,4 +1,7 @@
 {
+  "LANG_EN": "English",
+  "LANG_RU": "Russian",
+  "LANG_UA": "Ukrainian",
   "ADMIN_PANEL": "Admin Panel",
   "ADMIN_DASHBOARD": "Admin Dashboard",
   "SETTINGS": "Settings",
@@ -13,14 +16,84 @@
   "CURRENCY": "Currency",
   "TIMEZONE": "Timezone",
   "LANGUAGE": "Language",
+  "DEFAULT_3D_QUALITY": "Default 3D Quality",
+  "OPTIMIZED_FAST": "Optimized (Fast)",
+  "HIGH_DEFINITION": "High Definition (HD)",
+  "DEFAULT_3D_QUALITY_HINT": "Choose the default model quality displayed to users.",
   "SAVE": "Save General Settings",
   "SAVING": "Saving...",
   "NOTIFICATION_SETTINGS": "Notification Settings",
   "EMAIL_NOTIFICATIONS": "Email Notifications",
   "ORDER_NOTIFICATIONS": "Order Notifications",
   "NOTIFICATIONS": "Notifications",
-  "STOCK_ALERTS": "Stock Alerts",
-  "USER_REGISTRATIONS": "User Registrations",
+  "MARK_ALL_READ": "Mark all as read",
+  "NOTIFICATION": {
+    "ORDER_CREATED": {
+      "TITLE": "New Order Received",
+      "MESSAGE": "Order #{{orderId}} from {{customerName}} has been received"
+    },
+    "ORDER_UPDATED": {
+      "TITLE": "Order Status Updated",
+      "MESSAGE": "Order #{{orderId}} status changed to {{newStatus}}"
+    },
+    "LOW_STOCK": {
+      "TITLE": "Low Stock Alert",
+      "MESSAGE": "{{productName}} is running low on stock ({{stock}} remaining)"
+    },
+    "NEW_USER": {
+      "TITLE": "New User Registration",
+      "MESSAGE": "{{userName}} ({{userEmail}}) has registered"
+    },
+    "PAYMENT_SUCCESS": {
+      "TITLE": "Payment Successful",
+      "MESSAGE": "Payment completed for order #{{orderId}}"
+    },
+    "PAYMENT_FAILED": {
+      "TITLE": "Payment Failed",
+      "MESSAGE": "Payment failed for order #{{orderId}}"
+    },
+    "ORDER_CONFIRMATION": {
+      "TITLE": "Order Confirmation",
+      "MESSAGE": "Order #{{orderId}} has been confirmed"
+    },
+    "ORDER_STATUS_UPDATE": {
+      "TITLE": "Order Status Updated",
+      "MESSAGE": "Order #{{orderId}} status changed from {{oldStatus}} to {{newStatus}}"
+    },
+    "PAYMENT_CREATED": {
+      "TITLE": "Payment Created",
+      "MESSAGE": "Payment created for order #{{orderId}}"
+    },
+    "SYSTEM": {
+      "SENT_TITLE": "Notification Sent",
+      "SENT_MESSAGE": "{{type}} notification sent for order #{{orderId}}",
+      "ERROR_TITLE": "Notification Error",
+      "ERROR_MESSAGE": "Failed to send notification for order #{{orderId}}: {{error}}"
+    },
+    "PAYMENT_ERROR": {
+      "TITLE": "Payment Error",
+      "MESSAGE": "Failed to create payment: {{error}}"
+    },
+    "WEBHOOK_ERROR": {
+      "TITLE": "Webhook Error",
+      "MESSAGE": "Failed to process webhook: {{error}}"
+    },
+    "UNKNOWN_PAYMENT_STATUS": {
+      "TITLE": "Unknown Payment Status",
+      "MESSAGE": "Unknown status: {{status}} for order #{{orderId}}"
+    }
+  },
+  "TIME": {
+    "JUST_NOW": "Just now",
+    "MINUTES_AGO": "{{minutes}}m ago",
+    "HOURS_AGO": "{{hours}}h ago",
+    "DAYS_AGO": "{{days}}d ago"
+  },
+  "API_ERROR": {
+    "TRIPO_API_ERROR": "Tripo3D API Error",
+    "HUNYUAN_API_ERROR": "Hunyuan3D API Error",
+    "MESHY_API_ERROR": "Meshy API Error"
+  },
   "LOGOUT": "Logout",
   "LAST_7_DAYS": "Last 7 Days",
   "ROLE_ADMIN": "Administrator",
@@ -205,6 +278,11 @@
   "NETWORK_ERROR_MSG": "Failed to connect to server. Check internet connection.",
   "VALIDATION_ERROR_TITLE": "Validation error",
   "VALIDATION_ERROR_MSG": "Please fix the following errors:",
+  "FIELD_REQUIRED": "This field is required",
+  "FIELD_MAX_LENGTH": "Maximum {{length}} characters",
+  "FIELD_INVALID_FORMAT": "Invalid format",
+  "INVALID_IMAGE_FORMAT": "Please select a valid image file (SVG, PNG, JPG)",
+  "FILE_SIZE_LIMIT": "File size must be less than {{size}}MB",
   "SUCCESS_TITLE": "Success",
   "INFO_TITLE": "Information",
   "WARNING_TITLE": "Warning",
@@ -234,6 +312,7 @@
   "LUMA_API_KEY_LABEL": "Luma AI API Key",
   "CUSTOM_WEBHOOK_URL_INFO": "URL of your self-hosted API compatible with the system",
   "CUSTOM_WEBHOOK_URL_LABEL": "Custom Webhook URL",
+  "USE_HIGH_QUALITY_LOCAL": "High Quality mode",
   "SAVE_ENGINE_SETTINGS": "Save Engine Settings",
   "STRP_PAYMENTS": "Stripe Payments",
   "WEBHOOK_SECRET_LABEL": "Webhook Secret",
@@ -251,6 +330,16 @@
   "AI_TIP": "Tip: Professional models can take 2-5 minutes. Don't close this page!",
   "AI_MODEL_READY": "AI Model ready! Downloading to server...",
   "RECOVER_AI_MODEL": "Recover from AI History",
+  "AI_PROVIDER": {
+    "PROBLEMATIC_TITLE": "Configuration Issues",
+    "PROBLEMATIC_MSG": "The selected engine has technical limitations on the current server.",
+    "UNIQUE3D_INSTRUCTIONS": "The Unique3D engine requires the pytorch3d library, which is not supported on Apple Silicon (M1-M4) directly. This causes segmentation faults and worker crashes.\n\nRecommended actions:\n1. Use HunyuanV2 (it works locally on Mac).\n2. Run the AI worker in a Docker container.\n3. Use a remote Linux server with an NVIDIA GPU.",
+    "HUNYUAN_V1_INSTRUCTIONS": "Hunyuan3D V1 is legacy. We recommend using HunyuanV2 — it's faster and produces higher quality GLB models.",
+    "SWITCH_TO_WORKING": "Switch to HunyuanV2",
+    "CONTINUE_ANYWAY": "Try Anyway",
+    "LEGACY": "Legacy",
+    "INCOMPATIBLE": "Incompatible"
+  },
   "IMAGE_PROCESSOR": {
     "UPLOAD_HINT": "Up to 10MB (JPG, PNG, WEBP)",
     "REMOVE_BG": "Remove Background",
@@ -286,7 +375,6 @@
     "BKG_REMOVE": "Remove Background",
     "BKG_OPTIMIZE": "Optimize Image"
   },
-
   "ADD_PRODUCT": "Add Product",
   "EDIT_PRODUCT": "Edit Product",
   "PRODUCT_NAME": "Product Name",
@@ -472,6 +560,20 @@
   "SECTIONS": "Sections",
   "ADD_SECTION": "Add Section",
   "MAIN_PAGE_SECTIONS": "Main Page Sections",
+  "FOOTER_CONSTRUCTOR": "Footer Constructor",
+  "MANAGE_FOOTER_COLUMNS_AND_LINKS": "Manage your website footer columns, links and social media",
+  "LOADING_FOOTER_CONFIG": "Loading footer configuration...",
+  "COLUMN_TITLE": "Column Title",
+  "ADD_LINK": "Add Link",
+  "ADD_COLUMN": "Add Column",
+  "SOCIAL_LINKS": "Social Links",
+  "COPYRIGHT_TEXT": "Copyright Text",
+  "FOOTER_UPDATED": "Footer updated successfully",
+  "FOOTER_CREATED": "Footer created successfully",
+  "CREATE_PAGE_CONTENT": "Create Page Content",
+  "ERROR_LOADING_FOOTER": "Error loading footer configuration",
+  "ERROR_UPDATING_FOOTER": "Error updating footer",
+  "ERROR_CREATING_FOOTER": "Error creating footer",
   "MANAGE_SITE_SECTIONS": "Manage your website sections and layout",
   "SELECT_SECTION_FOR_PREVIEW": "Select a section from the list to see it in live preview",
   "HERO": "Hero",
@@ -712,14 +814,16 @@
   "TARGET_PRODUCT": "Product Detail",
   "TARGET_SHOP": "Shop Page",
   "TARGET_CUSTOM": "Custom Page",
-  "VARIANT_DEFAULT": "Default Style",
+  "VARIANT_DEFAULT": "Auto (Site Theme)",
+  "VARIANT_LIGHT": "Light (Base)",
+  "VARIANT_DARK": "Dark (Base)",
+  "VARIANT_GLASS": "Glass (Base)",
   "VARIANT_LIGHT_SOFT": "Soft Light (Beige)",
-  "VARIANT_GLASS": "Luxury Glass",
+  "VARIANT_DARK_SOFT": "Soft Dark",
+  "VARIANT_DEEP_DARK": "Midnight Black",
   "VARIANT_GLASS_CLEAR": "Clear Glass",
   "VARIANT_GLASS_DEEP": "Deep Frosted Glass",
   "VARIANT_MINIMAL": "Minimalist",
-  "VARIANT_DARK": "Deep Dark",
-  "VARIANT_DARK_SOFT": "Soft Dark",
   "SECTION_TYPE_LABELS": {
     "HEADER": "Header Section",
     "HERO": "Hero Section",
@@ -733,8 +837,19 @@
     "PRODUCT_TABS": "Product Tabs (Modular)",
     "SIMILAR_PRODUCTS": "Similar Products (Modular)",
     "BOUGHT_TOGETHER": "Bought Together (Modular)",
-    "HTML_CONTENT": "Custom HTML Content"
+    "HTML_CONTENT": "Custom HTML Content",
+    "FOOTER": "Footer Section"
   },
+  "MISSING_FOOTER_TITLE": "No Global Footer Found",
+  "MISSING_FOOTER_HINT": "Your site is using a fallback footer. Add a Footer Section here to customize it.",
+  "ADD_NOW": "Add Now",
+  "FOOTER_NOT_CREATED": "Global Footer is not created yet",
+  "MISSING": "Missing",
+  "CREATE": "Create",
+  "FOOTER_SECTION": "Footer Section",
+  "FOOTER_COLUMNS": "Footer Columns",
+  "LABEL": "Label",
+  "LINKS": "Links",
   "HEADER_UTILITIES": "Header Utilities",
   "SHOW_SEARCH": "Show Search Icon",
   "SHOW_CART": "Show Cart Icon",
@@ -989,7 +1104,6 @@
     "HINT": "Rotate model to enable zoom · Page scroll over viewer",
     "LOADING": "Loading 3D Scene",
     "THREED_HINT": "3-finger swipe to rotate, 1-finger swipe to scroll page",
-
     "EXPAND_3D": "View 3D Model",
     "EXPAND_PHOTO": "View Full Photo",
     "LOAD_ERROR": "3D Load Error",
@@ -1195,5 +1309,62 @@
       "PAYMENT_METHODS": "💳 Payment methods",
       "METHODS_LIST": "Visa, MasterCard, PayPal, Apple Pay"
     }
-  }
+  },
+  "MODEL_ARCHIVED_SUCCESSFULLY": "3D Model successfully archived to Cloudinary!",
+  "ARCHIVE_FAILED": "Failed to archive model. Please check server logs.",
+  "LOCAL_STORAGE_WARNING": "This model is stored on the server's local disk.",
+  "ARCHIVE_TO_CLOUDINARY": "Archive to Cloudinary",
+  "SECURITY_BLOCK": "Browser Security Blocked This Model",
+  "MIXED_CONTENT_EXPLANATION": "Your browser blocks loading local assets (HTTP) while on this secure site (HTTPS). Archiving the model to Cloudinary will fix this permanently.",
+  "FIX_NOW_ARCHIVE": "Fix Now: Archive to Cloudinary",
+  "ACTIVE_ENGINE": "Active AI Engine",
+  "UNIQUE3D_LOCAL_HQ": "Unique3D (Local Ultra HQ)",
+  "HUNYUAN_V2_CLOUD_FREE": "Hunyuan3D v2 (SOTA Free)",
+  "SPEC_VALUE_PLACEHOLDER": "e.g., Nike, Red",
+  "ADMIN_EMAIL_PLACEHOLDER": "admin@example.com",
+  "SITE_NAME_PLACEHOLDER": "Your Store Name",
+  "SITE_DESCRIPTION_PLACEHOLDER": "Brief description of your store",
+  "SITE_KEYWORDS_PLACEHOLDER": "Comma-separated keywords",
+  "SITE_URL_PLACEHOLDER": "https://yourstore.com",
+  "DEFAULT_LANG_PLACEHOLDER": "en",
+  "OG_IMAGE_PLACEHOLDER": "https://yourstore.com/images/og-default.jpg",
+  "TWITTER_HANDLE_PLACEHOLDER": "@yourstore",
+  "GOOGLE_ANALYTICS_PLACEHOLDER": "G-XXXXXXXXXX",
+  "GOOGLE_SEARCH_CONSOLE_PLACEHOLDER": "Meta tag content from Search Console",
+  "BING_WEBMASTER_TOOLS_PLACEHOLDER": "Meta tag content from Bing Webmaster Tools",
+  "ROBOTS_TXT_PLACEHOLDER": "User-agent: *&#10;Allow: /&#10;Disallow: /admin/",
+  "You don't have enough credit to create this task": "You don't have enough credit to create this task",
+  "LOGO_AND_SETTINGS": "Logo & Settings",
+  "LOGO_IMAGE": "Logo Image",
+  "THEME_SETTINGS": "Theme Settings",
+  "VISUAL_VARIANT": "Visual Variant",
+  "HEADER_UTILITIES": "Header Utilities",
+  "SHOW_SEARCH": "Show Search",
+  "SHOW_CART": "Show Cart",
+  "SHOW_PROFILE": "Show Profile",
+  "HEADER_ACTIVE": "Header Active",
+  "MENU_NAVIGATION": "Menu Navigation",
+  "MENU_ITEMS": "Menu Items",
+  "ADD_ITEM": "Add Item",
+  "MENU_ITEM_TITLE": "Menu Item Title",
+  "JUMP_TO_SECTION": "Jump to Section",
+  "MANUAL_ENTRY": "Manual Entry",
+  "ACCESS_LEVEL": "Access Level",
+  "SOCIAL_LINKS": "Social Links",
+  "COPYRIGHT_TEXT": "Copyright Text",
+  "FOOTER_COLUMNS": "Footer Columns",
+  "ADD_COLUMN": "Add Column",
+  "COLUMN_TITLE": "Column Title",
+  "LINKS": "Links",
+  "ADD_LINK": "Add Link",
+  "LABEL": "Label",
+  "SETTINGS": "Settings",
+  "ACTIVE_ON_SITE": "Active on Site",
+  "CONTENT": "Content",
+  "TITLE_EN": "Title (EN)",
+  "TITLE_RU": "Title (RU)",
+  "TITLE_UA": "Title (UA)",
+  "FOOTER_NOT_CREATED": "Footer not created",
+  "MISSING": "Missing",
+  "CREATE": "Create"
 }

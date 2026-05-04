@@ -1,4 +1,7 @@
 {
+  "LANG_EN": "English",
+  "LANG_RU": "Русский",
+  "LANG_UA": "Українська",
   "ADMIN_PANEL": "Панель адміністратора",
   "ADMIN_DASHBOARD": "Панель керування",
   "SETTINGS": "Налаштування",
@@ -13,13 +16,85 @@
   "CURRENCY": "Валюта",
   "TIMEZONE": "Часовий пояс",
   "LANGUAGE": "Мова",
+  "DEFAULT_3D_QUALITY": "Якість 3D за замовчуванням",
+  "OPTIMIZED_FAST": "Оптимізована (Швидко)",
+  "HIGH_DEFINITION": "Висока роздільна здатність (HD)",
+  "DEFAULT_3D_QUALITY_HINT": "Оберіть якість моделей, що відображаються користувачам за замовчуванням.",
   "SAVE": "Зберегти загальні налаштування",
   "SAVING": "Збереження...",
   "NOTIFICATION_SETTINGS": "Налаштування сповіщень",
   "EMAIL_NOTIFICATIONS": "Email сповіщення",
   "ORDER_NOTIFICATIONS": "Сповіщення про замовлення",
   "NOTIFICATIONS": "Сповіщення",
-  "STOCK_ALERTS": "Оповіщення про запаси",
+  "MARK_ALL_READ": "Відзначити всі як прочитані",
+  "NOTIFICATION": {
+    "ORDER_CREATED": {
+      "TITLE": "Отримано нове замовлення",
+      "MESSAGE": "Замовлення #{{orderId}} від {{customerName}} отримано"
+    },
+    "ORDER_UPDATED": {
+      "TITLE": "Статус замовлення оновлено",
+      "MESSAGE": "Статус замовлення #{{orderId}} змінено на {{newStatus}}"
+    },
+    "LOW_STOCK": {
+      "TITLE": "Сповіщення про низький запас",
+      "MESSAGE": "У товарі {{productName}} закінчується запас (залишилося {{stock}})"
+    },
+    "NEW_USER": {
+      "TITLE": "Реєстрація нового користувача",
+      "MESSAGE": "{{userName}} ({{userEmail}}) зареєструвався"
+    },
+    "PAYMENT_SUCCESS": {
+      "TITLE": "Оплата пройшла успішно",
+      "MESSAGE": "Оплату за замовлення #{{orderId}} завершено"
+    },
+    "PAYMENT_FAILED": {
+      "TITLE": "Помилка оплати",
+      "MESSAGE": "Оплата за замовлення #{{orderId}} не вдалася"
+    },
+    "ORDER_CONFIRMATION": {
+      "TITLE": "Підтвердження замовлення",
+      "MESSAGE": "Замовлення #{{orderId}} підтверджено"
+    },
+    "ORDER_STATUS_UPDATE": {
+      "TITLE": "Статус замовлення змінено",
+      "MESSAGE": "Статус замовлення #{{orderId}} змінено з {{oldStatus}} на {{newStatus}}"
+    },
+    "PAYMENT_CREATED": {
+      "TITLE": "Платіж створено",
+      "MESSAGE": "Платіж за замовлення #{{orderId}} створено"
+    },
+    "SYSTEM": {
+      "SENT_TITLE": "Сповіщення надіслано",
+      "SENT_MESSAGE": "Сповіщення {{type}} надіслано для замовлення #{{orderId}}",
+      "ERROR_TITLE": "Помилка сповіщення",
+      "ERROR_MESSAGE": "Не вдалося надіслати сповіщення для замовлення #{{orderId}}: {{error}}"
+    },
+    "PAYMENT_ERROR": {
+      "TITLE": "Помилка платежу",
+      "MESSAGE": "Не вдалося створити платіж: {{error}}"
+    },
+    "WEBHOOK_ERROR": {
+      "TITLE": "Помилка вебхука",
+      "MESSAGE": "Помилка при обробці вебхука: {{error}}"
+    },
+    "UNKNOWN_PAYMENT_STATUS": {
+      "TITLE": "Невідомий статус платежу",
+      "MESSAGE": "Отримано невідомий статус: {{status}} для замовлення #{{orderId}}"
+    }
+  },
+  "TIME": {
+    "JUST_NOW": "Щойно",
+    "MINUTES_AGO": "{{minutes}}хв тому",
+    "HOURS_AGO": "{{hours}}год тому",
+    "DAYS_AGO": "{{days}}д тому"
+  },
+  "API_ERROR": {
+    "TRIPO_API_ERROR": "Помилка Tripo3D API",
+    "HUNYUAN_API_ERROR": "Помилка Hunyuan3D API",
+    "MESHY_API_ERROR": "Помилка Meshy API"
+  },
+  "STOCK_ALERTS": "Оповещення про запаси",
   "USER_REGISTRATIONS": "Реєстрації користувачів",
   "LOGOUT": "Вийти",
   "LAST_7_DAYS": "Останні 7 днів",
@@ -192,6 +267,11 @@
   "NETWORK_ERROR_MSG": "Не вдалося підключитися до сервера. Перевірте інтернет-з'єднання.",
   "VALIDATION_ERROR_TITLE": "Помилка валідації",
   "VALIDATION_ERROR_MSG": "Будь ласка, виправте наступні помилки:",
+  "FIELD_REQUIRED": "Це поле обов'язкове для заповнення",
+  "FIELD_MAX_LENGTH": "Максимум {{length}} символів",
+  "FIELD_INVALID_FORMAT": "Невірний формат",
+  "INVALID_IMAGE_FORMAT": "Оберіть коректний файл зображення (SVG, PNG, JPG)",
+  "FILE_SIZE_LIMIT": "Розмір файлу має бути менше ніж {{size}}МБ",
   "SUCCESS_TITLE": "Успіх",
   "INFO_TITLE": "Інформація",
   "WARNING_TITLE": "Попередження",
@@ -238,6 +318,16 @@
   "AI_TIP": "Порада: Генерація може зайняти 2-5 хвилин. Не закривайте сторінку!",
   "AI_MODEL_READY": "AI модель готова! Завантаження на сервер...",
   "RECOVER_AI_MODEL": "Відновити з історії AI",
+  "AI_PROVIDER": {
+    "PROBLEMATIC_TITLE": "Проблеми з конфігурацією",
+    "PROBLEMATIC_MSG": "Обраний двигун має технічні обмеження на поточному сервері.",
+    "UNIQUE3D_INSTRUCTIONS": "Двигун Unique3D потребує наявності бібліотеки pytorch3d, яка не підтримується на Apple Silicon (M1-M4) напряму. Це викликає помилки сегментації та збої воркера.\n\nЩо можна зробити:\n1. Використовувати HunyuanV2 (він працює локально на Mac).\n2. Запустити AI воркер у Docker-контейнері.\n3. Використовувати віддалений Linux-сервер з GPU NVIDIA.",
+    "HUNYUAN_V1_INSTRUCTIONS": "Версія Hunyuan3D V1 морально застаріла. Ми рекомендуємо використовувати HunyuanV2 — вона швидша та видає якісніші GLB моделі.",
+    "SWITCH_TO_WORKING": "Переключитися на HunyuanV2",
+    "CONTINUE_ANYWAY": "Все одно спробувати",
+    "LEGACY": "Застаріло",
+    "INCOMPATIBLE": "Несумісно"
+  },
   "IMAGE_PROCESSOR": {
     "UPLOAD_HINT": "До 10 МБ (JPG, PNG, WEBP)",
     "REMOVE_BG": "Видалити тло",
@@ -273,7 +363,6 @@
     "BKG_REMOVE": "Видалити тло",
     "BKG_OPTIMIZE": "Оптимізувати"
   },
-
   "ADD_PRODUCT": "Додати товар",
   "EDIT_PRODUCT": "Редагувати товар",
   "PRODUCT_NAME": "Назва товару",
@@ -1177,5 +1266,62 @@
       "PAYMENT_METHODS": "💳 Способи оплати",
       "METHODS_LIST": "Visa, MasterCard, PayPal, Apple Pay"
     }
-  }
+  },
+  "MODEL_ARCHIVED_SUCCESSFULLY": "3D-модель успішно архівована в Cloudinary!",
+  "ARCHIVE_FAILED": "Не вдалося архівувати модель. Перевірте логи сервера.",
+  "LOCAL_STORAGE_WARNING": "Ця модель зберігається локально на сервері.",
+  "ARCHIVE_TO_CLOUDINARY": "Архівувати в Cloudinary",
+  "SECURITY_BLOCK": "Безпека браузера заблокувала модель",
+  "MIXED_CONTENT_EXPLANATION": "Ваш браузер блокує завантаження локальних ресурсів (HTTP) на захищеному сайті (HTTPS). Архівація моделі в Cloudinary вирішить цю проблему назавжди.",
+  "FIX_NOW_ARCHIVE": "Виправити: Архівувати в Cloudinary",
+  "ACTIVE_ENGINE": "Активний AI двигун",
+  "UNIQUE3D_LOCAL_HQ": "Unique3D (Локальний Ultra HQ)",
+  "HUNYUAN_V2_CLOUD_FREE": "Hunyuan3D v2 (SOTA Free)",
+  "SPEC_VALUE_PLACEHOLDER": "напр., Nike, Червоний",
+  "ADMIN_EMAIL_PLACEHOLDER": "admin@example.com",
+  "SITE_NAME_PLACEHOLDER": "Назва вашого магазину",
+  "SITE_DESCRIPTION_PLACEHOLDER": "Короткий опис вашого магазину",
+  "SITE_KEYWORDS_PLACEHOLDER": "Ключові слова через кому",
+  "SITE_URL_PLACEHOLDER": "https://yourstore.com",
+  "DEFAULT_LANG_PLACEHOLDER": "ua",
+  "OG_IMAGE_PLACEHOLDER": "https://yourstore.com/images/og-default.jpg",
+  "TWITTER_HANDLE_PLACEHOLDER": "@yourstore",
+  "GOOGLE_ANALYTICS_PLACEHOLDER": "G-XXXXXXXXXX",
+  "GOOGLE_SEARCH_CONSOLE_PLACEHOLDER": "Контент мета-тега з Search Console",
+  "BING_WEBMASTER_TOOLS_PLACEHOLDER": "Контент мета-тега з Bing Webmaster Tools",
+  "ROBOTS_TXT_PLACEHOLDER": "User-agent: *&#10;Allow: /&#10;Disallow: /admin/",
+  "You don't have enough credit to create this task": "У вас недостатньо кредитів для створення цього завдання",
+  "LOGO_AND_SETTINGS": "Логотип та Налаштування",
+  "LOGO_IMAGE": "Зображення логотипу",
+  "THEME_SETTINGS": "Налаштування теми",
+  "VISUAL_VARIANT": "Візуальний варіант",
+  "HEADER_UTILITIES": "Утиліти хедера",
+  "SHOW_SEARCH": "Показувати пошук",
+  "SHOW_CART": "Показувати кошик",
+  "SHOW_PROFILE": "Показувати профіль",
+  "HEADER_ACTIVE": "Хедер активний",
+  "MENU_NAVIGATION": "Навігація меню",
+  "MENU_ITEMS": "Пункти меню",
+  "ADD_ITEM": "Додати пункт",
+  "MENU_ITEM_TITLE": "Заголовок пункту меню",
+  "JUMP_TO_SECTION": "Перейти до секції",
+  "MANUAL_ENTRY": "Ввести вручну",
+  "ACCESS_LEVEL": "Рівень доступу",
+  "SOCIAL_LINKS": "Соціальні мережі",
+  "COPYRIGHT_TEXT": "Текст копірайту",
+  "FOOTER_COLUMNS": "Колонки футера",
+  "ADD_COLUMN": "Додати колонку",
+  "COLUMN_TITLE": "Заголовок колонки",
+  "LINKS": "Посилання",
+  "ADD_LINK": "Додати посилання",
+  "LABEL": "Назва",
+  "SETTINGS": "Налаштування",
+  "ACTIVE_ON_SITE": "Активно на сайті",
+  "CONTENT": "Контент",
+  "TITLE_EN": "Заголовок (EN)",
+  "TITLE_RU": "Заголовок (RU)",
+  "TITLE_UA": "Заголовок (UA)",
+  "FOOTER_NOT_CREATED": "Футер не створено",
+  "MISSING": "Відсутній",
+  "CREATE": "Створити"
 }
