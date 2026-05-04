@@ -29,7 +29,7 @@
             </div>
             <img *ngIf="selectedType === 'image' && product?.images?.length" [src]="product.images[selectedImageIndex]"
               alt="Product image" class="main-image" (click)="onImageClicked()" />
-            <app-three-d-viewer *ngIf="selectedType === '3d' && product?.model3dUrl" [modelPath]="product.model3dUrl"
+            <app-three-d-viewer *ngIf="selectedType === '3d' && product?.model3dUrl" [modelPath]="product.model3dUrl" [hdModelPath]="product['localModel3dUrl']"
               class="main-3d-viewer" [previewOnly]="false" [scale]="[9, 9, 9]"
               [position]="[0, 0, 0]" (click)="$event.stopPropagation()"></app-three-d-viewer>
             <!-- Expand overlay -->
@@ -51,7 +51,7 @@
             <img *ngFor="let img of product?.images; let i = index" [src]="img" [class.selected]="
                 selectedType === 'image' && selectedImageIndex === i
               " (click)="onThumbnailSelected('image', i)" alt="Product thumbnail" class="thumb-image" />
-            <app-three-d-viewer *ngIf="product?.model3dUrl" [modelPath]="product.model3dUrl" class="thumb-3d"
+            <app-three-d-viewer *ngIf="product?.model3dUrl" [modelPath]="product.model3dUrl" [hdModelPath]="product['localModel3dUrl']" class="thumb-3d"
               [class.selected]="selectedType === '3d'" (click)="onThumbnailSelected('3d')" [previewOnly]="true"
               [scale]="[9, 9, 9]" [position]="[0, 0, 0]" [autoRotate]="true"></app-three-d-viewer>
           </div>

@@ -3,6 +3,12 @@ import { SettingsService } from '../settings/settings.service';
 import { firstValueFrom } from 'rxjs';
 import axios from 'axios';
 import cloudinary from '../config/cloudinary.config';
+import * as fs from 'fs';
+import * as path from 'path';
+import { exec } from 'child_process';
+import { promisify } from 'util';
+
+const execAsync = promisify(exec);
 
 import { AiGenerationProvider, AiTaskResult } from './interfaces/ai-provider.interface';
 import { Tripo3dProvider } from './providers/tripo3d.provider';
@@ -109,17 +115,44 @@ export class AiGenerationService {
   }
 
   /**
-   * Downloads a model from any provider URL and uploads it to Cloudinary.
+   * Downloads a model from any provider URL, optimizes it, and uploads to Cloudinary while saving HQ locally.
    */
   async downloadModel(url: string, filename: string) {
     try {
-      this.logger.log(`Downloading model from ${url} for permanent storage...`);
+      this.logger.log(`Downloading model from ${url} for optimization and storage...`);
       const response = await axios.get(url, { responseType: 'arraybuffer' });
       const buffer = Buffer.from(response.data);
 
-      this.logger.log(`Uploading model to Cloudinary (${buffer.length} bytes)...`);
+      // 1. Save HQ file locally
+      const uploadsDir = path.join(__dirname, '..', '..', 'uploads', 'products-3d');
+      if (!fs.existsSync(uploadsDir)) {
+        fs.mkdirSync(uploadsDir, { recursive: true });
+      }
 
-      // Use upload_stream with chunk_size to support files > 10MB (Raw/GLB)
+      const hqFilename = filename.replace('.glb', '_hq.glb');
+      const hqFilePath = path.join(uploadsDir, hqFilename);
+      fs.writeFileSync(hqFilePath, buffer);
+      this.logger.log(`Saved high-quality model locally at ${hqFilePath}`);
+
+      // 2. Optimize the file using gltf-transform
+      const optFilename = filename.replace('.glb', '_opt.glb');
+      const optFilePath = path.join(uploadsDir, optFilename);
+      
+      this.logger.log(`Optimizing model using gltf-transform...`);
+      try {
+        // Run gltf-transform to optimize geometry and textures
+        await execAsync(`npx gltf-transform optimize "${hqFilePath}" "${optFilePath}" --texture-compress webp`);
+        this.logger.log(`Model optimization complete.`);
+      } catch (optError) {
+        this.logger.warn(`Optimization failed, falling back to original model for cloud upload: ${optError.message}`);
+        // Fallback to the original file if optimization fails
+        fs.copyFileSync(hqFilePath, optFilePath);
+      }
+
+      // 3. Upload Optimized Model to Cloudinary
+      const optBuffer = fs.readFileSync(optFilePath);
+      this.logger.log(`Uploading optimized model to Cloudinary (${optBuffer.length} bytes)...`);
+
       const uploadPromise = new Promise<any>((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
           {
@@ -138,15 +171,21 @@ export class AiGenerationService {
             }
           }
         );
-        uploadStream.end(buffer);
+        uploadStream.end(optBuffer);
       });
 
       const result = await uploadPromise;
       this.logger.log(`Model successfully archived at ${result.secure_url}`);
 
+      // 4. Clean up temporary optimized file
+      if (fs.existsSync(optFilePath)) {
+        fs.unlinkSync(optFilePath);
+      }
+
       return {
         success: true,
-        path: result.secure_url,
+        path: result.secure_url, // Optimized Cloud URL
+        localPath: `/uploads/products-3d/${hqFilename}`, // High-Quality Local URL
         publicId: result.public_id
       };
     } catch (error) {

@@ -64,6 +64,18 @@
             </mat-form-field>
           </div>
 
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>{{ 'DEFAULT_3D_QUALITY' | translate }}</mat-label>
+              <mat-select formControlName="viewerDefaultQuality">
+                <mat-option value="optimized">{{ 'OPTIMIZED_FAST' | translate }}</mat-option>
+                <mat-option value="hd">{{ 'HIGH_DEFINITION' | translate }}</mat-option>
+              </mat-select>
+              <mat-icon matSuffix>3d_rotation</mat-icon>
+              <mat-hint>{{ 'DEFAULT_3D_QUALITY_HINT' | translate }}</mat-hint>
+            </mat-form-field>
+          </div>
+
           <div class="form-actions">
             <button mat-raised-button color="primary" type="submit" [disabled]="generalForm.invalid || isLoading">
               <mat-icon>{{ isLoading ? 'hourglass_empty' : 'save' }}</mat-icon>

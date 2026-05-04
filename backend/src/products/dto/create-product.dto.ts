@@ -74,4 +74,8 @@ export class CreateProductDto {
   @IsOptional()
   @IsString()
   model3dUrl?: string;
+
+  @IsOptional()
+  @IsString()
+  localModel3dUrl?: string;
 }

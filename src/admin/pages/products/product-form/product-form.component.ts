@@ -42,6 +42,7 @@ export class ProductFormComponent implements OnInit {
   imageUrls: string[] = [];
   model3dFile: File | null = null;
   model3dUrl: string = '';
+  localModel3dUrl: string | null = null;
   model3dPublicId: string | null = null;
   isUploading3d = false;
   dragging3d = false;
@@ -374,6 +375,7 @@ export class ProductFormComponent implements OnInit {
         this.resetAiState();
         if (response.path) {
           this.model3dUrl = response.path;
+          this.localModel3dUrl = response.localPath || null;
           this.model3dPublicId = response.publicId || null;
           this.snackBar.open(this.translate.instant('MODEL_3D_READY_SAVED'), this.translate.instant('SUCCESS_BTN'), { duration: 5000 });
         }
@@ -594,6 +596,7 @@ export class ProductFormComponent implements OnInit {
     this.productService.upload3dModel(file).subscribe({
       next: (res) => {
         this.model3dUrl = res.url;
+        this.localModel3dUrl = res.localPath || null;
         this.model3dPublicId = res.publicId || null;
         this.isUploading3d = false;
         this.snackBar.open(this.translate.instant('MODEL_3D_UPLOADED'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
@@ -629,6 +632,7 @@ export class ProductFormComponent implements OnInit {
       this.productService.archiveLocalModel(localPath).subscribe({
         next: (res) => {
           this.model3dUrl = res.url;
+          this.localModel3dUrl = res.localPath || null;
           this.model3dPublicId = res.publicId;
           this.isUploading3d = false;
           this.snackBar.open(this.translate.instant('MODEL_ARCHIVED_SUCCESSFULLY'), this.translate.instant('SUCCESS_BTN'), { duration: 5000 });
@@ -663,7 +667,8 @@ export class ProductFormComponent implements OnInit {
     }
   }
   remove3dModel() {
-    this.model3dUrl = null;
+    this.model3dUrl = null as unknown as string;
+    this.localModel3dUrl = null;
     this.model3dFile = null;
   }
 
@@ -710,7 +715,8 @@ export class ProductFormComponent implements OnInit {
       this.imageUrls = [];
     }
 
-    this.model3dUrl = product.model3dUrl || null;
+    this.model3dUrl = product.model3dUrl || '';
+    this.localModel3dUrl = (product as any).localModel3dUrl || null;
     this.model3dPublicId = (product as any).model3dPublicId || null;
 
     // Clear existing specifications
@@ -764,6 +770,7 @@ export class ProductFormComponent implements OnInit {
       images: this.imageUrls,
       specifications,
       model3dUrl: this.model3dUrl,
+      localModel3dUrl: this.localModel3dUrl,
       model3dPublicId: this.model3dPublicId,
     };
     // rest of onSubmit ... navigations etc

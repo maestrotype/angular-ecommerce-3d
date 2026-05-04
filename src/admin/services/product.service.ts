@@ -138,19 +138,19 @@ export class ProductService {
     );
   }
 
-  upload3dModel(file: File): Observable<{ url: string; publicId: string }> {
+  upload3dModel(file: File): Observable<{ url: string; publicId: string; localPath?: string }> {
     const formData = new FormData();
     formData.append('model', file);
     // Uses UploadsController endpoint which stores on Cloudinary (environment-independent)
-    return this.http.post<{ url: string; publicId: string }>(
+    return this.http.post<{ url: string; publicId: string; localPath?: string }>(
       `${this.API_URL}/uploads/product-3d-model`,
       formData
     );
   }
 
   // New method to move local file to Cloudinary
-  archiveLocalModel(localPath: string): Observable<{ url: string; publicId: string }> {
-    return this.http.post<{ url: string; publicId: string }>(
+  archiveLocalModel(localPath: string): Observable<{ url: string; publicId: string; localPath?: string }> {
+    return this.http.post<{ url: string; publicId: string; localPath?: string }>(
       `${this.API_URL}/uploads/archive-local`,
       { path: localPath }
     );

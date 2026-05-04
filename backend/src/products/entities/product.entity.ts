@@ -57,6 +57,9 @@ export class Product {
   @Column({ nullable: true })
   model3dUrl?: string;
 
+  @Column({ nullable: true })
+  localModel3dUrl?: string;
+
   @UpdateDateColumn()
   updatedAt: Date;
 }
