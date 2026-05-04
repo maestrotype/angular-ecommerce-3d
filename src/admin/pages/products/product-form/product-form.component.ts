@@ -685,47 +685,98 @@ export class ProductFormComponent implements OnInit {
     this.isUploading3d = true;
     this.snackBar.open(this.translate.instant('ARCHIVING_STARTED'), this.translate.instant('CLOSE_BTN'), { duration: 2000 });
 
-    // Universal Bridge Archiving:
-    // We try to fetch the file directly in the browser. If the browser can see it (e.g. it's on localhost),
-    // we can "bridge" it to the production server even if the server itself cannot see it.
-    this.http.get(this.model3dUrl, { responseType: 'blob' }).subscribe({
-      next: (blob) => {
-        const filename = this.model3dUrl.split('/').pop() || 'model.glb';
-        const file = new File([blob], filename, { type: 'model/gltf-binary' });
-        
-        this.productService.upload3dModel(file).subscribe({
-          next: (res) => {
-            this.applyModelChangesAndSave(res.url, res.localPath || null, res.publicId || null);
-            this.isUploading3d = false;
-            this.snackBar.open(this.translate.instant('MODEL_ARCHIVED_SUCCESSFULLY'), this.translate.instant('SUCCESS_BTN'), { duration: 5000 });
-          },
-          error: (err) => {
-            this.isUploading3d = false;
-            this.snackBar.open('Bridge archiving failed during upload: ' + (err.error?.message || err.message), 'Close', { duration: 5000 });
+    const filename = this.model3dUrl.split('/').pop() || 'model.glb';
+    const isHttps = window.location.protocol === 'https:';
+
+    // List of candidate URLs to try "rescuing" the file from
+    const candidates: string[] = [this.model3dUrl];
+    
+    // If the current URL points to Render but it failed, we try to find it on localhost
+    if (this.model3dUrl.includes('onrender.com')) {
+      candidates.push(this.model3dUrl.replace(/https?:\/\/angular-ecommerce-backend\.onrender\.com/, 'http://localhost:3002'));
+    }
+    
+    // Also try the AI worker's default output location as a backup
+    if (this.model3dUrl.includes('ai-gen') || this.model3dUrl.includes('task_')) {
+      candidates.push(`http://localhost:8000/outputs/${filename}`);
+    }
+
+    const tryCandidate = (index: number) => {
+      if (index >= candidates.length) {
+        // All browser-side bridge attempts failed, fall back to server-side archiving
+        this.fallbackToServerArchiving();
+        return;
+      }
+
+      const url = candidates[index];
+      console.log(`[Bridge] Attempting to rescue model from: ${url}`);
+
+      this.http.get(url, { responseType: 'blob' }).subscribe({
+        next: (blob) => {
+          console.log(`[Bridge] Successfully grabbed model from ${url}! Uploading to Cloudinary...`);
+          const file = new File([blob], filename, { type: 'model/gltf-binary' });
+          this.uploadFileToCloudinary(file);
+        },
+        error: (err) => {
+          console.warn(`[Bridge] Failed to fetch from ${url}:`, err);
+          
+          // Check for Mixed Content or CORS
+          if (isHttps && url.startsWith('http://localhost')) {
+            console.error('[Bridge] Mixed Content block suspected. HTTPS sites cannot easily fetch from HTTP localhost.');
           }
-        });
-      },
-      error: () => {
-        // Fallback: If browser cannot fetch it (e.g. true 404 or CORS), try standard server-side archiving
-        if (this.model3dPublicId?.startsWith('LOCAL:')) {
-          const localPath = this.model3dPublicId;
-          this.productService.archiveLocalModel(localPath).subscribe({
-            next: (res) => {
-              this.applyModelChangesAndSave(res.url, res.localPath || null, res.publicId);
-              this.isUploading3d = false;
-              this.snackBar.open(this.translate.instant('MODEL_ARCHIVED_SUCCESSFULLY'), this.translate.instant('SUCCESS_BTN'), { duration: 5000 });
-            },
-            error: (err) => {
-              this.isUploading3d = false;
-              this.snackBar.open(this.translate.instant('ARCHIVE_FAILED') + ': ' + (err.error?.message || 'Server cannot find file'), this.translate.instant('CLOSE_BTN'), { duration: 5000 });
-            }
-          });
-        } else {
-          this.isUploading3d = false;
-          this.snackBar.open('Cannot archive: File not found locally or on server.', 'Close', { duration: 5000 });
+          
+          tryCandidate(index + 1);
         }
+      });
+    };
+
+    tryCandidate(0);
+  }
+
+  private uploadFileToCloudinary(file: File): void {
+    this.productService.upload3dModel(file).subscribe({
+      next: (res) => {
+        this.applyModelChangesAndSave(res.url, res.localPath || null, res.publicId || null);
+        this.isUploading3d = false;
+        this.snackBar.open(this.translate.instant('MODEL_ARCHIVED_SUCCESSFULLY'), this.translate.instant('SUCCESS_BTN'), { duration: 5000 });
+      },
+      error: (err) => {
+        this.isUploading3d = false;
+        const msg = err.error?.message || err.message;
+        this.snackBar.open('Bridge archiving failed during upload: ' + msg, 'Close', { duration: 5000 });
       }
     });
+  }
+
+  private fallbackToServerArchiving(): void {
+    if (this.model3dPublicId?.startsWith('LOCAL:')) {
+      const localPath = this.model3dPublicId;
+      console.log(`[Bridge] Falling back to server-side archiving for path: ${localPath}`);
+      
+      this.productService.archiveLocalModel(localPath).subscribe({
+        next: (res) => {
+          this.applyModelChangesAndSave(res.url, res.localPath || null, res.publicId);
+          this.isUploading3d = false;
+          this.snackBar.open(this.translate.instant('MODEL_ARCHIVED_SUCCESSFULLY'), this.translate.instant('SUCCESS_BTN'), { duration: 5000 });
+        },
+        error: (err) => {
+          this.isUploading3d = false;
+          const isHttps = window.location.protocol === 'https:';
+          let errorMsg = this.translate.instant('ARCHIVE_FAILED');
+          
+          if (isHttps) {
+            errorMsg += '. Tip: Try doing this while running the app on localhost:4200 to bypass browser security.';
+          } else {
+            errorMsg += ': ' + (err.error?.message || 'Server cannot find file');
+          }
+          
+          this.snackBar.open(errorMsg, this.translate.instant('CLOSE_BTN'), { duration: 10000 });
+        }
+      });
+    } else {
+      this.isUploading3d = false;
+      this.snackBar.open('Cannot archive: File not found. Try re-uploading the model.', 'Close', { duration: 7000 });
+    }
   }
 
   onModelLoaded(): void {
