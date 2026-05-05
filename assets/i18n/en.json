@@ -1312,7 +1312,7 @@
   },
   "MODEL_ARCHIVED_SUCCESSFULLY": "3D Model successfully archived to Cloudinary!",
   "ARCHIVE_FAILED": "Failed to archive model. Please check server logs.",
-  "LOCAL_STORAGE_WARNING": "This model is stored on the server's local disk.",
+  "LOCAL_STORAGE_WARNING": "WARNING: This file is stored on the server's ephemeral local disk. It will be DELETED when the server restarts. Click 'Archive to Cloudinary' for permanent storage.",
   "ARCHIVE_TO_CLOUDINARY": "Archive to Cloudinary",
   "SECURITY_BLOCK": "Browser Security Blocked This Model",
   "MIXED_CONTENT_EXPLANATION": "Your browser blocks loading local assets (HTTP) while on this secure site (HTTPS). Archiving the model to Cloudinary will fix this permanently.",

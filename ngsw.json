@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1777909161456,
+  "timestamp": 1777956919407,
   "index": "/angular-ecommerce-3d/index.html",
   "assetGroups": [
     {
@@ -144,9 +144,9 @@
     "/angular-ecommerce-3d/927.f7ff4195bb92c9db.js": "03877d2b12932728013bf0d36be5926f5749771d",
     "/angular-ecommerce-3d/976.378e11d83ab2cb2d.js": "a09fd4f437380a80623cf6b7ced6b34094e0015f",
     "/angular-ecommerce-3d/994.c33933d6bc941cbc.js": "fa65e84743a25b5b29918d3f7f8dc1e5ba292f35",
-    "/angular-ecommerce-3d/assets/i18n/en.json": "354e7d9c1802776d6a0ae50c595515b7312f3b6f",
-    "/angular-ecommerce-3d/assets/i18n/ru.json": "6c61e41b03dc74e968bf971f5a288aada4661f8a",
-    "/angular-ecommerce-3d/assets/i18n/ua.json": "317d2982d6a8cde94bfb80b54233a7c57d6547e5",
+    "/angular-ecommerce-3d/assets/i18n/en.json": "c570cd31a9120dcff05da5c241b404541dac85e9",
+    "/angular-ecommerce-3d/assets/i18n/ru.json": "3012a83e4cc1ccadca9b6be57e5b599425db7e0e",
+    "/angular-ecommerce-3d/assets/i18n/ua.json": "c14844d12b9691ee4f4ad07b81e894dfa475f2d9",
     "/angular-ecommerce-3d/assets/icons/apple-touch-icon.png": "f912963bdc6d5a38d8f1dd0afbaab2ce8d657acb",
     "/angular-ecommerce-3d/assets/icons/arrow-left.svg": "b66ba95cd42b9b8ff5c24e6f6d6844594b0a3aa6",
     "/angular-ecommerce-3d/assets/icons/chanel.svg": "7ceca51ac54978f9680333ef2143f68310125687",
