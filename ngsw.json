@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1777956919407,
+  "timestamp": 1778054414591,
   "index": "/angular-ecommerce-3d/index.html",
   "assetGroups": [
     {
@@ -18,7 +18,7 @@
         "/angular-ecommerce-3d/594.94b296f7622b0885.js",
         "/angular-ecommerce-3d/642.3836251ff518cd35.js",
         "/angular-ecommerce-3d/7.cf7468fa61cf7673.js",
-        "/angular-ecommerce-3d/703.d86cbe5b6c741573.js",
+        "/angular-ecommerce-3d/703.80cd348109d18afe.js",
         "/angular-ecommerce-3d/8.bc8aacd64927459a.js",
         "/angular-ecommerce-3d/82.0be20def37096675.js",
         "/angular-ecommerce-3d/824.0bca324713ca08f4.js",
@@ -31,7 +31,7 @@
         "/angular-ecommerce-3d/main.1e20198934e70a48.js",
         "/angular-ecommerce-3d/manifest.webmanifest",
         "/angular-ecommerce-3d/polyfills.a527a9cc31db9a9d.js",
-        "/angular-ecommerce-3d/runtime.a29a8bd2199bed49.js",
+        "/angular-ecommerce-3d/runtime.bb087f7cfb9429ea.js",
         "/angular-ecommerce-3d/styles.22030039d2d43241.css"
       ],
       "patterns": []
@@ -136,7 +136,7 @@
     "/angular-ecommerce-3d/594.94b296f7622b0885.js": "a3ff7ac302635feaf219dfa9c04d8afcb4c99ad6",
     "/angular-ecommerce-3d/642.3836251ff518cd35.js": "19b6a2d75f1c4fee69bdf4f30d7ce2c21c236bd5",
     "/angular-ecommerce-3d/7.cf7468fa61cf7673.js": "497cfba8932a508393a0fd73b33cbda2141634cd",
-    "/angular-ecommerce-3d/703.d86cbe5b6c741573.js": "0b4d6e132c666c2d79015133204e5c453072535f",
+    "/angular-ecommerce-3d/703.80cd348109d18afe.js": "79b2243921953660ba58f8f88de457e02be312ff",
     "/angular-ecommerce-3d/8.bc8aacd64927459a.js": "60b2184d692790f518e7a24993a8a17e9030ef5b",
     "/angular-ecommerce-3d/82.0be20def37096675.js": "19b714185f05a52558b499110cbefc5aee28d5cc",
     "/angular-ecommerce-3d/824.0bca324713ca08f4.js": "00e7105c603b3c96d81d42406051000af150d754",
@@ -144,9 +144,9 @@
     "/angular-ecommerce-3d/927.f7ff4195bb92c9db.js": "03877d2b12932728013bf0d36be5926f5749771d",
     "/angular-ecommerce-3d/976.378e11d83ab2cb2d.js": "a09fd4f437380a80623cf6b7ced6b34094e0015f",
     "/angular-ecommerce-3d/994.c33933d6bc941cbc.js": "fa65e84743a25b5b29918d3f7f8dc1e5ba292f35",
-    "/angular-ecommerce-3d/assets/i18n/en.json": "c570cd31a9120dcff05da5c241b404541dac85e9",
-    "/angular-ecommerce-3d/assets/i18n/ru.json": "3012a83e4cc1ccadca9b6be57e5b599425db7e0e",
-    "/angular-ecommerce-3d/assets/i18n/ua.json": "c14844d12b9691ee4f4ad07b81e894dfa475f2d9",
+    "/angular-ecommerce-3d/assets/i18n/en.json": "3f2263e816f2daea73d706c4ec4756793c8e19aa",
+    "/angular-ecommerce-3d/assets/i18n/ru.json": "0c3795899b11190115c7b1931f83d07531396c6e",
+    "/angular-ecommerce-3d/assets/i18n/ua.json": "18c33ed1b25168fa9e5fa8d57cb42299eefaab83",
     "/angular-ecommerce-3d/assets/icons/apple-touch-icon.png": "f912963bdc6d5a38d8f1dd0afbaab2ce8d657acb",
     "/angular-ecommerce-3d/assets/icons/arrow-left.svg": "b66ba95cd42b9b8ff5c24e6f6d6844594b0a3aa6",
     "/angular-ecommerce-3d/assets/icons/chanel.svg": "7ceca51ac54978f9680333ef2143f68310125687",
@@ -209,11 +209,11 @@
     "/angular-ecommerce-3d/assets/models/people/Unka.glb": "86c756b78aa0564e8b74f43b9a4fcef40f225a0e",
     "/angular-ecommerce-3d/assets/models/shoes/shoes1.glb": "6c07b477b7e6675ae2f9f262c06d4ce22728aa25",
     "/angular-ecommerce-3d/common.8176c2cd2da75340.js": "c908495a8b1def1afce45c4f2615bd0a273e84b5",
-    "/angular-ecommerce-3d/index.html": "79194ead78ac0a11877b5eef82f2189e4e6fb9c0",
+    "/angular-ecommerce-3d/index.html": "e00e0459e21dd7b5ab4409e716630b40338b0c3e",
     "/angular-ecommerce-3d/main.1e20198934e70a48.js": "e06b69e6f81313dd37a17b13d8408f8063d94a7b",
     "/angular-ecommerce-3d/manifest.webmanifest": "68e4e874611f558407b7642b0fe602db24978dcb",
     "/angular-ecommerce-3d/polyfills.a527a9cc31db9a9d.js": "75b41ca06c59053b7d23f357a4cbbd22f58c0a66",
-    "/angular-ecommerce-3d/runtime.a29a8bd2199bed49.js": "42e858e0522f725d7a39239d05a5d07d3ba867f6",
+    "/angular-ecommerce-3d/runtime.bb087f7cfb9429ea.js": "72e97dfc31249081bee7fc0ea960712516c83b12",
     "/angular-ecommerce-3d/styles.22030039d2d43241.css": "2ee1b15dc9acde28df7a7dad6bd31e6c66926ddc"
   },
   "navigationUrls": [
