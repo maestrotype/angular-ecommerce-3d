@@ -73,7 +73,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     // Get actual unread count from server
     this.notificationService.getUnreadCount()
-      .pipe(takeUntil(this.destroy$))
       .subscribe(count => {
         this.unreadCount = count;
       });

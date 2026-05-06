@@ -20,7 +20,7 @@ export class HunyuanV2Provider implements AiGenerationProvider {
   private async getWorkerUrl(): Promise<string> {
     // Priority: Local Worker (if M4 Max) or Cloud Endpoint
     const setting = await firstValueFrom(this.settingsService.getSettingByKey('ai.customUrl')).catch(() => null);
-    const baseUrl = (setting?.value?.trim() || 'http://localhost:8000').replace(/\/generate$/, '');
+    const baseUrl = (setting?.value?.trim() || 'http://127.0.0.1:8000').replace(/\/generate$/, '');
     return `${baseUrl}/generate/hunyuan3d-v2`;
   }
 
@@ -44,7 +44,7 @@ export class HunyuanV2Provider implements AiGenerationProvider {
 
   async getTaskStatus(taskId: string): Promise<AiTaskResult> {
     const setting = await firstValueFrom(this.settingsService.getSettingByKey('ai.customUrl')).catch(() => null);
-    const baseUrl = (setting?.value?.trim() || 'http://localhost:8000').replace(/\/generate$/, '');
+    const baseUrl = (setting?.value?.trim() || 'http://127.0.0.1:8000').replace(/\/generate$/, '');
     const statusUrl = `${baseUrl}/generate/${taskId}`;
 
     try {

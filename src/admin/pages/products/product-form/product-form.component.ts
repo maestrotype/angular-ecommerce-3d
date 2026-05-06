@@ -53,6 +53,9 @@ export class ProductFormComponent implements OnInit {
   recentAiTasks: any[] = [];
   showRecoveryList: boolean = false;
   taskId: string | null = null;
+  isDevelopment: boolean = false;
+  isLocalApi: boolean = false;
+  viewerVersion: number = 0;
 
   get model3dUrlIsLocal(): boolean {
     return !!this.model3dUrl && (this.model3dUrl.includes('localhost') || this.model3dUrl.includes('127.0.0.1') || !!this.model3dPublicId?.startsWith('LOCAL:'));
@@ -99,6 +102,21 @@ export class ProductFormComponent implements OnInit {
       }
     });
     this.fetchActiveEngineName();
+    this.checkApiEnvironment();
+  }
+
+  private checkApiEnvironment(): void {
+    this.isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    this.isLocalApi = localStorage.getItem('use_local_api') === 'true';
+  }
+
+  toggleApiEnvironment(): void {
+    if (this.isLocalApi) {
+      localStorage.removeItem('use_local_api');
+    } else {
+      localStorage.setItem('use_local_api', 'true');
+    }
+    window.location.reload();
   }
 
   private fetchActiveEngineName(): void {
@@ -412,12 +430,20 @@ export class ProductFormComponent implements OnInit {
   }
 
   private applyModelChangesAndSave(url: string, localPath: string | null, publicId: string | null): void {
+    const wasLocal = this.model3dUrlIsLocal;
     this.model3dUrl = url;
     this.localModel3dUrl = localPath;
     this.model3dPublicId = publicId;
     
-    this.snackBar.open(this.translate.instant('MODEL_3D_READY_SAVED'), this.translate.instant('SUCCESS_BTN'), { duration: 5000 });
+    // Determine the environment for the message
+    const envName = this.isLocalApi ? 'LOCAL' : 'PRODUCTION';
+    const messageKey = wasLocal && !this.model3dUrlIsLocal ? 'MODEL_SYNCED_TO_CLOUD' : 'MODEL_3D_READY_SAVED';
     
+    this.snackBar.open(`${this.translate.instant(messageKey)} [DB: ${envName}]`, this.translate.instant('SUCCESS_BTN'), { duration: 5000 });
+    
+    // Increment version to force 3D viewer to re-render with new URL
+    this.viewerVersion++;
+
     // Automatically save to DB if in edit mode
     if (this.isEditMode && this.productId) {
       this.saveProductModelOnly();
@@ -425,30 +451,22 @@ export class ProductFormComponent implements OnInit {
   }
 
   private saveProductModelOnly(): void {
-    const rawFormValue = this.productForm.value;
-    const formValue = this.packLocalizedFields(rawFormValue);
-    
-    const specifications: { [key: string]: string } = {};
-    rawFormValue.specifications.forEach((spec: any) => {
-      if (spec.key && spec.value) specifications[spec.key] = spec.value;
-    });
-
-    const productData = {
-      ...formValue,
-      imageUrl: this.imageUrls[0],
-      images: this.imageUrls,
-      specifications,
+    // SURGICAL UPDATE: Only send 3D related fields to avoid validation errors for unrelated fields
+    const productData: any = {
       model3dUrl: this.model3dUrl,
       localModel3dUrl: this.localModel3dUrl,
       model3dPublicId: this.model3dPublicId,
     };
 
+    console.log(`[Save] Persisting 3D model to ${this.isLocalApi ? 'Local' : 'Production'} Database...`, productData);
+
     this.productService.updateProduct(this.productId!, productData).subscribe({
       next: () => {
-        console.log('Product 3D model state updated in DB');
+        console.log(`[Save] Successfully saved to ${this.isLocalApi ? 'Local' : 'Production'} DB`);
       },
       error: (err) => {
         console.error('Failed to update product model state:', err);
+        this.snackBar.open('Error saving model to database. Check console for details.', 'Close', { duration: 5000 });
       }
     });
   }
@@ -683,27 +701,39 @@ export class ProductFormComponent implements OnInit {
     if (!this.model3dUrl || !this.model3dUrlIsLocal) return;
     
     this.isUploading3d = true;
-    this.snackBar.open(this.translate.instant('ARCHIVING_STARTED'), this.translate.instant('CLOSE_BTN'), { duration: 2000 });
+    const envName = this.isLocalApi ? 'LOCAL' : 'PRODUCTION';
+    const startMsg = this.isLocalApi ? 'ARCHIVING_STARTED' : 'SYNCING_TO_PRODUCTION';
+    
+    this.snackBar.open(this.translate.instant(startMsg), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
 
     const filename = this.model3dUrl.split('/').pop() || 'model.glb';
     const isHttps = window.location.protocol === 'https:';
 
     // List of candidate URLs to try "rescuing" the file from
-    const candidates: string[] = [this.model3dUrl];
+    const candidates: string[] = [];
     
-    // If the current URL points to Render but it failed, we try to find it on localhost
+    // 1. Current URL (might be local already)
+    candidates.push(this.model3dUrl);
+    
+    // 2. If it points to Render, explicitly try localhost:3002
     if (this.model3dUrl.includes('onrender.com')) {
       candidates.push(this.model3dUrl.replace(/https?:\/\/angular-ecommerce-backend\.onrender\.com/, 'http://localhost:3002'));
     }
     
-    // Also try the AI worker's default output location as a backup
+    // 3. AI Worker output location (very common for generated models)
     if (this.model3dUrl.includes('ai-gen') || this.model3dUrl.includes('task_')) {
       candidates.push(`http://localhost:8000/outputs/${filename}`);
+    }
+    
+    // 4. Fallback to just localhost if not already tried
+    if (!this.model3dUrl.includes('localhost')) {
+      candidates.push(`http://localhost:3002/uploads/product-3d-models/${filename}`);
     }
 
     const tryCandidate = (index: number) => {
       if (index >= candidates.length) {
         // All browser-side bridge attempts failed, fall back to server-side archiving
+        console.warn('[Bridge] All local candidates failed. Falling back to server-side archiving.');
         this.fallbackToServerArchiving();
         return;
       }
@@ -713,7 +743,7 @@ export class ProductFormComponent implements OnInit {
 
       this.http.get(url, { responseType: 'blob' }).subscribe({
         next: (blob) => {
-          console.log(`[Bridge] Successfully grabbed model from ${url}! Uploading to Cloudinary...`);
+          console.log(`[Bridge] Successfully grabbed model from ${url}! Syncing to ${envName}...`);
           const file = new File([blob], filename, { type: 'model/gltf-binary' });
           this.uploadFileToCloudinary(file);
         },
@@ -722,7 +752,7 @@ export class ProductFormComponent implements OnInit {
           
           // Check for Mixed Content or CORS
           if (isHttps && url.startsWith('http://localhost')) {
-            console.error('[Bridge] Mixed Content block suspected. HTTPS sites cannot easily fetch from HTTP localhost.');
+            console.error('[Bridge] Mixed Content block suspected. Browsers on HTTPS cannot fetch from HTTP localhost.');
           }
           
           tryCandidate(index + 1);

@@ -248,7 +248,7 @@
 
                 <!-- 3D Viewer -->
                 <div class="viewer-container-glass">
-                  <app-three-d-viewer [modelPath]="model3dUrl" [hdModelPath]="localModel3dUrl" [autoRotate]="true" [previewOnly]="false" (modelLoaded)="onModelLoaded()"></app-three-d-viewer>
+                  <app-three-d-viewer [key]="viewerVersion" [modelPath]="model3dUrl" [hdModelPath]="localModel3dUrl" [autoRotate]="true" [previewOnly]="false" (modelLoaded)="onModelLoaded()"></app-three-d-viewer>
                   
                   <div class="viewer-controls-overlay">
                     <div class="model-info-pill" 
@@ -256,7 +256,15 @@
                          [matTooltip]="model3dUrlIsLocal ? ('LOCAL_STORAGE_WARNING' | translate) : ''">
                       <mat-icon>{{ model3dUrlIsLocal ? 'warning' : 'description' }}</mat-icon>
                       <span class="filename-text">{{ model3dUrl.split('/').pop() }}</span>
-                      <span *ngIf="model3dUrlIsLocal" class="local-label">(Local)</span>
+                    </div>
+
+                    <!-- API Switcher (Dev only) -->
+                    <div class="api-env-pill" *ngIf="isDevelopment" 
+                         [class.prod]="!isLocalApi"
+                         (click)="toggleApiEnvironment()"
+                         [matTooltip]="isLocalApi ? 'Switch to Production DB' : 'Switch to Local DB'">
+                      <mat-icon>{{ isLocalApi ? 'dns' : 'public' }}</mat-icon>
+                      <span>{{ isLocalApi ? 'LOCAL' : 'PROD' }}</span>
                     </div>
                     
                     <button *ngIf="model3dUrlIsLocal" 
@@ -275,17 +283,6 @@
                     </button>
                   </div>
 
-                  <!-- Critical Mixed Content Warning -->
-                  <div *ngIf="model3dUrlIsBlockedByMixedContent" class="mixed-content-banner">
-                    <mat-icon>security</mat-icon>
-                    <div class="banner-text">
-                      <strong>{{ 'SECURITY_BLOCK' | translate }}</strong>
-                      <p>{{ 'MIXED_CONTENT_EXPLANATION' | translate }}</p>
-                    </div>
-                    <button mat-flat-button color="warn" size="small" (click)="archiveLocalModel()">
-                      {{ 'FIX_NOW_ARCHIVE' | translate }}
-                    </button>
-                  </div>
                 </div>
               </div>
 

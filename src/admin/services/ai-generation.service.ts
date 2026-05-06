@@ -31,7 +31,14 @@ export interface TripoStatusResponse {
   providedIn: 'root'
 })
 export class AiGenerationService {
-  private apiUrl = environment.apiUrl + '/ai-generation';
+  // AI generation ALWAYS uses local backend — it needs a local Python server on port 8000.
+  // It can never work via the production Render backend.
+  private get apiUrl(): string {
+    const isLocalhost = typeof window !== 'undefined' &&
+      (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+    const base = isLocalhost ? 'http://localhost:3002/api' : environment.apiUrl;
+    return base + '/ai-generation';
+  }
 
   constructor(private http: HttpClient) {}
 

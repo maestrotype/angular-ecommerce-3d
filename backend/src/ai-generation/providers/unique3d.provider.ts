@@ -21,7 +21,7 @@ export class Unique3dProvider implements AiGenerationProvider {
     // Unique3D is a local HQ provider, we use the custom URL setting
     const setting = await firstValueFrom(this.settingsService.getSettingByKey('ai.customUrl')).catch(() => null);
     if (!setting?.value?.trim()) {
-      return 'http://localhost:8000/generate/unique3d'; // Default fallback
+      return 'http://127.0.0.1:8000/generate/unique3d'; // Default fallback
     }
     // Append the specific unique3d path if it's just the base URL
     const baseUrl = setting.value.trim().replace(/\/generate$/, '');
@@ -48,7 +48,7 @@ export class Unique3dProvider implements AiGenerationProvider {
 
   async getTaskStatus(taskId: string): Promise<AiTaskResult> {
     const setting = await firstValueFrom(this.settingsService.getSettingByKey('ai.customUrl')).catch(() => null);
-    const baseUrl = (setting?.value?.trim() || 'http://localhost:8000').replace(/\/generate$/, '');
+    const baseUrl = (setting?.value?.trim() || 'http://127.0.0.1:8000').replace(/\/generate$/, '');
     const statusUrl = `${baseUrl}/generate/${taskId}`;
 
     try {

@@ -1,8 +1,9 @@
 export const environment = {
   production: false,
   get apiUrl() {
-    const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-    return isLocal ? 'http://localhost:3002/api' : 'https://angular-ecommerce-backend.onrender.com/api';
+    const useLocal = typeof localStorage !== 'undefined' && localStorage.getItem('use_local_api') === 'true';
+    if (useLocal) return 'http://localhost:3002/api';
+    return 'https://angular-ecommerce-backend.onrender.com/api';
   },
   fallbackApiUrl: 'https://angular-ecommerce-backend.onrender.com/api',
   stripePublishableKey: 'pk_test_mock_key_for_testing_only',
