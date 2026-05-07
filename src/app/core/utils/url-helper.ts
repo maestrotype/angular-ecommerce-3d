@@ -34,16 +34,16 @@ export function isLegacyLocalUrl(url: string | undefined): boolean {
 export function fixBackendUrl(url: string | undefined): string {
   if (!url) return '';
 
+  const apiBase = environment.apiUrl;
+  const backendBaseUrl = apiBase.endsWith('/api') ? apiBase.substring(0, apiBase.length - 4) : apiBase;
+
   // Cloudinary or any other external CDN — return as-is
   if (isCloudinaryUrl(url)) return url;
 
-  // Any other fully-qualified http URL that isn't localhost — return as-is
-  if (url.startsWith('http') && !url.includes('localhost:3002')) {
+  // Any other fully-qualified http URL that isn't localhost AND isn't our own backend — return as-is
+  if (url.startsWith('http') && !url.includes('localhost:3002') && !url.includes(backendBaseUrl)) {
     return url;
   }
-
-  const apiBase = environment.apiUrl;
-  const backendBaseUrl = apiBase.endsWith('/api') ? apiBase.substring(0, apiBase.length - 4) : apiBase;
 
   let resultUrl = url;
   if (url.includes('localhost:3002')) {
