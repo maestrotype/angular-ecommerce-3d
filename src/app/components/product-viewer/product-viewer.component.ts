@@ -15,6 +15,7 @@ export class ProductViewerComponent implements OnInit, OnDestroy {
   images: string[] = [];
   currentIndex = 0;
   model3dUrl = '';
+  localModel3dUrl: string | null = null;
   productName = '';
   mode: 'image' | '3d' = 'image';
 
@@ -53,6 +54,10 @@ export class ProductViewerComponent implements OnInit, OnDestroy {
       }
       if (modelParam) {
         this.model3dUrl = decodeURIComponent(modelParam);
+      }
+      const localModelParam = state['localModel'];
+      if (localModelParam) {
+        this.localModel3dUrl = decodeURIComponent(localModelParam);
       }
       if (nameParam) {
         this.productName = decodeURIComponent(nameParam);

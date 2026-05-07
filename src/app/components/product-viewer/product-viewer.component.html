@@ -88,7 +88,7 @@
     <app-three-d-viewer
       *ngIf="model3dUrl"
       [modelPath]="model3dUrl"
-      [hdModelPath]="product['localModel3dUrl']"
+      [hdModelPath]="localModel3dUrl"
       [scale]="[9, 9, 9]"
       [position]="[0, 0, 0]"
       [previewOnly]="false"
@@ -116,7 +116,7 @@
         <div class="thumb-3d-container">
           <app-three-d-viewer
             [modelPath]="model3dUrl"
-            [hdModelPath]="product['localModel3dUrl']"
+            [hdModelPath]="localModel3dUrl"
             [scale]="[9, 9, 9]"
             [position]="[0, 0, 0]"
             [previewOnly]="true"
