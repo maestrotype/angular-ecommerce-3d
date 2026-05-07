@@ -14,11 +14,11 @@
       <!-- STATE 1: SECTION LIST (TABLE) -->
       <ng-container *ngIf="!isEditorOpen">
         <div class="list-table-header">
-          <div class="col-order">ORDER</div>
-          <div class="col-type">TYPE</div>
-          <div class="col-title">TITLE</div>
-          <div class="col-status">STATUS</div>
-          <div class="col-actions">ACTIONS</div>
+          <div class="col-order">{{ 'TABLE_ORDER' | translate }}</div>
+          <div class="col-type">{{ 'TABLE_TYPE' | translate }}</div>
+          <div class="col-title">{{ 'TABLE_TITLE' | translate }}</div>
+          <div class="col-status">{{ 'TABLE_STATUS' | translate }}</div>
+          <div class="col-actions">{{ 'TABLE_ACTIONS' | translate }}</div>
         </div>
 
         <div class="responsive-list" cdkDropList (cdkDropListDropped)="drop($event)">
@@ -33,7 +33,7 @@
             </div>
 
             <div class="col-type">
-              <span class="type-link">{{ section.type }}</span>
+              <span class="type-link">{{ 'SECTION_TYPE.' + section.type | translate }}</span>
             </div>
 
             <div class="col-title">
@@ -59,7 +59,7 @@
               <span class="order-num">--</span>
             </div>
             <div class="col-type">
-              <span class="type-link">FOOTER</span>
+              <span class="type-link">{{ 'SECTION_TYPE.FOOTER' | translate }}</span>
             </div>
             <div class="col-title">
               <span class="title-text muted">{{ 'FOOTER_NOT_CREATED' | translate }}</span>
@@ -117,7 +117,7 @@
     <div class="preview-container-side">
       <div class="architect-card">
         <div class="architect-header">
-          <h3><mat-icon>visibility</mat-icon> SITE ARCHITECT</h3>
+          <h3><mat-icon>visibility</mat-icon> {{ 'SITE_ARCHITECT' | translate }}</h3>
           <div class="device-switcher">
             <button mat-icon-button [class.active]="previewMode === 'desktop'" (click)="setPreviewMode('desktop')" matTooltip="Desktop"><mat-icon>desktop_windows</mat-icon></button>
             <button mat-icon-button [class.active]="previewMode === 'tablet'" (click)="setPreviewMode('tablet')" matTooltip="Tablet"><mat-icon>tablet_mac</mat-icon></button>
@@ -148,7 +148,7 @@
             
             <div class="tool-groups">
               <div class="tool-group">
-                <span class="label">SPACING</span>
+                <span class="label">{{ 'SPACING' | translate }}</span>
                 <div class="btn-row">
                   <button mat-icon-button (click)="updateVisualOverride('margin-top', -5)"><mat-icon>expand_less</mat-icon></button>
                   <button mat-icon-button (click)="updateVisualOverride('margin-top', 5)"><mat-icon>expand_more</mat-icon></button>
@@ -156,7 +156,7 @@
               </div>
     
               <div class="tool-group">
-                <span class="label">TEXT</span>
+                <span class="label">{{ 'TEXT' | translate }}</span>
                 <div class="btn-row">
                   <button mat-icon-button (click)="updateVisualOverride('font-size', -2)"><mat-icon>text_fields</mat-icon> <small>-</small></button>
                   <button mat-icon-button (click)="updateVisualOverride('font-size', 2)"><mat-icon>text_fields</mat-icon> <small>+</small></button>
@@ -164,7 +164,7 @@
               </div>
     
               <div class="tool-group">
-                <span class="label">COLORS</span>
+                <span class="label">{{ 'COLORS' | translate }}</span>
                 <div class="color-palette">
                   <div class="color-swatch white" (click)="updateColorOverride('#ffffff')"></div>
                   <div class="color-swatch primary" (click)="updateColorOverride('var(--admin-primary)')"></div>
