@@ -56,13 +56,20 @@ export function fixBackendUrl(url: string | undefined): string {
 
   // Ensure /uploads/ is present for asset files rooted at our backend
   if (resultUrl.includes(backendBaseUrl) &&
-      !resultUrl.includes('/uploads/') &&
       !resultUrl.includes('/api/') &&
       !resultUrl.includes('assets/')) {
+    
     const isAssetFile = /\.(glb|gltf|jpg|jpeg|png|webp|svg)$/i.test(resultUrl);
-    if (isAssetFile) {
+    if (isAssetFile && !resultUrl.includes('/uploads/')) {
       const pathPart = resultUrl.replace(backendBaseUrl, '').replace(/^\//, '');
-      return `${backendBaseUrl}/uploads/${pathPart}`;
+      
+      // Smart folder detection
+      let folder = 'uploads';
+      if (pathPart.includes('ai-gen') || pathPart.endsWith('.glb')) {
+        folder = 'uploads/products-3d';
+      }
+      
+      return `${backendBaseUrl}/${folder}/${pathPart}`;
     }
   }
 

@@ -261,6 +261,17 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   @Input() position: [number, number, number] = [0, 0, 0];
   @Input() previewOnly = false;
   @Input() autoRotate = true;
+  @Input() set upsideDown(value: boolean) {
+    this._upsideDown = value;
+    if (this.model) {
+      this.applyRotation();
+    }
+  }
+  get upsideDown(): boolean {
+    return this._upsideDown;
+  }
+  private _upsideDown = false;
+
   @Output() modelLoaded = new EventEmitter<void>();
 
   isLoading = true;
@@ -430,6 +441,8 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
       pathToLoad.includes('ai-gen') || 
       pathToLoad.includes('product3d-ai')
     );
+    // AI models always export upside-down — auto-correct orientation
+    this._upsideDown = this.isAiGeneration;
 
     if (this.currentLoadedPath === pathToLoad) return;
     
@@ -527,11 +540,8 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     // 1. Apply scale FIRST
     this.model.scale.set(this.scale[0], this.scale[1], this.scale[2]);
     
-    // Fix for AI models which are often exported upside down (180 deg) or Z-up
-    if (this.isAiGeneration) {
-      this.model.rotation.set(Math.PI, 0, 0); 
-    }
-
+    // Apply initial rotation based on flag
+    this.applyRotation();
     this.model.updateMatrixWorld(true);
 
     const box = new THREE.Box3().setFromObject(this.model);
@@ -583,6 +593,15 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     this.cdr.detectChanges();
     this.modelLoaded.emit();
     this.animate();
+  }
+
+  private applyRotation() {
+    if (!this.model) return;
+    if (this._upsideDown) {
+      this.model.rotation.set(Math.PI, 0, 0); 
+    } else {
+      this.model.rotation.set(0, 0, 0);
+    }
   }
 
   private animate = () => {
