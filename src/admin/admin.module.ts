@@ -13,7 +13,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorModule, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -83,6 +83,7 @@ import { SectionService } from './services/section.service';
 import { ErrorHandlerService } from './services/error-handler.service';
 import { ConfirmationService } from './services/confirmation.service';
 import { PaymentService } from './services/payment.service';
+import { PaginatorIntlService } from './services/paginator-intl.service';
 
 // Interceptors
 
@@ -183,7 +184,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     SectionService,
     ErrorHandlerService,
     ConfirmationService,
-    PaymentService
+    PaymentService,
+    { provide: MatPaginatorIntl, useClass: PaginatorIntlService }
   ]
 })
 export class AdminModule { }

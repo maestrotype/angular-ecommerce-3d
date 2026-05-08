@@ -18,11 +18,11 @@ export class DashboardComponent implements OnInit {
 
   // Chart Properties
   public salesChartData: ChartConfiguration<'line'>['data'] = {
-    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    labels: [],
     datasets: [
       {
         data: [1200, 1900, 1700, 2400, 2100, 2800, 3200],
-        label: 'Sales Activity',
+        label: '',
         fill: true,
         tension: 0.4,
         borderColor: '#3b82f6',
@@ -83,6 +83,20 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadDashboardData();
+    this.initChartTranslations();
+    
+    this.translate.onLangChange.subscribe(() => {
+      this.initChartTranslations();
+    });
+  }
+
+  private initChartTranslations(): void {
+    const days = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+    this.salesChartData.labels = days.map(day => this.translate.instant('DAYS_SHORT.' + day));
+    this.salesChartData.datasets[0].label = this.translate.instant('SALES_ACTIVITY');
+    
+    // Trigger chart update if necessary
+    this.salesChartData = { ...this.salesChartData };
   }
 
   loadDashboardData(): void {

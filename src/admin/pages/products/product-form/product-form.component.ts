@@ -12,8 +12,8 @@ import { CategoryService } from "../../../services/category.service";
 import { Category } from "../../../models/category.model";
 import { ProcessingOptions, ProcessedImageResult } from "../../../components/ui/image-processor/image-processor.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { fixBackendUrl, isLegacyLocalUrl } from '../../../../app/core/utils/url-helper';
 import { environment } from '../../../../environments/environment';
-import { isLegacyLocalUrl } from '../../../../app/core/utils/url-helper';
 import { SettingsService } from "../../../services/settings.service";
 import { OnboardingDialogComponent } from "../../../components/shared/onboarding-dialog/onboarding-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
@@ -343,20 +343,8 @@ export class ProductFormComponent implements OnInit {
 
         if (apiStatus === 'success' && data.result?.model) {
           this.aiStatusMessage = this.translate.instant('AI_GENERATION_SUCCESS');
-          
           const modelUrl = data.result.model;
-          const isLocalModel = modelUrl.includes('localhost') || modelUrl.includes('127.0.0.1');
-
-          if (isLocalModel) {
-            // Local models are served directly from the worker
-            this.model3dUrl = modelUrl;
-            // PublicId for local files can be stored to allow archiving
-            this.model3dPublicId = (data as any).localPath ? 'LOCAL:' + (data as any).localPath : null;
-            this.resetAiState();
-            this.snackBar.open('Model generated and loaded locally!', this.translate.instant('CLOSE_BTN'), { duration: 3000 });
-          } else {
-            this.finalizeAiModel(modelUrl, taskId);
-          }
+          this.finalizeAiModel(modelUrl, taskId);
         } else if (apiStatus === 'failed') {
           this.resetAiState();
           const errorMsg = translateErrorMessage((status as any).data?.error || status.message || 'Unknown AI error', this.translate);
@@ -1048,5 +1036,23 @@ export class ProductFormComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(["/admin/products"]);
+  }
+
+  downloadModel(): void {
+    if (!this.model3dUrl) return;
+    
+    // Use our helper to get the full absolute URL
+    let url = fixBackendUrl(this.model3dUrl);
+    
+    // Create a temporary link to trigger download
+    const link = document.createElement('a');
+    link.href = url;
+    link.target = '_blank';
+    link.download = this.model3dUrl.split('/').pop() || 'model.glb';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    this.snackBar.open(this.translate.instant('MODEL_DOWNLOAD_STARTED'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
   }
 }

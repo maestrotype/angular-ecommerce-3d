@@ -120,8 +120,8 @@ export class UploadsController {
       const uploadPromise = new Promise<any>((resolve, reject) => {
         cloudinary.uploader.upload_large(file.path, {
           folder: "section-3d-models",
-          resource_type: "raw",
-          chunk_size: 6000000,
+          resource_type: "auto", // Changed from 'raw' to 'auto' to support > 10MB on free accounts
+          chunk_size: 10000000, // 10MB chunks
           timeout: 600000
         }, (error, result) => {
           if (error) reject(error);
@@ -205,9 +205,9 @@ export class UploadsController {
         
         cloudinary.uploader.upload_large(file.path, {
           folder: "product-3d-models",
-          resource_type: "raw",
+          resource_type: "auto", // Changed from 'raw' to 'auto' to support > 10MB on free accounts
           public_id: publicId,
-          chunk_size: 6000000,
+          chunk_size: 10000000, // 10MB chunks
           timeout: 600000
         }, (error, result) => {
           if (error) reject(error);
@@ -374,8 +374,13 @@ export class UploadsController {
       return throwError(() => new BadRequestException("No path provided"));
     }
 
-    // Path should be like 'LOCAL:/path/to/file.glb' or a raw path
-    const cleanPath = body.path.replace('LOCAL:', '');
+    // Path should be like 'LOCAL:/uploads/products-3d/file.glb' or an absolute path
+    let cleanPath = body.path.replace('LOCAL:', '');
+    
+    // If it's a relative URL path (starts with /uploads), resolve it to absolute filesystem path
+    if (cleanPath.startsWith('/uploads/')) {
+      cleanPath = join(__dirname, '..', '..', cleanPath.substring(1));
+    }
     
     if (!existsSync(cleanPath)) {
       console.error(`[UploadsController] Archive failed: File not found at ${cleanPath}`);
@@ -390,9 +395,9 @@ export class UploadsController {
 
       cloudinary.uploader.upload_large(cleanPath, {
         folder,
-        resource_type: "raw",
+        resource_type: "auto", // Changed from 'raw' to 'auto' to support > 10MB on free accounts
         public_id: publicId,
-        chunk_size: 6000000,
+        chunk_size: 10000000, // 10MB chunks
         timeout: 600000
       }, (error, result) => {
         if (error) reject(error);

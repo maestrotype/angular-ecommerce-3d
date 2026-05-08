@@ -25,20 +25,20 @@
           <mat-form-field appearance="outline" class="field status">
             <mat-label>{{ 'STATUS' | translate }}</mat-label>
             <mat-select formControlName="status">
-              <mat-option *ngFor="let s of statusOptions" [value]="s.value">{{ s.label }}</mat-option>
+              <mat-option *ngFor="let s of statusOptions" [value]="s.value">{{ s.label | translate }}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="field method">
             <mat-label>{{ 'METHOD' | translate }}</mat-label>
             <mat-select formControlName="paymentMethod">
-              <mat-option *ngFor="let m of methodOptions" [value]="m.value">{{ m.label }}</mat-option>
+              <mat-option *ngFor="let m of methodOptions" [value]="m.value">{{ m.label | translate }}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="field email">
             <mat-label>{{ 'CUSTOMER_EMAIL' | translate }}</mat-label>
-            <input matInput placeholder="user@example.com" formControlName="customerEmail" />
+            <input matInput [placeholder]="'ADMIN_EMAIL_PLACEHOLDER' | translate" formControlName="customerEmail" />
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="field min">
@@ -53,14 +53,14 @@
 
           <mat-form-field appearance="outline" class="field from">
             <mat-label>{{ 'FROM' | translate }}</mat-label>
-            <input matInput [matDatepicker]="startPicker" formControlName="startDate" placeholder="дд.мм.гггг" />
+            <input matInput [matDatepicker]="startPicker" formControlName="startDate" [placeholder]="'DATE_FORMAT_PLACEHOLDER' | translate" />
             <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
             <mat-datepicker #startPicker></mat-datepicker>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="field to">
             <mat-label>{{ 'TO' | translate }}</mat-label>
-            <input matInput [matDatepicker]="endPicker" formControlName="endDate" placeholder="дд.мм.гггг" />
+            <input matInput [matDatepicker]="endPicker" formControlName="endDate" [placeholder]="'DATE_FORMAT_PLACEHOLDER' | translate" />
             <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
             <mat-datepicker #endPicker></mat-datepicker>
           </mat-form-field>
@@ -96,7 +96,7 @@
           <td mat-cell *matCellDef="let payment">
             <div class="payment-method">
               <mat-icon>{{ getPaymentMethodIcon(payment?.paymentMethod) }}</mat-icon>
-              <span>{{ payment?.paymentMethod ? (payment.paymentMethod | titlecase) : ('N_A' | translate) }}</span>
+              <span>{{ payment?.paymentMethod ? ('METHOD_' + payment.paymentMethod.toUpperCase() | translate) : ('N_A' | translate) }}</span>
             </div>
           </td>
         </ng-container>
@@ -105,7 +105,7 @@
           <th mat-header-cell *matHeaderCellDef>{{ 'STATUS' | translate }}</th>
           <td mat-cell *matCellDef="let payment">
             <span class="status-badge" [class]="getStatusColor(payment?.status)">
-              {{ payment?.status ? (payment.status | titlecase) : ('N_A' | translate) }}
+              {{ payment?.status ? ('STATUS_' + payment.status.toUpperCase() | translate) : ('N_A' | translate) }}
             </span>
           </td>
         </ng-container>

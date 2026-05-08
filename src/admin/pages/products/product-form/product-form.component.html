@@ -248,7 +248,12 @@
 
                 <!-- 3D Viewer -->
                 <div class="viewer-container-glass">
-                  <app-three-d-viewer [key]="viewerVersion" [modelPath]="model3dUrl" [hdModelPath]="localModel3dUrl" [autoRotate]="true" [previewOnly]="false" (modelLoaded)="onModelLoaded()"></app-three-d-viewer>
+                  <app-three-d-viewer [key]="viewerVersion" 
+                                     [modelPath]="model3dUrl" 
+                                     [hdModelPath]="localModel3dUrl" 
+                                     [autoRotate]="true" 
+                                     [previewOnly]="false" 
+                                     (modelLoaded)="onModelLoaded()"></app-three-d-viewer>
                   
                   <div class="viewer-controls-overlay">
                     <div class="model-info-pill" 
@@ -267,20 +272,28 @@
                       <span>{{ isLocalApi ? 'LOCAL' : 'PROD' }}</span>
                     </div>
                     
-                    <button *ngIf="model3dUrlIsLocal" 
-                            mat-raised-button color="accent" type="button" 
-                            class="archive-btn-overlay"
-                            (click)="archiveLocalModel()" 
-                            [disabled]="isUploading3d"
-                            matTooltip="Move this local file to Cloudinary for permanent storage">
-                      <mat-icon *ngIf="!isUploading3d">cloud_upload</mat-icon>
-                      <mat-spinner *ngIf="isUploading3d" diameter="18" class="mini-spinner-inline"></mat-spinner>
-                      {{ 'ARCHIVE_TO_CLOUDINARY' | translate }}
-                    </button>
+                    <div class="overlay-actions">
+                      <button *ngIf="model3dUrlIsLocal" 
+                              mat-raised-button color="accent" type="button" 
+                              class="archive-btn-overlay"
+                              (click)="archiveLocalModel()" 
+                              [disabled]="isUploading3d"
+                              matTooltip="Move this local file to Cloudinary for permanent storage">
+                        <mat-icon *ngIf="!isUploading3d">cloud_upload</mat-icon>
+                        <mat-spinner *ngIf="isUploading3d" diameter="18" class="mini-spinner-inline"></mat-spinner>
+                        {{ 'ARCHIVE_TO_CLOUDINARY' | translate }}
+                      </button>
 
-                    <button mat-icon-button color="warn" type="button" (click)="remove3dModel()" [matTooltip]="'PRODUCT_3D.REMOVE_MODEL' | translate" class="remove-btn-overlay">
-                      <mat-icon>delete</mat-icon>
-                    </button>
+                      <button mat-icon-button class="download-btn-overlay"
+                              (click)="downloadModel()" 
+                              matTooltip="Download GLB to my PC">
+                        <mat-icon>download</mat-icon>
+                      </button>
+
+                      <button mat-icon-button color="warn" type="button" (click)="remove3dModel()" [matTooltip]="'PRODUCT_3D.REMOVE_MODEL' | translate" class="remove-btn-overlay">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
                   </div>
 
                 </div>

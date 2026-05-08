@@ -32,17 +32,17 @@ export class PaymentsComponent implements OnInit, OnDestroy {
   // Filters form
   filtersForm: FormGroup;
   statusOptions = [
-    { value: 'all', label: 'All' },
-    { value: 'pending', label: 'Pending' },
-    { value: 'processing', label: 'Processing' },
-    { value: 'completed', label: 'Completed' },
-    { value: 'failed', label: 'Failed' }
+    { value: 'all', label: 'STATUS_ALL' },
+    { value: 'pending', label: 'STATUS_PENDING' },
+    { value: 'processing', label: 'STATUS_PROCESSING' },
+    { value: 'completed', label: 'STATUS_COMPLETED' },
+    { value: 'failed', label: 'STATUS_FAILED' }
   ];
   methodOptions = [
-    { value: 'all', label: 'All' },
-    { value: 'liqpay', label: 'LiqPay' },
-    { value: 'stripe', label: 'Stripe' },
-    { value: 'paypal', label: 'PayPal' }
+    { value: 'all', label: 'METHOD_ALL' },
+    { value: 'liqpay', label: 'METHOD_LIQPAY' },
+    { value: 'stripe', label: 'METHOD_STRIPE' },
+    { value: 'paypal', label: 'METHOD_PAYPAL' }
   ];
   
   displayedColumns: string[] = ['id', 'orderId', 'amount', 'paymentMethod', 'status', 'customerEmail', 'createdAt', 'actions'];
