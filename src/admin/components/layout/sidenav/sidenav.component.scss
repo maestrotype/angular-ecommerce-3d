@@ -28,6 +28,54 @@
     box-shadow: -10px 0 50px rgba(0, 0, 0, 0.2);
   }
 
+  /* Mobile Header - CORRECTLY NESTED */
+  .sidenav-header-mobile {
+    padding: 24px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.03);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    margin-bottom: 15px;
+
+    .menu-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      font-weight: 800;
+      color: var(--admin-text-primary);
+      opacity: 0.9;
+    }
+
+    .close-btn {
+      background: rgba(0, 0, 0, 0.04);
+      border: none;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      color: var(--admin-text-primary);
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.08);
+        transform: rotate(90deg) scale(1.05);
+      }
+
+      mat-icon {
+        font-size: 22px;
+        width: 22px;
+        height: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+
   /* Desktop Header / Logo */
   .sidenav-header {
     padding: 30px 25px;
@@ -61,18 +109,19 @@
     padding: 0 15px;
 
     .user-info {
-      padding: 15px;
+      padding: 16px;
       margin-bottom: 25px;
       background: rgba(255, 255, 255, 0.05);
-      border-radius: 16px;
+      border-radius: 20px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
       .avatar {
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
         border-radius: 12px;
         background: var(--admin-primary);
         display: flex;
@@ -82,10 +131,14 @@
         box-shadow: 0 4px 12px rgba(var(--admin-primary-rgb, 59, 130, 246), 0.3);
 
         mat-icon {
-          font-size: 24px;
-          width: 24px;
-          height: 24px;
+          font-size: 26px;
+          width: 26px;
+          height: 26px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
+        img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; }
       }
 
       .user-info-text {
@@ -96,99 +149,69 @@
           font-size: 14px;
           font-weight: 700;
           color: var(--admin-text-primary);
+          line-height: 1.2;
+          margin-bottom: 2px;
         }
 
         .user-role {
-          font-size: 11px;
+          font-size: 10px;
           text-transform: uppercase;
-          letter-spacing: 0.5px;
+          letter-spacing: 0.8px;
           color: var(--admin-text-secondary);
-          opacity: 0.7;
+          opacity: 0.6;
+          font-weight: 600;
         }
       }
     }
-  .sidenav-header-mobile {
-    padding: 20px 25px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgba(var(--admin-primary-rgb, 0, 0, 0), 0.05);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    margin-bottom: 20px;
-
-    .menu-title {
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 2.5px;
-      font-weight: 800;
-      color: var(--admin-text-primary);
-    }
-
-    .close-btn {
-      background: rgba(0, 0, 0, 0.05);
-      border: none;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      color: var(--admin-text-primary);
-
-      &:hover {
-        background: rgba(0, 0, 0, 0.1);
-        transform: rotate(90deg);
-      }
-
-      mat-icon {
-        font-size: 20px;
-        width: 20px;
-        height: 20px;
-      }
-    }
-  }
 
     mat-nav-list {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 6px;
 
       a {
-        margin-bottom: 4px;
-        border-radius: 12px;
-        height: 48px;
+        border-radius: 14px;
+        height: 52px;
         display: flex;
         align-items: center;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         color: var(--admin-text-primary);
         position: relative;
         overflow: hidden;
         padding: 0 16px !important;
+        opacity: 0.8;
 
         mat-icon {
           color: var(--admin-text-secondary);
-          transition: color 0.3s ease;
-          margin-right: 12px;
+          transition: all 0.3s ease;
+          margin-right: 14px;
+          font-size: 22px;
+          width: 22px;
+          height: 22px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
         &:hover {
           background-color: var(--admin-bg-hover, rgba(255, 255, 255, 0.05));
-          transform: translateX(5px);
+          transform: translateX(6px);
+          opacity: 1;
+          mat-icon { color: var(--admin-primary); }
         }
 
         &.active {
-          background: rgba(var(--admin-primary-rgb, 59, 130, 246), 0.15);
+          background: rgba(var(--admin-primary-rgb, 59, 130, 246), 0.12);
           color: var(--admin-primary);
-          font-weight: 600;
+          font-weight: 700;
+          opacity: 1;
 
           &::before {
             content: '';
             position: absolute;
             left: 0;
-            top: 20%;
-            height: 60%;
+            top: 25%;
+            height: 50%;
             width: 4px;
             background: var(--admin-primary);
             border-radius: 0 4px 4px 0;
@@ -196,6 +219,7 @@
 
           mat-icon {
             color: var(--admin-primary);
+            transform: scale(1.1);
           }
         }
       }
@@ -316,7 +340,7 @@
 [data-theme="dark"] {
   .sidenav-wrapper {
     @media (max-width: 768px) {
-      background: #0f1115; // Matches Zinc dark palette
+      background: #0f1115;
       border-left: 1px solid rgba(255, 255, 255, 0.05);
 
       .sidenav-header-mobile {
@@ -340,7 +364,7 @@
 [data-theme="dark-glass"] {
   .sidenav-wrapper {
     @media (max-width: 768px) {
-      background: rgba(30, 28, 26, 0.95); // Darker warm gray for dark glass mobile
+      background: rgba(30, 28, 26, 0.95);
       border-left: 1px solid rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(30px) saturate(160%);
       -webkit-backdrop-filter: blur(30px) saturate(160%);
