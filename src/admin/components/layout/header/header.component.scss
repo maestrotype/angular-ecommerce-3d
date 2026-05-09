@@ -537,53 +537,11 @@
 }
 
 
-// Glass theme - notification menu enhancements
+// Glass theme adjustments
 [data-theme="glass"] {
-  .notification-menu.mat-mdc-menu-panel {
-    .notification-header {
-      background: rgba(255, 255, 255, 0.4);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
-      border-bottom-color: rgba(255, 255, 255, 0.3);
-      
-      .notification-title {
-        color: #1f2937;
-      }
-      
-      button.mark-all-read.mat-mdc-button {
-        background-color: var(--admin-button-muted);
-        
-        &:hover {
-          background-color: var(--admin-button-muted-hover);
-        }
-      }
-    }
-    
-    .notification-list {
-      background: rgba(248, 250, 252, 0.5);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-    }
-    
-    .notification-item {
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-color: rgba(255, 255, 255, 0.6);
-      
-      &::after {
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-      }
-      
-      &.unread {
-        background: rgba(59, 130, 246, 0.15);
-      }
-      
-      &:hover {
-        background: rgba(255, 255, 255, 0.85);
-        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
-      }
-    }
+  // Layout specific overrides only, colors and glass effects are handled globally via tokens
+  .admin-header {
+    border-bottom: var(--glass-border);
   }
 }
 
