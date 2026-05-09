@@ -118,8 +118,7 @@
             </div>
 
             <!-- Processing Options -->
-            <div class="processing-options">
-              <div class="options-grid">
+            <div class="switches-group">
                 <mat-slide-toggle [(ngModel)]="imageProcessingOptions.removeBackground"
                   [ngModelOptions]="{standalone: true}" color="primary">
                   {{ 'PRODUCT_3D.BKG_REMOVE' | translate }}
@@ -129,7 +128,6 @@
                   color="primary">
                   {{ 'PRODUCT_3D.BKG_OPTIMIZE' | translate }}
                 </mat-slide-toggle>
-              </div>
             </div>
           </div>
         </div>
@@ -158,58 +156,56 @@
               <input type="file" #file3dInput (change)="on3dFileSelected($event)" accept=".glb" style="display: none" />
               
                 <!-- State: No Model -->
-              <div *ngIf="!model3dUrl" class="upload-placeholder">
-                <div class="placeholder-icon" (click)="file3dInput.click()">
-                  <mat-icon>upload_file</mat-icon>
-                </div>
-                <h3>{{ 'PRODUCT_3D.DRAG_DROP' | translate }}</h3>
-                <p>{{ 'PRODUCT_3D.SUPPORT_HINT' | translate }}</p>
-                
-                <div class="upload-actions">
-                  <div class="action-buttons">
-                    <button mat-flat-button color="primary" type="button" class="action-btn browse-btn" (click)="file3dInput.click()">
-                      <mat-icon>upload_file</mat-icon>
-                      <span>{{ 'PRODUCT_3D.BROWSE_FILES' | translate }}</span>
-                    </button>
-                    
-                    <button mat-raised-button color="accent" type="button" class="action-btn ai-gen-btn" 
-                            (click)="generateAi3dModel()" [disabled]="isAiGenerating || isUploading3d">
-                      <mat-icon *ngIf="!isAiGenerating">auto_awesome</mat-icon>
-                      <mat-spinner *ngIf="isAiGenerating" diameter="20" class="mini-spinner"></mat-spinner>
-                      <span>{{ isAiGenerating ? ('AI_GENERATING' | translate) : ('PRODUCT_3D.GENERATE_AI' | translate) }}</span>
-                    </button>
+                <div *ngIf="!model3dUrl" class="upload-placeholder">
+                  <div class="placeholder-icon" (click)="file3dInput.click()">
+                    <mat-icon>cloud_upload</mat-icon>
                   </div>
+                  <h3>{{ 'PRODUCT_3D.DRAG_DROP' | translate }}</h3>
+                  <p>{{ 'PRODUCT_3D.SUPPORT_HINT' | translate }}</p>
+                  
+                  <div class="upload-actions">
+                    <div class="action-buttons">
+                      <button type="button" class="action-btn browse-btn" (click)="file3dInput.click()">
+                        <mat-icon>folder_open</mat-icon>
+                        <span>{{ 'PRODUCT_3D.BROWSE_FILES' | translate }}</span>
+                      </button>
+                      
+                      <button type="button" class="action-btn ai-gen-btn" 
+                              (click)="generateAi3dModel()" [disabled]="isAiGenerating || isUploading3d">
+                        <mat-icon *ngIf="!isAiGenerating">auto_awesome</mat-icon>
+                        <mat-spinner *ngIf="isAiGenerating" diameter="20" class="mini-spinner"></mat-spinner>
+                        <span>{{ isAiGenerating ? ('AI_GENERATING' | translate) : ('PRODUCT_3D.GENERATE_AI' | translate) }}</span>
+                      </button>
+                    </div>
 
-                  <div class="engine-info-row" *ngIf="!isAiGenerating">
-                    <div class="engine-pill">
-                      <mat-icon>memory</mat-icon>
-                      <span>{{ 'ACTIVE_ENGINE' | translate }}:</span>
-                      <strong class="engine-name">{{ aiStatusMessage || ('CAR_LOADING' | translate) }}</strong>
+                    <div class="engine-info-group" *ngIf="!isAiGenerating">
+                      <div class="info-pill">
+                        <mat-icon>memory</mat-icon>
+                        <span>{{ 'ACTIVE_ENGINE' | translate }}: <strong>{{ aiStatusMessage || ('CAR_LOADING' | translate) }}</strong></span>
+                      </div>
+                      <div class="info-pill clickable" (click)="showRecentAiTasks()">
+                        <mat-icon>history</mat-icon>
+                        <span>{{ 'RECOVER_AI_MODEL' | translate }}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <!-- AI Progress Indicator -->
-                <div *ngIf="isAiGenerating" class="ai-progress-container">
-                  <div class="ai-status-title">{{ 'AI_GENERATE_3D_MODEL' | translate }}</div>
-                  <div class="ai-progress-wrapper">
-                    <div class="ai-progress-bar">
-                      <div class="ai-progress-fill" [style.width.%]="aiProgress"></div>
+                  <!-- AI Progress Indicator -->
+                  <div *ngIf="isAiGenerating" class="ai-progress-container">
+                    <div class="ai-status-title">{{ 'AI_GENERATE_3D_MODEL' | translate }}</div>
+                    <div class="ai-progress-wrapper">
+                      <div class="ai-progress-bar">
+                        <div class="ai-progress-fill" [style.width.%]="aiProgress"></div>
+                      </div>
+                      <span class="ai-percent">{{ aiProgress }}%</span>
                     </div>
-                    <span class="ai-percent">{{ aiProgress }}%</span>
+                    <div class="ai-status-info">
+                      <mat-icon class="spinning" *ngIf="aiProgress < 100">refresh</mat-icon>
+                      <mat-icon *ngIf="aiProgress === 100">check_circle</mat-icon>
+                      <span>{{ aiStatusMessage }}</span>
+                    </div>
+                    <div class="ai-tip">{{ 'AI_TIP' | translate }}</div>
                   </div>
-                  <div class="ai-status-info">
-                    <mat-icon class="spinning" *ngIf="aiProgress < 100">refresh</mat-icon>
-                    <mat-icon *ngIf="aiProgress === 100">check_circle</mat-icon>
-                    <span>{{ aiStatusMessage }}</span>
-                  </div>
-                  <div class="ai-tip">{{ 'AI_TIP' | translate }}</div>
-                </div>
-
-                <!-- Recovery / History Link -->
-                <div *ngIf="!isAiGenerating && !model3dUrl" class="ai-recover-btn" (click)="showRecentAiTasks()">
-                  <mat-icon>history</mat-icon>
-                  <span>{{ 'RECOVER_AI_MODEL' | translate }}</span>
                 </div>
 
                 <!-- Recovery List Overlay -->
@@ -238,7 +234,6 @@
                     </div>
                   </div>
                 </div>
-              </div>
 
               <input type="file" id="aiSourceImageInput" style="display: none" (change)="onAiSourceImageSelected($event)" accept="image/*">
 
@@ -256,22 +251,25 @@
                                      (modelLoaded)="onModelLoaded()"></app-three-d-viewer>
                   
                   <div class="viewer-controls-overlay">
-                    <div class="model-info-pill" 
-                         [class.local-pill]="model3dUrlIsLocal"
-                         [matTooltip]="model3dUrlIsLocal ? ('LOCAL_STORAGE_WARNING' | translate) : ''">
-                      <mat-icon>{{ model3dUrlIsLocal ? 'warning' : 'description' }}</mat-icon>
-                      <span class="filename-text">{{ model3dUrl.split('/').pop() }}</span>
+                    <!-- LEFT: Info pills -->
+                    <div class="overlay-left">
+                      <div class="model-info-pill" 
+                           [class.local-pill]="model3dUrlIsLocal"
+                           [matTooltip]="model3dUrlIsLocal ? ('LOCAL_STORAGE_WARNING' | translate) : ''">
+                        <mat-icon>{{ model3dUrlIsLocal ? 'warning' : 'description' }}</mat-icon>
+                        <span class="filename-text">{{ model3dUrl.split('/').pop() }}</span>
+                      </div>
+                      <!-- API Switcher (Dev only) -->
+                      <div class="api-env-pill" *ngIf="isDevelopment" 
+                           [class.prod]="!isLocalApi"
+                           (click)="toggleApiEnvironment()"
+                           [matTooltip]="isLocalApi ? 'Switch to Production DB' : 'Switch to Local DB'">
+                        <mat-icon>{{ isLocalApi ? 'dns' : 'public' }}</mat-icon>
+                        <span>{{ isLocalApi ? 'LOCAL' : 'PROD' }}</span>
+                      </div>
                     </div>
 
-                    <!-- API Switcher (Dev only) -->
-                    <div class="api-env-pill" *ngIf="isDevelopment" 
-                         [class.prod]="!isLocalApi"
-                         (click)="toggleApiEnvironment()"
-                         [matTooltip]="isLocalApi ? 'Switch to Production DB' : 'Switch to Local DB'">
-                      <mat-icon>{{ isLocalApi ? 'dns' : 'public' }}</mat-icon>
-                      <span>{{ isLocalApi ? 'LOCAL' : 'PROD' }}</span>
-                    </div>
-                    
+                    <!-- RIGHT: Action buttons -->
                     <div class="overlay-actions">
                       <button *ngIf="model3dUrlIsLocal" 
                               mat-raised-button color="accent" type="button" 
@@ -280,8 +278,8 @@
                               [disabled]="isUploading3d"
                               matTooltip="Move this local file to Cloudinary for permanent storage">
                         <mat-icon *ngIf="!isUploading3d">cloud_upload</mat-icon>
-                        <mat-spinner *ngIf="isUploading3d" diameter="18" class="mini-spinner-inline"></mat-spinner>
-                        {{ 'ARCHIVE_TO_CLOUDINARY' | translate }}
+                        <mat-spinner *ngIf="isUploading3d" diameter="16" class="mini-spinner-inline"></mat-spinner>
+                        <span class="archive-btn-text">{{ 'ARCHIVE_TO_CLOUDINARY' | translate }}</span>
                       </button>
 
                       <button mat-icon-button class="download-btn-overlay"
@@ -290,12 +288,13 @@
                         <mat-icon>download</mat-icon>
                       </button>
 
-                      <button mat-icon-button color="warn" type="button" (click)="remove3dModel()" [matTooltip]="'PRODUCT_3D.REMOVE_MODEL' | translate" class="remove-btn-overlay">
+                      <button mat-icon-button color="warn" type="button" (click)="remove3dModel()" 
+                              [matTooltip]="'PRODUCT_3D.REMOVE_MODEL' | translate" 
+                              class="remove-btn-overlay">
                         <mat-icon>delete</mat-icon>
                       </button>
                     </div>
                   </div>
-
                 </div>
               </div>
 
@@ -309,21 +308,25 @@
         </mat-card>
 
         <div class="localization-group">
-          <label class="group-label">{{ 'DESCRIPTION' | translate }}</label>
+          <div class="group-header">
+            <mat-icon>description</mat-icon>
+            <h3>{{ 'DESCRIPTION' | translate }}</h3>
+          </div>
+          
           <div class="lang-fields">
-            <mat-form-field appearance="outline" class="form-field">
+            <mat-form-field appearance="outline" class="full-width">
               <mat-label>{{ 'LANG_EN' | translate }}</mat-label>
               <textarea matInput formControlName="description_en" rows="4"
                 [placeholder]="'DESCRIPTION_PLACEHOLDER' | translate"></textarea>
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="form-field">
+            <mat-form-field appearance="outline" class="full-width">
               <mat-label>{{ 'LANG_RU' | translate }}</mat-label>
               <textarea matInput formControlName="description_ru" rows="4"
                 [placeholder]="'DESCRIPTION_PLACEHOLDER' | translate"></textarea>
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="form-field">
+            <mat-form-field appearance="outline" class="full-width">
               <mat-label>{{ 'LANG_UA' | translate }}</mat-label>
               <textarea matInput formControlName="description_ua" rows="4"
                 [placeholder]="'DESCRIPTION_PLACEHOLDER' | translate"></textarea>
