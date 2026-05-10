@@ -1345,6 +1345,16 @@
   .mat-mdc-menu-item:hover {
     background-color: #374151;
   }
+
+  /* Force Deep Dark Sidebar for Dark Theme */
+  .mat-sidenav-container .mat-sidenav,
+  .mat-drawer-container .mat-drawer,
+  mat-sidenav.mat-sidenav,
+  mat-drawer.mat-drawer {
+    background-color: #0f1115;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: none;
+  }
 }
 
 /* Glass theme specific menu styles */
