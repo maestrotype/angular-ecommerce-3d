@@ -40,8 +40,10 @@ export class ThemeService {
 
     // Apply only the relevant theme to the DOM
     if (isAdminArea) {
+      document.body.classList.add('is-admin');
       this.applyTheme(adminTheme, 'admin');
     } else {
+      document.body.classList.remove('is-admin');
       this.applyTheme(frontendTheme, 'frontend');
     }
   }

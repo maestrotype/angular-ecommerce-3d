@@ -23,25 +23,45 @@
 
   /* GLASS THEME OPTIMIZATION */
   &[data-theme="glass"] {
-    background-color: rgba(15, 17, 21, 0.4);
+    background-color: var(--admin-bg-secondary);
     backdrop-filter: blur(25px) saturate(180%);
     -webkit-backdrop-filter: blur(25px) saturate(180%);
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.4);
 
     .user-info {
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      
+      .user-name {
+        color: var(--admin-text-primary);
+      }
+      .user-role {
+        color: var(--admin-text-secondary);
+      }
     }
 
-    mat-nav-list a.active {
-      background: rgba(255, 255, 255, 0.12);
-      color: #ffffff;
-
-      &::before {
-        background: #ffffff;
+    mat-nav-list a {
+      color: var(--admin-text-primary);
+      
+      mat-icon {
+        color: var(--admin-text-secondary);
+      }
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.3);
       }
 
-      mat-icon {
-        color: #ffffff;
+      &.active {
+        background: rgba(255, 255, 255, 0.4);
+        color: var(--admin-primary);
+
+        &::before {
+          background: var(--admin-primary);
+        }
+
+        mat-icon {
+          color: var(--admin-primary);
+        }
       }
     }
   }

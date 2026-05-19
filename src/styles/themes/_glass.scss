@@ -2,7 +2,7 @@
    GLASS THEME STYLES - DEEP DARK HUD OPTIMIZED
    ========================================================================== */
 
-[data-theme="glass"] {
+body:not(.is-admin)[data-theme="glass"], html[data-theme="glass"] body:not(.is-admin) {
   /* Глубокий темный фон с градиентами (как в сайдбаре) */
   background: #08090a !important;
   background-image: 

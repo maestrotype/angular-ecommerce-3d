@@ -14,16 +14,16 @@
 
     <!-- Theme Toggle -->
     <button mat-icon-button (click)="toggleTheme()" [matTooltip]="
-        currentTheme === 'dark' ? 'Switch to Light Theme' : 
-        currentTheme === 'light' ? 'Switch to Glass Theme' : 
+        currentTheme === 'light' ? 'Switch to Dark Theme' : 
+        currentTheme === 'dark' ? 'Switch to Glass Theme' : 
         currentTheme === 'glass' ? 'Switch to Dark Glass Theme' :
-        'Switch to Dark Theme'
+        'Switch to Light Theme'
       " *ngIf="!isMobile">
       <mat-icon>
-        {{ currentTheme === 'dark' ? 'light_mode' :
-        currentTheme === 'light' ? 'blur_on' :
-        currentTheme === 'glass' ? 'nights_stay' :
-        'dark_mode' }}
+        {{ currentTheme === 'light' ? 'dark_mode' :
+           currentTheme === 'dark' ? 'blur_on' :
+           currentTheme === 'glass' ? 'nights_stay' :
+           'light_mode' }}
       </mat-icon>
     </button>
 
