@@ -46,12 +46,14 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      flex-shrink: 0;
-      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      flex: 1 1 auto;
+      min-width: 480px;
+      max-width: 72%;
+      transition: flex-basis 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
       // DEFINITIVE COLUMN WIDTHS FOR TABLE ALIGNMENT
       --col-order-w: 80px;
-      --col-type-w: 140px;
+      --col-type-w: 200px;
       --col-status-w: 100px;
       --col-actions-w: 120px;
       
@@ -69,7 +71,7 @@
         
         div { flex-shrink: 0; }
         .col-order { width: var(--col-order-w); }
-        .col-type { width: var(--col-type-w); }
+        .col-type { width: var(--col-type-w); min-width: var(--col-type-w); }
         .col-title { flex: 1; }
         .col-status { width: var(--col-status-w); text-align: center; }
         .col-actions { width: var(--col-actions-w); text-align: center; }
@@ -106,8 +108,20 @@
             .order-num { color: var(--admin-text-primary); font-weight: 600; }
           }
           .col-type { 
-            width: var(--col-type-w); 
-            .type-link { color: var(--admin-primary); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; }
+            width: var(--col-type-w);
+            min-width: var(--col-type-w);
+            padding-right: 12px;
+            overflow: hidden;
+            .type-link {
+              display: block;
+              color: var(--admin-primary);
+              font-weight: 700;
+              font-size: 0.75rem;
+              text-transform: uppercase;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
           }
           .col-title { 
             flex: 1; 
@@ -200,15 +214,18 @@
     }
 
     .preview-container-side {
-      flex: 1;
+      flex: 1 1 42%;
       display: flex;
-      min-width: 0;
+      min-width: 400px;
+      max-width: min(720px, 50vw);
 
       .architect-card {
         background: var(--admin-bg-secondary);
         border: 1px solid var(--admin-border-primary);
         border-radius: 20px;
-        flex: 1;
+        flex: 1 1 auto;
+        width: 100%;
+        min-width: 380px;
         display: flex;
         flex-direction: column;
         overflow: hidden;
@@ -275,7 +292,8 @@
           display: flex;
           flex-direction: column;
           align-items: center;
-          padding: 10px 0 40px; // Slightly less top padding, more bottom padding
+          width: 100%;
+          padding: 20px 36px 48px;
           position: relative;
           
           &::-webkit-scrollbar { width: 6px; }
@@ -403,7 +421,7 @@
 
   // Preserve column widths in preview
   --col-order-w: 80px;
-  --col-type-w: 140px;
+  --col-type-w: 200px;
   --col-status-w: 100px;
   --col-actions-w: 120px;
 

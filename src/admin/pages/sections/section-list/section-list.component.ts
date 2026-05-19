@@ -51,10 +51,10 @@ export class SectionListComponent implements OnInit, AfterViewInit {
   themeMode: 'default' | 'dark' | 'glass' = 'default';
   isFoldExpanded = false;
   selectedElementInfo: { selector: string, section: any } | null = null;
-  sidebarWidth = 540;
+  sidebarWidth = 640;
   private isResizing = false;
   private initialMouseX = 0;
-  private initialSidebarWidth = 540;
+  private initialSidebarWidth = 640;
 
   constructor(
     private sectionService: SectionService,
@@ -66,6 +66,9 @@ export class SectionListComponent implements OnInit, AfterViewInit {
 
 
   ngOnInit(): void {
+    this.sidebarWidth = this.computeInitialSidebarWidth();
+    this.initialSidebarWidth = this.sidebarWidth;
+
     this.route.queryParams.subscribe(params => {
       const target = params['pageTarget'];
       const create = params['createIfMissing'];
@@ -115,7 +118,8 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     requestAnimationFrame(() => {
       const deltaX = event.clientX - this.initialMouseX;
       const newWidth = this.initialSidebarWidth + deltaX;
-      if (newWidth > 300 && newWidth < 1200) {
+      const maxWidth = Math.floor(window.innerWidth * 0.78);
+      if (newWidth > 400 && newWidth < maxWidth) {
         this.sidebarWidth = newWidth;
       }
     });
@@ -126,6 +130,19 @@ export class SectionListComponent implements OnInit, AfterViewInit {
       this.isResizing = false;
       document.body.classList.remove('resizing-active');
     }
+  }
+
+  getSectionTypeLabelKey(type: string): string {
+    const key = type.replace(/-/g, '_').toUpperCase();
+    return `SECTION_TYPE_LABELS.${key}`;
+  }
+
+  private computeInitialSidebarWidth(): number {
+    if (typeof window === 'undefined') {
+      return 640;
+    }
+    const contentWidth = window.innerWidth - 280;
+    return Math.min(860, Math.max(500, Math.floor(contentWidth * 0.52)));
   }
 
   ngAfterViewInit(): void {

@@ -9,7 +9,7 @@
 
   <div class="layout-body">
     <!-- LEFT SIDE: Swappable Container (List <-> Editor) -->
-    <div class="list-container-side" [style.width.px]="sidebarWidth">
+    <div class="list-container-side" [style.flex-basis.px]="sidebarWidth">
       
       <!-- STATE 1: SECTION LIST (TABLE) -->
       <ng-container *ngIf="!isEditorOpen">
@@ -33,7 +33,7 @@
             </div>
 
             <div class="col-type">
-              <span class="type-link">{{ 'SECTION_TYPE.' + section.type | translate }}</span>
+              <span class="type-link">{{ getSectionTypeLabelKey(section.type) | translate }}</span>
             </div>
 
             <div class="col-title">
@@ -59,7 +59,7 @@
               <span class="order-num">--</span>
             </div>
             <div class="col-type">
-              <span class="type-link">{{ 'SECTION_TYPE.FOOTER' | translate }}</span>
+              <span class="type-link">{{ 'SECTION_TYPE_LABELS.FOOTER' | translate }}</span>
             </div>
             <div class="col-title">
               <span class="title-text muted">{{ 'FOOTER_NOT_CREATED' | translate }}</span>
