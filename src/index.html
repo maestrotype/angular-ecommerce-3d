@@ -8,7 +8,9 @@
   <script>
     (function() {
       try {
-        const savedTheme = localStorage.getItem('selected-theme') || 'light';
+        let savedTheme = localStorage.getItem('selected-theme') || 'light';
+        if (savedTheme === 'default') savedTheme = 'light';
+        if (savedTheme === 'dark-glass') savedTheme = 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
       } catch (e) {}
     })();

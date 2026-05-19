@@ -62,7 +62,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
         // Only clear admin theme if we're switching to frontend
         if (!this.adminRoute && isPlatformBrowser(this.platformId)) {
-          // Logic moved to ThemeService for better management
+          this.themeService.syncThemeToCurrentArea();
         }
       });
   }
