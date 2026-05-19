@@ -93,24 +93,11 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
     if (isPlatformBrowser(this.platformId)) {
       // Check theme when window regains focus (returning from admin)
-      window.addEventListener('focus', () => {
-        const actualTheme = this.themeService.getCurrentTheme().id;
-        if (this.currentTheme !== actualTheme) {
-          this.currentTheme = actualTheme;
-          // Force reapply theme to DOM
-          this.themeService.setTheme(actualTheme);
-        }
-      });
+      window.addEventListener('focus', () => this.syncThemeFromService());
 
-      // Also check when tab becomes visible (returning from admin)
       document.addEventListener('visibilitychange', () => {
         if (!document.hidden) {
-          const actualTheme = this.themeService.getCurrentTheme().id;
-          if (this.currentTheme !== actualTheme) {
-            this.currentTheme = actualTheme;
-            // Force reapply theme to DOM
-            this.themeService.setTheme(actualTheme);
-          }
+          this.syncThemeFromService();
         }
       });
 
@@ -243,14 +230,19 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   private loadThemes(): void {
     this.themes = this.themeService.getThemesByArea('frontend');
+    this.syncThemeFromService();
 
-    // Get current theme immediately
-    this.currentTheme = this.themeService.getCurrentTheme().id;
-
-    // Subscribe to theme changes
     this.themeSubscription = this.themeService.currentTheme$.subscribe(theme => {
       this.currentTheme = theme.id;
     });
+  }
+
+  private syncThemeFromService(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    if (this.router.url.startsWith('/admin')) return;
+
+    this.themeService.syncThemeToCurrentArea();
+    this.currentTheme = this.themeService.getCurrentTheme().id;
   }
 
   toggleThemeMenu(): void {

@@ -1,6 +1,8 @@
-import { Injectable, PLATFORM_ID, Inject, afterNextRender } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { Router, NavigationEnd } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { Theme } from './theme.model';
 import { AVAILABLE_THEMES, DEFAULT_THEME_ID } from './theme-config';
 
@@ -16,29 +18,39 @@ export class ThemeService {
   private adminThemeSubject = new BehaviorSubject<Theme>(this.getThemeById(DEFAULT_THEME_ID));
   public adminTheme$ = this.adminThemeSubject.asObservable();
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private router: Router
+  ) {
     if (isPlatformBrowser(this.platformId)) {
       this.initializeTheme();
+      this.router.events
+        .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+        .subscribe(() => this.syncThemeToCurrentArea());
     }
   }
 
   private initializeTheme(): void {
     if (!isPlatformBrowser(this.platformId)) return;
 
-    // Detect current area
     const isAdminArea = window.location.pathname.startsWith('/admin');
 
-    // Load frontend theme
-    const savedFrontend = localStorage.getItem('selected-theme');
-    const frontendTheme = savedFrontend ? this.getThemeById(savedFrontend) : this.getThemeById(DEFAULT_THEME_ID);
+    const frontendId = this.normalizeStoredThemeId(
+      localStorage.getItem('selected-theme'),
+      'frontend'
+    );
+    const frontendTheme = this.getThemeById(frontendId);
     this.currentThemeSubject.next(frontendTheme);
+    localStorage.setItem('selected-theme', frontendTheme.id);
 
-    // Load admin theme
-    const savedAdmin = localStorage.getItem('selected-theme-admin') || localStorage.getItem('adminTheme');
-    const adminTheme = savedAdmin ? this.getThemeById(savedAdmin) : this.getThemeById(DEFAULT_THEME_ID);
+    const adminId = this.normalizeStoredThemeId(
+      localStorage.getItem('selected-theme-admin') || localStorage.getItem('adminTheme'),
+      'admin'
+    );
+    const adminTheme = this.getThemeById(adminId, 'admin');
     this.adminThemeSubject.next(adminTheme);
+    localStorage.setItem('selected-theme-admin', adminTheme.id);
 
-    // Apply only the relevant theme to the DOM
     if (isAdminArea) {
       this.applyTheme(adminTheme, 'admin');
     } else {
@@ -46,8 +58,49 @@ export class ThemeService {
     }
   }
 
-  getThemeById(themeId: string): Theme {
-    return AVAILABLE_THEMES.find(theme => theme.id === themeId) ||
+  /** Re-apply the theme for the current route (fixes admin theme leaking to storefront). */
+  syncThemeToCurrentArea(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    const isAdminArea = this.router.url.startsWith('/admin');
+    if (isAdminArea) {
+      this.applyTheme(this.getCurrentAdminTheme(), 'admin');
+    } else {
+      this.applyTheme(this.getCurrentTheme(), 'frontend');
+    }
+  }
+
+  getDomThemeId(): string | null {
+    if (!isPlatformBrowser(this.platformId)) return null;
+    return document.documentElement.getAttribute('data-theme');
+  }
+
+  private normalizeStoredThemeId(themeId: string | null, area: Area): string {
+    if (!themeId) {
+      return DEFAULT_THEME_ID;
+    }
+    return this.resolveThemeId(themeId, area);
+  }
+
+  private resolveThemeId(themeId: string, area: Area): string {
+    if (themeId === 'default') {
+      return 'light';
+    }
+    if (area === 'frontend') {
+      if (themeId === 'dark-glass') {
+        return 'dark';
+      }
+      const frontendIds = this.getThemesByArea('frontend').map(t => t.id);
+      if (!frontendIds.includes(themeId)) {
+        return DEFAULT_THEME_ID;
+      }
+    }
+    return themeId;
+  }
+
+  getThemeById(themeId: string, area: Area = 'frontend'): Theme {
+    const resolvedId = this.resolveThemeId(themeId, area);
+    return AVAILABLE_THEMES.find(theme => theme.id === resolvedId) ||
       AVAILABLE_THEMES.find(theme => theme.id === DEFAULT_THEME_ID) ||
       AVAILABLE_THEMES[0];
   }
@@ -65,11 +118,12 @@ export class ThemeService {
   }
 
   setTheme(themeId: string, area: Area = 'frontend'): void {
-    const theme = this.getThemeById(themeId);
+    const resolvedId = this.resolveThemeId(themeId, area);
+    const theme = this.getThemeById(resolvedId, area);
 
     if (isPlatformBrowser(this.platformId)) {
       const storageKey = area === 'admin' ? 'selected-theme-admin' : 'selected-theme';
-      localStorage.setItem(storageKey, themeId);
+      localStorage.setItem(storageKey, theme.id);
       if (area === 'admin') {
         localStorage.setItem('adminTheme', themeId); // Compatibility with old key
       }
@@ -89,11 +143,9 @@ export class ThemeService {
       return;
     }
 
-    const themeId = theme.id;
-
-    // Apply to both for maximum compatibility, but prioritize area logic if needed
-    document.documentElement.setAttribute('data-theme', themeId);
-    document.body.setAttribute('data-theme', themeId);
+    const domThemeId = this.resolveThemeId(theme.id, area);
+    document.documentElement.setAttribute('data-theme', domThemeId);
+    document.body.setAttribute('data-theme', domThemeId);
   }
 
   getCurrentTheme(): Theme {
