@@ -1,4 +1,6 @@
 .admin-header {
+  height: 64px;
+  min-height: 64px;
   background-color: var(--admin-header-bg);
   color: var(--admin-text-primary);
   box-shadow: none;
@@ -541,7 +543,9 @@
 [data-theme="glass"] {
   // Layout specific overrides only, colors and glass effects are handled globally via tokens
   .admin-header {
-    border-bottom: var(--glass-border);
+    border-bottom: var(--glass-border, 1px solid rgba(255, 255, 255, 0.2));
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
   }
 }
 

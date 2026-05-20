@@ -60,9 +60,11 @@ export class AppComponent implements OnInit, OnDestroy {
       .subscribe((event: NavigationEnd) => {
         this.adminRoute = event.url.startsWith('/admin');
 
-        // Only clear admin theme if we're switching to frontend
-        if (!this.adminRoute && isPlatformBrowser(this.platformId)) {
-          this.themeService.syncThemeToCurrentArea();
+        // Update theme based on area
+        if (this.adminRoute) {
+          this.themeService.updateArea('admin');
+        } else {
+          this.themeService.updateArea('frontend');
         }
       });
   }

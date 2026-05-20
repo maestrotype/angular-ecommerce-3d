@@ -104,9 +104,11 @@
 }
 
 .sidenav-header {
-  padding: 30px 25px;
+  height: 64px;
+  padding: 0 25px;
   display: flex;
   align-items: center;
+  box-sizing: border-box;
 
   .logo {
     display: flex;

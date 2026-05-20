@@ -218,6 +218,7 @@
   display: grid;
   grid-template-columns: 2.2fr 1fr;
   gap: var(--admin-spacing-xl);
+  margin-bottom: var(--admin-spacing-xl);
 
   @media (max-width: 1200px) {
     grid-template-columns: 1fr;
