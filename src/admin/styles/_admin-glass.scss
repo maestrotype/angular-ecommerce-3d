@@ -32,11 +32,11 @@
   --admin-primary-rgb: 59, 130, 246;
   --admin-bg-primary: rgba(255, 255, 255, 0.05); 
   --admin-bg-glass: rgba(255, 255, 255, 0.1);
-  --admin-bg-secondary: rgba(255, 255, 255, 0.08);   
+  --admin-bg-secondary: rgba(25, 60, 105, 0.5);   
   --admin-product-card-bg: rgba(255, 255, 255, 0.12);
   --admin-bg-tertiary: rgba(255, 255, 255, 0.05);
   --admin-bg-card: rgba(255, 255, 255, 0.15);
-  --admin-header-bg: rgba(255, 255, 255, 0.1);
+  --admin-header-bg: rgba(30, 65, 110, 0.55);
   --admin-bg-hover: rgba(59, 130, 246, 0.1);
   --admin-back-btn: rgba(54, 63, 66, 0.3);
   --admin-submit-btn: #3b82f6;
@@ -111,4 +111,15 @@
   --mdc-elevated-card-container-color: transparent;
   --mdc-filled-card-container-color: transparent;
   --mdc-outlined-card-container-color: transparent;
+
+  // Angular Material sidenav container tokens — make transparent so body gradient shows through
+  --mat-sidenav-container-background-color: transparent;
+  --mat-sidenav-container-divider-color: transparent;
+  --mat-sidenav-content-background-color: transparent;
+  --mat-drawer-container-background-color: transparent;
+  --mat-drawer-content-background-color: transparent;
+
+  // Angular Material toolbar token
+  --mat-toolbar-standard-height: 64px;
+  --mat-toolbar-mobile-height: 64px;
 }
