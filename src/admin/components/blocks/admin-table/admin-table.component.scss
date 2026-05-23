@@ -29,21 +29,21 @@
     
     ::ng-deep {
       .mat-mdc-table {
-        background-color: transparent !important;
+        background-color: transparent;
       }
       .mat-mdc-header-row {
-        background-color: transparent !important;
+        background-color: transparent;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       }
       .mat-mdc-row {
-        background-color: transparent !important;
+        background-color: transparent;
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         &:last-child {
           border-bottom: none;
         }
       }
       .mat-mdc-row:nth-child(even) {
-        background-color: rgba(255, 255, 255, 0.03) !important;
+        background-color: rgba(255, 255, 255, 0.03);
       }
     }
     
