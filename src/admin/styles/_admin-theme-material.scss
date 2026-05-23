@@ -72,16 +72,10 @@
 
 .admin-table-wrapper .mat-mdc-header-row {
   background-color: var(--admin-table-header-bg);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  // box-shadow: 0 2px 2px #1f293726, inset 0 1px #fff6;
 }
 
 .admin-table-wrapper .mat-mdc-row {
   background-color: var(--admin-table-row-bg);
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  // box-shadow: 0 2px 2px #1f293726, inset 0 1px #fff6;
 }
 
 .admin-table-container .admin-table-wrapper .mat-mdc-table .mat-mdc-row:nth-child(even) {
@@ -617,13 +611,8 @@
 
   /* ===== Tables with glass effect ===== */
   .mat-mdc-table {
-    backdrop-filter: blur(15px) saturate(150%);
-    -webkit-backdrop-filter: blur(15px) saturate(150%);
-    box-shadow: 0 4px 16px rgba(31, 41, 55, 0.1);
     transform: translate3d(0, 0, 0);
     -webkit-transform: translate3d(0, 0, 0);
-    border-radius: var(--border-radius-glass, 16px);
-    overflow: hidden;
   }
 
   /* ===== Sidenav / Drawer - Liquid Glass Effect ===== */
