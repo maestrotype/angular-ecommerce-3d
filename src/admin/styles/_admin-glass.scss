@@ -108,6 +108,11 @@
   --mdc-filled-card-container-color: transparent;
   --mdc-outlined-card-container-color: transparent;
 
+  // Select panel background — same as input field for seamless merge
+  --admin-select-panel-bg: rgba(190, 210, 240, 0.65);
+  --mat-select-panel-background-color: rgba(190, 210, 240, 0.65);
+  --mdc-list-item-container-color: transparent;
+
   // Angular Material sidenav container tokens — make transparent so body gradient shows through
   --mat-sidenav-container-background-color: transparent;
   --mat-sidenav-container-divider-color: transparent;
