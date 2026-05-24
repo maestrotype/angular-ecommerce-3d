@@ -7,12 +7,8 @@
     rgba(221, 232, 255, 0.55) 45%,
     rgba(196, 210, 239, 0.35) 100%
   );
-  --admin-glass-surface-soft: linear-gradient(
-    155deg,
-    rgba(240, 244, 255, 0.75) 0%,
-    rgba(217, 230, 250, 0.5) 60%,
-    rgba(199, 211, 233, 0.35) 100%
-  );
+  --admin-glass-surface-soft: 
+    rgba(199, 211, 233, 0.35);
   --admin-glass-surface-muted: linear-gradient(
     165deg,
     rgba(226, 232, 240, 0.45) 0%,
@@ -32,11 +28,11 @@
   --admin-primary-rgb: 59, 130, 246;
   --admin-bg-primary: rgba(255, 255, 255, 0.05); 
   --admin-bg-glass: rgba(255, 255, 255, 0.1);
-  --admin-bg-secondary: rgba(255, 255, 255, 0.08);   
+  --admin-bg-secondary: rgba(25, 60, 105, 0.5);   
   --admin-product-card-bg: rgba(255, 255, 255, 0.12);
   --admin-bg-tertiary: rgba(255, 255, 255, 0.05);
   --admin-bg-card: rgba(255, 255, 255, 0.15);
-  --admin-header-bg: rgba(241, 245, 249, 0.85);
+  --admin-header-bg: rgba(30, 65, 110, 0.55);
   --admin-bg-hover: rgba(59, 130, 246, 0.1);
   --admin-back-btn: rgba(54, 63, 66, 0.3);
   --admin-submit-btn: #3b82f6;
@@ -54,11 +50,11 @@
   --admin-basic-translucent: rgba(255, 255, 255, 0.5);
   --admin-dark-translucent: rgba(0, 0, 0, 0.1);
   --admin-light-translucent: rgba(255, 255, 255, 0.75);
-  --admin-table-bg: rgba(250, 250, 250, 0.1);
-  --admin-table-border: rgba(59, 130, 246, 0.1);
-  --admin-table-header-bg: rgba(219, 234, 254, 0.6);
-  --admin-table-even-bg: rgba(248, 250, 252, 0.4);
-  --admin-table-row-bg: rgba(255, 255, 255, 0.35);    
+  --admin-table-bg: rgba(255, 255, 255, 0.2);
+  --admin-table-border: rgba(255, 255, 255, 0.15);
+  --admin-table-header-bg: rgba(255, 255, 255, 0.35);
+  --admin-table-even-bg: rgba(255, 255, 255, 0.25);
+  --admin-table-row-bg: rgba(255, 255, 255, 0.15);    
   --admin-bg-container: #d7e1ff; 
   --dashboard-stat-card-bg: rgba(248, 250, 252, 0.2);
   
@@ -111,4 +107,20 @@
   --mdc-elevated-card-container-color: transparent;
   --mdc-filled-card-container-color: transparent;
   --mdc-outlined-card-container-color: transparent;
+
+  // Select panel background — same as input field for seamless merge
+  --admin-select-panel-bg: rgba(190, 210, 240, 0.65);
+  --mat-select-panel-background-color: rgba(190, 210, 240, 0.65);
+  --mdc-list-item-container-color: transparent;
+
+  // Angular Material sidenav container tokens — make transparent so body gradient shows through
+  --mat-sidenav-container-background-color: transparent;
+  --mat-sidenav-container-divider-color: transparent;
+  --mat-sidenav-content-background-color: transparent;
+  --mat-drawer-container-background-color: transparent;
+  --mat-drawer-content-background-color: transparent;
+
+  // Angular Material toolbar token
+  --mat-toolbar-standard-height: 64px;
+  --mat-toolbar-mobile-height: 64px;
 }

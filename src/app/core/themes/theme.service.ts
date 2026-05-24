@@ -51,12 +51,19 @@ export class ThemeService {
     this.adminThemeSubject.next(adminTheme);
     localStorage.setItem('selected-theme-admin', adminTheme.id);
 
-    if (isAdminArea) {
+    // Apply only the relevant theme to the DOM
+    this.updateArea(isAdminArea ? 'admin' : 'frontend');
+  }
+
+  updateArea(area: Area): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    if (area === 'admin') {
       document.body.classList.add('is-admin');
-      this.applyTheme(adminTheme, 'admin');
+      this.applyTheme(this.adminThemeSubject.value, 'admin');
     } else {
       document.body.classList.remove('is-admin');
-      this.applyTheme(frontendTheme, 'frontend');
+      this.applyTheme(this.currentThemeSubject.value, 'frontend');
     }
   }
 

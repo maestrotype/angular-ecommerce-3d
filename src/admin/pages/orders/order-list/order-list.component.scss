@@ -48,27 +48,7 @@
     }
   }
 
-  // Override admin-table-container styles to match original Orders
-  .admin-table-container.admin-table-container {
-    background: var(--admin-basic-bg);
-    border-radius: var(--admin-border-radius-md);
-    box-shadow: var(--admin-shadow-md);
-    overflow: hidden;
-    margin-bottom: 16px;
-    /* Improve compositing for semi-transparent backgrounds to avoid rendering glitches */
-    isolation: isolate;
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    will-change: transform;
-  }
 
-  // Ensure table inside has proper styling
-  .admin-table-container .mat-mdc-table {
-    /* Use explicit table background instead of transparent to avoid compositing artifacts */
-    background-color: var(--admin-table-bg);
-  }
 
   .header-section {
     display: flex;

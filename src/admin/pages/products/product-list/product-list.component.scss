@@ -67,11 +67,6 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-:host ::ng-deep {
-  .mat-mdc-table {
-    background-color: var(--admin-basic-bg);
-  }
-}
 
 .table-container {
     border-radius: 8px;
