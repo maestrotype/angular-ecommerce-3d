@@ -460,3 +460,60 @@
     user-select: none !important;
   }
 }
+
+// ===== Glass Theme Overrides =====
+:host-context(body[data-theme="glass"]) {
+  .sections-page-wrapper {
+    background: transparent;
+
+    .page-header .new-section-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .layout-body {
+      .list-container-side {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(15px) saturate(150%);
+        -webkit-backdrop-filter: blur(15px) saturate(150%);
+
+        .list-table-header {
+          background: rgba(255, 255, 255, 0.15);
+          border-bottom-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .responsive-list .list-row-item {
+          border-bottom-color: rgba(255, 255, 255, 0.1);
+          &:hover { background: rgba(255, 255, 255, 0.12); }
+          &.active { background: rgba(255, 255, 255, 0.18); }
+        }
+
+        .editor-pane-swap {
+          background: rgba(255, 255, 255, 0.15);
+          .drawer-header {
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom-color: rgba(255, 255, 255, 0.15);
+          }
+          .editor-form-wrapper { background: rgba(255, 255, 255, 0.05); }
+        }
+      }
+
+      .preview-container-side .architect-card {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(15px) saturate(150%);
+        -webkit-backdrop-filter: blur(15px) saturate(150%);
+
+        .architect-header {
+          background: rgba(255, 255, 255, 0.15);
+          border-bottom-color: rgba(255, 255, 255, 0.15);
+        }
+        .architect-content { background: rgba(255, 255, 255, 0.05); }
+      }
+    }
+  }
+}
+
