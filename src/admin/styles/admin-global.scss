@@ -483,19 +483,11 @@ button {
     .mdc-switch__track {
       background-color: var(--admin-border-primary);
     }
-
-    .mdc-switch__handle-track {
-      background-color: var(--admin-border-primary);
-    }
   }
 
   &.mat-mdc-slide-toggle-checked {
     .mdc-switch {
       .mdc-switch__track {
-        background-color: var(--admin-primary);
-      }
-
-      .mdc-switch__handle-track {
         background-color: var(--admin-primary);
       }
     }

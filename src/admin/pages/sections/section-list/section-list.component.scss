@@ -466,52 +466,103 @@
   .sections-page-wrapper {
     background: transparent;
 
-    .page-header .new-section-btn {
-      background: rgba(255, 255, 255, 0.2);
-      border-color: rgba(255, 255, 255, 0.3);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+    // Fix text readability on the glass panel
+    .list-table-header {
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .list-row-item {
+      .col-order { color: rgba(255, 255, 255, 0.6); }
+      .order-num { color: #ffffff !important; }
+      .col-type .type-link { 
+        color: rgba(255, 255, 255, 0.9) !important;
+        &:hover {
+          color: #ffffff !important;
+          text-decoration: underline;
+        }
+      }
+      .title-text { color: #ffffff !important; }
+    }
+
+    .page-header {
+      h1 { color: #ffffff; }
+
+      .new-section-btn {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.3);
+        color: #ffffff;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
     }
 
     .layout-body {
       .list-container-side {
-        background: rgba(255, 255, 255, 0.2);
-        border-color: rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.2);
         backdrop-filter: blur(15px) saturate(150%);
         -webkit-backdrop-filter: blur(15px) saturate(150%);
 
         .list-table-header {
-          background: rgba(255, 255, 255, 0.15);
-          border-bottom-color: rgba(255, 255, 255, 0.15);
+          background: rgba(255, 255, 255, 0.12);
+          border-bottom-color: rgba(255, 255, 255, 0.12);
         }
 
         .responsive-list .list-row-item {
-          border-bottom-color: rgba(255, 255, 255, 0.1);
-          &:hover { background: rgba(255, 255, 255, 0.12); }
-          &.active { background: rgba(255, 255, 255, 0.18); }
+          border-bottom-color: rgba(255, 255, 255, 0.08);
+          // Clean hover — subtle white tint, not a heavy block
+          &:hover {
+            background: rgba(255, 255, 255, 0.1);
+          }
+          &.active {
+            background: rgba(255, 255, 255, 0.15);
+          }
         }
 
         .editor-pane-swap {
-          background: rgba(255, 255, 255, 0.15);
+          background: rgba(255, 255, 255, 0.1);
           .drawer-header {
-            background: rgba(255, 255, 255, 0.1);
-            border-bottom-color: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.08);
+            border-bottom-color: rgba(255, 255, 255, 0.12);
           }
-          .editor-form-wrapper { background: rgba(255, 255, 255, 0.05); }
+          .editor-form-wrapper { background: rgba(255, 255, 255, 0.04); }
         }
       }
 
       .preview-container-side .architect-card {
-        background: rgba(255, 255, 255, 0.2);
-        border-color: rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.2);
         backdrop-filter: blur(15px) saturate(150%);
         -webkit-backdrop-filter: blur(15px) saturate(150%);
 
         .architect-header {
-          background: rgba(255, 255, 255, 0.15);
-          border-bottom-color: rgba(255, 255, 255, 0.15);
+          background: rgba(255, 255, 255, 0.1);
+          border-bottom-color: rgba(255, 255, 255, 0.12);
+          h3 { color: rgba(255, 255, 255, 0.8); }
         }
-        .architect-content { background: rgba(255, 255, 255, 0.05); }
+        .architect-content { background: rgba(255, 255, 255, 0.04); }
+      }
+    }
+
+    // ── Slide toggle: kill the extra hover states and ripples ──
+    ::ng-deep {
+      .mat-mdc-slide-toggle {
+        --mdc-switch-selected-hover-state-layer-color: transparent !important;
+        --mdc-switch-unselected-hover-state-layer-color: transparent !important;
+        --mdc-switch-selected-focus-state-layer-color: transparent !important;
+        --mdc-switch-unselected-focus-state-layer-color: transparent !important;
+        --mdc-switch-selected-pressed-state-layer-color: transparent !important;
+        --mdc-switch-unselected-pressed-state-layer-color: transparent !important;
+        
+        .mat-mdc-slide-toggle-ripple,
+        .mdc-switch__ripple {
+          display: none !important;
+        }
+
+        .mdc-switch:hover .mdc-switch__track::before,
+        .mdc-switch:hover .mdc-switch__track::after {
+          opacity: 0 !important;
+        }
       }
     }
   }
