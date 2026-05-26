@@ -243,7 +243,7 @@ button {
     }
 
     .mat-mdc-cell {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
   }
 
@@ -254,6 +254,38 @@ button {
     }
   }
 }
+
+// Table container — glass theme: matches integrations card palette exactly
+[data-theme="glass"] {
+  .admin-table-container,
+  .admin-table-wrapper {
+    background: var(--admin-bg-card);                    // rgba(255,255,255,0.15)
+    backdrop-filter: blur(16px) saturate(155%);
+    -webkit-backdrop-filter: blur(16px) saturate(155%);
+    border: 1px solid var(--admin-glass-border-soft);    // rgba(255,255,255,0.35)
+    border-radius: 20px;
+    box-shadow: var(--admin-glass-shadow);
+    overflow: hidden;
+
+    // Header row — subtly brighter than body (not as stark as default 0.35)
+    .mat-mdc-header-row,
+    .mat-mdc-header-row.mat-mdc-header-row {
+      background-color: var(--admin-table-header-bg);   // rgba(255,255,255,0.22)
+    }
+
+    // Data rows — transparent so container card-bg shows through uniformly
+    .mat-mdc-row,
+    .mat-mdc-row.mat-mdc-row {
+      background-color: var(--admin-table-row-bg);      // transparent
+    }
+
+    // Even rows — extremely subtle stripe
+    .mat-mdc-row:nth-child(even) {
+      background-color: var(--admin-table-even-bg);     // rgba(255,255,255,0.07)
+    }
+  }
+}
+
 
 // Form Fields
 .mat-mdc-form-field {
