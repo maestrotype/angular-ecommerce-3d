@@ -45,18 +45,23 @@
   --admin-bg-overlay: rgba(15, 23, 42, 0.2);
   --admin-message-info-bg: rgba(255, 255, 255, 0.3);
   
-  // Table colors — tuned to match the Integrations card palette.
-  // Container provides the base rgba(255,255,255,0.15); rows stay near-transparent
-  // so the whole block looks like ONE uniform frosted-glass card.
+  // Table colors — two-tone zebra: dark Dashboard-card blue vs light frosted glass.
+  // Header + even rows + paginator → dark steel-blue (matches Dashboard KPI cards).
+  // Odd rows → light near-transparent so the overall rhythm reads dark / light / dark.
   --admin-basic-bg: rgba(255, 255, 255, 0.15);
   --admin-basic-translucent: rgba(255, 255, 255, 0.45);
   --admin-dark-translucent: rgba(0, 0, 0, 0.06);
   --admin-light-translucent: rgba(255, 255, 255, 0.7);
-  --admin-table-bg: rgba(255, 255, 255, 0.15);        // container level
-  --admin-table-border: rgba(255, 255, 255, 0.35);    // matches glass-border-soft
-  --admin-table-header-bg: rgba(255, 255, 255, 0.22); // slightly brighter than body
-  --admin-table-even-bg: rgba(255, 255, 255, 0.07);   // very subtle zebra stripe
-  --admin-table-row-bg: rgba(255, 255, 255, 0.0);     // transparent — container shows
+  --admin-table-bg: rgba(255, 255, 255, 0.15);             // container wrapper level
+  --admin-table-border: transparent;                       // no borders
+  --admin-table-header-bg: rgba(25, 60, 105, 0.72);        // DARK — Dashboard KPI card blue
+  --admin-table-header-text: rgba(255, 255, 255, 0.95);    // WHITE text in header
+  --admin-table-even-bg: rgba(25, 60, 105, 0.45);          // DARK — same hue, a bit lighter
+  --admin-table-even-text: rgba(255, 255, 255, 0.90);      // WHITE text in even rows
+  --admin-table-row-bg: rgba(25, 60, 105, 0.18);           // DARKER tint — no more harsh contrast
+  --admin-table-row-text: rgba(255, 255, 255, 0.85);       // WHITE text in odd rows too
+  --admin-table-paginator-bg: rgba(25, 60, 105, 0.72);     // DARK — same as header
+  --admin-table-paginator-text: rgba(255, 255, 255, 0.90); // WHITE text in paginator
   --admin-bg-container: #d7e1ff;
   --dashboard-stat-card-bg: rgba(248, 250, 252, 0.2);
   
