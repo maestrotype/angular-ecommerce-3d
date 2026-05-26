@@ -1046,3 +1046,40 @@
   --header-link: #e4e4e7;
   .hamburger span { background: #e4e4e7 !important; }
 }
+
+// Glass theme: override only header text/link colours to white.
+// Does NOT touch any other section colours, tokens or variables.
+:host-context(body[data-theme="glass"]) .header {
+  --header-text: #ffffff;
+  --header-link: rgba(255, 255, 255, 0.85);
+  --header-link-hover: #ffffff;
+  --header-search-text: #ffffff;
+  --header-text-rgb: 255, 255, 255;
+
+  .hamburger span {
+    background: #ffffff;
+  }
+
+  // Theme-switcher & lang-switcher popovers: frosted glass matching page sections.
+  .theme-switcher__popover,
+  .lang-switcher__popover {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    border-color: rgba(255, 255, 255, 0.18);
+
+    .theme-switcher__option,
+    .lang-switcher__option {
+      color: rgba(255, 255, 255, 0.9);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.12);
+      }
+    }
+
+    .theme-switcher__check,
+    .lang-switcher__check {
+      color: #93c5fd;
+    }
+  }
+}

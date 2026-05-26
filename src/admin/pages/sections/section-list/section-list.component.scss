@@ -407,17 +407,17 @@
 // CDK DRAG & DROP STYLES (Global levels)
 ::ng-deep .cdk-drag-preview {
   box-sizing: border-box;
-  background: var(--admin-bg-hover) !important;
-  border: 1px solid var(--admin-primary) !important;
+  background: var(--admin-bg-hover);
+  border: 1px solid var(--admin-primary);
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 0 1px rgba(var(--admin-primary-rgb), 0.2);
-  display: flex !important;
+  display: flex;
   align-items: center;
   padding: 12px 24px;
   width: auto;
   min-width: 400px;
   opacity: 0.95;
-  z-index: 5000 !important;
+  z-index: 5000;
 
   // Preserve column widths in preview
   --col-order-w: 80px;
@@ -435,8 +435,8 @@
 
 ::ng-deep .cdk-drag-placeholder {
   opacity: 0.2;
-  background: rgba(var(--admin-primary-rgb), 0.1) !important;
-  border: 2px dashed var(--admin-primary) !important;
+  background: rgba(var(--admin-primary-rgb), 0.1);
+  border: 2px dashed var(--admin-primary);
   border-radius: 12px;
   margin: 4px 10px;
 }
@@ -456,8 +456,8 @@
 
 :host-context(body.resizing-active) {
   * {
-    cursor: col-resize !important;
-    user-select: none !important;
+    cursor: col-resize;
+    user-select: none;
   }
 }
 
@@ -466,52 +466,112 @@
   .sections-page-wrapper {
     background: transparent;
 
-    .page-header .new-section-btn {
-      background: rgba(255, 255, 255, 0.2);
-      border-color: rgba(255, 255, 255, 0.3);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+    // Fix text readability on the glass panel
+    .list-table-header {
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .list-row-item {
+      .col-order { color: rgba(255, 255, 255, 0.6); }
+      .order-num { color: #ffffff; }
+      .col-type .type-link { 
+        color: rgba(255, 255, 255, 0.9);
+        &:hover {
+          color: #ffffff;
+          text-decoration: underline;
+        }
+      }
+      .title-text { color: #ffffff; }
+    }
+
+    .page-header {
+      h1 { color: #ffffff; }
+
+      .new-section-btn {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.3);
+        color: #ffffff;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
     }
 
     .layout-body {
       .list-container-side {
-        background: rgba(255, 255, 255, 0.2);
-        border-color: rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.2);
         backdrop-filter: blur(15px) saturate(150%);
         -webkit-backdrop-filter: blur(15px) saturate(150%);
 
         .list-table-header {
-          background: rgba(255, 255, 255, 0.15);
-          border-bottom-color: rgba(255, 255, 255, 0.15);
+          background: rgba(255, 255, 255, 0.12);
+          border-bottom-color: rgba(255, 255, 255, 0.12);
         }
 
         .responsive-list .list-row-item {
-          border-bottom-color: rgba(255, 255, 255, 0.1);
-          &:hover { background: rgba(255, 255, 255, 0.12); }
-          &.active { background: rgba(255, 255, 255, 0.18); }
+          border-bottom-color: rgba(255, 255, 255, 0.08);
+          // Clean hover — subtle white tint, not a heavy block
+          &:hover {
+            background: rgba(255, 255, 255, 0.1);
+          }
+          &.active {
+            background: rgba(255, 255, 255, 0.15);
+          }
         }
 
         .editor-pane-swap {
-          background: rgba(255, 255, 255, 0.15);
+          background: rgba(255, 255, 255, 0.1);
           .drawer-header {
-            background: rgba(255, 255, 255, 0.1);
-            border-bottom-color: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.08);
+            border-bottom-color: rgba(255, 255, 255, 0.12);
           }
-          .editor-form-wrapper { background: rgba(255, 255, 255, 0.05); }
+          .editor-form-wrapper { background: rgba(255, 255, 255, 0.04); }
         }
       }
 
       .preview-container-side .architect-card {
-        background: rgba(255, 255, 255, 0.2);
-        border-color: rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.2);
         backdrop-filter: blur(15px) saturate(150%);
         -webkit-backdrop-filter: blur(15px) saturate(150%);
 
         .architect-header {
-          background: rgba(255, 255, 255, 0.15);
-          border-bottom-color: rgba(255, 255, 255, 0.15);
+          background: rgba(255, 255, 255, 0.1);
+          border-bottom-color: rgba(255, 255, 255, 0.12);
+          h3 { color: rgba(255, 255, 255, 0.8); }
         }
-        .architect-content { background: rgba(255, 255, 255, 0.05); }
+        .architect-content { background: rgba(255, 255, 255, 0.04); }
+      }
+    }
+
+    // ── Slide toggle: kill the extra hover states and ripples ──
+    ::ng-deep {
+      .mat-mdc-slide-toggle,
+      .mat-mdc-slide-toggle.mat-accent,
+      .mat-mdc-slide-toggle.mat-primary {
+        --mdc-switch-selected-hover-state-layer-color: transparent;
+        --mdc-switch-unselected-hover-state-layer-color: transparent;
+        --mdc-switch-selected-focus-state-layer-color: transparent;
+        --mdc-switch-unselected-focus-state-layer-color: transparent;
+        --mdc-switch-selected-pressed-state-layer-color: transparent;
+        --mdc-switch-unselected-pressed-state-layer-color: transparent;
+        --mdc-switch-hover-state-layer-color: transparent;
+        --mdc-switch-focus-state-layer-color: transparent;
+        
+        .mat-mdc-slide-toggle-ripple,
+        .mdc-switch__ripple,
+        .mat-ripple,
+        .mat-ripple-element {
+          display: none;
+          background-color: transparent;
+          background: transparent;
+          opacity: 0;
+        }
+
+        .mdc-switch:hover .mdc-switch__track::before,
+        .mdc-switch:hover .mdc-switch__track::after {
+          opacity: 0;
+        }
       }
     }
   }

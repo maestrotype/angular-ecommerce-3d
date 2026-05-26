@@ -22,7 +22,7 @@
   border-radius: 10px;
 }
 
-body {
+body.is-admin {
   font-family: var(--admin-font-family);
   font-size: var(--admin-font-size-md);
   line-height: 1.6;
@@ -36,7 +36,7 @@ body {
   // Glass theme background - bright blue like macOS/iOS
 }
 
-body[data-theme="glass"] {
+body.is-admin[data-theme="glass"] {
   min-height: 100vh;
   position: relative;
   background: linear-gradient(135deg,
@@ -91,7 +91,7 @@ body[data-theme="glass"] {
   }
 }
 
-body[data-theme="dark-glass"] {
+body.is-admin[data-theme="dark-glass"] {
   min-height: 100vh;
   position: relative;
   background: linear-gradient(135deg,
@@ -483,19 +483,11 @@ button {
     .mdc-switch__track {
       background-color: var(--admin-border-primary);
     }
-
-    .mdc-switch__handle-track {
-      background-color: var(--admin-border-primary);
-    }
   }
 
   &.mat-mdc-slide-toggle-checked {
     .mdc-switch {
       .mdc-switch__track {
-        background-color: var(--admin-primary);
-      }
-
-      .mdc-switch__handle-track {
         background-color: var(--admin-primary);
       }
     }
