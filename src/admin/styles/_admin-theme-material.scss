@@ -33,7 +33,7 @@
     border-top-left-radius: 0;
     border-top-right-radius: 0;
   }
-  
+
   .cdk-overlay-pane.mat-mdc-select-panel-above div.mat-mdc-select-panel {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
@@ -273,7 +273,7 @@
   }
 
   /* Override Warn (Red) with Primary Blue as requested */
-  .mat-mdc-button.mat-warn, 
+  .mat-mdc-button.mat-warn,
   .mat-mdc-icon-button.mat-warn,
   .mat-mdc-raised-button.mat-warn,
   .mat-mdc-unelevated-button.mat-warn,
@@ -282,12 +282,13 @@
     --mdc-icon-button-icon-color: var(--admin-primary);
     --mat-icon-button-state-layer-color: var(--admin-primary);
     color: var(--admin-primary);
-    
+
     mat-icon {
       color: var(--admin-primary);
     }
-    
-    .mdc-button__label, .mdc-button__icon {
+
+    .mdc-button__label,
+    .mdc-button__icon {
       color: var(--admin-primary);
     }
   }
@@ -303,7 +304,7 @@
     --mdc-switch-selected-pressed-track-color: var(--admin-primary);
     --mdc-switch-selected-track-color: var(--admin-primary);
     opacity: 0.8;
-    
+
     &.mat-mdc-slide-toggle-checked {
       opacity: 1;
     }
@@ -450,17 +451,26 @@
   }
 
   /* ===== Slide Toggle Hover Cleanup ===== */
-  .mat-mdc-slide-toggle.mat-accent {
-    --mdc-switch-selected-hover-state-layer-color: transparent !important;
-    --mdc-switch-unselected-hover-state-layer-color: transparent !important;
-    --mdc-switch-selected-focus-state-layer-color: transparent !important;
-    --mdc-switch-unselected-focus-state-layer-color: transparent !important;
-    --mdc-switch-selected-pressed-state-layer-color: transparent !important;
-    --mdc-switch-unselected-pressed-state-layer-color: transparent !important;
-    
+  .mat-mdc-slide-toggle,
+  .mat-mdc-slide-toggle.mat-accent,
+  .mat-mdc-slide-toggle.mat-primary {
+    --mdc-switch-selected-hover-state-layer-color: transparent;
+    --mdc-switch-unselected-hover-state-layer-color: transparent;
+    --mdc-switch-selected-focus-state-layer-color: transparent;
+    --mdc-switch-unselected-focus-state-layer-color: transparent;
+    --mdc-switch-selected-pressed-state-layer-color: transparent;
+    --mdc-switch-unselected-pressed-state-layer-color: transparent;
+    --mdc-switch-hover-state-layer-color: transparent;
+    --mdc-switch-focus-state-layer-color: transparent;
+
     .mat-mdc-slide-toggle-ripple,
-    .mdc-switch__ripple {
-      display: none !important;
+    .mdc-switch__ripple,
+    .mat-ripple,
+    .mat-ripple-element {
+      display: none;
+      background-color: transparent;
+      background: transparent;
+      opacity: 0;
     }
   }
 
@@ -547,7 +557,7 @@
     /* Set MDC variable to prevent opaque white background on internal elements */
     --mat-select-panel-background-color: var(--admin-select-panel-bg, var(--admin-input-bg, rgba(255, 255, 255, 0.15)));
     --mdc-list-item-container-color: transparent;
-    
+
     background: var(--mat-select-panel-background-color);
     backdrop-filter: blur(15px) saturate(150%);
     -webkit-backdrop-filter: blur(15px) saturate(150%);
