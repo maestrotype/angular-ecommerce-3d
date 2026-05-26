@@ -471,19 +471,6 @@
       color: rgba(255, 255, 255, 0.85);
     }
 
-    .list-row-item {
-      .col-order { color: rgba(255, 255, 255, 0.6); }
-      .order-num { color: #ffffff; }
-      .col-type .type-link { 
-        color: rgba(255, 255, 255, 0.9);
-        &:hover {
-          color: #ffffff;
-          text-decoration: underline;
-        }
-      }
-      .title-text { color: #ffffff; }
-    }
-
     .page-header {
       h1 { color: #ffffff; }
 
@@ -517,6 +504,18 @@
           &.active {
             background: rgba(255, 255, 255, 0.15);
           }
+
+          // Nested elements with high specificity to override default styles
+          .col-order { color: rgba(255, 255, 255, 0.6); }
+          .order-num { color: #ffffff; }
+          .col-type .type-link { 
+            color: rgba(255, 255, 255, 0.9);
+            &:hover {
+              color: #ffffff;
+              text-decoration: underline;
+            }
+          }
+          .col-title .title-text { color: #ffffff; }
         }
 
         .editor-pane-swap {
