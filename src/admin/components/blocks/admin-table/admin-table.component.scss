@@ -19,37 +19,47 @@
   }
 
   // Glass theme - Unified Glass Card
+  :host-context([data-theme="glass"]) &,
   :host-context(body[data-theme="glass"]) & {
     background-color: var(--admin-table-bg);
-    border-radius: var(--border-radius-glass, 16px);
+    border-radius: var(--border-radius-glass, 20px);
     overflow: hidden;
-    backdrop-filter: blur(15px) saturate(150%);
-    -webkit-backdrop-filter: blur(15px) saturate(150%);
-    box-shadow: 0 4px 16px rgba(31, 41, 55, 0.1);
+    backdrop-filter: blur(16px) saturate(155%);
+    -webkit-backdrop-filter: blur(16px) saturate(155%);
+    border: none;                           // REMOVE outer border!
+    box-shadow: var(--admin-glass-shadow);
     
     ::ng-deep {
       .mat-mdc-table {
         background-color: transparent;
       }
       .mat-mdc-header-row {
-        background-color: transparent;
+        background-color: var(--admin-table-header-bg);
+      }
+      .mat-mdc-header-cell {
+        color: var(--admin-table-header-text);
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       }
       .mat-mdc-row {
-        background-color: transparent;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        &:last-child {
-          border-bottom: none;
-        }
+        background-color: var(--admin-table-row-bg);
+      }
+      .mat-mdc-row .mat-mdc-cell {
+        color: var(--admin-table-row-text);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
       }
       .mat-mdc-row:nth-child(even) {
-        background-color: rgba(255, 255, 255, 0.03);
+        background-color: var(--admin-table-even-bg);
+      }
+      .mat-mdc-row:nth-child(even) .mat-mdc-cell {
+        color: var(--admin-table-even-text);
       }
     }
     
-    mat-paginator {
-      background-color: transparent;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    mat-paginator,
+    .mat-mdc-paginator {
+      background-color: var(--admin-table-paginator-bg);
+      color: var(--admin-table-paginator-text);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
     }
   }
 }
