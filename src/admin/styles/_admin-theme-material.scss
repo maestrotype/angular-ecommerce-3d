@@ -1168,12 +1168,14 @@
 
   /* ===== Button styling ===== */
   .mat-mdc-raised-button.mat-primary,
-  .mat-mdc-button.mat-primary {
-    background: rgba(138, 180, 248, 0.3);
-    color: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(138, 180, 248, 0.5);
+  .mat-mdc-button.mat-primary,
+  .mat-mdc-raised-button.mat-accent,
+  .mat-mdc-button.mat-accent {
+    background: rgba(var(--admin-primary-rgb, 59, 130, 246), 0.3);
+    color: #ffffff;
+    border: 1px solid rgba(var(--admin-primary-rgb, 59, 130, 246), 0.5);
     box-shadow:
-      0 4px 16px rgba(138, 180, 248, 0.25),
+      0 4px 16px rgba(var(--admin-primary-rgb, 59, 130, 246), 0.25),
       inset 0 1px 0 rgba(255, 255, 255, 0.25);
     backdrop-filter: blur(15px) saturate(150%);
     -webkit-backdrop-filter: blur(15px) saturate(150%);
@@ -1184,17 +1186,21 @@
   }
 
   .mat-mdc-raised-button.mat-primary:hover,
-  .mat-mdc-button.mat-primary:hover {
-    background: rgba(138, 180, 248, 0.4);
-    border-color: rgba(138, 180, 248, 0.6);
+  .mat-mdc-button.mat-primary:hover,
+  .mat-mdc-raised-button.mat-accent:hover,
+  .mat-mdc-button.mat-accent:hover {
+    background: rgba(var(--admin-primary-rgb, 59, 130, 246), 0.4);
+    border-color: rgba(var(--admin-primary-rgb, 59, 130, 246), 0.6);
     box-shadow:
-      0 6px 20px rgba(138, 180, 248, 0.35),
+      0 6px 20px rgba(var(--admin-primary-rgb, 59, 130, 246), 0.35),
       inset 0 1px 0 rgba(255, 255, 255, 0.3);
   }
 
   .mat-mdc-raised-button.mat-primary:active,
-  .mat-mdc-button.mat-primary:active {
-    background: rgba(138, 180, 248, 0.35);
+  .mat-mdc-button.mat-primary:active,
+  .mat-mdc-raised-button.mat-accent:active,
+  .mat-mdc-button.mat-accent:active {
+    background: rgba(var(--admin-primary-rgb, 59, 130, 246), 0.35);
     transform: translateY(1px);
   }
 }
