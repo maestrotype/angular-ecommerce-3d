@@ -791,6 +791,71 @@
   }
 }
 
+// ── Glass theme: paginator + table overrides ──
+[data-theme='glass'] {
+  // Material MDC token: prevents white background injected by the component
+  --mat-paginator-container-background-color: var(--admin-table-paginator-bg);
+  --mat-paginator-container-text-color: var(--admin-table-paginator-text);
+  --mat-paginator-enabled-icon-color: var(--admin-table-paginator-text);
+  --mat-paginator-disabled-icon-color: rgba(255, 255, 255, 0.3);
+  --mat-paginator-page-size-label-text-color: var(--admin-table-paginator-text);
+
+  .mat-paginator,
+  .mat-mdc-paginator {
+    background-color: var(--admin-table-paginator-bg);
+    color: var(--admin-table-paginator-text);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0 0 20px 20px;
+  }
+
+  .mat-paginator .mat-icon-button,
+  .mat-mdc-paginator .mat-mdc-icon-button {
+    color: var(--admin-table-paginator-text);
+  }
+
+  .mat-paginator .mat-paginator-page-size-label,
+  .mat-paginator .mat-paginator-range-label,
+  .mat-mdc-paginator .mat-mdc-paginator-page-size-label,
+  .mat-mdc-paginator .mat-mdc-paginator-range-label,
+  .mat-mdc-paginator .mat-mdc-select-value,
+  .mat-mdc-paginator .mat-mdc-select-arrow,
+  .mat-mdc-paginator .mat-mdc-select-trigger {
+    color: var(--admin-table-paginator-text);
+  }
+
+  // Table background resets — actual row/header colors set via admin-global.scss
+  .mat-mdc-table.mat-mdc-table,
+  table.mat-mdc-table.mat-mdc-table {
+    background-color: transparent;
+
+    .mat-mdc-header-cell.mat-mdc-header-cell {
+      color: var(--admin-table-header-text);
+      font-weight: 600;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .mat-mdc-cell,
+    td {
+      color: var(--admin-table-row-text);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    tbody tr:nth-child(odd),
+    .mat-mdc-row:nth-child(odd) {
+      background: var(--admin-table-row-bg);
+    }
+
+    tbody tr:nth-child(even),
+    .mat-mdc-row:nth-child(even) {
+      background: var(--admin-table-even-bg);
+    }
+
+    tbody tr:nth-child(even) td {
+      color: var(--admin-table-even-text);
+    }
+  }
+}
+
 /* Dark Glass theme specific styling */
 [data-theme='dark-glass'] {
   /* ===== Material Tabs MDC Variables ===== */
@@ -1058,112 +1123,6 @@
   .sidenav-footer button mat-icon,
   .sidenav-footer .mat-mdc-button mat-icon {
     color: rgba(255, 255, 255, 0.95);
-  }
-
-  /* ===== Paginator - LIGHT glass (Apple style) ===== */
-  .mat-paginator,
-  .mat-mdc-paginator {
-    background-color: transparent;
-    color: rgba(255, 255, 255, 0.95);
-    border-top: none;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    border-radius: 0 0 20px 20px;
-  }
-
-  .mat-paginator .mat-icon-button,
-  .mat-mdc-paginator .mat-mdc-icon-button {
-    color: rgba(255, 255, 255, 0.95);
-  }
-
-  .mat-paginator .mat-paginator-page-size-label,
-  .mat-paginator .mat-paginator-range-label,
-  .mat-mdc-paginator .mat-mdc-paginator-page-size-label,
-  .mat-mdc-paginator .mat-mdc-paginator-range-label {
-    color: rgba(255, 255, 255, 0.95);
-  }
-
-  .mat-mdc-paginator .mat-mdc-select,
-  .mat-paginator .mat-select {
-    color: rgba(255, 255, 255, 0.95);
-  }
-
-  .mat-mdc-paginator .mat-mdc-select-value,
-  .mat-paginator .mat-select-value {
-    color: rgba(255, 255, 255, 0.95);
-  }
-
-  .mat-mdc-paginator .mat-mdc-select-trigger,
-  .mat-paginator .mat-select-trigger {
-    color: rgba(255, 255, 255, 0.95);
-  }
-
-  .mat-mdc-paginator .mat-mdc-select-arrow,
-  .mat-paginator .mat-select-arrow {
-    color: rgba(255, 255, 255, 0.95);
-  }
-
-  /* ===== Tables - LIGHT liquid glass (Apple style) ===== */
-  .mat-mdc-table.mat-mdc-table,
-  table.mat-mdc-table.mat-mdc-table {
-    background-color: transparent;
-    backdrop-filter: blur(20px) saturate(150%);
-    -webkit-backdrop-filter: blur(20px) saturate(150%);
-    border-radius: 20px 20px 0 0;
-    overflow: hidden;
-    box-shadow: none;
-    transform: translate3d(0, 0, 0);
-    -webkit-transform: translate3d(0, 0, 0);
-
-    /* Header - WHITE text with top highlight (Apple style) */
-    .mat-mdc-header-row.mat-mdc-header-row,
-    thead tr,
-    .mat-mdc-header-cell.mat-mdc-header-cell {
-      color: rgba(255, 255, 255, 1);
-      font-weight: 600;
-      border: none;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.3),
-        0 1px 0 rgba(0, 0, 0, 0.08);
-    }
-
-    /* Cells - remove internal borders */
-    .mat-mdc-cell.mat-mdc-cell,
-    td {
-      border-bottom: none;
-    }
-
-    /* Cells - PURE WHITE text */
-    .mat-mdc-cell,
-    td {
-      border: none;
-      color: rgba(255, 255, 255, 1);
-      padding: 8px 12px;
-    }
-
-    /* Zebra striping - LIGHT GRAY-BROWN (liquid glass) */
-    tbody tr:nth-child(odd) {
-      background: rgba(80, 75, 70, 0.2);
-      will-change: auto;
-    }
-
-    tbody tr:nth-child(even) {
-      background: rgba(70, 65, 60, 0.12);
-      will-change: auto;
-    }
-
-    /* First row top corners */
-    tbody tr:first-child td:first-child {
-      border-top-left-radius: 0;
-    }
-
-    tbody tr:first-child td:last-child {
-      border-top-right-radius: 0;
-    }
-  }
-
-  /* Remove inner table shadows to prevent dark corners */
-  .admin-table-wrapper .mat-mdc-table {
-    box-shadow: none;
   }
 
   /* ===== Button styling ===== */
