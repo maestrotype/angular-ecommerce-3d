@@ -221,7 +221,7 @@
     gap: 8px;
     margin-top: 12px;
     padding-top: 12px;
-    border-top: 1px solid #404040;
+    border-top: 1px solid var(--admin-border-primary, #404040);
 
     .action-button {
       width: 36px;

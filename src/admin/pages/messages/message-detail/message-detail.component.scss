@@ -32,7 +32,7 @@
   padding: 16px;
   border-radius: 8px;
   margin-bottom: 24px;
-  border: 1px solid #404040;
+  border: 1px solid var(--admin-border-primary, #404040);
 
   .info-row {
     margin-bottom: 12px;
@@ -64,7 +64,7 @@
     background: var(--admin-bg-hover);
     padding: 16px;
     border-radius: 8px;
-    border: 1px solid #404040;
+    border: 1px solid var(--admin-border-primary, #404040);
     white-space: pre-wrap;
     line-height: 1.6;
     color: var(--mdc-list-list-item-label-text-color);
@@ -88,7 +88,7 @@
 .reply-form {
   margin-top: 24px;
   padding-top: 24px;
-  border-top: 1px solid #404040;
+  border-top: 1px solid var(--admin-border-primary, #404040);
 
   h4 {
     margin: 0 0 16px 0;

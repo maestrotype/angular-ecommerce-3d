@@ -58,6 +58,7 @@
   gap: 20px;
   margin-bottom: 20px;
   width: 100%;
+  align-items: start;
 
   @media (max-width: 768px) { grid-template-columns: 1fr; }
 }
@@ -284,7 +285,7 @@ textarea { width: 100% !important; min-height: 120px; }
 
   .viewer-container-glass {
     position: relative; width: 100%; height: 100%; min-height: 520px;
-    background: #0a0a0c;
+    background: transparent;
     app-three-d-viewer { width: 100%; height: 100%; display: block; }
   }
 
