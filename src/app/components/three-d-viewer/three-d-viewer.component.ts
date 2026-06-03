@@ -207,6 +207,7 @@ import { environment } from '../../../environments/environment';
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     :host-context([data-theme="light"]), :host-context([data-theme="default"]) {
+      .viewer-host { background: #f1f5f9; }
       .loader-overlay { background: rgba(255, 255, 255, 0.9); }
       .loader-percent { color: #1e293b; }
       .error-glass-card { background: white; border-color: rgba(0,0,0,0.05); }
