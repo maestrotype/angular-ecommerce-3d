@@ -413,6 +413,7 @@
         --favorites-clear-btn-text: #ffffff;
         --favorites-clear-btn-hover-bg: #5a6268;
         --favorites-card-bg: #374151;
+        --favorites-section-wrapper: transparent;
         --favorites-card-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         --favorites-card-blur: blur(15px);
         --favorites-card-border: rgba(255, 255, 255, 0.1);
@@ -620,50 +621,51 @@
 
         /* Best Sellers section - Glass theme */
         --best-sellers-bg: radial-gradient(circle at 0% 0%,
-                        rgba(129, 140, 248, 0.25) 0%,
+                        rgba(99, 102, 241, 0.15) 0%,
                         transparent 55%),
                         linear-gradient(135deg,
-                        rgba(255, 255, 255, 0.35) 0%,
-                        rgba(255, 255, 255, 0.18) 40%,
-                        rgba(255, 255, 255, 0.08) 100%);
-        --best-sellers-text: #0f172a;
-        --best-sellers-subtitle: #4b5563;
+                        rgba(0, 0, 0, 0.4) 0%,
+                        rgba(0, 0, 0, 0.2) 40%,
+                        rgba(0, 0, 0, 0.1) 100%);
+        --best-sellers-text: #ffffff;
+        --best-sellers-subtitle: rgba(255, 255, 255, 0.7);
 
         /* Favorites section - Glass theme */
-        --favorites-bg: rgba(255, 255, 255, 0.15);
-        --favorites-text: #1e293b;
-        --favorites-header-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%);
-        --favorites-header-text: #1e293b;
-        --favorites-header-overlay: rgba(255, 255, 255, 0.05);
+        --favorites-bg: rgba(0, 0, 0, 0.2);
+        --favorites-text: #ffffff;
+        --favorites-header-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%);
+        --favorites-header-text: #ffffff;
+        --favorites-header-overlay: rgba(0, 0, 0, 0.2);
         --favorites-header-blur: blur(25px);
-        --favorites-back-btn-bg: rgba(255, 255, 255, 0.4);
-        --favorites-back-btn-text: #1e293b;
-        --favorites-back-btn-border: rgba(255, 255, 255, 0.6);
+        --favorites-back-btn-bg: rgba(255, 255, 255, 0.1);
+        --favorites-back-btn-text: #ffffff;
+        --favorites-back-btn-border: rgba(255, 255, 255, 0.2);
         --favorites-back-btn-blur: blur(15px);
-        --favorites-back-btn-hover-bg: rgba(255, 255, 255, 0.6);
-        --favorites-back-btn-hover-border: rgba(255, 255, 255, 0.8);
+        --favorites-back-btn-hover-bg: rgba(255, 255, 255, 0.2);
+        --favorites-back-btn-hover-border: rgba(255, 255, 255, 0.3);
         --favorites-title-size: 2.5rem;
         --favorites-title-weight: 700;
         --favorites-heart-color: #ff6b6b;
         --favorites-subtitle-size: 1.1rem;
         --favorites-subtitle-opacity: 0.9;
-        --favorites-top-bar-bg: rgba(255, 255, 255, 0.3);
-        --favorites-top-bar-text: #1e293b;
-        --favorites-clear-btn-bg: rgba(255, 255, 255, 0.5);
-        --favorites-clear-btn-text: #1e293b;
-        --favorites-clear-btn-hover-bg: rgba(255, 255, 255, 0.7);
-        --favorites-card-bg: rgba(255, 255, 255, 0.25);
-        --favorites-card-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+        --favorites-top-bar-bg: rgba(255, 255, 255, 0.05);
+        --favorites-top-bar-text: #ffffff;
+        --favorites-clear-btn-bg: rgba(255, 255, 255, 0.15);
+        --favorites-clear-btn-text: #ffffff;
+        --favorites-clear-btn-hover-bg: rgba(255, 255, 255, 0.25);
+        --favorites-card-bg: rgba(0, 0, 0, 0.25);
+        --favorites-section-wrapper: transparent;
+        --favorites-card-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         --favorites-card-blur: blur(20px);
-        --favorites-card-border: rgba(255, 255, 255, 0.5);
-        --favorites-card-hover-shadow: 0 20px 40px rgba(31, 38, 135, 0.15);
-        --favorites-card-hover-bg: rgba(255, 255, 255, 0.4);
-        --favorites-product-name-color: #1e293b;
-        --favorites-product-category-color: #6366f1;
-        --favorites-product-price-color: #6366f1;
-        --favorites-add-to-cart-bg: rgba(255, 255, 255, 0.4);
-        --favorites-add-to-cart-text: #1e293b;
-        --favorites-add-to-cart-hover-bg: rgba(255, 255, 255, 0.6);
+        --favorites-card-border: rgba(255, 255, 255, 0.1);
+        --favorites-card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        --favorites-card-hover-bg: rgba(255, 255, 255, 0.05);
+        --favorites-product-name-color: #ffffff;
+        --favorites-product-category-color: #818cf8;
+        --favorites-product-price-color: #818cf8;
+        --favorites-add-to-cart-bg: rgba(255, 255, 255, 0.1);
+        --favorites-add-to-cart-text: #ffffff;
+        --favorites-add-to-cart-hover-bg: rgba(255, 255, 255, 0.2);
 
         /* Surface variables - DEEP DARK Glass effect */
         --surface-primary: rgba(0, 0, 0, 0.4);
