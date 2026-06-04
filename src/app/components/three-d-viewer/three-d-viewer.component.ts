@@ -143,7 +143,7 @@ import { environment } from '../../../environments/environment';
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 24px;
-      padding: 2rem;
+      padding: 1rem;
       max-width: 400px;
       width: 100%;
       text-align: center;
