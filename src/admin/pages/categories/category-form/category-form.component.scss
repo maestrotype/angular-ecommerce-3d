@@ -64,7 +64,7 @@
   gap: 16px;
   justify-content: flex-end;
   padding: 24px;
-  border-top: 1px solid #404040;
+  border-top: 1px solid var(--admin-border-primary, #404040);
 
   .cancel-button {
     height: 100%;

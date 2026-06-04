@@ -221,7 +221,7 @@
     gap: 8px;
     margin-top: 12px;
     padding-top: 12px;
-    border-top: 1px solid #404040;
+    border-top: 1px solid var(--admin-border-primary, #404040);
 
     .action-button {
       width: 36px;
@@ -314,15 +314,15 @@
 ::ng-deep {
   .mat-form-field {
     .mat-form-field-label {
-      color: #e5e7eb ;
+      color: var(--admin-text-secondary, #e5e7eb) ;
     }
     
     .mat-input-element {
-      color: #ffffff ;
+      color: var(--admin-text-primary, #ffffff) ;
     }
     
     .mat-form-field-outline {
-      color: #6b7280 ;
+      color: var(--admin-border-primary, #6b7280) ;
     }
     
     &.mat-focused {
@@ -337,16 +337,16 @@
   }
   
   .mat-select {
-    color: #ffffff ;
+    color: var(--admin-text-primary, #ffffff) ;
     
     .mat-select-arrow {
-      color: #9ca3af ;
+      color: var(--admin-text-secondary, #9ca3af) ;
     }
   }
   
   .mat-option {
     background-color: var(--admin-bg-secondary) ;
-    color: #ffffff ;
+    color: var(--admin-text-primary, #ffffff) ;
     
     &:hover {
       background-color: var(--admin-bg-hover) ;
@@ -367,10 +367,10 @@
   }
   
   .mat-icon-button {
-    color: #ffffff ;
+    color: var(--admin-text-primary, #ffffff) ;
     
     &.mat-button-disabled {
-      color: #6b7280 ;
+      color: var(--admin-text-secondary, #6b7280) ;
     }
   }
   
@@ -396,12 +396,12 @@
   }
   
   .mat-header-cell {
-    color: #ffffff ;
+    color: var(--admin-text-primary, #ffffff) ;
     font-weight: 600;
   }
   
   .mat-cell {
-    color: #ffffff ;
+    color: var(--admin-text-primary, #ffffff) ;
   }
 }
   
