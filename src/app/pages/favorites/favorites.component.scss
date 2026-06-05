@@ -237,6 +237,151 @@
         }
       }
     }
+
+    // Products grid - base structural styles (colors come from theme-specific overrides below)
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 24px;
+      margin-top: 8px;
+
+      .product-card {
+        display: flex;
+        flex-direction: column;
+        border-radius: 16px;
+        overflow: hidden;
+        background: var(--favorites-card-bg, #ffffff);
+        border: 1px solid var(--favorites-card-border, rgba(0,0,0,0.08));
+        box-shadow: var(--favorites-card-shadow, 0 2px 12px rgba(0,0,0,0.06));
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+
+        &:hover {
+          transform: translateY(-6px);
+          box-shadow: var(--favorites-card-hover-shadow, 0 12px 28px rgba(0,0,0,0.12));
+          background: var(--favorites-card-hover-bg, #ffffff);
+        }
+
+        .product-image {
+          position: relative;
+          width: 100%;
+          aspect-ratio: 1 / 1;
+          overflow: hidden;
+          background: var(--product-image-bg, #f8fafc);
+
+          img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.5s ease;
+          }
+
+          .product-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .overlay-actions {
+              display: flex;
+              gap: 12px;
+
+              .action-btn {
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.9);
+                border: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                color: #475569;
+
+                &:hover {
+                  background: #ffffff;
+                  transform: scale(1.1);
+                }
+
+                &.is-favorite {
+                  color: #ff6b6b;
+                }
+
+                .material-icons {
+                  font-size: 20px;
+                }
+              }
+            }
+          }
+
+          &:hover {
+            img { transform: scale(1.06); }
+            .product-overlay { opacity: 1; }
+          }
+        }
+
+        .product-info {
+          padding: 18px;
+          display: flex;
+          flex-direction: column;
+          flex-grow: 1;
+
+          .product-name {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0 0 12px;
+            line-height: 1.4;
+            color: var(--favorites-product-name-color, var(--text-primary, #1e293b));
+          }
+
+          .product-footer {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 8px;
+
+            .product-price {
+              .price-main {
+                display: flex;
+                flex-direction: column;
+
+                .current-price {
+                  font-size: 1.2rem;
+                  font-weight: 700;
+                  color: var(--favorites-product-price-color, var(--text-primary, #1e293b));
+                }
+
+                .original-price {
+                  font-size: 0.85rem;
+                  color: var(--text-secondary, #94a3b8);
+                  text-decoration: line-through;
+                }
+              }
+            }
+
+            .product-category {
+              font-size: 0.75rem;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+              color: var(--favorites-product-category-color, #64748b);
+              background: transparent;
+              padding: 3px 8px;
+              border-radius: 4px;
+              border: 1px solid currentColor;
+              white-space: nowrap;
+            }
+          }
+        }
+      }
+    }
   }
 
 }

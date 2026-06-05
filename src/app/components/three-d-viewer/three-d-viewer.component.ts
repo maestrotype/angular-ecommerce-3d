@@ -88,7 +88,7 @@ import { environment } from '../../../environments/environment';
     .viewer-host { 
       position: relative; width: 100%; height: 100%; overflow: hidden; 
       border-radius: inherit;
-      background: #0a0a0c;
+      background: transparent;
     }
 
     .three-canvas { width: 100%; height: 100%; opacity: 0; transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -143,7 +143,7 @@ import { environment } from '../../../environments/environment';
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 24px;
-      padding: 2rem;
+      padding: 1rem;
       max-width: 400px;
       width: 100%;
       text-align: center;
@@ -206,13 +206,53 @@ import { environment } from '../../../environments/environment';
     @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-    /* Light Theme Adjustments */
     :host-context([data-theme="light"]), :host-context([data-theme="default"]) {
+      .viewer-host { background: #f1f5f9; }
       .loader-overlay { background: rgba(255, 255, 255, 0.9); }
       .loader-percent { color: #1e293b; }
       .error-glass-card { background: white; border-color: rgba(0,0,0,0.05); }
       .error-title { color: #1e293b; }
       .error-body { color: #475569; }
+    }
+
+    :host-context([data-theme="dark"]) {
+      .viewer-host { background: #0a0a0c; }
+    }
+
+    :host-context([data-theme="glass"]) {
+      .loader-overlay {
+        background: rgba(15, 23, 42, 0.25);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+      }
+      .error-overlay {
+        background: rgba(15, 23, 42, 0.15);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+      .error-glass-card {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    :host-context([data-theme="dark-glass"]) {
+      .viewer-host { background: rgba(10, 10, 20, 0.6); }
+      .loader-overlay {
+        background: rgba(10, 10, 20, 0.5);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+      }
+      .error-overlay {
+        background: rgba(10, 10, 20, 0.4);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+      .error-glass-card {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.12);
+      }
     }
   `]
 })

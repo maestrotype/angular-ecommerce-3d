@@ -136,7 +136,7 @@
     color: #ffffff;
     background-color: var(--admin-bg-secondary);
     border-radius: 8px;
-    border: 1px solid #404040;
+    border: 1px solid var(--admin-border-primary, #404040);
   }
   
   .error-container mat-icon {

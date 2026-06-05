@@ -42,6 +42,37 @@
         --footer-link-hover: #0f172a;
         --footer-border: rgba(255, 255, 255, 0.3);
     }
+
+    // Global theme overrides - always win over variant classes
+    // because they are scoped to :host (same specificity as variants)
+    // but appear later in the cascade
+    &:host-context([data-theme="dark"]) {
+        --footer-bg: rgba(15, 23, 42, 0.95);
+        --footer-text: #f8fafc;
+        --footer-link: #94a3b8;
+        --footer-link-hover: #ffffff;
+        --footer-border: rgba(255, 255, 255, 0.1);
+        --footer-backdrop-filter: blur(15px);
+    }
+
+    &:host-context([data-theme="glass"]) {
+        --footer-bg: rgba(10, 15, 30, 0.6);
+        --footer-backdrop-filter: blur(20px);
+        --footer-text: #ffffff;
+        --footer-link: rgba(255, 255, 255, 0.7);
+        --footer-link-hover: #ffffff;
+        --footer-border: rgba(255, 255, 255, 0.1);
+    }
+
+    &:host-context([data-theme="light"]),
+    &:host-context([data-theme="default"])  {
+        --footer-bg: linear-gradient(180deg, #f1f5f9 0%, #ffffff 100%);
+        --footer-text: #1e293b;
+        --footer-link: #64748b;
+        --footer-link-hover: #0f172a;
+        --footer-border: rgba(0, 0, 0, 0.05);
+        --footer-backdrop-filter: none;
+    }
 }
 
 .footer {

@@ -2,10 +2,10 @@
 .message-detail-container {
   max-width: 800px;
   background-color: var(--admin-bg-card);
-  color: var(--mdc-list-list-item-label-text-color);
+  color: var(--admin-text-primary, var(--mdc-list-list-item-label-text-color));
   border: var(--border-width) var(--border-style) var(--border-color);
   border-radius: var(--border-radius-dark-glass);
-  box-shadow: 0 16px 60px #00000059, 0 2px 24px #ffb4781a, inset 0 1px #ffffff57, inset 0 0 60px #ffffff08;
+  box-shadow: var(--admin-shadow-lg, 0 16px 60px rgba(0, 0, 0, 0.35));
 }
 
 .header {
@@ -32,7 +32,7 @@
   padding: 16px;
   border-radius: 8px;
   margin-bottom: 24px;
-  border: 1px solid #404040;
+  border: 1px solid var(--admin-border-primary, #404040);
 
   .info-row {
     margin-bottom: 12px;
@@ -64,7 +64,7 @@
     background: var(--admin-bg-hover);
     padding: 16px;
     border-radius: 8px;
-    border: 1px solid #404040;
+    border: 1px solid var(--admin-border-primary, #404040);
     white-space: pre-wrap;
     line-height: 1.6;
     color: var(--mdc-list-list-item-label-text-color);
@@ -81,14 +81,23 @@
 }
 
 .admin-reply .reply-text {
-  background: #1e3a8a;
-  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+  border-color: var(--admin-primary, #3b82f6);
+  color: var(--admin-text-primary);
+
+  [data-theme="dark"] &,
+  [data-theme="glass"] &,
+  [data-theme="dark-glass"] & {
+    background: rgba(30, 58, 138, 0.6);
+    border-color: var(--admin-primary, #3b82f6);
+    color: #f8fafc;
+  }
 }
 
 .reply-form {
   margin-top: 24px;
   padding-top: 24px;
-  border-top: 1px solid #404040;
+  border-top: 1px solid var(--admin-border-primary, #404040);
 
   h4 {
     margin: 0 0 16px 0;
@@ -121,28 +130,28 @@
 ::ng-deep {
   .mat-dialog-container {
     background-color: var(--admin-bg-card) ;
-    color: var(--mdc-list-list-item-label-text-color);
+    color: var(--admin-text-primary, var(--mdc-list-list-item-label-text-color));
   }
   
   .mat-dialog-title {
-    color: var(--mdc-list-list-item-label-text-color);
+    color: var(--admin-text-primary, var(--mdc-list-list-item-label-text-color));
   }
   
   .mat-dialog-content {
-    color: var(--mdc-list-list-item-label-text-color);
+    color: var(--admin-text-primary, var(--mdc-list-list-item-label-text-color));
   }
   
   .mat-form-field {
     .mat-form-field-label {
-      color: var(--mdc-list-list-item-label-text-color);
+      color: var(--admin-text-secondary, var(--mdc-list-list-item-label-text-color));
     }
     
     .mat-input-element {
-      color: var(--mdc-list-list-item-label-text-color);
+      color: var(--admin-text-primary, var(--mdc-list-list-item-label-text-color));
     }
     
     .mat-form-field-outline {
-      color: #6b7280 ;
+      color: var(--admin-border-primary, #6b7280) ;
     }
     
     &.mat-focused {
@@ -158,16 +167,16 @@
   
   .mat-chip {
     background-color: #3b82f6 ;
-    color: var(--mdc-list-list-item-label-text-color);
+    color: #ffffff ;
   }
   
   .mat-button {
-    color: var(--mdc-list-list-item-label-text-color);
+    color: var(--admin-text-primary, var(--mdc-list-list-item-label-text-color));
   }
   
   .mat-raised-button.mat-primary {
     background-color: #3b82f6 ;
-    color: var(--mdc-list-list-item-label-text-color);
+    color: #ffffff ;
   }
 }
   

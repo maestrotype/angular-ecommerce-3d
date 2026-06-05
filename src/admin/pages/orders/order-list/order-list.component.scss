@@ -7,6 +7,11 @@
     min-height: calc(100vh - 64px);
     color: var(--admin-order-list-text-primary);
     box-shadow: var(--admin-shadow-md);
+
+    [data-theme="glass"] & {
+      background-color: transparent;
+      box-shadow: none;
+    }
   }
 
   .list__header {
@@ -792,22 +797,5 @@
     background-color: var(--admin-bg-secondary);
   }
 
-  .mat-paginator {
-    background-color: var(--admin-order-list-pagination-bg, var(--admin-bg-secondary));
-    color: var(--admin-order-list-text-primary, #ffffff);
-    border-top: 1px solid var(--admin-order-list-pagination-border, #404040);
 
-    .mat-paginator-page-size-label,
-    .mat-paginator-range-label {
-      color: var(--admin-order-list-text-primary, #ffffff);
-    }
-
-    .mat-icon-button {
-      color: var(--admin-order-list-text-primary, #ffffff);
-    }
-
-    .mat-select {
-      color: var(--admin-order-list-text-primary, #ffffff);
-    }
-  }
 }

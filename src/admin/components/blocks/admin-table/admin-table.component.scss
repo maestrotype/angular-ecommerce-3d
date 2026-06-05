@@ -1,59 +1,8 @@
 .admin-table-wrapper {
-  // Table styles are now in _admin-theme-material.scss
-  // Only component-specific styles remain here
+  // Table styles are now globally managed in _admin-theme-material.scss
+  // Only structural component-specific styles remain here
   overflow: hidden;
-  
-  mat-paginator {
-    background-color: var(--admin-order-list-pagination-bg, var(--admin-bg-secondary));
-    color: var(--admin-order-list-text-primary, var(--admin-text-primary));
-    border-top: 1px solid var(--admin-order-list-pagination-border, var(--admin-border-primary));
-  }
-  
-  // Dark Glass theme - Apple style
-  [data-theme="dark-glass"] & {
-    mat-paginator {
-      background-color: transparent;
-      border-top: none;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    }
-  }
-
-  // Glass theme - Unified Glass Card
-  :host-context(body[data-theme="glass"]) & {
-    background-color: var(--admin-table-bg);
-    border-radius: var(--border-radius-glass, 16px);
-    overflow: hidden;
-    backdrop-filter: blur(15px) saturate(150%);
-    -webkit-backdrop-filter: blur(15px) saturate(150%);
-    box-shadow: 0 4px 16px rgba(31, 41, 55, 0.1);
-    
-    ::ng-deep {
-      .mat-mdc-table {
-        background-color: transparent;
-      }
-      .mat-mdc-header-row {
-        background-color: transparent;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      }
-      .mat-mdc-row {
-        background-color: transparent;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        &:last-child {
-          border-bottom: none;
-        }
-      }
-      .mat-mdc-row:nth-child(even) {
-        background-color: rgba(255, 255, 255, 0.03);
-      }
-    }
-    
-    mat-paginator {
-      background-color: transparent;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-  }
 }
-
 .admin-table-loading {
   text-align: center;
   padding: var(--admin-spacing-xxl) var(--admin-spacing-lg);

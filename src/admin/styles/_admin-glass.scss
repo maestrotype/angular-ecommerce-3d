@@ -45,30 +45,45 @@
   --admin-bg-overlay: rgba(15, 23, 42, 0.2);
   --admin-message-info-bg: rgba(255, 255, 255, 0.3);
   
-  // Table colors - translucent for glass effect
-  --admin-basic-bg: rgba(255, 255, 255, 0.2);
-  --admin-basic-translucent: rgba(255, 255, 255, 0.5);
-  --admin-dark-translucent: rgba(0, 0, 0, 0.1);
-  --admin-light-translucent: rgba(255, 255, 255, 0.75);
-  --admin-table-bg: rgba(255, 255, 255, 0.2);
-  --admin-table-border: rgba(255, 255, 255, 0.15);
-  --admin-table-header-bg: rgba(255, 255, 255, 0.35);
-  --admin-table-even-bg: rgba(255, 255, 255, 0.25);
-  --admin-table-row-bg: rgba(255, 255, 255, 0.15);    
-  --admin-bg-container: #d7e1ff; 
+  // Table colors — two-tone zebra: dark Dashboard-card blue vs light frosted glass.
+  // Header + even rows + paginator → dark steel-blue (matches Dashboard KPI cards).
+  // Odd rows → light near-transparent so the overall rhythm reads dark / light / dark.
+  --admin-basic-bg: rgba(255, 255, 255, 0.15);
+  --admin-basic-translucent: rgba(255, 255, 255, 0.45);
+  --admin-dark-translucent: rgba(0, 0, 0, 0.06);
+  --admin-light-translucent: rgba(255, 255, 255, 0.7);
+  --admin-table-bg: rgba(255, 255, 255, 0.15);             // container wrapper level
+  --admin-table-border: transparent;                       // no borders
+  --admin-table-header-bg: rgba(25, 60, 105, 0.72);        // DARK — Dashboard KPI card blue
+  --admin-table-header-text: rgba(255, 255, 255, 0.95);    // WHITE text in header
+  --admin-table-even-bg: rgba(25, 60, 105, 0.45);          // DARK — same hue, a bit lighter
+  --admin-table-even-text: rgba(255, 255, 255, 0.90);      // WHITE text in even rows
+  --admin-table-row-bg: rgba(25, 60, 105, 0.18);           // DARKER tint — no more harsh contrast
+  --admin-table-row-text: rgba(255, 255, 255, 0.85);       // WHITE text in odd rows too
+  --admin-table-paginator-bg: rgba(25, 60, 105, 0.72);     // DARK — same as header
+  --admin-table-paginator-text: rgba(255, 255, 255, 0.90); // WHITE text in paginator
+  --admin-bg-container: #d7e1ff;
   --dashboard-stat-card-bg: rgba(248, 250, 252, 0.2);
   
-  // Text Colors - Glass Theme (same as light theme)
-  --admin-text-primary: #212121;
-  --admin-text-secondary: #757575;
-  --admin-text-disabled: #bdbdbd;
-  --admin-text-inverse: #ffffff;
-  
-  // Border Colors - Glass Theme (same as light theme)
-  --admin-border-primary: #d0d0d0;
-  --admin-border-secondary: #c0c0c0;
-  --admin-border-focus: #1976d2;
-  --admin-border-error: #f44336;
+  --admin-text-primary: rgba(255, 255, 255, 0.95);
+  --admin-text-secondary: rgba(255, 255, 255, 0.65);
+  --admin-text-disabled: rgba(255, 255, 255, 0.35);
+  --admin-text-inverse: #1a2a4a;
+
+  --admin-border-primary: rgba(255, 255, 255, 0.2);
+  --admin-border-secondary: rgba(255, 255, 255, 0.12);
+  --admin-border-focus: rgba(100, 160, 255, 0.8);
+  --admin-border-error: #f87171;
+
+  --admin-input-bg: rgba(255, 255, 255, 0.12);
+  --admin-input-text: rgba(255, 255, 255, 0.95);
+  --admin-input-border: rgba(255, 255, 255, 0.2);
+  --admin-input-label: rgba(255, 255, 255, 0.6);
+  --admin-input-focus-border: rgba(100, 160, 255, 0.8);
+
+  --mat-card-subtitle-text-color: rgba(255, 255, 255, 0.95);
+  --mdc-form-field-label-text-color: rgba(255, 255, 255, 0.65);
+  --mat-select-placeholder-text-color: rgba(255, 255, 255, 0.5);
   
   // Order Details / List glass overrides - translucent
   --admin-popup-bg: rgba(240, 242, 245, 0.25);

@@ -163,7 +163,7 @@
                     }
 
                     .material-icons {
-                        color: var(--color-text-primary, #1e293b);
+                        color: var(--color-text-primary, #ffffff);
                     }
                 }
             }
@@ -174,16 +174,16 @@
                 backdrop-filter: blur(10px);
                 -webkit-backdrop-filter: blur(10px);
                 border: 1px solid rgba(255, 255, 255, 0.3);
-                color: #1e293b;
+                color: #ffffff;
                 font-weight: 700;
             }
         }
 
         .product-info {
             .product-name {
-                color: #1e293b;
+                color: #ffffff;
                 font-weight: 700;
-                text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
             }
 
             .product-rating {
@@ -203,7 +203,7 @@
 
                 .rating-value,
                 .rating-count {
-                    color: rgba(30, 41, 59, 0.8);
+                    color: rgba(255, 255, 255, 0.8);
                 }
 
                 .product-category {
@@ -216,12 +216,12 @@
             .product-footer {
                 .product-price {
                     .current-price {
-                        color: #1e293b;
+                        color: #ffffff;
                         font-weight: 800;
                     }
 
                     .original-price {
-                        color: rgba(30, 41, 59, 0.6);
+                        color: rgba(255, 255, 255, 0.6);
                     }
                 }
             }
