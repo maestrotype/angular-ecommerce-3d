@@ -44,6 +44,35 @@
     }
 }
 
+// Global Theme Overrides (these override variants)
+:host-context([data-theme="dark"]) {
+    --footer-bg: var(--color-surface-primary, #0f172a);
+    --footer-text: #f8fafc;
+    --footer-link: #94a3b8;
+    --footer-link-hover: #ffffff;
+    --footer-border: rgba(255, 255, 255, 0.1);
+}
+
+:host-context([data-theme="glass"]) {
+    --footer-bg: rgba(255, 255, 255, 0.05);
+    --footer-backdrop-filter: blur(20px);
+    --footer-text: #ffffff;
+    --footer-link: rgba(255, 255, 255, 0.7);
+    --footer-link-hover: #ffffff;
+    --footer-border: rgba(255, 255, 255, 0.1);
+}
+
+// Ensure default/light theme overrides variant-dark if forced by global theme switcher
+:host-context([data-theme="default"]),
+:host-context([data-theme="light"]) {
+    --footer-bg: linear-gradient(180deg, #f1f5f9 0%, #ffffff 100%);
+    --footer-text: #1e293b;
+    --footer-link: #64748b;
+    --footer-link-hover: #0f172a;
+    --footer-border: rgba(0, 0, 0, 0.05);
+    --footer-backdrop-filter: none;
+}
+
 .footer {
     background: var(--footer-bg);
     backdrop-filter: var(--footer-backdrop-filter);
