@@ -3,10 +3,10 @@
     <div class="title-row" style="display: flex; justify-content: space-between; align-items: flex-start;">
       <div>
         <h2>{{ 'UAV_MAPPING' | translate }}</h2>
-        <p class="subtitle">Navigate the map, draw a rectangle over the drone's flight area, then upload your video to extract the GPS trajectory.</p>
+        <p class="subtitle">Укажите на карте область полета (нарисуйте прямоугольник), затем загрузите видео, чтобы извлечь GPS-траекторию.</p>
       </div>
       <button mat-stroked-button color="warn" (click)="resetAll()" [disabled]="isProcessing">
-        <mat-icon>delete_sweep</mat-icon> Reset All
+        <mat-icon>delete_sweep</mat-icon> Сбросить всё
       </button>
     </div>
   </div>
@@ -18,16 +18,16 @@
       <mat-card class="admin-card glass-card upload-card">
         <mat-card-header>
           <div class="card-icon"><mat-icon>videocam</mat-icon></div>
-          <mat-card-title>Video Footage</mat-card-title>
-          <mat-card-subtitle>Raw or OSD Drone Video</mat-card-subtitle>
+          <mat-card-title>Видео с дрона</mat-card-title>
+          <mat-card-subtitle>Сырое видео или видео с OSD</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <div class="upload-zone" [class.has-file]="videoFile" (click)="videoInput.click()">
             <input type="file" #videoInput (change)="onVideoSelected($event)" accept="video/mp4,video/quicktime" hidden>
             <div *ngIf="!videoFile" class="upload-placeholder">
               <mat-icon>upload_file</mat-icon>
-              <h3>Select Video</h3>
-              <p>MP4, MOV up to 2GB</p>
+              <h3>Выберите видео</h3>
+              <p>MP4, MOV до 2 ГБ</p>
             </div>
             <div *ngIf="videoFile" class="file-info">
               <mat-icon class="file-icon">movie</mat-icon>
@@ -45,8 +45,8 @@
             <input type="file" #imageInput (change)="onImageSelected($event)" accept="image/*" hidden>
             <div *ngIf="!referenceImageFile" class="upload-placeholder">
               <mat-icon style="font-size: 24px; width: 24px; height: 24px;">image_search</mat-icon>
-              <h3 style="font-size: 13px;">Reference Image (Optional)</h3>
-              <p style="font-size: 10px; color: var(--text-muted);">Click to upload or press <b>Ctrl+V</b> to paste</p>
+              <h3 style="font-size: 13px;">Референсное фото (Опционально)</h3>
+              <p style="font-size: 10px; color: var(--text-muted);">Нажмите для загрузки или нажмите <b>Ctrl+V</b> для вставки</p>
             </div>
             <div *ngIf="referenceImageFile" class="file-info">
               <mat-icon class="file-icon">image</mat-icon>
@@ -61,15 +61,15 @@
 
           <div class="video-options" style="margin-top: 16px;">
             <mat-slide-toggle [(ngModel)]="cropVideo" color="primary">
-              Crop OSD Interface
+              Обрезать интерфейс (OSD)
             </mat-slide-toggle>
-            <p class="subtitle" style="font-size: 12px; margin-top: 8px;">Ignores outer 20% of video to remove drone UI overlays.</p>
+            <p class="subtitle" style="font-size: 12px; margin-top: 8px;">Игнорирует внешние 20% видео для удаления телеметрии дрона.</p>
           </div>
           
           <div class="settings-group" style="margin-top: 16px;">
-            <label for="taskPrompt" style="display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">AI Hints (Optional)</label>
+            <label for="taskPrompt" style="display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; color: var(--text-muted);">Подсказки для ИИ (Опционально)</label>
             <textarea id="taskPrompt" [(ngModel)]="taskPrompt" 
-              placeholder="E.g., 'Look for a red brick house with a blue roof'"
+              placeholder="Например: 'Искать дом из красного кирпича с синей крышей'"
               class="ai-prompt-input"></textarea>
           </div>
         </mat-card-content>
@@ -79,30 +79,30 @@
       <mat-card class="admin-card glass-card info-card">
         <mat-card-header>
           <div class="card-icon"><mat-icon>crop_free</mat-icon></div>
-          <mat-card-title>Selected Area</mat-card-title>
-          <mat-card-subtitle>Rectangle drawn on the map</mat-card-subtitle>
+          <mat-card-title>Выбранная область</mat-card-title>
+          <mat-card-subtitle>Прямоугольник на карте</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <div *ngIf="!selectedBounds" class="no-selection-hint">
             <mat-icon>touch_app</mat-icon>
-            <p>Click on the map to start drawing a rectangle. <br>Click again to finish.</p>
+            <p>Кликните на карту, чтобы начать выделение прямоугольника. <br>Кликните еще раз, чтобы завершить.</p>
           </div>
           <div *ngIf="selectedBounds" class="bounds-display">
             <div class="bounds-grid">
               <div class="bound-item">
-                <span class="bound-label">North</span>
+                <span class="bound-label">Север</span>
                 <span class="bound-value">{{ selectedBounds.north | number:'1.4-4' }}°</span>
               </div>
               <div class="bound-item">
-                <span class="bound-label">South</span>
+                <span class="bound-label">Юг</span>
                 <span class="bound-value">{{ selectedBounds.south | number:'1.4-4' }}°</span>
               </div>
               <div class="bound-item">
-                <span class="bound-label">West</span>
+                <span class="bound-label">Запад</span>
                 <span class="bound-value">{{ selectedBounds.west | number:'1.4-4' }}°</span>
               </div>
               <div class="bound-item">
-                <span class="bound-label">East</span>
+                <span class="bound-label">Восток</span>
                 <span class="bound-value">{{ selectedBounds.east | number:'1.4-4' }}°</span>
               </div>
             </div>
@@ -110,25 +110,25 @@
             <!-- Landmarks panel -->
             <div class="landmarks-section">
               <div class="landmarks-title">
-                <mat-icon>layers</mat-icon> Terrain Features in Area
+                <mat-icon>layers</mat-icon> Особенности ландшафта
               </div>
               <div *ngIf="landmarksLoading" class="landmarks-loading">
-                <mat-icon class="spinning">sync</mat-icon> Scanning area...
+                <mat-icon class="spinning">sync</mat-icon> Сканирование области...
               </div>
               <div *ngIf="!landmarksLoading && landmarks" class="landmark-chips">
-                <span *ngIf="landmarks.railways > 0" class="chip rail">🚂 Railways</span>
-                <span *ngIf="landmarks.rivers > 0" class="chip water">🏞 Rivers ({{ landmarks.rivers }})</span>
-                <span *ngIf="landmarks.waterBodies > 0" class="chip water">💧 Water bodies</span>
-                <span *ngIf="landmarks.settlements > 0" class="chip settlement">🏘 Settlements ({{ landmarks.settlements }})</span>
-                <span *ngIf="landmarks.buildings > 0" class="chip building">🏠 Buildings {{ landmarks.buildings > 100 ? '100+' : '(' + landmarks.buildings + ')' }}</span>
-                <span *ngIf="landmarks.roads > 0" class="chip road">🛣 Main Roads</span>
-                <span *ngIf="landmarks.forests > 0" class="chip forest">🌲 Forests / Woods</span>
-                <span *ngIf="landmarks.railways === 0 && landmarks.rivers === 0 && landmarks.settlements === 0 && landmarks.buildings === 0" class="chip none">⚠️ Sparse terrain — tracking may be less accurate</span>
+                <span *ngIf="landmarks.railways > 0" class="chip rail">🚂 Железные дороги</span>
+                <span *ngIf="landmarks.rivers > 0" class="chip water">🏞 Реки ({{ landmarks.rivers }})</span>
+                <span *ngIf="landmarks.waterBodies > 0" class="chip water">💧 Водоемы</span>
+                <span *ngIf="landmarks.settlements > 0" class="chip settlement">🏘 Поселения ({{ landmarks.settlements }})</span>
+                <span *ngIf="landmarks.buildings > 0" class="chip building">🏠 Здания {{ landmarks.buildings > 100 ? '100+' : '(' + landmarks.buildings + ')' }}</span>
+                <span *ngIf="landmarks.roads > 0" class="chip road">🛣 Главные дороги</span>
+                <span *ngIf="landmarks.forests > 0" class="chip forest">🌲 Леса</span>
+                <span *ngIf="landmarks.railways === 0 && landmarks.rivers === 0 && landmarks.settlements === 0 && landmarks.buildings === 0" class="chip none">⚠️ Малоориентирная местность — отслеживание может быть менее точным</span>
               </div>
             </div>
 
             <button mat-stroked-button (click)="clearSelection()" style="margin-top: 8px; width: 100%;">
-              <mat-icon>refresh</mat-icon> Clear & Re-draw
+              <mat-icon>refresh</mat-icon> Очистить и перерисовать
             </button>
           </div>
         </mat-card-content>
@@ -141,14 +141,14 @@
           (click)="startProcessing()">
           <mat-icon *ngIf="!isProcessing; else spinner">my_location</mat-icon>
           <ng-template #spinner><mat-icon class="spinning">sync</mat-icon></ng-template>
-          {{ isProcessing ? 'Extracting trajectory...' : 'Map Flight Path' }}
+          {{ isProcessing ? 'Извлечение траектории...' : 'Построить маршрут' }}
         </button>
 
         <button mat-stroked-button color="accent" class="process-btn secondary-btn"
           [disabled]="!referenceImageFile || !selectedBounds || isProcessing"
           (click)="geolocateCurrentScreenshot()" style="margin-top: 10px;">
           <mat-icon>location_searching</mat-icon>
-          📍 Find screenshot on map
+          📍 Найти скриншот на карте
         </button>
 
         <mat-progress-bar *ngIf="isProcessing" mode="determinate" [value]="loadingProgress" style="margin-top: 12px; border-radius: 8px;"></mat-progress-bar>
@@ -157,7 +157,7 @@
         </div>
         <button *ngIf="isProcessing" mat-stroked-button color="warn" 
           (click)="stopProcessing()" style="width: 100%; margin-top: 12px; border-radius: 10px;">
-          <mat-icon>stop_circle</mat-icon> Stop Generation
+          <mat-icon>stop_circle</mat-icon> Остановить генерацию
         </button>
       </div>
     </div>
@@ -166,10 +166,10 @@
     <div class="map-panel">
       <div class="map-toolbar">
         <span class="map-mode-label" *ngIf="!selectedBounds">
-          <mat-icon>info</mat-icon> Click to start selecting area
+          <mat-icon>info</mat-icon> Кликните для выбора области
         </span>
         <span class="map-mode-label selected" *ngIf="selectedBounds">
-          <mat-icon>check_circle</mat-icon> Area selected
+          <mat-icon>check_circle</mat-icon> Область выбрана
         </span>
       </div>
       <div id="selectionMap" [class.drawing]="isDrawing"></div>
@@ -179,7 +179,7 @@
   <!-- Results overlay (GPS trajectory on live map) -->
   <div class="results-section" *ngIf="showResults">
     <div class="results-header">
-      <span class="results-title"><mat-icon>route</mat-icon> Flight Trajectory</span>
+      <span class="results-title"><mat-icon>route</mat-icon> Траектория полета</span>
       <button mat-icon-button (click)="closeResults()"><mat-icon>close</mat-icon></button>
     </div>
     <div id="mapContainer"></div>
@@ -189,20 +189,20 @@
       <div class="stat-item">
         <mat-icon>route</mat-icon>
         <div>
-          <span class="stat-label">Track Points</span>
+          <span class="stat-label">Точек маршрута</span>
           <span class="stat-value">{{ trajectoryStats.points }}</span>
         </div>
       </div>
       <div class="stat-item">
         <mat-icon>straighten</mat-icon>
         <div>
-          <span class="stat-label">Est. Distance</span>
-          <span class="stat-value">{{ trajectoryStats.distanceKm }} km</span>
+          <span class="stat-label">Примерная дистанция</span>
+          <span class="stat-value">{{ trajectoryStats.distanceKm }} км</span>
         </div>
       </div>
       <div class="stat-item hint">
         <mat-icon>info</mat-icon>
-        <span>Trajectory is shown on the real GPS map. <br>Drag the <strong style="color:#00ff00">green start marker</strong> to fine-tune alignment.</span>
+        <span>Траектория отображается на реальной GPS-карте. <br>Перетащите <strong style="color:#00ff00">зеленый маркер старта</strong> для точной настройки.</span>
       </div>
     </div>
     
@@ -210,9 +210,9 @@
     <div class="ai-analysis-panel" *ngIf="textAnalysis">
       <div class="ai-header">
         <mat-icon>psychology</mat-icon>
-        <h3>AI Aerial Intelligence Report</h3>
+        <h3>ИИ Отчет аэроразведки</h3>
         <div class="confidence-tag" [class.low]="confidence < 40" [class.high]="confidence > 85">
-          {{ confidence }}% Confidence
+          {{ confidence }}% Уверенность
         </div>
       </div>
       <p class="ai-summary">{{textAnalysis}}</p>

@@ -66,6 +66,7 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
   private selectionRect: L.Rectangle | null = null;
   private drawStartLatLng: L.LatLng | null = null;
   private settlementMarkers: L.Marker[] = [];
+  private mapResizeObserver: ResizeObserver | null = null;
 
   @HostListener('window:paste', ['$event'])
   onPaste(event: ClipboardEvent) {
@@ -123,6 +124,24 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
       maxZoom: 19,
       opacity: 0.8
     }).addTo(this.selectionMap);
+
+    // FIX: Leaflet often fails to render all tiles when initialized inside flexbox containers
+    // or when the window size changes. We add a ResizeObserver to automatically invalidate the size.
+    const mapContainer = document.getElementById('selectionMap');
+    if (mapContainer) {
+      this.mapResizeObserver = new ResizeObserver(() => {
+        if (this.selectionMap) {
+          this.selectionMap.invalidateSize();
+        }
+      });
+      this.mapResizeObserver.observe(mapContainer);
+    }
+    
+    // Fallback explicit invalidation after layout settles
+    setTimeout(() => {
+      if (this.selectionMap) this.selectionMap.invalidateSize();
+    }, 250);
+
     // Click handler for drawing
     this.selectionMap.on('click', (e: L.LeafletMouseEvent) => {
       if (!this.isDrawing) {
@@ -378,6 +397,11 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
       opacity: 0.85
     }).addTo(this.resultsMap);
 
+    // FIX: Ensure results map also renders correctly
+    setTimeout(() => {
+      if (this.resultsMap) this.resultsMap.invalidateSize();
+    }, 200);
+
     if (geoCalibrated && this.selectedBounds) {
       // Draw selection area outline on results map
       const b = this.selectedBounds;
@@ -545,6 +569,10 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy() {
     if (this.pollSub) this.pollSub.unsubscribe();
     if (this.animationInterval) clearInterval(this.animationInterval);
+    if (this.mapResizeObserver) {
+      this.mapResizeObserver.disconnect();
+      this.mapResizeObserver = null;
+    }
     if (this.selectionMap) this.selectionMap.remove();
     if (this.resultsMap) this.resultsMap.remove();
   }
