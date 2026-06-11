@@ -23,21 +23,48 @@
 
   .seo-settings-content {
     .seo-tabs {
-      ::ng-deep .mat-tab-header {
-        border-bottom: 1px solid var(--admin-border-primary);
-      }
-
-      ::ng-deep .mat-tab-label {
-        font-weight: var(--admin-font-weight-medium);
-        color: var(--admin-text-secondary);
-        
-        &.mat-tab-label-active {
-          color: var(--admin-primary);
+      ::ng-deep {
+        .mat-mdc-tab-header {
+          border-bottom: 1px solid var(--admin-border-primary);
         }
-      }
 
-      ::ng-deep .mat-tab-body-content {
-        padding: var(--admin-spacing-lg) 0;
+        .mat-mdc-tab-body-content {
+          padding: var(--admin-spacing-lg) 0;
+        }
+
+        // Tab text colors - uses global theme variables
+        .mat-mdc-tab.mat-mdc-tab {
+          font-weight: var(--admin-font-weight-medium);
+          transition: color 0.3s ease;
+          
+          .mat-mdc-tab-label-content,
+          .mdc-tab__text-label {
+            color: var(--admin-text-secondary);
+          }
+          
+          // Active tab color
+          &.mat-mdc-tab-active {
+            .mat-mdc-tab-label-content,
+            .mdc-tab__text-label {
+              color: var(--admin-tab-active, var(--admin-primary));
+            }
+          }
+          
+          // Hover tab color
+          &:hover {
+            .mat-mdc-tab-label-content,
+            .mdc-tab__text-label {
+              color: var(--admin-tab-active, var(--admin-primary));
+            }
+          }
+        }
+        
+        // Active indicator bar
+        .mat-mdc-tab-header .mdc-tab-indicator__content--underline,
+        .mat-mdc-tab-indicator .mdc-tab-indicator__content {
+          border-color: var(--admin-tab-active, var(--admin-primary));
+          background-color: var(--admin-tab-active, var(--admin-primary));
+        }
       }
     }
 

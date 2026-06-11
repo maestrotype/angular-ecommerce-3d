@@ -48,48 +48,6 @@
     color: rgba(255, 255, 255, 0.95);
   }
   
-  // Material tabs - primary (голубой) for active and hover
-  ::ng-deep {
-    .seo-tabs.mat-mdc-tab-group .mat-mdc-tab.mat-mdc-tab,
-    .seo-tabs .mat-mdc-tab-header .mat-mdc-tab.mat-mdc-tab {
-      color: rgba(255, 255, 255, 0.7);
-      transition: color 0.3s ease;
-      
-      .mat-mdc-tab-label-content,
-      .mdc-tab__text-label {
-        color: rgba(255, 255, 255, 0.7);
-      }
-    }
-    
-    /* Active tab - primary color (голубой) */
-    .seo-tabs.mat-mdc-tab-group .mat-mdc-tab.mat-mdc-tab.mat-mdc-tab-active,
-    .seo-tabs .mat-mdc-tab-header .mat-mdc-tab.mat-mdc-tab.mat-mdc-tab-active {
-      color: var(--admin-primary);
-      
-      .mat-mdc-tab-label-content,
-      .mdc-tab__text-label {
-        color: var(--admin-primary);
-      }
-    }
-    
-    /* Hover - primary color (голубой) */
-    .seo-tabs.mat-mdc-tab-group .mat-mdc-tab.mat-mdc-tab:hover,
-    .seo-tabs .mat-mdc-tab-header .mat-mdc-tab.mat-mdc-tab:hover {
-      color: var(--admin-primary);
-      
-      .mat-mdc-tab-label-content,
-      .mdc-tab__text-label {
-        color: var(--admin-primary);
-      }
-    }
-    
-    /* Tab indicator - primary color (голубой) */
-    .seo-tabs .mat-mdc-tab-header .mdc-tab-indicator__content--underline,
-    .seo-tabs .mat-mdc-tab-indicator .mdc-tab-indicator__content {
-      border-color: var(--admin-primary);
-      background-color: var(--admin-primary);
-    }
-    
     // Input fields white text
     .mat-mdc-form-field.mat-mdc-form-field {
       .mat-mdc-input-element,
@@ -119,19 +77,53 @@
       }
     }
   }
-}
 
 .seo-content {
   margin-top: var(--admin-spacing-lg);
   
   .seo-tabs {
-    ::ng-deep .mat-mdc-tab-header {
-      margin-bottom: var(--admin-spacing-lg);
-      border-bottom: 1px solid var(--admin-border-primary);
-    }
+    ::ng-deep {
+      .mat-mdc-tab-header {
+        margin-bottom: var(--admin-spacing-lg);
+        border-bottom: 1px solid var(--admin-border-primary);
+      }
 
-    ::ng-deep .mat-mdc-tab-body-content {
-      padding: var(--admin-spacing-lg) 0;
+      .mat-mdc-tab-body-content {
+        padding: var(--admin-spacing-lg) 0;
+      }
+
+      // Tab text colors - uses global theme variables
+      .mat-mdc-tab.mat-mdc-tab {
+        transition: color 0.3s ease;
+        
+        .mat-mdc-tab-label-content,
+        .mdc-tab__text-label {
+          color: var(--admin-text-secondary);
+        }
+        
+        // Active tab color
+        &.mat-mdc-tab-active {
+          .mat-mdc-tab-label-content,
+          .mdc-tab__text-label {
+            color: var(--admin-tab-active, var(--admin-primary));
+          }
+        }
+        
+        // Hover tab color
+        &:hover {
+          .mat-mdc-tab-label-content,
+          .mdc-tab__text-label {
+            color: var(--admin-tab-active, var(--admin-primary));
+          }
+        }
+      }
+      
+      // Active indicator bar
+      .mat-mdc-tab-header .mdc-tab-indicator__content--underline,
+      .mat-mdc-tab-indicator .mdc-tab-indicator__content {
+        border-color: var(--admin-tab-active, var(--admin-primary));
+        background-color: var(--admin-tab-active, var(--admin-primary));
+      }
     }
   }
 }
