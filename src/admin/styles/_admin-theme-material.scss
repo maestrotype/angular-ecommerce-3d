@@ -166,6 +166,28 @@
   .mat-mdc-form-field .mat-mdc-text-field-wrapper textarea,
   .mat-mdc-form-field .mat-mdc-text-field-wrapper .mdc-text-field__input {
     color: var(--admin-input-text);
+    -webkit-text-fill-color: var(--admin-input-text);
+    opacity: 1;
+  }
+
+  /* placeholder */
+  .mat-mdc-form-field .mat-mdc-text-field-wrapper .mat-input-element::placeholder,
+  .mat-mdc-form-field .mat-mdc-text-field-wrapper input::placeholder,
+  .mat-mdc-form-field .mat-mdc-text-field-wrapper textarea::placeholder,
+  .mat-mdc-form-field .mat-mdc-text-field-wrapper .mdc-text-field__input::placeholder {
+    color: var(--admin-input-placeholder, var(--admin-input-label));
+    -webkit-text-fill-color: var(--admin-input-placeholder, var(--admin-input-label));
+    opacity: 1;
+  }
+
+  /* autofill fix */
+  .mat-mdc-form-field .mat-mdc-text-field-wrapper input:-webkit-autofill,
+  .mat-mdc-form-field .mat-mdc-text-field-wrapper input:-webkit-autofill:hover, 
+  .mat-mdc-form-field .mat-mdc-text-field-wrapper input:-webkit-autofill:focus, 
+  .mat-mdc-form-field .mat-mdc-text-field-wrapper input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px var(--admin-input-bg) inset;
+    -webkit-text-fill-color: var(--admin-input-text);
+    transition: background-color 5000s ease-in-out 0s;
   }
 
   /* floating label */
@@ -916,40 +938,6 @@
   .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline,
   .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline {
     display: none;
-  }
-
-  /* ===== Text visibility ===== */
-  .mat-mdc-form-field.mat-mdc-form-field .mat-mdc-input-element,
-  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mat-input-element,
-  .mat-mdc-input-element.mat-mdc-input-element,
-  input.mat-mdc-input-element.mat-mdc-input-element,
-  textarea.mat-mdc-input-element.mat-mdc-input-element {
-    color: rgba(255, 255, 255, 0.95);
-    opacity: 1;
-  }
-
-  .mat-mdc-input-element.mat-mdc-input-element::placeholder,
-  .mat-input-element.mat-input-element::placeholder,
-  .mat-mdc-form-field.mat-mdc-form-field input::placeholder,
-  .mat-mdc-form-field.mat-mdc-form-field textarea::placeholder {
-    color: rgba(255, 255, 255, 0.6);
-    opacity: 1;
-  }
-
-  /* Labels */
-  .mat-mdc-form-field.mat-mdc-form-field .mdc-floating-label,
-  .mat-mdc-form-field.mat-mdc-form-field .mat-mdc-floating-label,
-  .mat-mdc-form-field.mat-mdc-form-field label,
-  .mdc-text-field__input.mdc-text-field__input {
-    color: rgba(255, 255, 255, 0.7);
-    opacity: 1;
-  }
-
-  .mat-mdc-form-field.mat-mdc-form-field.mat-focused .mdc-floating-label,
-  .mat-mdc-form-field.mat-mdc-form-field.mat-focused .mat-mdc-floating-label,
-  .mat-mdc-form-field.mat-mdc-form-field.mat-focused label {
-    color: rgba(255, 255, 255, 0.95);
-    opacity: 1;
   }
 
   /* Hint text (character counters) */

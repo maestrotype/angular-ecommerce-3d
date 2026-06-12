@@ -44,6 +44,14 @@
   --admin-border-focus: #3b82f6;
   --admin-border-error: #3b82f6;   // ALSO BLUE
 
+  // Input Fields
+  --admin-input-bg: #09090b;       // Match primary bg or card bg
+  --admin-input-text: #fafafa;
+  --admin-input-border: rgba(255, 255, 255, 0.12);
+  --admin-input-label: #a1a1aa;
+  --admin-input-placeholder: rgba(255, 255, 255, 0.7);
+  --admin-input-focus-border: #3b82f6;
+
   // Effects & Depth
   --admin-card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
   // Keep a hint of blue in the gradient for "depth"

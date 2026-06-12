@@ -92,7 +92,11 @@
   --admin-input-border: rgba(255, 255, 255, 0.2);
   --admin-input-label: rgba(255, 255, 255, 0.9);
   --admin-input-focus-border: #8ab4f8;
-  --mat-select-placeholder-text-color: #e5e7eb;
+  --mat-select-placeholder-text-color: rgba(255, 255, 255, 0.75);
+  --mdc-outlined-text-field-input-text-color: rgba(255, 255, 255, 0.98);
+  --mdc-outlined-text-field-input-text-placeholder-color: rgba(255, 255, 255, 0.75);
+  --mdc-filled-text-field-input-text-color: rgba(255, 255, 255, 0.98);
+  --mdc-filled-text-field-input-text-placeholder-color: rgba(255, 255, 255, 0.75);
   
   // MDC card container tokens
   --mdc-elevated-card-container-color: transparent;
@@ -177,6 +181,11 @@
   --admin-input-border: rgba(255, 255, 255, 0.2);
   --admin-input-label: rgba(255, 255, 255, 0.9);
   --admin-input-focus-border: #8ab4f8;
+  --mat-select-placeholder-text-color: rgba(255, 255, 255, 0.75);
+  --mdc-outlined-text-field-input-text-color: rgba(255, 255, 255, 0.98);
+  --mdc-outlined-text-field-input-text-placeholder-color: rgba(255, 255, 255, 0.75);
+  --mdc-filled-text-field-input-text-color: rgba(255, 255, 255, 0.98);
+  --mdc-filled-text-field-input-text-placeholder-color: rgba(255, 255, 255, 0.75);
 
   // Borders
   --border-width: 0.5px;
