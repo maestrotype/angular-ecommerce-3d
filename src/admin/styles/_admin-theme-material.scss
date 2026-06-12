@@ -171,14 +171,8 @@
   }
 
   /* placeholder */
-  .mat-mdc-form-field .mat-mdc-text-field-wrapper .mat-input-element::placeholder,
-  .mat-mdc-form-field .mat-mdc-text-field-wrapper input::placeholder,
-  .mat-mdc-form-field .mat-mdc-text-field-wrapper textarea::placeholder,
-  .mat-mdc-form-field .mat-mdc-text-field-wrapper .mdc-text-field__input::placeholder {
-    color: var(--admin-input-placeholder, var(--admin-input-label));
-    -webkit-text-fill-color: var(--admin-input-placeholder, var(--admin-input-label));
-    opacity: 1;
-  }
+  --mdc-outlined-text-field-input-text-placeholder-color: var(--admin-input-placeholder, var(--admin-input-label));
+  --mdc-filled-text-field-input-text-placeholder-color: var(--admin-input-placeholder, var(--admin-input-label));
 
   /* autofill fix */
   .mat-mdc-form-field .mat-mdc-text-field-wrapper input:-webkit-autofill,
