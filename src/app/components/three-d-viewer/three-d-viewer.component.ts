@@ -40,8 +40,8 @@ import { environment } from '../../../environments/environment';
       <div #container class="three-canvas" [class.ready]="!isLoading && !hasError"></div>
 
       <!-- Beautiful Error Card -->
-      <div class="error-overlay" *ngIf="hasError">
-        <div class="error-glass-card">
+      <div class="error-overlay" *ngIf="hasError" (click)="$event.stopPropagation(); $event.preventDefault()">
+        <div class="error-glass-card" (click)="$event.stopPropagation(); $event.preventDefault()">
           <div class="error-header">
             <div class="error-icon-bg">
               <mat-icon>error_outline</mat-icon>
@@ -60,11 +60,24 @@ import { environment } from '../../../environments/environment';
              <mat-icon>hourglass_empty</mat-icon>
              <span class="hint-text">Model may still be processing on the AI server</span>
           </div>
-          <div class="error-actions">
-            <button class="retry-btn" (click)="checkAndLoad()">
+          <div class="error-actions" style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+            <button type="button" class="retry-btn" (click)="checkAndLoad(); $event.stopPropagation(); $event.preventDefault()">
               <mat-icon>refresh</mat-icon>
               <span>Try Reloading</span>
             </button>
+            <button type="button" class="logs-btn" (click)="toggleLogs(); $event.stopPropagation(); $event.preventDefault()">
+              <mat-icon>{{ showLogs ? 'expand_less' : 'expand_more' }}</mat-icon>
+              <span>{{ (showLogs ? 'VIEWER.HIDE_LOGS' : 'VIEWER.SHOW_LOGS') | translate }}</span>
+            </button>
+          </div>
+
+          <div class="logs-container" *ngIf="showLogs" (click)="$event.stopPropagation()">
+            <div class="logs-title">{{ 'VIEWER.LOGS_TITLE' | translate }}</div>
+            <div class="log-item"><strong>URL:</strong> {{ failedUrl }}</div>
+            <div class="log-item" *ngIf="getErrorString()"><strong>Error:</strong> {{ getErrorString() }}</div>
+            <div class="log-suggestion" *ngIf="getAdvice()">
+              <strong>Suggestion:</strong> {{ getAdvice() }}
+            </div>
           </div>
         </div>
       </div>
@@ -186,6 +199,52 @@ import { environment } from '../../../environments/environment';
     }
     .retry-btn:hover { transform: translateY(-2px); background: #4f46e5; box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4); }
 
+    .logs-btn {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 20px; background: rgba(255, 255, 255, 0.05); color: #94a3b8;
+      border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; font-weight: 600; font-size: 0.85rem;
+      cursor: pointer; transition: all 0.3s ease;
+      mat-icon { font-size: 18px; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; }
+    }
+    .logs-btn:hover { background: rgba(255, 255, 255, 0.1); color: #f8fafc; border-color: rgba(255, 255, 255, 0.2); }
+
+    .logs-container {
+      margin-top: 1rem;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 14px;
+      text-align: left;
+      font-size: 0.75rem;
+      max-height: 150px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+    }
+    .logs-title {
+      font-weight: 700;
+      color: #cbd5e1;
+      margin-bottom: 6px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .log-item {
+      color: #94a3b8;
+      word-break: break-all;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+    .log-item strong {
+      color: #f1f5f9;
+    }
+    .log-suggestion {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      color: #fbbf24;
+      line-height: 1.4;
+    }
+
     /* HD Toggle */
     .hd-toggle-container { position: absolute; top: 1rem; right: 1rem; z-index: 25; }
     .hd-toggle-btn {
@@ -213,6 +272,13 @@ import { environment } from '../../../environments/environment';
       .error-glass-card { background: white; border-color: rgba(0,0,0,0.05); }
       .error-title { color: #1e293b; }
       .error-body { color: #475569; }
+      .logs-btn { background: rgba(0, 0, 0, 0.03); border-color: rgba(0, 0, 0, 0.08); color: #475569; }
+      .logs-btn:hover { background: rgba(0, 0, 0, 0.06); color: #1e293b; }
+      .logs-container { background: rgba(0, 0, 0, 0.02); border-color: rgba(0, 0, 0, 0.05); }
+      .logs-title { color: #334155; }
+      .log-item { color: #475569; }
+      .log-item strong { color: #1e293b; }
+      .log-suggestion { color: #d97706; border-top-color: rgba(0, 0, 0, 0.05); }
     }
 
     :host-context([data-theme="dark"]) {
@@ -283,6 +349,9 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   loadingProgress = 0;
   isAiGeneration = false;
   isHdMode = false;
+  lastErrorDetails: any = null;
+  failedUrl = '';
+  showLogs = false;
   private currentLoadedPath: string | null = null;
   private isRetryingFallback = false;
 
@@ -433,6 +502,8 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     
     this.isLoading = true;
     this.hasError = false;
+    this.lastErrorDetails = null;
+    this.failedUrl = pathToLoad || '';
 
     loader.load(
       url,
@@ -466,10 +537,12 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
             fallbackUrl,
             (gltf) => this.onLoadSuccess(gltf, fallbackUrl),
             null,
-            () => {
+            (fallbackErr) => {
               this.isRetryingFallback = false;
               this.isLoading = false;
               this.hasError = true;
+              this.lastErrorDetails = fallbackErr;
+              this.failedUrl = fallbackUrl;
               this.cdr.detectChanges();
             }
           );
@@ -478,9 +551,51 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
 
         this.isLoading = false;
         this.hasError = true;
+        this.lastErrorDetails = err;
+        this.failedUrl = url;
         this.cdr.detectChanges();
       }
     );
+  }
+
+  toggleLogs() {
+    this.showLogs = !this.showLogs;
+    this.cdr.detectChanges();
+  }
+
+  getErrorString(): string {
+    if (!this.lastErrorDetails) return 'Unknown load error';
+    
+    if (this.lastErrorDetails && typeof this.lastErrorDetails === 'object') {
+      const target = this.lastErrorDetails.target;
+      if (target && ('status' in target || 'statusText' in target)) {
+        return `HTTP ${target.status} ${target.statusText || ''}`.trim() || `Network/HTTP error (status: ${target.status})`;
+      }
+    }
+
+    if (this.lastErrorDetails.message) {
+      return this.lastErrorDetails.message;
+    }
+    
+    if (typeof this.lastErrorDetails === 'string') {
+      return this.lastErrorDetails;
+    }
+    
+    return 'Failed to compile or load 3D model asset';
+  }
+
+  getAdvice(): string {
+    const url = this.failedUrl || '';
+    if (url.includes('onrender.com') && url.includes('/uploads/')) {
+      return 'This file was stored on Render\'s ephemeral disk. It has been deleted due to a server restart. The model needs to be re-uploaded to Cloudinary.';
+    }
+    if (url.includes('localhost:3002') || url.includes('127.0.0.1:3002')) {
+      return 'The backend server appears to be running locally but isn\'t accessible. Ensure your local backend is running on port 3002.';
+    }
+    if (url.includes('res.cloudinary.com')) {
+      return 'Cloudinary resource could not be loaded. Please verify the URL is correct and the file exists in your Cloudinary console.';
+    }
+    return '';
   }
 
   private onLoadSuccess(gltf: any, url: string) {

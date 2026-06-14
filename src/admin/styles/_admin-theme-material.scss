@@ -138,7 +138,57 @@
 [data-theme='glass'],
 [data-theme='dark-glass'] {
 
+  /* ===== MDC Global Input Variables ===== */
+  --mdc-outlined-text-field-input-text-color: var(--admin-input-text);
+  --mdc-outlined-text-field-label-text-color: var(--admin-input-label);
+  --mdc-outlined-text-field-focus-label-text-color: var(--admin-input-focus-border);
+  --mdc-outlined-text-field-outline-color: var(--admin-input-border);
+  --mdc-outlined-text-field-hover-outline-color: var(--admin-input-focus-border);
+  --mdc-outlined-text-field-focus-outline-color: var(--admin-input-focus-border);
+  
+  --mdc-filled-text-field-input-text-color: var(--admin-input-text);
+  --mdc-filled-text-field-label-text-color: var(--admin-input-label);
+  --mdc-filled-text-field-focus-label-text-color: var(--admin-input-focus-border);
+  --mdc-filled-text-field-active-indicator-color: var(--admin-input-border);
+  --mdc-filled-text-field-hover-active-indicator-color: var(--admin-input-focus-border);
+  --mdc-filled-text-field-focus-active-indicator-color: var(--admin-input-focus-border);
+
+  --mat-select-value-text-color: var(--admin-input-text);
+  --mat-select-placeholder-text-color: var(--admin-input-placeholder, var(--admin-input-label));
+
   /* ===== Text fields / outlined inputs (MDC) ===== */
+}
+
+/* Explicit fallback styles to ensure visibility in overlays for standard themes */
+[data-theme='light'],
+[data-theme='dark'],
+[data-theme='glass'] {
+  .mat-mdc-form-field .mat-mdc-select-value-text,
+  .mat-mdc-form-field .mat-mdc-select-min-line {
+    color: var(--admin-input-text);
+  }
+  .mat-mdc-form-field .mdc-floating-label {
+    color: var(--admin-input-label);
+  }
+  .mat-mdc-form-field.mat-focused .mdc-floating-label {
+    color: var(--admin-input-focus-border);
+  }
+  .mat-mdc-form-field .mdc-notched-outline__leading,
+  .mat-mdc-form-field .mdc-notched-outline__notch,
+  .mat-mdc-form-field .mdc-notched-outline__trailing {
+    border-color: var(--admin-input-border);
+  }
+  .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+  .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+  .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+    border-color: var(--admin-input-focus-border);
+  }
+}
+
+[data-theme='light'],
+[data-theme='dark'],
+[data-theme='glass'],
+[data-theme='dark-glass'] {
   /* wrapper: gives background, radius and base border */
   .mat-mdc-text-field-wrapper {
     background-color: var(--admin-input-bg);

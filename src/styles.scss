@@ -378,6 +378,9 @@ body {
 
 /* Snackbar Styles */
 .success-snackbar {
+    --mdc-snackbar-container-color: var(--admin-success, #4caf50);
+    --mdc-snackbar-supporting-text-color: #ffffff;
+    --mat-snack-bar-button-color: #ffffff;
     background: var(--admin-success, #4caf50);
     color: white;
     border-radius: 8px;
@@ -389,6 +392,9 @@ body {
 }
 
 .error-snackbar {
+    --mdc-snackbar-container-color: var(--admin-error, #f44336);
+    --mdc-snackbar-supporting-text-color: #ffffff;
+    --mat-snack-bar-button-color: #ffffff;
     background: var(--admin-error, #f44336);
     color: white;
     border-radius: 8px;
@@ -400,6 +406,9 @@ body {
 }
 
 .warning-snackbar {
+    --mdc-snackbar-container-color: var(--admin-warning, #ff9800);
+    --mdc-snackbar-supporting-text-color: #ffffff;
+    --mat-snack-bar-button-color: #ffffff;
     background: var(--admin-warning, #ff9800);
     color: white;
     border-radius: 8px;
