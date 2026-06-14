@@ -20,6 +20,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { AiGenerationService } from "../../../services/ai-generation.service";
 import { AiWarningDialogComponent } from "../../../components/shared/ai-warning-dialog/ai-warning-dialog.component";
 import { finalize } from "rxjs/operators";
+import { ThreeDModelService } from '../../../../app/core/services/three-d-model.service';
 
 
 
@@ -87,6 +88,7 @@ export class ProductFormComponent implements OnInit {
     private settingsService: SettingsService,
     private dialog: MatDialog,
     private aiService: AiGenerationService,
+    private threeDService: ThreeDModelService,
     private translate: TranslateService
   ) {
     this.productForm = this.createForm();
@@ -108,6 +110,17 @@ export class ProductFormComponent implements OnInit {
   private checkApiEnvironment(): void {
     this.isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
     this.isLocalApi = localStorage.getItem('use_local_api') === 'true';
+  }
+
+  loadModelPreview(modelUrl: string) {
+    this.threeDService.loadModel(modelUrl).subscribe({
+      next: (modelData) => {
+        console.log('Preview model loaded:', modelData);
+      },
+      error: (error) => {
+        console.error('Preview loading failed:', error);
+      }
+    });
   }
 
   toggleApiEnvironment(): void {

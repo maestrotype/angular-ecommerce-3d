@@ -23,6 +23,12 @@ export class ProductsService {
   ) { }
 
   create(createProductDto: CreateProductDto): Observable<Product> {
+    try {
+      this.validate3dModelUrl(createProductDto.model3dUrl);
+    } catch (err) {
+      return throwError(() => err);
+    }
+
     const product = this.productRepository.create(createProductDto);
 
     return from(this.productRepository.save(product)).pipe(
@@ -70,6 +76,12 @@ export class ProductsService {
   }
 
   update(id: number, updateProductDto: UpdateProductDto): Observable<Product> {
+    try {
+      this.validate3dModelUrl(updateProductDto.model3dUrl);
+    } catch (err) {
+      return throwError(() => err);
+    }
+
     return this.findOne(id).pipe(
       switchMap(product => {
         Object.assign(product, updateProductDto);
@@ -157,5 +169,17 @@ export class ProductsService {
     ).pipe(
       catchError(error => throwError(() => new InternalServerErrorException(`Failed to search products: ${error.message}`)))
     );
+  }
+
+  private validate3dModelUrl(url?: string): void {
+    if (!url) return;
+    const isProduction = process.env.NODE_ENV?.toLowerCase() === 'production' || process.env.RENDER === 'true';
+    if (isProduction) {
+      const isLocalOrRender = url.includes('onrender.com/uploads') || url.includes('/uploads/') || url.includes('localhost');
+      const isCloudinary = url.includes('res.cloudinary.com');
+      if (isLocalOrRender && !isCloudinary) {
+        throw new BadRequestException('In production mode, all 3D models must be hosted on Cloudinary. Saving local/Render disk paths is not allowed.');
+      }
+    }
   }
 }

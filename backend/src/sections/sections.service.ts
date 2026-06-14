@@ -1,5 +1,5 @@
 
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Section } from './entities/section.entity';
@@ -17,6 +17,11 @@ export class SectionsService {
   ) {}
 
   create(createSectionDto: CreateSectionDto): Observable<Section> {
+    try {
+      this.validate3dModelUrl(createSectionDto.model3dUrl);
+    } catch (err) {
+      return throwError(() => err);
+    }
     return from(this.sectionRepository
       .createQueryBuilder('section')
       .select('MAX(section.order)', 'maxOrder')
@@ -81,6 +86,12 @@ export class SectionsService {
   }
 
   update(id: number, updateSectionDto: UpdateSectionDto): Observable<Section> {
+    try {
+      this.validate3dModelUrl(updateSectionDto.model3dUrl);
+    } catch (err) {
+      return throwError(() => err);
+    }
+
     return this.findOne(id).pipe(
       switchMap(section => {
         Object.assign(section, updateSectionDto);
@@ -129,6 +140,17 @@ export class SectionsService {
         return throwError(() => error);
       })
     );
+  }
+  private validate3dModelUrl(url?: string): void {
+    if (!url) return;
+    const isProduction = process.env.NODE_ENV?.toLowerCase() === 'production' || process.env.RENDER === 'true';
+    if (isProduction) {
+      const isLocalOrRender = url.includes('onrender.com/uploads') || url.includes('/uploads/') || url.includes('localhost');
+      const isCloudinary = url.includes('res.cloudinary.com');
+      if (isLocalOrRender && !isCloudinary) {
+        throw new BadRequestException('In production mode, all 3D models must be hosted on Cloudinary. Saving local/Render disk paths is not allowed.');
+      }
+    }
   }
 }
 

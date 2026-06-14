@@ -1,8 +1,10 @@
-<div class="notification-content">
-  <div class="notification-icon">
-    <i [class]="iconClass"></i>
-  </div>
-  <div class="notification-message">
-    {{ notificationData.message }}
+<div [ngClass]="modalClass">
+  <div class="notification-content">
+    <div class="notification-icon">
+      <i [class]="iconClass"></i>
+    </div>
+    <div class="notification-message">
+      {{ notificationData.message }}
+    </div>
   </div>
 </div> 

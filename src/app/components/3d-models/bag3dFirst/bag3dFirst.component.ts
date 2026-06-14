@@ -3,6 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { fixBackendUrl } from '../../../core/utils/url-helper';
+import { ThreeDModelService } from '../../../core/services/three-d-model.service';
 
 @Component({
   selector: 'app-bag3dFirst',
@@ -16,15 +17,61 @@ export class Bag3dFirstComponent implements AfterViewInit {
   private renderer!: THREE.WebGLRenderer;
   private model!: THREE.Object3D;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
+  private isLazyLoaded = false;
+  private observer: IntersectionObserver | null = null;
+  private modelLoadTimeout: any = null;
+
+  constructor(@Inject(PLATFORM_ID) private platformId: Object,
+    private threeDService: ThreeDModelService) { }
 
   ngAfterViewInit() {
     // Only initialize Three.js in browser (not on server)
     if (isPlatformBrowser(this.platformId)) {
-      this.initThree();
-      this.loadModel();
-      this.animate();
+      this.setupLazyLoading();
     }
+  }
+
+  private setupLazyLoading() {
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !this.isLazyLoaded) {
+          this.loadModelWithDelay();
+        }
+      });
+    }, options);
+
+    const element = this.container.nativeElement;
+    if (element) {
+      this.observer.observe(element);
+    }
+  }
+
+  private loadModelWithDelay() {
+    this.modelLoadTimeout = setTimeout(() => {
+      if (isPlatformBrowser(this.platformId)) {
+        this.initThree();
+        this.loadModel();
+        this.animate();
+        this.isLazyLoaded = true;
+      }
+    }, 300);
+  }
+
+   private loadModelFromService(modelPath: string) {
+    this.threeDService.loadModel(modelPath).subscribe({
+      next: (modelData) => {
+        console.log('Model loaded via service:', modelData);
+      },
+      error: (error) => {
+        console.error('Model loading error:', error);
+      }
+    });
   }
 
   private initThree() {
@@ -99,5 +146,12 @@ export class Bag3dFirstComponent implements AfterViewInit {
       this.model.rotation.y += 0.005; // Rotate model
     }
     this.renderer.render(this.scene, this.camera);
+  }
+
+  ngOnDestroy() {
+    if (this.observer) {
+      this.observer.disconnect();
+    }
+    clearTimeout(this.modelLoadTimeout);
   }
 }

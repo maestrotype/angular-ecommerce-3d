@@ -109,7 +109,7 @@ export class UploadsController {
       return throwError(() => new BadRequestException("No file uploaded"));
     }
 
-    const isProduction = process.env.NODE_ENV === 'production';
+    const isProduction = process.env.NODE_ENV?.toLowerCase() === 'production' || process.env.RENDER === 'true';
 
     // Cloudinary for small files, or forced for all in production
     if (file.size <= 10 * 1024 * 1024 || isProduction) {
@@ -158,7 +158,7 @@ export class UploadsController {
       
       try { unlinkSync(file.path); } catch (e) {}
       
-      const serverUrl = process.env.NODE_ENV === 'production' 
+      const serverUrl = isProduction 
         ? 'https://angular-ecommerce-backend.onrender.com' 
         : 'http://localhost:3002';
 
@@ -191,7 +191,7 @@ export class UploadsController {
       return throwError(() => new BadRequestException("No file uploaded"));
     }
 
-    const isProduction = process.env.NODE_ENV === 'production';
+    const isProduction = process.env.NODE_ENV?.toLowerCase() === 'production' || process.env.RENDER === 'true';
 
     // Cloudinary for small files, or forced for all in production to avoid ephemeral storage loss
     if (file.size <= 10 * 1024 * 1024 || isProduction) {
