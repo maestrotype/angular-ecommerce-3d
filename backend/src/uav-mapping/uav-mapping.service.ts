@@ -114,7 +114,7 @@ export class UavMappingBackendService {
       const response = await firstValueFrom(
         this.httpService.post(`${this.pythonWorkerUrl}/geolocate-image`, formData, {
           headers: { ...formData.getHeaders() },
-          timeout: 120000, // 2 minutes (increased for tile downloads & model init)
+          timeout: 300000, // 5 minutes (increased to prevent 500 timeouts on larger areas)
         }),
       );
       return response.data;

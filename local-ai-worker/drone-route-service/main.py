@@ -155,7 +155,6 @@ async def geolocate_image(
             try: shutil.rmtree(work_dir)
             except: pass
         return {"status": "failed", "error": f"Internal Error: {str(e)}"}
-        return {"status": "failed", "error": f"Internal Error: {str(e)}"}
 
 @app.post("/process-drone-video")
 async def process_drone_video(

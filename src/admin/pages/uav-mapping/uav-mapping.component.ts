@@ -163,6 +163,33 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
         // Second click: finalize
         if (this.selectionRect && this.drawStartLatLng) {
           const bounds = this.selectionRect.getBounds();
+
+          // Рассчитываем площадь в км²
+          const latSpan = bounds.getNorth() - bounds.getSouth();
+          const lngSpan = bounds.getEast() - bounds.getWest();
+          const centerLat = (bounds.getNorth() + bounds.getSouth()) / 2;
+          const latKm = latSpan * 111.32;
+          const lngKm = lngSpan * 111.32 * Math.cos(centerLat * Math.PI / 180);
+          const areaKm2 = latKm * lngKm;
+
+          // Предупреждение если < 10 км²
+          if (areaKm2 < 10) {
+            this.snackBar.open(
+              `⚠️ Выбранная зона слишком мала (${areaKm2.toFixed(1)} км²). ` +
+              `Рекомендуется минимум 10 км², идеально 20+ км² для надежного поиска. ` +
+              `Пожалуйста, выберите большую область.`,
+              'OK', { duration: 6000 }
+            );
+            // Сбрасываем и даем перерисовать
+            this.isDrawing = false;
+            this.drawStartLatLng = null;
+            if (this.selectionRect) {
+              this.selectionMap!.removeLayer(this.selectionRect);
+              this.selectionRect = null;
+            }
+            return;
+          }
+
           this.selectedBounds = {
             north: bounds.getNorth(),
             south: bounds.getSouth(),
@@ -171,7 +198,10 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
           };
           this.isDrawing = false;
           this.drawStartLatLng = null;
-          this.snackBar.open('Area selected! Upload a video and press Map Flight Path.', 'OK', { duration: 3000 });
+          this.snackBar.open(
+            `✅ Зона ${areaKm2.toFixed(1)} км² выбрана! Загрузите скриншот и нажмите "Геолоцировать".`,
+            'OK', { duration: 3000 }
+          );
           // Query Overpass API for landmarks in the selected area
           this.queryLandmarks(this.selectedBounds!);
         }
@@ -197,6 +227,14 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
     }
     this.settlementMarkers.forEach(m => this.selectionMap?.removeLayer(m));
     this.settlementMarkers = [];
+  }
+
+  getAreaKm2(): number {
+    if (!this.selectedBounds) return 0;
+    const latSpan = this.selectedBounds.north - this.selectedBounds.south;
+    const lngSpan = this.selectedBounds.east - this.selectedBounds.west;
+    const centerLat = (this.selectedBounds.north + this.selectedBounds.south) / 2;
+    return latSpan * 111.32 * lngSpan * 111.32 * Math.cos(centerLat * Math.PI / 180);
   }
 
   resetAll() {

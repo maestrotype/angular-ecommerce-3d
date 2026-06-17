@@ -136,6 +136,24 @@
             .bound-value { display: block; font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
           }
         }
+
+        .area-size-badge {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(var(--primary-rgb), 0.08);
+          border: 1px solid rgba(var(--primary-rgb), 0.2);
+          border-radius: 8px;
+          padding: 8px 12px;
+          margin: 10px 0;
+          font-size: 13px;
+          color: var(--primary-color);
+          
+          b {
+            margin-left: 4px;
+            font-weight: 700;
+          }
+        }
         
         .landmarks-section {
           margin-top: 12px;
