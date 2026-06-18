@@ -114,13 +114,58 @@ export class UavMappingBackendService {
       const response = await firstValueFrom(
         this.httpService.post(`${this.pythonWorkerUrl}/geolocate-image`, formData, {
           headers: { ...formData.getHeaders() },
-          timeout: 300000, // 5 minutes (increased to prevent 500 timeouts on larger areas)
+          timeout: 600000, // 10 minutes (increased to prevent 500 timeouts on larger areas)
         }),
       );
       return response.data;
     } catch (error) {
       this.logger.error(`Geolocation failed: ${error.message}`);
       throw new HttpException('Geolocation service failed', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  /**
+   * Геолокация нескольких изображений.
+   * Geolocates multiple images and builds a route.
+   */
+  async geolocateMultiImages(imageFiles: Express.Multer.File[], bounds: string) {
+    const formData = new FormData();
+    for (const file of imageFiles) {
+      formData.append('images', fs.createReadStream(file.path), file.originalname);
+    }
+    formData.append('bounds', bounds);
+
+    try {
+      this.logger.log(`Forwarding ${imageFiles.length} images for multi-geolocation to Python`);
+      const response = await firstValueFrom(
+        this.httpService.post(`${this.pythonWorkerUrl}/geolocate-multi-images`, formData, {
+          headers: { ...formData.getHeaders() },
+          maxContentLength: Infinity,
+          maxBodyLength: Infinity,
+          timeout: imageFiles.length * 600000, // 10 minutes per image
+        }),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Multi-geolocation failed: ${error.message}`);
+      throw new HttpException('Multi-geolocation service failed', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  /**
+   * Получение результатов выполненной задачи.
+   * Gets task result from the Python service.
+   */
+  async getTaskResult(taskId: string) {
+    try {
+      const response = await firstValueFrom(
+        this.httpService.get(`${this.pythonWorkerUrl}/task-result/${taskId}`),
+      );
+      return response.data;
+    } catch (error) {
+      this.logger.error(`Error fetching task result ${taskId}: ${error.message}`);
+      const status = error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR;
+      throw new HttpException('Result fetch failed', status);
     }
   }
 }

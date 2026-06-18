@@ -9,7 +9,7 @@ import {
   UploadedFile,
   Logger 
 } from '@nestjs/common';
-import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
+import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname, join } from 'path';
 import { UavMappingBackendService } from './uav-mapping.service';
@@ -92,5 +92,31 @@ export class UavMappingController {
       throw new Error('Image file is required');
     }
     return this.uavService.geolocateImage(file, bounds);
+  }
+
+  @Post('geolocate-multi')
+  @UseInterceptors(FilesInterceptor('images', 20, {
+    storage: diskStorage({
+      destination: join(process.cwd(), 'uploads'),
+      filename: (req, file, cb) => {
+        const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('');
+        return cb(null, `geolocate_multi_${randomName}${extname(file.originalname)}`);
+      }
+    }),
+    limits: { fileSize: 20 * 1024 * 1024 } // 20MB per file
+  }))
+  async geolocateMultiImages(
+    @UploadedFiles() files: Express.Multer.File[],
+    @Body('bounds') bounds: string,
+  ) {
+    if (!files || files.length === 0) {
+      throw new Error('At least one image is required');
+    }
+    return this.uavService.geolocateMultiImages(files, bounds);
+  }
+
+  @Get('result/:taskId')
+  async getTaskResult(@Param('taskId') taskId: string) {
+    return this.uavService.getTaskResult(taskId);
   }
 }

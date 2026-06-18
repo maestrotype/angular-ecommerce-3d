@@ -18,6 +18,27 @@ export interface UavTaskStatus {
   text_analysis?: string;
 }
 
+export interface GeolocateFrame {
+  index: number;
+  filename: string;
+  status: 'success' | 'failed';
+  lat?: number;
+  lng?: number;
+  confidence?: number;
+  footprint_corners?: number[][];
+  zoom?: number;
+  error?: string;
+}
+
+export interface MultiGeolocateResponse {
+  status: string;
+  task_id: string;
+  frames?: GeolocateFrame[];
+  route_confidence?: number;
+  successful_frames?: number;
+  total_frames?: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -68,6 +89,17 @@ export class UavMappingService {
     formData.append('image', imageFile);
     formData.append('bounds', JSON.stringify(bounds));
     return this.http.post(`${this.apiUrl}/geolocate-image`, formData);
+  }
+
+  geolocateMultiImages(imageFiles: File[], bounds: GeoBounds): Observable<any> {
+    const formData = new FormData();
+    imageFiles.forEach(file => formData.append('images', file));
+    formData.append('bounds', JSON.stringify(bounds));
+    return this.http.post<any>(`${this.apiUrl}/geolocate-multi`, formData);
+  }
+
+  getTaskResult(taskId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/result/${taskId}`);
   }
 }
 

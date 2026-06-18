@@ -1,5 +1,12 @@
 @import 'leaflet/dist/leaflet.css';
 
+/* ─── UAV footprint pulsing center animation ────────── */
+@keyframes uav-pulse {
+  0%   { transform: translate(-50%, -50%) scale(0.6); opacity: 0.5; }
+  70%  { transform: translate(-50%, -50%) scale(2.0); opacity: 0; }
+  100% { transform: translate(-50%, -50%) scale(2.0); opacity: 0; }
+}
+
 /* ─── GPS dot markers for Leaflet ─────────────────── */
 .gps-dot {
   width: 14px;
@@ -371,5 +378,261 @@
       color: rgba(255, 255, 255, 0.9);
       white-space: pre-wrap;
     }
+  }
+
+  /* Multi-image preview classes */
+  .multi-file-container {
+    .multi-header {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 6px;
+    }
+    .multi-image-preview-list {
+      &::-webkit-scrollbar {
+        width: 4px;
+      }
+      &::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.05);
+      }
+      &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+      }
+    }
+  }
+
+  /* ─── Screenshot Card ─────────────────────────────────── */
+  .screenshot-card {
+    transition: all 0.3s ease;
+    &.drag-over {
+      border-color: var(--accent-color, #a78bfa) !important;
+      box-shadow: 0 0 15px rgba(var(--accent-rgb, 139, 92, 246), 0.4) !important;
+      background: rgba(var(--accent-rgb, 139, 92, 246), 0.08) !important;
+    }
+
+    .mode-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(var(--accent-rgb, 139, 92, 246), 0.15);
+      color: var(--accent-color, #a78bfa);
+      border: 1px solid rgba(var(--accent-rgb, 139, 92, 246), 0.3);
+      margin-left: auto;
+      mat-icon { font-size: 14px; width: 14px; height: 14px; }
+
+      &.route-mode {
+        background: rgba(34, 197, 94, 0.15);
+        color: #4ade80;
+        border-color: rgba(34, 197, 94, 0.3);
+      }
+    }
+  }
+
+  .screenshot-upload-zone {
+    border: 2px dashed rgba(var(--accent-rgb, 139, 92, 246), 0.4);
+    border-radius: 12px;
+    padding: 24px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      border-color: var(--accent-color, #a78bfa);
+      background: rgba(var(--accent-rgb, 139, 92, 246), 0.05);
+    }
+
+    mat-icon { font-size: 36px; width: 36px; height: 36px; opacity: 0.6; }
+    h3 { margin: 8px 0 4px; font-size: 14px; font-weight: 600; }
+    p { margin: 4px 0; font-size: 12px; color: var(--text-muted); }
+  }
+
+  /* ─── Single Screenshot Preview ──────────────────────── */
+  .single-screenshot-preview {
+    .preview-image-wrap {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 2px solid rgba(var(--accent-rgb, 139, 92, 246), 0.4);
+      
+      .single-preview-img {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+        display: block;
+      }
+
+      .preview-overlay {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        display: flex;
+        gap: 4px;
+        opacity: 0;
+        transition: opacity 0.2s;
+
+        button {
+          background: rgba(0,0,0,0.6);
+          backdrop-filter: blur(4px);
+          mat-icon { color: white; }
+        }
+      }
+
+      &:hover .preview-overlay { opacity: 1; }
+    }
+
+    .preview-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      font-size: 12px;
+      opacity: 0.7;
+      mat-icon { font-size: 16px; width: 16px; height: 16px; }
+    }
+  }
+
+  /* ─── Multi Screenshot Preview (thumbnail strip) ──────── */
+  .multi-screenshot-preview {
+    .thumb-strip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 8px 0;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.2) transparent;
+
+      &::-webkit-scrollbar { height: 4px; }
+      &::-webkit-scrollbar-thumb {
+        background: rgba(255,255,255,0.2);
+        border-radius: 4px;
+      }
+    }
+
+    .thumb-item {
+      position: relative;
+      flex-shrink: 0;
+      
+      .thumb-num {
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: rgba(0,0,0,0.7);
+        color: #fff;
+        font-size: 10px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+      }
+      
+      &.first-thumb .thumb-num { background: #22c55e; }
+      &.last-thumb .thumb-num { background: #ef4444; }
+
+      .thumb-img {
+        width: 72px;
+        height: 72px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 2px solid rgba(255,255,255,0.15);
+        display: block;
+        transition: border-color 0.2s;
+        &:hover { border-color: var(--accent-color, #a78bfa); }
+      }
+
+      .thumb-delete {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        width: 20px;
+        height: 20px;
+        min-width: 0;
+        padding: 0;
+        background: rgba(239,68,68,0.9);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.15s;
+        mat-icon { font-size: 12px; width: 12px; height: 12px; color: white; }
+      }
+
+      &:hover .thumb-delete { opacity: 1; }
+
+      .thumb-arrow {
+        position: absolute;
+        right: -14px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        color: rgba(255,255,255,0.3);
+        z-index: 1;
+      }
+    }
+
+    .multi-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 10px;
+      
+      .multi-count {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #4ade80;
+        mat-icon { font-size: 16px; width: 16px; height: 16px; }
+      }
+    }
+  }
+
+  /* ─── Mode hint text ──────────────────────────────────── */
+  .mode-hint {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    opacity: 0.5;
+    margin: 8px 0 0;
+    mat-icon { font-size: 14px; width: 14px; height: 14px; }
+    &.route { color: #4ade80; opacity: 0.7; }
+  }
+
+  /* ─── Actions section redesign ─────────────────────────── */
+  .action-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .action-divider {
+    text-align: center;
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    margin: 10px 0;
+    position: relative;
+    
+    &::before, &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: calc(50% - 20px);
+      height: 1px;
+      background: rgba(255,255,255,0.1);
+    }
+    &::before { left: 0; }
+    &::after { right: 0; }
   }
 }

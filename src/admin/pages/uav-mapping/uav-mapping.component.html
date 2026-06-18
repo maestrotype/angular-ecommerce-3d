@@ -3,7 +3,7 @@
     <div class="title-row" style="display: flex; justify-content: space-between; align-items: flex-start;">
       <div>
         <h2>{{ 'UAV_MAPPING' | translate }}</h2>
-        <p class="subtitle">Укажите на карте область полета (нарисуйте прямоугольник), затем загрузите видео, чтобы извлечь GPS-траекторию.</p>
+        <p class="subtitle">Загрузите видео <strong>или</strong> скриншот(ы) с БПЛА. Выделите на карте зону поиска и запустите анализ.</p>
       </div>
       <button mat-stroked-button color="warn" (click)="resetAll()" [disabled]="isProcessing">
         <mat-icon>delete_sweep</mat-icon> Сбросить всё
@@ -14,12 +14,13 @@
   <div class="main-layout">
     <!-- Left panel: controls -->
     <div class="controls-panel">
-      <!-- Video Upload Card -->
+
+      <!-- ═══ Card 1: Video Upload ═══════════════════════════════════ -->
       <mat-card class="admin-card glass-card upload-card">
         <mat-card-header>
           <div class="card-icon"><mat-icon>videocam</mat-icon></div>
           <mat-card-title>Видео с дрона</mat-card-title>
-          <mat-card-subtitle>Сырое видео или видео с OSD</mat-card-subtitle>
+          <mat-card-subtitle>MP4/MOV — для извлечения GPS-траектории</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <div class="upload-zone" [class.has-file]="videoFile" (click)="videoInput.click()">
@@ -36,24 +37,6 @@
                 <span class="filesize">{{ getFileSize(videoFile.size) }}</span>
               </div>
               <button mat-icon-button (click)="removeVideo($event)" color="warn">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
-          </div>
-          
-          <div class="upload-zone minor-zone" [class.has-file]="referenceImageFile" (click)="imageInput.click()" style="margin-top: 16px; padding: 12px;">
-            <input type="file" #imageInput (change)="onImageSelected($event)" accept="image/*" hidden>
-            <div *ngIf="!referenceImageFile" class="upload-placeholder">
-              <mat-icon style="font-size: 24px; width: 24px; height: 24px;">image_search</mat-icon>
-              <h3 style="font-size: 13px;">Референсное фото (Опционально)</h3>
-              <p style="font-size: 10px; color: var(--text-muted);">Нажмите для загрузки или нажмите <b>Ctrl+V</b> для вставки</p>
-            </div>
-            <div *ngIf="referenceImageFile" class="file-info">
-              <mat-icon class="file-icon">image</mat-icon>
-              <div class="details">
-                <span class="filename">{{ referenceImageFile.name }}</span>
-              </div>
-              <button mat-icon-button (click)="removeImage($event)" color="warn">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>
@@ -75,7 +58,104 @@
         </mat-card-content>
       </mat-card>
 
-      <!-- Area selection info card -->
+      <!-- ═══ Card 2: Screenshots Upload ══════════════════════════════ -->
+      <mat-card class="admin-card glass-card upload-card screenshot-card"
+                [class.drag-over]="isDraggingFile"
+                (dragover)="onDragOver($event)"
+                (dragleave)="onDragLeave($event)"
+                (drop)="onDrop($event)">
+        <mat-card-header>
+          <div class="card-icon screenshot-icon"><mat-icon>photo_library</mat-icon></div>
+          <mat-card-title>Скриншоты БПЛА</mat-card-title>
+          <mat-card-subtitle>{{ isMultiImageMode ? 'Режим маршрута · ' + referenceImageFiles.length + ' фото' : 'Режим точки / области' }}</mat-card-subtitle>
+          <div class="mode-badge" [class.route-mode]="isMultiImageMode">
+            <mat-icon>{{ isMultiImageMode ? 'route' : 'location_on' }}</mat-icon>
+            {{ isMultiImageMode ? 'Маршрут' : 'Точка / Область' }}
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <!-- Single file input for all screenshot upload interactions -->
+          <input type="file" #screenshotInput
+                 (change)="onMultiImageFilesSelected($event)"
+                 accept="image/jpeg,image/png,image/webp,image/*"
+                 multiple hidden>
+
+          <!-- ── Empty state ── -->
+          <div *ngIf="!referenceImageFile && referenceImageFiles.length === 0"
+               class="screenshot-upload-zone"
+               (click)="screenshotInput.click()">
+            <mat-icon>add_photo_alternate</mat-icon>
+            <h3>Загрузите скриншот(ы)</h3>
+            <p>1 фото → область / точка на карте</p>
+            <p>2+ фото → вероятностный маршрут</p>
+            <p style="font-size:10px; opacity:0.45; margin-top:6px;">Также работает Ctrl+V из буфера обмена · до 20 шт.</p>
+          </div>
+
+          <!-- ── Single screenshot preview ── -->
+          <div *ngIf="referenceImageFile && !isMultiImageMode" class="single-screenshot-preview">
+            <div class="preview-image-wrap">
+              <img [src]="getFilePreviewUrl(referenceImageFile)"
+                   alt="Скриншот БПЛА"
+                   class="single-preview-img" />
+              <div class="preview-overlay">
+                <button mat-icon-button (click)="replaceSingleScreenshot(screenshotInput)" title="Заменить фото">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="removeSingleImage()" title="Удалить фото">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+            <div class="preview-meta">
+              <mat-icon>image</mat-icon>
+              <span>{{ referenceImageFile.name }}</span>
+            </div>
+            <p class="mode-hint">
+              <mat-icon>location_on</mat-icon>
+              Одно фото → будет показана область / точка на карте
+            </p>
+          </div>
+
+          <!-- ── Multi screenshot preview (thumbnail strip) ── -->
+          <div *ngIf="isMultiImageMode && referenceImageFiles.length > 0" class="multi-screenshot-preview">
+
+            <div class="thumb-strip">
+              <ng-container *ngFor="let file of referenceImageFiles; let idx = index">
+                <div class="thumb-item"
+                     [class.first-thumb]="idx === 0"
+                     [class.last-thumb]="idx === referenceImageFiles.length - 1">
+                  <span class="thumb-num">{{ idx + 1 }}</span>
+                  <img [src]="getFilePreviewUrl(file)" [alt]="file.name" class="thumb-img" />
+                  <button class="thumb-delete" mat-icon-button (click)="removeImageAtIndex(idx)">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+                <mat-icon *ngIf="idx < referenceImageFiles.length - 1" class="thumb-arrow">
+                  arrow_forward
+                </mat-icon>
+              </ng-container>
+            </div>
+
+            <div class="multi-controls">
+              <span class="multi-count">
+                <mat-icon>route</mat-icon>
+                {{ referenceImageFiles.length }} кадров → маршрут
+              </span>
+              <button mat-stroked-button (click)="screenshotInput.click()">
+                <mat-icon>add</mat-icon> Добавить
+              </button>
+            </div>
+
+            <p class="mode-hint route">
+              <mat-icon>route</mat-icon>
+              Маршрут строится от кадра 1 до кадра {{ referenceImageFiles.length }}
+            </p>
+          </div>
+
+        </mat-card-content>
+      </mat-card>
+
+      <!-- ═══ Card 3: Area selection info ════════════════════════════ -->
       <mat-card class="admin-card glass-card info-card">
         <mat-card-header>
           <div class="card-icon"><mat-icon>crop_free</mat-icon></div>
@@ -139,31 +219,62 @@
         </mat-card-content>
       </mat-card>
 
-      <!-- Action buttons -->
+      <!-- ═══ Action Buttons ══════════════════════════════════════════ -->
       <div class="actions-section">
-        <button mat-flat-button color="primary" class="process-btn"
-          [disabled]="!videoFile || !selectedBounds || isProcessing"
-          (click)="startProcessing()">
-          <mat-icon *ngIf="!isProcessing; else spinner">my_location</mat-icon>
-          <ng-template #spinner><mat-icon class="spinning">sync</mat-icon></ng-template>
-          {{ isProcessing ? 'Извлечение траектории...' : 'Построить маршрут' }}
-        </button>
 
-        <button mat-stroked-button color="accent" class="process-btn secondary-btn"
-          [disabled]="!referenceImageFile || !selectedBounds || isProcessing"
-          (click)="geolocateCurrentScreenshot()" style="margin-top: 10px;">
-          <mat-icon>location_searching</mat-icon>
-          📍 Найти скриншот на карте
-        </button>
-
-        <mat-progress-bar *ngIf="isProcessing" mode="determinate" [value]="loadingProgress" style="margin-top: 12px; border-radius: 8px;"></mat-progress-bar>
-        <div *ngIf="isProcessing" class="status-action-text" style="font-size: 12px; color: var(--primary-color); margin-top: 6px; font-weight: 500; text-align: center;">
-          <mat-icon style="font-size: 14px; width: 14px; height: 14px; vertical-align: middle;">sync</mat-icon> {{ currentAction }}
+        <!-- Button 1: Video → Route -->
+        <div class="action-group">
+          <button mat-flat-button color="primary" class="process-btn"
+            [disabled]="!videoFile || !selectedBounds || isProcessing"
+            (click)="startProcessing()">
+            <mat-icon *ngIf="!isVideoProcessing">movie_filter</mat-icon>
+            <mat-icon *ngIf="isVideoProcessing" class="spinning">sync</mat-icon>
+            {{ isVideoProcessing ? 'Извлечение траектории...' : 'Построить маршрут из видео' }}
+          </button>
+          <ng-container *ngIf="isVideoProcessing">
+            <mat-progress-bar mode="determinate" [value]="videoLoadingProgress"
+                              style="margin-top: 10px; border-radius: 8px;"></mat-progress-bar>
+            <div class="status-action-text">
+              <mat-icon class="spinning">sync</mat-icon> {{ currentVideoAction }}
+            </div>
+            <button mat-stroked-button color="warn" (click)="stopProcessing()"
+                    style="width: 100%; margin-top: 8px; border-radius: 10px;">
+              <mat-icon>stop_circle</mat-icon> Остановить
+            </button>
+          </ng-container>
         </div>
-        <button *ngIf="isProcessing" mat-stroked-button color="warn" 
-          (click)="stopProcessing()" style="width: 100%; margin-top: 12px; border-radius: 10px;">
-          <mat-icon>stop_circle</mat-icon> Остановить генерацию
-        </button>
+
+        <div class="action-divider">или</div>
+
+        <!-- Button 2: Screenshots → Point / Route -->
+        <div class="action-group">
+          <!-- Multi-image: Построить маршрут -->
+          <button *ngIf="isMultiImageMode" mat-flat-button color="accent" class="process-btn"
+            [disabled]="referenceImageFiles.length < 2 || !selectedBounds || isProcessing"
+            (click)="geolocateCurrentScreenshot()">
+            <mat-icon *ngIf="!isGeoProcessing">route</mat-icon>
+            <mat-icon *ngIf="isGeoProcessing" class="spinning">sync</mat-icon>
+            {{ getGeoButtonLabel() }}
+          </button>
+
+          <!-- Single-image: Найти скриншот на карте -->
+          <button *ngIf="!isMultiImageMode" mat-stroked-button color="accent" class="process-btn secondary-btn"
+            [disabled]="!referenceImageFile || !selectedBounds || isProcessing"
+            (click)="geolocateCurrentScreenshot()">
+            <mat-icon *ngIf="!isGeoProcessing">location_searching</mat-icon>
+            <mat-icon *ngIf="isGeoProcessing" class="spinning">sync</mat-icon>
+            {{ getGeoButtonLabel() }}
+          </button>
+          
+          <ng-container *ngIf="isGeoProcessing">
+            <mat-progress-bar mode="determinate" [value]="geoLoadingProgress"
+                              style="margin-top: 10px; border-radius: 8px;"></mat-progress-bar>
+            <div class="status-action-text">
+              <mat-icon class="spinning">sync</mat-icon> {{ currentGeoAction }}
+            </div>
+          </ng-container>
+        </div>
+
       </div>
     </div>
 
@@ -217,7 +328,7 @@
         <mat-icon>psychology</mat-icon>
         <h3>ИИ Отчет аэроразведки</h3>
         <div class="confidence-tag" [class.low]="confidence < 40" [class.high]="confidence > 85">
-          {{ confidence }}% Уверенность
+          {{ confidence | number:'1.0-1' }}% Уверенность
         </div>
       </div>
       <p class="ai-summary">{{textAnalysis}}</p>
