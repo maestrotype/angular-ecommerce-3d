@@ -191,6 +191,11 @@
               <mat-icon style="font-size: 16px; width: 16px; height: 16px; margin-right: 4px; vertical-align: middle;">square_foot</mat-icon>
               Площадь поиска: <b>{{ getAreaKm2() | number:'1.0-1' }} км²</b>
             </div>
+            
+            <div class="area-warning" *ngIf="getAreaKm2() > 200">
+              <mat-icon>warning</mat-icon>
+              <span>Зона слишком большая для геолокации скриншотов. Уменьшите до ~100–150 км².</span>
+            </div>
 
             <!-- Landmarks panel -->
             <div class="landmarks-section">

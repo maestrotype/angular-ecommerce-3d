@@ -32,6 +32,9 @@ class SatelliteMatcher:
         self.extractor_disk = DISK(max_num_keypoints=1024).eval().to(self.device)
         self.matcher_disk = LightGlue(features='disk').eval().to(self.device)
         
+        # Кэш для спутниковых карт (ключ = bounds_zoom, значение = путь к файлу)
+        self._sat_cache = {}
+        
         logging.info(f"SatelliteMatcher initialized on {self.device} (Safe Mode)")
 
     def download_satellite_base(self, bounds: Dict, output_path: str, target_zoom: int = 17) -> str:
@@ -43,16 +46,35 @@ class SatelliteMatcher:
         """
         import concurrent.futures
         
-        # 1. Рассчитываем оптимальный зум. Минимум 15 для сохранения ориентиров.
+        # Проверяем кэш по округленным границам и зуму
+        cache_key = f"{bounds['north']:.4f}_{bounds['south']:.4f}_{bounds['east']:.4f}_{bounds['west']:.4f}_{target_zoom}"
+        if cache_key in self._sat_cache and os.path.exists(self._sat_cache[cache_key]):
+            cached_img = self._sat_cache[cache_key]
+            cached_json = cached_img + ".json"
+            if cached_img != output_path:
+                try:
+                    shutil.copy2(cached_img, output_path)
+                    if os.path.exists(cached_json):
+                        shutil.copy2(cached_json, output_path + ".json")
+                    logging.info(f"✅ Using cached satellite map and copied to {output_path}")
+                except Exception as e:
+                    logging.error(f"Failed to copy cached satellite map: {e}")
+                    # В случае ошибки копирования продолжаем стандартную загрузку
+            else:
+                logging.info(f"✅ Using cached satellite map directly at {output_path}")
+                return output_path
+
+        # 1. Рассчитываем оптимальный зум. Минимум 14 для сохранения ориентиров.
         zoom = target_zoom
         tiles = list(mercantile.tiles(bounds['west'], bounds['south'], bounds['east'], bounds['north'], zoom))
         
-        while len(tiles) > 144 and zoom > 15:
+        MAX_TILES = 400
+        while len(tiles) > MAX_TILES and zoom > 14:
             zoom -= 1
             tiles = list(mercantile.tiles(bounds['west'], bounds['south'], bounds['east'], bounds['north'], zoom))
             
-        if len(tiles) > 144:
-            logging.error(f"Area too large: {len(tiles)} tiles even at zoom 15")
+        if len(tiles) > MAX_TILES:
+            logging.error(f"Area too large: {len(tiles)} tiles even at zoom 14")
             return "ERROR_TOO_LARGE"
 
         logging.info(f"📍 Area processing: {len(tiles)} tiles at Zoom {zoom}")
@@ -114,6 +136,8 @@ class SatelliteMatcher:
         with open(output_path + ".json", "w") as f:
             json.dump(meta, f)
             
+        # Сохраняем в кэш
+        self._sat_cache[cache_key] = output_path
         return output_path
 
     def _rectify_oblique(self, image_path: str) -> str:
@@ -318,7 +342,7 @@ class SatelliteMatcher:
                     f0, f1, m01 = [rbd(x) for x in [feats_drone, feats_patch, matches01]]
                     matches = m01['matches']
 
-                    min_m = 4 if is_scan_pass else 5
+                    min_m = 6 if is_scan_pass else 8
                     if len(matches) < min_m:
                         continue
 
@@ -336,8 +360,8 @@ class SatelliteMatcher:
                     num_inliers = int(np.sum(inliers))
                     conf = float(num_inliers / max(len(matches), 1))
 
-                    min_inl = 4 if is_scan_pass else 8
-                    min_cf  = 0.04 if is_scan_pass else 0.10
+                    min_inl = 6 if is_scan_pass else 8
+                    min_cf  = 0.08 if is_scan_pass else 0.10
 
                     if num_inliers >= min_inl and conf >= min_cf:
                         h_d, w_d = img_drone.shape[1:]
@@ -355,9 +379,9 @@ class SatelliteMatcher:
                                 abs_y = pt_y + py
                                 best_match = (abs_x, abs_y, conf)
                                 
-                            # ОПТИМИЗАЦИЯ: Если нашли очень уверенное совпадение (>25 инлайеров и >25% уверенности),
+                            # ОПТИМИЗАЦИЯ: Если нашли очень уверенное совпадение (>20 инлайеров и >20% уверенности),
                             # прерываем поиск досрочно.
-                            if num_inliers >= 25 and conf >= 0.25:
+                            if num_inliers >= 20 and conf >= 0.20:
                                 logging.info(f"🎯 High-confidence match found early with {num_inliers} inliers ({int(conf*100)}% conf). Stopping search.")
                                 return best_match
 
@@ -400,7 +424,8 @@ class SatelliteMatcher:
             logging.error(f"Footprint computation failed: {e}")
             return []
 
-    def hierarchical_geolocate(self, img_path: str, bounds: Dict, work_dir: str) -> Dict:
+    def hierarchical_geolocate(self, img_path: str, bounds: Dict, work_dir: str, 
+                               preloaded_scan_map: str = None) -> Dict:
         """
         Двухэтапный поиск: Scan Pass (Zoom 17/16/15) -> Focus Pass (Zoom 17)
         """
@@ -414,10 +439,14 @@ class SatelliteMatcher:
             cleaned_path = self._clean_drone_image(rectified_path)
             
             # STAGE 1: SCAN PASS (Адаптивный зум от 17 до 15)
-            scan_map_path = os.path.join(work_dir, "scan_map.jpg")
-            
-            # Пробуем Zoom 17 для лучшей детализации, если область позволяет, авто-откат до 15
-            scan_res = self.download_satellite_base(bounds, scan_map_path, target_zoom=17)
+            if preloaded_scan_map and os.path.exists(preloaded_scan_map):
+                scan_map_path = preloaded_scan_map
+                scan_res = scan_map_path
+                logging.info(f"Using preloaded scan map: {scan_map_path}")
+            else:
+                scan_map_path = os.path.join(work_dir, "scan_map.jpg")
+                # Пробуем Zoom 17 для лучшей детализации, если область позволяет, авто-откат до 15
+                scan_res = self.download_satellite_base(bounds, scan_map_path, target_zoom=17)
             
             if scan_res == "ERROR_TOO_LARGE":
                 return {"status": "failed", "error": "Search area is absolutely massive (>500km2). Try a smaller zone."}

@@ -257,10 +257,17 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
           };
           this.isDrawing = false;
           this.drawStartLatLng = null;
-          this.snackBar.open(
-            `✅ Зона ${areaKm2.toFixed(1)} км² выбрана! Загрузите скриншот и нажмите "Геолоцировать".`,
-            'OK', { duration: 3000 }
-          );
+          if (areaKm2 > 200) {
+            this.snackBar.open(
+              `⚠️ Большая зона: ${areaKm2.toFixed(0)} км². Рекомендуется до 150 км² для надёжной геолокации скриншотов.`,
+              'OK', { duration: 6000 }
+            );
+          } else {
+            this.snackBar.open(
+              `✅ Зона ${areaKm2.toFixed(1)} км² выбрана! Загрузите скриншот и нажмите "Геолоцировать".`,
+              'OK', { duration: 3000 }
+            );
+          }
           // Query Overpass API for landmarks in the selected area
           this.queryLandmarks(this.selectedBounds!);
         }
@@ -509,6 +516,20 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
                     
                     this.textAnalysis = `Построен вероятностный маршрут по ${successCount} из ${totalCount} кадров. Общая уверенность маршрута: ${confPct}%.`;
                     
+                    // Проверяем, все ли кадры упали из-за "Area too large"
+                    const allFailedWithAreaError = (result.frames || []).every(
+                      (f: any) => f.status === 'failed' && f.error?.includes('Area too large')
+                    );
+
+                    if (allFailedWithAreaError && (result.frames || []).length > 0) {
+                      this.snackBar.open(
+                        '⚠️ Зона поиска слишком большая для данного алгоритма. Уменьшите прямоугольник на карте (~50-70 км²) и попробуйте снова.',
+                        'Закрыть',
+                        { duration: 10000 }
+                      );
+                      return;
+                    }
+
                     const trajectory: [number, number][] = (result.frames || [])
                       .filter((f: any) => f.status === 'success')
                       .map((f: any) => [f.lat, f.lng] as [number, number]);
@@ -530,7 +551,16 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
               } else if (status.status === 'failed') {
                 clearInterval(pollInterval);
                 this.isGeoProcessing = false;
-                this.snackBar.open('Обработка завершилась ошибкой: ' + (status.error || 'Неизвестная ошибка'), 'Закрыть', { duration: 7000 });
+                const errText = status.error || '';
+                if (errText.includes('Area too large')) {
+                  this.snackBar.open(
+                    '⚠️ Зона поиска слишком большая для данного алгоритма. Уменьшите прямоугольник на карте (~50-70 км²) и попробуйте снова.',
+                    'Закрыть',
+                    { duration: 10000 }
+                  );
+                } else {
+                  this.snackBar.open('Обработка завершилась ошибкой: ' + (status.error || 'Неизвестная ошибка'), 'Закрыть', { duration: 7000 });
+                }
               }
             },
             error: (err) => {

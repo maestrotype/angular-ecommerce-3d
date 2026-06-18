@@ -179,6 +179,41 @@ def run_multi_geolocate_background(task_id: str, saved_paths: List[str], poly: D
             "total": total_frames,
             "frames": []
         }
+
+        # Скачиваем карту один раз для всей выделенной области
+        shared_scan_map = os.path.join(work_dir, "shared_scan_map.jpg")
+        logging.info(f"Downloading shared satellite map to {shared_scan_map}")
+        scan_res = sat_matcher_global.download_satellite_base(poly, shared_scan_map, target_zoom=17)
+
+        if scan_res == "ERROR_TOO_LARGE":
+            err_msg = "Area too large: Search area is absolutely massive (>500km2). Try a smaller zone."
+            logging.error(f"Multi-geolocation task {task_id} failed: {err_msg}")
+            for i, img_path in enumerate(saved_paths):
+                results.append({
+                    "index": i,
+                    "filename": Path(img_path).name,
+                    "status": "failed",
+                    "error": err_msg
+                })
+            
+            final_result = {
+                "status": "success",
+                "task_id": task_id,
+                "frames": results,
+                "route_confidence": 0.0,
+                "successful_frames": 0,
+                "total_frames": total_frames
+            }
+            tasks[task_id] = {
+                "status": "success",
+                "progress": 100,
+                "current_action": "Failed: Area too large",
+                "completed": total_frames,
+                "total": total_frames,
+                "frames": results,
+                "result": final_result
+            }
+            return
         
         for i, img_path in enumerate(saved_paths):
             logging.info(f"Geolocating frame {i+1}/{total_frames}: {img_path}")
@@ -190,8 +225,10 @@ def run_multi_geolocate_background(task_id: str, saved_paths: List[str], poly: D
             tasks[task_id] = task_data
             
             try:
-                # Run hierarchical geolocate
-                res = sat_matcher_global.hierarchical_geolocate(str(img_path), poly, work_dir)
+                # Run hierarchical geolocate passing preloaded_scan_map
+                res = sat_matcher_global.hierarchical_geolocate(
+                    str(img_path), poly, work_dir, preloaded_scan_map=shared_scan_map
+                )
                 
                 frame_res = {
                     "index": i,
