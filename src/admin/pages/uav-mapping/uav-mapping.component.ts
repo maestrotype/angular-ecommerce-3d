@@ -43,12 +43,32 @@ export interface LandmarkSummary {
 export class UavMappingComponent implements AfterViewInit, OnDestroy {
   videoFile: File | null = null;
   referenceImageFile: File | null = null;
+  referenceImageFiles: File[] = [];
+  multiGeoFrames: any[] = [];
+  routeConfidence: number = 0;
+  isMultiImageMode: boolean = false;
+  activeFrameIndex: number = 0;
   cropVideo: boolean = true;
   taskPrompt: string = '';
 
-  isProcessing: boolean = false;
-  loadingProgress: number = 0;
-  currentAction: string = '';
+  // ── Separate processing flags per mode ──────────────
+  isVideoProcessing: boolean = false;
+  isGeoProcessing: boolean = false;
+  isDraggingFile: boolean = false;
+
+  // Video progress
+  videoLoadingProgress: number = 0;
+  currentVideoAction: string = '';
+
+  // Geo progress
+  geoLoadingProgress: number = 0;
+  currentGeoAction: string = '';
+
+  // Backward-compat getter used in templates and guards
+  get isProcessing(): boolean {
+    return this.isVideoProcessing || this.isGeoProcessing;
+  }
+
   taskId: string | null = null;
   private pollSub: Subscription | null = null;
 
@@ -73,14 +93,53 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
     const items = event.clipboardData?.items;
     if (!items) return;
     
+    const filesToUpload: File[] = [];
     for (let i = 0; i < items.length; i++) {
       if (items[i].type.indexOf('image') !== -1) {
         const file = items[i].getAsFile();
         if (file) {
-          this.referenceImageFile = file;
-          this.snackBar.open('Image pasted from clipboard!', 'OK', { duration: 2000 });
-          return; // Process only first image
+          filesToUpload.push(file);
         }
+      }
+    }
+
+    if (filesToUpload.length > 0) {
+      this.addScreenshots(filesToUpload);
+      this.snackBar.open(
+        filesToUpload.length === 1 ? 'Изображение вставлено из буфера обмена!' : `Вставлено ${filesToUpload.length} изображений из буфера обмена!`, 
+        'OK', 
+        { duration: 2000 }
+      );
+    }
+  }
+
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDraggingFile = true;
+  }
+
+  onDragLeave(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDraggingFile = false;
+  }
+
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDraggingFile = false;
+
+    if (event.dataTransfer?.files && event.dataTransfer.files.length > 0) {
+      const files: File[] = [];
+      for (let i = 0; i < event.dataTransfer.files.length; i++) {
+        const file = event.dataTransfer.files[i];
+        if (file.type.startsWith('image/')) {
+          files.push(file);
+        }
+      }
+      if (files.length > 0) {
+        this.addScreenshots(files);
       }
     }
   }
@@ -240,18 +299,29 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
   resetAll() {
     this.videoFile = null;
     this.referenceImageFile = null;
+    this.referenceImageFiles = [];
+    this.isMultiImageMode = false;
+    this.multiGeoFrames = [];
+    this.routeConfidence = 0;
     this.selectedBounds = null;
     this.landmarks = null;
     this.taskId = null;
-    this.isProcessing = false;
-    this.loadingProgress = 0;
-    this.currentAction = '';
+    this.isVideoProcessing = false;
+    this.isGeoProcessing = false;
+    this.videoLoadingProgress = 0;
+    this.geoLoadingProgress = 0;
+    this.currentVideoAction = '';
+    this.currentGeoAction = '';
     this.showResults = false;
     this.taskPrompt = '';
+    this.textAnalysis = null;
+    this.confidence = 0;
+    this.trajectoryStats = null;
+    this.previewUrlsMap.clear();
     
     this.clearSelection();
     if (this.pollSub) this.pollSub.unsubscribe();
-    this.snackBar.open('All data cleared.', 'OK', { duration: 2000 });
+    this.snackBar.open('Все данные сброшены.', 'OK', { duration: 2000 });
   }
 
   // ─── Video handling ──────────────────────────────────────────────────────────
@@ -276,6 +346,78 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
     this.referenceImageFile = null;
   }
 
+  removeSingleImage() {
+    this.referenceImageFile = null;
+    this.isMultiImageMode = false;
+    this.previewUrlsMap.clear();
+  }
+
+  getGeoButtonLabel(): string {
+    if (this.isGeoProcessing) return 'Обработка...';
+    if (this.isMultiImageMode && this.referenceImageFiles.length > 1) {
+      return `Построить маршрут (${this.referenceImageFiles.length} фото)`;
+    }
+    return 'Найти скриншот на карте';
+  }
+
+  onMultiImageFilesSelected(event: any) {
+    if (!event.target.files) return;
+    const files = Array.from(event.target.files) as File[];
+    if (files.length === 0) return;
+
+    this.addScreenshots(files);
+    event.target.value = ''; // Reset input to allow selecting same file
+  }
+
+  addScreenshots(files: File[]) {
+    let currentFiles: File[] = [];
+    if (this.isMultiImageMode) {
+      currentFiles = [...this.referenceImageFiles];
+    } else if (this.referenceImageFile) {
+      currentFiles = [this.referenceImageFile];
+    }
+
+    const newFiles = [...currentFiles, ...files];
+    if (newFiles.length > 20) {
+      this.snackBar.open('Максимум 20 изображений разрешено', 'Закрыть', { duration: 3000 });
+      return;
+    }
+
+    if (newFiles.length === 1) {
+      this.referenceImageFile = newFiles[0];
+      this.referenceImageFiles = [];
+      this.isMultiImageMode = false;
+    } else {
+      this.referenceImageFiles = newFiles;
+      this.referenceImageFile = null;
+      this.isMultiImageMode = true;
+    }
+  }
+
+  replaceSingleScreenshot(input: HTMLInputElement) {
+    this.removeSingleImage();
+    setTimeout(() => input.click(), 50);
+  }
+
+  removeImageAtIndex(index: number) {
+    this.referenceImageFiles = this.referenceImageFiles.filter((_, i) => i !== index);
+    if (this.referenceImageFiles.length === 1) {
+      this.referenceImageFile = this.referenceImageFiles[0];
+      this.referenceImageFiles = [];
+      this.isMultiImageMode = false;
+    } else if (this.referenceImageFiles.length === 0) {
+      this.isMultiImageMode = false;
+    }
+  }
+
+  private previewUrlsMap = new Map<File, string>();
+  getFilePreviewUrl(file: File): string {
+    if (!this.previewUrlsMap.has(file)) {
+      this.previewUrlsMap.set(file, URL.createObjectURL(file));
+    }
+    return this.previewUrlsMap.get(file)!;
+  }
+
   getFileSize(bytes: number): string {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
@@ -285,30 +427,123 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
   // ─── Processing ──────────────────────────────────────────────────────────────
 
   geolocateCurrentScreenshot() {
-    if (!this.referenceImageFile || !this.selectedBounds || this.isProcessing) return;
+    if (!this.selectedBounds || this.isProcessing) return;
 
-    this.isProcessing = true;
-    this.loadingProgress = 10;
-    this.currentAction = 'Locating screenshot on map...';
+    if (this.isMultiImageMode && this.referenceImageFiles.length > 1) {
+      this.geolocateMultiImages();
+      return;
+    }
+
+    if (!this.referenceImageFile) return;
+
+    this.isGeoProcessing = true;
+    this.geoLoadingProgress = 10;
+    this.currentGeoAction = 'Поиск на спутниковой карте...';
 
     this.uavService.geolocateImage(this.referenceImageFile, this.selectedBounds).subscribe({
       next: (res) => {
-        this.isProcessing = false;
+        this.isGeoProcessing = false;
         if (res.status === 'success') {
-          this.snackBar.open('Screenshot located! Placed pin on map.', 'Close', { duration: 5000 });
+          this.snackBar.open('Скриншот найден! Область отображена на карте.', 'Закрыть', { duration: 5000 });
           this.showResults = true;
-          this.confidence = res.confidence;
-          this.textAnalysis = `Screenshot successfully geolocated with ${(res.confidence * 100).toFixed(1)}% confidence. Location found at coordinates: ${res.lat.toFixed(6)}, ${res.lng.toFixed(6)}.`;
-          
-          // Render on map as a single point
-          setTimeout(() => this.initResultsMap([[res.lat, res.lng]], true), 150);
+          // confidence stored as 0-100 for display
+          this.confidence = res.confidence * 100;
+          const confPct = this.confidence.toFixed(1);
+          this.textAnalysis = `Скриншот геолоцирован с уверенностью ${confPct}% — координаты: ${res.lat.toFixed(6)}, ${res.lng.toFixed(6)}.`;
+
+          setTimeout(() => this.initResultsMap(
+            [[res.lat, res.lng]],
+            true,
+            res.footprint_corners || [],
+            res.zoom || 17
+          ), 150);
         } else {
-          this.snackBar.open('Geolocation failed: ' + res.error, 'Close', { duration: 7000 });
+          this.snackBar.open('Геолокация не удалась: ' + res.error, 'Закрыть', { duration: 7000 });
         }
       },
       error: (err) => {
-        this.isProcessing = false;
-        this.snackBar.open('API Error: ' + err.message, 'Close', { duration: 5000 });
+        this.isGeoProcessing = false;
+        this.snackBar.open('Ошибка API: ' + err.message, 'Закрыть', { duration: 5000 });
+      }
+    });
+  }
+
+  geolocateMultiImages() {
+    if (!this.selectedBounds || this.isProcessing) return;
+
+    this.isGeoProcessing = true;
+    this.geoLoadingProgress = 5;
+    this.currentGeoAction = `Отправка ${this.referenceImageFiles.length} снимков на обработку...`;
+    this.textAnalysis = null;
+    this.multiGeoFrames = [];
+
+    this.uavService.geolocateMultiImages(this.referenceImageFiles, this.selectedBounds).subscribe({
+      next: (initRes) => {
+        const taskId = initRes.task_id;
+        this.currentGeoAction = 'Ожидание в очереди...';
+        this.geoLoadingProgress = 10;
+        
+        const pollInterval = setInterval(() => {
+          this.uavService.getTaskStatus(taskId).subscribe({
+            next: (status) => {
+              if (status.status === 'processing' || status.status === 'pending') {
+                this.geoLoadingProgress = status.progress || 10;
+                this.currentGeoAction = status.current_action || 'Обработка изображений...';
+              } else if (status.status === 'success') {
+                clearInterval(pollInterval);
+                this.currentGeoAction = 'Получение результатов...';
+                this.geoLoadingProgress = 95;
+                
+                this.uavService.getTaskResult(taskId).subscribe({
+                  next: (result) => {
+                    this.isGeoProcessing = false;
+                    this.showResults = true;
+                    this.multiGeoFrames = result.frames || [];
+                    this.routeConfidence = result.route_confidence || 0;
+                    // store as 0-100 for display
+                    this.confidence = (result.route_confidence || 0) * 100;
+                    
+                    const successCount = result.successful_frames || 0;
+                    const totalCount = result.total_frames || 0;
+                    const confPct = this.confidence.toFixed(1);
+                    
+                    this.textAnalysis = `Построен вероятностный маршрут по ${successCount} из ${totalCount} кадров. Общая уверенность маршрута: ${confPct}%.`;
+                    
+                    const trajectory: [number, number][] = (result.frames || [])
+                      .filter((f: any) => f.status === 'success')
+                      .map((f: any) => [f.lat, f.lng] as [number, number]);
+                      
+                    if (trajectory.length === 0) {
+                      this.snackBar.open('Ни один из кадров не был геолоцирован.', 'Закрыть', { duration: 7000 });
+                      return;
+                    }
+                    
+                    setTimeout(() => {
+                      this.initResultsMap(trajectory, true, [], 17, result.frames || []);
+                    }, 150);
+                  },
+                  error: (err) => {
+                    this.isGeoProcessing = false;
+                    this.snackBar.open('Ошибка загрузки результатов: ' + err.message, 'Закрыть', { duration: 5000 });
+                  }
+                });
+              } else if (status.status === 'failed') {
+                clearInterval(pollInterval);
+                this.isGeoProcessing = false;
+                this.snackBar.open('Обработка завершилась ошибкой: ' + (status.error || 'Неизвестная ошибка'), 'Закрыть', { duration: 7000 });
+              }
+            },
+            error: (err) => {
+              clearInterval(pollInterval);
+              this.isGeoProcessing = false;
+              this.snackBar.open('Ошибка получения статуса: ' + err.message, 'Закрыть', { duration: 5000 });
+            }
+          });
+        }, 3000);
+      },
+      error: (err) => {
+        this.isGeoProcessing = false;
+        this.snackBar.open('Не удалось начать обработку: ' + err.message, 'Закрыть', { duration: 5000 });
       }
     });
   }
@@ -316,8 +551,8 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
   startProcessing() {
     if (!this.videoFile || !this.selectedBounds || this.isProcessing) return;
 
-    this.isProcessing = true;
-    this.loadingProgress = 0;
+    this.isVideoProcessing = true;
+    this.videoLoadingProgress = 0;
     this.textAnalysis = null;
 
     this.uavService.processVideo(this.videoFile, this.cropVideo, this.selectedBounds, this.referenceImageFile, this.taskPrompt).subscribe({
@@ -326,24 +561,25 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
         this.pollStatus();
       },
       error: (err) => {
-        this.isProcessing = false;
-        this.snackBar.open('Failed to start processing: ' + err.message, 'Close', { duration: 5000 });
+        this.isVideoProcessing = false;
+        this.snackBar.open('Не удалось запустить обработку: ' + err.message, 'Закрыть', { duration: 5000 });
       }
     });
   }
 
   stopProcessing() {
-    if (!this.taskId || !this.isProcessing) return;
+    if (!this.taskId) return;
     
     this.uavService.stopTask(this.taskId).subscribe({
       next: () => {
-        this.isProcessing = false;
+        this.isVideoProcessing = false;
+        this.isGeoProcessing = false;
         if (this.pollSub) this.pollSub.unsubscribe();
-        this.snackBar.open('Process stopped by user.', 'OK', { duration: 3000 });
-        this.currentAction = '🛑 Stopped';
+        this.snackBar.open('Процесс остановлен.', 'OK', { duration: 3000 });
+        this.currentVideoAction = '🛑 Остановлено';
       },
       error: (err) => {
-        this.snackBar.open('Failed to stop: ' + (err.message || 'Unknown error'), 'Close', { duration: 5000 });
+        this.snackBar.open('Ошибка остановки: ' + (err.message || 'Неизвестная ошибка'), 'Закрыть', { duration: 5000 });
       }
     });
   }
@@ -354,13 +590,13 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
 
       this.uavService.getTaskStatus(this.taskId).subscribe({
         next: (status) => {
-          this.loadingProgress = status.progress || 0;
-          this.currentAction = status.current_action || 'Processing...';
+          this.videoLoadingProgress = status.progress || 0;
+          this.currentVideoAction = status.current_action || 'Обработка видео...';
 
           if (status.status === 'success') {
-            this.isProcessing = false;
+            this.isVideoProcessing = false;
             if (this.pollSub) this.pollSub.unsubscribe();
-            this.snackBar.open('Mapping complete! GPS trajectory ready.', 'Close', { duration: 5000 });
+            this.snackBar.open('Маршрут построен! GPS-траектория готова.', 'Закрыть', { duration: 5000 });
             this.showResults = true;
             if (status.text_analysis) {
               this.textAnalysis = status.text_analysis;
@@ -368,10 +604,10 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
             setTimeout(() => this.loadTrajectoryAndRender(status.model_url!), 150);
 
           } else if (status.status === 'failed') {
-            this.isProcessing = false;
+            this.isVideoProcessing = false;
             if (this.pollSub) this.pollSub.unsubscribe();
-            const msg = status.error || 'Unknown error';
-            this.snackBar.open('Mapping failed: ' + msg, 'Close', { duration: 10000 });
+            const msg = status.error || 'Неизвестная ошибка';
+            this.snackBar.open('Построение маршрута не удалось: ' + msg, 'Закрыть', { duration: 10000 });
           }
         },
         error: (err) => console.error('Poll error', err)
@@ -409,7 +645,13 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
     return Math.round(dist * 100) / 100;
   }
 
-  private initResultsMap(trajectory: [number, number][], geoCalibrated: boolean) {
+  private initResultsMap(
+    trajectory: [number, number][],
+    geoCalibrated: boolean,
+    footprintCorners: number[][] = [],
+    matchedZoom: number = 17,
+    allFrames: any[] = []
+  ) {
     if (this.resultsMap) this.resultsMap.remove();
     if (this.animationInterval) clearInterval(this.animationInterval);
 
@@ -440,6 +682,17 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
       if (this.resultsMap) this.resultsMap.invalidateSize();
     }, 200);
 
+    if (allFrames.length > 1) {
+      if (geoCalibrated && this.selectedBounds) {
+        const b = this.selectedBounds;
+        L.rectangle([[b.south, b.west], [b.north, b.east]], {
+          color: '#6366f1', weight: 1.5, dashArray: '4 4', fillOpacity: 0, interactive: false
+        }).addTo(this.resultsMap);
+      }
+      this.renderMultiFrameRoute(allFrames);
+      return;
+    }
+
     if (geoCalibrated && this.selectedBounds) {
       // Draw selection area outline on results map
       const b = this.selectedBounds;
@@ -457,17 +710,8 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
     }
 
     if (latLngs.length === 1) {
-      // Single geolocation point
-      L.marker(latLngs[0], { 
-        icon: L.divIcon({
-          html: '<div class="geolocate-pin">📍</div>',
-          className: 'custom-geo-icon'
-        }) 
-      }).addTo(this.resultsMap)
-        .bindPopup(`<b>📍 Located Position</b><br>Confidence: ${(this.confidence * 100).toFixed(1)}%`)
-        .openPopup();
-      
-      this.resultsMap.setView(latLngs[0], 17);
+      // Single geolocation: render footprint area + center marker
+      this.renderGeolocationFootprint(latLngs[0], footprintCorners, matchedZoom);
       return;
     }
 
@@ -522,6 +766,109 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
       totalKm += this.haversineKm(latLngs[i - 1], latLngs[i]);
     }
     this.trajectoryStats = { points: latLngs.length, distanceKm: Math.round(totalKm * 10) / 10 };
+  }
+
+  private renderGeolocationFootprint(
+    center: L.LatLngTuple,
+    corners: number[][],
+    zoom: number
+  ) {
+    const map = this.resultsMap!;
+    const conf = this.confidence;
+    const confPct = (conf * 100).toFixed(1);
+
+    // Confidence-based color: red (low) → yellow → green (high)
+    const hue = Math.round(conf * 120); // 0=red, 60=yellow, 120=green
+    const color = `hsl(${hue}, 90%, 50%)`;
+    const colorLight = `hsl(${hue}, 90%, 65%)`;
+
+    if (corners && corners.length === 4) {
+      const poly = corners.map(c => [c[0], c[1]] as L.LatLngTuple);
+
+      // Outer glow / shadow rectangle
+      L.polygon(poly, {
+        color: color,
+        weight: 0,
+        fillColor: color,
+        fillOpacity: 0.08,
+        interactive: false
+      }).addTo(map);
+
+      // Main footprint border
+      const footprintPoly = L.polygon(poly, {
+        color: color,
+        weight: 3,
+        dashArray: '10 5',
+        fillColor: colorLight,
+        fillOpacity: 0.18,
+        lineCap: 'round',
+        lineJoin: 'round',
+      }).addTo(map);
+
+      // Corner marks
+      corners.forEach(c => {
+        L.circleMarker([c[0], c[1]] as L.LatLngTuple, {
+          radius: 5,
+          color: '#fff',
+          weight: 2,
+          fillColor: color,
+          fillOpacity: 1,
+          interactive: false
+        }).addTo(map);
+      });
+
+      // Compute size of footprint
+      const latSpan = Math.abs(corners[0][0] - corners[2][0]);
+      const lngSpan = Math.abs(corners[0][1] - corners[1][1]);
+      const widthM  = Math.round(lngSpan * 111320 * Math.cos(center[0] * Math.PI / 180));
+      const heightM = Math.round(latSpan * 111320);
+
+      footprintPoly.bindPopup(`
+        <div style="min-width:200px; font-family: sans-serif;">
+          <div style="font-size:15px; font-weight:700; margin-bottom:6px;">📸 UAV Screenshot Footprint</div>
+          <div style="margin-bottom:4px;">🎯 <b>Confidence:</b> <span style="color:${color};font-weight:700">${confPct}%</span></div>
+          <div style="margin-bottom:4px;">📍 <b>Center:</b> ${center[0].toFixed(6)}, ${center[1].toFixed(6)}</div>
+          <div style="margin-bottom:4px;">📐 <b>Footprint:</b> ~${widthM}m × ${heightM}m</div>
+          <div style="margin-bottom:4px;">🔭 <b>Matched at Zoom:</b> ${zoom}</div>
+          <div style="font-size:11px; color:#888; margin-top:6px;">The highlighted area shows the estimated<br>geographic coverage of your UAV screenshot.</div>
+        </div>
+      `).openPopup();
+    }
+
+    // Pulsing center crosshair marker
+    const pinHtml = `
+      <div style="position:relative; width:32px; height:32px;">
+        <div style="
+          position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+          width:32px; height:32px; border-radius:50%;
+          background:${color}; opacity:0.25;
+          animation: uav-pulse 1.6s ease-out infinite;
+        "></div>
+        <div style="
+          position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+          width:14px; height:14px; border-radius:50%;
+          background:${color}; border:3px solid white;
+          box-shadow:0 0 10px ${color};
+        "></div>
+      </div>`;
+
+    L.marker(center, {
+      icon: L.divIcon({ html: pinHtml, className: '', iconSize: [32, 32], iconAnchor: [16, 16] }),
+      zIndexOffset: 1000
+    }).addTo(map).bindPopup(`<b>📍 Center of UAV View</b><br>Lat: ${center[0].toFixed(6)}<br>Lng: ${center[1].toFixed(6)}`);
+
+    // Zoom to show footprint with padding, fall back to pin
+    if (corners && corners.length === 4) {
+      const lats = corners.map(c => c[0]);
+      const lngs = corners.map(c => c[1]);
+      const bounds = L.latLngBounds(
+        [Math.min(...lats), Math.min(...lngs)],
+        [Math.max(...lats), Math.max(...lngs)]
+      );
+      map.fitBounds(bounds.pad(0.8));
+    } else {
+      map.setView(center, 16);
+    }
   }
 
   private haversineKm(a: L.LatLngTuple, b: L.LatLngTuple): number {
@@ -594,6 +941,116 @@ export class UavMappingComponent implements AfterViewInit, OnDestroy {
       if (t['natural'] === 'wood' || t.landuse === 'forest') forests++;
     }
     return { railways, rivers, settlements, buildings, roads, forests, waterBodies };
+  }
+
+  private renderMultiFrameRoute(frames: any[]) {
+    const map = this.resultsMap!;
+    const successFrames = frames.filter(f => f.status === 'success');
+
+    if (successFrames.length === 0) return;
+
+    // 1. Draw footprint polygons for each successful frame
+    successFrames.forEach((frame) => {
+      const hue = Math.round((frame.confidence ?? 0) * 120);
+      const color = `hsl(${hue}, 85%, 52%)`;
+
+      if (frame.footprint_corners && frame.footprint_corners.length === 4) {
+        const poly = frame.footprint_corners.map((c: any) => [c[0], c[1]] as L.LatLngTuple);
+        L.polygon(poly, {
+          color: color,
+          weight: 2,
+          dashArray: '6 4',
+          fillColor: color,
+          fillOpacity: 0.12,
+          lineCap: 'round'
+        }).addTo(map)
+          .bindPopup(this.buildFramePopup(frame, frame.index + 1));
+      }
+    });
+
+    // 2. Draw route polyline segments with variable width & opacity based on confidence
+    for (let i = 0; i < successFrames.length - 1; i++) {
+      const a = successFrames[i];
+      const b = successFrames[i + 1];
+      const segConf = ((a.confidence ?? 0) + (b.confidence ?? 0)) / 2;
+      const hue = Math.round(segConf * 120);
+      const color = `hsl(${hue}, 85%, 52%)`;
+
+      L.polyline(
+        [[a.lat!, a.lng!], [b.lat!, b.lng!]],
+        {
+          color: color,
+          weight: 3 + segConf * 5,       // 3px to 8px
+          opacity: 0.4 + segConf * 0.5,   // 0.4 to 0.9
+          lineCap: 'round'
+        }
+      ).addTo(map);
+    }
+
+    // 3. Draw numbered markers with colors matching confidence
+    successFrames.forEach((frame) => {
+      const hue = Math.round((frame.confidence ?? 0) * 120);
+      const color = `hsl(${hue}, 85%, 52%)`;
+      const label = frame.index + 1;
+
+      const isFirst = frame.index === 0;
+      const isLast = frame.index === frames.length - 1;
+      const borderColor = isFirst ? '#4caf50' : (isLast ? '#f44336' : '#ffffff');
+
+      const iconHtml = `
+        <div style="
+          width: 28px; height: 28px; border-radius: 50%;
+          background: ${color}; border: 3px solid ${borderColor};
+          display: flex; align-items: center; justify-content: center;
+          font-weight: 700; font-size: 12px; color: white;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        ">${label}</div>`;
+
+      L.marker([frame.lat!, frame.lng!], {
+        icon: L.divIcon({
+          html: iconHtml,
+          className: '',
+          iconSize: [28, 28],
+          iconAnchor: [14, 14]
+        }),
+        zIndexOffset: 1000 + frame.index
+      }).addTo(map)
+        .bindPopup(this.buildFramePopup(frame, label));
+    });
+
+    // 4. Fit to path
+    const latLngs: L.LatLngTuple[] = successFrames.map(f => [f.lat!, f.lng!] as L.LatLngTuple);
+    map.fitBounds(L.polyline(latLngs).getBounds().pad(0.3));
+
+    // 5. Update stats
+    let totalKm = 0;
+    for (let i = 1; i < latLngs.length; i++) {
+      totalKm += this.haversineKm(latLngs[i - 1], latLngs[i]);
+    }
+    this.trajectoryStats = { points: successFrames.length, distanceKm: Math.round(totalKm * 10) / 10 };
+  }
+
+  private buildFramePopup(frame: any, originalNumber: number): string {
+    if (frame.status === 'failed') {
+      return `<b>📸 Кадр ${originalNumber}</b><br>❌ Ошибка геолокации<br><small>${frame.error || ''}</small>`;
+    }
+    const conf = ((frame.confidence ?? 0) * 100).toFixed(1);
+    const hue = Math.round((frame.confidence ?? 0) * 120);
+    const color = `hsl(${hue}, 85%, 52%)`;
+    return `
+      <div style="min-width: 180px; font-family: sans-serif; color: #fff;">
+        <b style="font-size: 14px; display: block; margin-bottom: 4px;">📸 Кадр ${originalNumber}</b>
+        <span style="display: block; margin-bottom: 2px;">
+          🎯 <b>Уверенность:</b> <span style="color: ${color}; font-weight: 700;">${conf}%</span>
+        </span>
+        <span style="display: block; margin-bottom: 2px;">
+          📍 <b>Координаты:</b> ${frame.lat.toFixed(6)}, ${frame.lng.toFixed(6)}
+        </span>
+        <span style="display: block; opacity: 0.8; font-size: 11px;">
+          🔭 Zoom: ${frame.zoom ?? 17} | Файл: ${frame.filename}
+        </span>
+      </div>
+    `;
   }
 
   closeResults() {
