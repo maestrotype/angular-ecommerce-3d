@@ -147,6 +147,8 @@ async def geolocate_image(
             "lat": result["lat"],
             "lng": result["lng"],
             "confidence": result["confidence"],
+            "footprint_corners": result.get("footprint_corners", []),
+            "zoom": result.get("zoom", 17),
             "task_id": task_id
         }
     except Exception as e:
@@ -155,6 +157,167 @@ async def geolocate_image(
             try: shutil.rmtree(work_dir)
             except: pass
         return {"status": "failed", "error": f"Internal Error: {str(e)}"}
+
+def run_multi_geolocate_background(task_id: str, saved_paths: List[str], poly: Dict, work_dir: str):
+    global sat_matcher_global, tasks
+    try:
+        if sat_matcher_global is None:
+            logging.info("Initializing global SatelliteMatcher (in background task)...")
+            sat_matcher_global = SatelliteMatcher()
+            
+        results = []
+        total_frames = len(saved_paths)
+        successful_frames = 0
+        confidences = []
+        
+        # Initialize tasks entry
+        tasks[task_id] = {
+            "status": "processing",
+            "progress": 0,
+            "current_action": f"Starting geolocation for {total_frames} frames...",
+            "completed": 0,
+            "total": total_frames,
+            "frames": []
+        }
+        
+        for i, img_path in enumerate(saved_paths):
+            logging.info(f"Geolocating frame {i+1}/{total_frames}: {img_path}")
+            
+            # Update progress status
+            task_data = dict(tasks[task_id])
+            task_data["current_action"] = f"Geolocating frame {i+1} of {total_frames}..."
+            task_data["progress"] = int((i / total_frames) * 100)
+            tasks[task_id] = task_data
+            
+            try:
+                # Run hierarchical geolocate
+                res = sat_matcher_global.hierarchical_geolocate(str(img_path), poly, work_dir)
+                
+                frame_res = {
+                    "index": i,
+                    "filename": Path(img_path).name,
+                }
+                
+                if res["status"] == "success":
+                    frame_res["status"] = "success"
+                    frame_res["lat"] = res["lat"]
+                    frame_res["lng"] = res["lng"]
+                    frame_res["confidence"] = res["confidence"]
+                    frame_res["footprint_corners"] = res["footprint_corners"]
+                    frame_res["zoom"] = res["zoom"]
+                    
+                    successful_frames += 1
+                    confidences.append(res["confidence"])
+                else:
+                    frame_res["status"] = "failed"
+                    frame_res["error"] = res.get("error", "Unknown error")
+            except Exception as fe:
+                logging.exception(f"Error geolocating frame {i}: {fe}")
+                frame_res = {
+                    "index": i,
+                    "filename": Path(img_path).name,
+                    "status": "failed",
+                    "error": str(fe)
+                }
+                
+            results.append(frame_res)
+            
+            # Update task data in shared memory
+            task_data = dict(tasks[task_id])
+            task_data["completed"] = i + 1
+            task_data["frames"] = results
+            tasks[task_id] = task_data
+            
+        # Calculate overall route confidence
+        route_conf = 0.0
+        if confidences:
+            route_conf = sum(confidences) / len(confidences)
+            
+        final_result = {
+            "status": "success",
+            "task_id": task_id,
+            "frames": results,
+            "route_confidence": route_conf,
+            "successful_frames": successful_frames,
+            "total_frames": total_frames
+        }
+        
+        tasks[task_id] = {
+            "status": "success",
+            "progress": 100,
+            "current_action": "Completed",
+            "completed": total_frames,
+            "total": total_frames,
+            "frames": results,
+            "result": final_result,
+            "model_url": f"http://localhost:8001/task-result/{task_id}"
+        }
+        logging.info(f"Multi-geolocation task {task_id} completed successfully. {successful_frames}/{total_frames} matched.")
+        
+    except Exception as e:
+        logging.exception(f"Critical error in run_multi_geolocate_background: {e}")
+        tasks[task_id] = {
+            "status": "failed",
+            "progress": 100,
+            "current_action": f"Failed: {str(e)}",
+            "error": str(e)
+        }
+
+@app.post("/geolocate-multi-images")
+async def geolocate_multi_images(
+    background_tasks: BackgroundTasks,
+    images: List[UploadFile] = File(...),
+    bounds: str = Form("{}"),
+):
+    logging.info(f"📍 [Python] Received multi-image geolocate request. Count: {len(images)}. Bounds: {bounds}")
+    
+    if not images or len(images) == 0:
+        return {"status": "failed", "error": "No images provided"}
+        
+    task_id = str(uuid.uuid4())
+    work_dir = Path(f"outputs/geolocate_multi_{task_id}")
+    work_dir.mkdir(parents=True, exist_ok=True)
+    
+    saved_paths = []
+    for idx, image in enumerate(images):
+        ext = Path(image.filename).suffix
+        filename = f"{idx:03d}_{image.filename}"
+        img_path = work_dir / filename
+        try:
+            content = await image.read()
+            with open(img_path, "wb") as f:
+                f.write(content)
+            saved_paths.append(str(img_path))
+        except Exception as e:
+            logging.error(f"Failed to save image {image.filename}: {e}")
+            if work_dir.exists():
+                try: shutil.rmtree(work_dir)
+                except: pass
+            return {"status": "failed", "error": f"IO Error saving {image.filename}: {str(e)}"}
+            
+    try:
+        poly = json.loads(bounds)
+    except Exception as e:
+        return {"status": "failed", "error": f"Invalid bounds JSON: {str(e)}"}
+        
+    tasks[task_id] = {
+        "status": "pending",
+        "progress": 0,
+        "current_action": "Waiting in queue...",
+        "completed": 0,
+        "total": len(images),
+        "frames": []
+    }
+    
+    background_tasks.add_task(
+        run_multi_geolocate_background,
+        task_id,
+        saved_paths,
+        poly,
+        str(work_dir)
+    )
+    
+    return {"task_id": task_id, "status": "accepted"}
 
 @app.post("/process-drone-video")
 async def process_drone_video(
