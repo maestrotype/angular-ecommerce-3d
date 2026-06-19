@@ -67,13 +67,15 @@ function isCloudinarySizeError(rawMsg: string): boolean {
     );
 }
 
-function isServerSleepingError(err: any, rawMsg: string): boolean {
+function isServerSleepingError(err: any, rawMsg: string, targetsProductionApi = false): boolean {
     const status = err?.status ?? 0;
     if ([502, 503, 504].includes(status)) {
         return true;
     }
-    // Render cold start: gateway returns no CORS headers → browser reports status 0
-    return isNetworkFailure(err, rawMsg) && isProductionApiUrl();
+    if (!isNetworkFailure(err, rawMsg)) {
+        return false;
+    }
+    return targetsProductionApi || isProductionApiUrl();
 }
 
 export function resolveApiError(
@@ -83,12 +85,15 @@ export function resolveApiError(
         titleKey?: string;
         isLocalApi?: boolean;
         isDevelopment?: boolean;
+        /** Request was sent to production Render API (e.g. Cloudinary upload), not the local API toggle. */
+        targetsProductionApi?: boolean;
     },
 ): ResolvedApiError {
     const status = err?.status ?? 0;
     const rawMsg = err?.error?.message || err?.message || '';
     const titleKey = options?.titleKey || 'ERROR_TITLE';
-    const isLocalApi = options?.isLocalApi ?? isLocalApiUrl();
+    const targetsProductionApi = options?.targetsProductionApi ?? false;
+    const isLocalApi = targetsProductionApi ? false : (options?.isLocalApi ?? isLocalApiUrl());
     const isDevelopment = options?.isDevelopment ?? isDevelopmentHost();
 
     if (isCloudinarySizeError(rawMsg)) {
@@ -100,7 +105,7 @@ export function resolveApiError(
         };
     }
 
-    if (isServerSleepingError(err, rawMsg)) {
+    if (isServerSleepingError(err, rawMsg, targetsProductionApi)) {
         let message = translate.instant('SERVER_SLEEPING_MSG');
         if (isDevelopment) {
             message += `\n${translate.instant('SERVER_SLEEPING_LOCAL_HINT')}`;

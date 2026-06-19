@@ -154,6 +154,7 @@
                  (dragleave)="on3dDragLeave($event)">
               
               <input type="file" #file3dInput (change)="on3dFileSelected($event)" accept=".glb" style="display: none" />
+              <input type="file" #cloudinaryReuploadInput (change)="onCloudinaryReuploadSelected($event)" accept=".glb" style="display: none" />
               
                 <!-- State: No Model -->
                 <div *ngIf="!model3dUrl" class="upload-placeholder">
@@ -276,10 +277,10 @@
                               class="archive-btn-overlay"
                               (click)="archiveLocalModel()" 
                               [disabled]="isUploading3d"
-                              matTooltip="Move this local file to Cloudinary for permanent storage">
+                              [matTooltip]="(isLiveSite ? 'UPLOAD_TO_CLOUDINARY_HINT' : 'ARCHIVE_TO_CLOUDINARY') | translate">
                         <mat-icon *ngIf="!isUploading3d">cloud_upload</mat-icon>
                         <mat-spinner *ngIf="isUploading3d" diameter="16" class="mini-spinner-inline"></mat-spinner>
-                        <span class="archive-btn-text">{{ 'ARCHIVE_TO_CLOUDINARY' | translate }}</span>
+                        <span class="archive-btn-text">{{ (isLiveSite ? 'UPLOAD_TO_CLOUDINARY' : 'ARCHIVE_TO_CLOUDINARY') | translate }}</span>
                       </button>
 
                       <button mat-icon-button class="download-btn-overlay"

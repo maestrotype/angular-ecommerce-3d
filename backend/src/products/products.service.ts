@@ -173,6 +173,14 @@ export class ProductsService {
 
   private validate3dModelUrl(url?: string): void {
     if (!url) return;
-    // Allow Cloudinary and server-hosted model URLs (including Render disk fallback).
+    const isProduction = process.env.NODE_ENV?.toLowerCase() === 'production' || process.env.RENDER === 'true';
+    if (!isProduction) return;
+
+    const isCloudinary = url.includes('res.cloudinary.com');
+    if (!isCloudinary) {
+      throw new BadRequestException(
+        'Production database requires 3D models on Cloudinary. Use "Archive to Cloudinary" before saving.',
+      );
+    }
   }
 }

@@ -8,6 +8,7 @@ import {
   ProductUpdateRequest,
 } from "../models/product.model";
 import { environment } from '../../environments/environment';
+import { PROD_API_URL } from '../../app/core/utils/api-url.util';
 
 @Injectable({
   providedIn: "root",
@@ -140,21 +141,46 @@ export class ProductService {
     );
   }
 
-  upload3dModel(file: File): Observable<{ url: string; publicId: string; localPath?: string }> {
+  upload3dModel(file: File, apiBase?: string): Observable<{ url: string; publicId: string; localPath?: string }> {
     const formData = new FormData();
     formData.append('model', file);
-    // Uses UploadsController endpoint which stores on Cloudinary (environment-independent)
+    const base = apiBase || this.API_URL;
     return this.http.post<{ url: string; publicId: string; localPath?: string }>(
-      `${this.API_URL}/uploads/product-3d-model`,
-      formData
+      `${base}/uploads/product-3d-model`,
+      formData,
+      { headers: this.getUploadHeaders() },
     );
   }
 
+  /** Always uploads via production Render backend → Cloudinary (required for GitHub Pages). */
+  upload3dModelToCloudinary(file: File): Observable<{ url: string; publicId: string; localPath?: string }> {
+    return this.upload3dModel(file, PROD_API_URL);
+  }
+
+  updateProductOnApi(
+    apiBase: string,
+    id: number,
+    product: ProductUpdateRequest,
+  ): Observable<Product> {
+    const headers = this.getHeaders();
+    return this.http.patch<Product>(`${apiBase}/products/${id}`, product, { headers });
+  }
+
+  updateProductOnProduction(id: number, product: ProductUpdateRequest): Observable<Product> {
+    return this.updateProductOnApi(PROD_API_URL, id, product);
+  }
+
   // New method to move local file to Cloudinary
-  archiveLocalModel(localPath: string): Observable<{ url: string; publicId: string; localPath?: string }> {
+  archiveLocalModel(localPath: string, apiBase?: string): Observable<{ url: string; publicId: string; localPath?: string }> {
+    const base = apiBase || this.API_URL;
     return this.http.post<{ url: string; publicId: string; localPath?: string }>(
-      `${this.API_URL}/uploads/archive-local`,
-      { path: localPath }
+      `${base}/uploads/archive-local`,
+      { path: localPath },
+      { headers: this.getUploadHeaders() },
     );
+  }
+
+  archiveLocalModelOnProduction(localPath: string): Observable<{ url: string; publicId: string; localPath?: string }> {
+    return this.archiveLocalModel(localPath, PROD_API_URL);
   }
 }

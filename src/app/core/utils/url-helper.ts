@@ -34,41 +34,34 @@ export function isLegacyLocalUrl(url: string | undefined): boolean {
 export function fixBackendUrl(url: string | undefined): string {
   if (!url) return '';
 
+  if (isCloudinaryUrl(url)) return url;
+
+  // Local / Render ephemeral URLs only work where the file actually exists — never rewrite to production backend.
+  if (isLegacyLocalUrl(url)) {
+    return url;
+  }
+
   const apiBase = environment.apiUrl;
   const backendBaseUrl = apiBase.endsWith('/api') ? apiBase.substring(0, apiBase.length - 4) : apiBase;
 
-  // Cloudinary or any other external CDN — return as-is
-  if (isCloudinaryUrl(url)) return url;
-
-  // Any other fully-qualified http URL that isn't localhost AND isn't our own backend — return as-is
-  if (url.startsWith('http') && !url.includes('localhost:3002') && !url.includes(backendBaseUrl)) {
+  if (url.startsWith('http') && !url.includes(backendBaseUrl)) {
     return url;
   }
 
   let resultUrl = url;
-  if (url.includes('localhost:3002')) {
-    // Swap localhost for the current environment's backend base
-    resultUrl = url.replace(/https?:\/\/localhost:3002/, backendBaseUrl);
-  } else if (!url.startsWith('http') && !url.startsWith('assets/')) {
-    // Relative path — prepend backend base
+  if (!url.startsWith('http') && !url.startsWith('assets/')) {
     resultUrl = `${backendBaseUrl}/${url.replace(/^\//, '')}`;
   }
 
-  // Ensure /uploads/ is present for asset files rooted at our backend
   if (resultUrl.includes(backendBaseUrl) &&
       !resultUrl.includes('/api/') &&
       !resultUrl.includes('assets/')) {
-    
     const isAssetFile = /\.(glb|gltf|jpg|jpeg|png|webp|svg)$/i.test(resultUrl);
     if (isAssetFile && !resultUrl.includes('/uploads/')) {
       const pathPart = resultUrl.replace(backendBaseUrl, '').replace(/^\//, '');
-      
-      // Smart folder detection
-      let folder = 'uploads';
-      if (pathPart.includes('ai-gen') || pathPart.endsWith('.glb')) {
-        folder = 'uploads/products-3d';
-      }
-      
+      const folder = pathPart.includes('ai-gen') || pathPart.endsWith('.glb')
+        ? 'uploads/products-3d'
+        : 'uploads';
       return `${backendBaseUrl}/${folder}/${pathPart}`;
     }
   }

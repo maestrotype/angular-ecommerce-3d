@@ -586,6 +586,13 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
 
   getAdvice(): string {
     const url = this.failedUrl || '';
+    const isLiveSite = typeof window !== 'undefined' &&
+      !window.location.hostname.includes('localhost') &&
+      !window.location.hostname.includes('127.0.0.1');
+
+    if (url.includes('localhost') && isLiveSite) {
+      return this.translate.instant('VIEWER.LOCALHOST_ON_LIVE_ADVICE');
+    }
     if (url.includes('onrender.com') && url.includes('/uploads/')) {
       return this.translate.instant('VIEWER.RENDER_EPHEMERAL_ADVICE');
     }
