@@ -392,17 +392,26 @@ body {
 }
 
 .error-snackbar {
-    --mdc-snackbar-container-color: var(--admin-error, #f44336);
+    --mdc-snackbar-container-color: var(--admin-error, #d32f2f);
     --mdc-snackbar-supporting-text-color: #ffffff;
     --mat-snack-bar-button-color: #ffffff;
-    background: var(--admin-error, #f44336);
-    color: white;
+    background: var(--admin-error, #d32f2f);
+    color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+
+    .mdc-snackbar__label {
+        white-space: pre-line;
+        line-height: 1.45;
+        color: #ffffff !important;
+    }
 }
 
-.error-snackbar .mat-simple-snackbar-action {
-    color: white;
+.error-snackbar .mat-simple-snackbar-action,
+.error-snackbar .mat-mdc-snack-bar-action,
+.error-snackbar .mat-mdc-snack-bar-action .mdc-button__label {
+    color: #ffffff !important;
+    font-weight: 600;
 }
 
 .warning-snackbar {

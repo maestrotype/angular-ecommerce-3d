@@ -9,12 +9,14 @@ import {
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import { v4 as uuidv4 } from "uuid";
-import { readFileSync, unlinkSync, existsSync, mkdirSync, writeFileSync } from "fs";
+import { readFileSync, unlinkSync, existsSync } from "fs";
 import * as os from "os";
 import { join } from "path";
 import { v2 as cloudinary } from "cloudinary";
 import { ImageProcessingService } from "../services/image-processing.service";
-import { Observable, from, throwError, bindNodeCallback, of } from 'rxjs';
+import { GlbOptimizationService, CLOUDINARY_RAW_FILE_LIMIT } from "../services/glb-optimization.service";
+import { saveModelToLocalDisk, isCloudinarySizeError } from "../services/model-storage.util";
+import { Observable, from, throwError } from 'rxjs';
 import { map, catchError, tap, switchMap } from 'rxjs/operators';
 
 
@@ -44,7 +46,10 @@ function createCloudinaryUpload(folder: string, resourceType: "image" | "raw" | 
 
 @Controller("uploads")
 export class UploadsController {
-  constructor(private readonly imageProcessingService: ImageProcessingService) { }
+  constructor(
+    private readonly imageProcessingService: ImageProcessingService,
+    private readonly glbOptimizationService: GlbOptimizationService,
+  ) { }
 
   @Post("section-image")
   @UseInterceptors(
@@ -89,6 +94,93 @@ export class UploadsController {
     );
   }
 
+  private cleanupTempFiles(filePath: string, optimizedPath: string | null): void {
+    try { unlinkSync(filePath); } catch (e) {}
+    if (optimizedPath) {
+      try { unlinkSync(optimizedPath); } catch (e) {}
+    }
+  }
+
+  private async uploadGlbToCloudinary(
+    uploadPath: string,
+    folder: string,
+    publicId?: string,
+  ): Promise<{ url: string; publicId: string }> {
+    const result = await new Promise<any>((resolve, reject) => {
+      cloudinary.uploader.upload_large(uploadPath, {
+        folder,
+        resource_type: "raw",
+        public_id: publicId,
+        chunk_size: 6000000,
+        timeout: 600000,
+      }, (error, uploadResult) => {
+        if (error) reject(error);
+        else resolve(uploadResult);
+      });
+    });
+
+    return {
+      url: result.secure_url,
+      publicId: result.public_id,
+    };
+  }
+
+  private async processAndUpload3dModel(
+    file: Express.Multer.File,
+    folder: string,
+    isProduct: boolean
+  ): Promise<{ url: string; publicId: string; localPath?: string }> {
+    if (!file) {
+      throw new BadRequestException("No file uploaded");
+    }
+
+    const isProduction = process.env.NODE_ENV?.toLowerCase() === 'production' || process.env.RENDER === 'true';
+    const isCloudinaryConfigured = !!process.env.CLOUDINARY_CLOUD_NAME;
+    const useCloudinary = isProduction || isCloudinaryConfigured;
+
+    let uploadPath = file.path;
+    let optimizedPath: string | null = null;
+    try {
+      optimizedPath = await this.glbOptimizationService.optimize(file.path);
+      if (optimizedPath) {
+        uploadPath = optimizedPath;
+      }
+    } catch (e) {
+      console.error("[UploadsController] Uncaught error during optimization step:", e);
+    }
+
+    const finalSize = existsSync(uploadPath) ? readFileSync(uploadPath).length : file.size;
+    console.log(`[UploadsController] 3D model ready for storage. Size: ${(finalSize / 1024 / 1024).toFixed(2)}MB`);
+
+    const isAi = file.originalname.toLowerCase().includes('ai-gen') || file.originalname.toLowerCase().includes('task_');
+    const publicId = (isProduct && isAi) ? `ai-gen-${uuidv4()}` : undefined;
+
+    if (useCloudinary && finalSize <= CLOUDINARY_RAW_FILE_LIMIT) {
+      console.log(`[UploadsController] Uploading 3D model to Cloudinary (${folder})...`);
+      try {
+        const cloudResult = await this.uploadGlbToCloudinary(uploadPath, folder, publicId);
+        this.cleanupTempFiles(file.path, optimizedPath);
+        return cloudResult;
+      } catch (error: any) {
+        console.error(`[UploadsController] Cloudinary upload failed:`, error);
+        if (!isCloudinarySizeError(error)) {
+          this.cleanupTempFiles(file.path, optimizedPath);
+          const message = error?.message || "3D model Cloudinary upload failed";
+          throw new BadRequestException(`Cloudinary upload failed: ${message}`);
+        }
+        console.warn(`[UploadsController] Cloudinary size limit hit, falling back to server storage`);
+      }
+    } else if (useCloudinary && finalSize > CLOUDINARY_RAW_FILE_LIMIT) {
+      console.warn(
+        `[UploadsController] Model is ${(finalSize / 1024 / 1024).toFixed(2)}MB (>10MB Cloudinary raw limit). Saving on server disk.`,
+      );
+    }
+
+    const localResult = saveModelToLocalDisk(uploadPath, isProduct, file.originalname);
+    this.cleanupTempFiles(file.path, optimizedPath);
+    return localResult;
+  }
+
   @Post("section-3d-model")
   @UseInterceptors(
     FileInterceptor("model", {
@@ -105,68 +197,7 @@ export class UploadsController {
     })
   )
   uploadSection3dModel(@UploadedFile() file: Express.Multer.File): Observable<{ url: string; publicId: string }> {
-    if (!file) {
-      return throwError(() => new BadRequestException("No file uploaded"));
-    }
-
-    const isProduction = process.env.NODE_ENV?.toLowerCase() === 'production' || process.env.RENDER === 'true';
-
-    // Cloudinary for small files, or forced for all in production
-    if (file.size <= 10 * 1024 * 1024 || isProduction) {
-      if (isProduction && file.size > 10 * 1024 * 1024) {
-        console.log(`[UploadsController] Large section-3d file (${(file.size/1024/1024).toFixed(1)}MB) detected in production. Enforcing chunked Cloudinary upload...`);
-      }
-
-      const uploadPromise = new Promise<any>((resolve, reject) => {
-        cloudinary.uploader.upload_large(file.path, {
-          folder: "section-3d-models",
-          resource_type: "auto", // Changed from 'raw' to 'auto' to support > 10MB on free accounts
-          chunk_size: 10000000, // 10MB chunks
-          timeout: 600000
-        }, (error, result) => {
-          if (error) reject(error);
-          else resolve(result);
-        });
-      });
-
-      return from(uploadPromise).pipe(
-        map((result: any) => {
-          try { unlinkSync(file.path); } catch (e) {}
-          return {
-            url: result.secure_url,
-            publicId: result.public_id,
-          };
-        }),
-        catchError(error => {
-          try { unlinkSync(file.path); } catch (e) {}
-          const message = error?.message || "3D section model upload failed";
-          return throwError(() => new BadRequestException(`Cloudinary upload failed: ${message}`));
-        })
-      );
-    } else {
-      // Fallback: Local Storage (Dev mode only, > 10MB)
-      const finalDir = join(__dirname, "..", "..", "uploads", "sections-3d");
-      if (!existsSync(finalDir)) {
-        mkdirSync(finalDir, { recursive: true });
-      }
-      
-      const finalFileName = `section3d-${Date.now()}-${Math.round(Math.random() * 1e9)}.glb`;
-      const finalPath = join(finalDir, finalFileName);
-      
-      const buffer = readFileSync(file.path);
-      writeFileSync(finalPath, buffer);
-      
-      try { unlinkSync(file.path); } catch (e) {}
-      
-      const serverUrl = isProduction 
-        ? 'https://angular-ecommerce-backend.onrender.com' 
-        : 'http://localhost:3002';
-
-      return of({
-        url: `${serverUrl}/uploads/sections-3d/${finalFileName}`,
-        publicId: finalPath,
-      });
-    }
+    return from(this.processAndUpload3dModel(file, "section-3d-models", false));
   }
 
   @Post("product-3d-model")
@@ -187,75 +218,7 @@ export class UploadsController {
     })
   )
   uploadProduct3dModel(@UploadedFile() file: Express.Multer.File): Observable<{ url: string; publicId: string }> {
-    if (!file) {
-      return throwError(() => new BadRequestException("No file uploaded"));
-    }
-
-    const isProduction = process.env.NODE_ENV?.toLowerCase() === 'production' || process.env.RENDER === 'true';
-
-    // Cloudinary for small files, or forced for all in production to avoid ephemeral storage loss
-    if (file.size <= 10 * 1024 * 1024 || isProduction) {
-      if (isProduction && file.size > 10 * 1024 * 1024) {
-        console.log(`[UploadsController] Large product-3d file (${(file.size/1024/1024).toFixed(1)}MB) detected in production. Enforcing chunked Cloudinary upload...`);
-      }
-
-      const uploadPromise = new Promise<any>((resolve, reject) => {
-        const isAi = file.originalname.toLowerCase().includes('ai-gen') || file.originalname.toLowerCase().includes('task_');
-        const publicId = isAi ? `ai-gen-${uuidv4()}` : undefined;
-        
-        cloudinary.uploader.upload_large(file.path, {
-          folder: "product-3d-models",
-          resource_type: "auto", // Changed from 'raw' to 'auto' to support > 10MB on free accounts
-          public_id: publicId,
-          chunk_size: 10000000, // 10MB chunks
-          timeout: 600000
-        }, (error, result) => {
-          if (error) reject(error);
-          else resolve(result);
-        });
-      });
-
-      return from(uploadPromise).pipe(
-        map((result: any) => {
-          try { unlinkSync(file.path); } catch (e) {}
-          return {
-            url: result.secure_url,
-            publicId: result.public_id,
-          };
-        }),
-        catchError(error => {
-          try { unlinkSync(file.path); } catch (e) {}
-          const message = error?.message || "3D model Cloudinary upload failed";
-          return throwError(() => new BadRequestException(`Cloudinary upload failed: ${message}`));
-        })
-      );
-    } else {
-      // Fallback: File is > 10MB in Dev mode. Keep it on local disk.
-      // Move it from temp directory to proper uploads directory
-      const finalDir = join(__dirname, "..", "..", "uploads", "products-3d");
-      if (!existsSync(finalDir)) {
-        mkdirSync(finalDir, { recursive: true });
-      }
-      
-      const isAi = file.originalname.toLowerCase().includes('ai-gen') || file.originalname.toLowerCase().includes('task_');
-      const prefix = isAi ? 'ai-gen' : 'product3d';
-      const finalFileName = `${prefix}-${Date.now()}-${Math.round(Math.random() * 1e9)}.glb`;
-      const finalPath = join(finalDir, finalFileName);
-      
-      // Copy from temp to final destination
-      const buffer = readFileSync(file.path);
-      writeFileSync(finalPath, buffer);
-      
-      // Clean up temp file
-      try { unlinkSync(file.path); } catch (e) {}
-      
-      const serverUrl = 'http://localhost:3002'; // Local dev default
-
-      return of({
-        url: `${serverUrl}/uploads/products-3d/${finalFileName}`,
-        publicId: `LOCAL:${finalPath}`, // Mark as local for frontend detection
-      });
-    }
+    return from(this.processAndUpload3dModel(file, "product-3d-models", true));
   }
 
   @Post("process-image")
@@ -388,35 +351,54 @@ export class UploadsController {
     }
 
     const folder = body.folder || "product-3d-models";
-    
-    const uploadPromise = new Promise<any>((resolve, reject) => {
+
+    const archivePromise = (async () => {
+      let uploadPath = cleanPath;
+      let optimizedPath: string | null = null;
+
+      if (cleanPath.toLowerCase().endsWith('.glb')) {
+        try {
+          optimizedPath = await this.glbOptimizationService.optimize(cleanPath);
+          if (optimizedPath) {
+            uploadPath = optimizedPath;
+          }
+        } catch (e) {
+          console.error("[UploadsController] Optimization failed during archiving:", e);
+        }
+      }
+
+      const finalSize = existsSync(uploadPath) ? readFileSync(uploadPath).length : 0;
       const isAi = cleanPath.toLowerCase().includes('ai-gen') || cleanPath.toLowerCase().includes('task_');
       const publicId = isAi ? `ai-gen-${uuidv4()}` : undefined;
 
-      cloudinary.uploader.upload_large(cleanPath, {
-        folder,
-        resource_type: "auto", // Changed from 'raw' to 'auto' to support > 10MB on free accounts
-        public_id: publicId,
-        chunk_size: 10000000, // 10MB chunks
-        timeout: 600000
-      }, (error, result) => {
-        if (error) reject(error);
-        else resolve(result);
-      });
-    });
+      if (finalSize <= CLOUDINARY_RAW_FILE_LIMIT) {
+        try {
+          const result = await this.uploadGlbToCloudinary(uploadPath, folder, publicId);
+          if (optimizedPath) {
+            try { unlinkSync(optimizedPath); } catch (e) {}
+          }
+          console.log(`[UploadsController] File successfully archived to Cloudinary: ${result.url}`);
+          return result;
+        } catch (error: any) {
+          if (!isCloudinarySizeError(error)) {
+            if (optimizedPath) {
+              try { unlinkSync(optimizedPath); } catch (e) {}
+            }
+            console.error(`[UploadsController] Archive failed:`, error);
+            throw new BadRequestException(error?.message || "Cloudinary archiving failed");
+          }
+          console.warn(`[UploadsController] Archive hit Cloudinary size limit after optimization`);
+        }
+      }
 
-    return from(uploadPromise).pipe(
-      map((result: any) => {
-        console.log(`[UploadsController] File successfully archived to Cloudinary: ${result.secure_url}`);
-        return {
-          url: result.secure_url,
-          publicId: result.public_id,
-        };
-      }),
-      catchError(error => {
-        console.error(`[UploadsController] Archive failed:`, error);
-        return throwError(() => new BadRequestException(error?.message || "Cloudinary archiving failed"));
-      })
-    );
+      if (optimizedPath) {
+        try { unlinkSync(optimizedPath); } catch (e) {}
+      }
+      throw new BadRequestException(
+        'Model is still larger than 10MB after optimization. Reduce texture resolution or mesh complexity in Blender, then try again.',
+      );
+    })();
+
+    return from(archivePromise);
   }
 }

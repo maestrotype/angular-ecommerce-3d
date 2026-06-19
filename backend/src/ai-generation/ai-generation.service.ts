@@ -5,10 +5,8 @@ import axios from 'axios';
 import cloudinary from '../config/cloudinary.config';
 import * as fs from 'fs';
 import * as path from 'path';
-import { exec } from 'child_process';
-import { promisify } from 'util';
-
-const execAsync = promisify(exec);
+import { GlbOptimizationService, CLOUDINARY_RAW_FILE_LIMIT } from '../services/glb-optimization.service';
+import { getServerBaseUrl } from '../services/model-storage.util';
 
 import { AiGenerationProvider, AiTaskResult } from './interfaces/ai-provider.interface';
 import { Tripo3dProvider } from './providers/tripo3d.provider';
@@ -25,6 +23,7 @@ export class AiGenerationService {
 
   constructor(
     private settingsService: SettingsService,
+    private glbOptimizationService: GlbOptimizationService,
     private tripo3dProvider: Tripo3dProvider,
     private hunyuan3dProvider: Hunyuan3dProvider,
     private meshyProvider: MeshyProvider,
@@ -137,20 +136,34 @@ export class AiGenerationService {
       // 2. Optimize the file using gltf-transform
       const optFilename = filename.replace('.glb', '_opt.glb');
       const optFilePath = path.join(uploadsDir, optFilename);
-      
+
       this.logger.log(`Optimizing model using gltf-transform...`);
-      try {
-        // Run gltf-transform to optimize geometry and textures
-        await execAsync(`npx gltf-transform optimize "${hqFilePath}" "${optFilePath}" --texture-compress webp`);
-        this.logger.log(`Model optimization complete.`);
-      } catch (optError) {
-        this.logger.warn(`Optimization failed, falling back to original model for cloud upload: ${optError.message}`);
-        // Fallback to the original file if optimization fails
+      const optimizedPath = await this.glbOptimizationService.optimize(hqFilePath);
+      const uploadPath = optimizedPath || hqFilePath;
+      if (optimizedPath && optimizedPath !== optFilePath) {
+        fs.copyFileSync(optimizedPath, optFilePath);
+      } else if (!optimizedPath) {
         fs.copyFileSync(hqFilePath, optFilePath);
       }
 
-      // 3. Upload Optimized Model to Cloudinary
-      const optBuffer = fs.readFileSync(optFilePath);
+      const uploadSize = fs.statSync(uploadPath).size;
+      this.logger.log(`Optimized model size: ${(uploadSize / 1024 / 1024).toFixed(2)}MB`);
+
+      if (uploadSize > CLOUDINARY_RAW_FILE_LIMIT) {
+        const serverUrl = getServerBaseUrl();
+        if (fs.existsSync(optFilePath) && optFilePath !== hqFilePath) {
+          fs.unlinkSync(optFilePath);
+        }
+        return {
+          success: true,
+          path: `${serverUrl}/uploads/products-3d/${hqFilename}`,
+          localPath: `/uploads/products-3d/${hqFilename}`,
+          publicId: `LOCAL:${hqFilePath}`,
+        };
+      }
+
+      // 3. Upload optimized model to Cloudinary (<= 10MB)
+      const optBuffer = fs.readFileSync(uploadPath);
       this.logger.log(`Uploading optimized model to Cloudinary (${optBuffer.length} bytes)...`);
 
       const uploadPromise = new Promise<any>((resolve, reject) => {
@@ -159,8 +172,8 @@ export class AiGenerationService {
             folder: 'product-3d-models',
             resource_type: 'raw',
             public_id: filename.replace('.glb', ''),
-            chunk_size: 6000000, // 6MB chunks
-            timeout: 600000
+            chunk_size: 6000000,
+            timeout: 600000,
           },
           (error, result) => {
             if (error) {

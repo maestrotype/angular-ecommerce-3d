@@ -29,3 +29,18 @@ export function translateErrorMessage(message: string, translate: any): string {
     const translated = translate.instant(message);
     return translated;
 }
+
+export function getDetailedUploadErrorMessage(err: any, translate: any): string {
+    const rawMsg = err?.error?.message || err?.message || '';
+
+    if (
+        rawMsg.includes('File size too large') ||
+        rawMsg.includes('Maximum is 10485760') ||
+        rawMsg.includes('10485760') ||
+        rawMsg.includes('still larger than 10MB')
+    ) {
+        return translate.instant('CLOUDINARY_3D_FILE_TOO_LARGE');
+    }
+
+    return translateErrorMessage(rawMsg || 'UNKNOWN_ERROR', translate);
+}

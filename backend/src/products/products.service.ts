@@ -173,13 +173,6 @@ export class ProductsService {
 
   private validate3dModelUrl(url?: string): void {
     if (!url) return;
-    const isProduction = process.env.NODE_ENV?.toLowerCase() === 'production' || process.env.RENDER === 'true';
-    if (isProduction) {
-      const isLocalOrRender = url.includes('onrender.com/uploads') || url.includes('/uploads/') || url.includes('localhost');
-      const isCloudinary = url.includes('res.cloudinary.com');
-      if (isLocalOrRender && !isCloudinary) {
-        throw new BadRequestException('In production mode, all 3D models must be hosted on Cloudinary. Saving local/Render disk paths is not allowed.');
-      }
-    }
+    // Allow Cloudinary and server-hosted model URLs (including Render disk fallback).
   }
 }

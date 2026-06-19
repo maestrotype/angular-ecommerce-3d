@@ -13,10 +13,13 @@ import { CustomProvider } from './providers/custom.provider';
 import { Unique3dProvider } from './providers/unique3d.provider';
 import { HunyuanV2Provider } from './providers/hunyuan-v2.provider';
 
+import { GlbOptimizationService } from '../services/glb-optimization.service';
+
 @Module({
   imports: [SettingsModule, HttpModule],
   providers: [
     AiGenerationService,
+    GlbOptimizationService,
     Tripo3dProvider,
     Hunyuan3dProvider,
     MeshyProvider,

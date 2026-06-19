@@ -25,7 +25,7 @@ import { ThreeDModelService } from '../../../../app/core/services/three-d-model.
 
 
 import { LocalizedString } from "../../../../shared/models/localized-string.model";
-import { getLocalizedString, translateErrorMessage } from "../../../../shared/utils/localization.util";
+import { getLocalizedString, translateErrorMessage, getDetailedUploadErrorMessage } from "../../../../shared/utils/localization.util";
 import { TranslateService } from "@ngx-translate/core";
 
 @Component({
@@ -683,16 +683,19 @@ export class ProductFormComponent implements OnInit {
         this.localModel3dUrl = res.localPath || null;
         this.model3dPublicId = res.publicId || null;
         this.isUploading3d = false;
-        this.snackBar.open(this.translate.instant('MODEL_3D_UPLOADED'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
+        const successKey = res.publicId?.startsWith('LOCAL:')
+          ? 'MODEL_3D_READY_SAVED'
+          : 'MODEL_3D_UPLOADED';
+        this.snackBar.open(this.translate.instant(successKey), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
       },
       error: (err) => {
         this.isUploading3d = false;
         const status = err?.status ? ` [HTTP ${err.status}]` : '';
-        const rawMsg = err?.error?.message || err?.message || 'Unknown error';
-        const errorMsg = translateErrorMessage(rawMsg, this.translate);
-        this.snackBar.open(this.translate.instant('MODEL_3D_UPLOAD_FAILED') + status + ': ' + errorMsg, this.translate.instant('CLOSE_BTN'), {
-          duration: 8000,
-          panelClass: 'error-snackbar'
+        const errorMsg = getDetailedUploadErrorMessage(err, this.translate);
+        const message = `${this.translate.instant('MODEL_3D_UPLOAD_FAILED')}${status}\n${errorMsg}`;
+        this.snackBar.open(message, this.translate.instant('CLOSE_BTN'), {
+          duration: 10000,
+          panelClass: ['error-snackbar']
         });
       },
     });
@@ -773,8 +776,8 @@ export class ProductFormComponent implements OnInit {
       },
       error: (err) => {
         this.isUploading3d = false;
-        const msg = err.error?.message || err.message;
-        this.snackBar.open('Bridge archiving failed during upload: ' + msg, 'Close', { duration: 5000 });
+        const errorMsg = getDetailedUploadErrorMessage(err, this.translate);
+        this.snackBar.open('Bridge archiving failed during upload: ' + errorMsg, 'Close', { duration: 10000 });
       }
     });
   }

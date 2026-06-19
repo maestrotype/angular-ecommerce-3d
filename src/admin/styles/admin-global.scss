@@ -466,24 +466,75 @@ button {
 
 // Snackbar
 .mat-mdc-snack-bar-container {
-  &.admin-snackbar-success {
-    .mdc-snackbar__surface {
-      background: var(--admin-success);
-      color: var(--admin-text-inverse);
-    }
+  .mdc-snackbar__surface {
+    max-width: min(560px, 92vw);
   }
 
+  .mdc-snackbar__label {
+    white-space: pre-line;
+    line-height: 1.45;
+    font-size: 14px;
+  }
+
+  .mat-mdc-snack-bar-action .mdc-button__label {
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  &.error-snackbar,
   &.admin-snackbar-error {
+    --mdc-snackbar-container-color: var(--admin-error, #d32f2f);
+    --mdc-snackbar-supporting-text-color: #ffffff;
+    --mat-snack-bar-button-color: #ffffff;
+
     .mdc-snackbar__surface {
-      background: var(--admin-error);
-      color: var(--admin-text-inverse);
+      background-color: var(--admin-error, #d32f2f) !important;
+      color: #ffffff !important;
+    }
+
+    .mdc-snackbar__label {
+      color: #ffffff !important;
+    }
+
+    .mat-mdc-snack-bar-action,
+    .mat-mdc-snack-bar-action .mdc-button__label {
+      color: #ffffff !important;
     }
   }
 
-  &.admin-snackbar-warning {
+  &.success-snackbar,
+  &.admin-snackbar-success {
+    --mdc-snackbar-container-color: var(--admin-success, #2e7d32);
+    --mdc-snackbar-supporting-text-color: #ffffff;
+    --mat-snack-bar-button-color: #ffffff;
+
     .mdc-snackbar__surface {
-      background: var(--admin-warning);
-      color: var(--admin-text-inverse);
+      background: var(--admin-success, #2e7d32) !important;
+      color: #ffffff !important;
+    }
+
+    .mdc-snackbar__label,
+    .mat-mdc-snack-bar-action,
+    .mat-mdc-snack-bar-action .mdc-button__label {
+      color: #ffffff !important;
+    }
+  }
+
+  &.warning-snackbar,
+  &.admin-snackbar-warning {
+    --mdc-snackbar-container-color: var(--admin-warning, #ed6c02);
+    --mdc-snackbar-supporting-text-color: #ffffff;
+    --mat-snack-bar-button-color: #ffffff;
+
+    .mdc-snackbar__surface {
+      background: var(--admin-warning, #ed6c02) !important;
+      color: #ffffff !important;
+    }
+
+    .mdc-snackbar__label,
+    .mat-mdc-snack-bar-action,
+    .mat-mdc-snack-bar-action .mdc-button__label {
+      color: #ffffff !important;
     }
   }
 
@@ -491,6 +542,18 @@ button {
     .mdc-snackbar__surface {
       background: var(--admin-info);
       color: var(--admin-text-inverse);
+    }
+  }
+
+  &:not(.error-snackbar):not(.success-snackbar):not(.warning-snackbar):not(.admin-snackbar-error):not(.admin-snackbar-success):not(.admin-snackbar-warning):not(.admin-snackbar-info) {
+    .mdc-snackbar__surface {
+      background-color: var(--admin-bg-secondary, #1e1e1e) !important;
+      color: var(--admin-text-primary, #ffffff) !important;
+    }
+
+    .mat-mdc-snack-bar-action,
+    .mat-mdc-snack-bar-action .mdc-button__label {
+      color: var(--admin-primary, #bb86fc) !important;
     }
   }
 }
@@ -580,12 +643,6 @@ button {
 
   .mdc-dialog__content {
     color: var(--admin-text-primary);
-  }
-
-  // Fixing the very light background in screenshots
-  .mdc-snackbar__surface {
-    background-color: var(--admin-bg-secondary, #1e1e1e) !important;
-    color: var(--admin-text-primary, #ffffff) !important;
   }
 }
 
