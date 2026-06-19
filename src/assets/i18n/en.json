@@ -190,6 +190,14 @@
   "ONLY_GLB_FORMAT": "Only GLB format is supported. Please convert your model first.",
   "FILE_TOO_LARGE": "File too large (max 100 MB)",
   "MODEL_3D_UPLOADED": "3D model uploaded to Cloudinary ✓",
+  "MODEL_SAVED_TEMPORARY_STORAGE": "Model saved temporarily on the server. Click \"Archive to Cloudinary\" for permanent storage.",
+  "MODEL_STORAGE_TEMPORARY": "Temporary (not Cloudinary)",
+  "MODEL_STORAGE_CLOUDINARY": "Cloudinary ✓",
+  "MODEL_STORAGE_CLOUDINARY_HINT": "Model is permanently stored on Cloudinary",
+  "SWITCHED_TO_LOCAL_API": "Switched to LOCAL API (localhost:3002)",
+  "SWITCHED_TO_PROD_API": "Switched to PROD API (Render). 3D models are stored on Cloudinary.",
+  "SWITCH_TO_LOCAL_API": "Switch to local backend",
+  "SWITCH_TO_PROD_API": "Switch to production backend (Render)",
   "MODEL_3D_UPLOAD_FAILED": "3D upload failed",
   "CLOUDINARY_3D_FILE_TOO_LARGE": "File exceeds Cloudinary limit (10 MB). Compress textures or optimize the model in Blender.",
   "UNKNOWN_ERROR": "Unknown error",
@@ -1082,7 +1090,10 @@
     "AI_GENERATION_PENDING": "This AI-generated model is still being processed or was not successfully uploaded. Please try again later.",
     "SHOW_LOGS": "Show Logs",
     "HIDE_LOGS": "Hide Logs",
-    "LOGS_TITLE": "Error Details & Logs"
+    "LOGS_TITLE": "Error Details & Logs",
+    "RENDER_EPHEMERAL_ADVICE": "This file was on Render's temporary disk and was deleted after a server restart. Re-upload the model or click \"Archive to Cloudinary\".",
+    "LOCAL_BACKEND_ADVICE": "Local backend is not accessible. Run: cd backend && npm run start:dev",
+    "CLOUDINARY_LOAD_ADVICE": "Cloudinary file could not be loaded. Verify the URL in your Cloudinary console."
   },
   "PAYMENT": {
     "HEADER": {

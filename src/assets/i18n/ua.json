@@ -179,6 +179,14 @@
   "ONLY_GLB_FORMAT": "Підтримується тільки формат GLB. Сконвертуйте модель.",
   "FILE_TOO_LARGE": "Файл занадто великий (макс. 100 МБ)",
   "MODEL_3D_UPLOADED": "3D модель завантажено в Cloudinary ✓",
+  "MODEL_SAVED_TEMPORARY_STORAGE": "Модель збережено тимчасово на сервері. Натисніть «Архівувати в Cloudinary» для постійного зберігання.",
+  "MODEL_STORAGE_TEMPORARY": "Тимчасово (не Cloudinary)",
+  "MODEL_STORAGE_CLOUDINARY": "Cloudinary ✓",
+  "MODEL_STORAGE_CLOUDINARY_HINT": "Модель надійно збережена в Cloudinary",
+  "SWITCHED_TO_LOCAL_API": "Перемкнено на LOCAL API (localhost:3002)",
+  "SWITCHED_TO_PROD_API": "Перемкнено на PROD API (Render). 3D-моделі зберігаються в Cloudinary.",
+  "SWITCH_TO_LOCAL_API": "Перемкнути на локальний backend",
+  "SWITCH_TO_PROD_API": "Перемкнути на production backend (Render)",
   "MODEL_3D_UPLOAD_FAILED": "Помилка завантаження 3D моделі",
   "CLOUDINARY_3D_FILE_TOO_LARGE": "Файл перевищує ліміт Cloudinary (10 МБ). Скоріть текстури або оптимізуйте модель у Blender.",
   "UNKNOWN_ERROR": "Невідома помилка",
@@ -1060,7 +1068,10 @@
     "AI_GENERATION_PENDING": "Очікування AI моделі. Ця 3D-модель все ще обробляється або не була успешно завантажена в хмару. Будь ласка, спробуйте пізніше.",
     "SHOW_LOGS": "Показати логи",
     "HIDE_LOGS": "Приховати логи",
-    "LOGS_TITLE": "Деталі помилки та логи"
+    "LOGS_TITLE": "Деталі помилки та логи",
+    "RENDER_EPHEMERAL_ADVICE": "Файл був на тимчасовому диску Render і видалений після перезавантаження сервера. Завантажте модель знову або натисніть «Архівувати в Cloudinary».",
+    "LOCAL_BACKEND_ADVICE": "Локальний backend недоступний. Запустіть: cd backend && npm run start:dev",
+    "CLOUDINARY_LOAD_ADVICE": "Не вдалося завантажити файл з Cloudinary. Перевірте URL у консолі Cloudinary."
   },
   "PAYMENT": {
     "HEADER": {

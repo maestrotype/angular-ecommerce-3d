@@ -83,7 +83,9 @@ export interface AppSettings {
   providedIn: "root",
 })
 export class SettingsService {
-  private apiUrl = environment.apiUrl + "/settings";
+  private get apiUrl(): string {
+    return environment.apiUrl + "/settings";
+  }
 
   constructor(private http: HttpClient) {}
 

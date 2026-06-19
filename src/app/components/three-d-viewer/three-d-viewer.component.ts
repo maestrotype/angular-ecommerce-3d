@@ -587,13 +587,13 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   getAdvice(): string {
     const url = this.failedUrl || '';
     if (url.includes('onrender.com') && url.includes('/uploads/')) {
-      return 'This file was stored on Render\'s ephemeral disk. It has been deleted due to a server restart. The model needs to be re-uploaded to Cloudinary.';
+      return this.translate.instant('VIEWER.RENDER_EPHEMERAL_ADVICE');
     }
     if (url.includes('localhost:3002') || url.includes('127.0.0.1:3002')) {
-      return 'The backend server appears to be running locally but isn\'t accessible. Ensure your local backend is running on port 3002.';
+      return this.translate.instant('VIEWER.LOCAL_BACKEND_ADVICE');
     }
     if (url.includes('res.cloudinary.com')) {
-      return 'Cloudinary resource could not be loaded. Please verify the URL is correct and the file exists in your Cloudinary console.';
+      return this.translate.instant('VIEWER.CLOUDINARY_LOAD_ADVICE');
     }
     return '';
   }

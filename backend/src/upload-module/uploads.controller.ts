@@ -163,16 +163,21 @@ export class UploadsController {
         return cloudResult;
       } catch (error: any) {
         console.error(`[UploadsController] Cloudinary upload failed:`, error);
+        this.cleanupTempFiles(file.path, optimizedPath);
         if (!isCloudinarySizeError(error)) {
-          this.cleanupTempFiles(file.path, optimizedPath);
           const message = error?.message || "3D model Cloudinary upload failed";
           throw new BadRequestException(`Cloudinary upload failed: ${message}`);
         }
-        console.warn(`[UploadsController] Cloudinary size limit hit, falling back to server storage`);
+        throw new BadRequestException(
+          'Model exceeds Cloudinary 10MB limit after optimization. Reduce textures or mesh complexity in Blender.',
+        );
       }
-    } else if (useCloudinary && finalSize > CLOUDINARY_RAW_FILE_LIMIT) {
-      console.warn(
-        `[UploadsController] Model is ${(finalSize / 1024 / 1024).toFixed(2)}MB (>10MB Cloudinary raw limit). Saving on server disk.`,
+    }
+
+    if (useCloudinary && isProduction) {
+      this.cleanupTempFiles(file.path, optimizedPath);
+      throw new BadRequestException(
+        'Model exceeds Cloudinary 10MB limit after optimization. Reduce textures or mesh complexity in Blender.',
       );
     }
 

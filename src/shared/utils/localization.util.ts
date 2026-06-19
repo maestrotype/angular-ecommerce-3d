@@ -1,5 +1,5 @@
 import { LocalizedString } from '../models/localized-string.model';
-import { environment } from '../../environments/environment';
+import { resolveApiUrl } from '../../app/core/utils/api-url.util';
 
 export interface ResolvedApiError {
   title: string;
@@ -40,11 +40,11 @@ function isDevelopmentHost(): boolean {
 }
 
 function isLocalApiUrl(): boolean {
-    return environment.apiUrl.includes('localhost:3002');
+    return resolveApiUrl().includes('localhost:3002');
 }
 
 function isProductionApiUrl(): boolean {
-    return environment.apiUrl.includes('onrender.com');
+    return resolveApiUrl().includes('onrender.com');
 }
 
 function isNetworkFailure(err: any, rawMsg: string): boolean {

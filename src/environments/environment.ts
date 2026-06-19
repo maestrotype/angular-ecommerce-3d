@@ -1,9 +1,9 @@
+import { resolveApiUrl } from '../app/core/utils/api-url.util';
+
 export const environment = {
   production: false,
   get apiUrl() {
-    const useLocal = typeof localStorage !== 'undefined' && localStorage.getItem('use_local_api') === 'true';
-    if (useLocal) return 'http://localhost:3002/api';
-    return 'https://angular-ecommerce-backend.onrender.com/api';
+    return resolveApiUrl();
   },
   fallbackApiUrl: 'https://angular-ecommerce-backend.onrender.com/api',
   stripePublishableKey: 'pk_test_mock_key_for_testing_only',

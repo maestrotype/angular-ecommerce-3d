@@ -254,24 +254,24 @@
                     <!-- LEFT: Info pills -->
                     <div class="overlay-left">
                       <div class="model-info-pill" 
-                           [class.local-pill]="model3dUrlIsLocal"
-                           [matTooltip]="model3dUrlIsLocal ? ('LOCAL_STORAGE_WARNING' | translate) : ''">
-                        <mat-icon>{{ model3dUrlIsLocal ? 'warning' : 'description' }}</mat-icon>
-                        <span class="filename-text">{{ model3dUrl.split('/').pop() }}</span>
+                           [class.local-pill]="model3dNeedsCloudinaryArchive"
+                           [matTooltip]="model3dNeedsCloudinaryArchive ? ('LOCAL_STORAGE_WARNING' | translate) : ('MODEL_STORAGE_CLOUDINARY_HINT' | translate)">
+                        <mat-icon>{{ model3dNeedsCloudinaryArchive ? 'warning' : 'cloud_done' }}</mat-icon>
+                        <span class="filename-text">{{ model3dStorageLabelKey | translate }}</span>
                       </div>
                       <!-- API Switcher (Dev only) -->
-                      <div class="api-env-pill" *ngIf="isDevelopment" 
+                      <button type="button" class="api-env-pill" *ngIf="isDevelopment" 
                            [class.prod]="!isLocalApi"
-                           (click)="toggleApiEnvironment()"
-                           [matTooltip]="isLocalApi ? 'Switch to Production DB' : 'Switch to Local DB'">
+                           (click)="toggleApiEnvironment($event)"
+                           [matTooltip]="isLocalApi ? ('SWITCH_TO_PROD_API' | translate) : ('SWITCH_TO_LOCAL_API' | translate)">
                         <mat-icon>{{ isLocalApi ? 'dns' : 'public' }}</mat-icon>
                         <span>{{ isLocalApi ? 'LOCAL' : 'PROD' }}</span>
-                      </div>
+                      </button>
                     </div>
 
                     <!-- RIGHT: Action buttons -->
                     <div class="overlay-actions">
-                      <button *ngIf="model3dUrlIsLocal" 
+                      <button *ngIf="model3dNeedsCloudinaryArchive" 
                               mat-raised-button color="accent" type="button" 
                               class="archive-btn-overlay"
                               (click)="archiveLocalModel()" 

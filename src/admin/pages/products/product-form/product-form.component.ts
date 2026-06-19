@@ -26,6 +26,8 @@ import { ThreeDModelService } from '../../../../app/core/services/three-d-model.
 
 import { LocalizedString } from "../../../../shared/models/localized-string.model";
 import { getLocalizedString, translateErrorMessage, resolveApiError, formatResolvedApiError } from "../../../../shared/utils/localization.util";
+import { isCloudinaryUrl } from "../../../../app/core/utils/url-helper";
+import { ApiEnvironmentService } from "../../../../app/core/services/api-environment.service";
 import { TranslateService } from "@ngx-translate/core";
 
 @Component({
@@ -59,7 +61,15 @@ export class ProductFormComponent implements OnInit {
   viewerVersion: number = 0;
 
   get model3dUrlIsLocal(): boolean {
-    return !!this.model3dUrl && (this.model3dUrl.includes('localhost') || this.model3dUrl.includes('127.0.0.1') || !!this.model3dPublicId?.startsWith('LOCAL:'));
+    return this.model3dNeedsCloudinaryArchive;
+  }
+
+  get model3dNeedsCloudinaryArchive(): boolean {
+    return !!this.model3dUrl && !isCloudinaryUrl(this.model3dUrl);
+  }
+
+  get model3dStorageLabelKey(): string {
+    return this.model3dNeedsCloudinaryArchive ? 'MODEL_STORAGE_TEMPORARY' : 'MODEL_STORAGE_CLOUDINARY';
   }
 
   get model3dUrlIsBlockedByMixedContent(): boolean {
@@ -89,7 +99,8 @@ export class ProductFormComponent implements OnInit {
     private dialog: MatDialog,
     private aiService: AiGenerationService,
     private threeDService: ThreeDModelService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private apiEnvironment: ApiEnvironmentService,
   ) {
     this.productForm = this.createForm();
   }
@@ -108,9 +119,8 @@ export class ProductFormComponent implements OnInit {
   }
 
   private checkApiEnvironment(): void {
-    this.isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    const pref = localStorage.getItem('use_local_api');
-    this.isLocalApi = this.isDevelopment ? pref !== 'false' : pref === 'true';
+    this.isDevelopment = this.apiEnvironment.isDevelopment;
+    this.isLocalApi = this.apiEnvironment.isLocalApi;
   }
 
   loadModelPreview(modelUrl: string) {
@@ -124,10 +134,18 @@ export class ProductFormComponent implements OnInit {
     });
   }
 
-  toggleApiEnvironment(): void {
-    this.isLocalApi = !this.isLocalApi;
-    localStorage.setItem('use_local_api', this.isLocalApi ? 'true' : 'false');
-    window.location.reload();
+  toggleApiEnvironment(event?: Event): void {
+    event?.preventDefault();
+    event?.stopPropagation();
+    this.isLocalApi = this.apiEnvironment.toggle();
+    const messageKey = this.isLocalApi ? 'SWITCHED_TO_LOCAL_API' : 'SWITCHED_TO_PROD_API';
+    this.snackBar.open(this.translate.instant(messageKey), this.translate.instant('CLOSE_BTN'), {
+      duration: 4000,
+      panelClass: ['warning-snackbar'],
+    });
+    if (this.productId) {
+      this.loadProduct(this.productId);
+    }
   }
 
   private fetchActiveEngineName(): void {
@@ -681,10 +699,15 @@ export class ProductFormComponent implements OnInit {
         this.localModel3dUrl = res.localPath || null;
         this.model3dPublicId = res.publicId || null;
         this.isUploading3d = false;
-        const successKey = res.publicId?.startsWith('LOCAL:')
-          ? 'MODEL_3D_READY_SAVED'
-          : 'MODEL_3D_UPLOADED';
-        this.snackBar.open(this.translate.instant(successKey), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
+        this.viewerVersion++;
+        if (isCloudinaryUrl(res.url)) {
+          this.snackBar.open(this.translate.instant('MODEL_3D_UPLOADED'), this.translate.instant('CLOSE_BTN'), { duration: 4000 });
+        } else {
+          this.snackBar.open(this.translate.instant('MODEL_SAVED_TEMPORARY_STORAGE'), this.translate.instant('CLOSE_BTN'), {
+            duration: 10000,
+            panelClass: ['warning-snackbar'],
+          });
+        }
       },
       error: (err) => {
         this.isUploading3d = false;
@@ -702,7 +725,7 @@ export class ProductFormComponent implements OnInit {
   }
 
   archiveLocalModel(): void {
-    if (!this.model3dUrl || !this.model3dUrlIsLocal) return;
+    if (!this.model3dUrl || !this.model3dNeedsCloudinaryArchive) return;
     
     this.isUploading3d = true;
     const envName = this.isLocalApi ? 'LOCAL' : 'PRODUCTION';

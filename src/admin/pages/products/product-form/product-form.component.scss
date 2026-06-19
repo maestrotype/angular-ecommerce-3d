@@ -383,6 +383,8 @@ textarea { width: 100% !important; min-height: 120px; }
       background: rgba(99, 102, 241, 0.15);
       border-color: rgba(99, 102, 241, 0.4);
       color: #818cf8;
+      font: inherit;
+      appearance: none;
 
       &.prod { background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.4); color: #f87171; }
       &:hover { transform: translateY(-2px); background: rgba(255, 255, 255, 0.1); }

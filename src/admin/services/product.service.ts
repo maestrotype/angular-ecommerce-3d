@@ -13,7 +13,9 @@ import { environment } from '../../environments/environment';
   providedIn: "root",
 })
 export class ProductService {
-  private readonly API_URL = environment.apiUrl;
+  private get API_URL(): string {
+    return environment.apiUrl;
+  }
 
   constructor(private http: HttpClient) { }
 
