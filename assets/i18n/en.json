@@ -1094,7 +1094,7 @@
     "RENDER_EPHEMERAL_ADVICE": "This file was on Render's temporary disk and was deleted after a server restart. Re-upload the model or click \"Archive to Cloudinary\".",
     "LOCAL_BACKEND_ADVICE": "Local backend is not accessible. Run: cd backend && npm run start:dev",
     "CLOUDINARY_LOAD_ADVICE": "Cloudinary file could not be loaded. Verify the URL in your Cloudinary console.",
-    "LOCALHOST_ON_LIVE_ADVICE": "This model URL points to localhost and only works on your computer. Click \"Archive to Cloudinary\" in the admin panel while on localhost."
+    "LOCALHOST_ON_LIVE_ADVICE": "This model URL points to localhost and only works on your computer. Click \"Upload to Cloudinary\" below and select the .glb file from your PC. If upload fails with 502, wait ~30 seconds and try again (Render server is waking up)."
   },
   "PAYMENT": {
     "HEADER": {
@@ -1305,7 +1305,9 @@
   "PROD_SYNC_GUIDE_TEXT": "This model exists locally but is missing on the server. Click 'Archive to Cloudinary' now to push it to the live production database.",
   "ARCHIVE_TO_CLOUDINARY": "Archive to Cloudinary",
   "ARCHIVE_NOT_CLOUDINARY_ERROR": "Model was not uploaded to Cloudinary. Switch to PROD API, wait for Render to wake up (30–60s), then try \"Archive to Cloudinary\" again.",
-  "ARCHIVE_BEFORE_SAVE_PROD": "Model is not on Cloudinary yet. Click \"Archive to Cloudinary\" before saving to production.",
+  "ARCHIVE_BEFORE_SAVE_PROD": "Model is not on Cloudinary yet. Click \"Upload to Cloudinary\" and select the .glb file before saving to production.",
+  "LIVE_SITE_MODEL_BROKEN_TITLE": "This 3D model cannot load on the live site",
+  "LIVE_SITE_MODEL_BROKEN_BODY": "The database has a temporary localhost URL. Click \"Upload to Cloudinary\" below and select the .glb file from your computer. Wait for Render to wake up if you see a 502 error.",
   "UPLOAD_TO_CLOUDINARY": "Upload to Cloudinary",
   "UPLOAD_TO_CLOUDINARY_HINT": "Select a .glb file from your computer — it will be stored on Cloudinary permanently",
   "REUPLOAD_GLB_FOR_CLOUDINARY": "Select a .glb file from your computer to upload to Cloudinary",
