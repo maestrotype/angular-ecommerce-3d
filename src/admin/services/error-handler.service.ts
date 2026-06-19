@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../components/error-dialog/error-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
+import { resolveApiError, formatResolvedApiError } from '../../shared/utils/localization.util';
 
 export interface ErrorInfo {
   title: string;
@@ -100,15 +101,11 @@ export class ErrorHandlerService {
   }
 
   showNetworkError(error: any): void {
-    const errorInfo: ErrorInfo = {
-      title: this.translate.instant('NETWORK_ERROR_TITLE'),
-      message: this.translate.instant('NETWORK_ERROR_MSG'),
-      details: error.message || 'Network error',
-      type: 'error',
-      action: this.translate.instant('RETRY_BTN')
-    };
-
-    this.showErrorWithDialog(errorInfo);
+    const resolved = resolveApiError(error, this.translate);
+    this.snackBar.open(formatResolvedApiError(resolved), this.translate.instant('CLOSE_BTN'), {
+      duration: resolved.duration,
+      panelClass: resolved.panelClass,
+    });
   }
 
   showValidationError(errors: string[]): void {
@@ -161,11 +158,12 @@ export class ErrorHandlerService {
   }
 
   handleGlobalError(error: any): void {
-    
-    
-    if (error.status === 0) {
+    if (error.status === 0 || [502, 503, 504].includes(error.status)) {
       this.showNetworkError(error);
-    } else if (error.status >= 500) {
+      return;
+    }
+
+    if (error.status >= 500) {
       this.showErrorWithDialog({
         title: this.translate.instant('SERVER_ERROR_TITLE'),
         message: this.translate.instant('SERVER_ERROR_MSG'),
@@ -173,14 +171,15 @@ export class ErrorHandlerService {
         type: 'error',
         action: this.translate.instant('RETRY_BTN')
       });
-    } else {
-      this.showErrorWithDialog({
-        title: this.translate.instant('ERROR_UPDATING_PRODUCT'), // Fallback generic title or specific if needed
-        message: this.translate.instant('UNEXPECTED_ERROR'),
-        details: error.message,
-        type: 'error',
-        action: this.translate.instant('CLOSE_BTN')
-      });
+      return;
     }
+
+    this.showErrorWithDialog({
+      title: this.translate.instant('ERROR_UPDATING_PRODUCT'),
+      message: this.translate.instant('UNEXPECTED_ERROR'),
+      details: error.message,
+      type: 'error',
+      action: this.translate.instant('CLOSE_BTN')
+    });
   }
 } 

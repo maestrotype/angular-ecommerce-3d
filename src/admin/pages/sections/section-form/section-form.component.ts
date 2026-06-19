@@ -9,7 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { SectionService } from '../../../services/section.service';
 import { Section, CreateSectionDto, UpdateSectionDto, MenuItem } from '../../../models/section.model';
 import { LocalizedString } from '../../../../shared/models/localized-string.model';
-import { getLocalizedString, getDetailedUploadErrorMessage } from '../../../../shared/utils/localization.util';
+import { getLocalizedString, resolveApiError, formatResolvedApiError } from '../../../../shared/utils/localization.util';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ImageUploadComponent } from '../../../components/ui/image-upload/image-upload.component';
 
@@ -620,12 +620,13 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
       }),
       catchError(error => {
         this.uploading3d = false;
-        const errorMsg = getDetailedUploadErrorMessage(error, this.translate);
-        this.snackBar.open(
-          `${this.translate.instant('ERROR_UPLOADING_3D_MODEL')}\n${errorMsg}`,
-          this.translate.instant('CLOSE_BTN'),
-          { duration: 10000, panelClass: ['error-snackbar'] },
-        );
+        const resolved = resolveApiError(error, this.translate, {
+          titleKey: 'ERROR_UPLOADING_3D_MODEL',
+        });
+        this.snackBar.open(formatResolvedApiError(resolved), this.translate.instant('CLOSE_BTN'), {
+          duration: resolved.duration,
+          panelClass: resolved.panelClass,
+        });
         return throwError(() => error);
       })
     );

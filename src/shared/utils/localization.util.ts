@@ -1,4 +1,12 @@
 import { LocalizedString } from '../models/localized-string.model';
+import { environment } from '../../environments/environment';
+
+export interface ResolvedApiError {
+  title: string;
+  message: string;
+  panelClass: string[];
+  duration: number;
+}
 
 export function getLocalizedString(value: string | LocalizedString | undefined | null, lang: string = 'en'): string {
     if (!value) return '';
@@ -9,38 +17,133 @@ export function getLocalizedString(value: string | LocalizedString | undefined |
 
 export function translateErrorMessage(message: string, translate: any): string {
     if (!message) return '';
-    
-    // Check for "KEY.SUBKEY: Actual message" pattern
+
     const match = message.match(/^([A-Z0-9_]+\.[A-Z0-9_]+): (.*)$/);
     if (match) {
         const key = match[1];
         const rest = match[2];
         const translatedKey = translate.instant(key);
-        
-        // Attempt to translate the rest part too - it might be a known error string key
         const translatedRest = translate.instant(rest);
-        
+
         if (translatedKey !== key) {
             return `${translatedKey}: ${translatedRest}`;
         }
     }
-    
-    // Try translating the whole string (maybe it's just a key)
+
     const translated = translate.instant(message);
-    return translated;
+    return translated !== message ? translated : message;
 }
 
-export function getDetailedUploadErrorMessage(err: any, translate: any): string {
-    const rawMsg = err?.error?.message || err?.message || '';
+function isDevelopmentHost(): boolean {
+    return typeof window !== 'undefined' &&
+        (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+}
 
-    if (
+function isLocalApiUrl(): boolean {
+    return environment.apiUrl.includes('localhost:3002');
+}
+
+function isProductionApiUrl(): boolean {
+    return environment.apiUrl.includes('onrender.com');
+}
+
+function isNetworkFailure(err: any, rawMsg: string): boolean {
+    const status = err?.status ?? 0;
+    return (
+        !status ||
+        status === 0 ||
+        rawMsg === 'Failed to fetch' ||
+        rawMsg.includes('Http failure response') ||
+        rawMsg.includes('NetworkError')
+    );
+}
+
+function isCloudinarySizeError(rawMsg: string): boolean {
+    return (
         rawMsg.includes('File size too large') ||
         rawMsg.includes('Maximum is 10485760') ||
         rawMsg.includes('10485760') ||
         rawMsg.includes('still larger than 10MB')
-    ) {
-        return translate.instant('CLOUDINARY_3D_FILE_TOO_LARGE');
+    );
+}
+
+function isServerSleepingError(err: any, rawMsg: string): boolean {
+    const status = err?.status ?? 0;
+    if ([502, 503, 504].includes(status)) {
+        return true;
+    }
+    // Render cold start: gateway returns no CORS headers → browser reports status 0
+    return isNetworkFailure(err, rawMsg) && isProductionApiUrl();
+}
+
+export function resolveApiError(
+    err: any,
+    translate: any,
+    options?: {
+        titleKey?: string;
+        isLocalApi?: boolean;
+        isDevelopment?: boolean;
+    },
+): ResolvedApiError {
+    const status = err?.status ?? 0;
+    const rawMsg = err?.error?.message || err?.message || '';
+    const titleKey = options?.titleKey || 'ERROR_TITLE';
+    const isLocalApi = options?.isLocalApi ?? isLocalApiUrl();
+    const isDevelopment = options?.isDevelopment ?? isDevelopmentHost();
+
+    if (isCloudinarySizeError(rawMsg)) {
+        return {
+            title: translate.instant(options?.titleKey || 'MODEL_3D_UPLOAD_FAILED'),
+            message: translate.instant('CLOUDINARY_3D_FILE_TOO_LARGE'),
+            panelClass: ['error-snackbar'],
+            duration: 12000,
+        };
     }
 
-    return translateErrorMessage(rawMsg || 'UNKNOWN_ERROR', translate);
+    if (isServerSleepingError(err, rawMsg)) {
+        let message = translate.instant('SERVER_SLEEPING_MSG');
+        if (isDevelopment) {
+            message += `\n${translate.instant('SERVER_SLEEPING_LOCAL_HINT')}`;
+        }
+        return {
+            title: translate.instant('SERVER_SLEEPING_TITLE'),
+            message,
+            panelClass: ['warning-snackbar'],
+            duration: 18000,
+        };
+    }
+
+    if (isNetworkFailure(err, rawMsg) && isLocalApi) {
+        return {
+            title: translate.instant('LOCAL_BACKEND_DOWN_TITLE'),
+            message: translate.instant('LOCAL_BACKEND_DOWN_MSG'),
+            panelClass: ['warning-snackbar'],
+            duration: 15000,
+        };
+    }
+
+    if (isNetworkFailure(err, rawMsg)) {
+        return {
+            title: translate.instant('NETWORK_ERROR_TITLE'),
+            message: translate.instant('NETWORK_ERROR_MSG'),
+            panelClass: ['error-snackbar'],
+            duration: 12000,
+        };
+    }
+
+    const statusSuffix = status ? ` [HTTP ${status}]` : '';
+    return {
+        title: translate.instant(titleKey),
+        message: `${translateErrorMessage(rawMsg || 'UNKNOWN_ERROR', translate)}${statusSuffix}`,
+        panelClass: ['error-snackbar'],
+        duration: 12000,
+    };
+}
+
+export function formatResolvedApiError(resolved: ResolvedApiError): string {
+    return `${resolved.title}\n${resolved.message}`;
+}
+
+export function getDetailedUploadErrorMessage(err: any, translate: any): string {
+    return resolveApiError(err, translate, { titleKey: 'MODEL_3D_UPLOAD_FAILED' }).message;
 }

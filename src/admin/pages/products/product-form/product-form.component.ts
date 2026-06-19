@@ -25,7 +25,7 @@ import { ThreeDModelService } from '../../../../app/core/services/three-d-model.
 
 
 import { LocalizedString } from "../../../../shared/models/localized-string.model";
-import { getLocalizedString, translateErrorMessage, getDetailedUploadErrorMessage } from "../../../../shared/utils/localization.util";
+import { getLocalizedString, translateErrorMessage, resolveApiError, formatResolvedApiError } from "../../../../shared/utils/localization.util";
 import { TranslateService } from "@ngx-translate/core";
 
 @Component({
@@ -109,7 +109,8 @@ export class ProductFormComponent implements OnInit {
 
   private checkApiEnvironment(): void {
     this.isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    this.isLocalApi = localStorage.getItem('use_local_api') === 'true';
+    const pref = localStorage.getItem('use_local_api');
+    this.isLocalApi = this.isDevelopment ? pref !== 'false' : pref === 'true';
   }
 
   loadModelPreview(modelUrl: string) {
@@ -124,11 +125,8 @@ export class ProductFormComponent implements OnInit {
   }
 
   toggleApiEnvironment(): void {
-    if (this.isLocalApi) {
-      localStorage.removeItem('use_local_api');
-    } else {
-      localStorage.setItem('use_local_api', 'true');
-    }
+    this.isLocalApi = !this.isLocalApi;
+    localStorage.setItem('use_local_api', this.isLocalApi ? 'true' : 'false');
     window.location.reload();
   }
 
@@ -690,12 +688,14 @@ export class ProductFormComponent implements OnInit {
       },
       error: (err) => {
         this.isUploading3d = false;
-        const status = err?.status ? ` [HTTP ${err.status}]` : '';
-        const errorMsg = getDetailedUploadErrorMessage(err, this.translate);
-        const message = `${this.translate.instant('MODEL_3D_UPLOAD_FAILED')}${status}\n${errorMsg}`;
-        this.snackBar.open(message, this.translate.instant('CLOSE_BTN'), {
-          duration: 10000,
-          panelClass: ['error-snackbar']
+        const resolved = resolveApiError(err, this.translate, {
+          titleKey: 'MODEL_3D_UPLOAD_FAILED',
+          isLocalApi: this.isLocalApi,
+          isDevelopment: this.isDevelopment,
+        });
+        this.snackBar.open(formatResolvedApiError(resolved), this.translate.instant('CLOSE_BTN'), {
+          duration: resolved.duration,
+          panelClass: resolved.panelClass,
         });
       },
     });
@@ -776,8 +776,15 @@ export class ProductFormComponent implements OnInit {
       },
       error: (err) => {
         this.isUploading3d = false;
-        const errorMsg = getDetailedUploadErrorMessage(err, this.translate);
-        this.snackBar.open('Bridge archiving failed during upload: ' + errorMsg, 'Close', { duration: 10000 });
+        const resolved = resolveApiError(err, this.translate, {
+          titleKey: 'MODEL_3D_UPLOAD_FAILED',
+          isLocalApi: this.isLocalApi,
+          isDevelopment: this.isDevelopment,
+        });
+        this.snackBar.open(formatResolvedApiError(resolved), this.translate.instant('CLOSE_BTN'), {
+          duration: resolved.duration,
+          panelClass: resolved.panelClass,
+        });
       }
     });
   }
@@ -848,12 +855,14 @@ export class ProductFormComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-        const status = err?.status ? ` [HTTP ${err.status}]` : '';
-        const rawMsg = err?.error?.message || err?.message || 'Unknown error';
-        const errorMsg = translateErrorMessage(rawMsg, this.translate);
-        this.snackBar.open(this.translate.instant('FAILED_TO_LOAD_PRODUCT') + status + ': ' + errorMsg, this.translate.instant('CLOSE_BTN'), {
-          duration: 7000,
-          panelClass: 'error-snackbar'
+        const resolved = resolveApiError(err, this.translate, {
+          titleKey: 'FAILED_TO_LOAD_PRODUCT',
+          isLocalApi: this.isLocalApi,
+          isDevelopment: this.isDevelopment,
+        });
+        this.snackBar.open(formatResolvedApiError(resolved), this.translate.instant('CLOSE_BTN'), {
+          duration: resolved.duration,
+          panelClass: resolved.panelClass,
         });
         this.isLoading = false;
       },
