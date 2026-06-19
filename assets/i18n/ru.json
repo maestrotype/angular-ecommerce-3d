@@ -862,7 +862,8 @@
     "LOGS_TITLE": "Детали ошибки и логи",
     "RENDER_EPHEMERAL_ADVICE": "Файл был на временном диске Render и удалён после перезагрузки сервера. Загрузите модель снова или нажмите «Архивировать в Cloudinary».",
     "LOCAL_BACKEND_ADVICE": "Локальный backend недоступен. Запустите: cd backend && npm run start:dev",
-    "CLOUDINARY_LOAD_ADVICE": "Не удалось загрузить файл из Cloudinary. Проверьте URL в консоли Cloudinary."
+    "CLOUDINARY_LOAD_ADVICE": "Не удалось загрузить файл из Cloudinary. Проверьте URL в консоли Cloudinary.",
+    "LOCALHOST_ON_LIVE_ADVICE": "URL модели указывает на localhost — он работает только на вашем компьютере. Откройте админку на localhost и нажмите «Архивировать в Cloudinary»."
   },
   "CUSTOMER_EMAIL": "Email клиента",
   "MIN_AMOUNT": "Мин. сумма",
@@ -1303,6 +1304,11 @@
   "PROD_SYNC_GUIDE_TITLE": "Синхронизация с живым сайтом",
   "PROD_SYNC_GUIDE_TEXT": "Эта модель есть у вас локально, но её нет на сервере. Нажмите 'Архивировать в Cloudinary' сейчас, чтобы перенести её в базу данных живого сайта.",
   "ARCHIVE_TO_CLOUDINARY": "Архивировать в Cloudinary",
+  "ARCHIVE_NOT_CLOUDINARY_ERROR": "Модель не попала в Cloudinary. Переключитесь на PROD API, дождитесь пробуждения Render (30–60 с) и нажмите «Архивировать в Cloudinary» снова.",
+  "ARCHIVE_BEFORE_SAVE_PROD": "Модель ещё не в Cloudinary. Нажмите «Архивировать в Cloudinary» перед сохранением на production.",
+  "UPLOAD_TO_CLOUDINARY": "Загрузить в Cloudinary",
+  "UPLOAD_TO_CLOUDINARY_HINT": "Выберите .glb файл с компьютера — он сохранится в Cloudinary навсегда",
+  "REUPLOAD_GLB_FOR_CLOUDINARY": "Выберите .glb файл с компьютера для загрузки в Cloudinary",
   "SECURITY_BLOCK": "Безопасность браузера заблокировала модель",
   "MIXED_CONTENT_EXPLANATION": "Ваш браузер блокирует загрузку локальных ресурсов (HTTP) на защищенном сайте (HTTPS). Архивация модели в Cloudinary решит эту проблему навсегда.",
   "FIX_NOW_ARCHIVE": "Исправить: Архивировать в Cloudinary",
