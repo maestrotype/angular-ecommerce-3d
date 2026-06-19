@@ -374,6 +374,28 @@ textarea { width: 100% !important; min-height: 120px; }
 
     .model-info-pill.local-pill { border-color: #f59e0b; color: #fbbf24; background: rgba(245, 158, 11, 0.15); }
 
+    .live-model-warning-banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      background: rgba(245, 158, 11, 0.12);
+      color: #fbbf24;
+
+      mat-icon { flex-shrink: 0; margin-top: 2px; }
+      .banner-text {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        line-height: 1.45;
+        strong { color: #fcd34d; font-weight: 600; }
+        span { opacity: 0.95; font-size: 0.92rem; }
+      }
+    }
+
     .api-env-pill {
       cursor: pointer;
       width: fit-content;

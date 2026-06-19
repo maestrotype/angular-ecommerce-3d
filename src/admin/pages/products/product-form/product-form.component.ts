@@ -445,7 +445,15 @@ export class ProductFormComponent implements OnInit {
         next: (response: any) => {
           this.resetAiState();
           if (response.path) {
-            this.applyModelChangesAndSave(response.path, response.localPath || null, response.publicId || null);
+            const persistOptions = this.isLiveSite || !this.isLocalApi
+              ? { forceProductionDb: true, requireCloudinary: true as const }
+              : undefined;
+            this.applyModelChangesAndSave(
+              response.path,
+              response.localPath || null,
+              response.publicId || null,
+              persistOptions,
+            );
           }
         },
         error: (err) => {
@@ -474,10 +482,23 @@ export class ProductFormComponent implements OnInit {
     const wasLocal = this.model3dNeedsCloudinaryArchive;
     this.model3dUrl = url;
     this.localModel3dUrl = isCloudinaryUrl(url) ? null : localPath;
-    this.model3dPublicId = isCloudinaryUrl(url) ? publicId : publicId;
+    this.model3dPublicId = publicId;
     this.viewerVersion++;
 
-    const saveToProduction = options?.forceProductionDb || !this.isLocalApi || isCloudinaryUrl(url);
+    const wantsProduction = options?.forceProductionDb || !this.isLocalApi;
+    const saveToProduction = wantsProduction && isCloudinaryUrl(url);
+
+    if (wantsProduction && !isCloudinaryUrl(url)) {
+      this.snackBar.open(this.translate.instant('ARCHIVE_BEFORE_SAVE_PROD'), this.translate.instant('CLOSE_BTN'), {
+        duration: 12000,
+        panelClass: ['warning-snackbar'],
+      });
+      if (this.isEditMode && this.productId && this.isLocalApi) {
+        this.saveProductModelOnly(false);
+      }
+      return;
+    }
+
     const messageKey = wasLocal && isCloudinaryUrl(url)
       ? 'MODEL_SYNCED_TO_CLOUD'
       : isCloudinaryUrl(url)
@@ -492,6 +513,15 @@ export class ProductFormComponent implements OnInit {
   }
 
   private saveProductModelOnly(saveToProduction = false): void {
+    if (saveToProduction && !isCloudinaryUrl(this.model3dUrl)) {
+      console.warn('[Save] Blocked production save: model URL is not on Cloudinary', this.model3dUrl);
+      this.snackBar.open(this.translate.instant('ARCHIVE_BEFORE_SAVE_PROD'), this.translate.instant('CLOSE_BTN'), {
+        duration: 12000,
+        panelClass: ['warning-snackbar'],
+      });
+      return;
+    }
+
     const productData: any = {
       model3dUrl: this.model3dUrl,
       localModel3dUrl: this.localModel3dUrl,

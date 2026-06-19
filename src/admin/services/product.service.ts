@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable, throwError } from "rxjs";
-import { catchError } from "rxjs/operators";
+import { Observable, throwError, timer } from "rxjs";
+import { catchError, retry } from "rxjs/operators";
 import {
   Product,
   ProductCreateRequest,
@@ -154,7 +154,18 @@ export class ProductService {
 
   /** Always uploads via production Render backend → Cloudinary (required for GitHub Pages). */
   upload3dModelToCloudinary(file: File): Observable<{ url: string; publicId: string; localPath?: string }> {
-    return this.upload3dModel(file, PROD_API_URL);
+    return this.upload3dModel(file, PROD_API_URL).pipe(
+      retry({
+        count: 3,
+        delay: (error, retryCount) => {
+          const status = error?.status;
+          if (status === 0 || status === 502 || status === 503 || status === 504) {
+            return timer(15000 * retryCount);
+          }
+          return throwError(() => error);
+        },
+      }),
+    );
   }
 
   updateProductOnApi(

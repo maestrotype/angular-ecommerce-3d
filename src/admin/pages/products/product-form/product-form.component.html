@@ -242,6 +242,14 @@
               <!-- State: Model Loaded -->
               <div *ngIf="model3dUrl" class="model-active-view">
 
+                <div *ngIf="isLiveSite && model3dNeedsCloudinaryArchive" class="live-model-warning-banner">
+                  <mat-icon>cloud_off</mat-icon>
+                  <div class="banner-text">
+                    <strong>{{ 'LIVE_SITE_MODEL_BROKEN_TITLE' | translate }}</strong>
+                    <span>{{ 'LIVE_SITE_MODEL_BROKEN_BODY' | translate }}</span>
+                  </div>
+                </div>
+
                 <!-- 3D Viewer -->
                 <div class="viewer-container-glass">
                   <app-three-d-viewer [key]="viewerVersion" 

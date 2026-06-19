@@ -1072,7 +1072,7 @@
     "RENDER_EPHEMERAL_ADVICE": "Файл був на тимчасовому диску Render і видалений після перезавантаження сервера. Завантажте модель знову або натисніть «Архівувати в Cloudinary».",
     "LOCAL_BACKEND_ADVICE": "Локальний backend недоступний. Запустіть: cd backend && npm run start:dev",
     "CLOUDINARY_LOAD_ADVICE": "Не вдалося завантажити файл з Cloudinary. Перевірте URL у консолі Cloudinary.",
-    "LOCALHOST_ON_LIVE_ADVICE": "URL моделі вказує на localhost — він працює лише на вашому комп'ютері. Відкрийте адмінку на localhost і натисніть «Архівувати в Cloudinary»."
+    "LOCALHOST_ON_LIVE_ADVICE": "URL моделі вказує на localhost — він працює лише на вашому комп'ютері. Натисніть «Завантажити в Cloudinary» нижче і виберіть .glb з комп'ютера. При помилці 502 зачекайте ~30 секунд і повторіть (сервер Render прокидається)."
   },
   "PAYMENT": {
     "HEADER": {
@@ -1285,7 +1285,9 @@
   "PROD_SYNC_GUIDE_TEXT": "Ця модель є у вас локально, але її немає на сервері. Натисніть 'Архівувати в Cloudinary' зараз, щоб перенести її в базу даних живого сайту.",
   "ARCHIVE_TO_CLOUDINARY": "Архівувати в Cloudinary",
   "ARCHIVE_NOT_CLOUDINARY_ERROR": "Модель не потрапила в Cloudinary. Перемкніть на PROD API, зачекайте пробудження Render (30–60 с) і спробуйте «Архівувати в Cloudinary» знову.",
-  "ARCHIVE_BEFORE_SAVE_PROD": "Модель ще не в Cloudinary. Натисніть «Архівувати в Cloudinary» перед збереженням на production.",
+  "ARCHIVE_BEFORE_SAVE_PROD": "Модель ще не в Cloudinary. Натисніть «Завантажити в Cloudinary» і виберіть .glb перед збереженням на production.",
+  "LIVE_SITE_MODEL_BROKEN_TITLE": "3D-модель не завантажується на live-сайті",
+  "LIVE_SITE_MODEL_BROKEN_BODY": "У базі збережено тимчасовий localhost URL. Натисніть «Завантажити в Cloudinary» нижче і виберіть .glb з комп'ютера. При помилці 502 зачекайте ~30 секунд (сервер Render прокидається).",
   "UPLOAD_TO_CLOUDINARY": "Завантажити в Cloudinary",
   "UPLOAD_TO_CLOUDINARY_HINT": "Оберіть .glb файл з комп'ютера — він збережеться в Cloudinary назавжди",
   "REUPLOAD_GLB_FOR_CLOUDINARY": "Оберіть .glb файл з комп'ютера для завантаження в Cloudinary",
