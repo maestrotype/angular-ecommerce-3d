@@ -1,8 +1,9 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Observable, of } from "rxjs";
-import { map, catchError } from "rxjs/operators";
+import { Observable, of, throwError, timer } from "rxjs";
+import { map, catchError, retry, switchMap } from "rxjs/operators";
 import { environment } from '../../environments/environment';
+import { PROD_API_URL } from '../../app/core/utils/api-url.util';
 import { ApiResponse } from 'src/shared/models/api-response.model';
 
 export interface GeneralSettings {
@@ -49,6 +50,19 @@ export interface CloudinarySettings {
   cloudName: string;
   apiKey: string;
   apiSecret: string;
+}
+
+export interface CloudinaryStatus {
+  configured: boolean;
+  source: 'database' | 'environment' | 'none';
+  cloudName: string | null;
+  apiKeySet: boolean;
+  apiSecretSet: boolean;
+  connectionOk: boolean | null;
+  connectionError: string | null;
+  uploadReady: boolean;
+  messageKey: string;
+  messageParams?: Record<string, string>;
 }
 
 export interface AiGenerationSettings {
@@ -206,12 +220,82 @@ export class SettingsService {
     );
   }
 
-  updateCloudinarySettings(settings: CloudinarySettings): Observable<ApiResponse> {
-    return this.http.put<ApiResponse>(`${this.apiUrl}/cloudinary`, settings).pipe(
+  updateCloudinarySettings(settings: CloudinarySettings): Observable<ApiResponse & { cloudinaryStatus?: CloudinaryStatus }> {
+    return this.http.put<ApiResponse & { cloudinaryStatus?: CloudinaryStatus }>(`${this.apiUrl}/cloudinary`, settings).pipe(
       map(response => response),
       catchError(error => {
         throw error;
       })
+    );
+  }
+
+  /** Cloudinary credentials must live on the production Render server. */
+  updateCloudinarySettingsOnProduction(settings: CloudinarySettings): Observable<ApiResponse & { cloudinaryStatus?: CloudinaryStatus }> {
+    return this.wakeProductionBackend().pipe(
+      switchMap(() =>
+        this.http.put<ApiResponse & { cloudinaryStatus?: CloudinaryStatus }>(
+          `${PROD_API_URL}/settings/cloudinary`,
+          settings,
+        ),
+      ),
+      catchError(error => {
+        throw error;
+      }),
+    );
+  }
+
+  /** Check whether production backend can upload to Cloudinary (no auth required). */
+  getProductionCloudinaryStatus(): Observable<CloudinaryStatus> {
+    return this.wakeProductionBackend().pipe(
+      switchMap(() =>
+        this.http.get<{ success: boolean; data: CloudinaryStatus }>(`${PROD_API_URL}/uploads/cloudinary-status`),
+      ),
+      map((res) => res.data),
+      catchError(() => of({
+        configured: false,
+        source: 'none' as const,
+        cloudName: null,
+        apiKeySet: false,
+        apiSecretSet: false,
+        connectionOk: false,
+        connectionError: 'Could not reach production backend',
+        uploadReady: false,
+        messageKey: 'CLOUDINARY_STATUS_BACKEND_UNREACHABLE',
+      })),
+    );
+  }
+
+  getCloudinaryStatus(): Observable<CloudinaryStatus> {
+    return this.http.get<{ success: boolean; data: CloudinaryStatus }>(`${this.apiUrl}/cloudinary/status`).pipe(
+      map((res) => res.data),
+      catchError(() => of({
+        configured: false,
+        source: 'none' as const,
+        cloudName: null,
+        apiKeySet: false,
+        apiSecretSet: false,
+        connectionOk: null,
+        connectionError: null,
+        uploadReady: false,
+        messageKey: 'CLOUDINARY_STATUS_NOT_CONFIGURED',
+      })),
+    );
+  }
+
+  private wakeProductionBackend(): Observable<void> {
+    return this.http.get<{ status: string }>(`${PROD_API_URL}/health`).pipe(
+      map(() => undefined),
+      retry({
+        count: 12,
+        delay: (error, retryCount) => {
+          const status = error?.status ?? 0;
+          if (status === 0 || status === 502 || status === 503 || status === 504) {
+            return timer(Math.min(4000 + retryCount * 2000, 12000));
+          }
+          return throwError(() => error);
+        },
+      }),
+      catchError(() => of(undefined)),
     );
   }
 

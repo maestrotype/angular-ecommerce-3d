@@ -21,11 +21,35 @@
       </mat-card-header>
 
       <mat-card-content>
+        <!-- Production Cloudinary status -->
+        <div class="cloudinary-status-banner"
+             [class.status-ok]="productionCloudinaryStatus?.uploadReady"
+             [class.status-warn]="productionCloudinaryStatus && !productionCloudinaryStatus.uploadReady"
+             [class.status-loading]="isCheckingCloudinary">
+          <mat-icon>{{ productionCloudinaryStatus?.uploadReady ? 'cloud_done' : (isCheckingCloudinary ? 'hourglass_top' : 'cloud_off') }}</mat-icon>
+          <div class="status-text">
+            <strong>{{ (productionCloudinaryStatus?.uploadReady ? 'CLOUDINARY_STATUS_TITLE_OK' : 'CLOUDINARY_STATUS_TITLE_ISSUE') | translate }}</strong>
+            <span *ngIf="isCheckingCloudinary">{{ 'CLOUDINARY_STATUS_CHECKING' | translate }}</span>
+            <span *ngIf="!isCheckingCloudinary && productionCloudinaryStatus">{{ getCloudinaryStatusMessage(productionCloudinaryStatus) }}</span>
+            <span *ngIf="!isCheckingCloudinary && !productionCloudinaryStatus">{{ 'CLOUDINARY_STATUS_BACKEND_UNREACHABLE' | translate }}</span>
+            <small *ngIf="productionCloudinaryStatus?.source" class="status-source">
+              {{ 'CLOUDINARY_STATUS_SOURCE' | translate:{ source: productionCloudinaryStatus?.source } }}
+            </small>
+          </div>
+          <button mat-stroked-button type="button" (click)="refreshCloudinaryStatus()" [disabled]="isCheckingCloudinary">
+            <mat-icon>refresh</mat-icon>
+            {{ 'CLOUDINARY_TEST_CONNECTION' | translate }}
+          </button>
+        </div>
+
+        <p class="cloudinary-hint">{{ 'CLOUDINARY_ADMIN_HINT' | translate }}</p>
+
         <form [formGroup]="cloudinaryForm" (ngSubmit)="onSaveCloudinary()" class="integration-form">
           <div class="form-row">
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>{{ 'CLOUD_NAME' | translate }}</mat-label>
-              <input matInput formControlName="cloudName" placeholder="Enter Cloud Name">
+              <input matInput formControlName="cloudName" [placeholder]="'CLOUDINARY_CLOUD_NAME_PLACEHOLDER' | translate">
+              <mat-hint>{{ 'CLOUDINARY_CLOUD_NAME_HINT' | translate }}</mat-hint>
               <mat-icon matSuffix>cloud</mat-icon>
             </mat-form-field>
           </div>

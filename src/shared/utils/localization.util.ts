@@ -105,8 +105,20 @@ export function resolveApiError(
         };
     }
 
+    if (rawMsg.includes('CLOUDINARY_NOT_CONFIGURED')) {
+        return {
+            title: translate.instant('CLOUDINARY_UPLOAD_BLOCKED_TITLE'),
+            message: translate.instant('CLOUDINARY_NOT_CONFIGURED_MSG'),
+            panelClass: ['error-snackbar'],
+            duration: 18000,
+        };
+    }
+
     if (isServerSleepingError(err, rawMsg, targetsProductionApi)) {
         let message = translate.instant('SERVER_SLEEPING_MSG');
+        if (status === 0 || rawMsg === 'Failed to fetch') {
+            message += `\n${translate.instant('SERVER_SLEEPING_CORS_HINT')}`;
+        }
         if (isDevelopment) {
             message += `\n${translate.instant('SERVER_SLEEPING_LOCAL_HINT')}`;
         }
@@ -114,7 +126,7 @@ export function resolveApiError(
             title: translate.instant('SERVER_SLEEPING_TITLE'),
             message,
             panelClass: ['warning-snackbar'],
-            duration: 18000,
+            duration: 22000,
         };
     }
 

@@ -69,6 +69,10 @@
   color: var(--mat-card-subtitle-text-color);
 }
 
+.mat-mdc-card-header {
+  align-items: center;
+}
+
 .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title {
   color: var(--mat-card-subtitle-text-color);
 }

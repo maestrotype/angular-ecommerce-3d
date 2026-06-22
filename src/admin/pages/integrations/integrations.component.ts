@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { SettingsService, CloudinarySettings, AiGenerationSettings, SMTPSettings, PaymentSettings } from '../../services/settings.service';
+import { SettingsService, CloudinarySettings, CloudinaryStatus, AiGenerationSettings, SMTPSettings, PaymentSettings } from '../../services/settings.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { finalize } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
+import { ApiEnvironmentService } from '../../../app/core/services/api-environment.service';
+import { resolveApiError, formatResolvedApiError } from '../../../shared/utils/localization.util';
 
 @Component({
   selector: 'app-integrations',
@@ -16,6 +18,9 @@ export class IntegrationsComponent implements OnInit {
   smtpForm: FormGroup;
   stripeForm: FormGroup;
   isLoading = false;
+  isCheckingCloudinary = false;
+  productionCloudinaryStatus: CloudinaryStatus | null = null;
+  localCloudinaryStatus: CloudinaryStatus | null = null;
 
   // Visibility toggles
   hideCloudinarySecret = true;
@@ -31,7 +36,8 @@ export class IntegrationsComponent implements OnInit {
     private fb: FormBuilder,
     private settingsService: SettingsService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private apiEnvironment: ApiEnvironmentService,
   ) {
     this.cloudinaryForm = this.fb.group({
       cloudName: ['', Validators.required],
@@ -66,8 +72,13 @@ export class IntegrationsComponent implements OnInit {
     });
   }
 
+  get isLocalApi(): boolean {
+    return this.apiEnvironment.isLocalApi;
+  }
+
   ngOnInit(): void {
     this.loadSettings();
+    this.refreshCloudinaryStatus();
   }
 
   loadSettings(): void {
@@ -95,27 +106,84 @@ export class IntegrationsComponent implements OnInit {
             });
           }
         },
-        error: (err) => {
+        error: () => {
           this.showError('FAILED_TO_LOAD_SETTINGS');
         }
       });
   }
 
+  refreshCloudinaryStatus(): void {
+    this.isCheckingCloudinary = true;
+    this.settingsService.getProductionCloudinaryStatus()
+      .pipe(finalize(() => this.isCheckingCloudinary = false))
+      .subscribe((status) => {
+        this.productionCloudinaryStatus = status;
+      });
+
+    if (this.isLocalApi) {
+      this.settingsService.getCloudinaryStatus().subscribe((status) => {
+        this.localCloudinaryStatus = status;
+      });
+    } else {
+      this.localCloudinaryStatus = null;
+    }
+  }
+
+  getCloudinaryStatusMessage(status: CloudinaryStatus | null): string {
+    if (!status) return '';
+    const params = status.messageParams || {};
+    return this.translate.instant(status.messageKey, params);
+  }
+
   onSaveCloudinary(): void {
     if (this.cloudinaryForm.invalid) return;
-    this.saveSettings(this.settingsService.updateCloudinarySettings(this.cloudinaryForm.value), 'CLOUDINARY_SETTINGS_SAVED');
+
+    const value = this.cloudinaryForm.value as CloudinarySettings;
+    if (value.cloudName?.trim().toLowerCase() === 'cloudinary') {
+      this.snackBar.open(
+        this.translate.instant('CLOUDINARY_WRONG_CLOUD_NAME'),
+        this.translate.instant('CLOSE_BTN'),
+        { duration: 12000, panelClass: ['error-snackbar'] },
+      );
+      return;
+    }
+
+    this.isLoading = true;
+    this.settingsService.updateCloudinarySettingsOnProduction(value)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe({
+        next: (response) => {
+          const status = response.cloudinaryStatus;
+          if (status) {
+            this.productionCloudinaryStatus = status;
+            this.showCloudinaryStatusNotification(status, 'CLOUDINARY_SETTINGS_SAVED');
+          } else {
+            this.showSuccess('CLOUDINARY_SETTINGS_SAVED');
+          }
+          this.refreshCloudinaryStatus();
+          this.loadSettings();
+        },
+        error: (err) => {
+          const resolved = resolveApiError(err, this.translate, {
+            titleKey: 'CLOUDINARY_SAVE_FAILED',
+            targetsProductionApi: true,
+          });
+          this.snackBar.open(formatResolvedApiError(resolved), this.translate.instant('CLOSE_BTN'), {
+            duration: resolved.duration,
+            panelClass: resolved.panelClass,
+          });
+        },
+      });
   }
 
   onSaveAi(): void {
     if (this.aiForm.invalid) return;
     
-    // Clean data before sending to backend to avoid null validation errors
     const rawValue = this.aiForm.value;
     const cleanData: any = {};
     
     Object.keys(rawValue).forEach(key => {
       const val = rawValue[key];
-      // Convert null/undefined to empty string for key fields, but keep boolean for customUseHq
       if (key === 'customUseHq') {
         cleanData[key] = !!val;
       } else {
@@ -133,7 +201,6 @@ export class IntegrationsComponent implements OnInit {
 
   onSaveStripe(): void {
     if (this.stripeForm.invalid) return;
-    // We only update Stripe parts of payment settings here
     const stripeData = this.stripeForm.value;
     this.isLoading = true;
     this.settingsService.getSettings().subscribe(current => {
@@ -151,12 +218,22 @@ export class IntegrationsComponent implements OnInit {
       .subscribe({
         next: () => {
           this.showSuccess(successMsg);
-          this.loadSettings(); // Reload to get obscured keys
+          this.loadSettings();
         },
-        error: (err) => {
+        error: () => {
           this.showError('FAILED_TO_SAVE_SETTINGS');
         }
       });
+  }
+
+  private showCloudinaryStatusNotification(status: CloudinaryStatus, titleKey: string): void {
+    const title = this.translate.instant(titleKey);
+    const detail = this.getCloudinaryStatusMessage(status);
+    const panelClass = status.uploadReady ? ['success-snackbar'] : ['warning-snackbar'];
+    this.snackBar.open(`${title}\n${detail}`, this.translate.instant('CLOSE_BTN'), {
+      duration: status.uploadReady ? 8000 : 18000,
+      panelClass,
+    });
   }
 
   private showSuccess(msgKey: string): void {

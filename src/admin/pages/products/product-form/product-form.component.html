@@ -310,7 +310,7 @@
               <!-- Loading state (if applicable) -->
               <div *ngIf="isUploading3d" class="uploading-overlay">
                 <mat-spinner diameter="40"></mat-spinner>
-                <span>{{ 'PRODUCT_3D.UPLOADING_CLOUDINARY' | translate }}</span>
+                <span>{{ (isLiveSite ? 'PRODUCT_3D.WAKING_AND_UPLOADING' : 'PRODUCT_3D.UPLOADING_CLOUDINARY') | translate }}</span>
               </div>
             </div>
           </mat-card-content>
