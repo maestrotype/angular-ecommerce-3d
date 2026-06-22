@@ -13,6 +13,8 @@ import { AdminAuthGuard } from './guards/admin-auth.guard';
 import { CategoryFormComponent } from './pages/categories/category-form/category-form.component';
 import { MessageListComponent } from './pages/messages/message-list/message-list.component';
 import { SectionListComponent } from './pages/sections/section-list/section-list.component';
+import { PageListComponent } from './pages/pages/page-list/page-list.component';
+import { PageFormComponent } from './pages/pages/page-form/page-form.component';
 import { PaymentsComponent } from './pages/payments/payments.component';
 import { IntegrationsComponent } from './pages/integrations/integrations.component';
 
@@ -45,6 +47,9 @@ const routes: Routes = [
       { path: 'users', component: UserListComponent },
       { path: 'messages', component: MessageListComponent },
       { path: 'sections', component: SectionListComponent },
+      { path: 'pages', component: PageListComponent },
+      { path: 'pages/new', component: PageFormComponent },
+      { path: 'pages/edit/:id', component: PageFormComponent },
       { path: 'payments', component: PaymentsComponent },
       { path: 'integrations', component: IntegrationsComponent },
 

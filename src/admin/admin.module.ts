@@ -49,6 +49,8 @@ import { MessageListComponent } from './pages/messages/message-list/message-list
 import { MessageDetailComponent } from './pages/messages/message-detail/message-detail.component';
 import { SectionListComponent } from './pages/sections/section-list/section-list.component';
 import { SectionFormComponent } from './pages/sections/section-form/section-form.component';
+import { PageListComponent } from './pages/pages/page-list/page-list.component';
+import { PageFormComponent } from './pages/pages/page-form/page-form.component';
 import { PaymentsComponent } from './pages/payments/payments.component';
 import { PaymentDetailsDialogComponent } from './pages/payments/payment-details-dialog.component';
 import { OrderDetailsDialogComponent } from './pages/payments/order-details-dialog.component';
@@ -107,6 +109,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     MessageDetailComponent,
     SectionListComponent,
     SectionFormComponent,
+    PageListComponent,
+    PageFormComponent,
     PaymentsComponent,
     PaymentDetailsDialogComponent,
     OrderDetailsDialogComponent,

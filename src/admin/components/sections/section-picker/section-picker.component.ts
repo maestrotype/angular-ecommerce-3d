@@ -75,6 +75,12 @@ export class SectionPickerComponent {
       label: 'ABOUT_SECTION', 
       icon: 'info', 
       description: 'Detailed company information and mission.' 
+    },
+    { 
+      value: 'html-content', 
+      label: 'HTML_CONTENT_SECTION', 
+      icon: 'article', 
+      description: 'Custom HTML text block for info pages.' 
     }
   ];
 

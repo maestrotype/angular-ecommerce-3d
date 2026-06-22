@@ -4,9 +4,35 @@
     <div class="spinner"></div>
   </div>
 
-  <div *ngIf="!loading" class="page-content">
-    <app-section-renderer 
-      *ngFor="let section of sections" 
+  <div *ngIf="!loading && notFound" class="not-found">
+    <h1>{{ 'PAGE_NOT_FOUND_TITLE' | translate }}</h1>
+    <p>{{ 'PAGE_NOT_FOUND_MESSAGE' | translate }}</p>
+    <a routerLink="/home">{{ 'GO_HOME' | translate }}</a>
+  </div>
+
+  <div *ngIf="!loading && page && page.template === 'simple'" class="page-content simple-page">
+    <section class="page-hero">
+      <div class="container">
+        <span class="page-eyebrow">3D Store</span>
+        <h1>{{ page.title | localized }}</h1>
+        <p class="page-hero-desc" *ngIf="page.seoDescription">{{ page.seoDescription | localized }}</p>
+      </div>
+    </section>
+
+    <section class="page-body-section">
+      <div class="container">
+        <article class="content-card" [innerHTML]="safeContent"></article>
+      </div>
+    </section>
+  </div>
+
+  <div *ngIf="!loading && page && page.template === 'contact'" class="page-content">
+    <app-contacts></app-contacts>
+  </div>
+
+  <div *ngIf="!loading && page && page.template === 'sections'" class="page-content">
+    <app-section-renderer
+      *ngFor="let section of sections"
       [section]="section">
     </app-section-renderer>
   </div>
