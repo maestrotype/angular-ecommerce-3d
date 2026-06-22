@@ -7,6 +7,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { SectionService } from '../../../services/section.service';
+import { PageService } from '../../../services/page.service';
 import { Section, CreateSectionDto, UpdateSectionDto, MenuItem } from '../../../models/section.model';
 import { LocalizedString } from '../../../../shared/models/localized-string.model';
 import { getLocalizedString, resolveApiError, formatResolvedApiError } from '../../../../shared/utils/localization.util';
@@ -75,11 +76,10 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
   ];
 
 
-  pageTargets = [
-    { value: 'home', label: 'TARGET_HOME' },
-    { value: 'product', label: 'TARGET_PRODUCT' },
-    { value: 'shop', label: 'TARGET_SHOP' },
-    { value: 'custom', label: 'TARGET_CUSTOM' }
+  pageTargets: { value: string; label: string; translate?: boolean }[] = [
+    { value: 'home', label: 'TARGET_HOME', translate: true },
+    { value: 'product', label: 'TARGET_PRODUCT', translate: true },
+    { value: 'shop', label: 'TARGET_SHOP', translate: true },
   ];
 
   variants = [
@@ -106,6 +106,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
   constructor(
     private fb: FormBuilder,
     private sectionService: SectionService,
+    private pageService: PageService,
     private snackBar: MatSnackBar,
     private translate: TranslateService,
     @Optional() public dialogRef: MatDialogRef<SectionFormComponent>,
@@ -126,6 +127,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     }
 
     this.loadAvailableSections();
+    this.loadPageTargets();
 
     // Live Sync for Preview
     this.sectionForm.valueChanges.subscribe(val => {
@@ -150,6 +152,27 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
   private loadAvailableSections(): void {
     this.sectionService.getSections().subscribe(sections => {
       this.availableSections = sections.filter(s => s.type !== 'header');
+    });
+  }
+
+  private loadPageTargets(): void {
+    this.pageService.getPagesForAdmin().subscribe(pages => {
+      const staticTargets = [
+        { value: 'home', label: 'TARGET_HOME', translate: true },
+        { value: 'product', label: 'TARGET_PRODUCT', translate: true },
+        { value: 'shop', label: 'TARGET_SHOP', translate: true },
+      ];
+      const pageTargets = pages.map(page => ({
+        value: page.slug,
+        label: typeof page.title === 'string' ? page.title : (page.title?.en || page.slug),
+        translate: false,
+      }));
+      this.pageTargets = [...staticTargets, ...pageTargets];
+
+      const currentTarget = this.sectionForm.get('pageTarget')?.value;
+      if (currentTarget && !this.pageTargets.some(t => t.value === currentTarget)) {
+        this.pageTargets.push({ value: currentTarget, label: currentTarget });
+      }
     });
   }
 
@@ -287,6 +310,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     return [
       {
         title: { en: 'Quick Links', ru: 'Быстрые ссылки', ua: 'Швидкі посилання' },
+        linkSource: 'manual',
         links: [
           { label: { en: 'Home', ru: 'Главная', ua: 'Головна' }, url: '/home' },
           { label: { en: 'Shop', ru: 'Магазин', ua: 'Магазин' }, url: '/shop' },
@@ -296,18 +320,17 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
       },
       {
         title: { en: 'Categories', ru: 'Категории', ua: 'Категорії' },
-        links: [
-          { label: { en: 'Shoes', ru: 'Обувь', ua: 'Взуття' }, url: '/shop?category=shoes' },
-          { label: { en: 'Handbags', ru: 'Сумки', ua: 'Сумки' }, url: '/shop?category=handbags' },
-          { label: { en: 'Clothing', ru: 'Одежда', ua: 'Одяг' }, url: '/shop?category=clothing' }
-        ]
+        linkSource: 'shop-categories',
+        links: []
       },
       {
         title: { en: 'Support', ru: 'Поддержка', ua: 'Підтримка' },
+        linkSource: 'manual',
         links: [
           { label: { en: 'Help Center', ru: 'Центр помощи', ua: 'Центр допомоги' }, url: '/help' },
-          { label: { en: 'Shipping Info', ru: 'Доставка', ua: 'Доставка' }, url: '/shipping' },
-          { label: { en: 'Returns', ru: 'Возвраты', ua: 'Повернення' }, url: '/returns' }
+          { label: { en: 'Shipping', ru: 'Доставка', ua: 'Доставка' }, url: '/shipping' },
+          { label: { en: 'Size Guide', ru: 'Таблица размеров', ua: 'Таблиця розмірів' }, url: '/size-guide' },
+          { label: { en: 'My Orders', ru: 'Мои заказы', ua: 'Мої замовлення' }, url: '/my-orders' }
         ]
       }
     ];

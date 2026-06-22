@@ -1,0 +1,68 @@
+<div class="page-form-wrapper">
+  <div class="form-header">
+    <h1>{{ (isEditMode ? 'EDIT_PAGE' : 'ADD_PAGE') | translate }}</h1>
+    <button mat-button type="button" (click)="cancel()">
+      <mat-icon>arrow_back</mat-icon>
+      {{ 'BACK' | translate }}
+    </button>
+  </div>
+
+  <form [formGroup]="pageForm" (ngSubmit)="onSubmit()" class="page-form">
+    <div class="form-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'PAGE_SLUG' | translate }}</mat-label>
+        <input matInput formControlName="slug" placeholder="help-center" />
+        <mat-hint>{{ 'PAGE_SLUG_HINT' | translate }}</mat-hint>
+        <mat-error *ngIf="pageForm.get('slug')?.hasError('pattern')">{{ 'PAGE_SLUG_INVALID' | translate }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'PAGE_TEMPLATE' | translate }}</mat-label>
+        <mat-select formControlName="template">
+          <mat-option *ngFor="let t of templates" [value]="t.value">{{ t.label | translate }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'STATUS' | translate }}</mat-label>
+        <mat-select formControlName="status">
+          <mat-option *ngFor="let s of statuses" [value]="s.value">{{ s.label | translate }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="lang-tabs">
+      <button type="button" mat-stroked-button [class.active]="activeLang === 'en'" (click)="setLang('en')">EN</button>
+      <button type="button" mat-stroked-button [class.active]="activeLang === 'ru'" (click)="setLang('ru')">RU</button>
+      <button type="button" mat-stroked-button [class.active]="activeLang === 'ua'" (click)="setLang('ua')">UA</button>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ 'TITLE' | translate }} ({{ activeLang | uppercase }})</mat-label>
+      <input matInput [formControlName]="'title_' + activeLang" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width" *ngIf="pageForm.get('template')?.value === 'simple'">
+      <mat-label>{{ 'PAGE_CONTENT' | translate }} ({{ activeLang | uppercase }})</mat-label>
+      <textarea matInput rows="12" [formControlName]="'content_' + activeLang"></textarea>
+      <mat-hint>{{ 'PAGE_CONTENT_HINT' | translate }}</mat-hint>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ 'PAGE_SEO_DESCRIPTION' | translate }} ({{ activeLang | uppercase }})</mat-label>
+      <textarea matInput rows="3" [formControlName]="'seoDescription_' + activeLang"></textarea>
+    </mat-form-field>
+
+    <p class="sections-hint" *ngIf="pageForm.get('template')?.value === 'sections'">
+      {{ 'PAGE_SECTIONS_HINT' | translate }}
+    </p>
+
+    <div class="form-actions">
+      <button mat-button type="button" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="isLoading">
+        <mat-spinner diameter="20" *ngIf="isLoading"></mat-spinner>
+        <span *ngIf="!isLoading">{{ (isEditMode ? 'SAVE_CHANGES' : 'CREATE_PAGE') | translate }}</span>
+      </button>
+    </div>
+  </form>
+</div>

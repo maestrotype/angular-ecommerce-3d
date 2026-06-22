@@ -14,4 +14,5 @@ export const sectionComponentMap: { [key: string]: () => Promise<Type<any>> } = 
   'product-tabs': () => import('../product-detail/product-tabs/product-tabs.component').then(m => m.ProductTabsComponent),
   'similar-products': () => import('../../shared/components/recommendations/similar-products/similar-products.component').then(m => m.SimilarProductsComponent),
   'bought-together': () => import('../../shared/components/recommendations/bought-together/bought-together.component').then(m => m.BoughtTogetherComponent),
+  'html-content': () => import('../html-content/html-content.component').then(m => m.HtmlContentComponent),
 };

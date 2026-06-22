@@ -27,8 +27,11 @@ import {
     }
   
     @Get()
-    findAll(@Query('pageTarget') pageTarget?: string) {
-      return this.sectionsService.findAllActive(pageTarget);
+    findAll(
+      @Query('pageTarget') pageTarget?: string,
+      @Query('type') type?: string,
+    ) {
+      return this.sectionsService.findAllActive(pageTarget, type);
     }
   
     @Get('admin')

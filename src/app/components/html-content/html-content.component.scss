@@ -1,0 +1,40 @@
+.html-content-page {
+  padding: 120px 0 80px;
+  min-height: 50vh;
+
+  .page-header {
+    margin-bottom: 2rem;
+
+    h1 {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      margin: 0 0 0.5rem;
+      color: var(--text-primary, #fff);
+    }
+
+    .subtitle {
+      margin: 0;
+      opacity: 0.75;
+      color: var(--text-secondary, #ccc);
+    }
+  }
+
+  .page-body {
+    color: var(--text-primary, #e8e8e8);
+    line-height: 1.7;
+    font-size: 1rem;
+
+    :deep(p) {
+      margin: 0 0 1rem;
+    }
+
+    :deep(a) {
+      color: var(--accent-color, #4f8cff);
+      text-decoration: underline;
+    }
+
+    :deep(ul),
+    :deep(ol) {
+      margin: 0 0 1rem 1.25rem;
+    }
+  }
+}

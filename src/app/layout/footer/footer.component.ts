@@ -5,6 +5,9 @@ import { ModalService } from '../../core/services/modal.service';
 import { CartService } from '../../core/services/cart.service';
 import { FavoritesService } from '../../core/services/favorites.service';
 import { SectionService } from '../../../admin/services/section.service';
+import { CategoryService } from '../../core/services/category.service';
+import { Category } from 'src/shared/models/category.model';
+import { parseFooterLink } from '../../core/utils/footer-link.util';
 
 
 @Component({
@@ -16,13 +19,17 @@ import { SectionService } from '../../../admin/services/section.service';
 
 
 export class FooterComponent implements OnInit, OnDestroy, OnChanges {
-  @Input() data: any; // Support for Architect Live Preview
+  @Input() data: any;
   cartCount = 0;
   favoritesCount = 0;
   currentYear = new Date().getFullYear();
+  shopCategories: Category[] = [];
+  parseFooterLink = parseFooterLink;
+
   private cartSubscription: Subscription = new Subscription();
   private favoritesSubscription: Subscription = new Subscription();
   private footerSubscription: Subscription = new Subscription();
+  private categoriesSubscription: Subscription = new Subscription();
 
   @HostBinding('class')
   get variantClass(): string {
@@ -34,7 +41,8 @@ export class FooterComponent implements OnInit, OnDestroy, OnChanges {
     private cartService: CartService,
     private favoritesService: FavoritesService,
     private router: Router,
-    private sectionService: SectionService
+    private sectionService: SectionService,
+    private categoryService: CategoryService,
   ) { }
 
   ngOnInit(): void {
@@ -46,13 +54,30 @@ export class FooterComponent implements OnInit, OnDestroy, OnChanges {
       count => this.favoritesCount = count
     );
 
+    this.loadShopCategories();
+
     if (!this.data) {
       this.loadFooterData();
     }
   }
 
+  isShopCategoriesColumn(col: any): boolean {
+    return col?.linkSource === 'shop-categories';
+  }
+
+  private loadShopCategories(): void {
+    this.categoriesSubscription = this.categoryService.getAllCategories().subscribe({
+      next: (categories) => {
+        this.shopCategories = (categories || []).filter(c => c.isActive !== false);
+      },
+      error: () => {
+        this.shopCategories = [];
+      },
+    });
+  }
+
   private loadFooterData(): void {
-    this.footerSubscription = this.sectionService.getSections().subscribe(sections => {
+    this.footerSubscription = this.sectionService.getActiveSections(undefined, 'footer').subscribe(sections => {
       const footer = sections.find(s => s.type === 'footer');
       if (footer) {
         this.data = footer;
@@ -69,6 +94,8 @@ export class FooterComponent implements OnInit, OnDestroy, OnChanges {
   ngOnDestroy(): void {
     this.cartSubscription.unsubscribe();
     this.favoritesSubscription.unsubscribe();
+    this.footerSubscription.unsubscribe();
+    this.categoriesSubscription.unsubscribe();
   }
 
   openAuthModal(): void {
