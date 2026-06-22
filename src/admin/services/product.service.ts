@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, throwError, timer } from "rxjs";
-import { catchError, retry } from "rxjs/operators";
+import { catchError, map, retry, switchMap } from "rxjs/operators";
 import {
   Product,
   ProductCreateRequest,
@@ -152,15 +152,42 @@ export class ProductService {
     );
   }
 
+  /**
+   * Pings production /health until Render wakes up.
+   * When asleep, Render returns 503 without CORS headers — the browser shows a misleading CORS error.
+   */
+  wakeProductionBackend(): Observable<void> {
+    return this.http.get<{ status: string }>(`${PROD_API_URL}/health`).pipe(
+      map(() => undefined),
+      retry({
+        count: 20,
+        delay: (error, retryCount) => {
+          const status = error?.status ?? 0;
+          if (status === 0 || status === 502 || status === 503 || status === 504) {
+            return timer(Math.min(4000 + retryCount * 2000, 12000));
+          }
+          return throwError(() => error);
+        },
+      }),
+    );
+  }
+
+  private isRenderWakeError(error: unknown): boolean {
+    const status = (error as { status?: number })?.status ?? 0;
+    return status === 0 || status === 502 || status === 503 || status === 504;
+  }
+
   /** Always uploads via production Render backend → Cloudinary (required for GitHub Pages). */
   upload3dModelToCloudinary(file: File): Observable<{ url: string; publicId: string; localPath?: string }> {
-    return this.upload3dModel(file, PROD_API_URL).pipe(
+    return this.wakeProductionBackend().pipe(
+      switchMap(() => this.upload3dModel(file, PROD_API_URL)),
       retry({
         count: 3,
         delay: (error, retryCount) => {
-          const status = error?.status;
-          if (status === 0 || status === 502 || status === 503 || status === 504) {
-            return timer(15000 * retryCount);
+          if (this.isRenderWakeError(error)) {
+            return this.wakeProductionBackend().pipe(
+              switchMap(() => timer(5000 * retryCount)),
+            );
           }
           return throwError(() => error);
         },
@@ -178,7 +205,9 @@ export class ProductService {
   }
 
   updateProductOnProduction(id: number, product: ProductUpdateRequest): Observable<Product> {
-    return this.updateProductOnApi(PROD_API_URL, id, product);
+    return this.wakeProductionBackend().pipe(
+      switchMap(() => this.updateProductOnApi(PROD_API_URL, id, product)),
+    );
   }
 
   // New method to move local file to Cloudinary

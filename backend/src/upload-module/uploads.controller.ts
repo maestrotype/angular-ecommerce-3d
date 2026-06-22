@@ -1,6 +1,7 @@
 import {
   Controller,
   Post,
+  Get,
   UseInterceptors,
   UploadedFile,
   BadRequestException,
@@ -16,6 +17,7 @@ import { v2 as cloudinary } from "cloudinary";
 import { ImageProcessingService } from "../services/image-processing.service";
 import { GlbOptimizationService, CLOUDINARY_RAW_FILE_LIMIT } from "../services/glb-optimization.service";
 import { saveModelToLocalDisk, isCloudinarySizeError } from "../services/model-storage.util";
+import { CloudinaryConfigService } from "../services/cloudinary-config.service";
 import { Observable, from, throwError } from 'rxjs';
 import { map, catchError, tap, switchMap } from 'rxjs/operators';
 
@@ -49,6 +51,7 @@ export class UploadsController {
   constructor(
     private readonly imageProcessingService: ImageProcessingService,
     private readonly glbOptimizationService: GlbOptimizationService,
+    private readonly cloudinaryConfigService: CloudinaryConfigService,
   ) { }
 
   @Post("section-image")
@@ -135,8 +138,14 @@ export class UploadsController {
     }
 
     const isProduction = process.env.NODE_ENV?.toLowerCase() === 'production' || process.env.RENDER === 'true';
-    const isCloudinaryConfigured = !!process.env.CLOUDINARY_CLOUD_NAME;
+    const isCloudinaryConfigured = this.cloudinaryConfigService.isConfigured();
     const useCloudinary = isProduction || isCloudinaryConfigured;
+
+    if (isProduction && !isCloudinaryConfigured) {
+      throw new BadRequestException(
+        'CLOUDINARY_NOT_CONFIGURED: Set Cloudinary credentials in Admin → Integrations or as CLOUDINARY_* environment variables on Render.',
+      );
+    }
 
     let uploadPath = file.path;
     let optimizedPath: string | null = null;
@@ -203,6 +212,13 @@ export class UploadsController {
   )
   uploadSection3dModel(@UploadedFile() file: Express.Multer.File): Observable<{ url: string; publicId: string }> {
     return from(this.processAndUpload3dModel(file, "section-3d-models", false));
+  }
+
+  @Get("cloudinary-status")
+  getCloudinaryStatus(): Observable<any> {
+    return from(this.cloudinaryConfigService.getStatus()).pipe(
+      map((status) => ({ success: true, data: status })),
+    );
   }
 
   @Post("product-3d-model")

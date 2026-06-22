@@ -3,7 +3,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdminGuard } from '../auth/guards/admin.guard';
 
 import { Observable, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, switchMap } from 'rxjs/operators';
 import { SettingsService } from './settings.service';
 import { 
   UpdateSettingsDto, 
@@ -37,6 +37,15 @@ export class SettingsController {
   getRawSettings(): Observable<any> {
     return this.settingsService.getSettingsGrouped().pipe(
       map((settings) => ({ success: true, data: settings })),
+      catchError((error) => of({ success: false, error: error.message }))
+    );
+  }
+
+  @Get('cloudinary/status')
+  @HttpCode(HttpStatus.OK)
+  getCloudinaryStatus(): Observable<any> {
+    return this.settingsService.getCloudinaryStatus().pipe(
+      map((status) => ({ success: true, data: status })),
       catchError((error) => of({ success: false, error: error.message }))
     );
   }
@@ -116,7 +125,16 @@ export class SettingsController {
   @HttpCode(HttpStatus.OK)
   updateCloudinarySettings(@Body() settings: UpdateCloudinarySettingsDto): Observable<any> {
     return this.settingsService.updateCloudinarySettings(settings).pipe(
-      map((result) => ({ success: true, data: result, message: 'Cloudinary settings updated successfully' })),
+      switchMap((result) =>
+        this.settingsService.getCloudinaryStatus().pipe(
+          map((status) => ({
+            success: true,
+            data: result,
+            cloudinaryStatus: status,
+            message: 'Cloudinary settings updated successfully',
+          })),
+        ),
+      ),
       catchError((error) => of({ success: false, error: error.message }))
     );
   }

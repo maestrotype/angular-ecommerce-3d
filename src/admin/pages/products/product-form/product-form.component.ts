@@ -14,12 +14,13 @@ import { ProcessingOptions, ProcessedImageResult } from "../../../components/ui/
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { fixBackendUrl, isLegacyLocalUrl } from '../../../../app/core/utils/url-helper';
 import { environment } from '../../../../environments/environment';
-import { SettingsService } from "../../../services/settings.service";
+import { SettingsService, CloudinaryStatus } from "../../../services/settings.service";
 import { OnboardingDialogComponent } from "../../../components/shared/onboarding-dialog/onboarding-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
 import { AiGenerationService } from "../../../services/ai-generation.service";
 import { AiWarningDialogComponent } from "../../../components/shared/ai-warning-dialog/ai-warning-dialog.component";
 import { finalize } from "rxjs/operators";
+import { switchMap, of, EMPTY } from "rxjs";
 import { ThreeDModelService } from '../../../../app/core/services/three-d-model.service';
 
 
@@ -763,11 +764,12 @@ export class ProductFormComponent implements OnInit {
     this.isUploading3d = true;
 
     const upload$ = useCloudinary
-      ? this.productService.upload3dModelToCloudinary(file)
+      ? this.uploadToCloudinaryWithPrecheck(file)
       : this.productService.upload3dModel(file);
 
     upload$.subscribe({
       next: (res) => {
+        if (!res) return;
         if (useCloudinary) {
           if (!isCloudinaryUrl(res.url)) {
             this.isUploading3d = false;
@@ -812,6 +814,28 @@ export class ProductFormComponent implements OnInit {
 
   onCloudinaryReuploadSelected(event: Event): void {
     this.on3dFileSelected(event);
+  }
+
+  private uploadToCloudinaryWithPrecheck(file: File) {
+    return this.settingsService.getProductionCloudinaryStatus().pipe(
+      switchMap((status) => {
+        if (!status.uploadReady) {
+          this.isUploading3d = false;
+          this.showCloudinaryStatusError(status);
+          return EMPTY;
+        }
+        return this.productService.upload3dModelToCloudinary(file);
+      }),
+    );
+  }
+
+  private showCloudinaryStatusError(status: CloudinaryStatus): void {
+    const detail = this.translate.instant(status.messageKey, status.messageParams || {});
+    this.snackBar.open(
+      `${this.translate.instant('CLOUDINARY_UPLOAD_BLOCKED_TITLE')}\n${detail}`,
+      this.translate.instant('CLOSE_BTN'),
+      { duration: 18000, panelClass: ['error-snackbar'] },
+    );
   }
 
   private promptCloudinaryReupload(): void {
@@ -869,8 +893,10 @@ export class ProductFormComponent implements OnInit {
   }
 
   private uploadFileToCloudinary(file: File): void {
-    this.productService.upload3dModelToCloudinary(file).subscribe({
+    this.isUploading3d = true;
+    this.uploadToCloudinaryWithPrecheck(file).subscribe({
       next: (res) => {
+        if (!res) return;
         if (!isCloudinaryUrl(res.url)) {
           this.isUploading3d = false;
           this.snackBar.open(this.translate.instant('ARCHIVE_NOT_CLOUDINARY_ERROR'), this.translate.instant('CLOSE_BTN'), {

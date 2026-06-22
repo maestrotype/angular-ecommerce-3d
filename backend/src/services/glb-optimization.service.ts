@@ -24,6 +24,18 @@ export class GlbOptimizationService {
   }
 
   async optimize(inputPath: string): Promise<string | null> {
+    const onRender = process.env.RENDER === 'true' || process.env.NODE_ENV?.toLowerCase() === 'production';
+    if (onRender || process.env.SKIP_GLB_OPTIMIZATION === 'true') {
+      console.log('[GlbOptimization] Skipped on production Render (timeout/memory limits)');
+      return null;
+    }
+
+    const inputSize = readFileSync(inputPath).length;
+    if (inputSize <= CLOUDINARY_RAW_FILE_LIMIT) {
+      console.log('[GlbOptimization] Skipped — file already under Cloudinary 10MB limit');
+      return null;
+    }
+
     const outputPath = `${inputPath}-optimized.glb`;
     try {
       const bin = this.resolveGltfTransformBin();

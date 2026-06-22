@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Observable, from, of, throwError } from 'rxjs';
 import { map, catchError, switchMap, tap, mergeMap, toArray } from 'rxjs/operators';
 import { Settings } from './entities/settings.entity';
+import { CloudinaryConfigService } from '../services/cloudinary-config.service';
 import { 
   UpdateSettingsDto, 
   UpdatePaymentSettingsDto, 
@@ -20,6 +21,7 @@ export class SettingsService {
   constructor(
     @InjectRepository(Settings)
     private settingsRepository: Repository<Settings>,
+    private readonly cloudinaryConfigService: CloudinaryConfigService,
   ) {
     // Initialize default settings when service starts
     this.initializeDefaultSettings().subscribe({
@@ -204,12 +206,17 @@ export class SettingsService {
     return from(updates).pipe(
       mergeMap(updateObservable => updateObservable),
       toArray(),
+      switchMap(() => from(this.cloudinaryConfigService.refresh())),
       map(() => ({ success: true, message: 'Cloudinary settings updated' })),
       catchError((error) => {
         console.error('Error updating cloudinary settings:', error);
         return throwError(() => error);
       })
     );
+  }
+
+  getCloudinaryStatus(): Observable<any> {
+    return from(this.cloudinaryConfigService.getStatus());
   }
 
   // Update AI settings
