@@ -1,0 +1,9 @@
+<section class="html-content-page" [id]="data?.anchorId || null">
+  <div class="container">
+    <header class="page-header" *ngIf="data?.title">
+      <h1>{{ data?.title | localized }}</h1>
+      <p class="subtitle" *ngIf="data?.subtitle">{{ data?.subtitle | localized }}</p>
+    </header>
+    <article class="page-body" [innerHTML]="safeContent"></article>
+  </div>
+</section>

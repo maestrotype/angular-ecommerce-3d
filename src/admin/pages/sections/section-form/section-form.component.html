@@ -394,7 +394,9 @@
                 <mat-form-field appearance="outline">
                   <mat-label>{{ 'PAGE_TARGET' | translate }}</mat-label>
                   <mat-select formControlName="pageTarget">
-                    <mat-option *ngFor="let target of pageTargets" [value]="target.value">{{ target.label | translate }}</mat-option>
+                    <mat-option *ngFor="let target of pageTargets" [value]="target.value">
+                      {{ target.translate ? (target.label | translate) : target.label }}
+                    </mat-option>
                   </mat-select>
                   <mat-hint>{{ 'WHERE_SECTION_APPEAR' | translate }}</mat-hint>
                 </mat-form-field>
