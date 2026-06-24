@@ -322,16 +322,6 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
         title: { en: 'Categories', ru: 'Категории', ua: 'Категорії' },
         linkSource: 'shop-categories',
         links: []
-      },
-      {
-        title: { en: 'Support', ru: 'Поддержка', ua: 'Підтримка' },
-        linkSource: 'manual',
-        links: [
-          { label: { en: 'Help Center', ru: 'Центр помощи', ua: 'Центр допомоги' }, url: '/help' },
-          { label: { en: 'Shipping', ru: 'Доставка', ua: 'Доставка' }, url: '/shipping' },
-          { label: { en: 'Size Guide', ru: 'Таблица размеров', ua: 'Таблиця розмірів' }, url: '/size-guide' },
-          { label: { en: 'My Orders', ru: 'Мои заказы', ua: 'Мої замовлення' }, url: '/my-orders' }
-        ]
       }
     ];
   }
