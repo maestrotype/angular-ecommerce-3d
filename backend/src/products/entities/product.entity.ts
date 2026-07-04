@@ -60,6 +60,12 @@ export class Product {
   @Column({ nullable: true })
   localModel3dUrl?: string;
 
+  @Column({ nullable: true })
+  model3dPublicId?: string;
+
+  @Column({ nullable: true })
+  hdModelPath?: string;
+
   @UpdateDateColumn()
   updatedAt: Date;
 }

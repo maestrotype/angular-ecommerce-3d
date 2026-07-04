@@ -210,7 +210,7 @@ export class UploadsController {
       },
     })
   )
-  uploadSection3dModel(@UploadedFile() file: Express.Multer.File): Observable<{ url: string; publicId: string }> {
+  uploadSection3dModel(@UploadedFile() file: Express.Multer.File): Observable<{ url: string; publicId: string; localPath?: string }> {
     return from(this.processAndUpload3dModel(file, "section-3d-models", false));
   }
 
@@ -238,7 +238,7 @@ export class UploadsController {
       },
     })
   )
-  uploadProduct3dModel(@UploadedFile() file: Express.Multer.File): Observable<{ url: string; publicId: string }> {
+  uploadProduct3dModel(@UploadedFile() file: Express.Multer.File): Observable<{ url: string; publicId: string; localPath?: string }> {
     return from(this.processAndUpload3dModel(file, "product-3d-models", true));
   }
 

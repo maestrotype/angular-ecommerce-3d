@@ -1,5 +1,5 @@
 
-import { Injectable, NotFoundException, BadRequestException, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, InternalServerErrorException, Logger } from '@nestjs/common';
 import { MoreThan, Like } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -10,6 +10,14 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { NotificationsService } from '../notifications/notifications.service';
 import { extractString } from '../common/utils/localization.util';
+
+// Interface for product response with optional warning
+export interface ProductWithWarning {
+  product: Product;
+  modelHostingWarning?: boolean;
+  modelHostingMessage?: string;
+  modelHostingMessageKey?: string;
+}
 
 @Injectable()
 export class ProductsService {
@@ -22,12 +30,19 @@ export class ProductsService {
     private notificationsService: NotificationsService,
   ) { }
 
+  private logger = new Logger(ProductsService.name);
+
   create(createProductDto: CreateProductDto): Observable<Product> {
-    try {
-      this.validate3dModelUrl(createProductDto.model3dUrl);
-    } catch (err) {
-      return throwError(() => err);
-    }
+    return this.createWithWarning(createProductDto).pipe(
+      map(result => result.product)
+    );
+  }
+
+  /**
+   * Create a product and return it with an optional model hosting warning.
+   */
+  createWithWarning(createProductDto: CreateProductDto): Observable<ProductWithWarning> {
+    const hasWarning = this.validate3dModelUrl(createProductDto.model3dUrl);
 
     const product = this.productRepository.create(createProductDto);
 
@@ -37,6 +52,14 @@ export class ProductsService {
           map(() => savedProduct)
         )
       ),
+      map(savedProduct => {
+        const result: ProductWithWarning = { product: savedProduct };
+        if (hasWarning) {
+          result.modelHostingWarning = true;
+          result.modelHostingMessageKey = 'MODEL_HOSTING_WARNING';
+        }
+        return result;
+      }),
       catchError(error => throwError(() => new InternalServerErrorException(`Failed to create product: ${error.message}`)))
     );
   }
@@ -76,11 +99,16 @@ export class ProductsService {
   }
 
   update(id: number, updateProductDto: UpdateProductDto): Observable<Product> {
-    try {
-      this.validate3dModelUrl(updateProductDto.model3dUrl);
-    } catch (err) {
-      return throwError(() => err);
-    }
+    return this.updateWithWarning(id, updateProductDto).pipe(
+      map(result => result.product)
+    );
+  }
+
+  /**
+   * Update a product and return it with an optional model hosting warning.
+   */
+  updateWithWarning(id: number, updateProductDto: UpdateProductDto): Observable<ProductWithWarning> {
+    const hasWarning = this.validate3dModelUrl(updateProductDto.model3dUrl);
 
     return this.findOne(id).pipe(
       switchMap(product => {
@@ -92,6 +120,14 @@ export class ProductsService {
           map(() => updatedProduct)
         )
       ),
+      map(updatedProduct => {
+        const result: ProductWithWarning = { product: updatedProduct };
+        if (hasWarning) {
+          result.modelHostingWarning = true;
+          result.modelHostingMessageKey = 'MODEL_HOSTING_WARNING';
+        }
+        return result;
+      }),
       catchError(error => throwError(() => new InternalServerErrorException(`Failed to update product: ${error.message}`)))
     );
   }
@@ -171,16 +207,66 @@ export class ProductsService {
     );
   }
 
-  private validate3dModelUrl(url?: string): void {
-    if (!url) return;
+  /**
+   * Validate that the 3D model URL is accessible from the public frontend.
+   * On production, local file paths won't work for public users.
+   * Returns true if there's a warning, false otherwise.
+   */
+  private validate3dModelUrl(url?: string): boolean {
+    if (!url) return false;
+
     const isProduction = process.env.NODE_ENV?.toLowerCase() === 'production' || process.env.RENDER === 'true';
-    if (!isProduction) return;
+    if (!isProduction) return false;
 
     const isCloudinary = url.includes('res.cloudinary.com');
-    if (!isCloudinary) {
-      throw new BadRequestException(
-        'Production database requires 3D models on Cloudinary. Use "Archive to Cloudinary" before saving.',
+    if (isCloudinary) return false;
+
+    // Check if it's a local file path or localhost URL
+    const isLocalPath = url.startsWith('LOCAL:') ||
+      url.includes('localhost') ||
+      url.includes('127.0.0.1') ||
+      (url.startsWith('/') && !url.includes('/uploads/'));
+
+    if (isLocalPath) {
+      this.logger.warn(
+        `⚠️  Product "${url}" has a local model URL that won't be accessible on production. ` +
+        `Use POST /uploads/archive-local to upload the model to Cloudinary first.`
       );
+      return true; // Warning returned but save is allowed
     }
+
+    // For other non-Cloudinary URLs (e.g., external CDN), allow but log
+    this.logger.warn(
+      `⚠️  Product model URL is not on Cloudinary: ${url}. ` +
+      `Ensure it's publicly accessible from the frontend.`
+    );
+    return true;
+  }
+
+  /**
+   * Get the local 3D model file path for a product.
+   * Used to serve local GLB files to the public frontend.
+   */
+  getLocal3dModel(productId: number): Observable<{ localPath: string; fileName: string }> {
+    return from(
+      this.productRepository.findOne({ where: { id: productId } })
+    ).pipe(
+      switchMap(product => {
+        if (!product) {
+          return throwError(() => new NotFoundException(`Product with ID ${productId} not found`));
+        }
+        if (!product.localModel3dUrl) {
+          return throwError(() => new NotFoundException(`Product ${productId} has no local 3D model`));
+        }
+        const fileName = product.localModel3dUrl.split('/').pop();
+        return of({ localPath: product.localModel3dUrl, fileName });
+      }),
+      catchError(error => {
+        if (error instanceof NotFoundException) {
+          return throwError(() => error);
+        }
+        return throwError(() => new InternalServerErrorException(`Failed to get product 3D model: ${error.message}`));
+      })
+    );
   }
 }

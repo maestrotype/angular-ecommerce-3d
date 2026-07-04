@@ -15,6 +15,9 @@ export interface Product {
   images?: string[];
   imageUrl: string;
   model3dUrl?: string;
+  localModel3dUrl?: string;
+  model3dPublicId?: string;
+  hdModelPath?: string;
   stock?: number;
   createdAt?: Date;
   updatedAt?: Date;

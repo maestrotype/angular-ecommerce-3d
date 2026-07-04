@@ -1105,9 +1105,18 @@ export class ProductFormComponent implements OnInit {
     // rest of onSubmit ... navigations etc
     if (this.isEditMode) {
       this.productService.updateProduct(this.productId!, productData).subscribe({
-        next: () => {
+        next: (response: any) => {
           this.isLoading = false;
-          this.snackBar.open(this.translate.instant('PRODUCT_UPDATED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
+          
+          // Handle model hosting warning from backend
+          if (response?.modelHostingWarning) {
+            this.snackBar.open(response.modelHostingMessage || this.translate.instant('MODEL_HOSTING_WARNING'), this.translate.instant('CLOSE_BTN'), {
+              duration: 10000,
+              panelClass: ['warning-snackbar'],
+            });
+          } else {
+            this.snackBar.open(this.translate.instant('PRODUCT_UPDATED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
+          }
           this.router.navigate(['/admin/products']);
         },
         error: (err) => {
@@ -1123,9 +1132,18 @@ export class ProductFormComponent implements OnInit {
       });
     } else {
       this.productService.createProduct(productData as any).subscribe({
-        next: () => {
+        next: (response: any) => {
           this.isLoading = false;
-          this.snackBar.open(this.translate.instant('PRODUCT_CREATED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
+          
+          // Handle model hosting warning from backend
+          if (response?.modelHostingWarning) {
+            this.snackBar.open(response.modelHostingMessage || this.translate.instant('MODEL_HOSTING_WARNING'), this.translate.instant('CLOSE_BTN'), {
+              duration: 10000,
+              panelClass: ['warning-snackbar'],
+            });
+          } else {
+            this.snackBar.open(this.translate.instant('PRODUCT_CREATED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
+          }
           this.router.navigate(['/admin/products']);
         },
         error: (err) => {

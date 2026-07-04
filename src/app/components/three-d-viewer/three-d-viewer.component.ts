@@ -1,16 +1,17 @@
-import { Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ElementRef, Inject, PLATFORM_ID, HostListener, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ElementRef, Inject, PLATFORM_ID, OnDestroy, ChangeDetectorRef, NgZone } from '@angular/core';
 import { isPlatformBrowser, CommonModule, Location } from '@angular/common';
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
-import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { fixBackendUrl } from '../../core/utils/url-helper';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { ThreeDModelService } from '../../core/services/three-d-model.service';
+import { Subscription } from 'rxjs';
+
+// Type-only imports to prevent bundling heavy libraries in the main chunk
+import type * as THREE from 'three';
+import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 @Component({
   selector: 'app-three-d-viewer',
@@ -330,6 +331,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   @Input() position: [number, number, number] = [0, 0, 0];
   @Input() previewOnly = false;
   @Input() autoRotate = true;
+  @Input() loading: 'lazy' | 'eager' = 'lazy'; // Support for viewport lazy-loading
   
   @Input() set upsideDown(value: boolean) {
     this._upsideDown = value;
@@ -360,6 +362,8 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   private renderer!: THREE.WebGLRenderer;
   private controls!: OrbitControls;
   private resizeObserver!: ResizeObserver;
+  private intersectionObserver: IntersectionObserver | null = null;
+  private modelSubscription: Subscription | null = null;
   private model!: THREE.Object3D;
   private animId!: number;
   private isMobile = false;
@@ -371,7 +375,9 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     private location: Location,
     private snackBar: MatSnackBar,
     private translate: TranslateService,
-    private http: HttpClient
+    private http: HttpClient,
+    private ngZone: NgZone,
+    private threeDModelService: ThreeDModelService
   ) {
     if (isPlatformBrowser(this.platformId)) {
       this.isMobile = /Mobi|Android/i.test(navigator.userAgent);
@@ -380,14 +386,76 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     if (isPlatformBrowser(this.platformId)) {
-      this.initThree();
-      this.checkAndLoad();
-      
-      this.resizeObserver = new ResizeObserver(() => {
-        this.onResize();
-      });
-      this.resizeObserver.observe(this.container.nativeElement);
+      if (this.loading === 'lazy') {
+        this.setupViewportObserver();
+      } else {
+        this.initializeViewer();
+      }
     }
+  }
+
+  /**
+   * Set up IntersectionObserver to lazy load the viewer when it enters the viewport.
+   */
+  private setupViewportObserver() {
+    const options = {
+      root: null,
+      rootMargin: '100px', // Start loading slightly before the component enters the screen
+      threshold: 0.01
+    };
+
+    this.intersectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          this.initializeViewer();
+          this.disconnectObserver();
+        }
+      });
+    }, options);
+
+    this.intersectionObserver.observe(this.container.nativeElement);
+  }
+
+  private disconnectObserver() {
+    if (this.intersectionObserver) {
+      this.intersectionObserver.disconnect();
+      this.intersectionObserver = null;
+    }
+  }
+
+  /**
+   * Loads heavy dependencies dynamically and configures ThreeJS.
+   * Runs the main renderer loop outside Angular's zone to prevent performance overhead.
+   */
+  private initializeViewer() {
+    this.ngZone.runOutsideAngular(async () => {
+      try {
+        const THREE = await import('three');
+        const { OrbitControls } = await import('three/examples/jsm/controls/OrbitControls');
+
+        if (this.isDestroyed) return;
+
+        this.initThreeWithDeps(THREE, OrbitControls);
+        
+        this.resizeObserver = new ResizeObserver(() => {
+          this.onResize();
+        });
+        this.resizeObserver.observe(this.container.nativeElement);
+
+        // Run checkAndLoad in zone since it updates loading/quality states
+        this.ngZone.run(() => {
+          this.checkAndLoad();
+        });
+      } catch (err) {
+        console.error('Failed to initialize 3D viewer libraries:', err);
+        this.ngZone.run(() => {
+          this.isLoading = false;
+          this.hasError = true;
+          this.lastErrorDetails = err;
+          this.cdr.detectChanges();
+        });
+      }
+    });
   }
 
   private checkAndLoad() {
@@ -406,6 +474,34 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  /**
+   * Build the URL to fetch the 3D model, trying the new API endpoint
+   * for local models before falling back to the direct URL.
+   */
+  private buildModelUrl(pathToLoad: string): string {
+    // If it's already a full URL (Cloudinary, etc), return as-is
+    if (pathToLoad.startsWith('http')) {
+      return pathToLoad;
+    }
+
+    // Extract product ID from the path (e.g., "/uploads/products-3d/123-model.glb" -> 123)
+    const pathParts = pathToLoad.split('/');
+    const productIdStr = pathParts.find(part => /^\\d+$/.test(part));
+    
+    if (productIdStr) {
+      const productId = parseInt(productIdStr, 10);
+      // Try the new API endpoint first
+      return `${environment.apiUrl}/products/${productId}/3d-model`;
+    }
+
+    // If no product ID found, use the original URL preparation
+    let url = fixBackendUrl(pathToLoad);
+    if (url && !url.startsWith('http')) {
+      url = this.location.prepareExternalUrl(url);
+    }
+    return url;
+  }
+
   toggleHdMode() {
     if (!this.hdModelPath) return;
     this.isHdMode = !this.isHdMode;
@@ -422,7 +518,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     this.renderer.setSize(el.clientWidth, el.clientHeight);
   }
 
-  private initThree() {
+  private initThreeWithDeps(THREE: any, OrbitControls: any) {
     const el = this.container.nativeElement;
     const w = el.clientWidth || 400;
     const h = el.clientHeight || 400;
@@ -465,7 +561,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     if (this.isMobile) {
       this.controls.touches.ONE = null;
       this.controls.touches.TWO = THREE.TOUCH.DOLLY_PAN;
-      this.setupThreeFingerRotation();
+      this.setupThreeFingerRotation(THREE);
     }
 
     if (this.previewOnly) {
@@ -475,13 +571,10 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  /**
+   * Subscribes to the advanced cached loading service.
+   */
   private loadModel() {
-    const loader = new GLTFLoader();
-    loader.setMeshoptDecoder(MeshoptDecoder);
-    const dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
-    loader.setDRACOLoader(dracoLoader);
-    
     const pathToLoad = this.isHdMode && this.hdModelPath ? this.hdModelPath : this.modelPath;
     
     this.isAiGeneration = !!pathToLoad && (
@@ -490,38 +583,45 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
       pathToLoad.toLowerCase().includes('product3d-ai')
     );
     
-    // AI models consistently load upside down (usually need 180deg flip on X)
     this._upsideDown = this.isAiGeneration;
 
     if (this.currentLoadedPath === pathToLoad && this.model) return;
     
-    let url = fixBackendUrl(pathToLoad);
-    if (url && !url.startsWith('http')) {
-      url = this.location.prepareExternalUrl(url);
-    }
+    // Use buildModelUrl to resolve the URL (tries API endpoint for local models first)
+    const url = this.buildModelUrl(pathToLoad);
     
     this.isLoading = true;
     this.hasError = false;
     this.lastErrorDetails = null;
     this.failedUrl = pathToLoad || '';
+    this.cdr.detectChanges();
 
-    loader.load(
-      url,
-      (gltf) => this.onLoadSuccess(gltf, pathToLoad),
-      (xhr) => {
+    if (this.modelSubscription) {
+      this.modelSubscription.unsubscribe();
+    }
+
+    this.modelSubscription = this.threeDModelService.loadModel(url).subscribe({
+      next: (event) => {
         if (this.isDestroyed) return;
-        if (xhr.lengthComputable) {
-          this.loadingProgress = Math.round((xhr.loaded / xhr.total) * 100);
+        if (event.type === 'progress') {
+          this.loadingProgress = event.progress || 0;
           this.cdr.detectChanges();
+        } else if (event.type === 'loaded') {
+          this.ngZone.runOutsideAngular(async () => {
+            const THREE = await import('three');
+            this.onLoadSuccess(event.data, pathToLoad, THREE);
+          });
         }
       },
-      (err) => {
+      error: (err) => {
         if (this.isDestroyed) return;
         console.error('3D load error:', err);
         
         if (this.isHdMode && this.hdModelPath && this.modelPath && this.hdModelPath !== this.modelPath) {
-          this.isHdMode = false;
-          this.loadModel();
+          this.ngZone.run(() => {
+            this.isHdMode = false;
+            this.loadModel();
+          });
           return;
         }
 
@@ -530,32 +630,49 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
           const prodBase = 'https://angular-ecommerce-backend.onrender.com';
           const fallbackUrl = url.replace(/https?:\/\/localhost:3002/, prodBase);
           this.isRetryingFallback = true;
-          this.isLoading = true;
-          this.hasError = false;
+          
+          this.ngZone.run(() => {
+            this.isLoading = true;
+            this.hasError = false;
+            this.cdr.detectChanges();
+          });
 
-          loader.load(
-            fallbackUrl,
-            (gltf) => this.onLoadSuccess(gltf, fallbackUrl),
-            null,
-            (fallbackErr) => {
-              this.isRetryingFallback = false;
-              this.isLoading = false;
-              this.hasError = true;
-              this.lastErrorDetails = fallbackErr;
-              this.failedUrl = fallbackUrl;
-              this.cdr.detectChanges();
+          this.modelSubscription = this.threeDModelService.loadModel(fallbackUrl).subscribe({
+            next: (fbEvent) => {
+              if (this.isDestroyed) return;
+              if (fbEvent.type === 'progress') {
+                this.loadingProgress = fbEvent.progress || 0;
+                this.cdr.detectChanges();
+              } else if (fbEvent.type === 'loaded') {
+                this.ngZone.runOutsideAngular(async () => {
+                  const THREE = await import('three');
+                  this.onLoadSuccess(fbEvent.data, fallbackUrl, THREE);
+                });
+              }
+            },
+            error: (fallbackErr) => {
+              this.ngZone.run(() => {
+                this.isRetryingFallback = false;
+                this.isLoading = false;
+                this.hasError = true;
+                this.lastErrorDetails = fallbackErr;
+                this.failedUrl = fallbackUrl;
+                this.cdr.detectChanges();
+              });
             }
-          );
+          });
           return;
         }
 
-        this.isLoading = false;
-        this.hasError = true;
-        this.lastErrorDetails = err;
-        this.failedUrl = url;
-        this.cdr.detectChanges();
+        this.ngZone.run(() => {
+          this.isLoading = false;
+          this.hasError = true;
+          this.lastErrorDetails = err;
+          this.failedUrl = url;
+          this.cdr.detectChanges();
+        });
       }
-    );
+    });
   }
 
   toggleLogs() {
@@ -605,11 +722,14 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     return '';
   }
 
-  private onLoadSuccess(gltf: any, url: string) {
+  private onLoadSuccess(modelScene: any, url: string, THREE: any) {
     if (this.isDestroyed || !this.scene) return;
+    
+    // Dispose memory of old model before setting the new one
+    this.disposeModel();
     if (this.model) this.scene.remove(this.model);
 
-    this.model = gltf.scene;
+    this.model = modelScene;
     this.model.scale.set(this.scale[0], this.scale[1], this.scale[2]);
     
     this.applyRotation();
@@ -640,26 +760,28 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
       this.controls.update();
     }
 
-    this.model.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        const mesh = child as THREE.Mesh;
-        mesh.castShadow = !this.isMobile;
-        mesh.receiveShadow = !this.isMobile;
+    this.model.traverse((child: any) => {
+      if (child.isMesh) {
+        child.castShadow = !this.isMobile;
+        child.receiveShadow = !this.isMobile;
       }
     });
 
     this.scene.add(this.model);
     this.currentLoadedPath = url;
-    this.isLoading = false;
-    this.cdr.detectChanges();
-    this.modelLoaded.emit();
+
+    this.ngZone.run(() => {
+      this.isLoading = false;
+      this.cdr.detectChanges();
+      this.modelLoaded.emit();
+    });
+
     this.animate();
   }
 
   private applyRotation() {
     if (!this.model) return;
     if (this._upsideDown) {
-      // Rotate 180 degrees around X axis to flip model vertically
       this.model.rotation.set(Math.PI, 0, 0); 
     } else {
       this.model.rotation.set(0, 0, 0);
@@ -675,7 +797,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     }
   };
 
-  private setupThreeFingerRotation() {
+  private setupThreeFingerRotation(THREE: any) {
     const el = this.renderer.domElement;
     let lastX = 0, lastY = 0;
 
@@ -703,11 +825,39 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     }, { passive: false });
   }
 
+  /**
+   * Traverses the model and disposes of all geometries and materials.
+   * Crucial to prevent severe WebGL / GPU context and memory leaks.
+   */
+  private disposeModel() {
+    if (this.model) {
+      this.model.traverse((child: any) => {
+        if (child.isMesh) {
+          if (child.geometry) {
+            child.geometry.dispose();
+          }
+          if (child.material) {
+            if (Array.isArray(child.material)) {
+              child.material.forEach((mat: any) => mat.dispose());
+            } else {
+              child.material.dispose();
+            }
+          }
+        }
+      });
+    }
+  }
+
   ngOnDestroy() {
     this.isDestroyed = true;
+    this.disconnectObserver();
+    if (this.modelSubscription) {
+      this.modelSubscription.unsubscribe();
+    }
     if (this.resizeObserver) this.resizeObserver.disconnect();
     if (this.animId) cancelAnimationFrame(this.animId);
     if (this.controls) this.controls.dispose();
+    this.disposeModel();
     if (this.renderer) {
       this.renderer.dispose();
       this.renderer.forceContextLoss();

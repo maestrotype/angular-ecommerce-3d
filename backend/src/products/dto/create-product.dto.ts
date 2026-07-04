@@ -78,4 +78,12 @@ export class CreateProductDto {
   @IsOptional()
   @IsString()
   localModel3dUrl?: string;
+
+  @IsOptional()
+  @IsString()
+  model3dPublicId?: string;
+
+  @IsOptional()
+  @IsString()
+  hdModelPath?: string;
 }
