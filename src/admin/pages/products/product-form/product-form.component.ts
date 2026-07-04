@@ -14,6 +14,7 @@ import { ProcessingOptions, ProcessedImageResult } from "../../../components/ui/
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { fixBackendUrl, isLegacyLocalUrl } from '../../../../app/core/utils/url-helper';
 import { environment } from '../../../../environments/environment';
+import { PROD_API_URL } from '../../../../app/core/utils/api-url.util';
 import { SettingsService, CloudinaryStatus } from "../../../services/settings.service";
 import { OnboardingDialogComponent } from "../../../components/shared/onboarding-dialog/onboarding-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
@@ -760,36 +761,34 @@ export class ProductFormComponent implements OnInit {
       return;
     }
 
-    const useCloudinary = this.isLiveSite || !this.isLocalApi;
+    // Always save locally first — to the connected backend server.
+    // Use Cloudinary archive button later if needed.
     this.isUploading3d = true;
 
-    const upload$ = useCloudinary
-      ? this.uploadToCloudinaryWithPrecheck(file)
-      : this.productService.upload3dModel(file);
+    // Determine which backend to use: local or production
+    const upload$ = this.isLocalApi
+      ? this.productService.upload3dModel(file)
+      : this.productService.upload3dModel(file, PROD_API_URL);
 
     upload$.subscribe({
       next: (res) => {
         if (!res) return;
-        if (useCloudinary) {
-          if (!isCloudinaryUrl(res.url)) {
-            this.isUploading3d = false;
-            this.snackBar.open(this.translate.instant('ARCHIVE_NOT_CLOUDINARY_ERROR'), this.translate.instant('CLOSE_BTN'), {
-              duration: 12000,
-              panelClass: ['error-snackbar'],
-            });
-            return;
-          }
-          this.applyModelChangesAndSave(res.url, null, res.publicId, { forceProductionDb: true, requireCloudinary: true });
-        } else {
-          this.model3dUrl = res.url;
-          this.localModel3dUrl = res.localPath || null;
-          this.model3dPublicId = res.publicId || null;
-          this.viewerVersion++;
-          this.snackBar.open(this.translate.instant('MODEL_SAVED_TEMPORARY_STORAGE'), this.translate.instant('CLOSE_BTN'), {
-            duration: 10000,
-            panelClass: ['warning-snackbar'],
-          });
-        }
+        
+        // Save to the backend server (local disk).
+        // The backend will try Cloudinary first, then fall back to local if needed.
+        this.model3dUrl = res.url;
+        this.localModel3dUrl = res.localPath || null;
+        this.model3dPublicId = res.publicId || null;
+        this.viewerVersion++;
+        
+        const messageKey = isCloudinaryUrl(res.url)
+          ? 'MODEL_3D_UPLOADED'
+          : 'MODEL_SAVED_TEMPORARY_STORAGE';
+        
+        this.snackBar.open(this.translate.instant(messageKey), this.translate.instant('CLOSE_BTN'), {
+          duration: 10000,
+          panelClass: isCloudinaryUrl(res.url) ? [] : ['warning-snackbar'],
+        });
         this.isUploading3d = false;
       },
       error: (err) => {
@@ -798,7 +797,7 @@ export class ProductFormComponent implements OnInit {
           titleKey: 'MODEL_3D_UPLOAD_FAILED',
           isLocalApi: this.isLocalApi,
           isDevelopment: this.isDevelopment,
-          targetsProductionApi: useCloudinary,
+          targetsProductionApi: !this.isLocalApi,
         });
         this.snackBar.open(formatResolvedApiError(resolved), this.translate.instant('CLOSE_BTN'), {
           duration: resolved.duration,
