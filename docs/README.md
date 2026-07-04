@@ -2,6 +2,17 @@
 
 Technical reference for the Angular 17+ 3D E-commerce Platform.
 
+## AI Agent Workflow (New)
+
+> **Для ИИ-ассистентов**: Начните работу с этих файлов.
+
+| Файл | Назначение |
+|------|-----------|
+| [AI_PROJECT_PROMPT.md](AI_PROJECT_PROMPT.md) | Системный промпт: правила кода, дизайн-система, prompt templates |
+| [PROJECT_STATUS.md](PROJECT_STATUS.md) | Текущий статус проекта, активная задача, дорожная карта |
+| [tasks/](tasks/) | Описание задач в формате `task_XXX_name.md` |
+| [templates/task-template.md](templates/task-template.md) | Шаблон для создания новой задачи |
+
 ## Documentation Modules
 
 1. **[Quick Start Guide](GETTING_STARTED.md)**

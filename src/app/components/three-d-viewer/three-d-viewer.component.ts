@@ -474,6 +474,34 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  /**
+   * Build the URL to fetch the 3D model, trying the new API endpoint
+   * for local models before falling back to the direct URL.
+   */
+  private buildModelUrl(pathToLoad: string): string {
+    // If it's already a full URL (Cloudinary, etc), return as-is
+    if (pathToLoad.startsWith('http')) {
+      return pathToLoad;
+    }
+
+    // Extract product ID from the path (e.g., "/uploads/products-3d/123-model.glb" -> 123)
+    const pathParts = pathToLoad.split('/');
+    const productIdStr = pathParts.find(part => /^\\d+$/.test(part));
+    
+    if (productIdStr) {
+      const productId = parseInt(productIdStr, 10);
+      // Try the new API endpoint first
+      return `${environment.apiUrl}/products/${productId}/3d-model`;
+    }
+
+    // If no product ID found, use the original URL preparation
+    let url = fixBackendUrl(pathToLoad);
+    if (url && !url.startsWith('http')) {
+      url = this.location.prepareExternalUrl(url);
+    }
+    return url;
+  }
+
   toggleHdMode() {
     if (!this.hdModelPath) return;
     this.isHdMode = !this.isHdMode;
@@ -559,10 +587,8 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
 
     if (this.currentLoadedPath === pathToLoad && this.model) return;
     
-    let url = fixBackendUrl(pathToLoad);
-    if (url && !url.startsWith('http')) {
-      url = this.location.prepareExternalUrl(url);
-    }
+    // Use buildModelUrl to resolve the URL (tries API endpoint for local models first)
+    const url = this.buildModelUrl(pathToLoad);
     
     this.isLoading = true;
     this.hasError = false;
