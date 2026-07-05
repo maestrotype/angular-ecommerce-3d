@@ -7,11 +7,29 @@
 
 ## 2. Project Implementation Roadmap
 
-| Фаза | Статус | Описание |
-|------|--------|----------|
-| 1. Infrastructure | ✅ Completed | Базовая архитектура, сервисы, конфигурация |
-| 2. 3D Pipeline | 🔄 In Progress | Загрузка, сохранение и архивация 3D моделей |
-| 3. UI Polish | ⏳ Pending | Финальная полировка интерфейса, анимации |
+### Core Application
+| Phase | Status | Description |
+|-------|--------|-------------|
+| 1. Infrastructure | ✅ Completed | Basic architecture, services, configuration |
+| 2. 3D Pipeline | 🔄 In Progress | 3D model upload, storage, archival |
+| 3. UI Polish | ⏳ Pending | Final interface polish, animations |
+
+### UI Style Redesign (New)
+The UI redesign follows the architecture defined in [REDESIGN_PLAN.md](REDESIGN_PLAN.md).
+
+| Phase | Status | Description |
+|-------|--------|-------------|
+| Phase 1 | ⏳ Pending | Style Architecture Audit |
+| Phase 2 | ⏳ Pending | Theme Engine Foundation |
+| Phase 3 | ⏳ Pending | Design Token System |
+| Phase 4 | ⏳ Pending | Angular Material Integration |
+| Phase 5 | ⏳ Pending | Style Cleanup & Consolidation |
+| Phase 6 | ⏳ Pending | Component Migration |
+| Phase 7 | ⏳ Pending | Premium UI Implementation |
+| Phase 8 | ⏳ Pending | Animations & Micro-interactions |
+| Phase 9 | ⏳ Pending | Polish & Cross-browser Testing |
+
+> **Important**: UI redesign phases are independent of core application phases. They can start once Phase 1 (Audit) is complete.
 
 ## 3. Completed Tasks Record
 - [x] Angular 17 application scaffolded with SSR support
@@ -27,8 +45,23 @@
 ## 4. Known Issues & Blockers
 - [ ] **Glass theme text contrast** inconsistencies in some components
 - [ ] **Admin panel styling** uses separate system not fully aligned with frontend design tokens
+- [ ] **Duplicated style files** between `src/styles/` and `src/admin/styles/`
+- [ ] **Hardcoded colors** in component SCSS files
+- [ ] **White-on-white text** when switching between some themes
 
-## 5. How to Maintain Project Status
+## 5. Architecture Documentation
+
+The UI architecture is documented in dedicated files. Always read these before making style-related changes:
+
+| Document | Purpose |
+|----------|---------|
+| [AI_CONSTITUTION.md](AI_CONSTITUTION.md) | Rules all AI agents must follow |
+| [STYLE_ARCHITECTURE.md](STYLE_ARCHITECTURE.md) | Style hierarchy, token flow, folder structure |
+| [THEME_ENGINE.md](THEME_ENGINE.md) | Multi-dimensional theme engine specification |
+| [REDESIGN_PLAN.md](REDESIGN_PLAN.md) | Phased redesign roadmap with atomic tasks |
+| [UI_AUDIT.md](UI_AUDIT.md) | Architecture cleanup tracker |
+
+## 6. How to Maintain Project Status
 
 ### When Completing a Task
 1. Mark the task as completed in `docs/tasks/task_XXX_<name>.md`:
@@ -73,9 +106,11 @@
 3. Update the task file with final implementation details
 4. Follow steps 1-4 in "When Completing a Task" section above
 
-## 6. Quick Links
+## 7. Quick Links
 - **System Prompt**: [docs/AI_PROJECT_PROMPT.md](AI_PROJECT_PROMPT.md)
 - **Active Task**: [docs/tasks/task_001_3d-model-loading.md](tasks/task_001_3d-model-loading.md)
 - **Task Template**: [docs/templates/task-template.md](templates/task-template.md)
 - **Architecture Docs**: [docs/ARCHITECTURE.md](ARCHITECTURE.md)
 - **Backend API**: [docs/BACKEND_API.md](BACKEND_API.md)
+- **Style Architecture**: [docs/STYLE_ARCHITECTURE.md](STYLE_ARCHITECTURE.md)
+- **UI Redesign Plan**: [docs/REDESIGN_PLAN.md](REDESIGN_PLAN.md)
