@@ -109,7 +109,15 @@ export class UploadsController {
     folder: string,
     publicId?: string,
   ): Promise<{ url: string; publicId: string }> {
+    // Cloudinary SDK timeout + outer promise timeout to prevent hanging forever
+    const CLOUDINARY_UPLOAD_TIMEOUT = 60_000; // 60 seconds
+
     const result = await new Promise<any>((resolve, reject) => {
+      // Outer timeout to catch cases where Cloudinary SDK doesn't fire the callback
+      const timer = setTimeout(() => {
+        reject(new Error(`Cloudinary upload timeout after ${CLOUDINARY_UPLOAD_TIMEOUT / 1000}s`));
+      }, CLOUDINARY_UPLOAD_TIMEOUT);
+
       cloudinary.uploader.upload_large(uploadPath, {
         folder,
         resource_type: "raw",
@@ -117,6 +125,7 @@ export class UploadsController {
         chunk_size: 6000000,
         timeout: 600000,
       }, (error, uploadResult) => {
+        clearTimeout(timer);
         if (error) reject(error);
         else resolve(uploadResult);
       });
@@ -139,12 +148,18 @@ export class UploadsController {
 
     const isProduction = process.env.NODE_ENV?.toLowerCase() === 'production' || process.env.RENDER === 'true';
     const isCloudinaryConfigured = this.cloudinaryConfigService.isConfigured();
-    const useCloudinary = isProduction || isCloudinaryConfigured;
+    // In development mode, ALWAYS use local storage.
+    // Only use Cloudinary in production.
+    const useCloudinary = isProduction;
 
     if (isProduction && !isCloudinaryConfigured) {
       throw new BadRequestException(
         'CLOUDINARY_NOT_CONFIGURED: Set Cloudinary credentials in Admin → Integrations or as CLOUDINARY_* environment variables on Render.',
       );
+    }
+
+    if (!isProduction) {
+      console.log('[UploadsController] Dev mode detected — using local storage for 3D models');
     }
 
     let uploadPath = file.path;
@@ -164,6 +179,9 @@ export class UploadsController {
     const isAi = file.originalname.toLowerCase().includes('ai-gen') || file.originalname.toLowerCase().includes('task_');
     const publicId = (isProduct && isAi) ? `ai-gen-${uuidv4()}` : undefined;
 
+    // Try Cloudinary first if configured and file is within size limits.
+    // On failure, fall back to local storage (unless in production).
+    let cloudinaryError: any = null;
     if (useCloudinary && finalSize <= CLOUDINARY_RAW_FILE_LIMIT) {
       console.log(`[UploadsController] Uploading 3D model to Cloudinary (${folder})...`);
       try {
@@ -171,25 +189,33 @@ export class UploadsController {
         this.cleanupTempFiles(file.path, optimizedPath);
         return cloudResult;
       } catch (error: any) {
-        console.error(`[UploadsController] Cloudinary upload failed:`, error);
-        this.cleanupTempFiles(file.path, optimizedPath);
-        if (!isCloudinarySizeError(error)) {
-          const message = error?.message || "3D model Cloudinary upload failed";
-          throw new BadRequestException(`Cloudinary upload failed: ${message}`);
-        }
+        console.error(`[UploadsController] Cloudinary upload failed, falling back to local:`, error);
+        cloudinaryError = error;
+      }
+    }
+
+    // In production, if Cloudinary was attempted and failed, throw an error.
+    if (isProduction && cloudinaryError) {
+      this.cleanupTempFiles(file.path, optimizedPath);
+      if (isCloudinarySizeError(cloudinaryError)) {
         throw new BadRequestException(
           'Model exceeds Cloudinary 10MB limit after optimization. Reduce textures or mesh complexity in Blender.',
         );
       }
+      const message = cloudinaryError?.message || "3D model Cloudinary upload failed";
+      throw new BadRequestException(`Cloudinary upload failed: ${message}`);
     }
 
-    if (useCloudinary && isProduction) {
+    // In production, if file exceeds Cloudinary limit, throw an error.
+    if (useCloudinary && isProduction && !cloudinaryError) {
       this.cleanupTempFiles(file.path, optimizedPath);
       throw new BadRequestException(
         'Model exceeds Cloudinary 10MB limit after optimization. Reduce textures or mesh complexity in Blender.',
       );
     }
 
+    // Fall back to local storage.
+    console.log(`[UploadsController] Saving 3D model to local storage...`);
     const localResult = saveModelToLocalDisk(uploadPath, isProduct, file.originalname);
     this.cleanupTempFiles(file.path, optimizedPath);
     return localResult;
