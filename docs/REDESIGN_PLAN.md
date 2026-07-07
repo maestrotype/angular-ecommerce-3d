@@ -1,9 +1,10 @@
 # UI Redesign Plan — angular-ecommerce-3d
 
-This document defines the phased roadmap for the complete UI architecture redesign. Each phase is broken into atomic tasks suitable for independent implementation by AI agents.
+This document defines the phased roadmap for the complete UI architecture redesign. Each phase is broken into atomic tasks suitable for independent implementation by AI agents (Qwen3-Coder).
 
 **Current Phase**: Phase 1 (Style Architecture Audit)
-**Last Updated**: 2026-07-05
+**Last Updated**: 2026-07-06
+**Prerequisites**: `STYLE_ARCHITECTURE.md` (architecture rules), `UI_AUDIT.md` (findings tracker)
 
 ---
 
@@ -263,15 +264,67 @@ Migrate component-by-component, verifying each before proceeding. Priority order
 
 ## Phase 7: Premium UI Implementation
 
-**Goal**: Apply premium visual design using the clean architecture foundation.
+**Goal**: Apply premium visual design using the clean architecture foundation. All styling must use design tokens — no hardcoded values.
 
-### Focus Areas
-- Refined card designs with proper elevation
-- Premium typography hierarchy
-- Consistent empty states and loading states
-- Professional form designs
-- Polished data tables
-- Refined navigation patterns
+### Task 7.1 — Redesign Product Cards
+- **Objective**: Implement premium product card with proper elevation, image treatment, and badge system
+- **Files to Edit**: `src/styles/components/_cards.scss`, product card component styles
+- **Definition of Done**: Card uses only design tokens. Looks correct in all 4 themes. Hover states polished.
+
+### Task 7.2 — Redesign Typography Hierarchy
+- **Objective**: Apply premium type scale with proper weight, line-height, and letter-spacing per theme
+- **Files to Edit**: `src/styles/core/_typography.scss`, theme partials
+- **Definition of Done**: H1–H6, body, caption all use token-driven type scale. Verified visually in all themes.
+
+### Task 7.3 — Implement Empty States
+- **Objective**: Create reusable empty state component with icon, title, description, and optional CTA
+- **Files to Edit**: New shared component, `src/styles/components/_empty-states.scss`
+- **Definition of Done**: Used in cart, search results, favorites, order history. Respects current theme.
+
+### Task 7.4 — Implement Loading States
+- **Objective**: Create skeleton loaders and loading spinners per theme motion language
+- **Files to Edit**: New shared components, `src/styles/components/_loading.scss`
+- **Definition of Done**: Skeleton loaders used in tables, card grids, and detail views. Theme-aware colors.
+
+### Task 7.5 — Redesign Admin Data Tables
+- **Objective**: Premium table styling with proper row hover, selection, density controls
+- **Files to Edit**: `src/admin/components/blocks/admin-table/`, Material table overrides
+- **Definition of Done**: Tables respect theme density. No hardcoded colors. Striped/compact modes work.
+
+### Task 7.6 — Redesign Forms
+- **Objective**: Premium form inputs with floating labels, validation states, and proper focus rings
+- **Files to Edit**: `src/styles/components/_forms.scss`, Material form overrides
+- **Definition of Done**: All input types consistent. Error/success/disabled states clear. Accessible focus rings.
+
+### Task 7.7 — Redesign Navigation
+- **Objective**: Premium header, footer, and sidebar navigation with proper active states
+- **Files to Edit**: `src/styles/components/_navigation.scss`, layout component styles
+- **Definition of Done**: Navigation respects theme. Mobile drawer polished. Breadcrumb consistent.
+
+### Task 7.8 — Redesign Dialogs and Modals
+- **Objective**: Premium auth modal, confirm dialogs, and info modals with proper backdrop and motion
+- **Files to Edit**: `src/styles/components/_modals.scss`, modal component styles
+- **Definition of Done**: Modals use theme backdrop, proper elevation, smooth enter/exit animations.
+
+### Task 7.9 — Redesign Dashboard
+- **Objective**: Premium admin dashboard with stat cards, charts containers, and activity feed
+- **Files to Edit**: `src/admin/pages/dashboard/`, `src/admin/components/ui/stat-card/`
+- **Definition of Done**: Dashboard looks professional in all themes. Stat cards use token-driven styling.
+
+### Task 7.10 — Redesign Product Detail Page
+- **Objective**: Premium product detail with image gallery, 3D viewer frame, info panel, and recommendations
+- **Files to Edit**: `src/app/components/product-detail/` styles
+- **Definition of Done**: PDP is the visual centerpiece. Image gallery, 3D viewer, and info panel all polished.
+
+### Task 7.11 — Redesign Checkout Flow
+- **Objective**: Premium checkout with clear step indicators, form validation, and order summary
+- **Files to Edit**: Checkout component styles
+- **Definition of Done**: 3-step checkout feels professional. Error states clear. Mobile-responsive.
+
+### Task 7.12 — Cross-Theme Visual Review
+- **Objective**: Screenshot every redesigned component in all 4 themes and verify consistency
+- **Files to Edit**: None (verification task)
+- **Definition of Done**: No visual regressions in any theme. All components pass visual review.
 
 ---
 
@@ -338,12 +391,22 @@ Migrate component-by-component, verifying each before proceeding. Priority order
 
 When assigning a task from this plan to an AI agent (e.g., Qwen3-Coder):
 
-1. Copy the task section above
-2. Add specific file paths from `UI_AUDIT.md`
-3. Reference relevant sections of `STYLE_ARCHITECTURE.md` and `THEME_ENGINE.md`
-4. Include the Definition of Done verbatim
-5. Require build verification before task completion
+1. Copy the task section above verbatim
+2. Add specific file paths from `UI_AUDIT.md` if the task involves cleanup
+3. Reference relevant sections of `STYLE_ARCHITECTURE.md` (rules) and `THEME_ENGINE.md` (theme dimensions)
+4. Include the Definition of Done verbatim — do not modify acceptance criteria
+5. Require `npm run build` verification before task completion
+6. After completing the task, update `UI_AUDIT.md` §10 (Migration Progress Tracker)
+
+### Task Format for Qwen3-Coder
+```
+Task: [Copy task title and description]
+Files to Edit: [List from task definition]
+Architecture Rules: See STYLE_ARCHITECTURE.md §[relevant section]
+Definition of Done: [Copy verbatim]
+Constraints: No hardcoded colors. Use design tokens only. Update UI_AUDIT.md after completion.
+```
 
 ---
 
-*This document is maintained by the Principal UI Architect. Last updated: 2026-07-05*
+*This document is maintained by the Principal UI Architect. Last updated: 2026-07-06*

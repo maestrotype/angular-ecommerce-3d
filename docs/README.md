@@ -21,12 +21,14 @@ Technical reference for the Angular 17+ 3D E-commerce Platform.
 
 > **Read before making any style, theme, or component changes.**
 
-| Document | Purpose |
-|----------|---------|
-| [STYLE_ARCHITECTURE.md](STYLE_ARCHITECTURE.md) | Style hierarchy, token flow, folder structure, forbidden patterns |
-| [THEME_ENGINE.md](THEME_ENGINE.md) | Multi-dimensional theme engine specification |
-| [REDESIGN_PLAN.md](REDESIGN_PLAN.md) | Phased redesign roadmap with atomic tasks |
-| [UI_AUDIT.md](UI_AUDIT.md) | Architecture cleanup tracker — update after every style task |
+| Document | Purpose | When to Read |
+|----------|---------|--------------|
+| [STYLE_REFACTOR_PLAN.md](STYLE_REFACTOR_PLAN.md) | **Architecture Decision Record** — Style architecture, ADRs, contracts | Before any architectural style changes |
+| [STYLE_ARCHITECTURE.md](STYLE_ARCHITECTURE.md) | Style hierarchy, token flow, SCSS structure, forbidden patterns | Before any CSS/SCSS changes |
+| [THEME_ENGINE.md](THEME_ENGINE.md) | Multi-dimensional theme engine specification | When adding/modifying themes |
+| [REDESIGN_PLAN.md](REDESIGN_PLAN.md) | Phased redesign roadmap with atomic tasks | Before starting UI work |
+| [UI_AUDIT.md](UI_AUDIT.md) | Architecture cleanup tracker — update after every style task | After completing style tasks |
+| [COMPONENT_GUIDELINES.md](COMPONENT_GUIDELINES.md) | Component styling patterns and best practices | When creating new components |
 
 ---
 
@@ -36,14 +38,46 @@ Technical reference for the Angular 17+ 3D E-commerce Platform.
 |--------|-------------|
 | [Quick Start Guide](GETTING_STARTED.md) | System requirements, environment configuration, local deployment |
 | [Core Architecture](ARCHITECTURE.md) | SSR engine, hydration strategy, backend service layer |
-| [Customization & Branding](CUSTOMIZATION.md) | Theme tokens, 3D viewer configuration, localization |
+| [Customization & Branding](CUSTOMIZATION.md) | Theme tokens (quick ref), 3D viewer config, i18n, social auth |
 | [API Reference](BACKEND_API.md) | NestJS REST API, authentication guards, DTO structures |
 | [Admin Dashboard Guide](ADMIN_GUIDE.md) | Managing products, categories, SEO via Admin UI |
 | [Troubleshooting](TROUBLESHOOTING.md) | SSR hydration, 3D rendering, database connectivity issues |
 
 ---
 
+## Document Navigation Map
+
+```
+                        Need to understand the project?
+                               │
+        ┌──────────────────────┼──────────────────────┐
+        ▼                      ▼                      ▼
+   AI_CONSTITUTION.md    PROJECT_STATUS.md      ARCHITECTURE.md
+   (AI rules)            (Current state)        (App architecture)
+
+                         Need to change styles?
+                                │
+         ┌──────────────────────────────────────────────┐
+         ▼                                              ▼
+    STYLE_REFACTOR_PLAN.md                     Need implementation details?
+    (Architecture decisions, contracts)                  │
+         ┌──────────────────────┼──────────────────────┐
+         ▼                      ▼                      ▼
+    STYLE_ARCHITECTURE.md  THEME_ENGINE.md      COMPONENT_GUIDELINES.md
+    (How styles work)     (Theme system)        (Component patterns)
+
+                        Need to customize?
+                               │
+        ┌──────────────────────┼──────────────────────┐
+        ▼                      ▼                      ▼
+   CUSTOMIZATION.md      GETTING_STARTED.md   TROUBLESHOOTING.md
+   (Dev customization)   (Setup guide)         (Problem solving)
+```
+
+---
+
 ## Technical Stack
+
 - **Frontend**: Angular 17 (Standalone Components, SSR, Signals-ready architecture)
 - **3D Engine**: Three.js with GLTFLoader and Meshopt decoder support
 - **Backend**: NestJS 10 (TypeORM, JWT, Passport)

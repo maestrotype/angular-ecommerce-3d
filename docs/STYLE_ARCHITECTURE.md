@@ -2,8 +2,8 @@
 
 This document defines the complete style architecture for the application. It is the single source of truth for how styles are organized, how themes work, how tokens flow, and how Angular Material is integrated.
 
-**Role**: Principal UI Architect  
-**Last Updated**: 2026-07-05
+**Role**: Principal UI Architect
+**Last Updated**: 2026-07-06
 
 ---
 
@@ -70,6 +70,7 @@ src/
 │   │   ├── _buttons.scss          # Button base styles
 │   │   ├── _cards.scss            # Card base styles
 │   │   ├── _forms.scss            # Form element styles
+│   │   ├── _modals.scss           # Modal/dialog base styles
 │   │   ├── _navigation.scss       # Navigation base styles
 │   │   ├── _theme-switcher.scss   # Theme switcher styles
 │   │   └── _empty-states.scss     # Empty state patterns
@@ -94,6 +95,7 @@ src/
 ```
 
 ### Rules
+
 - Partial files are prefixed with `_` and are never imported directly by components
 - `_index.scss` files serve as the single import point for each module
 - Component styles (under `src/app/`) are local and never imported globally
@@ -130,6 +132,7 @@ The import order in `src/styles/main.scss` is strict and must be preserved:
 ```
 
 **Why this order matters**:
+
 - Core establishes the baseline
 - Tokens define the vocabulary
 - Themes assign values to tokens
@@ -226,6 +229,7 @@ Each theme partial defines CSS variables for ALL dimensions, even if it inherits
 Angular Material components are overridden through a centralized file: `src/styles/material/_overrides.scss`
 
 **Rules**:
+
 1. Never override Material styles inside a component's SCSS file
 2. All Material overrides use theme CSS variables, not hardcoded values
 3. Overrides are scoped to the Material component's generated class names
@@ -279,6 +283,7 @@ Token Definition          Theme Assignment           Component Consumption
 ```
 
 **Flow**:
+
 1. Design tokens are defined as CSS custom properties on `:root`
 2. Each theme partial redefines the subset of tokens that change per-theme
 3. Components consume tokens via `var(--token-name)` — no awareness of theme needed
@@ -312,6 +317,7 @@ Token Definition          Theme Assignment           Component Consumption
 ## 9. Forbidden Patterns
 
 ### 9.1 Hardcoded Values
+
 ```scss
 // FORBIDDEN
 .color { color: #333; }
@@ -321,6 +327,7 @@ Token Definition          Theme Assignment           Component Consumption
 ```
 
 ### 9.2 Duplicate Definitions
+
 ```scss
 // FORBIDDEN — Defining tokens in multiple files
 // File A: src/styles/tokens/_theme-variables.scss
@@ -331,12 +338,14 @@ Token Definition          Theme Assignment           Component Consumption
 ```
 
 ### 9.3 Component Coupling
+
 ```scss
 // FORBIDDEN — One component importing another's styles
 @use '../other-component/other-component.scss';
 ```
 
 ### 9.4 Global Leakage
+
 ```scss
 // FORBIDDEN — Unintentional global styles in component file
 body { margin: 0; }  // This leaks globally due to Angular encapsulation
@@ -363,14 +372,67 @@ body { margin: 0; }  // This leaks globally due to Angular encapsulation
 | CSS vs SCSS variables | Mixed usage | CSS custom properties preferred |
 
 ### Migration Phases
+
 See `REDESIGN_PLAN.md` for the detailed phased migration plan.
 
 ### Rollback Strategy
+
 Each migration phase is independent and reversible. If a phase introduces regressions:
+
 1. Revert the specific files changed in that phase
 2. Document the regression in `UI_AUDIT.md`
 3. Create a sub-task to address the regression before retrying
 
 ---
 
-*This document is maintained by the Principal UI Architect. Last updated: 2026-07-05*
+## 11. Contract Enforcement
+
+This section defines how the architectural contract (established in `AI_CONSTITUTION.md §4`) is enforced during development, code review, and CI.
+
+### 11.1 Pre-Merge Checklist
+
+Before any PR touching styles is merged, the reviewer verifies:
+
+- [ ] No hardcoded colors, spacing, radius, or shadows in component styles
+- [ ] No new global CSS variables declared outside `src/styles/themes/` or `src/styles/tokens/`
+- [ ] No `!important` usage (unless explicitly documented and approved)
+- [ ] No `::ng-deep` in component styles (Material overrides use centralized file only)
+- [ ] No inline `style=` bindings with design values in templates
+- [ ] Component styles reference semantic tokens exclusively via `var(--semantic-*)` or `var(--<category>-<name>)`
+- [ ] `npm run build` succeeds with zero errors
+
+### 11.2 Automated Checks (Recommended)
+
+When CI is available, enforce these patterns via lint rules:
+
+```
+# Example CSS lint rules (stylelint)
+no-invalid-position-at-import-rule: true
+color-nomenclature: /^var\(--/          # Reject hardcoded colors
+declaration-no-unknown: true            # Catch typos in variable names
+```
+
+### 11.3 Violation Handling
+
+| Severity | Example | Action |
+|----------|---------|--------|
+| **Critical** | Hardcoded colors in shared components | Block merge, require immediate fix |
+| **High** | `!important` usage, new global variables | Block merge, require fix |
+| **Medium** | Missing token reference (uses SCSS $var instead of CSS var) | Flag for fix within same sprint |
+| **Low** | Documentation not updated after style changes | Note in PR comments, track as follow-up |
+
+### 11.4 Audit Trail
+
+Every contract violation that is caught and fixed must be logged in `UI_AUDIT.md` under a "Contract Violations" appendix with:
+
+- Date detected
+- File(s) involved
+- Violation type
+- Resolution applied
+- Who/what detected it (human review, AI agent, CI)
+
+This audit trail enables pattern analysis to prevent recurring violations.
+
+---
+
+*This document is maintained by the Principal UI Architect. Last updated: 2026-07-06*

@@ -108,9 +108,28 @@ Theme switching is performed by changing the `data-theme` attribute on `<html>`.
 
 ---
 
-## 4. File Access Rules
+## 4. Developer & AI Contract
 
-### 4.1 Protected Files (Read-Only Without Architect Approval)
+**Every developer and AI agent must follow these rules when modifying styles:**
+
+1. **Consume semantic tokens only.** Components reference `--semantic-*` exclusively.
+2. **Never declare global variables in component styles.** Component SCSS is self-contained.
+3. **Never redefine theme variables outside theme files.** Theme definitions live in `src/styles/themes/`.
+4. **Never hardcode design values.** Colors, spacing, radius, shadows, and typography flow through tokens.
+5. **Never use `!important` or `::ng-deep`.** These bypass architectural boundaries.
+6. **Material overrides live in one file.** Scattered overrides are forbidden per `STYLE_REFACTOR_PLAN.md §ADR-005`.
+7. **New themes follow the nine-dimension model.** Color-only themes are insufficient per `STYLE_REFACTOR_PLAN.md §ADR-004`.
+8. **`styles.scss` contains imports only.** Appending CSS to the entry file is forbidden per `STYLE_REFACTOR_PLAN.md §ADR-003`.
+9. **Admin reuses shared tokens.** Admin-specific namespaces are reserved for layout values only per `STYLE_REFACTOR_PLAN.md §ADR-009`.
+10. **When in doubt, read STYLE_REFACTOR_PLAN.md first.** It is the single source of truth for style architecture.
+
+**Contract Violations:** Any violation of the above rules is treated as an architectural regression and must be reverted before merge.
+
+---
+
+## 5. File Access Rules
+
+### 5.1 Protected Files (Read-Only Without Architect Approval)
 
 | File | Reason |
 |------|--------|
@@ -120,7 +139,7 @@ Theme switching is performed by changing the `data-theme` attribute on `<html>`.
 | `src/app/core/themes/theme-config.ts` | Theme registry — improper changes break theme switching |
 | `src/styles/main.scss` | Style entry point — import order matters |
 
-### 4.2 Forbidden Files (Never Modify)
+### 5.2 Forbidden Files (Never Modify)
 
 | Pattern | Reason |
 |---------|--------|
@@ -128,7 +147,7 @@ Theme switching is performed by changing the `data-theme` attribute on `<html>`.
 | `dist/**` | Build output — regenerated on build |
 | `backend/**` | Backend code (unless working on backend tasks) |
 
-### 4.3 SCSS Import Rules
+### 5.3 SCSS Import Rules
 
 - Component styles import from relative paths only
 - Global styles (`src/styles/`) may use `@use` for token modules
@@ -136,28 +155,29 @@ Theme switching is performed by changing the `data-theme` attribute on `<html>`.
 
 ---
 
-## 5. Workflow Rules
+## 6. Workflow Rules
 
-### 5.1 Before Implementing Any UI Change
+### 6.1 Before Implementing Any UI Change
 
-1. Read `STYLE_ARCHITECTURE.md` for current architecture
-2. Read `UI_AUDIT.md` for known issues in the target area
-3. Check `REDESIGN_PLAN.md` for active phase and current task
+1. Read `STYLE_REFACTOR_PLAN.md` for architectural decisions and target end-state
+2. Read `STYLE_ARCHITECTURE.md` for current architecture
+3. Read `UI_AUDIT.md` for known issues in the target area
+4. Check `REDESIGN_PLAN.md` for active phase and current task
 
-### 5.2 After Completing Any UI Task
+### 6.2 After Completing Any UI Task
 
 1. Run `npm run build` — must succeed with zero errors
 2. Update the active task file in `docs/tasks/`
 3. Update `UI_AUDIT.md` if any audit items were resolved
 4. Update `PROJECT_STATUS.md` section 3 (Completed Tasks) and section 4 (Known Issues)
 
-### 5.3 When Discovering a New Architecture Issue
+### 6.3 When Discovering a New Architecture Issue
 
 1. Document it in `UI_AUDIT.md` under the appropriate category
 2. Mark status as `OPEN`
 3. Do NOT attempt to fix issues outside your current task scope
 
-### 5.4 Documentation Update Protocol
+### 6.4 Documentation Update Protocol
 
 | When | What to Update |
 |------|----------------|
@@ -168,7 +188,7 @@ Theme switching is performed by changing the `data-theme` attribute on `<html>`.
 
 ---
 
-## 6. Build Verification
+## 7. Build Verification
 
 Every UI task MUST pass the following verification before marking complete:
 
@@ -180,7 +200,7 @@ Warnings are acceptable only if documented in `PROJECT_STATUS.md §4`.
 
 ---
 
-## 7. Git Rules
+## 8. Git Rules
 
 - Commit messages must reference the task ID: `task-0XX: description`
 - Do not commit generated files (`dist/`, `.build/`)
@@ -188,7 +208,7 @@ Warnings are acceptable only if documented in `PROJECT_STATUS.md §4`.
 
 ---
 
-## 8. Escalation
+## 9. Escalation
 
 When an AI agent encounters a situation not covered by this constitution:
 
@@ -198,4 +218,4 @@ When an AI agent encounters a situation not covered by this constitution:
 
 ---
 
-*This document is maintained by the Principal UI Architect. Last updated: 2026-07-05*
+*This document is maintained by the Principal UI Architect. Last updated: 2026-07-06*
