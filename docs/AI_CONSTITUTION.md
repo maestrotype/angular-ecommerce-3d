@@ -218,4 +218,33 @@ When an AI agent encounters a situation not covered by this constitution:
 
 ---
 
+## Rule: No Replanning
+
+When the project already contains an approved architecture, roadmap, ADR, or implementation plan, you MUST NOT create a new plan.
+
+Before starting any task:
+
+1. Read the existing documentation.
+2. Identify the current implementation step.
+3. Continue from that exact point.
+
+You MUST NOT:
+- rewrite the roadmap;
+- create alternative implementation plans;
+- propose a different architecture;
+- regenerate documents that already exist;
+- repeatedly summarize the same documentation;
+- stop work to suggest another planning phase.
+
+Planning is allowed ONLY if:
+- the requested document does not exist; or
+- the user explicitly asks to redesign the architecture.
+
+Otherwise your response must begin implementation immediately.
+
+If the task is too large, split it into small implementation steps and execute the first one instead of creating a new plan.
+
+Default behavior:
+**Read → Understand → Implement. Never Read → Replan.**
+
 *This document is maintained by the Principal UI Architect. Last updated: 2026-07-06*

@@ -70,10 +70,11 @@
    --color-surface-tertiary: #e9ecef;
    --color-surface-hover: #f1f3f4;
 
-   /* ==========================================================================
-     TEXT COLORS
-     ========================================================================== */
-   --color-text-secondary: #666666;
+    /* ==========================================================================
+      TEXT COLORS
+      ========================================================================== */
+    --color-text-primary: #333333;
+    --color-text-secondary: #666666;
    --color-text-tertiary: #999999;
    --color-text-disabled: #bdbdbd;
    --color-text-inverse: #ffffff;
@@ -134,24 +135,40 @@
    --line-height-relaxed: 1.6;
    --line-height-loose: 1.8;
 
-   /* ==========================================================================
-     SPACING
-     ========================================================================== */
+   /* Typography scale tokens (ADR-001, Task-003) */
+   --text-xs: 0.75rem;
+   --text-sm: 0.875rem;
+   --text-base: 1rem;
+   --text-lg: 1.125rem;
+   --text-xl: 1.25rem;
+   --text-2xl: 1.5rem;
+   --font-sans: system-ui, -apple-system, sans-serif;
+   --font-mono: ui-monospace, monospace;
 
-   --spacing-xs: 0.25rem;
-   /* 4px */
-   --spacing-sm: 0.5rem;
-   /* 8px */
-   --spacing-md: 1rem;
-   /* 16px */
-   --spacing-lg: 1.5rem;
-   /* 24px */
-   --spacing-xl: 2rem;
-   /* 32px */
-   --spacing-xxl: 3rem;
-   /* 48px */
-   --spacing-xxxl: 4rem;
-   /* 64px */
+    /* ==========================================================================
+       SPACING
+       ========================================================================== */
+
+    --spacing-xs: 0.25rem;
+    /* 4px */
+    --spacing-sm: 0.5rem;
+    /* 8px */
+    --spacing-md: 1rem;
+    /* 16px */
+    --spacing-lg: 1.5rem;
+    /* 24px */
+    --spacing-xl: 2rem;
+    /* 32px */
+    --spacing-xxl: 3rem;
+    /* 48px */
+    --spacing-xxxl: 4rem;
+    /* 64px */
+
+    /* Semantic spacing tokens (ADR-001) */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
 
    /* ==========================================================================
      BORDER RADIUS
@@ -169,10 +186,10 @@
    /* 16px */
    --radius-xxl: 1.5rem;
    /* 24px */
-   --radius-full: 9999px;
+    --radius-full: 9999px;
 
-   /* ==========================================================================
-     SHADOWS
+    /* ==========================================================================
+      SHADOWS
      ========================================================================== */
 
    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);

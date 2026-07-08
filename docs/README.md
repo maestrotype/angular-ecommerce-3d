@@ -17,13 +17,24 @@ Technical reference for the Angular 17+ 3D E-commerce Platform.
 
 ---
 
+## Architecture Decision Records (ADRs)
+
+> **ADR**s document significant architectural decisions, their context, and consequences.
+> See [adr/](adr/) for the full list.
+
+| ADR | Title | Status |
+|-----|-------|--------|
+| [ADR-001](adr/001-style-architecture-refactoring.md) | Style Architecture Refactoring | proposed |
+
+---
+
 ## UI Architecture Documentation
 
 > **Read before making any style, theme, or component changes.**
 
 | Document | Purpose | When to Read |
 |----------|---------|--------------|
-| [STYLE_REFACTOR_PLAN.md](STYLE_REFACTOR_PLAN.md) | **Architecture Decision Record** — Style architecture, ADRs, contracts | Before any architectural style changes |
+| [STYLE_REFACTOR_PLAN.md](STYLE_REFACTOR_PLAN.md) | Migration plan — Phase-by-phase refactoring roadmap | Before any architectural style changes |
 | [STYLE_ARCHITECTURE.md](STYLE_ARCHITECTURE.md) | Style hierarchy, token flow, SCSS structure, forbidden patterns | Before any CSS/SCSS changes |
 | [THEME_ENGINE.md](THEME_ENGINE.md) | Multi-dimensional theme engine specification | When adding/modifying themes |
 | [REDESIGN_PLAN.md](REDESIGN_PLAN.md) | Phased redesign roadmap with atomic tasks | Before starting UI work |

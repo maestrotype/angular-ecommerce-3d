@@ -1,6 +1,6 @@
 # Project Status — angular-ecommerce-3d
 
-**Last Updated**: 2026-07-06
+**Last Updated**: 2026-07-07
 **Maintainer**: Principal UI Architect
 
 > This document tracks high-level project progress. For detailed phase planning and task breakdown, see `REDESIGN_PLAN.md`. For architectural decisions and rules, see `STYLE_ARCHITECTURE.md`.
@@ -32,7 +32,7 @@
 |-------|------|--------|----------|
 | 1 | Style Architecture Audit | 🔄 In Progress | Documentation complete, code audit pending |
 | 2 | Theme Engine Redesign | ⏳ Pending | — |
-| 3 | Design Token Unification | ⏳ Pending | — |
+| 3 | Design Token Unification | 🔄 In Progress | Task-001 completed: core token wiring |
 | 4 | Angular Material Integration | ⏳ Pending | — |
 | 5 | Style Cleanup | ⏳ Pending | — |
 | 6 | Component Migration | ⏳ Pending | — |
@@ -46,6 +46,9 @@
 ### Recent Changes
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-07-08 | Task-002 (correction): Removed duplicate px-based radius tokens (`--radius-sm: 4px`, `--radius-md: 8px`, `--radius-lg: 12px`) from `core/_variables.scss`; kept only the original rem-based radius tokens. Transition and z-index tokens already existed — no addition needed. | Principal UI Architect |
+| 2026-07-08 | Task-003: Added typography scale tokens (`--text-xs` to `--text-2xl`, `--font-sans`, `--font-mono`) to `core/_variables.scss` :root block (per ADR-001) | Principal UI Architect |
+| 2026-07-07 | Task-001: Added missing `--color-text-primary` CSS token to `core/_variables.scss`; fixed `tokens/_index.scss` to forward `theme-variables` before importing core variables (per ADR-001 token layering rule) | Principal UI Architect |
 | 2026-07-06 | Style Architecture documentation improved — corrected SCSS inventory, updated token flow, added component token hierarchy | Principal UI Architect |
 | 2026-07-05 | Initial UI architecture documentation created (STYLE_ARCHITECTURE.md, THEME_ENGINE.md, REDESIGN_PLAN.md, UI_AUDIT.md) | Principal UI Architect |
 
@@ -100,4 +103,4 @@
 
 ---
 
-*This document is maintained by the Principal UI Architect. Last updated: 2026-07-06*
+*This document is maintained by the Principal UI Architect. Last updated: 2026-07-07*
