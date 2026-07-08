@@ -1,0 +1,42 @@
+:root {
+  // ===== SURFACE TOKENS =====
+  --surface-primary: var(--color-white);
+  --surface-secondary: var(--color-slate-50);
+  --surface-tertiary: var(--color-slate-100);
+  --surface-overlay: var(--color-white);
+  --surface-inverse: var(--color-slate-900);
+
+  // ===== TEXT TOKENS =====
+  --text-primary: var(--color-slate-900);
+  --text-secondary: var(--color-slate-500);
+  --text-inverse: var(--color-white);
+  --text-on-primary: var(--color-white);
+  --text-link: var(--color-primary-base);
+
+  // ===== BORDER TOKENS =====
+  --border-default: var(--color-slate-200);
+  --border-strong: var(--color-slate-300);
+  --border-primary: var(--color-primary-base);
+
+  // ===== INTERACTIVE TOKENS =====
+  --interactive-primary: var(--color-primary-base);
+  --interactive-primary-hover: var(--color-slate-700);
+  --interactive-secondary: var(--color-slate-200);
+  --interactive-secondary-hover: var(--color-slate-300);
+  --interactive-danger: var(--color-error-base);
+  --interactive-disabled: var(--color-slate-300);
+
+  // ===== STATE TOKENS =====
+  --state-success-bg: var(--color-success-base);
+  --state-success-text: var(--color-white);
+  --state-warning-bg: var(--color-warning-base);
+  --state-warning-text: var(--color-slate-900);
+  --state-error-bg: var(--color-error-base);
+  --state-error-text: var(--color-white);
+
+  // ===== COMPOSITE TOKENS =====
+  --radius-card: var(--radius-md);
+  --shadow-card: var(--shadow-sm);
+  --glass-blur: 12px;
+  --glass-opacity: 0.8;
+}

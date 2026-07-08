@@ -1,29 +1,120 @@
 /* ==========================================================================
-   DARK THEME STYLES
-   Special styles for dark theme
+   DARK THEME
+   Maps semantic tokens to dark-specific primitive design tokens.
+   
+   Layer model (ADR-001):
+     Layer 1: tokens/_index.scss        — Primitive tokens (colors, spacing, etc.)
+     Layer 2: tokens/_semantic-tokens.scss — Semantic defaults (overridable by themes)
+     Layer 3: themes/_dark.scss         — Dark theme overrides (this file)
+   
+   Pattern: same structure as _default.scss, only dark-specific values.
    ========================================================================== */
 
 [data-theme="dark"] {
-  /* Dark theme overrides */
-  background-color: #0f172a;
-  color: #f8fafc;
-  
-  /* Override root variables for dark theme */
-  --color-surface-primary: #1e293b;
-  --color-surface-secondary: #334155;
-  --color-surface-tertiary: #475569;
-  --color-cards-background: #1e293b;
-  --color-cards-border: rgba(71, 85, 105, 0.3);
-  --color-cards-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --color-text-primary: #f8fafc;
-  --color-text-secondary: #bebfc7;
-  --color-text-tertiary: #94a3b8;
-  --favorites-section-wrapper: #1e293b;
-  --header-text: #f8fafc;
-  --theme-switcher-bg: rgba(30, 41, 59, 0.8);
-  --product-image-bg: #0f172ae1;
-  
-  /* Force dark theme for all cards and surfaces with higher specificity */
+  /* ===== SURFACE OVERRIDES ===== */
+  --surface-primary: var(--color-slate-800);
+  --surface-secondary: var(--color-slate-700);
+  --surface-tertiary: var(--color-slate-600);
+  --surface-overlay: var(--color-slate-800);
+  --surface-inverse: var(--color-white);
+
+  /* ===== TEXT OVERRIDES ===== */
+  --text-primary: var(--color-slate-50);
+  --text-secondary: var(--color-slate-400);
+  --text-inverse: var(--color-slate-900);
+  --text-on-primary: var(--color-white);
+  --text-link: var(--color-blue-400);
+
+  /* ===== BORDER OVERRIDES ===== */
+  --border-default: rgba(var(--color-slate-600-rgb), 0.3);
+  --border-strong: var(--color-slate-600);
+  --border-primary: var(--color-brand-base);
+
+  /* ===== INTERACTIVE OVERRIDES ===== */
+  --interactive-primary: var(--color-brand-base);
+  --interactive-primary-hover: var(--color-brand-light);
+  --interactive-secondary: var(--color-slate-700);
+  --interactive-secondary-hover: var(--color-slate-600);
+  --interactive-danger: var(--color-error-base);
+  --interactive-disabled: var(--color-slate-600);
+
+  /* ===== STATE OVERRIDES ===== */
+  --state-success-bg: var(--color-success-base);
+  --state-success-text: var(--color-white);
+  --state-warning-bg: var(--color-warning-base);
+  --state-warning-text: var(--color-slate-900);
+  --state-error-bg: var(--color-error-base);
+  --state-error-text: var(--color-white);
+
+  /* ===== COMPOSITE OVERRIDES ===== */
+  --radius-card: var(--radius-md);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --glass-blur: 12px;
+  --glass-opacity: 0.8;
+
+  /* ===== LEGACY ALIASES (backward compatibility) ===== */
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-secondary);
+  --color-border-primary: var(--border-default);
+  --color-surface-primary: var(--surface-primary);
+  --color-surface-secondary: var(--surface-secondary);
+  --color-cards-background: var(--surface-primary);
+  --color-cards-border: var(--border-default);
+  --color-cards-shadow: var(--shadow-card);
+
+  /* ===== PAGE-SPECIFIC: Favorites ===== */
+  --favorites-bg: linear-gradient(135deg, var(--color-slate-900) 0%, var(--color-slate-800) 100%);
+  --favorites-header-bg: linear-gradient(135deg, var(--color-slate-700) 0%, var(--color-slate-600) 100%);
+  --favorites-header-text: var(--color-slate-50);
+  --favorites-header-overlay: rgba(255, 255, 255, 0.1);
+  --favorites-header-blur: 22px;
+  --favorites-back-btn-bg: rgba(255, 255, 255, 0.15);
+  --favorites-back-btn-text: var(--color-slate-50);
+  --favorites-back-btn-border: rgba(255, 255, 255, 0.3);
+  --favorites-back-btn-blur: blur(10px);
+  --favorites-back-btn-hover-bg: rgba(255, 255, 255, 0.25);
+  --favorites-back-btn-hover-border: rgba(255, 255, 255, 0.5);
+  --favorites-title-size: var(--text-3xl);
+  --favorites-title-weight: var(--font-weight-bold);
+  --favorites-heart-color: var(--color-accent-pink);
+  --favorites-subtitle-size: var(--text-lg);
+  --favorites-subtitle-opacity: 0.9;
+  --favorites-card-bg: var(--color-slate-700);
+  --favorites-card-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --favorites-card-blur: blur(12px);
+  --favorites-card-border: var(--border-default);
+  --favorites-card-hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  --favorites-card-hover-bg: var(--color-slate-600);
+  --favorites-header-shadow: var(--shadow-lg);
+  --favorites-section-wrapper: var(--color-slate-800);
+
+  /* ===== PAGE-SPECIFIC: Theme Switcher ===== */
+  --theme-switcher-bg: rgba(var(--color-slate-800-rgb), 0.8);
+
+  /* ===== PAGE-SPECIFIC: Product Image ===== */
+  --product-image-bg: var(--color-slate-900);
+
+  /* ===== PAGE-SPECIFIC: Auth ===== */
+  --auth-btn-primary: var(--color-brand-base);
+  --auth-btn-primary-hover: var(--color-brand-light);
+
+  /* ===== COMPONENT: Auth Modal Tabs ===== */
+  .auth-modal {
+    .auth-header {
+      .auth-tabs {
+        .auth-tab {
+          &.active {
+            border-radius: var(--radius-md) 0 0 0;
+          }
+        }
+      }
+    }
+  }
+
+  /* ===== COMPONENT-SPECIFIC OVERRIDES (high specificity) ===== */
+
+  /* Cards and surfaces */
   body .product-card,
   body .card,
   body .filters-section,
@@ -31,254 +122,248 @@
   body .checkout-form,
   body .auth-modal,
   body .modal-content {
-    background: #1e293b;
-    color: #f8fafc;
+    background: var(--surface-primary);
+    color: var(--text-primary);
   }
-  
-  /* Dark theme for dropdowns and selects with higher specificity */
+
+  /* Dropdowns and selects */
   body .filter-select,
   body .dropdown-trigger,
   body .mat-select-panel,
   body .mat-option,
   body .custom-dropdown .dropdown-trigger,
   body .custom-dropdown .dropdown-menu {
-    background: #1e293b;
-    color: #f8fafc;
-    border-color: rgba(71, 85, 105, 0.3);
+    background: var(--surface-primary);
+    color: var(--text-primary);
+    border-color: var(--border-default);
   }
-  
-  /* Dark theme for recommendation sections */
+
+  /* Recommendation sections */
   body .similar-products,
   body .bought-together {
-    background: #0f172a;
+    background: var(--color-slate-900);
   }
-  
-  /* Dark theme for product info with higher specificity */
+
+  /* Product info text */
   body .product-name,
   body .product-category,
   body .product-price,
   body .product-info h3,
   body .product-info p,
   body .product-info span {
-    color: #f8fafc;
+    color: var(--text-primary);
   }
 
-  /* Dark theme for buttons with higher specificity */
+  /* Buttons */
   body .action-btn,
   body .cart-icon-btn,
   body .favorite-btn,
   body .overlay-actions button {
-    background: #334155;
-    color: #f8fafc;
-    border-color: rgba(71, 85, 105, 0.3);
+    background: var(--surface-secondary);
+    color: var(--text-primary);
+    border-color: var(--border-default);
   }
-  
-  /* Force product-details-info to be dark */
+
+  /* Product detail info */
   body .product-detail-info {
     background: transparent;
   }
 
   body .product-info {
     background: transparent;
-    color: #f8fafc;
+    color: var(--text-primary);
     border: none;
     border-radius: 0;
     box-shadow: none;
   }
 
-  /* Force all product cards to be dark */
+  /* Product cards */
   body .product-card {
-    background: #374151;
-    color: #f8fafc;
-    border: 1px solid #4b5563;
+    background: var(--color-slate-700);
+    color: var(--text-primary);
+    border: 1px solid var(--color-slate-600);
   }
 
   body .product-card:hover {
-    background: #4b5563;
+    background: var(--color-slate-600);
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
   }
 
-  /* Favorites page dark theme */
+  /* Favorites page */
   body .favorites-page {
-    background: #0f172a;
-    color: #f8fafc;
+    background: var(--color-slate-900);
+    color: var(--text-primary);
   }
 
   body .favorites-page .favorites-content {
-    background: #0f172a;
-    color: #f8fafc;
+    background: var(--color-slate-900);
+    color: var(--text-primary);
   }
 
   body .favorites-page .section-wrapper .favorites-header {
-    background: linear-gradient(135deg, #334155 0%, #475569 100%);
-    color: #f8fafc;
+    background: var(--favorites-header-bg);
+    color: var(--favorites-header-text);
   }
 
-  body .favorites-page .section-wrapper .favorites-header .page-title {
-    color: #f8fafc;
-  }
-
-  body .favorites-page .section-wrapper .favorites-header .page-subtitle {
-    color: #f8fafc;
-  }
-
+  body .favorites-page .section-wrapper .favorites-header .page-title,
+  body .favorites-page .section-wrapper .favorites-header .page-subtitle,
   body .favorites-page .section-wrapper .favorites-header .header-content .page-subtitle {
-    color: #f8fafc;
+    color: var(--text-primary);
   }
 
   body .favorites-page .favorites-header .back-btn {
-    background: rgba(255, 255, 255, 0.15);
-    color: #f8fafc;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: var(--favorites-back-btn-bg);
+    color: var(--favorites-back-btn-text);
+    border: 1px solid var(--favorites-back-btn-border);
     padding: 16px 32px;
-    border-radius: 12px;
-    font-weight: 600;
+    border-radius: var(--radius-md);
+    font-weight: var(--font-weight-semibold);
   }
 
   body .favorites-page .favorites-header .back-btn:hover {
-    background: rgba(255, 255, 255, 0.25);
-    border-color: rgba(255, 255, 255, 0.5);
+    background: var(--favorites-back-btn-hover-bg);
+    border-color: var(--favorites-back-btn-hover-border);
   }
 
   body .favorites-page .actions-bar {
-    background: #334155;
-    color: #f8fafc;
-    border: 1px solid #475569;
+    background: var(--surface-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--surface-tertiary);
     padding: 24px 32px;
-    border-radius: 16px;
+    border-radius: var(--radius-lg);
   }
 
   body .favorites-page .favorites-count {
-    color: #f8fafc;
+    color: var(--text-primary);
     font-size: 18px;
-    font-weight: 600;
+    font-weight: var(--font-weight-semibold);
   }
 
   body .favorites-page .clear-all-btn {
-    background: #6c757d;
-    color: #ffffff;
+    background: var(--color-slate-500);
+    color: var(--color-white);
     padding: 12px 24px;
-    border-radius: 8px;
-    font-weight: 600;
+    border-radius: var(--radius-sm);
+    font-weight: var(--font-weight-semibold);
   }
 
   body .favorites-page .clear-all-btn:hover {
-    background: #5a6268;
+    background: var(--color-slate-400);
   }
 
   body .favorites-page .product-card {
-    background: #374151;
-    color: #f8fafc;
-    border: 1px solid #4b5563;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    background: var(--color-slate-700);
+    color: var(--text-primary);
+    border: 1px solid var(--color-slate-600);
+    box-shadow: var(--favorites-card-shadow);
   }
 
   body .favorites-page .product-card:hover {
-    background: #4b5563;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    background: var(--color-slate-600);
+    box-shadow: var(--favorites-card-hover-shadow);
   }
 
   body .favorites-page .product-name {
-    color: #f8fafc;
+    color: var(--text-primary);
   }
 
   body .favorites-page .product-category {
-    background: #60a5fa;
-    color: white;
+    background: var(--color-blue-400);
+    color: var(--color-white);
   }
 
   body .favorites-page .current-price {
-    color: #60a5fa;
+    color: var(--color-blue-400);
   }
 
   body .favorites-page .action-btn {
-    background: rgba(255, 255, 255, 0.15);
-    color: #f8fafc;
+    background: var(--favorites-back-btn-bg);
+    color: var(--text-primary);
   }
 
   body .favorites-page .action-btn:hover {
-    background: rgba(255, 255, 255, 0.25);
-    color: #60a5fa;
+    background: var(--favorites-back-btn-hover-bg);
+    color: var(--color-blue-400);
   }
 
-  /* Breadcrumb dark theme */
+  /* Breadcrumb */
   body .breadcrumb {
-    color: #cbd5e1;
+    color: var(--color-slate-300);
   }
 
   body .breadcrumb .breadcrumb-link {
-    color: #cbd5e1;
+    color: var(--color-slate-300);
 
     &:hover {
-      color: #60a5fa;
+      color: var(--color-blue-400);
     }
   }
 
-  /* Back button dark theme */
+  /* Back button */
   body .back-btn {
     background: rgba(255, 255, 255, 0.1);
-    color: #f8fafc;
+    color: var(--text-primary);
     border: 1px solid rgba(255, 255, 255, 0.3);
     padding: 12px 24px;
-    border-radius: 8px;
-    font-weight: 600;
-    transition: all 0.3s ease;
+    border-radius: var(--radius-sm);
+    font-weight: var(--font-weight-semibold);
+    transition: all var(--transition-normal);
 
     &:hover {
       background: rgba(255, 255, 255, 0.2);
       border-color: rgba(255, 255, 255, 0.5);
-      color: #60a5fa;
+      color: var(--color-blue-400);
     }
   }
 
-  /* Button dark theme */
+  /* Buttons */
   body .btn-primary {
-    background: #60a5fa;
-    color: #ffffff;
-    border: 1px solid #60a5fa;
+    background: var(--color-blue-400);
+    color: var(--color-white);
+    border: 1px solid var(--color-blue-400);
 
     &:hover {
-      background: #3b82f6;
-      border-color: #3b82f6;
+      background: var(--color-blue-500);
+      border-color: var(--color-blue-500);
     }
   }
 
   body .btn-secondary {
-    background: #334155;
-    color: #f8fafc;
-    border: 1px solid #475569;
+    background: var(--surface-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--surface-tertiary);
 
     &:hover {
-      background: #475569;
-      border-color: #64748b;
+      background: var(--surface-tertiary);
+      border-color: var(--color-slate-500);
     }
   }
 
-  /* Form controls dark theme */
+  /* Form controls */
   body .form-control {
-    background: #334155;
-    color: #f8fafc;
-    border: 1px solid #475569;
+    background: var(--surface-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--surface-tertiary);
 
     &:focus {
-      background: #334155;
-      color: #f8fafc;
-      border-color: #60a5fa;
+      background: var(--surface-secondary);
+      color: var(--text-primary);
+      border-color: var(--color-blue-400);
       box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2);
     }
   }
 
   body .input-group .form-control {
-    background: #334155;
-    color: #f8fafc;
-    border: 1px solid #475569;
+    background: var(--surface-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--surface-tertiary);
   }
 
-  /* Quantity input dark theme */
+  /* Quantity input */
   body .quantity-value {
-    background: #334155;
-    color: #f8fafc;
-    border: 1px solid #475569;
+    background: var(--surface-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--surface-tertiary);
   }
 }

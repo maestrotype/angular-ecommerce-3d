@@ -1,66 +1,473 @@
 /* ==========================================================================
-   GLASS THEME STYLES - DEEP DARK HUD OPTIMIZED
+   GLASS THEME
+   Maps semantic tokens to glass-specific primitive design tokens.
+   
+   Layer model (ADR-001):
+     Layer 1: tokens/_index.scss        — Primitive tokens (colors, spacing, etc.)
+     Layer 2: tokens/_semantic-tokens.scss — Semantic defaults (overridable by themes)
+     Layer 3: themes/_glass.scss        — Glass theme overrides (this file)
+   
+   Pattern: same structure as _default.scss and _dark.scss.
+   Glass-specific: transparency, backdrop-filter, glow effects.
    ========================================================================== */
 
-body:not(.is-admin)[data-theme="glass"], html[data-theme="glass"] body:not(.is-admin) {
-  /* Глубокий темный фон с градиентами (как в сайдбаре) */
-  background: #08090a !important;
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(79, 70, 229, 0.1) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, rgba(30, 41, 59, 0.2) 0px, transparent 50%) !important;
-  background-attachment: fixed !important;
-  color: #ffffff !important;
-  min-height: 100vh;
-  
-  /* ТОКЕНЫ ТЕМНОГО СТЕКЛА */
+[data-theme="glass"] {
+  /* ===== SURFACE OVERRIDES (Glass) ===== */
+  --surface-primary: rgba(0, 0, 0, 0.5);
+  --surface-secondary: rgba(255, 255, 255, 0.05);
+  --surface-tertiary: rgba(255, 255, 255, 0.08);
+  --surface-overlay: rgba(0, 0, 0, 0.7);
+  --surface-inverse: var(--color-white);
+
+  /* ===== TEXT OVERRIDES ===== */
+  --text-primary: var(--color-white);
+  --text-secondary: rgba(255, 255, 255, 0.9);
+  --text-inverse: var(--color-slate-900);
+  --text-on-primary: var(--color-white);
+  --text-link: var(--color-blue-400);
+
+  /* ===== BORDER OVERRIDES (Glass) ===== */
+  --border-default: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.15);
+  --border-primary: var(--color-brand-base);
+
+  /* ===== INTERACTIVE OVERRIDES ===== */
+  --interactive-primary: var(--color-brand-base);
+  --interactive-primary-hover: var(--color-brand-light);
+  --interactive-secondary: rgba(255, 255, 255, 0.1);
+  --interactive-secondary-hover: rgba(255, 255, 255, 0.15);
+  --interactive-danger: var(--color-error-base);
+  --interactive-disabled: rgba(255, 255, 255, 0.3);
+
+  /* ===== STATE OVERRIDES ===== */
+  --state-success-bg: var(--color-success-base);
+  --state-success-text: var(--color-white);
+  --state-warning-bg: var(--color-warning-base);
+  --state-warning-text: var(--color-slate-900);
+  --state-error-bg: var(--color-error-base);
+  --state-error-text: var(--color-white);
+
+  /* ===== GLASS-SPECIFIC TOKENS ===== */
   --glass-blur: blur(20px) saturate(160%);
   --glass-border: 1px solid rgba(255, 255, 255, 0.08);
-  --glass-bg: rgba(0, 0, 0, 0.5); /* ТЕМНЫЙ ФОН СТЕКЛА */
+  --glass-bg: rgba(0, 0, 0, 0.5);
   --glass-bg-hover: rgba(255, 255, 255, 0.05);
   --glass-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+  --glass-opacity: 0.5;
 
-  /* Контентная область всегда прозрачна, чтобы видеть фон темы */
-  .admin-container, mat-sidenav-content, .admin-content {
-    background: transparent !important;
-  }
+  /* ===== COMPOSITE OVERRIDES ===== */
+  --radius-card: var(--radius-xl);
+  --shadow-card: var(--glass-shadow);
 
-  /* Читаемость заголовков */
-  h1, h2, h3, .admin-header-title, .section-title {
-    color: #ffffff !important;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-  }
+  /* ===== BACKGROUND (Deep Dark HUD) ===== */
+  --bg-page: #08090a;
+  --bg-gradient-1: radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.12) 0px, transparent 50%);
+  --bg-gradient-2: radial-gradient(at 100% 0%, rgba(79, 70, 229, 0.1) 0px, transparent 50%);
+  --bg-gradient-3: radial-gradient(at 50% 100%, rgba(30, 41, 59, 0.2) 0px, transparent 50%);
 
-  /* Карточки дашборда - Глубокое темное стекло */
-  .mat-mdc-card, .glass-card, .dashboard-card {
-    background: var(--glass-bg) !important;
-    backdrop-filter: var(--glass-blur) !important;
-    -webkit-backdrop-filter: var(--glass-blur) !important;
-    border: var(--glass-border) !important;
-    box-shadow: var(--glass-shadow) !important;
-    border-radius: 20px !important;
-    color: #ffffff !important;
+  /* ===== LEGACY ALIASES (backward compatibility) ===== */
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-secondary);
+  --color-border-primary: var(--border-default);
+  --color-surface-primary: var(--surface-primary);
+  --color-surface-secondary: var(--surface-secondary);
+  --color-cards-background: var(--glass-bg);
+  --color-cards-border: var(--border-default);
+  --color-cards-shadow: var(--glass-shadow);
 
-    /* Внутренние элементы карточек */
-    .mat-mdc-card-title, .mat-mdc-card-subtitle, p, span {
-      color: rgba(255, 255, 255, 0.9) !important;
+  /* ===== PAGE-SPECIFIC: Favorites ===== */
+  --favorites-bg: linear-gradient(135deg, #08090a 0%, var(--color-slate-900) 100%);
+  --favorites-header-bg: var(--glass-bg);
+  --favorites-header-text: var(--color-white);
+  --favorites-header-overlay: rgba(255, 255, 255, 0.05);
+  --favorites-header-blur: var(--glass-blur);
+  --favorites-back-btn-bg: rgba(255, 255, 255, 0.1);
+  --favorites-back-btn-text: var(--color-white);
+  --favorites-back-btn-border: rgba(255, 255, 255, 0.15);
+  --favorites-back-btn-blur: blur(12px);
+  --favorites-back-btn-hover-bg: rgba(255, 255, 255, 0.18);
+  --favorites-back-btn-hover-border: rgba(255, 255, 255, 0.3);
+  --favorites-title-size: var(--text-3xl);
+  --favorites-title-weight: var(--font-weight-bold);
+  --favorites-heart-color: var(--color-accent-pink);
+  --favorites-subtitle-size: var(--text-lg);
+  --favorites-subtitle-opacity: 0.9;
+  --favorites-card-bg: var(--glass-bg);
+  --favorites-card-shadow: var(--glass-shadow);
+  --favorites-card-blur: var(--glass-blur);
+  --favorites-card-border: var(--border-default);
+  --favorites-card-hover-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+  --favorites-card-hover-bg: rgba(255, 255, 255, 0.08);
+  --favorites-header-shadow: var(--shadow-lg);
+  --favorites-section-wrapper: transparent;
+
+  /* ===== PAGE-SPECIFIC: Theme Switcher ===== */
+  --theme-switcher-bg: var(--glass-bg);
+
+  /* ===== PAGE-SPECIFIC: Product Image ===== */
+  --product-image-bg: transparent;
+
+  /* ===== PAGE-SPECIFIC: Auth ===== */
+  --auth-btn-primary: var(--color-brand-base);
+  --auth-btn-primary-hover: var(--color-brand-light);
+
+  /* ===== COMPONENT: Auth Modal Tabs ===== */
+  .auth-modal {
+    .auth-header {
+      .auth-tabs {
+        .auth-tab {
+          &.active {
+            border-radius: var(--radius-md) 0 0 0;
+          }
+        }
+      }
     }
-    
-    mat-icon {
-      color: #ffffff !important;
-      filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
+  }
+
+  /* ===== COMPONENT-SPECIFIC OVERRIDES (high specificity) ===== */
+
+  /* Cards and surfaces with glass effect */
+  body .product-card,
+  body .card,
+  body .filters-section,
+  body .order-summary,
+  body .checkout-form,
+  body .auth-modal,
+  body .modal-content {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--text-primary);
+    border: var(--border-default);
+    box-shadow: var(--glass-shadow);
+  }
+
+  /* Dropdowns and selects */
+  body .filter-select,
+  body .dropdown-trigger,
+  body .mat-select-panel,
+  body .mat-option,
+  body .custom-dropdown .dropdown-trigger,
+  body .custom-dropdown .dropdown-menu {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--text-primary);
+    border-color: var(--border-default);
+  }
+
+  /* Recommendation sections */
+  body .similar-products,
+  body .bought-together {
+    background: transparent;
+  }
+
+  /* Product info text */
+  body .product-name,
+  body .product-category,
+  body .product-price,
+  body .product-info h3,
+  body .product-info p,
+  body .product-info span {
+    color: var(--text-primary);
+  }
+
+  /* Buttons */
+  body .action-btn,
+  body .cart-icon-btn,
+  body .favorite-btn,
+  body .overlay-actions button {
+    background: var(--glass-bg-hover);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--text-primary);
+    border-color: var(--border-default);
+  }
+
+  /* Product detail info */
+  body .product-detail-info {
+    background: transparent;
+  }
+
+  body .product-info {
+    background: transparent;
+    color: var(--text-primary);
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  /* Product cards with glass */
+  body .product-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--text-primary);
+    border: var(--border-default);
+    border-radius: var(--radius-xl);
+  }
+
+  body .product-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+  }
+
+  /* Favorites page */
+  body .favorites-page {
+    background: transparent;
+    color: var(--text-primary);
+  }
+
+  body .favorites-page .favorites-content {
+    background: transparent;
+    color: var(--text-primary);
+  }
+
+  body .favorites-page .section-wrapper .favorites-header {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--favorites-header-text);
+  }
+
+  body .favorites-page .section-wrapper .favorites-header .page-title,
+  body .favorites-page .section-wrapper .favorites-header .page-subtitle,
+  body .favorites-page .section-wrapper .favorites-header .header-content .page-subtitle {
+    color: var(--text-primary);
+  }
+
+  body .favorites-page .favorites-header .back-btn {
+    background: var(--favorites-back-btn-bg);
+    backdrop-filter: var(--favorites-back-btn-blur);
+    -webkit-backdrop-filter: var(--favorites-back-btn-blur);
+    color: var(--favorites-back-btn-text);
+    border: 1px solid var(--favorites-back-btn-border);
+    padding: 16px 32px;
+    border-radius: var(--radius-md);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  body .favorites-page .favorites-header .back-btn:hover {
+    background: var(--favorites-back-btn-hover-bg);
+    border-color: var(--favorites-back-btn-hover-border);
+  }
+
+  body .favorites-page .actions-bar {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--text-primary);
+    border: 1px solid var(--border-default);
+    padding: 24px 32px;
+    border-radius: var(--radius-lg);
+  }
+
+  body .favorites-page .favorites-count {
+    color: var(--text-primary);
+    font-size: 18px;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  body .favorites-page .clear-all-btn {
+    background: var(--color-slate-500);
+    color: var(--color-white);
+    padding: 12px 24px;
+    border-radius: var(--radius-sm);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  body .favorites-page .clear-all-btn:hover {
+    background: var(--color-slate-400);
+  }
+
+  body .favorites-page .product-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--text-primary);
+    border: var(--border-default);
+    box-shadow: var(--glass-shadow);
+  }
+
+  body .favorites-page .product-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+  }
+
+  body .favorites-page .product-name {
+    color: var(--text-primary);
+  }
+
+  body .favorites-page .product-category {
+    background: var(--color-blue-400);
+    color: var(--color-white);
+  }
+
+  body .favorites-page .current-price {
+    color: var(--color-blue-400);
+  }
+
+  body .favorites-page .action-btn {
+    background: var(--glass-bg-hover);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--text-primary);
+  }
+
+  body .favorites-page .action-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--color-blue-400);
+  }
+
+  /* Breadcrumb */
+  body .breadcrumb {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  body .breadcrumb .breadcrumb-link {
+    color: rgba(255, 255, 255, 0.8);
+
+    &:hover {
+      color: var(--color-blue-400);
     }
   }
 
-  /* Хедер в режиме Glass */
-  .mat-toolbar.admin-header {
-    background: rgba(0, 0, 0, 0.3) !important;
-    backdrop-filter: var(--glass-blur) !important;
-    border-bottom: var(--glass-border) !important;
-    color: #ffffff !important;
-    
-    mat-icon, button {
-      color: #ffffff !important;
+  /* Back button */
+  body .back-btn {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 12px 24px;
+    border-radius: var(--radius-sm);
+    font-weight: var(--font-weight-semibold);
+    transition: all var(--transition-normal);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.3);
+      color: var(--color-blue-400);
     }
   }
+
+  /* Buttons */
+  body .btn-primary {
+    background: var(--color-blue-400);
+    color: var(--color-white);
+    border: 1px solid var(--color-blue-400);
+
+    &:hover {
+      background: var(--color-blue-500);
+      border-color: var(--color-blue-500);
+    }
+  }
+
+  body .btn-secondary {
+    background: var(--glass-bg-hover);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--text-primary);
+    border: 1px solid var(--border-default);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  /* Form controls */
+  body .form-control {
+    background: var(--glass-bg-hover);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--text-primary);
+    border: 1px solid var(--border-default);
+
+    &:focus {
+      background: var(--glass-bg-hover);
+      color: var(--text-primary);
+      border-color: var(--color-blue-400);
+      box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2);
+    }
+  }
+
+  body .input-group .form-control {
+    background: var(--glass-bg-hover);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--text-primary);
+    border: 1px solid var(--border-default);
+  }
+
+  /* Quantity input */
+  body .quantity-value {
+    background: var(--glass-bg-hover);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--text-primary);
+    border: 1px solid var(--border-default);
+  }
+
+  /* ===== ADMIN-SPECIFIC GLASS OVERRIDES ===== */
+  &.is-admin, html[data-theme="glass"] &.is-admin {
+    /* Admin container transparent to show theme background */
+    .admin-container, mat-sidenav-content, .admin-content {
+      background: transparent !important;
+    }
+
+    /* Headers with glow */
+    h1, h2, h3, .admin-header-title, .section-title {
+      color: var(--color-white) !important;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Admin cards - Deep dark glass */
+    .mat-mdc-card, .glass-card, .dashboard-card {
+      background: var(--glass-bg) !important;
+      backdrop-filter: var(--glass-blur) !important;
+      -webkit-backdrop-filter: var(--glass-blur) !important;
+      border: var(--border-default) !important;
+      box-shadow: var(--glass-shadow) !important;
+      border-radius: var(--radius-xl) !important;
+      color: var(--color-white) !important;
+
+      .mat-mdc-card-title, .mat-mdc-card-subtitle, p, span {
+        color: rgba(255, 255, 255, 0.9) !important;
+      }
+
+      mat-icon {
+        color: var(--color-white) !important;
+        filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
+      }
+    }
+
+    /* Admin header */
+    .mat-toolbar.admin-header {
+      background: rgba(0, 0, 0, 0.3) !important;
+      backdrop-filter: var(--glass-blur) !important;
+      -webkit-backdrop-filter: var(--glass-blur) !important;
+      border-bottom: var(--border-default) !important;
+      color: var(--color-white) !important;
+
+      mat-icon, button {
+        color: var(--color-white) !important;
+      }
+    }
+  }
+}
+
+/* ===== BODY-LEVEL GLASS BACKGROUND (non-admin only) ===== */
+body:not(.is-admin)[data-theme="glass"],
+html[data-theme="glass"] body:not(.is-admin) {
+  background: var(--bg-page) !important;
+  background-image:
+    var(--bg-gradient-1),
+    var(--bg-gradient-2),
+    var(--bg-gradient-3) !important;
+  background-attachment: fixed !important;
+  color: var(--color-white) !important;
+  min-height: 100vh;
 }

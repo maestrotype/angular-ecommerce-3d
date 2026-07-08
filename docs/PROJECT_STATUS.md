@@ -1,6 +1,6 @@
 # Project Status — angular-ecommerce-3d
 
-**Last Updated**: 2026-07-07
+**Last Updated**: 2026-07-08
 **Maintainer**: Principal UI Architect
 
 > This document tracks high-level project progress. For detailed phase planning and task breakdown, see `REDESIGN_PLAN.md`. For architectural decisions and rules, see `STYLE_ARCHITECTURE.md`.
@@ -32,7 +32,7 @@
 |-------|------|--------|----------|
 | 1 | Style Architecture Audit | 🔄 In Progress | Documentation complete, code audit pending |
 | 2 | Theme Engine Redesign | ⏳ Pending | — |
-| 3 | Design Token Unification | 🔄 In Progress | Task-001 completed: core token wiring |
+| 3 | Design Token Unification | 🔄 In Progress | Task-001: primitive tokens connected; Task-002: default theme migrated; Task-003: dark theme migrated; Task-004: glass theme migrated |
 | 4 | Angular Material Integration | ⏳ Pending | — |
 | 5 | Style Cleanup | ⏳ Pending | — |
 | 6 | Component Migration | ⏳ Pending | — |
@@ -46,11 +46,15 @@
 ### Recent Changes
 | Date | Change | Author |
 |------|--------|--------|
-| 2026-07-08 | Task-002 (correction): Removed duplicate px-based radius tokens (`--radius-sm: 4px`, `--radius-md: 8px`, `--radius-lg: 12px`) from `core/_variables.scss`; kept only the original rem-based radius tokens. Transition and z-index tokens already existed — no addition needed. | Principal UI Architect |
-| 2026-07-08 | Task-003: Added typography scale tokens (`--text-xs` to `--text-2xl`, `--font-sans`, `--font-mono`) to `core/_variables.scss` :root block (per ADR-001) | Principal UI Architect |
-| 2026-07-07 | Task-001: Added missing `--color-text-primary` CSS token to `core/_variables.scss`; fixed `tokens/_index.scss` to forward `theme-variables` before importing core variables (per ADR-001 token layering rule) | Principal UI Architect |
-| 2026-07-06 | Style Architecture documentation improved — corrected SCSS inventory, updated token flow, added component token hierarchy | Principal UI Architect |
-| 2026-07-05 | Initial UI architecture documentation created (STYLE_ARCHITECTURE.md, THEME_ENGINE.md, REDESIGN_PLAN.md, UI_AUDIT.md) | Principal UI Architect |
+| 2026-07-08 | Task-004: Rewrote `themes/_glass.scss` to use semantic tokens with glass-specific overrides. Structure mirrors `_default.scss`/`_dark.scss`: `[data-theme="glass"]` scoping, glass-specific tokens (--glass-blur, --glass-bg, --glass-shadow), backdrop-filter on all component overrides, deep dark HUD background with radial gradients, admin-specific glass section, body-level gradient background. Build passes (6171ms). | Principal UI Architect |
+| 2026-07-08 | Task-003: Rewrote `themes/_dark.scss` to use semantic tokens with dark-specific overrides. Structure mirrors `_default.scss`: `[data-theme="dark"]` scoping, primitive token references via `var()`, page-specific tokens (Favorites, Auth), component overrides, and legacy aliases. Build passes (5960ms). | Principal UI Architect |
+| 2026-07-08 | Task-002: Rewrote `themes/_default.scss` to use semantic tokens from `_semantic-tokens.scss`. All hardcoded values replaced with `var()` references to primitive tokens. Added `[data-theme="default"]` scoping, legacy aliases for backward compat, and `:root` fallback. Build passes (5689ms). | Principal UI Architect |
+| 2026-07-08 | Task-001 (ADR-001): Connected primitive tokens from TOKEN_CONTRACT.md to main styles pipeline. Created `tokens/_index.scss` with ~60 CSS custom properties covering colors, spacing, radius, shadows, typography, and motion. Added `tokens/_semantic-tokens.scss` for theme-level semantic mappings. Build passes. | Principal UI Architect |
+| 2026-07-08 | Task-002 (correction): Removed duplicate px-based radius tokens from `core/_variables.scss`; kept only rem-based radius tokens. | Principal UI Architect |
+| 2026-07-08 | Task-003: Added typography scale tokens to `core/_variables.scss` :root block (per ADR-001) | Principal UI Architect |
+| 2026-07-07 | Task-001: Added missing `--color-text-primary` CSS token to `core/_variables.scss`; fixed token layering rule | Principal UI Architect |
+| 2026-07-06 | Style Architecture documentation improved — corrected SCSS inventory, updated token flow | Principal UI Architect |
+| 2026-07-05 | Initial UI architecture documentation created | Principal UI Architect |
 
 ---
 
@@ -103,4 +107,4 @@
 
 ---
 
-*This document is maintained by the Principal UI Architect. Last updated: 2026-07-07*
+*This document is maintained by the Principal UI Architect. Last updated: 2026-07-08*
