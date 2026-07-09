@@ -1,6 +1,6 @@
 # Project Status — angular-ecommerce-3d
 
-**Last Updated**: 2026-07-08
+**Last Updated**: 2026-07-09
 **Maintainer**: Principal UI Architect
 
 > This document tracks high-level project progress. For detailed phase planning and task breakdown, see `REDESIGN_PLAN.md`. For architectural decisions and rules, see `STYLE_ARCHITECTURE.md`.
@@ -33,9 +33,9 @@
 | 1 | Style Architecture Audit | 🔄 In Progress | Documentation complete, code audit pending |
 | 2 | Theme Engine Redesign | ⏳ Pending | — |
 | 3 | Design Token Unification | ✅ Complete | Task-001..004: all themes migrated; Task-005: PoC component migrated |
-| 5 | Style Cleanup | 🔄 In Progress | Task-005 PoC complete — ready for mass component migration |
+| 5 | Style Cleanup | 🔄 In Progress | Task-007: 3 more components migrated to semantic tokens (cards, theme-switcher, base-modal). Ready for mass migration. |
 | 4 | Angular Material Integration | ⏳ Pending | — |
-| 5 | Style Cleanup | ⏳ Pending | — |
+| 5 | Style Cleanup | 🔄 In Progress | — |
 | 6 | Component Migration | ⏳ Pending | — |
 | 7 | Premium UI Implementation | ⏳ Pending | — |
 | 8 | Animation System | ⏳ Pending | — |
@@ -47,6 +47,7 @@
 ### Recent Changes
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-07-09 | Task-007 (ADR-001): Migrated 3 component files to semantic tokens: `styles/components/_cards.scss`, `styles/components/_theme-switcher.scss`, `app/shared/modal/base-modal.component.scss`. Replaced all hardcoded colors (#e0e0e0, #aaa, #999, #ffffff, #1e293b, etc.), admin variables (--admin-*), and legacy custom properties (--favorites-*, --glass-*) with semantic tokens: --surface-page/primary/secondary/elevated/hover/overlay, --text-primary/secondary/muted/inverse/on-primary, --border-default/subtle/medium/strong/emphasis, --spacing-*, --radius-*/full, --shadow-sm/md/lg/xl, --transition-fast, --font-family/weight/size-*, --z-modal, --backdrop-blur/sm, --color-primary/accent, --state-*, --interactive-*, --glass-bg/border/shadow/blur. Build passes (8388ms). | Principal UI Architect |
 | 2026-07-08 | Task-006 (ADR-001): Migrated `favorites.component.scss` to semantic tokens. Replaced all `--favorites-*` custom properties and hardcoded colors (#ffffff, #1e293b, #ff6b6b, #3498db, #f3f3f3, #6c757d, #5a6268, #495057, #94a3b8, #64748b, #475569, #60a5fa, #6366f1) with semantic tokens: --surface-page/card/secondary/elevated/hover/overlay/overlay-light, --text-primary/secondary/muted, --font-family-primary/secondary, --spacing-*, --radius-*, --shadow-sm/md/lg/xl, --border-default/subtle/medium/strong, --backdrop-blur, --color-primary/accent, --state-danger-bg, --state-warning-*, --interactive-primary-*, --glass-*, --text-on-primary, --font-weight-*, --text-*. Zero hardcoded colors remain. Build passes (7619ms). | Principal UI Architect |
 | 2026-07-08 | Task-005 (PoC): Migrated `theme-selector.component.scss` to semantic tokens. Replaced ~40 hardcoded values (colors like #e0e0e0, #aaa, #999, #4caf50; admin vars like --admin-text-secondary, --admin-bg-card) with semantic tokens: --text-primary, --text-secondary, --surface-primary/secondary/tertiary, --border-default/strong, --spacing-*, --radius-*, --shadow-sm/md/xl, --transition-fast, --font-weight-*, --text-xs/sm/base/xl/2xl, --z-modal, --state-success-bg. Component works identically across all themes. Build passes. | Principal UI Architect |
 | 2026-07-08 | Task-004: Rewrote `themes/_glass.scss` to use semantic tokens with glass-specific overrides. Structure mirrors `_default.scss`/`_dark.scss`: `[data-theme="glass"]` scoping, glass-specific tokens (--glass-blur, --glass-bg, --glass-shadow), backdrop-filter on all component overrides, deep dark HUD background with radial gradients, admin-specific glass section, body-level gradient background. Build passes (6171ms). | Principal UI Architect |
@@ -110,4 +111,4 @@
 
 ---
 
-*This document is maintained by the Principal UI Architect. Last updated: 2026-07-08*
+*This document is maintained by the Principal UI Architect. Last updated: 2026-07-09*

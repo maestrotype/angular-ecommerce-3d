@@ -4,7 +4,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 9999;
+  z-index: var(--z-modal, 9999);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -15,39 +15,39 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(4px);
+    background: var(--surface-overlay);
+    backdrop-filter: var(--backdrop-blur-sm);
     animation: fadeIn 0.3s ease-out;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 1rem;
+    padding: var(--spacing-lg);
 
     &.modal-backdrop-image {
-      background: rgba(0, 0, 0, 0.9);
+      background: var(--surface-overlay-full);
       backdrop-filter: blur(8px);
     }
 
     &.modal-backdrop-cart,
     &.modal-backdrop-auth {
-      background: rgba(0, 0, 0, 0.6);
+      background: var(--surface-overlay);
       backdrop-filter: blur(6px);
     }
 
     &.modal-backdrop-notification {
-      background: rgba(0, 0, 0, 0.3);
+      background: var(--surface-overlay-light);
       backdrop-filter: blur(4px);
       align-items: flex-start;
       justify-content: center;
-      padding-top: 2rem;
+      padding-top: var(--spacing-xl);
     }
   }
 
   .modal-content {
     position: relative;
-    background: var(--surface-primary);
-    border-radius: 16px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    background: var(--surface-elevated);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
     animation: modalSlideIn 0.3s ease-out;
     max-width: 90vw;
     max-height: 90vh;
@@ -64,7 +64,6 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      /* We want the modal itself to not scroll, but let the pan/zoom handle boundaries */
     }
 
     &.modal-content-cart {
@@ -96,16 +95,16 @@
     z-index: 10;
     color: var(--text-primary);
     border: none;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     width: 36px;
     height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all var(--transition-fast);
     background: var(--surface-tertiary);
-    border: 1px solid var(--border-primary);
+    border: 1px solid var(--border-default);
 
     &:hover {
       transform: scale(1.05);
@@ -114,16 +113,16 @@
       border-color: transparent;
     }
 
-    // Special styling for image modals (center it vertically in the dark header)
+    // Special styling for image modals
     .modal-content-image & {
       top: 12px;
       right: 16px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: white;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--text-on-primary);
 
       &:hover {
-        background: rgba(255, 255, 255, 0.25);
+        background: var(--glass-bg-hover);
       }
     }
 
@@ -133,12 +132,12 @@
       right: 8px;
       width: 32px;
       height: 32px;
-      background: rgba(255, 255, 255, 0.95);
-      border: 1px solid rgba(0, 0, 0, 0.1);
+      background: var(--surface-elevated);
+      border: 1px solid var(--border-subtle);
 
       &:hover {
-        background: rgba(255, 255, 255, 1);
-        border-color: rgba(0, 0, 0, 0.2);
+        background: var(--surface-hover);
+        border-color: var(--border-emphasis);
       }
     }
 
@@ -187,7 +186,7 @@
 
       &.modal-content-cart,
       &.modal-content-auth {
-        margin: 1rem;
+        margin: var(--spacing-lg);
         max-width: calc(100vw - 2rem);
       }
     }

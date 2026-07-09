@@ -4,12 +4,12 @@
    ========================================================================== */
 
 .product-card {
-  background: var(--surface-primary, #ffffff);
-  border: 1px solid var(--border-primary, #e5e7eb);
-  border-radius: var(--card-radius, 8px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: var(--surface-card);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
   position: relative;
   cursor: pointer;
   width: 100%;
@@ -18,7 +18,7 @@
   flex-direction: column;
   
   &:hover { 
-    box-shadow: var(--card-shadow-hover, 0 8px 25px rgba(0, 0, 0, 0.15));
+    box-shadow: var(--shadow-md);
     transform: translateY(-4px);
   }
 
@@ -27,7 +27,7 @@
     width: 100%;
     height: 280px;
     overflow: hidden;
-    background-color: var(--product-image-bg);
+    background-color: var(--surface-secondary);
     
     img { 
       width: 100%; 
@@ -59,8 +59,8 @@
           width: 40px;
           height: 40px;
           border-radius: 50%;
-          background: var(--color-surface-primary, rgba(255, 255, 255, 0.9));
-          border: 1px solid var(--color-border-primary, rgba(0, 0, 0, 0.05));
+          background: var(--surface-elevated);
+          border: 1px solid var(--border-subtle);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -69,14 +69,14 @@
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
           &:hover {
-            background: var(--color-surface-hover, #ffffff);
+            background: var(--surface-hover);
             transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow-md);
           }
 
           .material-icons {
             font-size: 18px;
-            color: var(--color-text-primary, #333);
+            color: var(--text-primary);
           }
 
           &.favorite-btn {
@@ -90,7 +90,7 @@
               }
               .material-icons.filled {
                 display: block;
-                color: #e74c3c;
+                color: var(--state-danger-text, var(--color-accent));
               }
             }
           }
@@ -114,8 +114,8 @@
       position: absolute;
       top: 12px;
       left: 12px;
-      background: #e74c3c;
-      color: white;
+      background: var(--state-danger-bg);
+      color: var(--text-on-primary);
       padding: 4px 8px;
       border-radius: 4px;
       font-size: 12px;
@@ -125,11 +125,11 @@
     }
 
     .new-badge {
-      background: #27ae60;
+      background: var(--state-success-bg, #27ae60);
     }
 
     .discount-badge {
-      background: #f39c12;
+      background: var(--state-warning-bg, #f39c12);
     }
 
     .out-of-stock-badge {
@@ -137,8 +137,8 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(0, 0, 0, 0.8);
-      color: white;
+      background: var(--surface-overlay);
+      color: var(--text-on-primary);
       padding: 8px 16px;
       border-radius: 4px;
       font-size: 14px;
@@ -153,7 +153,7 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    border-top: 1px solid var(--border-secondary, #e5e7eb); /* Footer divider */
+    border-top: 1px solid var(--border-subtle); /* Footer divider */
     flex-grow: 1;
 
     .product-name {
@@ -187,15 +187,15 @@
 
           .original-price {
             font-size: 14px;
-            color: var(--text-tertiary);
+            color: var(--text-muted);
             text-decoration: line-through;
           }
         }
       }
 
       .product-category {
-        background: var(--surface-secondary, #f0f0f0);
-        color: var(--text-secondary, #666);
+      background: var(--surface-secondary);
+      color: var(--text-secondary);
         padding: 2px 6px;
         border-radius: 4px;
         font-size: 11px;
@@ -228,59 +228,8 @@
   }
 }
 
-// Theme-specific styles
-[data-theme='glass'] .product-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-
-  &:hover {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.12) 100%);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.35);
-  }
-
-  .product-category {
-    color: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-  }
-
-  .product-code {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
-    color: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-  }
-
-  .cart-icon-btn {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: rgba(255, 255, 255, 0.9);
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.3);
-      border-color: rgba(255, 255, 255, 0.5);
-    }
-  }
-}
-
-[data-theme='dark'] .product-card {
-  background: 
-    radial-gradient(circle at 0% 0%, rgba(148, 163, 184, 0.15), transparent 60%),
-    linear-gradient(145deg, #1e293b, #0f172a);
-  border: 1px solid rgba(148, 163, 184, 0.3);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-
-  &:hover {
-    border-color: rgba(148, 163, 184, 0.5);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
-  }
-
-  .product-image {
-    background: radial-gradient(circle at 50% 120%, rgba(255,255,255,0.03), transparent);
-  }
-}
+// Theme-specific styles — handled by theme files via semantic tokens
+// Glass and Dark themes override --surface-card, --border-default, --shadow-* etc.
 
 @keyframes fadeInUp {
   from {
