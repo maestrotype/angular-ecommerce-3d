@@ -1,41 +1,41 @@
 /* ==========================================================================
    FAVORITES PAGE STYLES
-   Based on best-sellers component structure
+   Uses semantic tokens (ADR-001) — zero hardcoded colors.
    ========================================================================== */
 
 .favorites-page {
-  background: var(--favorites-bg, var(--color-surface-primary, #ffffff));
-  color: var(--favorites-text, var(--text-primary, #1e293b));
-  font-family: Inter, sans-serif;
+  background: var(--surface-page);
+  color: var(--text-primary);
+  font-family: var(--font-family-primary);
   min-height: 100vh;
   width: 100%;
 
   .section-wrapper {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 80px 20px;
-    background-color: var(--favorites-section-wrapper);
+    padding: var(--spacing-page);
+    background-color: transparent;
   }
 
   .favorites-content {
-    padding: 40px 0;
+    padding: var(--spacing-xl) 0;
     background: transparent;
     min-height: 60vh;
   }
 
   .favorites-header {
     position: relative;
-    padding: 40px 30px;
-    border-radius: var(--radius-xl, 20px);
+    padding: var(--spacing-xl) var(--spacing-lg);
+    border-radius: var(--radius-xl);
 
-    background: var(--favorites-header-bg, var(--glass-bg));
-    color: var(--favorites-header-text, var(--color-text-primary));
+    background: var(--surface-card);
+    color: var(--text-primary);
 
-    backdrop-filter: blur(var(--favorites-header-blur, var(--glass-blur-lg)));
-    -webkit-backdrop-filter: blur(var(--favorites-header-blur, var(--glass-blur-lg)));
+    backdrop-filter: var(--backdrop-blur);
+    -webkit-backdrop-filter: var(--backdrop-blur);
 
-    border: 1px solid var(--favorites-header-border, var(--glass-border));
-    box-shadow: var(--favorites-header-shadow, var(--glass-shadow-lg));
+    border: 1px solid var(--border-default);
+    box-shadow: var(--shadow-lg);
 
     text-align: center;
     overflow: hidden;
@@ -46,39 +46,12 @@
       inset: 0;
 
       background: linear-gradient(120deg,
-          var(--glass-highlight),
+          var(--surface-highlight),
           transparent 45%);
 
       opacity: 0.5;
       pointer-events: none;
     }
-
-    // .favorites-header {
-    //   text-align: center;
-    //   margin-top: 30px;
-    //   background: var(--favorites-header-bg);
-    //   color: var(--favorites-header-text);
-    //   padding: 40px 0 30px;
-    //   border-radius: 20px;
-    //   position: relative;
-    //   overflow: hidden;
-    //   background: rgba(255, 255, 255, 0.5);
-    //   backdrop-filter: blur(20px);
-    //   -webkit-backdrop-filter: blur(20px);
-    //     // backdrop-filter: var(--favorites-header-blur);
-    //     // -webkit-backdrop-filter: var(--favorites-header-blur);
-
-    //   &::before {
-    //     content: '';
-    //     position: absolute;
-    //     top: 0;
-    //     left: 0;
-    //     right: 0;
-    //     bottom: 0;
-    //       // background: var(--favorites-header-overlay);
-    //       // backdrop-filter: var(--favorites-header-blur);
-    //       // -webkit-backdrop-filter: var(--favorites-header-blur);
-    //   }
 
     .header-content {
       position: relative;
@@ -87,29 +60,29 @@
 
     .back-btn {
       position: absolute;
-      left: 16px;
+      left: var(--spacing-sm);
       top: 0px;
       transform: translateY(-50%);
-      background: rgba(255, 255, 255, 0.25);
+      background: var(--surface-overlay-light);
       color: var(--text-secondary);
-      border: 2px solid rgba(255, 255, 255, 0.5);
-      border-radius: 16px;
-      font-size: 16px;
-      font-weight: 700;
+      border: 2px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-bold);
       cursor: pointer;
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: var(--backdrop-blur);
+      -webkit-backdrop-filter: var(--backdrop-blur);
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-      padding: 7px;
+      box-shadow: var(--shadow-md);
+      padding: var(--spacing-2xs);
 
       &:hover {
-        background: rgba(255, 255, 255, 0.35);
-        border-color: rgba(255, 255, 255, 0.7);
+        background: var(--surface-hover);
+        border-color: var(--border-medium);
         transform: translateY(-50%) translateX(-8px) scale(1.02);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        box-shadow: var(--shadow-lg);
       }
 
       &:active {
@@ -118,22 +91,22 @@
     }
 
     .page-title {
-      font-size: var(--favorites-title-size, 2.5rem);
-      font-weight: var(--favorites-title-weight, 700);
-      margin: 0 0 10px 0;
-      color: var(--favorites-header-text);
+      font-size: var(--text-3xl);
+      font-weight: var(--font-weight-bold);
+      margin: 0 0 var(--spacing-xs) 0;
+      color: var(--text-primary);
       text-shadow: 0 1px 2px rgba(0, 0, 0, .3);
       .heart-icon {
-        color: var(--favorites-heart-color, #ff6b6b);
-        margin-right: 10px;
+        color: var(--state-danger-bg);
+        margin-right: var(--spacing-xs);
       }
     }
 
     .page-subtitle {
-      font-size: var(--favorites-subtitle-size, 1.1rem);
-      opacity: var(--favorites-subtitle-opacity, 0.9);
+      font-size: var(--text-lg);
+      opacity: 0.9;
       margin: 0;
-      color: var(--color-text-primary);
+      color: var(--text-primary);
       text-shadow: 0 1px 2px rgba(0, 0, 0, .3);
     }
   }
@@ -141,44 +114,44 @@
   .loading-state,
   .empty-state {
     text-align: center;
-    padding: 60px 20px;
+    padding: var(--spacing-2xl) var(--spacing-md);
 
     .loading-spinner {
       width: 40px;
       height: 40px;
-      border: 4px solid #f3f3f3;
-      border-top: 4px solid #3498db;
+      border: 4px solid var(--surface-secondary);
+      border-top: 4px solid var(--color-primary);
       border-radius: 50%;
       animation: spin 1s linear infinite;
-      margin: 0 auto 20px;
+      margin: 0 auto var(--spacing-md);
     }
 
     h2 {
-      font-size: 2rem;
-      margin-bottom: 10px;
+      font-size: var(--text-2xl);
+      margin-bottom: var(--spacing-xs);
       color: var(--text-primary);
     }
 
     p {
-      font-size: 1.1rem;
+      font-size: var(--text-lg);
       color: var(--text-secondary);
-      margin-bottom: 30px;
+      margin-bottom: var(--spacing-xl);
     }
 
     .shop-now-btn {
-      background: var(--button-primary-bg);
-      color: var(--button-primary-text);
-      border: 1px solid var(--button-primary-border);
-      padding: 12px 30px;
-      border-radius: 25px;
-      font-size: 16px;
-      font-weight: 600;
+      background: var(--interactive-primary-bg);
+      color: var(--interactive-primary-text);
+      border: 1px solid var(--interactive-primary-border);
+      padding: var(--spacing-sm) var(--spacing-lg);
+      border-radius: var(--radius-full);
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-semibold);
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all var(--transition-normal);
 
       &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        box-shadow: var(--shadow-md);
       }
     }
   }
@@ -186,44 +159,44 @@
   .favorites-section {
 
     .actions-bar {
-      background: var(--favorites-top-bar-bg);
-      color: var(--favorites-top-bar-text);
-      padding: 24px 32px;
-      border-radius: 16px;
-      margin-bottom: 30px;
+      background: var(--surface-card);
+      color: var(--text-primary);
+      padding: var(--spacing-lg) var(--spacing-xl);
+      border-radius: var(--radius-lg);
+      margin-bottom: var(--spacing-xl);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      backdrop-filter: var(--favorites-card-blur);
-      -webkit-backdrop-filter: var(--favorites-card-blur);
-      border: 1px solid var(--favorites-card-border);
+      backdrop-filter: var(--backdrop-blur);
+      -webkit-backdrop-filter: var(--backdrop-blur);
+      border: 1px solid var(--border-default);
 
       .favorites-count {
-        font-size: 18px;
-        font-weight: 600;
-        color: var(--favorites-top-bar-text);
+        font-size: var(--text-lg);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-primary);
       }
 
       .clear-all-btn {
-        background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
-        color: #ffffff;
-        border: 2px solid rgba(255, 255, 255, 0.2);
-        padding: 14px 28px;
-        border-radius: 12px;
-        font-size: 16px;
-        font-weight: 700;
+        background: linear-gradient(135deg, var(--state-warning-bg) 0%, var(--state-warning-border) 100%);
+        color: var(--text-on-primary);
+        border: 2px solid var(--border-subtle);
+        padding: var(--spacing-sm) var(--spacing-lg);
+        border-radius: var(--radius-md);
+        font-size: var(--text-base);
+        font-weight: var(--font-weight-bold);
         cursor: pointer;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         min-width: 140px;
         text-transform: uppercase;
         letter-spacing: 0.5px;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        box-shadow: var(--shadow-sm);
 
         &:hover:not(:disabled) {
-          background: linear-gradient(135deg, #5a6268 0%, #495057 100%);
+          background: linear-gradient(135deg, var(--state-warning-border) 0%, var(--state-warning-text) 100%);
           transform: translateY(-3px) scale(1.02);
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-          border-color: rgba(255, 255, 255, 0.3);
+          box-shadow: var(--shadow-md);
+          border-color: var(--border-medium);
         }
 
         &:active:not(:disabled) {
@@ -238,28 +211,27 @@
       }
     }
 
-    // Products grid - base structural styles (colors come from theme-specific overrides below)
     .products-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-      gap: 24px;
-      margin-top: 8px;
+      gap: var(--spacing-lg);
+      margin-top: var(--spacing-xs);
 
       .product-card {
         display: flex;
         flex-direction: column;
-        border-radius: 16px;
+        border-radius: var(--radius-lg);
         overflow: hidden;
-        background: var(--favorites-card-bg, #ffffff);
-        border: 1px solid var(--favorites-card-border, rgba(0,0,0,0.08));
-        box-shadow: var(--favorites-card-shadow, 0 2px 12px rgba(0,0,0,0.06));
+        background: var(--surface-card);
+        border: 1px solid var(--border-default);
+        box-shadow: var(--shadow-sm);
         cursor: pointer;
         transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
 
         &:hover {
           transform: translateY(-6px);
-          box-shadow: var(--favorites-card-hover-shadow, 0 12px 28px rgba(0,0,0,0.12));
-          background: var(--favorites-card-hover-bg, #ffffff);
+          box-shadow: var(--shadow-lg);
+          background: var(--surface-hover);
         }
 
         .product-image {
@@ -267,7 +239,7 @@
           width: 100%;
           aspect-ratio: 1 / 1;
           overflow: hidden;
-          background: var(--product-image-bg, #f8fafc);
+          background: var(--surface-secondary);
 
           img {
             position: absolute;
@@ -281,37 +253,37 @@
           .product-overlay {
             position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, 0.45);
+            background: var(--surface-overlay);
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity var(--transition-normal);
             display: flex;
             align-items: center;
             justify-content: center;
 
             .overlay-actions {
               display: flex;
-              gap: 12px;
+              gap: var(--spacing-sm);
 
               .action-btn {
                 width: 44px;
                 height: 44px;
                 border-radius: 50%;
-                background: rgba(255, 255, 255, 0.9);
+                background: var(--surface-elevated);
                 border: none;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 cursor: pointer;
-                transition: all 0.2s ease;
-                color: #475569;
+                transition: all var(--transition-fast);
+                color: var(--text-secondary);
 
                 &:hover {
-                  background: #ffffff;
+                  background: var(--surface-card);
                   transform: scale(1.1);
                 }
 
                 &.is-favorite {
-                  color: #ff6b6b;
+                  color: var(--state-danger-bg);
                 }
 
                 .material-icons {
@@ -328,17 +300,17 @@
         }
 
         .product-info {
-          padding: 18px;
+          padding: var(--spacing-md);
           display: flex;
           flex-direction: column;
           flex-grow: 1;
 
           .product-name {
-            font-size: 1rem;
-            font-weight: 600;
-            margin: 0 0 12px;
-            line-height: 1.4;
-            color: var(--favorites-product-name-color, var(--text-primary, #1e293b));
+            font-size: var(--text-base);
+            font-weight: var(--font-weight-semibold);
+            margin: 0 0 var(--spacing-sm);
+            line-height: var(--leading-normal);
+            color: var(--text-primary);
           }
 
           .product-footer {
@@ -346,7 +318,7 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-            gap: 8px;
+            gap: var(--spacing-xs);
 
             .product-price {
               .price-main {
@@ -354,27 +326,27 @@
                 flex-direction: column;
 
                 .current-price {
-                  font-size: 1.2rem;
-                  font-weight: 700;
-                  color: var(--favorites-product-price-color, var(--text-primary, #1e293b));
+                  font-size: var(--text-xl);
+                  font-weight: var(--font-weight-bold);
+                  color: var(--text-primary);
                 }
 
                 .original-price {
-                  font-size: 0.85rem;
-                  color: var(--text-secondary, #94a3b8);
+                  font-size: var(--text-sm);
+                  color: var(--text-secondary);
                   text-decoration: line-through;
                 }
               }
             }
 
             .product-category {
-              font-size: 0.75rem;
+              font-size: var(--text-xs);
               text-transform: uppercase;
               letter-spacing: 0.5px;
-              color: var(--favorites-product-category-color, #64748b);
+              color: var(--text-muted);
               background: transparent;
-              padding: 3px 8px;
-              border-radius: 4px;
+              padding: 3px var(--spacing-xs);
+              border-radius: var(--radius-sm);
               border: 1px solid currentColor;
               white-space: nowrap;
             }
@@ -420,7 +392,7 @@
       }
 
       .page-title {
-        font-size: 2rem;
+        font-size: var(--text-2xl);
       }
     }
 
@@ -432,66 +404,48 @@
   }
 }
 
-// Dark theme - following best-sellers pattern
+// Dark theme overrides — semantic tokens handle most, only accents differ
 :host-context([data-theme="dark"]) .favorites-page {
-  color: var(--favorites-text);
-  font-family: 'Poppins', sans-serif;
-
-  .favorites-header {
-    .page-title {
-      color: var(--favorites-text);
-    }
-  }
+  font-family: var(--font-family-secondary);
 
   .favorites-section .actions-bar {
-    background: var(--surface-primary);
-    color: var(--favorites-text);
-    border: 1px solid #334155;
-  }
-
-  .favorites-section .favorites-count {
-    color: var(--favorites-text);
+    border-color: var(--border-strong);
   }
 
   .favorites-section .clear-all-btn {
-    background: #6c757d;
-    color: #ffffff;
+    background: var(--state-warning-bg);
+    color: var(--text-on-primary);
   }
 
   .products-grid .product-card {
-    background: var(--surface-primary);
-    border-color: #334155;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-md);
 
     &:hover {
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-    }
-
-    .product-name {
-      color: var(--favorites-text);
+      box-shadow: var(--shadow-xl);
     }
 
     .current-price {
-      color: #60a5fa;
+      color: var(--color-primary);
     }
 
     .product-category {
-      background: #60a5fa;
-      color: #ffffff;
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: var(--text-on-primary);
     }
 
     .action-btn {
-      background: rgba(255, 255, 255, 0.15);
-      color: var(--favorites-text);
+      background: var(--surface-overlay-light);
+      color: var(--text-primary);
     }
   }
 }
 
-// Glass theme - following best-sellers pattern
+// Glass theme overrides — semantic tokens handle most, glass effects added
 :host-context([data-theme="glass"]) .favorites-page {
   .favorites-header {
     .page-title {
-      color: var(--favorites-text);
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
@@ -501,69 +455,59 @@
   }
 
   .favorites-section .actions-bar {
-    background: rgba(255, 255, 255, 0.2);
-    color: var(--favorites-text);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-  }
-
-  .favorites-section .favorites-count {
-    color: var(--favorites-text);
+    background: var(--glass-bg);
+    border-color: var(--glass-border);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
   }
 
   .favorites-section .clear-all-btn {
-    background: rgba(108, 117, 125, 0.8);
-    color: #ffffff;
+    background: var(--glass-bg-hover);
+    color: var(--text-on-primary);
   }
 
   .products-grid .product-card {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow:
-      0 8px 32px rgba(0, 0, 0, 0.1),
-      0 2px 8px rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: var(--glass-bg);
+    border-color: var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
     &:hover {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: rgba(255, 255, 255, 0.3);
-      box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.15),
-        0 8px 16px rgba(255, 255, 255, 0.2);
+      background: var(--glass-bg-hover);
+      border-color: var(--glass-border-hover);
+      box-shadow: var(--glass-shadow-hover);
       transform: translateY(-8px) scale(1.02);
     }
 
     .product-name {
-      color: var(--favorites-text);
-      font-weight: 700;
+      font-weight: var(--font-weight-bold);
       text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
     }
 
     .current-price {
-      color: #6366f1;
+      color: var(--color-accent);
       font-weight: 800;
     }
 
     .product-category {
-      background: #6366f1;
-      border: 1px solid #6366f1;
-      color: #ffffff;
+      background: var(--color-accent);
+      border-color: var(--color-accent);
+      color: var(--text-on-primary);
     }
 
     .action-btn {
-      background: rgba(255, 255, 255, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
       backdrop-filter: blur(15px);
       -webkit-backdrop-filter: blur(15px);
       box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2);
-      color: var(--favorites-text);
+      color: var(--text-primary);
 
       &:hover {
-        background: rgba(255, 255, 255, 0.3);
-        border-color: rgba(255, 255, 255, 0.5);
+        background: var(--glass-bg-hover);
+        border-color: var(--glass-border-hover);
         box-shadow: 0 8px 24px rgba(255, 255, 255, 0.3);
       }
     }

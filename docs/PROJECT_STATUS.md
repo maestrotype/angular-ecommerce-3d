@@ -32,7 +32,8 @@
 |-------|------|--------|----------|
 | 1 | Style Architecture Audit | 🔄 In Progress | Documentation complete, code audit pending |
 | 2 | Theme Engine Redesign | ⏳ Pending | — |
-| 3 | Design Token Unification | 🔄 In Progress | Task-001: primitive tokens connected; Task-002: default theme migrated; Task-003: dark theme migrated; Task-004: glass theme migrated |
+| 3 | Design Token Unification | ✅ Complete | Task-001..004: all themes migrated; Task-005: PoC component migrated |
+| 5 | Style Cleanup | 🔄 In Progress | Task-005 PoC complete — ready for mass component migration |
 | 4 | Angular Material Integration | ⏳ Pending | — |
 | 5 | Style Cleanup | ⏳ Pending | — |
 | 6 | Component Migration | ⏳ Pending | — |
@@ -46,6 +47,8 @@
 ### Recent Changes
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-07-08 | Task-006 (ADR-001): Migrated `favorites.component.scss` to semantic tokens. Replaced all `--favorites-*` custom properties and hardcoded colors (#ffffff, #1e293b, #ff6b6b, #3498db, #f3f3f3, #6c757d, #5a6268, #495057, #94a3b8, #64748b, #475569, #60a5fa, #6366f1) with semantic tokens: --surface-page/card/secondary/elevated/hover/overlay/overlay-light, --text-primary/secondary/muted, --font-family-primary/secondary, --spacing-*, --radius-*, --shadow-sm/md/lg/xl, --border-default/subtle/medium/strong, --backdrop-blur, --color-primary/accent, --state-danger-bg, --state-warning-*, --interactive-primary-*, --glass-*, --text-on-primary, --font-weight-*, --text-*. Zero hardcoded colors remain. Build passes (7619ms). | Principal UI Architect |
+| 2026-07-08 | Task-005 (PoC): Migrated `theme-selector.component.scss` to semantic tokens. Replaced ~40 hardcoded values (colors like #e0e0e0, #aaa, #999, #4caf50; admin vars like --admin-text-secondary, --admin-bg-card) with semantic tokens: --text-primary, --text-secondary, --surface-primary/secondary/tertiary, --border-default/strong, --spacing-*, --radius-*, --shadow-sm/md/xl, --transition-fast, --font-weight-*, --text-xs/sm/base/xl/2xl, --z-modal, --state-success-bg. Component works identically across all themes. Build passes. | Principal UI Architect |
 | 2026-07-08 | Task-004: Rewrote `themes/_glass.scss` to use semantic tokens with glass-specific overrides. Structure mirrors `_default.scss`/`_dark.scss`: `[data-theme="glass"]` scoping, glass-specific tokens (--glass-blur, --glass-bg, --glass-shadow), backdrop-filter on all component overrides, deep dark HUD background with radial gradients, admin-specific glass section, body-level gradient background. Build passes (6171ms). | Principal UI Architect |
 | 2026-07-08 | Task-003: Rewrote `themes/_dark.scss` to use semantic tokens with dark-specific overrides. Structure mirrors `_default.scss`: `[data-theme="dark"]` scoping, primitive token references via `var()`, page-specific tokens (Favorites, Auth), component overrides, and legacy aliases. Build passes (5960ms). | Principal UI Architect |
 | 2026-07-08 | Task-002: Rewrote `themes/_default.scss` to use semantic tokens from `_semantic-tokens.scss`. All hardcoded values replaced with `var()` references to primitive tokens. Added `[data-theme="default"]` scoping, legacy aliases for backward compat, and `:root` fallback. Build passes (5689ms). | Principal UI Architect |
