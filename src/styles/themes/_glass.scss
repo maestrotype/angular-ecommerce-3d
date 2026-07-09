@@ -411,50 +411,56 @@
     border: 1px solid var(--border-default);
   }
 
-  /* ===== ADMIN-SPECIFIC GLASS OVERRIDES ===== */
-  &.is-admin, html[data-theme="glass"] &.is-admin {
-    /* Admin container transparent to show theme background */
-    .admin-container, mat-sidenav-content, .admin-content {
-      background: transparent !important;
+}
+
+/* ==========================================================================
+   ADMIN GLASS OVERRIDES
+   Proper selector: html[data-theme="glass"] body.is-admin
+   Fixes: selector was [data-theme="glass"].is-admin which never matched
+   because data-theme is on <html> and .is-admin is on <body>.
+   ========================================================================== */
+html[data-theme="glass"] body.is-admin {
+  /* Admin container transparent to show theme background */
+  .admin-container, mat-sidenav-content, .admin-content {
+    background: transparent;
+  }
+
+  /* Headers with glow */
+  h1, h2, h3, .admin-header-title, .section-title {
+    color: var(--color-white);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Admin cards - Deep dark glass */
+  .mat-mdc-card, .glass-card, .dashboard-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: var(--border-default);
+    box-shadow: var(--glass-shadow);
+    border-radius: var(--radius-xl);
+    color: var(--color-white);
+
+    .mat-mdc-card-title, .mat-mdc-card-subtitle, p, span {
+      color: rgba(255, 255, 255, 0.9);
     }
 
-    /* Headers with glow */
-    h1, h2, h3, .admin-header-title, .section-title {
-      color: var(--color-white) !important;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    mat-icon {
+      color: var(--color-white);
+      filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
     }
+  }
 
-    /* Admin cards - Deep dark glass */
-    .mat-mdc-card, .glass-card, .dashboard-card {
-      background: var(--glass-bg) !important;
-      backdrop-filter: var(--glass-blur) !important;
-      -webkit-backdrop-filter: var(--glass-blur) !important;
-      border: var(--border-default) !important;
-      box-shadow: var(--glass-shadow) !important;
-      border-radius: var(--radius-xl) !important;
-      color: var(--color-white) !important;
+  /* Admin header */
+  .mat-toolbar.admin-header {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-bottom: var(--border-default);
+    color: var(--color-white);
 
-      .mat-mdc-card-title, .mat-mdc-card-subtitle, p, span {
-        color: rgba(255, 255, 255, 0.9) !important;
-      }
-
-      mat-icon {
-        color: var(--color-white) !important;
-        filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
-      }
-    }
-
-    /* Admin header */
-    .mat-toolbar.admin-header {
-      background: rgba(0, 0, 0, 0.3) !important;
-      backdrop-filter: var(--glass-blur) !important;
-      -webkit-backdrop-filter: var(--glass-blur) !important;
-      border-bottom: var(--border-default) !important;
-      color: var(--color-white) !important;
-
-      mat-icon, button {
-        color: var(--color-white) !important;
-      }
+    mat-icon, button {
+      color: var(--color-white);
     }
   }
 }
