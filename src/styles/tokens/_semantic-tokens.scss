@@ -37,6 +37,9 @@
   // ===== COMPOSITE TOKENS =====
   --radius-card: var(--radius-md);
   --shadow-card: var(--shadow-sm);
-  --glass-blur: 12px;
+  // NOTE: --glass-blur must be a full CSS function (blur(...)) because it is consumed
+  // by backdrop-filter: var(--glass-blur). A raw pixel value would be invalid.
+  --glass-blur: blur(12px);
+  --glass-blur-value: 12px; // raw value for JS or filter() usage
   --glass-opacity: 0.8;
 }

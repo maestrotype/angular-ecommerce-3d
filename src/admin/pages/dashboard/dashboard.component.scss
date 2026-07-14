@@ -43,42 +43,27 @@
   margin-bottom: var(--admin-spacing-xxl);
 }
 
+/* Task-015: stat-card uses CSS variables driven by theme.
+   Do NOT use [data-theme="glass"] & here — Angular ViewEncapsulation.Emulated
+   compiles such nested selectors incorrectly. Instead, define values in
+   _admin-glass.scss → [data-theme="glass"] { --dashboard-stat-card-*: ... } */
 .stat-card {
   height: 120px;
-  background-color: var(--admin-bg-secondary);
-  border: 1px solid var(--admin-border-primary);
+  background-color: var(--dashboard-stat-card-bg, var(--admin-bg-secondary));
+  border: 1px solid var(--dashboard-stat-card-border, var(--admin-border-primary));
   border-radius: var(--admin-border-radius-xl);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--dashboard-stat-card-shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+  backdrop-filter: var(--dashboard-stat-card-blur, none);
+  -webkit-backdrop-filter: var(--dashboard-stat-card-blur, none);
   position: relative;
   overflow: hidden;
 
-  // Premium Zinc/Dark effect
-  [data-theme="dark"], [data-theme="zinc"] & {
-    background: rgba(24, 24, 27, 0.6);
-    backdrop-filter: blur(10px);
-    border-color: rgba(255, 255, 255, 0.05);
-  }
-
-  // Glass effect for glass theme
-  [data-theme="glass"] & {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(15px) saturate(150%);
-    -webkit-backdrop-filter: blur(15px) saturate(150%);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 
-      0 8px 32px rgba(31, 41, 55, 0.08),
-      inset 0 1px 0 rgba(255, 255, 255, 0.5);
-  }
-
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
-
-    [data-theme="glass"] & {
-      background: rgba(255, 255, 255, 0.4);
-      border-color: rgba(255, 255, 255, 0.6);
-    }
+    box-shadow: var(--dashboard-stat-card-hover-shadow, 0 12px 40px rgba(0, 0, 0, 0.12));
+    background-color: var(--dashboard-stat-card-hover-bg, var(--admin-bg-hover));
+    border-color: var(--dashboard-stat-card-hover-border, var(--admin-border-primary));
   }
 }
 
@@ -91,17 +76,19 @@
   z-index: 2;
 }
 
+/* Task-016: icon colors use CSS variables.
+   Glass theme overrides all to white via _admin-glass.scss → --stat-icon-*: #ffffff */
 .stat-icon {
   font-size: 48px;
   width: 48px;
   height: 48px;
 
-  &.products { color: var(--admin-success); }
-  &.orders { color: var(--admin-primary); }
-  &.users { color: var(--admin-warning); }
-  &.revenue { color: #a855f7; } // Purple 500
-  &.aov { color: #3b82f6; } // Blue 500
-  &.success-rate { color: var(--admin-success); }
+  &.products     { color: var(--stat-icon-products, var(--admin-success)); }
+  &.orders       { color: var(--stat-icon-orders, var(--admin-primary)); }
+  &.users        { color: var(--stat-icon-users, var(--admin-warning)); }
+  &.revenue      { color: var(--stat-icon-revenue, #a855f7); }
+  &.aov          { color: var(--stat-icon-aov, #3b82f6); }
+  &.success-rate { color: var(--stat-icon-success-rate, var(--admin-success)); }
 }
 
 .stat-info {

@@ -47,7 +47,8 @@
   /* ===== COMPOSITE OVERRIDES ===== */
   --radius-card: var(--radius-md);
   --shadow-card: var(--shadow-sm);
-  --glass-blur: 12px;
+  --glass-blur: blur(12px); // Must be CSS function for backdrop-filter (Task-017)
+  --glass-blur-value: 12px;
   --glass-opacity: 0.8;
 
   /* ===== LEGACY ALIASES (backward compatibility) ===== */

@@ -392,18 +392,11 @@ button {
 
 // Toolbar
 .mat-toolbar {
-  background-color: var(--admin-bg-card);
-  color: var(--admin-text-primary);
-  border-bottom: 1px solid var(--admin-border-primary);
-
-  // Glass theme improvements
-  [data-theme="glass"] & {
-    background: var(--admin-glass-surface-soft);
-    backdrop-filter: blur(18px) saturate(180%);
-    -webkit-backdrop-filter: blur(18px) saturate(180%);
-    border-bottom: 1px solid var(--admin-glass-border-soft);
-    box-shadow: var(--admin-glass-shadow);
-  }
+  background-color: var(--admin-header-bg, var(--admin-bg-card));
+  color: var(--admin-header-text, var(--admin-text-primary));
+  border-bottom: var(--admin-header-border, 1px solid var(--admin-border-primary));
+  backdrop-filter: var(--admin-header-blur, none);
+  -webkit-backdrop-filter: var(--admin-header-blur, none);
 }
 
 // Sidenav
@@ -412,12 +405,12 @@ button {
   color: var(--admin-text-primary);
   border-right: 1px solid var(--admin-border-primary);
 
-  // Glass theme improvements
+  // Glass theme improvements (using tokens from _admin-glass.scss)
   [data-theme="glass"] & {
-    background: var(--admin-glass-surface-muted);
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
-    border-right: 1px solid var(--admin-glass-border-soft);
+    background: var(--admin-bg-secondary);
+    backdrop-filter: var(--admin-header-blur, blur(20px) saturate(160%));
+    -webkit-backdrop-filter: var(--admin-header-blur, blur(20px) saturate(160%));
+    border-right: var(--admin-header-border, 1px solid var(--admin-glass-border-soft));
     box-shadow: var(--admin-glass-shadow);
   }
 }

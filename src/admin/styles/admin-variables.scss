@@ -60,6 +60,23 @@
   --admin-bg-overlay: rgba(0, 0, 0, 0.5);
   --admin-popup-bg: #fafafa;
   
+  // Dashboard stat cards — fallback (light theme) (Task-015)
+  --dashboard-stat-card-bg: var(--admin-bg-secondary);
+  --dashboard-stat-card-border: var(--admin-border-primary);
+  --dashboard-stat-card-blur: none;
+  --dashboard-stat-card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --dashboard-stat-card-hover-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  --dashboard-stat-card-hover-bg: var(--admin-bg-hover);
+  --dashboard-stat-card-hover-border: var(--admin-border-primary);
+
+  // Dashboard stat card icons — colored in light/dark theme (Task-016)
+  --stat-icon-products: var(--admin-success);
+  --stat-icon-orders: var(--admin-primary);
+  --stat-icon-users: var(--admin-warning);
+  --stat-icon-revenue: #a855f7;
+  --stat-icon-aov: #3b82f6;
+  --stat-icon-success-rate: var(--admin-success);
+  
   // Text Colors - Light Theme (Default)
   --admin-text-primary: #212121;
   --admin-text-secondary: #757575;
@@ -197,4 +214,11 @@
   --mdc-elevated-card-container-color: transparent;
   --mdc-filled-card-container-color: transparent;
   --mdc-outlined-card-container-color: transparent;
+
+  // Admin Header Variables (Task-020) - Fallback for light theme
+  --admin-header-bg: var(--admin-bg-card);
+  --admin-header-blur: none;
+  --admin-header-border: var(--admin-border-primary);
+  --admin-header-text: var(--admin-text-primary);
+  --admin-header-icon-color: var(--admin-text-secondary);
 }

@@ -435,4 +435,107 @@ This audit trail enables pattern analysis to prevent recurring violations.
 
 ---
 
-*This document is maintained by the Principal UI Architect. Last updated: 2026-07-06*
+## 12. Angular ViewEncapsulation: Theme Selector Anti-Pattern
+
+> **Added**: 2026-07-14 | **Discovered in**: Task-015
+
+### 12.1 The Problem
+
+Angular uses `ViewEncapsulation.Emulated` by default. This adds a unique attribute (e.g., `_ngcontent-xxx-c42`) to every element in the component. Nested theme selectors inside component SCSS **break silently**:
+
+```scss
+// ❌ WRONG — dashboard.component.scss
+.stat-card {
+  [data-theme="glass"] & {
+    background: rgba(255, 255, 255, 0.2); // This rule is NEVER applied!
+  }
+}
+// Angular compiles this to:
+// [data-theme="glass"] .stat-card[_ngcontent-xxx-c42] { ... }
+// But `data-theme` is on <html>, not a parent of the emulated scope
+// → selector never matches → style silently dropped
+```
+
+### 12.2 The Solution
+
+Always use **theme-driven CSS variables** consumed by the component:
+
+```scss
+// ✅ CORRECT — _admin-glass.scss (or any global theme file)
+[data-theme="glass"] {
+  --dashboard-stat-card-bg: rgba(255, 255, 255, 0.2);
+  --dashboard-stat-card-blur: blur(15px) saturate(150%);
+}
+
+// ✅ CORRECT — dashboard.component.scss
+.stat-card {
+  background-color: var(--dashboard-stat-card-bg, var(--admin-bg-secondary));
+  backdrop-filter: var(--dashboard-stat-card-blur, none);
+}
+```
+
+### 12.3 When This Pattern Is Safe
+
+| Context | Safe? | Reason |
+|---------|-------|--------|
+| `admin-global.scss` (global file) | ✅ Yes | No encapsulation — rules applied globally |
+| `_admin-glass.scss` (global file) | ✅ Yes | No encapsulation — rules applied globally |
+| `component.scss` with `[data-theme="glass"] &` | ❌ NO | Angular encapsulation breaks selector |
+| `component.scss` with `:host-context([data-theme])` | ✅ Yes | Angular-aware selector, works with emulation |
+
+**Alternative**: If you must use component-scope theme selectors, use `:host-context()`:
+```scss
+// ✅ Also correct (Angular-native approach):
+:host-context([data-theme="glass"]) {
+  .stat-card {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+```
+But prefer CSS variables as they scale better across themes.
+
+---
+
+## 13. Admin Panel Token Namespace
+
+### 13.1 Separation Model
+
+Admin panel uses `--admin-*` prefix to isolate from storefront. Key files:
+
+| File | Purpose |
+|------|---------|
+| `src/admin/styles/admin-variables.scss` | `:root` fallback values for all `--admin-*` and component-specific tokens |
+| `src/admin/styles/_admin-glass.scss` | `[data-theme="glass"]` overrides for admin |
+| `src/admin/styles/_admin-dark.scss` | `[data-theme="dark"]` overrides for admin |
+| `src/admin/styles/_admin-light.scss` | `[data-theme="light"]` overrides for admin |
+| `src/admin/styles/admin-global.scss` | Global admin component styles — consume tokens only |
+
+### 13.2 Token Naming for Admin Components
+
+For **page-level** tokens (e.g., dashboard-specific), use a component prefix:
+```scss
+// In admin-variables.scss (:root):
+--dashboard-stat-card-bg: var(--admin-bg-secondary);    // fallback
+--stat-icon-products: var(--admin-success);              // fallback
+
+// In _admin-glass.scss ([data-theme="glass"]):
+--dashboard-stat-card-bg: rgba(255, 255, 255, 0.2);     // override
+--stat-icon-products: #ffffff;                           // override
+```
+
+This follows the pattern: **define in theme file, consume in component**.
+
+### 13.3 Known Token Groups
+
+| Token Group | Variables | Defined In |
+|-------------|-----------|------------|
+| Layout | `--admin-bg-*`, `--admin-text-*`, `--admin-border-*` | `admin-variables.scss` |
+| Glass surfaces | `--admin-glass-surface-*`, `--admin-glass-border-*`, `--admin-glass-shadow*` | `_admin-glass.scss` |
+| Dashboard cards | `--dashboard-stat-card-*` | `admin-variables.scss` + `_admin-glass.scss` |
+| Stat icons | `--stat-icon-*` | `admin-variables.scss` + `_admin-glass.scss` |
+| Admin header | `--admin-header-*` | `admin-variables.scss` + `_admin-glass.scss` (Task-020) |
+| Material tokens | `--mdc-*`, `--mat-*` | All admin theme files |
+
+---
+
+*This document is maintained by the Principal UI Architect. Last updated: 2026-07-14*

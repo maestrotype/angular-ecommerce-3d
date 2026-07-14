@@ -1,6 +1,4 @@
-# Project Status — angular-ecommerce-3d
-
-**Last Updated**: 2026-07-09
+**Last Updated**: 2026-07-14
 **Maintainer**: Principal UI Architect
 
 > This document tracks high-level project progress. For detailed phase planning and task breakdown, see `REDESIGN_PLAN.md`. For architectural decisions and rules, see `STYLE_ARCHITECTURE.md`.
@@ -33,10 +31,10 @@
 | 1 | Style Architecture Audit | 🔄 In Progress | Documentation complete, code audit pending |
 | 2 | Theme Engine Redesign | ⏳ Pending | — |
 | 3 | Design Token Unification | ✅ Complete | Task-001..004: all themes migrated; Task-005: PoC component migrated |
-| 5 | Style Cleanup | 🔄 In Progress | Task-007: 3 more components migrated to semantic tokens (cards, theme-switcher, base-modal). Ready for mass migration. |
+| 5 | Style Cleanup | 🔄 In Progress | Task-007: 3 more components migrated. Task-008: glass regression fixed. Task-015..017: Glass admin UI restored. |
 | 4 | Angular Material Integration | ⏳ Pending | — |
 | 5 | Style Cleanup | 🔄 In Progress | — |
-| 6 | Component Migration | ⏳ Pending | — |
+| 6 | Component Migration | ⏳ Pending | Task-018..026 planned |
 | 7 | Premium UI Implementation | ⏳ Pending | — |
 | 8 | Animation System | ⏳ Pending | — |
 | 9 | Polish & Consistency | ⏳ Pending | — |
@@ -47,6 +45,10 @@
 ### Recent Changes
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-07-14 | Task-017 (ADR-001): Fixed `--glass-blur` token in `_semantic-tokens.scss` and `_default.scss`. Token was `12px` (raw number) but `backdrop-filter: var(--glass-blur)` requires a CSS function. Fixed to `blur(12px)`. Added `--glass-blur-value: 12px` for JS/filter() usage. Build passes (8188ms). | Principal UI Architect |
+| 2026-07-14 | Task-016 (ADR-001): Restored original colorful icons in the glass admin theme. Excluded `.stat-icon` from the global `mat-icon` white color override in `_glass.scss` via `mat-icon:not(.stat-icon)`. Reverted temporary white icon values to proper bright colors in `_admin-glass.scss` to match the exact original visual appearance. Build passes. | Principal UI Architect |
+| 2026-07-14 | Task-020 (ADR-001): Fixed admin header/sidenav backdrop-filter and glass theme integration. Added `--admin-header-*` CSS variables in `_admin-glass.scss` and fallbacks in `admin-variables.scss`. Updated `admin-global.scss` to use token-based styling instead of nested theme selectors. Removed DevTools warnings on `backdrop-filter`. Build passes (5722ms). | Qwen |
+| 2026-07-14 | Task-015 (ADR-001): Fixed stat-cards background in glass admin theme. Root cause: `[data-theme="glass"] & {}` selectors inside Angular components with ViewEncapsulation.Emulated compile to invalid selectors — they never match. Solution: moved glass-specific values to `--dashboard-stat-card-*` CSS variables in `_admin-glass.scss`, with fallbacks in `admin-variables.scss`. `dashboard.component.scss` now only consumes `var(--dashboard-stat-card-*)`. Anti-pattern documented in plan. Build passes (8188ms). | Principal UI Architect |
 | 2026-07-09 | Task-008: Fixed Admin Dashboard Glass regression. Root cause: selector `[data-theme="glass"].is-admin` in `_glass.scss` never matched because `data-theme="glass"` is on `<html>` and `.is-admin` is on `<body>`. Fixed by moving admin block outside `[data-theme="glass"]` and using correct selector `html[data-theme="glass"] body.is-admin`. Removed all 16 `!important` declarations that were masking the broken selector. Build passes (5893ms). | Principal UI Architect |
 | 2026-07-09 | Task-007 (ADR-001): Migrated 3 component files to semantic tokens: `styles/components/_cards.scss`, `styles/components/_theme-switcher.scss`, `app/shared/modal/base-modal.component.scss`. Replaced all hardcoded colors (#e0e0e0, #aaa, #999, #ffffff, #1e293b, etc.), admin variables (--admin-*), and legacy custom properties (--favorites-*, --glass-*) with semantic tokens: --surface-page/primary/secondary/elevated/hover/overlay, --text-primary/secondary/muted/inverse/on-primary, --border-default/subtle/medium/strong/emphasis, --spacing-*, --radius-*/full, --shadow-sm/md/lg/xl, --transition-fast, --font-family/weight/size-*, --z-modal, --backdrop-blur/sm, --color-primary/accent, --state-*, --interactive-*, --glass-bg/border/shadow/blur. Build passes (8388ms). | Principal UI Architect |
 | 2026-07-08 | Task-006 (ADR-001): Migrated `favorites.component.scss` to semantic tokens. Replaced all `--favorites-*` custom properties and hardcoded colors (#ffffff, #1e293b, #ff6b6b, #3498db, #f3f3f3, #6c757d, #5a6268, #495057, #94a3b8, #64748b, #475569, #60a5fa, #6366f1) with semantic tokens: --surface-page/card/secondary/elevated/hover/overlay/overlay-light, --text-primary/secondary/muted, --font-family-primary/secondary, --spacing-*, --radius-*, --shadow-sm/md/lg/xl, --border-default/subtle/medium/strong, --backdrop-blur, --color-primary/accent, --state-danger-bg, --state-warning-*, --interactive-primary-*, --glass-*, --text-on-primary, --font-weight-*, --text-*. Zero hardcoded colors remain. Build passes (7619ms). | Principal UI Architect |

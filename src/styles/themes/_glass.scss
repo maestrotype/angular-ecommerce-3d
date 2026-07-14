@@ -445,7 +445,7 @@ html[data-theme="glass"] body.is-admin {
       color: rgba(255, 255, 255, 0.9);
     }
 
-    mat-icon {
+    mat-icon:not(.stat-icon) {
       color: var(--color-white);
       filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
     }

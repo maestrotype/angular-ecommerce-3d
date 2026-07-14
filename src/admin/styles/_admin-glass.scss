@@ -64,7 +64,22 @@
   --admin-table-paginator-bg: rgba(25, 60, 105, 0.72);     // DARK — same as header
   --admin-table-paginator-text: rgba(255, 255, 255, 0.90); // WHITE text in paginator
   --admin-bg-container: #d7e1ff;
-  --dashboard-stat-card-bg: rgba(248, 250, 252, 0.2);
+  // Dashboard stat cards — glass theme (Task-015)
+  --dashboard-stat-card-bg: rgba(255, 255, 255, 0.2);
+  --dashboard-stat-card-border: rgba(255, 255, 255, 0.4);
+  --dashboard-stat-card-blur: blur(15px) saturate(150%);
+  --dashboard-stat-card-shadow: 0 8px 32px rgba(31, 41, 55, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  --dashboard-stat-card-hover-shadow: 0 16px 48px rgba(31, 41, 55, 0.12);
+  --dashboard-stat-card-hover-bg: rgba(255, 255, 255, 0.4);
+  --dashboard-stat-card-hover-border: rgba(255, 255, 255, 0.6);
+
+  // Dashboard stat card icons — original colorful icons in glass theme (Task-016)
+  --stat-icon-products: #4caf50;
+  --stat-icon-orders: #3b82f6;
+  --stat-icon-users: #ff9800;
+  --stat-icon-revenue: #a855f7;
+  --stat-icon-aov: #3b82f6;
+  --stat-icon-success-rate: #4caf50;
   
   --admin-text-primary: rgba(255, 255, 255, 0.95);
   --admin-text-secondary: rgba(255, 255, 255, 0.65);
@@ -139,4 +154,11 @@
   // Angular Material toolbar token
   --mat-toolbar-standard-height: 64px;
   --mat-toolbar-mobile-height: 64px;
+
+  // Header-specific glass variables (Task-020)
+  --admin-header-bg: rgba(199, 211, 233, 0.35);
+  --admin-header-blur: blur(18px) saturate(180%);
+  --admin-header-border: var(--admin-glass-border-soft);
+  --admin-header-text: rgba(255, 255, 255, 0.95);
+  --admin-header-icon-color: rgba(255, 255, 255, 0.9);
 }
