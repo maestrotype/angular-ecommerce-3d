@@ -4,6 +4,7 @@
   background-color: var(--admin-header-bg);
   color: var(--admin-text-primary);
   box-shadow: none;
+  border-bottom: 1px solid var(--admin-header-border, var(--admin-border-primary));
   transition: background-color var(--admin-transition-normal),
     color var(--admin-transition-normal),
     border-color var(--admin-transition-normal);
@@ -464,7 +465,8 @@
 
 [data-theme="light"] {
   .admin-header {
-    background-color: #fff;
+    background-color: var(--admin-header-bg, #f3f4f6);
+    border-bottom-color: var(--admin-header-border, #e5e7eb);
   }
 }
 
