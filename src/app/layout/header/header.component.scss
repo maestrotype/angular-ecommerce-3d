@@ -1050,6 +1050,7 @@
 // Glass theme: override only header text/link colours to white.
 // Does NOT touch any other section colours, tokens or variables.
 :host-context(body[data-theme="glass"]) .header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   --header-text: #ffffff;
   --header-link: rgba(255, 255, 255, 0.85);
   --header-link-hover: #ffffff;

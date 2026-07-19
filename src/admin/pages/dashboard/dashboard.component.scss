@@ -50,7 +50,7 @@
 .stat-card {
   height: 120px;
   background-color: var(--dashboard-stat-card-bg, var(--admin-bg-secondary));
-  border: 1px solid var(--dashboard-stat-card-border, var(--admin-border-primary));
+  border: 1px solid var(--admin-border-primary);
   border-radius: var(--admin-border-radius-xl);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: var(--dashboard-stat-card-shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
@@ -63,7 +63,7 @@
     transform: translateY(-4px);
     box-shadow: var(--dashboard-stat-card-hover-shadow, 0 12px 40px rgba(0, 0, 0, 0.12));
     background-color: var(--dashboard-stat-card-hover-bg, var(--admin-bg-hover));
-    border-color: var(--dashboard-stat-card-hover-border, var(--admin-border-primary));
+    border-color: var(--admin-border-primary);
   }
 }
 

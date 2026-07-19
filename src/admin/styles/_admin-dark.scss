@@ -12,6 +12,7 @@
   --admin-bg-hover: rgba(255, 255, 255, 0.04);
   
   --admin-header-bg: #0f0f12;
+  --admin-header-border: rgba(255, 255, 255, 0.06);
   --admin-bg-overlay: rgba(0, 0, 0, 0.8);
   
   // Text Colors
@@ -57,6 +58,10 @@
   // Keep a hint of blue in the gradient for "depth"
   --admin-card-gradient: linear-gradient(135deg, #18181b 0%, #09090b 100%);
   --admin-surface-glow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  
+  // Shadows for headers / separators (darker theme needs stronger contrast)
+  --admin-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --admin-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
   
   // Custom Color for Headers matches even table rows (More distinct grey)
   --admin-header-bg: #1c1c21; 
@@ -183,6 +188,23 @@
   --mdc-elevated-card-container-color: transparent;
   --mdc-filled-card-container-color: transparent;
   --mdc-outlined-card-container-color: transparent;
+
+  // Dashboard stat cards — dark theme (match production fallback)
+  --dashboard-stat-card-bg: var(--admin-bg-secondary);
+  --dashboard-stat-card-border: var(--admin-border-primary);
+  --dashboard-stat-card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --dashboard-stat-card-blur: none;
+  --dashboard-stat-card-hover-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  --dashboard-stat-card-hover-bg: var(--admin-bg-hover);
+  --dashboard-stat-card-hover-border: var(--admin-border-primary);
+
+  // Stat card icons — dark theme defaults
+  --stat-icon-products: var(--admin-success);
+  --stat-icon-orders: var(--admin-primary);
+  --stat-icon-users: var(--admin-warning);
+  --stat-icon-revenue: #a855f7;
+  --stat-icon-aov: #3b82f6;
+  --stat-icon-success-rate: var(--admin-success);
 
   // Custom Avatar Variables
   --admin-avatar-bg: rgba(59, 130, 246, 0.15); 

@@ -11,6 +11,7 @@
   // Header background - slightly distinct from page bg for visual separation
   --admin-header-bg: #f3f4f6;
   --admin-header-border: #e5e7eb;
+  --admin-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
   --admin-back-btn: #f5f6f8;
   --admin-submit-btn: #3b82f6;
   --admin-submit-btn-hover: #2563eb;
@@ -61,6 +62,23 @@
   // Custom Avatar Variables
   --admin-avatar-bg: rgba(59, 130, 246, 0.1); 
   --admin-avatar-color: #3b82f6;
+
+  // Dashboard stat cards — light theme (match production fallback)
+  --dashboard-stat-card-bg: var(--admin-bg-card);
+  --dashboard-stat-card-border: var(--admin-border-primary);
+  --dashboard-stat-card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  --dashboard-stat-card-blur: none;
+  --dashboard-stat-card-hover-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+  --dashboard-stat-card-hover-bg: var(--admin-bg-hover);
+  --dashboard-stat-card-hover-border: var(--admin-border-primary);
+
+  // Stat card icons — light theme defaults
+  --stat-icon-products: #4caf50;
+  --stat-icon-orders: #3b82f6;
+  --stat-icon-users: #ff9800;
+  --stat-icon-revenue: #a855f7;
+  --stat-icon-aov: #3b82f6;
+  --stat-icon-success-rate: #4caf50;
 
   // Ensure MDC card container tokens are transparent in light theme
   --mdc-elevated-card-container-color: transparent;

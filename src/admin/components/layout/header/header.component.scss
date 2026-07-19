@@ -3,7 +3,7 @@
   min-height: 64px;
   background-color: var(--admin-header-bg);
   color: var(--admin-text-primary);
-  box-shadow: none;
+  box-shadow: var(--admin-shadow-sm);
   border-bottom: 1px solid var(--admin-header-border, var(--admin-border-primary));
   transition: background-color var(--admin-transition-normal),
     color var(--admin-transition-normal),
@@ -466,7 +466,16 @@
 [data-theme="light"] {
   .admin-header {
     background-color: var(--admin-header-bg, #f3f4f6);
-    border-bottom-color: var(--admin-header-border, #e5e7eb);
+    border-bottom: 1px solid var(--admin-header-border, #e5e7eb);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+}
+
+// Dark theme - header
+[data-theme="dark"] {
+  .admin-header {
+    background-color: var(--admin-header-bg, #1f2937);
+    border-bottom: 1px solid var(--admin-header-border, var(--admin-border-primary));
   }
 }
 
@@ -543,9 +552,8 @@
 
 // Glass theme adjustments
 [data-theme="glass"] {
-  // Layout specific overrides only, colors and glass effects are handled globally via tokens
   .admin-header {
-    border-bottom: var(--glass-border, 1px solid rgba(255, 255, 255, 0.2));
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(20px) saturate(160%);
     -webkit-backdrop-filter: blur(20px) saturate(160%);
   }
@@ -628,12 +636,6 @@
     }
   }
   
-  // Dark theme - dark header
-  [data-theme="dark"] {
-    .admin-header {
-      border-bottom: 1px solid #374151;
-    }
-  }
   
   .admin-header {
     .header-title {
