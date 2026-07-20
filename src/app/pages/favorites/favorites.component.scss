@@ -284,6 +284,10 @@
 
                 &.is-favorite {
                   color: var(--state-danger-bg);
+
+                  .material-icons {
+                    display: block;
+                  }
                 }
 
                 .material-icons {
@@ -438,6 +442,10 @@
     .action-btn {
       background: var(--surface-overlay-light);
       color: var(--text-primary);
+
+      &.is-favorite {
+        color: var(--state-danger-bg);
+      }
     }
   }
 }
@@ -504,6 +512,10 @@
       -webkit-backdrop-filter: blur(15px);
       box-shadow: 0 4px 16px rgba(255, 255, 255, 0.2);
       color: var(--text-primary);
+
+      &.is-favorite {
+        color: var(--state-danger-bg);
+      }
 
       &:hover {
         background: var(--glass-bg-hover);
