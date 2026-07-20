@@ -37,6 +37,9 @@
   // ===== COMPOSITE TOKENS =====
   --radius-card: var(--radius-md);
   --shadow-card: var(--shadow-sm);
+
+  // ===== OVERLAY TOKENS =====
+  --surface-overlay-hover: rgba(0, 0, 0, 0.3);
   // NOTE: --glass-blur must be a full CSS function (blur(...)) because it is consumed
   // by backdrop-filter: var(--glass-blur). A raw pixel value would be invalid.
   --glass-blur: blur(12px);

@@ -49,8 +49,12 @@
   /* ===== COMPOSITE OVERRIDES ===== */
   --radius-card: var(--radius-md);
   --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --glass-blur: 12px;
+  --glass-blur: blur(12px);
+  --glass-blur-value: 12px;
   --glass-opacity: 0.8;
+
+  /* ===== OVERLAY OVERRIDES ===== */
+  --surface-overlay-hover: rgba(255, 255, 255, 0.15);
 
   /* ===== LEGACY ALIASES (backward compatibility) ===== */
   --color-text-primary: var(--text-primary);

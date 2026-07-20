@@ -253,7 +253,7 @@
           .product-overlay {
             position: absolute;
             inset: 0;
-            background: var(--surface-overlay);
+            background: var(--surface-overlay-hover);
             opacity: 0;
             transition: opacity var(--transition-normal);
             display: flex;
