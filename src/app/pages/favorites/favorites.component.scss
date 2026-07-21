@@ -222,22 +222,7 @@
       gap: var(--spacing-lg);
       margin-top: var(--spacing-xs);
 
-      .product-card {
-        display: flex;
-        flex-direction: column;
-        border-radius: var(--radius-lg);
-        overflow: hidden;
-        background: var(--surface-card);
-        border: 1px solid var(--border-default);
-        box-shadow: var(--shadow-sm);
-        cursor: pointer;
-        transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-
-        &:hover {
-          transform: translateY(-6px);
-          box-shadow: var(--shadow-lg);
-          background: var(--surface-hover);
-        }
+        .product-card {
 
         .product-image {
           position: relative;

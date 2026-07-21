@@ -264,8 +264,9 @@
   }
 
   body .favorites-page .product-card:hover {
-    background: var(--color-slate-600);
-    box-shadow: var(--favorites-card-hover-shadow);
+    border-color: rgba(var(--color-blue-400-rgb), 0.35);
+    box-shadow: var(--favorites-card-hover-shadow), 0 0 20px rgba(var(--color-blue-400-rgb), 0.08);
+    transform: translateY(-4px);
   }
 
   body .favorites-page .product-name {
@@ -273,8 +274,9 @@
   }
 
   body .favorites-page .product-category {
-    background: var(--color-blue-400);
-    color: var(--color-white);
+    background: rgba(var(--color-blue-400-rgb), 0.12);
+    color: var(--color-blue-300);
+    border: 1px solid rgba(var(--color-blue-400-rgb), 0.25);
   }
 
   body .favorites-page .current-price {
