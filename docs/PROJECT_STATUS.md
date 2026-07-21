@@ -1,4 +1,4 @@
-**Last Updated**: 2026-07-14
+**Last Updated**: 2026-07-21
 **Maintainer**: Principal UI Architect
 
 > This document tracks high-level project progress. For detailed phase planning and task breakdown, see `REDESIGN_PLAN.md`. For architectural decisions and rules, see `STYLE_ARCHITECTURE.md`.
@@ -45,6 +45,7 @@
 ### Recent Changes
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-07-21 | Favorites Page Visual Audit: Fixed proportions and styling on favorites page. Reduced header padding, softened CLEAR ALL button (neutral secondary style instead of orange warning gradient), improved category badge contrast, stabilized product name with min-height/line-clamp, refined back button. All changes use semantic tokens (ADR-001 compliant). | Principal UI Architect |
 | 2026-07-14 | Task-022: Fixed admin header border regression in dark theme. Root cause: `[data-theme="dark"]` block in `header.component.scss` had no border override for `.admin-header`, so it inherited `border-bottom: none` from the base class. Fix: added explicit `.admin-header` rule with `background-color: var(--admin-header-bg, #1f2937)` and `border-bottom: 1px solid var(--admin-header-border, var(--admin-border-primary))` to match production appearance. | Principal UI Architect |
 | 2026-07-14 | Task-016 (ADR-001): Restored original colorful icons in the glass admin theme. Excluded `.stat-icon` from the global `mat-icon` white color override in `_glass.scss` via `mat-icon:not(.stat-icon)`. Reverted temporary white icon values to proper bright colors in `_admin-glass.scss` to match the exact original visual appearance. Build passes. | Principal UI Architect |
 | 2026-07-14 | Task-021 (Regression Fix #2): Fixed admin header border regression across themes. Root cause: base `.admin-header` had `border-bottom: 1px solid var(--admin-header-border)` applied universally, and dark theme had a hardcoded `border-bottom: 1px solid #374151` in the 480px media query — causing light theme to have wrong border color and dark theme to have an unwanted border. Fix: changed base `.admin-header` to `border-bottom: none`; light theme gets explicit border via `[data-theme="light"] { .admin-header { border-bottom: 1px solid #e5e7eb; } }` at 480px+; dark theme has no border (matching production). Glass theme retains its glass-style border. | Principal UI Architect |
@@ -115,4 +116,4 @@
 
 ---
 
-*This document is maintained by the Principal UI Architect. Last updated: 2026-07-14*
+*This document is maintained by the Principal UI Architect. Last updated: 2026-07-21*
