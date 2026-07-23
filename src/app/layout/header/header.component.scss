@@ -299,15 +299,47 @@
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       color: var(--header-link);
+      background: transparent;
+      border: none;
+      outline: none;
 
       &:hover {
         color: var(--color-primary, #3b82f6);
         transform: translateX(5px) translateY(-2px);
+        background: transparent;
       }
 
       &:active {
         color: var(--color-primary, #3b82f6);
         transform: translateX(2px) translateY(0px);
+        background: transparent;
+      }
+
+      &:focus,
+      &:focus-visible {
+        outline: none;
+        background: transparent;
+      }
+    }
+
+    // Theme toggle specific overrides (circular shape, fixed size)
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      margin: 0;
+      border-radius: 50%;
+      -webkit-appearance: none;
+      appearance: none;
+      line-height: 1;
+
+      svg {
+        width: 24px;
+        height: 24px;
+        flex-shrink: 0;
       }
     }
 
@@ -1037,14 +1069,14 @@
   --header-text: #f8fafc;
   --header-link: #f8fafc;
   --header-link-hover: #3b82f6;
-  .hamburger span { background: #f8fafc !important; }
+  .hamburger span { background: #f8fafc; }
 }
 
 :host(.variant-dark-soft) .header {
   --header-bg: #27272a;
   --header-text: #e4e4e7;
   --header-link: #e4e4e7;
-  .hamburger span { background: #e4e4e7 !important; }
+  .hamburger span { background: #e4e4e7; }
 }
 
 // Glass theme: override only header text/link colours to white.

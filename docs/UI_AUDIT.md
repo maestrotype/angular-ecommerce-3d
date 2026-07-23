@@ -3,8 +3,8 @@
 This document tracks the architectural cleanup of the style system. Each section records discovered issues and migration progress. Future AI agents must update this document after every style-related task.
 
 **Role**: Principal UI Architect
-**Last Updated**: 2026-07-05
-**Audit Status**: Initial — pending codebase scan
+**Last Updated**: 2026-07-23
+**Audit Status**: Active — ongoing style migrations and fixes
 
 ---
 
@@ -212,4 +212,10 @@ _Update after every style-related task._
 
 ---
 
-*This document is maintained by the Principal UI Architect. Last updated: 2026-07-05*
+## 11. Recent Fixes Log
+
+| Date | Issue | Fix | Files Modified | Status |
+|------|-------|-----|----------------|--------|
+| 2026-07-23 | Header theme-toggle button had incorrect hover (blue background from browser default button styling) | Added explicit `background:transparent`, `border:none`, `outline:none` resets for `.theme-toggle` within `.user-actions`. Unified hover behavior with other header icons (transparent bg + color change + transform). | `header.component.scss` | RESOLVED |
+
+*This document is maintained by the Principal UI Architect. Last updated: 2026-07-23*

@@ -1,4 +1,4 @@
-**Last Updated**: 2026-07-21
+**Last Updated**: 2026-07-23
 **Maintainer**: Principal UI Architect
 
 > This document tracks high-level project progress. For detailed phase planning and task breakdown, see `REDESIGN_PLAN.md`. For architectural decisions and rules, see `STYLE_ARCHITECTURE.md`.
@@ -45,6 +45,8 @@
 ### Recent Changes
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-07-23 | Header `!important` Cleanup: Removed all remaining `!important` declarations from `header.component.scss` (2 instances in `.hamburger span` inside `:host(.variant-dark)` and `:host(.variant-dark-soft)`). The `:host()` selector provides sufficient specificity without `!important`, following AI_CONSTITUTION.md Rule #3 (FORBIDDEN: `!important` in component styles). Modified: `header.component.scss`. Build passes (6905ms), 0 `!important` remaining. | Principal UI Architect |
+| 2026-07-23 | Header Theme Toggle Hover Fix: Unified `.theme-toggle` button styling with other header icons. Root cause: browser default `<button>` styles (background, border, outline) overriding transparent icon appearance. Fix: dedicated `.theme-toggle` block in `.user-actions` with `background:transparent`, `border:none`, `outline:none`, `box-shadow:none`, `-webkit-appearance:none`, unified hover/active transitions matching `.search-icon`, `.cart`, `.favorites`. Modified: `header.component.scss`. Build passes. | Principal UI Architect |
 | 2026-07-21 | Product Card Hover & Badge Redesign: Removed harsh blue bottom background on product card hover. Replaced with elegant border-glow (`rgba(96,165,250,0.35)`) + deep box-shadow with subtle blue tint + smooth `translateY(-4px)` lift. Redesigned category badge (SHOES) with semi-transparent background (`rgba(96,165,250,0.1)`), thin border (`rgba(96,165,250,0.25)`), increased border-radius (6px), compact padding (3px 8px), smaller font (10px). Mobile hover uses transparent background. Added missing primitive tokens (`--color-blue-300`, `--color-blue-400`, `--color-blue-400-rgb`). Modified: `_cards.scss`, `_dark.scss`, `_primitive-tokens.scss`. | Principal UI Architect |
 | 2026-07-21 | Favorites Page Visual Audit: Fixed proportions and styling on favorites page. Reduced header padding, softened CLEAR ALL button (neutral secondary style instead of orange warning gradient), improved category badge contrast, stabilized product name with min-height/line-clamp, refined back button. All changes use semantic tokens (ADR-001 compliant). | Principal UI Architect |
 | 2026-07-14 | Task-022: Fixed admin header border regression in dark theme. Root cause: `[data-theme="dark"]` block in `header.component.scss` had no border override for `.admin-header`, so it inherited `border-bottom: none` from the base class. Fix: added explicit `.admin-header` rule with `background-color: var(--admin-header-bg, #1f2937)` and `border-bottom: 1px solid var(--admin-header-border, var(--admin-border-primary))` to match production appearance. | Principal UI Architect |
@@ -117,4 +119,4 @@
 
 ---
 
-*This document is maintained by the Principal UI Architect. Last updated: 2026-07-21*
+*This document is maintained by the Principal UI Architect. Last updated: 2026-07-23*
