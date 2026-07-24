@@ -5,7 +5,14 @@
         </div>
 
         <div class="brands-grid">
-            <div class="brand-item" *ngFor="let brand of brands">
+            <div
+                class="brand-item"
+                *ngFor="let brand of brands"
+                [attr.data-brand-name]="brand.name | localized"
+                tabindex="0"
+                role="img"
+                [attr.aria-label]="(brand.name | localized) + ' — ' + ('HOME.BRANDS.VISIT' | translate)"
+            >
                 <img [src]="brand.logo" [alt]="brand.name | localized" class="brand-logo">
             </div>
         </div>

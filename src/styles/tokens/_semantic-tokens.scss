@@ -45,4 +45,11 @@
   --glass-blur: blur(12px);
   --glass-blur-value: 12px; // raw value for JS or filter() usage
   --glass-opacity: 0.8;
+
+  // ===== BADGE TOKENS =====
+  --badge-bg: var(--state-error-bg);
+  --badge-text: var(--state-error-text);
+  --badge-min-size: 18px;
+  --badge-font-size: 0.75rem;
+  --badge-border-radius: var(--radius-full);
 }

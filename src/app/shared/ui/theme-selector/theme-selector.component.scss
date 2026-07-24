@@ -16,6 +16,7 @@
   &__options {
     display: grid;
     gap: var(--spacing-sm);
+    animation: optionsSlideIn 0.25s ease-out;
   }
 }
 
@@ -30,16 +31,58 @@
   transition: all var(--transition-fast);
   background: var(--surface-secondary);
   position: relative;
+  overflow: hidden;
+  
+  // Staggered entrance animation per item
+  @for $i from 1 through 6 {
+    &:nth-child(#{$i}) {
+      animation: optionSlideIn 0.2s ease-out #{$i * 50}ms both;
+    }
+  }
   
   &:hover {
     border-color: var(--border-strong);
     box-shadow: var(--shadow-sm);
     background: var(--surface-tertiary);
+    transform: translateY(-1px);
   }
   
   &.active {
-    border-color: var(--border-strong);
+    border-color: var(--primary-main);
     background: var(--surface-tertiary);
+    
+    // Animated glow border ring
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: var(--radius-md);
+      padding: 2px;
+      background: linear-gradient(
+        135deg,
+        var(--primary-main),
+        var(--accent-main, var(--primary-main)),
+        var(--secondary-main, var(--primary-main))
+      );
+      background-size: 200% 200%;
+      animation: glowRotate 3s ease infinite;
+      -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+    
+    // Inner glow
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-md);
+      box-shadow: inset 0 0 12px rgba(var(--primary-rgb, 66, 133, 244), 0.08);
+      pointer-events: none;
+    }
     
     .theme-option__name {
       color: var(--text-primary);
@@ -48,6 +91,12 @@
     
     .theme-option__description {
       color: var(--text-secondary);
+    }
+    
+    // Active checkmark pulse
+    .theme-check {
+      color: var(--primary-main);
+      animation: checkPulse 2s ease-in-out infinite;
     }
   }
   
@@ -71,16 +120,22 @@
   }
 }
 
-// Mini UI Preview
+// Mini UI Preview — enlarged swatches (Task-024)
 .theme-preview-mini {
-  width: 80px;
-  height: 60px;
-  border-radius: 8px;
+  width: 96px;
+  height: 72px;
+  border-radius: var(--radius-md);
   overflow: hidden;
   position: relative;
   border: 2px solid var(--preview-primary);
   background: var(--preview-bg);
   flex-shrink: 0;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  
+  .theme-option:hover & {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
   
   .mini-header {
     height: 20px;
@@ -121,22 +176,15 @@
 // Preview Hint Icon
 .preview-hint {
   font-size: 18px;
-  color: #666;
-  transition: color 0.2s ease;
+  color: var(--text-tertiary);
+  transition: color var(--transition-fast);
   
   .theme-option:hover & {
-    color: #999;
+    color: var(--text-secondary);
   }
 }
 
 // Active Checkmark
-.theme-check {
-  font-size: var(--text-xl);
-  color: var(--state-success-bg);
-  position: absolute;
-  right: var(--spacing-xs);
-  top: var(--spacing-xs);
-}
 
 // Modal Preview
 .theme-preview-modal {
@@ -349,6 +397,49 @@
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+// Task-024: Theme Selector Polish — new animations
+@keyframes optionsSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes optionSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glowRotate {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes checkPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.85;
   }
 }
 

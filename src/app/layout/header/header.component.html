@@ -4,11 +4,13 @@
       <app-logo></app-logo>
     </div>
 
-    <!-- Desktop Navigation -->
+     <!-- Desktop Navigation -->
     <nav class="nav" [class.nav-compressed]="isSearchOpen">
       <ng-container *ngFor="let item of menuItems">
         <a *ngIf="item.url.startsWith('/')" [routerLink]="item.url" class="nav-link"
-          [class.hidden]="!canAccessMenuItem(item)">
+          [class.hidden]="!canAccessMenuItem(item)"
+          routerLinkActive="active" [routerLinkActiveOptions]="{ exact: item.url === '/' }"
+          ariaCurrentWhenActive="page">
           {{ item.title | localized }}
         </a>
         <a *ngIf="item.url.startsWith('#')" 
@@ -63,22 +65,22 @@
           </svg>
         </button>
 
-        <div class="theme-switcher__popover" *ngIf="showThemeMenu">
-          <button class="theme-switcher__option" *ngFor="let theme of themes" (click)="changeTheme(theme.id)"
-            type="button" [class.active]="currentTheme === theme.id">
+        <div class="theme-switcher__popover" *ngIf="showThemeMenu" [@popoverAnimation]>
+          <button class="theme-switcher__option" *ngFor="let theme of themes; let i = index" (click)="changeTheme(theme.id)"
+            type="button" [class.active]="currentTheme === theme.id" [@optionStaggerAnimation] i>
             <span class="theme-switcher__swatch">
               <ng-container [ngSwitch]="theme.id">
-                <svg *ngSwitchCase="'default'" width="24" height="16" viewBox="0 0 24 16"
+                <svg *ngSwitchCase="'default'" width="32" height="20" viewBox="0 0 32 20"
                   xmlns="http://www.w3.org/2000/svg">
-                  <rect x="0" y="0" width="24" height="16" fill="var(--surface-2)" />
-                  <rect x="0" y="8" width="24" height="8" fill="var(--color-primary)" />
+                  <rect x="0" y="0" width="32" height="20" rx="3" fill="var(--surface-2)" />
+                  <rect x="0" y="10" width="32" height="10" rx="0 0 3 3" fill="var(--color-primary)" />
                 </svg>
-                <svg *ngSwitchCase="'dark'" width="24" height="16" viewBox="0 0 24 16"
+                <svg *ngSwitchCase="'dark'" width="32" height="20" viewBox="0 0 32 20"
                   xmlns="http://www.w3.org/2000/svg">
-                  <rect x="0" y="0" width="24" height="16" fill="#111827" />
-                  <circle cx="18" cy="5" r="3" fill="#f59e0b" />
+                  <rect x="0" y="0" width="32" height="20" rx="3" fill="#111827" />
+                  <circle cx="24" cy="6" r="3.5" fill="#f59e0b" />
                 </svg>
-                <svg *ngSwitchCase="'glass'" width="24" height="16" viewBox="0 0 24 16"
+                <svg *ngSwitchCase="'glass'" width="32" height="20" viewBox="0 0 32 20"
                   xmlns="http://www.w3.org/2000/svg">
                   <defs>
                     <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
@@ -86,15 +88,19 @@
                       <stop offset="100%" stop-color="rgba(255,255,255,.2)" />
                     </linearGradient>
                   </defs>
-                  <rect x="0" y="0" width="24" height="16" fill="url(#g1)" />
-                  <rect x="0" y="0" width="24" height="16" stroke="var(--border)" fill="none" />
+                  <rect x="0" y="0" width="32" height="20" rx="3" fill="url(#g1)" />
+                  <rect x="0" y="0" width="32" height="20" rx="3" stroke="var(--border, rgba(255,255,255,0.3))" stroke-width="1" fill="none" />
                 </svg>
                 <span *ngSwitchDefault
-                  style="display:block;width:24px;height:16px;background:var(--color-primary);"></span>
+                  style="display:block;width:32px;height:20px;border-radius:4px;background:var(--color-primary);"></span>
               </ng-container>
             </span>
             <span class="theme-switcher__label">{{ theme.name }}</span>
-            <span class="theme-switcher__check" *ngIf="currentTheme === theme.id">✔</span>
+            <span class="theme-switcher__check" *ngIf="currentTheme === theme.id">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.5 4.5L6.5 11.5L2.5 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
           </button>
         </div>
       </div>

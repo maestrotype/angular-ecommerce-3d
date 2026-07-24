@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, Input, OnChanges, SimpleChanges, HostBinding } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalService } from '../../core/services/modal.service';
 import { CartService } from '../../core/services/cart.service';
 import { FavoritesService } from '../../core/services/favorites.service';
@@ -26,6 +27,10 @@ export class FooterComponent implements OnInit, OnDestroy, OnChanges {
   shopCategories: Category[] = [];
   parseFooterLink = parseFooterLink;
 
+  newsletterForm!: FormGroup;
+  isSubscribing = false;
+  subscribeSuccess = false;
+
   private cartSubscription: Subscription = new Subscription();
   private favoritesSubscription: Subscription = new Subscription();
   private footerSubscription: Subscription = new Subscription();
@@ -43,9 +48,14 @@ export class FooterComponent implements OnInit, OnDestroy, OnChanges {
     private router: Router,
     private sectionService: SectionService,
     private categoryService: CategoryService,
+    private fb: FormBuilder,
   ) { }
 
   ngOnInit(): void {
+    this.newsletterForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]]
+    });
+
     this.cartSubscription = this.cartService.getTotalCount().subscribe(
       count => this.cartCount = count
     );
@@ -130,5 +140,26 @@ export class FooterComponent implements OnInit, OnDestroy, OnChanges {
 
   goHome() {
     this.router.navigate(['/home']);
+  }
+
+  onSubscribe(): void {
+    if (this.newsletterForm.invalid) return;
+
+    this.isSubscribing = true;
+    const email = this.newsletterForm.value.email;
+
+    // Simulate API call with timer
+    timer(1500).subscribe(() => {
+      this.isSubscribing = false;
+      this.subscribeSuccess = true;
+
+      // Reset success message after 3 seconds
+      timer(3000).subscribe(() => {
+        this.subscribeSuccess = false;
+        this.newsletterForm.reset();
+      });
+
+      console.log('Newsletter subscription requested for:', email);
+    });
   }
 }

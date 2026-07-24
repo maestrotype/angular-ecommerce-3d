@@ -68,8 +68,8 @@
         --auth-tab-hover: #64748b;
 
         /* Brands section - Default theme */
-        --brands-bg: #f8fafc;
-        --brands-text: #1e293b;
+        --brands-bg: var(--color-slate-50);
+        --brands-text: var(--color-slate-800);
         --brands-logo-opacity: 0.7;
         --brands-logo-hover-opacity: 1;
         --brands-logo-filter: none;
@@ -260,8 +260,8 @@
         --auth-tab-hover: #cbd5e1;
 
         /* Brands section - Dark theme (admin palette) - light grey text */
-        --brands-bg: #334155;
-        --brands-text: #cbd5e1;
+        --brands-bg: var(--color-slate-700);
+        --brands-text: var(--color-slate-300);
         --brands-logo-opacity: 1;
         --brands-logo-hover-opacity: 1;
         --brands-logo-filter: brightness(0) invert(1);
@@ -508,7 +508,7 @@
 
         /* Brands section - Glass theme */
         --brands-bg: rgba(255, 255, 255, 0.15);
-        --brands-text: #1e293b;
+        --brands-text: var(--color-slate-800);
         --brands-logo-opacity: 0.6;
         --brands-logo-hover-opacity: 1;
         --brands-logo-filter: grayscale(100%);

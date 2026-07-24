@@ -2,6 +2,7 @@ import { Component, ViewChild, ElementRef, OnInit, OnDestroy, Inject, PLATFORM_I
 import { isPlatformBrowser } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { trigger, transition, style, animate, stagger, query } from '@angular/animations';
 import { CartService } from '../../core/services/cart.service';
 import { FavoritesService } from '../../core/services/favorites.service';
 import { ProductService } from '../../core/services/product.service';
@@ -16,7 +17,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   @Input() data: any; // Support for Architect Live Preview

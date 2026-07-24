@@ -1,13 +1,10 @@
 :host {
-    container-type: inline-size;
-    display: block;
-    width: 100%;
+  container-type: inline-size;
+  display: block;
+  width: 100%;
   display: block;
   z-index: 999;
   position: relative;
-
-
-  // UNIVERSAL ARCHITECT OVERRIDE: 
 
   // Disable fixed positioning so it follows reordering flow
   :host-context(app-admin-section-preview) & {
@@ -85,11 +82,11 @@
 
   .nav {
     display: flex;
-    gap: 12px; // Reduced from 20px for better fit
+    gap: 12px;
     flex: 1;
     justify-content: center;
     margin: 0 20px;
-    min-width: 0; // Allow shrinking if space is very tight
+    min-width: 0;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     &.nav-compressed {
@@ -100,16 +97,16 @@
     }
 
     @media (max-width: 1100px) {
-        gap: 4px;
-        margin: 0 10px;
-        
-        a {
-            padding: 8px 12px;
-            font-size: 0.85em;
+      gap: 4px;
+      margin: 0 10px;
 
-            &.admin-link span { display: none; } // Hide "Admin Panel" text on small desktop
-            &.admin-link mat-icon { margin: 0; }
-        }
+      a {
+        padding: 8px 12px;
+        font-size: 0.85em;
+
+        &.admin-link span { display: none; }
+        &.admin-link mat-icon { margin: 0; }
+      }
     }
 
     a {
@@ -151,6 +148,37 @@
           inset 0 1px 0 rgba(255, 255, 255, 0.3);
       }
 
+      // TASK-023: Active state with animated sliding underline
+      &.active {
+        color: var(--color-primary, #3b82f6);
+        font-weight: 600;
+
+        // Soften background glow — subtle surface hint instead of glass card
+        &::before {
+          opacity: 0;
+        }
+
+        // Animated underline bar
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: 4px;
+          left: 50%;
+          transform: translateX(-50%) scaleX(1);
+          width: calc(100% - 24px);
+          height: 2.5px;
+          border-radius: var(--radius-sm, 2px);
+          background: var(--color-primary, #3b82f6);
+          box-shadow: 0 1px 4px var(--color-primary, #3b82f6);
+          animation: navUnderlineIn 250ms ease-out both;
+        }
+      }
+
+      // Underline hover preview (grows from 0)
+      &:hover::after {
+        content: '';
+      }
+
       &:hover,
       &:active {
         color: var(--header-link-hover);
@@ -163,50 +191,6 @@
             0 12px 40px rgba(0, 0, 0, 0.15),
             inset 0 1px 0 rgba(255, 255, 255, 0.4),
             inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-        }
-      }
-
-      &:active {
-        transform: translateY(0px);
-
-        &::before {
-          transform: scale(0.98);
-          box-shadow:
-            0 6px 20px rgba(0, 0, 0, 0.2),
-            inset 0 1px 0 rgba(255, 255, 255, 0.3),
-            inset 0 -1px 0 rgba(0, 0, 0, 0.15);
-        }
-      }
-
-      &.active {
-        color: var(--header-link-hover, #007AFF);
-
-        &::before {
-          opacity: 1;
-          transform: scale(1);
-          background: linear-gradient(135deg,
-              rgba(0, 122, 255, 0.2) 0%,
-              rgba(0, 122, 255, 0.1) 50%,
-              rgba(0, 122, 255, 0.05) 100%);
-          border: 1px solid var(--header-accent-30, rgba(0, 122, 255, 0.3));
-          backdrop-filter: blur(20px);
-          box-shadow:
-            0 8px 32px rgba(0, 122, 255, 0.2),
-            inset 0 1px 0 rgba(255, 255, 255, 0.4),
-            inset 0 -1px 0 rgba(0, 122, 255, 0.1);
-        }
-
-        &::after {
-          content: '';
-          position: absolute;
-          bottom: -8px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 6px;
-          height: 6px;
-          background: #007AFF;
-          border-radius: 50%;
-          box-shadow: 0 2px 8px rgba(0, 122, 255, 0.5);
         }
       }
     }
@@ -282,9 +266,9 @@
 
   .user-actions {
     display: flex;
-    gap: 8px; // Reduced from 15px to fit more icons
+    gap: 8px;
     align-items: center;
-    flex-shrink: 0; // Prevent icons from shrinking or being pushed out
+    flex-shrink: 0;
     margin-left: 10px;
 
     .search-icon,
@@ -343,31 +327,11 @@
       }
     }
 
-    .cart-count,
-    .favorites-count {
-      position: absolute;
-      top: 0.25rem;
-      right: 0.25rem;
-      background: var(--badge-bg, #ff6b6b);
-      color: var(--badge-text, #fff);
-      border-radius: 50%;
-      width: 18px; // Slightly smaller to avoid overlap
-      height: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.7rem;
-      font-weight: 600;
-      min-width: 18px;
-      line-height: 1;
-    }
-
     @media (max-width: 1100px) {
-        gap: 2px;
-        margin-left: 5px;
-        
-        .profile-icon span, .lang-switcher span { display: none; }
-        .theme-switcher span { display: none; }
+      .profile-icon span,
+      .lang-switcher span {
+        display: none;
+      }
     }
   }
 
@@ -599,7 +563,6 @@
         margin: 0 0 2px 0;
         font-size: 12px;
         color: #1e3a8a;
-        /* Dark Navy Blue for high contrast */
         font-weight: 700;
       }
 
@@ -652,11 +615,11 @@
   &.active {
     opacity: 1;
     visibility: visible;
-    pointer-events: auto; // Enable only when active
+    pointer-events: auto;
   }
 }
 
-// Mobile Menu
+// Mobile Menu (first definition — container queries)
 .mobile-menu {
   position: fixed;
   top: 0;
@@ -745,7 +708,7 @@
     }
 
     .desktop-search {
-      display: block; // Or however it was defined previously
+      display: block;
 
       &.active {
         z-index: 10;
@@ -822,11 +785,11 @@
   position: fixed;
   top: 0;
   right: 0;
-  width: 90%; // Balanced width for typical mobile
+  width: 90%;
   max-width: 400px;
 
   @container (max-width: 350px) {
-    width: 100%; // Take full width on Fold 6 to avoid clipping theme buttons
+    width: 100%;
   }
 
   height: calc(var(--vh, 1vh) * 100);
@@ -886,7 +849,7 @@
 
   .mobile-nav {
     flex: 1;
-    padding: 20px 20px 40px; // Reduced side padding from 25px
+    padding: 20px 20px 40px;
     display: flex;
     flex-direction: column;
     gap: 28px;
@@ -896,8 +859,6 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
-
-      // Header title already covers the "Menu" label
     }
 
     .mobile-nav-link {
@@ -909,7 +870,23 @@
       transition: all 0.3s ease;
       position: relative;
       display: block;
-      text-align: left; // Back to left alignment
+      text-align: left;
+
+      &.active {
+        color: var(--color-primary, #3b82f6);
+
+        &::after {
+          content: '';
+          position: absolute;
+          right: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: var(--color-primary, #3b82f6);
+        }
+      }
 
       &:active {
         color: var(--color-primary);
@@ -934,7 +911,7 @@
 
       .theme-chips {
         display: flex;
-        flex-wrap: wrap; // Important for Fold 6 to avoid clipping
+        flex-wrap: wrap;
         gap: 8px;
         padding-bottom: 4px;
 
@@ -968,13 +945,13 @@
     }
 
     .mobile-auth-section {
-      margin-top: 40px; // Use fixed spacing instead of auto to raise the button
+      margin-top: 40px;
       padding-top: 20px;
       border-top: 1px solid rgba(0, 0, 0, 0.08);
 
       .mobile-auth-btn {
         width: 100%;
-        padding: 14px; // Compacted from 16px
+        padding: 14px;
         border-radius: 14px;
         font-size: 0.95rem;
         font-weight: 600;
@@ -1019,15 +996,27 @@
   }
 }
 
-// Galaxy Fold & very narrow devices — prevents hamburger from being clipped by frame border-radius
+// TASK-023: Animated underline keyframes
+@keyframes navUnderlineIn {
+  from {
+    transform: translateX(-50%) scaleX(0);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) scaleX(1);
+    opacity: 1;
+  }
+}
+
+// Galaxy Fold & very narrow devices
 @container (max-width: 340px) {
   .header {
     .header-container {
-      padding: 0 6px; // Reduce from 15px to give hamburger room inside rounded frame
+      padding: 0 6px;
     }
 
     .mobile-search {
-      margin: 0 4px; // Tighter search margin
+      margin: 0 4px;
     }
   }
 }
@@ -1079,8 +1068,7 @@
   .hamburger span { background: #e4e4e7; }
 }
 
-// Glass theme: override only header text/link colours to white.
-// Does NOT touch any other section colours, tokens or variables.
+// Glass theme overrides
 :host-context(body[data-theme="glass"]) .header {
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   --header-text: #ffffff;
@@ -1093,7 +1081,21 @@
     background: #ffffff;
   }
 
-  // Theme-switcher & lang-switcher popovers: frosted glass matching page sections.
+  // Active state for glass theme — white underline bar
+  .nav a.active {
+    color: #ffffff;
+
+    &::before {
+      opacity: 0;
+    }
+
+    &::after {
+      background: #ffffff;
+      box-shadow: 0 1px 6px rgba(255, 255, 255, 0.5);
+    }
+  }
+
+  // Theme-switcher & lang-switcher popovers: frosted glass
   .theme-switcher__popover,
   .lang-switcher__popover {
     background: rgba(255, 255, 255, 0.12);
