@@ -174,9 +174,33 @@
         }
       }
 
-      // Underline hover preview (grows from 0)
-      &:hover::after {
+      // Hover underline preview — thin, muted line that grows from center
+      &::after {
         content: '';
+        position: absolute;
+        bottom: 4px;
+        left: 50%;
+        transform: translateX(-50%) scaleX(0);
+        width: calc(100% - 24px);
+        height: 2px;
+        border-radius: var(--radius-sm, 2px);
+        background: var(--color-primary, #3b82f6);
+        opacity: 0;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      // Hover preview — show thin muted underline
+      &:hover::after {
+        transform: translateX(-50%) scaleX(1);
+        opacity: 0.4;
+      }
+
+      // Active state overrides the hover preview with full underline + animation
+      &.active::after {
+        height: 2.5px;
+        opacity: 1;
+        box-shadow: 0 1px 4px var(--color-primary, #3b82f6);
+        animation: navUnderlineIn 250ms ease-out both;
       }
 
       &:hover,
@@ -1008,6 +1032,17 @@
   }
 }
 
+@keyframes navUnderlineOut {
+  from {
+    transform: translateX(-50%) scaleX(1);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-50%) scaleX(0);
+    opacity: 0;
+  }
+}
+
 // Galaxy Fold & very narrow devices
 @container (max-width: 340px) {
   .header {
@@ -1059,6 +1094,58 @@
   --header-link: #f8fafc;
   --header-link-hover: #3b82f6;
   .hamburger span { background: #f8fafc; }
+
+  // Active state for dark theme — vivid blue underline
+  .nav a.active {
+    color: #60a5fa;
+
+    &::after {
+      background: #60a5fa;
+      box-shadow: 0 1px 8px rgba(96, 165, 250, 0.6);
+    }
+  }
+}
+
+// Dark theme overrides (body attribute) — for runtime theme switching
+:host-context(body[data-theme="dark"]) .header {
+  --header-text: #f8fafc;
+  --header-link: #e4e4e7;
+  --header-link-hover: #60a5fa;
+  --header-text-rgb: 248, 250, 252;
+
+  .hamburger span {
+    background: #f8fafc;
+  }
+
+  // Active state for dark theme — vivid blue underline
+  .nav a.active {
+    color: #60a5fa;
+
+    &::after {
+      background: #60a5fa;
+      box-shadow: 0 1px 8px rgba(96, 165, 250, 0.6);
+    }
+  }
+}
+
+:host-context(body[data-theme="light"]) .header {
+  --header-text: #1e293b;
+  --header-link: #1e293b;
+  --header-link-hover: #3b82f6;
+  --header-text-rgb: 30, 41, 59;
+
+  .hamburger span {
+    background: #1e293b;
+  }
+
+  .nav a.active {
+    color: #3b82f6;
+
+    &::after {
+      background: #3b82f6;
+      box-shadow: 0 1px 4px rgba(59, 130, 246, 0.5);
+    }
+  }
 }
 
 :host(.variant-dark-soft) .header {

@@ -24,6 +24,11 @@
   transition: transform var(--animation-fast, 0.2s) ease,
               opacity var(--animation-fast, 0.2s) ease;
 
+  // Pop animation — triggered when count changes (via .pop class)
+  &.pop {
+    animation: badgePop 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  }
+
   // Pulse animation variant
   &.pulse {
     animation: badgePulse 1.5s infinite;
@@ -37,6 +42,12 @@
     line-height: 0;
     transform: translate(40%, -40%);
   }
+}
+
+@keyframes badgePop {
+  0% { transform: translate(35%, -35%) scale(1); }
+  50% { transform: translate(35%, -35%) scale(1.4); }
+  100% { transform: translate(35%, -35%) scale(1); }
 }
 
 @keyframes badgePulse {

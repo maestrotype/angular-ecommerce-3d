@@ -25,10 +25,17 @@
         visibility
       </mat-icon>
 
-      <!-- Active Checkmark -->
-      <mat-icon class="theme-check" *ngIf="currentTheme?.id === theme.id">
-        check_circle
-      </mat-icon>
+      <!-- Active Checkmark — SVG gradient icon (Task-024) -->
+      <svg class="theme-check" *ngIf="currentTheme?.id === theme.id" viewBox="0 0 24 24" width="28" height="28">
+        <defs>
+          <linearGradient id="checkGrad-{{theme.id}}" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:var(--primary-main)"/>
+            <stop offset="100%" style="stop-color:var(--accent-main, var(--primary-main))"/>
+          </linearGradient>
+        </defs>
+        <circle cx="12" cy="12" r="10" fill="url(#checkGrad-{{theme.id}})" opacity="0.15"/>
+        <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z" fill="url(#checkGrad-{{theme.id}})"/>
+      </svg>
     </div>
   </div>
 
