@@ -1,221 +1,257 @@
 # UI Audit — angular-ecommerce-3d
 
-This document tracks the architectural cleanup of the style system. Each section records discovered issues and migration progress. Future AI agents must update this document after every style-related task.
+This document records **current-state findings** of the style system audit. Task tracking lives in [REFACTORING_BOARD.md](REFACTORING_BOARD.md) — do not duplicate task statuses here.
 
 **Role**: Principal UI Architect
-**Last Updated**: 2026-07-23
-**Audit Status**: Active — ongoing style migrations and fixes
+**Last Updated**: 2026-07-28
+**Audit Status**: Full codebase scan completed 2026-07-28 (baseline established)
 
 ---
 
 ## 1. SCSS File Inventory
 
-_A complete list of every .scss file, categorized by purpose._
+### 1.1 Global Styles (`src/styles/`, ~4,089 lines total)
 
-### 1.1 Global Styles (`src/styles/`)
+| File | Lines | Purpose | Status | Notes |
+|------|------:|---------|--------|-------|
+| `src/styles/main.scss` | 19 | Master import file | KEEP | **Actual build entry** (wired in `angular.json`); imports only ✅ |
+| `src/styles/tokens/_index.scss` | 15 | Token pipeline entry | KEEP | ✅ RESOLVED (A1, 2026-07-28): imports `_primitive-tokens.scss` + `_semantic-tokens.scss`; still `@forward`s legacy `_theme-variables.scss` → Task A3 |
+| `src/styles/tokens/_primitive-tokens.scss` | 106 | Primitive tokens (single source) | KEEP | ✅ RESOLVED (A1, 2026-07-28): now wired into the pipeline |
+| `src/styles/tokens/_semantic-tokens.scss` | ~110 | Semantic tokens | KEEP | ✅ RESOLVED (A2, 2026-07-28): full storefront coverage; 0 undefined no-fallback refs outside `--tw-*` (A5) and `--admin-*`/`--lg-*` (Epic C) |
+| `src/styles/tokens/_theme-variables.scss` | 722 | Legacy CSS variable monolith | DELETE | Still forwarded; decompose into themes/semantic → Task A3 |
+| `src/styles/themes/_index.scss` | 89 | Theme re-export | FIX | Contains product-detail CSS vars with hex (logic in an index file) |
+| `src/styles/themes/_default.scss` | 119 | Default/light theme | KEEP | Rewritten to semantic tokens ✅ |
+| `src/styles/themes/_dark.scss` | 374 | Dark theme | KEEP | Rewritten to semantic tokens ✅ |
+| `src/styles/themes/_glass.scss` | 481 | Glass theme | KEEP | Rewritten ✅; 4 `!important` + 5 `.mat-` overrides remain |
+| `src/styles/core/_variables.scss` | 243 | SCSS vars + parallel palette | FIX | Defines parallel `:root` color palette (46 hex) → Task A4 |
+| `src/styles/core/_mixins.scss` | 318 | Mixins | KEEP | Audit for unused mixins in Epic E |
+| `src/styles/core/_base.scss` | 231 | Base element styles | FIX | 7 `!important` |
+| `src/styles/core/_typography.scss` | 202 | Typography | KEEP | |
+| `src/styles/core/_utilities.scss` | 307 | Utilities | KEEP | |
+| `src/styles/components/_buttons.scss` | 356 | Button presets | KEEP | |
+| `src/styles/components/_cards.scss` | 242 | Card presets | KEEP | Migrated to semantic tokens ✅ |
+| `src/styles/components/_theme-switcher.scss` | 86 | Theme switcher | KEEP | Migrated ✅ |
+| `src/styles/components/_forms.scss` | 5 | **Stub** | IMPLEMENT/DELETE | → Task E3 |
+| `src/styles/components/_modals.scss` | 5 | **Stub** | IMPLEMENT/DELETE | → Task E3 |
+| `src/styles/components/_navigation.scss` | 5 | **Stub** | IMPLEMENT/DELETE | → Task E3 |
+| `src/styles.scss` | 499 | **Orphaned** catch-all | DELETE | NOT in build (`angular.json` uses `main.scss`); contains real logic: glass helpers, scrollbars (13 `!important`), 28 `.mat-` override lines, 32 hex → Task A5 |
 
-| File | Purpose | Status | Notes |
-|------|---------|--------|-------|
-| `src/styles/main.scss` | Master import file | KEEP | Entry point |
-| `src/styles/core/_index.scss` | Core re-export | KEEP | |
-| `src/styles/core/_base.scss` | Base element styles | KEEP | |
-| `src/styles/core/_variables.scss` | SCSS variables | INVESTIGATE | May duplicate tokens |
-| `src/styles/tokens/_index.scss` | Token re-export | KEEP | |
-| `src/styles/tokens/_theme-variables.scss` | CSS variable definitions | INVESTIGATE | ~723 lines, likely duplicated |
-| `src/styles/themes/_index.scss` | Theme re-export | KEEP | |
-| `src/styles/themes/_default.scss` | Default/light theme | KEEP | |
-| `src/styles/themes/_dark.scss` | Dark theme | KEEP | |
-| `src/styles/themes/_glass.scss` | Glass theme | KEEP | |
-| `src/styles/components/_cards.scss` | Card presets | KEEP | |
-| `src/styles/components/_navigation.scss` | Navigation presets | KEEP | |
-| `src/styles/components/_theme-switcher.scss` | Theme switcher styles | KEEP | |
+### 1.2 Admin Styles (`src/admin/styles/`, ~4,032 lines)
 
-### 1.2 Admin Styles (`src/admin/styles/`)
-
-| File | Purpose | Status | Notes |
-|------|---------|--------|-------|
-| `src/admin/styles/admin.scss` | Admin entry point | KEEP | |
-| `src/admin/styles/admin-variables.scss` | Admin-specific variables | INVESTIGATE | Duplicates global tokens? |
-| `src/admin/styles/_admin-light.scss` | Admin light theme | INVESTIGATE | Redundant with global themes? |
-| `src/admin/styles/_admin-dark.scss` | Admin dark theme | INVESTIGATE | Redundant with global themes? |
-| `src/admin/styles/_admin-glass.scss` | Admin glass theme | INVESTIGATE | Redundant with global themes? |
-| `src/admin/styles/_admin-dark-glass.scss` | Admin dark glass theme | INVESTIGATE | Redundant with global themes? |
-| `src/admin/styles/_admin-theme-material.scss` | Admin Material theme | INVESTIGATE | May be unused |
-| `src/admin/styles/admin-global.scss` | Admin global styles | INVESTIGATE | Scope leakage risk |
+| File | Lines | Purpose | Status | Notes |
+|------|------:|---------|--------|-------|
+| `admin.scss` | 49 | Admin entry | KEEP | Import orchestrator + CDK overlay |
+| `material-theme.scss` | 28 | Material palette | FIX | Link to design tokens → Task B4 |
+| `admin-variables.scss` | 224 | `--admin-*` definitions (120 unique) | DELETE after C | Parallel token system → Epic C |
+| `admin-mixins.scss` | 274 | Admin mixins | INVESTIGATE | Overlap with core mixins |
+| `admin-global.scss` | 1,195 | Admin global styles | DECOMPOSE | 76 `.mat-` lines, 14 `!important` → Task C5 |
+| `_admin-material-base.scss` | 18 | Material base | INVESTIGATE | |
+| `_admin-theme-material.scss` | 1,548 | De-facto Material override dump | MIGRATE | 349 `.mat-` lines → Task B2 |
+| `_admin-light.scss` | 95 | Admin light theme | MIGRATE → DELETE | Remounts `--admin-*` per theme → Task C3 |
+| `_admin-dark.scss` | 212 | Admin dark theme | MIGRATE → DELETE | 14 `!important` → Task C3 |
+| `_admin-glass.scss` | 164 | Admin glass theme | MIGRATE → DELETE | → Task C3 |
+| `_admin-dark-glass.scss` | 220 | Admin dark-glass theme | MIGRATE → DELETE | No storefront counterpart theme file → Task C3 |
 
 ### 1.3 Component Styles
 
-_Component styles are listed per directory. A full scan is required during Phase 1._
+| Scope | `.component.scss` files |
+|-------|------------------------:|
+| `src/app` (storefront) | 46 |
+| `src/admin` | 40 |
+| **Total** | **86** |
 
-**Frontend Components** (`src/app/`):
-- `app.component.scss` — Root component
-- `layout/header/header.component.scss`
-- `layout/footer/footer.component.scss`
-- `layout/hero/*.scss`, `layout/hero-glass/*.scss`
-- `layout/best-sellers/best-sellers.component.scss`
-- `components/product-detail/*.scss` (multiple sub-components)
-- `components/product-viewer/*.scss`, `three-d-viewer/*.scss`
-- `pages/favorites/`, `pages/dynamic-page/`
-- `shared/modal/*.scss` (multiple)
-- `shared/ui/theme-selector/*.scss`
-- `shared/components/recommendations/*.scss` (multiple)
+Migration state (scan 2026-07-28):
 
-**Admin Components** (`src/admin/`):
-- `components/layout/` — admin-layout, sidenav, header
-- `components/blocks/` — admin-table, list-container
-- `components/ui/` — stat-card
-- `pages/*/` — dashboard, products, categories, orders, users, payments, messages, sections, pages, settings, seo
+| Bucket | App (46) | Admin (40) | All (86) |
+|--------|---------:|-----------:|---------:|
+| Uses semantic-ish tokens | 32 (70%) | 4 (10%) | 36 (42%) |
+| Still contains hex | 36 (78%) | 25 (63%) | 61 (71%) |
+| Uses `--admin-*` | 3 | 30 (75%) | 33 |
+| **Fully clean (semantic only, no hex)** | **3** | **0** | **3** |
 
-**Action Required**: Phase 1 Task 1.1 must generate a complete automated inventory using `find src -name "*.scss"`.
+Fully clean components: `favorites`, `base-modal`, `cart-modal`.
 
 ---
 
 ## 2. Duplicate CSS Variable Definitions
 
-_Variables defined in multiple locations. Populated during Phase 1 Task 1.2._
-
-| Variable Name | Definition Locations | Conflicting Values | Resolution |
-|--------------|---------------------|-------------------|------------|
-| _pending scan_ | | | |
-
-**Known Suspects** (from file exploration):
-- `--bg-primary`: likely in `_theme-variables.scss`, each theme partial, AND `admin-variables.scss`
-- `--text-primary`: same pattern as above
-- `--radius-md`: likely in `_theme-variables.scss` and admin variables
-- `--shadow-*`: likely duplicated between global tokens and admin styles
-
-**Search Command**: `grep -rn "^--" src/styles/ src/admin/styles/`
+| Duplication | Locations | Resolution |
+|-------------|-----------|------------|
+| ~~Primitive tokens defined twice~~ | ~~`tokens/_primitive-tokens.scss` AND inlined in `tokens/_index.scss`~~ | ✅ RESOLVED (A1, 2026-07-28): `_index.scss` imports the file; inline copies deleted |
+| Color palette defined in parallel | `tokens/` vs `core/_variables.scss` (`--color-primary: #667eea` etc.) vs TS `light-theme.ts` | Task A4 + F1 |
+| Theme variables monolith | `tokens/_theme-variables.scss` (722 lines) overlaps theme partials | Task A3: decompose and delete |
+| `--admin-*` system | 174 unique tokens defined across `admin-variables.scss` (120) + 4 admin theme files (445 definition occurrences total) | Epic C (ADR-011: classify SHARED / ADMIN-ONLY / CONFLICT) |
 
 ---
 
 ## 3. Hardcoded Colors
 
-_Component SCSS files containing hardcoded hex/rgb/rgba values. Populated during Phase 1 Task 1.3._
+Scan 2026-07-28, pattern `#[0-9a-fA-F]{3,8}`:
 
-| File | Line | Hardcoded Value | Should Use Token |
-|------|------|----------------|------------------|
-| _pending scan_ | | | |
+| Scope | Files | Occurrences |
+|-------|------:|------------:|
+| All SCSS under `src/` | 78 | 1,930 |
+| **Excluding token/theme sources** (violations to fix) | **68** | **1,336** |
 
-**Search Pattern**: `#[0-9a-fA-F]{3,8}` or `rgb(` or `rgba(`
+Top offenders (excluding token/theme files):
 
-**Known Suspects**:
-- Admin component styles: table rows, status badges, form states
-- Frontend product cards: sale prices, badge colors
-- Theme switcher: theme preview colors (acceptable exception)
+| Hex count | File | Board task |
+|----------:|------|------------|
+| 91 | `src/app/pages/shop/shop.component.scss` | D1 |
+| 74 | `src/app/pages/payment/payment.component.scss` | D2 |
+| 61 | `.../bought-together.component.scss` | D3 |
+| 56 | `src/app/pages/checkout/checkout.component.scss` | D2 |
+| 54 | `.../similar-products.component.scss` | D3 |
+| 52 | `.../order-details-dialog.component.scss` | D2 |
+| 51 | `src/app/layout/header/header.component.scss` | D4 |
+| 46 | `src/styles/core/_variables.scss` | A4 |
+| 45 | `src/app/pages/home/home.component.scss` | D1 |
+| 32 | `src/styles.scss` (orphaned) | A5 |
 
 ---
 
 ## 4. Admin Style Isolation
 
-_How admin styles diverge from shared styles._
-
-### Current Architecture
+### Current Architecture (confirmed by scan)
 ```
-src/styles/              ← Frontend styles (shared tokens)
-src/admin/styles/        ← Admin styles (separate token definitions)
+src/styles/              ← Frontend tokens + themes (semantic layer scaffolded)
+src/admin/styles/        ← Fully parallel --admin-* system (2,335 usages / 43 files / 174 unique tokens)
 ```
 
-### Problem
-Admin panel maintains its own variable system (`admin-variables.scss`) and theme variants (`_admin-light.scss`, `_admin-dark.scss`, etc.) that duplicate the global theme system.
+`_admin-layout-tokens.scss` (target of ADR-011) **does not exist yet**.
 
 ### Target Architecture
 ```
-src/styles/tokens/       ← Shared tokens (single source)
-src/styles/themes/       ← Shared themes (single source)
-src/admin/styles/        ← Admin LAYOUT only (imports shared tokens)
+src/styles/tokens/                        ← Shared tokens (single source)
+src/styles/themes/                        ← Shared themes (single source)
+src/admin/styles/_admin-layout-tokens.scss ← Admin LAYOUT only (sidebar, toolbar)
 ```
 
 ### Divergence Map
 
 | Concern | Frontend Location | Admin Location | Duplicated? |
 |---------|------------------|----------------|-------------|
-| Color tokens | `_theme-variables.scss` | `admin-variables.scss` | YES |
-| Light theme | `_default.scss` | `_admin-light.scss` | YES |
-| Dark theme | `_dark.scss` | `_admin-dark.scss` | YES |
-| Glass theme | `_glass.scss` | `_admin-glass.scss` | YES |
-| Dark glass | (global) | `_admin-dark-glass.scss` | YES |
+| Color tokens | `tokens/` | `admin-variables.scss` (120 unique defs) | YES |
+| Light theme | `_default.scss` | `_admin-light.scss` (95 lines) | YES |
+| Dark theme | `_dark.scss` | `_admin-dark.scss` (212 lines) | YES |
+| Glass theme | `_glass.scss` | `_admin-glass.scss` (164 lines) | YES |
+| Dark glass | — (no storefront file) | `_admin-dark-glass.scss` (220 lines) | ADMIN-ONLY theme |
+| Material overrides | scattered | `_admin-theme-material.scss` (1,548 lines) | YES |
 | Layout styles | N/A | `admin-layout.component.scss` | NO (correct) |
 
 ---
 
-## 5. Hardcoded Shadows
+## 5. `!important` Usage
 
-| File | Line | Hardcoded Value | Should Use Token |
-|------|------|----------------|------------------|
-| _pending scan_ | | | |
+**Total: 91 occurrences in 12 files** (scan 2026-07-28):
+
+| Count | File |
+|------:|------|
+| 20 | `src/app/layout/hero/hero.component.scss` |
+| 14 | `src/admin/styles/admin-global.scss` |
+| 14 | `src/admin/styles/_admin-dark.scss` |
+| 13 | `src/styles.scss` (orphaned) |
+| 12 | `.../admin-section-preview.component.scss` |
+| 7 | `src/styles/core/_base.scss` |
+| 4 | `src/styles/themes/_glass.scss` |
+| 7 | 5 other files (≤2 each) |
 
 ---
 
-## 6. Hardcoded Border Radius
+## 6. `::ng-deep` Usage
 
-| File | Line | Hardcoded Value | Should Use Token |
-|------|------|----------------|------------------|
-| _pending scan_ | | | |
+**Total: 40 occurrences in 12 files**, almost all admin:
+
+| Count | File |
+|------:|------|
+| 9 | `.../message-list.component.scss` |
+| 9 | `.../order-list.component.scss` |
+| 5 | `.../list-container.component.scss` |
+| 5 | `.../section-list.component.scss` |
+| 3 | `.../category-list.component.scss` |
+| 2 each | `image-processor`, `user-list` |
+| 1 each | `product-detail` (app), `seo-settings`, `message-detail`, `product-form`, `seo` |
 
 ---
 
 ## 7. Inconsistent Spacing Values
 
-_Spacing values not using the spacing scale (4, 8, 12, 16, 20, 24, 32, 40, 48...)._
-
-| File | Line | Value Found | Closest Token |
-|------|------|------------|---------------|
-| _pending scan_ | | | |
+Not separately scanned; resolved per-component during Epic D migration (spacing values → `--spacing-*` tokens as part of the per-component checklist).
 
 ---
 
 ## 8. Angular Material Overrides
 
-_Places where Material styles are manually overridden._
+**No centralized `_material-overrides.scss` exists.** Scan 2026-07-28:
 
-| File | What's Overridden | Why (Root Cause) | Better Solution |
-|------|-------------------|-----------------|-----------------|
-| _pending scan_ | | | |
+| Metric | Value |
+|--------|-------|
+| Files with `.mat-` / `.mat-mdc-` selector overrides | 24 |
+| De-facto central dump | `src/admin/styles/_admin-theme-material.scss` — 1,548 lines, 349 `.mat-` lines |
+
+Notable scatter outside the dump (23 files):
+
+| `.mat-` lines | File |
+|--------------:|------|
+| 76 | `src/admin/styles/admin-global.scss` |
+| 32 | `.../message-list.component.scss` |
+| 28 | `src/styles.scss` (orphaned) |
+| 25 | `.../order-list.component.scss` |
+| 23 | `.../user-list.component.scss` |
+| 20 | `.../seo-settings.component.scss` |
+| 15 | `.../seo.component.scss` |
+| 5 | `src/styles/themes/_glass.scss` |
+| 2 | `src/styles/themes/_dark.scss` |
+
+Resolution: Epic B (Tasks B1–B4).
 
 ---
 
-## 9. Potentially Unused Files
+## 9. Potentially Unused / Orphaned Files
 
-_Files that may be orphaned or no longer imported._
-
-| File | Last Known Import | Still Used? | Action |
-|------|------------------|-------------|--------|
-| `src/admin/styles/_admin-theme-material.scss` | Unknown | UNKNOWN | Investigate |
-| `src/styles/core/_variables.scss` | Possibly by `main.scss` | UNKNOWN | Investigate |
+| File | Finding | Action |
+|------|---------|--------|
+| `src/styles.scss` | **Confirmed orphaned** — not referenced in `angular.json` (entry is `src/styles/main.scss`), but contains 499 lines of real logic | Port needed rules, delete → Task A5 |
+| `src/styles/tokens/_primitive-tokens.scss` | ✅ RESOLVED (A1, 2026-07-28) — wired into pipeline; was causing unresolved `--color-blue-*`, `--z-modal`, `--font-*` weights in dark/glass themes | Done |
+| `src/styles/components/_forms.scss`, `_modals.scss`, `_navigation.scss` | Stubs (5 lines, "will be implemented here") | Implement or remove → Task E3 |
+| `src/admin/styles/_admin-theme-material.scss` | Used, but is the Material-override dump | Migrate → Task B2 |
 
 ---
 
-## 10. Migration Progress Tracker
+## 10. Theme Engine (TypeScript) Findings
 
-_Update after every style-related task._
+Location: `src/app/core/themes/`
 
-| Phase | Task | Status | Completed Date | Agent | Notes |
-|-------|------|--------|----------------|-------|-------|
-| Phase 1 | Task 1.1: SCSS Inventory | PENDING | — | — | — |
-| Phase 1 | Task 1.2: Duplicate Variables Audit | PENDING | — | — | — |
-| Phase 1 | Task 1.3: Hardcoded Colors Audit | PENDING | — | — | — |
-| Phase 1 | Task 1.4: Admin Isolation Analysis | PENDING | — | — | — |
-| Phase 2 | Task 2.1: Theme Model Expansion | PENDING | — | — | — |
-| Phase 2 | Task 2.2: SCSS Mixin Library | PENDING | — | — | — |
-| Phase 2 | Task 2.3: ThemeService Refactor | PENDING | — | — | — |
-| Phase 2 | Task 2.4: Theme Migration | PENDING | — | — | — |
-| Phase 3-9 | ... | PENDING | — | — | — |
+| File | Lines | Role |
+|------|------:|------|
+| `theme.model.ts` | 213 | `Theme`, `ThemeColors`, `ThemeLayout`, `ThemeComponents` |
+| `theme-config.ts` | 13 | Registry |
+| `theme.service.ts` | 176 | Switching + admin/storefront area sync |
+| `themes/*.ts` | 191–204 each | `light`, `dark`, `glass`, `dark-glass` |
+
+Key findings:
+- Switching works via `data-theme` attribute on `<html>` and `<body>`; area detection via `body.is-admin`; persistence in localStorage (`selected-theme`, `selected-theme-admin`).
+- Storefront exposes 3 themes (`dark-glass` filtered out); admin exposes all 4.
+- **The TS theme objects are metadata catalogs** — `theme.service.ts` does not apply `colors`/`layout`/`components` values to the DOM. All visuals come from SCSS `[data-theme]` blocks. TS ↔ SCSS ↔ docs are out of sync → ADR-012, Epic F.
+
+---
+
+## 11. Documented Anti-Patterns (learned from regressions)
+
+| Anti-pattern | Why it fails | Correct approach |
+|--------------|--------------|------------------|
+| `[data-theme="glass"] & {}` inside component SCSS with `ViewEncapsulation.Emulated` | Compiles to selectors that never match | Theme-specific CSS variables defined in theme files, consumed via `var(--x, fallback)` in component (see Task-015) |
+| `[data-theme="glass"].is-admin` compound selector | `data-theme` is on `<html>`, `.is-admin` on `<body>` — never matches | `html[data-theme="glass"] body.is-admin` (see Task-008) |
+| `!important` to force theme overrides | Masks broken selectors instead of fixing them | Fix selector specificity; 16 masking `!important` were removed in Task-008 |
 
 ---
 
 ## How to Use This Document
 
-1. **Before starting a style task**: Read the relevant sections above
-2. **During the task**: Fill in discovered issues as you find them
-3. **After completing the task**: Update the Migration Progress table
-4. **When a section is fully resolved**: Mark it as RESOLVED with a date
+1. **Findings live here**; **task statuses live in [REFACTORING_BOARD.md](REFACTORING_BOARD.md)**.
+2. When a scan finding is fully resolved, mark the row RESOLVED with a date — keep the baseline number for history.
+3. When discovering a new issue: document it here, add a task to the board, do NOT fix outside your current task scope.
 
 ---
 
-## 11. Recent Fixes Log
-
-| Date | Issue | Fix | Files Modified | Status |
-|------|-------|-----|----------------|--------|
-| 2026-07-23 | Header theme-toggle button had incorrect hover (blue background from browser default button styling) | Added explicit `background:transparent`, `border:none`, `outline:none` resets for `.theme-toggle` within `.user-actions`. Unified hover behavior with other header icons (transparent bg + color change + transform). | `header.component.scss` | RESOLVED |
-
-*This document is maintained by the Principal UI Architect. Last updated: 2026-07-23*
+*This document is maintained by the Principal UI Architect. Last updated: 2026-07-28*

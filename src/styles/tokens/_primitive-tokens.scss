@@ -25,6 +25,10 @@
   --color-primary-base: #3b82f6;
   --color-secondary-base: #64748b;
   --color-accent-base: #f59e0b;
+  --color-brand-base: #3b82f6;
+  --color-brand-light: #60a5fa;
+  --color-brand-dark: #2563eb;
+  --color-accent-pink: #ff6b6b;
 
   // --- Colors (State) ---
   --color-success-base: #10b981;
@@ -35,6 +39,8 @@
   --color-blue-300: #93c5fd;
   --color-blue-400: #60a5fa;
   --color-blue-400-rgb: 96, 165, 250;
+  --color-slate-600-rgb: 71, 85, 105;
+  --color-slate-800-rgb: 30, 41, 59;
   --color-blue-500: #3b82f6;
   --color-blue-600: #2563eb;
   --color-emerald-500: #10b981;
@@ -78,6 +84,7 @@
   --text-lg: 18px;
   --text-xl: 20px;
   --text-2xl: 24px;
+  --text-3xl: 30px;
   --leading-tight: 1.25;
   --leading-normal: 1.5;
   --leading-relaxed: 1.75;

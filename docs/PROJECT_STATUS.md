@@ -1,7 +1,9 @@
-**Last Updated**: 2026-07-23
+# Project Status
+
+**Last Updated**: 2026-07-28
 **Maintainer**: Principal UI Architect
 
-> This document tracks high-level project progress. For detailed phase planning and task breakdown, see `REDESIGN_PLAN.md`. For architectural decisions and rules, see `STYLE_ARCHITECTURE.md`.
+> This document tracks high-level project status. For refactoring task tracking and progress metrics, see **[REFACTORING_BOARD.md](REFACTORING_BOARD.md)** (single source of truth for progress). For architectural decisions, see `STYLE_REFACTOR_PLAN.md`.
 
 ---
 
@@ -14,59 +16,36 @@
 | E-commerce Flow | ✅ Operational | Cart, checkout, Stripe payments |
 | Admin Panel | ✅ Operational | CRUD for products, orders, users, categories |
 | Multi-language | ✅ Operational | EN / RU / UA via @angular/localize |
-| Theme System | 🔄 Being Redesigned | 4 themes exist, architecture under audit |
+| Theme System | 🔄 Being Refactored | 4 themes work; token unification in progress |
 | AI 3D Generation | 🔬 Experimental | Hunyuan3D, InstantMesh, Unique3D integrated |
 | Recommendations | ✅ Operational | Collaborative filtering API |
 
 ---
 
-## UI Redesign Progress
+## Style Refactoring Status
 
-> **Detailed task tracking**: `REDESIGN_PLAN.md`
-> **Architecture decisions**: `STYLE_ARCHITECTURE.md`
-> **Audit findings**: `UI_AUDIT.md`
+> **Full task board with metrics**: [REFACTORING_BOARD.md](REFACTORING_BOARD.md)
+> **Baseline audit (2026-07-28)**: code was scanned to establish objective completion metrics. Statuses below reflect the actual code state, superseding earlier optimistic records.
 
-| Phase | Name | Status | Progress |
-|-------|------|--------|----------|
-| 1 | Style Architecture Audit | 🔄 In Progress | Documentation complete, code audit pending |
-| 2 | Theme Engine Redesign | ⏳ Pending | — |
-| 3 | Design Token Unification | ✅ Complete | Task-001..004: all themes migrated; Task-005: PoC component migrated |
-| 5 | Style Cleanup | 🔄 In Progress | Task-007: 3 more components migrated. Task-008: glass regression fixed. Task-015..017: Glass admin UI restored. |
-| 4 | Angular Material Integration | ⏳ Pending | — |
-| 5 | Style Cleanup | 🔄 In Progress | — |
-| 6 | Component Migration | ⏳ Pending | Task-018..026 planned |
-| 7 | Premium UI Implementation | ⏳ Pending | — |
-| 8 | Animation System | ⏳ Pending | — |
-| 9 | Polish & Consistency | ⏳ Pending | — |
+| Epic | Name | Status | Reality Check (2026-07-28) |
+|------|------|--------|----------------------------|
+| A | Token Foundation | 🔄 Next Up | Token scaffold exists; legacy `_theme-variables.scss` (722 lines) still forwarded; orphaned `styles.scss` (499 lines); primitives duplicated in `_index.scss` |
+| B | Material Overrides Centralization | ⏳ Pending | No `_material-overrides.scss`; overrides scattered across 24 files incl. 1,548-line `_admin-theme-material.scss` |
+| C | Admin Unification (ADR-011) | ⏳ Pending | Parallel `--admin-*` system fully intact: 2,335 usages in 43 files, 174 unique tokens |
+| D | Component Migration (ADR-006) | 🔄 Partially Started | 3/86 components fully clean (`favorites`, `base-modal`, `cart-modal`); ~29 partially migrated; 1,336 hardcoded hex remain |
+| E | Final Cleanup | ⏳ Pending | 91 `!important` (12 files), 40 `::ng-deep` (12 files), 3 stub files |
+| F | Theme Engine v2 (ADR-004/012) | 💡 Planned | ThemeService works (data-theme switching, persistence, 4 themes); TS model not synced with SCSS |
+| G | Premium UI / Animations / Polish | 💡 Planned | See `REDESIGN_PLAN.md` Phases 7–9 |
 
 ### Current Blockers
 - None
 
-### Recent Changes
-| Date | Change | Author |
-|------|--------|--------|
-| 2026-07-23 | Header `!important` Cleanup: Removed all remaining `!important` declarations from `header.component.scss` (2 instances in `.hamburger span` inside `:host(.variant-dark)` and `:host(.variant-dark-soft)`). The `:host()` selector provides sufficient specificity without `!important`, following AI_CONSTITUTION.md Rule #3 (FORBIDDEN: `!important` in component styles). Modified: `header.component.scss`. Build passes (6905ms), 0 `!important` remaining. | Principal UI Architect |
-| 2026-07-23 | Header Theme Toggle Hover Fix: Unified `.theme-toggle` button styling with other header icons. Root cause: browser default `<button>` styles (background, border, outline) overriding transparent icon appearance. Fix: dedicated `.theme-toggle` block in `.user-actions` with `background:transparent`, `border:none`, `outline:none`, `box-shadow:none`, `-webkit-appearance:none`, unified hover/active transitions matching `.search-icon`, `.cart`, `.favorites`. Modified: `header.component.scss`. Build passes. | Principal UI Architect |
-| 2026-07-21 | Product Card Hover & Badge Redesign: Removed harsh blue bottom background on product card hover. Replaced with elegant border-glow (`rgba(96,165,250,0.35)`) + deep box-shadow with subtle blue tint + smooth `translateY(-4px)` lift. Redesigned category badge (SHOES) with semi-transparent background (`rgba(96,165,250,0.1)`), thin border (`rgba(96,165,250,0.25)`), increased border-radius (6px), compact padding (3px 8px), smaller font (10px). Mobile hover uses transparent background. Added missing primitive tokens (`--color-blue-300`, `--color-blue-400`, `--color-blue-400-rgb`). Modified: `_cards.scss`, `_dark.scss`, `_primitive-tokens.scss`. | Principal UI Architect |
-| 2026-07-21 | Favorites Page Visual Audit: Fixed proportions and styling on favorites page. Reduced header padding, softened CLEAR ALL button (neutral secondary style instead of orange warning gradient), improved category badge contrast, stabilized product name with min-height/line-clamp, refined back button. All changes use semantic tokens (ADR-001 compliant). | Principal UI Architect |
-| 2026-07-14 | Task-022: Fixed admin header border regression in dark theme. Root cause: `[data-theme="dark"]` block in `header.component.scss` had no border override for `.admin-header`, so it inherited `border-bottom: none` from the base class. Fix: added explicit `.admin-header` rule with `background-color: var(--admin-header-bg, #1f2937)` and `border-bottom: 1px solid var(--admin-header-border, var(--admin-border-primary))` to match production appearance. | Principal UI Architect |
-| 2026-07-14 | Task-016 (ADR-001): Restored original colorful icons in the glass admin theme. Excluded `.stat-icon` from the global `mat-icon` white color override in `_glass.scss` via `mat-icon:not(.stat-icon)`. Reverted temporary white icon values to proper bright colors in `_admin-glass.scss` to match the exact original visual appearance. Build passes. | Principal UI Architect |
-| 2026-07-14 | Task-021 (Regression Fix #2): Fixed admin header border regression across themes. Root cause: base `.admin-header` had `border-bottom: 1px solid var(--admin-header-border)` applied universally, and dark theme had a hardcoded `border-bottom: 1px solid #374151` in the 480px media query — causing light theme to have wrong border color and dark theme to have an unwanted border. Fix: changed base `.admin-header` to `border-bottom: none`; light theme gets explicit border via `[data-theme="light"] { .admin-header { border-bottom: 1px solid #e5e7eb; } }` at 480px+; dark theme has no border (matching production). Glass theme retains its glass-style border. | Principal UI Architect |
-| 2026-07-14 | Task-015 (ADR-001): Fixed stat-cards background in glass admin theme. Root cause: `[data-theme="glass"] & {}` selectors inside Angular components with ViewEncapsulation.Emulated compile to invalid selectors — they never match. Solution: moved glass-specific values to `--dashboard-stat-card-*` CSS variables in `_admin-glass.scss`, with fallbacks in `admin-variables.scss`. `dashboard.component.scss` now only consumes `var(--dashboard-stat-card-*)`. Anti-pattern documented in plan. Build passes (8188ms). | Principal UI Architect |
-| 2026-07-14 | Task-021 (Regression Fix): Fixed admin header visual regression in light theme. Root cause: `--admin-header-bg` was not defined in `_admin-light.scss`, so header fell back to `#ffffff` (same as page bg) and had no `border-bottom`, causing the header to blend into the page content with no visual separation. Fix: added `--admin-header-bg: #f3f4f6` and `--admin-header-border: #e5e7eb` to `_admin-light.scss`; added `border-bottom: 1px solid var(--admin-header-border, var(--admin-border-primary))` to base `.admin-header` class; updated `[data-theme="light"]` override to use semantic tokens. Header now has distinct background and border matching production. Build passes. | Principal UI Architect |
-| 2026-07-09 | Task-008: Fixed Admin Dashboard Glass regression. Root cause: selector `[data-theme="glass"].is-admin` in `_glass.scss` never matched because `data-theme="glass"` is on `<html>` and `.is-admin` is on `<body>`. Fixed by moving admin block outside `[data-theme="glass"]` and using correct selector `html[data-theme="glass"] body.is-admin`. Removed all 16 `!important` declarations that were masking the broken selector. Build passes (5893ms). | Principal UI Architect |
-| 2026-07-09 | Task-007 (ADR-001): Migrated 3 component files to semantic tokens: `styles/components/_cards.scss`, `styles/components/_theme-switcher.scss`, `app/shared/modal/base-modal.component.scss`. Replaced all hardcoded colors (#e0e0e0, #aaa, #999, #ffffff, #1e293b, etc.), admin variables (--admin-*), and legacy custom properties (--favorites-*, --glass-*) with semantic tokens: --surface-page/primary/secondary/elevated/hover/overlay, --text-primary/secondary/muted/inverse/on-primary, --border-default/subtle/medium/strong/emphasis, --spacing-*, --radius-*/full, --shadow-sm/md/lg/xl, --transition-fast, --font-family/weight/size-*, --z-modal, --backdrop-blur/sm, --color-primary/accent, --state-*, --interactive-*, --glass-bg/border/shadow/blur. Build passes (8388ms). | Principal UI Architect |
-| 2026-07-08 | Task-006 (ADR-001): Migrated `favorites.component.scss` to semantic tokens. Replaced all `--favorites-*` custom properties and hardcoded colors (#ffffff, #1e293b, #ff6b6b, #3498db, #f3f3f3, #6c757d, #5a6268, #495057, #94a3b8, #64748b, #475569, #60a5fa, #6366f1) with semantic tokens: --surface-page/card/secondary/elevated/hover/overlay/overlay-light, --text-primary/secondary/muted, --font-family-primary/secondary, --spacing-*, --radius-*, --shadow-sm/md/lg/xl, --border-default/subtle/medium/strong, --backdrop-blur, --color-primary/accent, --state-danger-bg, --state-warning-*, --interactive-primary-*, --glass-*, --text-on-primary, --font-weight-*, --text-*. Zero hardcoded colors remain. Build passes (7619ms). | Principal UI Architect |
-| 2026-07-08 | Task-005 (PoC): Migrated `theme-selector.component.scss` to semantic tokens. Replaced ~40 hardcoded values (colors like #e0e0e0, #aaa, #999, #4caf50; admin vars like --admin-text-secondary, --admin-bg-card) with semantic tokens: --text-primary, --text-secondary, --surface-primary/secondary/tertiary, --border-default/strong, --spacing-*, --radius-*, --shadow-sm/md/xl, --transition-fast, --font-weight-*, --text-xs/sm/base/xl/2xl, --z-modal, --state-success-bg. Component works identically across all themes. Build passes. | Principal UI Architect |
-| 2026-07-08 | Task-004: Rewrote `themes/_glass.scss` to use semantic tokens with glass-specific overrides. Structure mirrors `_default.scss`/`_dark.scss`: `[data-theme="glass"]` scoping, glass-specific tokens (--glass-blur, --glass-bg, --glass-shadow), backdrop-filter on all component overrides, deep dark HUD background with radial gradients, admin-specific glass section, body-level gradient background. Build passes (6171ms). | Principal UI Architect |
-| 2026-07-08 | Task-003: Rewrote `themes/_dark.scss` to use semantic tokens with dark-specific overrides. Structure mirrors `_default.scss`: `[data-theme="dark"]` scoping, primitive token references via `var()`, page-specific tokens (Favorites, Auth), component overrides, and legacy aliases. Build passes (5960ms). | Principal UI Architect |
-| 2026-07-08 | Task-002: Rewrote `themes/_default.scss` to use semantic tokens from `_semantic-tokens.scss`. All hardcoded values replaced with `var()` references to primitive tokens. Added `[data-theme="default"]` scoping, legacy aliases for backward compat, and `:root` fallback. Build passes (5689ms). | Principal UI Architect |
-| 2026-07-08 | Task-001 (ADR-001): Connected primitive tokens from TOKEN_CONTRACT.md to main styles pipeline. Created `tokens/_index.scss` with ~60 CSS custom properties covering colors, spacing, radius, shadows, typography, and motion. Added `tokens/_semantic-tokens.scss` for theme-level semantic mappings. Build passes. | Principal UI Architect |
-| 2026-07-08 | Task-002 (correction): Removed duplicate px-based radius tokens from `core/_variables.scss`; kept only rem-based radius tokens. | Principal UI Architect |
-| 2026-07-08 | Task-003: Added typography scale tokens to `core/_variables.scss` :root block (per ADR-001) | Principal UI Architect |
-| 2026-07-07 | Task-001: Added missing `--color-text-primary` CSS token to `core/_variables.scss`; fixed token layering rule | Principal UI Architect |
-| 2026-07-06 | Style Architecture documentation improved — corrected SCSS inventory, updated token flow | Principal UI Architect |
-| 2026-07-05 | Initial UI architecture documentation created | Principal UI Architect |
+### What Verifiably Works Today
+- Token scaffold: `src/styles/tokens/` (`_primitive-tokens.scss`, `_semantic-tokens.scss`)
+- Themes rewritten to semantic tokens: `_default.scss`, `_dark.scss`, `_glass.scss`
+- Imports-only entry point: `src/styles/main.scss` (wired in `angular.json`)
+- ThemeService: 4 themes, `data-theme` switching, localStorage persistence, separate admin/storefront selection
+- Glass/admin theme regressions fixed (Tasks 008, 015–017, 021, 022)
 
 ---
 
@@ -90,33 +69,66 @@
 
 ## Known Technical Debt
 
+> Quantified baseline (2026-07-28). Live numbers are tracked in [REFACTORING_BOARD.md §1](REFACTORING_BOARD.md).
+
 ### High Priority
-- [ ] Duplicate CSS variable definitions across `src/styles/` and `src/admin/styles/`
-- [ ] Hardcoded colors in component SCSS files
-- [ ] Admin panel maintains separate theme system duplicating global themes
-- [ ] `_theme-variables.scss` is ~723 lines — needs decomposition
+- [ ] Parallel `--admin-*` token system: 2,335 usages / 43 files / 174 unique tokens (Epic C)
+- [ ] 1,336 hardcoded hex colors in 68 SCSS files outside token/theme sources (Epic D)
+- [ ] Legacy `_theme-variables.scss` (722 lines) still forwarded by `tokens/_index.scss` (Epic A)
+- [ ] Orphaned `src/styles.scss` (499 lines of logic, not in build) — docs previously described it as the entry point (Epic A)
+- [ ] No centralized Material overrides; `_admin-theme-material.scss` is a 1,548-line de-facto dump (Epic B)
 
 ### Medium Priority
-- [ ] Inconsistent spacing values across components
-- [ ] Angular Material overrides scattered across multiple files
-- [ ] Some SCSS partials may be unused (e.g., `_admin-theme-material.scss`)
-- [ ] `!important` usage in component styles
+- [ ] `_primitive-tokens.scss` exists but is not imported — `_index.scss` duplicates primitives inline (drift risk)
+- [ ] `core/_variables.scss` (243 lines) defines a parallel color palette
+- [ ] 91 `!important` in 12 files; 40 `::ng-deep` in 12 files
+- [ ] `admin-global.scss` is 1,195 lines with mixed concerns
 
 ### Low Priority
-- [ ] SCSS variables (`$var`) still used alongside CSS custom properties (`--var`)
-- [ ] Documentation dates need synchronization
+- [ ] Stub files in pipeline: `_forms.scss`, `_modals.scss`, `_navigation.scss` (5 lines each)
+- [ ] TS `Theme` interface not synchronized with SCSS tokens (ADR-012)
+- [ ] SCSS variables (`$var`) still used alongside CSS custom properties
+
+---
+
+## Recent Changes
+
+| Date | Change | Author |
+|------|--------|--------|
+| 2026-07-28 | Task A2 (Board): Semantic token layer completed for storefront scope. Audit found 81 token names referenced via `var()` but never defined; ~46 of them used WITHOUT fallbacks — meaning broken declarations at runtime (favorites page surfaces/borders, base-modal backdrop, `--border-primary`/`--interactive-primary` in ALL themes via missing `--color-brand-*`). Added: 8 primitives (`--color-brand-base/light/dark`, `--color-accent-pink`, `--color-slate-600/800-rgb`, `--text-3xl`), ~25 semantic tokens (surfaces, borders subtle/medium/emphasis, `--text-muted`, `--state-danger-*`, `--backdrop-blur/-sm`, `--glass-*-hover`, spacing aliases, auth secondary set) with dark/glass theme overrides mapped from original legacy `--favorites-*` values. Remaining undefined-no-fallback: only out-of-scope (`--tw-*` in orphaned styles.scss → A5; `--admin-*`, `--lg-*` → Epic C). Verified: build passes, browser check of favorites + card hover in all 3 themes, no console errors. | Principal UI Architect |
+| 2026-07-28 | Task A1 (Board): `tokens/_index.scss` now imports `_primitive-tokens.scss` instead of duplicating primitives inline. Side effect fixed: tokens defined only in the previously-unimported file (`--color-blue-300/400`, `--color-blue-400-rgb`, `--z-modal`, `--z-*` scale, `--font-normal/medium/semibold/bold`) were unresolved at runtime — dark/glass theme `--text-link`, product-card hover glow, and modal z-indexes silently fell back. Verified: build passes, tokens present in CSS bundle, browser check in all 3 themes (`--color-blue-400` = `#60a5fa`, `--z-modal` = `400`). | Principal UI Architect |
+| 2026-07-28 | Documentation overhaul: full code audit performed (hex/`!important`/`::ng-deep`/`--admin-*` counts, token pipeline analysis, ThemeService review). Created `REFACTORING_BOARD.md` as the single source of truth for refactoring progress with measurable metrics (M1–M8) and epic/task breakdown (A–G). Corrected phase statuses that overstated progress (e.g., "Phase 3 Complete" while the 722-line legacy monolith is still forwarded). Updated `UI_AUDIT.md` with real scan data. | Principal UI Architect |
+| 2026-07-23 | Header `!important` Cleanup: Removed all remaining `!important` declarations from `header.component.scss` (2 instances in `.hamburger span` inside `:host(.variant-dark)` and `:host(.variant-dark-soft)`). The `:host()` selector provides sufficient specificity without `!important`, following AI_CONSTITUTION.md Rule #3 (FORBIDDEN: `!important` in component styles). Modified: `header.component.scss`. Build passes (6905ms), 0 `!important` remaining. | Principal UI Architect |
+| 2026-07-23 | Header Theme Toggle Hover Fix: Unified `.theme-toggle` button styling with other header icons. Root cause: browser default `<button>` styles (background, border, outline) overriding transparent icon appearance. Fix: dedicated `.theme-toggle` block in `.user-actions` with `background:transparent`, `border:none`, `outline:none`, `box-shadow:none`, `-webkit-appearance:none`, unified hover/active transitions matching `.search-icon`, `.cart`, `.favorites`. Modified: `header.component.scss`. Build passes. | Principal UI Architect |
+| 2026-07-21 | Product Card Hover & Badge Redesign: Removed harsh blue bottom background on product card hover. Replaced with elegant border-glow (`rgba(96,165,250,0.35)`) + deep box-shadow with subtle blue tint + smooth `translateY(-4px)` lift. Redesigned category badge (SHOES) with semi-transparent background, thin border, increased border-radius (6px), compact padding, smaller font. Mobile hover uses transparent background. Added missing primitive tokens (`--color-blue-300`, `--color-blue-400`, `--color-blue-400-rgb`). Modified: `_cards.scss`, `_dark.scss`, `_primitive-tokens.scss`. | Principal UI Architect |
+| 2026-07-21 | Favorites Page Visual Audit: Fixed proportions and styling on favorites page. Reduced header padding, softened CLEAR ALL button, improved category badge contrast, stabilized product name with min-height/line-clamp, refined back button. All changes use semantic tokens (ADR-001 compliant). | Principal UI Architect |
+| 2026-07-14 | Task-022: Fixed admin header border regression in dark theme. Added explicit `.admin-header` rule with `background-color: var(--admin-header-bg, #1f2937)` and border to match production appearance. | Principal UI Architect |
+| 2026-07-14 | Task-016 (ADR-001): Restored original colorful icons in the glass admin theme. Excluded `.stat-icon` from the global `mat-icon` white color override in `_glass.scss` via `mat-icon:not(.stat-icon)`. Build passes. | Principal UI Architect |
+| 2026-07-14 | Task-021 (Regression Fix #2): Fixed admin header border regression across themes. Base `.admin-header` changed to `border-bottom: none`; light theme gets explicit border at 480px+; dark theme has no border; glass retains glass-style border. | Principal UI Architect |
+| 2026-07-14 | Task-015 (ADR-001): Fixed stat-cards background in glass admin theme. Root cause: `[data-theme="glass"] & {}` selectors inside components with ViewEncapsulation.Emulated compile to invalid selectors. Solution: `--dashboard-stat-card-*` CSS variables in `_admin-glass.scss` with fallbacks. Anti-pattern documented. Build passes (8188ms). | Principal UI Architect |
+| 2026-07-14 | Task-021 (Regression Fix): Fixed admin header visual regression in light theme. Added `--admin-header-bg: #f3f4f6` and `--admin-header-border: #e5e7eb` to `_admin-light.scss`. Build passes. | Principal UI Architect |
+| 2026-07-09 | Task-008: Fixed Admin Dashboard Glass regression. Root cause: selector `[data-theme="glass"].is-admin` never matched (`data-theme` on `<html>`, `.is-admin` on `<body>`). Fixed with `html[data-theme="glass"] body.is-admin`. Removed all 16 masking `!important` declarations. Build passes (5893ms). | Principal UI Architect |
+| 2026-07-09 | Task-007 (ADR-001): Migrated 3 files to semantic tokens: `_cards.scss`, `_theme-switcher.scss`, `base-modal.component.scss`. Build passes (8388ms). | Principal UI Architect |
+| 2026-07-08 | Task-006 (ADR-001): Migrated `favorites.component.scss` to semantic tokens. Zero hardcoded colors remain. Build passes (7619ms). | Principal UI Architect |
+| 2026-07-08 | Task-005 (PoC): Migrated `theme-selector.component.scss` to semantic tokens (~40 hardcoded values replaced). Build passes. | Principal UI Architect |
+| 2026-07-08 | Task-004: Rewrote `themes/_glass.scss` to semantic tokens with glass-specific overrides. Build passes (6171ms). | Principal UI Architect |
+| 2026-07-08 | Task-003: Rewrote `themes/_dark.scss` to semantic tokens with dark-specific overrides. Build passes (5960ms). | Principal UI Architect |
+| 2026-07-08 | Task-002: Rewrote `themes/_default.scss` to use semantic tokens from `_semantic-tokens.scss`. Build passes (5689ms). | Principal UI Architect |
+| 2026-07-08 | Task-001 (ADR-001): Connected primitive tokens to main styles pipeline. Created `tokens/_index.scss` (~60 CSS custom properties) and `tokens/_semantic-tokens.scss`. Build passes. | Principal UI Architect |
+| 2026-07-06 | Style Architecture documentation improved — corrected SCSS inventory, updated token flow | Principal UI Architect |
+| 2026-07-05 | Initial UI architecture documentation created | Principal UI Architect |
 
 ---
 
 ## How to Use This Document
 
 1. **For a high-level overview**: Read this document
-2. **For UI architecture decisions**: See `STYLE_ARCHITECTURE.md`
-3. **For theme engine details**: See `THEME_ENGINE.md`
-4. **For phase-by-phase tasks**: See `REDESIGN_PLAN.md`
-5. **For audit findings and cleanup progress**: See `UI_AUDIT.md`
+2. **For refactoring tasks and progress metrics**: See `REFACTORING_BOARD.md` — single source of truth
+3. **For UI architecture decisions**: See `STYLE_REFACTOR_PLAN.md`
+4. **For theme engine details**: See `THEME_ENGINE.md`
+5. **For audit findings**: See `UI_AUDIT.md`
 6. **For AI agent guidelines**: See `AI_CONSTITUTION.md`
 
 ---
 
-*This document is maintained by the Principal UI Architect. Last updated: 2026-07-23*
+*This document is maintained by the Principal UI Architect. Last updated: 2026-07-28*

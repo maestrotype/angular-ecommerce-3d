@@ -11,7 +11,8 @@ Technical reference for the Angular 17+ 3D E-commerce Platform.
 | File | Purpose |
 |------|---------|
 | [AI_CONSTITUTION.md](AI_CONSTITUTION.md) | **Read First** — Rules all AI agents must follow |
-| [PROJECT_STATUS.md](PROJECT_STATUS.md) | Current status, active task, roadmap |
+| [REFACTORING_BOARD.md](REFACTORING_BOARD.md) | **Single source of truth for refactoring progress** — metrics, epics, tasks (Done / In Progress / To Do / Planned) |
+| [PROJECT_STATUS.md](PROJECT_STATUS.md) | High-level project status and changelog |
 | [tasks/](tasks/) | Task descriptions (`task_XXX_name.md`) |
 | [templates/task-template.md](templates/task-template.md) | Template for creating new tasks |
 
@@ -65,6 +66,12 @@ Technical reference for the Angular 17+ 3D E-commerce Platform.
         ▼                      ▼                      ▼
    AI_CONSTITUTION.md    PROJECT_STATUS.md      ARCHITECTURE.md
    (AI rules)            (Current state)        (App architecture)
+
+                        Need a task to work on?
+                               │
+                               ▼
+                      REFACTORING_BOARD.md
+                (Progress metrics, epics A–G, task statuses)
 
                          Need to change styles?
                                 │

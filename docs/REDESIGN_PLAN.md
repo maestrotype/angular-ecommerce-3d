@@ -2,9 +2,10 @@
 
 This document defines the phased roadmap for the complete UI architecture redesign. Each phase is broken into atomic tasks suitable for independent implementation by AI agents (Qwen3-Coder).
 
-**Current Phase**: Phase 1 (Style Architecture Audit)
-**Last Updated**: 2026-07-06
-**Prerequisites**: `STYLE_ARCHITECTURE.md` (architecture rules), `UI_AUDIT.md` (findings tracker)
+> **⚠️ Status tracking moved**: Task and phase statuses are tracked ONLY in [REFACTORING_BOARD.md](REFACTORING_BOARD.md). This document remains the **reference catalog of task definitions** (especially Phases 7–9 / Epic G). Do not update statuses here.
+
+**Last Updated**: 2026-07-28
+**Prerequisites**: `STYLE_ARCHITECTURE.md` (architecture rules), `UI_AUDIT.md` (findings), `REFACTORING_BOARD.md` (progress)
 
 ---
 

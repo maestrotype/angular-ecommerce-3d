@@ -18,10 +18,17 @@
   --surface-tertiary: rgba(255, 255, 255, 0.08);
   --surface-overlay: rgba(0, 0, 0, 0.7);
   --surface-inverse: var(--color-white);
+  --surface-page: transparent;
+  --surface-card: var(--glass-bg);
+  --surface-elevated: rgba(255, 255, 255, 0.08);
+  --surface-highlight: rgba(255, 255, 255, 0.12);
+  --surface-overlay-light: rgba(255, 255, 255, 0.08);
+  --surface-overlay-full: rgba(0, 0, 0, 0.6);
 
   /* ===== TEXT OVERRIDES ===== */
   --text-primary: var(--color-white);
   --text-secondary: rgba(255, 255, 255, 0.9);
+  --text-muted: rgba(255, 255, 255, 0.55);
   --text-inverse: var(--color-slate-900);
   --text-on-primary: var(--color-white);
   --text-link: var(--color-blue-400);
@@ -30,6 +37,9 @@
   --border-default: rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.15);
   --border-primary: var(--color-brand-base);
+  --border-subtle: rgba(255, 255, 255, 0.1);
+  --border-medium: rgba(255, 255, 255, 0.2);
+  --border-emphasis: rgba(255, 255, 255, 0.35);
 
   /* ===== INTERACTIVE OVERRIDES ===== */
   --interactive-primary: var(--color-brand-base);
@@ -54,6 +64,9 @@
   --glass-bg-hover: rgba(255, 255, 255, 0.05);
   --glass-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
   --glass-opacity: 0.5;
+  --glass-border-hover: rgba(255, 255, 255, 0.25);
+  --glass-shadow-hover: 0 20px 45px rgba(0, 0, 0, 0.7);
+  --backdrop-blur: var(--glass-blur);
 
   /* ===== COMPOSITE OVERRIDES ===== */
   --radius-card: var(--radius-xl);
@@ -114,6 +127,11 @@
   /* ===== PAGE-SPECIFIC: Auth ===== */
   --auth-btn-primary: var(--color-brand-base);
   --auth-btn-primary-hover: var(--color-brand-light);
+  --auth-tab-hover-bg: rgba(255, 255, 255, 0.08);
+  --auth-btn-secondary: rgba(255, 255, 255, 0.06);
+  --auth-btn-secondary-border: 1px solid rgba(255, 255, 255, 0.15);
+  --auth-btn-secondary-text: rgba(255, 255, 255, 0.9);
+  --auth-input-focus: var(--color-blue-400);
 
   /* ===== COMPONENT: Auth Modal Tabs ===== */
   .auth-modal {

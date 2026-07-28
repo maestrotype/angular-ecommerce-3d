@@ -159,17 +159,19 @@ Theme switching is performed by changing the `data-theme` attribute on `<html>`.
 
 ### 6.1 Before Implementing Any UI Change
 
-1. Read `STYLE_REFACTOR_PLAN.md` for architectural decisions and target end-state
-2. Read `STYLE_ARCHITECTURE.md` for current architecture
-3. Read `UI_AUDIT.md` for known issues in the target area
-4. Check `REDESIGN_PLAN.md` for active phase and current task
+1. Check `REFACTORING_BOARD.md` for the current epic, task, and its Definition of Done
+2. Read `STYLE_REFACTOR_PLAN.md` for architectural decisions and target end-state
+3. Read `STYLE_ARCHITECTURE.md` for current architecture
+4. Read `UI_AUDIT.md` for known issues in the target area
 
 ### 6.2 After Completing Any UI Task
 
 1. Run `npm run build` — must succeed with zero errors
-2. Update the active task file in `docs/tasks/`
-3. Update `UI_AUDIT.md` if any audit items were resolved
-4. Update `PROJECT_STATUS.md` section 3 (Completed Tasks) and section 4 (Known Issues)
+2. Update the task status in `REFACTORING_BOARD.md` (§4) and affected metrics (§1) — re-measure, do not guess
+3. Update `UI_AUDIT.md` if any audit findings were resolved
+4. Add one changelog line to `PROJECT_STATUS.md` (Recent Changes)
+
+**RULE**: Never mark a task ✅ without measurable proof (metric re-scan, screenshot, or grep output). Documentation drifted from code once; it must not happen again.
 
 ### 6.3 When Discovering a New Architecture Issue
 
@@ -181,10 +183,11 @@ Theme switching is performed by changing the `data-theme` attribute on `<html>`.
 
 | When | What to Update |
 |------|----------------|
-| After style cleanup | `UI_AUDIT.md` — mark items as RESOLVED |
+| After any refactoring task | `REFACTORING_BOARD.md` — task status + metrics (single source of truth for progress) |
+| After style cleanup | `UI_AUDIT.md` — mark findings as RESOLVED |
 | After theme changes | `THEME_ENGINE.md` if new dimensions added |
 | After architecture changes | `STYLE_ARCHITECTURE.md` — update affected sections |
-| After phase completion | `REDESIGN_PLAN.md` — mark phase complete |
+| After epic completion | `PROJECT_STATUS.md` — update epic status table |
 
 ---
 
