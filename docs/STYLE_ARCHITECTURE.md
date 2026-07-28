@@ -3,7 +3,7 @@
 This document defines the complete style architecture for the application. It is the single source of truth for how styles are organized, how themes work, how tokens flow, and how Angular Material is integrated.
 
 **Role**: Principal UI Architect
-**Last Updated**: 2026-07-06
+**Last Updated**: 2026-07-28
 
 ---
 
@@ -42,56 +42,65 @@ This document defines the complete style architecture for the application. It is
 
 ## 2. SCSS Folder Structure
 
+**Build entry** (wired in `angular.json` → `styles[]`): `src/styles/main.scss` — imports only. There is no `src/styles.scss`.
+
+Admin styles are separate entries in the same `styles[]` array (`material-theme.scss`, `admin.scss`).
+
 ```
 src/
-├── styles.scss                    # Main entry (angular.json)
 ├── styles/
-│   ├── main.scss                  # Master import file (imported by styles.scss)
-│   │
-│   ├── core/                      # Global resets and base styles
-│   │   ├── _index.scss            # Re-exports core module
-│   │   ├── _reset.scss            # CSS reset / normalize
-│   │   ├── _base.scss             # Base element styles (html, body, etc.)
-│   │   └── _typography.scss       # Typography scale and utilities
+│   ├── main.scss                  # Build entry (angular.json) — imports only
 │   │
 │   ├── tokens/                    # Design tokens (theme-independent)
-│   │   ├── _index.scss            # Re-exports token module
-│   │   ├── _design-tokens.scss    # Canonical token definitions
-│   │   └── _functions.scss        # SCSS helper functions
+│   │   ├── _index.scss            # Pipeline: primitives → semantic
+│   │   ├── _primitive-tokens.scss # Raw design values (single source)
+│   │   └── _semantic-tokens.scss  # Contextual mappings for components
 │   │
 │   ├── themes/                    # Theme definitions (theme-dependent)
 │   │   ├── _index.scss            # Re-exports all themes
 │   │   ├── _default.scss          # Default/light theme
 │   │   ├── _dark.scss             # Dark theme
-│   │   ├── _glass.scss            # Glass theme
-│   │   └── _<name>.scss           # Additional themes
+│   │   └── _glass.scss            # Glass theme
+│   │
+│   ├── core/                      # Global resets, base, utilities
+│   │   ├── _index.scss            # Re-exports core module
+│   │   ├── _variables.scss        # SCSS breakpoints + non-color utils
+│   │   ├── _mixins.scss           # Reusable SCSS mixins
+│   │   ├── _base.scss             # Base element styles (html, body, etc.)
+│   │   ├── _typography.scss       # Typography scale
+│   │   ├── _utilities.scss        # Utility classes
+│   │   └── _scrollbars.scss       # Thin scrollbars + drawer hide
 │   │
 │   ├── components/                # Global component style presets
-│   │   ├── _buttons.scss          # Button base styles
-│   │   ├── _cards.scss            # Card base styles
-│   │   ├── _forms.scss            # Form element styles
-│   │   ├── _modals.scss           # Modal/dialog base styles
-│   │   ├── _navigation.scss       # Navigation base styles
-│   │   ├── _theme-switcher.scss   # Theme switcher styles
-│   │   └── _empty-states.scss     # Empty state patterns
+│   │   ├── _index.scss            # Re-exports component presets
+│   │   ├── _buttons.scss
+│   │   ├── _cards.scss
+│   │   ├── _forms.scss            # stub (Epic E)
+│   │   ├── _modals.scss           # stub (Epic E)
+│   │   ├── _navigation.scss       # stub (Epic E)
+│   │   ├── _theme-switcher.scss
+│   │   └── _glass-helpers.scss    # .glass-theme, cart controls, .theme-price
 │   │
-│   ├── material/                  # Angular Material overrides
-│   │   ├── _overrides.scss        # Centralized Material overrides
-│   │   └── _density.scss          # Material density adjustments
-│   │
-│   └── utilities/                 # Utility classes and mixins
-│       ├── _mixins.scss           # Reusable SCSS mixins
-│       └── _helpers.scss          # Utility classes
+│   └── overrides/                 # Third-party / Material overrides (ADR-005)
+│       ├── _index.scss            # Re-exports overrides module
+│       └── _material-overrides.scss  # Single audit point (B2–B4 migrate rules here)
 │
 ├── admin/
-│   └── styles/                    # Admin-specific styles (extends shared)
-│       ├── admin.scss             # Admin entry point
-│       ├── _admin-layout.scss     # Admin layout overrides
-│       └── _admin-theme-*.scss    # Admin theme variants
+│   └── styles/                    # Admin-specific styles (parallel --admin-* until Epic C)
+│       ├── admin.scss             # Admin entry (angular.json)
+│       ├── material-theme.scss    # Material palette entry (angular.json)
+│       ├── admin-global.scss
+│       ├── admin-variables.scss
+│       ├── admin-mixins.scss
+│       ├── _admin-light.scss
+│       ├── _admin-dark.scss
+│       ├── _admin-glass.scss
+│       ├── _admin-dark-glass.scss
+│       ├── _admin-material-base.scss
+│       └── _admin-theme-material.scss  # → Epic B centralization
 │
 └── app/                           # Component styles (local only)
-    ├── component/
-    │   └── component.scss         # Component-local styles
+    └── **/*.component.scss
 ```
 
 ### Rules
@@ -99,7 +108,8 @@ src/
 - Partial files are prefixed with `_` and are never imported directly by components
 - `_index.scss` files serve as the single import point for each module
 - Component styles (under `src/app/`) are local and never imported globally
-- Admin styles may extend shared tokens but define their own layout rules
+- Admin styles may reuse shared tokens but currently keep a parallel `--admin-*` namespace (Epic C)
+- `main.scss` contains imports only — no CSS rules
 
 ---
 
@@ -108,37 +118,29 @@ src/
 The import order in `src/styles/main.scss` is strict and must be preserved:
 
 ```scss
-/* 1. Core — resets and base */
-@use 'core/index';
+/* 1. Tokens — theme-independent design tokens */
+@import './tokens/index';
 
-/* 2. Tokens — theme-independent design tokens */
-@use 'tokens/index';
+/* 2. Themes — theme-dependent CSS variables (before components) */
+@import './themes/index';
 
-/* 3. Themes — theme-dependent CSS variables */
-@use 'themes/index';
+/* 3. Core — variables, mixins, base, typography, utilities, scrollbars */
+@import './core/index';
 
-/* 4. Material overrides — must come after themes */
-@use 'material/overrides';
+/* 4. Component presets — global component styles */
+@import './components/index';
 
-/* 5. Component presets — global component styles */
-@use 'components/buttons';
-@use 'components/cards';
-@use 'components/forms';
-@use 'components/navigation';
-
-/* 6. Utilities — mixins and helper classes */
-@use 'utilities/mixins';
-@use 'utilities/helpers';
+/* 5. Material / MDC / CDK overrides (ADR-005) */
+@import './overrides/index';
 ```
 
 **Why this order matters**:
 
-- Core establishes the baseline
 - Tokens define the vocabulary
-- Themes assign values to tokens
-- Material overrides need theme variables available
+- Themes assign values to tokens (and legacy aliases)
+- Core establishes baseline styles and may consume tokens
 - Component presets consume both tokens and theme variables
-- Utilities are last (they may reference anything above)
+- Material overrides load last among shared styles so token-driven rules win over Material defaults
 
 ---
 
@@ -176,10 +178,11 @@ Categories:
 
 ### 4.3 Variable Definition Rules
 
-1. **Global variables** are defined ONCE in `src/styles/tokens/_design-tokens.scss`
-2. **Theme variables** are defined in each theme's SCSS partial under `[data-theme="<name>"]`
-3. **Component variables** are forbidden unless approved by the UI Architect
-4. A variable defined at a higher scope shadows lower-scope definitions of the same name
+1. **Primitives** are defined ONCE in `src/styles/tokens/_primitive-tokens.scss`
+2. **Semantic tokens** map context in `src/styles/tokens/_semantic-tokens.scss`
+3. **Theme variables** are defined in each theme's SCSS partial under `[data-theme="<name>"]`
+4. **Component variables** are forbidden unless approved by the UI Architect
+5. A variable defined at a higher scope shadows lower-scope definitions of the same name
 
 ---
 
@@ -226,12 +229,12 @@ Each theme partial defines CSS variables for ALL dimensions, even if it inherits
 
 ### 6.1 Override Strategy
 
-Angular Material components are overridden through a centralized file: `src/styles/material/_overrides.scss`
+Central file: `src/styles/overrides/_material-overrides.scss` (wired via `overrides/_index.scss` in `main.scss`). Scaffold created in B1; rules still live in `src/admin/styles/_admin-theme-material.scss` and scattered component SCSS until B2–B3 migrate them.
 
 **Rules**:
 
 1. Never override Material styles inside a component's SCSS file
-2. All Material overrides use theme CSS variables, not hardcoded values
+2. All Material overrides use semantic CSS variables, not hardcoded values
 3. Overrides are scoped to the Material component's generated class names
 4. Density overrides use Angular Material's built-in density API where possible
 
@@ -272,13 +275,11 @@ Token Definition          Theme Assignment           Component Consumption
 }                         │   #ffffff;        │    padding: var(--spacing-md);
                          │ }                 │ }
 ┌──────────────────┐     └──────────────────┘
-│ _design-tokens   │            ▲
-│ .scss            │            │  Theme service sets
-│                  │            │  data-theme attribute
-│ --spacing-md:    │───────────┘
-│   16px;          │
-│ --radius-md:     │
-│   8px;           │
+│ _primitive-      │            ▲
+│ tokens.scss      │            │  Theme service sets
+│ + _semantic-     │            │  data-theme attribute
+│ tokens.scss      │───────────┘
+│                  │
 └──────────────────┘
 ```
 
@@ -364,12 +365,13 @@ body { margin: 0; }  // This leaks globally due to Angular encapsulation
 
 | Aspect | Current | Target |
 |--------|---------|--------|
-| Token definitions | Scattered across 4+ files | Single `_design-tokens.scss` |
-| Theme variables | Monolithic 723-line file | Per-theme partials |
-| Admin styles | Completely separate | Shared tokens, admin-specific layouts |
-| Material overrides | Scattered in components | Centralized `_overrides.scss` |
-| Hardcoded colors | Present in many components | Zero — all use tokens |
+| Token definitions | ✅ Primitive + semantic pipeline | Keep single-source primitives |
+| Theme variables | ✅ Per-theme partials (`_default`/`_dark`/`_glass`) | Maintain; sync TS model (Epic F) |
+| Admin styles | Parallel `--admin-*` system | Shared tokens, admin layout only (Epic C) |
+| Material overrides | Scaffold in `overrides/`; rules still scattered (B2–B3) | All rules in `_material-overrides.scss` (Epic B) |
+| Hardcoded colors | Present in many components | Zero — all use tokens (Epic D) |
 | CSS vs SCSS variables | Mixed usage | CSS custom properties preferred |
+| Style entry | ✅ `src/styles/main.scss` (imports only) | Keep; never append CSS rules |
 
 ### Migration Phases
 
@@ -538,4 +540,4 @@ This follows the pattern: **define in theme file, consume in component**.
 
 ---
 
-*This document is maintained by the Principal UI Architect. Last updated: 2026-07-14*
+*This document is maintained by the Principal UI Architect. Last updated: 2026-07-28 (B1: `overrides/_material-overrides.scss`)*

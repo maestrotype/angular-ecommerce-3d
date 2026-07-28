@@ -20,11 +20,14 @@ This document defines the rules, constraints and workflow that ALL AI agents mus
 
 | Category | Source File | Format |
 |----------|-------------|--------|
-| Design tokens (theme-independent) | `src/styles/tokens/_design-tokens.scss` | SCSS variables + CSS custom properties |
+| **Style entry (imports only)** | `src/styles/main.scss` | Wired in `angular.json` `styles[]` — no CSS rules |
+| Primitive tokens (theme-independent) | `src/styles/tokens/_primitive-tokens.scss` | CSS custom properties (raw values) |
+| Semantic tokens (contextual) | `src/styles/tokens/_semantic-tokens.scss` | CSS custom properties mapping to primitives |
 | Theme values (theme-dependent) | `src/styles/themes/_<theme>.scss` | CSS custom properties on `[data-theme="<theme>"]` |
+| Material overrides (ADR-005) | `src/styles/overrides/_material-overrides.scss` | Token-driven `.mat-` / `.mat-mdc-` / `.mdc-` rules only |
 | TypeScript theme definitions | `src/app/core/themes/themes/<theme>.ts` | Objects implementing `Theme` interface |
 
-**RULE**: Never hardcode a color, spacing value, radius, shadow, or font size in a component stylesheet. Always reference a design token.
+**RULE**: Never hardcode a color, spacing value, radius, shadow, or font size in a component stylesheet. Always reference a design token. Never append CSS to `main.scss` — it is imports-only.
 
 ### 2.2 Forbidden Patterns
 
@@ -68,9 +71,7 @@ $spacing-md: 16px;       // in component file
   box-shadow: var(--shadow-sm);
 }
 
-// CORRECT — Use SCSS token functions where CSS vars aren't available
-@use '../styles/tokens/design-tokens' as tokens;
-
+// CORRECT — Consume semantic/primitive CSS vars; do not invent local globals
 :host {
   display: block;
 }
@@ -119,7 +120,7 @@ Theme switching is performed by changing the `data-theme` attribute on `<html>`.
 5. **Never use `!important` or `::ng-deep`.** These bypass architectural boundaries.
 6. **Material overrides live in one file.** Scattered overrides are forbidden per `STYLE_REFACTOR_PLAN.md §ADR-005`.
 7. **New themes follow the nine-dimension model.** Color-only themes are insufficient per `STYLE_REFACTOR_PLAN.md §ADR-004`.
-8. **`styles.scss` contains imports only.** Appending CSS to the entry file is forbidden per `STYLE_REFACTOR_PLAN.md §ADR-003`.
+8. **`main.scss` contains imports only.** Appending CSS to the style entry file is forbidden per `STYLE_REFACTOR_PLAN.md §ADR-003`. (`src/styles.scss` was removed in A5.)
 9. **Admin reuses shared tokens.** Admin-specific namespaces are reserved for layout values only per `STYLE_REFACTOR_PLAN.md §ADR-009`.
 10. **When in doubt, read STYLE_REFACTOR_PLAN.md first.** It is the single source of truth for style architecture.
 
@@ -134,7 +135,8 @@ Theme switching is performed by changing the `data-theme` attribute on `<html>`.
 | File | Reason |
 |------|--------|
 | `angular.json` | Build configuration — changes affect entire project |
-| `src/styles/tokens/_design-tokens.scss` | Token definitions — changes cascade everywhere |
+| `src/styles/tokens/_primitive-tokens.scss` | Primitive token definitions — changes cascade everywhere |
+| `src/styles/tokens/_semantic-tokens.scss` | Semantic mappings — changes cascade to all consumers |
 | `src/app/core/themes/theme.model.ts` | Theme interface — structural change breaks all themes |
 | `src/app/core/themes/theme-config.ts` | Theme registry — improper changes break theme switching |
 | `src/styles/main.scss` | Style entry point — import order matters |

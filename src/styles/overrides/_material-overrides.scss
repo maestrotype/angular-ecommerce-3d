@@ -1,0 +1,54 @@
+/* ==========================================================================
+   MATERIAL OVERRIDES — single audit point (ADR-005)
+   --------------------------------------------------------------------------
+   All Angular Material / MDC / CDK visual overrides live here.
+   Consume semantic tokens only — no hardcoded colors, spacing, or shadows.
+   Do NOT put .mat- / .mat-mdc- / .mdc- overrides in component SCSS.
+
+   Migration:
+     B2 — move rules from src/admin/styles/_admin-theme-material.scss
+     B3 — move scattered .mat- overrides from component SCSS (23 files)
+     B4 — bind material-theme.scss palette to design tokens
+   ========================================================================== */
+
+/* ===== Buttons ===== */
+/* .mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-unelevated-button, … */
+
+/* ===== Form fields / inputs ===== */
+/* .mat-mdc-form-field, .mat-mdc-text-field-wrapper, outlined notch, autofill */
+
+/* ===== Selects ===== */
+/* .mat-mdc-select, .mat-mdc-select-panel, .mat-mdc-option */
+
+/* ===== Checkboxes / Radios / Slide toggles ===== */
+/* .mat-mdc-checkbox, .mat-mdc-radio-button, .mat-mdc-slide-toggle */
+
+/* ===== Tables ===== */
+/* .mat-mdc-table, .mat-mdc-header-row, .mat-mdc-row, .mat-mdc-cell */
+
+/* ===== Paginator ===== */
+/* .mat-mdc-paginator */
+
+/* ===== Dialogs ===== */
+/* .mat-mdc-dialog-container, .mat-mdc-dialog-surface, .mat-mdc-dialog-title */
+
+/* ===== Cards / Panels / Expansion ===== */
+/* .mat-mdc-card, .mat-expansion-panel, .mat-mdc-list */
+
+/* ===== Menus / Overlays (CDK) ===== */
+/* .mat-mdc-menu-panel, .cdk-overlay-pane, .cdk-overlay-backdrop */
+
+/* ===== Icons / Icon buttons ===== */
+/* .mat-icon, .mat-mdc-icon-button */
+
+/* ===== Tabs ===== */
+/* .mat-mdc-tab-group, .mat-mdc-tab-header, .mat-mdc-tab-body */
+
+/* ===== Toolbar / Sidenav / Drawer ===== */
+/* .mat-toolbar, .mat-sidenav, .mat-drawer, .mat-drawer-container */
+
+/* ===== Datepicker ===== */
+/* .mat-datepicker-content, .mat-calendar */
+
+/* ===== Snackbar / Tooltip / Badge ===== */
+/* .mat-mdc-snack-bar-container, .mat-mdc-tooltip, .mat-badge */

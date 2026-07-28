@@ -29,8 +29,8 @@
 
 | Epic | Name | Status | Reality Check (2026-07-28) |
 |------|------|--------|----------------------------|
-| A | Token Foundation | 🔄 In Progress | A1–A5 done: primitives, semantic, themes, variables, orphaned `styles.scss` deleted; remaining: A6 docs sync |
-| B | Material Overrides Centralization | ⏳ Pending | No `_material-overrides.scss`; overrides scattered across 24 files incl. 1,548-line `_admin-theme-material.scss` |
+| A | Token Foundation | ✅ Complete | A1–A6 done: primitives, semantic, themes, variables, orphan deleted, docs entry = `main.scss` |
+| B | Material Overrides Centralization | 🔄 In Progress | B1 done: `overrides/_material-overrides.scss` scaffold + wired in `main.scss`; B2–B4 migrate rules |
 | C | Admin Unification (ADR-011) | ⏳ Pending | Parallel `--admin-*` system fully intact: 2,335 usages in 43 files, 174 unique tokens |
 | D | Component Migration (ADR-006) | 🔄 Partially Started | 3/86 components fully clean (`favorites`, `base-modal`, `cart-modal`); ~29 partially migrated; 1,336 hardcoded hex remain |
 | E | Final Cleanup | ⏳ Pending | 91 `!important` (12 files), 40 `::ng-deep` (12 files), 3 stub files |
@@ -76,7 +76,7 @@
 - [ ] 1,336 hardcoded hex colors in 68 SCSS files outside token/theme sources (Epic D)
 - [x] Legacy `_theme-variables.scss` decomposed into theme partials and deleted (A3, 2026-07-28)
 - [x] Orphaned `src/styles.scss` deleted — glass helpers → `components/_glass-helpers.scss`, scrollbars → `core/_scrollbars.scss` (A5, 2026-07-28)
-- [ ] No centralized Material overrides; `_admin-theme-material.scss` is a 1,548-line de-facto dump (Epic B)
+- [ ] Material overrides: scaffold exists (`overrides/_material-overrides.scss`); rules still in `_admin-theme-material.scss` + components (Epic B / B2–B3)
 
 ### Medium Priority
 - [x] `_primitive-tokens.scss` imported via `tokens/_index.scss` (A1, 2026-07-28)
@@ -95,6 +95,8 @@
 
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-07-28 | Task B1 (Board): Created `src/styles/overrides/_material-overrides.scss` (sectioned by Material components: buttons, form fields, selects, tables, dialogs, …) + `overrides/_index.scss`; wired into `main.scss` after component presets. Docs: STYLE_ARCHITECTURE tree/import order/§6.1; AI_CONSTITUTION §2.1; Board M8 + Epic B 1/4. No rule migration yet (B2–B3). | Principal UI Architect |
+| 2026-07-28 | Task A6 (Board): Docs synced to code — build entry is `src/styles/main.scss` (imports only; wired in `angular.json`); orphaned `src/styles.scss` removed from docs. Updated folder tree, import order, token pipeline (`_primitive-tokens` + `_semantic-tokens`), and Material-overrides note (Epic B). `AI_CONSTITUTION.md` §2.1 + contract rule #8 + protected files. Epic A = 6/6 complete. | Principal UI Architect |
 | 2026-07-28 | Task A5 (Board): Deleted orphaned `src/styles.scss` (499 lines). Ported `.glass-theme` / cart controls / `.theme-price` → `components/_glass-helpers.scss` (tokenized); thin scrollbars + drawer hide → `core/_scrollbars.scss` (no `!important`). Discarded dead blocks already covered elsewhere or unused: `:root` layout aliases, Tailwind `--tw-*` backdrop utility, snackbars (admin-global), section/mat dialog panels (no `panelClass` refs), dark-glass Material overrides, mat-badge-warn, duplicate product-card/view-btn/dropdown glass. Verified: file gone; `npm run build` passes; `!important` 91→76. | Principal UI Architect |
 | 2026-07-28 | Task A4 (Board): Removed parallel color palette from `core/_variables.scss` (243→107 lines). Migrated used `--color-*` vars into semantic legacy aliases mapped to semantic/primitive tokens; expanded theme legacy alias sets; converted breakpoints to SCSS `$breakpoint-*` and wired responsive mixins; dropped unused sidenav import; high-contrast overrides now target semantic tokens. Side effect: `--color-primary` no longer hardcodes purple `#667eea` after themes (was clobbering theme aliases due to import order). Verified: 0 `--color-*` / 0 hex color defs in `core/`; `npm run build` passes; bundle has `--color-primary: var(--interactive-primary)`. | Principal UI Architect |
 | 2026-07-28 | Task A3 (Board): Decomposed and deleted legacy `_theme-variables.scss` (722 lines). Parsed default/dark/glass blocks; skipped variables already defined in semantic tokens or theme partials (last-declaration-wins); prepended remaining vars into `_default.scss` / `_dark.scss` / `_glass.scss`; removed `@forward` from `tokens/_index.scss`. Verified: `npm run build` passes; computed tokens in dark (`--hero-bg-gradient`, `--header-bg`, `--product-tabs-bg`); visual check home (light/dark/glass) + product detail (dark) — no broken gradients/header/footer. | Principal UI Architect |

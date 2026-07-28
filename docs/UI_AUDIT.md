@@ -184,7 +184,7 @@ Not separately scanned; resolved per-component during Epic D migration (spacing 
 
 ## 8. Angular Material Overrides
 
-**No centralized `_material-overrides.scss` exists.** Scan 2026-07-28:
+**Central file exists** (`src/styles/overrides/_material-overrides.scss`, B1) — still a section scaffold; rules not migrated yet. Scan 2026-07-28:
 
 | Metric | Value |
 |--------|-------|
