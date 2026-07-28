@@ -91,6 +91,30 @@
   --mdc-list-list-item-hover-state-layer-opacity: 0;
   --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
   --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
+
 }
 
-  
+/* ===== B2 Material bridge → semantic (on body.is-admin so it wins over shared themes) ===== */
+body.is-admin[data-theme='light'],
+html[data-theme='light'] body.is-admin {
+  --input-bg: var(--admin-input-bg);
+  --input-text: var(--admin-input-text);
+  --input-border: var(--admin-input-border);
+  --input-label: var(--admin-input-label);
+  --input-focus-border: var(--admin-input-focus-border);
+  --input-placeholder: var(--admin-input-placeholder, var(--admin-input-label));
+  --interactive-primary-rgb: var(--admin-primary-rgb);
+  --interactive-button: var(--admin-button, var(--admin-primary));
+  --surface-header: var(--admin-header-bg);
+  --surface-table: var(--admin-table-bg);
+  --surface-table-header: var(--admin-table-header-bg);
+  --surface-table-row: var(--admin-table-row-bg, var(--admin-table-bg));
+  --surface-table-even: var(--admin-table-even-bg, var(--admin-bg-secondary));
+  --surface-paginator: var(--admin-table-paginator-bg, var(--admin-table-header-bg));
+  --surface-select-panel: var(--admin-select-panel-bg, var(--admin-bg-card));
+  --text-table-header: var(--admin-table-header-text, var(--admin-text-primary));
+  --text-table-row: var(--admin-table-row-text, var(--admin-text-primary));
+  --text-table-even: var(--admin-table-even-text, var(--admin-text-primary));
+  --text-paginator: var(--admin-table-paginator-text, var(--admin-text-primary));
+  --radius-dialog: var(--border-radius-dark-glass, var(--radius-md));
+}

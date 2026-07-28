@@ -48,7 +48,7 @@ This document records **current-state findings** of the style system audit. Task
 | `admin-mixins.scss` | 274 | Admin mixins | INVESTIGATE | Overlap with core mixins |
 | `admin-global.scss` | 1,195 | Admin global styles | DECOMPOSE | 76 `.mat-` lines, 14 `!important` → Task C5 |
 | `_admin-material-base.scss` | 18 | Material base | INVESTIGATE | |
-| `_admin-theme-material.scss` | 1,548 | De-facto Material override dump | MIGRATE | 349 `.mat-` lines → Task B2 |
+| ~~`_admin-theme-material.scss`~~ | ~~1,548~~ | ~~De-facto Material override dump~~ | ✅ DELETED (B2) | Migrated → `src/styles/overrides/_material-overrides.scss` |
 | `_admin-light.scss` | 95 | Admin light theme | MIGRATE → DELETE | Remounts `--admin-*` per theme → Task C3 |
 | `_admin-dark.scss` | 212 | Admin dark theme | MIGRATE → DELETE | 14 `!important` → Task C3 |
 | `_admin-glass.scss` | 164 | Admin glass theme | MIGRATE → DELETE | → Task C3 |
@@ -138,7 +138,7 @@ src/admin/styles/_admin-layout-tokens.scss ← Admin LAYOUT only (sidebar, toolb
 | Dark theme | `_dark.scss` | `_admin-dark.scss` (212 lines) | YES |
 | Glass theme | `_glass.scss` | `_admin-glass.scss` (164 lines) | YES |
 | Dark glass | — (no storefront file) | `_admin-dark-glass.scss` (220 lines) | ADMIN-ONLY theme |
-| Material overrides | scattered | `_admin-theme-material.scss` (1,548 lines) | YES |
+| Material overrides | `overrides/_material-overrides.scss` (B2) | component `.mat-` scatter (B3) | PARTIAL |
 | Layout styles | N/A | `admin-layout.component.scss` | NO (correct) |
 
 ---
@@ -184,14 +184,14 @@ Not separately scanned; resolved per-component during Epic D migration (spacing 
 
 ## 8. Angular Material Overrides
 
-**Central file exists** (`src/styles/overrides/_material-overrides.scss`, B1) — still a section scaffold; rules not migrated yet. Scan 2026-07-28:
+**Central file active** (`src/styles/overrides/_material-overrides.scss`, B1+B2) — admin dump migrated onto semantic/bridge tokens. Component `.mat-` scatter remains (B3). Scan update 2026-07-28:
 
 | Metric | Value |
 |--------|-------|
-| Files with `.mat-` / `.mat-mdc-` selector overrides | 24 |
-| De-facto central dump | `src/admin/styles/_admin-theme-material.scss` — 1,548 lines, 349 `.mat-` lines |
+| Files with `.mat-` / `.mat-mdc-` selector overrides | ~23 (dump removed) |
+| Central overrides | `src/styles/overrides/_material-overrides.scss` (~1 540 lines, semantic/bridge) |
 
-Notable scatter outside the dump (23 files):
+Notable scatter outside the central file:
 
 | `.mat-` lines | File |
 |--------------:|------|
@@ -205,7 +205,7 @@ Notable scatter outside the dump (23 files):
 | 5 | `src/styles/themes/_glass.scss` |
 | 2 | `src/styles/themes/_dark.scss` |
 
-Resolution: Epic B (Tasks B1–B4).
+Resolution: Epic B (B1–B2 ✅; B3–B4 remaining).
 
 ---
 
@@ -216,7 +216,7 @@ Resolution: Epic B (Tasks B1–B4).
 | ~~`src/styles.scss`~~ | ✅ DELETED (A5, 2026-07-28) — glass helpers + scrollbars ported to modules; dead blocks discarded | Done |
 | `src/styles/tokens/_primitive-tokens.scss` | ✅ RESOLVED (A1, 2026-07-28) — wired into pipeline; was causing unresolved `--color-blue-*`, `--z-modal`, `--font-*` weights in dark/glass themes | Done |
 | `src/styles/components/_forms.scss`, `_modals.scss`, `_navigation.scss` | Stubs (5 lines, "will be implemented here") | Implement or remove → Task E3 |
-| `src/admin/styles/_admin-theme-material.scss` | Used, but is the Material-override dump | Migrate → Task B2 |
+| ~~`src/admin/styles/_admin-theme-material.scss`~~ | ✅ DELETED (B2) — migrated to `overrides/_material-overrides.scss` | Done |
 
 ---
 

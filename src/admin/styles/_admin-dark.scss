@@ -25,6 +25,7 @@
   // Semantic / Accents (Keep some dark blue/indigo vibe but more muted)
   // User requested to replace red with blue
   --admin-primary: #3b82f6;        // Blue 500
+  --admin-primary-rgb: 59, 130, 246;
   --admin-primary-hover: #60a5fa;  // Blue 400
   --admin-secondary: #71717a;
   
@@ -209,4 +210,30 @@
   // Custom Avatar Variables
   --admin-avatar-bg: rgba(59, 130, 246, 0.15); 
   --admin-avatar-color: #60a5fa;
+
+}
+
+/* ===== B2 Material bridge → semantic (on body.is-admin so it wins over shared themes) ===== */
+body.is-admin[data-theme='dark'],
+html[data-theme='dark'] body.is-admin {
+  --input-bg: var(--admin-input-bg);
+  --input-text: var(--admin-input-text);
+  --input-border: var(--admin-input-border);
+  --input-label: var(--admin-input-label);
+  --input-focus-border: var(--admin-input-focus-border);
+  --input-placeholder: var(--admin-input-placeholder, var(--admin-input-label));
+  --interactive-primary-rgb: var(--admin-primary-rgb);
+  --interactive-button: var(--admin-button, var(--admin-primary));
+  --surface-header: var(--admin-header-bg);
+  --surface-table: var(--admin-table-bg);
+  --surface-table-header: var(--admin-table-header-bg);
+  --surface-table-row: var(--admin-table-row-bg, var(--admin-table-bg));
+  --surface-table-even: var(--admin-table-even-bg, var(--admin-bg-secondary));
+  --surface-paginator: var(--admin-table-paginator-bg, var(--admin-table-header-bg));
+  --surface-select-panel: var(--admin-select-panel-bg, var(--admin-bg-card));
+  --text-table-header: var(--admin-table-header-text, var(--admin-text-primary));
+  --text-table-row: var(--admin-table-row-text, var(--admin-text-primary));
+  --text-table-even: var(--admin-table-even-text, var(--admin-text-primary));
+  --text-paginator: var(--admin-table-paginator-text, var(--admin-text-primary));
+  --radius-dialog: var(--border-radius-dark-glass, var(--radius-md));
 }

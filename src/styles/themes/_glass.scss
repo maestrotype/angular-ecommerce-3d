@@ -281,6 +281,16 @@
   --interactive-secondary-hover: rgba(255, 255, 255, 0.15);
   --interactive-danger: var(--color-error-base);
   --interactive-disabled: rgba(255, 255, 255, 0.3);
+  --interactive-primary-rgb: 59, 130, 246;
+  --interactive-button: var(--interactive-primary);
+
+  /* ===== B2 Material bridge (storefront inputs; admin table zebra stays in admin themes) ===== */
+  --input-bg: var(--surface-elevated);
+  --input-text: var(--text-primary);
+  --input-border: var(--border-strong);
+  --input-label: var(--text-secondary);
+  --input-focus-border: var(--border-primary);
+  --input-placeholder: var(--text-muted);
 
   /* ===== STATE OVERRIDES ===== */
   --state-success-bg: var(--color-success-base);

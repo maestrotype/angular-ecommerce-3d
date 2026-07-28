@@ -180,7 +180,7 @@
   // Table container margin is handled in admin-table component
   // No need to override here
 
-  // Table styles are now in _admin-theme-material.scss
+  // Table styles are now in src/styles/overrides/_material-overrides.scss
   // Only page-specific styles remain here
   .admin-table-wrapper {
     ::ng-deep {

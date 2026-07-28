@@ -38,6 +38,30 @@
   --interactive-primary-bg: var(--color-primary-base);
   --interactive-primary-text: var(--color-white);
   --interactive-primary-border: var(--color-primary-base);
+  // RGB triplet for rgba(var(--interactive-primary-rgb), a) focus rings (B2 bridge)
+  --interactive-primary-rgb: 59, 130, 246;
+  --interactive-button: var(--interactive-primary);
+
+  // ===== INPUT TOKENS (B2 Material bridge) =====
+  --input-bg: var(--surface-primary);
+  --input-text: var(--text-primary);
+  --input-border: var(--border-strong);
+  --input-label: var(--text-secondary);
+  --input-focus-border: var(--border-primary);
+  --input-placeholder: var(--text-muted);
+
+  // ===== TABLE / MATERIAL SURFACE TOKENS (B2 bridge) =====
+  --surface-header: var(--surface-secondary);
+  --surface-table: var(--surface-primary);
+  --surface-table-header: var(--surface-tertiary);
+  --surface-table-row: var(--surface-primary);
+  --surface-table-even: var(--surface-secondary);
+  --surface-paginator: var(--surface-table-header);
+  --surface-select-panel: var(--surface-elevated);
+  --text-table-header: var(--text-primary);
+  --text-table-row: var(--text-primary);
+  --text-table-even: var(--text-primary);
+  --text-paginator: var(--text-primary);
 
   // ===== STATE TOKENS =====
   --state-success-bg: var(--color-success-base);
@@ -51,6 +75,7 @@
 
   // ===== COMPOSITE TOKENS =====
   --radius-card: var(--radius-md);
+  --radius-dialog: var(--radius-md);
   --shadow-card: var(--shadow-sm);
 
   // ===== OVERLAY TOKENS =====

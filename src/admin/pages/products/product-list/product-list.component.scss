@@ -77,7 +77,7 @@
   .product-table {
     width: 100%;
     
-    // Table styles are now in _admin-theme-material.scss
+    // Table styles are now in src/styles/overrides/_material-overrides.scss
     // Only product-specific styles remain here
   }
   
@@ -809,5 +809,5 @@
     }
   }
   
-  // Material Design overrides removed - all styles are in _admin-theme-material.scss
+  // Material Design overrides removed - all styles are in src/styles/overrides/_material-overrides.scss
   

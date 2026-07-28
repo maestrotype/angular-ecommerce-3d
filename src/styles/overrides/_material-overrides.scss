@@ -1,54 +1,1543 @@
 /* ==========================================================================
    MATERIAL OVERRIDES — single audit point (ADR-005)
    --------------------------------------------------------------------------
-   All Angular Material / MDC / CDK visual overrides live here.
-   Consume semantic tokens only — no hardcoded colors, spacing, or shadows.
+   Migrated from src/admin/styles/_admin-theme-material.scss (B2 Bridge).
+   Consume semantic tokens only — no --admin-* and no hardcoded brand colors.
    Do NOT put .mat- / .mat-mdc- / .mdc- overrides in component SCSS.
 
-   Migration:
-     B2 — move rules from src/admin/styles/_admin-theme-material.scss
+   Remaining work:
      B3 — move scattered .mat- overrides from component SCSS (23 files)
      B4 — bind material-theme.scss palette to design tokens
    ========================================================================== */
 
-/* ===== Buttons ===== */
-/* .mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-unelevated-button, … */
+/* Safe defaults if variables missing */
+:root {
 
-/* ===== Form fields / inputs ===== */
-/* .mat-mdc-form-field, .mat-mdc-text-field-wrapper, outlined notch, autofill */
+  .mat-drawer-content {
+    z-index: 1;
+  }
 
-/* ===== Selects ===== */
-/* .mat-mdc-select, .mat-mdc-select-panel, .mat-mdc-option */
+  .mat-drawer-inner-container {
+    box-shadow: var(--shadow-lg), inset 0 1px rgba(255, 255, 255, 0.08); // glass edge recipe
+  }
 
-/* ===== Checkboxes / Radios / Slide toggles ===== */
-/* .mat-mdc-checkbox, .mat-mdc-radio-button, .mat-mdc-slide-toggle */
+  .cdk-overlay-pane:not(.mat-mdc-select-panel-above) div.mat-mdc-select-panel {
+    scrollbar-width: none; // Firefox
+    -ms-overflow-style: none; // Edge/IE
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
 
-/* ===== Tables ===== */
-/* .mat-mdc-table, .mat-mdc-header-row, .mat-mdc-row, .mat-mdc-cell */
+  .cdk-overlay-pane.mat-mdc-select-panel-above div.mat-mdc-select-panel {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
 
-/* ===== Paginator ===== */
-/* .mat-mdc-paginator */
+  .mat-icon {
+    height: auto;
+    width: auto;
+  }
 
-/* ===== Dialogs ===== */
-/* .mat-mdc-dialog-container, .mat-mdc-dialog-surface, .mat-mdc-dialog-title */
+  .mat-datepicker-content {
+    padding-bottom: 10px;
+  }
 
-/* ===== Cards / Panels / Expansion ===== */
-/* .mat-mdc-card, .mat-expansion-panel, .mat-mdc-list */
+  .mat-drawer-side {
+    border-right: none;
+  }
 
-/* ===== Menus / Overlays (CDK) ===== */
-/* .mat-mdc-menu-panel, .cdk-overlay-pane, .cdk-overlay-backdrop */
+  .mat-datepicker-close-button {
+    display: none;
+  }
+}
 
-/* ===== Icons / Icon buttons ===== */
-/* .mat-icon, .mat-mdc-icon-button */
+.admin-table-container .mat-mdc-table {
+  background-color: inherit;
+}
 
-/* ===== Tabs ===== */
-/* .mat-mdc-tab-group, .mat-mdc-tab-header, .mat-mdc-tab-body */
+.mat-mdc-card-content .mdc-form-field {
+  color: var(--text-primary);
+}
 
-/* ===== Toolbar / Sidenav / Drawer ===== */
-/* .mat-toolbar, .mat-sidenav, .mat-drawer, .mat-drawer-container */
+.mat-mdc-checkbox .mdc-form-field>label {
+  color: var(--mat-card-subtitle-text-color);
+}
 
-/* ===== Datepicker ===== */
-/* .mat-datepicker-content, .mat-calendar */
+.mat-mdc-card-header {
+  align-items: center;
+}
 
-/* ===== Snackbar / Tooltip / Badge ===== */
-/* .mat-mdc-snack-bar-container, .mat-mdc-tooltip, .mat-badge */
+.mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title {
+  color: var(--mat-card-subtitle-text-color);
+}
+
+.admin-header .mat-toolbar {
+  background-color: inherit;
+}
+
+.admin-table-wrapper .mat-mdc-header-row {
+  background-color: var(--surface-table-header);
+}
+
+.admin-table-wrapper .mat-mdc-row {
+  background-color: var(--surface-table-row);
+}
+
+.admin-table-container .admin-table-wrapper .mat-mdc-table .mat-mdc-row:nth-child(even) {
+  background-color: var(--surface-table-even);
+}
+
+// Dialog
+.mat-mdc-dialog-panel {
+  .mat-mdc-dialog-container {
+    .mdc-dialog__surface {
+      background-color: var(--surface-elevated);
+      border-radius: var(--radius-dialog);
+      color: var(--text-primary);
+      backdrop-filter: blur(5px);
+    }
+
+    .mdc-dialog__title {
+      color: var(--text-primary);
+      background-color: var(--surface-header);
+    }
+
+    .mdc-dialog__content {
+      color: var(--text-primary);
+    }
+  }
+}
+
+/* Performance optimizations for backdrop-filter */
+[data-theme='glass'],
+[data-theme='dark-glass'] {
+
+  /* Create stacking context and GPU layer for elements with backdrop-filter.
+     Add GPU hints to reduce Chrome compositing/rendering artifacts for semi-transparent layers. */
+  .mat-sidenav,
+  .mat-drawer,
+  .mat-toolbar,
+  .admin-header,
+  .mat-mdc-table,
+  .admin-table-container,
+  .admin-table-wrapper {
+    isolation: isolate;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: transform;
+  }
+}
+
+/* Target both cases: theme on <html> or on <body> */
+[data-theme='light'],
+[data-theme='dark'],
+[data-theme='glass'],
+[data-theme='dark-glass'] {
+
+  /* ===== MDC Global Input Variables ===== */
+  --mdc-outlined-text-field-input-text-color: var(--input-text);
+  --mdc-outlined-text-field-label-text-color: var(--input-label);
+  --mdc-outlined-text-field-focus-label-text-color: var(--input-focus-border);
+  --mdc-outlined-text-field-outline-color: var(--input-border);
+  --mdc-outlined-text-field-hover-outline-color: var(--input-focus-border);
+  --mdc-outlined-text-field-focus-outline-color: var(--input-focus-border);
+  
+  --mdc-filled-text-field-input-text-color: var(--input-text);
+  --mdc-filled-text-field-label-text-color: var(--input-label);
+  --mdc-filled-text-field-focus-label-text-color: var(--input-focus-border);
+  --mdc-filled-text-field-active-indicator-color: var(--input-border);
+  --mdc-filled-text-field-hover-active-indicator-color: var(--input-focus-border);
+  --mdc-filled-text-field-focus-active-indicator-color: var(--input-focus-border);
+
+  --mat-select-value-text-color: var(--input-text);
+  --mat-select-placeholder-text-color: var(--input-placeholder, var(--input-label));
+
+  /* ===== Text fields / outlined inputs (MDC) ===== */
+}
+
+/* Explicit fallback styles to ensure visibility in overlays for standard themes */
+[data-theme='light'],
+[data-theme='dark'],
+[data-theme='glass'] {
+  .mat-mdc-form-field .mat-mdc-select-value-text,
+  .mat-mdc-form-field .mat-mdc-select-min-line {
+    color: var(--input-text);
+  }
+  .mat-mdc-form-field .mdc-floating-label {
+    color: var(--input-label);
+  }
+  .mat-mdc-form-field.mat-focused .mdc-floating-label {
+    color: var(--input-focus-border);
+  }
+  .mat-mdc-form-field .mdc-notched-outline__leading,
+  .mat-mdc-form-field .mdc-notched-outline__notch,
+  .mat-mdc-form-field .mdc-notched-outline__trailing {
+    border-color: var(--input-border);
+  }
+  .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+  .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+  .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+    border-color: var(--input-focus-border);
+  }
+}
+
+[data-theme='light'],
+[data-theme='dark'],
+[data-theme='glass'],
+[data-theme='dark-glass'] {
+  /* wrapper: gives background, radius and base border */
+  .mat-mdc-text-field-wrapper {
+    background-color: var(--input-bg);
+    color: var(--input-text);
+    border-radius: 12px;
+    transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease, border-radius .15s ease;
+  }
+
+  /* Flatten bottom corners when dropdown is open */
+  .mat-mdc-form-field:has(mat-select[aria-expanded="true"]) .mat-mdc-text-field-wrapper {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  /* Remove dividing bottom border when dropdown is open */
+  .mat-mdc-form-field:has(mat-select[aria-expanded="true"]) .mdc-notched-outline__leading,
+  .mat-mdc-form-field:has(mat-select[aria-expanded="true"]) .mdc-notched-outline__notch,
+  .mat-mdc-form-field:has(mat-select[aria-expanded="true"]) .mdc-notched-outline__trailing {
+    border-bottom-color: transparent;
+  }
+
+  /* input text color */
+  .mat-mdc-form-field .mat-mdc-text-field-wrapper .mat-input-element,
+  .mat-mdc-form-field .mat-mdc-text-field-wrapper input,
+  .mat-mdc-form-field .mat-mdc-text-field-wrapper textarea,
+  .mat-mdc-form-field .mat-mdc-text-field-wrapper .mdc-text-field__input {
+    color: var(--input-text);
+    -webkit-text-fill-color: var(--input-text);
+    opacity: 1;
+  }
+
+  /* placeholder */
+  --mdc-outlined-text-field-input-text-placeholder-color: var(--input-placeholder, var(--input-label));
+  --mdc-filled-text-field-input-text-placeholder-color: var(--input-placeholder, var(--input-label));
+
+  /* autofill fix */
+  .mat-mdc-form-field .mat-mdc-text-field-wrapper input:-webkit-autofill,
+  .mat-mdc-form-field .mat-mdc-text-field-wrapper input:-webkit-autofill:hover, 
+  .mat-mdc-form-field .mat-mdc-text-field-wrapper input:-webkit-autofill:focus, 
+  .mat-mdc-form-field .mat-mdc-text-field-wrapper input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px var(--input-bg) inset;
+    -webkit-text-fill-color: var(--input-text);
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  /* floating label */
+  .mat-mdc-text-field-wrapper .mdc-floating-label {
+    color: var(--input-label);
+    transition: color .12s ease, transform .12s ease;
+  }
+
+  /* label when floated (focused/has-value) */
+  .mat-mdc-text-field-wrapper .mdc-floating-label--float-above,
+  .mat-mdc-text-field-wrapper.mat-focused .mdc-floating-label {
+    color: var(--input-focus-border);
+  }
+
+  /* outline stroke color (leading / notch / trailing) */
+  .mat-mdc-text-field-wrapper .mdc-notched-outline__leading,
+  .mat-mdc-text-field-wrapper .mdc-notched-outline__notch,
+  .mat-mdc-text-field-wrapper .mdc-notched-outline__trailing {
+    border-color: var(--input-border);
+    /* some mdc implementations use stroke */
+    stroke: var(--input-border);
+  }
+
+  /* focused state */
+  .mat-mdc-text-field-wrapper.mat-focused,
+  .mat-mdc-text-field-wrapper:focus-within {
+    border-color: var(--input-focus-border);
+    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0);
+    /* no strong default, use below for visible focus */
+  }
+
+  .mat-mdc-text-field-wrapper.mat-focused {
+    box-shadow: 0 0 0 3px rgba(var(--interactive-primary-rgb), 0.12);
+  }
+
+  /* hover state (not focused) */
+  .mat-mdc-text-field-wrapper:hover:not(.mat-focused) {
+    border-color: var(--input-focus-border);
+  }
+
+  /* disabled */
+  .mat-mdc-text-field-wrapper .mat-form-field-disabled,
+  .mat-mdc-text-field-wrapper[aria-disabled="true"] {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+
+  /* ===== Selects ===== */
+  .mat-mdc-select-trigger,
+  .mat-mdc-select {
+    color: var(--input-text);
+  }
+
+  .mat-mdc-select .mat-mdc-select-arrow,
+  .mat-mdc-select-arrow {
+    color: var(--input-label);
+  }
+
+  .mat-select-panel {
+    background-color: var(--surface-secondary);
+    color: var(--input-text);
+    scrollbar-width: none; // Firefox
+    -ms-overflow-style: none; // Edge/IE
+    display: none;
+  }
+
+  .mat-option {
+    background: transparent;
+    color: var(--input-text);
+  }
+
+  .mat-option:hover {
+    background: var(--surface-highlight);
+  }
+
+  .mat-option.mat-selected {
+    background: var(--interactive-primary);
+    color: var(--text-on-primary);
+  }
+
+  /* ===== Buttons ===== */
+  .mat-mdc-button,
+  .mat-mdc-raised-button,
+  .mat-mdc-flat-button,
+  .mat-mdc-stroked-button {
+    transition: background-color .12s ease, border-color .12s ease, color .12s ease;
+  }
+
+  /* primary raised/filled */
+  .mat-mdc-raised-button.mat-primary,
+  .mat-mdc-button.mat-primary {
+    background-color: var(--interactive-button);
+    color: var(--text-on-primary);
+    border-color: transparent;
+    height: 100%;
+    padding: 10px;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+    margin-left: auto;
+  }
+
+  .mat-mdc-raised-button.mat-primary:hover,
+  .mat-mdc-button.mat-primary:hover {
+    filter: brightness(.95);
+  }
+
+  /* Override Warn (Red) with Primary Blue as requested */
+  .mat-mdc-button.mat-warn,
+  .mat-mdc-icon-button.mat-warn,
+  .mat-mdc-raised-button.mat-warn,
+  .mat-mdc-unelevated-button.mat-warn,
+  .mat-mdc-fab.mat-warn,
+  .mat-mdc-mini-fab.mat-warn {
+    --mdc-icon-button-icon-color: var(--interactive-primary);
+    --mat-icon-button-state-layer-color: var(--interactive-primary);
+    color: var(--interactive-primary);
+
+    mat-icon {
+      color: var(--interactive-primary);
+    }
+
+    .mdc-button__label,
+    .mdc-button__icon {
+      color: var(--interactive-primary);
+    }
+  }
+
+  /* Force Slide Toggle to Primary Blue */
+  .mat-mdc-slide-toggle.mat-accent {
+    --mdc-switch-selected-focus-state-layer-color: var(--interactive-primary);
+    --mdc-switch-selected-handle-color: var(--interactive-primary);
+    --mdc-switch-selected-hover-state-layer-color: var(--interactive-primary);
+    --mdc-switch-selected-pressed-state-layer-color: var(--interactive-primary);
+    --mdc-switch-selected-focus-track-color: var(--interactive-primary);
+    --mdc-switch-selected-hover-track-color: var(--interactive-primary);
+    --mdc-switch-selected-pressed-track-color: var(--interactive-primary);
+    --mdc-switch-selected-track-color: var(--interactive-primary);
+    opacity: 0.8;
+
+    &.mat-mdc-slide-toggle-checked {
+      opacity: 1;
+    }
+  }
+
+  /* outlined / secondary */
+  .mat-mdc-stroked-button {
+    border-color: var(--input-border);
+    color: var(--input-text);
+  }
+
+  .mat-mdc-stroked-button:hover {
+    border-color: var(--input-focus-border);
+  }
+
+  .mat-mdc-button.mat-button-disabled,
+  .mat-mdc-raised-button.mat-button-disabled {
+    opacity: 0.6;
+  }
+
+  /* ===== Paginator ===== */
+  .mat-paginator,
+  .mat-mdc-paginator {
+    background-color: var(--surface-table-header);
+    color: var(--text-primary);
+    border-top: 1px solid var(--border-default);
+  }
+
+  .mat-paginator .mat-icon-button,
+  .mat-mdc-paginator .mat-mdc-icon-button {
+    color: var(--text-primary);
+  }
+
+  .mat-paginator .mat-paginator-page-size-label,
+  .mat-paginator .mat-paginator-range-label,
+  .mat-mdc-paginator .mat-mdc-paginator-page-size-label,
+  .mat-mdc-paginator .mat-mdc-paginator-range-label {
+    color: var(--text-primary);
+  }
+
+  /* ===== Tables ===== */
+  .mat-mdc-table {
+
+    /* Table header - distinct background */
+    .mat-mdc-header-row .mat-mdc-header-cell {
+      color: var(--text-primary);
+      font-weight: var(--font-weight-bold);
+      padding: var(--spacing-md) var(--spacing-md);
+    }
+
+    /* Table cells - no borders */
+    .mat-mdc-cell {
+      color: var(--text-primary);
+      padding: var(--spacing-md) var(--spacing-md);
+    }
+  }
+
+  /* ===== Cards / Panels / Menus ===== */
+  .mat-card,
+  .mat-menu-panel,
+  .mat-dialog-container {
+    background-color: var(--surface-secondary);
+    color: var(--input-text);
+    border: 1px solid var(--input-border);
+  }
+
+  /* ===== Icons and icon-buttons ===== */
+  .mat-icon-button,
+  .mat-button .mat-icon {
+    color: var(--input-text);
+  }
+
+  .mat-icon-button.mat-button-disabled {
+    color: var(--text-secondary);
+  }
+
+  /* ===== Checkboxes / Radios / Slide toggles ===== */
+  .mat-mdc-checkbox .mdc-checkbox__native-control:checked~.mdc-checkbox__background,
+  .mat-mdc-radio-button .mdc-radio__native-control:checked~.mdc-radio__background {
+    color: var(--interactive-primary);
+    background-color: var(--interactive-primary);
+  }
+
+  /* focus visible (accessibility) */
+  :where(.mat-focus-indicator:focus-visible) {
+    outline: 3px solid rgba(var(--interactive-primary-rgb), 0.14);
+    outline-offset: 2px;
+  }
+}
+
+/* Glass theme specific styling */
+[data-theme='glass'] {
+
+  /* ===== Input fields - deep inset (strongly pressed) ===== */
+  .mat-mdc-form-field .mat-mdc-text-field-wrapper,
+  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    box-shadow:
+      inset 0 5px 15px rgba(31, 41, 55, 0.4),
+      inset 0 3px 8px rgba(31, 41, 55, 0.3),
+      inset 0 -1px 2px rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(15px) saturate(150%);
+    -webkit-backdrop-filter: blur(15px) saturate(150%);
+    transition: all 0.3s ease;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  .mat-mdc-text-field-wrapper:hover,
+  .mat-mdc-form-field:hover .mat-mdc-text-field-wrapper {
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow:
+      inset 0 5px 15px rgba(31, 41, 55, 0.35),
+      inset 0 3px 8px rgba(31, 41, 55, 0.25),
+      inset 0 -1px 2px rgba(255, 255, 255, 0.3);
+  }
+
+  .mat-mdc-text-field-wrapper.mat-focused,
+  .mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
+    background: rgba(255, 255, 255, 0.28);
+    box-shadow:
+      inset 0 5px 15px rgba(59, 130, 246, 0.35),
+      inset 0 3px 8px rgba(31, 41, 55, 0.25),
+      inset 0 -1px 2px rgba(255, 255, 255, 0.35),
+      0 0 0 3px rgba(59, 130, 246, 0.3);
+  }
+
+  /* Remove ALL borders for glass theme - high specificity */
+  .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline .mdc-notched-outline__leading,
+  .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline .mdc-notched-outline__notch,
+  .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline .mdc-notched-outline__trailing,
+  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__leading,
+  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__notch,
+  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__trailing {
+    border-color: transparent;
+    border-width: 0;
+    opacity: 0;
+  }
+
+  .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline,
+  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline {
+    display: none;
+  }
+
+  /* ===== Slide Toggle Hover Cleanup ===== */
+  .mat-mdc-slide-toggle,
+  .mat-mdc-slide-toggle.mat-accent,
+  .mat-mdc-slide-toggle.mat-primary {
+    --mdc-switch-selected-hover-state-layer-color: transparent;
+    --mdc-switch-unselected-hover-state-layer-color: transparent;
+    --mdc-switch-selected-focus-state-layer-color: transparent;
+    --mdc-switch-unselected-focus-state-layer-color: transparent;
+    --mdc-switch-selected-pressed-state-layer-color: transparent;
+    --mdc-switch-unselected-pressed-state-layer-color: transparent;
+    --mdc-switch-hover-state-layer-color: transparent;
+    --mdc-switch-focus-state-layer-color: transparent;
+
+    .mat-mdc-slide-toggle-ripple,
+    .mdc-switch__ripple,
+    .mat-ripple,
+    .mat-ripple-element {
+      display: none;
+      background-color: transparent;
+      background: transparent;
+      opacity: 0;
+    }
+  }
+
+  /* ===== Select dropdowns ===== */
+  .mat-mdc-select-trigger,
+  .mat-mdc-select {
+    color: var(--text-primary);
+  }
+
+  /* Force panel background to match the input field - same rgba as input wrapper */
+  .mat-mdc-select-panel,
+  .mat-select-panel {
+    background-color: var(--surface-select-panel);
+    border: none;
+  }
+
+  /* Ensure list items inside the panel are transparent so panel bg shows through */
+  .mat-mdc-select-panel .mat-mdc-option,
+  .mat-mdc-select-panel .mdc-list-item {
+    background-color: transparent;
+  }
+
+  .mat-mdc-select-panel .mat-mdc-option:hover:not(.mdc-list-item--disabled),
+  .mat-mdc-select-panel .mat-mdc-option.mat-mdc-option-active {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .mat-mdc-select .mat-mdc-select-arrow,
+  .mat-mdc-select-arrow {
+    color: var(--text-secondary);
+  }
+
+  /* Select label - use hint/placeholder approach */
+  .mat-mdc-form-field .mdc-text-field__input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.8;
+  }
+
+  .mat-mdc-select-value,
+  .mat-mdc-select-value-text,
+  .mat-mdc-select-min-line {
+    color: var(--input-text);
+    opacity: 1;
+  }
+
+  .mat-mdc-select-placeholder,
+  .mat-mdc-select-placeholder.mat-mdc-select-placeholder {
+    color: var(--input-label);
+    opacity: 1;
+  }
+
+  .mat-mdc-select-trigger .mat-mdc-select-placeholder {
+    color: var(--input-label);
+    opacity: 1;
+  }
+
+  .mat-mdc-form-field mat-label,
+  .mat-mdc-form-field .mat-mdc-form-field-label,
+  mat-label {
+    color: var(--input-label);
+    opacity: 1;
+    display: inline-block;
+    visibility: visible;
+  }
+
+  /* Select field wrapper - remove strong inset effect to match normal inputs */
+  .mat-mdc-form-field:has(.mat-mdc-select) .mat-mdc-text-field-wrapper {
+    /* Use standard input background */
+    box-shadow: none;
+  }
+
+  .mat-mdc-form-field:has(.mat-mdc-select):hover .mat-mdc-text-field-wrapper {
+    /* Use standard hover */
+    box-shadow: none;
+  }
+
+  /* Dropdown panel */
+  .mat-mdc-select-panel.mat-mdc-select-panel,
+  .mat-select-panel.mat-select-panel {
+    /* Set MDC variable to prevent opaque white background on internal elements */
+    --mat-select-panel-background-color: var(--surface-select-panel, var(--input-bg, rgba(255, 255, 255, 0.15)));
+    --mdc-list-item-container-color: transparent;
+
+    background: var(--mat-select-panel-background-color);
+    backdrop-filter: blur(15px) saturate(150%);
+    -webkit-backdrop-filter: blur(15px) saturate(150%);
+    border: none;
+    box-shadow:
+      0 8px 24px rgba(31, 41, 55, 0.2),
+      /* reduce the bright inset highlight so it doesn't create light rounded boxes in dark themes */
+      inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    will-change: transform;
+    transform: translateZ(0);
+    /* Limit panel height to viewport and allow internal scrolling (prevents page scrollbar) */
+    max-height: calc(100vh - 140px);
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Hide native scrollbar on overlay panels (visual only). Panels remain scrollable via wheel/trackpad/keyboard. */
+  .mat-mdc-select-panel.mat-mdc-select-panel,
+  .mat-select-panel.mat-select-panel,
+  .cdk-overlay-pane {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+
+  .mat-mdc-select-panel.mat-mdc-select-panel::-webkit-scrollbar,
+  .mat-select-panel.mat-select-panel::-webkit-scrollbar,
+  .cdk-overlay-pane::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  /* Also hide scrollbars on inner listbox elements that actually scroll */
+  .mat-mdc-select-panel.mat-mdc-select-panel [role="listbox"],
+  .mat-select-panel.mat-select-panel [role="listbox"],
+  .cdk-overlay-pane [role="listbox"] {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .mat-mdc-select-panel.mat-mdc-select-panel [role="listbox"]::-webkit-scrollbar,
+  .mat-select-panel.mat-select-panel [role="listbox"]::-webkit-scrollbar,
+  .cdk-overlay-pane [role="listbox"]::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  /* Broad overlay scrollbar hide (covers any nested scrollable overlay elements) */
+  .cdk-overlay-pane,
+  .cdk-overlay-pane * {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .cdk-overlay-pane::-webkit-scrollbar,
+  .cdk-overlay-pane *::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  .mat-option,
+  .mat-mdc-option {
+    background: transparent;
+    color: var(--text-primary);
+    transition: background 0.2s ease;
+  }
+
+  .mat-option:hover,
+  .mat-mdc-option:hover {
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  .mat-option.mat-selected,
+  .mat-mdc-option.mat-selected {
+    background: rgba(59, 130, 246, 0.15);
+    color: var(--text-primary);
+  }
+
+  .mat-mdc-form-field .mdc-floating-label,
+  .mat-mdc-text-field-wrapper .mdc-floating-label,
+  .mat-mdc-form-field .mat-mdc-floating-label {
+    color: var(--input-label);
+    opacity: 1;
+  }
+
+  .mat-mdc-form-field.mat-focused .mdc-floating-label,
+  .mat-mdc-text-field-wrapper.mat-focused .mdc-floating-label,
+  .mat-mdc-form-field.mat-focused .mat-mdc-floating-label {
+    color: var(--input-text);
+    opacity: 1;
+  }
+
+  .mat-mdc-form-field .mat-mdc-input-element,
+  .mat-mdc-text-field-wrapper .mat-input-element,
+  .mat-mdc-input-element,
+  .mat-mdc-form-field .mat-mdc-text-field-wrapper .mdc-text-field__input {
+    color: var(--input-text);
+    opacity: 1;
+  }
+
+  .mat-mdc-input-element::placeholder,
+  .mat-input-element::placeholder {
+    color: var(--input-label);
+    opacity: 0.8;
+  }
+
+  /* ===== Tables with glass effect ===== */
+  .mat-mdc-table {
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+  }
+
+  /* ===== Sidenav / Drawer - Liquid Glass Effect ===== */
+  .mat-sidenav-container .mat-sidenav,
+  .mat-drawer-container .mat-drawer,
+  mat-sidenav.mat-sidenav,
+  mat-drawer.mat-drawer {
+    background-color: var(--surface-header);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border: none;
+    box-shadow:
+      0 8px 32px rgba(31, 41, 55, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  /* ===== Toolbar / Header - Liquid Glass Effect ===== */
+  .mat-toolbar.mat-toolbar,
+  mat-toolbar.mat-toolbar,
+  .admin-header.mat-toolbar {
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow:
+      0 4px 16px rgba(31, 41, 55, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  /* ===== Sidenav Container - Remove borders ===== */
+  .mat-sidenav-container,
+  .mat-drawer-container {
+    background: transparent;
+  }
+
+  .mat-sidenav-content,
+  .mat-drawer-content {
+    background: transparent;
+  }
+
+  /* Remove Material's default borders and shadows */
+  .mat-drawer-backdrop {
+    background: transparent;
+  }
+
+  .mat-drawer-inner-container {
+    background: transparent;
+    border: none;
+  }
+
+  /* Remove any borders from sidenav inner elements */
+  .mat-sidenav .mat-list-item,
+  .mat-drawer .mat-list-item {
+    border-bottom: none;
+  }
+
+  .mat-sidenav .sidenav-header,
+  .mat-drawer .sidenav-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .mat-sidenav .sidenav-footer,
+  .mat-drawer .sidenav-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  /* ===== Button styling ===== */
+  .mat-mdc-raised-button.mat-primary,
+  .mat-mdc-button.mat-primary {
+    background: rgba(255, 255, 255, 0.3);
+    color: #0f172a; // TODO Epic C: map to semantic
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow:
+      0 4px 16px rgba(31, 41, 55, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(15px) saturate(150%);
+    -webkit-backdrop-filter: blur(15px) saturate(150%);
+    border-radius: 12px;
+    font-weight: 500;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  .mat-mdc-raised-button.mat-primary:hover,
+  .mat-mdc-button.mat-primary:hover {
+    background: rgba(255, 255, 255, 0.4);
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow:
+      0 6px 20px rgba(31, 41, 55, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  }
+
+  .mat-mdc-raised-button.mat-primary:active,
+  .mat-mdc-button.mat-primary:active {
+    background: rgba(255, 255, 255, 0.35);
+    transform: translateY(1px);
+  }
+
+  .mat-mdc-raised-button.mat-primary:disabled,
+  .mat-mdc-button.mat-primary:disabled {
+    transform: translateY(-1px);
+    box-shadow: 0 18px 38px rgba(15, 23, 42, 0.22);
+  }
+
+  .mat-mdc-raised-button.mat-primary:active,
+  .mat-mdc-button.mat-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 10px 20px rgba(15, 23, 42, 0.2);
+  }
+
+  .mat-mdc-raised-button.mat-primary .mat-icon,
+  .mat-mdc-button.mat-primary .mat-icon {
+    color: inherit;
+  }
+}
+
+// ── Glass theme: paginator + table overrides ──
+[data-theme='glass'] {
+  // Material MDC token: prevents white background injected by the component
+  --mat-paginator-container-background-color: var(--surface-paginator);
+  --mat-paginator-container-text-color: var(--text-paginator);
+  --mat-paginator-enabled-icon-color: var(--text-paginator);
+  --mat-paginator-disabled-icon-color: rgba(255, 255, 255, 0.3);
+  --mat-paginator-page-size-label-text-color: var(--text-paginator);
+
+  /* ===== Material Tabs — readable on dark glass background ===== */
+  --mdc-tab-indicator-active-indicator-color: var(--interactive-primary);
+  --mat-tab-header-active-label-text-color: var(--interactive-primary);
+  --mat-tab-header-inactive-label-text-color: rgba(255, 255, 255, 0.7);
+  --mat-tab-header-active-hover-label-text-color: var(--interactive-primary);
+  --mat-tab-header-inactive-hover-label-text-color: rgba(255, 255, 255, 0.9);
+
+  .mat-paginator,
+  .mat-mdc-paginator {
+    background-color: var(--surface-paginator);
+    color: var(--text-paginator);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 0 0 20px 20px;
+  }
+
+  .mat-paginator .mat-icon-button,
+  .mat-mdc-paginator .mat-mdc-icon-button {
+    color: var(--text-paginator);
+  }
+
+  .mat-paginator .mat-paginator-page-size-label,
+  .mat-paginator .mat-paginator-range-label,
+  .mat-mdc-paginator .mat-mdc-paginator-page-size-label,
+  .mat-mdc-paginator .mat-mdc-paginator-range-label,
+  .mat-mdc-paginator .mat-mdc-select-value,
+  .mat-mdc-paginator .mat-mdc-select-arrow,
+  .mat-mdc-paginator .mat-mdc-select-trigger {
+    color: var(--text-paginator);
+  }
+
+  // Table background resets — actual row/header colors set via admin-global.scss
+  .mat-mdc-table.mat-mdc-table,
+  table.mat-mdc-table.mat-mdc-table {
+    background-color: transparent;
+
+    .mat-mdc-header-cell.mat-mdc-header-cell {
+      color: var(--text-table-header);
+      font-weight: 600;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .mat-mdc-cell,
+    td {
+      color: var(--text-table-row);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    tbody tr:nth-child(odd),
+    .mat-mdc-row:nth-child(odd) {
+      background: var(--surface-table-row);
+    }
+
+    tbody tr:nth-child(even),
+    .mat-mdc-row:nth-child(even) {
+      background: var(--surface-table-even);
+    }
+
+    tbody tr:nth-child(even) td {
+      color: var(--text-table-even);
+    }
+  }
+}
+
+/* Dark Glass theme specific styling */
+[data-theme='dark-glass'] {
+  /* ===== Material Tabs MDC Variables ===== */
+  --mdc-tab-indicator-active-indicator-color: var(--interactive-primary);
+  --mat-tab-header-active-label-text-color: var(--interactive-primary);
+  --mat-tab-header-inactive-label-text-color: rgba(255, 255, 255, 0.7);
+  --mat-tab-header-active-hover-label-text-color: var(--interactive-primary);
+  --mat-tab-header-inactive-hover-label-text-color: var(--interactive-primary);
+
+  /* ===== Input fields - LIGHT glass for dark background ===== */
+  .mat-mdc-form-field .mat-mdc-text-field-wrapper,
+  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper {
+    /* Use theme variables so dark-glass can control appearance without specificity wars */
+    background: var(--input-bg);
+    border: 1px solid var(--border-subtle);
+    box-shadow:
+      /* darker inner depth for dark themes */
+      inset 0 3px 8px rgba(0, 0, 0, 0.45),
+      inset 0 1px 4px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    transition: all 0.25s ease;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  .mat-mdc-text-field-wrapper:hover,
+  .mat-mdc-form-field:hover .mat-mdc-text-field-wrapper {
+    background: var(--input-bg);
+    box-shadow:
+      inset 0 3px 10px rgba(0, 0, 0, 0.48),
+      inset 0 1px 4px rgba(0, 0, 0, 0.28);
+  }
+
+  .mat-mdc-text-field-wrapper.mat-focused,
+  .mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
+    background: var(--input-bg);
+    box-shadow:
+      inset 0 3px 10px rgba(59, 59, 59, 0.35),
+      inset 0 1px 4px rgba(0, 0, 0, 0.22),
+      0 0 0 3px rgba(138, 180, 248, 0.18);
+  }
+
+  /* Remove ALL borders for dark-glass theme */
+  .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline .mdc-notched-outline__leading,
+  .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline .mdc-notched-outline__notch,
+  .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline .mdc-notched-outline__trailing,
+  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__leading,
+  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__notch,
+  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__trailing {
+    border-color: transparent;
+    border-width: 0;
+    opacity: 0;
+  }
+
+  .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline,
+  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline {
+    display: none;
+  }
+
+  /* Hint text (character counters) */
+  .mat-mdc-form-field.mat-mdc-form-field .mat-mdc-form-field-hint,
+  .mat-mdc-form-field.mat-mdc-form-field .mat-hint,
+  .mat-mdc-form-field.mat-mdc-form-field .mat-mdc-form-field-hint-wrapper,
+  .mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-subscript-wrapper {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  /* All headings white */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  /* ===== Material Tabs - WHITE text with primary color ===== */
+  .mat-mdc-tab-group.mat-mdc-tab-group .mat-mdc-tab.mat-mdc-tab,
+  .mat-mdc-tab-header.mat-mdc-tab-header .mat-mdc-tab.mat-mdc-tab {
+    color: rgba(255, 255, 255, 0.7);
+    transition: color 0.3s ease;
+  }
+
+  /* Active tab - primary color (голубой) */
+  .mat-mdc-tab-group.mat-mdc-tab-group .mat-mdc-tab.mat-mdc-tab-active,
+  .mat-mdc-tab-header.mat-mdc-tab-header .mat-mdc-tab.mat-mdc-tab-active,
+  .mat-mdc-tab.mat-mdc-tab.mat-mdc-tab-active {
+    color: var(--interactive-primary);
+  }
+
+  /* Hover - primary color (голубой) */
+  .mat-mdc-tab-group.mat-mdc-tab-group .mat-mdc-tab.mat-mdc-tab:hover,
+  .mat-mdc-tab-header.mat-mdc-tab-header .mat-mdc-tab.mat-mdc-tab:hover {
+    color: var(--interactive-primary);
+  }
+
+  /* Tab label content inherits color */
+  .mat-mdc-tab.mat-mdc-tab .mat-mdc-tab-label-content,
+  .mat-mdc-tab.mat-mdc-tab .mdc-tab__text-label {
+    color: inherit;
+  }
+
+  /* Tab indicator - primary color (голубой) */
+  .mat-mdc-tab-header.mat-mdc-tab-header .mdc-tab-indicator__content--underline,
+  .mat-mdc-tab-header.mat-mdc-tab-header .mat-mdc-tab-indicator .mdc-tab-indicator__content {
+    border-color: var(--interactive-primary);
+    background-color: var(--interactive-primary);
+  }
+
+  /* Tab pagination chevron */
+  .mat-mdc-tab-header.mat-mdc-tab-header .mat-mdc-tab-header-pagination-chevron {
+    border-color: rgba(255, 255, 255, 0.7);
+  }
+
+  /* ===== Sidenav / Drawer - DARKER glass with WHITE text ===== */
+  .mat-sidenav-container .mat-sidenav,
+  .mat-drawer-container .mat-drawer,
+  mat-sidenav.mat-sidenav,
+  mat-drawer.mat-drawer {
+    background-color: var(--surface-header);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border: none;
+    color: rgba(255, 255, 255, 0.95);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  /* White text for all sidenav items */
+  .mat-sidenav .mat-list-item,
+  .mat-drawer .mat-list-item,
+  .mat-sidenav .nav-link,
+  .mat-drawer .nav-link,
+  .mat-sidenav a,
+  .mat-drawer a {
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  .mat-sidenav mat-icon,
+  .mat-drawer mat-icon {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  /* Borders between nav items */
+  .mat-sidenav .nav-item.nav-item,
+  .mat-drawer .nav-item.nav-item,
+  .admin-sidenav .nav-item.nav-item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    margin-bottom: 2px;
+  }
+
+  .mat-sidenav .nav-item:last-child,
+  .mat-drawer .nav-item:last-child,
+  .admin-sidenav .nav-item:last-child {
+    border-bottom: none;
+  }
+
+  /* ===== Toolbar / Header - DARK glass ===== */
+  .mat-toolbar.mat-toolbar,
+  mat-toolbar.mat-toolbar,
+  .admin-header.mat-toolbar {
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow:
+      0 4px 16px rgba(0, 0, 0, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  /* ===== Select dropdowns - GRAY-BROWN glass (Apple style) ===== */
+  .mat-mdc-select-panel.mat-mdc-select-panel,
+  .mat-select-panel.mat-select-panel {
+    background: rgba(75, 70, 65, 0.7);
+    backdrop-filter: blur(20px) saturate(150%);
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    box-shadow:
+      0 10px 30px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  .mat-option,
+  .mat-mdc-option {
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  .mat-option:hover,
+  .mat-mdc-option:hover {
+    background: rgba(85, 80, 75, 0.6);
+    color: rgba(255, 255, 255, 1);
+  }
+
+  .mat-option.mat-selected,
+  .mat-mdc-option.mat-selected {
+    background: rgba(95, 90, 85, 0.7);
+    color: rgba(255, 255, 255, 1);
+  }
+
+  /* ===== Logout button - transparent, no background ===== */
+  .sidenav-footer button,
+  .sidenav-footer .mat-mdc-button {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.95);
+    border: none;
+    border-radius: 12px;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    padding: 12px 16px;
+    font-weight: 500;
+  }
+
+  .sidenav-footer button:hover,
+  .sidenav-footer .mat-mdc-button:hover {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+
+  .sidenav-footer button mat-icon,
+  .sidenav-footer .mat-mdc-button mat-icon {
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  /* ===== Button styling ===== */
+  .mat-mdc-raised-button.mat-primary,
+  .mat-mdc-button.mat-primary,
+  .mat-mdc-raised-button.mat-accent,
+  .mat-mdc-button.mat-accent {
+    background: rgba(var(--interactive-primary-rgb), 0.3);
+    color: var(--text-on-primary);
+    border: 1px solid rgba(var(--interactive-primary-rgb), 0.5);
+    box-shadow:
+      0 4px 16px rgba(var(--interactive-primary-rgb), 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(15px) saturate(150%);
+    -webkit-backdrop-filter: blur(15px) saturate(150%);
+    border-radius: 12px;
+    font-weight: 500;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  .mat-mdc-raised-button.mat-primary:hover,
+  .mat-mdc-button.mat-primary:hover,
+  .mat-mdc-raised-button.mat-accent:hover,
+  .mat-mdc-button.mat-accent:hover {
+    background: rgba(var(--interactive-primary-rgb), 0.4);
+    border-color: rgba(var(--interactive-primary-rgb), 0.6);
+    box-shadow:
+      0 6px 20px rgba(var(--interactive-primary-rgb), 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+
+  .mat-mdc-raised-button.mat-primary:active,
+  .mat-mdc-button.mat-primary:active,
+  .mat-mdc-raised-button.mat-accent:active,
+  .mat-mdc-button.mat-accent:active {
+    background: rgba(var(--interactive-primary-rgb), 0.35);
+    transform: translateY(1px);
+  }
+}
+
+/* Shimmer animation for button hover effect */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%) translateY(-100%);
+  }
+
+  100% {
+    transform: translateX(100%) translateY(100%);
+  }
+}
+
+/* Dark theme specific button styles */
+[data-theme='dark'] {
+  /* ===== Material Tabs — readable on dark background ===== */
+  --mdc-tab-indicator-active-indicator-color: var(--interactive-primary);
+  --mat-tab-header-active-label-text-color: var(--interactive-primary);
+  --mat-tab-header-inactive-label-text-color: rgba(255, 255, 255, 0.7);
+  --mat-tab-header-active-hover-label-text-color: var(--interactive-primary);
+  --mat-tab-header-inactive-hover-label-text-color: rgba(255, 255, 255, 0.9);
+
+  .mat-datepicker-content {
+    background-color: #0f172a; // TODO Epic C: map to semantic
+  }
+
+  /* primary raised/filled buttons - dark theme */
+  .mat-mdc-raised-button.mat-primary,
+  .mat-mdc-button.mat-primary {
+    // --mdc-protected-button-container-color: #607d8b;
+    --mdc-protected-button-container-color: #313638; // TODO Epic C
+    --mdc-protected-button-label-text-color: white;
+    --mat-protected-button-state-layer-color: white;
+    background-color: #313638; // TODO Epic C: map to semantic
+    position: relative;
+    overflow: hidden;
+  }
+
+  .mat-mdc-raised-button.mat-primary::before,
+  .mat-mdc-button.mat-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent);
+    transform: translateX(-100%) translateY(-100%);
+    transition: transform 0.6s ease;
+    pointer-events: none;
+  }
+
+  .mat-mdc-raised-button.mat-primary:hover,
+  .mat-mdc-button.mat-primary:hover {
+    filter: none;
+  }
+
+  .mat-mdc-raised-button.mat-primary:hover::before,
+  .mat-mdc-button.mat-primary:hover::before {
+    animation: shimmer 1.5s ease-in-out infinite;
+  }
+}
+
+[data-theme='light'] {
+
+  .mat-mdc-raised-button.mat-primary,
+  .mat-mdc-button.mat-primary {
+    background: var(--add-btn);
+    color: var(--text-on-primary);
+    box-shadow:
+      0 2px 8px rgba(25, 118, 210, 0.3),
+      0 1px 3px rgba(0, 0, 0, 0.12);
+    border-radius: var(--radius-md);
+
+    &:hover {
+      background: var(--add-btn-hover);
+      box-shadow:
+        0 4px 12px rgba(25, 118, 210, 0.4),
+        0 2px 4px rgba(0, 0, 0, 0.15);
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow:
+        0 1px 4px rgba(25, 118, 210, 0.3),
+        0 1px 2px rgba(0, 0, 0, 0.12);
+    }
+  }
+}
+
+// Dark Glass theme - Logout button transparent
+[data-theme='dark-glass'] {
+
+  .sidenav-footer button.mat-mdc-button,
+  .sidenav-footer .logout-btn {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+}
+
+/* ===== Mat Menu Styles ===== */
+[data-theme='light'],
+[data-theme='dark'],
+[data-theme='glass'],
+[data-theme='dark-glass'] {
+  .mat-mdc-menu-panel {
+    background-color: var(--surface-elevated);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-default);
+    min-width: 200px;
+    margin-top: 8px;
+
+    .mat-mdc-menu-content {
+      padding: 8px 0;
+    }
+  }
+
+  .mat-mdc-menu-item {
+    color: var(--text-primary);
+    font-size: var(--font-size-md);
+    min-height: 48px;
+    padding: 12px 16px;
+    transition: background-color var(--transition-normal);
+
+    &:hover {
+      background-color: var(--surface-highlight);
+    }
+
+    &:focus {
+      background-color: var(--surface-highlight);
+    }
+
+    .mat-icon {
+      color: var(--text-secondary);
+      margin-right: 12px;
+      height: auto;
+      width: auto;
+    }
+
+    .mat-mdc-menu-item-text {
+      color: var(--text-primary);
+      font-weight: var(--font-weight-medium);
+    }
+  }
+
+  .mat-mdc-button.mat-mdc-button-base {
+    color: inherit;
+  }
+
+  .mat-divider {
+    border-top-color: var(--border-default);
+    margin: 8px 0;
+  }
+}
+
+// Notification menu - full width on mobile
+@media (max-width: 480px) {
+
+  [data-theme='light'],
+  [data-theme='dark'],
+  [data-theme='glass'],
+  [data-theme='dark-glass'] {
+    .notification-menu.mat-mdc-menu-panel {
+      width: 100%;
+      min-width: 100%;
+      max-width: 100%;
+    }
+  }
+}
+
+/* Light theme specific menu styles */
+[data-theme='light'] {
+  .mat-mdc-menu-panel {
+    background-color: var(--text-on-primary);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  .mat-mdc-menu-item:hover {
+    background-color: #f3f4f6; // TODO Epic C: map to semantic
+  }
+}
+
+/* Dark theme specific menu styles */
+[data-theme='dark'] {
+  .mat-mdc-menu-panel {
+    background-color: #1f2937; // TODO Epic C: map to semantic
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3);
+    border-color: #374151; // TODO Epic C: map to semantic
+  }
+
+  .mat-mdc-menu-item:hover {
+    background-color: #374151; // TODO Epic C: map to semantic
+  }
+
+  /* Force Deep Dark Sidebar for Dark Theme */
+  .mat-sidenav-container .mat-sidenav,
+  .mat-drawer-container .mat-drawer,
+  mat-sidenav.mat-sidenav,
+  mat-drawer.mat-drawer {
+    background-color: #0f1115; // TODO Epic C: map to semantic
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: none;
+  }
+}
+
+/* Glass theme specific menu styles */
+[data-theme='glass'] {
+  .mat-mdc-menu-panel {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  }
+
+  .mat-mdc-menu-item:hover {
+    background-color: rgba(59, 130, 246, 0.1);
+  }
+}
+
+/* Dark Glass theme specific menu styles */
+[data-theme='dark-glass'] {
+  .mat-datepicker-content {
+    background-color: #5a5550; // TODO Epic C: map to semantic
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 15px;
+  }
+
+  .mat-calendar-body-cell-content {
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  --mdc-outlined-button-label-text-color: rgba(255, 255, 255, 0.7);
+  --mdc-outlined-button-state-layer-color: rgba(255, 255, 255, 0.7);
+  --mat-paginator-page-size-label-text-color: rgba(255, 255, 255, 0.7);
+  --mat-paginator-enabled-icon-color: rgba(255, 255, 255, 0.7);
+  --mat-paginator-disabled-icon-color: rgba(255, 255, 255, 0.3);
+  --mat-datepicker-calendar-previous-button-icon-color: rgba(255, 255, 255, 0.7);
+  --mat-datepicker-calendar-next-button-icon-color: rgba(255, 255, 255, 0.7);
+  --mat-datepicker-calendar-period-button-icon-color: rgba(255, 255, 255, 0.7);
+  --mat-datepicker-calendar-navigation-button-icon-color: rgba(255, 255, 255, 0.7);
+  --mat-datepicker-calendar-header-text-color: rgba(255, 255, 255, 0.7);
+  --mat-datepicker-calendar-body-label-text-color: rgba(255, 255, 255, 0.7);
+  --mat-datepicker-calendar-container-background-color: rgba(70, 65, 60, 0.6);
+  --mat-option-selected-state-label-text-color: rgba(255, 255, 255, 0.95);
+  --mat-icon-color: rgba(255, 255, 255, 0.7);
+  --mat-datepicker-toggle-icon-color: rgba(255, 255, 255, 0.7);
+
+  .mat-mdc-menu-panel {
+    background: rgba(90, 85, 80, 0.85);
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow:
+      0 12px 50px rgba(0, 0, 0, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+
+  .mat-mdc-menu-item {
+    color: rgba(255, 255, 255, 0.95);
+
+    .mat-icon {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .mat-mdc-menu-item-text {
+      color: rgba(255, 255, 255, 0.95);
+    }
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  .mat-divider {
+    border-top-color: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Strong overrides for Chrome/macOS compositing issues:
+     remove bright inset highlights and heavy backdrop-filters on interactive controls
+     to avoid rendering artifacts (bands/stripes) while keeping dark shadows. */
+  .mat-mdc-form-field .mat-mdc-text-field-wrapper,
+  .mat-mdc-form-field:has(.mat-mdc-select) .mat-mdc-text-field-wrapper {
+    /* remove bright inset highlights, keep subtle dark depth */
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.45), 0 6px 20px rgba(0, 0, 0, 0.45);
+    background: var(--input-bg);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .mat-mdc-select-panel,
+  .mat-select-panel {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    background: var(--surface-select-panel, var(--surface-elevated));
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: 1px solid var(--border-subtle);
+  }
+
+  /* Table rows/cells: explicit solid-ish background to avoid banding */
+  .mat-mdc-table,
+  .mat-mdc-table .mat-mdc-row,
+  .mat-mdc-table .mat-mdc-cell {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background-color: var(--surface-table);
+    box-shadow: none;
+  }
+
+  /* Reduce heavy compositing effects for tables/sidenav in dark-glass to prevent rendering glitches */
+  .mat-mdc-table,
+  table.mat-mdc-table {
+    /* disable backdrop-filter for large table surfaces in this theme (Chrome compositing bug workaround) */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background-color: var(--surface-table);
+    box-shadow: none;
+  }
+
+  .mat-mdc-table .mat-mdc-row,
+  .mat-mdc-table .mat-mdc-cell,
+  .admin-table-wrapper .mat-mdc-row {
+    background-color: var(--surface-table);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    will-change: transform;
+  }
+
+  /* soften sidenav shadow to avoid visible vertical bands on some GPUs */
+  .mat-sidenav-container .mat-sidenav,
+  .mat-drawer-container .mat-drawer,
+  mat-sidenav.mat-sidenav,
+  mat-drawer.mat-drawer {
+    box-shadow:
+      0 8px 20px rgba(0, 0, 0, 0.45),
+      inset 0 0 0 rgba(0, 0, 0, 0);
+  }
+}

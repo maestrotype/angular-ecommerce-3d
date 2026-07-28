@@ -83,7 +83,7 @@ src/
 │   │
 │   └── overrides/                 # Third-party / Material overrides (ADR-005)
 │       ├── _index.scss            # Re-exports overrides module
-│       └── _material-overrides.scss  # Single audit point (B2–B4 migrate rules here)
+│       └── _material-overrides.scss  # Central Material overrides (B2 dump migrated; B3–B4 remain)
 │
 ├── admin/
 │   └── styles/                    # Admin-specific styles (parallel --admin-* until Epic C)
@@ -97,7 +97,7 @@ src/
 │       ├── _admin-glass.scss
 │       ├── _admin-dark-glass.scss
 │       ├── _admin-material-base.scss
-│       └── _admin-theme-material.scss  # → Epic B centralization
+│       └── (removed) _admin-theme-material.scss  # Migrated B2 → overrides/_material-overrides.scss
 │
 └── app/                           # Component styles (local only)
     └── **/*.component.scss
@@ -229,7 +229,9 @@ Each theme partial defines CSS variables for ALL dimensions, even if it inherits
 
 ### 6.1 Override Strategy
 
-Central file: `src/styles/overrides/_material-overrides.scss` (wired via `overrides/_index.scss` in `main.scss`). Scaffold created in B1; rules still live in `src/admin/styles/_admin-theme-material.scss` and scattered component SCSS until B2–B3 migrate them.
+Central file: `src/styles/overrides/_material-overrides.scss` (wired via `overrides/_index.scss` in `main.scss`). B2 migrated the admin dump onto semantic/bridge tokens (`--input-*`, `--surface-table-*`, …). Scattered component `.mat-` rules remain until B3; `material-theme.scss` palette binding is B4.
+
+See `docs/migration/_admin-theme-material-migration.md` for the remap table.
 
 **Rules**:
 
@@ -368,7 +370,7 @@ body { margin: 0; }  // This leaks globally due to Angular encapsulation
 | Token definitions | ✅ Primitive + semantic pipeline | Keep single-source primitives |
 | Theme variables | ✅ Per-theme partials (`_default`/`_dark`/`_glass`) | Maintain; sync TS model (Epic F) |
 | Admin styles | Parallel `--admin-*` system | Shared tokens, admin layout only (Epic C) |
-| Material overrides | Scaffold in `overrides/`; rules still scattered (B2–B3) | All rules in `_material-overrides.scss` (Epic B) |
+| Material overrides | Central dump in `overrides/` (B2); component `.mat-` remain (B3) | All rules in `_material-overrides.scss` (Epic B) |
 | Hardcoded colors | Present in many components | Zero — all use tokens (Epic D) |
 | CSS vs SCSS variables | Mixed usage | CSS custom properties preferred |
 | Style entry | ✅ `src/styles/main.scss` (imports only) | Keep; never append CSS rules |
@@ -540,4 +542,4 @@ This follows the pattern: **define in theme file, consume in component**.
 
 ---
 
-*This document is maintained by the Principal UI Architect. Last updated: 2026-07-28 (B1: `overrides/_material-overrides.scss`)*
+*This document is maintained by the Principal UI Architect. Last updated: 2026-07-28 (B2: Material dump → overrides, Bridge tokens)*
