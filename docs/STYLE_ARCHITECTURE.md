@@ -54,7 +54,8 @@ src/
 │   ├── tokens/                    # Design tokens (theme-independent)
 │   │   ├── _index.scss            # Pipeline: primitives → semantic
 │   │   ├── _primitive-tokens.scss # Raw design values (single source)
-│   │   └── _semantic-tokens.scss  # Contextual mappings for components
+│   │   ├── _semantic-tokens.scss  # Contextual mappings for components
+│   │   └── _material-palettes.scss # Sass Material palettes + CSS bridge (B4; @use from material-theme)
 │   │
 │   ├── themes/                    # Theme definitions (theme-dependent)
 │   │   ├── _index.scss            # Re-exports all themes
@@ -83,12 +84,12 @@ src/
 │   │
 │   └── overrides/                 # Third-party / Material overrides (ADR-005)
 │       ├── _index.scss            # Re-exports overrides module
-│       └── _material-overrides.scss  # Central Material overrides (B2+B3; B4 remain)
+│       └── _material-overrides.scss  # Central Material overrides (B1–B4; residual admin-global → C5)
 │
 ├── admin/
 │   └── styles/                    # Admin-specific styles (parallel --admin-* until Epic C)
 │       ├── admin.scss             # Admin entry (angular.json)
-│       ├── material-theme.scss    # Material palette entry (angular.json)
+│       ├── material-theme.scss    # Material theme entry — token palettes + CSS bridge (B4)
 │       ├── admin-global.scss
 │       ├── admin-variables.scss
 │       ├── admin-mixins.scss
@@ -96,7 +97,7 @@ src/
 │       ├── _admin-dark.scss
 │       ├── _admin-glass.scss
 │       ├── _admin-dark-glass.scss
-│       ├── _admin-material-base.scss
+│       ├── _admin-material-base.scss  # Shim (B4: core/themes in material-theme.scss)
 │       └── (removed) _admin-theme-material.scss  # Migrated B2 → overrides/_material-overrides.scss
 │
 └── app/                           # Component styles (local only)
@@ -229,9 +230,9 @@ Each theme partial defines CSS variables for ALL dimensions, even if it inherits
 
 ### 6.1 Override Strategy
 
-Central file: `src/styles/overrides/_material-overrides.scss` (wired via `overrides/_index.scss` in `main.scss`). B2 migrated the admin dump onto semantic/bridge tokens. B3 cleared all `.mat-` / `.mdc-` from admin `*.component.scss` (unique rules → host-scoped B3 section). Residual: `admin-global.scss` (C5), theme-file `.mat-`, `material-theme.scss` (B4).
+Central file: `src/styles/overrides/_material-overrides.scss` (wired via `overrides/_index.scss` in `main.scss`). B2 migrated the admin dump onto semantic/bridge tokens. B3 cleared all `.mat-` / `.mdc-` from admin `*.component.scss` (unique rules → host-scoped B3 section). B4 bound Material Sass palettes + MDC CSS slots to design tokens (`material-theme.scss` + `tokens/_material-palettes.scss`). Residual: `admin-global.scss` / theme-file `.mat-` → C5.
 
-See `docs/migration/_admin-theme-material-migration.md` for the remap table.
+See `docs/migration/_admin-theme-material-migration.md`, `_b3-component-mat-migration.md`, `_b4-material-theme-tokens.md`.
 
 **Rules**:
 
@@ -258,12 +259,12 @@ See `docs/migration/_admin-theme-material-migration.md` for the remap table.
 
 ### 6.3 Material Palette Generation
 
-Angular Material's prebuilt theme system is used for base theming. Custom overrides layer on top:
+Material themes are generated from design-token palettes (B4), not stock indigo/pink:
 
-1. Load Angular Material prebuilt theme (or generate via SCSS functions)
-2. Apply theme-specific CSS variables that override Material defaults
-3. Use `::ng-deep` sparingly, only when Material's API doesn't expose the needed customization
-
+1. Sass maps in `src/styles/tokens/_material-palettes.scss` mirror primitive brand/accent/error hex
+2. `material-theme.scss` builds light/dark Material themes from those maps
+3. `material-color-bridge` remaps MDC/Mat CSS custom properties → semantic tokens (`--interactive-primary`, …) so runtime token changes update Material components
+4. Selector-level chrome stays in `_material-overrides.scss` (ADR-005)
 ---
 
 ## 7. Design Token Flow
@@ -370,7 +371,7 @@ body { margin: 0; }  // This leaks globally due to Angular encapsulation
 | Token definitions | ✅ Primitive + semantic pipeline | Keep single-source primitives |
 | Theme variables | ✅ Per-theme partials (`_default`/`_dark`/`_glass`) | Maintain; sync TS model (Epic F) |
 | Admin styles | Parallel `--admin-*` system | Shared tokens, admin layout only (Epic C) |
-| Material overrides | Component `.mat-` cleared (B3); residual admin-global/themes | All rules in `_material-overrides.scss` (Epic B + C5) |
+| Material overrides | Component `.mat-` cleared (B3); palette↔tokens (B4); residual admin-global/themes | All rules in `_material-overrides.scss` + token bridge (Epic B ✅; C5 residual) |
 | Hardcoded colors | Present in many components | Zero — all use tokens (Epic D) |
 | CSS vs SCSS variables | Mixed usage | CSS custom properties preferred |
 | Style entry | ✅ `src/styles/main.scss` (imports only) | Keep; never append CSS rules |
@@ -542,4 +543,4 @@ This follows the pattern: **define in theme file, consume in component**.
 
 ---
 
-*This document is maintained by the Principal UI Architect. Last updated: 2026-07-28 (B2: Material dump → overrides, Bridge tokens)*
+*This document is maintained by the Principal UI Architect. Last updated: 2026-07-28 (B4: Material palette ↔ design tokens)*

@@ -6,7 +6,8 @@
    Do NOT put .mat- / .mat-mdc- / .mdc- overrides in component SCSS.
 
    B3 — component .mat- rules migrated (host-scoped section below).
-   Remaining: B4 — bind material-theme.scss palette to design tokens.
+   B4 — Material palette + MDC CSS bridge in material-theme.scss /
+        tokens/_material-palettes.scss (semantic slots).
    Out of scope here: admin-global / theme-file .mat- (C5 / later).
    ========================================================================== */
 

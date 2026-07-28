@@ -27,7 +27,7 @@
 | `_admin-dark.scss` / `_admin-dark-glass.scss` | Epic C / theme cleanup |
 | `themes/_glass.scss` / `_dark.scss` | theme recipes → overrides or tokens |
 | `_scrollbars.scss` | E / cleanup |
-| `material-theme.scss` | **B4** |
+| `material-theme.scss` | **B4 ✅** |
 
 ## Verification
 

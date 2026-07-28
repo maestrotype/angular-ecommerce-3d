@@ -25,6 +25,7 @@ This document defines the rules, constraints and workflow that ALL AI agents mus
 | Semantic tokens (contextual) | `src/styles/tokens/_semantic-tokens.scss` | CSS custom properties mapping to primitives |
 | Theme values (theme-dependent) | `src/styles/themes/_<theme>.scss` | CSS custom properties on `[data-theme="<theme>"]` |
 | Material overrides (ADR-005) | `src/styles/overrides/_material-overrides.scss` | Token-driven `.mat-` / `.mat-mdc-` / `.mdc-` rules only |
+| Material palette (B4) | `src/styles/tokens/_material-palettes.scss` + `src/admin/styles/material-theme.scss` | Sass maps mirror primitives; MDC CSS bridge → semantic |
 | TypeScript theme definitions | `src/app/core/themes/themes/<theme>.ts` | Objects implementing `Theme` interface |
 
 **RULE**: Never hardcode a color, spacing value, radius, shadow, or font size in a component stylesheet. Always reference a design token. Never append CSS to `main.scss` — it is imports-only.
@@ -137,6 +138,9 @@ Theme switching is performed by changing the `data-theme` attribute on `<html>`.
 | `angular.json` | Build configuration — changes affect entire project |
 | `src/styles/tokens/_primitive-tokens.scss` | Primitive token definitions — changes cascade everywhere |
 | `src/styles/tokens/_semantic-tokens.scss` | Semantic mappings — changes cascade to all consumers |
+| `src/styles/tokens/_material-palettes.scss` | Material Sass palettes + CSS bridge (B4) — keep hex in sync with primitives |
+| `src/admin/styles/material-theme.scss` | Material theme entry — token-bound; do not reintroduce stock palettes |
+| `src/styles/overrides/_material-overrides.scss` | Central Material overrides (ADR-005) |
 | `src/app/core/themes/theme.model.ts` | Theme interface — structural change breaks all themes |
 | `src/app/core/themes/theme-config.ts` | Theme registry — improper changes break theme switching |
 | `src/styles/main.scss` | Style entry point — import order matters |

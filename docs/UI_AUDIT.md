@@ -43,11 +43,11 @@ This document records **current-state findings** of the style system audit. Task
 | File | Lines | Purpose | Status | Notes |
 |------|------:|---------|--------|-------|
 | `admin.scss` | 49 | Admin entry | KEEP | Import orchestrator + CDK overlay |
-| `material-theme.scss` | 28 | Material palette | FIX | Link to design tokens → Task B4 |
+| `material-theme.scss` | ~45 | Material theme + token bridge | ✅ B4 | Palettes + MDC CSS → semantic tokens |
 | `admin-variables.scss` | 224 | `--admin-*` definitions (120 unique) | DELETE after C | Parallel token system → Epic C |
 | `admin-mixins.scss` | 274 | Admin mixins | INVESTIGATE | Overlap with core mixins |
 | `admin-global.scss` | 1,195 | Admin global styles | DECOMPOSE | 76 `.mat-` lines, 14 `!important` → Task C5 |
-| `_admin-material-base.scss` | 18 | Material base | INVESTIGATE | |
+| `_admin-material-base.scss` | shim | Material base | ✅ B4 | Themes live in `material-theme.scss` |
 | ~~`_admin-theme-material.scss`~~ | ~~1,548~~ | ~~De-facto Material override dump~~ | ✅ DELETED (B2) | Migrated → `src/styles/overrides/_material-overrides.scss` |
 | `_admin-light.scss` | 95 | Admin light theme | MIGRATE → DELETE | Remounts `--admin-*` per theme → Task C3 |
 | `_admin-dark.scss` | 212 | Admin dark theme | MIGRATE → DELETE | 14 `!important` → Task C3 |
@@ -138,7 +138,7 @@ src/admin/styles/_admin-layout-tokens.scss ← Admin LAYOUT only (sidebar, toolb
 | Dark theme | `_dark.scss` | `_admin-dark.scss` (212 lines) | YES |
 | Glass theme | `_glass.scss` | `_admin-glass.scss` (164 lines) | YES |
 | Dark glass | — (no storefront file) | `_admin-dark-glass.scss` (220 lines) | ADMIN-ONLY theme |
-| Material overrides | `overrides/_material-overrides.scss` (B1–B3) | admin-global / themes / B4 | PARTIAL |
+| Material overrides | `overrides/_material-overrides.scss` (B1–B4) | admin-global / themes → C5 | PARTIAL (C5) |
 | Layout styles | N/A | `admin-layout.component.scss` | NO (correct) |
 
 ---
@@ -192,7 +192,7 @@ Not separately scanned; resolved per-component during Epic D migration (spacing 
 | Central overrides | `src/styles/overrides/_material-overrides.scss` (~1 950 lines) |
 | Residual files | `admin-global.scss` (76), `_admin-dark.scss` (6), `_glass.scss` (5), `_admin-dark-glass.scss` (3), `_dark.scss` (2), `_scrollbars.scss` (2) |
 
-Resolution: Epic B (B1–B3 ✅; B4 remaining). Residual admin-global → C5.
+Resolution: Epic B ✅ (B1–B4). Residual admin-global → C5.
 
 ---
 

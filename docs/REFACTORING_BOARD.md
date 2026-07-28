@@ -22,7 +22,7 @@
 | M5 | Компоненты полностью на semantic-токенах (без hex) | 3 / 86 | 3 / 86 | 86 / 86 | ▓░░░░░░░░░ 3% |
 | M6 | Legacy `_theme-variables.scss` | 722 строки, подключён | **удалён** | удалён | ██████████ 100% |
 | M7 | Orphaned `src/styles.scss` | 499 строк логики | **удалён** | удалён | ██████████ 100% |
-| M8 | Централизованный `_material-overrides.scss` | нет; overrides в 24 файлах | **component `.mat-` = 0** (B3); residual: admin-global + themes | 1 файл с правилами | ▓▓▓▓▓▓▓▓░░ 75% |
+| M8 | Централизованный `_material-overrides.scss` | нет; overrides в 24 файлах | **Epic B 4/4** (B4: palette↔tokens); residual: admin-global + themes → C5 | 1 файл с правилами | ▓▓▓▓▓▓▓▓▓░ 90% |
 
 **Команды для перепроверки метрик:**
 
@@ -49,7 +49,7 @@ rg -c '::ng-deep' src --glob '*.scss'
 | Каркас токенов (primitive + semantic) | `src/styles/tokens/` | `_primitive-tokens.scss` (105 стр.), `_semantic-tokens.scss` (47 стр.) |
 | Темы переписаны на semantic-токены | `src/styles/themes/` | `_default.scss`, `_dark.scss`, `_glass.scss` |
 | Entry point imports-only | `src/styles/main.scss` | 19→22 строк, только импорты; подключён в `angular.json` |
-| Material overrides (central) | `src/styles/overrides/` | B3: all admin `*.component.scss` cleared of `.mat-`; host-scoped section in `_material-overrides.scss`. Residual: `admin-global` (C5), theme files, `material-theme.scss` (B4) |
+| Material overrides (central) | `src/styles/overrides/` | B1–B4 done: component `.mat-` = 0; host-scoped B3; palette↔tokens (B4). Residual: `admin-global` / theme-file `.mat-` → C5 |
 | ThemeService: переключение, персистентность, admin/front зоны | `src/app/core/themes/` | 4 темы; `data-theme` на `<html>` и `<body>` |
 | 3 компонента полностью мигрированы | `favorites`, `base-modal`, `cart-modal` | Semantic-токены, 0 hex |
 | ~29 компонентов частично мигрированы | storefront | Semantic-токены + остаточные hex |
@@ -62,7 +62,7 @@ rg -c '::ng-deep' src --glob '*.scss'
 | 1 | Параллельная admin-система токенов `--admin-*` не тронута | 2 335 использований, 43 файла, 174 уникальных токена | C |
 | 2 | Компоненты не мигрированы (hex повсюду) | 1 336 hex в 68 файлах; admin — 10% на semantic | D |
 | 3 | ~~Legacy-монолит `_theme-variables.scss`~~ **Удалён (A3, 2026-07-28)**: блоки перенесены в `_default`/`_dark`/`_glass` с фильтрацией дублей | — | A |
-| 4 | Material overrides размазаны | Component scatter cleared (B3); remain `admin-global` `.mat-` (C5) + `material-theme.scss` (B4) | B |
+| 4 | Material overrides размазаны | Component scatter cleared (B3); palette bound to tokens (B4); remain `admin-global` `.mat-` (C5) | B ✅ / C5 |
 | 5 | ~~Orphaned `src/styles.scss`~~ **Удалён (A5)**; docs synced to `main.scss` entry (A6, 2026-07-28) | — | A |
 | 6 | ~~`_primitive-tokens.scss` существует, но НЕ импортируется — `tokens/_index.scss` дублирует примитивы инлайн~~ **Исправлено (A1, 2026-07-28)**: заодно починены нерезолвившиеся токены `--color-blue-300/400`, `--color-blue-400-rgb`, `--z-modal`, `--font-*` weights, использовавшиеся в dark/glass темах и модалках | — | A |
 | 7 | ~~`core/_variables.scss` — параллельная палитра~~ **Исправлено (A4, 2026-07-28)**: цвета перенесены в semantic legacy-алиасы; файл — только SCSS-breakpoints + non-color утилиты | — | A |
@@ -97,8 +97,8 @@ graph LR
 | Эпик | Название | Статус | Задач | Метрики |
 |------|----------|--------|-------|---------|
 | A | Фундамент токенов | ✅ **Готово** | 6/6 | M6, M7 |
-| B | Централизация Material overrides | 🔄 In Progress | 3/4 | M8 |
-| C | Admin-унификация (ADR-011) | ⏳ Ожидает A, B | 0/6 | M2 |
+| B | Централизация Material overrides | ✅ Done | 4/4 | M8 |
+| C | Admin-унификация (ADR-011) | ⏳ Ожидает (A ✅, B ✅) | 0/6 | M2 |
 | D | Миграция компонентов (ADR-006) | ⏳ Ожидает C | 0/10 | M1, M5 |
 | E | Финальная зачистка | ⏳ Ожидает D | 0/4 | M3, M4 |
 | F | Theme Engine v2 (ADR-004, ADR-012) | 💡 План | 0/5 | — |
@@ -123,16 +123,16 @@ graph LR
 | A5 | Разобрать orphaned `src/styles.scss` (499 стр.): нужные правила перенести в модули (`components/`, `core/`), файл удалить | `src/styles.scss`, `src/styles/components/*`, `src/styles/core/*` | Файл удалён; glass-хелперы и скроллбары живут в модулях; build проходит | ✅ (2026-07-28) |
 | A6 | Обновить `STYLE_ARCHITECTURE.md` и `AI_CONSTITUTION.md` §2.1: entry point — `main.scss` (не `styles.scss`), актуальная структура папок | `docs/STYLE_ARCHITECTURE.md`, `docs/AI_CONSTITUTION.md` | Документация соответствует коду | ✅ (2026-07-28) |
 
-### Эпик B — Централизация Material overrides (ADR-005)
+### Эпик B — Централизация Material overrides (ADR-005) ✅
 
-**Цель**: все переопределения Angular Material в одном файле, на semantic-токенах.
+**Цель**: все переопределения Angular Material в одном файле, на semantic-токенах. **Закрыт 2026-07-28 (B1–B4).**
 
 | ID | Задача | Файлы | Definition of Done | Статус |
 |----|--------|-------|--------------------|--------|
 | B1 | Создать `src/styles/overrides/_material-overrides.scss`, подключить в `main.scss` | новый файл, `main.scss` | Файл существует, структурирован по компонентам (buttons, tables, dialogs…) | ✅ (2026-07-28) |
 | B2 | Перенести overrides из `_admin-theme-material.scss` (1 548 стр., 349 `.mat-`-строк), переведя на semantic-токены | `src/admin/styles/_admin-theme-material.scss` → overrides | Admin-файл удалён или сведён к нулю; визуальная проверка admin-таблиц/форм | ✅ (2026-07-28, Bridge) |
 | B3 | Перенести разрозненные `.mat-` overrides из компонентов (23 файла: message-list — 32, order-list — 25, user-list — 23, seo-settings — 20…) | компонентные SCSS | 0 `.mat-` в `*.component.scss`; уникальные правила в `_material-overrides.scss` (host-scoped). Residual: admin-global/themes → C5 | ✅ (2026-07-28) |
-| B4 | Связать Material-палитру с токенами (`material-theme.scss` → design tokens) | `src/admin/styles/material-theme.scss` | Смена токена цвета меняет Material-компоненты | 📋 |
+| B4 | Связать Material-палитру с токенами (`material-theme.scss` → design tokens) | `src/admin/styles/material-theme.scss`, `tokens/_material-palettes.scss` | Смена токена цвета меняет Material-компоненты (MDC CSS bridge → semantic) | ✅ (2026-07-28) |
 
 ### Эпик C — Admin-унификация (ADR-011)
 
@@ -214,6 +214,8 @@ graph LR
 | 2026-07-28 | Эпик A закрыт (A1–A6): primitive/semantic pipeline, темы, variables cleanup, orphan `styles.scss` удалён, docs entry = `main.scss` |
 | 2026-07-28 | B1: создан `src/styles/overrides/_material-overrides.scss` (секции по Material-компонентам) + `_index.scss`; подключён в `main.scss` после components |
 | 2026-07-28 | B2 Bridge: `_admin-theme-material.scss` удалён; правила → `_material-overrides.scss` на semantic/bridge-токенах; admin-темы прокидывают `--input-*` / `--surface-table-*` |
+| 2026-07-28 | B3: 0 `.mat-`/`.mdc-` в admin `*.component.scss`; unique host-scoped → overrides; Epic B 3/4 |
+| 2026-07-28 | **Эпик B закрыт (B4)**: Material palettes ← primitives; MDC CSS bridge → semantic tokens; `_admin-material-base` shim; M8 ~90% |
 
 ---
 

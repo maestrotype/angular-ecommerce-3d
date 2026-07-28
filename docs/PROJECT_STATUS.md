@@ -30,7 +30,7 @@
 | Epic | Name | Status | Reality Check (2026-07-28) |
 |------|------|--------|----------------------------|
 | A | Token Foundation | ✅ Complete | A1–A6 done: primitives, semantic, themes, variables, orphan deleted, docs entry = `main.scss` |
-| B | Material Overrides Centralization | 🔄 In Progress | B1–B3 done: component `.mat-` = 0; host-scoped B3 section in overrides; B4 (`material-theme.scss`) remaining |
+| B | Material Overrides Centralization | ✅ Complete | B1–B4 done: overrides central; component `.mat-` = 0; palette↔tokens (MDC bridge). Residual admin-global `.mat-` → C5 |
 | C | Admin Unification (ADR-011) | ⏳ Pending | Parallel `--admin-*` system fully intact: 2,335 usages in 43 files, 174 unique tokens |
 | D | Component Migration (ADR-006) | 🔄 Partially Started | 3/86 components fully clean (`favorites`, `base-modal`, `cart-modal`); ~29 partially migrated; 1,336 hardcoded hex remain |
 | E | Final Cleanup | ⏳ Pending | 91 `!important` (12 files), 40 `::ng-deep` (12 files), 3 stub files |
@@ -76,7 +76,7 @@
 - [ ] 1,336 hardcoded hex colors in 68 SCSS files outside token/theme sources (Epic D)
 - [x] Legacy `_theme-variables.scss` decomposed into theme partials and deleted (A3, 2026-07-28)
 - [x] Orphaned `src/styles.scss` deleted — glass helpers → `components/_glass-helpers.scss`, scrollbars → `core/_scrollbars.scss` (A5, 2026-07-28)
-- [ ] Material overrides: B1–B3 done (component `.mat-` = 0); `material-theme.scss` + admin-global residual (B4 / C5)
+- [x] Material overrides Epic B (B1–B4): central overrides + palette↔tokens; residual admin-global `.mat-` → C5
 
 ### Medium Priority
 - [x] `_primitive-tokens.scss` imported via `tokens/_index.scss` (A1, 2026-07-28)
@@ -95,6 +95,7 @@
 
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-07-28 | Task B4 (Board): Bound Material palette to design tokens. Added `tokens/_material-palettes.scss` (Sass maps mirroring primitive brand/accent/error hex + `material-color-bridge` mixin remapping MDC/Mat CSS vars → `--interactive-primary` / `--color-accent` / `--interactive-danger`). Rewrote `material-theme.scss` (no stock indigo/pink); dark/dark-glass via `all-component-colors`; `_admin-material-base` reduced to import shim (no duplicate themes). Migration: `docs/migration/_b4-material-theme-tokens.md`. Epic B **4/4 complete**; M8 ~90%. Residual `.mat-`: admin-global/themes → C5. `npm run build` passes. | Principal UI Architect |
 | 2026-07-28 | Task B3 (Board): Cleared all `.mat-` / `.mdc-` from admin `*.component.scss` (17 files). Deleted redundant legacy `::ng-deep` Material dumps (already covered by B2). Moved unique host-scoped rules (column widths, subject accent, chips, SEO tabs, confirmation dialog, image-processor, forms) into `_material-overrides.scss` B3 section. Header notification menu kept in component with non-Material selectors (`.notification-menu`). Verified: 0 component matches; `npm run build` passes. Epic B 3/4; M8 ~75%; M4 40→25; M2 2125→2017. Residual `.mat-`: admin-global (C5), themes, scrollbars. | Principal UI Architect |
 | 2026-07-28 | Task B2 (Board, Bridge): Migrated `_admin-theme-material.scss` (1 548 lines) → `src/styles/overrides/_material-overrides.scss` on semantic tokens. Added Material bridge tokens (`--input-*`, `--surface-table-*`, `--interactive-primary-rgb`, `--radius-dialog`, …) in `_semantic-tokens.scss`; wired from 4 admin themes + shared dark/glass. Deleted admin dump; import removed from `admin.scss`. Migration note: `docs/migration/_admin-theme-material-migration.md`. Epic B 2/4; M8 ~50%. | Principal UI Architect |
 | 2026-07-28 | Task B1 (Board): Created `src/styles/overrides/_material-overrides.scss` (sectioned by Material components: buttons, form fields, selects, tables, dialogs, …) + `overrides/_index.scss`; wired into `main.scss` after component presets. Docs: STYLE_ARCHITECTURE tree/import order/§6.1; AI_CONSTITUTION §2.1; Board M8 + Epic B 1/4. No rule migration yet (B2–B3). | Principal UI Architect |

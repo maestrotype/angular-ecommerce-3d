@@ -1,18 +1,7 @@
-@use '@angular/material' as mat;
-
-@include mat.core();
-
-$admin-primary: mat.define-palette(mat.$indigo-palette);
-$admin-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
-$admin-warn: mat.define-palette(mat.$red-palette);
-
-$admin-theme: mat.define-light-theme((
-  color: (
-    primary: $admin-primary,
-    accent: $admin-accent,
-    warn: $admin-warn,
-  ),
-  density: 0,
-));
-
-@include mat.all-component-themes($admin-theme);
+/* ==========================================================================
+   ADMIN MATERIAL BASE (shim)
+   --------------------------------------------------------------------------
+   B4: `mat.core()` + token-bound themes live in `material-theme.scss`
+   (first entry in angular.json styles[]). Kept as an import shim so
+   `admin.scss` stays stable; do not re-include mat.all-component-themes here.
+   ========================================================================== */
