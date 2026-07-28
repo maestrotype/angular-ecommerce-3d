@@ -11,6 +11,225 @@
    ========================================================================== */
 
 [data-theme="dark"] {
+  /* ===== MIGRATED FROM tokens/_theme-variables.scss (Task A3) ===== */
+  /* Dark theme variables */
+  --hero-bg-gradient: linear-gradient(135deg,
+  #1e293b 0%,
+  #334155 50%,
+  #475569 100%);
+
+  --hero-backdrop-filter: blur(20px);
+  --hero-text-color: #f8fafc;
+  --hero-accent-color: #60a5fa;
+
+  /* Global Text Colors */
+
+  /* Special Offer section - Dark theme */
+  --special-offer-bg: linear-gradient(135deg,
+  rgba(15, 23, 42, 0.95) 0%,
+  rgba(30, 41, 59, 0.9) 30%,
+  rgba(51, 65, 85, 0.85) 70%,
+  rgba(71, 85, 105, 0.9) 100%);
+
+  --special-offer-backdrop-filter: blur(20px);
+  --special-offer-text: #f8fafc;
+  --special-offer-accent: #60a5fa;
+  --color-special-offer-button-text: #ffffff;
+  --color-special-offer-button-hover: #3b82f6;
+  --color-special-offer-button-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  --special-offer-button-border: 1px solid transparent;
+  --special-offer-button-blur: none;
+
+  /* Categories section - Dark theme (admin palette) - light grey icons */
+  --categories-bg: #1e293b;
+  --categories-text: #f8fafc;
+  --categories-card-bg: #334155;
+  --categories-card-hover: #475569;
+  --categories-card-border: #475569;
+  --categories-icon-filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(80%) contrast(100%);
+
+  /* Footer section - Dark theme */
+  --footer-bg: rgba(15, 23, 42, 0.95);
+  --footer-backdrop-filter: blur(15px) saturate(180%);
+  --footer-text: #f8fafc;
+  --footer-link: #cbd5e1;
+  --footer-link-hover: #ffffff;
+  --footer-text-rgb: 248, 250, 252;
+
+  /* About section - Dark theme (admin palette) */
+  --about-bg: #1e293b;
+  --about-text: #f8fafc;
+  --about-title: #ffffff;
+  --about-subtitle: #cbd5e1;
+  --about-button-bg: #ef4444;
+  --about-button-hover: #dc2626;
+  --auth-tab-text: #f8fafc;
+  --auth-tab-active: #cbd5e1;
+  --auth-tab-inactive: #64748b;
+  --auth-tab-hover: #cbd5e1;
+
+  /* Brands section - Dark theme (admin palette) - light grey text */
+  --brands-bg: #334155;
+  --brands-text: #cbd5e1;
+  --brands-logo-opacity: 1;
+  --brands-logo-hover-opacity: 1;
+  --brands-logo-filter: brightness(0) invert(1);
+  --brands-logo-hover-filter: brightness(0) invert(1);
+
+  /* Contacts section - Dark theme (admin palette) - same as categories cards */
+  --contacts-bg: #334155;
+  --contacts-text: #f8fafc;
+  --contacts-title: #ffffff;
+  --contacts-subtitle: #cbd5e1;
+  --contacts-card-bg: #374151;
+  --contacts-card-text: #f8fafc;
+  --contacts-input-bg: rgba(255, 255, 255, 0.35);
+  --contacts-input-text: #1e293b;
+  --contacts-button-bg: #60a5fa;
+  --contacts-button-hover: #3b82f6;
+
+  /* Header section - Dark theme (admin palette) - semi-transparent like contact form */
+  --header-bg: rgba(15, 23, 42, 0.8);
+  --header-backdrop-filter: blur(20px) saturate(180%);
+  --header-text: #f8fafc;
+  --header-link: #cbd5e1;
+  --header-link-hover: #ffffff;
+  --header-search-bg: rgba(255, 255, 255, 0.1);
+  --header-search-text: #f8fafc;
+
+  /* RGB Variables for transparencies (Dark Theme) */
+  --header-bg-rgb: 15, 23, 42;
+  --header-text-rgb: 248, 250, 252;
+  --footer-bg-rgb: 15, 23, 42;
+  --footer-text-rgb: 248, 250, 252;
+
+  /* Product Detail section - Dark theme */
+  --product-detail-bg: #0f172a;
+  --product-detail-card-bg: #1e293b;
+  --product-detail-card-border: 1px solid #334155;
+  --product-detail-main-view-bg: #1e293b;
+  --product-detail-main-view-border: 1px solid #334155;
+  --product-detail-thumb-bg: #1e293b;
+  --product-detail-thumb-border: 2px solid transparent;
+  --product-detail-thumb-selected-border: 2px solid #007bff;
+
+  /* Product Text Colors - Dark theme */
+  --product-title-color: #f8fafc;
+  --product-meta-color: #cbd5e1;
+  --product-price-color: #60a5fa;
+  --product-description-color: #e2e8f0;
+  --product-specs-label-color: #cbd5e1;
+  --product-specs-value-color: #f1f5f9;
+
+  /* Breadcrumb and Navigation - Dark theme */
+  --breadcrumb-color: #cbd5e1;
+  --breadcrumb-link-color: #cbd5e1;
+  --breadcrumb-link-hover-color: #60a5fa;
+  --breadcrumb-current-color: #f8fafc;
+
+  /* Similar Products - Dark theme */
+  --similar-products-title-color: #f8fafc;
+  --similar-products-subtitle-color: #cbd5e1;
+  --similar-products-bg: #0f172a;
+  --similar-products-card-bg: #1e293b;
+  --similar-products-card-border: 1px solid #334155;
+  --similar-products-card-text: #f8fafc;
+  --similar-products-card-price: #60a5fa;
+
+  /* Bought Together - Dark theme */
+  --bought-together-title-color: #f8fafc;
+  --bought-together-subtitle-color: #cbd5e1;
+  --bought-together-bg: #0f172a;
+  --bought-together-card-bg: #1e293b;
+  --bought-together-card-border: 1px solid #334155;
+  --bought-together-card-text: #f8fafc;
+  --bought-together-card-price: #60a5fa;
+
+  /* Product Stepper - Dark theme */
+  --product-stepper-bg: #334155;
+  --product-stepper-border: 1px solid #475569;
+  --product-stepper-radius: 10px;
+  --product-stepper-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --product-stepper-btn-bg: #475569;
+  --product-stepper-btn-hover: #64748b;
+  --product-stepper-btn-color: #f8fafc;
+  --product-stepper-value-color: #f8fafc;
+
+  /* Glass Style Buttons - Dark theme */
+  --glass-btn-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  --glass-btn-border: 1px solid rgba(255, 255, 255, 0.2);
+  --glass-btn-color: #f8fafc;
+  --glass-btn-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  --glass-btn-hover-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%);
+  --glass-btn-hover-border: 1px solid rgba(255, 255, 255, 0.3);
+  --glass-btn-hover-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+
+  /* Product Tabs - Dark theme */
+  --product-tabs-bg: #1e293b;
+  --product-tabs-border: 1px solid #334155;
+  --product-tabs-radius: 12px;
+  --product-tabs-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --product-tabs-nav-bg: #334155;
+  --product-tabs-nav-border: 1px solid #475569;
+  --product-tabs-active-bg: #475569;
+  --product-tabs-active-color: #f8fafc;
+  --product-tabs-active-border: #60a5fa;
+  --product-tabs-hover-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  --product-tabs-hover-color: #e2e8f0;
+  --product-tabs-text-color: #cbd5e1;
+  --product-tabs-content-color: #f1f5f9;
+
+  /* Delivery Options - Dark theme */
+  --delivery-option-bg: #334155;
+  --delivery-option-border: 1px solid #475569;
+  --delivery-option-text: #f8fafc;
+  --delivery-option-title: #ffffff;
+  --delivery-option-subtitle: #cbd5e1;
+
+  /* Best Sellers section - Dark theme (admin palette) - richer gradient */
+  --best-sellers-bg: radial-gradient(circle at 0% 0%,
+  rgba(96, 165, 250, 0.25) 0%,
+  transparent 55%),
+  linear-gradient(135deg,
+  #020617 0%,
+  #0b1120 35%,
+  #111827 70%,
+  #020617 100%);
+  --best-sellers-text: #e5e7eb;
+  --best-sellers-subtitle: #bfdbfe;
+
+  /* Favorites section - Dark theme */
+  --favorites-text: #f8fafc;
+  --favorites-top-bar-bg: #334155;
+  --favorites-top-bar-text: #f8fafc;
+  --favorites-clear-btn-bg: #6c757d;
+  --favorites-clear-btn-text: #ffffff;
+  --favorites-clear-btn-hover-bg: #5a6268;
+  --favorites-product-name-color: #f8fafc;
+  --favorites-product-category-color: #60a5fa;
+  --favorites-product-price-color: #60a5fa;
+  --favorites-add-to-cart-bg: rgba(255, 255, 255, 0.1);
+  --favorites-add-to-cart-text: #f8fafc;
+  --favorites-add-to-cart-hover-bg: rgba(255, 255, 255, 0.2);
+
+  /* Surface variables - Different for different elements */
+  --surface-hover: #3b82f6;
+
+  /* Button specific variables */
+  --button-primary-bg: #6366f1;
+  --button-primary-text: #ffffff;
+  --button-primary-border: #6366f1;
+  /* Text variables */
+  --text-tertiary: #94a3b8;
+
+  /* Border variables */
+  --border-secondary: rgba(255, 255, 255, 0.2);
+  --border-focus: #6366f1;
+
+  /* CARD COMPONENT */
+  --card-radius: 8px;
+  /* ===== END MIGRATED (Task A3) ===== */
+
   /* ===== SURFACE OVERRIDES ===== */
   --surface-primary: var(--color-slate-800);
   --surface-secondary: var(--color-slate-700);

@@ -12,6 +12,239 @@
    ========================================================================== */
 
 [data-theme="glass"] {
+  /* ===== MIGRATED FROM tokens/_theme-variables.scss (Task A3) ===== */
+  /* Glass theme variables */
+  --hero-bg-gradient: linear-gradient(135deg,
+  rgba(255, 255, 255, 0.3) 0%,
+  rgba(255, 255, 255, 0.1) 100%);
+
+  --hero-backdrop-filter: blur(20px) saturate(180%);
+  --hero-text-color: #1e293b;
+  --hero-accent-color: #6366f1;
+
+  /* Special Offer section - Light glass */
+  --special-offer-bg: linear-gradient(135deg,
+  rgba(255, 255, 255, 0.3) 0%,
+  rgba(255, 255, 255, 0.1) 100%);
+
+  --special-offer-backdrop-filter: blur(25px) saturate(180%);
+  --special-offer-text: #1e293b;
+  --special-offer-accent: rgba(255, 255, 255, 0.2);
+  --color-special-offer-button-text: #0f172a;
+  --color-special-offer-button-hover: rgba(255, 255, 255, 0.35);
+  --color-special-offer-button-shadow:
+  0 12px 30px rgba(0, 0, 0, 0.12),
+  inset 0 1px 2px rgba(255, 255, 255, 0.9),
+  inset 0 12px 24px rgba(255, 255, 255, 0.3),
+  inset 0 -12px 24px rgba(0, 0, 0, 0.04);
+  --special-offer-button-border: 1px solid rgba(255, 255, 255, 0.4);
+  --special-offer-button-blur: blur(32px) saturate(250%);
+
+  /* Categories section - Glass theme */
+  --categories-bg: rgba(255, 255, 255, 0.15);
+  --categories-text: #1e293b;
+  --categories-card-bg: rgba(255, 255, 255, 0.25);
+  --categories-card-hover: rgba(255, 255, 255, 0.4);
+  --categories-card-border: rgba(255, 255, 255, 0.5);
+  --categories-icon-filter: none;
+
+  /* Footer section - Glass theme */
+  --footer-bg: rgba(255, 255, 255, 0.2);
+  --footer-backdrop-filter: blur(20px) saturate(180%);
+  --footer-text: #1e293b;
+  --footer-link: #475569;
+  --footer-link-hover: #1e293b;
+
+  /* About section - Glass theme */
+  --about-bg: rgba(255, 255, 255, 0.15);
+  --about-text: #1e293b;
+  --about-title: #1e293b;
+  --about-subtitle: #475569;
+  --about-button-bg: rgba(239, 68, 68, 0.8);
+  --about-button-hover: rgba(220, 38, 38, 0.9);
+
+  /* Brands section - Glass theme */
+  --brands-bg: rgba(255, 255, 255, 0.15);
+  --brands-text: #1e293b;
+  --brands-logo-opacity: 0.6;
+  --brands-logo-hover-opacity: 1;
+  --brands-logo-filter: grayscale(100%);
+  --brands-logo-hover-filter: grayscale(0%);
+
+  /* Contacts section - Glass theme */
+  --contacts-bg: rgba(255, 255, 255, 0.15);
+  --contacts-text: #1e293b;
+  --contacts-title: #1e293b;
+  --contacts-subtitle: #475569;
+  --contacts-card-bg: rgba(255, 255, 255, 0.3);
+  --contacts-card-text: #1e293b;
+  --contacts-input-bg: rgba(255, 255, 255, 0.45);
+  --contacts-input-text: #1e293b;
+  --contacts-button-bg: rgba(99, 102, 241, 0.8);
+  --contacts-button-hover: rgba(79, 70, 229, 0.9);
+
+  /* Header section - Glass theme */
+  --header-bg: rgba(255, 255, 255, 0.25);
+  --header-backdrop-filter: blur(25px) saturate(180%);
+  --header-text: #1e293b;
+  --header-link: #334155;
+  --header-link-hover: #0f172a;
+  --header-search-bg: rgba(255, 255, 255, 0.4);
+  --header-search-text: #1e293b;
+  --header-text-rgb: 30, 41, 59;
+
+  /* Product Detail section - Glass theme */
+  --product-detail-bg: rgba(255, 255, 255, 0.1);
+  --product-detail-card-bg: rgba(255, 255, 255, 0.25);
+  --product-detail-card-border: 1px solid rgba(255, 255, 255, 0.5);
+  --product-detail-main-view-bg: rgba(255, 255, 255, 0.25);
+  --product-detail-main-view-border: 1px solid rgba(255, 255, 255, 0.5);
+  --product-detail-thumb-bg: rgba(255, 255, 255, 0.25);
+  --product-detail-thumb-border: 2px solid transparent;
+  --product-detail-thumb-selected-border: 2px solid #6366f1;
+
+  /* Product Text Colors - Glass theme */
+  --product-title-color: #1e293b;
+  --product-meta-color: #475569;
+  --product-price-color: #4f46e5;
+  --product-description-color: #334155;
+  --product-specs-label-color: #475569;
+  --product-specs-value-color: #0f172a;
+
+  /* Breadcrumb and Navigation - Glass theme */
+  --breadcrumb-color: #475569;
+  --breadcrumb-link-color: #475569;
+  --breadcrumb-link-hover-color: #4f46e5;
+  --breadcrumb-current-color: #1e293b;
+
+  /* Similar Products - Glass theme */
+  --similar-products-title-color: #1e293b;
+  --similar-products-subtitle-color: #475569;
+  --similar-products-bg: rgba(255, 255, 255, 0.1);
+  --similar-products-card-bg: rgba(255, 255, 255, 0.25);
+  --similar-products-card-border: 1px solid rgba(255, 255, 255, 0.5);
+  --similar-products-card-text: #1e293b;
+  --similar-products-card-price: #4f46e5;
+
+  /* Bought Together - Glass theme */
+  --bought-together-title-color: #1e293b;
+  --bought-together-subtitle-color: #475569;
+  --bought-together-bg: rgba(255, 255, 255, 0.1);
+  --bought-together-card-bg: rgba(255, 255, 255, 0.25);
+  --bought-together-card-border: 1px solid rgba(255, 255, 255, 0.5);
+  --bought-together-card-text: #1e293b;
+  --bought-together-card-price: #4f46e5;
+
+  /* Product Stepper - Glass theme */
+  --product-stepper-bg: rgba(255, 255, 255, 0.3);
+  --product-stepper-border: 1px solid rgba(255, 255, 255, 0.5);
+  --product-stepper-radius: 10px;
+  --product-stepper-shadow: 0 4px 16px rgba(31, 38, 135, 0.1);
+  --product-stepper-btn-bg: rgba(255, 255, 255, 0.2);
+  --product-stepper-btn-hover: rgba(255, 255, 255, 0.4);
+  --product-stepper-btn-color: #1e293b;
+  --product-stepper-value-color: #1e293b;
+
+  /* Glass Style Buttons - Glass theme */
+  --glass-btn-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.2) 100%);
+  --glass-btn-border: 1px solid rgba(255, 255, 255, 0.5);
+  --glass-btn-color: #1e293b;
+  --glass-btn-shadow: 0 8px 32px rgba(31, 38, 135, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  --glass-btn-hover-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.3) 100%);
+  --glass-btn-hover-border: 1px solid rgba(255, 255, 255, 0.7);
+  --glass-btn-hover-shadow: 0 12px 40px rgba(31, 38, 135, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+  /* Product Tabs - Glass theme */
+  --product-tabs-bg: rgba(255, 255, 255, 0.3);
+  --product-tabs-border: 1px solid rgba(255, 255, 255, 0.5);
+  --product-tabs-radius: 12px;
+  --product-tabs-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+  --product-tabs-nav-bg: rgba(255, 255, 255, 0.2);
+  --product-tabs-nav-border: 1px solid rgba(255, 255, 255, 0.3);
+  --product-tabs-active-bg: rgba(255, 255, 255, 0.5);
+  --product-tabs-active-color: #1e293b;
+  --product-tabs-active-border: #3b82f6;
+  --product-tabs-hover-bg: rgba(255, 255, 255, 0.3);
+  --product-tabs-hover-color: #1e293b;
+  --product-tabs-text-color: #475569;
+  --product-tabs-content-color: #1e293b;
+
+  /* Delivery Options - Glass theme */
+  --delivery-option-bg: rgba(255, 255, 255, 0.3);
+  --delivery-option-border: 1px solid rgba(255, 255, 255, 0.5);
+  --delivery-option-text: #1e293b;
+  --delivery-option-title: #1e293b;
+  --delivery-option-subtitle: #475569;
+
+  /* Best Sellers section - Glass theme */
+  --best-sellers-bg: radial-gradient(circle at 0% 0%,
+  rgba(99, 102, 241, 0.15) 0%,
+  transparent 55%),
+  linear-gradient(135deg,
+  rgba(0, 0, 0, 0.4) 0%,
+  rgba(0, 0, 0, 0.2) 40%,
+  rgba(0, 0, 0, 0.1) 100%);
+  --best-sellers-text: #ffffff;
+  --best-sellers-subtitle: rgba(255, 255, 255, 0.7);
+
+  /* Favorites section - Glass theme */
+  --favorites-text: #ffffff;
+  --favorites-top-bar-bg: rgba(255, 255, 255, 0.05);
+  --favorites-top-bar-text: #ffffff;
+  --favorites-clear-btn-bg: rgba(255, 255, 255, 0.15);
+  --favorites-clear-btn-text: #ffffff;
+  --favorites-clear-btn-hover-bg: rgba(255, 255, 255, 0.25);
+  --favorites-product-name-color: #ffffff;
+  --favorites-product-category-color: #818cf8;
+  --favorites-product-price-color: #818cf8;
+  --favorites-add-to-cart-bg: rgba(255, 255, 255, 0.1);
+  --favorites-add-to-cart-text: #ffffff;
+  --favorites-add-to-cart-hover-bg: rgba(255, 255, 255, 0.2);
+
+  /* Surface variables - DEEP DARK Glass effect */
+  --surface-hover: rgba(255, 255, 255, 0.08);
+
+  /* Button specific variables - Glass morphism style */
+  --button-primary-bg: rgba(255, 255, 255, 0.1);
+  --button-primary-text: #ffffff;
+  --button-primary-border: rgba(255, 255, 255, 0.2);
+
+  /* Text variables - FORCE WHITE ON DARK GLASS */
+  --text-tertiary: rgba(255, 255, 255, 0.5);
+
+  /* Compatibility variables used in components */
+  --color-text-inverse: #000000;
+
+  /* Auth Modal section - Glass theme */
+  --auth-modal-bg: rgba(0, 0, 0, 0.6);
+  --auth-modal-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);
+  --auth-modal-border: 1px solid rgba(255, 255, 255, 0.1);
+  --auth-header-bg: transparent;
+  --auth-header-border: 1px solid rgba(255, 255, 255, 0.08);
+  --auth-tab-text: rgba(255, 255, 255, 0.6);
+  --auth-tab-active: #ffffff;
+  --auth-tab-inactive: rgba(255, 255, 255, 0.4);
+  --auth-tab-hover: #ffffff;
+  --auth-tab-active-bg: rgba(255, 255, 255, 0.1);
+  --auth-content-bg: transparent;
+  --auth-input-bg: rgba(255, 255, 255, 0.05);
+  --auth-input-border: 1px solid rgba(255, 255, 255, 0.1);
+
+  /* Admin specific variables for Glass Theme */
+  --admin-text-primary: #ffffff;
+  --admin-text-secondary: rgba(255, 255, 255, 0.7);
+  --admin-bg-primary: #0f1115;
+  --admin-bg-secondary: rgba(0, 0, 0, 0.4);
+  --admin-border-primary: rgba(255, 255, 255, 0.08);
+
+  /* Border variables */
+  --border-secondary: rgba(255, 255, 255, 0.05);
+  --border-focus: #3b82f6;
+
+  /* CARD COMPONENT */
+  --card-radius: 24px;
+  /* ===== END MIGRATED (Task A3) ===== */
+
   /* ===== SURFACE OVERRIDES (Glass) ===== */
   --surface-primary: rgba(0, 0, 0, 0.5);
   --surface-secondary: rgba(255, 255, 255, 0.05);

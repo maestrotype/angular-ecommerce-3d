@@ -15,10 +15,10 @@ This document records **current-state findings** of the style system audit. Task
 | File | Lines | Purpose | Status | Notes |
 |------|------:|---------|--------|-------|
 | `src/styles/main.scss` | 19 | Master import file | KEEP | **Actual build entry** (wired in `angular.json`); imports only ✅ |
-| `src/styles/tokens/_index.scss` | 15 | Token pipeline entry | KEEP | ✅ RESOLVED (A1, 2026-07-28): imports `_primitive-tokens.scss` + `_semantic-tokens.scss`; still `@forward`s legacy `_theme-variables.scss` → Task A3 |
+| `src/styles/tokens/_index.scss` | ~12 | Token pipeline entry | KEEP | ✅ RESOLVED (A1+A3): imports primitives + semantic; `@forward` legacy removed |
 | `src/styles/tokens/_primitive-tokens.scss` | 106 | Primitive tokens (single source) | KEEP | ✅ RESOLVED (A1, 2026-07-28): now wired into the pipeline |
 | `src/styles/tokens/_semantic-tokens.scss` | ~110 | Semantic tokens | KEEP | ✅ RESOLVED (A2, 2026-07-28): full storefront coverage; 0 undefined no-fallback refs outside `--tw-*` (A5) and `--admin-*`/`--lg-*` (Epic C) |
-| `src/styles/tokens/_theme-variables.scss` | 722 | Legacy CSS variable monolith | DELETE | Still forwarded; decompose into themes/semantic → Task A3 |
+| ~~`src/styles/tokens/_theme-variables.scss`~~ | ~~722~~ | Legacy CSS variable monolith | DELETE | ✅ DELETED (A3, 2026-07-28): content moved into `themes/_default/_dark/_glass.scss` |
 | `src/styles/themes/_index.scss` | 89 | Theme re-export | FIX | Contains product-detail CSS vars with hex (logic in an index file) |
 | `src/styles/themes/_default.scss` | 119 | Default/light theme | KEEP | Rewritten to semantic tokens ✅ |
 | `src/styles/themes/_dark.scss` | 374 | Dark theme | KEEP | Rewritten to semantic tokens ✅ |
@@ -79,7 +79,7 @@ Fully clean components: `favorites`, `base-modal`, `cart-modal`.
 |-------------|-----------|------------|
 | ~~Primitive tokens defined twice~~ | ~~`tokens/_primitive-tokens.scss` AND inlined in `tokens/_index.scss`~~ | ✅ RESOLVED (A1, 2026-07-28): `_index.scss` imports the file; inline copies deleted |
 | Color palette defined in parallel | `tokens/` vs `core/_variables.scss` (`--color-primary: #667eea` etc.) vs TS `light-theme.ts` | Task A4 + F1 |
-| Theme variables monolith | `tokens/_theme-variables.scss` (722 lines) overlaps theme partials | Task A3: decompose and delete |
+| ~~Theme variables monolith~~ | ~~`tokens/_theme-variables.scss`~~ | ✅ Done (A3): deleted, themes absorb leftover vars |
 | `--admin-*` system | 174 unique tokens defined across `admin-variables.scss` (120) + 4 admin theme files (445 definition occurrences total) | Epic C (ADR-011: classify SHARED / ADMIN-ONLY / CONFLICT) |
 
 ---

@@ -3,12 +3,11 @@
    ========================================
    Layer 1: _primitive-tokens.scss — raw design values (single source)
    Layer 2: _semantic-tokens.scss — contextual mappings consumed by components
-   Legacy:  _theme-variables.scss — monolith pending decomposition (Task A3)
+   Legacy monolith _theme-variables.scss decomposed into themes/ (Task A3, 2026-07-28).
 
    Rule: primitives are defined ONLY in _primitive-tokens.scss.
    Never redeclare token values in this file.
    ======================================== */
 
-@forward './theme-variables';
 @import './primitive-tokens';
 @import './semantic-tokens';

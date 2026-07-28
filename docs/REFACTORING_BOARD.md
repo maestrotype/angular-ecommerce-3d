@@ -20,7 +20,7 @@
 | M3 | `!important` | 91 в 12 файлах | 91 | 0 | ░░░░░░░░░░ 0% |
 | M4 | `::ng-deep` | 40 в 12 файлах | 40 | 0 | ░░░░░░░░░░ 0% |
 | M5 | Компоненты полностью на semantic-токенах (без hex) | 3 / 86 | 3 / 86 | 86 / 86 | ▓░░░░░░░░░ 3% |
-| M6 | Legacy `_theme-variables.scss` | 722 строки, подключён | 722 | удалён | ░░░░░░░░░░ 0% |
+| M6 | Legacy `_theme-variables.scss` | 722 строки, подключён | **удалён** | удалён | ██████████ 100% |
 | M7 | Orphaned `src/styles.scss` | 499 строк логики | 499 | удалён | ░░░░░░░░░░ 0% |
 | M8 | Централизованный `_material-overrides.scss` | нет; overrides в 24 файлах | нет | 1 файл | ░░░░░░░░░░ 0% |
 
@@ -60,7 +60,7 @@ rg -c '::ng-deep' src --glob '*.scss'
 |---|----------|---------|------|
 | 1 | Параллельная admin-система токенов `--admin-*` не тронута | 2 335 использований, 43 файла, 174 уникальных токена | C |
 | 2 | Компоненты не мигрированы (hex повсюду) | 1 336 hex в 68 файлах; admin — 10% на semantic | D |
-| 3 | Legacy-монолит `_theme-variables.scss` жив и подключён через `@forward` | 722 строки | A |
+| 3 | ~~Legacy-монолит `_theme-variables.scss`~~ **Удалён (A3, 2026-07-28)**: блоки перенесены в `_default`/`_dark`/`_glass` с фильтрацией дублей | — | A |
 | 4 | Material overrides размазаны | `_admin-theme-material.scss` (1 548 стр.) + 23 файла | B |
 | 5 | Orphaned `src/styles.scss` — 499 строк логики, не подключён к сборке, но docs считают его entry | 499 строк | A |
 | 6 | ~~`_primitive-tokens.scss` существует, но НЕ импортируется — `tokens/_index.scss` дублирует примитивы инлайн~~ **Исправлено (A1, 2026-07-28)**: заодно починены нерезолвившиеся токены `--color-blue-300/400`, `--color-blue-400-rgb`, `--z-modal`, `--font-*` weights, использовавшиеся в dark/glass темах и модалках | — | A |
@@ -95,7 +95,7 @@ graph LR
 
 | Эпик | Название | Статус | Задач | Метрики |
 |------|----------|--------|-------|---------|
-| A | Фундамент токенов | 🔄 **В работе** | 2/6 | M6, M7 |
+| A | Фундамент токенов | 🔄 **В работе** | 3/6 | M7 |
 | B | Централизация Material overrides | ⏳ Ожидает A | 0/4 | M8 |
 | C | Admin-унификация (ADR-011) | ⏳ Ожидает A, B | 0/6 | M2 |
 | D | Миграция компонентов (ADR-006) | ⏳ Ожидает C | 0/10 | M1, M5 |
@@ -117,7 +117,7 @@ graph LR
 |----|--------|-------|--------------------| -------|
 | A1 | Устранить дубли примитивов: `tokens/_index.scss` должен импортировать `_primitive-tokens.scss`, а не дублировать значения инлайн | `src/styles/tokens/_index.scss`, `_primitive-tokens.scss` | Каждый примитив определён ровно в одном файле; build проходит | ✅ (2026-07-28) |
 | A2 | Расширить semantic-слой до полного покрытия (сейчас 47 строк — каркас). Свести список всех semantic-токенов, реально используемых компонентами, доопределить недостающие | `src/styles/tokens/_semantic-tokens.scss`, `_primitive-tokens.scss`, `themes/_dark.scss`, `themes/_glass.scss` | Все `var(--...)`-ссылки без фолбэков разрешаются в витринном скоупе (остаток: `--tw-*` → A5, `--admin-*`/`--lg-*` → эпик C) | ✅ (2026-07-28) |
-| A3 | Инвентаризация `_theme-variables.scss` (722 стр.): классифицировать каждый блок → перенести в темы / semantic / удалить | `src/styles/tokens/_theme-variables.scss`, `src/styles/themes/*` | Файл удалён, `@forward` убран из `_index.scss`; визуально ничего не сломалось | 📋 |
+| A3 | Инвентаризация `_theme-variables.scss` (722 стр.): классифицировать каждый блок → перенести в темы / semantic / удалить | `src/styles/tokens/_theme-variables.scss`, `src/styles/themes/*` | Файл удалён, `@forward` убран из `_index.scss`; визуально ничего не сломалось | ✅ (2026-07-28) |
 | A4 | Согласовать `core/_variables.scss` (243 стр., параллельная палитра) с токенами: убрать дублирующие цвета, оставить только SCSS-утилиты (breakpoints и т.п.) | `src/styles/core/_variables.scss` | Нет CSS-переменных цвета вне tokens/themes | 📋 |
 | A5 | Разобрать orphaned `src/styles.scss` (499 стр.): нужные правила перенести в модули (`components/`, `core/`), файл удалить | `src/styles.scss`, `src/styles/components/*`, `src/styles/core/*` | Файл удалён; glass-хелперы и скроллбары живут в модулях; build проходит | 📋 |
 | A6 | Обновить `STYLE_ARCHITECTURE.md` и `AI_CONSTITUTION.md` §2.1: entry point — `main.scss` (не `styles.scss`), актуальная структура папок | `docs/STYLE_ARCHITECTURE.md`, `docs/AI_CONSTITUTION.md` | Документация соответствует коду | 📋 |

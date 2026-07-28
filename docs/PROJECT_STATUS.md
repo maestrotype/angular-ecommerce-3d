@@ -29,7 +29,7 @@
 
 | Epic | Name | Status | Reality Check (2026-07-28) |
 |------|------|--------|----------------------------|
-| A | Token Foundation | 🔄 Next Up | Token scaffold exists; legacy `_theme-variables.scss` (722 lines) still forwarded; orphaned `styles.scss` (499 lines); primitives duplicated in `_index.scss` |
+| A | Token Foundation | 🔄 In Progress | A1–A3 done: primitives single-sourced, semantic layer complete, `_theme-variables.scss` deleted; remaining: `core/_variables.scss`, orphaned `styles.scss`, docs sync |
 | B | Material Overrides Centralization | ⏳ Pending | No `_material-overrides.scss`; overrides scattered across 24 files incl. 1,548-line `_admin-theme-material.scss` |
 | C | Admin Unification (ADR-011) | ⏳ Pending | Parallel `--admin-*` system fully intact: 2,335 usages in 43 files, 174 unique tokens |
 | D | Component Migration (ADR-006) | 🔄 Partially Started | 3/86 components fully clean (`favorites`, `base-modal`, `cart-modal`); ~29 partially migrated; 1,336 hardcoded hex remain |
@@ -74,7 +74,7 @@
 ### High Priority
 - [ ] Parallel `--admin-*` token system: 2,335 usages / 43 files / 174 unique tokens (Epic C)
 - [ ] 1,336 hardcoded hex colors in 68 SCSS files outside token/theme sources (Epic D)
-- [ ] Legacy `_theme-variables.scss` (722 lines) still forwarded by `tokens/_index.scss` (Epic A)
+- [x] Legacy `_theme-variables.scss` decomposed into theme partials and deleted (A3, 2026-07-28)
 - [ ] Orphaned `src/styles.scss` (499 lines of logic, not in build) — docs previously described it as the entry point (Epic A)
 - [ ] No centralized Material overrides; `_admin-theme-material.scss` is a 1,548-line de-facto dump (Epic B)
 
@@ -95,6 +95,7 @@
 
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-07-28 | Task A3 (Board): Decomposed and deleted legacy `_theme-variables.scss` (722 lines). Parsed default/dark/glass blocks; skipped variables already defined in semantic tokens or theme partials (last-declaration-wins); prepended remaining vars into `_default.scss` / `_dark.scss` / `_glass.scss`; removed `@forward` from `tokens/_index.scss`. Verified: `npm run build` passes; computed tokens in dark (`--hero-bg-gradient`, `--header-bg`, `--product-tabs-bg`); visual check home (light/dark/glass) + product detail (dark) — no broken gradients/header/footer. | Principal UI Architect |
 | 2026-07-28 | Task A2 (Board): Semantic token layer completed for storefront scope. Audit found 81 token names referenced via `var()` but never defined; ~46 of them used WITHOUT fallbacks — meaning broken declarations at runtime (favorites page surfaces/borders, base-modal backdrop, `--border-primary`/`--interactive-primary` in ALL themes via missing `--color-brand-*`). Added: 8 primitives (`--color-brand-base/light/dark`, `--color-accent-pink`, `--color-slate-600/800-rgb`, `--text-3xl`), ~25 semantic tokens (surfaces, borders subtle/medium/emphasis, `--text-muted`, `--state-danger-*`, `--backdrop-blur/-sm`, `--glass-*-hover`, spacing aliases, auth secondary set) with dark/glass theme overrides mapped from original legacy `--favorites-*` values. Remaining undefined-no-fallback: only out-of-scope (`--tw-*` in orphaned styles.scss → A5; `--admin-*`, `--lg-*` → Epic C). Verified: build passes, browser check of favorites + card hover in all 3 themes, no console errors. | Principal UI Architect |
 | 2026-07-28 | Task A1 (Board): `tokens/_index.scss` now imports `_primitive-tokens.scss` instead of duplicating primitives inline. Side effect fixed: tokens defined only in the previously-unimported file (`--color-blue-300/400`, `--color-blue-400-rgb`, `--z-modal`, `--z-*` scale, `--font-normal/medium/semibold/bold`) were unresolved at runtime — dark/glass theme `--text-link`, product-card hover glow, and modal z-indexes silently fell back. Verified: build passes, tokens present in CSS bundle, browser check in all 3 themes (`--color-blue-400` = `#60a5fa`, `--z-modal` = `400`). | Principal UI Architect |
 | 2026-07-28 | Documentation overhaul: full code audit performed (hex/`!important`/`::ng-deep`/`--admin-*` counts, token pipeline analysis, ThemeService review). Created `REFACTORING_BOARD.md` as the single source of truth for refactoring progress with measurable metrics (M1–M8) and epic/task breakdown (A–G). Corrected phase statuses that overstated progress (e.g., "Phase 3 Complete" while the 722-line legacy monolith is still forwarded). Updated `UI_AUDIT.md` with real scan data. | Principal UI Architect |

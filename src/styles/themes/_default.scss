@@ -1,3 +1,189 @@
+:root, [data-theme="default"], [data-theme="light"] {
+  /* ===== MIGRATED FROM tokens/_theme-variables.scss (Task A3) ===== */
+  /* Default theme variables */
+  --hero-bg-gradient: linear-gradient(135deg,
+  rgba(248, 250, 252, 0.85) 0%,
+  rgba(241, 245, 249, 0.8) 30%,
+  rgba(226, 232, 240, 0.75) 70%,
+  rgba(203, 213, 225, 0.8) 100%);
+
+  --hero-backdrop-filter: blur(25px) saturate(180%);
+  --hero-text-color: #1e293b;
+  --hero-accent-color: #3b82f6;
+
+  /* Global Text Colors */
+
+  /* Special Offer section - Default theme */
+  --special-offer-bg: linear-gradient(135deg,
+  rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.8) 30%,
+  rgba(241, 245, 249, 0.7) 70%,
+  rgba(226, 232, 240, 0.8) 100%);
+
+  --special-offer-backdrop-filter: blur(20px);
+  --special-offer-text: #1e293b;
+  --special-offer-accent: #3b82f6;
+  --color-special-offer-button-text: #ffffff;
+  --color-special-offer-button-hover: #2563eb;
+  --color-special-offer-button-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+  --special-offer-button-border: 1px solid transparent;
+  --special-offer-button-blur: none;
+
+  /* Categories section - Default theme */
+  --categories-bg: #ffffff;
+  --categories-text: #1e293b;
+  --categories-card-bg: #ffffff;
+  --categories-card-hover: #f8fafc;
+  --categories-card-border: #e2e8f0;
+  --categories-icon-filter: none;
+
+  /* Footer section - Default theme */
+  --footer-bg: linear-gradient(135deg,
+  #f8fafcd9,
+  #e2e8f0bf 30%,
+  #cbd5e1d9 70%,
+  #bac8d8e6);
+  --footer-backdrop-filter: blur(20px);
+  --footer-text: #1e293b;
+  --footer-link: #64748b;
+  --footer-link-hover: #1e293b;
+  --footer-will-change: transform;
+  --footer-transform: translateZ(0);
+
+  /* About section - Default theme */
+  --about-bg: #ffffff;
+  --about-text: #1e293b;
+  --about-title: #1e293b;
+  --about-subtitle: #64748b;
+  --about-button-bg: #ef4444;
+  --about-button-hover: #dc2626;
+  --auth-tab-text: #1e293b;
+  --auth-tab-active: #333;
+  --auth-tab-inactive: #64748b;
+  --auth-tab-hover: #64748b;
+
+  /* Brands section - Default theme */
+  --brands-bg: #f8fafc;
+  --brands-text: #1e293b;
+  --brands-logo-opacity: 0.7;
+  --brands-logo-hover-opacity: 1;
+  --brands-logo-filter: none;
+  --brands-logo-hover-filter: none;
+
+  /* Contacts section - Default theme */
+  --contacts-bg: #ffffff;
+  --contacts-text: #1e293b;
+  --contacts-title: #1e293b;
+  --contacts-subtitle: #64748b;
+  --contacts-card-bg: #f8fafc;
+  --contacts-card-text: #1e293b;
+  --contacts-input-bg: #ffffff;
+  --contacts-input-text: #1e293b;
+  --contacts-button-bg: #3b82f6;
+  --contacts-button-hover: #2563eb;
+
+  /* Header section - Default theme */
+  --header-bg: rgba(255, 255, 255, 0.95);
+  --header-backdrop-filter: blur(10px);
+  --header-text: #1e293b;
+  --header-link: #64748b;
+  --header-link-hover: #1e293b;
+  --header-search-bg: rgba(255, 255, 255, 0.9);
+  --header-search-text: #1e293b;
+
+  /* RGB Variables for transparencies */
+  --header-bg-rgb: 255, 255, 255;
+  --header-text-rgb: 30, 41, 59;
+  --footer-bg-rgb: 255, 255, 255;
+  --footer-text-rgb: 30, 41, 59;
+
+  /* Product Detail section - Default theme */
+  --product-detail-bg: #f8f9fa;
+  --product-detail-card-bg: #ffffff;
+  --product-detail-card-border: 1px solid #e5e7eb;
+  --product-detail-main-view-bg: #ffffff;
+  --product-detail-main-view-border: 1px solid #e5e7eb;
+  --product-detail-thumb-bg: #ffffff;
+  --product-detail-thumb-border: 2px solid transparent;
+  --product-detail-thumb-selected-border: 2px solid #007bff;
+
+  /* Product Stepper - Default theme */
+  --product-stepper-bg: #ffffff;
+  --product-stepper-border: 1px solid #e5e7eb;
+  --product-stepper-radius: 10px;
+  --product-stepper-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --product-stepper-btn-bg: #f9fafb;
+  --product-stepper-btn-hover: #f3f4f6;
+  --product-stepper-value-color: #111827;
+
+  /* Glass Style Buttons - Default theme */
+  --glass-btn-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
+  --glass-btn-border: 1px solid rgba(255, 255, 255, 0.3);
+  --glass-btn-color: #1e293b;
+  --glass-btn-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  --glass-btn-hover-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%);
+  --glass-btn-hover-border: 1px solid rgba(255, 255, 255, 0.4);
+  --glass-btn-hover-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+
+  /* Best Sellers section - Default theme */
+  --best-sellers-bg: linear-gradient(
+  135deg,
+  #f9fafb 0%,
+  #e5edf7 45%,
+  #dbeafe 100%);
+  --best-sellers-text: #0f172a;
+  --best-sellers-subtitle: #64748b;
+
+  /* Favorites section - Default theme */
+  --favorites-bg: #f8fafc;
+  --favorites-text: #1e293b;
+  --favorites-header-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --favorites-header-text: #ffffff;
+  --favorites-header-overlay: rgba(255, 255, 255, 0.1);
+  --favorites-header-blur: blur(0px);
+  --favorites-back-btn-bg: rgba(255, 255, 255, 0.2);
+  --favorites-back-btn-text: #ffffff;
+  --favorites-back-btn-border: rgba(255, 255, 255, 0.3);
+  --favorites-back-btn-blur: blur(10px);
+  --favorites-back-btn-hover-bg: rgba(255, 255, 255, 0.3);
+  --favorites-back-btn-hover-border: rgba(255, 255, 255, 0.5);
+  --favorites-title-size: 2.5rem;
+  --favorites-title-weight: 700;
+  --favorites-heart-color: #ff6b6b;
+  --favorites-subtitle-size: 1.1rem;
+  --favorites-subtitle-opacity: 0.9;
+  --favorites-top-bar-bg: #ffffff;
+  --favorites-top-bar-text: #333333;
+  --favorites-clear-btn-bg: #6c757d;
+  --favorites-clear-btn-text: #ffffff;
+  --favorites-clear-btn-hover-bg: #5a6268;
+  --favorites-card-bg: rgba(255, 255, 255, 0.65);
+  --favorites-card-shadow: 0 8px 32px rgba(31, 38, 135, 0.08);
+  --favorites-card-blur: blur(12px);
+  --favorites-card-border: rgba(255, 255, 255, 0.18);
+  --favorites-card-hover-shadow: 0 20px 40px rgba(31, 38, 135, 0.13);
+  --favorites-card-hover-bg: rgba(255, 255, 255, 0.95);
+  --favorites-product-name-color: #333333;
+  --favorites-product-category-color: #667eea;
+  --favorites-product-price-color: #667eea;
+  --favorites-add-to-cart-bg: rgba(255, 255, 255, 0.7);
+  --favorites-add-to-cart-text: #333333;
+  --favorites-add-to-cart-hover-bg: rgba(255, 255, 255, 0.95);
+
+  /* Surface variables - Different for different elements */
+  --surface-hover: #f1f3f4;
+
+  /* Text variables */
+  --text-tertiary: #94a3b8;
+
+  /* Border variables */
+  --border-secondary: #f3f4f6;
+  --border-focus: #6366f1;
+
+  /* CARD COMPONENT */
+  --card-radius: 0px;
+  /* ===== END MIGRATED (Task A3) ===== */
+}
+
 /* ==========================================================================
    DEFAULT THEME
    Maps semantic tokens to primitive design tokens for the default (light) theme.
