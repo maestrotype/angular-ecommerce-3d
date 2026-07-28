@@ -1,120 +1,41 @@
 /* ==========================================================================
-   ADMIN LIGHT THEME VARIABLES
+   ADMIN LIGHT THEME — C3 (ADR-011)
+   Semantic SoT from shared tokens; `--admin-*` aliases live in admin-variables.
+   Admin chrome scoped to body.is-admin. Layout: `_admin-layout-tokens.scss`.
    ========================================================================== */
 
-[data-theme='light'] {
-  --admin-bg-main: #f9fafb;
-  --admin-bg-card: #ffffff;
-  --admin-bg-secondary: #f3f4f6;
-  --admin-bg-hover: #f5f6f8;
-  
-  // Header background - slightly distinct from page bg for visual separation
-  --admin-header-bg: #f3f4f6;
-  --admin-header-border: #e5e7eb;
-  --admin-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
-  --admin-back-btn: #f5f6f8;
-  --admin-submit-btn: #3b82f6;
-  --admin-submit-btn-hover: #2563eb;
-  --admin-submit-btn-text: #ffffff;
-  --admin-cancel-btn: #6b7280;
-  --admin-cancel-btn-hover: #4b5563;
-  --admin-border-color: #d1d5db;
-  --admin-text-primary: #111827;
-  --admin-text-secondary: #6b7280;
-  --admin-primary: #3b82f6;
-  --admin-primary-rgb: 59, 130, 246;
-  --admin-input-bg: #ffffff;
-  --admin-input-text: #111827;
-  --admin-input-border: #111827;
-  --admin-input-label: #6b7280;
-  --admin-text-label: #6b7280;
-  --admin-input-focus-border: var(--admin-primary);
-  --admin-danger: #3b82f6; // Changed from red to blue
-  --add-btn: #313638;
-  --add-btn-hover: #3a464b;
-  --mat-card-subtitle-text-color: #111827;
+body.is-admin[data-theme='light'],
+html[data-theme='light'] body.is-admin {
+  --backdrop-blur: none;
 
-  // Background Colors - Light Theme
-  --admin-bg-primary: #f0f2f5;
-  --admin-bg-secondary: #f0f2f5;
-  --admin-bg-tertiary: #ffffff;
-  --admin-bg-card: #ffffff;
-  --admin-table-bg: #ffffff;
-  --admin-table-border: #e5e7eb;
-  --admin-table-header-bg: #f8fafc;
-  --admin-bg-hover: rgba(59, 130, 246, 0.05);
-  --admin-bg-overlay: rgba(0, 0, 0, 0.3);
-  --admin-basic-bg: #ffffff;
-  --admin-order-list-card-bg: #ffffff;
-  
-  // Text Colors - Light Theme
-  --admin-text-primary: #111827;
-  --admin-text-secondary: #6b7280;
-  --admin-text-disabled: #9ca3af;
-  --admin-text-inverse: #ffffff;
-  
-  // Border Colors - Light Theme
-  --admin-border-primary: #e5e7eb;
-  --admin-border-secondary: #f3f4f6;
-  --admin-border-focus: #3b82f6;
-  --admin-border-error: #3b82f6; // Changed from red to blue
-  
-  // Custom Avatar Variables
-  --admin-avatar-bg: rgba(59, 130, 246, 0.1); 
-  --admin-avatar-color: #3b82f6;
-
-  // Dashboard stat cards — light theme (match production fallback)
-  --dashboard-stat-card-bg: var(--admin-bg-card);
-  --dashboard-stat-card-border: var(--admin-border-primary);
-  --dashboard-stat-card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  --dashboard-stat-card-bg: var(--surface-elevated);
+  --dashboard-stat-card-border: var(--border-default);
+  --dashboard-stat-card-shadow: var(--shadow-md);
   --dashboard-stat-card-blur: none;
-  --dashboard-stat-card-hover-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
-  --dashboard-stat-card-hover-bg: var(--admin-bg-hover);
-  --dashboard-stat-card-hover-border: var(--admin-border-primary);
+  --dashboard-stat-card-hover-shadow: var(--shadow-lg);
+  --dashboard-stat-card-hover-bg: var(--surface-highlight);
+  --dashboard-stat-card-hover-border: var(--border-default);
 
-  // Stat card icons — light theme defaults
-  --stat-icon-products: #4caf50;
-  --stat-icon-orders: #3b82f6;
-  --stat-icon-users: #ff9800;
-  --stat-icon-revenue: #a855f7;
-  --stat-icon-aov: #3b82f6;
-  --stat-icon-success-rate: #4caf50;
+  --stat-icon-products: var(--color-success);
+  --stat-icon-orders: var(--interactive-primary);
+  --stat-icon-users: var(--color-warning);
+  --stat-icon-revenue: var(--color-accent);
+  --stat-icon-aov: var(--interactive-primary);
+  --stat-icon-success-rate: var(--color-success);
 
-  // Ensure MDC card container tokens are transparent in light theme
+  --mat-card-subtitle-text-color: var(--text-primary);
+
   --mdc-elevated-card-container-color: transparent;
   --mdc-filled-card-container-color: transparent;
   --mdc-outlined-card-container-color: transparent;
-  
-  // MDC list hover tokens (light)
-  --mdc-list-list-item-hover-label-text-color: var(--admin-text-primary);
+
+  --mdc-list-list-item-hover-label-text-color: var(--text-primary);
   --mdc-list-list-item-hover-state-layer-color: transparent;
   --mdc-list-list-item-hover-state-layer-opacity: 0;
-  --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
-  --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
+  --mdc-list-item-hover-label-text-color: var(--text-primary);
+  --mdc-list-item-hover-leading-icon-color: var(--text-secondary);
 
-}
-
-/* ===== B2 Material bridge → semantic (on body.is-admin so it wins over shared themes) ===== */
-body.is-admin[data-theme='light'],
-html[data-theme='light'] body.is-admin {
-  --input-bg: var(--admin-input-bg);
-  --input-text: var(--admin-input-text);
-  --input-border: var(--admin-input-border);
-  --input-label: var(--admin-input-label);
-  --input-focus-border: var(--admin-input-focus-border);
-  --input-placeholder: var(--admin-input-placeholder, var(--admin-input-label));
-  --interactive-primary-rgb: var(--admin-primary-rgb);
-  --interactive-button: var(--admin-button, var(--admin-primary));
-  --surface-header: var(--admin-header-bg);
-  --surface-table: var(--admin-table-bg);
-  --surface-table-header: var(--admin-table-header-bg);
-  --surface-table-row: var(--admin-table-row-bg, var(--admin-table-bg));
-  --surface-table-even: var(--admin-table-even-bg, var(--admin-bg-secondary));
-  --surface-paginator: var(--admin-table-paginator-bg, var(--admin-table-header-bg));
-  --surface-select-panel: var(--admin-select-panel-bg, var(--admin-bg-card));
-  --text-table-header: var(--admin-table-header-text, var(--admin-text-primary));
-  --text-table-row: var(--admin-table-row-text, var(--admin-text-primary));
-  --text-table-even: var(--admin-table-even-text, var(--admin-text-primary));
-  --text-paginator: var(--admin-table-paginator-text, var(--admin-text-primary));
-  --radius-dialog: var(--border-radius-dark-glass, var(--radius-md));
+  // Legacy add-btn (non --admin-*; keep until C5)
+  --add-btn: var(--color-slate-700);
+  --add-btn-hover: var(--color-slate-600);
 }

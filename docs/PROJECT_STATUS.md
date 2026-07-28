@@ -31,7 +31,7 @@
 |------|------|--------|----------------------------|
 | A | Token Foundation | ✅ Complete | A1–A6 done: primitives, semantic, themes, variables, orphan deleted, docs entry = `main.scss` |
 | B | Material Overrides Centralization | ✅ Complete | B1–B4 done: overrides central; component `.mat-` = 0; palette↔tokens (MDC bridge). Residual admin-global `.mat-` → C5 |
-| C | Admin Unification (ADR-011) | 🔄 In Progress | C2 done: `_admin-layout-tokens.scss` (5 ADMIN-ONLY); M2 = 2 025; C3–C6 pending |
+| C | Admin Unification (ADR-011) | 🔄 In Progress | C3 done: themes map semantic+layout; `admin-variables` shim; M2 = 1 623; C4–C6 pending |
 | D | Component Migration (ADR-006) | 🔄 Partially Started | 3/86 components fully clean (`favorites`, `base-modal`, `cart-modal`); ~29 partially migrated; 1,336 hardcoded hex remain |
 | E | Final Cleanup | ⏳ Pending | 91 `!important` (12 files), 40 `::ng-deep` (12 files), 3 stub files |
 | F | Theme Engine v2 (ADR-004/012) | 💡 Planned | ThemeService works (data-theme switching, persistence, 4 themes); TS model not synced with SCSS |
@@ -72,7 +72,7 @@
 > Quantified baseline (2026-07-28). Live numbers are tracked in [REFACTORING_BOARD.md §1](REFACTORING_BOARD.md).
 
 ### High Priority
-- [ ] Parallel `--admin-*` token system: M2 = 2 025; C2 layout tokens isolated (5 ADMIN-ONLY); C1 SHARED 125 / CONFLICT 47 — migrate C3–C6
+- [ ] Parallel `--admin-*` token system: M2 = 1 623; C3 themes→semantic; shim until C6; migrate C4–C6
 - [ ] 1,336 hardcoded hex colors in 68 SCSS files outside token/theme sources (Epic D)
 - [x] Legacy `_theme-variables.scss` decomposed into theme partials and deleted (A3, 2026-07-28)
 - [x] Orphaned `src/styles.scss` deleted — glass helpers → `components/_glass-helpers.scss`, scrollbars → `core/_scrollbars.scss` (A5, 2026-07-28)
@@ -95,6 +95,7 @@
 
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-07-28 | Task C3 (Board): SHARED/CONFLICT reconciliation — `admin-variables.scss` is semantic/primitive alias shim; admin themes set semantic (+ layout) only under `body.is-admin`; glass recipes promoted (`--glass-surface-*`, `--surface-card-gradient`/`--surface-glow`); reverse B2 bridge removed; storefront `_glass.scss` `--admin-*` leftovers deleted; UNDEFINED (6) aliased. Note: `docs/migration/_c3-admin-token-reconciliation.md`. Epic C 3/6; M2 = 1 623; defined `--admin-*` ≈ 180. `npm run build` passes. | Principal UI Architect |
 | 2026-07-28 | Task C2 (Board): Created `src/admin/styles/_admin-layout-tokens.scss` with 5 ADMIN-ONLY structural tokens (`--admin-sidebar-width`, `--admin-toolbar-height`, `--admin-content-padding`, mobile paddings). Wired in `admin.scss`; relocated mobile paddings out of `admin-variables.scss`; replaced hardcodes in `admin-layout.component.scss` and glass `--mat-toolbar-*-height`. Epic C 2/6; M2 = 2 025; defined `--admin-*` = 177. `npm run build` passes. | Principal UI Architect |
 | 2026-07-28 | Task C1 (Board): Inventoried all `--admin-*` tokens (174 defined). Classified per ADR-011: SHARED 125, CONFLICT 47, ADMIN-ONLY 2 (+3 proposed layout tokens from hardcodes: sidebar-width 260px, toolbar-height 64px, content-padding 24px). Documented 6 undefined refs and conflict resolution defaults (adopt frontend vs promote semantic). Tables in `UI_AUDIT.md` §4.1; note `docs/migration/_c1-admin-token-inventory.md`. Epic C 1/6. No SCSS code changes. | Principal UI Architect |
 | 2026-07-28 | Task B4 (Board): Bound Material palette to design tokens. Added `tokens/_material-palettes.scss` (Sass maps mirroring primitive brand/accent/error hex + `material-color-bridge` mixin remapping MDC/Mat CSS vars → `--interactive-primary` / `--color-accent` / `--interactive-danger`). Rewrote `material-theme.scss` (no stock indigo/pink); dark/dark-glass via `all-component-colors`; `_admin-material-base` reduced to import shim (no duplicate themes). Migration: `docs/migration/_b4-material-theme-tokens.md`. Epic B **4/4 complete**; M8 ~90%. Residual `.mat-`: admin-global/themes → C5. `npm run build` passes. | Principal UI Architect |

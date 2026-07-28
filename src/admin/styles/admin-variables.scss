@@ -1,222 +1,281 @@
-// Admin Panel Variables
+// ==========================================================================
+// Admin Panel Variables — C3 compatibility shim (ADR-011)
+// ==========================================================================
+// SHARED/CONFLICT `--admin-*` tokens alias shared semantic/primitive tokens.
+// Layout ADMIN-ONLY tokens live in `_admin-layout-tokens.scss` (C2).
+// Do not delete this file until C6; component migration is C4.
+// ==========================================================================
+
 :root {
-  // Colors - Primary
-  --admin-primary: #1976d2;
-  --admin-tab-active: var(--admin-primary);
-  --admin-primary-hover: #1565c0;
-  --admin-primary-light: #42a5f5;
-  --admin-primary-dark: #0d47a1;
-  
-  // Colors - Secondary
-  --admin-secondary: #dc004e;
-  --admin-secondary-hover: #c51162;
-  --admin-secondary-light: #ff5983;
-  --admin-secondary-dark: #9a0036;
-  
-  // Colors - Success
-  --admin-success: #4caf50;
-  --admin-success-hover: #388e3c;
-  --admin-success-light: #81c784;
-  --admin-success-dark: #2e7d32;
-  
-  // Colors - Warning
-  --admin-warning: #ff9800;
-  --admin-warning-hover: #f57c00;
-  --admin-warning-light: #ffb74d;
-  --admin-warning-dark: #e65100;
-  
-  // Colors - Error
-  --admin-error: #f44336;
-  --admin-error-hover: #d32f2f;
-  --admin-error-light: #e57373;
-  --admin-error-dark: #c62828;
-  
-  // Colors - Info
-  --admin-info: #2196f3;
-  --admin-info-hover: #1976d2;
-  --admin-info-light: #64b5f6;
-  --admin-info-dark: #0d47a1;
+  // --- Brand / interactive (CONFLICT → adopt frontend) ---
+  --admin-primary: var(--interactive-primary);
+  --admin-tab-active: var(--interactive-primary);
+  --admin-primary-hover: var(--interactive-primary-hover);
+  --admin-primary-light: var(--color-brand-light);
+  --admin-primary-dark: var(--color-brand-dark);
+  --admin-primary-rgb: var(--interactive-primary-rgb);
 
-  --admin-button: linear-gradient(45deg, #306BCB, #CF6679);
-  --admin-button-muted: #607d8b;
-  --admin-button-muted-hover: #546e7a;
+  // Secondary was Material pink accent — map to accent, not slate secondary
+  --admin-secondary: var(--color-accent-pink);
+  --admin-secondary-hover: var(--color-accent-pink);
+  --admin-secondary-light: var(--color-accent-pink);
+  --admin-secondary-dark: var(--color-accent-pink);
+  --admin-accent: var(--color-accent);
+  --admin-accent-primary: var(--color-accent);
 
-  // New Standardized Action Button Variables
-  --admin-submit-btn: #3b82f6;
-  --admin-submit-btn-hover: #2563eb;
-  --admin-submit-btn-disabled: #9ca3af;
-  --admin-submit-btn-text: #ffffff;
-  
-  --admin-cancel-btn: #6b7280;
-  --admin-cancel-btn-hover: #4b5563;
-  --admin-cancel-btn-text: #ffffff;
-  
-  // Background Colors - Light Theme (Default)
-  --admin-bg-primary: #ffffff;
-  --admin-bg-secondary: #fff;
-  --admin-bg-tertiary: #fafafa;
-  --admin-bg-card: #ffffff;
-  --admin-bg-hover: #e8f4f8;
-  --admin-bg-overlay: rgba(0, 0, 0, 0.5);
-  --admin-popup-bg: #fafafa;
-  
-  // Dashboard stat cards — fallback (light theme) (Task-015)
-  --dashboard-stat-card-bg: var(--admin-bg-secondary);
-  --dashboard-stat-card-border: var(--admin-border-primary);
-  --dashboard-stat-card-blur: none;
-  --dashboard-stat-card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --dashboard-stat-card-hover-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
-  --dashboard-stat-card-hover-bg: var(--admin-bg-hover);
-  --dashboard-stat-card-hover-border: var(--admin-border-primary);
+  // --- State colors (CONFLICT → adopt frontend) ---
+  --admin-success: var(--color-success);
+  --admin-success-hover: var(--color-success-hover);
+  --admin-success-light: var(--color-success-light);
+  --admin-success-dark: var(--color-success-dark);
+  --admin-status-success: var(--color-success);
 
-  // Dashboard stat card icons — colored in light/dark theme (Task-016)
-  --stat-icon-products: var(--admin-success);
-  --stat-icon-orders: var(--admin-primary);
-  --stat-icon-users: var(--admin-warning);
-  --stat-icon-revenue: #a855f7;
-  --stat-icon-aov: #3b82f6;
-  --stat-icon-success-rate: var(--admin-success);
-  
-  // Text Colors - Light Theme (Default)
-  --admin-text-primary: #212121;
-  --admin-text-secondary: #757575;
-  --admin-text-disabled: #bdbdbd;
-  --admin-text-inverse: #ffffff;
-  
-  // Material Design Component Variables - Light Theme (Default)
-  --mdc-list-item-label-text-color: var(--admin-text-primary);
-  --mdc-list-item-supporting-text-color: var(--admin-text-secondary);
-  --mdc-list-item-leading-icon-color: var(--admin-text-secondary);
-  --mdc-list-item-trailing-icon-color: var(--admin-text-secondary);
-  --mdc-list-item-selected-label-text-color: var(--admin-text-primary);
-  --mdc-list-item-disabled-label-text-color: var(--admin-text-disabled);
-  --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
-  --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
-  --mdc-list-item-focus-label-text-color: var(--admin-text-primary);
-  // Border Colors - Light Theme (Default)
-  --admin-border-primary: #b0b0b0;
-  --admin-border-secondary: #c0c0c0;
-  --admin-border-focus: #1976d2;
-  --admin-border-error: #f44336;
-  
-  // Spacing
-  --admin-spacing-xs: 4px;
-  --admin-spacing-sm: 8px;
-  --admin-spacing-md: 16px;
-  --admin-spacing-lg: 24px;
-  --admin-spacing-xl: 32px;
-  --admin-spacing-xxl: 48px;
+  --admin-warning: var(--color-warning);
+  --admin-warning-hover: var(--color-warning-hover);
+  --admin-warning-light: var(--color-warning-light);
+  --admin-warning-dark: var(--color-warning-dark);
+  --admin-warn: var(--color-warning);
 
-  // Mobile padding → _admin-layout-tokens.scss (C2 / ADR-011)
-  
-  // Border Radius
-  --admin-border-radius-sm: 4px;
-  --admin-border-radius-md: 8px;
-  --admin-border-radius-lg: 12px;
-  --admin-border-radius-xl: 16px;
-  
-  // Typography
-  --admin-font-family: 'Roboto', 'Helvetica Neue', sans-serif;
-  --admin-font-size-xs: 12px;
-  --admin-font-size-sm: 14px;
-  --admin-font-size-md: 16px;
-  --admin-font-size-lg: 18px;
-  --admin-font-size-xl: 20px;
-  --admin-font-size-xxl: 24px;
-  
-  // Font Weights
-  --admin-font-weight-light: 300;
-  --admin-font-weight-normal: 400;
-  --admin-font-weight-medium: 500;
-  --admin-font-weight-bold: 700;
-  
-  // Shadows
-  --admin-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
-  --admin-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --admin-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-  --admin-shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+  --admin-error: var(--interactive-danger);
+  --admin-error-hover: var(--color-error-hover);
+  --admin-error-light: var(--color-error-light);
+  --admin-error-dark: var(--color-error-dark);
 
-  // Borders
-  --border-width: 0px;
-  --border-color: rgba(0, 0, 0, 0.12);
-  --border-opacity: 0.12;
-  --border-style: solid;
-  
-  // Z-Index
-  --admin-z-dropdown: 1000;
-  --admin-z-sticky: 1020;
-  --admin-z-fixed: 1030;
-  --admin-z-modal-backdrop: 1040;
-  --admin-z-modal: 1050;
-  --admin-z-popover: 1060;
-  --admin-z-tooltip: 1070;
-  
-  // Order Details Specific
-  --admin-order-detail-header-bg: var(--admin-bg-hover);
-  --admin-order-detail-card-bg: var(--admin-bg-secondary);
-  --admin-order-detail-border: var(--admin-border-primary);
-  --admin-order-detail-text-primary: var(--admin-text-primary);
-  --admin-order-detail-text-secondary: var(--admin-text-secondary);
-  --admin-order-detail-text-label: var(--admin-text-secondary);
-  --admin-order-detail-price-color: var(--admin-success);
-  --admin-order-detail-total-color: var(--admin-success);
-  
-  // Order List Specific
-  --admin-order-list-bg: var(--admin-bg-card);
-  --admin-order-list-card-bg: var(--admin-bg-secondary);
-  --admin-order-list-border: var(--admin-border-primary);
-  --admin-order-list-text-primary: var(--admin-text-primary);
-  --admin-order-list-text-secondary: var(--admin-text-secondary);
-  --admin-order-list-text-label: var(--admin-text-secondary);
-  --admin-order-list-header-bg: var(--admin-bg-hover);
-  --admin-order-list-row-hover: var(--admin-bg-hover);
-  --admin-order-list-pagination-bg: var(--admin-bg-secondary);
-  --admin-order-list-pagination-border: var(--admin-border-primary);
-  
-  // Common Order Status Colors (shared between list and detail)
-  --admin-order-status-pending: #ff9800;
-  --admin-order-status-processing: #2196f3;
-  --admin-order-status-shipped: #4caf50;
-  --admin-order-status-delivered: #4caf50;
-  --admin-order-status-cancelled: #f44336;
-  
-  // Transitions
-  --admin-transition-fast: 0.15s ease;
-  --admin-transition-normal: 0.3s ease;
-  --admin-transition-slow: 0.5s ease;
-  
-  // Breakpoints
+  --admin-info: var(--color-info);
+  --admin-info-hover: var(--color-info-hover);
+  --admin-info-light: var(--color-blue-400);
+  --admin-info-dark: var(--color-blue-600);
+
+  --admin-danger: var(--interactive-danger);
+
+  // --- Buttons (CONFLICT → simplify to interactive) ---
+  --admin-button: var(--interactive-button);
+  --admin-button-hover: var(--interactive-primary-hover);
+  --admin-button-text: var(--interactive-primary-text);
+  --admin-button-muted: var(--interactive-secondary);
+  --admin-button-muted-hover: var(--interactive-secondary-hover);
+
+  --admin-submit-btn: var(--interactive-primary);
+  --admin-submit-btn-hover: var(--interactive-primary-hover);
+  --admin-submit-btn-disabled: var(--interactive-disabled);
+  --admin-submit-btn-text: var(--interactive-primary-text);
+
+  --admin-cancel-btn: var(--color-secondary-base);
+  --admin-cancel-btn-hover: var(--color-slate-600);
+  --admin-cancel-btn-text: var(--text-inverse);
+  --admin-back-btn: var(--surface-highlight);
+
+  // --- Surfaces (CONFLICT → adopt frontend) ---
+  --admin-bg-primary: var(--surface-page);
+  --admin-bg-secondary: var(--surface-secondary);
+  --admin-bg-tertiary: var(--surface-tertiary);
+  --admin-bg-card: var(--surface-elevated);
+  --admin-bg-card-rgb: var(--surface-elevated-rgb);
+  --admin-bg-hover: var(--surface-highlight);
+  --admin-bg-overlay: var(--surface-overlay-full);
+  --admin-bg-main: var(--surface-page);
+  --admin-bg-container: var(--surface-page);
+  --admin-bg-glass: var(--glass-bg, var(--surface-card));
+  --admin-popup-bg: var(--surface-elevated);
+  --admin-basic-bg: var(--surface-elevated);
+  --admin-product-card-bg: var(--surface-card);
+  --admin-message-info-bg: var(--color-info-bg);
+  --admin-basic-translucent: var(--surface-overlay-light);
+  --admin-dark-translucent: var(--surface-overlay-hover);
+  --admin-light-translucent: var(--surface-overlay-light);
+
+  // --- Text (CONFLICT → adopt frontend) ---
+  --admin-text-primary: var(--text-primary);
+  --admin-text-secondary: var(--text-secondary);
+  --admin-text-tertiary: var(--text-muted);
+  --admin-text-disabled: var(--text-muted);
+  --admin-text-disabled-rgb: var(--text-muted-rgb);
+  --admin-text-inverse: var(--text-inverse);
+  --admin-text-label: var(--text-secondary);
+
+  // --- Borders (CONFLICT → adopt frontend) ---
+  --admin-border-primary: var(--border-default);
+  --admin-border-secondary: var(--border-subtle);
+  --admin-border-focus: var(--border-primary);
+  --admin-border-error: var(--interactive-danger);
+  --admin-border-color: var(--border-default);
+
+  // --- Header chrome ---
+  --admin-header-bg: var(--surface-header);
+  --admin-header-blur: var(--backdrop-blur);
+  --admin-header-border: var(--glass-border-soft, var(--border-default));
+  --admin-header-text: var(--text-primary);
+  --admin-header-icon-color: var(--text-secondary);
+
+  // --- Inputs (SHARED → B2 bridge tokens) ---
+  --admin-input-bg: var(--input-bg);
+  --admin-input-text: var(--input-text);
+  --admin-input-border: var(--input-border);
+  --admin-input-label: var(--input-label);
+  --admin-input-placeholder: var(--input-placeholder);
+  --admin-input-focus-border: var(--input-focus-border);
+
+  // --- Table / select ---
+  --admin-table-bg: var(--surface-table);
+  --admin-table-border: var(--border-default);
+  --admin-table-header-bg: var(--surface-table-header);
+  --admin-table-header-text: var(--text-table-header);
+  --admin-table-row-bg: var(--surface-table-row);
+  --admin-table-row-text: var(--text-table-row);
+  --admin-table-even-bg: var(--surface-table-even);
+  --admin-table-even-text: var(--text-table-even);
+  --admin-table-paginator-bg: var(--surface-paginator);
+  --admin-table-paginator-text: var(--text-paginator);
+  --admin-select-panel-bg: var(--surface-select-panel);
+  --admin-selection-bg: var(--surface-highlight);
+
+  // --- Shadows (CONFLICT → adopt frontend) ---
+  --admin-shadow-sm: var(--shadow-sm);
+  --admin-shadow-md: var(--shadow-md);
+  --admin-shadow-lg: var(--shadow-lg);
+  --admin-shadow-xl: var(--shadow-xl);
+  --admin-card-shadow: var(--shadow-card);
+  --admin-card-gradient: var(--surface-card-gradient);
+  --admin-surface-glow: var(--surface-glow);
+
+  // --- Glass recipes (CONFLICT → promoted glass semantics) ---
+  --admin-glass-surface-strong: var(--glass-surface-strong);
+  --admin-glass-surface-soft: var(--glass-surface-soft);
+  --admin-glass-surface-muted: var(--glass-surface-muted);
+  --admin-glass-border-strong: var(--glass-border-strong);
+  --admin-glass-border-soft: var(--glass-border-soft);
+  --admin-glass-divider: var(--glass-divider);
+  --admin-glass-highlight: var(--glass-highlight);
+  --admin-glass-shadow: var(--glass-shadow);
+  --admin-glass-shadow-lg: var(--glass-shadow-lg);
+  --admin-glass-inner-shadow: var(--glass-inner-shadow);
+
+  // --- Spacing (SHARED) ---
+  --admin-spacing-xs: var(--space-1);
+  --admin-spacing-sm: var(--space-2);
+  --admin-spacing-md: var(--space-4);
+  --admin-spacing-lg: var(--space-6);
+  --admin-spacing-xl: var(--space-8);
+  --admin-spacing-xxl: var(--space-12);
+
+  // --- Radius (SHARED) ---
+  --admin-border-radius-sm: var(--radius-sm);
+  --admin-border-radius-md: var(--radius-md);
+  --admin-border-radius-lg: var(--radius-lg);
+  --admin-border-radius-xl: var(--radius-xl);
+
+  // --- Typography (SHARED) ---
+  --admin-font-family: var(--font-sans);
+  --admin-font-size-xs: var(--text-xs);
+  --admin-font-size-sm: var(--text-sm);
+  --admin-font-size-md: var(--text-base);
+  --admin-font-size-lg: var(--text-lg);
+  --admin-font-size-xl: var(--text-xl);
+  --admin-font-size-xxl: var(--text-2xl);
+  --admin-font-weight-light: var(--font-light);
+  --admin-font-weight-normal: var(--font-normal);
+  --admin-font-weight-medium: var(--font-medium);
+  --admin-font-weight-semibold: var(--font-semibold);
+  --admin-font-weight-bold: var(--font-bold);
+
+  // --- Motion (SHARED) ---
+  --admin-transition-fast: var(--duration-fast) var(--easing-default);
+  --admin-transition-normal: var(--duration-normal) var(--easing-default);
+  --admin-transition-slow: var(--duration-slow) var(--easing-default);
+
+  // --- Z-index (CONFLICT → adopt frontend --z-*) ---
+  --admin-z-dropdown: var(--z-dropdown);
+  --admin-z-sticky: var(--z-sticky);
+  --admin-z-fixed: var(--z-overlay);
+  --admin-z-modal-backdrop: var(--z-overlay);
+  --admin-z-modal: var(--z-modal);
+  --admin-z-popover: var(--z-modal);
+  --admin-z-tooltip: var(--z-toast);
+
+  // --- Breakpoints (SHARED — documented; prefer SCSS $breakpoint-* / mixins) ---
   --admin-breakpoint-sm: 576px;
   --admin-breakpoint-md: 768px;
   --admin-breakpoint-lg: 992px;
   --admin-breakpoint-xl: 1200px;
   --admin-breakpoint-xxl: 1400px;
 
-  // Material Design List item variables (default scope)
-  --mdc-list-list-item-label-text-color: var(--admin-text-secondary);
-  --mdc-list-list-item-supporting-text-color: var(--admin-text-secondary);
-  --mdc-list-list-item-disabled-text-color: var(--admin-text-disabled);
-  --mdc-list-list-item-leading-icon-color: var(--admin-text-secondary);
-  --mdc-list-list-item-trailing-icon-color: var(--admin-text-secondary);
-  // MDC list hover tokens (default scope)
-  --mdc-list-list-item-hover-label-text-color: var(--admin-text-primary);
+  // --- Order detail / list aliases ---
+  --admin-order-detail-header-bg: var(--surface-highlight);
+  --admin-order-detail-card-bg: var(--surface-secondary);
+  --admin-order-detail-border: var(--border-default);
+  --admin-order-detail-text-primary: var(--text-primary);
+  --admin-order-detail-text-secondary: var(--text-secondary);
+  --admin-order-detail-text-label: var(--text-secondary);
+  --admin-order-detail-price-color: var(--color-success);
+  --admin-order-detail-total-color: var(--color-success);
+
+  --admin-order-list-bg: var(--surface-elevated);
+  --admin-order-list-card-bg: var(--surface-secondary);
+  --admin-order-list-border: var(--border-default);
+  --admin-order-list-text-primary: var(--text-primary);
+  --admin-order-list-text-secondary: var(--text-secondary);
+  --admin-order-list-text-label: var(--text-secondary);
+  --admin-order-list-header-bg: var(--surface-highlight);
+  --admin-order-list-row-hover: var(--surface-highlight);
+  --admin-order-list-pagination-bg: var(--surface-secondary);
+  --admin-order-list-pagination-border: var(--border-default);
+
+  --admin-order-status-pending: var(--color-warning);
+  --admin-order-status-processing: var(--color-info);
+  --admin-order-status-shipped: var(--color-success);
+  --admin-order-status-delivered: var(--color-success);
+  --admin-order-status-cancelled: var(--interactive-danger);
+
+  // --- Avatar ---
+  --admin-avatar-bg: var(--color-info-bg);
+  --admin-avatar-color: var(--interactive-primary);
+
+  // --- Legacy border helpers (non --admin-*; keep for consumers until C5/C6) ---
+  --border-width: 0px;
+  --border-color: var(--border-default);
+  --border-opacity: 0.12;
+  --border-style: solid;
+
+  // --- Dashboard / stat cards (non --admin-* chrome) ---
+  --dashboard-stat-card-bg: var(--surface-secondary);
+  --dashboard-stat-card-border: var(--border-default);
+  --dashboard-stat-card-blur: none;
+  --dashboard-stat-card-shadow: var(--shadow-md);
+  --dashboard-stat-card-hover-shadow: var(--shadow-lg);
+  --dashboard-stat-card-hover-bg: var(--surface-highlight);
+  --dashboard-stat-card-hover-border: var(--border-default);
+
+  --stat-icon-products: var(--color-success);
+  --stat-icon-orders: var(--interactive-primary);
+  --stat-icon-users: var(--color-warning);
+  --stat-icon-revenue: var(--color-accent);
+  --stat-icon-aov: var(--interactive-primary);
+  --stat-icon-success-rate: var(--color-success);
+
+  // --- MDC list defaults → semantic text ---
+  --mdc-list-item-label-text-color: var(--text-primary);
+  --mdc-list-item-supporting-text-color: var(--text-secondary);
+  --mdc-list-item-leading-icon-color: var(--text-secondary);
+  --mdc-list-item-trailing-icon-color: var(--text-secondary);
+  --mdc-list-item-selected-label-text-color: var(--text-primary);
+  --mdc-list-item-disabled-label-text-color: var(--text-muted);
+  --mdc-list-item-hover-label-text-color: var(--text-primary);
+  --mdc-list-item-hover-leading-icon-color: var(--text-secondary);
+  --mdc-list-item-focus-label-text-color: var(--text-primary);
+
+  --mdc-list-list-item-label-text-color: var(--text-secondary);
+  --mdc-list-list-item-supporting-text-color: var(--text-secondary);
+  --mdc-list-list-item-disabled-text-color: var(--text-muted);
+  --mdc-list-list-item-leading-icon-color: var(--text-secondary);
+  --mdc-list-list-item-trailing-icon-color: var(--text-secondary);
+  --mdc-list-list-item-hover-label-text-color: var(--text-primary);
   --mdc-list-list-item-hover-state-layer-color: transparent;
   --mdc-list-list-item-hover-state-layer-opacity: 0;
-  --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
-  --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
-  --mdc-list-list-item-hover-leading-icon-color: var(--admin-text-secondary);
-  --mdc-list-list-item-hover-trailing-icon-color: var(--admin-text-secondary);
-  --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
-  --mdc-list-item-hover-trailing-icon-color: var(--admin-text-secondary);
-  // Override MDC card container tokens globally
+  --mdc-list-list-item-hover-leading-icon-color: var(--text-secondary);
+  --mdc-list-list-item-hover-trailing-icon-color: var(--text-secondary);
+  --mdc-list-item-hover-trailing-icon-color: var(--text-secondary);
+
   --mdc-elevated-card-container-color: transparent;
   --mdc-filled-card-container-color: transparent;
   --mdc-outlined-card-container-color: transparent;
-
-  // Admin Header Variables (Task-020) - Fallback for light theme
-  --admin-header-bg: var(--admin-bg-card);
-  --admin-header-blur: none;
-  --admin-header-border: var(--admin-border-primary);
-  --admin-header-text: var(--admin-text-primary);
-  --admin-header-icon-color: var(--admin-text-secondary);
 }

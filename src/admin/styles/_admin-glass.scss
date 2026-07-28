@@ -1,190 +1,128 @@
-// Glass Theme Variables
-[data-theme="glass"] {
-  // Core glass surfaces & helpers
-  --admin-glass-surface-strong: linear-gradient(
+/* ==========================================================================
+   ADMIN GLASS THEME — C3 (ADR-011)
+   Intentional admin glass recipes promoted onto semantic tokens (body.is-admin
+   wins over storefront `_glass.scss`). `--admin-*` aliases → semantic (shim).
+   Layout: `--admin-toolbar-height` from `_admin-layout-tokens.scss`.
+   ========================================================================== */
+
+/* Promote intentional admin glass recipes onto semantic (specificity over storefront) */
+body.is-admin[data-theme='glass'],
+html[data-theme='glass'] body.is-admin {
+  --interactive-primary: var(--color-brand-base);
+  --interactive-primary-rgb: 59, 130, 246;
+  --interactive-button: var(--interactive-primary);
+  --interactive-primary-hover: var(--color-brand-dark);
+
+  --glass-surface-strong: linear-gradient(
     150deg,
     rgba(250, 251, 255, 0.9) 0%,
     rgba(221, 232, 255, 0.55) 45%,
     rgba(196, 210, 239, 0.35) 100%
   );
-  --admin-glass-surface-soft: 
-    rgba(199, 211, 233, 0.35);
-  --admin-glass-surface-muted: linear-gradient(
+  --glass-surface-soft: rgba(199, 211, 233, 0.35);
+  --glass-surface-muted: linear-gradient(
     165deg,
     rgba(226, 232, 240, 0.45) 0%,
     rgba(203, 213, 225, 0.25) 60%,
     rgba(186, 200, 216, 0.18) 100%
   );
-  --admin-glass-border-strong: rgba(255, 255, 255, 0.7);
-  --admin-glass-border-soft: rgba(255, 255, 255, 0.35);
-  --admin-glass-divider: rgba(255, 255, 255, 0.45);
-  --admin-glass-highlight: rgba(255, 255, 255, 0.65);
-  --admin-glass-shadow: 0 18px 45px rgba(15, 23, 42, 0.18);
-  --admin-glass-shadow-lg: 0 28px 80px rgba(15, 23, 42, 0.25);
-  --admin-glass-inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  --glass-border-strong: rgba(255, 255, 255, 0.7);
+  --glass-border-soft: rgba(255, 255, 255, 0.35);
+  --glass-divider: rgba(255, 255, 255, 0.45);
+  --glass-highlight: rgba(255, 255, 255, 0.65);
+  --glass-shadow: 0 18px 45px rgba(15, 23, 42, 0.18);
+  --glass-shadow-lg: 0 28px 80px rgba(15, 23, 42, 0.25);
+  --glass-inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  --glass-bg: rgba(255, 255, 255, 0.1);
 
-  // Background Colors - Glass Theme (translucent for glass effect)
-  --admin-primary: #3b82f6;
-  --admin-tab-active: #ffffff;
-  --admin-primary-rgb: 59, 130, 246;
-  --admin-bg-primary: rgba(255, 255, 255, 0.05); 
-  --admin-bg-glass: rgba(255, 255, 255, 0.1);
-  --admin-bg-secondary: rgba(25, 60, 105, 0.5);   
-  --admin-product-card-bg: rgba(255, 255, 255, 0.12);
-  --admin-bg-tertiary: rgba(255, 255, 255, 0.05);
-  --admin-bg-card: rgba(255, 255, 255, 0.15);
-  --admin-header-bg: rgba(30, 65, 110, 0.55);
-  --admin-bg-hover: rgba(59, 130, 246, 0.1);
-  --admin-back-btn: rgba(54, 63, 66, 0.3);
-  --admin-submit-btn: #3b82f6;
-  --admin-submit-btn-hover: #2563eb;
-  --admin-submit-btn-disabled: #6b7280;
-  --admin-submit-btn-text: #ffffff;
-  --admin-cancel-btn: #6b7280;
-  --admin-cancel-btn-hover: #9ca3af;
-  --admin-cancel-btn-disabled: #404040;
-  --admin-bg-overlay: rgba(15, 23, 42, 0.2);
-  --admin-message-info-bg: rgba(255, 255, 255, 0.3);
-  
-  // Table colors — two-tone zebra: dark Dashboard-card blue vs light frosted glass.
-  // Header + even rows + paginator → dark steel-blue (matches Dashboard KPI cards).
-  // Odd rows → light near-transparent so the overall rhythm reads dark / light / dark.
-  --admin-basic-bg: rgba(255, 255, 255, 0.15);
-  --admin-basic-translucent: rgba(255, 255, 255, 0.45);
-  --admin-dark-translucent: rgba(0, 0, 0, 0.06);
-  --admin-light-translucent: rgba(255, 255, 255, 0.7);
-  --admin-table-bg: rgba(255, 255, 255, 0.15);             // container wrapper level
-  --admin-table-border: transparent;                       // no borders
-  --admin-table-header-bg: rgba(25, 60, 105, 0.72);        // DARK — Dashboard KPI card blue
-  --admin-table-header-text: rgba(255, 255, 255, 0.95);    // WHITE text in header
-  --admin-table-even-bg: rgba(25, 60, 105, 0.45);          // DARK — same hue, a bit lighter
-  --admin-table-even-text: rgba(255, 255, 255, 0.90);      // WHITE text in even rows
-  --admin-table-row-bg: rgba(25, 60, 105, 0.18);           // DARKER tint — no more harsh contrast
-  --admin-table-row-text: rgba(255, 255, 255, 0.85);       // WHITE text in odd rows too
-  --admin-table-paginator-bg: rgba(25, 60, 105, 0.72);     // DARK — same as header
-  --admin-table-paginator-text: rgba(255, 255, 255, 0.90); // WHITE text in paginator
-  --admin-bg-container: #d7e1ff;
-  // Dashboard stat cards — glass theme (Task-015)
-  --dashboard-stat-card-bg: rgba(255, 255, 255, 0.2);
-  --dashboard-stat-card-border: rgba(255, 255, 255, 0.4);
-  --dashboard-stat-card-blur: blur(15px) saturate(150%);
-  --dashboard-stat-card-shadow: 0 8px 32px rgba(31, 41, 55, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.5);
-  --dashboard-stat-card-hover-shadow: 0 16px 48px rgba(31, 41, 55, 0.12);
-  --dashboard-stat-card-hover-bg: rgba(255, 255, 255, 0.4);
-  --dashboard-stat-card-hover-border: rgba(255, 255, 255, 0.6);
+  --surface-page: rgba(255, 255, 255, 0.05);
+  --surface-primary: rgba(255, 255, 255, 0.05);
+  --surface-secondary: rgba(25, 60, 105, 0.5);
+  --surface-tertiary: rgba(255, 255, 255, 0.05);
+  --surface-elevated: rgba(255, 255, 255, 0.15);
+  --surface-elevated-rgb: 255, 255, 255;
+  --surface-card: rgba(255, 255, 255, 0.15);
+  --surface-highlight: rgba(59, 130, 246, 0.1);
+  --surface-overlay-full: rgba(15, 23, 42, 0.2);
+  --surface-header: rgba(199, 211, 233, 0.35);
+  --surface-table: rgba(255, 255, 255, 0.15);
+  --surface-table-header: rgba(25, 60, 105, 0.72);
+  --surface-table-even: rgba(25, 60, 105, 0.45);
+  --surface-table-row: rgba(25, 60, 105, 0.18);
+  --surface-paginator: rgba(25, 60, 105, 0.72);
+  --surface-select-panel: rgba(190, 210, 240, 0.65);
 
-  // Dashboard stat card icons — original colorful icons in glass theme (Task-016)
-  --stat-icon-products: #4caf50;
-  --stat-icon-orders: #3b82f6;
-  --stat-icon-users: #ff9800;
-  --stat-icon-revenue: #a855f7;
-  --stat-icon-aov: #3b82f6;
-  --stat-icon-success-rate: #4caf50;
-  
-  --admin-text-primary: rgba(255, 255, 255, 0.95);
-  --admin-text-secondary: rgba(255, 255, 255, 0.65);
-  --admin-text-disabled: rgba(255, 255, 255, 0.35);
-  --admin-text-inverse: #1a2a4a;
+  --text-primary: rgba(255, 255, 255, 0.95);
+  --text-secondary: rgba(255, 255, 255, 0.65);
+  --text-muted: rgba(255, 255, 255, 0.35);
+  --text-muted-rgb: 255, 255, 255;
+  --text-inverse: #1a2a4a;
+  --text-table-header: rgba(255, 255, 255, 0.95);
+  --text-table-even: rgba(255, 255, 255, 0.9);
+  --text-table-row: rgba(255, 255, 255, 0.85);
+  --text-paginator: rgba(255, 255, 255, 0.9);
 
-  --admin-border-primary: rgba(255, 255, 255, 0.2);
-  --admin-border-secondary: rgba(255, 255, 255, 0.12);
-  --admin-border-focus: rgba(100, 160, 255, 0.8);
-  --admin-border-error: #f87171;
+  --border-default: rgba(255, 255, 255, 0.2);
+  --border-subtle: rgba(255, 255, 255, 0.12);
+  --border-primary: rgba(100, 160, 255, 0.8);
+  --interactive-danger: var(--color-error-base);
 
-  --admin-input-bg: rgba(255, 255, 255, 0.12);
-  --admin-input-text: rgba(255, 255, 255, 0.95);
-  --admin-input-border: rgba(255, 255, 255, 0.2);
-  --admin-input-label: rgba(255, 255, 255, 0.6);
-  --admin-input-focus-border: rgba(100, 160, 255, 0.8);
+  --input-bg: rgba(255, 255, 255, 0.12);
+  --input-text: rgba(255, 255, 255, 0.95);
+  --input-border: rgba(255, 255, 255, 0.2);
+  --input-label: rgba(255, 255, 255, 0.6);
+  --input-focus-border: rgba(100, 160, 255, 0.8);
+  --input-placeholder: var(--input-label);
 
-  --mat-card-subtitle-text-color: rgba(255, 255, 255, 0.95);
-  --mdc-form-field-label-text-color: rgba(255, 255, 255, 0.65);
-  --mat-select-placeholder-text-color: rgba(255, 255, 255, 0.5);
-  
-  // Order Details / List glass overrides - translucent
-  --admin-popup-bg: rgba(240, 242, 245, 0.25);
-  --admin-order-detail-header-bg: rgba(232, 244, 248, 0.3);
-  --admin-order-detail-card-bg: rgba(255, 255, 255, 0.2);
-  --admin-order-detail-border: rgba(208, 208, 208, 0.3);
-  --admin-order-detail-text-primary: var(--admin-text-primary);
-  --admin-order-detail-text-secondary: var(--admin-text-secondary);
-  --admin-order-list-bg: rgba(240, 242, 245, 0.25);
-  --admin-order-list-card-bg: rgba(248, 250, 252, 0.25);
-  --admin-order-list-border: rgba(208, 208, 208, 0.3);
-  --admin-order-list-text-primary: var(--admin-text-primary);
-  --admin-order-list-text-secondary: var(--admin-text-secondary);
-  --admin-order-list-header-bg: rgba(229, 231, 235, 0.3);
-  --admin-order-list-row-hover: rgba(232, 244, 248, 0.35);
-  --admin-order-list-pagination-bg: rgba(229, 231, 235, 0.3);
-  --admin-order-list-pagination-border: rgba(208, 208, 208, 0.3);
-  
-  // Neon Accents
-  --admin-neon-primary: #9ba9ff;
-  --admin-neon-secondary: #cdd6ff;
-  
-  // Material Design List item variables (glass theme)
-  --mdc-list-list-item-label-text-color: var(--admin-text-primary);
-  --mdc-list-list-item-supporting-text-color: var(--admin-text-secondary);
-  --mdc-list-list-item-disabled-text-color: var(--admin-text-disabled);
-  --mdc-list-list-item-leading-icon-color: var(--admin-text-secondary);
-  --mdc-list-list-item-trailing-icon-color: var(--admin-text-secondary);
-  // MDC list hover tokens (glass)
-  --mdc-list-list-item-hover-label-text-color: var(--admin-text-primary);
+  --backdrop-blur: blur(18px) saturate(180%);
+  --border-subtle: var(--glass-border-soft);
+
+  --mat-select-panel-background-color: var(--surface-select-panel);
+  --mat-card-subtitle-text-color: var(--text-primary);
+  --mdc-form-field-label-text-color: var(--text-secondary);
+  --mat-select-placeholder-text-color: var(--text-muted);
+  --radius-dialog: var(--radius-md);
+
+  --mdc-list-list-item-label-text-color: var(--text-primary);
+  --mdc-list-list-item-supporting-text-color: var(--text-secondary);
+  --mdc-list-list-item-disabled-text-color: var(--text-muted);
+  --mdc-list-list-item-leading-icon-color: var(--text-secondary);
+  --mdc-list-list-item-trailing-icon-color: var(--text-secondary);
+  --mdc-list-list-item-hover-label-text-color: var(--text-primary);
   --mdc-list-list-item-hover-state-layer-color: rgba(255, 255, 255, 0.1);
   --mdc-list-list-item-hover-state-layer-opacity: 0.2;
-  --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
-  --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
-  // Ensure MDC card container tokens are transparent in glass theme
+  --mdc-list-item-hover-label-text-color: var(--text-primary);
+  --mdc-list-item-hover-leading-icon-color: var(--text-secondary);
+
   --mdc-elevated-card-container-color: transparent;
   --mdc-filled-card-container-color: transparent;
   --mdc-outlined-card-container-color: transparent;
-
-  // Select panel background — same as input field for seamless merge
-  --admin-select-panel-bg: rgba(190, 210, 240, 0.65);
-  --mat-select-panel-background-color: rgba(190, 210, 240, 0.65);
   --mdc-list-item-container-color: transparent;
 
-  // Angular Material sidenav container tokens — make transparent so body gradient shows through
   --mat-sidenav-container-background-color: transparent;
   --mat-sidenav-container-divider-color: transparent;
   --mat-sidenav-content-background-color: transparent;
   --mat-drawer-container-background-color: transparent;
   --mat-drawer-content-background-color: transparent;
 
-  // Angular Material toolbar token (C2: admin layout SoT)
+  // C2 layout SoT
   --mat-toolbar-standard-height: var(--admin-toolbar-height);
   --mat-toolbar-mobile-height: var(--admin-toolbar-height);
 
-  // Header-specific glass variables (Task-020)
-  --admin-header-bg: rgba(199, 211, 233, 0.35);
-  --admin-header-blur: blur(18px) saturate(180%);
-  --admin-header-border: var(--admin-glass-border-soft);
-  --admin-header-text: rgba(255, 255, 255, 0.95);
-  --admin-header-icon-color: rgba(255, 255, 255, 0.9);
+  --dashboard-stat-card-bg: rgba(255, 255, 255, 0.2);
+  --dashboard-stat-card-border: rgba(255, 255, 255, 0.4);
+  --dashboard-stat-card-blur: blur(15px) saturate(150%);
+  --dashboard-stat-card-shadow:
+    0 8px 32px rgba(31, 41, 55, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  --dashboard-stat-card-hover-shadow: 0 16px 48px rgba(31, 41, 55, 0.12);
+  --dashboard-stat-card-hover-bg: rgba(255, 255, 255, 0.4);
+  --dashboard-stat-card-hover-border: rgba(255, 255, 255, 0.6);
 
-}
-
-/* ===== B2 Material bridge → semantic (on body.is-admin so it wins over shared themes) ===== */
-body.is-admin[data-theme='glass'],
-html[data-theme='glass'] body.is-admin {
-  --input-bg: var(--admin-input-bg);
-  --input-text: var(--admin-input-text);
-  --input-border: var(--admin-input-border);
-  --input-label: var(--admin-input-label);
-  --input-focus-border: var(--admin-input-focus-border);
-  --input-placeholder: var(--admin-input-placeholder, var(--admin-input-label));
-  --interactive-primary-rgb: var(--admin-primary-rgb);
-  --interactive-button: var(--admin-button, var(--admin-primary));
-  --surface-header: var(--admin-header-bg);
-  --surface-table: var(--admin-table-bg);
-  --surface-table-header: var(--admin-table-header-bg);
-  --surface-table-row: var(--admin-table-row-bg, var(--admin-table-bg));
-  --surface-table-even: var(--admin-table-even-bg, var(--admin-bg-secondary));
-  --surface-paginator: var(--admin-table-paginator-bg, var(--admin-table-header-bg));
-  --surface-select-panel: var(--admin-select-panel-bg, var(--admin-bg-card));
-  --text-table-header: var(--admin-table-header-text, var(--admin-text-primary));
-  --text-table-row: var(--admin-table-row-text, var(--admin-text-primary));
-  --text-table-even: var(--admin-table-even-text, var(--admin-text-primary));
-  --text-paginator: var(--admin-table-paginator-text, var(--admin-text-primary));
-  --radius-dialog: var(--border-radius-dark-glass, var(--radius-md));
+  --stat-icon-products: var(--color-success);
+  --stat-icon-orders: var(--interactive-primary);
+  --stat-icon-users: var(--color-warning);
+  --stat-icon-revenue: var(--color-accent);
+  --stat-icon-aov: var(--interactive-primary);
+  --stat-icon-success-rate: var(--color-success);
 }

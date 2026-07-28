@@ -110,7 +110,7 @@ src/
 - Partial files are prefixed with `_` and are never imported directly by components
 - `_index.scss` files serve as the single import point for each module
 - Component styles (under `src/app/`) are local and never imported globally
-- Admin styles may reuse shared tokens; layout ADMIN-ONLY isolated in `_admin-layout-tokens.scss` (C2); SHARED/CONFLICT migrate C3–C6
+- Admin styles may reuse shared tokens; layout ADMIN-ONLY isolated in `_admin-layout-tokens.scss` (C2); C3 themes map semantic+layout; component `--admin-*` → C4; shim delete C6
 - `main.scss` contains imports only — no CSS rules
 
 ---
@@ -371,7 +371,7 @@ body { margin: 0; }  // This leaks globally due to Angular encapsulation
 |--------|---------|--------|
 | Token definitions | ✅ Primitive + semantic pipeline | Keep single-source primitives |
 | Theme variables | ✅ Per-theme partials (`_default`/`_dark`/`_glass`) | Maintain; sync TS model (Epic F) |
-| Admin styles | C2: 5 ADMIN-ONLY in `_admin-layout-tokens.scss`; SHARED 125 / CONFLICT 47 remain until C6 | Shared tokens, admin layout only (Epic C) |
+| Admin styles | C3: themes→semantic; shim in `admin-variables`; 5 ADMIN-ONLY layout; M2 ≈ 1 623 | Shared tokens, admin layout only (Epic C) |
 | Material overrides | Component `.mat-` cleared (B3); palette↔tokens (B4); residual admin-global/themes | All rules in `_material-overrides.scss` + token bridge (Epic B ✅; C5 residual) |
 | Hardcoded colors | Present in many components | Zero — all use tokens (Epic D) |
 | CSS vs SCSS variables | Mixed usage | CSS custom properties preferred |

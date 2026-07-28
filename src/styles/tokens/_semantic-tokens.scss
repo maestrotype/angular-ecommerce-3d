@@ -93,6 +93,25 @@
   --glass-border-hover: rgba(255, 255, 255, 0.3);
   --glass-shadow-hover: 0 20px 40px rgba(31, 38, 135, 0.15);
 
+  // ===== GLASS SURFACE RECIPES (C3 — promoted from --admin-glass-*; themes override) =====
+  --glass-surface-strong: var(--surface-elevated);
+  --glass-surface-soft: var(--surface-card);
+  --glass-surface-muted: var(--surface-secondary);
+  --glass-border-strong: var(--border-strong);
+  --glass-border-soft: var(--border-subtle);
+  --glass-divider: var(--border-default);
+  --glass-highlight: rgba(255, 255, 255, 0.65);
+  --glass-shadow: var(--shadow-lg);
+  --glass-shadow-lg: var(--shadow-xl);
+  --glass-inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+
+  // ===== SURFACE EFFECTS (C3 — promoted from --admin-card-* / --admin-surface-glow) =====
+  --surface-card-gradient: var(--surface-elevated);
+  --surface-glow: none;
+  // RGB companions for rgba(var(--surface-elevated-rgb), a) until C4 migrates consumers
+  --surface-elevated-rgb: 255, 255, 255;
+  --text-muted-rgb: 148, 163, 184;
+
   // ===== SPACING ALIASES =====
   // Extend the --spacing-* scale (core/_variables.scss) at both ends.
   --spacing-2xs: 0.125rem;
