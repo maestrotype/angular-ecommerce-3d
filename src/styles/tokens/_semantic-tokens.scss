@@ -80,4 +80,67 @@
   --auth-btn-secondary-border: 1px solid var(--color-slate-300);
   --auth-btn-secondary-text: var(--color-slate-700);
   --auth-input-focus: var(--color-brand-base);
+
+  // ===== LEGACY COLOR ALIASES (Task A4) =====
+  // Former parallel palette from core/_variables.scss.
+  // Maps old --color-* names onto semantic/primitive tokens so components
+  // keep working until Epic D migrates them. Themes override the semantic
+  // targets; these aliases follow automatically.
+  --color-primary: var(--interactive-primary);
+  --color-primary-light: var(--color-brand-light);
+  --color-primary-dark: var(--color-brand-dark);
+  --color-primary-hover: var(--interactive-primary-hover);
+
+  --color-secondary: var(--color-secondary-base);
+  --color-secondary-dark: var(--color-slate-600);
+
+  --color-accent: var(--color-accent-base);
+
+  --color-success: var(--color-success-base);
+  --color-success-light: var(--color-emerald-500);
+  --color-success-dark: var(--color-emerald-600);
+  --color-success-hover: var(--color-emerald-600);
+  --color-success-bg: rgba(16, 185, 129, 0.1);
+
+  --color-warning: var(--color-warning-base);
+  --color-warning-light: var(--color-amber-500);
+  --color-warning-dark: var(--color-amber-500);
+  --color-warning-hover: var(--color-amber-500);
+  --color-warning-bg: rgba(245, 158, 11, 0.1);
+
+  --color-error: var(--color-error-base);
+  --color-error-light: var(--color-red-500);
+  --color-error-dark: var(--color-red-500);
+  --color-error-hover: var(--color-red-500);
+  --color-error-bg: rgba(239, 68, 68, 0.1);
+
+  --color-info: var(--color-blue-500);
+  --color-info-hover: var(--color-blue-600);
+  --color-info-bg: rgba(59, 130, 246, 0.1);
+
+  --color-bg-primary: var(--surface-page);
+  --color-bg-secondary: var(--surface-primary);
+  --color-bg-tertiary: var(--surface-secondary);
+  --color-bg-hover: var(--surface-highlight);
+
+  --color-surface-primary: var(--surface-primary);
+  --color-surface-secondary: var(--surface-secondary);
+  --color-surface-tertiary: var(--surface-tertiary);
+  --color-surface-hover: var(--surface-highlight);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-muted);
+  --color-text-disabled: var(--interactive-disabled);
+  --color-text-inverse: var(--text-inverse);
+  --color-text-accent: var(--text-link);
+
+  --color-border-primary: var(--border-default);
+  --color-border-secondary: var(--border-subtle);
+  --color-border-tertiary: var(--border-subtle);
+  --color-border-focus: var(--border-primary);
+
+  --color-shadow-light: rgba(0, 0, 0, 0.1);
+  --color-shadow-medium: rgba(0, 0, 0, 0.15);
+  --color-shadow-heavy: rgba(0, 0, 0, 0.25);
 }

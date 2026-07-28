@@ -64,7 +64,7 @@ rg -c '::ng-deep' src --glob '*.scss'
 | 4 | Material overrides размазаны | `_admin-theme-material.scss` (1 548 стр.) + 23 файла | B |
 | 5 | Orphaned `src/styles.scss` — 499 строк логики, не подключён к сборке, но docs считают его entry | 499 строк | A |
 | 6 | ~~`_primitive-tokens.scss` существует, но НЕ импортируется — `tokens/_index.scss` дублирует примитивы инлайн~~ **Исправлено (A1, 2026-07-28)**: заодно починены нерезолвившиеся токены `--color-blue-300/400`, `--color-blue-400-rgb`, `--z-modal`, `--font-*` weights, использовавшиеся в dark/glass темах и модалках | — | A |
-| 7 | `core/_variables.scss` — параллельная палитра (`--color-primary: #667eea` и т.д.) | 243 строки | A |
+| 7 | ~~`core/_variables.scss` — параллельная палитра~~ **Исправлено (A4, 2026-07-28)**: цвета перенесены в semantic legacy-алиасы; файл — только SCSS-breakpoints + non-color утилиты | — | A |
 | 8 | Заглушки `_forms.scss`, `_modals.scss`, `_navigation.scss` | по 5 строк | E |
 | 9 | TS-модель `Theme` — каталог метаданных, не применяется к DOM; не синхронизирована с SCSS (ADR-012) | 4 файла тем | F |
 
@@ -95,7 +95,7 @@ graph LR
 
 | Эпик | Название | Статус | Задач | Метрики |
 |------|----------|--------|-------|---------|
-| A | Фундамент токенов | 🔄 **В работе** | 3/6 | M7 |
+| A | Фундамент токенов | 🔄 **В работе** | 4/6 | M7 |
 | B | Централизация Material overrides | ⏳ Ожидает A | 0/4 | M8 |
 | C | Admin-унификация (ADR-011) | ⏳ Ожидает A, B | 0/6 | M2 |
 | D | Миграция компонентов (ADR-006) | ⏳ Ожидает C | 0/10 | M1, M5 |
@@ -118,7 +118,7 @@ graph LR
 | A1 | Устранить дубли примитивов: `tokens/_index.scss` должен импортировать `_primitive-tokens.scss`, а не дублировать значения инлайн | `src/styles/tokens/_index.scss`, `_primitive-tokens.scss` | Каждый примитив определён ровно в одном файле; build проходит | ✅ (2026-07-28) |
 | A2 | Расширить semantic-слой до полного покрытия (сейчас 47 строк — каркас). Свести список всех semantic-токенов, реально используемых компонентами, доопределить недостающие | `src/styles/tokens/_semantic-tokens.scss`, `_primitive-tokens.scss`, `themes/_dark.scss`, `themes/_glass.scss` | Все `var(--...)`-ссылки без фолбэков разрешаются в витринном скоупе (остаток: `--tw-*` → A5, `--admin-*`/`--lg-*` → эпик C) | ✅ (2026-07-28) |
 | A3 | Инвентаризация `_theme-variables.scss` (722 стр.): классифицировать каждый блок → перенести в темы / semantic / удалить | `src/styles/tokens/_theme-variables.scss`, `src/styles/themes/*` | Файл удалён, `@forward` убран из `_index.scss`; визуально ничего не сломалось | ✅ (2026-07-28) |
-| A4 | Согласовать `core/_variables.scss` (243 стр., параллельная палитра) с токенами: убрать дублирующие цвета, оставить только SCSS-утилиты (breakpoints и т.п.) | `src/styles/core/_variables.scss` | Нет CSS-переменных цвета вне tokens/themes | 📋 |
+| A4 | Согласовать `core/_variables.scss` (243 стр., параллельная палитра) с токенами: убрать дублирующие цвета, оставить только SCSS-утилиты (breakpoints и т.п.) | `src/styles/core/_variables.scss` | Нет CSS-переменных цвета вне tokens/themes | ✅ (2026-07-28) |
 | A5 | Разобрать orphaned `src/styles.scss` (499 стр.): нужные правила перенести в модули (`components/`, `core/`), файл удалить | `src/styles.scss`, `src/styles/components/*`, `src/styles/core/*` | Файл удалён; glass-хелперы и скроллбары живут в модулях; build проходит | 📋 |
 | A6 | Обновить `STYLE_ARCHITECTURE.md` и `AI_CONSTITUTION.md` §2.1: entry point — `main.scss` (не `styles.scss`), актуальная структура папок | `docs/STYLE_ARCHITECTURE.md`, `docs/AI_CONSTITUTION.md` | Документация соответствует коду | 📋 |
 

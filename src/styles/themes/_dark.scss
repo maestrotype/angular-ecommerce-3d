@@ -288,12 +288,24 @@
   --surface-overlay-hover: rgba(255, 255, 255, 0.15);
 
   /* ===== LEGACY ALIASES (backward compatibility) ===== */
+  /* Full --color-* legacy set lives in tokens/_semantic-tokens.scss (A4). */
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
-  --color-text-tertiary: var(--text-secondary);
+  --color-text-tertiary: var(--text-muted);
+  --color-text-inverse: var(--text-inverse);
   --color-border-primary: var(--border-default);
+  --color-border-secondary: var(--border-subtle);
+  --color-border-focus: var(--border-primary);
   --color-surface-primary: var(--surface-primary);
   --color-surface-secondary: var(--surface-secondary);
+  --color-surface-tertiary: var(--surface-tertiary);
+  --color-surface-hover: var(--surface-highlight);
+  --color-bg-primary: var(--surface-page);
+  --color-bg-secondary: var(--surface-primary);
+  --color-bg-tertiary: var(--surface-secondary);
+  --color-bg-hover: var(--surface-highlight);
+  --color-primary: var(--interactive-primary);
+  --color-primary-hover: var(--interactive-primary-hover);
   --color-cards-background: var(--surface-primary);
   --color-cards-border: var(--border-default);
   --color-cards-shadow: var(--shadow-card);

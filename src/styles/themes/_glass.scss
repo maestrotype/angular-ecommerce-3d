@@ -315,12 +315,25 @@
   --bg-gradient-3: radial-gradient(at 50% 100%, rgba(30, 41, 59, 0.2) 0px, transparent 50%);
 
   /* ===== LEGACY ALIASES (backward compatibility) ===== */
+  /* Full --color-* legacy set lives in tokens/_semantic-tokens.scss (A4). */
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
-  --color-text-tertiary: var(--text-secondary);
+  --color-text-tertiary: var(--text-muted);
+  /* Glass keeps pure black inverse (set above in migrated block); reaffirm after aliases. */
+  --color-text-inverse: #000000;
   --color-border-primary: var(--border-default);
+  --color-border-secondary: var(--border-subtle);
+  --color-border-focus: var(--border-primary);
   --color-surface-primary: var(--surface-primary);
   --color-surface-secondary: var(--surface-secondary);
+  --color-surface-tertiary: var(--surface-tertiary);
+  --color-surface-hover: var(--surface-highlight);
+  --color-bg-primary: var(--surface-page);
+  --color-bg-secondary: var(--surface-primary);
+  --color-bg-tertiary: var(--surface-secondary);
+  --color-bg-hover: var(--surface-highlight);
+  --color-primary: var(--interactive-primary);
+  --color-primary-hover: var(--interactive-primary-hover);
   --color-cards-background: var(--glass-bg);
   --color-cards-border: var(--border-default);
   --color-cards-shadow: var(--glass-shadow);

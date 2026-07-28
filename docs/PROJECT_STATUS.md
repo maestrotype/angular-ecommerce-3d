@@ -29,7 +29,7 @@
 
 | Epic | Name | Status | Reality Check (2026-07-28) |
 |------|------|--------|----------------------------|
-| A | Token Foundation | 🔄 In Progress | A1–A3 done: primitives single-sourced, semantic layer complete, `_theme-variables.scss` deleted; remaining: `core/_variables.scss`, orphaned `styles.scss`, docs sync |
+| A | Token Foundation | 🔄 In Progress | A1–A4 done: primitives single-sourced, semantic layer complete, `_theme-variables.scss` deleted, `core/_variables.scss` de-colored; remaining: orphaned `styles.scss`, docs sync |
 | B | Material Overrides Centralization | ⏳ Pending | No `_material-overrides.scss`; overrides scattered across 24 files incl. 1,548-line `_admin-theme-material.scss` |
 | C | Admin Unification (ADR-011) | ⏳ Pending | Parallel `--admin-*` system fully intact: 2,335 usages in 43 files, 174 unique tokens |
 | D | Component Migration (ADR-006) | 🔄 Partially Started | 3/86 components fully clean (`favorites`, `base-modal`, `cart-modal`); ~29 partially migrated; 1,336 hardcoded hex remain |
@@ -79,8 +79,8 @@
 - [ ] No centralized Material overrides; `_admin-theme-material.scss` is a 1,548-line de-facto dump (Epic B)
 
 ### Medium Priority
-- [ ] `_primitive-tokens.scss` exists but is not imported — `_index.scss` duplicates primitives inline (drift risk)
-- [ ] `core/_variables.scss` (243 lines) defines a parallel color palette
+- [x] `_primitive-tokens.scss` imported via `tokens/_index.scss` (A1, 2026-07-28)
+- [x] `core/_variables.scss` parallel color palette removed — colors → semantic legacy aliases; file keeps SCSS breakpoints + non-color utils (A4, 2026-07-28)
 - [ ] 91 `!important` in 12 files; 40 `::ng-deep` in 12 files
 - [ ] `admin-global.scss` is 1,195 lines with mixed concerns
 
@@ -95,6 +95,7 @@
 
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-07-28 | Task A4 (Board): Removed parallel color palette from `core/_variables.scss` (243→107 lines). Migrated used `--color-*` vars into semantic legacy aliases mapped to semantic/primitive tokens; expanded theme legacy alias sets; converted breakpoints to SCSS `$breakpoint-*` and wired responsive mixins; dropped unused sidenav import; high-contrast overrides now target semantic tokens. Side effect: `--color-primary` no longer hardcodes purple `#667eea` after themes (was clobbering theme aliases due to import order). Verified: 0 `--color-*` / 0 hex color defs in `core/`; `npm run build` passes; bundle has `--color-primary: var(--interactive-primary)`. | Principal UI Architect |
 | 2026-07-28 | Task A3 (Board): Decomposed and deleted legacy `_theme-variables.scss` (722 lines). Parsed default/dark/glass blocks; skipped variables already defined in semantic tokens or theme partials (last-declaration-wins); prepended remaining vars into `_default.scss` / `_dark.scss` / `_glass.scss`; removed `@forward` from `tokens/_index.scss`. Verified: `npm run build` passes; computed tokens in dark (`--hero-bg-gradient`, `--header-bg`, `--product-tabs-bg`); visual check home (light/dark/glass) + product detail (dark) — no broken gradients/header/footer. | Principal UI Architect |
 | 2026-07-28 | Task A2 (Board): Semantic token layer completed for storefront scope. Audit found 81 token names referenced via `var()` but never defined; ~46 of them used WITHOUT fallbacks — meaning broken declarations at runtime (favorites page surfaces/borders, base-modal backdrop, `--border-primary`/`--interactive-primary` in ALL themes via missing `--color-brand-*`). Added: 8 primitives (`--color-brand-base/light/dark`, `--color-accent-pink`, `--color-slate-600/800-rgb`, `--text-3xl`), ~25 semantic tokens (surfaces, borders subtle/medium/emphasis, `--text-muted`, `--state-danger-*`, `--backdrop-blur/-sm`, `--glass-*-hover`, spacing aliases, auth secondary set) with dark/glass theme overrides mapped from original legacy `--favorites-*` values. Remaining undefined-no-fallback: only out-of-scope (`--tw-*` in orphaned styles.scss → A5; `--admin-*`, `--lg-*` → Epic C). Verified: build passes, browser check of favorites + card hover in all 3 themes, no console errors. | Principal UI Architect |
 | 2026-07-28 | Task A1 (Board): `tokens/_index.scss` now imports `_primitive-tokens.scss` instead of duplicating primitives inline. Side effect fixed: tokens defined only in the previously-unimported file (`--color-blue-300/400`, `--color-blue-400-rgb`, `--z-modal`, `--z-*` scale, `--font-normal/medium/semibold/bold`) were unresolved at runtime — dark/glass theme `--text-link`, product-card hover glow, and modal z-indexes silently fell back. Verified: build passes, tokens present in CSS bundle, browser check in all 3 themes (`--color-blue-400` = `#60a5fa`, `--z-modal` = `400`). | Principal UI Architect |

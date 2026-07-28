@@ -166,11 +166,11 @@ select {
   }
 }
 
-/* High contrast mode */
+/* High contrast mode — override semantic tokens (legacy --color-* aliases follow) */
 @media (prefers-contrast: high) {
   :root {
-    --color-border-primary: #000000;
-    --color-text-secondary: #000000;
+    --border-default: #000000;
+    --text-secondary: #000000;
   }
 }
 

@@ -23,7 +23,7 @@ This document records **current-state findings** of the style system audit. Task
 | `src/styles/themes/_default.scss` | 119 | Default/light theme | KEEP | Rewritten to semantic tokens ✅ |
 | `src/styles/themes/_dark.scss` | 374 | Dark theme | KEEP | Rewritten to semantic tokens ✅ |
 | `src/styles/themes/_glass.scss` | 481 | Glass theme | KEEP | Rewritten ✅; 4 `!important` + 5 `.mat-` overrides remain |
-| `src/styles/core/_variables.scss` | 243 | SCSS vars + parallel palette | FIX | Defines parallel `:root` color palette (46 hex) → Task A4 |
+| `src/styles/core/_variables.scss` | 107 | SCSS breakpoints + non-color utils | KEEP | ✅ RESOLVED (A4, 2026-07-28): parallel color palette removed; colors → semantic legacy aliases |
 | `src/styles/core/_mixins.scss` | 318 | Mixins | KEEP | Audit for unused mixins in Epic E |
 | `src/styles/core/_base.scss` | 231 | Base element styles | FIX | 7 `!important` |
 | `src/styles/core/_typography.scss` | 202 | Typography | KEEP | |
@@ -78,7 +78,7 @@ Fully clean components: `favorites`, `base-modal`, `cart-modal`.
 | Duplication | Locations | Resolution |
 |-------------|-----------|------------|
 | ~~Primitive tokens defined twice~~ | ~~`tokens/_primitive-tokens.scss` AND inlined in `tokens/_index.scss`~~ | ✅ RESOLVED (A1, 2026-07-28): `_index.scss` imports the file; inline copies deleted |
-| Color palette defined in parallel | `tokens/` vs `core/_variables.scss` (`--color-primary: #667eea` etc.) vs TS `light-theme.ts` | Task A4 + F1 |
+| Color palette defined in parallel | `tokens/` vs TS `light-theme.ts` (SCSS `core/_variables` palette removed in A4) | Task F1 |
 | ~~Theme variables monolith~~ | ~~`tokens/_theme-variables.scss`~~ | ✅ Done (A3): deleted, themes absorb leftover vars |
 | `--admin-*` system | 174 unique tokens defined across `admin-variables.scss` (120) + 4 admin theme files (445 definition occurrences total) | Epic C (ADR-011: classify SHARED / ADMIN-ONLY / CONFLICT) |
 
@@ -104,7 +104,7 @@ Top offenders (excluding token/theme files):
 | 54 | `.../similar-products.component.scss` | D3 |
 | 52 | `.../order-details-dialog.component.scss` | D2 |
 | 51 | `src/app/layout/header/header.component.scss` | D4 |
-| 46 | `src/styles/core/_variables.scss` | A4 |
+| ~~46~~ | ~~`src/styles/core/_variables.scss`~~ | ✅ A4 (0 hex) |
 | 45 | `src/app/pages/home/home.component.scss` | D1 |
 | 32 | `src/styles.scss` (orphaned) | A5 |
 
