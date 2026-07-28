@@ -842,7 +842,7 @@
   "LOADING_SEO_SETTINGS": "Завантаження SEO налаштувань...",
   "GOOGLE_ANALYTICS_MEASUREMENT_ID_HINT": "Ваш ID вимірювання Google Analytics 4",
   "GOOGLE_SEARCH_CONSOLE_META_TAG_HINT": "Вміст мета-тегу для перевірки Google Search Console",
-  "BING_WEBMASTER_TOOLS_META_TAG_HINT": "Вміст мета-тегу для перевірки Bing Webmaster Tools",
+  "BING_WEBMASTER_TOOLS_META_TAG_HINT": "Вміст мета-тега з Bing Webmaster Tools",
   "XML_SITEMAP_GENERATION_HINT": "Автоматично генерувати та оновлювати sitemap.xml",
   "STRUCTURED_DATA_HINT": "Додати структуровану розмітку для кращих результатів пошуку",
   "ROBOTS_TXT_CONTENT_HINT": "Вміст файлу robots.txt",
@@ -933,36 +933,40 @@
     "COPYRIGHT": "Всі права захищені.",
     "SOCIAL_INSTAGRAM": "Instagram",
     "SOCIAL_FACEBOOK": "Facebook",
-    "SOCIAL_TWITTER": "Twitter"
+    "SOCIAL_TWITTER": "Twitter",
+    "NEWSLETTER_TITLE": "Підпишіться на нашу розсилку",
+    "NEWSLETTER_DESC": "Отримуйте останні оновлення про нові товари та спеціальні пропозиції.",
+    "NEWSLETTER_PLACEHOLDER": "Введіть ваш email",
+    "NEWSLETTER_ARIA": "Email для підписки на розсилку",
+    "NEWSLETTER_SUBSCRIBE": "Підписатися",
+    "NEWSLETTER_SUCCESS": "Дякуємо за підписку!"
   },
-  "HOME": {
-    "HERO": {
-      "BADGE": "НОВИНКА",
-      "TITLE_DEFAULT": "ВІДКРИЙТЕ СВІЙ",
-      "SUBTITLE_DEFAULT": "НОВИЙ СТИЛЬ",
-      "CONTENT_DEFAULT": "Досліджуйте нашу останню інтерактивну 3D-колекцію.",
-      "SHOP_NOW": "КУПИТИ ЗАРАЗ",
-      "ALT_TEXT": "Популярний товар"
-    },
-    "CATEGORIES": {
-      "TITLE": "Пошук за категоріями"
-    },
-    "BEST_SELLERS": {
-      "SUBTITLE_DEFAULT": "ТОП ТОВАРІВ",
-      "TITLE_DEFAULT": "Хіти продажу",
-      "BADGE_SPECIAL": "Особливе",
-      "BADGE_NEW": "Нове",
-      "BADGE_OUT_OF_STOCK": "Немає в наявності"
-    },
-    "SPECIAL_OFFER": {
-      "BADGE": "АКЦІЯ",
-      "TITLE_DEFAULT": "Спеціальна пропозиція",
-      "SUBTITLE_DEFAULT": "Тільки цього тижня: знижки до 40%",
-      "SHOP_NOW": "КУПИТИ ЗАРАЗ"
-    },
-    "BRANDS": {
-      "TITLE": "Нам довіряють найкращі бренди"
-    }
+  "HERO_SECTION": {
+    "BADGE": "НОВИНКА",
+    "TITLE_DEFAULT": "ВІДКРИЙТЕ СВІЙ",
+    "SUBTITLE_DEFAULT": "НОВИЙ СТИЛЬ",
+    "CONTENT_DEFAULT": "Досліджуйте нашу останню інтерактивну 3D-колекцію.",
+    "SHOP_NOW": "КУПИТИ ЗАРАЗ",
+    "ALT_TEXT": "Популярний товар"
+  },
+  "CATEGORIES_SECTION": {
+    "TITLE": "Пошук за категоріями"
+  },
+  "BEST_SELLERS": {
+    "SUBTITLE_DEFAULT": "ТОП ТОВАРІВ",
+    "TITLE_DEFAULT": "Хіти продажу",
+    "BADGE_SPECIAL": "Особливе",
+    "BADGE_NEW": "Нове",
+    "BADGE_OUT_OF_STOCK": "Немає в наявності"
+  },
+  "SPECIAL_OFFER": {
+    "BADGE": "АКЦІЯ",
+    "TITLE_DEFAULT": "Спеціальна пропозиція",
+    "SUBTITLE_DEFAULT": "Тільки цього тижня: знижки до 40%",
+    "SHOP_NOW": "КУПИТИ ЗАРАЗ"
+  },
+  "BRANDS_SECTION": {
+    "TITLE": "Нам довіряють найкращі бренди"
   },
   "SHOP": {
     "HEADER": {

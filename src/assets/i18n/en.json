@@ -953,7 +953,14 @@
     "COPYRIGHT": "All rights reserved.",
     "SOCIAL_INSTAGRAM": "Instagram",
     "SOCIAL_FACEBOOK": "Facebook",
-    "SOCIAL_TWITTER": "Twitter"
+    "SOCIAL_TWITTER": "Twitter",
+    "NEWSLETTER_TITLE": "Subscribe to Our Newsletter",
+    "NEWSLETTER_DESC": "Get the latest updates on new products and special offers.",
+    "NEWSLETTER_PLACEHOLDER": "Enter your email",
+    "NEWSLETTER_ARIA": "Email address for newsletter",
+    "NEWSLETTER_SUBSCRIBE": "Subscribe",
+    "NEWSLETTER_SUCCESS": "Thank you for subscribing!",
+    "PAYMENTS": "Payment Methods"
   },
   "HOME": {
     "HERO": {

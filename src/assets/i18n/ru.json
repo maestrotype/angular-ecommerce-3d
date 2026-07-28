@@ -971,7 +971,14 @@
     "COPYRIGHT": "Все права защищены.",
     "SOCIAL_INSTAGRAM": "Instagram",
     "SOCIAL_FACEBOOK": "Facebook",
-    "SOCIAL_TWITTER": "Twitter"
+    "SOCIAL_TWITTER": "Twitter",
+    "NEWSLETTER_TITLE": "Подпишитесь на нашу рассылку",
+    "NEWSLETTER_DESC": "Получайте последние обновления о новых товарах и специальных предложениях.",
+    "NEWSLETTER_PLACEHOLDER": "Введите ваш email",
+    "NEWSLETTER_ARIA": "Email для подписки на рассылку",
+    "NEWSLETTER_SUBSCRIBE": "Подписаться",
+    "NEWSLETTER_SUCCESS": "Спасибо за подписку!",
+    "PAYMENTS": "Способы оплаты"
   },
   "HOME": {
     "HERO": {

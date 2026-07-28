@@ -4,20 +4,22 @@
       <app-logo></app-logo>
     </div>
 
-     <!-- Desktop Navigation -->
+      <!-- Desktop Navigation -->
     <nav class="nav" [class.nav-compressed]="isSearchOpen">
       <ng-container *ngFor="let item of menuItems">
         <a *ngIf="item.url.startsWith('/')" [routerLink]="item.url" class="nav-link"
           [class.hidden]="!canAccessMenuItem(item)"
-          routerLinkActive="active" [routerLinkActiveOptions]="{ exact: item.url === '/' }"
+          [class.active]="isNavActive(item.url)"
+          (click)="onNavClick(item.url)"
           ariaCurrentWhenActive="page">
           {{ item.title | localized }}
         </a>
         <a *ngIf="item.url.startsWith('#')" 
-           href="javascript:void(0)"
-           (click)="handleMenuClick(item, $event)" 
-           class="nav-link"
-           [class.hidden]="!canAccessMenuItem(item)">
+            href="javascript:void(0)"
+            (click)="handleMenuClick(item, $event)" 
+            class="nav-link"
+            [class.active]="activeHash === item.url.substring(1)"
+            [class.hidden]="!canAccessMenuItem(item)">
           {{ item.title | localized }}
         </a>
       </ng-container>

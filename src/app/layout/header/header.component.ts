@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef, OnInit, OnDestroy, Inject, PLATFORM_ID, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
+import { Subscription, filter } from 'rxjs';
+import { Router, NavigationEnd } from '@angular/router';
 import { trigger, transition, style, animate, stagger, query } from '@angular/animations';
 import { CartService } from '../../core/services/cart.service';
 import { FavoritesService } from '../../core/services/favorites.service';
@@ -34,6 +34,11 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   private cartSubscription: Subscription = new Subscription();
   private favoritesSubscription: Subscription = new Subscription();
   private themeSubscription: Subscription = new Subscription();
+  private routerSubscription: Subscription = new Subscription();
+
+  // Active hash tracking for section-based nav links (#brands, #contacts)
+  activeHash = '';
+  private observer: IntersectionObserver | null = null;
 
   // Header customization
   headerSettings: HeaderSettings | null = null;
@@ -85,7 +90,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.currentLang = this.translate.currentLang || this.translate.getDefaultLang() || 'en';
   }
 
-  ngOnInit(): void {
+   ngOnInit(): void {
     this.loadHeaderCustomization();
     this.loadCartCount();
     this.loadFavoritesCount();
@@ -105,6 +110,16 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       document.addEventListener('click', this.onDocumentClick.bind(this));
 
       window.addEventListener('resize', this.checkScreenSize.bind(this));
+
+      // Setup IntersectionObserver for section-based active tracking
+      this.setupSectionObserver();
+
+      // Clear activeHash and rebuild observer on route changes
+      this.routerSubscription = this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(() => {
+        this.activeHash = '';
+        // Rebuild observer for the new route (sections may differ)
+        this.setupSectionObserver();
+      });
     }
 
     this.searchTerm = '';
@@ -137,10 +152,17 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.cartSubscription.unsubscribe();
     this.favoritesSubscription.unsubscribe();
     this.themeSubscription.unsubscribe();
+    this.routerSubscription.unsubscribe();
 
     if (isPlatformBrowser(this.platformId)) {
       document.removeEventListener('click', this.onDocumentClick.bind(this));
       window.removeEventListener('resize', this.checkScreenSize.bind(this));
+    }
+
+    // Cleanup IntersectionObserver
+    if (this.observer) {
+      this.observer.disconnect();
+      this.observer = null;
     }
   }
 
@@ -402,17 +424,37 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.closeMobileMenu();
   }
 
+  /** Check if a nav link should be active based on current router URL */
+  isNavActive(url: string): boolean {
+    if (!url || url.startsWith('#')) return false;
+    // Use path-only URL (strip query params) so /shop?category=xxx still matches /shop
+    const currentPath = this.router.url.split('?')[0];
+
+    // /home matches exactly /home or /
+    if (url === '/home') return currentPath === '/home' || currentPath === '/';
+
+    // Exact match or starts with the URL (for nested routes like /shop/category)
+    return currentPath === url || currentPath.startsWith(url + '/');
+  }
+
+  /** Handle click on route-based nav links */
+  onNavClick(url: string): void {
+    this.activeHash = ''; // Clear hash active when navigating to a route
+  }
+
   handleMenuClick(menuItem: MenuItem, event?: MouseEvent): void {
     // Only close search and mobile menu
     this.isSearchOpen = false;
     this.closeMobileMenu();
-    
+
     console.log('[Header] Menu click:', menuItem.url);
 
     if (menuItem.url.startsWith('#')) {
       const sectionId = menuItem.url.substring(1);
+      this.activeHash = sectionId; // Manually set active state for hash links
       this.scrollToSection(sectionId);
     } else if (menuItem.url.startsWith('/')) {
+      this.activeHash = ''; // Clear hash active when navigating to a route
       this.router.navigate([menuItem.url]);
       this.searchTerm = '';
       this.searchResults = [];
@@ -421,6 +463,56 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
         window.open(menuItem.url, '_blank');
       }
     }
+  }
+
+  /**
+   * Setup IntersectionObserver to track which section is in view.
+   * Updates activeHash automatically when user scrolls past sections.
+   */
+  private setupSectionObserver(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    // Delay to ensure DOM is fully rendered
+    setTimeout(() => {
+      const sectionIds = this.menuItems
+        .filter(item => item.url.startsWith('#'))
+        .map(item => item.url.substring(1));
+
+      if (sectionIds.length === 0) return;
+
+      const sections = sectionIds
+        .map(id => document.getElementById(id))
+        .filter((el): el is HTMLElement => !!el);
+
+      if (sections.length === 0) {
+        // Try again after a short delay (lazy-loaded content)
+        setTimeout(() => this.setupSectionObserver(), 500);
+        return;
+      }
+
+      if (this.observer) {
+        this.observer.disconnect();
+      }
+
+      this.observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const sectionId = entry.target.id;
+            // Only update if the section is near the top (within 30% of viewport)
+            const rect = entry.boundingClientRect;
+            if (rect.top <= window.innerHeight * 0.3) {
+              this.activeHash = sectionId;
+            }
+          }
+        });
+      }, {
+        root: null,
+        rootMargin: '-100px 0px -60% 0px',
+        threshold: [0, 0.1, 0.5]
+      });
+
+      sections.forEach(section => this.observer?.observe(section));
+    }, 100);
   }
 
   scrollToSection(sectionId: string): void {
