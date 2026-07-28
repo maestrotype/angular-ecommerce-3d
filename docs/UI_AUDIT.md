@@ -82,7 +82,7 @@ Fully clean components: `favorites`, `base-modal`, `cart-modal`.
 | ~~Primitive tokens defined twice~~ | ~~`tokens/_primitive-tokens.scss` AND inlined in `tokens/_index.scss`~~ | ✅ RESOLVED (A1, 2026-07-28): `_index.scss` imports the file; inline copies deleted |
 | Color palette defined in parallel | `tokens/` vs TS `light-theme.ts` (SCSS `core/_variables` palette removed in A4) | Task F1 |
 | ~~Theme variables monolith~~ | ~~`tokens/_theme-variables.scss`~~ | ✅ Done (A3): deleted, themes absorb leftover vars |
-| `--admin-*` system | 174 unique tokens defined across `admin-variables.scss` (120) + 4 admin theme files (445 definition occurrences total) | Epic C (ADR-011: classify SHARED / ADMIN-ONLY / CONFLICT) |
+| `--admin-*` system | 174 defined / 2 017 usages (M2); classified C1 → SHARED 125 / CONFLICT 47 / ADMIN-ONLY 2 | ✅ C1 (2026-07-28); migrate C2–C6 — see §4.1 |
 
 ---
 
@@ -116,30 +116,137 @@ Top offenders (excluding token/theme files):
 
 ### Current Architecture (confirmed by scan)
 ```
-src/styles/              ← Frontend tokens + themes (semantic layer scaffolded)
-src/admin/styles/        ← Fully parallel --admin-* system (2,335 usages / 43 files / 174 unique tokens)
+src/styles/              ← Frontend tokens + themes (canonical SoT)
+src/admin/styles/        ← Parallel --admin-* (174 defined; M2 = 2 017 usages)
 ```
 
-`_admin-layout-tokens.scss` (target of ADR-011) **does not exist yet**.
+`_admin-layout-tokens.scss` (ADR-011) **does not exist yet** → Task C2.
 
 ### Target Architecture
 ```
 src/styles/tokens/                        ← Shared tokens (single source)
 src/styles/themes/                        ← Shared themes (single source)
-src/admin/styles/_admin-layout-tokens.scss ← Admin LAYOUT only (sidebar, toolbar)
+src/admin/styles/_admin-layout-tokens.scss ← Admin LAYOUT only (sidebar, toolbar, content padding)
 ```
 
 ### Divergence Map
 
 | Concern | Frontend Location | Admin Location | Duplicated? |
 |---------|------------------|----------------|-------------|
-| Color tokens | `tokens/` | `admin-variables.scss` (120 unique defs) | YES |
+| Color tokens | `tokens/` | `admin-variables.scss` (120 unique defs) | YES → C1 CONFLICT/SHARED |
 | Light theme | `_default.scss` | `_admin-light.scss` (95 lines) | YES |
 | Dark theme | `_dark.scss` | `_admin-dark.scss` (212 lines) | YES |
 | Glass theme | `_glass.scss` | `_admin-glass.scss` (164 lines) | YES |
 | Dark glass | — (no storefront file) | `_admin-dark-glass.scss` (220 lines) | ADMIN-ONLY theme |
 | Material overrides | `overrides/_material-overrides.scss` (B1–B4) | admin-global / themes → C5 | PARTIAL (C5) |
-| Layout styles | N/A | `admin-layout.component.scss` | NO (correct) |
+| Layout styles | N/A | `admin-layout.component.scss` | NO (correct); widths still hardcoded → C2 |
+
+### 4.1 C1 — `--admin-*` token classification (ADR-011)
+
+**Scan date:** 2026-07-28. **DoD:** every defined token classified. Detail note: [`docs/migration/_c1-admin-token-inventory.md`](migration/_c1-admin-token-inventory.md).
+
+| Class | Count | Meaning | Epic next |
+|-------|------:|---------|-----------|
+| SHARED | 125 | Same concept as shared tokens; replace with primitive/semantic | C3–C4 |
+| CONFLICT | 47 | Same concept, different values — resolve per ADR-011 §2 | C3 |
+| ADMIN-ONLY | 2 | Layout-only; keep under `--admin-*` | C2 |
+| **Total defined** | **174** | | |
+| UNDEFINED (used, no def) | 6 | Broken refs — fix during migration | C3–C4 |
+| Proposed ADMIN-ONLY (new) | 3 | Hardcoded layout dims → create in C2 | C2 |
+
+#### ADMIN-ONLY (existing — keep)
+
+| Token | Maps / notes |
+|-------|----------------|
+| `--admin-mobile-padding-horizontal` | Layout; → `_admin-layout-tokens.scss` |
+| `--admin-mobile-padding-vertical` | Layout; → `_admin-layout-tokens.scss` |
+
+#### ADMIN-ONLY (proposed — create in C2)
+
+| Token | Value today | Source |
+|-------|-------------|--------|
+| `--admin-sidebar-width` | `260px` | `.admin-sidenav` |
+| `--admin-toolbar-height` | `64px` | glass `--mat-toolbar-*-height` |
+| `--admin-content-padding` | `24px` | `.admin-main` |
+
+#### CONFLICT (47) — resolve before/during C3
+
+Default: **accidental drift → adopt frontend**. Intentional recipes → promote descriptive semantic (not a second `--admin-*`).
+
+| Token | Admin (light default) | Shared target | Resolution |
+|-------|----------------------|---------------|------------|
+| `--admin-primary` | `#1976d2` | `--interactive-primary` (`#3b82f6`) | Adopt frontend |
+| `--admin-primary-hover` | `#1565c0` | `--interactive-primary-hover` | Adopt frontend |
+| `--admin-primary-rgb` | `59, 130, 246` (themes) / Material RGB | `--interactive-primary-rgb` | Adopt frontend |
+| `--admin-secondary` | `#dc004e` | `--color-secondary-base` `#64748b` | Intent: accent pink → `--color-accent` / `--color-accent-pink`; drop parallel |
+| `--admin-success` | `#4caf50` | `--color-success-base` | Adopt frontend |
+| `--admin-warning` | `#ff9800` | `--color-warning-base` | Adopt frontend |
+| `--admin-error` | `#f44336` | `--interactive-danger` | Adopt frontend |
+| `--admin-info` | `#2196f3` | `--color-info` / `--color-blue-500` | Adopt frontend |
+| `--admin-bg-primary` | `#ffffff` | `--surface-primary` / `--surface-page` | Adopt frontend |
+| `--admin-bg-secondary` | `#fff` | `--surface-secondary` | Adopt frontend |
+| `--admin-bg-tertiary` | `#fafafa` | `--surface-tertiary` | Adopt frontend |
+| `--admin-bg-card` | `#ffffff` | `--surface-elevated` / `--surface-card` | Adopt frontend |
+| `--admin-bg-hover` | `#e8f4f8` | `--surface-highlight` | Prefer frontend; else promote `--surface-admin-hover` |
+| `--admin-text-primary` | `#212121` | `--text-primary` | Adopt frontend |
+| `--admin-text-secondary` | `#757575` | `--text-secondary` | Adopt frontend |
+| `--admin-text-disabled` | `#bdbdbd` | `--text-muted` / disabled | Adopt frontend |
+| `--admin-border-primary` | `#b0b0b0` | `--border-default` | Adopt frontend |
+| `--admin-border-secondary` | `#c0c0c0` | `--border-subtle` | Adopt frontend |
+| `--admin-border-focus` | `#1976d2` | `--border-primary` / `--input-focus-border` | Adopt frontend |
+| `--admin-border-error` | `#f44336` | `--interactive-danger` | Adopt frontend |
+| `--admin-shadow-sm` | denser recipe | `--shadow-sm` | Adopt frontend |
+| `--admin-shadow-md` | near-identical | `--shadow-md` | Adopt frontend |
+| `--admin-shadow-lg` | different blur | `--shadow-lg` | Adopt frontend |
+| `--admin-shadow-xl` | different blur | `--shadow-xl` | Adopt frontend |
+| `--admin-card-shadow` | dark-theme heavy | `--shadow-card` / `--shadow-lg` | Adopt or promote |
+| `--admin-card-gradient` | dark card fill | surface gradient semantic | Promote if kept |
+| `--admin-surface-glow` | inset highlight | glass/surface effect | Promote into glass theme |
+| `--admin-button` | pink/blue gradient | `--interactive-button` | Promote or simplify to primary |
+| `--admin-z-dropdown` … `--admin-z-tooltip` (7) | 1000–1070 | `--z-*` 100–500 | Adopt frontend; verify stacking |
+| `--admin-glass-*` (10) | admin glass recipes | `--glass-*` / theme glass | Promote unused→delete; used→shared glass semantics |
+| `--admin-neon-primary` / `--admin-neon-secondary` | unused glass accents | — | Delete (dead) or promote |
+
+Glass CONFLICT tokens (10): `--admin-glass-border-soft`, `--admin-glass-border-strong`, `--admin-glass-divider`, `--admin-glass-highlight`, `--admin-glass-inner-shadow`, `--admin-glass-shadow`, `--admin-glass-shadow-lg`, `--admin-glass-surface-muted`, `--admin-glass-surface-soft`, `--admin-glass-surface-strong`.
+
+Z CONFLICT tokens (7): `--admin-z-dropdown`, `--admin-z-sticky`, `--admin-z-fixed`, `--admin-z-modal-backdrop`, `--admin-z-modal`, `--admin-z-popover`, `--admin-z-tooltip`.
+
+#### SHARED (125) — replace with shared tokens (no value negotiation)
+
+| Group | Tokens | Shared target |
+|-------|--------|---------------|
+| Spacing (6) | `--admin-spacing-xs`…`xxl` | `--space-1/2/4/6/8/12` |
+| Radius (4) | `--admin-border-radius-sm`…`xl` | `--radius-sm`…`xl` |
+| Font size (6) | `--admin-font-size-xs`…`xxl` | `--text-xs`…`--text-2xl` |
+| Font weight (4) | `--admin-font-weight-light/normal/medium/bold` | `--font-*` (+ add light if needed) |
+| Font family (1) | `--admin-font-family` | `--font-sans` |
+| Motion (3) | `--admin-transition-*` | `--duration-*` + `--easing-default` |
+| Breakpoints (5) | `--admin-breakpoint-*` | SCSS `$breakpoint-*` / media mixins |
+| Submit/cancel (8) | `--admin-submit-btn*`, `--admin-cancel-btn*` | `--interactive-*` / state |
+| Tab (1) | `--admin-tab-active` | `--interactive-primary` |
+| Text helpers (3) | `--admin-text-inverse/label/tertiary` | `--text-inverse`, `--text-secondary`, `--text-muted` |
+| Input (6) | `--admin-input-*` | `--input-*` (B2 bridge) |
+| Table/select (11) | `--admin-table-*`, `--admin-select-panel-bg`, `--admin-selection-bg` | `--surface-table-*`, `--surface-select-panel` |
+| Order detail/list aliases (21) | `--admin-order-detail-*`, `--admin-order-list-*` | corresponding `--surface-*` / `--text-*` / `--border-*` |
+| Order status (5) | `--admin-order-status-*` | `--state-*` / `--color-*-base` |
+| Surfaces misc (12) | `--admin-popup-bg`, `--admin-bg-main/container/glass/overlay`, `--admin-border-color`, `--admin-basic-bg`, translucents (3), `--admin-product-card-bg`, `--admin-message-info-bg` | `--surface-*` / `--glass-*` / overlay |
+| Buttons muted / back / avatar (5) | `--admin-button-muted*`, `--admin-back-btn`, `--admin-avatar-*` | `--interactive-secondary` / surfaces |
+| Header chrome (5) | `--admin-header-*` | `--surface-*` / `--text-*` / blur tokens |
+| Palette variants (18) | `--admin-*-light/dark/hover` for primary/secondary/success/warning/error/info; `--admin-primary-light/dark`; `--admin-button-hover/text`; `--admin-danger` | `--color-*` / `--interactive-danger` |
+| Accent (1) | `--admin-accent` | `--color-accent` |
+
+#### UNDEFINED (6) — used without definition
+
+| Token | Uses | Fix |
+|-------|-----:|-----|
+| `--admin-font-weight-semibold` | 4 | → `--font-semibold` |
+| `--admin-accent-primary` | 2 | → `--color-accent` or `--interactive-primary` |
+| `--admin-status-success` | 1 | → `--color-success` |
+| `--admin-warn` | 1 | → `--color-warning` |
+| `--admin-bg-card-rgb` | 1 | semantic RGB companion or drop |
+| `--admin-text-disabled-rgb` | 1 | semantic RGB companion or drop |
+
+Scan artifacts (not real tokens): `--admin-font-size-`, `--admin-font-weight-` from `admin-mixins.scss` interpolation.
 
 ---
 
