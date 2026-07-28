@@ -51,9 +51,9 @@ Full per-token table: [UI_AUDIT.md §4.1](../UI_AUDIT.md#41-c1--admin--token-cla
 | `--admin-bg-card-rgb` | 1 | add RGB companion on semantic surface **or** inline rgba |
 | `--admin-text-disabled-rgb` | 1 | same for disabled text |
 
-## Proposed ADMIN-ONLY (C2)
+## Proposed ADMIN-ONLY (C2) — **done**
 
-Hardcoded today — not yet `--admin-*` CSS vars:
+See [`_c2-admin-layout-tokens.md`](_c2-admin-layout-tokens.md). Tokens live in `_admin-layout-tokens.scss`.
 
 | Token | Value | Source |
 |-------|-------|--------|
@@ -61,7 +61,7 @@ Hardcoded today — not yet `--admin-*` CSS vars:
 | `--admin-toolbar-height` | `64px` | glass `--mat-toolbar-*-height` |
 | `--admin-content-padding` | `24px` | `.admin-main` padding |
 
-Existing ADMIN-ONLY to relocate: `--admin-mobile-padding-horizontal`, `--admin-mobile-padding-vertical`.
+Existing ADMIN-ONLY relocated: `--admin-mobile-padding-horizontal`, `--admin-mobile-padding-vertical`.
 
 ## Verification
 

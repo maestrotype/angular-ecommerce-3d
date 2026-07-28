@@ -82,7 +82,7 @@ Fully clean components: `favorites`, `base-modal`, `cart-modal`.
 | ~~Primitive tokens defined twice~~ | ~~`tokens/_primitive-tokens.scss` AND inlined in `tokens/_index.scss`~~ | ✅ RESOLVED (A1, 2026-07-28): `_index.scss` imports the file; inline copies deleted |
 | Color palette defined in parallel | `tokens/` vs TS `light-theme.ts` (SCSS `core/_variables` palette removed in A4) | Task F1 |
 | ~~Theme variables monolith~~ | ~~`tokens/_theme-variables.scss`~~ | ✅ Done (A3): deleted, themes absorb leftover vars |
-| `--admin-*` system | 174 defined / 2 017 usages (M2); classified C1 → SHARED 125 / CONFLICT 47 / ADMIN-ONLY 2 | ✅ C1 (2026-07-28); migrate C2–C6 — see §4.1 |
+| `--admin-*` system | 177 defined / 2 025 usages (M2); C2: 5 ADMIN-ONLY in `_admin-layout-tokens.scss`; C1 class SHARED 125 / CONFLICT 47 | ✅ C2 (2026-07-28); migrate C3–C6 — see §4.1 |
 
 ---
 
@@ -117,10 +117,10 @@ Top offenders (excluding token/theme files):
 ### Current Architecture (confirmed by scan)
 ```
 src/styles/              ← Frontend tokens + themes (canonical SoT)
-src/admin/styles/        ← Parallel --admin-* (174 defined; M2 = 2 017 usages)
+src/admin/styles/        ← Parallel --admin-* (177 defined; M2 live — see Board); layout isolated in C2
 ```
 
-`_admin-layout-tokens.scss` (ADR-011) **does not exist yet** → Task C2.
+`_admin-layout-tokens.scss` (ADR-011) **exists** (C2, 2026-07-28) — 5 ADMIN-ONLY structural tokens.
 
 ### Target Architecture
 ```
@@ -139,7 +139,7 @@ src/admin/styles/_admin-layout-tokens.scss ← Admin LAYOUT only (sidebar, toolb
 | Glass theme | `_glass.scss` | `_admin-glass.scss` (164 lines) | YES |
 | Dark glass | — (no storefront file) | `_admin-dark-glass.scss` (220 lines) | ADMIN-ONLY theme |
 | Material overrides | `overrides/_material-overrides.scss` (B1–B4) | admin-global / themes → C5 | PARTIAL (C5) |
-| Layout styles | N/A | `admin-layout.component.scss` | NO (correct); widths still hardcoded → C2 |
+| Layout styles | N/A | `admin-layout.component.scss` + `_admin-layout-tokens.scss` | NO; C2 tokens wired |
 
 ### 4.1 C1 — `--admin-*` token classification (ADR-011)
 
@@ -149,25 +149,19 @@ src/admin/styles/_admin-layout-tokens.scss ← Admin LAYOUT only (sidebar, toolb
 |-------|------:|---------|-----------|
 | SHARED | 125 | Same concept as shared tokens; replace with primitive/semantic | C3–C4 |
 | CONFLICT | 47 | Same concept, different values — resolve per ADR-011 §2 | C3 |
-| ADMIN-ONLY | 2 | Layout-only; keep under `--admin-*` | C2 |
-| **Total defined** | **174** | | |
+| ADMIN-ONLY | **5** | Layout-only in `_admin-layout-tokens.scss` (C2) | done (C2) |
+| **Total defined** | **177** | was 174; +3 layout tokens in C2 | |
 | UNDEFINED (used, no def) | 6 | Broken refs — fix during migration | C3–C4 |
-| Proposed ADMIN-ONLY (new) | 3 | Hardcoded layout dims → create in C2 | C2 |
 
-#### ADMIN-ONLY (existing — keep)
+#### ADMIN-ONLY (C2 — isolated in `_admin-layout-tokens.scss`)
 
-| Token | Maps / notes |
-|-------|----------------|
-| `--admin-mobile-padding-horizontal` | Layout; → `_admin-layout-tokens.scss` |
-| `--admin-mobile-padding-vertical` | Layout; → `_admin-layout-tokens.scss` |
-
-#### ADMIN-ONLY (proposed — create in C2)
-
-| Token | Value today | Source |
-|-------|-------------|--------|
+| Token | Value | Consumers |
+|-------|-------|-----------|
 | `--admin-sidebar-width` | `260px` | `.admin-sidenav` |
 | `--admin-toolbar-height` | `64px` | glass `--mat-toolbar-*-height` |
 | `--admin-content-padding` | `24px` | `.admin-main` |
+| `--admin-mobile-padding-horizontal` | `8px` | list-container, category-list |
+| `--admin-mobile-padding-vertical` | `22px` | list-container |
 
 #### CONFLICT (47) — resolve before/during C3
 

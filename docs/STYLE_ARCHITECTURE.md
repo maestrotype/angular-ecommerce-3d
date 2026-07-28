@@ -87,8 +87,9 @@ src/
 │       └── _material-overrides.scss  # Central Material overrides (B1–B4; residual admin-global → C5)
 │
 ├── admin/
-│   └── styles/                    # Admin-specific styles (C1 classified; unify C2–C6)
+│   └── styles/                    # Admin-specific styles (C2: layout tokens isolated; unify C3–C6)
 │       ├── admin.scss             # Admin entry (angular.json)
+│       ├── _admin-layout-tokens.scss  # ADMIN-ONLY structural (C2 / ADR-011)
 │       ├── material-theme.scss    # Material theme entry — token palettes + CSS bridge (B4)
 │       ├── admin-global.scss
 │       ├── admin-variables.scss
@@ -109,7 +110,7 @@ src/
 - Partial files are prefixed with `_` and are never imported directly by components
 - `_index.scss` files serve as the single import point for each module
 - Component styles (under `src/app/`) are local and never imported globally
-- Admin styles may reuse shared tokens; `--admin-*` inventoried (C1: SHARED/CONFLICT/ADMIN-ONLY) — migrate C2–C6
+- Admin styles may reuse shared tokens; layout ADMIN-ONLY isolated in `_admin-layout-tokens.scss` (C2); SHARED/CONFLICT migrate C3–C6
 - `main.scss` contains imports only — no CSS rules
 
 ---
@@ -370,7 +371,7 @@ body { margin: 0; }  // This leaks globally due to Angular encapsulation
 |--------|---------|--------|
 | Token definitions | ✅ Primitive + semantic pipeline | Keep single-source primitives |
 | Theme variables | ✅ Per-theme partials (`_default`/`_dark`/`_glass`) | Maintain; sync TS model (Epic F) |
-| Admin styles | C1 classified (SHARED 125 / CONFLICT 47 / ADMIN-ONLY 2); parallel system until C6 | Shared tokens, admin layout only (Epic C) |
+| Admin styles | C2: 5 ADMIN-ONLY in `_admin-layout-tokens.scss`; SHARED 125 / CONFLICT 47 remain until C6 | Shared tokens, admin layout only (Epic C) |
 | Material overrides | Component `.mat-` cleared (B3); palette↔tokens (B4); residual admin-global/themes | All rules in `_material-overrides.scss` + token bridge (Epic B ✅; C5 residual) |
 | Hardcoded colors | Present in many components | Zero — all use tokens (Epic D) |
 | CSS vs SCSS variables | Mixed usage | CSS custom properties preferred |

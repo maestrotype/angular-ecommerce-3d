@@ -151,9 +151,9 @@
   --mat-drawer-container-background-color: transparent;
   --mat-drawer-content-background-color: transparent;
 
-  // Angular Material toolbar token
-  --mat-toolbar-standard-height: 64px;
-  --mat-toolbar-mobile-height: 64px;
+  // Angular Material toolbar token (C2: admin layout SoT)
+  --mat-toolbar-standard-height: var(--admin-toolbar-height);
+  --mat-toolbar-mobile-height: var(--admin-toolbar-height);
 
   // Header-specific glass variables (Task-020)
   --admin-header-bg: rgba(199, 211, 233, 0.35);

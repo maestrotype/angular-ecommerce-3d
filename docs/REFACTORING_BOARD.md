@@ -16,7 +16,7 @@
 | # | Метрика | Baseline (2026-07-28) | Сейчас | Цель | Прогресс |
 |---|---------|----------------------|--------|------|----------|
 | M1 | Hardcoded hex в SCSS (вне tokens/themes) | 1 336 в 68 файлах | 1 336 | 0 | ░░░░░░░░░░ 0% |
-| M2 | Использований `--admin-*` | 2 335 в 43 файлах | **2 017** (B3: removed component Material dumps that referenced `--admin-*`) | 0 (кроме layout-токенов) | ▓░░░░░░░░░ 14% |
+| M2 | Использований `--admin-*` | 2 335 в 43 файлах | **2 025** (C2: +layout token defs/usages; was 2 017) | 0 (кроме layout-токенов) | ▓░░░░░░░░░ 13% |
 | M3 | `!important` | 91 в 12 файлах | **76** (A5: −15 из orphan) | 0 | ▓░░░░░░░░░ 16% |
 | M4 | `::ng-deep` | 40 в 12 файлах | **25** (B3: removed component Material `::ng-deep` dumps) | 0 | ▓▓▓▓░░░░░░ 38% |
 | M5 | Компоненты полностью на semantic-токенах (без hex) | 3 / 86 | 3 / 86 | 86 / 86 | ▓░░░░░░░░░ 3% |
@@ -59,7 +59,7 @@ rg -c '::ng-deep' src --glob '*.scss'
 
 | # | Проблема | Масштаб | Эпик |
 |---|----------|---------|------|
-| 1 | Параллельная admin-система токенов `--admin-*` | M2 = 2 017; C1: 174 classified (SHARED 125 / CONFLICT 47 / ADMIN-ONLY 2) | C |
+| 1 | Параллельная admin-система токенов `--admin-*` | M2 = 2 025; C2: 5 ADMIN-ONLY in `_admin-layout-tokens.scss`; C1: SHARED 125 / CONFLICT 47 | C |
 | 2 | Компоненты не мигрированы (hex повсюду) | 1 336 hex в 68 файлах; admin — 10% на semantic | D |
 | 3 | ~~Legacy-монолит `_theme-variables.scss`~~ **Удалён (A3, 2026-07-28)**: блоки перенесены в `_default`/`_dark`/`_glass` с фильтрацией дублей | — | A |
 | 4 | Material overrides размазаны | Component scatter cleared (B3); palette bound to tokens (B4); remain `admin-global` `.mat-` (C5) | B ✅ / C5 |
@@ -98,7 +98,7 @@ graph LR
 |------|----------|--------|-------|---------|
 | A | Фундамент токенов | ✅ **Готово** | 6/6 | M6, M7 |
 | B | Централизация Material overrides | ✅ Done | 4/4 | M8 |
-| C | Admin-унификация (ADR-011) | 🔄 In Progress | 1/6 | M2 |
+| C | Admin-унификация (ADR-011) | 🔄 In Progress | 2/6 | M2 |
 | D | Миграция компонентов (ADR-006) | ⏳ Ожидает C | 0/10 | M1, M5 |
 | E | Финальная зачистка | ⏳ Ожидает D | 0/4 | M3, M4 |
 | F | Theme Engine v2 (ADR-004, ADR-012) | 💡 План | 0/5 | — |
@@ -141,7 +141,7 @@ graph LR
 | ID | Задача | Файлы | Definition of Done | Статус |
 |----|--------|-------|--------------------|--------|
 | C1 | Инвентаризация 174 уникальных `--admin-*` токенов: классифицировать SHARED / ADMIN-ONLY / CONFLICT (правила — ADR-011 §2) | `docs/UI_AUDIT.md` §4.1; `docs/migration/_c1-admin-token-inventory.md` | Каждый токен классифицирован | ✅ (2026-07-28) |
-| C2 | Создать `src/admin/styles/_admin-layout-tokens.scss` — только структурные значения (sidebar-width, toolbar-height, content-margin) | новый файл | ADMIN-ONLY токены изолированы | 📋 |
+| C2 | Создать `src/admin/styles/_admin-layout-tokens.scss` — только структурные значения (sidebar-width, toolbar-height, content-padding) | `_admin-layout-tokens.scss`; wired in `admin.scss`; consumers: admin-layout, glass | ADMIN-ONLY токены изолированы | ✅ (2026-07-28) |
 | C3 | SHARED-токены: заменить `--admin-*` на semantic-эквиваленты в admin-темах | `_admin-light/dark/glass/dark-glass.scss` | Admin-темы маппят только semantic + layout | 📋 |
 | C4 | Мигрировать 30 admin-компонентов с `--admin-*` на semantic-токены (пакетами по 5, с визуальной проверкой) | `src/admin/**/*.scss` | 0 `--admin-*` (кроме layout) в компонентах | 📋 |
 | C5 | Разобрать `admin-global.scss` (1 195 стр.): токены → shared, стили → модули | `src/admin/styles/admin-global.scss` | Файл ≤ 200 строк layout-специфики | 📋 |
@@ -217,6 +217,7 @@ graph LR
 | 2026-07-28 | B3: 0 `.mat-`/`.mdc-` в admin `*.component.scss`; unique host-scoped → overrides; Epic B 3/4 |
 | 2026-07-28 | **Эпик B закрыт (B4)**: Material palettes ← primitives; MDC CSS bridge → semantic tokens; `_admin-material-base` shim; M8 ~90% |
 | 2026-07-28 | C1: 174 `--admin-*` classified — SHARED 125 / CONFLICT 47 / ADMIN-ONLY 2 (+3 proposed layout); gaps 6; Epic C 1/6 |
+| 2026-07-28 | C2: `_admin-layout-tokens.scss` (5 ADMIN-ONLY); mobile paddings relocated; admin-layout + glass hardcodes → tokens; Epic C 2/6; M2 = 2 025 |
 
 ---
 

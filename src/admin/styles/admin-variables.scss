@@ -106,10 +106,8 @@
   --admin-spacing-lg: 24px;
   --admin-spacing-xl: 32px;
   --admin-spacing-xxl: 48px;
-  
-  // Mobile Spacing
-  --admin-mobile-padding-vertical: 22px;
-  --admin-mobile-padding-horizontal: 8px;
+
+  // Mobile padding → _admin-layout-tokens.scss (C2 / ADR-011)
   
   // Border Radius
   --admin-border-radius-sm: 4px;
