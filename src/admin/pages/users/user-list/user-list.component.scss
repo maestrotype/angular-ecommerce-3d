@@ -38,17 +38,8 @@
     color: rgba(255, 255, 255, 1);
   }
   
-  // Add borders between table rows
-  .mat-mdc-table.mat-mdc-table {
-    .mat-mdc-row .mat-mdc-cell {
-      border-bottom: 1px solid var(--admin-order-list-border);
-    }
-    
-    .mat-mdc-row:last-child .mat-mdc-cell {
-      border-bottom: none;
-    }
-  }
-  
+  // Row borders → overrides (B3)
+
   // Override admin-table-container styles to match Orders
   .admin-table-container.admin-table-container {
     background: var(--admin-basic-bg);
@@ -68,10 +59,6 @@
     }
   }
   
-  // Ensure table inside has proper styling
-  .admin-table-container .mat-mdc-table {
-    background-color: transparent;
-  }
 }
 
 .header-section {
@@ -163,85 +150,4 @@
     font-size: var(--admin-font-size-lg);
   }
 }
-
-::ng-deep {
-  .mat-icon-button {
-    color: var(--admin-text-primary);
-
-    &.mat-button-disabled {
-      color: var(--admin-text-disabled);
-    }
-  }
-
-  .mat-form-field {
-    .mat-form-field-label {
-      color: var(--admin-text-secondary);
-    }
-
-    .mat-input-element {
-      color: var(--admin-text-primary);
-    }
-
-    .mat-form-field-outline {
-      color: var(--admin-border-primary);
-    }
-
-    &.mat-focused {
-      .mat-form-field-outline-thick {
-        color: var(--admin-primary);
-      }
-
-      .mat-form-field-label {
-        color: var(--admin-primary);
-      }
-    }
-  }
-
-  .mat-chip {
-    font-size: var(--admin-font-size-sm);
-    padding: 4px 12px;
-    min-height: 28px;
-
-    &.mat-chip-selected {
-      &.mat-primary {
-        background-color: var(--admin-primary);
-        color: white;
-      }
-
-      &.mat-accent {
-        background-color: var(--admin-accent);
-        color: white;
-      }
-
-      &.mat-warn {
-        background-color: var(--admin-warn);
-        color: white;
-      }
-    }
-  }
-
-  .mat-paginator {
-    background-color: var(--admin-bg-secondary);
-    color: var(--admin-text-primary);
-    border-top: 1px solid var(--admin-border-primary);
-
-    .mat-paginator-page-size-label,
-    .mat-paginator-range-label {
-      color: var(--admin-text-primary);
-    }
-
-    .mat-icon-button {
-      color: var(--admin-text-primary);
-    }
-
-    .mat-select {
-      color: var(--admin-text-primary);
-    }
-  }
-}
-
-
-
-
-
 

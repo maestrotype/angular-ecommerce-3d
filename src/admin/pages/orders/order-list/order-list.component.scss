@@ -42,17 +42,7 @@
     padding: 0;
   }
 
-  // Add borders between table rows like in original Orders
-  .mat-mdc-table.mat-mdc-table {
-    .mat-mdc-row .mat-mdc-cell {
-      border-bottom: 1px solid var(--admin-order-list-border);
-    }
-
-    .mat-mdc-row:last-child .mat-mdc-cell {
-      border-bottom: none;
-    }
-  }
-
+  // Row borders → overrides (B3)
 
 
   .header-section {
@@ -692,34 +682,7 @@
       font-size: 12px;
     }
 
-    .mat-column-id {
-      width: 60px;
-    }
-
-    .mat-column-customer {
-      width: 120px;
-    }
-
-    .mat-column-items {
-      width: 100px;
-    }
-
-    .mat-column-total {
-      width: 60px;
-    }
-
-    .mat-column-status {
-      width: 80px;
-    }
-
-    .mat-column-actions {
-      width: 60px;
-    }
-
-    // Hide less important columns on small screens
-    .mat-column-date {
-      display: none;
-    }
+    // Column widths → overrides (B3)
   }
 
   .orders-grid {
@@ -733,69 +696,3 @@
   }
 }
 
-// Material components styling to match original Orders
-:host ::ng-deep {
-  .mat-icon-button {
-    color: var(--admin-order-list-text-primary, #ffffff);
-
-    &.mat-button-disabled {
-      color: var(--admin-text-disabled, #6b7280);
-    }
-  }
-
-  .mat-raised-button.mat-primary {
-    background-color: var(--admin-primary, #3b82f6);
-    color: #ffffff;
-  }
-
-  .mat-form-field {
-    .mat-form-field-label {
-      color: var(--admin-input-label, #e5e7eb);
-    }
-
-    .mat-input-element {
-      color: var(--admin-order-list-text-primary, #ffffff);
-    }
-
-    .mat-form-field-outline {
-      color: var(--admin-input-border, #6b7280);
-    }
-
-    &.mat-focused {
-      .mat-form-field-outline-thick {
-        color: var(--admin-primary, #3b82f6);
-      }
-
-      .mat-form-field-label {
-        color: var(--admin-primary, #3b82f6);
-      }
-    }
-  }
-
-  .mat-select {
-    color: var(--admin-order-list-text-primary, #ffffff);
-
-    .mat-select-arrow {
-      color: var(--admin-text-secondary, #9ca3af);
-    }
-  }
-
-  .mat-option {
-    background-color: var(--admin-bg-secondary);
-    color: var(--admin-order-list-text-primary, #ffffff);
-
-    &:hover {
-      background-color: var(--admin-bg-hover);
-    }
-
-    &.mat-selected {
-      background-color: var(--admin-primary, #3b82f6);
-    }
-  }
-
-  .mat-select-panel {
-    background-color: var(--admin-bg-secondary);
-  }
-
-
-}

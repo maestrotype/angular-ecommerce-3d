@@ -104,35 +104,7 @@
   margin: 0 var(--admin-spacing-lg);
 
   .payments-table {
-    .mat-table {
-      width: 100%;
-      background-color: transparent;
-
-      .mat-header-cell {
-        background-color: var(--admin-order-list-header-bg);
-        color: var(--admin-text-primary);
-        font-weight: var(--admin-font-weight-bold);
-        font-size: var(--admin-font-size-sm);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        padding: var(--admin-spacing-md);
-        border-bottom: 1px solid var(--admin-border-primary);
-      }
-
-      .mat-cell {
-        color: var(--admin-text-primary);
-        padding: var(--admin-spacing-md);
-        font-size: var(--admin-font-size-sm);
-      }
-
-      .mat-row {
-        border-bottom: 1px solid var(--admin-order-list-border);
-        
-        &:hover td {
-          background-color: var(--admin-order-list-row-hover);
-        }
-      }
-    }
+    // Table chrome → overrides (B3)
 
     .amount {
       font-weight: var(--admin-font-weight-bold);

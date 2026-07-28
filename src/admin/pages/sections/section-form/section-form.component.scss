@@ -17,16 +17,7 @@
       margin-bottom: 0;
     }
 
-    ::ngDeep .mat-mdc-tab-header {
-      padding: 0 32px;
-      border-bottom: 1px solid var(--admin-border-primary);
-      
-      .mat-mdc-tab {
-        --mdc-tab-indicator-active-indicator-color: #ffffff;
-        --mat-tab-header-active-label-text-color: #ffffff;
-        --mat-tab-header-inactive-label-text-color: rgba(255, 255, 255, 0.4);
-      }
-    }
+    // Drawer tabs → overrides (B3)
   }
 
   .form-header {
@@ -75,24 +66,7 @@
       flex-shrink: 0;
       margin-left: 16px;
       
-      mat-chip-listbox {
-        --mdc-chip-label-text-color: var(--admin-text-primary);
-        --mdc-chip-label-text-color: #fff;
-        --mdc-chip-elevated-container-color: rgba(var(--admin-primary-rgb), 0.1);
-        --mdc-chip-selected-elevated-container-color: var(--admin-primary);
-        
-        .mat-mdc-chip-option {
-          --mdc-chip-container-height: 34px;
-          min-width: 50px;
-          margin-right: 8px; // SPACING BETWEEN CHIPS
-          
-          &.mat-mdc-chip-selected {
-            --mdc-chip-label-text-color: var(--admin-bg-card);
-            box-shadow: 0 4px 12px rgba(var(--admin-primary-rgb), 0.4);
-            .mdc-chip__checkmark { display: none; }
-          }
-        }
-      }
+      // Chip listbox → overrides (B3)
     }
   }
 

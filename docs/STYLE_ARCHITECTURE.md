@@ -83,7 +83,7 @@ src/
 │   │
 │   └── overrides/                 # Third-party / Material overrides (ADR-005)
 │       ├── _index.scss            # Re-exports overrides module
-│       └── _material-overrides.scss  # Central Material overrides (B2 dump migrated; B3–B4 remain)
+│       └── _material-overrides.scss  # Central Material overrides (B2+B3; B4 remain)
 │
 ├── admin/
 │   └── styles/                    # Admin-specific styles (parallel --admin-* until Epic C)
@@ -229,7 +229,7 @@ Each theme partial defines CSS variables for ALL dimensions, even if it inherits
 
 ### 6.1 Override Strategy
 
-Central file: `src/styles/overrides/_material-overrides.scss` (wired via `overrides/_index.scss` in `main.scss`). B2 migrated the admin dump onto semantic/bridge tokens (`--input-*`, `--surface-table-*`, …). Scattered component `.mat-` rules remain until B3; `material-theme.scss` palette binding is B4.
+Central file: `src/styles/overrides/_material-overrides.scss` (wired via `overrides/_index.scss` in `main.scss`). B2 migrated the admin dump onto semantic/bridge tokens. B3 cleared all `.mat-` / `.mdc-` from admin `*.component.scss` (unique rules → host-scoped B3 section). Residual: `admin-global.scss` (C5), theme-file `.mat-`, `material-theme.scss` (B4).
 
 See `docs/migration/_admin-theme-material-migration.md` for the remap table.
 
@@ -370,7 +370,7 @@ body { margin: 0; }  // This leaks globally due to Angular encapsulation
 | Token definitions | ✅ Primitive + semantic pipeline | Keep single-source primitives |
 | Theme variables | ✅ Per-theme partials (`_default`/`_dark`/`_glass`) | Maintain; sync TS model (Epic F) |
 | Admin styles | Parallel `--admin-*` system | Shared tokens, admin layout only (Epic C) |
-| Material overrides | Central dump in `overrides/` (B2); component `.mat-` remain (B3) | All rules in `_material-overrides.scss` (Epic B) |
+| Material overrides | Component `.mat-` cleared (B3); residual admin-global/themes | All rules in `_material-overrides.scss` (Epic B + C5) |
 | Hardcoded colors | Present in many components | Zero — all use tokens (Epic D) |
 | CSS vs SCSS variables | Mixed usage | CSS custom properties preferred |
 | Style entry | ✅ `src/styles/main.scss` (imports only) | Keep; never append CSS rules |

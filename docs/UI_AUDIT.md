@@ -138,7 +138,7 @@ src/admin/styles/_admin-layout-tokens.scss ← Admin LAYOUT only (sidebar, toolb
 | Dark theme | `_dark.scss` | `_admin-dark.scss` (212 lines) | YES |
 | Glass theme | `_glass.scss` | `_admin-glass.scss` (164 lines) | YES |
 | Dark glass | — (no storefront file) | `_admin-dark-glass.scss` (220 lines) | ADMIN-ONLY theme |
-| Material overrides | `overrides/_material-overrides.scss` (B2) | component `.mat-` scatter (B3) | PARTIAL |
+| Material overrides | `overrides/_material-overrides.scss` (B1–B3) | admin-global / themes / B4 | PARTIAL |
 | Layout styles | N/A | `admin-layout.component.scss` | NO (correct) |
 
 ---
@@ -184,28 +184,15 @@ Not separately scanned; resolved per-component during Epic D migration (spacing 
 
 ## 8. Angular Material Overrides
 
-**Central file active** (`src/styles/overrides/_material-overrides.scss`, B1+B2) — admin dump migrated onto semantic/bridge tokens. Component `.mat-` scatter remains (B3). Scan update 2026-07-28:
+**Central file active** (`src/styles/overrides/_material-overrides.scss`, B1–B3) — admin dump + component scatter migrated. Residual `.mat-` outside overrides (scan 2026-07-28 post-B3):
 
 | Metric | Value |
 |--------|-------|
-| Files with `.mat-` / `.mat-mdc-` selector overrides | ~23 (dump removed) |
-| Central overrides | `src/styles/overrides/_material-overrides.scss` (~1 540 lines, semantic/bridge) |
+| Admin `*.component.scss` with `.mat-` | **0** |
+| Central overrides | `src/styles/overrides/_material-overrides.scss` (~1 950 lines) |
+| Residual files | `admin-global.scss` (76), `_admin-dark.scss` (6), `_glass.scss` (5), `_admin-dark-glass.scss` (3), `_dark.scss` (2), `_scrollbars.scss` (2) |
 
-Notable scatter outside the central file:
-
-| `.mat-` lines | File |
-|--------------:|------|
-| 76 | `src/admin/styles/admin-global.scss` |
-| 32 | `.../message-list.component.scss` |
-| ~~28~~ | ~~`src/styles.scss` (orphaned)~~ ✅ A5 deleted |
-| 25 | `.../order-list.component.scss` |
-| 23 | `.../user-list.component.scss` |
-| 20 | `.../seo-settings.component.scss` |
-| 15 | `.../seo.component.scss` |
-| 5 | `src/styles/themes/_glass.scss` |
-| 2 | `src/styles/themes/_dark.scss` |
-
-Resolution: Epic B (B1–B2 ✅; B3–B4 remaining).
+Resolution: Epic B (B1–B3 ✅; B4 remaining). Residual admin-global → C5.
 
 ---
 

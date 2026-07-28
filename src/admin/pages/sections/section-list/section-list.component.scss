@@ -134,7 +134,7 @@
             display: flex; 
             justify-content: center; 
             gap: 4px;
-            button { color: var(--admin-primary); &.mat-warn { color: var(--admin-error); } }
+            button { color: var(--admin-primary); } // warn color → overrides (B3)
           }
         }
       }
@@ -172,23 +172,7 @@
           }
           .drawer-lang-switcher {
             margin-right: 12px;
-            ::ng-deep {
-              .mat-mdc-chip-listbox-wrapper { gap: 4px; }
-              mat-chip-listbox {
-                --mdc-chip-label-text-color: rgba(255, 255, 255, 0.7);
-              }
-              .mat-mdc-standard-chip {
-                min-height: 28px; padding: 0 8px; font-size: 0.75rem; font-weight: 700;
-                background: rgba(255, 255, 255, 0.1); 
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                
-                &.mat-mdc-chip-selected { 
-                  --mdc-chip-label-text-color: #ffffff;
-                  background: var(--admin-primary); 
-                  box-shadow: 0 0 12px rgba(var(--admin-primary-rgb), 0.4);
-                }
-              }
-            }
+            // Lang chips → overrides (B3)
           }
         }
 
@@ -543,36 +527,7 @@
       }
     }
 
-    // ── Slide toggle: kill the extra hover states and ripples ──
-    ::ng-deep {
-      .mat-mdc-slide-toggle,
-      .mat-mdc-slide-toggle.mat-accent,
-      .mat-mdc-slide-toggle.mat-primary {
-        --mdc-switch-selected-hover-state-layer-color: transparent;
-        --mdc-switch-unselected-hover-state-layer-color: transparent;
-        --mdc-switch-selected-focus-state-layer-color: transparent;
-        --mdc-switch-unselected-focus-state-layer-color: transparent;
-        --mdc-switch-selected-pressed-state-layer-color: transparent;
-        --mdc-switch-unselected-pressed-state-layer-color: transparent;
-        --mdc-switch-hover-state-layer-color: transparent;
-        --mdc-switch-focus-state-layer-color: transparent;
-        
-        .mat-mdc-slide-toggle-ripple,
-        .mdc-switch__ripple,
-        .mat-ripple,
-        .mat-ripple-element {
-          display: none;
-          background-color: transparent;
-          background: transparent;
-          opacity: 0;
-        }
-
-        .mdc-switch:hover .mdc-switch__track::before,
-        .mdc-switch:hover .mdc-switch__track::after {
-          opacity: 0;
-        }
-      }
-    }
+    // Slide-toggle chrome → overrides (B2/B3)
   }
 }
 

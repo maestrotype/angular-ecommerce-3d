@@ -5,9 +5,9 @@
    Consume semantic tokens only — no --admin-* and no hardcoded brand colors.
    Do NOT put .mat- / .mat-mdc- / .mdc- overrides in component SCSS.
 
-   Remaining work:
-     B3 — move scattered .mat- overrides from component SCSS (23 files)
-     B4 — bind material-theme.scss palette to design tokens
+   B3 — component .mat- rules migrated (host-scoped section below).
+   Remaining: B4 — bind material-theme.scss palette to design tokens.
+   Out of scope here: admin-global / theme-file .mat- (C5 / later).
    ========================================================================== */
 
 /* Safe defaults if variables missing */
@@ -1540,4 +1540,412 @@
       0 8px 20px rgba(0, 0, 0, 0.45),
       inset 0 0 0 rgba(0, 0, 0, 0);
   }
+}
+
+/* ==========================================================================
+   B3 — page/component-scoped Material (from admin *.component.scss)
+   Layout + unique theming. Prefer semantic tokens; --admin-* → Epic C.
+   ========================================================================== */
+
+/* —— Tables: row borders (orders / users) —— */
+app-order-list .mat-mdc-table.mat-mdc-table .mat-mdc-row .mat-mdc-cell,
+app-user-list .mat-mdc-table.mat-mdc-table .mat-mdc-row .mat-mdc-cell {
+  border-bottom: 1px solid var(--admin-order-list-border, var(--border-default)); // TODO Epic C
+}
+
+app-order-list .mat-mdc-table.mat-mdc-table .mat-mdc-row:last-child .mat-mdc-cell,
+app-user-list .mat-mdc-table.mat-mdc-table .mat-mdc-row:last-child .mat-mdc-cell {
+  border-bottom: none;
+}
+
+/* —— Message list: subject column + actions —— */
+app-message-list .messages-table .mat-column-subject.mat-mdc-header-cell,
+app-message-list .messages-table .mat-column-subject.mat-mdc-cell,
+app-message-list .messages-table td.mat-column-subject,
+app-message-list .messages-table th.mat-column-subject {
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--interactive-primary);
+}
+
+[data-theme='dark'] app-message-list .messages-table .mat-column-subject.mat-mdc-header-cell,
+[data-theme='dark'] app-message-list .messages-table .mat-column-subject.mat-mdc-cell,
+[data-theme='dark'] app-message-list .messages-table td.mat-column-subject,
+[data-theme='dark'] app-message-list .messages-table th.mat-column-subject {
+  color: var(--admin-primary-light, var(--interactive-primary)); // TODO Epic C
+}
+
+[data-theme='glass'] app-message-list .messages-table .mat-column-subject.mat-mdc-header-cell,
+[data-theme='glass'] app-message-list .messages-table .mat-column-subject.mat-mdc-cell,
+[data-theme='glass'] app-message-list .messages-table td.mat-column-subject,
+[data-theme='glass'] app-message-list .messages-table th.mat-column-subject {
+  color: var(--admin-border-focus, var(--interactive-primary)); // TODO Epic C
+}
+
+app-message-list .messages-table .mat-column-actions {
+  width: 200px;
+  text-align: center;
+}
+
+/* —— User list chips —— */
+app-user-list .mat-chip {
+  font-size: var(--font-size-sm, 0.875rem);
+  padding: 4px 12px;
+  min-height: 28px;
+
+  &.mat-chip-selected.mat-primary {
+    background-color: var(--interactive-primary);
+    color: var(--text-on-primary, #fff);
+  }
+
+  &.mat-chip-selected.mat-accent {
+    background-color: var(--admin-accent, var(--interactive-primary)); // TODO Epic C
+    color: var(--text-on-primary, #fff);
+  }
+
+  &.mat-chip-selected.mat-warn {
+    background-color: var(--interactive-danger, var(--admin-warn));
+    color: var(--text-on-primary, #fff);
+  }
+}
+
+/* —— Category list: touch targets + mobile paginator —— */
+app-category-list .action-button .mat-mdc-button-touch-target {
+  width: 48px;
+  height: 48px;
+}
+
+@media (max-width: 768px) {
+  app-category-list .action-button .mat-mdc-button-touch-target {
+    width: 56px;
+    height: 56px;
+  }
+
+  app-category-list .mobile-paginator .mat-mdc-paginator-container {
+    padding: 8px 0;
+    min-height: 56px;
+  }
+
+  app-category-list .mobile-paginator .mat-mdc-paginator-page-size {
+    font-size: 16px;
+  }
+
+  app-category-list .mobile-paginator .mat-mdc-paginator-range-label {
+    font-size: 16px;
+    margin: 0 16px;
+  }
+}
+
+/* —— Fold compact column widths —— */
+@media (min-width: 690px) and (max-width: 768px) {
+  app-order-list .admin-table-wrapper .order-table {
+    th,
+    td {
+      padding: 6px 8px;
+      font-size: 12px;
+    }
+
+    .mat-column-id { width: 60px; }
+    .mat-column-customer { width: 120px; }
+    .mat-column-items { width: 100px; }
+    .mat-column-total { width: 60px; }
+    .mat-column-status { width: 80px; }
+    .mat-column-actions { width: 60px; }
+    .mat-column-date { display: none; }
+  }
+
+  app-category-list .category-table {
+    th,
+    td {
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+
+    .mat-column-id { width: 60px; }
+    .mat-column-name { width: 120px; }
+    .mat-column-description { width: 200px; }
+    .mat-column-actions { width: 80px; }
+  }
+
+  app-product-list .products-table {
+    th,
+    td {
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+
+    .mat-column-id { width: 60px; }
+    .mat-column-image { width: 80px; }
+    .mat-column-name { width: 120px; }
+    .mat-column-category { width: 100px; }
+    .mat-column-price { width: 80px; }
+    .mat-column-stock { width: 80px; }
+    .mat-column-actions { width: 80px; }
+  }
+}
+
+/* —— SEO / SEO settings: tab chrome —— */
+app-seo .seo-tabs .mat-mdc-tab-header,
+app-seo-settings .seo-tabs .mat-mdc-tab-header {
+  margin-bottom: var(--spacing-lg, 1.5rem);
+  border-bottom: 1px solid var(--border-default, var(--admin-border-primary));
+}
+
+app-seo .seo-tabs .mat-mdc-tab-body-content,
+app-seo-settings .seo-tabs .mat-mdc-tab-body-content {
+  padding: var(--spacing-lg, 1.5rem) 0;
+}
+
+app-seo .seo-tabs .mat-mdc-tab .mat-mdc-tab-label-content,
+app-seo .seo-tabs .mat-mdc-tab .mdc-tab__text-label,
+app-seo-settings .seo-tabs .mat-mdc-tab .mat-mdc-tab-label-content,
+app-seo-settings .seo-tabs .mat-mdc-tab .mdc-tab__text-label {
+  color: var(--text-secondary);
+}
+
+app-seo .seo-tabs .mat-mdc-tab.mat-mdc-tab-active .mat-mdc-tab-label-content,
+app-seo .seo-tabs .mat-mdc-tab.mat-mdc-tab-active .mdc-tab__text-label,
+app-seo .seo-tabs .mat-mdc-tab:hover .mat-mdc-tab-label-content,
+app-seo .seo-tabs .mat-mdc-tab:hover .mdc-tab__text-label,
+app-seo-settings .seo-tabs .mat-mdc-tab.mat-mdc-tab-active .mat-mdc-tab-label-content,
+app-seo-settings .seo-tabs .mat-mdc-tab.mat-mdc-tab-active .mdc-tab__text-label,
+app-seo-settings .seo-tabs .mat-mdc-tab:hover .mat-mdc-tab-label-content,
+app-seo-settings .seo-tabs .mat-mdc-tab:hover .mdc-tab__text-label {
+  color: var(--admin-tab-active, var(--interactive-primary)); // TODO Epic C
+}
+
+app-seo .seo-tabs .mat-mdc-tab-header .mdc-tab-indicator__content--underline,
+app-seo .seo-tabs .mat-mdc-tab-indicator .mdc-tab-indicator__content,
+app-seo-settings .seo-tabs .mat-mdc-tab-header .mdc-tab-indicator__content--underline,
+app-seo-settings .seo-tabs .mat-mdc-tab-indicator .mdc-tab-indicator__content {
+  border-color: var(--admin-tab-active, var(--interactive-primary));
+  background-color: var(--admin-tab-active, var(--interactive-primary));
+}
+
+/* —— SEO settings cards —— */
+app-seo-settings .settings-card .mat-card-header,
+app-seo-settings .settings-card .mat-mdc-card-header {
+  padding-bottom: var(--spacing-md, 1rem);
+  border-bottom: 1px solid var(--border-subtle, var(--admin-border-secondary));
+}
+
+app-seo-settings .settings-card .mat-card-title,
+app-seo-settings .settings-card .mat-mdc-card-title {
+  font-size: var(--font-size-xl, 1.25rem);
+  font-weight: var(--font-weight-bold, 700);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-xs, 0.25rem);
+}
+
+app-seo-settings .settings-card .mat-card-subtitle,
+app-seo-settings .settings-card .mat-mdc-card-subtitle {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm, 0.875rem);
+}
+
+app-seo-settings .settings-card .mat-card-content,
+app-seo-settings .settings-card .mat-mdc-card-content {
+  padding-top: var(--spacing-lg, 1.5rem);
+}
+
+app-seo-settings .settings-form mat-form-field .mat-error,
+app-seo-settings .settings-form mat-form-field .mat-mdc-form-field-error {
+  font-size: var(--font-size-xs, 0.75rem);
+  margin-top: var(--spacing-xs, 0.25rem);
+}
+
+app-seo-settings .settings-form mat-form-field .mat-hint,
+app-seo-settings .settings-form mat-form-field .mat-mdc-form-field-hint {
+  font-size: var(--font-size-xs, 0.75rem);
+  color: var(--text-secondary);
+}
+
+/* —— Section form drawer tabs + chips —— */
+app-section-form .form-wrapper.drawer-mode .mat-mdc-tab-header {
+  padding: 0 32px;
+  border-bottom: 1px solid var(--border-default, var(--admin-border-primary));
+}
+
+app-section-form .form-wrapper.drawer-mode .mat-mdc-tab-header .mat-mdc-tab {
+  --mdc-tab-indicator-active-indicator-color: #ffffff;
+  --mat-tab-header-active-label-text-color: #ffffff;
+  --mat-tab-header-inactive-label-text-color: rgba(255, 255, 255, 0.4);
+}
+
+app-section-form .header-actions mat-chip-listbox {
+  --mdc-chip-label-text-color: #fff;
+  --mdc-chip-elevated-container-color: rgba(var(--interactive-primary-rgb), 0.1);
+  --mdc-chip-selected-elevated-container-color: var(--interactive-primary);
+}
+
+app-section-form .header-actions .mat-mdc-chip-option {
+  --mdc-chip-container-height: 34px;
+  min-width: 50px;
+  margin-right: 8px;
+}
+
+app-section-form .header-actions .mat-mdc-chip-option.mat-mdc-chip-selected {
+  --mdc-chip-label-text-color: var(--surface-elevated, var(--admin-bg-card));
+  box-shadow: 0 4px 12px rgba(var(--interactive-primary-rgb), 0.4);
+}
+
+app-section-form .header-actions .mat-mdc-chip-option.mat-mdc-chip-selected .mdc-chip__checkmark {
+  display: none;
+}
+
+/* —— Section list: warn actions + lang chips + glass switch track —— */
+app-section-list .col-actions button.mat-warn {
+  color: var(--interactive-danger, var(--admin-error));
+}
+
+app-section-list .drawer-lang-switcher .mat-mdc-chip-listbox-wrapper {
+  gap: 4px;
+}
+
+app-section-list .drawer-lang-switcher mat-chip-listbox {
+  --mdc-chip-label-text-color: rgba(255, 255, 255, 0.7);
+}
+
+app-section-list .drawer-lang-switcher .mat-mdc-standard-chip {
+  min-height: 28px;
+  padding: 0 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+app-section-list .drawer-lang-switcher .mat-mdc-standard-chip.mat-mdc-chip-selected {
+  --mdc-chip-label-text-color: #ffffff;
+  background: var(--interactive-primary);
+  box-shadow: 0 0 12px rgba(var(--interactive-primary-rgb), 0.4);
+}
+
+[data-theme='glass'] app-section-list .mat-mdc-slide-toggle .mdc-switch:hover .mdc-switch__track::before,
+[data-theme='glass'] app-section-list .mat-mdc-slide-toggle .mdc-switch:hover .mdc-switch__track::after,
+[data-theme='dark-glass'] app-section-list .mat-mdc-slide-toggle .mdc-switch:hover .mdc-switch__track::before,
+[data-theme='dark-glass'] app-section-list .mat-mdc-slide-toggle .mdc-switch:hover .mdc-switch__track::after {
+  opacity: 0;
+}
+
+/* —— Payments table extras —— */
+app-payments .payments-table .mat-header-cell,
+app-payments .payments-table .mat-mdc-header-cell {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: var(--font-weight-bold, 700);
+  font-size: var(--font-size-sm, 0.875rem);
+}
+
+app-payments .payments-table .mat-row:hover td,
+app-payments .payments-table .mat-mdc-row:hover td {
+  background-color: var(--admin-order-list-row-hover, var(--surface-highlight)); // TODO Epic C
+}
+
+/* —— Image processor —— */
+app-image-processor .processing-options .mat-mdc-slide-toggle-label {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+app-image-processor .loading-container .mat-mdc-progress-spinner circle {
+  stroke: var(--interactive-primary);
+}
+
+app-image-processor .actions button.mat-primary {
+  background: var(--interactive-primary);
+  color: var(--text-on-primary, #1a1a1a);
+
+  &:hover:not(:disabled) {
+    background: var(--admin-primary-hover, var(--interactive-primary)); // TODO Epic C
+    box-shadow: 0 0 20px rgba(var(--interactive-primary-rgb, 138, 180, 248), 0.4);
+  }
+}
+
+app-image-processor .actions button.mat-warn {
+  background: rgba(242, 139, 130, 0.2);
+  color: var(--interactive-danger, var(--admin-error));
+  border: 1px solid var(--interactive-danger, var(--admin-error));
+
+  &:hover:not(:disabled) {
+    background: rgba(242, 139, 130, 0.3);
+  }
+}
+
+/* —— Confirmation dialog layout —— */
+.confirmation-dialog .mat-dialog-title,
+.confirmation-dialog .mat-mdc-dialog-title {
+  margin: 0;
+  color: var(--text-primary, #212121);
+  font-weight: 600;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.confirmation-dialog .dialog-icon {
+  font-size: 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+
+  &.danger { color: var(--interactive-danger, #f44336); }
+  &.warning { color: var(--status-warning, #ff9800); }
+  &.info { color: var(--interactive-primary, #1976d2); }
+}
+
+.confirmation-dialog .mat-dialog-content,
+.confirmation-dialog .mat-mdc-dialog-content {
+  margin: 16px 0;
+
+  p {
+    margin: 0;
+    color: var(--text-secondary, #757575);
+    line-height: 1.6;
+    font-size: 1rem;
+  }
+}
+
+.confirmation-dialog .mat-dialog-actions,
+.confirmation-dialog .mat-mdc-dialog-actions {
+  margin: 0;
+  padding: 8px 0;
+  gap: 8px;
+
+  button {
+    min-width: 80px;
+  }
+
+  button[color='warn'] {
+    background-color: var(--interactive-danger, #f44336);
+    color: #fff;
+
+    &:hover {
+      background-color: var(--admin-error, #d32f2f); // TODO Epic C
+    }
+  }
+
+  button[mat-button] {
+    color: var(--text-secondary, #757575);
+    border: 1px solid var(--border-subtle, #f0f0f0);
+
+    &:hover {
+      background-color: var(--surface-highlight, #f5f5f5);
+    }
+  }
+}
+
+/* —— Forms: full width + subscript —— */
+app-product-form .mat-mdc-form-field {
+  width: 100%;
+}
+
+app-product-form .switches-group mat-slide-toggle .mdc-form-field {
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+app-settings mat-form-field .mat-mdc-form-field-subscript-wrapper,
+app-profile mat-form-field .mat-mdc-form-field-subscript-wrapper {
+  margin-top: 4px;
 }

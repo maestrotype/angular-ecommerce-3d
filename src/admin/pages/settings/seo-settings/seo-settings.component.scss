@@ -22,51 +22,7 @@
   }
 
   .seo-settings-content {
-    .seo-tabs {
-      ::ng-deep {
-        .mat-mdc-tab-header {
-          border-bottom: 1px solid var(--admin-border-primary);
-        }
-
-        .mat-mdc-tab-body-content {
-          padding: var(--admin-spacing-lg) 0;
-        }
-
-        // Tab text colors - uses global theme variables
-        .mat-mdc-tab.mat-mdc-tab {
-          font-weight: var(--admin-font-weight-medium);
-          transition: color 0.3s ease;
-          
-          .mat-mdc-tab-label-content,
-          .mdc-tab__text-label {
-            color: var(--admin-text-secondary);
-          }
-          
-          // Active tab color
-          &.mat-mdc-tab-active {
-            .mat-mdc-tab-label-content,
-            .mdc-tab__text-label {
-              color: var(--admin-tab-active, var(--admin-primary));
-            }
-          }
-          
-          // Hover tab color
-          &:hover {
-            .mat-mdc-tab-label-content,
-            .mdc-tab__text-label {
-              color: var(--admin-tab-active, var(--admin-primary));
-            }
-          }
-        }
-        
-        // Active indicator bar
-        .mat-mdc-tab-header .mdc-tab-indicator__content--underline,
-        .mat-mdc-tab-indicator .mdc-tab-indicator__content {
-          border-color: var(--admin-tab-active, var(--admin-primary));
-          background-color: var(--admin-tab-active, var(--admin-primary));
-        }
-      }
-    }
+    .seo-tabs {}
 
     .settings-card {
       margin-bottom: var(--admin-spacing-lg);
@@ -74,26 +30,7 @@
       background-color: var(--admin-bg-card);
       border: 1px solid var(--admin-border-primary);
 
-      .mat-card-header {
-        padding-bottom: var(--admin-spacing-md);
-        border-bottom: 1px solid var(--admin-border-secondary);
-
-        .mat-card-title {
-          font-size: var(--admin-font-size-xl);
-          font-weight: var(--admin-font-weight-bold);
-          color: var(--admin-text-primary);
-          margin-bottom: var(--admin-spacing-xs);
-        }
-
-        .mat-card-subtitle {
-          color: var(--admin-text-secondary);
-          font-size: var(--admin-font-size-sm);
-        }
-      }
-
-      .mat-card-content {
-        padding-top: var(--admin-spacing-lg);
-      }
+      // Card header/content → overrides (B3)
     }
 
     .settings-form {
@@ -120,35 +57,7 @@
         }
 
         mat-form-field {
-          .mat-form-field-wrapper {
-            padding-bottom: 0;
-          }
-
-          .mat-form-field-outline {
-            border-radius: var(--admin-border-radius-md);
-          }
-
-          .mat-form-field-label {
-            color: var(--admin-text-secondary);
-          }
-
-          .mat-form-field-outline-thick {
-            color: var(--admin-primary);
-          }
-
-          .mat-icon {
-            color: var(--admin-text-secondary);
-          }
-
-          .mat-error {
-            font-size: var(--admin-font-size-xs);
-            margin-top: var(--admin-spacing-xs);
-          }
-
-          .mat-hint {
-            font-size: var(--admin-font-size-xs);
-            color: var(--admin-text-secondary);
-          }
+          // Material field chrome → overrides (B3)
         }
       }
 

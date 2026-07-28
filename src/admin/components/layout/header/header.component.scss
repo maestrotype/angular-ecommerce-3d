@@ -54,7 +54,7 @@
   }
 }
 
-.notification-menu.mat-mdc-menu-panel {
+.notification-menu {
   min-width: 360px;
   max-width: 420px;
   
@@ -75,7 +75,7 @@
       color: var(--admin-text-primary);
     }
     
-    button.mark-all-read.mat-mdc-button {
+    button.mark-all-read {
       font-size: 13px;
       font-weight: var(--admin-font-weight-medium);
       padding: 6px 12px;
@@ -89,9 +89,7 @@
         color: #ffffff;
       }
       
-      span,
-      .mdc-button__label,
-      .mat-button-wrapper {
+      span {
         color: #ffffff;
       }
       
@@ -317,7 +315,7 @@
 
 // Dark Glass theme - notification menu
 [data-theme="dark-glass"] {
-  .notification-menu.mat-mdc-menu-panel {
+  .notification-menu {
     .notification-header {
       background: rgba(90, 85, 80, 0.5);
       backdrop-filter: blur(40px) saturate(200%);
@@ -328,7 +326,7 @@
         color: rgba(255, 255, 255, 0.95);
       }
       
-      button.mark-all-read.mat-mdc-button {
+      button.mark-all-read {
         background-color: var(--admin-button-muted);
         
         &:hover {
@@ -426,7 +424,7 @@
 
 // Light theme - notification menu enhancements
 [data-theme="light"] {
-  .notification-menu.mat-mdc-menu-panel {
+  .notification-menu {
     .notification-header {
       background: rgba(255, 255, 255, 0.98);
       border-bottom-color: #e5e7eb;
@@ -435,7 +433,7 @@
         color: #111827;
       }
       
-      button.mark-all-read.mat-mdc-button {
+      button.mark-all-read {
         background-color: var(--admin-button-muted);
         
         &:hover {
@@ -481,7 +479,7 @@
 
 // Dark theme - notification menu enhancements
 [data-theme="dark"] {
-  .notification-menu.mat-mdc-menu-panel {
+  .notification-menu {
     background-color: var(--admin-bg-secondary);
     border: 1px solid var(--admin-border-primary);
     box-shadow: var(--admin-card-shadow);
@@ -494,7 +492,7 @@
         color: var(--admin-text-primary);
       }
       
-      button.mark-all-read.mat-mdc-button {
+      button.mark-all-read {
         background-color: var(--admin-primary);
         color: #ffffff;
         

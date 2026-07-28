@@ -48,84 +48,12 @@
     color: rgba(255, 255, 255, 0.95);
   }
   
-    // Input fields white text
-    .mat-mdc-form-field.mat-mdc-form-field {
-      .mat-mdc-input-element,
-      input,
-      textarea {
-        color: rgba(255, 255, 255, 0.95);
-      }
-      
-      // Placeholder white
-      .mat-mdc-input-element::placeholder,
-      input::placeholder,
-      textarea::placeholder {
-        color: rgba(255, 255, 255, 0.6);
-      }
-      
-      // Labels white
-      .mat-mdc-floating-label,
-      .mdc-floating-label,
-      label {
-        color: rgba(255, 255, 255, 0.7);
-      }
-      
-      // Hint text (character counter) white
-      .mat-mdc-form-field-hint,
-      .mat-hint {
-        color: rgba(255, 255, 255, 0.6);
-      }
-    }
   }
 
 .seo-content {
   margin-top: var(--admin-spacing-lg);
   
-  .seo-tabs {
-    ::ng-deep {
-      .mat-mdc-tab-header {
-        margin-bottom: var(--admin-spacing-lg);
-        border-bottom: 1px solid var(--admin-border-primary);
-      }
-
-      .mat-mdc-tab-body-content {
-        padding: var(--admin-spacing-lg) 0;
-      }
-
-      // Tab text colors - uses global theme variables
-      .mat-mdc-tab.mat-mdc-tab {
-        transition: color 0.3s ease;
-        
-        .mat-mdc-tab-label-content,
-        .mdc-tab__text-label {
-          color: var(--admin-text-secondary);
-        }
-        
-        // Active tab color
-        &.mat-mdc-tab-active {
-          .mat-mdc-tab-label-content,
-          .mdc-tab__text-label {
-            color: var(--admin-tab-active, var(--admin-primary));
-          }
-        }
-        
-        // Hover tab color
-        &:hover {
-          .mat-mdc-tab-label-content,
-          .mdc-tab__text-label {
-            color: var(--admin-tab-active, var(--admin-primary));
-          }
-        }
-      }
-      
-      // Active indicator bar
-      .mat-mdc-tab-header .mdc-tab-indicator__content--underline,
-      .mat-mdc-tab-indicator .mdc-tab-indicator__content {
-        border-color: var(--admin-tab-active, var(--admin-primary));
-        background-color: var(--admin-tab-active, var(--admin-primary));
-      }
-    }
-  }
+  .seo-tabs {}
 }
 
 .tab-content {

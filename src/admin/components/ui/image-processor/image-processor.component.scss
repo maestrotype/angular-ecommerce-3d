@@ -137,12 +137,7 @@
   border-radius: 16px;
   border: 1px solid var(--admin-border-secondary);
 
-  ::ng-deep {
-    .mat-mdc-slide-toggle-label {
-      color: var(--admin-text-secondary);
-      font-weight: 500;
-    }
-  }
+  // slide-toggle label → overrides (B3)
 }
 
 .preview-section {
@@ -226,9 +221,7 @@
     font-size: 0.9rem;
   }
 
-  ::ng-deep .mat-mdc-progress-spinner circle {
-    stroke: var(--admin-primary);
-  }
+  // spinner → overrides (B3)
 }
 
 .file-info {
@@ -270,25 +263,7 @@
       margin-right: 8px;
     }
 
-    &.mat-primary {
-      background: var(--admin-primary, #8ab4f8);
-      color: #1a1a1a;
-
-      &:hover:not(:disabled) {
-        background: var(--admin-primary-hover, #aec7f9);
-        box-shadow: 0 0 20px rgba(138, 180, 248, 0.4);
-      }
-    }
-
-    &.mat-warn {
-      background: rgba(242, 139, 130, 0.2);
-      color: var(--admin-error, #f28b82);
-      border: 1px solid var(--admin-error);
-
-      &:hover:not(:disabled) {
-        background: rgba(242, 139, 130, 0.3);
-      }
-    }
+    // mat-primary / mat-warn fills → overrides (B3)
   }
 }
 

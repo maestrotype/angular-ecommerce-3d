@@ -39,9 +39,10 @@ Storefront input bridge: `_dark.scss` / `_glass.scss` (`--input-*` only)
 
 - Theme-scoped hex recipes in overrides (`#313638`, glass menu colors, etc.) marked `// TODO Epic C`
 - Glass inset/frost `rgba(...)` effect recipes inside `[data-theme='glass'|'dark-glass']`
-- Scattered `.mat-` rules in component SCSS → **B3**
+- Scattered `.mat-` rules in component SCSS → **B3 ✅** (0 in `*.component.scss`; residual admin-global/themes)
 - `material-theme.scss` palette → **B4**
 - Component `--admin-*` usage → **Epic C**
+- `admin-global.scss` `.mat-` → **C5**
 
 ## Verification
 
