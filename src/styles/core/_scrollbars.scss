@@ -1,0 +1,39 @@
+/* ==========================================================================
+   SCROLLBARS
+   Global thin scrollbars + hide on Material drawer content.
+   Ported from orphaned src/styles.scss (Task A5) — without !important.
+   ========================================================================== */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-medium) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-medium);
+  border-radius: var(--radius-full, 9999px);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-emphasis);
+}
+
+mat-sidenav-content,
+.mat-drawer-content {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+mat-sidenav-content::-webkit-scrollbar,
+.mat-drawer-content::-webkit-scrollbar {
+  display: none;
+}

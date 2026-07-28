@@ -17,11 +17,11 @@
 |---|---------|----------------------|--------|------|----------|
 | M1 | Hardcoded hex в SCSS (вне tokens/themes) | 1 336 в 68 файлах | 1 336 | 0 | ░░░░░░░░░░ 0% |
 | M2 | Использований `--admin-*` | 2 335 в 43 файлах | 2 335 | 0 (кроме layout-токенов) | ░░░░░░░░░░ 0% |
-| M3 | `!important` | 91 в 12 файлах | 91 | 0 | ░░░░░░░░░░ 0% |
+| M3 | `!important` | 91 в 12 файлах | **76** (A5: −15 из orphan) | 0 | ▓░░░░░░░░░ 16% |
 | M4 | `::ng-deep` | 40 в 12 файлах | 40 | 0 | ░░░░░░░░░░ 0% |
 | M5 | Компоненты полностью на semantic-токенах (без hex) | 3 / 86 | 3 / 86 | 86 / 86 | ▓░░░░░░░░░ 3% |
 | M6 | Legacy `_theme-variables.scss` | 722 строки, подключён | **удалён** | удалён | ██████████ 100% |
-| M7 | Orphaned `src/styles.scss` | 499 строк логики | 499 | удалён | ░░░░░░░░░░ 0% |
+| M7 | Orphaned `src/styles.scss` | 499 строк логики | **удалён** | удалён | ██████████ 100% |
 | M8 | Централизованный `_material-overrides.scss` | нет; overrides в 24 файлах | нет | 1 файл | ░░░░░░░░░░ 0% |
 
 **Команды для перепроверки метрик:**
@@ -62,7 +62,7 @@ rg -c '::ng-deep' src --glob '*.scss'
 | 2 | Компоненты не мигрированы (hex повсюду) | 1 336 hex в 68 файлах; admin — 10% на semantic | D |
 | 3 | ~~Legacy-монолит `_theme-variables.scss`~~ **Удалён (A3, 2026-07-28)**: блоки перенесены в `_default`/`_dark`/`_glass` с фильтрацией дублей | — | A |
 | 4 | Material overrides размазаны | `_admin-theme-material.scss` (1 548 стр.) + 23 файла | B |
-| 5 | Orphaned `src/styles.scss` — 499 строк логики, не подключён к сборке, но docs считают его entry | 499 строк | A |
+| 5 | ~~Orphaned `src/styles.scss`~~ **Удалён (A5, 2026-07-28)**: glass-хелперы → `components/_glass-helpers.scss`, скроллбары → `core/_scrollbars.scss`; мёртвый код отброшен. Docs entry point → A6 | — | A |
 | 6 | ~~`_primitive-tokens.scss` существует, но НЕ импортируется — `tokens/_index.scss` дублирует примитивы инлайн~~ **Исправлено (A1, 2026-07-28)**: заодно починены нерезолвившиеся токены `--color-blue-300/400`, `--color-blue-400-rgb`, `--z-modal`, `--font-*` weights, использовавшиеся в dark/glass темах и модалках | — | A |
 | 7 | ~~`core/_variables.scss` — параллельная палитра~~ **Исправлено (A4, 2026-07-28)**: цвета перенесены в semantic legacy-алиасы; файл — только SCSS-breakpoints + non-color утилиты | — | A |
 | 8 | Заглушки `_forms.scss`, `_modals.scss`, `_navigation.scss` | по 5 строк | E |
@@ -119,7 +119,7 @@ graph LR
 | A2 | Расширить semantic-слой до полного покрытия (сейчас 47 строк — каркас). Свести список всех semantic-токенов, реально используемых компонентами, доопределить недостающие | `src/styles/tokens/_semantic-tokens.scss`, `_primitive-tokens.scss`, `themes/_dark.scss`, `themes/_glass.scss` | Все `var(--...)`-ссылки без фолбэков разрешаются в витринном скоупе (остаток: `--tw-*` → A5, `--admin-*`/`--lg-*` → эпик C) | ✅ (2026-07-28) |
 | A3 | Инвентаризация `_theme-variables.scss` (722 стр.): классифицировать каждый блок → перенести в темы / semantic / удалить | `src/styles/tokens/_theme-variables.scss`, `src/styles/themes/*` | Файл удалён, `@forward` убран из `_index.scss`; визуально ничего не сломалось | ✅ (2026-07-28) |
 | A4 | Согласовать `core/_variables.scss` (243 стр., параллельная палитра) с токенами: убрать дублирующие цвета, оставить только SCSS-утилиты (breakpoints и т.п.) | `src/styles/core/_variables.scss` | Нет CSS-переменных цвета вне tokens/themes | ✅ (2026-07-28) |
-| A5 | Разобрать orphaned `src/styles.scss` (499 стр.): нужные правила перенести в модули (`components/`, `core/`), файл удалить | `src/styles.scss`, `src/styles/components/*`, `src/styles/core/*` | Файл удалён; glass-хелперы и скроллбары живут в модулях; build проходит | 📋 |
+| A5 | Разобрать orphaned `src/styles.scss` (499 стр.): нужные правила перенести в модули (`components/`, `core/`), файл удалить | `src/styles.scss`, `src/styles/components/*`, `src/styles/core/*` | Файл удалён; glass-хелперы и скроллбары живут в модулях; build проходит | ✅ (2026-07-28) |
 | A6 | Обновить `STYLE_ARCHITECTURE.md` и `AI_CONSTITUTION.md` §2.1: entry point — `main.scss` (не `styles.scss`), актуальная структура папок | `docs/STYLE_ARCHITECTURE.md`, `docs/AI_CONSTITUTION.md` | Документация соответствует коду | 📋 |
 
 ### Эпик B — Централизация Material overrides (ADR-005)

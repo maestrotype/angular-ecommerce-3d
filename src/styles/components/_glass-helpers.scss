@@ -1,0 +1,86 @@
+/* ==========================================================================
+   GLASS HELPERS
+   Utility class `.glass-theme` used on storefront controls (cart modal, etc.).
+   Ported from orphaned src/styles.scss (Task A5). Tokenized — no hex.
+   ========================================================================== */
+
+.glass-theme {
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--border-default);
+  box-shadow: var(--shadow-sm);
+  transition:
+    background var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.glass-theme:hover {
+  background: var(--glass-bg-hover, var(--surface-highlight));
+  transform: translateY(-1px);
+  box-shadow: var(--glass-shadow-hover, var(--shadow-md));
+}
+
+.theme-price {
+  color: var(--color-accent);
+}
+
+/* ----- Cart modal controls ----- */
+
+.glass-theme.quantity-btn {
+  background: var(--glass-bg, var(--surface-overlay-light));
+  border: 1px solid var(--border-default);
+  backdrop-filter: var(--backdrop-blur-sm);
+  -webkit-backdrop-filter: var(--backdrop-blur-sm);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-sm);
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  font-weight: var(--font-weight-bold, 700);
+  color: var(--text-primary);
+}
+
+.glass-theme.remove-btn {
+  background: var(--glass-bg, var(--surface-overlay-light));
+  border: 1px solid var(--border-default);
+  backdrop-filter: var(--backdrop-blur-sm);
+  -webkit-backdrop-filter: var(--backdrop-blur-sm);
+  box-shadow: var(--shadow-sm);
+  color: var(--color-accent);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-sm);
+}
+
+.glass-theme.continue-shopping-btn,
+.glass-theme.continue-btn {
+  background: var(--glass-bg, var(--surface-overlay-light));
+  border: 1px solid var(--border-default);
+  backdrop-filter: var(--backdrop-blur-sm);
+  -webkit-backdrop-filter: var(--backdrop-blur-sm);
+  box-shadow: var(--shadow-sm);
+  color: var(--text-primary);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-medium, 500);
+  cursor: pointer;
+}
+
+.glass-theme.checkout-btn {
+  background: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  backdrop-filter: var(--backdrop-blur-sm);
+  -webkit-backdrop-filter: var(--backdrop-blur-sm);
+  box-shadow: var(--shadow-sm);
+  color: var(--text-inverse);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-medium, 500);
+  cursor: pointer;
+}
+
+.glass-theme.checkout-btn:hover {
+  background: var(--color-accent);
+}

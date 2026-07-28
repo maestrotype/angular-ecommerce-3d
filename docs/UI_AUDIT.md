@@ -17,7 +17,7 @@ This document records **current-state findings** of the style system audit. Task
 | `src/styles/main.scss` | 19 | Master import file | KEEP | **Actual build entry** (wired in `angular.json`); imports only ✅ |
 | `src/styles/tokens/_index.scss` | ~12 | Token pipeline entry | KEEP | ✅ RESOLVED (A1+A3): imports primitives + semantic; `@forward` legacy removed |
 | `src/styles/tokens/_primitive-tokens.scss` | 106 | Primitive tokens (single source) | KEEP | ✅ RESOLVED (A1, 2026-07-28): now wired into the pipeline |
-| `src/styles/tokens/_semantic-tokens.scss` | ~110 | Semantic tokens | KEEP | ✅ RESOLVED (A2, 2026-07-28): full storefront coverage; 0 undefined no-fallback refs outside `--tw-*` (A5) and `--admin-*`/`--lg-*` (Epic C) |
+| `src/styles/tokens/_semantic-tokens.scss` | ~145 | Semantic tokens | KEEP | ✅ RESOLVED (A2, 2026-07-28): full storefront coverage; remaining undefined-no-fallback: `--admin-*`/`--lg-*` (Epic C) |
 | ~~`src/styles/tokens/_theme-variables.scss`~~ | ~~722~~ | Legacy CSS variable monolith | DELETE | ✅ DELETED (A3, 2026-07-28): content moved into `themes/_default/_dark/_glass.scss` |
 | `src/styles/themes/_index.scss` | 89 | Theme re-export | FIX | Contains product-detail CSS vars with hex (logic in an index file) |
 | `src/styles/themes/_default.scss` | 119 | Default/light theme | KEEP | Rewritten to semantic tokens ✅ |
@@ -28,13 +28,15 @@ This document records **current-state findings** of the style system audit. Task
 | `src/styles/core/_base.scss` | 231 | Base element styles | FIX | 7 `!important` |
 | `src/styles/core/_typography.scss` | 202 | Typography | KEEP | |
 | `src/styles/core/_utilities.scss` | 307 | Utilities | KEEP | |
+| `src/styles/core/_scrollbars.scss` | ~40 | Global thin scrollbars | KEEP | ✅ Added (A5, 2026-07-28); no `!important` |
 | `src/styles/components/_buttons.scss` | 356 | Button presets | KEEP | |
 | `src/styles/components/_cards.scss` | 242 | Card presets | KEEP | Migrated to semantic tokens ✅ |
 | `src/styles/components/_theme-switcher.scss` | 86 | Theme switcher | KEEP | Migrated ✅ |
+| `src/styles/components/_glass-helpers.scss` | ~90 | `.glass-theme` utility + cart controls | KEEP | ✅ Added (A5, 2026-07-28); tokenized |
 | `src/styles/components/_forms.scss` | 5 | **Stub** | IMPLEMENT/DELETE | → Task E3 |
 | `src/styles/components/_modals.scss` | 5 | **Stub** | IMPLEMENT/DELETE | → Task E3 |
 | `src/styles/components/_navigation.scss` | 5 | **Stub** | IMPLEMENT/DELETE | → Task E3 |
-| `src/styles.scss` | 499 | **Orphaned** catch-all | DELETE | NOT in build (`angular.json` uses `main.scss`); contains real logic: glass helpers, scrollbars (13 `!important`), 28 `.mat-` override lines, 32 hex → Task A5 |
+| ~~`src/styles.scss`~~ | ~~499~~ | Orphaned catch-all | DELETE | ✅ DELETED (A5, 2026-07-28): glass → `_glass-helpers`, scrollbars → `_scrollbars`; dead dialog/snackbar/tw/admin blocks discarded |
 
 ### 1.2 Admin Styles (`src/admin/styles/`, ~4,032 lines)
 
@@ -106,7 +108,7 @@ Top offenders (excluding token/theme files):
 | 51 | `src/app/layout/header/header.component.scss` | D4 |
 | ~~46~~ | ~~`src/styles/core/_variables.scss`~~ | ✅ A4 (0 hex) |
 | 45 | `src/app/pages/home/home.component.scss` | D1 |
-| 32 | `src/styles.scss` (orphaned) | A5 |
+| ~~32~~ | ~~`src/styles.scss` (orphaned)~~ | ✅ A5 (deleted) |
 
 ---
 
@@ -143,14 +145,14 @@ src/admin/styles/_admin-layout-tokens.scss ← Admin LAYOUT only (sidebar, toolb
 
 ## 5. `!important` Usage
 
-**Total: 91 occurrences in 12 files** (scan 2026-07-28):
+**Total: 76 occurrences** (was 91; −15 from orphaned `styles.scss` deleted in A5, 2026-07-28):
 
 | Count | File |
 |------:|------|
 | 20 | `src/app/layout/hero/hero.component.scss` |
 | 14 | `src/admin/styles/admin-global.scss` |
 | 14 | `src/admin/styles/_admin-dark.scss` |
-| 13 | `src/styles.scss` (orphaned) |
+| ~~13~~ | ~~`src/styles.scss` (orphaned)~~ ✅ A5 deleted |
 | 12 | `.../admin-section-preview.component.scss` |
 | 7 | `src/styles/core/_base.scss` |
 | 4 | `src/styles/themes/_glass.scss` |
@@ -195,7 +197,7 @@ Notable scatter outside the dump (23 files):
 |--------------:|------|
 | 76 | `src/admin/styles/admin-global.scss` |
 | 32 | `.../message-list.component.scss` |
-| 28 | `src/styles.scss` (orphaned) |
+| ~~28~~ | ~~`src/styles.scss` (orphaned)~~ ✅ A5 deleted |
 | 25 | `.../order-list.component.scss` |
 | 23 | `.../user-list.component.scss` |
 | 20 | `.../seo-settings.component.scss` |
@@ -211,7 +213,7 @@ Resolution: Epic B (Tasks B1–B4).
 
 | File | Finding | Action |
 |------|---------|--------|
-| `src/styles.scss` | **Confirmed orphaned** — not referenced in `angular.json` (entry is `src/styles/main.scss`), but contains 499 lines of real logic | Port needed rules, delete → Task A5 |
+| ~~`src/styles.scss`~~ | ✅ DELETED (A5, 2026-07-28) — glass helpers + scrollbars ported to modules; dead blocks discarded | Done |
 | `src/styles/tokens/_primitive-tokens.scss` | ✅ RESOLVED (A1, 2026-07-28) — wired into pipeline; was causing unresolved `--color-blue-*`, `--z-modal`, `--font-*` weights in dark/glass themes | Done |
 | `src/styles/components/_forms.scss`, `_modals.scss`, `_navigation.scss` | Stubs (5 lines, "will be implemented here") | Implement or remove → Task E3 |
 | `src/admin/styles/_admin-theme-material.scss` | Used, but is the Material-override dump | Migrate → Task B2 |
