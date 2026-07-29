@@ -939,7 +939,8 @@
     "NEWSLETTER_PLACEHOLDER": "Введіть ваш email",
     "NEWSLETTER_ARIA": "Email для підписки на розсилку",
     "NEWSLETTER_SUBSCRIBE": "Підписатися",
-    "NEWSLETTER_SUCCESS": "Дякуємо за підписку!"
+    "NEWSLETTER_SUCCESS": "Дякуємо за підписку!",
+    "PAYMENTS": "Способи оплати"
   },
   "HERO_SECTION": {
     "BADGE": "НОВИНКА",

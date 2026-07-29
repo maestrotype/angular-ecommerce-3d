@@ -424,6 +424,12 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.closeMobileMenu();
   }
 
+  /** Check if currently on the home page */
+  isHomePage(): boolean {
+    const currentPath = this.router.url.split('?')[0];
+    return currentPath === '/home' || currentPath === '/';
+  }
+
   /** Check if a nav link should be active based on current router URL */
   isNavActive(url: string): boolean {
     if (!url || url.startsWith('#')) return false;
@@ -494,9 +500,14 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
         this.observer.disconnect();
       }
 
+      // Only allow IntersectionObserver to update activeHash when on home page.
+      // This prevents "Brands" section link from activating when browsing /shop, etc.
       this.observer = new IntersectionObserver((entries) => {
+        const currentPath = this.router.url.split('?')[0];
+        const isHomePage = currentPath === '/home' || currentPath === '/';
+
         entries.forEach(entry => {
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting && isHomePage) {
             const sectionId = entry.target.id;
             // Only update if the section is near the top (within 30% of viewport)
             const rect = entry.boundingClientRect;

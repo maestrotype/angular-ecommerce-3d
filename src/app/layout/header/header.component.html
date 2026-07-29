@@ -9,7 +9,7 @@
       <ng-container *ngFor="let item of menuItems">
         <a *ngIf="item.url.startsWith('/')" [routerLink]="item.url" class="nav-link"
           [class.hidden]="!canAccessMenuItem(item)"
-          [class.active]="isNavActive(item.url)"
+          routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
           (click)="onNavClick(item.url)"
           ariaCurrentWhenActive="page">
           {{ item.title | localized }}
@@ -18,7 +18,7 @@
             href="javascript:void(0)"
             (click)="handleMenuClick(item, $event)" 
             class="nav-link"
-            [class.active]="activeHash === item.url.substring(1)"
+            [class.active]="isHomePage() && activeHash === item.url.substring(1)"
             [class.hidden]="!canAccessMenuItem(item)">
           {{ item.title | localized }}
         </a>
@@ -200,7 +200,7 @@
         <!-- Regular Router Links -->
         <a *ngIf="canAccessMenuItem(item) && item.url.startsWith('/')" 
            [routerLink]="item.url" (click)="closeMobileMenu()" 
-           class="mobile-nav-link" routerLinkActive="active">
+           class="mobile-nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
           {{ item.title | localized }}
         </a>
         <!-- Anchor Links -->
