@@ -24,16 +24,21 @@
   }
 }
 
-/* GLASS THEME - correct selector: data-theme is on body, use :host-context */
+/* GLASS — prod medium chrome (same recipe as header) */
 :host-context(body[data-theme="glass"]) .sidenav-wrapper {
-  background-color: rgba(25, 60, 105, 0.5);
-  backdrop-filter: blur(25px) saturate(180%);
-  -webkit-backdrop-filter: blur(25px) saturate(180%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  background: var(--surface-chrome-gradient, var(--surface-chrome));
+  background-color: var(--surface-chrome);
+  backdrop-filter: var(--chrome-blur, blur(22px) saturate(145%));
+  -webkit-backdrop-filter: var(--chrome-blur, blur(22px) saturate(145%));
+  border-right: var(--chrome-border, 1px solid rgba(255, 255, 255, 0.3));
+  box-shadow: var(--chrome-shadow);
 
   .user-info {
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: var(--glass-surface-soft, rgba(255, 255, 255, 0.14));
+    border: 1px solid var(--glass-border-soft, rgba(255, 255, 255, 0.28));
+    box-shadow: var(--glass-inner-shadow);
+    backdrop-filter: blur(12px) saturate(150%);
+    -webkit-backdrop-filter: blur(12px) saturate(150%);
 
     .user-name {
       color: var(--text-primary);
@@ -41,6 +46,12 @@
     .user-role {
       color: var(--text-secondary);
     }
+  }
+
+  mat-nav-list,
+  .mat-mdc-list,
+  .mat-mdc-nav-list {
+    background: transparent;
   }
 
   mat-nav-list a {
@@ -51,12 +62,12 @@
     }
 
     &:hover {
-      background: rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.14);
     }
 
     &.active {
-      background: rgba(255, 255, 255, 0.35);
-      color: var(--interactive-primary);
+      background: rgba(255, 255, 255, 0.22);
+      color: var(--text-primary);
 
       &::before {
         background: var(--interactive-primary);
@@ -184,8 +195,9 @@
   display: flex;
   align-items: center;
   box-sizing: border-box;
+  background: transparent; /* inherit sidenav chrome — no separate header strip */
   border-bottom: 1px solid var(--border-default);
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
   .logo {
     display: flex;
     align-items: center;

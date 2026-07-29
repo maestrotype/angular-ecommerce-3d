@@ -22,7 +22,7 @@ This document records **current-state findings** of the style system audit. Task
 | `src/styles/themes/_index.scss` | 89 | Theme re-export | FIX | Contains product-detail CSS vars with hex (logic in an index file) |
 | `src/styles/themes/_default.scss` | 119 | Default/light theme | KEEP | Rewritten to semantic tokens ✅ |
 | `src/styles/themes/_dark.scss` | 374 | Dark theme | KEEP | Rewritten to semantic tokens ✅ |
-| `src/styles/themes/_glass.scss` | 481 | Glass theme | KEEP | Rewritten ✅; 4 `!important` + 5 `.mat-` overrides remain |
+| `src/styles/themes/_glass.scss` | 481 | Glass theme | KEEP | Rewritten ✅; admin header uses `--surface-header` (not black overlay); 4 `!important` remain |
 | `src/styles/core/_variables.scss` | 107 | SCSS breakpoints + non-color utils | KEEP | ✅ RESOLVED (A4, 2026-07-28): parallel color palette removed; colors → semantic legacy aliases |
 | `src/styles/core/_mixins.scss` | 318 | Mixins | KEEP | Audit for unused mixins in Epic E |
 | `src/styles/core/_base.scss` | 231 | Base element styles | FIX | 7 `!important` |
@@ -46,8 +46,9 @@ This document records **current-state findings** of the style system audit. Task
 | `material-theme.scss` | ~45 | Material theme + token bridge | ✅ B4 | Palettes + MDC CSS → semantic tokens |
 | `admin-variables.scss` | 224 | `--admin-*` → semantic aliases (C3 shim) | DELETE after C6 | C4 consumers migrated; shim kept for global/mixins |
 | `_admin-layout-tokens.scss` | ~40 | 5 ADMIN-ONLY layout tokens | KEEP | C2 / ADR-011 |
-| `admin-mixins.scss` | 274 | Admin mixins | INVESTIGATE | Overlap with core mixins |
-| `admin-global.scss` | 1,195 | Admin global styles | DECOMPOSE | 76 `.mat-` lines, 14 `!important` → Task C5 |
+| `admin-mixins.scss` | 275 | Admin mixins | C6 cutover | Still `--admin-*` via shim; header note for C6 |
+| `admin-global.scss` | **16** | Import orchestrator | ✅ C5 | Partials in `global/` (11 files); 0 `!important` |
+| `global/_*.scss` | ~1 226 | Admin global modules | ✅ C5 | base, atmospheres, typography, tables, forms-controls, chrome, overlays, patterns, sidenav-nav, responsive, glass-dialogs |
 | `_admin-material-base.scss` | shim | Material base | ✅ B4 | Themes live in `material-theme.scss` |
 | ~~`_admin-theme-material.scss`~~ | ~~1,548~~ | ~~De-facto Material override dump~~ | ✅ DELETED (B2) | Migrated → `src/styles/overrides/_material-overrides.scss` |
 | `_admin-light.scss` | ~40 | Admin light chrome (`body.is-admin`) | MIGRATE → DELETE (C6) | ✅ C3: semantic only |
@@ -84,7 +85,7 @@ Fully clean components: `favorites`, `base-modal`, `cart-modal`.
 | ~~Primitive tokens defined twice~~ | ~~`tokens/_primitive-tokens.scss` AND inlined in `tokens/_index.scss`~~ | ✅ RESOLVED (A1, 2026-07-28): `_index.scss` imports the file; inline copies deleted |
 | Color palette defined in parallel | `tokens/` vs TS `light-theme.ts` (SCSS `core/_variables` palette removed in A4) | Task F1 |
 | ~~Theme variables monolith~~ | ~~`tokens/_theme-variables.scss`~~ | ✅ Done (A3): deleted, themes absorb leftover vars |
-| `--admin-*` system | ~180 defined / **~467** usages (M2); C4: components clean; C2: 5 ADMIN-ONLY layout; shim in `admin-variables` | ✅ C4 (2026-07-28); residual C5–C6 — see §4.1 |
+| `--admin-*` system | ~180 defined / **~463** usages (M2); C4–C5 path; shim until C6 | ✅ C5 (2026-07-29); residual **C6** — see §4.1 |
 
 ---
 
@@ -119,12 +120,13 @@ Top offenders (excluding token/theme files):
 ### Current Architecture (confirmed by scan)
 ```
 src/styles/              ← Frontend tokens + themes (canonical SoT)
-src/admin/styles/        ← C4: components on semantic; layout in C2; shim until C6; global → C5
+src/admin/styles/        ← C5: global modularized; C4 components on semantic; layout in C2; shim until C6
 ```
 
 `_admin-layout-tokens.scss` (ADR-011) **exists** (C2) — 5 ADMIN-ONLY structural tokens.  
 C3: admin themes map **semantic + layout** only; `admin-variables.scss` is a compatibility shim until C6.  
-C4: **0** non-layout `--admin-*` in components (see [`_c4-admin-component-token-migration.md`](migration/_c4-admin-component-token-migration.md)).
+C4: **0** non-layout `--admin-*` in components (see [`_c4-admin-component-token-migration.md`](migration/_c4-admin-component-token-migration.md)).  
+C5: `admin-global.scss` → thin orchestrator + [`global/`](../src/admin/styles/global/) (see [`_c5-admin-global-decomposition.md`](migration/_c5-admin-global-decomposition.md)).
 
 ### Target Architecture
 ```
@@ -140,9 +142,9 @@ src/admin/styles/_admin-layout-tokens.scss ← Admin LAYOUT only (sidebar, toolb
 | Color tokens | `tokens/` | `admin-variables.scss` (aliases → semantic) | SHIM (C3); delete C6 |
 | Light theme | `_default.scss` | `_admin-light.scss` (chrome only) | ✅ C3 semantic |
 | Dark theme | `_dark.scss` | `_admin-dark.scss` (chrome + Material depth) | ✅ C3 adopt frontend |
-| Glass theme | `_glass.scss` | `_admin-glass.scss` (promotions on `body.is-admin`) | ✅ C3 promoted |
+| Glass theme | `_glass.scss` | `_admin-glass.scss` (liquid chrome + promotions) | ✅ liquid glass; header≡sidebar via `--surface-chrome` |
 | Dark glass | — (no storefront file) | `_admin-dark-glass.scss` | ADMIN-ONLY theme on semantic |
-| Material overrides | `overrides/_material-overrides.scss` (B1–B4) | admin-global / themes → C5 | PARTIAL (C5) |
+| Material overrides | `overrides/_material-overrides.scss` (B1–B4) | `admin/styles/global/*` (C5) + themes | ✅ glass chrome denser/desaturated; header≡sidebar |
 | Layout styles | N/A | `admin-layout.component.scss` + `_admin-layout-tokens.scss` | NO; C2 tokens wired |
 
 ### 4.1 C1–C4 — `--admin-*` token classification & reconciliation (ADR-011)
@@ -200,18 +202,21 @@ Spacing, radius, font, motion, breakpoints, submit/cancel, tab, text helpers, in
 
 ## 5. `!important` Usage
 
-**Total: 76 occurrences** (was 91; −15 from orphaned `styles.scss` deleted in A5, 2026-07-28):
+**Total: 72 occurrences in 12 files** (C5: −15 from admin-global snackbar/overflow; ban on *new* — `.cursor/rules/no-important.mdc`):
 
 | Count | File |
 |------:|------|
 | 20 | `src/app/layout/hero/hero.component.scss` |
-| 14 | `src/admin/styles/admin-global.scss` |
-| 14 | `src/admin/styles/_admin-dark.scss` (Material depth; → C5) |
-| ~~13~~ | ~~`src/styles.scss` (orphaned)~~ ✅ A5 deleted |
-| 12 | `.../admin-section-preview.component.scss` |
+| 14 | `src/admin/styles/_admin-dark.scss` (Material depth; → E / C6) |
+| 10 | `.../sidenav/sidenav.component.scss` |
+| 9 | `.../admin-section-preview.component.scss` |
 | 7 | `src/styles/core/_base.scss` |
 | 4 | `src/styles/themes/_glass.scss` |
-| 7 | 5 other files (≤2 each) |
+| 2 | `src/styles/overrides/_material-overrides.scss` |
+| 2 | `.../section-list.component.scss` |
+| 1 each | scrollbars, product-detail, product-form, admin-login |
+
+~~`admin-global.scss` / `global/*`~~ ✅ C5: **0** `!important`
 
 ---
 
@@ -245,9 +250,9 @@ Not separately scanned; resolved per-component during Epic D migration (spacing 
 |--------|-------|
 | Admin `*.component.scss` with `.mat-` | **0** |
 | Central overrides | `src/styles/overrides/_material-overrides.scss` (~1 950 lines) |
-| Residual files | `admin-global.scss` (76), `_admin-dark.scss` (6), `_glass.scss` (5), `_admin-dark-glass.scss` (3), `_dark.scss` (2), `_scrollbars.scss` (2) |
+| Residual files | `admin/styles/global/*` (C5), `_admin-dark.scss` (6), `_glass.scss` (5), `_admin-dark-glass.scss` (3), `_dark.scss` (2), `_scrollbars.scss` (2) |
 
-Resolution: Epic B ✅ (B1–B4). Residual admin-global → C5.
+Resolution: Epic B ✅ (B1–B4). Admin global Material → C5 modularized (`global/`).
 
 ---
 

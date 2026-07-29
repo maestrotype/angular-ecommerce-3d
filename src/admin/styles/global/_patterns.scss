@@ -1,0 +1,144 @@
+// Status badges
+.status-badge {
+  padding: 4px 8px;
+  border-radius: var(--admin-border-radius-sm);
+  font-size: var(--admin-font-size-xs);
+  font-weight: var(--admin-font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &.success {
+    background-color: var(--admin-success);
+    color: var(--admin-text-inverse);
+  }
+
+  &.warning {
+    background-color: var(--admin-warning);
+    color: var(--admin-text-inverse);
+  }
+
+  &.error {
+    background-color: var(--admin-error);
+    color: var(--admin-text-inverse);
+  }
+
+  &.info {
+    background-color: var(--admin-info);
+    color: var(--admin-text-inverse);
+  }
+
+  &.default {
+    background-color: var(--admin-bg-tertiary);
+    color: var(--admin-text-secondary);
+  }
+}
+
+// Payment method icons
+.payment-method {
+  display: flex;
+  align-items: center;
+  gap: var(--admin-spacing-sm);
+
+  mat-icon {
+    color: var(--admin-text-secondary);
+  }
+
+  span {
+    color: var(--admin-text-primary);
+  }
+}
+
+// Customer info
+.customer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  .email {
+    color: var(--admin-text-primary);
+    font-weight: var(--admin-font-weight-medium);
+  }
+
+  .phone {
+    color: var(--admin-text-secondary);
+    font-size: var(--admin-font-size-sm);
+  }
+}
+
+// Actions
+.actions {
+  display: flex;
+  gap: var(--admin-spacing-xs);
+
+  button {
+    color: var(--admin-text-secondary);
+
+    &:hover {
+      color: var(--admin-text-primary);
+      background-color: var(--admin-bg-hover);
+    }
+
+    &:disabled {
+      color: var(--admin-text-disabled);
+    }
+  }
+}
+
+// Loading and no-data states
+.loading,
+.no-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--admin-spacing-md);
+  padding: var(--admin-spacing-xl);
+  color: var(--admin-text-secondary);
+
+  mat-icon {
+    color: var(--admin-text-disabled);
+  }
+}
+
+// Statistics cards
+.stat-card {
+  background-color: var(--admin-order-list-card-bg);
+  border: 1px solid var(--admin-border-primary);
+  border-radius: var(--admin-border-radius-md);
+  padding: var(--admin-spacing-lg);
+  text-align: center;
+  transition: all var(--admin-transition-normal);
+
+  &:hover {
+    box-shadow: var(--admin-shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .stat-value {
+    font-size: var(--admin-font-size-xxl);
+    font-weight: var(--admin-font-weight-bold);
+    color: var(--admin-primary);
+    margin-bottom: var(--admin-spacing-sm);
+  }
+
+  .stat-label {
+    font-size: var(--admin-font-size-sm);
+    color: var(--admin-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+// Filters
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--admin-spacing-md);
+  margin-bottom: var(--admin-spacing-lg);
+}
+
+.filters-actions {
+  display: flex;
+  gap: var(--admin-spacing-md);
+  margin-bottom: var(--admin-spacing-lg);
+}

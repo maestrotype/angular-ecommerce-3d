@@ -1,0 +1,49 @@
+// Typography
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @include admin-heading(1);
+  margin: 0 0 var(--admin-spacing-md) 0;
+  color: var(--admin-text-primary);
+}
+
+h1 {
+  @include admin-heading(1);
+}
+
+h2 {
+  @include admin-heading(2);
+}
+
+h3 {
+  @include admin-heading(3);
+}
+
+h4 {
+  @include admin-heading(4);
+}
+
+p {
+  @include admin-text('md', 'normal');
+  margin: 0 0 var(--admin-spacing-md) 0;
+  color: var(--admin-text-primary);
+}
+
+// Links
+a {
+  color: var(--admin-primary);
+  text-decoration: none;
+  transition: color var(--admin-transition-normal);
+
+  &:hover {
+    color: var(--admin-primary-hover);
+  }
+}
+
+// Buttons
+button {
+  @include admin-button('primary');
+}

@@ -1,0 +1,236 @@
+// ── GLASS THEME POPUP DIALOG OVERRIDES ──
+[data-theme="glass"] {
+  // Clear Angular Material default dialog padding and white background
+  .mat-mdc-dialog-container,
+  .mat-dialog-container {
+    --mdc-dialog-container-color: transparent;
+    background-color: transparent;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .cdk-overlay-pane {
+    max-width: 95vw;
+  }
+
+  .message-detail-container,
+  .order-detail-container {
+    max-width: 800px;
+    background: rgba(25, 45, 75, 0.9); // Deep dashboard blue, highly legible, solid feel
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5);
+    color: rgba(255, 255, 255, 0.95);
+    overflow: hidden;
+    padding: 24px;
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(25, 60, 105, 0.85); // Rich dashboard header blue
+      padding: 16px 24px;
+      margin: -24px -24px 24px -24px; // Perfectly flush with overlay bounds
+      border-radius: 24px 24px 0 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+
+      h2, [mat-dialog-title] {
+        margin: 0;
+        padding: 0;
+        color: rgba(255, 255, 255, 0.95);
+        font-size: 1.35rem;
+        font-weight: 600;
+        line-height: normal;
+      }
+
+      button, .close-button {
+        color: rgba(255, 255, 255, 0.85);
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease-in-out;
+        border: none;
+        padding: 0;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.2);
+          color: #ffffff;
+        }
+      }
+    }
+
+    .order-content {
+      background: transparent;
+      padding: 24px 0 0 0;
+    }
+
+    .message-info,
+    .order-info,
+    .customer-info,
+    .order-items,
+    .order-summary,
+    .status-update,
+    .order-notes {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 24px;
+
+      h3 {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0 0 12px 0;
+      }
+
+      .info-row {
+        margin-bottom: 12px;
+        color: rgba(255, 255, 255, 0.95);
+        font-size: 0.95rem;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        strong {
+          color: rgba(255, 255, 255, 0.7); // Light gray/white with 70% opacity: extremely readable!
+          font-weight: 500;
+          display: inline-block;
+          min-width: 80px;
+        }
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: var(--admin-spacing-md);
+      }
+
+      .info-item {
+        display: flex;
+        flex-direction: column;
+        gap: var(--admin-spacing-xs);
+
+        label {
+          color: rgba(255, 255, 255, 0.6);
+          font-size: 0.85rem;
+          font-weight: 500;
+        }
+
+        span {
+          color: rgba(255, 255, 255, 0.95);
+          font-size: 0.95rem;
+        }
+      }
+    }
+
+    .items-table {
+      .table-header {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      .table-row {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+
+        .product-details {
+          .product-name {
+            color: rgba(255, 255, 255, 0.95);
+          }
+          .product-description {
+            color: rgba(255, 255, 255, 0.6);
+          }
+        }
+
+        .col-price, .col-quantity, .col-total {
+          color: rgba(255, 255, 255, 0.9);
+        }
+
+        .col-total {
+          color: #10b981; // Vibrant mint green for totals
+        }
+      }
+    }
+
+    .order-summary {
+      .summary-row {
+        color: rgba(255, 255, 255, 0.85);
+
+        &.total {
+          border-top: 1px solid rgba(255, 255, 255, 0.15);
+          color: #10b981;
+        }
+      }
+    }
+
+    .notes-content {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .message-content, .admin-reply {
+      h4 {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.95rem;
+        font-weight: 500;
+        margin: 0 0 8px 0;
+      }
+
+      .content-text, .reply-text {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: rgba(255, 255, 255, 0.95);
+        border-radius: 12px;
+        padding: 16px;
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      .reply-date small {
+        color: rgba(255, 255, 255, 0.5);
+      }
+    }
+
+    .reply-form {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+      h4 {
+        color: rgba(255, 255, 255, 0.7);
+      }
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      padding: 16px 24px;
+      background: rgba(25, 60, 105, 0.72); // Match header background
+      margin: 24px -24px -24px -24px; // Spans full width
+      border-radius: 0 0 24px 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+
+      button {
+        border-radius: 12px;
+        padding: 8px 18px;
+        font-weight: 500;
+
+        &.mat-button {
+          color: rgba(255, 255, 255, 0.8);
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,138 @@
+// Snackbar
+.mat-mdc-snack-bar-container {
+  .mdc-snackbar__surface {
+    max-width: min(560px, 92vw);
+  }
+
+  .mdc-snackbar__label {
+    white-space: pre-line;
+    line-height: 1.45;
+    font-size: 14px;
+  }
+
+  .mat-mdc-snack-bar-action .mdc-button__label {
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  &.error-snackbar,
+  &.admin-snackbar-error {
+    --mdc-snackbar-container-color: var(--admin-error, #d32f2f);
+    --mdc-snackbar-supporting-text-color: #ffffff;
+    --mat-snack-bar-button-color: #ffffff;
+
+    .mdc-snackbar__surface.mdc-snackbar__surface {
+      background-color: var(--mdc-snackbar-container-color, var(--admin-error, #d32f2f));
+      color: var(--mdc-snackbar-supporting-text-color, #ffffff);
+    }
+
+    .mdc-snackbar__label.mdc-snackbar__label {
+      color: var(--mdc-snackbar-supporting-text-color, #ffffff);
+    }
+
+    .mat-mdc-snack-bar-action,
+    .mat-mdc-snack-bar-action .mdc-button__label {
+      color: var(--mat-snack-bar-button-color, #ffffff);
+    }
+  }
+
+  &.success-snackbar,
+  &.admin-snackbar-success {
+    --mdc-snackbar-container-color: var(--admin-success, #2e7d32);
+    --mdc-snackbar-supporting-text-color: #ffffff;
+    --mat-snack-bar-button-color: #ffffff;
+
+    .mdc-snackbar__surface.mdc-snackbar__surface {
+      background: var(--mdc-snackbar-container-color, var(--admin-success, #2e7d32));
+      color: var(--mdc-snackbar-supporting-text-color, #ffffff);
+    }
+
+    .mdc-snackbar__label.mdc-snackbar__label,
+    .mat-mdc-snack-bar-action,
+    .mat-mdc-snack-bar-action .mdc-button__label {
+      color: var(--mdc-snackbar-supporting-text-color, #ffffff);
+    }
+  }
+
+  &.warning-snackbar,
+  &.admin-snackbar-warning {
+    --mdc-snackbar-container-color: var(--admin-warning, #ed6c02);
+    --mdc-snackbar-supporting-text-color: #ffffff;
+    --mat-snack-bar-button-color: #ffffff;
+
+    .mdc-snackbar__surface.mdc-snackbar__surface {
+      background: var(--mdc-snackbar-container-color, var(--admin-warning, #ed6c02));
+      color: var(--mdc-snackbar-supporting-text-color, #ffffff);
+    }
+
+    .mdc-snackbar__label.mdc-snackbar__label,
+    .mat-mdc-snack-bar-action,
+    .mat-mdc-snack-bar-action .mdc-button__label {
+      color: var(--mdc-snackbar-supporting-text-color, #ffffff);
+    }
+  }
+
+  &.admin-snackbar-info {
+    .mdc-snackbar__surface {
+      background: var(--admin-info);
+      color: var(--admin-text-inverse);
+    }
+  }
+
+  &:not(.error-snackbar):not(.success-snackbar):not(.warning-snackbar):not(.admin-snackbar-error):not(.admin-snackbar-success):not(.admin-snackbar-warning):not(.admin-snackbar-info) {
+    --mdc-snackbar-container-color: var(--admin-bg-secondary, #1e1e1e);
+    --mdc-snackbar-supporting-text-color: var(--admin-text-primary, #ffffff);
+    --mat-snack-bar-button-color: var(--admin-primary, #bb86fc);
+
+    .mdc-snackbar__surface.mdc-snackbar__surface {
+      background-color: var(--mdc-snackbar-container-color);
+      color: var(--mdc-snackbar-supporting-text-color);
+    }
+
+    .mat-mdc-snack-bar-action,
+    .mat-mdc-snack-bar-action .mdc-button__label {
+      color: var(--mat-snack-bar-button-color);
+    }
+  }
+}
+
+// Dialog
+.mat-mdc-dialog-container,
+.cdk-overlay-container {
+  .mdc-dialog__surface {
+    background-color: var(--admin-bg-card);
+    border-radius: var(--border-radius-dark-glass, 16px);
+    color: var(--admin-text-primary);
+  }
+
+  .mdc-dialog__title {
+    color: var(--admin-text-primary);
+    background-color: var(--admin-header-bg);
+  }
+
+  .mdc-dialog__content {
+    color: var(--admin-text-primary);
+  }
+}
+
+// Tooltip — NEVER paint the outer .mat-mdc-tooltip (square hit-box).
+// Themes set --mdc-plain-tooltip-*; do not rebind them here to --surface-* (kills theme solids).
+.mat-mdc-tooltip {
+  background-color: transparent;
+  background-image: none;
+
+  &::before {
+    background: transparent;
+  }
+
+  .mdc-tooltip__surface {
+    background-color: var(--mdc-plain-tooltip-container-color, var(--surface-elevated));
+    color: var(--mdc-plain-tooltip-supporting-text-color, var(--text-primary));
+    border-radius: var(--mdc-plain-tooltip-container-shape, 8px);
+    overflow: hidden;
+  }
+}
+
+.mat-mdc-tooltip-panel {
+  background: transparent;
+}

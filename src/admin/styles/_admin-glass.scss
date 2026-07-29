@@ -1,11 +1,9 @@
 /* ==========================================================================
-   ADMIN GLASS THEME — C3 (ADR-011)
-   Intentional admin glass recipes promoted onto semantic tokens (body.is-admin
-   wins over storefront `_glass.scss`). `--admin-*` aliases → semantic (shim).
-   Layout: `--admin-toolbar-height` from `_admin-layout-tokens.scss`.
+   ADMIN GLASS THEME — liquid glass (ADR-011)
+   Prod-aligned chrome + frosted content surfaces under body.is-admin.
+   Chrome (header ≡ sidebar) lighter/airier; content blocks deeper navy glass.
    ========================================================================== */
 
-/* Promote intentional admin glass recipes onto semantic (specificity over storefront) */
 body.is-admin[data-theme='glass'],
 html[data-theme='glass'] body.is-admin {
   --interactive-primary: var(--color-brand-base);
@@ -13,68 +11,88 @@ html[data-theme='glass'] body.is-admin {
   --interactive-button: var(--interactive-primary);
   --interactive-primary-hover: var(--color-brand-dark);
 
+  /* —— Liquid glass recipes —— */
   --glass-surface-strong: linear-gradient(
-    150deg,
-    rgba(250, 251, 255, 0.9) 0%,
-    rgba(221, 232, 255, 0.55) 45%,
-    rgba(196, 210, 239, 0.35) 100%
+    155deg,
+    rgba(70, 110, 160, 0.55) 0%,
+    rgba(35, 70, 115, 0.4) 45%,
+    rgba(22, 52, 88, 0.35) 100%
   );
-  --glass-surface-soft: rgba(199, 211, 233, 0.35);
+  --glass-surface-soft: rgba(40, 80, 125, 0.35);
   --glass-surface-muted: linear-gradient(
     165deg,
-    rgba(226, 232, 240, 0.45) 0%,
-    rgba(203, 213, 225, 0.25) 60%,
-    rgba(186, 200, 216, 0.18) 100%
+    rgba(55, 95, 145, 0.4) 0%,
+    rgba(28, 60, 100, 0.32) 55%,
+    rgba(20, 48, 82, 0.28) 100%
   );
-  --glass-border-strong: rgba(255, 255, 255, 0.7);
-  --glass-border-soft: rgba(255, 255, 255, 0.35);
-  --glass-divider: rgba(255, 255, 255, 0.45);
-  --glass-highlight: rgba(255, 255, 255, 0.65);
-  --glass-shadow: 0 18px 45px rgba(15, 23, 42, 0.18);
-  --glass-shadow-lg: 0 28px 80px rgba(15, 23, 42, 0.25);
-  --glass-inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border-strong: rgba(255, 255, 255, 0.5);
+  --glass-border-soft: rgba(255, 255, 255, 0.28);
+  --glass-divider: rgba(255, 255, 255, 0.22);
+  --glass-highlight: rgba(255, 255, 255, 0.5);
+  --glass-shadow:
+    0 12px 40px rgba(15, 23, 42, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32);
+  --glass-shadow-lg:
+    0 22px 64px rgba(15, 23, 42, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.36);
+  --glass-inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  --glass-bg: rgba(22, 52, 88, 0.36);
 
-  --surface-page: rgba(255, 255, 255, 0.05);
-  --surface-primary: rgba(255, 255, 255, 0.05);
-  --surface-secondary: rgba(25, 60, 105, 0.5);
-  --surface-tertiary: rgba(255, 255, 255, 0.05);
-  --surface-elevated: rgba(255, 255, 255, 0.15);
-  --surface-elevated-rgb: 255, 255, 255;
-  --surface-card: rgba(255, 255, 255, 0.15);
-  --surface-highlight: rgba(59, 130, 246, 0.1);
-  --surface-overlay-full: rgba(15, 23, 42, 0.2);
-  --surface-header: rgba(199, 211, 233, 0.35);
-  --surface-table: rgba(255, 255, 255, 0.15);
-  --surface-table-header: rgba(25, 60, 105, 0.72);
-  --surface-table-even: rgba(25, 60, 105, 0.45);
-  --surface-table-row: rgba(25, 60, 105, 0.18);
-  --surface-paginator: rgba(25, 60, 105, 0.72);
-  --surface-select-panel: rgba(190, 210, 240, 0.65);
+  /* Chrome (header ≡ sidebar) — lighter / airier than content blocks */
+  --surface-chrome: rgba(70, 120, 170, 0.36);
+  --surface-chrome-gradient: linear-gradient(
+    165deg,
+    rgba(100, 145, 190, 0.3) 0%,
+    rgba(65, 115, 165, 0.36) 48%,
+    rgba(55, 105, 155, 0.38) 100%
+  );
+  --chrome-blur: blur(22px) saturate(150%);
+  --chrome-border: 1px solid rgba(255, 255, 255, 0.32);
+  --chrome-shadow:
+    0 10px 32px rgba(15, 23, 42, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
 
-  --text-primary: rgba(255, 255, 255, 0.95);
-  --text-secondary: rgba(255, 255, 255, 0.65);
-  --text-muted: rgba(255, 255, 255, 0.35);
+  --surface-page: transparent;
+  --surface-primary: transparent;
+  --surface-secondary: var(--surface-chrome);
+  --surface-tertiary: rgba(20, 48, 82, 0.28);
+  /* Content blocks — deeper navy glass than chrome */
+  --surface-elevated: rgba(18, 45, 78, 0.48);
+  --surface-elevated-rgb: 18, 45, 78;
+  --surface-card: rgba(20, 48, 82, 0.46);
+  --surface-highlight: rgba(255, 255, 255, 0.1);
+  --surface-overlay-full: rgba(15, 23, 42, 0.28);
+  --surface-header: var(--surface-chrome);
+  --surface-table: rgba(18, 45, 78, 0.4);
+  --surface-table-header: rgba(12, 34, 60, 0.78);
+  --surface-table-even: rgba(18, 45, 78, 0.52);
+  --surface-table-row: rgba(18, 45, 78, 0.32);
+  --surface-paginator: rgba(12, 34, 60, 0.78);
+  --surface-select-panel: rgba(40, 75, 120, 0.62);
+
+  --text-primary: rgba(255, 255, 255, 0.96);
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-muted: rgba(255, 255, 255, 0.4);
   --text-muted-rgb: 255, 255, 255;
-  --text-inverse: #1a2a4a;
+  --text-inverse: #14243c;
   --text-table-header: rgba(255, 255, 255, 0.95);
   --text-table-even: rgba(255, 255, 255, 0.9);
-  --text-table-row: rgba(255, 255, 255, 0.85);
+  --text-table-row: rgba(255, 255, 255, 0.86);
   --text-paginator: rgba(255, 255, 255, 0.9);
 
-  --border-default: rgba(255, 255, 255, 0.2);
-  --border-subtle: rgba(255, 255, 255, 0.12);
-  --border-primary: rgba(100, 160, 255, 0.8);
+  --border-default: rgba(255, 255, 255, 0.22);
+  --border-subtle: rgba(255, 255, 255, 0.14);
+  --border-primary: rgba(140, 185, 255, 0.75);
   --interactive-danger: var(--color-error-base);
 
-  --input-bg: rgba(255, 255, 255, 0.12);
+  --input-bg: rgba(16, 40, 70, 0.42);
   --input-text: rgba(255, 255, 255, 0.95);
-  --input-border: rgba(255, 255, 255, 0.2);
-  --input-label: rgba(255, 255, 255, 0.6);
-  --input-focus-border: rgba(100, 160, 255, 0.8);
+  --input-border: rgba(255, 255, 255, 0.26);
+  --input-label: rgba(255, 255, 255, 0.62);
+  --input-focus-border: rgba(140, 185, 255, 0.85);
   --input-placeholder: var(--input-label);
 
-  --backdrop-blur: blur(18px) saturate(180%);
+  --backdrop-blur: var(--chrome-blur);
   --border-subtle: var(--glass-border-soft);
 
   --mat-select-panel-background-color: var(--surface-select-panel);
@@ -89,8 +107,8 @@ html[data-theme='glass'] body.is-admin {
   --mdc-list-list-item-leading-icon-color: var(--text-secondary);
   --mdc-list-list-item-trailing-icon-color: var(--text-secondary);
   --mdc-list-list-item-hover-label-text-color: var(--text-primary);
-  --mdc-list-list-item-hover-state-layer-color: rgba(255, 255, 255, 0.1);
-  --mdc-list-list-item-hover-state-layer-opacity: 0.2;
+  --mdc-list-list-item-hover-state-layer-color: rgba(255, 255, 255, 0.12);
+  --mdc-list-list-item-hover-state-layer-opacity: 0.22;
   --mdc-list-item-hover-label-text-color: var(--text-primary);
   --mdc-list-item-hover-leading-icon-color: var(--text-secondary);
 
@@ -105,19 +123,20 @@ html[data-theme='glass'] body.is-admin {
   --mat-drawer-container-background-color: transparent;
   --mat-drawer-content-background-color: transparent;
 
-  // C2 layout SoT
   --mat-toolbar-standard-height: var(--admin-toolbar-height);
   --mat-toolbar-mobile-height: var(--admin-toolbar-height);
+  --mat-toolbar-container-background-color: transparent;
+  --mat-toolbar-container-text-color: var(--text-primary);
 
-  --dashboard-stat-card-bg: rgba(255, 255, 255, 0.2);
-  --dashboard-stat-card-border: rgba(255, 255, 255, 0.4);
-  --dashboard-stat-card-blur: blur(15px) saturate(150%);
+  --dashboard-stat-card-bg: rgba(18, 45, 78, 0.5);
+  --dashboard-stat-card-border: rgba(255, 255, 255, 0.28);
+  --dashboard-stat-card-blur: blur(18px) saturate(155%);
   --dashboard-stat-card-shadow:
-    0 8px 32px rgba(31, 41, 55, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5);
-  --dashboard-stat-card-hover-shadow: 0 16px 48px rgba(31, 41, 55, 0.12);
-  --dashboard-stat-card-hover-bg: rgba(255, 255, 255, 0.4);
-  --dashboard-stat-card-hover-border: rgba(255, 255, 255, 0.6);
+    0 10px 32px rgba(15, 23, 42, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  --dashboard-stat-card-hover-shadow: 0 16px 48px rgba(15, 23, 42, 0.2);
+  --dashboard-stat-card-hover-bg: rgba(24, 55, 92, 0.58);
+  --dashboard-stat-card-hover-border: rgba(255, 255, 255, 0.4);
 
   --stat-icon-products: var(--color-success);
   --stat-icon-orders: var(--interactive-primary);

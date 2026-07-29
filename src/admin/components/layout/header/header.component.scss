@@ -27,7 +27,7 @@
     align-items: center;
     gap: var(--space-2);
 
-    // Win without !important: CSS vars kill MDC state-layer; radial hover is circular.
+    // Circular hover via MDC state-layer tokens + radial-gradient (no cascade hacks).
     button.mat-mdc-icon-button.mat-mdc-button-base,
     button.mat-mdc-icon-button {
       color: var(--text-primary);
@@ -593,13 +593,16 @@
 }
 
 
-// Glass theme adjustments
-[data-theme="glass"] {
-  .admin-header {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
-  }
+// Glass — prod medium chrome ≡ sidebar
+:host-context(body[data-theme='glass']) .admin-header.mat-toolbar,
+:host-context(body[data-theme='glass']) mat-toolbar.admin-header {
+  background: var(--surface-chrome-gradient, var(--surface-chrome));
+  background-color: var(--surface-chrome);
+  border-bottom: var(--chrome-border, 1px solid rgba(255, 255, 255, 0.3));
+  box-shadow: var(--chrome-shadow);
+  backdrop-filter: var(--chrome-blur, blur(22px) saturate(145%));
+  -webkit-backdrop-filter: var(--chrome-blur, blur(22px) saturate(145%));
+  --mat-toolbar-container-background-color: transparent;
 }
 
 // User menu

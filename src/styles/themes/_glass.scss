@@ -721,16 +721,19 @@ html[data-theme="glass"] body.is-admin {
     }
   }
 
-  /* Admin header */
+  /* Admin header — prod medium chrome ≡ sidebar */
   .mat-toolbar.admin-header {
-    background: rgba(0, 0, 0, 0.3);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-    border-bottom: var(--border-default);
-    color: var(--color-white);
+    --mat-toolbar-container-background-color: transparent;
+    background: var(--surface-chrome-gradient, var(--surface-chrome));
+    background-color: var(--surface-chrome);
+    backdrop-filter: var(--chrome-blur, blur(22px) saturate(145%));
+    -webkit-backdrop-filter: var(--chrome-blur, blur(22px) saturate(145%));
+    border-bottom: var(--chrome-border, 1px solid rgba(255, 255, 255, 0.3));
+    box-shadow: var(--chrome-shadow);
+    color: var(--text-primary);
 
     mat-icon, button {
-      color: var(--color-white);
+      color: var(--text-primary);
     }
   }
 }

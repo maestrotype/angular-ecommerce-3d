@@ -1,0 +1,117 @@
+// Form Fields
+.mat-mdc-form-field {
+  .mat-mdc-text-field-wrapper {
+    background-color: var(--admin-bg-card);
+    color: var(--admin-text-primary);
+
+    // Glass theme improvements
+    [data-theme="glass"] & {
+      background: var(--admin-glass-surface-muted);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid var(--admin-border-secondary);
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+    }
+  }
+
+  .mat-mdc-form-field-label {
+    color: var(--admin-text-secondary);
+  }
+
+  .mat-mdc-input-element {
+    color: var(--admin-text-primary);
+  }
+
+  .mat-mdc-input-element::placeholder {
+    color: var(--admin-text-secondary);
+  }
+
+  .mat-mdc-form-field-outline {
+    color: var(--admin-border-primary);
+  }
+
+  &.mat-focused .mat-mdc-form-field-outline {
+    color: var(--admin-border-focus);
+  }
+}
+
+// Select
+.mat-mdc-select {
+  .mat-mdc-select-value {
+    color: var(--admin-text-primary);
+  }
+
+  .mat-mdc-select-arrow {
+    color: var(--admin-text-secondary);
+  }
+}
+
+// Checkbox
+.mat-mdc-checkbox {
+  .mdc-checkbox {
+    .mdc-checkbox__background {
+      border-color: var(--admin-border-primary);
+    }
+
+    .mdc-checkbox__checkmark {
+      color: var(--admin-text-inverse);
+    }
+  }
+
+  &.mat-mdc-checkbox-checked {
+    .mdc-checkbox__background {
+      background-color: var(--admin-primary);
+      border-color: var(--admin-primary);
+    }
+  }
+}
+
+// Radio Button
+.mat-mdc-radio-button {
+  .mdc-radio {
+    .mdc-radio__background {
+      border-color: var(--admin-border-primary);
+    }
+
+    .mdc-radio__outer-circle {
+      border-color: var(--admin-border-primary);
+    }
+  }
+
+  &.mat-mdc-radio-checked {
+    .mdc-radio__background {
+      .mdc-radio__outer-circle {
+        border-color: var(--admin-primary);
+      }
+
+      .mdc-radio__inner-circle {
+        border-color: var(--admin-primary);
+      }
+    }
+  }
+}
+
+// Slide Toggle
+.mat-mdc-slide-toggle {
+  .mdc-switch {
+    .mdc-switch__track {
+      background-color: var(--admin-border-primary);
+    }
+  }
+
+  &.mat-mdc-slide-toggle-checked {
+    .mdc-switch {
+      .mdc-switch__track {
+        background-color: var(--admin-primary);
+      }
+    }
+  }
+}
+
+// Progress Spinner
+.mat-mdc-progress-spinner {
+  circle {
+    stroke: var(--admin-primary);
+  }
+}

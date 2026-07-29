@@ -1,4 +1,5 @@
 // Admin Panel Mixins
+// C5: still consumes --admin-* via admin-variables shim; C6 removes shim after semantic cutover.
 
 // Button Mixins
 @mixin admin-button($variant: 'primary') {

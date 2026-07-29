@@ -30,15 +30,15 @@
 | Epic | Name | Status | Reality Check (2026-07-29) |
 |------|------|--------|----------------------------|
 | A | Token Foundation | ✅ Complete | A1–A6 done |
-| B | Material Overrides Centralization | ✅ Complete | B1–B4 done; residual admin-global `.mat-` → C5 |
-| C | Admin Unification (ADR-011) | 🔄 In Progress | **C4 done** + post-C4 dark/dark-glass visual polish; M2 ≈ 463; **next = C5** |
-| D | Component Migration (ADR-006) | 🔄 Partially Started | Epic D after C5–C6 preferred for admin surfaces |
-| E | Final Cleanup | ⏳ Pending | M3 ≈ 87 `!important` (14 files); hard ban for **new** code (`.cursor/rules/no-important.mdc`) |
+| B | Material Overrides Centralization | ✅ Complete | B1–B4 done; admin Material leftovers modularized in C5 `global/` |
+| C | Admin Unification (ADR-011) | 🔄 In Progress | **C5 done**; M2 ≈ 463; M3 = 72; **next = C6** (delete shim + mixin cutover) |
+| D | Component Migration (ADR-006) | 🔄 Partially Started | Prefer after C6 for admin surfaces |
+| E | Final Cleanup | ⏳ Pending | M3 = 72 `!important` (12 files); hard ban for **new** code (`.cursor/rules/no-important.mdc`) |
 | F | Theme Engine v2 (ADR-004/012) | 💡 Planned | |
 | G | Premium UI / Animations / Polish | 💡 Planned | |
 
 ### Current Blockers
-- None for C5. Visual dark-glass regressions from C4 token remap are addressed (tooltips / chrome); verify after commit on all 4 admin themes.
+- None for C6. Smoke-check admin light/dark/glass/dark-glass (login + dashboard + one list; tooltips) after C5 split before deleting shim.
 
 ### Post-C4 lessons (2026-07-29) — do not repeat
 1. **`!important` is forbidden** for new/agent work (absolute). Win with CSS variables (`--mdc-*` / `--mat-*`), specificity, or correct layer — never `!important`. Rule: `.cursor/rules/no-important.mdc` + `AI_CONSTITUTION.md`.
@@ -52,6 +52,7 @@
 - Token scaffold + themes + `main.scss` entry
 - ThemeService: 4 themes, admin/storefront persistence
 - C4: admin components off SHARED/CONFLICT `--admin-*` (layout-only kept)
+- C5: `admin-global.scss` is a 16-line orchestrator; styles in `src/admin/styles/global/` (11 partials); 0 `!important` there
 - Dark / dark-glass admin chrome polish (header border tokens, tooltip surface, badge, scrollbars, table outline tokens)
 - Hard ban on new `!important` documented for agents
 
@@ -80,15 +81,16 @@
 > Quantified baseline (2026-07-28). Live numbers in [REFACTORING_BOARD.md §1](REFACTORING_BOARD.md).
 
 ### High Priority
-- [ ] Parallel `--admin-*`: M2 ≈ 463; C4 components clean (layout-only); residual global/mixins/shim → **C5–C6**
+- [ ] Parallel `--admin-*`: M2 ≈ 463; C4–C5 path clean; residual shim/mixins/themes → **C6**
 - [ ] 1,336 hardcoded hex colors outside token/theme sources (Epic D)
 - [x] Legacy `_theme-variables.scss` deleted (A3)
 - [x] Orphaned `src/styles.scss` deleted (A5)
 - [x] Material overrides Epic B (B1–B4)
+- [x] `admin-global.scss` decomposed (C5)
 
 ### Medium Priority
-- [ ] M3 ≈ 87 `!important` (14 files) — **no new ones**; Epic E / C5 must reduce (admin-global 14, `_admin-dark` 14, sidenav 10, …)
-- [ ] `admin-global.scss` still large / mixed concerns → **C5**
+- [ ] M3 = 72 `!important` (12 files) — **no new ones**; Epic E (hero, `_admin-dark`, sidenav, …)
+- [ ] `admin-variables.scss` shim + mixins still on `--admin-*` → **C6**
 - [ ] 40 `::ng-deep` in 12 files
 
 ### Low Priority
@@ -101,6 +103,13 @@
 
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-07-29 | Glass balance: lighter chrome (header/sidebar ~0.36 airy blue); darker content blocks (`--surface-card`/`elevated`/stat cards navy glass). Epic C still **5/6**. | Implementation Engineer |
+| 2026-07-29 | Glass chrome lighten: restore prod medium steel-blue `rgba(25,60,105,.5)` (was over-dark .78 charcoal). Header≡sidebar kept. Epic C still **5/6**. | Implementation Engineer |
+| 2026-07-29 | Glass polish: denser chrome + lower blur saturate so header≡sidebar (was electric blue over content); chart axis ticks theme-aware (white on glass/dark); chart cards use `--surface-card` not chrome. Epic C still **5/6**. | Implementation Engineer |
+| 2026-07-29 | Admin light-glass liquid rewrite: removed `isolation`/`translateZ` on chrome (was killing backdrop-filter → flat solid blue); single paint layer (transparent mat-drawer shell + `.sidenav-wrapper` / toolbar gradient); chrome tokens `--surface-chrome*` / `--chrome-blur`; softer prod-like body atmosphere; header≡sidebar; cards use dashboard glass tokens. Epic C still **5/6**. | Implementation Engineer |
+| 2026-07-29 | Glass chrome unify: local was too pale (`--surface-header` frosted). Restored prod sidebar etalon `rgba(25,60,105,.5)` as `--surface-secondary` and aliased `--surface-header` to it so header ≡ sidebar (also fixes prod mismatch). Applied across admin-glass, sidenav/header, chrome, material-overrides, storefront glass admin toolbar. Epic C still **5/6**. | Implementation Engineer |
+| 2026-07-29 | Post-C5 glass chrome fix: admin light-glass sidebar/header were reading too blue — storefront `_glass.scss` forced `rgba(0,0,0,.3)` on admin toolbar (high specificity) and sidenav/chrome still painted deep navy `--surface-secondary`. Restored frosted `--surface-header` on header + sidenav + mat-drawer; bound `--mat-toolbar-container-*` in `_admin-glass`. Epic C still **5/6**. | Implementation Engineer |
+| 2026-07-29 | Task C5 (Board): Decomposed `admin-global.scss` (~1239 → 16-line orchestrator) into `src/admin/styles/global/` (11 partials). Removed all `!important` from that path (body overflow + snackbar via doubled selectors / MDC tokens). `admin-mixins` documented for C6 semantic cutover; `admin-variables` shim kept. Note: `docs/migration/_c5-admin-global-decomposition.md`. Epic C **5/6**; M3 87→**72** (12 files). `npm run build` passes. | Implementation Engineer |
 | 2026-07-29 | Post-C4 admin visual polish (dark / dark-glass): fixed MatTooltip white corners (transparent host; surface-only fill + `--mdc-plain-tooltip-*`); re-bound `--glass-border-soft` in admin dark themes (inheritance gotcha); header/sidenav borders → `--border-default`; notification-badge without transform fringe; icon-button hover via MDC vars + radial (no new `!important`); dark-glass header `backdrop-filter: none`; scrollbar soft thumbs; table row outline via Material tokens. Policy: `.cursor/rules/no-important.mdc` + constitution/docs. Epic C still **4/6** (polish only; C5 not started). M2 ≈ 463; M3 ≈ 87. | Implementation Engineer |
 | 2026-07-28 | Task C4 (Board): Migrated all admin component `--admin-*` consumers to semantic/primitive (batches + remap helper `scripts/c4-remap-admin-tokens.cjs`); also cleared storefront strays + Material overrides TODO Epic C fallbacks. Layout ADMIN-ONLY tokens kept. Note: `docs/migration/_c4-admin-component-token-migration.md`. Epic C 4/6; M2 ≈ 467; non-layout `--admin-*` in components = 0. Visual: admin login OK. `npm run build` passes. | Implementation Engineer |
 | 2026-07-28 | Task C3 (Board): SHARED/CONFLICT reconciliation — `admin-variables.scss` is semantic/primitive alias shim; admin themes set semantic (+ layout) only under `body.is-admin`; glass recipes promoted (`--glass-surface-*`, `--surface-card-gradient`/`--surface-glow`); reverse B2 bridge removed; storefront `_glass.scss` `--admin-*` leftovers deleted; UNDEFINED (6) aliased. Note: `docs/migration/_c3-admin-token-reconciliation.md`. Epic C 3/6; M2 = 1 623; defined `--admin-*` ≈ 180. `npm run build` passes. | Principal UI Architect |
