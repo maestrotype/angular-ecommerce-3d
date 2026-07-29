@@ -110,7 +110,7 @@ src/
 - Partial files are prefixed with `_` and are never imported directly by components
 - `_index.scss` files serve as the single import point for each module
 - Component styles (under `src/app/`) are local and never imported globally
-- Admin styles may reuse shared tokens; layout ADMIN-ONLY isolated in `_admin-layout-tokens.scss` (C2); C3 themes map semantic+layout; component `--admin-*` → C4; shim delete C6
+- Admin styles may reuse shared tokens; layout ADMIN-ONLY isolated in `_admin-layout-tokens.scss` (C2); C3 themes map semantic+layout; C4 components on semantic; shim delete C6; `admin-global` → C5
 - `main.scss` contains imports only — no CSS rules
 
 ---
@@ -312,7 +312,7 @@ Token Definition          Theme Assignment           Component Consumption
 
 | Technique | Reason | Alternative |
 |-----------|--------|-------------|
-| `!important` | Breaks cascade predictability | Increase specificity properly |
+| `!important` | Breaks cascade; masks wrong selectors | **FORBIDDEN** — specificity / `--mat-*`/`--mdc-*` tokens / correct layer |
 | Inline styles in templates | Cannot use CSS variables reliably | Use CSS classes |
 | `style` attribute in TS code | Bypasses entire theme system | Toggle CSS classes |
 | Defining CSS variables in components | Creates scope confusion | Define in tokens or themes |
@@ -401,7 +401,7 @@ Before any PR touching styles is merged, the reviewer verifies:
 
 - [ ] No hardcoded colors, spacing, radius, or shadows in component styles
 - [ ] No new global CSS variables declared outside `src/styles/themes/` or `src/styles/tokens/`
-- [ ] No `!important` usage (unless explicitly documented and approved)
+- [ ] No `!important` usage (absolute ban — see `.cursor/rules/no-important.mdc`)
 - [ ] No `::ng-deep` in component styles (Material overrides use centralized file only)
 - [ ] No inline `style=` bindings with design values in templates
 - [ ] Component styles reference semantic tokens exclusively via `var(--semantic-*)` or `var(--<category>-<name>)`

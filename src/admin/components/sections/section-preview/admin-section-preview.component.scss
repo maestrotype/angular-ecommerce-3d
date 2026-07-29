@@ -92,7 +92,7 @@
 
   app-section-renderer {
     margin: 0;
-    border-bottom: 1px dashed rgba(var(--admin-primary-rgb), 0.2);
+    border-bottom: 1px dashed rgba(var(--interactive-primary-rgb), 0.2);
     transform: none;
     width: 100%;
     min-width: 100%;
@@ -125,25 +125,25 @@
       opacity: 0;
       transition: all 0.2s ease;
       
-      &:hover { background: var(--admin-primary); transform: scale(1.1); }
+      &:hover { background: var(--interactive-primary); transform: scale(1.1); }
       &:active { cursor: grabbing; }
     }
 
     &:hover {
-      border-color: var(--admin-primary);
+      border-color: var(--interactive-primary);
       z-index: 5;
       
       .section-overlay { opacity: 1; }
-      .section-badge { background: var(--admin-primary); transform: translateX(5px); opacity: 1; }
+      .section-badge { background: var(--interactive-primary); transform: translateX(5px); opacity: 1; }
       .drag-handle { opacity: 1; }
     }
 
     &.active {
-      border-color: var(--admin-primary);
-      box-shadow: 0 0 30px rgba(var(--admin-primary-rgb), 0.3);
+      border-color: var(--interactive-primary);
+      box-shadow: 0 0 30px rgba(var(--interactive-primary-rgb), 0.3);
       z-index: 10;
       
-      .section-badge { background: var(--admin-primary); font-weight: 800; opacity: 1; }
+      .section-badge { background: var(--interactive-primary); font-weight: 800; opacity: 1; }
     }
 
     .section-badge {
@@ -201,13 +201,13 @@
         .icon-circle {
           width: 32px;
           height: 32px;
-          background: var(--admin-primary);
+          background: var(--interactive-primary);
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
           color: white;
-          box-shadow: 0 0 12px rgba(var(--admin-primary-rgb), 0.5);
+          box-shadow: 0 0 12px rgba(var(--interactive-primary-rgb), 0.5);
           flex-shrink: 0;
           
           mat-icon { font-size: 18px; width: 18px; height: 18px; }
@@ -244,9 +244,9 @@
     z-index: 12000;
     
     button {
-      background: var(--admin-primary);
+      background: var(--interactive-primary);
       color: white;
-      box-shadow: 0 4px 15px rgba(var(--admin-primary-rgb), 0.4);
+      box-shadow: 0 4px 15px rgba(var(--interactive-primary-rgb), 0.4);
     }
   }
 
@@ -260,8 +260,8 @@
 
   .inspector-highlight {
     position: absolute; // Same as above
-    border: 2px solid var(--admin-primary);
-    background: rgba(var(--admin-primary-rgb), 0.1);
+    border: 2px solid var(--interactive-primary);
+    background: rgba(var(--interactive-primary-rgb), 0.1);
     z-index: 2500;
     pointer-events: none;
     transition: all 0.1s ease-out;
@@ -271,7 +271,7 @@
       position: absolute;
       top: -28px;
       left: -2px;
-      background: var(--admin-primary);
+      background: var(--interactive-primary);
       color: white;
       font-size: 11px;
       padding: 4px 12px;
@@ -304,14 +304,14 @@
     pointer-events: none;
     
     .hint-pill {
-      background: var(--admin-primary);
+      background: var(--interactive-primary);
       color: white;
       padding: 12px 32px;
       border-radius: 99px;
       display: flex;
       align-items: center;
       gap: 12px;
-      box-shadow: 0 15px 40px rgba(var(--admin-primary-rgb), 0.4);
+      box-shadow: 0 15px 40px rgba(var(--interactive-primary-rgb), 0.4);
       animation: inspectorSlideDown 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       font-weight: 800;
       font-size: 0.95rem;
@@ -406,8 +406,8 @@
 
 .cdk-drag-placeholder {
   opacity: 0.1;
-  background: var(--admin-primary);
-  border: 2px dashed var(--admin-primary);
+  background: var(--interactive-primary);
+  border: 2px dashed var(--interactive-primary);
 }
 
 .cdk-drag-animating {

@@ -753,6 +753,8 @@
   .mat-toolbar.mat-toolbar,
   mat-toolbar.mat-toolbar,
   .admin-header.mat-toolbar {
+    background-color: var(--surface-header);
+    color: var(--text-primary);
     backdrop-filter: blur(20px) saturate(150%);
     -webkit-backdrop-filter: blur(20px) saturate(150%);
     border: none;
@@ -1039,7 +1041,7 @@
     border-color: rgba(255, 255, 255, 0.7);
   }
 
-  /* ===== Sidenav / Drawer - DARKER glass with WHITE text ===== */
+  /* ===== Sidenav / Drawer — charcoal glass (prod: --surface-header #4d4a4e) ===== */
   .mat-sidenav-container .mat-sidenav,
   .mat-drawer-container .mat-drawer,
   mat-sidenav.mat-sidenav,
@@ -1056,6 +1058,18 @@
     transform: translateZ(0);
   }
 
+  /* Active nav: filled pill, no Material outline / left rail (tokens + specificity) */
+  .mat-mdc-nav-list a[mat-list-item].mat-mdc-list-item.active.mat-mdc-list-item,
+  .mat-mdc-nav-list a[mat-list-item].mat-mdc-list-item.mdc-list-item--activated.mat-mdc-list-item {
+    --mdc-list-list-item-container-color: rgba(255, 255, 255, 0.12);
+    --mat-list-item-hover-state-layer-opacity: 0;
+    --mdc-list-list-item-hover-state-layer-opacity: 0;
+    background-color: rgba(255, 255, 255, 0.12);
+    outline: none;
+    box-shadow: none;
+    border: none;
+  }
+
   /* White text for all sidenav items */
   .mat-sidenav .mat-list-item,
   .mat-drawer .mat-list-item,
@@ -1068,15 +1082,32 @@
 
   .mat-sidenav mat-icon,
   .mat-drawer mat-icon {
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.9);
   }
 
-  /* Borders between nav items */
+  /* Prod: no underline under logo */
+  .mat-sidenav .sidenav-header.sidenav-header,
+  .mat-drawer .sidenav-header.sidenav-header,
+  .admin-sidenav .sidenav-header.sidenav-header {
+    border-bottom: none;
+    box-shadow: none;
+  }
+
+  /* Nav MDC slots: primary text, bright icons (not secondary/muted) */
+  .mat-mdc-nav-list a[mat-list-item].mat-mdc-list-item {
+    --mdc-list-item-label-text-color: rgba(255, 255, 255, 0.95);
+    --mdc-list-item-leading-icon-color: rgba(255, 255, 255, 0.9);
+    --mdc-list-item-trailing-icon-color: rgba(255, 255, 255, 0.9);
+    --mdc-list-item-hover-label-text-color: rgba(255, 255, 255, 0.98);
+    --mdc-list-item-hover-leading-icon-color: rgba(255, 255, 255, 0.98);
+  }
+
+  /* Borders between nav items — disable under dark-glass (prod has clean pills) */
   .mat-sidenav .nav-item.nav-item,
   .mat-drawer .nav-item.nav-item,
   .admin-sidenav .nav-item.nav-item {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-    margin-bottom: 2px;
+    border-bottom: none;
+    margin-bottom: 0;
   }
 
   .mat-sidenav .nav-item:last-child,
@@ -1085,12 +1116,31 @@
     border-bottom: none;
   }
 
-  /* ===== Toolbar / Header - DARK glass ===== */
+  /* Kill MDC focus/activated chrome that drew the light outline on Dashboard */
+  .mat-mdc-nav-list .mat-mdc-list-item:focus,
+  .mat-mdc-nav-list .mat-mdc-list-item.mdc-list-item--activated,
+  .mat-mdc-nav-list .mat-mdc-list-item.active {
+    --mdc-list-item-container-color: transparent;
+    outline: none;
+    border: none;
+  }
+
+  .mat-mdc-nav-list .mat-mdc-list-item .mdc-list-item__ripple,
+  .mat-mdc-nav-list .mat-mdc-list-item .mat-mdc-list-item-interactive::before {
+    display: none;
+  }
+
+  /* ===== Toolbar / Header - DARK glass =====
+     Opaque --surface-header (#4d4a4e): no backdrop-filter.
+     backdrop-filter on the toolbar breaks overflow:hidden clipping on
+     child icon-buttons → square white hover corners in Chrome. */
   .mat-toolbar.mat-toolbar,
   mat-toolbar.mat-toolbar,
   .admin-header.mat-toolbar {
-    backdrop-filter: blur(20px) saturate(150%);
-    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    background-color: var(--surface-header);
+    color: var(--text-primary);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     border: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow:
@@ -1216,6 +1266,23 @@
   --mat-tab-header-inactive-label-text-color: rgba(255, 255, 255, 0.7);
   --mat-tab-header-active-hover-label-text-color: var(--interactive-primary);
   --mat-tab-header-inactive-hover-label-text-color: rgba(255, 255, 255, 0.9);
+
+  /* Tooltips: no white square under rounded surface */
+  --mdc-plain-tooltip-container-color: #27272a;
+  --mdc-plain-tooltip-supporting-text-color: rgba(250, 250, 250, 0.95);
+  --mdc-plain-tooltip-container-shape: 8px;
+
+  .mat-mdc-tooltip-panel {
+    background: transparent;
+  }
+
+  .mat-mdc-tooltip.mat-mdc-tooltip {
+    background-color: transparent;
+
+    &::before {
+      background: transparent;
+    }
+  }
 
   .mat-datepicker-content {
     background-color: #0f172a; // TODO Epic C: map to semantic
@@ -1450,6 +1517,34 @@
   --mat-icon-color: rgba(255, 255, 255, 0.7);
   --mat-datepicker-toggle-icon-color: rgba(255, 255, 255, 0.7);
 
+  /* Tooltips: outer host stays transparent; only surface is filled (no white square corners) */
+  --mdc-plain-tooltip-container-color: #3a3739;
+  --mdc-plain-tooltip-supporting-text-color: rgba(255, 255, 255, 0.95);
+  --mdc-plain-tooltip-container-shape: 8px;
+
+  .mat-mdc-tooltip-panel {
+    background: transparent;
+  }
+
+  .mat-mdc-tooltip.mat-mdc-tooltip {
+    background-color: transparent;
+    background-image: none;
+    --mdc-plain-tooltip-container-color: #3a3739;
+    --mdc-plain-tooltip-supporting-text-color: rgba(255, 255, 255, 0.95);
+    --mdc-plain-tooltip-container-shape: 8px;
+
+    &::before {
+      background: transparent;
+    }
+
+    .mdc-tooltip__surface {
+      background-color: #3a3739;
+      color: rgba(255, 255, 255, 0.95);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+  }
+
   .mat-mdc-menu-panel {
     background: rgba(90, 85, 80, 0.85);
     backdrop-filter: blur(40px) saturate(200%);
@@ -1532,6 +1627,70 @@
     will-change: transform;
   }
 
+  /* Row dividers: Material paints via --mat-table-row-item-outline-*;
+     zero those tokens — do not fight border with !important. */
+  .mat-mdc-table.mat-mdc-table,
+  table.mat-mdc-table.mat-mdc-table {
+    --mat-table-row-item-outline-color: transparent;
+    --mat-table-row-item-outline-width: 0;
+  }
+
+  .mat-mdc-table.mat-mdc-table .mat-mdc-cell.mat-mdc-cell,
+  .mat-mdc-table.mat-mdc-table td.mat-mdc-cell,
+  .admin-table-wrapper .mat-mdc-table .mat-mdc-cell.mat-mdc-cell {
+    border-bottom-width: 0;
+    border-bottom-style: none;
+    border-bottom-color: transparent;
+    box-shadow: none;
+  }
+
+  .mat-mdc-table.mat-mdc-table .mat-mdc-header-cell.mat-mdc-header-cell,
+  .admin-table-wrapper .mat-mdc-header-cell.mat-mdc-header-cell {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  /* Header icon-buttons: kill MDC state-layer via tokens; circular hover via radial.
+     No !important — specificity + CSS variables only. */
+  .admin-header.mat-toolbar .mat-mdc-icon-button.mat-mdc-button-base,
+  mat-toolbar.admin-header .mat-mdc-icon-button.mat-mdc-button-base {
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: transparent;
+    background-image: none;
+    --mat-icon-button-state-layer-color: transparent;
+    --mdc-icon-button-hover-state-layer-opacity: 0;
+    --mdc-icon-button-focus-state-layer-opacity: 0;
+    --mdc-icon-button-pressed-state-layer-opacity: 0;
+    -webkit-mask-image: radial-gradient(closest-side, #000 99%, transparent 100%);
+    mask-image: radial-gradient(closest-side, #000 99%, transparent 100%);
+    transform: translateZ(0);
+
+    &:hover,
+    &:focus,
+    &:focus-visible,
+    &.cdk-focused,
+    &.cdk-program-focused,
+    &.cdk-mouse-focused {
+      background-color: transparent;
+      background-image: radial-gradient(
+        circle at center,
+        rgba(255, 255, 255, 0.14) 0%,
+        rgba(255, 255, 255, 0.14) 64%,
+        transparent 65%
+      );
+    }
+
+    .mat-mdc-button-persistent-ripple::before {
+      opacity: 0;
+      background-color: transparent;
+    }
+
+    .mat-focus-indicator::before {
+      content: none;
+      display: none;
+    }
+  }
+
   /* soften sidenav shadow to avoid visible vertical bands on some GPUs */
   .mat-sidenav-container .mat-sidenav,
   .mat-drawer-container .mat-drawer,
@@ -1548,10 +1707,23 @@
    Layout + unique theming. Prefer semantic tokens; --admin-* → Epic C.
    ========================================================================== */
 
-/* —— Tables: row borders (orders / users) —— */
+/* —— Tables: row borders (orders / users / products) —— */
 app-order-list .mat-mdc-table.mat-mdc-table .mat-mdc-row .mat-mdc-cell,
-app-user-list .mat-mdc-table.mat-mdc-table .mat-mdc-row .mat-mdc-cell {
-  border-bottom: 1px solid var(--admin-order-list-border, var(--border-default)); // TODO Epic C
+app-user-list .mat-mdc-table.mat-mdc-table .mat-mdc-row .mat-mdc-cell,
+app-product-list .mat-mdc-table.mat-mdc-table .mat-mdc-row .mat-mdc-cell,
+app-category-list .mat-mdc-table.mat-mdc-table .mat-mdc-row .mat-mdc-cell {
+  border-bottom: none;
+}
+
+[data-theme='light'] app-order-list .mat-mdc-table.mat-mdc-table .mat-mdc-row .mat-mdc-cell,
+[data-theme='light'] app-user-list .mat-mdc-table.mat-mdc-table .mat-mdc-row .mat-mdc-cell,
+[data-theme='light'] app-product-list .mat-mdc-table.mat-mdc-table .mat-mdc-row .mat-mdc-cell,
+[data-theme='light'] app-category-list .mat-mdc-table.mat-mdc-table .mat-mdc-row .mat-mdc-cell,
+[data-theme='default'] app-order-list .mat-mdc-table.mat-mdc-table .mat-mdc-row .mat-mdc-cell,
+[data-theme='default'] app-user-list .mat-mdc-table.mat-mdc-table .mat-mdc-row .mat-mdc-cell,
+[data-theme='default'] app-product-list .mat-mdc-table.mat-mdc-table .mat-mdc-row .mat-mdc-cell,
+[data-theme='default'] app-category-list .mat-mdc-table.mat-mdc-table .mat-mdc-row .mat-mdc-cell {
+  border-bottom: 1px solid var(--border-default);
 }
 
 app-order-list .mat-mdc-table.mat-mdc-table .mat-mdc-row:last-child .mat-mdc-cell,
@@ -1572,14 +1744,14 @@ app-message-list .messages-table th.mat-column-subject {
 [data-theme='dark'] app-message-list .messages-table .mat-column-subject.mat-mdc-cell,
 [data-theme='dark'] app-message-list .messages-table td.mat-column-subject,
 [data-theme='dark'] app-message-list .messages-table th.mat-column-subject {
-  color: var(--admin-primary-light, var(--interactive-primary)); // TODO Epic C
+  color: var(--color-brand-light, var(--interactive-primary)); // TODO Epic C
 }
 
 [data-theme='glass'] app-message-list .messages-table .mat-column-subject.mat-mdc-header-cell,
 [data-theme='glass'] app-message-list .messages-table .mat-column-subject.mat-mdc-cell,
 [data-theme='glass'] app-message-list .messages-table td.mat-column-subject,
 [data-theme='glass'] app-message-list .messages-table th.mat-column-subject {
-  color: var(--admin-border-focus, var(--interactive-primary)); // TODO Epic C
+  color: var(--border-primary, var(--interactive-primary)); // TODO Epic C
 }
 
 app-message-list .messages-table .mat-column-actions {
@@ -1599,12 +1771,12 @@ app-user-list .mat-chip {
   }
 
   &.mat-chip-selected.mat-accent {
-    background-color: var(--admin-accent, var(--interactive-primary)); // TODO Epic C
+    background-color: var(--color-accent, var(--interactive-primary)); // TODO Epic C
     color: var(--text-on-primary, #fff);
   }
 
   &.mat-chip-selected.mat-warn {
-    background-color: var(--interactive-danger, var(--admin-warn));
+    background-color: var(--interactive-danger, var(--color-warning));
     color: var(--text-on-primary, #fff);
   }
 }
@@ -1688,7 +1860,7 @@ app-category-list .action-button .mat-mdc-button-touch-target {
 app-seo .seo-tabs .mat-mdc-tab-header,
 app-seo-settings .seo-tabs .mat-mdc-tab-header {
   margin-bottom: var(--spacing-lg, 1.5rem);
-  border-bottom: 1px solid var(--border-default, var(--admin-border-primary));
+  border-bottom: 1px solid var(--border-default, var(--border-default));
 }
 
 app-seo .seo-tabs .mat-mdc-tab-body-content,
@@ -1711,22 +1883,22 @@ app-seo-settings .seo-tabs .mat-mdc-tab.mat-mdc-tab-active .mat-mdc-tab-label-co
 app-seo-settings .seo-tabs .mat-mdc-tab.mat-mdc-tab-active .mdc-tab__text-label,
 app-seo-settings .seo-tabs .mat-mdc-tab:hover .mat-mdc-tab-label-content,
 app-seo-settings .seo-tabs .mat-mdc-tab:hover .mdc-tab__text-label {
-  color: var(--admin-tab-active, var(--interactive-primary)); // TODO Epic C
+  color: var(--interactive-primary, var(--interactive-primary)); // TODO Epic C
 }
 
 app-seo .seo-tabs .mat-mdc-tab-header .mdc-tab-indicator__content--underline,
 app-seo .seo-tabs .mat-mdc-tab-indicator .mdc-tab-indicator__content,
 app-seo-settings .seo-tabs .mat-mdc-tab-header .mdc-tab-indicator__content--underline,
 app-seo-settings .seo-tabs .mat-mdc-tab-indicator .mdc-tab-indicator__content {
-  border-color: var(--admin-tab-active, var(--interactive-primary));
-  background-color: var(--admin-tab-active, var(--interactive-primary));
+  border-color: var(--interactive-primary, var(--interactive-primary));
+  background-color: var(--interactive-primary, var(--interactive-primary));
 }
 
 /* —— SEO settings cards —— */
 app-seo-settings .settings-card .mat-card-header,
 app-seo-settings .settings-card .mat-mdc-card-header {
   padding-bottom: var(--spacing-md, 1rem);
-  border-bottom: 1px solid var(--border-subtle, var(--admin-border-secondary));
+  border-bottom: 1px solid var(--border-subtle, var(--border-subtle));
 }
 
 app-seo-settings .settings-card .mat-card-title,
@@ -1763,7 +1935,7 @@ app-seo-settings .settings-form mat-form-field .mat-mdc-form-field-hint {
 /* —— Section form drawer tabs + chips —— */
 app-section-form .form-wrapper.drawer-mode .mat-mdc-tab-header {
   padding: 0 32px;
-  border-bottom: 1px solid var(--border-default, var(--admin-border-primary));
+  border-bottom: 1px solid var(--border-default, var(--border-default));
 }
 
 app-section-form .form-wrapper.drawer-mode .mat-mdc-tab-header .mat-mdc-tab {
@@ -1785,7 +1957,7 @@ app-section-form .header-actions .mat-mdc-chip-option {
 }
 
 app-section-form .header-actions .mat-mdc-chip-option.mat-mdc-chip-selected {
-  --mdc-chip-label-text-color: var(--surface-elevated, var(--admin-bg-card));
+  --mdc-chip-label-text-color: var(--surface-elevated, var(--surface-elevated));
   box-shadow: 0 4px 12px rgba(var(--interactive-primary-rgb), 0.4);
 }
 
@@ -1795,7 +1967,7 @@ app-section-form .header-actions .mat-mdc-chip-option.mat-mdc-chip-selected .mdc
 
 /* —— Section list: warn actions + lang chips + glass switch track —— */
 app-section-list .col-actions button.mat-warn {
-  color: var(--interactive-danger, var(--admin-error));
+  color: var(--interactive-danger, var(--interactive-danger));
 }
 
 app-section-list .drawer-lang-switcher .mat-mdc-chip-listbox-wrapper {
@@ -1839,7 +2011,7 @@ app-payments .payments-table .mat-mdc-header-cell {
 
 app-payments .payments-table .mat-row:hover td,
 app-payments .payments-table .mat-mdc-row:hover td {
-  background-color: var(--admin-order-list-row-hover, var(--surface-highlight)); // TODO Epic C
+  background-color: var(--surface-highlight, var(--surface-highlight)); // TODO Epic C
 }
 
 /* —— Image processor —— */
@@ -1857,15 +2029,15 @@ app-image-processor .actions button.mat-primary {
   color: var(--text-on-primary, #1a1a1a);
 
   &:hover:not(:disabled) {
-    background: var(--admin-primary-hover, var(--interactive-primary)); // TODO Epic C
+    background: var(--interactive-primary-hover, var(--interactive-primary)); // TODO Epic C
     box-shadow: 0 0 20px rgba(var(--interactive-primary-rgb, 138, 180, 248), 0.4);
   }
 }
 
 app-image-processor .actions button.mat-warn {
   background: rgba(242, 139, 130, 0.2);
-  color: var(--interactive-danger, var(--admin-error));
-  border: 1px solid var(--interactive-danger, var(--admin-error));
+  color: var(--interactive-danger, var(--interactive-danger));
+  border: 1px solid var(--interactive-danger, var(--interactive-danger));
 
   &:hover:not(:disabled) {
     background: rgba(242, 139, 130, 0.3);
@@ -1921,7 +2093,7 @@ app-image-processor .actions button.mat-warn {
     color: #fff;
 
     &:hover {
-      background-color: var(--admin-error, #d32f2f); // TODO Epic C
+      background-color: var(--interactive-danger, #d32f2f); // TODO Epic C
     }
   }
 

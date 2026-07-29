@@ -1,18 +1,18 @@
 
 .message-detail-container {
   max-width: 800px;
-  background-color: var(--admin-bg-card);
-  color: var(--admin-text-primary, var(--mdc-list-list-item-label-text-color));
+  background-color: var(--surface-elevated);
+  color: var(--text-primary, var(--mdc-list-list-item-label-text-color));
   border: var(--border-width) var(--border-style) var(--border-color);
   border-radius: var(--border-radius-dark-glass);
-  box-shadow: var(--admin-shadow-lg, 0 16px 60px rgba(0, 0, 0, 0.35));
+  box-shadow: var(--shadow-lg, 0 16px 60px rgba(0, 0, 0, 0.35));
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--admin-header-bg);
+  background-color: var(--surface-header);
   padding: 3px;
   margin-bottom: 24px;
 
@@ -28,11 +28,11 @@
 }
 
 .message-info {
-  background: var(--admin-message-info-bg);
+  background: var(--color-info-bg);
   padding: 16px;
   border-radius: 8px;
   margin-bottom: 24px;
-  border: 1px solid var(--admin-border-primary, #404040);
+  border: 1px solid var(--border-default, #404040);
 
   .info-row {
     margin-bottom: 12px;
@@ -61,10 +61,10 @@
   }
 
   .content-text, .reply-text {
-    background: var(--admin-bg-hover);
+    background: var(--surface-highlight);
     padding: 16px;
     border-radius: 8px;
-    border: 1px solid var(--admin-border-primary, #404040);
+    border: 1px solid var(--border-default, #404040);
     white-space: pre-wrap;
     line-height: 1.6;
     color: var(--mdc-list-list-item-label-text-color);
@@ -82,14 +82,14 @@
 
 .admin-reply .reply-text {
   background: rgba(59, 130, 246, 0.1);
-  border-color: var(--admin-primary, #3b82f6);
-  color: var(--admin-text-primary);
+  border-color: var(--interactive-primary, #3b82f6);
+  color: var(--text-primary);
 
   [data-theme="dark"] &,
   [data-theme="glass"] &,
   [data-theme="dark-glass"] & {
     background: rgba(30, 58, 138, 0.6);
-    border-color: var(--admin-primary, #3b82f6);
+    border-color: var(--interactive-primary, #3b82f6);
     color: #f8fafc;
   }
 }
@@ -97,7 +97,7 @@
 .reply-form {
   margin-top: 24px;
   padding-top: 24px;
-  border-top: 1px solid var(--admin-border-primary, #404040);
+  border-top: 1px solid var(--border-default, #404040);
 
   h4 {
     margin: 0 0 16px 0;
@@ -122,7 +122,7 @@
   justify-content: flex-end;
   gap: 12px;
   padding-top: 16px;
-  background-color: var(--admin-header-bg);
+  background-color: var(--surface-header);
   margin-top: 24px;
 }
 

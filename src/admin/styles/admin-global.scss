@@ -230,7 +230,14 @@ button {
 
   .mat-mdc-cell {
     color: var(--admin-text-primary);
-    border-bottom-color: var(--admin-border-primary);
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+  }
+
+  [data-theme="light"] &,
+  [data-theme="default"] & {
+    .mat-mdc-cell {
+      border-bottom-color: var(--admin-border-primary);
+    }
   }
 
   [data-theme="glass"] & {
@@ -251,6 +258,21 @@ button {
   [data-theme="dark"] & {
     .mat-mdc-header-cell {
       border-bottom: 1px solid var(--admin-border-primary);
+    }
+
+    .mat-mdc-cell {
+      border-bottom-color: rgba(255, 255, 255, 0.06);
+    }
+  }
+
+  [data-theme="dark-glass"] & {
+    .mat-mdc-header-cell {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .mat-mdc-cell {
+      border-bottom: none;
+      border-bottom-width: 0;
     }
   }
 }
@@ -435,6 +457,13 @@ button {
 .mat-mdc-nav-list a[mat-list-item].mat-mdc-list-item:hover .mdc-list-item__primary-text,
 .mat-mdc-nav-list a[mat-list-item].mat-mdc-list-item:hover .mat-mdc-list-item-title {
   color: var(--admin-text-primary);
+}
+
+// Dark-glass: brighter icons than default secondary
+[data-theme='dark-glass'] .mat-mdc-nav-list a[mat-list-item].mat-mdc-list-item {
+  --mdc-list-item-leading-icon-color: rgba(255, 255, 255, 0.9);
+  --mdc-list-item-trailing-icon-color: rgba(255, 255, 255, 0.9);
+  --mdc-list-item-label-text-color: rgba(255, 255, 255, 0.95);
 }
 
 // Paginator
@@ -639,11 +668,26 @@ button {
   }
 }
 
-// Tooltip
+// Tooltip — NEVER paint the outer .mat-mdc-tooltip (square hit-box).
+// Themes set --mdc-plain-tooltip-*; do not rebind them here to --surface-* (kills theme solids).
 .mat-mdc-tooltip {
-  background-color: var(--admin-bg-tertiary);
-  color: var(--admin-text-inverse);
-  font-size: var(--admin-font-size-sm);
+  background-color: transparent;
+  background-image: none;
+
+  &::before {
+    background: transparent;
+  }
+
+  .mdc-tooltip__surface {
+    background-color: var(--mdc-plain-tooltip-container-color, var(--surface-elevated));
+    color: var(--mdc-plain-tooltip-supporting-text-color, var(--text-primary));
+    border-radius: var(--mdc-plain-tooltip-container-shape, 8px);
+    overflow: hidden;
+  }
+}
+
+.mat-mdc-tooltip-panel {
+  background: transparent;
 }
 
 // Status badges

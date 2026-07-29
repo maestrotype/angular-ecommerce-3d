@@ -11,11 +11,11 @@
     font-size: 28px;
     font-weight: 600;
     margin-bottom: 8px;
-    color: var(--admin-text-primary, var(--text-primary, #ffffff));
+    color: var(--text-primary, var(--text-primary, #ffffff));
   }
 
   .page-subtitle {
-    color: var(--admin-text-secondary, var(--text-secondary, rgba(255, 255, 255, 0.7)));
+    color: var(--text-secondary, var(--text-secondary, rgba(255, 255, 255, 0.7)));
     font-size: 16px;
   }
 }
@@ -27,15 +27,15 @@
 }
 
 .integration-card {
-  background: var(--admin-bg-card, var(--glass-bg, rgba(255, 255, 255, 0.05)));
+  background: var(--surface-elevated, var(--glass-bg, rgba(255, 255, 255, 0.05)));
   backdrop-filter: blur(12px);
-  border: 1px solid var(--admin-border-secondary, var(--glass-border, rgba(255, 255, 255, 0.1)));
+  border: 1px solid var(--border-subtle, var(--glass-border, rgba(255, 255, 255, 0.1)));
   border-radius: 16px;
   overflow: hidden;
   transition: transform 0.3s ease, border-color 0.3s ease;
 
   &:hover {
-    border-color: var(--admin-primary, var(--primary-color, #3f51b5));
+    border-color: var(--interactive-primary, var(--primary-color, #3f51b5));
     transform: translateY(-4px);
   }
 
@@ -45,11 +45,11 @@
     mat-card-title {
       font-size: 20px;
       font-weight: 500;
-      color: var(--admin-text-primary, var(--text-primary, #fff));
+      color: var(--text-primary, var(--text-primary, #fff));
     }
     
     mat-card-subtitle {
-      color: var(--admin-text-secondary, var(--text-secondary, rgba(255, 255, 255, 0.6)));
+      color: var(--text-secondary, var(--text-secondary, rgba(255, 255, 255, 0.6)));
       margin-top: 4px;
     }
   }
@@ -73,25 +73,25 @@
   
   &.cloudinary-icon {
     background-color: rgba(52, 72, 194, 0.2);
-    color: var(--admin-primary, #3448c2);
+    color: var(--interactive-primary, #3448c2);
     &::before { content: '☁️'; }
   }
   
   &.tripo-icon {
     background-color: rgba(103, 58, 183, 0.2);
-    color: var(--admin-accent, #673ab7);
+    color: var(--color-accent, #673ab7);
     &::before { content: '🤖'; }
   }
   
   &.stripe-icon {
     background-color: rgba(103, 114, 229, 0.2);
-    color: var(--admin-primary, #6772e5);
+    color: var(--interactive-primary, #6772e5);
     &::before { content: '💳'; }
   }
   
   &.email-icon {
     background-color: rgba(76, 175, 80, 0.2);
-    color: var(--admin-success, #4caf50);
+    color: var(--color-success, #4caf50);
     &::before { content: '✉️'; }
   }
 }
@@ -123,8 +123,8 @@
 }
 
 .info-banner {
-  background: rgba(var(--admin-primary-rgb, var(--primary-rgb, 63, 81, 181)), 0.1);
-  border-left: 4px solid var(--admin-primary, var(--primary-color, #3f51b5));
+  background: rgba(var(--interactive-primary-rgb, var(--primary-rgb, 63, 81, 181)), 0.1);
+  border-left: 4px solid var(--interactive-primary, var(--primary-color, #3f51b5));
   padding: 12px 16px;
   border-radius: 4px;
   display: flex;
@@ -133,7 +133,7 @@
   margin-bottom: 16px;
 
   mat-icon {
-    color: var(--admin-primary, var(--primary-color, #3f51b5));
+    color: var(--interactive-primary, var(--primary-color, #3f51b5));
     font-size: 20px;
     width: 20px;
     height: 20px;
@@ -142,12 +142,12 @@
   p {
     margin: 0;
     font-size: 14px;
-    color: var(--admin-text-secondary, var(--text-secondary, rgba(255, 255, 255, 0.8)));
+    color: var(--text-secondary, var(--text-secondary, rgba(255, 255, 255, 0.8)));
     line-height: 1.4;
   }
 
   .external-link {
-    color: var(--admin-accent, var(--accent-color, #ff4081));
+    color: var(--color-accent, var(--accent-color, #ff4081));
     text-decoration: none;
     font-weight: 500;
     

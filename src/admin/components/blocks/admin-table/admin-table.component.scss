@@ -5,16 +5,15 @@
 }
 .admin-table-loading {
   text-align: center;
-  padding: var(--admin-spacing-xxl) var(--admin-spacing-lg);
-  color: var(--admin-text-primary);
+  padding: var(--space-12) var(--space-6);
+  color: var(--text-primary);
 
   mat-spinner {
-    margin: 0 auto var(--admin-spacing-md);
+    margin: 0 auto var(--space-4);
   }
 
   p {
-    margin: var(--admin-spacing-md) 0;
-    font-size: var(--admin-font-size-lg);
+    margin: var(--space-4) 0;
+    font-size: var(--text-lg);
   }
 }
-

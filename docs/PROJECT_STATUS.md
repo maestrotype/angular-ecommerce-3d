@@ -1,6 +1,6 @@
 # Project Status
 
-**Last Updated**: 2026-07-28
+**Last Updated**: 2026-07-29
 **Maintainer**: Principal UI Architect
 
 > This document tracks high-level project status. For refactoring task tracking and progress metrics, see **[REFACTORING_BOARD.md](REFACTORING_BOARD.md)** (single source of truth for progress). For architectural decisions, see `STYLE_REFACTOR_PLAN.md`.
@@ -15,7 +15,7 @@
 | 3D Product Viewer | ✅ Operational | Three.js with GLB support, meshopt decoder |
 | E-commerce Flow | ✅ Operational | Cart, checkout, Stripe payments |
 | Admin Panel | ✅ Operational | CRUD for products, orders, users, categories |
-| Multi-language | ✅ Operational | EN / RU / UA via @angular/localize |
+| Multi-language | ✅ Operational | EN / RU / UA via @ngx-translate / localize |
 | Theme System | 🔄 Being Refactored | 4 themes work; token unification in progress |
 | AI 3D Generation | 🔬 Experimental | Hunyuan3D, InstantMesh, Unique3D integrated |
 | Recommendations | ✅ Operational | Collaborative filtering API |
@@ -27,25 +27,33 @@
 > **Full task board with metrics**: [REFACTORING_BOARD.md](REFACTORING_BOARD.md)
 > **Baseline audit (2026-07-28)**: code was scanned to establish objective completion metrics. Statuses below reflect the actual code state, superseding earlier optimistic records.
 
-| Epic | Name | Status | Reality Check (2026-07-28) |
+| Epic | Name | Status | Reality Check (2026-07-29) |
 |------|------|--------|----------------------------|
-| A | Token Foundation | ✅ Complete | A1–A6 done: primitives, semantic, themes, variables, orphan deleted, docs entry = `main.scss` |
-| B | Material Overrides Centralization | ✅ Complete | B1–B4 done: overrides central; component `.mat-` = 0; palette↔tokens (MDC bridge). Residual admin-global `.mat-` → C5 |
-| C | Admin Unification (ADR-011) | 🔄 In Progress | C3 done: themes map semantic+layout; `admin-variables` shim; M2 = 1 623; C4–C6 pending |
-| D | Component Migration (ADR-006) | 🔄 Partially Started | 3/86 components fully clean (`favorites`, `base-modal`, `cart-modal`); ~29 partially migrated; 1,336 hardcoded hex remain |
-| E | Final Cleanup | ⏳ Pending | 91 `!important` (12 files), 40 `::ng-deep` (12 files), 3 stub files |
-| F | Theme Engine v2 (ADR-004/012) | 💡 Planned | ThemeService works (data-theme switching, persistence, 4 themes); TS model not synced with SCSS |
-| G | Premium UI / Animations / Polish | 💡 Planned | See `REDESIGN_PLAN.md` Phases 7–9 |
+| A | Token Foundation | ✅ Complete | A1–A6 done |
+| B | Material Overrides Centralization | ✅ Complete | B1–B4 done; residual admin-global `.mat-` → C5 |
+| C | Admin Unification (ADR-011) | 🔄 In Progress | **C4 done** + post-C4 dark/dark-glass visual polish; M2 ≈ 463; **next = C5** |
+| D | Component Migration (ADR-006) | 🔄 Partially Started | Epic D after C5–C6 preferred for admin surfaces |
+| E | Final Cleanup | ⏳ Pending | M3 ≈ 87 `!important` (14 files); hard ban for **new** code (`.cursor/rules/no-important.mdc`) |
+| F | Theme Engine v2 (ADR-004/012) | 💡 Planned | |
+| G | Premium UI / Animations / Polish | 💡 Planned | |
 
 ### Current Blockers
-- None
+- None for C5. Visual dark-glass regressions from C4 token remap are addressed (tooltips / chrome); verify after commit on all 4 admin themes.
+
+### Post-C4 lessons (2026-07-29) — do not repeat
+1. **`!important` is forbidden** for new/agent work (absolute). Win with CSS variables (`--mdc-*` / `--mat-*`), specificity, or correct layer — never `!important`. Rule: `.cursor/rules/no-important.mdc` + `AI_CONSTITUTION.md`.
+2. **CSS custom-property inheritance gotcha:** `--glass-border-soft: var(--border-subtle)` resolves on `:root` to a **computed** light color (`#f1f5f9`); children inherit that resolved value, so theme overrides of `--border-subtle` alone do not update soft borders. **Re-declare** `--glass-border-soft` / `--glass-divider` inside theme scopes (done for admin dark + dark-glass).
+3. **MatTooltip white corners:** painting `background` on outer `.mat-mdc-tooltip` (square host) while only `.mdc-tooltip__surface` is rounded → light corners. Outer host/`::before`/panel must stay **transparent**; fill only the surface + `--mdc-plain-tooltip-container-color`.
+4. **Icon-button square hover under glass:** Material state-layer + `backdrop-filter` on toolbar breaks circular clipping. Prefer zero state-layer opacity + radial-gradient hover; opaque dark-glass header needs **no** useless `backdrop-filter`.
+5. **Notification badge fringe:** avoid `transform: translate(...)` on small rounded badges over dark chrome (GPU white fringe); use absolute `top`/`right` + pill radius + mask.
+6. **User-facing “white corners”** were finally identified as **MatTooltip** (e.g. “Go to storefront”), not only badges/icon-buttons — always confirm the exact element from a screenshot with arrows.
 
 ### What Verifiably Works Today
-- Token scaffold: `src/styles/tokens/` (`_primitive-tokens.scss`, `_semantic-tokens.scss`)
-- Themes rewritten to semantic tokens: `_default.scss`, `_dark.scss`, `_glass.scss`
-- Imports-only entry point: `src/styles/main.scss` (wired in `angular.json`)
-- ThemeService: 4 themes, `data-theme` switching, localStorage persistence, separate admin/storefront selection
-- Glass/admin theme regressions fixed (Tasks 008, 015–017, 021, 022)
+- Token scaffold + themes + `main.scss` entry
+- ThemeService: 4 themes, admin/storefront persistence
+- C4: admin components off SHARED/CONFLICT `--admin-*` (layout-only kept)
+- Dark / dark-glass admin chrome polish (header border tokens, tooltip surface, badge, scrollbars, table outline tokens)
+- Hard ban on new `!important` documented for agents
 
 ---
 
@@ -69,25 +77,23 @@
 
 ## Known Technical Debt
 
-> Quantified baseline (2026-07-28). Live numbers are tracked in [REFACTORING_BOARD.md §1](REFACTORING_BOARD.md).
+> Quantified baseline (2026-07-28). Live numbers in [REFACTORING_BOARD.md §1](REFACTORING_BOARD.md).
 
 ### High Priority
-- [ ] Parallel `--admin-*` token system: M2 = 1 623; C3 themes→semantic; shim until C6; migrate C4–C6
-- [ ] 1,336 hardcoded hex colors in 68 SCSS files outside token/theme sources (Epic D)
-- [x] Legacy `_theme-variables.scss` decomposed into theme partials and deleted (A3, 2026-07-28)
-- [x] Orphaned `src/styles.scss` deleted — glass helpers → `components/_glass-helpers.scss`, scrollbars → `core/_scrollbars.scss` (A5, 2026-07-28)
-- [x] Material overrides Epic B (B1–B4): central overrides + palette↔tokens; residual admin-global `.mat-` → C5
+- [ ] Parallel `--admin-*`: M2 ≈ 463; C4 components clean (layout-only); residual global/mixins/shim → **C5–C6**
+- [ ] 1,336 hardcoded hex colors outside token/theme sources (Epic D)
+- [x] Legacy `_theme-variables.scss` deleted (A3)
+- [x] Orphaned `src/styles.scss` deleted (A5)
+- [x] Material overrides Epic B (B1–B4)
 
 ### Medium Priority
-- [x] `_primitive-tokens.scss` imported via `tokens/_index.scss` (A1, 2026-07-28)
-- [x] `core/_variables.scss` parallel color palette removed — colors → semantic legacy aliases; file keeps SCSS breakpoints + non-color utils (A4, 2026-07-28)
-- [ ] 76 `!important` remaining (was 91; −15 via A5 orphan delete); 40 `::ng-deep` in 12 files
-- [ ] `admin-global.scss` is 1,195 lines with mixed concerns
+- [ ] M3 ≈ 87 `!important` (14 files) — **no new ones**; Epic E / C5 must reduce (admin-global 14, `_admin-dark` 14, sidenav 10, …)
+- [ ] `admin-global.scss` still large / mixed concerns → **C5**
+- [ ] 40 `::ng-deep` in 12 files
 
 ### Low Priority
-- [ ] Stub files in pipeline: `_forms.scss`, `_modals.scss`, `_navigation.scss` (5 lines each)
-- [ ] TS `Theme` interface not synchronized with SCSS tokens (ADR-012)
-- [ ] SCSS variables (`$var`) still used alongside CSS custom properties
+- [ ] Stub files: `_forms.scss`, `_modals.scss`, `_navigation.scss`
+- [ ] TS `Theme` interface not synced with SCSS (ADR-012)
 
 ---
 
@@ -95,6 +101,8 @@
 
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-07-29 | Post-C4 admin visual polish (dark / dark-glass): fixed MatTooltip white corners (transparent host; surface-only fill + `--mdc-plain-tooltip-*`); re-bound `--glass-border-soft` in admin dark themes (inheritance gotcha); header/sidenav borders → `--border-default`; notification-badge without transform fringe; icon-button hover via MDC vars + radial (no new `!important`); dark-glass header `backdrop-filter: none`; scrollbar soft thumbs; table row outline via Material tokens. Policy: `.cursor/rules/no-important.mdc` + constitution/docs. Epic C still **4/6** (polish only; C5 not started). M2 ≈ 463; M3 ≈ 87. | Implementation Engineer |
+| 2026-07-28 | Task C4 (Board): Migrated all admin component `--admin-*` consumers to semantic/primitive (batches + remap helper `scripts/c4-remap-admin-tokens.cjs`); also cleared storefront strays + Material overrides TODO Epic C fallbacks. Layout ADMIN-ONLY tokens kept. Note: `docs/migration/_c4-admin-component-token-migration.md`. Epic C 4/6; M2 ≈ 467; non-layout `--admin-*` in components = 0. Visual: admin login OK. `npm run build` passes. | Implementation Engineer |
 | 2026-07-28 | Task C3 (Board): SHARED/CONFLICT reconciliation — `admin-variables.scss` is semantic/primitive alias shim; admin themes set semantic (+ layout) only under `body.is-admin`; glass recipes promoted (`--glass-surface-*`, `--surface-card-gradient`/`--surface-glow`); reverse B2 bridge removed; storefront `_glass.scss` `--admin-*` leftovers deleted; UNDEFINED (6) aliased. Note: `docs/migration/_c3-admin-token-reconciliation.md`. Epic C 3/6; M2 = 1 623; defined `--admin-*` ≈ 180. `npm run build` passes. | Principal UI Architect |
 | 2026-07-28 | Task C2 (Board): Created `src/admin/styles/_admin-layout-tokens.scss` with 5 ADMIN-ONLY structural tokens (`--admin-sidebar-width`, `--admin-toolbar-height`, `--admin-content-padding`, mobile paddings). Wired in `admin.scss`; relocated mobile paddings out of `admin-variables.scss`; replaced hardcodes in `admin-layout.component.scss` and glass `--mat-toolbar-*-height`. Epic C 2/6; M2 = 2 025; defined `--admin-*` = 177. `npm run build` passes. | Principal UI Architect |
 | 2026-07-28 | Task C1 (Board): Inventoried all `--admin-*` tokens (174 defined). Classified per ADR-011: SHARED 125, CONFLICT 47, ADMIN-ONLY 2 (+3 proposed layout tokens from hardcodes: sidebar-width 260px, toolbar-height 64px, content-padding 24px). Documented 6 undefined refs and conflict resolution defaults (adopt frontend vs promote semantic). Tables in `UI_AUDIT.md` §4.1; note `docs/migration/_c1-admin-token-inventory.md`. Epic C 1/6. No SCSS code changes. | Principal UI Architect |

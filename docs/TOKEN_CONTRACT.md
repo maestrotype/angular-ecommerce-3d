@@ -171,7 +171,7 @@ Meaningful names that map to primitives. Components consume only this layer.
 
 ### Forbidden
 - `::ng-deep` (deprecated, use Material overrides or CDK strategies)
-- `!important` (≤2 documented exceptions maximum)
+- `!important` — **absolute ban** (see `.cursor/rules/no-important.mdc`; Epic E drives residual count → 0)
 - Hardcoded hex/rgb in component SCSS
 - Component-specific global variables (e.g., `--card-price-color`)
 

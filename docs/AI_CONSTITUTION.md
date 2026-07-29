@@ -45,9 +45,10 @@ This document defines the rules, constraints and workflow that ALL AI agents mus
   styles: [`color: #1976d2;`]
 })
 
-// FORBIDDEN — !important to override cascading
+// FORBIDDEN — !important. Absolute ban. No exceptions for AI tasks.
+// Fix specificity, CSS variables (--mdc-*/--mat-*), or override ownership instead.
 .my-component {
-  color: var(--text-primary) !important;
+  color: var(--text-primary) !important; // NEVER — even against Material
 }
 
 // FORBIDDEN — Defining new global CSS variables in a component
@@ -118,7 +119,7 @@ Theme switching is performed by changing the `data-theme` attribute on `<html>`.
 2. **Never declare global variables in component styles.** Component SCSS is self-contained.
 3. **Never redefine theme variables outside theme files.** Theme definitions live in `src/styles/themes/`.
 4. **Never hardcode design values.** Colors, spacing, radius, shadows, and typography flow through tokens.
-5. **Never use `!important` or `::ng-deep`.** These bypass architectural boundaries.
+5. **Never use `!important` or `::ng-deep`.** Absolute ban on `!important` for all agent/dev style work — no “temporary” exceptions. Fix cascade, tokens, or selector ownership. See `.cursor/rules/no-important.mdc`. `::ng-deep` remains banned for new code (legacy cleanup = Epic E).
 6. **Material overrides live in one file.** Scattered overrides are forbidden per `STYLE_REFACTOR_PLAN.md §ADR-005`.
 7. **New themes follow the nine-dimension model.** Color-only themes are insufficient per `STYLE_REFACTOR_PLAN.md §ADR-004`.
 8. **`main.scss` contains imports only.** Appending CSS to the style entry file is forbidden per `STYLE_REFACTOR_PLAN.md §ADR-003`. (`src/styles.scss` was removed in A5.)

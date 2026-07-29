@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--admin-spacing-lg);
+  padding: var(--space-6);
   background: var(--color-bg-primary, #f5f5f5);
   color: var(--color-text-primary, #333333);
 
@@ -12,48 +12,48 @@
     width: 100%;
     text-align: center;
     background: var(--color-surface-primary, #ffffff);
-    border-radius: var(--admin-border-radius-lg);
-    padding: var(--admin-spacing-xxl);
-    box-shadow: var(--admin-shadow-lg);
+    border-radius: var(--radius-lg);
+    padding: var(--space-12);
+    box-shadow: var(--shadow-lg);
     border: 1px solid var(--color-border-primary, #e5e7eb);
   }
 
   .success-icon {
-    margin-bottom: var(--admin-spacing-lg);
+    margin-bottom: var(--space-6);
 
     mat-icon {
       font-size: 80px;
       width: 80px;
       height: 80px;
-      color: var(--admin-success, #4caf50);
+      color: var(--color-success, #4caf50);
     }
   }
 
   .success-title {
-    font-size: var(--admin-font-size-xxl);
-    font-weight: var(--admin-font-weight-bold);
-    color: var(--admin-success, #4caf50);
-    margin: 0 0 var(--admin-spacing-md) 0;
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    color: var(--color-success, #4caf50);
+    margin: 0 0 var(--space-4) 0;
   }
 
   .success-message {
-    font-size: var(--admin-font-size-lg);
+    font-size: var(--text-lg);
     color: var(--color-text-secondary, #666666);
-    margin: 0 0 var(--admin-spacing-lg) 0;
+    margin: 0 0 var(--space-6) 0;
   }
 
   .payment-details {
     background: var(--color-surface-secondary, #f8f9fa);
-    border-radius: var(--admin-border-radius-md);
-    padding: var(--admin-spacing-lg);
-    margin-bottom: var(--admin-spacing-lg);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    margin-bottom: var(--space-6);
     border: 1px solid var(--color-border-secondary, #e9ecef);
 
     .detail-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: var(--admin-spacing-sm) 0;
+      padding: var(--space-2) 0;
       border-bottom: 1px solid var(--color-border-secondary, #e9ecef);
 
       &:last-child {
@@ -61,12 +61,12 @@
       }
 
       .detail-label {
-        font-weight: var(--admin-font-weight-medium);
+        font-weight: var(--font-medium);
         color: var(--color-text-secondary, #666666);
       }
 
       .detail-value {
-        font-weight: var(--admin-font-weight-bold);
+        font-weight: var(--font-bold);
         color: var(--color-text-primary, #333333);
       }
     }
@@ -75,32 +75,32 @@
   .success-actions {
     display: flex;
     flex-direction: column;
-    gap: var(--admin-spacing-md);
-    margin-bottom: var(--admin-spacing-lg);
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
 
     .action-btn {
-      padding: var(--admin-spacing-md) var(--admin-spacing-lg);
-      font-size: var(--admin-font-size-md);
-      font-weight: var(--admin-font-weight-medium);
-      border-radius: var(--admin-border-radius-md);
+      padding: var(--space-4) var(--space-6);
+      font-size: var(--text-base);
+      font-weight: var(--font-medium);
+      border-radius: var(--radius-md);
       transition: all 0.3s ease;
 
       &.primary-btn {
-        background: var(--admin-primary, #1976d2);
+        background: var(--interactive-primary, #1976d2);
         color: white;
 
         &:hover {
-          background: var(--admin-primary-hover, #1565c0);
+          background: var(--interactive-primary-hover, #1565c0);
           transform: translateY(-2px);
         }
       }
 
       &.secondary-btn {
-        border-color: var(--admin-primary, #1976d2);
-        color: var(--admin-primary, #1976d2);
+        border-color: var(--interactive-primary, #1976d2);
+        color: var(--interactive-primary, #1976d2);
 
         &:hover {
-          background: var(--admin-primary, #1976d2);
+          background: var(--interactive-primary, #1976d2);
           color: white;
           transform: translateY(-2px);
         }
@@ -110,10 +110,10 @@
 
   .success-info {
     color: var(--color-text-secondary, #666666);
-    font-size: var(--admin-font-size-sm);
+    font-size: var(--text-sm);
 
     p {
-      margin: var(--admin-spacing-xs) 0;
+      margin: var(--space-1) 0;
     }
   }
 }
@@ -160,10 +160,10 @@
 // Responsive design
 @media (max-width: 768px) {
   .payment-success-container {
-    padding: var(--admin-spacing-md);
+    padding: var(--space-4);
 
     .success-content {
-      padding: var(--admin-spacing-lg);
+      padding: var(--space-6);
     }
 
     .success-icon mat-icon {
@@ -173,12 +173,12 @@
     }
 
     .success-title {
-      font-size: var(--admin-font-size-xl);
+      font-size: var(--text-xl);
     }
 
     .success-actions {
       .action-btn {
-        padding: var(--admin-spacing-md);
+        padding: var(--space-4);
       }
     }
   }

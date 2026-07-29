@@ -3,8 +3,8 @@
 This document records **current-state findings** of the style system audit. Task tracking lives in [REFACTORING_BOARD.md](REFACTORING_BOARD.md) — do not duplicate task statuses here.
 
 **Role**: Principal UI Architect
-**Last Updated**: 2026-07-28
-**Audit Status**: Full codebase scan completed 2026-07-28 (baseline established)
+**Last Updated**: 2026-07-29
+**Audit Status**: Full codebase scan completed 2026-07-28 (baseline); post-C4 visual polish + policy notes 2026-07-29
 
 ---
 
@@ -44,7 +44,7 @@ This document records **current-state findings** of the style system audit. Task
 |------|------:|---------|--------|-------|
 | `admin.scss` | 49 | Admin entry | KEEP | Import orchestrator + CDK overlay |
 | `material-theme.scss` | ~45 | Material theme + token bridge | ✅ B4 | Palettes + MDC CSS → semantic tokens |
-| `admin-variables.scss` | 224 | `--admin-*` → semantic aliases (C3 shim) | DELETE after C6 | Parallel names remain for C4 consumers |
+| `admin-variables.scss` | 224 | `--admin-*` → semantic aliases (C3 shim) | DELETE after C6 | C4 consumers migrated; shim kept for global/mixins |
 | `_admin-layout-tokens.scss` | ~40 | 5 ADMIN-ONLY layout tokens | KEEP | C2 / ADR-011 |
 | `admin-mixins.scss` | 274 | Admin mixins | INVESTIGATE | Overlap with core mixins |
 | `admin-global.scss` | 1,195 | Admin global styles | DECOMPOSE | 76 `.mat-` lines, 14 `!important` → Task C5 |
@@ -67,9 +67,10 @@ Migration state (scan 2026-07-28):
 
 | Bucket | App (46) | Admin (40) | All (86) |
 |--------|---------:|-----------:|---------:|
-| Uses semantic-ish tokens | 32 (70%) | 4 (10%) | 36 (42%) |
+| Uses semantic-ish tokens | 35 (76%) | ~40 (100% layout-or-semantic) | ~75 |
 | Still contains hex | 36 (78%) | 25 (63%) | 61 (71%) |
-| Uses `--admin-*` | 3 | 30 (75%) | 33 |
+| Uses `--admin-*` (non-layout) | **0** | **0** | **0** |
+| Uses layout `--admin-*` only | 0 | 3 | 3 |
 | **Fully clean (semantic only, no hex)** | **3** | **0** | **3** |
 
 Fully clean components: `favorites`, `base-modal`, `cart-modal`.
@@ -83,7 +84,7 @@ Fully clean components: `favorites`, `base-modal`, `cart-modal`.
 | ~~Primitive tokens defined twice~~ | ~~`tokens/_primitive-tokens.scss` AND inlined in `tokens/_index.scss`~~ | ✅ RESOLVED (A1, 2026-07-28): `_index.scss` imports the file; inline copies deleted |
 | Color palette defined in parallel | `tokens/` vs TS `light-theme.ts` (SCSS `core/_variables` palette removed in A4) | Task F1 |
 | ~~Theme variables monolith~~ | ~~`tokens/_theme-variables.scss`~~ | ✅ Done (A3): deleted, themes absorb leftover vars |
-| `--admin-*` system | ~180 defined / **1 623** usages (M2); C3: themes→semantic; C2: 5 ADMIN-ONLY layout; shim in `admin-variables` | ✅ C3 (2026-07-28); migrate C4–C6 — see §4.1 |
+| `--admin-*` system | ~180 defined / **~467** usages (M2); C4: components clean; C2: 5 ADMIN-ONLY layout; shim in `admin-variables` | ✅ C4 (2026-07-28); residual C5–C6 — see §4.1 |
 
 ---
 
@@ -118,11 +119,12 @@ Top offenders (excluding token/theme files):
 ### Current Architecture (confirmed by scan)
 ```
 src/styles/              ← Frontend tokens + themes (canonical SoT)
-src/admin/styles/        ← C3: --admin-* shim aliases semantic; layout in C2; consumers → C4
+src/admin/styles/        ← C4: components on semantic; layout in C2; shim until C6; global → C5
 ```
 
 `_admin-layout-tokens.scss` (ADR-011) **exists** (C2) — 5 ADMIN-ONLY structural tokens.  
-C3: admin themes map **semantic + layout** only; `admin-variables.scss` is a compatibility shim until C6.
+C3: admin themes map **semantic + layout** only; `admin-variables.scss` is a compatibility shim until C6.  
+C4: **0** non-layout `--admin-*` in components (see [`_c4-admin-component-token-migration.md`](migration/_c4-admin-component-token-migration.md)).
 
 ### Target Architecture
 ```
@@ -143,17 +145,17 @@ src/admin/styles/_admin-layout-tokens.scss ← Admin LAYOUT only (sidebar, toolb
 | Material overrides | `overrides/_material-overrides.scss` (B1–B4) | admin-global / themes → C5 | PARTIAL (C5) |
 | Layout styles | N/A | `admin-layout.component.scss` + `_admin-layout-tokens.scss` | NO; C2 tokens wired |
 
-### 4.1 C1–C3 — `--admin-*` token classification & reconciliation (ADR-011)
+### 4.1 C1–C4 — `--admin-*` token classification & reconciliation (ADR-011)
 
-**Scan / C1:** 2026-07-28. **C3 reconciliation:** 2026-07-28.  
-Notes: [`_c1-admin-token-inventory.md`](migration/_c1-admin-token-inventory.md), [`_c3-admin-token-reconciliation.md`](migration/_c3-admin-token-reconciliation.md).
+**Scan / C1:** 2026-07-28. **C3 reconciliation:** 2026-07-28. **C4 component migration:** 2026-07-28.  
+Notes: [`_c1-admin-token-inventory.md`](migration/_c1-admin-token-inventory.md), [`_c3-admin-token-reconciliation.md`](migration/_c3-admin-token-reconciliation.md), [`_c4-admin-component-token-migration.md`](migration/_c4-admin-component-token-migration.md).
 
 | Class | Count | Meaning | Status |
 |-------|------:|---------|--------|
-| SHARED | 125 | Same concept as shared tokens | ✅ C3 aliased in `admin-variables`; consumers → C4 |
-| CONFLICT | 47 | Same concept, different values | ✅ C3 adopt frontend **or** promote semantic (glass) |
+| SHARED | 125 | Same concept as shared tokens | ✅ C3 shim; ✅ C4 components use semantic |
+| CONFLICT | 47 | Same concept, different values | ✅ C3 adopt/promote; ✅ C4 consumers migrated |
 | ADMIN-ONLY | **5** | Layout-only in `_admin-layout-tokens.scss` (C2) | ✅ done |
-| **Total defined** | **~180** | +UNDEFINED aliases; −unused neon | |
+| **Total defined** | **~180** | +UNDEFINED aliases; −unused neon | shim until C6 |
 | UNDEFINED (used, no def) | **0** | Were 6 — aliased in C3 | ✅ |
 
 #### ADMIN-ONLY (C2 — `_admin-layout-tokens.scss`)
@@ -179,7 +181,7 @@ Notes: [`_c1-admin-token-inventory.md`](migration/_c1-admin-token-inventory.md),
 
 Full per-token table from C1 remains in [`_c1-admin-token-inventory.md`](migration/_c1-admin-token-inventory.md); values now resolve through semantic aliases.
 
-#### SHARED (125) — aliased in C3; replace in components in C4
+#### SHARED (125) — ✅ C4 components use semantic directly; shim remains for global/mixins until C6
 
 Spacing, radius, font, motion, breakpoints, submit/cancel, tab, text helpers, input, table/select, order aliases, order status, surfaces misc, muted/back/avatar buttons, header chrome, palette variants, accent — all map via `admin-variables.scss` → shared tokens (see C1 inventory for names).
 

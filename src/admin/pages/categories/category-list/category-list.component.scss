@@ -4,7 +4,7 @@
   align-items: center;
   flex-wrap: wrap;
   width: 100%;
-  gap: var(--admin-spacing-md);
+  gap: var(--space-4);
 
   h1 {
     color: var(--mdc-list-list-item-label-text-color);
@@ -31,7 +31,7 @@
   justify-content: flex-start;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--admin-spacing-md);
+  gap: var(--space-4);
 
   .search-field {
     min-width: 200px;
@@ -63,17 +63,17 @@
 }
 
 .category-card {
-  background: var(--admin-bg-card);
-  border-radius: var(--admin-border-radius-lg);
-  box-shadow: var(--admin-shadow-md);
+  background: var(--surface-elevated);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
   padding: 20px;
-  border: 1px solid var(--admin-border-primary);
-  transition: all var(--admin-transition-normal);
+  border: 1px solid var(--border-default);
+  transition: all var(--duration-normal) var(--easing-default);
 
   &:hover {
-    box-shadow: var(--admin-shadow-lg);
+    box-shadow: var(--shadow-lg);
     transform: translateY(-2px);
-    border-color: var(--admin-primary);
+    border-color: var(--interactive-primary);
   }
 
   .card-header {
@@ -83,8 +83,8 @@
     margin-bottom: 16px;
 
     .category-id {
-      font-weight: var(--admin-font-weight-semibold);
-      color: var(--admin-primary);
+      font-weight: var(--font-semibold);
+      color: var(--interactive-primary);
       font-size: 16px;
     }
   }
@@ -96,8 +96,8 @@
       h3 {
         margin: 0;
         font-size: 20px;
-        font-weight: var(--admin-font-weight-bold);
-        color: var(--admin-text-primary);
+        font-weight: var(--font-bold);
+        color: var(--text-primary);
         line-height: 1.4;
       }
     }
@@ -105,7 +105,7 @@
     .category-description {
       p {
         margin: 0;
-        color: var(--admin-text-secondary);
+        color: var(--text-secondary);
         font-size: 16px;
         line-height: 1.6;
       }
@@ -118,7 +118,7 @@
     gap: 12px;
     margin-top: 16px;
     padding-top: 16px;
-    border-top: 1px solid var(--admin-border-primary);
+    border-top: 1px solid var(--border-default);
 
     .action-button {
       width: 48px;
@@ -297,8 +297,8 @@
   
   .mobile-paginator {
     margin-top: 24px;
-    background: var(--admin-bg-card);
-    border-radius: var(--admin-border-radius-lg);
+    background: var(--surface-elevated);
+    border-radius: var(--radius-lg);
     padding: 8px;
     
     // Paginator densify → overrides (B3)

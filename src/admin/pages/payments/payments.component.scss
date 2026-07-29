@@ -2,45 +2,45 @@
   width: 100%;
   
   h1 {
-    margin: 0 0 var(--admin-spacing-md) 0;
-    font-size: var(--admin-font-size-xxl);
-    font-weight: var(--admin-font-weight-bold);
-    color: var(--admin-text-primary);
-    border-bottom: 2px solid var(--admin-primary);
-    padding-bottom: var(--admin-spacing-sm);
+    margin: 0 0 var(--space-4) 0;
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    border-bottom: 2px solid var(--interactive-primary);
+    padding-bottom: var(--space-2);
   }
 
   .list__kpis {
-    margin-top: var(--admin-spacing-md);
+    margin-top: var(--space-4);
     
     .stats-cards {
       display: flex;
       flex-wrap: wrap;
-      gap: var(--admin-spacing-md);
+      gap: var(--space-4);
 
       .stat-card {
-        background: var(--admin-order-list-card-bg);
-        border-radius: var(--admin-border-radius-lg);
-        padding: var(--admin-spacing-md);
+        background: var(--surface-secondary);
+        border-radius: var(--radius-lg);
+        padding: var(--space-4);
         text-align: center;
-        box-shadow: var(--admin-shadow-md);
-        border: 1px solid var(--admin-order-list-border);
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-default);
         flex: 1;
         min-width: 200px;
 
         .stat-value {
-          font-size: var(--admin-font-size-xxl);
-          font-weight: var(--admin-font-weight-bold);
-          color: var(--admin-primary);
-          margin-bottom: var(--admin-spacing-sm);
+          font-size: var(--text-2xl);
+          font-weight: var(--font-bold);
+          color: var(--interactive-primary);
+          margin-bottom: var(--space-2);
         }
 
         .stat-label {
-          font-size: var(--admin-font-size-sm);
-          color: var(--admin-text-secondary);
+          font-size: var(--text-sm);
+          color: var(--text-secondary);
           text-transform: uppercase;
           letter-spacing: 0.5px;
-          font-weight: var(--admin-font-weight-medium);
+          font-weight: var(--font-medium);
         }
       }
     }
@@ -51,17 +51,17 @@
   width: 100%;
   
   h2 {
-    margin: 0 0 var(--admin-spacing-md) 0;
-    font-size: var(--admin-font-size-xl);
-    font-weight: var(--admin-font-weight-semibold);
-    color: var(--admin-text-primary);
+    margin: 0 0 var(--space-4) 0;
+    font-size: var(--text-xl);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
   }
 
   .filters-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: var(--admin-spacing-md);
-    margin-bottom: var(--admin-spacing-md);
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
 
     mat-form-field {
       width: 100%;
@@ -71,8 +71,8 @@
   .filters-actions {
     display: flex;
     justify-content: flex-end;
-    gap: var(--admin-spacing-sm);
-    margin-top: var(--admin-spacing-md);
+    gap: var(--space-2);
+    margin-top: var(--space-4);
 
     button {
       min-width: 120px;
@@ -84,9 +84,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--admin-spacing-md);
-  padding: var(--admin-spacing-xxl);
-  color: var(--admin-text-secondary);
+  gap: var(--space-4);
+  padding: var(--space-12);
+  color: var(--text-secondary);
 
   mat-icon {
     font-size: 3rem;
@@ -96,37 +96,37 @@
   }
 }
 .payments-table-wrapper {
-  background: var(--admin-order-list-card-bg);
-  border-radius: var(--admin-border-radius-md);
-  padding: var(--admin-spacing-lg);
-  box-shadow: var(--admin-shadow-md);
-  border: 1px solid var(--admin-order-list-border);
-  margin: 0 var(--admin-spacing-lg);
+  background: var(--surface-secondary);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-default);
+  margin: 0 var(--space-6);
 
   .payments-table {
     // Table chrome → overrides (B3)
 
     .amount {
-      font-weight: var(--admin-font-weight-bold);
-      color: var(--admin-order-detail-price-color);
-      margin-right: var(--admin-spacing-sm);
-      font-size: var(--admin-font-size-lg);
+      font-weight: var(--font-bold);
+      color: var(--color-success);
+      margin-right: var(--space-2);
+      font-size: var(--text-lg);
     }
 
     .currency {
-      font-size: var(--admin-font-size-xs);
-      color: var(--admin-text-secondary);
+      font-size: var(--text-xs);
+      color: var(--text-secondary);
       text-transform: uppercase;
-      font-weight: var(--admin-font-weight-medium);
+      font-weight: var(--font-medium);
     }
 
     .payment-method {
       display: flex;
       align-items: center;
-      gap: var(--admin-spacing-sm);
+      gap: var(--space-2);
 
       mat-icon {
-        color: var(--admin-primary);
+        color: var(--interactive-primary);
         font-size: 20px;
         width: 20px;
         height: 20px;
@@ -134,34 +134,34 @@
     }
 
     .status-badge {
-      padding: var(--admin-spacing-xs) var(--admin-spacing-md);
+      padding: var(--space-1) var(--space-4);
       border-radius: 20px;
-      font-size: var(--admin-font-size-xs);
-      font-weight: var(--admin-font-weight-medium);
+      font-size: var(--text-xs);
+      font-weight: var(--font-medium);
       text-transform: uppercase;
       letter-spacing: 0.5px;
 
       &.success {
         background: rgba(76, 175, 80, 0.1);
-        color: var(--admin-success);
+        color: var(--color-success);
         border: 1px solid rgba(76, 175, 80, 0.3);
       }
 
       &.warning {
         background: rgba(255, 152, 0, 0.1);
-        color: var(--admin-warning);
+        color: var(--color-warning);
         border: 1px solid rgba(255, 152, 0, 0.3);
       }
 
       &.error {
         background: rgba(244, 67, 54, 0.1);
-        color: var(--admin-error);
+        color: var(--interactive-danger);
         border: 1px solid rgba(244, 67, 54, 0.3);
       }
 
       &.info {
         background: rgba(33, 150, 243, 0.1);
-        color: var(--admin-info);
+        color: var(--color-info);
         border: 1px solid rgba(33, 150, 243, 0.3);
       }
     }
@@ -169,28 +169,28 @@
     .customer-info {
       display: flex;
       flex-direction: column;
-      gap: var(--admin-spacing-xs);
+      gap: var(--space-1);
 
       .email {
-        font-weight: var(--admin-font-weight-medium);
-        color: var(--admin-text-primary);
+        font-weight: var(--font-medium);
+        color: var(--text-primary);
       }
 
       .phone {
-        font-size: var(--admin-font-size-xs);
-        color: var(--admin-text-secondary);
+        font-size: var(--text-xs);
+        color: var(--text-secondary);
       }
     }
 
     .actions {
       display: flex;
-      gap: var(--admin-spacing-sm);
+      gap: var(--space-2);
 
       button {
-        color: var(--admin-text-secondary);
+        color: var(--text-secondary);
 
         &:hover {
-          color: var(--admin-primary);
+          color: var(--interactive-primary);
         }
       }
     }
@@ -199,12 +199,12 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: var(--admin-spacing-md);
-      padding: var(--admin-spacing-xxl);
-      color: var(--admin-text-secondary);
+      gap: var(--space-4);
+      padding: var(--space-12);
+      color: var(--text-secondary);
 
       mat-spinner {
-        color: var(--admin-primary);
+        color: var(--interactive-primary);
       }
 
       mat-icon {

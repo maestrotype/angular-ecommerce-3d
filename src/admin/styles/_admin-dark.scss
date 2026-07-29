@@ -1,37 +1,74 @@
 /* ==========================================================================
-   ADMIN DARK THEME — C3 (ADR-011)
-   Adopts storefront dark semantic tokens (no parallel zinc `--admin-*` palette).
-   Admin-only promotions + Material rules scoped to body.is-admin (no storefront leak).
+   ADMIN DARK THEME — C3/C4 fix (ADR-011)
+   Storefront dark = slate. Admin dark keeps intentional zinc chrome
+   (pre-C3 admin look) promoted onto semantic under body.is-admin only.
    ========================================================================== */
 
-/* Admin-only: promote card chrome + table/header tweaks onto semantic */
 body.is-admin[data-theme='dark'],
 html[data-theme='dark'] body.is-admin {
   --backdrop-blur: none;
 
-  // RGB companions for admin consumers until C4
-  --surface-elevated-rgb: 51, 65, 85; // slate-700
-  --text-muted-rgb: 100, 116, 139; // slate-500
+  /* Intentional admin zinc surfaces (was parallel --admin-bg-* before C3) */
+  --surface-page: #09090b;
+  --surface-primary: #09090b;
+  --surface-secondary: #0f0f12;
+  --surface-tertiary: #18181b;
+  --surface-elevated: #0f0f12;
+  --surface-elevated-rgb: 15, 15, 18;
+  --surface-card: #0f0f12;
+  --surface-overlay: #18181b;
+  --surface-overlay-full: rgba(0, 0, 0, 0.8);
+  --surface-overlay-light: rgba(255, 255, 255, 0.06);
+  --surface-highlight: rgba(255, 255, 255, 0.04);
+  --surface-header: #1c1c21;
 
-  // Promoted dark card chrome (was --admin-card-gradient / --admin-surface-glow)
-  --surface-card-gradient: linear-gradient(
-    135deg,
-    var(--surface-tertiary) 0%,
-    var(--surface-page) 100%
-  );
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  --text-muted-rgb: 113, 113, 122;
+  --text-inverse: #000000;
+  --text-on-primary: #ffffff;
+
+  --border-default: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --border-medium: rgba(255, 255, 255, 0.12);
+  --border-emphasis: rgba(255, 255, 255, 0.2);
+  --border-primary: var(--interactive-primary);
+
+  /* Re-bind glass aliases (inherited computed light values from :root otherwise stick) */
+  --glass-border-soft: var(--border-subtle);
+  --glass-border-strong: var(--border-strong);
+  --glass-divider: var(--border-default);
+
+  --input-bg: #09090b;
+  --input-text: #fafafa;
+  --input-border: rgba(255, 255, 255, 0.1);
+  --input-label: #a1a1aa;
+  --input-focus-border: var(--interactive-primary);
+  --input-placeholder: #71717a;
+
+  --surface-table: transparent;
+  --surface-table-header: #1c1c21;
+  --surface-table-even: #1c1c21;
+  --surface-table-row: transparent;
+  --surface-paginator: #1c1c21;
+  --surface-select-panel: #18181b;
+  --text-table-header: var(--text-primary);
+  --text-table-row: var(--text-primary);
+  --text-table-even: var(--text-primary);
+  --text-paginator: var(--text-primary);
+
+  --surface-card-gradient: linear-gradient(135deg, #18181b 0%, #09090b 100%);
   --surface-glow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
   --shadow-card: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.5);
 
-  // Table / header chrome via semantic
-  --surface-header: var(--surface-secondary);
-  --surface-table: transparent;
-  --surface-table-header: var(--surface-secondary);
-  --surface-table-even: var(--surface-secondary);
-  --surface-table-row: transparent;
-  --surface-select-panel: var(--surface-tertiary);
-
-  // Soft hover for admin chrome (intentional; prefer over storefront slate-600 fill)
-  --surface-highlight: rgba(255, 255, 255, 0.04);
+  /* Material toolbar slots — prevent light-theme white chrome */
+  --mat-toolbar-container-background-color: var(--surface-header);
+  --mat-toolbar-container-text-color: var(--text-primary);
 
   --dashboard-stat-card-bg: var(--surface-secondary);
   --dashboard-stat-card-border: var(--border-default);
@@ -118,6 +155,13 @@ html[data-theme='dark'] body.is-admin {
         color: var(--interactive-primary) !important;
       }
     }
+  }
+
+  .mat-toolbar,
+  .admin-header.mat-toolbar,
+  mat-toolbar.admin-header {
+    background-color: var(--surface-header);
+    color: var(--text-primary);
   }
 
   .logout-btn,

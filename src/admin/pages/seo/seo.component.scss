@@ -2,16 +2,16 @@
   width: 100%;
   
   h1 {
-    color: var(--admin-text-primary);
-    margin: 0 0 var(--admin-spacing-sm) 0;
-    font-size: var(--admin-font-size-xxl);
-    font-weight: var(--admin-font-weight-bold);
+    color: var(--text-primary);
+    margin: 0 0 var(--space-2) 0;
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
   }
   
   .subtitle {
-    color: var(--admin-text-secondary);
+    color: var(--text-secondary);
     margin: 0;
-    font-size: var(--admin-font-size-md);
+    font-size: var(--text-base);
   }
 }
 
@@ -51,7 +51,7 @@
   }
 
 .seo-content {
-  margin-top: var(--admin-spacing-lg);
+  margin-top: var(--space-6);
   
   .seo-tabs {}
 }
@@ -65,28 +65,28 @@
 .seo-form {
   display: flex;
   flex-direction: column;
-  gap: var(--admin-spacing-xl);
+  gap: var(--space-8);
 }
 
 .form-section {
   display: flex;
   flex-direction: column;
-  gap: var(--admin-spacing-lg);
+  gap: var(--space-6);
 
   h3 {
-    color: var(--admin-text-primary);
-    margin: 0 0 var(--admin-spacing-md) 0;
-    font-size: var(--admin-font-size-lg);
-    font-weight: var(--admin-font-weight-semibold);
-    padding-bottom: var(--admin-spacing-sm);
-    border-bottom: 1px solid var(--admin-border-primary);
+    color: var(--text-primary);
+    margin: 0 0 var(--space-4) 0;
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--border-default);
   }
 }
 
 .form-row {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--admin-spacing-lg);
+  gap: var(--space-6);
 
   .full-width { 
     grid-column: 1 / -1; 
@@ -104,10 +104,10 @@
 .form-actions {
   display: flex;
   justify-content: flex-end;
-  gap: var(--admin-spacing-lg);
-  margin-top: var(--admin-spacing-lg);
-  padding-top: var(--admin-spacing-lg);
-  border-top: 1px solid var(--admin-border-primary);
+  gap: var(--space-6);
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--border-default);
 
   button { 
     min-width: 140px; 
@@ -119,16 +119,16 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--admin-spacing-xxl);
-  color: var(--admin-text-primary);
+  padding: var(--space-12);
+  color: var(--text-primary);
 
   mat-spinner {
-    margin-bottom: var(--admin-spacing-md);
+    margin-bottom: var(--space-4);
   }
 
   p {
     margin: 0;
-    font-size: var(--admin-font-size-md);
+    font-size: var(--text-base);
   }
 }
 

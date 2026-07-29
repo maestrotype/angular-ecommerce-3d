@@ -3,7 +3,7 @@
   max-width: none;
   margin: 0;
   min-height: calc(100vh - 64px);
-  color: var(--admin-text-primary);
+  color: var(--text-primary);
 }
 
 .header-section {
@@ -15,7 +15,7 @@
   height: 100px;
 
   h1 {
-    color: var(--admin-text-secondary);
+    color: var(--text-secondary);
     margin: 0;
     font-size: 2rem;
     font-weight: 600;
@@ -23,12 +23,12 @@
   
   .back-button {
     background-color: transparent;
-    color: var(--admin-text-primary);
-    border: 1px solid var(--admin-border-primary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-default);
     box-shadow: none;
     
     &:hover { 
-      background-color: var(--admin-bg-hover); 
+      background-color: var(--surface-highlight); 
     }
   }
 }
@@ -111,7 +111,7 @@ textarea { width: 100% !important; min-height: 120px; }
     align-items: center;
     gap: 12px;
     margin-bottom: 24px;
-    color: var(--admin-primary);
+    color: var(--interactive-primary);
     
     mat-icon { font-size: 24px; width: 24px; height: 24px; }
     h3 { margin: 0; font-size: 1.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
@@ -138,8 +138,8 @@ textarea { width: 100% !important; min-height: 120px; }
 // --- 3D EXPERIENCE CARD ---
 .model3d-card {
   margin-top: 24px;
-  background: var(--admin-bg-secondary, rgba(255, 255, 255, 0.02));
-  border: 1px solid var(--admin-border-primary, rgba(255, 255, 255, 0.08));
+  background: var(--surface-secondary, rgba(255, 255, 255, 0.02));
+  border: 1px solid var(--border-default, rgba(255, 255, 255, 0.08));
   border-radius: 28px;
   position: relative;
   overflow: hidden;
@@ -162,9 +162,9 @@ textarea { width: 100% !important; min-height: 120px; }
   position: relative;
   min-height: 520px;
   margin: 24px 12px 12px 12px;
-  border: 2px dashed var(--admin-border-primary, rgba(255, 255, 255, 0.15));
+  border: 2px dashed var(--border-default, rgba(255, 255, 255, 0.15));
   border-radius: 16px;
-  background: var(--admin-bg-hover, rgba(0, 0, 0, 0.2));
+  background: var(--surface-highlight, rgba(0, 0, 0, 0.2));
   transition: all 0.4s ease;
   display: flex;
   flex-direction: column;
@@ -209,8 +209,8 @@ textarea { width: 100% !important; min-height: 120px; }
   .placeholder-icon {
     width: 80px;
     height: 80px;
-    background: var(--admin-bg-secondary, rgba(255, 255, 255, 0.05));
-    border: 1px solid var(--admin-border-primary, rgba(255, 255, 255, 0.1));
+    background: var(--surface-secondary, rgba(255, 255, 255, 0.05));
+    border: 1px solid var(--border-default, rgba(255, 255, 255, 0.1));
     border-radius: 24px;
     display: flex;
     align-items: center;
@@ -219,12 +219,12 @@ textarea { width: 100% !important; min-height: 120px; }
     cursor: pointer;
     transition: all 0.3s ease;
 
-    mat-icon { font-size: 40px; width: 40px; height: 40px; color: var(--admin-primary); }
-    &:hover { background: var(--admin-bg-hover, rgba(255, 255, 255, 0.1)); transform: translateY(-4px); }
+    mat-icon { font-size: 40px; width: 40px; height: 40px; color: var(--interactive-primary); }
+    &:hover { background: var(--surface-highlight, rgba(255, 255, 255, 0.1)); transform: translateY(-4px); }
   }
 
-  h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; color: var(--admin-text-primary, #fff); }
-  p { font-size: 1rem; color: var(--admin-text-secondary, #94a3b8); margin-bottom: 32px; }
+  h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; color: var(--text-primary, #fff); }
+  p { font-size: 1rem; color: var(--text-secondary, #94a3b8); margin-bottom: 32px; }
 
   .upload-actions {
     width: 100%;
@@ -256,10 +256,10 @@ textarea { width: 100% !important; min-height: 120px; }
       mat-icon { font-size: 20px; width: 20px; height: 20px; }
 
       &.browse-btn {
-        background: var(--admin-bg-secondary, rgba(255, 255, 255, 0.08));
-        color: var(--admin-text-primary, #fff);
-        border: 1px solid var(--admin-border-primary, rgba(255, 255, 255, 0.1));
-        &:hover { background: var(--admin-bg-hover, rgba(255, 255, 255, 0.15)); }
+        background: var(--surface-secondary, rgba(255, 255, 255, 0.08));
+        color: var(--text-primary, #fff);
+        border: 1px solid var(--border-default, rgba(255, 255, 255, 0.1));
+        &:hover { background: var(--surface-highlight, rgba(255, 255, 255, 0.15)); }
       }
 
       &.ai-gen-btn {
@@ -279,24 +279,24 @@ textarea { width: 100% !important; min-height: 120px; }
     width: 100%;
     align-items: flex-start;
     padding: 16px;
-    background: var(--admin-bg-secondary, rgba(255, 255, 255, 0.03));
+    background: var(--surface-secondary, rgba(255, 255, 255, 0.03));
     border-radius: 12px;
-    border: 1px solid var(--admin-border-primary, rgba(255, 255, 255, 0.05));
+    border: 1px solid var(--border-default, rgba(255, 255, 255, 0.05));
 
     .info-pill {
       display: flex;
       align-items: center;
       gap: 10px;
       font-size: 0.9rem;
-      color: var(--admin-text-secondary, #cbd5e1);
+      color: var(--text-secondary, #cbd5e1);
 
-      mat-icon { font-size: 18px; width: 18px; height: 18px; color: var(--admin-primary); }
-      strong { color: var(--admin-text-primary, #fff); }
+      mat-icon { font-size: 18px; width: 18px; height: 18px; color: var(--interactive-primary); }
+      strong { color: var(--text-primary, #fff); }
 
       &.clickable {
         cursor: pointer;
         transition: color 0.2s;
-        &:hover { color: var(--admin-primary); }
+        &:hover { color: var(--interactive-primary); }
       }
     }
   }

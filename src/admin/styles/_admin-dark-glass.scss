@@ -98,14 +98,24 @@ html[data-theme='dark-glass'] body.is-admin {
   --text-muted: rgba(255, 255, 255, 0.4);
   --text-muted-rgb: 255, 255, 255;
   --text-inverse: #1a1a1a;
+  --text-on-primary: #ffffff;
   --text-table-header: var(--text-primary);
   --text-table-row: var(--text-primary);
   --text-table-even: var(--text-primary);
   --text-paginator: var(--text-primary);
 
-  --border-default: rgba(255, 255, 255, 0.2);
-  --border-subtle: rgba(255, 255, 255, 0.15);
+  --border-default: rgba(255, 255, 255, 0.12);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.2);
+  --border-medium: rgba(255, 255, 255, 0.1);
+  --border-emphasis: rgba(255, 255, 255, 0.16);
   --border-primary: #8ab4f8;
+
+  /* Re-declare glass border aliases HERE — inherited computed #f1f5f9 from :root
+     does not follow --border-subtle overrides (CSS custom property inheritance). */
+  --glass-border-soft: var(--border-subtle);
+  --glass-border-strong: var(--border-strong);
+  --glass-divider: var(--border-default);
 
   --input-bg: rgba(90, 85, 80, 0.7);
   --input-text: rgba(255, 255, 255, 1);
@@ -115,4 +125,15 @@ html[data-theme='dark-glass'] body.is-admin {
   --input-placeholder: var(--input-label);
 
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+
+  /* Toolbar slots — Material light defaults must not paint a white header */
+  --mat-toolbar-container-background-color: var(--surface-header);
+  --mat-toolbar-container-text-color: var(--text-primary);
+
+  .mat-toolbar,
+  .admin-header.mat-toolbar,
+  mat-toolbar.admin-header {
+    background-color: var(--surface-header);
+    color: var(--text-primary);
+  }
 }

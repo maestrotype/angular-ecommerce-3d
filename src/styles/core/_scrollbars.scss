@@ -28,12 +28,24 @@
 }
 
 mat-sidenav-content,
-.mat-drawer-content {
+.mat-drawer-content,
+mat-sidenav,
+.mat-sidenav,
+mat-drawer,
+.mat-drawer,
+.mat-drawer-inner-container {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
 mat-sidenav-content::-webkit-scrollbar,
-.mat-drawer-content::-webkit-scrollbar {
+.mat-drawer-content::-webkit-scrollbar,
+mat-sidenav::-webkit-scrollbar,
+.mat-sidenav::-webkit-scrollbar,
+mat-drawer::-webkit-scrollbar,
+.mat-drawer::-webkit-scrollbar,
+.mat-drawer-inner-container::-webkit-scrollbar {
+  width: 0;
+  height: 0;
   display: none;
 }

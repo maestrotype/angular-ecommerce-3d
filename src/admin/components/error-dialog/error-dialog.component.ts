@@ -43,15 +43,15 @@ export class ErrorDialogComponent {
   getIconColor(): string {
     switch (this.data.type) {
       case 'error':
-        return 'var(--admin-error)';
+        return 'var(--interactive-danger)';
       case 'warning':
-        return 'var(--admin-warning)';
+        return 'var(--color-warning)';
       case 'info':
-        return 'var(--admin-info)';
+        return 'var(--color-info)';
       case 'success':
-        return 'var(--admin-success)';
+        return 'var(--color-success)';
       default:
-        return 'var(--admin-error)';
+        return 'var(--interactive-danger)';
     }
   }
 } 

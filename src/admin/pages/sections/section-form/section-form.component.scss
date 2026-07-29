@@ -2,8 +2,8 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: var(--admin-bg-card);
-  color: var(--admin-text-primary);
+  background: var(--surface-elevated);
+  color: var(--text-primary);
 
   &.drawer-mode {
     padding: 0; // Removed large padding
@@ -23,7 +23,7 @@
   .form-header {
     padding: 0; // Use parent padding
     margin-bottom: 24px;
-    border-bottom: 2px solid var(--admin-border-primary);
+    border-bottom: 2px solid var(--border-default);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -49,15 +49,15 @@
       }
 
       .type-badge {
-        background: var(--admin-primary);
-        color: var(--admin-bg-card);
+        background: var(--interactive-primary);
+        color: var(--surface-elevated);
         padding: 4px 10px;
         border-radius: 8px;
         font-size: 11px;
         font-weight: 800;
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        box-shadow: 0 4px 10px rgba(var(--admin-primary-rgb), 0.2);
+        box-shadow: 0 4px 10px rgba(var(--interactive-primary-rgb), 0.2);
         flex-shrink: 0;
       }
     }
@@ -88,7 +88,7 @@
 
     &::-webkit-scrollbar { width: 6px; }
     &::-webkit-scrollbar-thumb { 
-      background: var(--admin-border-primary); 
+      background: var(--border-default); 
       border-radius: 3px; 
     }
     &::-webkit-scrollbar-track { background: transparent; }
@@ -102,8 +102,8 @@
     padding-top: 10px;
 
     .settings-toggles-card {
-      background: var(--admin-bg-secondary);
-      border: 1px solid var(--admin-border-primary);
+      background: var(--surface-secondary);
+      border: 1px solid var(--border-default);
       border-radius: 16px;
       padding: 20px;
 
@@ -111,7 +111,7 @@
         margin: 0 0 16px 0;
         font-size: 0.9rem;
         font-weight: 700;
-        color: var(--admin-primary);
+        color: var(--interactive-primary);
         text-transform: uppercase;
         letter-spacing: 0.05em;
       }
@@ -134,7 +134,7 @@
   }
 
   .tab-content {
-    padding: var(--admin-spacing-md);
+    padding: var(--space-4);
     animation: fadeIn 0.3s ease-out;
   }
 
@@ -147,13 +147,13 @@
 
   .form-grid {
     display: grid;
-    gap: var(--admin-spacing-md);
+    gap: var(--space-4);
   }
 
   .form-field-group {
     display: flex;
     flex-direction: column;
-    gap: var(--admin-spacing-xs);
+    gap: var(--space-1);
 
     mat-form-field {
       width: 100%;
@@ -163,25 +163,25 @@
   .media-section {
     .toggle-group {
       display: flex;
-      gap: var(--admin-spacing-lg);
-      margin-bottom: var(--admin-spacing-lg);
-      padding: var(--admin-spacing-md);
-      background: var(--admin-bg-secondary);
-      border-radius: var(--admin-border-radius-md);
+      gap: var(--space-6);
+      margin-bottom: var(--space-6);
+      padding: var(--space-4);
+      background: var(--surface-secondary);
+      border-radius: var(--radius-md);
     }
   }
 
   .media-upload-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: var(--admin-spacing-lg);
+    gap: var(--space-6);
   }
 
   .upload-box {
-    background: var(--admin-bg-secondary);
-    border: 1px dashed var(--admin-border-primary);
-    border-radius: var(--admin-border-radius-md);
-    padding: var(--admin-spacing-md);
+    background: var(--surface-secondary);
+    border: 1px dashed var(--border-default);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
   }
 
   .threed-upload-container {
@@ -196,7 +196,7 @@
 
     &:hover {
       background: rgba(255, 255, 255, 0.05);
-      border-color: var(--admin-accent-primary);
+      border-color: var(--color-accent);
     }
 
     .no-model {
@@ -205,18 +205,18 @@
         height: 48px;
         width: 48px;
         margin-bottom: 12px;
-        color: var(--admin-text-secondary);
+        color: var(--text-secondary);
       }
       p { margin: 0; font-weight: 500; }
-      .hint { font-size: 12px; color: var(--admin-text-secondary); }
+      .hint { font-size: 12px; color: var(--text-secondary); }
     }
 
     .model-info {
       display: flex;
       align-items: center;
-      gap: var(--admin-spacing-md);
+      gap: var(--space-4);
       width: 100%;
-      padding: var(--admin-spacing-md);
+      padding: var(--space-4);
 
       mat-icon { font-size: 32px; height: 32px; width: 32px; }
       
@@ -237,22 +237,22 @@
 
         .status-badge {
           font-size: 11px;
-          color: var(--admin-accent-primary);
+          color: var(--color-accent);
           
-          &.ready { color: var(--admin-status-success); }
+          &.ready { color: var(--color-success); }
         }
       }
     }
   }
 
   .dynamic-list {
-    margin-top: var(--admin-spacing-lg);
+    margin-top: var(--space-6);
 
     .list-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: var(--admin-spacing-md);
+      margin-bottom: var(--space-4);
 
       h4 { margin: 0; }
     }
@@ -261,21 +261,21 @@
   .cdk-list {
     display: flex;
     flex-direction: column;
-    gap: var(--admin-spacing-sm);
+    gap: var(--space-2);
   }
 
   .cdk-item {
     display: flex;
     align-items: flex-start;
-    gap: var(--admin-spacing-sm);
-    padding: var(--admin-spacing-md);
-    background: var(--admin-bg-secondary);
-    border: 1px solid var(--admin-border-primary);
-    border-radius: var(--admin-border-radius-md);
+    gap: var(--space-2);
+    padding: var(--space-4);
+    background: var(--surface-secondary);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
 
     .drag-handle {
       cursor: grab;
-      color: var(--admin-text-secondary);
+      color: var(--text-secondary);
       margin-top: 12px;
     }
 
@@ -283,11 +283,11 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: var(--admin-spacing-sm);
+      gap: var(--space-2);
 
       .item-row {
         display: flex;
-        gap: var(--admin-spacing-sm);
+        gap: var(--space-2);
         align-items: center;
 
         mat-form-field { flex: 1; }
@@ -308,23 +308,23 @@
   .header-toggles {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--admin-spacing-lg);
-    padding: var(--admin-spacing-md);
-    margin: var(--admin-spacing-md) 0;
-    background: var(--admin-bg-secondary);
+    gap: var(--space-6);
+    padding: var(--space-4);
+    margin: var(--space-4) 0;
+    background: var(--surface-secondary);
     border-radius: 8px;
   }
 
   .advanced-info {
-    padding: var(--admin-spacing-md);
-    background: rgba(var(--admin-primary-rgb), 0.05);
-    border: 1px solid var(--admin-border-primary);
+    padding: var(--space-4);
+    background: rgba(var(--interactive-primary-rgb), 0.05);
+    border: 1px solid var(--border-default);
     border-radius: 12px;
     margin-top: 16px;
     
     h4 { 
       margin-top: 0; 
-      color: var(--admin-primary); 
+      color: var(--interactive-primary); 
       font-size: 0.85rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -335,11 +335,11 @@
       justify-content: space-between;
       margin-bottom: 8px;
       font-size: 13px;
-      color: var(--admin-text-secondary);
+      color: var(--text-secondary);
 
       code {
         background: rgba(0, 0, 0, 0.3);
-        color: var(--admin-primary);
+        color: var(--interactive-primary);
         padding: 2px 8px;
         border-radius: 6px;
         font-family: inherit;
@@ -350,12 +350,12 @@
   }
 
   .form-footer {
-    padding: var(--admin-spacing-md);
-    border-top: 1px solid var(--admin-border-primary);
-    background: var(--admin-bg-secondary);
+    padding: var(--space-4);
+    border-top: 1px solid var(--border-default);
+    background: var(--surface-secondary);
     display: flex;
     justify-content: flex-end;
-    gap: var(--admin-spacing-md);
+    gap: var(--space-4);
 
     &.form-actions-drawer {
       position: sticky;
@@ -410,7 +410,7 @@
         margin: 0;
         font-size: 0.8rem;
         text-transform: uppercase;
-        color: var(--admin-text-secondary);
+        color: var(--text-secondary);
         letter-spacing: 0.05em;
       }
     }
@@ -434,7 +434,7 @@
         font-size: 18px;
         height: 18px;
         width: 18px;
-        color: var(--admin-text-secondary);
+        color: var(--text-secondary);
       }
 
       .link-row {
@@ -456,8 +456,8 @@
 }
 
 .footer-column-item { 
-  background: var(--admin-bg-secondary);
-  border: 1px solid var(--admin-border-primary);
+  background: var(--surface-secondary);
+  border: 1px solid var(--border-default);
   border-radius: 12px;
   padding: 16px;
   margin-bottom: 24px;

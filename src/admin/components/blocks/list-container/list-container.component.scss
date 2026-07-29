@@ -1,10 +1,10 @@
 ::ng-deep {
   .list {
-    padding: var(--admin-spacing-lg);
-    background-color: var(--admin-bg-card);
+    padding: var(--space-6);
+    background-color: var(--surface-elevated);
     min-height: calc(100vh - 64px);
-    color: var(--admin-text-primary);
-    box-shadow: var(--admin-shadow-md);
+    color: var(--text-primary);
+    box-shadow: var(--shadow-md);
     border-radius: 0;
   }
   
@@ -35,9 +35,9 @@
 
     h1 {
       margin: 0;
-      color: var(--admin-text-primary);
-      font-size: var(--admin-font-size-xxl);
-      font-weight: var(--admin-font-weight-bold);
+      color: var(--text-primary);
+      font-size: var(--text-2xl);
+      font-weight: var(--font-bold);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -46,9 +46,9 @@
 
   .list__title {
     margin: 0;
-    color: var(--admin-text-primary);
-    font-size: var(--admin-font-size-xxl);
-    font-weight: var(--admin-font-weight-bold);
+    color: var(--text-primary);
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
   }
 
   ::ng-deep .header-section h1 {
@@ -66,31 +66,31 @@
 
   .list__kpis {
     display: flex;
-    gap: var(--admin-spacing-md);
+    gap: var(--space-4);
 
     .stats-cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: var(--admin-spacing-md);
+      gap: var(--space-4);
 
       .stat-card {
-        background-color: var(--admin-order-list-card-bg);
-        border-radius: var(--admin-border-radius-lg);
-        padding: var(--admin-spacing-md);
-        border: 1px solid var(--admin-border-primary);
+        background-color: var(--surface-secondary);
+        border-radius: var(--radius-lg);
+        padding: var(--space-4);
+        border: 1px solid var(--border-default);
 
         .stat-number {
-          font-size: var(--admin-font-size-xxl);
-          font-weight: var(--admin-font-weight-bold);
-          color: var(--admin-primary);
+          font-size: var(--text-2xl);
+          font-weight: var(--font-bold);
+          color: var(--interactive-primary);
           text-align: center;
         }
 
         .stat-label {
-          font-size: var(--admin-font-size-sm);
-          color: var(--admin-text-secondary);
+          font-size: var(--text-sm);
+          color: var(--text-secondary);
           text-align: center;
-          margin-top: var(--admin-spacing-sm);
+          margin-top: var(--space-2);
         }
       }
     }
@@ -99,8 +99,8 @@
   .list__filters {
     display: flex;
     justify-content: flex-start;
-    gap: var(--admin-spacing-md);
-    margin-bottom: var(--admin-spacing-lg);
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
     flex-wrap: wrap;
 
     .search-field {
@@ -115,7 +115,7 @@
     display: flex;
     justify-content: flex-start;
     align-items: baseline;
-    gap: var(--admin-spacing-lg);
+    gap: var(--space-6);
     flex-wrap: wrap;
     width: 100%;
   }
@@ -165,7 +165,7 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
-    color: var(--admin-text-primary);
+    color: var(--text-primary);
   }
   
   // Dark Glass theme - LIGHT GRAY-BROWN (liquid glass)
@@ -189,7 +189,7 @@
 @media (max-width: 768px) {
   ::ng-deep .list {
     padding: var(--admin-mobile-padding-vertical) var(--admin-mobile-padding-horizontal);
-    padding-bottom: calc(var(--admin-mobile-padding-vertical) + var(--admin-spacing-md));
+    padding-bottom: calc(var(--admin-mobile-padding-vertical) + var(--space-4));
   }
 
   .list__header {
