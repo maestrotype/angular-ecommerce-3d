@@ -42,19 +42,19 @@ This document records **current-state findings** of the style system audit. Task
 
 | File | Lines | Purpose | Status | Notes |
 |------|------:|---------|--------|-------|
-| `admin.scss` | 49 | Admin entry | KEEP | Import orchestrator + CDK overlay |
-| `material-theme.scss` | ~45 | Material theme + token bridge | ✅ B4 | Palettes + MDC CSS → semantic tokens |
-| `admin-variables.scss` | 224 | `--admin-*` → semantic aliases (C3 shim) | DELETE after C6 | C4 consumers migrated; shim kept for global/mixins |
-| `_admin-layout-tokens.scss` | ~40 | 5 ADMIN-ONLY layout tokens | KEEP | C2 / ADR-011 |
-| `admin-mixins.scss` | 275 | Admin mixins | C6 cutover | Still `--admin-*` via shim; header note for C6 |
+| `admin.scss` | ~50 | Admin entry | KEEP | layout tokens + root defaults + themes + global |
+| ~~`admin-variables.scss`~~ | ~~224~~ | ~~`--admin-*` shim~~ | ✅ DELETED (C6) | See `_admin-root-defaults.scss` |
+| `_admin-root-defaults.scss` | ~55 | Dashboard/MDC root defaults | KEEP | C6 (ex-shim leftovers) |
+| `_admin-layout-tokens.scss` | ~18 | 5 ADMIN-ONLY layout tokens | KEEP | C2 / ADR-011 |
+| `admin-mixins.scss` | ~280 | Admin mixins | ✅ C6 | Semantic tokens only |
 | `admin-global.scss` | **16** | Import orchestrator | ✅ C5 | Partials in `global/` (11 files); 0 `!important` |
-| `global/_*.scss` | ~1 226 | Admin global modules | ✅ C5 | base, atmospheres, typography, tables, forms-controls, chrome, overlays, patterns, sidenav-nav, responsive, glass-dialogs |
+| `global/_*.scss` | ~1 226 | Admin global modules | ✅ C5/C6 | On semantic; layout tokens only where needed |
 | `_admin-material-base.scss` | shim | Material base | ✅ B4 | Themes live in `material-theme.scss` |
 | ~~`_admin-theme-material.scss`~~ | ~~1,548~~ | ~~De-facto Material override dump~~ | ✅ DELETED (B2) | Migrated → `src/styles/overrides/_material-overrides.scss` |
-| `_admin-light.scss` | ~40 | Admin light chrome (`body.is-admin`) | MIGRATE → DELETE (C6) | ✅ C3: semantic only |
-| `_admin-dark.scss` | ~130 | Admin dark chrome + Material depth | MIGRATE → DELETE (C6) | ✅ C3: adopt frontend; card glow promoted |
-| `_admin-glass.scss` | ~150 | Admin glass semantic promotions | MIGRATE → DELETE (C6) | ✅ C3: recipes → `--glass-*` / surfaces |
-| `_admin-dark-glass.scss` | ~120 | Admin dark-glass semantic promotions | MIGRATE → DELETE (C6) | ✅ C3: admin-only theme on semantic |
+| `_admin-light.scss` | ~40 | Admin light chrome (`body.is-admin`) | KEEP | C3 semantic + C6 (shim gone) |
+| `_admin-dark.scss` | ~130 | Admin dark chrome + Material depth | KEEP | C3 adopt frontend |
+| `_admin-glass.scss` | ~150 | Admin glass semantic promotions | KEEP | liquid glass; header≡sidebar |
+| `_admin-dark-glass.scss` | ~120 | Admin dark-glass semantic promotions | KEEP | admin-only theme on semantic |
 
 ### 1.3 Component Styles
 
@@ -120,13 +120,14 @@ Top offenders (excluding token/theme files):
 ### Current Architecture (confirmed by scan)
 ```
 src/styles/              ← Frontend tokens + themes (canonical SoT)
-src/admin/styles/        ← C5: global modularized; C4 components on semantic; layout in C2; shim until C6
+src/admin/styles/        ← C6: no shim; layout ADMIN-ONLY + themes + global on semantic
 ```
 
-`_admin-layout-tokens.scss` (ADR-011) **exists** (C2) — 5 ADMIN-ONLY structural tokens.  
-C3: admin themes map **semantic + layout** only; `admin-variables.scss` is a compatibility shim until C6.  
-C4: **0** non-layout `--admin-*` in components (see [`_c4-admin-component-token-migration.md`](migration/_c4-admin-component-token-migration.md)).  
-C5: `admin-global.scss` → thin orchestrator + [`global/`](../src/admin/styles/global/) (see [`_c5-admin-global-decomposition.md`](migration/_c5-admin-global-decomposition.md)).
+`_admin-layout-tokens.scss` (ADR-011) — 5 ADMIN-ONLY structural tokens.  
+C3–C6: admin themes map **semantic + layout** only; `admin-variables.scss` **deleted** (C6).  
+C4: **0** non-layout `--admin-*` in components.  
+C5: `admin-global.scss` → thin orchestrator + [`global/`](../src/admin/styles/global/).  
+C6: mixins + residual global on semantic; defaults in [`_admin-root-defaults.scss`](../src/admin/styles/_admin-root-defaults.scss). See [`_c6-admin-variables-shim-removal.md`](migration/_c6-admin-variables-shim-removal.md).
 
 ### Target Architecture
 ```
@@ -139,7 +140,7 @@ src/admin/styles/_admin-layout-tokens.scss ← Admin LAYOUT only (sidebar, toolb
 
 | Concern | Frontend Location | Admin Location | Duplicated? |
 |---------|------------------|----------------|-------------|
-| Color tokens | `tokens/` | `admin-variables.scss` (aliases → semantic) | SHIM (C3); delete C6 |
+| Color tokens | `tokens/` | `_admin-root-defaults` (non-color helpers only) | ✅ C6 — no `--admin-*` color aliases |
 | Light theme | `_default.scss` | `_admin-light.scss` (chrome only) | ✅ C3 semantic |
 | Dark theme | `_dark.scss` | `_admin-dark.scss` (chrome + Material depth) | ✅ C3 adopt frontend |
 | Glass theme | `_glass.scss` | `_admin-glass.scss` (liquid chrome + promotions) | ✅ liquid glass; header≡sidebar via `--surface-chrome` |
@@ -157,8 +158,8 @@ Notes: [`_c1-admin-token-inventory.md`](migration/_c1-admin-token-inventory.md),
 | SHARED | 125 | Same concept as shared tokens | ✅ C3 shim; ✅ C4 components use semantic |
 | CONFLICT | 47 | Same concept, different values | ✅ C3 adopt/promote; ✅ C4 consumers migrated |
 | ADMIN-ONLY | **5** | Layout-only in `_admin-layout-tokens.scss` (C2) | ✅ done |
-| **Total defined** | **~180** | +UNDEFINED aliases; −unused neon | shim until C6 |
-| UNDEFINED (used, no def) | **0** | Were 6 — aliased in C3 | ✅ |
+| **Total defined** | **5** | Layout ADMIN-ONLY only (C6) | ✅ |
+| UNDEFINED (used, no def) | **0** | Were 6 — aliased in C3; shim removed C6 | ✅ |
 
 #### ADMIN-ONLY (C2 — `_admin-layout-tokens.scss`)
 
@@ -183,9 +184,9 @@ Notes: [`_c1-admin-token-inventory.md`](migration/_c1-admin-token-inventory.md),
 
 Full per-token table from C1 remains in [`_c1-admin-token-inventory.md`](migration/_c1-admin-token-inventory.md); values now resolve through semantic aliases.
 
-#### SHARED (125) — ✅ C4 components use semantic directly; shim remains for global/mixins until C6
+#### SHARED (125) — ✅ C4–C6: consumers use semantic directly; shim removed
 
-Spacing, radius, font, motion, breakpoints, submit/cancel, tab, text helpers, input, table/select, order aliases, order status, surfaces misc, muted/back/avatar buttons, header chrome, palette variants, accent — all map via `admin-variables.scss` → shared tokens (see C1 inventory for names).
+Spacing, radius, font, motion, breakpoints, submit/cancel, tab, text helpers, input, table/select, order aliases, order status, surfaces misc, muted/back/avatar buttons, header chrome, palette variants, accent — mapped to shared semantic tokens (see C1 inventory for historical `--admin-*` names).
 
 #### UNDEFINED (6) — fixed in C3
 

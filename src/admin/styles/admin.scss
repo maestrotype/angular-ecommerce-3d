@@ -2,16 +2,13 @@
 
 @import './_admin-material-base';
 // _admin-theme-material.scss migrated → src/styles/overrides/_material-overrides.scss (B2)
-@import './admin-layout-tokens'; // C2: ADMIN-ONLY structural tokens (ADR-011)
-@import './admin-variables';
+@import './admin-layout-tokens'; // C2/C6: ADMIN-ONLY structural tokens (ADR-011)
+@import './admin-root-defaults'; // C6: dashboard/MDC root defaults (ex-shim leftovers)
 @import './admin-dark';
 @import './admin-light';
 @import './admin-glass';
 @import './admin-dark-glass';
 @import './admin-global';
-// @import '../../styles/themes/admin-dark';
-// @import '../../styles/themes/admin-light';
-// Glass theme is handled in admin-variables.scss via [data-theme="glass"]
 
 /* ===== CDK Overlay Global Styles ===== */
 // Desktop: position notification menu in top-right corner

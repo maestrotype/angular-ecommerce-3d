@@ -16,19 +16,19 @@
 | # | Метрика | Baseline (2026-07-28) | Сейчас | Цель | Прогресс |
 |---|---------|----------------------|--------|------|----------|
 | M1 | Hardcoded hex в SCSS (вне tokens/themes) | 1 336 в 68 файлах | 1 336 | 0 | ░░░░░░░░░░ 0% |
-| M2 | Использований `--admin-*` | 2 335 в 43 файлах | **~463** (post-C4 polish; was ~467) | 0 (кроме layout-токенов) | ▓▓▓▓▓▓▓░░░ 70% |
+| M2 | Использований `--admin-*` | 2 335 в 43 файлах | **0 non-layout** (C6; 5 layout tokens only) | 0 (кроме layout-токенов) | ██████████ 100% |
 | M3 | `!important` | 91 в 12 файлах | **72** в 12 файлах (бан на *новые*; C5 cleared admin-global; residual: hero 20, `_admin-dark` 14, sidenav 10…) | 0 | ▓▓░░░░░░░░ 21% |
 | M4 | `::ng-deep` | 40 в 12 файлах | **25** (B3: removed component Material `::ng-deep` dumps) | 0 | ▓▓▓▓░░░░░░ 38% |
 | M5 | Компоненты полностью на semantic-токенах (без hex) | 3 / 86 | 3 / 86 | 86 / 86 | ▓░░░░░░░░░ 3% |
 | M6 | Legacy `_theme-variables.scss` | 722 строки, подключён | **удалён** | удалён | ██████████ 100% |
 | M7 | Orphaned `src/styles.scss` | 499 строк логики | **удалён** | удалён | ██████████ 100% |
-| M8 | Централизованный `_material-overrides.scss` | нет; overrides в 24 файлах | **Epic B 4/4**; C5: admin `.mat-` in `global/*` modules (not deleted yet → C6/E) | 1 файл + admin global modules | ▓▓▓▓▓▓▓▓▓░ 92% |
+| M8 | Централизованный `_material-overrides.scss` | нет; overrides в 24 файлах | **Epic B 4/4** + admin `global/*` (C5); C ✅ | 1 файл + admin global modules | ▓▓▓▓▓▓▓▓▓░ 95% |
 
 **Команды для перепроверки метрик:**
 
 ```bash
 # M1: hex вне токенов/тем
-rg -c '#[0-9a-fA-F]{3,8}\b' src --glob '*.scss' --glob '!src/styles/tokens/**' --glob '!src/styles/themes/**' --glob '!src/admin/styles/_admin-{light,dark,glass,dark-glass}.scss' --glob '!src/admin/styles/admin-variables.scss'
+rg -c '#[0-9a-fA-F]{3,8}\b' src --glob '*.scss' --glob '!src/styles/tokens/**' --glob '!src/styles/themes/**' --glob '!src/admin/styles/_admin-{light,dark,glass,dark-glass}.scss'
 # M2: параллельная admin-система
 rg -c '\-\-admin-' src --glob '*.scss'
 # M3 / M4
@@ -59,7 +59,7 @@ rg -c '::ng-deep' src --glob '*.scss'
 
 | # | Проблема | Масштаб | Эпик |
 |---|----------|---------|------|
-| 1 | Параллельная admin-система токенов `--admin-*` | M2 ≈ 463; C4–C5 clean path; residual shim/mixins/themes → **C6** | C |
+| 1 | ~~Параллельная admin-система токенов `--admin-*`~~ **C6 done** — только 5 layout ADMIN-ONLY | — | C ✅ |
 | 2 | Компоненты не мигрированы (hex повсюду) | 1 336 hex в 68 файлах; admin — 10% на semantic | D |
 | 3 | ~~Legacy-монолит `_theme-variables.scss`~~ **Удалён (A3, 2026-07-28)**: блоки перенесены в `_default`/`_dark`/`_glass` с фильтрацией дублей | — | A |
 | 4 | Material overrides размазаны | Component scatter cleared (B3); palette bound (B4); admin `.mat-` modularized (C5 `global/*`) | B ✅ / C5 ✅ |
@@ -89,8 +89,8 @@ graph LR
 
     style A fill:#e8f5e9
     style B fill:#fff3e0
-    style C fill:#ffebee
-    style D fill:#ffebee
+    style C fill:#e8f5e9
+    style D fill:#fff3e0
     style E fill:#e3f2fd
     style F fill:#f3e5f5
     style G fill:#f3e5f5
@@ -100,8 +100,8 @@ graph LR
 |------|----------|--------|-------|---------|
 | A | Фундамент токенов | ✅ **Готово** | 6/6 | M6, M7 |
 | B | Централизация Material overrides | ✅ Done | 4/4 | M8 |
-| C | Admin-унификация (ADR-011) | 🔄 In Progress | 4/6 | M2 |
-| D | Миграция компонентов (ADR-006) | ⏳ Ожидает C | 0/10 | M1, M5 |
+| C | Admin-унификация (ADR-011) | ✅ **Готово** | 6/6 | M2 |
+| D | Миграция компонентов (ADR-006) | ⏳ Ready (after C) | 0/10 | M1, M5 |
 | E | Финальная зачистка | ⏳ Ожидает D | 0/4 | M3, M4 |
 | F | Theme Engine v2 (ADR-004, ADR-012) | 💡 План | 0/5 | — |
 | G | Premium UI, анимации, полировка | 💡 План | — | — |
@@ -136,9 +136,9 @@ graph LR
 | B3 | Перенести разрозненные `.mat-` overrides из компонентов (23 файла: message-list — 32, order-list — 25, user-list — 23, seo-settings — 20…) | компонентные SCSS | 0 `.mat-` в `*.component.scss`; уникальные правила в `_material-overrides.scss` (host-scoped). Residual: admin-global/themes → C5 | ✅ (2026-07-28) |
 | B4 | Связать Material-палитру с токенами (`material-theme.scss` → design tokens) | `src/admin/styles/material-theme.scss`, `tokens/_material-palettes.scss` | Смена токена цвета меняет Material-компоненты (MDC CSS bridge → semantic) | ✅ (2026-07-28) |
 
-### Эпик C — Admin-унификация (ADR-011)
+### Эпик C — Admin-унификация (ADR-011) ✅
 
-**Цель**: одна система токенов для storefront и admin. `--admin-*` остаётся только для layout (sidebar, toolbar).
+**Цель**: одна система токенов для storefront и admin. `--admin-*` остаётся только для layout (sidebar, toolbar). **Закрыт 2026-07-29 (C1–C6).**
 
 | ID | Задача | Файлы | Definition of Done | Статус |
 |----|--------|-------|--------------------|--------|
@@ -147,7 +147,7 @@ graph LR
 | C3 | SHARED-токены: заменить `--admin-*` на semantic-эквиваленты в admin-темах | `_admin-light/dark/glass/dark-glass.scss`; `admin-variables` shim; note `_c3-admin-token-reconciliation.md` | Admin-темы маппят только semantic + layout | ✅ (2026-07-28) |
 | C4 | Мигрировать 30 admin-компонентов с `--admin-*` на semantic-токены (пакетами по 5, с визуальной проверкой) | `src/admin/**/*`; note `_c4-admin-component-token-migration.md` | 0 `--admin-*` (кроме layout) в компонентах | ✅ (2026-07-28) |
 | C5 | Разобрать `admin-global.scss` (1 195 стр.): токены → shared, стили → модули (+ `admin-mixins`) | `admin-global.scss` → 16-line orchestrator; `global/` ×11; note `_c5-admin-global-decomposition.md` | Файл ≤ 200 строк layout-специфики; 0 `!important` in global | ✅ (2026-07-29) |
-| C6 | Удалить `admin-variables.scss` и устаревшие admin-темы; cutover mixins → semantic | `src/admin/styles/` | M2 = 0 (кроме layout); build + визуальная проверка всех 4 тем | 📋 |
+| C6 | Удалить `admin-variables.scss`; cutover mixins → semantic; root defaults → `_admin-root-defaults` | shim deleted; mixins semantic; note `_c6-admin-variables-shim-removal.md` | M2 = 0 non-layout; 5 layout tokens kept; themes kept (chrome/promotions); build | ✅ (2026-07-29) |
 
 ### Эпик D — Миграция компонентов (ADR-006)
 
@@ -224,6 +224,7 @@ graph LR
 | 2026-07-28 | C4: all admin components (+ stray storefront/overrides) → semantic; layout-only `--admin-*` kept; Epic C 4/6; M2 ≈ 467 |
 | 2026-07-29 | Post-C4 polish: MatTooltip white corners; glass-border-soft rebind; badge/icon chrome; no-important rule; M2 ≈ 463; M3 ≈ 87; Epic C still 4/6 (C5 next) |
 | 2026-07-29 | **C5**: `admin-global.scss` → 16-line orchestrator + `global/` ×11 partials; snackbar/body overflow without `!important`; mixins noted for C6; shim kept; M3 87→72; Epic C **5/6** |
+| 2026-07-29 | **C6 / Epic C closed**: deleted `admin-variables.scss`; mixins → semantic; `_admin-root-defaults`; M2 = 0 non-layout (5 layout tokens); note `_c6-admin-variables-shim-removal.md` |
 | 2026-07-29 | Post-C5: restore admin light-glass frosted chrome (`--surface-header`); remove storefront black admin-header overlay; sidenav/mat-drawer off deep navy |
 | 2026-07-29 | Glass chrome: unify header≡sidebar on prod etalon `--surface-secondary` `rgba(25,60,105,.5)`; `--surface-header` aliases it |
 | 2026-07-29 | Liquid glass rewrite: drop chrome isolation/transform; single-layer chrome + `--surface-chrome*` / softer atmosphere |

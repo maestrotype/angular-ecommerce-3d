@@ -1,7 +1,7 @@
-@import './admin-variables.scss';
 @import './admin-mixins.scss';
 
 // Global Admin Styles — C5 orchestrator (partials live in ./global/)
+// C6: admin-variables shim removed; layout tokens + root defaults via admin.scss
 
 @import './global/base';
 @import './global/atmospheres';

@@ -1,7 +1,7 @@
 /* ==========================================================================
    ADMIN DARK-GLASS THEME — C3 (ADR-011)
    Admin-only theme (no storefront counterpart). Recipes promoted onto semantic
-   tokens; `--admin-*` aliases resolve via admin-variables + theme overrides.
+   tokens. Layout ADMIN-ONLY tokens remain in `_admin-layout-tokens.scss` (C6).
    ========================================================================== */
 
 [data-theme='dark-glass'] {

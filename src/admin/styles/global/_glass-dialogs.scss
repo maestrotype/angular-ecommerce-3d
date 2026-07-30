@@ -110,13 +110,13 @@
       .info-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: var(--admin-spacing-md);
+        gap: var(--space-4);
       }
 
       .info-item {
         display: flex;
         flex-direction: column;
-        gap: var(--admin-spacing-xs);
+        gap: var(--space-1);
 
         label {
           color: rgba(255, 255, 255, 0.6);

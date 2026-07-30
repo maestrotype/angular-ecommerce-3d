@@ -31,14 +31,14 @@
 |------|------|--------|----------------------------|
 | A | Token Foundation | ✅ Complete | A1–A6 done |
 | B | Material Overrides Centralization | ✅ Complete | B1–B4 done; admin Material leftovers modularized in C5 `global/` |
-| C | Admin Unification (ADR-011) | 🔄 In Progress | **C5 done**; M2 ≈ 463; M3 = 72; **next = C6** (delete shim + mixin cutover) |
-| D | Component Migration (ADR-006) | 🔄 Partially Started | Prefer after C6 for admin surfaces |
+| C | Admin Unification (ADR-011) | ✅ Complete | C1–C6; M2 = 0 non-layout (5 layout tokens); M3 = 72 |
+| D | Component Migration (ADR-006) | ⏳ Ready | Next epic — storefront hex first (D1+), then admin |
 | E | Final Cleanup | ⏳ Pending | M3 = 72 `!important` (12 files); hard ban for **new** code (`.cursor/rules/no-important.mdc`) |
 | F | Theme Engine v2 (ADR-004/012) | 💡 Planned | |
 | G | Premium UI / Animations / Polish | 💡 Planned | |
 
 ### Current Blockers
-- None for C6. Smoke-check admin light/dark/glass/dark-glass (login + dashboard + one list; tooltips) after C5 split before deleting shim.
+- None. Smoke admin themes after C6 if visuals regress (login + dashboard + list × 4 themes). Epic D can start.
 
 ### Post-C4 lessons (2026-07-29) — do not repeat
 1. **`!important` is forbidden** for new/agent work (absolute). Win with CSS variables (`--mdc-*` / `--mat-*`), specificity, or correct layer — never `!important`. Rule: `.cursor/rules/no-important.mdc` + `AI_CONSTITUTION.md`.
@@ -81,16 +81,16 @@
 > Quantified baseline (2026-07-28). Live numbers in [REFACTORING_BOARD.md §1](REFACTORING_BOARD.md).
 
 ### High Priority
-- [ ] Parallel `--admin-*`: M2 ≈ 463; C4–C5 path clean; residual shim/mixins/themes → **C6**
+- [x] Parallel `--admin-*` unified (C6) — only 5 layout ADMIN-ONLY tokens remain
 - [ ] 1,336 hardcoded hex colors outside token/theme sources (Epic D)
 - [x] Legacy `_theme-variables.scss` deleted (A3)
 - [x] Orphaned `src/styles.scss` deleted (A5)
 - [x] Material overrides Epic B (B1–B4)
 - [x] `admin-global.scss` decomposed (C5)
+- [x] `admin-variables.scss` shim deleted; mixins on semantic (C6)
 
 ### Medium Priority
 - [ ] M3 = 72 `!important` (12 files) — **no new ones**; Epic E (hero, `_admin-dark`, sidenav, …)
-- [ ] `admin-variables.scss` shim + mixins still on `--admin-*` → **C6**
 - [ ] 40 `::ng-deep` in 12 files
 
 ### Low Priority
@@ -103,6 +103,7 @@
 
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-07-29 | Task C6 (Board): Deleted `admin-variables.scss` shim; remapped residual consumers; rewrote `admin-mixins` on semantic; extracted `_admin-root-defaults.scss` (dashboard/MDC defaults). M2 = **0 non-layout** (5 layout tokens kept). Admin theme files kept for chrome/promotions. Note: `docs/migration/_c6-admin-variables-shim-removal.md`. Epic C **6/6**. `npm run build` passes. | Implementation Engineer |
 | 2026-07-29 | Glass balance: lighter chrome (header/sidebar ~0.36 airy blue); darker content blocks (`--surface-card`/`elevated`/stat cards navy glass). Epic C still **5/6**. | Implementation Engineer |
 | 2026-07-29 | Glass chrome lighten: restore prod medium steel-blue `rgba(25,60,105,.5)` (was over-dark .78 charcoal). Header≡sidebar kept. Epic C still **5/6**. | Implementation Engineer |
 | 2026-07-29 | Glass polish: denser chrome + lower blur saturate so header≡sidebar (was electric blue over content); chart axis ticks theme-aware (white on glass/dark); chart cards use `--surface-card` not chrome. Epic C still **5/6**. | Implementation Engineer |

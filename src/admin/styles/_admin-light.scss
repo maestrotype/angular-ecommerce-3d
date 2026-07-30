@@ -1,7 +1,7 @@
 /* ==========================================================================
    ADMIN LIGHT THEME — C3 (ADR-011)
-   Semantic SoT from shared tokens; `--admin-*` aliases live in admin-variables.
-   Admin chrome scoped to body.is-admin. Layout: `_admin-layout-tokens.scss`.
+   Semantic SoT from shared tokens. Layout ADMIN-ONLY tokens in `_admin-layout-tokens.scss` (C6).
+   Admin chrome scoped to body.is-admin.
    ========================================================================== */
 
 body.is-admin[data-theme='light'],
@@ -35,7 +35,7 @@ html[data-theme='light'] body.is-admin {
   --mdc-list-item-hover-label-text-color: var(--text-primary);
   --mdc-list-item-hover-leading-icon-color: var(--text-secondary);
 
-  // Legacy add-btn (non --admin-*; keep until C5)
+  // Legacy add-btn (non-semantic aliases used by older controls)
   --add-btn: var(--color-slate-700);
   --add-btn-hover: var(--color-slate-600);
 }

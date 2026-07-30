@@ -87,18 +87,20 @@ src/
 │       └── _material-overrides.scss  # Central Material overrides (B1–B4; residual admin-global → C5)
 │
 ├── admin/
-│   └── styles/                    # Admin-specific styles (C2: layout tokens isolated; unify C3–C6)
+│   └── styles/                    # Admin styles (C6: layout ADMIN-ONLY + themes + global on semantic)
 │       ├── admin.scss             # Admin entry (angular.json)
 │       ├── _admin-layout-tokens.scss  # ADMIN-ONLY structural (C2 / ADR-011)
+│       ├── _admin-root-defaults.scss  # Dashboard/MDC defaults (C6)
 │       ├── material-theme.scss    # Material theme entry — token palettes + CSS bridge (B4)
-│       ├── admin-global.scss
-│       ├── admin-variables.scss
-│       ├── admin-mixins.scss
+│       ├── admin-global.scss      # Orchestrator → global/*
+│       ├── admin-mixins.scss      # Semantic mixins (C6)
 │       ├── _admin-light.scss
 │       ├── _admin-dark.scss
 │       ├── _admin-glass.scss
 │       ├── _admin-dark-glass.scss
 │       ├── _admin-material-base.scss  # Shim (B4: core/themes in material-theme.scss)
+│       ├── global/                # C5 partials
+│       └── (removed) admin-variables.scss  # C6 shim deleted
 │       └── (removed) _admin-theme-material.scss  # Migrated B2 → overrides/_material-overrides.scss
 │
 └── app/                           # Component styles (local only)
@@ -371,7 +373,7 @@ body { margin: 0; }  // This leaks globally due to Angular encapsulation
 |--------|---------|--------|
 | Token definitions | ✅ Primitive + semantic pipeline | Keep single-source primitives |
 | Theme variables | ✅ Per-theme partials (`_default`/`_dark`/`_glass`) | Maintain; sync TS model (Epic F) |
-| Admin styles | C3: themes→semantic; shim in `admin-variables`; 5 ADMIN-ONLY layout; M2 ≈ 1 623 | Shared tokens, admin layout only (Epic C) |
+| Admin styles | C6: shim deleted; mixins semantic; 5 ADMIN-ONLY layout; M2 = 0 non-layout | Shared tokens + admin layout only |
 | Material overrides | Component `.mat-` cleared (B3); palette↔tokens (B4); residual admin-global/themes | All rules in `_material-overrides.scss` + token bridge (Epic B ✅; C5 residual) |
 | Hardcoded colors | Present in many components | Zero — all use tokens (Epic D) |
 | CSS vs SCSS variables | Mixed usage | CSS custom properties preferred |
@@ -504,44 +506,44 @@ But prefer CSS variables as they scale better across themes.
 
 ## 13. Admin Panel Token Namespace
 
-### 13.1 Separation Model
+### 13.1 Separation Model (ADR-011 / C6)
 
-Admin panel uses `--admin-*` prefix to isolate from storefront. Key files:
+Admin consumes **shared semantic tokens**. Only **layout** tokens keep the `--admin-*` prefix.
 
 | File | Purpose |
 |------|---------|
-| `src/admin/styles/admin-variables.scss` | `:root` fallback values for all `--admin-*` and component-specific tokens |
-| `src/admin/styles/_admin-glass.scss` | `[data-theme="glass"]` overrides for admin |
-| `src/admin/styles/_admin-dark.scss` | `[data-theme="dark"]` overrides for admin |
-| `src/admin/styles/_admin-light.scss` | `[data-theme="light"]` overrides for admin |
-| `src/admin/styles/admin-global.scss` | Global admin component styles — consume tokens only |
+| `src/admin/styles/_admin-layout-tokens.scss` | 5 ADMIN-ONLY layout tokens (sidebar, toolbar, paddings) |
+| `src/admin/styles/_admin-root-defaults.scss` | Dashboard/MDC root defaults (C6; ex-shim leftovers) |
+| `src/admin/styles/_admin-{light,dark,glass,dark-glass}.scss` | Admin theme chrome / semantic promotions |
+| `src/admin/styles/admin-global.scss` + `global/` | Global admin styles — semantic only |
+| ~~`admin-variables.scss`~~ | Deleted in C6 |
 
 ### 13.2 Token Naming for Admin Components
 
-For **page-level** tokens (e.g., dashboard-specific), use a component prefix:
+For **page-level** tokens (e.g., dashboard-specific), define defaults in `_admin-root-defaults.scss` and override in themes:
 ```scss
-// In admin-variables.scss (:root):
---dashboard-stat-card-bg: var(--admin-bg-secondary);    // fallback
---stat-icon-products: var(--admin-success);              // fallback
+// In _admin-root-defaults.scss (:root):
+--dashboard-stat-card-bg: var(--surface-secondary);
+--stat-icon-products: var(--color-success);
 
 // In _admin-glass.scss ([data-theme="glass"]):
---dashboard-stat-card-bg: rgba(255, 255, 255, 0.2);     // override
---stat-icon-products: #ffffff;                           // override
+--dashboard-stat-card-bg: /* glass recipe */;
+--stat-icon-products: #ffffff;
 ```
 
-This follows the pattern: **define in theme file, consume in component**.
+This follows the pattern: **define in theme/root, consume in component**.
 
 ### 13.3 Known Token Groups
 
 | Token Group | Variables | Defined In |
 |-------------|-----------|------------|
-| Layout | `--admin-bg-*`, `--admin-text-*`, `--admin-border-*` | `admin-variables.scss` |
-| Glass surfaces | `--admin-glass-surface-*`, `--admin-glass-border-*`, `--admin-glass-shadow*` | `_admin-glass.scss` |
-| Dashboard cards | `--dashboard-stat-card-*` | `admin-variables.scss` + `_admin-glass.scss` |
-| Stat icons | `--stat-icon-*` | `admin-variables.scss` + `_admin-glass.scss` |
-| Admin header | `--admin-header-*` | `admin-variables.scss` + `_admin-glass.scss` (Task-020) |
+| Layout (ADMIN-ONLY) | `--admin-sidebar-width`, `--admin-toolbar-height`, `--admin-content-padding`, mobile paddings | `_admin-layout-tokens.scss` |
+| Surfaces / text / borders | semantic `--surface-*`, `--text-*`, `--border-*` | tokens + admin themes |
+| Glass surfaces | `--glass-surface-*`, `--glass-border-*`, `--surface-chrome*` | semantic + `_admin-glass.scss` |
+| Dashboard cards | `--dashboard-stat-card-*` | `_admin-root-defaults.scss` + themes |
+| Stat icons | `--stat-icon-*` | `_admin-root-defaults.scss` + themes |
 | Material tokens | `--mdc-*`, `--mat-*` | All admin theme files |
 
 ---
 
-*This document is maintained by the Principal UI Architect. Last updated: 2026-07-28 (C1: admin token classification)*
+*This document is maintained by the Principal UI Architect. Last updated: 2026-07-29 (C6: shim removed)*

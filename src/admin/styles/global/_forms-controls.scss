@@ -1,49 +1,49 @@
 // Form Fields
 .mat-mdc-form-field {
   .mat-mdc-text-field-wrapper {
-    background-color: var(--admin-bg-card);
-    color: var(--admin-text-primary);
+    background-color: var(--surface-elevated);
+    color: var(--text-primary);
 
     // Glass theme improvements
     [data-theme="glass"] & {
-      background: var(--admin-glass-surface-muted);
+      background: var(--glass-surface-muted);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      border: 1px solid var(--admin-border-secondary);
+      border: 1px solid var(--border-subtle);
       border-radius: 18px;
       box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
     }
   }
 
   .mat-mdc-form-field-label {
-    color: var(--admin-text-secondary);
+    color: var(--text-secondary);
   }
 
   .mat-mdc-input-element {
-    color: var(--admin-text-primary);
+    color: var(--text-primary);
   }
 
   .mat-mdc-input-element::placeholder {
-    color: var(--admin-text-secondary);
+    color: var(--text-secondary);
   }
 
   .mat-mdc-form-field-outline {
-    color: var(--admin-border-primary);
+    color: var(--border-default);
   }
 
   &.mat-focused .mat-mdc-form-field-outline {
-    color: var(--admin-border-focus);
+    color: var(--border-primary);
   }
 }
 
 // Select
 .mat-mdc-select {
   .mat-mdc-select-value {
-    color: var(--admin-text-primary);
+    color: var(--text-primary);
   }
 
   .mat-mdc-select-arrow {
-    color: var(--admin-text-secondary);
+    color: var(--text-secondary);
   }
 }
 
@@ -51,18 +51,18 @@
 .mat-mdc-checkbox {
   .mdc-checkbox {
     .mdc-checkbox__background {
-      border-color: var(--admin-border-primary);
+      border-color: var(--border-default);
     }
 
     .mdc-checkbox__checkmark {
-      color: var(--admin-text-inverse);
+      color: var(--text-inverse);
     }
   }
 
   &.mat-mdc-checkbox-checked {
     .mdc-checkbox__background {
-      background-color: var(--admin-primary);
-      border-color: var(--admin-primary);
+      background-color: var(--interactive-primary);
+      border-color: var(--interactive-primary);
     }
   }
 }
@@ -71,22 +71,22 @@
 .mat-mdc-radio-button {
   .mdc-radio {
     .mdc-radio__background {
-      border-color: var(--admin-border-primary);
+      border-color: var(--border-default);
     }
 
     .mdc-radio__outer-circle {
-      border-color: var(--admin-border-primary);
+      border-color: var(--border-default);
     }
   }
 
   &.mat-mdc-radio-checked {
     .mdc-radio__background {
       .mdc-radio__outer-circle {
-        border-color: var(--admin-primary);
+        border-color: var(--interactive-primary);
       }
 
       .mdc-radio__inner-circle {
-        border-color: var(--admin-primary);
+        border-color: var(--interactive-primary);
       }
     }
   }
@@ -96,14 +96,14 @@
 .mat-mdc-slide-toggle {
   .mdc-switch {
     .mdc-switch__track {
-      background-color: var(--admin-border-primary);
+      background-color: var(--border-default);
     }
   }
 
   &.mat-mdc-slide-toggle-checked {
     .mdc-switch {
       .mdc-switch__track {
-        background-color: var(--admin-primary);
+        background-color: var(--interactive-primary);
       }
     }
   }
@@ -112,6 +112,6 @@
 // Progress Spinner
 .mat-mdc-progress-spinner {
   circle {
-    stroke: var(--admin-primary);
+    stroke: var(--interactive-primary);
   }
 }

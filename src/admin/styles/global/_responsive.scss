@@ -9,13 +9,13 @@
   // Dark theme - dark header
   [data-theme="dark"] {
     .admin-header {
-      border-bottom: 1px solid var(--admin-border-primary);
+      border-bottom: 1px solid var(--border-default);
     }
   }
 
   .admin-header {
     .header-title {
-      font-size: var(--admin-font-size-sm);
+      font-size: var(--text-sm);
     }
 
     .header-actions {
@@ -45,6 +45,6 @@
   }
 
   .stat-card {
-    padding: var(--admin-spacing-md);
+    padding: var(--space-4);
   }
 }

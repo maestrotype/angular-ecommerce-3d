@@ -2,17 +2,17 @@
 .mat-mdc-nav-list a[mat-list-item].mat-mdc-list-item {
   position: relative;
   isolation: isolate;
-  border-radius: var(--admin-border-radius-sm);
-  transition: box-shadow var(--admin-transition-normal),
-    transform var(--admin-transition-normal);
+  border-radius: var(--radius-sm);
+  transition: box-shadow var(--duration-normal) var(--easing-default),
+    transform var(--duration-normal) var(--easing-default);
   will-change: box-shadow, transform;
 
   // Force dark text/icon colors always
-  --mdc-list-item-label-text-color: var(--admin-text-primary);
-  --mdc-list-item-leading-icon-color: var(--admin-text-secondary);
-  --mdc-list-item-trailing-icon-color: var(--admin-text-secondary);
-  --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
-  --mdc-list-item-selected-label-text-color: var(--admin-text-primary);
+  --mdc-list-item-label-text-color: var(--text-primary);
+  --mdc-list-item-leading-icon-color: var(--text-secondary);
+  --mdc-list-item-trailing-icon-color: var(--text-secondary);
+  --mdc-list-item-hover-label-text-color: var(--text-primary);
+  --mdc-list-item-selected-label-text-color: var(--text-primary);
 
   // Disable Material state layers
   --mdc-list-list-item-hover-state-layer-color: transparent;
@@ -31,7 +31,7 @@
     border-radius: 2px 0 0 2px;
     pointer-events: none;
     z-index: 2;
-    transition: background-color var(--admin-transition-normal);
+    transition: background-color var(--duration-normal) var(--easing-default);
   }
 
   // Shadow/outline layer
@@ -39,45 +39,45 @@
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: var(--admin-border-radius-sm);
+    border-radius: var(--radius-sm);
     box-shadow: none;
     pointer-events: none;
     z-index: 1;
-    transition: box-shadow var(--admin-transition-normal);
+    transition: box-shadow var(--duration-normal) var(--easing-default);
   }
 
   // Hover state
   &:hover {
     background: transparent;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, .20), 0 0 0 1px var(--admin-border-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .20), 0 0 0 1px var(--border-default);
     transform: translateY(-1px);
   }
 
   &:hover::before {
-    background: var(--admin-primary);
+    background: var(--interactive-primary);
   }
 
   // Active/selected state
   &:is(.mdc-list-item--activated, .mat-mdc-list-item-selected, .active, [aria-current='page']) {
     background: transparent;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, .22), 0 0 0 1px var(--admin-border-primary);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, .22), 0 0 0 1px var(--border-default);
     transform: translateY(-1px);
   }
 
   &:is(.mdc-list-item--activated, .mat-mdc-list-item-selected, .active, [aria-current='page'])::before {
-    background: var(--admin-primary);
+    background: var(--interactive-primary);
   }
 
   // Force dark text in all states
   .mdc-list-item__primary-text,
   .mdc-list-item__text,
   .mat-mdc-list-item-title {
-    color: var(--admin-text-primary);
+    color: var(--text-primary);
   }
 
   mat-icon[matListItemIcon],
   .mat-mdc-list-item-icon {
-    color: var(--admin-text-secondary);
+    color: var(--text-secondary);
   }
 
   // Keep ripple below our layers
@@ -95,21 +95,21 @@
 // Scoped admin sidenav tokens (container-level)
 .sidenav-nav {
   // text/icon colors
-  --mdc-list-item-label-text-color: var(--admin-text-primary);
-  --mdc-list-item-leading-icon-color: var(--admin-text-secondary);
-  --mdc-list-item-trailing-icon-color: var(--admin-text-secondary);
+  --mdc-list-item-label-text-color: var(--text-primary);
+  --mdc-list-item-leading-icon-color: var(--text-secondary);
+  --mdc-list-item-trailing-icon-color: var(--text-secondary);
 
   // hover/focus layers off and colors stay dark
   --mdc-list-list-item-hover-state-layer-color: transparent;
   --mdc-list-list-item-hover-state-layer-opacity: 0;
-  --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
-  --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
+  --mdc-list-item-hover-label-text-color: var(--text-primary);
+  --mdc-list-item-hover-leading-icon-color: var(--text-secondary);
   --mdc-list-list-item-focus-state-layer-color: transparent;
   --mdc-list-list-item-focus-state-layer-opacity: 0;
-  --mdc-list-item-focus-label-text-color: var(--admin-text-primary);
+  --mdc-list-item-focus-label-text-color: var(--text-primary);
 
   // selected/active colors and indicator off
   --mat-list-active-indicator-color: transparent;
-  --mdc-list-item-selected-label-text-color: var(--admin-text-primary);
-  --mdc-list-item-selected-leading-icon-color: var(--admin-text-secondary);
+  --mdc-list-item-selected-label-text-color: var(--text-primary);
+  --mdc-list-item-selected-leading-icon-color: var(--text-secondary);
 }

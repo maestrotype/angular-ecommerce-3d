@@ -2,9 +2,7 @@
    ADMIN LAYOUT TOKENS (ADR-011)
    ========================================
    Structural values unique to the admin shell.
-   SHARED / CONFLICT colors, spacing, typography stay
-   in admin-variables / themes until C3–C6 migrate them.
-   Components must consume via var(--admin-*), never hardcode.
+   Colors/spacing/typography: shared semantic tokens.
    ======================================== */
 
 :root {
@@ -13,7 +11,7 @@
   --admin-toolbar-height: 64px;
   --admin-content-padding: 24px;
 
-  // Mobile shell padding (relocated from admin-variables)
+  // Mobile shell padding
   --admin-mobile-padding-vertical: 22px;
   --admin-mobile-padding-horizontal: 8px;
 }

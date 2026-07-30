@@ -1,0 +1,53 @@
+/* ==========================================================================
+   ADMIN ROOT DEFAULTS — C6 (ADR-011)
+   Non-layout defaults formerly in admin-variables.scss (dashboard/MDC helpers).
+   Layout ADMIN-ONLY tokens: `_admin-layout-tokens.scss`.
+   ========================================================================== */
+
+:root {
+  --border-width: 0px;
+  --border-color: var(--border-default);
+  --border-opacity: 0.12;
+  --border-style: solid;
+
+  --dashboard-stat-card-bg: var(--surface-secondary);
+  --dashboard-stat-card-border: var(--border-default);
+  --dashboard-stat-card-blur: none;
+  --dashboard-stat-card-shadow: var(--shadow-md);
+  --dashboard-stat-card-hover-shadow: var(--shadow-lg);
+  --dashboard-stat-card-hover-bg: var(--surface-highlight);
+  --dashboard-stat-card-hover-border: var(--border-default);
+
+  --stat-icon-products: var(--color-success);
+  --stat-icon-orders: var(--interactive-primary);
+  --stat-icon-users: var(--color-warning);
+  --stat-icon-revenue: var(--color-accent);
+  --stat-icon-aov: var(--interactive-primary);
+  --stat-icon-success-rate: var(--color-success);
+
+  --mdc-list-item-label-text-color: var(--text-primary);
+  --mdc-list-item-supporting-text-color: var(--text-secondary);
+  --mdc-list-item-leading-icon-color: var(--text-secondary);
+  --mdc-list-item-trailing-icon-color: var(--text-secondary);
+  --mdc-list-item-selected-label-text-color: var(--text-primary);
+  --mdc-list-item-disabled-label-text-color: var(--text-muted);
+  --mdc-list-item-hover-label-text-color: var(--text-primary);
+  --mdc-list-item-hover-leading-icon-color: var(--text-secondary);
+  --mdc-list-item-focus-label-text-color: var(--text-primary);
+
+  --mdc-list-list-item-label-text-color: var(--text-secondary);
+  --mdc-list-list-item-supporting-text-color: var(--text-secondary);
+  --mdc-list-list-item-disabled-text-color: var(--text-muted);
+  --mdc-list-list-item-leading-icon-color: var(--text-secondary);
+  --mdc-list-list-item-trailing-icon-color: var(--text-secondary);
+  --mdc-list-list-item-hover-label-text-color: var(--text-primary);
+  --mdc-list-list-item-hover-state-layer-color: transparent;
+  --mdc-list-list-item-hover-state-layer-opacity: 0;
+  --mdc-list-list-item-hover-leading-icon-color: var(--text-secondary);
+  --mdc-list-list-item-hover-trailing-icon-color: var(--text-secondary);
+  --mdc-list-item-hover-trailing-icon-color: var(--text-secondary);
+
+  --mdc-elevated-card-container-color: transparent;
+  --mdc-filled-card-container-color: transparent;
+  --mdc-outlined-card-container-color: transparent;
+}

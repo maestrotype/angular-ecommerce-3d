@@ -6,8 +6,8 @@ h4,
 h5,
 h6 {
   @include admin-heading(1);
-  margin: 0 0 var(--admin-spacing-md) 0;
-  color: var(--admin-text-primary);
+  margin: 0 0 var(--space-4) 0;
+  color: var(--text-primary);
 }
 
 h1 {
@@ -28,18 +28,18 @@ h4 {
 
 p {
   @include admin-text('md', 'normal');
-  margin: 0 0 var(--admin-spacing-md) 0;
-  color: var(--admin-text-primary);
+  margin: 0 0 var(--space-4) 0;
+  color: var(--text-primary);
 }
 
 // Links
 a {
-  color: var(--admin-primary);
+  color: var(--interactive-primary);
   text-decoration: none;
-  transition: color var(--admin-transition-normal);
+  transition: color var(--duration-normal) var(--easing-default);
 
   &:hover {
-    color: var(--admin-primary-hover);
+    color: var(--interactive-primary-hover);
   }
 }
 

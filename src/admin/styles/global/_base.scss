@@ -18,14 +18,14 @@
 }
 
 body.is-admin {
-  font-family: var(--admin-font-family);
-  font-size: var(--admin-font-size-md);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
   line-height: 1.6;
-  color: var(--admin-text-primary);
-  background: var(--admin-bg-primary);
+  color: var(--text-primary);
+  background: var(--surface-page);
   margin: 0;
   padding: 0;
-  transition: background-color var(--admin-transition-normal), color var(--admin-transition-normal);
+  transition: background-color var(--duration-normal) var(--easing-default), color var(--duration-normal) var(--easing-default);
   overflow: hidden;
 
   // Glass theme background - bright blue like macOS/iOS

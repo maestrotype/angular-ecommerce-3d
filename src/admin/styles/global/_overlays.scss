@@ -17,12 +17,12 @@
 
   &.error-snackbar,
   &.admin-snackbar-error {
-    --mdc-snackbar-container-color: var(--admin-error, #d32f2f);
+    --mdc-snackbar-container-color: var(--interactive-danger, #d32f2f);
     --mdc-snackbar-supporting-text-color: #ffffff;
     --mat-snack-bar-button-color: #ffffff;
 
     .mdc-snackbar__surface.mdc-snackbar__surface {
-      background-color: var(--mdc-snackbar-container-color, var(--admin-error, #d32f2f));
+      background-color: var(--mdc-snackbar-container-color, var(--interactive-danger, #d32f2f));
       color: var(--mdc-snackbar-supporting-text-color, #ffffff);
     }
 
@@ -38,12 +38,12 @@
 
   &.success-snackbar,
   &.admin-snackbar-success {
-    --mdc-snackbar-container-color: var(--admin-success, #2e7d32);
+    --mdc-snackbar-container-color: var(--color-success, #2e7d32);
     --mdc-snackbar-supporting-text-color: #ffffff;
     --mat-snack-bar-button-color: #ffffff;
 
     .mdc-snackbar__surface.mdc-snackbar__surface {
-      background: var(--mdc-snackbar-container-color, var(--admin-success, #2e7d32));
+      background: var(--mdc-snackbar-container-color, var(--color-success, #2e7d32));
       color: var(--mdc-snackbar-supporting-text-color, #ffffff);
     }
 
@@ -56,12 +56,12 @@
 
   &.warning-snackbar,
   &.admin-snackbar-warning {
-    --mdc-snackbar-container-color: var(--admin-warning, #ed6c02);
+    --mdc-snackbar-container-color: var(--color-warning, #ed6c02);
     --mdc-snackbar-supporting-text-color: #ffffff;
     --mat-snack-bar-button-color: #ffffff;
 
     .mdc-snackbar__surface.mdc-snackbar__surface {
-      background: var(--mdc-snackbar-container-color, var(--admin-warning, #ed6c02));
+      background: var(--mdc-snackbar-container-color, var(--color-warning, #ed6c02));
       color: var(--mdc-snackbar-supporting-text-color, #ffffff);
     }
 
@@ -74,15 +74,15 @@
 
   &.admin-snackbar-info {
     .mdc-snackbar__surface {
-      background: var(--admin-info);
-      color: var(--admin-text-inverse);
+      background: var(--color-info);
+      color: var(--text-inverse);
     }
   }
 
   &:not(.error-snackbar):not(.success-snackbar):not(.warning-snackbar):not(.admin-snackbar-error):not(.admin-snackbar-success):not(.admin-snackbar-warning):not(.admin-snackbar-info) {
-    --mdc-snackbar-container-color: var(--admin-bg-secondary, #1e1e1e);
-    --mdc-snackbar-supporting-text-color: var(--admin-text-primary, #ffffff);
-    --mat-snack-bar-button-color: var(--admin-primary, #bb86fc);
+    --mdc-snackbar-container-color: var(--surface-secondary, #1e1e1e);
+    --mdc-snackbar-supporting-text-color: var(--text-primary, #ffffff);
+    --mat-snack-bar-button-color: var(--interactive-primary, #bb86fc);
 
     .mdc-snackbar__surface.mdc-snackbar__surface {
       background-color: var(--mdc-snackbar-container-color);
@@ -100,18 +100,18 @@
 .mat-mdc-dialog-container,
 .cdk-overlay-container {
   .mdc-dialog__surface {
-    background-color: var(--admin-bg-card);
+    background-color: var(--surface-elevated);
     border-radius: var(--border-radius-dark-glass, 16px);
-    color: var(--admin-text-primary);
+    color: var(--text-primary);
   }
 
   .mdc-dialog__title {
-    color: var(--admin-text-primary);
-    background-color: var(--admin-header-bg);
+    color: var(--text-primary);
+    background-color: var(--surface-header);
   }
 
   .mdc-dialog__content {
-    color: var(--admin-text-primary);
+    color: var(--text-primary);
   }
 }
 
