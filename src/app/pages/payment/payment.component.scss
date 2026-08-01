@@ -1,6 +1,11 @@
+/* ==========================================================================
+   PAYMENT PAGE
+   Epic D2: semantic tokens only — zero hardcoded colors.
+   ========================================================================== */
+
 .payment-page {
   min-height: 100vh;
-  background: var(--color-bg-primary, #ffffff);
+  background: var(--surface-page);
   padding: 6rem 0;
 
   .container {
@@ -22,15 +27,15 @@
       gap: 0.5rem;
       padding: 0.75rem 1rem;
       border: none;
-      border-radius: 8px;
-      background: var(--color-surface-primary, #ffffff);
-      color: var(--color-text-primary, #333333);
+      border-radius: var(--radius-md);
+      background: var(--surface-primary);
+      color: var(--text-primary);
       cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: var(--color-shadow-light, 0 2px 8px rgba(0, 0, 0, 0.1));
+      box-shadow: var(--shadow-sm);
 
       &:hover {
-        background: var(--color-surface-hover, #f3f4f6);
+        background: var(--surface-highlight);
         transform: translateY(-1px);
       }
 
@@ -44,7 +49,7 @@
       margin: 0;
       font-size: 2.5rem;
       font-weight: 700;
-      color: var(--color-text-primary, #333333);
+      color: var(--text-primary);
       padding-bottom: 0.5rem;
     }
   }
@@ -54,20 +59,19 @@
     margin: 0 auto;
   }
 
-  // Loading State
   .loading-state {
     text-align: center;
     padding: 4rem 2rem;
-    background: var(--color-surface-primary, #ffffff);
-    border-radius: 16px;
-    box-shadow: var(--color-shadow-light, 0 2px 8px rgba(0, 0, 0, 0.1));
-    border: 1px solid var(--color-border-primary, #e5e7eb);
+    background: var(--surface-primary);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-default);
 
     .spinner {
       width: 60px;
       height: 60px;
-      border: 4px solid var(--color-border-secondary, #e5e7eb);
-      border-top: 4px solid var(--color-primary, #667eea);
+      border: 4px solid var(--border-subtle);
+      border-top: 4px solid var(--interactive-primary);
       border-radius: 50%;
       animation: spin 1s linear infinite;
       margin: 0 auto 2rem;
@@ -75,37 +79,36 @@
 
     h2 {
       margin: 0 0 1rem 0;
-      color: var(--color-text-primary, #333333);
+      color: var(--text-primary);
     }
 
     p {
-      color: var(--color-text-secondary, #6b7280);
+      color: var(--text-secondary);
       margin: 0;
     }
   }
 
-  // Payment Form
   .payment-form {
-    background: var(--color-surface-primary, #ffffff);
-    border-radius: 16px;
+    background: var(--surface-primary);
+    border-radius: var(--radius-lg);
     padding: 2rem;
-    box-shadow: var(--color-shadow-light, 0 2px 8px rgba(0, 0, 0, 0.1));
-    border: 1px solid var(--color-border-primary, #e5e7eb);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-default);
 
     .payment-info {
       margin-bottom: 2rem;
       padding-bottom: 2rem;
-      border-bottom: 1px solid var(--color-border-secondary, #e5e7eb);
+      border-bottom: 1px solid var(--border-subtle);
 
       h2 {
         margin: 0 0 1rem 0;
-        color: var(--color-text-primary, #333333);
+        color: var(--text-primary);
       }
 
       .order-details {
         p {
           margin: 0.5rem 0;
-          color: var(--color-text-secondary, #6b7280);
+          color: var(--text-secondary);
 
           .status {
             padding: 0.25rem 0.75rem;
@@ -114,8 +117,8 @@
             font-weight: 500;
 
             &.pending {
-              background: var(--color-warning-light, #fff3cd);
-              color: var(--color-warning-dark, #856404);
+              background: var(--color-warning-bg);
+              color: var(--color-warning-dark);
             }
           }
         }
@@ -127,7 +130,7 @@
 
       h3 {
         margin: 0 0 1rem 0;
-        color: var(--color-text-primary, #333333);
+        color: var(--text-primary);
       }
 
       .method-options {
@@ -136,26 +139,26 @@
           align-items: center;
           gap: 1rem;
           padding: 1rem;
-          border: 2px solid var(--color-border-primary, #e5e7eb);
-          border-radius: 8px;
+          border: 2px solid var(--border-default);
+          border-radius: var(--radius-md);
           cursor: pointer;
           transition: all 0.3s ease;
-          background: var(--color-surface-secondary, #f9fafb);
+          background: var(--surface-secondary);
 
           &.selected {
-            border-color: var(--color-primary, #667eea);
-            background: var(--color-bg-hover, #f3f4f6);
+            border-color: var(--interactive-primary);
+            background: var(--surface-highlight);
           }
 
           .method-icon {
             width: 48px;
             height: 48px;
-            border-radius: 8px;
-            background: var(--color-primary, #667eea);
+            border-radius: var(--radius-md);
+            background: var(--interactive-primary);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: var(--text-on-primary);
 
             svg {
               width: 24px;
@@ -168,12 +171,12 @@
 
             h4 {
               margin: 0 0 0.25rem 0;
-              color: var(--color-text-primary, #333333);
+              color: var(--text-primary);
             }
 
             p {
               margin: 0;
-              color: var(--color-text-secondary, #6b7280);
+              color: var(--text-secondary);
               font-size: 0.875rem;
             }
           }
@@ -187,18 +190,18 @@
       .pay-btn {
         padding: 1rem 3rem;
         border: none;
-        border-radius: 12px;
-        background: var(--color-primary);
-        color: white;
+        border-radius: var(--radius-md);
+        background: var(--interactive-primary);
+        color: var(--text-on-primary);
         font-size: 1.1rem;
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s ease;
-        box-shadow: var(--color-shadow-medium, 0 4px 12px rgba(0, 0, 0, 0.15));
+        box-shadow: var(--shadow-md);
 
         &:hover:not(:disabled) {
           transform: translateY(-2px);
-          box-shadow: var(--color-shadow-heavy, 0 8px 25px rgba(0, 0, 0, 0.25));
+          box-shadow: var(--shadow-lg);
         }
 
         &:disabled {
@@ -210,20 +213,19 @@
       .stripe-payment-section {
         margin-top: 1.5rem;
         padding: 1.5rem;
-        background: var(--color-surface-secondary, #f9fafb);
-        border-radius: 12px;
-        border: 1px solid var(--color-border-secondary, #e5e7eb);
+        background: var(--surface-secondary);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border-subtle);
       }
     }
   }
 
-  // Payment Status
   .payment-status {
-    background: var(--color-surface-primary, #ffffff);
-    border-radius: 16px;
+    background: var(--surface-primary);
+    border-radius: var(--radius-lg);
     padding: 2rem;
-    box-shadow: var(--color-shadow-light, 0 2px 8px rgba(0, 0, 0, 0.1));
-    border: 1px solid var(--color-border-primary, #e5e7eb);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-default);
 
     .status-header {
       display: flex;
@@ -231,11 +233,11 @@
       align-items: center;
       margin-bottom: 2rem;
       padding-bottom: 1rem;
-      border-bottom: 1px solid var(--color-border-secondary, #e5e7eb);
+      border-bottom: 1px solid var(--border-subtle);
 
       h2 {
         margin: 0;
-        color: var(--color-text-primary, #333333);
+        color: var(--text-primary);
       }
 
       .status-badge {
@@ -246,18 +248,18 @@
         text-transform: uppercase;
 
         &.status-pending {
-          background: var(--color-warning-light, #fff3cd);
-          color: var(--color-warning-dark, #856404);
+          background: var(--color-warning-bg);
+          color: var(--color-warning-dark);
         }
 
         &.status-completed {
-          background: var(--color-success-light, #d4edda);
-          color: var(--color-success-dark, #155724);
+          background: var(--color-success-bg);
+          color: var(--color-success-dark);
         }
 
         &.status-failed {
-          background: var(--color-error-light, #f8d7da);
-          color: var(--color-error-dark, #721c24);
+          background: var(--color-error-bg);
+          color: var(--color-error-dark);
         }
       }
     }
@@ -270,7 +272,7 @@
         justify-content: space-between;
         align-items: center;
         padding: 0.75rem 0;
-        border-bottom: 1px solid var(--color-border-tertiary, #f3f4f6);
+        border-bottom: 1px solid var(--border-subtle);
 
         &:last-child {
           border-bottom: none;
@@ -278,11 +280,11 @@
 
         .label {
           font-weight: 500;
-          color: var(--color-text-secondary, #6b7280);
+          color: var(--text-secondary);
         }
 
         .value {
-          color: var(--color-text-primary, #333333);
+          color: var(--text-primary);
           font-weight: 600;
         }
       }
@@ -294,35 +296,35 @@
 
       .status-icon {
         margin-bottom: 1rem;
-        color: var(--color-primary, #667eea);
+        color: var(--interactive-primary);
       }
 
       h3 {
         margin: 0 0 1rem 0;
-        color: var(--color-text-primary, #333333);
+        color: var(--text-primary);
       }
 
       p {
         margin: 0 0 1.5rem 0;
-        color: var(--color-text-secondary, #6b7280);
+        color: var(--text-secondary);
       }
 
       &.pending {
         .status-icon {
-          color: var(--color-warning, #ff9800);
+          color: var(--color-warning);
         }
 
         .progress-bar {
           width: 100%;
           height: 8px;
-          background: var(--color-border-secondary, #e5e7eb);
-          border-radius: 4px;
+          background: var(--border-subtle);
+          border-radius: var(--radius-xs, 4px);
           overflow: hidden;
 
           .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--color-primary, #667eea), var(--color-secondary, #764ba2));
-            border-radius: 4px;
+            background: linear-gradient(90deg, var(--interactive-primary), var(--color-accent));
+            border-radius: var(--radius-xs, 4px);
             animation: progress 2s ease-in-out infinite;
           }
         }
@@ -330,21 +332,21 @@
 
       &.completed {
         .status-icon {
-          color: var(--color-success, #4caf50);
+          color: var(--color-success);
         }
 
         .success-btn {
           padding: 0.75rem 2rem;
           border: none;
-          border-radius: 8px;
-          background: var(--color-success, #4caf50);
-          color: white;
+          border-radius: var(--radius-md);
+          background: var(--color-success);
+          color: var(--text-on-primary);
           font-weight: 600;
           cursor: pointer;
           transition: all 0.3s ease;
 
           &:hover {
-            background: var(--color-success-dark, #388e3c);
+            background: var(--color-success-dark);
             transform: translateY(-1px);
           }
         }
@@ -352,7 +354,7 @@
 
       &.failed {
         .status-icon {
-          color: var(--color-error, #f44336);
+          color: var(--color-error);
         }
 
         .error-actions {
@@ -364,28 +366,28 @@
           .cancel-btn {
             padding: 0.75rem 1.5rem;
             border: none;
-            border-radius: 8px;
+            border-radius: var(--radius-md);
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
           }
 
           .retry-btn {
-            background: var(--color-primary, #667eea);
-            color: white;
+            background: var(--interactive-primary);
+            color: var(--text-on-primary);
 
             &:hover {
-              background: var(--color-primary-dark, #4a5fd8);
+              background: var(--interactive-primary-hover);
             }
           }
 
           .cancel-btn {
-            background: var(--color-surface-secondary, #f9fafb);
-            color: var(--color-text-primary, #333333);
-            border: 1px solid var(--color-border-primary, #e5e7eb);
+            background: var(--surface-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-default);
 
             &:hover {
-              background: var(--color-surface-hover, #f3f4f6);
+              background: var(--surface-highlight);
             }
           }
         }
@@ -395,13 +397,13 @@
     .payment-actions {
       text-align: center;
       padding-top: 1rem;
-      border-top: 1px solid var(--color-border-secondary, #e5e7eb);
+      border-top: 1px solid var(--border-subtle);
 
       .cancel-btn,
       .retry-btn {
         padding: 0.75rem 1.5rem;
         border: none;
-        border-radius: 8px;
+        border-radius: var(--radius-md);
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s ease;
@@ -409,28 +411,27 @@
       }
 
       .cancel-btn {
-        background: var(--color-surface-secondary, #f9fafb);
-        color: var(--color-text-primary, #333333);
-        border: 1px solid var(--color-border-primary, #e5e7eb);
+        background: var(--surface-secondary);
+        color: var(--text-primary);
+        border: 1px solid var(--border-default);
 
         &:hover {
-          background: var(--color-surface-hover, #f3f4f6);
+          background: var(--surface-highlight);
         }
       }
 
       .retry-btn {
-        background: var(--color-primary, #667eea);
-        color: white;
+        background: var(--interactive-primary);
+        color: var(--text-on-primary);
 
         &:hover {
-          background: var(--color-primary-dark, #4a5fd8);
+          background: var(--interactive-primary-hover);
         }
       }
     }
   }
 }
 
-// Animations
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -455,7 +456,6 @@
   }
 }
 
-// Responsive
 @media (max-width: 768px) {
   .payment-page {
     .payment-header {
@@ -484,13 +484,12 @@
   }
 }
 
-// Stripe Form Styles
 .stripe-form {
   margin-top: 20px;
   padding: 20px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  background: #fafafa;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--surface-secondary);
 }
 
 .card-input-container {
@@ -501,19 +500,19 @@
   display: block;
   margin-bottom: 8px;
   font-weight: 500;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .card-element {
   padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background: var(--color-surface-primary, #ffffff);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-xs, 4px);
+  background: var(--input-bg);
   min-height: 40px;
 }
 
 .card-errors {
-  color: #dc3545;
+  color: var(--color-error);
   font-size: 14px;
   margin-top: 8px;
   min-height: 20px;
@@ -527,14 +526,14 @@
 .stripe-info {
   margin-top: 15px;
   padding: 15px;
-  background: #f8f9fa;
-  border: 1px solid #e9ecef;
-  border-radius: 6px;
+  background: var(--surface-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
   text-align: center;
 }
 
 .stripe-info p {
   margin: 0;
-  color: #6c757d;
+  color: var(--text-secondary);
   font-size: 14px;
 }

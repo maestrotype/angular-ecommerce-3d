@@ -1,58 +1,62 @@
-// Styling the home page to match Figma design
+/* ==========================================================================
+   HOME PAGE — skeleton loading + legacy section hooks
+   Epic D1: semantic tokens only (zero hardcoded colors).
+   ========================================================================== */
+
 .home {
-  padding: 20px;
+  padding: var(--spacing-md);
 
   @media (max-width: 768px) {
-    padding: 10px 0; // Reduce horizontal padding to 0, use vertical only
+    padding: var(--spacing-sm) 0;
   }
 }
 
 .banner {
   text-align: center;
-  padding: 50px;
-  background: #f5f5f5;
+  padding: var(--spacing-2xl);
   position: relative;
-  background: linear-gradient(135deg, #4ecdc4 0%, #ff6b6b 100%);
+  background: var(--hero-bg-gradient);
 
   h1 {
     font-size: 2em;
+    color: var(--hero-text-color);
   }
 
   canvas {
     width: 100%;
     height: 300px;
-    margin: 20px 0;
+    margin: var(--spacing-md) 0;
   }
 
   .shop-now {
-    padding: 12px 24px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
-    backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 8px;
-    color: #1e293b;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: var(--glass-btn-bg);
+    backdrop-filter: var(--hero-backdrop-filter);
+    border: var(--glass-btn-border);
+    border-radius: var(--radius-md);
+    color: var(--glass-btn-color);
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    box-shadow: var(--glass-btn-shadow);
 
     &:hover {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%);
-      border-color: rgba(255, 255, 255, 0.4);
+      background: var(--glass-btn-hover-bg);
+      border: var(--glass-btn-hover-border);
       transform: translateY(-2px);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+      box-shadow: var(--glass-btn-hover-shadow);
     }
   }
 }
 
 .best-sellers {
-  margin: 20px 0;
+  margin: var(--spacing-md) 0;
 }
 
 .product-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  gap: var(--spacing-md);
 }
 
 .product-card {
@@ -65,15 +69,21 @@
 
 .special-offer {
   text-align: center;
-  margin: 20px 0;
+  margin: var(--spacing-md) 0;
 }
 
 .special-offer .shop-now {
-  padding: 10px 20px;
-  background: #ff6347;
-  color: white;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--about-button-bg);
+  color: var(--text-on-primary);
   border: none;
   cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: var(--about-button-hover);
+  }
 }
 
 @keyframes fadeIn {
@@ -98,11 +108,18 @@
   }
 }
 
-// Skeleton loading styles for better user experience
+// Skeleton loading — surfaces follow active theme via semantic tokens
+$skeleton-shimmer: linear-gradient(
+  90deg,
+  var(--surface-secondary) 25%,
+  var(--surface-tertiary) 50%,
+  var(--surface-secondary) 75%
+);
+
 .skeleton-container {
   padding: 0;
   min-height: 100vh;
-  background: var(--bg-primary, #ffffff);
+  background: var(--surface-page);
 }
 
 .skeleton-section {
@@ -112,16 +129,15 @@
   overflow: hidden;
 
   &.hero-skeleton {
-    background: linear-gradient(135deg, var(--bg-primary, #ffffff) 0%, var(--bg-secondary, #f8f9fa) 100%);
+    background: linear-gradient(135deg, var(--surface-page) 0%, var(--surface-secondary) 100%);
   }
 
   &.content-skeleton {
-    background: var(--bg-primary, #ffffff);
+    background: var(--surface-page);
     padding: 4rem 0;
   }
 }
 
-// Hero section skeleton styles
 .skeleton-hero {
   display: flex;
   align-items: center;
@@ -136,44 +152,44 @@
     max-width: 500px;
     margin-right: 2rem;
 
+    .skeleton-badge,
+    .skeleton-hero-title,
+    .skeleton-hero-subtitle,
+    .skeleton-hero-description,
+    .skeleton-cta-button {
+      background: $skeleton-shimmer;
+      background-size: 200% 100%;
+      animation: skeleton-shimmer 2s infinite;
+    }
+
     .skeleton-badge {
       width: 80px;
       height: 24px;
-      background: linear-gradient(90deg, var(--skeleton-bg, #f0f0f0) 25%, var(--skeleton-bg-dark, #e0e0e0) 50%, var(--skeleton-bg, #f0f0f0) 75%);
-      background-size: 200% 100%;
       border-radius: 12px;
       margin-bottom: 1rem;
-      animation: skeleton-shimmer 2s infinite;
     }
 
     .skeleton-hero-title {
       width: 100%;
       height: 48px;
-      background: linear-gradient(90deg, var(--skeleton-bg, #f0f0f0) 25%, var(--skeleton-bg-dark, #e0e0e0) 50%, var(--skeleton-bg, #f0f0f0) 75%);
-      background-size: 200% 100%;
-      border-radius: 8px;
+      border-radius: var(--radius-md);
       margin-bottom: 1rem;
-      animation: skeleton-shimmer 2s infinite;
     }
 
     .skeleton-hero-subtitle {
       width: 80%;
       height: 32px;
-      background: linear-gradient(90deg, var(--skeleton-bg, #f0f0f0) 25%, var(--skeleton-bg-dark, #e0e0e0) 50%, var(--skeleton-bg, #f0f0f0) 75%);
-      background-size: 200% 100%;
-      border-radius: 6px;
+      border-radius: var(--radius-sm);
       margin-bottom: 1.5rem;
-      animation: skeleton-shimmer 2s infinite 0.2s;
+      animation-delay: 0.2s;
     }
 
     .skeleton-hero-description {
       width: 90%;
       height: 20px;
-      background: linear-gradient(90deg, var(--skeleton-bg, #f0f0f0) 25%, var(--skeleton-bg-dark, #e0e0e0) 50%, var(--skeleton-bg, #f0f0f0) 75%);
-      background-size: 200% 100%;
-      border-radius: 4px;
+      border-radius: var(--radius-xs, 4px);
       margin-bottom: 0.5rem;
-      animation: skeleton-shimmer 2s infinite 0.4s;
+      animation-delay: 0.4s;
 
       &:nth-child(2) {
         width: 70%;
@@ -184,11 +200,9 @@
     .skeleton-cta-button {
       width: 160px;
       height: 48px;
-      background: linear-gradient(90deg, var(--skeleton-bg, #f0f0f0) 25%, var(--skeleton-bg-dark, #e0e0e0) 50%, var(--skeleton-bg, #f0f0f0) 75%);
-      background-size: 200% 100%;
       border-radius: 24px;
       margin-top: 2rem;
-      animation: skeleton-shimmer 2s infinite 0.8s;
+      animation-delay: 0.8s;
     }
   }
 
@@ -203,16 +217,20 @@
     .skeleton-3d-model {
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, var(--skeleton-bg, #f0f0f0) 25%, var(--skeleton-bg-dark, #e0e0e0) 50%, var(--skeleton-bg, #f0f0f0) 75%);
+      background: linear-gradient(
+        135deg,
+        var(--surface-secondary) 25%,
+        var(--surface-tertiary) 50%,
+        var(--surface-secondary) 75%
+      );
       background-size: 200% 200%;
-      border-radius: 16px;
+      border-radius: var(--radius-lg);
       animation: skeleton-shimmer 2.5s infinite 1s;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--shadow-md);
     }
   }
 }
 
-// Content section skeleton styles
 .skeleton-content {
   max-width: 1200px;
   margin: 0 auto;
@@ -222,24 +240,27 @@
     text-align: center;
     margin-bottom: 3rem;
 
+    .skeleton-section-title,
+    .skeleton-section-subtitle {
+      background: $skeleton-shimmer;
+      background-size: 200% 100%;
+      animation: skeleton-shimmer 2s infinite;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
     .skeleton-section-title {
       width: 60%;
       height: 40px;
-      background: linear-gradient(90deg, var(--skeleton-bg, #f0f0f0) 25%, var(--skeleton-bg-dark, #e0e0e0) 50%, var(--skeleton-bg, #f0f0f0) 75%);
-      background-size: 200% 100%;
-      border-radius: 8px;
-      margin: 0 auto 1rem;
-      animation: skeleton-shimmer 2s infinite;
+      border-radius: var(--radius-md);
+      margin-bottom: 1rem;
     }
 
     .skeleton-section-subtitle {
       width: 40%;
       height: 24px;
-      background: linear-gradient(90deg, var(--skeleton-bg, #f0f0f0) 25%, var(--skeleton-bg-dark, #e0e0e0) 50%, var(--skeleton-bg, #f0f0f0) 75%);
-      background-size: 200% 100%;
-      border-radius: 6px;
-      margin: 0 auto;
-      animation: skeleton-shimmer 2s infinite 0.3s;
+      border-radius: var(--radius-sm);
+      animation-delay: 0.3s;
     }
   }
 
@@ -251,9 +272,9 @@
 
     .skeleton-text-line {
       height: 16px;
-      background: linear-gradient(90deg, var(--skeleton-bg, #f0f0f0) 25%, var(--skeleton-bg-dark, #e0e0e0) 50%, var(--skeleton-bg, #f0f0f0) 75%);
+      background: $skeleton-shimmer;
       background-size: 200% 100%;
-      border-radius: 4px;
+      border-radius: var(--radius-xs, 4px);
       margin-bottom: 0.75rem;
       animation: skeleton-shimmer 2s infinite;
 
@@ -280,7 +301,7 @@
     .skeleton-button {
       width: 140px;
       height: 44px;
-      background: linear-gradient(90deg, var(--skeleton-bg, #f0f0f0) 25%, var(--skeleton-bg-dark, #e0e0e0) 50%, var(--skeleton-bg, #f0f0f0) 75%);
+      background: $skeleton-shimmer;
       background-size: 200% 100%;
       border-radius: 22px;
       margin: 0 auto;
@@ -289,7 +310,6 @@
   }
 }
 
-// Enhanced skeleton animation with shimmer effect
 @keyframes skeleton-shimmer {
   0% {
     background-position: -200% 0;
@@ -300,24 +320,21 @@
   }
 }
 
-// Staggered animation for multiple skeleton elements
 .skeleton-section {
-
-  &:nth-child(1) .skeleton-hero-content>*,
-  &:nth-child(1) .skeleton-content-header>* {
+  &:nth-child(1) .skeleton-hero-content > *,
+  &:nth-child(1) .skeleton-content-header > * {
     animation-delay: 0s;
   }
 
-  &:nth-child(2) .skeleton-content-header>* {
+  &:nth-child(2) .skeleton-content-header > * {
     animation-delay: 0.2s;
   }
 
-  &:nth-child(3) .skeleton-content-header>* {
+  &:nth-child(3) .skeleton-content-header > * {
     animation-delay: 0.4s;
   }
 }
 
-// Responsive design for skeleton loading
 @media (max-width: 768px) {
   .skeleton-hero {
     flex-direction: column;
@@ -372,60 +389,5 @@
       grid-template-columns: 1fr;
       gap: 1.5rem;
     }
-  }
-}
-
-// Dark theme support for skeleton loading
-[data-theme="dark"] {
-  .skeleton-section {
-    &.hero-skeleton {
-      background: linear-gradient(135deg, var(--bg-primary, #1a1a1a) 0%, var(--bg-secondary, #2d2d2d) 100%);
-    }
-
-    &.content-skeleton {
-      background: var(--bg-primary, #1a1a1a);
-    }
-  }
-
-  .skeleton-badge,
-  .skeleton-hero-title,
-  .skeleton-hero-subtitle,
-  .skeleton-hero-description,
-  .skeleton-cta-button,
-  .skeleton-3d-model,
-  .skeleton-section-title,
-  .skeleton-section-subtitle,
-  .skeleton-text-line,
-  .skeleton-button {
-    background: linear-gradient(90deg, var(--skeleton-bg-dark, #2d2d2d) 25%, var(--skeleton-bg, #3a3a3a) 50%, var(--skeleton-bg-dark, #2d2d2d) 75%);
-    background-size: 200% 100%;
-  }
-}
-
-// Glass theme support for skeleton loading
-[data-theme="glass"] {
-  .skeleton-section {
-    &.hero-skeleton {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-    }
-
-    &.content-skeleton {
-      background: rgba(255, 255, 255, 0.05);
-    }
-  }
-
-  .skeleton-badge,
-  .skeleton-hero-title,
-  .skeleton-hero-subtitle,
-  .skeleton-hero-description,
-  .skeleton-cta-button,
-  .skeleton-3d-model,
-  .skeleton-section-title,
-  .skeleton-section-subtitle,
-  .skeleton-text-line,
-  .skeleton-button {
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.1) 75%);
-    background-size: 200% 100%;
-    backdrop-filter: blur(10px);
   }
 }
