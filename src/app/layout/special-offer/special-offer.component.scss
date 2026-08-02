@@ -59,7 +59,7 @@
             position: absolute;
             top: var(--spacing-md);
             left: var(--spacing-md);
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            background: linear-gradient(135deg, var(--color-warning) 0%, var(--color-warning-dark) 100%);
             color: var(--color-text-primary);
             padding: var(--spacing-md);
             border-radius: var(--radius-lg, 12px);

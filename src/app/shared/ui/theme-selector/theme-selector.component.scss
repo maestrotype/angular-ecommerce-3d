@@ -104,7 +104,7 @@
       -webkit-backdrop-filter: blur(var(--preview-blur));
       border-radius: 4px;
       padding: 4px;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       display: flex;
       align-items: flex-end;
       
@@ -121,11 +121,11 @@
 // Preview Hint Icon
 .preview-hint {
   font-size: 18px;
-  color: #666;
+  color: var(--text-muted);
   transition: color 0.2s ease;
-  
+
   .theme-option:hover & {
-    color: #999;
+    color: var(--text-secondary);
   }
 }
 

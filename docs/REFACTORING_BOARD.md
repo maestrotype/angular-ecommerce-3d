@@ -15,11 +15,11 @@
 
 | # | Метрика | Baseline (2026-07-28) | Сейчас | Цель | Прогресс |
 |---|---------|----------------------|--------|------|----------|
-| M1 | Hardcoded hex в SCSS (вне tokens/themes) | 1 336 в 68 файлах | **515** в 50 файлах | 0 | ▓▓▓▓▓▓░░░░ ~61% |
+| M1 | Hardcoded hex в SCSS (вне tokens/themes) | 1 336 в 68 файлах | **275** в 30 файлах | 0 | ▓▓▓▓▓▓▓▓░░ ~79% |
 | M2 | Использований `--admin-*` | 2 335 в 43 файлах | **0 non-layout** (C6; 5 layout tokens only) | 0 (кроме layout-токенов) | ██████████ 100% |
 | M3 | `!important` | 91 в 12 файлах | **~52** в 11 файлах (hero −20) | 0 | ▓▓▓▓▓░░░░░ ~43% |
 | M4 | `::ng-deep` | 40 в 12 файлах | **25** (B3: removed component Material `::ng-deep` dumps) | 0 | ▓▓▓▓░░░░░░ 38% |
-| M5 | Компоненты полностью на semantic-токенах (без hex) | 3 / 86 | **20 / 86** | 86 / 86 | ▓▓░░░░░░░░ 23% |
+| M5 | Компоненты полностью на semantic-токенах (без hex) | 3 / 86 | **40 / 86** | 86 / 86 | ▓▓▓▓░░░░░░ 47% |
 | M6 | Legacy `_theme-variables.scss` | 722 строки, подключён | **удалён** | удалён | ██████████ 100% |
 | M7 | Orphaned `src/styles.scss` | 499 строк логики | **удалён** | удалён | ██████████ 100% |
 | M8 | Централизованный `_material-overrides.scss` | нет; overrides в 24 файлах | **Epic B 4/4** + admin `global/*` (C5); C ✅ | 1 файл + admin global modules | ▓▓▓▓▓▓▓▓▓░ 95% |
@@ -101,7 +101,7 @@ graph LR
 | A | Фундамент токенов | ✅ **Готово** | 6/6 | M6, M7 |
 | B | Централизация Material overrides | ✅ Done | 4/4 | M8 |
 | C | Admin-унификация (ADR-011) | ✅ **Готово** | 6/6 | M2 |
-| D | Миграция компонентов (ADR-006) | 🔄 In Progress | 5/10 | M1, M5 |
+| D | Миграция компонентов (ADR-006) | 🔄 In Progress | 6/10 | M1, M5 |
 | E | Финальная зачистка | ⏳ Ожидает D | 0/4 | M3, M4 |
 | F | Theme Engine v2 (ADR-004, ADR-012) | 💡 План | 0/5 | — |
 | G | Premium UI, анимации, полировка | 💡 План | — | — |
@@ -153,7 +153,7 @@ graph LR
 
 **Цель**: 86/86 компонентов потребляют только semantic-токены. Порядок: сначала самые «грязные» storefront-страницы, затем admin.
 
-**Прогресс**: полностью чистых 20/86 (+product-detail, +product-info, +product-tabs, +product-images, +product-viewer; `three-d-viewer` уже был 0 hex), частично ~17.
+**Прогресс**: полностью чистых 40/86 — **storefront `src/app` = 0 hex** (D6); остаток M1 только в admin (~275 hex / 30 файлов).
 
 | ID | Задача (пакет) | Компоненты (hex baseline) | Статус |
 |----|----------------|---------------------------|--------|
@@ -162,7 +162,7 @@ graph LR
 | D3 | Рекомендации | `bought-together` (61), `similar-products` (54) | ✅ (2026-07-31) |
 | D4 | Layout | `header` (51), `footer`, `hero` (+20 `!important`), `hero-glass`, `best-sellers` | ✅ (2026-07-31) |
 | D5 | Product detail + 3D viewer | `product-detail/*`, `product-viewer`, `three-d-viewer` | ✅ (2026-08-02) |
-| D6 | Остальные storefront-страницы и shared-компоненты | по остаточному списку M1 | 📋 |
+| D6 | Остальные storefront-страницы и shared-компоненты | по остаточному списку M1 | ✅ (2026-08-02) |
 | D7 | Admin: layout + blocks | `admin-layout`, `sidenav`, `admin-table`, `list-container`, `stat-card` | 📋 |
 | D8 | Admin: списки | `product-list`, `order-list`, `user-list`, `category-list`, `message-list`, `section-list` | 📋 |
 | D9 | Admin: формы и страницы | `product-form`, `seo`, `settings`, `dashboard` и остальные | 📋 |
@@ -236,6 +236,7 @@ graph LR
 | 2026-07-31 | **D3 (Board)**: Migrated `bought-together` + `similar-products` to semantic tokens — 0 hex; removed `:host-context`/`[data-theme]` dumps; uses `--bought-together-*`/`--similar-products-*` from theme layer; `npm run build` passes. M5 = 10/86; M1 = 761. |
 | 2026-07-31 | **D4 (Board)**: Migrated layout components (`header`, `footer`, `hero`, `hero-glass`, `best-sellers`) to semantic tokens — 0 hex; hero variants refactored to CSS-var overrides (−20 `!important`); footer/best-sellers theme dumps removed. M5 = 15/86; M1 ≈ 614; M3 ≈ 52. |
 | 2026-08-02 | **D5 (Board)**: Migrated product detail stack (`product-detail`, `product-info`, `product-tabs`, `product-images`) + fullscreen `product-viewer` to semantic tokens — 0 hex; removed dark `:host-context` dumps; glass PDP layout kept on `--product-detail-*` / semantic tokens; `three-d-viewer` already clean; `npm run build` passes. M5 = 20/86; M1 = 515. |
+| 2026-08-02 | **D6 (Board)**: Migrated all remaining storefront components (20 files: pages, shared, modals, layout leftovers) — **0 hex in `src/app`**; removed theme-class modifiers and `:host-context` dumps; `custom-dropdown`/`auth-modal` glass refinements on semantic tokens; `npm run build` passes. M5 = 40/86; M1 = 275 (admin-only remainder). |
 
 ---
 

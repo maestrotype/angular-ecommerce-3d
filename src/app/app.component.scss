@@ -48,7 +48,7 @@ main {
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--footer-text, #1a1a1a);
+            color: var(--footer-text);
             cursor: pointer;
             transition: all 0.2s ease;
 
@@ -65,8 +65,8 @@ main {
                 position: absolute;
                 top: 0;
                 right: 0;
-                background: var(--color-primary, #6366f1);
-                color: white;
+                background: var(--interactive-primary);
+                color: var(--text-on-primary);
                 border-radius: 50%;
                 padding: 2px 6px;
                 font-size: 0.7rem;
@@ -76,8 +76,8 @@ main {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                border: 2px solid white;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                border: 2px solid var(--surface-primary);
+                box-shadow: var(--shadow-sm);
                 z-index: 2;
             }
         }

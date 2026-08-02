@@ -42,8 +42,8 @@
 
         &:hover {
             transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            border-color: #FF6B6B;
+            box-shadow: var(--shadow-lg);
+            border-color: var(--interactive-primary);
             background: var(--categories-card-hover);
         }
 

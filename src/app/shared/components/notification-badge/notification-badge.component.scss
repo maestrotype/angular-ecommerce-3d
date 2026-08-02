@@ -58,8 +58,8 @@
     isolation: isolate;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    -webkit-mask-image: radial-gradient(closest-side, #000 99%, transparent 100%);
-    mask-image: radial-gradient(closest-side, #000 99%, transparent 100%);
+    -webkit-mask-image: radial-gradient(closest-side, black 99%, transparent 100%);
+    mask-image: radial-gradient(closest-side, black 99%, transparent 100%);
     background-color: var(--interactive-primary);
     background-image: none;
     color: var(--text-on-primary);

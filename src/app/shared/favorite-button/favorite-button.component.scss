@@ -14,7 +14,7 @@
   overflow: hidden;
   box-shadow: var(--glass-btn-shadow);
   color: var(--glass-btn-color);
-  
+
   &::before {
     content: '';
     position: absolute;
@@ -22,96 +22,78 @@
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    background: linear-gradient(90deg, transparent, var(--glass-highlight), transparent);
     transition: left 0.5s;
   }
-  
+
   &:hover {
     background: var(--glass-btn-hover-bg);
     border: var(--glass-btn-hover-border);
     transform: translateY(-2px);
     box-shadow: var(--glass-btn-hover-shadow);
-    
+
     &::before {
       left: 100%;
     }
   }
-  
+
   &:active {
     transform: translateY(0);
     box-shadow: var(--glass-btn-shadow);
   }
-  
+
   &:disabled {
     cursor: not-allowed;
     opacity: 0.6;
     transform: none;
   }
-  
-  // Size variants
+
   &--small {
     padding: 6px 8px;
-    
-    .favorite-button__icon {
-      width: 16px;
-      height: 16px;
-    }
-    
+
+    .favorite-button__icon,
     .favorite-button__heart {
       width: 16px;
       height: 16px;
     }
   }
-  
+
   &--medium {
     padding: 8px 12px;
-    
-    .favorite-button__icon {
-      width: 20px;
-      height: 20px;
-    }
-    
+
+    .favorite-button__icon,
     .favorite-button__heart {
       width: 20px;
       height: 20px;
     }
   }
-  
+
   &--large {
     padding: 12px 16px;
-    
-    .favorite-button__icon {
-      width: 24px;
-      height: 24px;
-    }
-    
+
+    .favorite-button__icon,
     .favorite-button__heart {
       width: 24px;
       height: 24px;
     }
   }
-  
-  // Active state (favorited)
+
   &--active {
-    // background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
-    // border-color: #ff6b6b;
-    color: white;
-    
+    color: var(--text-on-primary);
+
     .favorite-button__heart {
-      fill: white;
-      stroke: white;
+      fill: var(--text-on-primary);
+      stroke: var(--text-on-primary);
     }
-    
+
     &:hover {
-      // background: linear-gradient(135deg, #ff5252, #ff7676);
       transform: translateY(-2px) scale(1.05);
     }
   }
-  
-  // Loading state
+
   &--loading {
     pointer-events: none;
-    
+
     .favorite-button__icon {
       opacity: 0.5;
     }
@@ -126,25 +108,25 @@
 }
 
 .favorite-button__heart {
-  stroke: #666;
+  stroke: var(--text-secondary);
   stroke-width: 2;
   fill: transparent;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  
+
   &--filled {
-    fill: #ff6b6b;
-    stroke: #ff6b6b;
+    fill: var(--interactive-danger);
+    stroke: var(--interactive-danger);
   }
 }
 
 .favorite-button__text {
   font-size: 14px;
   font-weight: 500;
-  color: #333;
+  color: var(--text-primary);
   transition: color 0.3s ease;
-  
+
   .favorite-button--active & {
-    color: white;
+    color: var(--text-on-primary);
   }
 }
 
@@ -162,45 +144,51 @@
   width: 16px;
   height: 16px;
   border: 2px solid transparent;
-  border-top: 2px solid #ff6b6b;
+  border-top: 2px solid var(--interactive-danger);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
 
-// Pulse animation for active state
 .favorite-button--active {
   animation: pulse 0.6s ease-in-out;
 }
 
-// Keyframes
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
-// Responsive design
 @media (max-width: 768px) {
   .favorite-button {
     padding: 6px 10px;
-    
-    .favorite-button__icon {
-      width: 18px;
-      height: 18px;
-    }
-    
+
+    .favorite-button__icon,
     .favorite-button__heart {
       width: 18px;
       height: 18px;
     }
-    
+
     .favorite-button__text {
       font-size: 12px;
     }
   }
-} 
+}

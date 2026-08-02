@@ -58,7 +58,7 @@
     .about-text {
         .badge {
             display: inline-block;
-            color: #FFF;
+            color: var(--text-on-primary);
             border-radius: 20px;
             font-size: 5rem;
             font-weight: 600;
@@ -80,7 +80,7 @@
             margin-bottom: 1.5rem;
             position: relative;
             .highlight {
-                color: #ef4444;
+                color: var(--interactive-danger);
             }
         }
 
@@ -151,7 +151,7 @@
                         right: -1rem;
                         width: 2rem;
                         height: 2rem;
-                        background: #fbbf24;
+                        background: var(--color-warning);
                         opacity: 0.8;
                         animation: pulse 2s infinite;
                     }
@@ -161,7 +161,7 @@
                         left: -1.5rem;
                         width: 3rem;
                         height: 3rem;
-                        background: #f472b6;
+                        background: var(--color-accent, var(--interactive-primary));
                         opacity: 0.6;
                         animation: bounce 2s infinite;
                     }
@@ -171,7 +171,7 @@
                         right: -2rem;
                         width: 1rem;
                         height: 1rem;
-                        background: #60a5fa;
+                        background: var(--interactive-primary);
                         opacity: 0.7;
                         animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
                     }
@@ -195,7 +195,7 @@
             right: 2.5rem;
             width: 8rem;
             height: 8rem;
-            background: linear-gradient(135deg, #f472b6, #a855f7);
+            background: linear-gradient(135deg, var(--color-accent, var(--interactive-primary)), var(--interactive-primary));
         }
 
         &.bg-decoration-2 {
@@ -203,7 +203,7 @@
             left: 2.5rem;
             width: 10rem;
             height: 10rem;
-            background: linear-gradient(135deg, #60a5fa, #06b6d4);
+            background: linear-gradient(135deg, var(--interactive-primary), var(--color-info, var(--interactive-primary)));
         }
     }
 }

@@ -10,37 +10,36 @@ form {
 
     label {
       font-weight: 600;
-      color: #334155;
+      color: var(--text-primary);
       font-size: 0.875rem;
     }
 
     input,
     textarea {
-      background: rgba(255,255,255,0.9);
-      border: 1px solid rgba(0,0,0,0.08);
-      border-radius: 12px;
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
       padding: 1rem 1.5rem;
       font-size: 1rem;
-      color: #334155;
+      color: var(--text-primary);
       transition: all 0.3s ease;
       outline: none;
       width: 100%;
       box-sizing: border-box;
 
       &:focus {
-        outline: none;
-        border-color: #6366f1;
-        box-shadow: 0 0 0 3px rgba(99,102,241,0.08);
-        background: var(--color-surface-primary, #ffffff);
+        border-color: var(--interactive-primary);
+        box-shadow: 0 0 0 3px rgba(var(--interactive-primary-rgb), 0.08);
+        background: var(--surface-primary);
       }
 
       &::placeholder {
-        color: #999;
+        color: var(--text-muted);
       }
 
       &.invalid {
-        border-color: #ef4444;
-        background: rgba(239, 68, 68, 0.05);
+        border-color: var(--interactive-danger);
+        background: var(--color-error-bg);
       }
     }
 
@@ -51,21 +50,21 @@ form {
     }
 
     .error-message {
-      color: #ef4444;
+      color: var(--interactive-danger);
       font-size: 0.75rem;
       margin-top: 0.25rem;
     }
   }
 
   .cta-button-glass {
-    background: rgba(255,255,255,0.25);
-    border: 1.5px solid rgba(255,255,255,0.5);
-    color: #334155;
+    background: var(--glass-btn-bg);
+    border: var(--glass-btn-border);
+    color: var(--glass-btn-color);
     padding: 1rem 2.5rem;
     font-size: 1.1rem;
     font-weight: 700;
-    border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(51,65,85,0.10), 0 1.5px 8px rgba(0,0,0,0.08);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--glass-btn-shadow);
     backdrop-filter: blur(12px) saturate(180%);
     transition: all 0.3s;
     text-transform: uppercase;
@@ -77,11 +76,10 @@ form {
     letter-spacing: 0.5px;
 
     &:hover:not(:disabled) {
-      background: rgba(99,102,241,0.10);
-      color: #6366f1;
-      box-shadow: 0 4px 16px rgba(99,102,241,0.10);
-      border-color: #b3bcf6;
-      filter: none;
+      background: var(--glass-btn-hover-bg);
+      color: var(--interactive-primary);
+      box-shadow: var(--glass-btn-hover-shadow);
+      border: var(--glass-btn-hover-border);
       transform: translateY(-1px) scale(1.01);
     }
 
@@ -116,4 +114,4 @@ form {
       text-align: center;
     }
   }
-} 
+}
