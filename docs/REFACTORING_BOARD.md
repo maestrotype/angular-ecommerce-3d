@@ -15,11 +15,11 @@
 
 | # | Метрика | Baseline (2026-07-28) | Сейчас | Цель | Прогресс |
 |---|---------|----------------------|--------|------|----------|
-| M1 | Hardcoded hex в SCSS (вне tokens/themes) | 1 336 в 68 файлах | **761** в 60 файлах | 0 | ▓▓▓▓░░░░░░ ~43% |
+| M1 | Hardcoded hex в SCSS (вне tokens/themes) | 1 336 в 68 файлах | **~614** в 55 файлах | 0 | ▓▓▓▓▓░░░░░ ~54% |
 | M2 | Использований `--admin-*` | 2 335 в 43 файлах | **0 non-layout** (C6; 5 layout tokens only) | 0 (кроме layout-токенов) | ██████████ 100% |
-| M3 | `!important` | 91 в 12 файлах | **72** в 12 файлах (бан на *новые*; C5 cleared admin-global; residual: hero 20, `_admin-dark` 14, sidenav 10…) | 0 | ▓▓░░░░░░░░ 21% |
+| M3 | `!important` | 91 в 12 файлах | **~52** в 11 файлах (hero −20) | 0 | ▓▓▓▓▓░░░░░ ~43% |
 | M4 | `::ng-deep` | 40 в 12 файлах | **25** (B3: removed component Material `::ng-deep` dumps) | 0 | ▓▓▓▓░░░░░░ 38% |
-| M5 | Компоненты полностью на semantic-токенах (без hex) | 3 / 86 | **10 / 86** | 86 / 86 | ▓▓░░░░░░░░ 12% |
+| M5 | Компоненты полностью на semantic-токенах (без hex) | 3 / 86 | **15 / 86** | 86 / 86 | ▓▓░░░░░░░░ 17% |
 | M6 | Legacy `_theme-variables.scss` | 722 строки, подключён | **удалён** | удалён | ██████████ 100% |
 | M7 | Orphaned `src/styles.scss` | 499 строк логики | **удалён** | удалён | ██████████ 100% |
 | M8 | Централизованный `_material-overrides.scss` | нет; overrides в 24 файлах | **Epic B 4/4** + admin `global/*` (C5); C ✅ | 1 файл + admin global modules | ▓▓▓▓▓▓▓▓▓░ 95% |
@@ -101,7 +101,7 @@ graph LR
 | A | Фундамент токенов | ✅ **Готово** | 6/6 | M6, M7 |
 | B | Централизация Material overrides | ✅ Done | 4/4 | M8 |
 | C | Admin-унификация (ADR-011) | ✅ **Готово** | 6/6 | M2 |
-| D | Миграция компонентов (ADR-006) | 🔄 In Progress | 3/10 | M1, M5 |
+| D | Миграция компонентов (ADR-006) | 🔄 In Progress | 4/10 | M1, M5 |
 | E | Финальная зачистка | ⏳ Ожидает D | 0/4 | M3, M4 |
 | F | Theme Engine v2 (ADR-004, ADR-012) | 💡 План | 0/5 | — |
 | G | Premium UI, анимации, полировка | 💡 План | — | — |
@@ -153,14 +153,14 @@ graph LR
 
 **Цель**: 86/86 компонентов потребляют только semantic-токены. Порядок: сначала самые «грязные» storefront-страницы, затем admin.
 
-**Прогресс**: полностью чистых 10/86 (+bought-together, +similar-products), частично ~22.
+**Прогресс**: полностью чистых 15/86 (+header, +footer, +hero, +hero-glass, +best-sellers), частично ~17.
 
 | ID | Задача (пакет) | Компоненты (hex baseline) | Статус |
 |----|----------------|---------------------------|--------|
 | D1 | Shop + Home | `shop` (91), `home` (45) | ✅ (2026-07-31) |
 | D2 | Checkout-поток | `payment` (74), `checkout` (56), `order-details-dialog` (52) | ✅ (2026-07-31) |
 | D3 | Рекомендации | `bought-together` (61), `similar-products` (54) | ✅ (2026-07-31) |
-| D4 | Layout | `header` (51), `footer`, `hero` (+20 `!important`), `hero-glass`, `best-sellers` | 📋 |
+| D4 | Layout | `header` (51), `footer`, `hero` (+20 `!important`), `hero-glass`, `best-sellers` | ✅ (2026-07-31) |
 | D5 | Product detail + 3D viewer | `product-detail/*`, `product-viewer`, `three-d-viewer` | 📋 |
 | D6 | Остальные storefront-страницы и shared-компоненты | по остаточному списку M1 | 📋 |
 | D7 | Admin: layout + blocks | `admin-layout`, `sidenav`, `admin-table`, `list-container`, `stat-card` | 📋 |
@@ -234,6 +234,7 @@ graph LR
 | 2026-07-31 | **D1 (Board)**: Migrated `shop` + `home` to semantic tokens — 0 hex, removed `:host-context` theme dumps; skeleton uses `--surface-*`; `npm run build` passes. M5 = 5/86; M1 = 1 030. |
 | 2026-07-31 | **D2 (Board)**: Migrated `payment`, `checkout`, `order-details-dialog` to semantic tokens — 0 hex; removed theme-class modifiers + broken `[data-theme]` blocks; `npm run build` passes. M5 = 8/86; M1 = 853. |
 | 2026-07-31 | **D3 (Board)**: Migrated `bought-together` + `similar-products` to semantic tokens — 0 hex; removed `:host-context`/`[data-theme]` dumps; uses `--bought-together-*`/`--similar-products-*` from theme layer; `npm run build` passes. M5 = 10/86; M1 = 761. |
+| 2026-07-31 | **D4 (Board)**: Migrated layout components (`header`, `footer`, `hero`, `hero-glass`, `best-sellers`) to semantic tokens — 0 hex; hero variants refactored to CSS-var overrides (−20 `!important`); footer/best-sellers theme dumps removed. M5 = 15/86; M1 ≈ 614; M3 ≈ 52. |
 
 ---
 
