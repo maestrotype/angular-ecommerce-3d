@@ -1,3 +1,8 @@
+/* ==========================================================================
+   PRODUCT TABS
+   Epic D5: theme --product-tabs-* tokens only.
+   ========================================================================== */
+
 .product-tabs {
   background: var(--product-tabs-bg);
   border: var(--product-tabs-border);
@@ -15,9 +20,9 @@
 
     .tab-btn {
       flex: 1;
-      background: var(--product-tabs-nav-bg, #f8f9fa);
-      border: var(--product-tabs-nav-border, 1px solid #e5e7eb);
-      color: var(--product-tabs-text-color, #6e757d);
+      background: var(--product-tabs-nav-bg);
+      border: var(--product-tabs-nav-border);
+      color: var(--product-tabs-text-color);
       padding: 0.75rem 1.5rem;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -42,7 +47,7 @@
         left: -100%;
         width: 100%;
         height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        background: linear-gradient(90deg, transparent, var(--glass-highlight), transparent);
         transition: left 0.5s;
       }
 
@@ -54,19 +59,19 @@
         right: 0;
         width: 0;
         height: 2px;
-        background: var(--product-tabs-active-border, #007bff);
+        background: var(--product-tabs-active-border);
         transition: width 0.3s ease;
         margin: 0 auto;
       }
 
       &:hover {
-        background: var(--product-tabs-hover-bg, rgba(0, 0, 0, .05));
-        color: var(--product-tabs-hover-color, #495057);
+        background: var(--product-tabs-hover-bg);
+        color: var(--product-tabs-hover-color);
       }
 
       &.active {
-        background: var(--product-tabs-active-bg, #ffffff);
-        color: var(--product-tabs-active-color, #333);
+        background: var(--product-tabs-active-bg);
+        color: var(--product-tabs-active-color);
         font-weight: 600;
         transform: none;
         box-shadow: none;
@@ -77,10 +82,10 @@
 
         &::after {
           width: 100%;
-          background: var(--product-tabs-active-border, #007bff);
+          background: var(--product-tabs-active-border);
         }
       }
-      
+
       &:hover:not(.active)::after {
         content: '';
         position: absolute;
@@ -88,15 +93,12 @@
         left: 50%;
         width: 0;
         height: 2px;
-        background: var(--product-tabs-active-border, #007bff);
+        background: var(--product-tabs-active-border);
         transition: all 0.3s ease;
         transform: translateX(-50%);
-      }
-
-      &:hover:not(.active)::after {
         width: 100%;
       }
-      
+
       @media (max-width: 768px) {
         padding: 0.6rem 0.75rem;
         font-size: 0.8rem;
@@ -106,17 +108,17 @@
 
   .tabs-content {
     padding: 1.25rem;
-    background: var(--product-tabs-bg, var(--color-surface-primary, #1e293b));
+    background: var(--product-tabs-bg);
     border-radius: 0 0 var(--product-tabs-radius) var(--product-tabs-radius);
-    color: var(--product-tabs-content-color, #333);
+    color: var(--product-tabs-content-color);
 
     .tab-panel {
       min-height: 100px;
     }
-    
+
     @media (max-width: 768px) {
       padding: 1rem;
-      
+
       .tab-panel {
         min-height: 80px;
       }
@@ -126,7 +128,7 @@
 
 .description-content {
   p {
-    color: var(--product-tabs-content-color, #666);
+    color: var(--product-tabs-content-color);
     line-height: 1.6;
     font-size: 1rem;
     margin-bottom: 1.5rem;
@@ -134,7 +136,7 @@
 
   .features {
     h3 {
-      color: var(--product-tabs-content-color, #333);
+      color: var(--product-tabs-content-color);
       margin-bottom: 1rem;
       font-size: 1.1rem;
     }
@@ -144,9 +146,9 @@
       padding: 0;
 
       li {
-        color: var(--product-tabs-content-color, #666);
+        color: var(--product-tabs-content-color);
         padding: 0.5rem 0;
-        border-bottom: 1px solid var(--color-border-primary, #eee);
+        border-bottom: 1px solid var(--border-subtle);
         position: relative;
         padding-left: 1.5rem;
 
@@ -154,7 +156,7 @@
           content: '✓';
           position: absolute;
           left: 0;
-          color: #10b981;
+          color: var(--color-success);
           font-weight: bold;
         }
 
@@ -168,7 +170,7 @@
 
 .specifications-content {
   h3 {
-    color: var(--product-tabs-content-color, #333);
+    color: var(--product-tabs-content-color);
     margin-bottom: 1.5rem;
     font-size: 1.1rem;
   }
@@ -177,7 +179,7 @@
     .spec-item {
       display: flex;
       padding: 0.75rem 0;
-      border-bottom: 1px solid var(--color-border-primary, #eee);
+      border-bottom: 1px solid var(--border-subtle);
 
       &:last-child {
         border-bottom: none;
@@ -185,12 +187,12 @@
 
       dt {
         font-weight: 500;
-        color: var(--product-tabs-content-color, #333);
+        color: var(--product-tabs-content-color);
         min-width: 120px;
       }
 
       dd {
-        color: var(--product-tabs-content-color, #666);
+        color: var(--text-secondary);
         margin: 0;
       }
     }
@@ -199,7 +201,7 @@
 
 .delivery-content {
   h3 {
-    color: var(--product-tabs-content-color, #333);
+    color: var(--product-tabs-content-color);
     margin-bottom: 1.5rem;
     font-size: 1.1rem;
   }
@@ -211,18 +213,18 @@
     .delivery-option,
     .payment-methods {
       padding: 1rem;
-      background: var(--delivery-option-bg, var(--color-surface-secondary, #f8f9fa));
-      border: var(--delivery-option-border, 1px solid #e5e7eb);
-      border-radius: 8px;
+      background: var(--delivery-option-bg, var(--surface-secondary));
+      border: var(--delivery-option-border, 1px solid var(--border-default));
+      border-radius: var(--radius-md);
 
       h4 {
-        color: var(--delivery-option-title, var(--product-tabs-content-color, #333));
+        color: var(--delivery-option-title, var(--product-tabs-content-color));
         margin-bottom: 0.5rem;
         font-size: 1rem;
       }
 
       p {
-        color: var(--delivery-option-subtitle, var(--product-tabs-content-color, #666));
+        color: var(--delivery-option-subtitle, var(--text-secondary));
         margin: 0;
       }
     }

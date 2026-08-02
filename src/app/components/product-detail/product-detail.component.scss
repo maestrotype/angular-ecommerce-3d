@@ -1,84 +1,17 @@
+/* ==========================================================================
+   PRODUCT DETAIL PAGE
+   Epic D5: semantic + theme --product-detail-* tokens; no hardcoded hex.
+   ========================================================================== */
+
 .product-detail {
   min-height: 100vh;
-  background: var(--color-bg-primary, #f8f9fa);
-  padding-top: 0; // Removed redundant 80px padding
-}
-
-// Dark theme for product detail
-:host-context([data-theme="dark"]) .product-detail {
-  background: #0f172a;
-  color: #f8fafc;
-
-  .product-header {
-    background: #1e293b;
-    border-bottom: 1px solid #334155;
-
-    .breadcrumb {
-      color: var(--breadcrumb-color, #cbd5e1);
-
-      .breadcrumb-link {
-        color: var(--breadcrumb-link-color, #cbd5e1);
-
-        &:hover {
-          color: var(--breadcrumb-link-hover-color, #60a5fa);
-        }
-      }
-
-      .current {
-        color: var(--breadcrumb-current-color, #f8fafc);
-      }
-    }
-
-    .back-btn {
-      background: rgba(255, 255, 255, 0.1);
-      color: var(--header-text);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.2);
-        color: #60a5fa;
-      }
-    }
-  }
-
-  .product-content {
-    background: #0f172a;
-
-    .product-card {
-      background: #1e293b;
-      border: 1px solid #334155;
-      color: #f8fafc;
-
-      .product-title {
-        color: var(--product-title-color, #f8fafc);
-      }
-
-      .product-price {
-        color: var(--product-price-color, #60a5fa);
-      }
-
-      .product-description {
-        color: var(--product-description-color, #cbd5e1);
-      }
-    }
-  }
-
-  .similar-products {
-    background: var(--similar-products-bg, #0f172a);
-
-    .section-title {
-      color: var(--similar-products-title-color, #f8fafc);
-    }
-
-    .section-subtitle {
-      color: var(--similar-products-subtitle-color, #cbd5e1);
-    }
-  }
+  background: var(--product-detail-bg, var(--surface-page));
+  padding-top: 0;
 }
 
 .product-header {
-  background: var(--color-surface-primary, #1e293b);
-  border-bottom: 1px solid #e9ecef;
+  background: var(--surface-secondary);
+  border-bottom: 1px solid var(--border-default);
   height: 60px;
   display: flex;
   align-items: center;
@@ -98,16 +31,16 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: var(--surface-overlay-light);
+    color: var(--text-primary);
+    border: 1px solid var(--glass-border-soft);
     padding: 0.5rem 1rem;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     font-weight: 500;
     font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.2s ease;
-    backdrop-filter: blur(10px);
+    backdrop-filter: var(--backdrop-blur-sm);
     flex-shrink: 0;
 
     .btn-text {
@@ -117,10 +50,10 @@
     }
 
     &:hover {
-      background: rgba(255, 255, 255, 0.2);
-      color: #ffffff;
+      background: var(--surface-highlight);
+      color: var(--interactive-primary);
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      box-shadow: var(--shadow-sm);
     }
 
     &:active {
@@ -129,7 +62,7 @@
   }
 
   .breadcrumb {
-    color: var(--breadcrumb-color, #6c757d);
+    color: var(--breadcrumb-color, var(--text-secondary));
     font-size: 0.85rem;
     display: flex;
     align-items: center;
@@ -137,17 +70,20 @@
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    &::-webkit-scrollbar { display: none; }
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     .breadcrumb-link {
-      color: var(--breadcrumb-link-color, #6c757d);
+      color: var(--breadcrumb-link-color, var(--text-secondary));
       text-decoration: none;
       cursor: pointer;
       transition: all 0.2s ease;
       white-space: nowrap;
 
       &:hover {
-        color: var(--breadcrumb-link-hover-color, #667eea);
+        color: var(--breadcrumb-link-hover-color, var(--interactive-primary));
         text-decoration: underline;
       }
     }
@@ -158,7 +94,7 @@
     }
 
     .current {
-      color: var(--breadcrumb-current-color, #333);
+      color: var(--breadcrumb-current-color, var(--text-primary));
       font-weight: 500;
       white-space: nowrap;
       overflow: hidden;
@@ -168,20 +104,22 @@
   }
 }
 
-/* Mobile responsive improvements */
 @media (max-width: 768px) {
   .product-header {
     height: auto;
     padding: 12px 0;
 
     .container {
-      flex-direction: row; // Keep them row, but maybe allow wrapping or scroll
+      flex-direction: row;
       align-items: center;
       gap: 12px;
       flex-wrap: nowrap;
       overflow-x: auto;
       scrollbar-width: none;
-      &::-webkit-scrollbar { display: none; }
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
     }
 
     .back-btn {
@@ -194,7 +132,7 @@
     .breadcrumb {
       flex-grow: 1;
       font-size: 0.75rem;
-      
+
       .current {
         max-width: 100px;
       }
@@ -246,10 +184,10 @@
 .main-view {
   width: 100%;
   height: 420px;
-  background: var(--product-detail-main-view-bg, #ffffff);
-  border: var(--product-detail-main-view-border, 1px solid #e5e7eb);
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: var(--product-detail-main-view-bg, var(--surface-primary));
+  border: var(--product-detail-main-view-border, 1px solid var(--border-default));
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -269,7 +207,7 @@
   max-width: 400px;
   max-height: 400px;
   object-fit: contain;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   position: absolute;
   top: 50%;
   left: 50%;
@@ -285,20 +223,18 @@
   cursor: pointer;
 }
 
-// Expand overlay - appears on hover
-[class*="product-detail"] .main-view,
+[class*='product-detail'] .main-view,
 .main-view {
-  // Container itself doesn't trigger navigation anymore, specific children do
   cursor: default;
 
   .expand-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0);
+    background: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 12px;
+    border-radius: var(--radius-md);
     transition: background 0.25s ease;
     z-index: 5;
     pointer-events: none;
@@ -312,17 +248,17 @@
     opacity: 0;
     transform: scale(0.85);
     transition: all 0.25s ease;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
+    background: var(--surface-overlay-full);
+    backdrop-filter: var(--backdrop-blur-sm);
+    border: 1px solid var(--glass-border-soft);
+    border-radius: var(--radius-md);
     padding: 0.75rem 1.25rem;
     pointer-events: auto;
     cursor: pointer;
     z-index: 10;
 
     span {
-      color: #fff;
+      color: var(--text-on-primary);
       font-size: 0.8rem;
       font-weight: 500;
       white-space: nowrap;
@@ -330,7 +266,7 @@
   }
 
   &:hover .expand-overlay {
-    background: rgba(0, 0, 0, 0.25);
+    background: var(--surface-overlay-hover);
   }
 
   &:hover .expand-icon {
@@ -352,11 +288,11 @@
   height: 60px;
   object-fit: contain;
   border: var(--product-detail-thumb-border, 2px solid transparent);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   cursor: pointer;
-  background: var(--product-detail-thumb-bg, #ffffff);
+  background: var(--product-detail-thumb-bg, var(--surface-primary));
   transition: all 0.2s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -373,42 +309,23 @@
   }
 
   &.selected {
-    border: var(--product-detail-thumb-selected-border, 2px solid #007bff);
-    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+    border: var(--product-detail-thumb-selected-border, 2px solid var(--interactive-primary));
+    box-shadow: 0 2px 8px rgba(var(--interactive-primary-rgb), 0.2);
   }
 
   &:hover {
-    border-color: #007bff;
+    border-color: var(--interactive-primary);
     transform: scale(1.05);
   }
 }
 
-.loading {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--color-bg-primary, #f8f9fa);
-
-  .container {
-    max-width: 1200px;
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 1rem;
-  }
-
-  .loading-content {
-    text-align: center;
-    color: var(--color-text-secondary, #666);
-  }
-}
-
+.loading,
 .not-found {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-bg-primary, #f8f9fa);
+  background: var(--product-detail-bg, var(--surface-page));
 
   .container {
     max-width: 1200px;
@@ -416,40 +333,41 @@
     margin: 0 auto;
     padding: 0 1rem;
   }
+}
 
-  .not-found-content {
-    text-align: center;
-    color: var(--color-text-secondary, #666);
+.loading .loading-content,
+.not-found .not-found-content {
+  text-align: center;
+  color: var(--text-secondary);
+}
 
-    h2 {
-      color: var(--color-text-primary, #333);
-      margin-bottom: 1rem;
-    }
+.not-found .not-found-content {
+  h2 {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+  }
 
-    .back-btn {
-      background: var(--color-primary, #007bff);
-      color: var(--text-secondary);
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 6px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      margin-top: 1rem;
+  .back-btn {
+    background: var(--interactive-primary);
+    color: var(--text-on-primary);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 1rem;
 
-      &:hover {
-        background: var(--color-primary-dark, #0056b3);
-      }
+    &:hover {
+      background: var(--interactive-primary-hover);
     }
   }
 }
 
-// ==========================================================================
-// 🧪 FUTURISTIC GLASS HUD DESIGN (Special Overload) - V2.3 REFINED
-// ==========================================================================
-:host-context([data-theme="glass"]) {
+// Glass theme layout enhancements (uses semantic / product-detail tokens)
+:host-context([data-theme='glass']) {
   .product-detail {
-    background: var(--surface-primary); // Using surface-primary for clean base
+    background: var(--product-detail-bg, var(--surface-primary));
     position: relative;
     overflow: hidden;
 
@@ -465,41 +383,44 @@
 
   .product-header {
     background: var(--surface-primary);
-    backdrop-filter: blur(20px);
+    backdrop-filter: var(--backdrop-blur);
     border-bottom: 1px solid var(--border-primary);
     margin-bottom: 1.5rem;
     height: 70px;
     z-index: 20;
-    
+
     .back-btn {
-        background: var(--surface-primary);
-        border: 1px solid var(--border-secondary);
-        border-radius: 12px;
-        color: var(--text-primary);
-        font-weight: 700;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      background: var(--surface-primary);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-weight: 700;
+      box-shadow: var(--shadow-sm);
     }
 
     .breadcrumb {
       color: var(--text-primary);
-      .breadcrumb-link, .breadcrumb-separator, .current {
-          color: var(--text-primary);
-          opacity: 1;
-          font-weight: 600;
+
+      .breadcrumb-link,
+      .breadcrumb-separator,
+      .current {
+        color: var(--text-primary);
+        opacity: 1;
+        font-weight: 600;
       }
     }
   }
 
   .product-grid {
     display: grid;
-    grid-template-columns: 1fr 1.4fr; // Right side is now wider for more info
+    grid-template-columns: 1fr 1.4fr;
     gap: 3rem;
     padding: 1rem 0;
     align-items: flex-start;
 
     @media (max-width: 1024px) {
-        grid-template-columns: 1fr; // Stack on mobile/tablet
-        gap: 1.5rem;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
     }
   }
 
@@ -508,15 +429,18 @@
     width: 100%;
     transform: perspective(2000px) rotateY(3deg);
     transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
-    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.06));
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.06));
 
     @media (max-width: 1024px) {
-        transform: none; // Remove rotation on mobile for stability
+      transform: none;
     }
 
     &:hover {
       transform: perspective(2000px) rotateY(0deg) scale(1.01);
-      @media (max-width: 1024px) { transform: none; }
+
+      @media (max-width: 1024px) {
+        transform: none;
+      }
     }
   }
 
@@ -525,18 +449,22 @@
     background: var(--product-detail-main-view-bg);
     backdrop-filter: blur(30px) saturate(180%);
     border: 1.5px solid var(--border-primary);
-    border-radius: 32px; 
-    box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+    border-radius: 32px;
+    box-shadow: var(--shadow-sm);
     position: relative;
 
     @media (max-width: 768px) {
-        height: 400px; // Shorter on mobile
+      height: 400px;
     }
 
-    .main-image, .main-3d-viewer {
+    .main-image,
+    .main-3d-viewer {
       padding: 2.5rem;
-      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.12));
-      @media (max-width: 768px) { padding: 1.5rem; }
+      filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.12));
+
+      @media (max-width: 768px) {
+        padding: 1.5rem;
+      }
     }
   }
 
@@ -545,30 +473,32 @@
     gap: 1rem;
     padding: 10px;
     background: var(--surface-secondary);
-    backdrop-filter: blur(15px);
+    backdrop-filter: var(--backdrop-blur-sm);
     border: 1px solid var(--border-primary);
     border-radius: 20px;
     justify-content: flex-start;
     overflow-x: auto;
     flex-wrap: nowrap;
-    
-    // Hide scrollbar but keep functionality
     scrollbar-width: none;
-    &::-webkit-scrollbar { display: none; }
-    
-    .thumb-image, .thumb-3d {
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    .thumb-image,
+    .thumb-3d {
       width: 65px;
       height: 65px;
       flex-shrink: 0;
       border-radius: 14px;
       background: var(--surface-primary);
-      border: 1px solid var(--border-secondary);
-      
+      border: 1px solid var(--border-subtle);
+
       &.selected {
         border-color: var(--border-focus);
         border-width: 2.5px;
         transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2);
+        box-shadow: 0 10px 20px rgba(var(--interactive-primary-rgb), 0.2);
       }
     }
   }
@@ -580,153 +510,187 @@
     backdrop-filter: blur(35px) saturate(150%);
     border: 1.5px solid var(--border-primary);
     border-radius: 32px;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow-lg);
     position: relative;
 
     @media (max-width: 768px) {
-        padding: 3.5rem 1.5rem 1.5rem; // Tighter on mobile
+      padding: 3.5rem 1.5rem 1.5rem;
     }
 
-    // HUD Header Strip
     &::before {
-        content: '● HUD SYSTEM v.2.4 // OPTICAL GLASS';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 35px;
-        background: rgba(0, 0, 0, 0.03);
-        border-bottom: 1px solid var(--border-secondary);
-        border-top-left-radius: 32px;
-        border-top-right-radius: 32px;
-        display: flex;
-        align-items: center;
-        padding: 0 25px;
-        font-family: monospace;
-        font-size: 8px;
-        color: var(--border-focus);
-        letter-spacing: 2px;
-        font-weight: 800;
-        animation: pulse-label 2s infinite;
+      content: '● HUD SYSTEM v.2.4 // OPTICAL GLASS';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 35px;
+      background: var(--surface-highlight);
+      border-bottom: 1px solid var(--border-subtle);
+      border-top-left-radius: 32px;
+      border-top-right-radius: 32px;
+      display: flex;
+      align-items: center;
+      padding: 0 25px;
+      font-family: monospace;
+      font-size: 8px;
+      color: var(--border-focus);
+      letter-spacing: 2px;
+      font-weight: 800;
+      animation: pulse-label 2s infinite;
     }
   }
 
   ::ng-deep {
-    // Increased specificity to avoid !important
     .product-detail .product-info {
       .product-title {
         font-size: 2.5rem;
         font-weight: 900;
         color: var(--text-primary);
         margin-top: 1rem;
-        @media (max-width: 768px) { font-size: 1.8rem; }
+
+        @media (max-width: 768px) {
+          font-size: 1.8rem;
+        }
       }
 
       .price-container {
         border-left: 3px solid var(--border-focus);
         padding-left: 1.5rem;
         margin: 2rem 0;
-        @media (max-width: 768px) { margin: 1.5rem 0; }
+
+        @media (max-width: 768px) {
+          margin: 1.5rem 0;
+        }
       }
 
       .current-price {
-          color: var(--product-price-color);
-          font-size: 2.2rem;
-          @media (max-width: 768px) { font-size: 1.8rem; }
+        color: var(--product-price-color);
+        font-size: 2.2rem;
+
+        @media (max-width: 768px) {
+          font-size: 1.8rem;
+        }
       }
 
       .purchase-row {
-          background: var(--surface-secondary);
-          padding: 1.25rem;
-          border-radius: 24px;
-          border: 1px solid var(--border-primary);
-          margin-top: 3rem;
-          @media (max-width: 768px) {
-              flex-direction: column;
-              gap: 1.5rem;
-              align-items: stretch;
-              padding: 1rem;
-          }
+        background: var(--surface-secondary);
+        padding: 1.25rem;
+        border-radius: 24px;
+        border: 1px solid var(--border-primary);
+        margin-top: 3rem;
+
+        @media (max-width: 768px) {
+          flex-direction: column;
+          gap: 1.5rem;
+          align-items: stretch;
+          padding: 1rem;
+        }
       }
 
       .stepper {
-          background: var(--surface-primary);
-          border-radius: 14px;
-          padding: 4px;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        background: var(--surface-primary);
+        border-radius: 14px;
+        padding: 4px;
+        box-shadow: var(--shadow-sm);
       }
 
       .add-to-cart-btn {
-          height: 60px;
-          border-radius: 16px;
-          background: var(--surface-secondary);
-          backdrop-filter: blur(12px) saturate(150%);
-          border: 1.5px solid var(--border-focus);
-          color: var(--text-primary);
-          font-weight: 800;
-          letter-spacing: 1.5px;
-          text-transform: uppercase;
-          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
-          position: relative;
-          overflow: hidden;
-          @media (max-width: 768px) { width: 100%; }
-          
-          &::after {
-              content: '';
-              position: absolute;
-              top: -50%; left: -50%; width: 200%; height: 200%;
-              background: linear-gradient(60deg, transparent, rgba(255,255,255,0.3), transparent);
-              transform: rotate(45deg);
-              transition: 0.6s;
-          }
+        height: 60px;
+        border-radius: 16px;
+        background: var(--surface-secondary);
+        backdrop-filter: blur(12px) saturate(150%);
+        border: 1.5px solid var(--border-focus);
+        color: var(--text-primary);
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        box-shadow: var(--shadow-sm);
+        position: relative;
+        overflow: hidden;
 
-          &:hover {
-              background: var(--surface-hover);
-              border-color: var(--border-focus);
-              transform: translateY(-2px);
-              box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
-              
-              &::after { left: 120%; }
+        @media (max-width: 768px) {
+          width: 100%;
+        }
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: linear-gradient(60deg, transparent, var(--glass-highlight), transparent);
+          transform: rotate(45deg);
+          transition: 0.6s;
+        }
+
+        &:hover {
+          background: var(--surface-highlight);
+          border-color: var(--border-focus);
+          transform: translateY(-2px);
+          box-shadow: var(--shadow-md);
+
+          &::after {
+            left: 120%;
           }
+        }
       }
     }
 
     .modular-section-wrapper {
-        margin-top: 5rem;
-        background: transparent;
-        
-        .section-title, .title {
-            color: var(--text-primary); 
-            font-size: 2.5rem;
-            font-weight: 900;
-            text-shadow: none;
-            opacity: 1;
+      margin-top: 5rem;
+      background: transparent;
+
+      .section-title,
+      .title {
+        color: var(--text-primary);
+        font-size: 2.5rem;
+        font-weight: 900;
+        text-shadow: none;
+        opacity: 1;
+      }
+
+      .section-subtitle,
+      .subtitle {
+        color: var(--text-secondary);
+        opacity: 1;
+        font-weight: 600;
+      }
+
+      .product-card {
+        background: var(--surface-primary);
+        border: 1px solid var(--border-primary);
+        border-radius: 28px;
+
+        .product-name {
+          color: var(--text-primary);
         }
 
-        .section-subtitle, .subtitle {
-            color: var(--text-secondary);
-            opacity: 1;
-            font-weight: 600;
+        .product-price {
+          color: var(--product-price-color);
         }
-
-        .product-card {
-            background: var(--surface-primary);
-            border: 1px solid var(--border-primary);
-            border-radius: 28px;
-            
-            .product-name { color: var(--text-primary); }
-            .product-price { color: var(--product-price-color); }
-        }
+      }
     }
   }
 }
 
 @keyframes pulse-label {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
 }
 
 @keyframes ambient-drift {
-    0% { transform: translate(0, 0) rotate(0deg); }
-    100% { transform: translate(100px, 50px) rotate(10deg); }
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  100% {
+    transform: translate(100px, 50px) rotate(10deg);
+  }
 }

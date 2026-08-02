@@ -1,10 +1,15 @@
+/* ==========================================================================
+   PRODUCT IMAGES
+   Epic D5: semantic tokens only.
+   ========================================================================== */
+
 .product-images {
   .main-image {
     position: relative;
-    background: var(--color-surface-primary, rgba(255,255,255,0.7));
-    border-radius: 20px;
+    background: var(--product-detail-main-view-bg, var(--surface-card));
+    border-radius: var(--radius-lg);
     padding: 2rem;
-    box-shadow: 0 8px 32px rgba(31,38,135,0.08);
+    box-shadow: var(--shadow-md);
     margin-bottom: 1rem;
     overflow: hidden;
     display: flex;
@@ -13,7 +18,7 @@
     max-width: 420px;
     min-width: 220px;
     width: 100%;
-    aspect-ratio: 1/1;
+    aspect-ratio: 1 / 1;
 
     img {
       max-width: 100%;
@@ -24,11 +29,8 @@
 
     .image-zoom-overlay {
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.8);
+      inset: 0;
+      background: var(--surface-overlay-full);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -59,14 +61,14 @@
     .thumbnail {
       width: 60px;
       height: 60px;
-      border-radius: 8px;
+      border-radius: var(--radius-md);
       overflow: hidden;
       cursor: pointer;
       border: 2px solid transparent;
       transition: all 0.3s ease;
 
       &.active {
-        border-color: var(--color-primary, #6366f1);
+        border-color: var(--interactive-primary);
       }
 
       &:hover {
@@ -79,12 +81,5 @@
         object-fit: cover;
       }
     }
-  }
-}
-
-:host-context([data-theme="dark"]) .product-images {
-  .main-image {
-    background: var(--color-surface-primary, rgba(30, 41, 59, 0.8));
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   }
 }
