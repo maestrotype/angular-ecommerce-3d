@@ -1,5 +1,5 @@
-:host-context(body[data-theme="glass"]) .admin-container,
-:host-context(body[data-theme="dark-glass"]) .admin-container {
+:host-context(body[data-theme='glass']) .admin-container,
+:host-context(body[data-theme='dark-glass']) .admin-container {
   background-color: transparent;
 }
 
@@ -7,24 +7,29 @@
   height: 100vh;
   background-color: var(--surface-page);
   color: var(--text-primary);
-  transition: background-color var(--duration-normal) var(--easing-default), color var(--duration-normal) var(--easing-default);
+  transition:
+    background-color var(--duration-normal) var(--easing-default),
+    color var(--duration-normal) var(--easing-default);
 }
 
 .admin-sidenav {
   width: var(--admin-sidebar-width);
   background-color: var(--surface-elevated);
-  box-shadow: 0 8px 32px #0009, inset 0 1px 0 #ffffff14;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 var(--glass-border-soft);
   color: var(--text-primary);
-  transition: background-color var(--duration-normal) var(--easing-default), color var(--duration-normal) var(--easing-default), border-color var(--duration-normal) var(--easing-default);
+  transition:
+    background-color var(--duration-normal) var(--easing-default),
+    color var(--duration-normal) var(--easing-default),
+    border-color var(--duration-normal) var(--easing-default);
 }
 
-/* Light glass: transparent shell so blue glass recipe shows through */
 :host-context(body[data-theme='glass']) .admin-sidenav {
   background-color: transparent;
   box-shadow: none;
 }
 
-/* Dark-glass: charcoal panel (matches prod --surface-header), not body sunset bleed */
 :host-context(body[data-theme='dark-glass']) .admin-sidenav {
   background-color: var(--surface-header);
   box-shadow:
@@ -32,13 +37,14 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
-/* Dark theme: reduce the white inset highlight to match dark aesthetic */
 :host-context(body[data-theme='dark']) .admin-sidenav {
-  box-shadow: 0 8px 32px #0009, inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
-:host-context(body[data-theme="glass"]) .admin-content,
-:host-context(body[data-theme="dark-glass"]) .admin-content {
+:host-context(body[data-theme='glass']) .admin-content,
+:host-context(body[data-theme='dark-glass']) .admin-content {
   background-color: transparent;
 }
 
@@ -46,7 +52,7 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Контейнер сам не скроллится, скроллится только main внутри него */
+  overflow: hidden;
   background-color: var(--surface-page);
   transition: background-color var(--duration-normal) var(--easing-default);
 }
@@ -55,26 +61,27 @@
   flex: 1;
   overflow-y: auto;
   padding: var(--admin-content-padding);
-  /* Плавный скролл */
   scroll-behavior: smooth;
 
-  /* Кастомный скроллбар — soft dark (never bright white) */
   &::-webkit-scrollbar {
     width: 6px;
   }
+
   &::-webkit-scrollbar-track {
     background: transparent;
   }
+
   &::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--surface-overlay-light);
     border-radius: 10px;
   }
+
   &::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.14);
+    background: var(--glass-border-soft);
   }
 
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+  scrollbar-color: var(--surface-overlay-light) transparent;
 }
 
 .admin-header {

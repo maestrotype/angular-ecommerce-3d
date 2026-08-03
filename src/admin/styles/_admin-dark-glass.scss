@@ -15,6 +15,7 @@
   --dashboard-stat-card-hover-shadow: var(--shadow-lg);
   --dashboard-stat-card-hover-bg: rgba(100, 95, 90, 0.55);
   --dashboard-stat-card-hover-border: rgba(255, 255, 255, 0.28);
+  --dashboard-stat-card-color: rgba(255, 255, 255, 0.95);
 
   --stat-icon-products: #81c784;
   --stat-icon-orders: #8ab4f8;
@@ -129,6 +130,20 @@ html[data-theme='dark-glass'] body.is-admin {
   /* Toolbar slots — Material light defaults must not paint a white header */
   --mat-toolbar-container-background-color: var(--surface-header);
   --mat-toolbar-container-text-color: var(--text-primary);
+
+  /* List shell — must beat body.is-admin defaults (same specificity tier + theme attr) */
+  --admin-list-bg: rgba(90, 85, 80, 0.62);
+  --admin-list-color: rgba(255, 255, 255, 1);
+  --admin-list-title-color: rgba(255, 255, 255, 0.95);
+  --admin-list-border: 1.5px solid rgba(255, 255, 255, 0.18);
+  --admin-list-radius: 28px;
+  --admin-list-shadow:
+    0 16px 60px 0 rgba(0, 0, 0, 0.35),
+    0 2px 24px rgba(255, 180, 120, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    inset 0 0 60px rgba(255, 255, 255, 0.03);
+  --admin-list-backdrop-filter: none;
+  --dashboard-stat-card-color: rgba(255, 255, 255, 0.95);
 
   .mat-toolbar,
   .admin-header.mat-toolbar,

@@ -17,6 +17,7 @@
   --dashboard-stat-card-hover-shadow: var(--shadow-lg);
   --dashboard-stat-card-hover-bg: var(--surface-highlight);
   --dashboard-stat-card-hover-border: var(--border-default);
+  --dashboard-stat-card-color: var(--text-primary);
 
   --stat-icon-products: var(--color-success);
   --stat-icon-orders: var(--interactive-primary);
@@ -50,4 +51,18 @@
   --mdc-elevated-card-container-color: transparent;
   --mdc-filled-card-container-color: transparent;
   --mdc-outlined-card-container-color: transparent;
+}
+
+/* List shell aliases MUST live on body.is-admin — not :root.
+   On :root, var(--surface-elevated) freezes to the storefront theme value
+   (slate in dark) before admin zinc overrides on body can apply. */
+body.is-admin {
+  --admin-list-bg: var(--surface-elevated);
+  --admin-list-color: var(--text-primary);
+  --admin-list-title-color: var(--text-primary);
+  --admin-list-border: none;
+  --admin-list-radius: 0;
+  --admin-list-shadow: var(--shadow-md);
+  --admin-list-backdrop-filter: none;
+  --dashboard-stat-card-color: var(--text-primary);
 }

@@ -77,6 +77,16 @@ html[data-theme='dark'] body.is-admin {
   --dashboard-stat-card-hover-shadow: var(--shadow-lg);
   --dashboard-stat-card-hover-bg: var(--surface-highlight);
   --dashboard-stat-card-hover-border: var(--border-default);
+  --dashboard-stat-card-color: var(--text-primary);
+
+  /* Rebind list shell to admin zinc (same element as --surface-elevated) */
+  --admin-list-bg: var(--surface-elevated);
+  --admin-list-color: var(--text-primary);
+  --admin-list-title-color: var(--text-primary);
+  --admin-list-border: none;
+  --admin-list-radius: 0;
+  --admin-list-shadow: var(--shadow-md);
+  --admin-list-backdrop-filter: none;
 
   --stat-icon-products: var(--color-success);
   --stat-icon-orders: var(--interactive-primary);

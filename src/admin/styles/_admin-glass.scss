@@ -138,6 +138,11 @@ html[data-theme='glass'] body.is-admin {
   --dashboard-stat-card-hover-bg: rgba(24, 55, 92, 0.58);
   --dashboard-stat-card-hover-border: rgba(255, 255, 255, 0.4);
 
+  --admin-list-bg: transparent;
+  --admin-list-shadow: none;
+  --admin-list-backdrop-filter: none;
+  --admin-list-border: none;
+
   --stat-icon-products: var(--color-success);
   --stat-icon-orders: var(--interactive-primary);
   --stat-icon-users: var(--color-warning);
