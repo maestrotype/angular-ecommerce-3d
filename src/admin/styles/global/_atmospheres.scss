@@ -49,6 +49,26 @@ body.is-admin[data-theme="glass"] {
     filter: blur(72px);
     pointer-events: none;
   }
+
+  /*
+   * .admin-main is overflow:auto → backdrop root. Tables inside it cannot sample
+   * body's gradient via backdrop-filter. Re-paint the same field here (fixed) so
+   * frosted table/container blur has atmosphere to sample.
+   */
+  .admin-main {
+    background: linear-gradient(
+      135deg,
+      #5b87b4 0%,
+      #4d7aa8 22%,
+      #446f9a 45%,
+      #3a638c 68%,
+      #446f9a 85%,
+      #527fad 100%
+    );
+    background-size: 400% 400%;
+    background-attachment: fixed;
+    animation: gradientShift 18s ease infinite;
+  }
 }
 
 body.is-admin[data-theme="dark-glass"] {

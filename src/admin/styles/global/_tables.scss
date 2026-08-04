@@ -56,52 +56,74 @@
   }
 }
 
-// Table container — glass theme: two-tone zebra (dark KPI-card blue ↔ soft dark steel-blue)
+// Table container — glass theme: frosted shell + translucent zebra rows.
+// Blur/bg only on the outer container — stacking the same fill on .admin-table-wrapper
+// made the table read as opaque dark instead of glass.
 [data-theme="glass"] {
-  .admin-table-container,
-  .admin-table-wrapper {
-    background: var(--surface-elevated);                 // rgba(255,255,255,0.15) wrapper
-    backdrop-filter: blur(16px) saturate(155%);
-    -webkit-backdrop-filter: blur(16px) saturate(155%);
-    border: none;                                      // REMOVE outer border!
+  --mat-table-background-color: transparent;
+
+  .admin-table-container {
+    /* Liquid-glass fill (readable even if backdrop-filter is clipped by overflow) */
+    background: var(--glass-surface-strong, var(--surface-elevated));
+    backdrop-filter: blur(22px) saturate(165%);
+    -webkit-backdrop-filter: blur(22px) saturate(165%);
+    border: 1px solid var(--glass-border-soft, rgba(255, 255, 255, 0.28));
     border-radius: 20px;
     box-shadow: var(--glass-shadow);
     overflow: hidden;
+  }
 
-    // ── HEADER ── dark Dashboard-card blue + white text
+  .admin-table-wrapper {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .admin-table-container .mat-mdc-table,
+  .admin-table-wrapper .mat-mdc-table,
+  .admin-table-container table.mat-mdc-table {
+    background-color: transparent;
+    background: transparent;
+    transform: none;
+    --mat-table-background-color: transparent;
+  }
+
+  .admin-table-container,
+  .admin-table-wrapper {
+    // ── HEADER ──
     .mat-mdc-header-row,
     .mat-mdc-header-row.mat-mdc-header-row {
-      background-color: var(--surface-table-header); // rgba(25,60,105,0.72)
+      background-color: var(--surface-table-header);
     }
     .mat-mdc-header-cell {
-      color: var(--text-table-header);          // rgba(255,255,255,0.95)
+      color: var(--text-table-header);
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    // ── ODD rows ── soft dark steel-blue + white text
+    // ── ODD rows ──
     .mat-mdc-row,
     .mat-mdc-row.mat-mdc-row {
-      background-color: var(--surface-table-row);    // rgba(25,60,105,0.18)
+      background-color: var(--surface-table-row);
     }
     .mat-mdc-row .mat-mdc-cell {
-      color: var(--text-table-row);             // rgba(255, 255, 255, 0.85)
+      color: var(--text-table-row);
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     }
 
-    // ── EVEN rows ── dark Dashboard-card blue + white text
+    // ── EVEN rows ──
     .mat-mdc-row:nth-child(even),
     .mat-mdc-row:nth-child(even).mat-mdc-row {
-      background-color: var(--surface-table-even);   // rgba(25,60,105,0.45)
+      background-color: var(--surface-table-even);
     }
     .mat-mdc-row:nth-child(even) .mat-mdc-cell {
-      color: var(--text-table-even);            // rgba(255,255,255,0.90)
+      color: var(--text-table-even);
     }
 
-    // ── PAGINATOR / FOOTER ── dark Dashboard-card blue + white text
+    // ── PAGINATOR / FOOTER ──
     .mat-paginator,
     .mat-mdc-paginator {
-      background-color: var(--surface-paginator);   // rgba(25,60,105,0.72)
-      color: var(--text-paginator);            // rgba(255,255,255,0.90)
+      background-color: var(--surface-paginator);
+      color: var(--text-paginator);
       border-top: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 0 0 20px 20px;
     }

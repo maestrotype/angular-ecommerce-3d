@@ -56,19 +56,21 @@ html[data-theme='glass'] body.is-admin {
   --surface-primary: transparent;
   --surface-secondary: var(--surface-chrome);
   --surface-tertiary: rgba(20, 48, 82, 0.28);
-  /* Content blocks — deeper navy glass than chrome */
-  --surface-elevated: rgba(18, 45, 78, 0.48);
-  --surface-elevated-rgb: 18, 45, 78;
-  --surface-card: rgba(20, 48, 82, 0.46);
-  --surface-highlight: rgba(255, 255, 255, 0.1);
+  /* Content blocks — frosted navy glass (lighter alphas so tables read as glass, not solid dark) */
+  --surface-elevated: rgba(40, 85, 135, 0.32);
+  --surface-elevated-rgb: 40, 85, 135;
+  --surface-card: rgba(40, 85, 135, 0.34);
+  --surface-highlight: rgba(255, 255, 255, 0.12);
   --surface-overlay-full: rgba(15, 23, 42, 0.28);
   --surface-header: var(--surface-chrome);
-  --surface-table: rgba(18, 45, 78, 0.4);
-  --surface-table-header: rgba(12, 34, 60, 0.78);
-  --surface-table-even: rgba(18, 45, 78, 0.52);
-  --surface-table-row: rgba(18, 45, 78, 0.32);
-  --surface-paginator: rgba(12, 34, 60, 0.78);
-  --surface-select-panel: rgba(40, 75, 120, 0.62);
+  --surface-table: transparent;
+  --surface-table-header: rgba(30, 70, 120, 0.42);
+  --surface-table-even: rgba(45, 95, 150, 0.22);
+  --surface-table-row: rgba(45, 95, 150, 0.1);
+  --surface-paginator: rgba(30, 70, 120, 0.42);
+  --surface-select-panel: rgba(40, 75, 120, 0.55);
+  /* Material MDC table fill — must stay transparent or the shell looks solid dark */
+  --mat-table-background-color: transparent;
 
   --text-primary: rgba(255, 255, 255, 0.96);
   --text-secondary: rgba(255, 255, 255, 0.7);
@@ -128,7 +130,7 @@ html[data-theme='glass'] body.is-admin {
   --mat-toolbar-container-background-color: transparent;
   --mat-toolbar-container-text-color: var(--text-primary);
 
-  --dashboard-stat-card-bg: rgba(18, 45, 78, 0.5);
+  --dashboard-stat-card-bg: rgba(40, 85, 135, 0.36);
   --dashboard-stat-card-border: rgba(255, 255, 255, 0.28);
   --dashboard-stat-card-blur: blur(18px) saturate(155%);
   --dashboard-stat-card-shadow:

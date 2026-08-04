@@ -374,10 +374,10 @@
                   
                   &:hover { transform: scale(1.2); border-color: white; }
                   
-                  &.white { background: #ffffff; }
+                  &.white { background: var(--text-on-primary); }
                   &.primary { background: var(--interactive-primary); }
-                  &.accent { background: #ffcc00; }
-                  &.dark { background: #1a1a1a; }
+                  &.accent { background: var(--color-warning); }
+                  &.dark { background: var(--surface-inverse, var(--surface-page)); }
                 }
               }
             }
@@ -445,23 +445,23 @@
   }
 }
 
-// ===== Glass Theme Overrides =====
-:host-context(body[data-theme="glass"]) {
+:host-context(body[data-theme='glass']) {
   .sections-page-wrapper {
     background: transparent;
 
-    // Fix text readability on the glass panel
     .list-table-header {
-      color: rgba(255, 255, 255, 0.85);
+      color: var(--text-primary);
     }
 
     .page-header {
-      h1 { color: #ffffff; }
+      h1 {
+        color: var(--text-primary);
+      }
 
       .new-section-btn {
-        background: rgba(255, 255, 255, 0.2);
-        border-color: rgba(255, 255, 255, 0.3);
-        color: #ffffff;
+        background: var(--surface-overlay-light);
+        border-color: var(--glass-border-soft);
+        color: var(--text-primary);
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
       }
@@ -469,65 +469,83 @@
 
     .layout-body {
       .list-container-side {
-        background: rgba(255, 255, 255, 0.15);
-        border-color: rgba(255, 255, 255, 0.2);
+        background: var(--surface-elevated);
+        border-color: var(--glass-border-soft);
         backdrop-filter: blur(15px) saturate(150%);
         -webkit-backdrop-filter: blur(15px) saturate(150%);
 
         .list-table-header {
-          background: rgba(255, 255, 255, 0.12);
-          border-bottom-color: rgba(255, 255, 255, 0.12);
+          background: var(--surface-highlight);
+          border-bottom-color: var(--border-subtle);
         }
 
         .responsive-list .list-row-item {
-          border-bottom-color: rgba(255, 255, 255, 0.08);
-          // Clean hover — subtle white tint, not a heavy block
+          border-bottom-color: var(--border-subtle);
+
           &:hover {
-            background: rgba(255, 255, 255, 0.1);
-          }
-          &.active {
-            background: rgba(255, 255, 255, 0.15);
+            background: var(--surface-overlay-light);
           }
 
-          // Nested elements with high specificity to override default styles
-          .col-order { color: rgba(255, 255, 255, 0.6); }
-          .order-num { color: #ffffff; }
-          .col-type .type-link { 
-            color: rgba(255, 255, 255, 0.9);
+          &.active {
+            background: var(--surface-highlight);
+          }
+
+          .col-order {
+            color: var(--text-secondary);
+          }
+
+          .order-num {
+            color: var(--text-primary);
+          }
+
+          .col-type .type-link {
+            color: var(--text-primary);
+
             &:hover {
-              color: #ffffff;
+              color: var(--interactive-primary);
               text-decoration: underline;
             }
           }
-          .col-title .title-text { color: #ffffff; }
+
+          .col-title .title-text {
+            color: var(--text-primary);
+          }
         }
 
         .editor-pane-swap {
-          background: rgba(255, 255, 255, 0.1);
+          background: var(--surface-elevated);
+
           .drawer-header {
-            background: rgba(255, 255, 255, 0.08);
-            border-bottom-color: rgba(255, 255, 255, 0.12);
+            background: var(--surface-highlight);
+            border-bottom-color: var(--border-subtle);
           }
-          .editor-form-wrapper { background: rgba(255, 255, 255, 0.04); }
+
+          .editor-form-wrapper {
+            background: var(--surface-page);
+          }
         }
       }
 
       .preview-container-side .architect-card {
-        background: rgba(255, 255, 255, 0.15);
-        border-color: rgba(255, 255, 255, 0.2);
+        background: var(--surface-elevated);
+        border-color: var(--glass-border-soft);
         backdrop-filter: blur(15px) saturate(150%);
         -webkit-backdrop-filter: blur(15px) saturate(150%);
 
         .architect-header {
-          background: rgba(255, 255, 255, 0.1);
-          border-bottom-color: rgba(255, 255, 255, 0.12);
-          h3 { color: rgba(255, 255, 255, 0.8); }
+          background: var(--surface-highlight);
+          border-bottom-color: var(--border-subtle);
+
+          h3 {
+            color: var(--text-secondary);
+          }
         }
-        .architect-content { background: rgba(255, 255, 255, 0.04); }
+
+        .architect-content {
+          background: var(--surface-page);
+        }
       }
     }
-
-    // Slide-toggle chrome → overrides (B2/B3)
   }
 }
 

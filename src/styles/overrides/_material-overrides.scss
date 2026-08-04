@@ -109,16 +109,9 @@
   }
 }
 
-/* Performance: do NOT put isolation/transform on glass chrome —
-   that kills backdrop-filter (flat opaque look). Tables only. */
-[data-theme='glass'],
-[data-theme='dark-glass'] {
-  .mat-mdc-table,
-  .admin-table-container,
-  .admin-table-wrapper {
-    transform: translateZ(0);
-  }
-}
+/* Do NOT put isolation/transform on glass surfaces — it kills
+   backdrop-filter and flattens translucent layers into opaque dark blocks. */
+
 
 /* Target both cases: theme on <html> or on <body> */
 [data-theme='light'],
@@ -716,11 +709,7 @@
     opacity: 0.8;
   }
 
-  /* ===== Tables with glass effect ===== */
-  .mat-mdc-table {
-    transform: translate3d(0, 0, 0);
-    -webkit-transform: translate3d(0, 0, 0);
-  }
+  /* Tables: never transform — it creates a backdrop root and kills frosted glass. */
 
   /* ===== Sidenav / Drawer — shell transparent; paint lives on .sidenav-wrapper ===== */
   .mat-sidenav-container .mat-sidenav,
