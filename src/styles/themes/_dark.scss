@@ -128,6 +128,13 @@
   --pdp-cta-bg: var(--interactive-primary);
   --pdp-cta-color: var(--text-on-primary);
   --pdp-cta-hover-bg: var(--interactive-primary-hover);
+
+  /* Checkout flow (G12) — dark */
+  --checkout-page-bg: var(--surface-page);
+  --checkout-panel-bg: var(--surface-card);
+  --checkout-panel-shadow: var(--shadow-lg);
+  --checkout-total-highlight-bg: var(--surface-secondary);
+
   --product-stock-color: #34d399;
   --product-original-price-color: #94a3b8;
   --product-specs-bg: var(--surface-secondary);

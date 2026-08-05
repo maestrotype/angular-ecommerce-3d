@@ -7,7 +7,6 @@ import { environment } from '../../../environments/environment';
 import { PaymentService } from '../../core/services/payment.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { ModalService } from '../../core/services/modal.service';
-import { ThemeService } from '../../core/themes/theme.service';
 import { Payment, PaymentStatus, PaymentRequest } from '../../../shared/models/payment.model';
 import { Order } from '../../../shared/models/order.model';
 import { PaymentSettingsService } from '../../core/services/payment-settings.service';
@@ -26,7 +25,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
   payment: Payment;
   isLoading = false;
   paymentStatus: PaymentStatus;
-  currentTheme = 'default';
   selectedMethod: 'liqpay' | 'stripe' | 'paypal' = 'liqpay';
   stripe: any = null;
   elements: any = null;
@@ -51,14 +49,12 @@ export class PaymentComponent implements OnInit, OnDestroy {
     private paymentService: PaymentService,
     private notificationService: NotificationService,
     private modalService: ModalService,
-    private themeService: ThemeService,
     private paymentSettingsService: PaymentSettingsService,
     private translate: TranslateService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
   ngOnInit(): void {
-    this.loadTheme();
     this.loadOrderData();
   }
 
@@ -68,14 +64,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
     if (this.statusCheckInterval) {
       clearInterval(this.statusCheckInterval);
     }
-  }
-
-  private loadTheme(): void {
-    this.themeService.currentTheme$.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(theme => {
-      this.currentTheme = theme.id;
-    });
   }
 
   private loadOrderData(): void {
@@ -470,10 +458,6 @@ export class PaymentComponent implements OnInit, OnDestroy {
         this.router.navigate(['/checkout']);
       }
     });
-  }
-
-  getThemeClass(baseClass: string): string {
-    return `${baseClass} ${this.currentTheme}-theme`;
   }
 
   goBackToCheckout(): void {

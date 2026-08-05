@@ -702,6 +702,12 @@
   "NO_PAYMENTS_FOUND": "No payments found",
   "LOADING_PAYMENTS": "Loading payments...",
   "CHECKOUT": {
+    "STEPS": {
+      "LABEL": "Checkout progress",
+      "CART": "Cart",
+      "CHECKOUT": "Checkout",
+      "PAYMENT": "Payment"
+    },
     "HEADER": {
       "BACK_TO_CART": "Back to Cart",
       "TITLE": "Checkout"

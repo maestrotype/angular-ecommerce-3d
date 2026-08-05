@@ -213,7 +213,7 @@ TS `ThemeDefinition` — каталог метаданных, синхрониз
 | G9 | Modals/dialogs: `_modals.scss` + backdrop motion | 7.8 | ✅ (2026-08-05) |
 | G10 | Admin dashboard stat cards | 7.9 | ✅ (2026-08-05) |
 | G11 | Product detail page polish | 7.10 | ✅ (2026-08-05) |
-| G12 | Checkout flow polish | 7.11 | 💡 |
+| G12 | Checkout flow polish | 7.11 | ✅ (2026-08-05) |
 | G13 | Page transitions | 8.2 | 💡 |
 | G14 | Micro-interactions (hover/focus/spinner) | 8.3 | 💡 |
 | G15 | Theme animation presets documentation | 8.4–8.6 | 💡 |

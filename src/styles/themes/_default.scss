@@ -161,6 +161,10 @@
   --pdp-cta-shadow: var(--product-cta-shadow);
   --pdp-cta-hover-shadow: var(--product-cta-hover-shadow);
 
+  /* Checkout flow (G12) — default */
+  --checkout-panel-shadow: var(--shadow-sm);
+  --checkout-submit-bg: linear-gradient(135deg, var(--interactive-primary), var(--color-accent));
+
   /* Product Stepper - Default theme */
   --product-stepper-bg: #ffffff;
   --product-stepper-border: 1px solid #e5e7eb;

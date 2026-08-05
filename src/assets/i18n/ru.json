@@ -701,6 +701,12 @@
   "NO_PAYMENTS_FOUND": "Платежи не найдены",
   "LOADING_PAYMENTS": "Загрузка платежей...",
   "CHECKOUT": {
+    "STEPS": {
+      "LABEL": "Прогресс оформления",
+      "CART": "Корзина",
+      "CHECKOUT": "Оформление",
+      "PAYMENT": "Оплата"
+    },
     "HEADER": {
       "BACK_TO_CART": "Вернуться в корзину",
       "TITLE": "Оформление заказа"

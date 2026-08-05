@@ -147,6 +147,18 @@
   --pdp-cta-hover-shadow: var(--shadow-md);
   --pdp-recommendations-margin-top: var(--spacing-2xl);
 
+  /* Checkout flow (G12) — glass */
+  --checkout-page-bg: transparent;
+  --checkout-panel-bg: var(--glass-surface-soft);
+  --checkout-panel-border: 1px solid var(--glass-border-soft);
+  --checkout-panel-blur: var(--backdrop-blur-sm);
+  --checkout-panel-shadow: var(--glass-shadow);
+  --checkout-back-btn-bg: var(--glass-surface-muted);
+  --checkout-method-bg: var(--glass-surface-muted);
+  --checkout-submit-bg: var(--surface-secondary);
+  --checkout-submit-color: var(--text-primary);
+  --checkout-submit-shadow: var(--shadow-sm);
+
   /* Product Text Colors - Glass theme */
   --product-title-color: #1e293b;
   --product-meta-color: #475569;

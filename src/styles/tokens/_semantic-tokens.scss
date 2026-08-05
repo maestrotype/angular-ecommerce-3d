@@ -251,6 +251,49 @@
   --pdp-price-accent-border: none;
   --pdp-price-accent-padding: 0;
 
+  // ===== CHECKOUT FLOW (G12) =====
+  --checkout-page-bg: var(--surface-page);
+  --checkout-page-padding-y: var(--spacing-2xl);
+  --checkout-content-max-width: var(--container-max-width, 75rem);
+  --checkout-grid-gap: var(--spacing-2xl);
+  --checkout-grid-template: minmax(0, 1fr) minmax(0, 1.5fr);
+  --checkout-header-gap: var(--spacing-xl);
+  --checkout-panel-bg: var(--surface-card);
+  --checkout-panel-border: 1px solid var(--glass-border-soft);
+  --checkout-panel-radius: var(--radius-lg);
+  --checkout-panel-padding: var(--spacing-xl);
+  --checkout-panel-shadow: var(--shadow-sm);
+  --checkout-panel-blur: none;
+  --checkout-section-title-border: 2px solid var(--interactive-primary);
+  --checkout-stepper-indicator-size: 2rem;
+  --checkout-stepper-line-color: var(--border-default);
+  --checkout-stepper-upcoming-color: var(--text-muted);
+  --checkout-stepper-active-color: var(--interactive-primary);
+  --checkout-stepper-active-bg: rgba(var(--interactive-primary-rgb, 99, 102, 241), 0.12);
+  --checkout-stepper-completed-color: var(--color-success);
+  --checkout-stepper-completed-bg: var(--color-success-bg);
+  --checkout-price-color: var(--interactive-primary);
+  --checkout-total-highlight-bg: var(--surface-highlight);
+  --checkout-total-final-color: var(--color-success);
+  --checkout-back-btn-bg: var(--surface-primary);
+  --checkout-submit-bg: linear-gradient(135deg, var(--interactive-primary), var(--color-accent));
+  --checkout-submit-color: var(--text-on-primary);
+  --checkout-submit-shadow: var(--shadow-md);
+  --checkout-submit-hover-shadow: var(--shadow-lg);
+  --checkout-method-bg: var(--surface-secondary);
+  --checkout-method-hover-bg: var(--surface-highlight);
+  --checkout-method-selected-border: var(--interactive-primary);
+  --checkout-warning-border: var(--color-warning);
+  --checkout-warning-bg: var(--color-warning-bg);
+  --checkout-warning-text: var(--color-warning-dark);
+  --checkout-status-pending-bg: var(--color-warning-bg);
+  --checkout-status-pending-color: var(--color-warning-dark);
+  --checkout-status-success-bg: var(--color-success-bg);
+  --checkout-status-success-color: var(--color-success-dark);
+  --checkout-status-error-bg: var(--color-error-bg);
+  --checkout-status-error-color: var(--color-error-dark);
+  --checkout-loading-panel-bg: var(--surface-primary);
+
   // ===== STATE TOKENS =====
   --state-success-bg: var(--color-success-base);
   --state-success-text: var(--color-white);
