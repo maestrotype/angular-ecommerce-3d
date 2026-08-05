@@ -79,6 +79,10 @@ html[data-theme='dark'] body.is-admin {
   --stat-card-hover-border: var(--border-default);
   --stat-card-color: var(--text-primary);
 
+  --dashboard-shell-bg: var(--surface-elevated);
+  --dashboard-chart-bg: var(--surface-tertiary);
+  --surface-card: #18181b;
+
   /* Rebind list shell to admin zinc (same element as --surface-elevated) */
   --admin-list-bg: var(--surface-elevated);
   --admin-list-color: var(--text-primary);

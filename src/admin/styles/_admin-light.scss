@@ -8,7 +8,7 @@ body.is-admin[data-theme='light'],
 html[data-theme='light'] body.is-admin {
   --backdrop-blur: none;
 
-  --stat-card-bg: var(--surface-elevated);
+  --stat-card-bg: var(--color-white);
   --stat-card-border: var(--border-default);
   --stat-card-shadow: var(--shadow-md);
   --stat-card-blur: none;
@@ -16,6 +16,9 @@ html[data-theme='light'] body.is-admin {
   --stat-card-hover-bg: var(--surface-highlight);
   --stat-card-hover-border: var(--border-default);
   --stat-card-color: var(--text-primary);
+
+  --dashboard-shell-bg: var(--color-slate-50);
+  --dashboard-chart-bg: var(--color-white);
 
   --admin-list-bg: var(--surface-elevated);
   --admin-list-color: var(--text-primary);

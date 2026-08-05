@@ -1,5 +1,5 @@
-// Cards
-.mat-mdc-card {
+// Cards (stat-card styling lives in global/_stat-cards.scss — Epic G10)
+.mat-mdc-card:not(.stat-card) {
   /* Override MDC theme token to remove default grey background */
   --mdc-elevated-card-container-color: transparent;
   --mdc-filled-card-container-color: transparent;

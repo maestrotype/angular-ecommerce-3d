@@ -130,15 +130,18 @@ html[data-theme='glass'] body.is-admin {
   --mat-toolbar-container-background-color: transparent;
   --mat-toolbar-container-text-color: var(--text-primary);
 
-  --stat-card-bg: rgba(40, 85, 135, 0.36);
-  --stat-card-border: rgba(255, 255, 255, 0.28);
-  --stat-card-blur: blur(18px) saturate(155%);
-  --stat-card-shadow:
-    0 10px 32px rgba(15, 23, 42, 0.16),
-    inset 0 1px 0 rgba(255, 255, 255, 0.35);
-  --stat-card-hover-shadow: 0 16px 48px rgba(15, 23, 42, 0.2);
-  --stat-card-hover-bg: rgba(24, 55, 92, 0.58);
-  --stat-card-hover-border: rgba(255, 255, 255, 0.4);
+  --stat-card-bg: var(--glass-bg);
+  --stat-card-border: var(--border-default);
+  --stat-card-blur: var(--glass-blur);
+  --stat-card-shadow: var(--glass-shadow);
+  --stat-card-hover-shadow: var(--glass-shadow-lg);
+  --stat-card-hover-bg: var(--glass-bg-hover, rgba(255, 255, 255, 0.08));
+  --stat-card-hover-border: var(--glass-border-strong);
+
+  --dashboard-shell-bg: rgba(28, 58, 95, 0.26);
+  --dashboard-chart-bg: rgba(40, 85, 135, 0.44);
+  --dashboard-shell-border: transparent;
+  --lg-gradient-primary: linear-gradient(135deg, #93c5fd 0%, #6366f1 50%, #a78bfa 100%);
 
   --admin-list-bg: transparent;
   --admin-list-shadow: none;

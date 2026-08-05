@@ -28,8 +28,9 @@
     position: fixed;
     right: 0;
     top: 100%;
-    background: var(--surface-elevated);
+    background: var(--theme-switcher-bg, var(--surface-elevated));
     backdrop-filter: var(--backdrop-blur);
+    -webkit-backdrop-filter: var(--backdrop-blur);
     border: 1px solid var(--border-default);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-lg);
@@ -37,6 +38,7 @@
     width: 240px;
     z-index: var(--z-modal, 1000);
     left: calc(100% - 240px);
+    overflow: hidden;
   }
   
   &__option {

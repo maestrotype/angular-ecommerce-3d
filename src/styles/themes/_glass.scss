@@ -107,6 +107,13 @@
   --product-detail-thumb-selected-border: 2px solid #6366f1;
 
   /* PDP premium (G11) — glass */
+  --pdp-page-bg: transparent;
+  --pdp-info-bg: var(--product-detail-card-bg);
+  --pdp-info-border: var(--product-detail-card-border);
+  --pdp-gallery-main-bg: var(--product-detail-main-view-bg);
+  --pdp-gallery-main-border: var(--product-detail-main-view-border);
+  --pdp-thumb-bg: var(--product-detail-thumb-bg);
+  --pdp-header-bg: var(--surface-primary);
   --pdp-grid-template: minmax(0, 1fr) minmax(0, 1.4fr);
   --pdp-gallery-main-height: 36.25rem;
   --pdp-gallery-main-radius: 2rem;
@@ -125,11 +132,8 @@
   --pdp-info-radius: 2rem;
   --pdp-info-blur: blur(35px) saturate(150%);
   --pdp-info-padding: 2.5rem;
-  --pdp-info-accent-bar: linear-gradient(90deg, var(--interactive-primary), var(--border-focus));
-  --pdp-info-accent-bar-height: 3px;
-  --pdp-info-accent-bar-margin: calc(var(--pdp-info-padding) * -1) calc(var(--pdp-info-padding) * -1) var(--spacing-md);
-  --pdp-price-accent-border: 3px solid var(--border-focus);
-  --pdp-price-accent-padding: var(--spacing-md);
+  --pdp-price-accent-border: none;
+  --pdp-price-accent-padding: 0;
   --pdp-purchase-row-bg: var(--surface-secondary);
   --pdp-purchase-row-border: 1px solid var(--border-primary);
   --pdp-purchase-row-radius: 1.5rem;
@@ -150,6 +154,13 @@
   --product-description-color: #334155;
   --product-specs-label-color: #475569;
   --product-specs-value-color: #0f172a;
+  --product-stock-color: #059669;
+  --product-stock-oos-color: #dc2626;
+  --product-original-price-color: #64748b;
+  --product-specs-bg: rgba(255, 255, 255, 0.15);
+  --product-specs-border: 1px solid var(--border-primary);
+  --product-specs-radius: var(--radius-md);
+  --product-specs-padding: var(--spacing-md);
 
   /* Breadcrumb and Navigation - Glass theme */
   --breadcrumb-color: #475569;
@@ -491,13 +502,13 @@
     background: transparent;
   }
 
-  /* Product info text */
-  body .product-name,
-  body .product-category,
-  body .product-price,
-  body .product-info h3,
-  body .product-info p,
-  body .product-info span {
+  /* Product info text (storefront cards — exclude PDP; G11 owns .product-detail .product-info) */
+  body .product-card .product-name,
+  body .product-card .product-category,
+  body .product-card .product-price,
+  body .product-card .product-info h3,
+  body .product-card .product-info p,
+  body .product-card .product-info span {
     color: var(--text-primary);
   }
 
@@ -746,8 +757,10 @@ html[data-theme="glass"] body.is-admin {
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
   }
 
-  /* Admin cards - Deep dark glass */
-  .mat-mdc-card, .glass-card, .dashboard-card {
+  /* Admin cards - Deep dark glass (stat-card excluded — admin/global/_stat-cards.scss) */
+  .mat-mdc-card:not(.stat-card),
+  .glass-card,
+  .dashboard-card {
     background: var(--glass-bg);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);

@@ -32,7 +32,8 @@
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 
-.stat-card {
+.stat-card,
+body.is-admin .mat-mdc-card.stat-card {
   background-color: var(--stat-card-bg);
   border: 1px solid var(--stat-card-border);
   border-radius: var(--stat-card-radius);
@@ -55,6 +56,7 @@
     --mdc-elevated-card-container-color: transparent;
     --mdc-elevated-card-container-shape: var(--stat-card-radius);
     --mdc-elevated-card-container-elevation: 0;
+    background-color: var(--stat-card-bg);
   }
 
   .mat-mdc-card-content {
@@ -208,34 +210,45 @@
   }
 }
 
-// ── Theme: glass — frosted KPI cards + gradient numbers ──
-[data-theme='glass'] body.is-admin,
-[data-theme='glass'] {
+// ── Theme: admin glass — frosted KPI cards (solid readable numbers) ──
+body.is-admin[data-theme='glass'],
+html[data-theme='glass'] body.is-admin {
   .stat-card {
     --stat-card-overlay: linear-gradient(
       135deg,
-      rgba(var(--interactive-primary-rgb), 0.1) 0%,
-      rgba(var(--color-info-rgb, var(--interactive-primary-rgb)), 0.1) 50%,
-      rgba(var(--color-accent-rgb, var(--interactive-primary-rgb)), 0.1) 100%
+      rgba(var(--interactive-primary-rgb), 0.08) 0%,
+      rgba(var(--interactive-primary-rgb), 0.03) 100%
     );
-    --stat-card-overlay-opacity: 0.6;
-    --stat-card-shimmer-hover-opacity: 1;
-    --stat-card-hover-transform: translateY(-4px) scale(1.02);
-    --stat-card-number-color: transparent;
-    --stat-card-number-gradient: var(--lg-gradient-primary);
-    --stat-card-number-fill: transparent;
-    --stat-card-number-clip: text;
-    --stat-card-label-color: var(--lg-text-secondary, var(--text-secondary));
+    --stat-card-overlay-opacity: 0.45;
+    --stat-card-shimmer-hover-opacity: 0.55;
+    --stat-card-hover-transform: translateY(-4px);
+    --stat-card-number-color: var(--text-primary);
+    --stat-card-number-gradient: none;
+    --stat-card-number-fill: currentColor;
+    --stat-card-number-clip: border-box;
+    --stat-card-label-color: var(--text-secondary);
     --stat-card-label-weight: var(--font-medium);
 
     .stat-number,
     .stat-value {
-      filter: drop-shadow(0 2px 4px rgba(var(--interactive-primary-rgb), 0.3));
+      filter: none;
     }
 
     .stat-label,
     .stat-info h3 {
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+      text-shadow: none;
     }
+  }
+}
+
+// ── Theme: admin dark-glass — ensure numbers stay visible ──
+body.is-admin[data-theme='dark-glass'],
+html[data-theme='dark-glass'] body.is-admin {
+  .stat-card {
+    --stat-card-number-color: var(--text-primary);
+    --stat-card-number-gradient: none;
+    --stat-card-number-fill: currentColor;
+    --stat-card-number-clip: border-box;
+    --stat-card-label-color: var(--text-secondary);
   }
 }

@@ -1,8 +1,9 @@
 .dashboard-container {
   padding: var(--space-8);
-  background-color: var(--surface-elevated);
+  background-color: var(--dashboard-shell-bg, var(--surface-elevated));
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-md);
+  border: 1px solid var(--dashboard-shell-border, var(--border-subtle));
   min-height: calc(100vh - 64px);
 
   h1 {
@@ -48,8 +49,13 @@
 }
 
 .errors-card {
-  background-color: var(--surface-elevated);
+  background-color: var(--dashboard-chart-bg, var(--surface-elevated));
   border: 1px solid var(--border-default);
+
+  &.mat-mdc-card {
+    --mdc-elevated-card-container-color: transparent;
+    background-color: var(--dashboard-chart-bg, var(--surface-elevated));
+  }
 
   .errors-list {
     .error-item {
@@ -139,13 +145,18 @@
 }
 
 .chart-card {
-  background-color: var(--surface-card);
+  background-color: var(--dashboard-chart-bg, var(--surface-card));
   border: 1px solid var(--border-default);
   border-radius: var(--radius-xl);
   padding: var(--space-6);
   display: flex;
   flex-direction: column;
   transition: all 0.3s ease;
+
+  &.mat-mdc-card {
+    --mdc-elevated-card-container-color: transparent;
+    background-color: var(--dashboard-chart-bg, var(--surface-card));
+  }
 
   &:hover {
     border-color: color-mix(in srgb, var(--interactive-primary) 30%, transparent);

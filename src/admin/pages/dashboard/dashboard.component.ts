@@ -58,10 +58,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
       y: {
         beginAtZero: true,
         grid: {
-          color: 'rgba(255, 255, 255, 0.12)',
+          color: 'rgba(15, 23, 42, 0.08)',
         },
         ticks: {
-          color: 'rgba(255, 255, 255, 0.88)',
+          color: '#475569',
           callback: (value) => '$' + value
         }
       },
@@ -70,7 +70,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           display: false
         },
         ticks: {
-          color: 'rgba(255, 255, 255, 0.88)'
+          color: '#475569'
         }
       }
     }

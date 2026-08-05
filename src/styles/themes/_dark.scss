@@ -116,10 +116,24 @@
   --product-detail-thumb-selected-border: 2px solid #007bff;
 
   /* PDP premium (G11) — dark */
+  --pdp-page-bg: var(--product-detail-bg);
+  --pdp-info-bg: var(--product-detail-card-bg);
+  --pdp-info-border: var(--product-detail-card-border);
+  --pdp-gallery-main-bg: var(--product-detail-main-view-bg);
+  --pdp-gallery-main-border: var(--product-detail-main-view-border);
+  --pdp-thumb-bg: var(--product-detail-thumb-bg);
+  --pdp-header-bg: var(--surface-secondary);
   --pdp-gallery-main-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
   --pdp-info-shadow: var(--shadow-xl);
   --pdp-cta-bg: var(--interactive-primary);
+  --pdp-cta-color: var(--text-on-primary);
   --pdp-cta-hover-bg: var(--interactive-primary-hover);
+  --product-stock-color: #34d399;
+  --product-original-price-color: #94a3b8;
+  --product-specs-bg: var(--surface-secondary);
+  --product-specs-border: 1px solid var(--border-default);
+  --product-specs-radius: var(--radius-md);
+  --product-specs-padding: var(--spacing-md);
 
   /* Product Text Colors - Dark theme */
   --product-title-color: #f8fafc;
@@ -430,13 +444,13 @@
     background: var(--color-slate-900);
   }
 
-  /* Product info text */
-  body .product-name,
-  body .product-category,
-  body .product-price,
-  body .product-info h3,
-  body .product-info p,
-  body .product-info span {
+  /* Product info text (storefront cards — exclude PDP; G11 owns .product-detail .product-info) */
+  body .product-card .product-name,
+  body .product-card .product-category,
+  body .product-card .product-price,
+  body .product-card .product-info h3,
+  body .product-card .product-info p,
+  body .product-card .product-info span {
     color: var(--text-primary);
   }
 

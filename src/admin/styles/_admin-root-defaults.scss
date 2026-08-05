@@ -65,4 +65,7 @@ body.is-admin {
   --admin-list-shadow: var(--shadow-md);
   --admin-list-backdrop-filter: none;
   --stat-card-color: var(--text-primary);
+
+  --dashboard-shell-bg: var(--surface-elevated);
+  --dashboard-chart-bg: var(--surface-card);
 }

@@ -403,15 +403,25 @@
   backdrop-filter: var(--pdp-info-blur);
   -webkit-backdrop-filter: var(--pdp-info-blur);
   overflow: hidden;
+  isolation: isolate;
 
   &::before {
     content: '';
-    display: block;
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    right: 0;
     height: var(--pdp-info-accent-bar-height);
     background: var(--pdp-info-accent-bar, transparent);
-    margin: var(--pdp-info-accent-bar-margin);
     border-top-left-radius: inherit;
     border-top-right-radius: inherit;
+    pointer-events: none;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
   }
 
   @media (max-width: 1024px) {
