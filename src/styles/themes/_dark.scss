@@ -13,9 +13,28 @@
 [data-theme="dark"] {
   color-scheme: dark;
 
+  --product-grid-columns: 4;
   --card-surface: var(--color-slate-700);
   --card-border: var(--color-slate-600);
+  --card-radius: var(--radius-lg);
+  --card-shadow: var(--shadow-sm);
   --card-shadow-hover: var(--shadow-lg);
+  --card-image-bg: var(--color-slate-800);
+  --card-info-bg: var(--color-slate-800);
+  --card-overlay-bg: rgba(15, 23, 42, 0.55);
+  --card-backdrop-filter: none;
+  --card-star: rgba(148, 163, 184, 0.45);
+  --card-star-filled: #94a3b8;
+  --card-category-bg: rgba(255, 255, 255, 0.08);
+  --card-category-border: rgba(255, 255, 255, 0.14);
+  --card-category-color: var(--text-secondary);
+  --card-cart-bg: rgba(255, 255, 255, 0.12);
+  --card-cart-border: rgba(255, 255, 255, 0.22);
+  --card-cart-color: var(--text-primary);
+  --card-stock-bg: rgba(100, 116, 139, 0.22);
+  --card-stock-color: #94a3b8;
+  --card-stock-border: rgba(148, 163, 184, 0.35);
+
   /* Dark theme variables */
   --hero-bg-gradient: linear-gradient(135deg,
   #1e293b 0%,

@@ -1,6 +1,29 @@
 :root, [data-theme="default"], [data-theme="light"] {
   color-scheme: light;
 
+  /* ===== PRODUCT CARDS + GRID (light) ===== */
+  --product-grid-columns: 2;
+  --card-surface: var(--surface-card);
+  --card-border: var(--border-subtle);
+  --card-radius: var(--radius-lg);
+  --card-shadow: var(--shadow-sm);
+  --card-shadow-hover: var(--shadow-md);
+  --card-image-bg: var(--surface-secondary);
+  --card-info-bg: var(--surface-primary);
+  --card-overlay-bg: rgba(241, 245, 249, 0.85);
+  --card-backdrop-filter: none;
+  --card-star: rgba(100, 116, 139, 0.35);
+  --card-star-filled: #64748b;
+  --card-category-bg: var(--surface-secondary);
+  --card-category-border: var(--border-subtle);
+  --card-category-color: var(--text-secondary);
+  --card-cart-bg: var(--surface-elevated);
+  --card-cart-border: var(--border-default);
+  --card-cart-color: var(--text-primary);
+  --card-stock-bg: rgba(148, 163, 184, 0.14);
+  --card-stock-color: #64748b;
+  --card-stock-border: rgba(148, 163, 184, 0.32);
+
   /* ===== MIGRATED FROM tokens/_theme-variables.scss (Task A3) ===== */
   /* Default theme variables */
   --hero-bg-gradient: linear-gradient(135deg,

@@ -31,7 +31,8 @@
 | **U0** | Ice / water liquid-glass recipe (tokens + atmosphere) | ✅ эталон цвета OK |
 | **U1** | Footer → liquid chrome | ✅ |
 | **U2** | Header → liquid chrome | ✅ |
-| **U3** | Glass product cards (frost + accents + stars + stock) | ✅ |
+| **U3** | Product cards all themes (light/dark/glass `--card-*`) | ✅ |
+| **U10** | Best sellers — shared cards + theme grid | ✅ |
 | **U4** | `color-scheme` for glass | ✅ light (ice) |
 | **U5** | Убрать legacy `.glass-theme` | 📋 |
 | **U6** | Home visual pass по эталону | 📋 |

@@ -1,6 +1,6 @@
 /* ==========================================================================
    BEST SELLERS SECTION
-   Epic D4: semantic tokens + --best-sellers-* from theme layer.
+   Epic D4 + UI polish: layout only — card chrome from `_cards.scss` + `--card-*` tokens.
    ========================================================================== */
 
 .best-sellers {
@@ -42,76 +42,22 @@
 
   .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(var(--product-grid-columns, 3), minmax(0, 1fr));
     gap: 30px;
     max-width: 1200px;
     margin: 0 auto;
     justify-content: center;
   }
 
-  .product-card {
-    background: var(--color-cards-background, var(--card-surface));
-    border-color: var(--color-cards-border, var(--card-border));
-    box-shadow: var(--shadow-card, var(--card-shadow));
-
-    .product-image {
-      background:
-        radial-gradient(circle at 50% 0%, var(--surface-highlight) 0%, transparent 62%),
-        var(--card-image-bg);
-    }
-
-    .product-info {
-      background: var(--surface-primary);
-      border-top: 1px solid var(--border-subtle);
-
-      .product-name {
-        color: var(--best-sellers-text, var(--text-primary));
-      }
-
-      .product-rating {
-        .star {
-          color: var(--border-emphasis);
-
-          &:hover,
-          &.filled {
-            color: var(--color-warning);
-          }
-        }
-
-        .rating-value,
-        .rating-count {
-          color: var(--text-secondary);
-        }
-
-        .product-category {
-          background: rgba(var(--interactive-primary-rgb), 0.15);
-          border: 1px solid rgba(var(--interactive-primary-rgb), 0.25);
-          color: var(--color-accent);
-        }
-      }
-
-      .product-footer {
-        .product-price {
-          .current-price {
-            color: var(--best-sellers-text, var(--text-primary));
-          }
-
-          .original-price {
-            color: var(--text-secondary);
-          }
-        }
-
-        .product-category {
-          background: var(--surface-secondary);
-          color: var(--text-secondary);
-        }
-      }
+  @media (max-width: 992px) {
+    .products-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
   @container (max-width: 480px) {
     .products-grid {
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: 1fr;
       gap: 15px;
     }
   }
@@ -126,21 +72,12 @@
     }
 
     .products-grid {
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1rem;
-    }
-
-    .product-card {
-      height: 380px;
-
-      .product-image img {
-        height: 200px;
-      }
     }
   }
 }
 
-// Section variants — override CSS custom props only
+// Section variants — override section chrome only
 :host(.variant-light-soft) .best-sellers {
   --best-sellers-bg: var(--surface-page);
   --best-sellers-text: var(--text-primary);
@@ -156,11 +93,6 @@
   --best-sellers-bg: var(--surface-overlay-full);
   --best-sellers-text: var(--text-inverse);
   --best-sellers-subtitle: var(--text-tertiary);
-
-  .product-card {
-    background: var(--surface-tertiary);
-    border-color: var(--border-subtle);
-  }
 }
 
 :host(.variant-minimal) .best-sellers {
@@ -173,56 +105,10 @@
   --best-sellers-bg: var(--surface-page);
   --best-sellers-text: var(--text-primary);
   --best-sellers-subtitle: var(--text-secondary);
-
-  .product-card {
-    background: var(--surface-secondary);
-    border-color: var(--border-primary);
-
-    .product-info {
-      background: var(--surface-secondary);
-      border-top-color: var(--border-primary);
-
-      .product-name {
-        color: var(--text-primary);
-      }
-
-      .product-footer .product-price .current-price {
-        color: var(--text-primary);
-      }
-
-      .product-category {
-        background: var(--surface-tertiary);
-        color: var(--text-secondary);
-      }
-    }
-  }
 }
 
 :host(.variant-dark-soft) .best-sellers {
   --best-sellers-bg: var(--surface-secondary);
   --best-sellers-text: var(--text-primary);
   --best-sellers-subtitle: var(--text-secondary);
-
-  .product-card {
-    background: var(--surface-secondary);
-    border-color: var(--border-primary);
-
-    .product-info {
-      background: var(--surface-secondary);
-      border-top-color: var(--border-primary);
-
-      .product-name {
-        color: var(--text-primary);
-      }
-
-      .product-footer .product-price .current-price {
-        color: var(--text-primary);
-      }
-
-      .product-category {
-        background: var(--surface-tertiary);
-        color: var(--text-secondary);
-      }
-    }
-  }
 }

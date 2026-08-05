@@ -472,7 +472,12 @@
   --hero-text-color: var(--text-primary);
   --hero-accent-color: #3b82f6;
 
+  --best-sellers-bg: transparent;
+  --best-sellers-text: var(--text-primary);
+  --best-sellers-subtitle: var(--text-muted);
+
   /* ===== PRODUCT CARDS — frosted ice pane ===== */
+  --product-grid-columns: 3;
   --card-surface: var(--glass-surface-soft);
   --card-border: var(--glass-border-soft);
   --card-shadow: var(--glass-shadow);
