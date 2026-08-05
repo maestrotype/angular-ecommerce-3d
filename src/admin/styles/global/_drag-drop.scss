@@ -1,0 +1,39 @@
+// CDK drag & drop — overlay renders outside component tree (Epic E2)
+.cdk-drag-preview {
+  box-sizing: border-box;
+  background: var(--surface-highlight);
+  border: 1px solid var(--interactive-primary);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(var(--interactive-primary-rgb), 0.2);
+  display: flex;
+  align-items: center;
+  padding: 12px 24px;
+  width: auto;
+  min-width: 400px;
+  opacity: 0.95;
+  z-index: 5000;
+
+  --col-order-w: 80px;
+  --col-type-w: 200px;
+  --col-status-w: 100px;
+  --col-actions-w: 120px;
+
+  div { flex-shrink: 0; }
+  .col-order { width: var(--col-order-w); display: flex; align-items: center; gap: 12px; color: var(--text-secondary); .order-num { color: var(--text-primary); font-weight: 600; } }
+  .col-type { width: var(--col-type-w); .type-link { color: var(--interactive-primary); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; } }
+  .col-title { flex: 1; min-width: 100px; .title-text { color: var(--text-primary); font-weight: 700; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } }
+  .col-status { width: var(--col-status-w); display: flex; justify-content: center; }
+  .col-actions { width: var(--col-actions-w); display: flex; justify-content: center; gap: 4px; button { color: var(--interactive-primary); } }
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.2;
+  background: rgba(var(--interactive-primary-rgb), 0.1);
+  border: 2px dashed var(--interactive-primary);
+  border-radius: 12px;
+  margin: 4px 10px;
+}
+
+.cdk-drag-animating {
+  transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
+}

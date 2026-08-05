@@ -33,12 +33,12 @@
 | B | Material Overrides Centralization | ✅ Complete | B1–B4 done; admin Material leftovers modularized in C5 `global/` |
 | C | Admin Unification (ADR-011) | ✅ Complete | C1–C6; M2 = 0 non-layout (5 layout tokens); M3 = 72 |
 | D | Component Migration (ADR-006) | ✅ Complete | D1–D10 done; M1 = 0, M5 = 86/86 |
-| E | Final Cleanup | ⏳ Next | M3 ≈ 42 `!important`; M4 ≈ 24 `::ng-deep` |
-| F | Theme Engine v2 (ADR-004/012) | 💡 Planned | |
+| E | Final Cleanup | ✅ Complete | M3 = 0, M4 = 0; stubs removed |
+| F | Theme Engine v2 (ADR-004/012) | ⏳ Next | |
 | G | Premium UI / Animations / Polish | 💡 Planned | |
 
 ### Current Blockers
-- None. Epic E (final cleanup: `!important`, `::ng-deep`, stub files) is next.
+- None. Epic F (Theme Engine v2) is next.
 
 ### Post-C4 lessons (2026-07-29) — do not repeat
 1. **`!important` is forbidden** for new/agent work (absolute). Win with CSS variables (`--mdc-*` / `--mat-*`), specificity, or correct layer — never `!important`. Rule: `.cursor/rules/no-important.mdc` + `AI_CONSTITUTION.md`.
@@ -90,11 +90,12 @@
 - [x] `admin-variables.scss` shim deleted; mixins on semantic (C6)
 
 ### Medium Priority
-- [ ] M3 = 72 `!important` (12 files) — **no new ones**; Epic E (hero, `_admin-dark`, sidenav, …)
-- [ ] 40 `::ng-deep` in 12 files
+- [x] M3 = 0 `!important` (Epic E)
+- [x] M4 = 0 `::ng-deep` (Epic E)
+- [ ] TS `Theme` interface not synced with SCSS (ADR-012) — Epic F
 
 ### Low Priority
-- [ ] Stub files: `_forms.scss`, `_modals.scss`, `_navigation.scss`
+- [x] Stub files: `_forms.scss`, `_modals.scss`, `_navigation.scss` — deleted (Epic E3)
 - [ ] TS `Theme` interface not synced with SCSS (ADR-012)
 
 ---
@@ -103,6 +104,7 @@
 
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-08-05 | Epic E (Board): Removed all `!important` and `::ng-deep`; admin-dark Material rules → `_material-overrides`; list-container `ViewEncapsulation.None`; CDK drag styles → `global/_drag-drop.scss`; glass PDP overrides → `product-info`; deleted stub SCSS files. M3 = **0**; M4 = **0**. Epic E **4/4 complete**. `npm run build` passes. | Implementation Engineer |
 | 2026-08-05 | Task D10 (Board): Cleared remaining 148 hex in 13 global/admin SCSS files; atmosphere gradients promoted to `--admin-atmosphere-gradient` in admin theme files; removed hex fallbacks from `var()`. M1 = **0**; M5 = **86/86**. Epic D **10/10 complete**. `npm run build` passes. | Implementation Engineer |
 | 2026-07-29 | Task C6 (Board): Deleted `admin-variables.scss` shim; remapped residual consumers; rewrote `admin-mixins` on semantic; extracted `_admin-root-defaults.scss` (dashboard/MDC defaults). M2 = **0 non-layout** (5 layout tokens kept). Admin theme files kept for chrome/promotions. Note: `docs/migration/_c6-admin-variables-shim-removal.md`. Epic C **6/6**. `npm run build` passes. | Implementation Engineer |
 | 2026-07-29 | Glass balance: lighter chrome (header/sidebar ~0.36 airy blue); darker content blocks (`--surface-card`/`elevated`/stat cards navy glass). Epic C still **5/6**. | Implementation Engineer |

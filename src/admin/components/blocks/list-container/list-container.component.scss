@@ -1,4 +1,4 @@
-::ng-deep {
+app-list-container {
   .list {
     padding: var(--space-6);
     background-color: var(--admin-list-bg, var(--surface-elevated));
@@ -122,48 +122,91 @@
 }
 
 @media (max-width: 768px) {
-  ::ng-deep .list {
-    padding: var(--admin-mobile-padding-vertical) var(--admin-mobile-padding-horizontal);
-    padding-bottom: calc(var(--admin-mobile-padding-vertical) + var(--space-4));
-  }
-
-  .list__header {
-    flex-direction: column;
-    gap: 16px;
-    align-items: stretch;
-    padding: 0;
-    margin-bottom: 16px;
-
-    h1 {
-      text-align: center;
-      font-size: 1.5rem;
+  app-list-container {
+    .list {
+      padding: var(--admin-mobile-padding-vertical) var(--admin-mobile-padding-horizontal);
+      padding-bottom: calc(var(--admin-mobile-padding-vertical) + var(--space-4));
     }
-  }
 
-  ::ng-deep .header-section h1 {
-    text-align: center;
-    font-size: 1.25rem;
-  }
+    .list__header {
+      flex-direction: column;
+      gap: 16px;
+      align-items: stretch;
+      padding: 16px;
+      margin-bottom: 16px;
 
-  .list__kpis .stats-cards {
-    justify-content: center;
-  }
+      h1 {
+        text-align: center;
+        font-size: 1.5rem;
+      }
+    }
 
-  .list__filters {
-    flex-direction: column;
-    gap: 12px;
-    padding: 0;
-    align-items: stretch;
+    .list__kpis {
+      padding: 0 16px;
 
-    .search-field {
-      min-width: none;
-      max-width: none;
+      .stats-cards {
+        justify-content: center;
+      }
+    }
+
+    .list__filters,
+    .filter-section {
+      flex-direction: column;
+      gap: 12px;
+      align-items: stretch;
+
+      .search-field {
+        min-width: 0;
+        max-width: none;
+      }
+    }
+
+    .header-section h1 {
+      text-align: center;
+      font-size: 1.25rem;
     }
   }
 }
 
 @media (max-width: 400px) {
-  ::ng-deep .header-section h1 {
+  app-list-container .header-section h1 {
     font-size: 1.1rem;
+  }
+}
+
+@media (min-width: 690px) and (max-width: 768px) {
+  app-list-container {
+    .list__header {
+      flex-direction: row;
+      gap: 1rem;
+      align-items: flex-start;
+      padding: 16px 16px 0 16px;
+
+      h1 {
+        text-align: left;
+        font-size: 1.5rem;
+      }
+    }
+
+    .list__kpis {
+      padding: 0 16px;
+
+      .stats-cards {
+        justify-content: flex-end;
+      }
+    }
+
+    .list__filters,
+    .filter-section {
+      flex-direction: row;
+      gap: 12px;
+      padding: 0 16px;
+      align-items: center;
+
+      .search-field {
+        min-width: 150px;
+        max-width: 300px;
+      }
+    }
   }
 }

@@ -741,12 +741,12 @@ html[data-theme="glass"] body.is-admin {
 /* ===== BODY-LEVEL GLASS BACKGROUND (non-admin only) ===== */
 body:not(.is-admin)[data-theme="glass"],
 html[data-theme="glass"] body:not(.is-admin) {
-  background: var(--bg-page) !important;
+  background: var(--bg-page);
   background-image:
     var(--bg-gradient-1),
     var(--bg-gradient-2),
-    var(--bg-gradient-3) !important;
-  background-attachment: fixed !important;
-  color: var(--color-white) !important;
+    var(--bg-gradient-3);
+  background-attachment: fixed;
+  color: var(--color-white);
   min-height: 100vh;
 }

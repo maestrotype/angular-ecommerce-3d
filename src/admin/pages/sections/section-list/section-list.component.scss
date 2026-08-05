@@ -158,12 +158,18 @@
           gap: 16px;
           flex-shrink: 0;
 
-          .back-btn { 
-            background: transparent !important; color: var(--text-primary); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            width: 40px; height: 40px; padding: 0;
+          .back-btn {
+            background: transparent;
+            color: var(--text-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            padding: 0;
             mat-icon { margin: 0; font-size: 24px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
-            &:hover { background: var(--surface-highlight) !important; }
+            &:hover { background: var(--surface-highlight); }
           }
           .header-title {
             flex: 1; min-width: 0; display: flex; flex-direction: column;
@@ -386,47 +392,6 @@
       }
     }
   }
-}
-
-// CDK DRAG & DROP STYLES (Global levels)
-::ng-deep .cdk-drag-preview {
-  box-sizing: border-box;
-  background: var(--surface-highlight);
-  border: 1px solid var(--interactive-primary);
-  border-radius: 12px;
-  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(var(--interactive-primary-rgb), 0.2);
-  display: flex;
-  align-items: center;
-  padding: 12px 24px;
-  width: auto;
-  min-width: 400px;
-  opacity: 0.95;
-  z-index: 5000;
-
-  // Preserve column widths in preview
-  --col-order-w: 80px;
-  --col-type-w: 200px;
-  --col-status-w: 100px;
-  --col-actions-w: 120px;
-
-  div { flex-shrink: 0; }
-  .col-order { width: var(--col-order-w); display: flex; align-items: center; gap: 12px; color: var(--text-secondary); .order-num { color: var(--text-primary); font-weight: 600; } }
-  .col-type { width: var(--col-type-w); .type-link { color: var(--interactive-primary); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; } }
-  .col-title { flex: 1; min-width: 100px; .title-text { color: var(--text-primary); font-weight: 700; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } }
-  .col-status { width: var(--col-status-w); display: flex; justify-content: center; }
-  .col-actions { width: var(--col-actions-w); display: flex; justify-content: center; gap: 4px; button { color: var(--interactive-primary); } }
-}
-
-::ng-deep .cdk-drag-placeholder {
-  opacity: 0.2;
-  background: rgba(var(--interactive-primary-rgb), 0.1);
-  border: 2px dashed var(--interactive-primary);
-  border-radius: 12px;
-  margin: 4px 10px;
-}
-
-::ng-deep .cdk-drag-animating {
-  transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
 }
 
 .responsive-list.cdk-drop-list-dragging .list-row-item:not(.cdk-drag-placeholder) {

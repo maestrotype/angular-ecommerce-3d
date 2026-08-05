@@ -17,12 +17,12 @@
 |---|---------|----------------------|--------|------|----------|
 | M1 | Hardcoded hex в SCSS (вне tokens/themes) | 1 336 в 68 файлах | **0** | 0 | ██████████ 100% |
 | M2 | Использований `--admin-*` | 2 335 в 43 файлах | **0 non-layout** (C6; 5 layout tokens only) | 0 (кроме layout-токенов) | ██████████ 100% |
-| M3 | `!important` | 91 в 12 файлах | **~52** в 11 файлах (hero −20) | 0 | ▓▓▓▓▓░░░░░ ~43% |
-| M4 | `::ng-deep` | 40 в 12 файлах | **25** (B3: removed component Material `::ng-deep` dumps) | 0 | ▓▓▓▓░░░░░░ 38% |
+| M3 | `!important` | 91 в 12 файлах | **0** | 0 | ██████████ 100% |
+| M4 | `::ng-deep` | 40 в 12 файлах | **0** | 0 | ██████████ 100% |
 | M5 | Компоненты полностью на semantic-токенах (без hex) | 3 / 86 | **86 / 86** | 86 / 86 | ██████████ 100% |
 | M6 | Legacy `_theme-variables.scss` | 722 строки, подключён | **удалён** | удалён | ██████████ 100% |
 | M7 | Orphaned `src/styles.scss` | 499 строк логики | **удалён** | удалён | ██████████ 100% |
-| M8 | Централизованный `_material-overrides.scss` | нет; overrides в 24 файлах | **Epic B 4/4** + admin `global/*` (C5); C ✅ | 1 файл + admin global modules | ▓▓▓▓▓▓▓▓▓░ 95% |
+| M8 | Централизованный `_material-overrides.scss` | нет; overrides в 24 файлах | **Epic B 4/4** + admin `global/*` (C5); C ✅; E ✅ | 1 файл + admin global modules | ██████████ 100% |
 
 **Команды для перепроверки метрик:**
 
@@ -102,8 +102,8 @@ graph LR
 | B | Централизация Material overrides | ✅ Done | 4/4 | M8 |
 | C | Admin-унификация (ADR-011) | ✅ **Готово** | 6/6 | M2 |
 | D | Миграция компонентов (ADR-006) | ✅ **Готово** | 10/10 | M1, M5 |
-| E | Финальная зачистка | ⏳ Следующий | 0/4 | M3, M4 |
-| F | Theme Engine v2 (ADR-004, ADR-012) | 💡 План | 0/5 | — |
+| E | Финальная зачистка | ✅ **Готово** | 4/4 | M3, M4 |
+| F | Theme Engine v2 (ADR-004, ADR-012) | ⏳ Следующий | 0/5 | — |
 | G | Premium UI, анимации, полировка | 💡 План | — | — |
 
 ---
@@ -179,10 +179,10 @@ graph LR
 
 | ID | Задача | Baseline | Definition of Done | Статус |
 |----|--------|----------|--------------------|--------|
-| E1 | Остаточные `!important` (после D): hero (20), `_admin-dark` (14), sidenav (10), … | 72 (post-C5) | M3 = 0 | 📋 |
-| E2 | Остаточные `::ng-deep` (после D) | 40 | M4 = 0; для Material — через overrides-файл | 📋 |
-| E3 | Реализовать или удалить заглушки `_forms.scss`, `_modals.scss`, `_navigation.scss` | 3 стаба | Нет файлов-пустышек в пайплайне | 📋 |
-| E4 | Финальный аудит: перегнать все метрики M1–M8, обновить дашборд, синхронизировать доки | — | Все метрики в целевых значениях | 📋 |
+| E1 | Остаточные `!important` (после D): hero (20), `_admin-dark` (14), sidenav (10), … | 72 (post-C5) | M3 = 0 | ✅ (2026-08-05) |
+| E2 | Остаточные `::ng-deep` (после D) | 40 | M4 = 0; для Material — через overrides-файл | ✅ (2026-08-05) |
+| E3 | Реализовать или удалить заглушки `_forms.scss`, `_modals.scss`, `_navigation.scss` | 3 стаба | Нет файлов-пустышек в пайплайне | ✅ (2026-08-05) |
+| E4 | Финальный аудит: перегнать все метрики M1–M8, обновить дашборд, синхронизировать доки | — | Все метрики в целевых значениях | ✅ (2026-08-05) |
 
 ### Эпик F — Theme Engine v2 (ADR-004, ADR-008, ADR-012) 💡
 
@@ -242,6 +242,7 @@ graph LR
 | 2026-08-03 | **D8 (Board)**: Migrated admin lists (`product-list`, `order-list`, `user-list`, `category-list`, `message-list`, `section-list`) — 0 hex; removed glass/dark-glass theme dumps; stock/status colors → semantic; order KPI cards use `--dashboard-stat-card-*`. M5 = 51/86; M1 ≈ 231. |
 | 2026-08-04 | **D9 (Board)**: Migrated admin forms and pages (`product-form`, `seo`, `settings`, `dashboard` and remaining) — 0 hex in components; residual hex in global SCSS/overrides deferred to D10. M5 = 65/86; M1 ≈ 148. |
 | 2026-08-05 | **D10 / Epic D closed**: Cleared remaining 148 hex in 13 files (global SCSS, `_material-overrides`, admin components); atmosphere gradients → `--admin-atmosphere-gradient` in admin theme files; removed hex fallbacks from `var()`. M1 = **0**; M5 = **86/86**; `npm run build` passes. |
+| 2026-08-05 | **Epic E closed (E1–E4)**: Removed all `!important` (admin-dark Material → `_material-overrides` with doubled selectors; glass body, print, reduced-motion, components); removed all `::ng-deep` (list-container `ViewEncapsulation.None`, CDK drag → `global/_drag-drop.scss`, glass PDP styles → `product-info`); deleted stub `_forms/_modals/_navigation.scss`. M3 = **0**; M4 = **0**; M8 = **100%**. |
 
 ---
 

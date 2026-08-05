@@ -1,137 +1,100 @@
-:host ::ng-deep {
-  .list__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 1rem;
-    padding: 0;
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+
+  h1 {
     margin: 0;
+    color: var(--text-primary);
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
   }
 
-  .list__kpis {
-    padding: 0;
-  }
-
-  .list__filters {
+  .stats-cards {
     display: flex;
     gap: var(--space-4);
-    flex-wrap: wrap;
-  }
 
-  .list__content {
-    padding: 0;
-  }
+    .stat-card {
+      background: var(--dashboard-stat-card-bg, var(--surface-secondary));
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      min-width: 120px;
+      border: 1px solid var(--dashboard-stat-card-border, var(--border-default));
+      box-shadow: var(--dashboard-stat-card-shadow, none);
+      backdrop-filter: var(--dashboard-stat-card-blur, none);
+      -webkit-backdrop-filter: var(--dashboard-stat-card-blur, none);
+      color: var(--dashboard-stat-card-color, var(--text-primary));
+      transition: all var(--duration-normal) var(--easing-default);
 
-  .header-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 1rem;
-
-    h1 {
-      margin: 0;
-      color: var(--text-primary);
-      font-size: var(--text-2xl);
-      font-weight: var(--font-bold);
-    }
-
-    .stats-cards {
-      display: flex;
-      gap: var(--space-4);
-
-      .stat-card {
-        background: var(--dashboard-stat-card-bg, var(--surface-secondary));
-        border-radius: var(--radius-lg);
-        padding: var(--space-4);
-        min-width: 120px;
-        border: 1px solid var(--dashboard-stat-card-border, var(--border-default));
-        box-shadow: var(--dashboard-stat-card-shadow, none);
-        backdrop-filter: var(--dashboard-stat-card-blur, none);
-        -webkit-backdrop-filter: var(--dashboard-stat-card-blur, none);
-        color: var(--dashboard-stat-card-color, var(--text-primary));
-        transition: all var(--duration-normal) var(--easing-default);
-
-        .stat-number {
-          font-size: var(--text-2xl);
-          font-weight: var(--font-bold);
-          color: var(--interactive-primary);
-          text-align: center;
-        }
-
-        .stat-label {
-          font-size: var(--text-sm);
-          color: var(--text-secondary);
-          text-align: center;
-          margin-top: var(--space-2);
-        }
-      }
-    }
-  }
-
-  .admin-table-wrapper {
-    ::ng-deep {
-      .customer-info {
-        .customer-name {
-          font-weight: var(--font-medium);
-          margin-bottom: var(--space-1);
-          color: var(--text-primary);
-        }
-
-        .customer-email {
-          font-size: var(--text-sm);
-          color: var(--text-secondary);
-        }
-
-        .customer-phone {
-          font-size: var(--text-sm);
-          color: var(--text-secondary);
-        }
-      }
-
-      .items-info {
-        font-size: var(--text-sm);
-        max-width: 200px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        color: var(--text-secondary);
-      }
-
-      .total-amount {
+      .stat-number {
+        font-size: var(--text-2xl);
         font-weight: var(--font-bold);
-        color: var(--color-success);
-        font-size: var(--text-lg);
+        color: var(--interactive-primary);
+        text-align: center;
       }
 
-      .status-select {
-        mat-select {
-          font-size: var(--text-sm);
+      .stat-label {
+        font-size: var(--text-sm);
+        color: var(--text-secondary);
+        text-align: center;
+        margin-top: var(--space-2);
+      }
+    }
+  }
+}
 
-          &.status-pending {
-            color: var(--color-warning);
-          }
+.admin-table-wrapper {
+  .customer-info {
+    .customer-name {
+      font-weight: var(--font-medium);
+      margin-bottom: var(--space-1);
+      color: var(--text-primary);
+    }
 
-          &.status-confirmed {
-            color: var(--color-info);
-          }
+    .customer-email,
+    .customer-phone {
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+    }
+  }
 
-          &.status-processing {
-            color: var(--color-info);
-          }
+  .items-info {
+    font-size: var(--text-sm);
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--text-secondary);
+  }
 
-          &.status-shipped {
-            color: var(--color-success);
-          }
+  .total-amount {
+    font-weight: var(--font-bold);
+    color: var(--color-success);
+    font-size: var(--text-lg);
+  }
 
-          &.status-delivered {
-            color: var(--color-success);
-          }
+  .status-select {
+    mat-select {
+      font-size: var(--text-sm);
 
-          &.status-cancelled {
-            color: var(--interactive-danger);
-          }
-        }
+      &.status-pending {
+        color: var(--color-warning);
+      }
+
+      &.status-confirmed,
+      &.status-processing {
+        color: var(--color-info);
+      }
+
+      &.status-shipped,
+      &.status-delivered {
+        color: var(--color-success);
+      }
+
+      &.status-cancelled {
+        color: var(--interactive-danger);
       }
     }
   }
@@ -457,41 +420,7 @@
 }
 
 @media (max-width: 768px) {
-  :host ::ng-deep {
-    .list__header {
-      flex-direction: column;
-      gap: 16px;
-      align-items: stretch;
-      padding: 16px;
-
-      h1 {
-        text-align: center;
-        font-size: 1.5rem;
-      }
-    }
-
-    .list__kpis {
-      padding: 0 16px;
-
-      .stats-cards {
-        justify-content: center;
-      }
-    }
-
-    .list__filters,
-    .filter-section {
-      flex-direction: column;
-      gap: 12px;
-      align-items: stretch;
-
-      .search-field {
-        min-width: none;
-        max-width: none;
-      }
-    }
-  }
-
-  :host ::ng-deep .admin-table-wrapper .desktop-view {
+  .admin-table-wrapper .desktop-view {
     display: none;
   }
 
@@ -521,49 +450,14 @@
     display: none;
   }
 
-  :host ::ng-deep .admin-table-wrapper .desktop-view {
+  .admin-table-wrapper .desktop-view {
     display: block;
   }
 }
 
 // Galaxy Z Fold 5/6 unfolded (690px) - use desktop format with compact table
 @media (min-width: 690px) and (max-width: 768px) {
-  :host ::ng-deep {
-    .list__header {
-      flex-direction: row;
-      gap: 1rem;
-      align-items: flex-start;
-      padding: 16px 16px 0 16px;
-
-      h1 {
-        text-align: left;
-        font-size: 1.5rem;
-      }
-    }
-
-    .list__kpis {
-      padding: 0 16px;
-
-      .stats-cards {
-        justify-content: flex-end;
-      }
-    }
-
-    .list__filters,
-    .filter-section {
-      flex-direction: row;
-      gap: 12px;
-      padding: 0 16px;
-      align-items: center;
-
-      .search-field {
-        min-width: 150px;
-        max-width: 300px;
-      }
-    }
-  }
-
-  :host ::ng-deep .admin-table-wrapper .desktop-view {
+  .admin-table-wrapper .desktop-view {
     display: block;
   }
 
@@ -571,8 +465,7 @@
     display: none;
   }
 
-  // Compact table for Galaxy Z Fold
-  :host ::ng-deep .admin-table-wrapper .order-table {
+  .admin-table-wrapper .order-table {
 
     th,
     td {

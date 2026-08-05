@@ -79,7 +79,11 @@
 // form-field width → overrides (B3)
 .full-width { width: 100%; }
 .half-width { flex: 1; width: 100%; }
-textarea { width: 100% !important; min-height: 120px; }
+textarea.mat-mdc-input-element,
+textarea {
+  width: 100%;
+  min-height: 120px;
+}
 
 .switches-group {
   display: flex;

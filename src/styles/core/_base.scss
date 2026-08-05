@@ -160,9 +160,9 @@ select {
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
   }
 }
 
@@ -180,10 +180,10 @@ select {
 
 @media print {
   * {
-    background: transparent !important;
-    color: black !important;
-    box-shadow: none !important;
-    text-shadow: none !important;
+    background: transparent;
+    color: black;
+    box-shadow: none;
+    text-shadow: none;
   }
 
   a,
