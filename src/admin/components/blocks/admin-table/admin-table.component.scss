@@ -1,37 +1,5 @@
-:host-context(body[data-theme='glass']) {
-  .admin-table-container {
-    background: var(--glass-surface-strong, var(--surface-elevated));
-    backdrop-filter: blur(22px) saturate(165%);
-    -webkit-backdrop-filter: blur(22px) saturate(165%);
-    border: 1px solid var(--glass-border-soft, rgba(255, 255, 255, 0.28));
-    border-radius: 20px;
-    box-shadow: var(--glass-shadow);
-    overflow: hidden;
-  }
+// Structural styles live in src/admin/styles/global/_tables.scss
 
-  .admin-table-wrapper,
-  .mat-mdc-table {
-    background: transparent;
-    --mat-table-background-color: transparent;
-  }
-}
-
-.admin-table-wrapper {
-  // Table styles are now globally managed in src/styles/overrides/_material-overrides.scss
-  // Only structural component-specific styles remain here
-  overflow: hidden;
-}
-.admin-table-loading {
-  text-align: center;
-  padding: var(--space-12) var(--space-6);
-  color: var(--text-primary);
-
-  mat-spinner {
-    margin: 0 auto var(--space-4);
-  }
-
-  p {
-    margin: var(--space-4) 0;
-    font-size: var(--text-lg);
-  }
+:host {
+  display: block;
 }

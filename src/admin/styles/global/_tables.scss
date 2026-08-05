@@ -1,125 +1,165 @@
-// Tables
-.mat-mdc-table {
-  background-color: inherit;
-  color: var(--text-primary);
+// ==========================================================================
+// ADMIN TABLES (Epic G6)
+// Premium data-table shell — density, zebra rows, hover, theme tokens
+// Row/cell fills are theme-scoped so Material dark palette cannot bleed through.
+// ==========================================================================
 
-  .mat-mdc-header-cell {
-    color: var(--text-primary);
+.admin-table-container {
+  --admin-table-cell-py: var(--table-cell-padding-y);
+  --admin-table-cell-px: var(--table-cell-padding-x);
+  --admin-table-header-py: var(--table-header-padding-y);
+  --table-shell-bg: transparent;
+
+  border: none;
+  border-radius: var(--table-radius);
+  background: var(--table-shell-bg);
+  box-shadow: none;
+  overflow: hidden;
+
+  &.admin-table--compact {
+    --admin-table-cell-py: var(--spacing-xs);
+    --admin-table-cell-px: var(--spacing-sm);
+    --admin-table-header-py: var(--spacing-xs);
   }
 
-  .mat-mdc-cell {
-    color: var(--text-primary);
-    border-bottom-color: rgba(255, 255, 255, 0.06);
+  &.admin-table--comfortable {
+    --admin-table-cell-py: var(--spacing-md);
+    --admin-table-cell-px: var(--spacing-lg);
+    --admin-table-header-py: var(--spacing-md);
   }
 
-  [data-theme="light"] &,
-  [data-theme="default"] & {
-    .mat-mdc-cell {
-      border-bottom-color: var(--border-default);
-    }
-  }
-
-  [data-theme="glass"] & {
-    backdrop-filter: blur(20px) saturate(160%);
-    // border: 1px solid var(--border-subtle);
-
-    .mat-mdc-header-cell {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-      color: var(--text-table-header); // white on dark header
-    }
-
-    .mat-mdc-cell {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-    }
-  }
-
-  // Dark theme - dark header
-  [data-theme="dark"] & {
-    .mat-mdc-header-cell {
-      border-bottom: 1px solid var(--border-default);
-    }
-
-    .mat-mdc-cell {
-      border-bottom-color: rgba(255, 255, 255, 0.06);
-    }
-  }
-
-  [data-theme="dark-glass"] & {
-    .mat-mdc-header-cell {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .mat-mdc-cell {
-      border-bottom: none;
-      border-bottom-width: 0;
+  &.admin-table--flat {
+    .mat-mdc-row:nth-child(even),
+    tbody tr:nth-child(even) {
+      background-color: var(--surface-table-row);
     }
   }
 }
 
-// Table container — glass theme: frosted shell + translucent zebra rows.
-// Blur/bg only on the outer container — stacking the same fill on .admin-table-wrapper
-// made the table read as opaque dark instead of glass.
-[data-theme="glass"] {
+.admin-table-wrapper {
+  overflow: hidden;
+  background: transparent;
   --mat-table-background-color: transparent;
 
+  .mat-mdc-table,
+  table.mat-mdc-table {
+    width: 100%;
+    background: transparent;
+    --mat-table-background-color: transparent;
+  }
+
+  .mat-mdc-header-row {
+    background-color: var(--surface-table-header);
+  }
+
+  .mat-mdc-header-cell {
+    padding: var(--admin-table-header-py) var(--admin-table-cell-px);
+    border-bottom: 1px solid var(--table-header-divider);
+    color: var(--text-table-header);
+    font-size: var(--table-header-size);
+    font-weight: var(--table-header-weight);
+    letter-spacing: var(--table-header-tracking);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .mat-mdc-row {
+    transition: background-color var(--transition-fast);
+
+    &:hover {
+      background-color: var(--table-row-hover);
+    }
+
+    &.is-selected,
+    &.mat-mdc-row-selected {
+      background-color: var(--table-row-selected);
+    }
+  }
+
+  .mat-mdc-cell {
+    padding: var(--admin-table-cell-py) var(--admin-table-cell-px);
+    border-bottom: 1px solid var(--table-row-divider);
+    color: var(--text-table-row);
+    vertical-align: middle;
+  }
+
+  .mat-mdc-paginator,
+  .mat-paginator {
+    background-color: var(--surface-paginator);
+    color: var(--text-paginator);
+    border-top: 1px solid var(--table-header-divider);
+    border-radius: 0 0 var(--table-radius) var(--table-radius);
+  }
+
+  .mat-mdc-paginator-range-label,
+  .mat-mdc-paginator-page-size-label,
+  .mat-mdc-paginator .mat-mdc-select-value,
+  .mat-mdc-paginator .mat-mdc-select-arrow,
+  .mat-mdc-paginator .mat-mdc-icon-button mat-icon {
+    color: var(--text-paginator);
+  }
+}
+
+.admin-table-loading {
+  padding: var(--spacing-xl) var(--spacing-md);
+}
+
+// ── Theme: glass — frosted shell + translucent zebra rows ──
+[data-theme='glass'] {
+  --table-shell-bg: var(--glass-surface-strong, var(--surface-elevated));
+  --table-border: var(--glass-border-soft, var(--border-default));
+  --table-row-divider: var(--glass-divider, var(--border-subtle));
+  --table-header-divider: var(--glass-divider, var(--border-default));
+  --mat-table-background-color: transparent;
+  --mat-paginator-container-background-color: var(--surface-paginator);
+  --mat-paginator-container-text-color: var(--text-paginator);
+
   .admin-table-container {
-    /* Liquid-glass fill (readable even if backdrop-filter is clipped by overflow) */
-    background: var(--glass-surface-strong, var(--surface-elevated));
-    backdrop-filter: blur(22px) saturate(165%);
-    -webkit-backdrop-filter: blur(22px) saturate(165%);
-    border: 1px solid var(--glass-border-soft, rgba(255, 255, 255, 0.28));
+    border: 1px solid var(--table-border);
+    backdrop-filter: var(--glass-blur, blur(22px) saturate(165%));
+    -webkit-backdrop-filter: var(--glass-blur, blur(22px) saturate(165%));
+    box-shadow: var(--glass-shadow, var(--shadow-md));
     border-radius: 20px;
-    box-shadow: var(--glass-shadow);
-    overflow: hidden;
   }
 
   .admin-table-wrapper {
-    background: transparent;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
 
-  .admin-table-container .mat-mdc-table,
-  .admin-table-wrapper .mat-mdc-table,
-  .admin-table-container table.mat-mdc-table {
-    background-color: transparent;
-    background: transparent;
-    transform: none;
-    --mat-table-background-color: transparent;
-  }
-
   .admin-table-container,
   .admin-table-wrapper {
-    // ── HEADER ──
     .mat-mdc-header-row,
     .mat-mdc-header-row.mat-mdc-header-row {
       background-color: var(--surface-table-header);
     }
+
     .mat-mdc-header-cell {
       color: var(--text-table-header);
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    // ── ODD rows ──
     .mat-mdc-row,
     .mat-mdc-row.mat-mdc-row {
       background-color: var(--surface-table-row);
     }
+
     .mat-mdc-row .mat-mdc-cell {
       color: var(--text-table-row);
+      background-color: var(--surface-table-row);
       border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     }
 
-    // ── EVEN rows ──
     .mat-mdc-row:nth-child(even),
     .mat-mdc-row:nth-child(even).mat-mdc-row {
       background-color: var(--surface-table-even);
     }
+
     .mat-mdc-row:nth-child(even) .mat-mdc-cell {
       color: var(--text-table-even);
+      background-color: var(--surface-table-even);
     }
 
-    // ── PAGINATOR / FOOTER ──
     .mat-paginator,
     .mat-mdc-paginator {
       background-color: var(--surface-paginator);
@@ -127,15 +167,87 @@
       border-top: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 0 0 20px 20px;
     }
-    .mat-mdc-paginator .mat-mdc-paginator-range-label,
-    .mat-mdc-paginator .mat-mdc-paginator-page-size-label,
-    .mat-mdc-paginator .mat-mdc-select-value,
-    .mat-mdc-paginator .mat-mdc-select-arrow {
-      color: var(--text-paginator);
+  }
+}
+
+// ── Theme: admin dark (zinc) — opaque fills, no Material slate bleed ──
+body.is-admin[data-theme='dark'],
+html[data-theme='dark'] body.is-admin {
+  --table-shell-bg: transparent;
+  --table-row-hover: var(--surface-tertiary);
+  --table-row-selected: rgba(var(--interactive-primary-rgb), 0.18);
+
+  .admin-table-container,
+  .admin-table-wrapper {
+    .mat-mdc-header-row {
+      background-color: var(--surface-table-header);
     }
-    .mat-mdc-paginator .mat-mdc-icon-button mat-icon,
-    .mat-mdc-paginator .mat-mdc-icon-button .mat-icon {
-      color: var(--text-paginator);
+
+    .mat-mdc-row,
+    .mat-mdc-row.mat-mdc-row {
+      background-color: var(--surface-secondary);
+    }
+
+    .mat-mdc-row .mat-mdc-cell {
+      background-color: var(--surface-secondary);
+      color: var(--text-table-row);
+    }
+
+    .mat-mdc-row:nth-child(even),
+    .mat-mdc-row:nth-child(even).mat-mdc-row {
+      background-color: var(--surface-table-even);
+    }
+
+    .mat-mdc-row:nth-child(even) .mat-mdc-cell {
+      background-color: var(--surface-table-even);
+      color: var(--text-table-even);
+    }
+  }
+}
+
+// ── Theme: dark-glass (admin) — warm zebra rows (prod parity), no Material slate bleed ──
+body.is-admin[data-theme='dark-glass'],
+html[data-theme='dark-glass'] body.is-admin {
+  --table-shell-bg: transparent;
+  --table-border: transparent;
+  --table-row-divider: var(--border-subtle);
+  --table-header-divider: var(--border-subtle);
+  --table-row-hover: rgba(255, 255, 255, 0.06);
+  --table-row-selected: rgba(var(--interactive-primary-rgb), 0.22);
+
+  .admin-table-container .mat-mdc-table,
+  .admin-table-wrapper .mat-mdc-table {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .admin-table-container,
+  .admin-table-wrapper {
+    .mat-mdc-header-row,
+    .mat-mdc-header-row.mat-mdc-header-row {
+      background-color: var(--surface-table-header);
+    }
+
+    .mat-mdc-row,
+    .mat-mdc-row.mat-mdc-row {
+      background-color: var(--surface-table-row);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+
+    .mat-mdc-row .mat-mdc-cell {
+      background-color: var(--surface-table-row);
+      border-bottom-width: 0;
+    }
+
+    .mat-mdc-row:nth-child(even),
+    .mat-mdc-row:nth-child(even).mat-mdc-row {
+      background-color: var(--surface-table-even);
+    }
+
+    .mat-mdc-row:nth-child(even) .mat-mdc-cell {
+      background-color: var(--surface-table-even);
+      color: var(--text-table-even);
     }
   }
 }

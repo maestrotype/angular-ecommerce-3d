@@ -63,6 +63,20 @@
   --text-table-even: var(--text-primary);
   --text-paginator: var(--text-primary);
 
+  --table-shell-bg: var(--surface-card);
+  --table-border: var(--border-default);
+  --table-radius: var(--radius-lg);
+  --table-cell-padding-y: var(--spacing-sm);
+  --table-cell-padding-x: var(--spacing-md);
+  --table-header-padding-y: var(--spacing-sm);
+  --table-row-divider: var(--border-subtle);
+  --table-header-divider: var(--border-default);
+  --table-row-hover: var(--surface-highlight);
+  --table-row-selected: rgba(var(--interactive-primary-rgb), 0.12);
+  --table-header-size: var(--type-size-label);
+  --table-header-weight: var(--type-weight-label);
+  --table-header-tracking: var(--type-tracking-label);
+
   // ===== STATE TOKENS =====
   --state-success-bg: var(--color-success-base);
   --state-success-text: var(--color-white);

@@ -143,7 +143,8 @@
 /* Explicit fallback styles to ensure visibility in overlays for standard themes */
 [data-theme='light'],
 [data-theme='dark'],
-[data-theme='glass'] {
+[data-theme='glass'],
+[data-theme='dark-glass'] {
   .mat-mdc-form-field .mat-mdc-select-value-text,
   .mat-mdc-form-field .mat-mdc-select-min-line {
     color: var(--input-text);
@@ -959,6 +960,23 @@
     display: none;
   }
 
+  .mat-mdc-form-field .mdc-floating-label,
+  .mat-mdc-form-field .mat-mdc-floating-label {
+    color: var(--input-label);
+    opacity: 1;
+  }
+
+  .mat-mdc-form-field.mat-focused .mdc-floating-label,
+  .mat-mdc-form-field.mat-form-field-should-float .mdc-floating-label {
+    color: var(--input-focus-border);
+  }
+
+  .mat-mdc-form-field .mdc-text-field__input::placeholder,
+  .mat-mdc-input-element::placeholder {
+    color: var(--input-placeholder);
+    opacity: 1;
+  }
+
   /* Hint text (character counters) */
   .mat-mdc-form-field.mat-mdc-form-field .mat-mdc-form-field-hint,
   .mat-mdc-form-field.mat-mdc-form-field .mat-hint,
@@ -1695,12 +1713,17 @@ html[data-theme='dark'] body.is-admin {
   .mat-mdc-table .mat-mdc-row,
   .mat-mdc-table .mat-mdc-cell,
   .admin-table-wrapper .mat-mdc-row {
-    background-color: var(--surface-table);
+    background-color: var(--surface-table-row, var(--surface-table));
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
     will-change: transform;
+  }
+
+  .admin-table-container .admin-table-wrapper .mat-mdc-table .mat-mdc-row:nth-child(even),
+  .admin-table-container .admin-table-wrapper .mat-mdc-table .mat-mdc-row:nth-child(even) .mat-mdc-cell {
+    background-color: var(--surface-table-even);
   }
 
   /* Row dividers: Material paints via --mat-table-row-item-outline-*;
