@@ -228,7 +228,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            background: rgba(0,0,0,0.2);
+            background: var(--surface-overlay-full);
             padding: 2px 6px;
             border-radius: 99px;
 
@@ -253,7 +253,7 @@
             .divider-v {
               width: 1px;
               height: 18px;
-              background: rgba(255,255,255,0.1);
+              background: var(--border-subtle);
               margin: 0 4px;
             }
 
@@ -290,15 +290,15 @@
           top: 20px;
           right: 20px;
           width: 240px;
-          background: rgba(30, 30, 30, 0.85);
+          background: rgba(var(--surface-elevated-rgb), 0.85);
           backdrop-filter: blur(25px) saturate(160%);
           -webkit-backdrop-filter: blur(25px) saturate(160%);
-          border: 1px solid rgba(255, 255, 255, 0.15);
+          border: 1px solid var(--border-default);
           border-radius: 20px;
           padding: 16px;
           z-index: 2000;
-          box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-          color: white;
+          box-shadow: var(--shadow-lg);
+          color: var(--text-primary);
 
           .toolbar-header {
             display: flex;
@@ -306,7 +306,7 @@
             align-items: center;
             margin-bottom: 12px;
             padding-bottom: 8px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid var(--border-subtle);
 
             .selector {
               font-family: 'JetBrains Mono', monospace;
@@ -334,7 +334,7 @@
                 display: block;
                 font-size: 9px;
                 font-weight: 800;
-                color: rgba(255,255,255,0.4);
+                color: var(--text-muted);
                 letter-spacing: 1px;
                 margin-bottom: 6px;
               }
@@ -344,14 +344,14 @@
                 gap: 6px;
                 
                 button {
-                  background: rgba(255,255,255,0.05);
-                  border: 1px solid rgba(255,255,255,0.1);
+                  background: var(--surface-highlight);
+                  border: 1px solid var(--border-subtle);
                   width: 36px;
                   height: 36px;
                   min-width: 36px;
                   padding: 0;
                   border-radius: 8px;
-                  color: white;
+                  color: var(--text-primary);
                   
                   mat-icon { font-size: 18px; }
                   small { margin-left: -2px; font-weight: 800; font-size: 8px; }
@@ -369,10 +369,10 @@
                   height: 24px;
                   border-radius: 50%;
                   cursor: pointer;
-                  border: 1px solid rgba(255,255,255,0.2);
+                  border: 1px solid var(--border-default);
                   transition: all 0.2s ease;
                   
-                  &:hover { transform: scale(1.2); border-color: white; }
+                  &:hover { transform: scale(1.2); border-color: var(--text-primary); }
                   
                   &.white { background: var(--text-on-primary); }
                   &.primary { background: var(--interactive-primary); }
@@ -394,7 +394,7 @@
   background: var(--surface-highlight);
   border: 1px solid var(--interactive-primary);
   border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 0 1px rgba(var(--interactive-primary-rgb), 0.2);
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(var(--interactive-primary-rgb), 0.2);
   display: flex;
   align-items: center;
   padding: 12px 24px;

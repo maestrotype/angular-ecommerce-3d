@@ -1,13 +1,18 @@
+/* ==========================================================================
+   SEO (Admin)
+   Epic D9: semantic tokens only — zero hardcoded colors.
+   ========================================================================== */
+
 .seo-header {
   width: 100%;
-  
+
   h1 {
     color: var(--text-primary);
     margin: 0 0 var(--space-2) 0;
     font-size: var(--text-2xl);
     font-weight: var(--font-bold);
   }
-  
+
   .subtitle {
     color: var(--text-secondary);
     margin: 0;
@@ -15,45 +20,8 @@
   }
 }
 
-// Dark glass theme - white text
-[data-theme="dark-glass"] {
-  // Headers and text
-  .seo-header h1,
-  .form-section h3,
-  h1, h2, h3, p, label, span {
-    color: rgba(255, 255, 255, 0.95);
-  }
-  
-  .seo-header .subtitle {
-    color: rgba(255, 255, 255, 0.7);
-  }
-}
-
-:host-context([data-theme="dark-glass"]) {
-  // Headers and text
-  .seo-header h1,
-  .form-section h3,
-  h1, h2, h3, p, label, span {
-    color: rgba(255, 255, 255, 0.95);
-  }
-  
-  .seo-header .subtitle {
-    color: rgba(255, 255, 255, 0.7);
-  }
-  
-  // Make sure all text in forms is white
-  .seo-content,
-  .tab-content,
-  .seo-form {
-    color: rgba(255, 255, 255, 0.95);
-  }
-  
-  }
-
 .seo-content {
   margin-top: var(--space-6);
-  
-  .seo-tabs {}
 }
 
 .tab-content {
@@ -61,7 +29,6 @@
   margin: 0 auto;
 }
 
-/* Sections and form layout */
 .seo-form {
   display: flex;
   flex-direction: column;
@@ -88,16 +55,16 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-6);
 
-  .full-width { 
-    grid-column: 1 / -1; 
-  }
-  
-  .half-width { 
-    grid-column: span 1; 
+  .full-width {
+    grid-column: 1 / -1;
   }
 
-  mat-form-field { 
-    width: 100%; 
+  .half-width {
+    grid-column: span 1;
+  }
+
+  mat-form-field {
+    width: 100%;
   }
 }
 
@@ -109,8 +76,8 @@
   padding-top: var(--space-6);
   border-top: 1px solid var(--border-default);
 
-  button { 
-    min-width: 140px; 
+  button {
+    min-width: 140px;
   }
 }
 
@@ -132,11 +99,10 @@
   }
 }
 
-// Responsive design
 @media (max-width: 768px) {
   .form-row {
     grid-template-columns: 1fr;
-    
+
     .full-width, .half-width {
       grid-column: 1 / -1;
     }
@@ -144,7 +110,7 @@
 
   .form-actions {
     flex-direction: column;
-    
+
     button {
       width: 100%;
     }

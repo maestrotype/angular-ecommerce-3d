@@ -195,7 +195,7 @@
     text-align: center;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.05);
+      background: var(--surface-highlight);
       border-color: var(--color-accent);
     }
 
@@ -293,7 +293,7 @@
         mat-form-field { flex: 1; }
 
         &.secondary {
-          background: rgba(0, 0, 0, 0.1);
+          background: var(--surface-overlay-light);
           padding: 8px;
           border-radius: 4px;
         }
@@ -338,7 +338,7 @@
       color: var(--text-secondary);
 
       code {
-        background: rgba(0, 0, 0, 0.3);
+        background: var(--surface-overlay-full);
         color: var(--interactive-primary);
         padding: 2px 8px;
         border-radius: 6px;
@@ -394,8 +394,8 @@
   }
 
   .links-sublist {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--surface-highlight);
+    border: 1px solid var(--border-subtle);
     border-radius: 12px;
     padding: 16px;
     margin-left: 36px;
@@ -425,7 +425,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      background: rgba(255, 255, 255, 0.03);
+      background: var(--surface-highlight);
       padding: 4px 8px;
       border-radius: 8px;
 

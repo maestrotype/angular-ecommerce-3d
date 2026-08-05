@@ -4,7 +4,7 @@
 > Статусы задач обновляются ТОЛЬКО здесь. Остальные документы (`PROJECT_STATUS.md`, `UI_AUDIT.md`, `REDESIGN_PLAN.md`) ссылаются сюда.
 >
 > **Baseline аудита**: 2026-07-28 (полный скан кодовой базы)
-> **Последнее обновление**: 2026-08-03
+> **Последнее обновление**: 2026-08-04
 > **Владелец**: Principal UI Architect
 
 ---
@@ -15,11 +15,11 @@
 
 | # | Метрика | Baseline (2026-07-28) | Сейчас | Цель | Прогресс |
 |---|---------|----------------------|--------|------|----------|
-| M1 | Hardcoded hex в SCSS (вне tokens/themes) | 1 336 в 68 файлах | **~231** в 23 файлах | 0 | ▓▓▓▓▓▓▓▓░░ ~83% |
+| M1 | Hardcoded hex в SCSS (вне tokens/themes) | 1 336 в 68 файлах | **~148** в 13 файлах | 0 | ▓▓▓▓▓▓▓▓▓░ ~89% |
 | M2 | Использований `--admin-*` | 2 335 в 43 файлах | **0 non-layout** (C6; 5 layout tokens only) | 0 (кроме layout-токенов) | ██████████ 100% |
 | M3 | `!important` | 91 в 12 файлах | **~52** в 11 файлах (hero −20) | 0 | ▓▓▓▓▓░░░░░ ~43% |
 | M4 | `::ng-deep` | 40 в 12 файлах | **25** (B3: removed component Material `::ng-deep` dumps) | 0 | ▓▓▓▓░░░░░░ 38% |
-| M5 | Компоненты полностью на semantic-токенах (без hex) | 3 / 86 | **51 / 86** | 86 / 86 | ▓▓▓▓▓░░░░░ 59% |
+| M5 | Компоненты полностью на semantic-токенах (без hex) | 3 / 86 | **65 / 86** | 86 / 86 | ▓▓▓▓▓▓▓░░░ 76% |
 | M6 | Legacy `_theme-variables.scss` | 722 строки, подключён | **удалён** | удалён | ██████████ 100% |
 | M7 | Orphaned `src/styles.scss` | 499 строк логики | **удалён** | удалён | ██████████ 100% |
 | M8 | Централизованный `_material-overrides.scss` | нет; overrides в 24 файлах | **Epic B 4/4** + admin `global/*` (C5); C ✅ | 1 файл + admin global modules | ▓▓▓▓▓▓▓▓▓░ 95% |
@@ -153,7 +153,7 @@ graph LR
 
 **Цель**: 86/86 компонентов потребляют только semantic-токены. Порядок: сначала самые «грязные» storefront-страницы, затем admin.
 
-**Прогресс**: полностью чистых 51/86 — storefront 0 hex (D6); admin layout/blocks (D7) + admin lists (D8); остаток M1 ≈ 231 hex / 23 файлов (forms/pages + global SCSS).
+**Прогресс**: полностью чистых 65/86 — storefront 0 hex (D6); admin layout/blocks (D7) + lists (D8) + forms/pages (D9); остаток M1 ≈ 148 hex / 13 файлов (admin components + global SCSS).
 
 | ID | Задача (пакет) | Компоненты (hex baseline) | Статус |
 |----|----------------|---------------------------|--------|
@@ -165,7 +165,7 @@ graph LR
 | D6 | Остальные storefront-страницы и shared-компоненты | по остаточному списку M1 | ✅ (2026-08-02) |
 | D7 | Admin: layout + blocks | `admin-layout`, `sidenav`, `admin-table`, `list-container`, `stat-card` | ✅ (2026-08-02) |
 | D8 | Admin: списки | `product-list`, `order-list`, `user-list`, `category-list`, `message-list`, `section-list` | ✅ (2026-08-03) |
-| D9 | Admin: формы и страницы | `product-form`, `seo`, `settings`, `dashboard` и остальные | 📋 |
+| D9 | Admin: формы и страницы | `product-form`, `seo`, `settings`, `dashboard` и остальные | ✅ (2026-08-04) |
 | D10 | Верификация: скриншоты всех страниц во всех 4 темах, M1 = 0, M5 = 86/86 | — | 📋 |
 
 **Чек-лист на каждый компонент** (из REDESIGN_PLAN Phase 6):
