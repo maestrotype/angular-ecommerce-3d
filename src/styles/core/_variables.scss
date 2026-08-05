@@ -22,27 +22,27 @@ $breakpoint-xxl: 1400px;
      Primitive aliases: --font-sans/--text-* / --font-bold — see tokens/.
      ========================================================================== */
 
-  --font-family-primary: 'Roboto', 'Helvetica Neue', sans-serif;
-  --font-family-secondary: 'Inter', 'Segoe UI', sans-serif;
-  --font-family-mono: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  --font-family-primary: var(--type-font-body);
+  --font-family-secondary: var(--type-font-heading);
+  --font-family-mono: var(--type-font-mono);
 
-  --font-size-xs: 0.75rem;   /* 12px */
-  --font-size-sm: 0.875rem;  /* 14px */
-  --font-size-md: 1rem;      /* 16px */
-  --font-size-lg: 1.125rem;  /* 18px */
-  --font-size-xl: 1.25rem;   /* 20px */
-  --font-size-xxl: 1.5rem;   /* 24px */
-  --font-size-xxxl: 2rem;    /* 32px */
+  --font-size-xs: var(--type-size-caption);
+  --font-size-sm: var(--type-size-body-sm);
+  --font-size-md: var(--type-size-body);
+  --font-size-lg: var(--type-size-h4);
+  --font-size-xl: var(--type-size-h3);
+  --font-size-xxl: var(--type-size-h2);
+  --font-size-xxxl: var(--type-size-h1);
 
-  --font-weight-light: 300;
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-  --font-weight-bold: 700;
+  --font-weight-light: var(--font-light);
+  --font-weight-normal: var(--font-normal);
+  --font-weight-medium: var(--font-medium);
+  --font-weight-semibold: var(--font-semibold);
+  --font-weight-bold: var(--font-bold);
 
-  --line-height-tight: 1.2;
-  --line-height-normal: 1.4;
-  --line-height-relaxed: 1.6;
+  --line-height-tight: var(--type-leading-heading);
+  --line-height-normal: var(--type-leading-body);
+  --line-height-relaxed: var(--leading-relaxed);
   --line-height-loose: 1.8;
 
   /* ==========================================================================

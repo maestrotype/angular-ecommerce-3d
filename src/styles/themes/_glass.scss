@@ -279,6 +279,15 @@
   --transition-slow: var(--motion-duration-slow) var(--motion-easing-default);
   --transition-enter: var(--motion-duration-normal) var(--motion-easing-enter);
 
+  /* ===== TYPOGRAPHY OVERRIDES (Epic G5 — elegant glass) ===== */
+  --type-font-heading: 'Poppins', var(--font-sans);
+  --type-weight-display: var(--font-semibold);
+  --type-weight-heading: var(--font-semibold);
+  --type-tracking-heading: -0.01em;
+  --type-tracking-display: -0.02em;
+  --type-leading-display: 1.15;
+  --type-size-display: clamp(2rem, 5vw, 3rem);
+
   /* ===== INTERACTIVE OVERRIDES ===== */
   --interactive-primary: var(--color-brand-base);
   --interactive-primary-hover: var(--color-brand-light);

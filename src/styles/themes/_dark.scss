@@ -270,6 +270,13 @@
   --transition-normal: var(--motion-duration-normal) var(--motion-easing-default);
   --transition-enter: var(--motion-duration-normal) var(--motion-easing-enter);
 
+  /* ===== TYPOGRAPHY OVERRIDES (Epic G5 — snappy dark) ===== */
+  --type-font-heading: 'Inter', var(--font-sans);
+  --type-weight-heading: var(--font-semibold);
+  --type-tracking-heading: -0.015em;
+  --type-leading-body: var(--leading-relaxed);
+  --type-tracking-label: 0.04em;
+
   /* ===== INTERACTIVE OVERRIDES ===== */
   --interactive-primary: var(--color-brand-base);
   --interactive-primary-hover: var(--color-brand-light);

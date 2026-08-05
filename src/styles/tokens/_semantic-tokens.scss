@@ -118,6 +118,43 @@
   --spacing-2xl: 3rem;
   --spacing-page: var(--space-6);
 
+  // ===== TYPOGRAPHY SCALE (Epic G5 / ADR-004) =====
+  --type-font-body: var(--font-sans);
+  --type-font-heading: 'Inter', var(--font-sans);
+  --type-font-mono: var(--font-mono);
+
+  --type-size-display: clamp(2rem, 4.5vw, 2.25rem);
+  --type-size-h1: var(--text-3xl);
+  --type-size-h2: var(--text-2xl);
+  --type-size-h3: var(--text-xl);
+  --type-size-h4: var(--text-lg);
+  --type-size-h5: var(--text-base);
+  --type-size-h6: var(--text-sm);
+  --type-size-body: var(--text-base);
+  --type-size-body-sm: var(--text-sm);
+  --type-size-caption: var(--text-xs);
+  --type-size-label: var(--text-xs);
+  --type-size-overline: var(--text-xs);
+
+  --type-weight-display: var(--font-bold);
+  --type-weight-heading: var(--font-bold);
+  --type-weight-subheading: var(--font-semibold);
+  --type-weight-body: var(--font-normal);
+  --type-weight-caption: var(--font-normal);
+  --type-weight-label: var(--font-medium);
+
+  --type-leading-display: var(--leading-tight);
+  --type-leading-heading: var(--leading-tight);
+  --type-leading-body: var(--leading-normal);
+  --type-leading-caption: var(--leading-normal);
+
+  --type-tracking-display: -0.03em;
+  --type-tracking-heading: -0.02em;
+  --type-tracking-body: 0;
+  --type-tracking-caption: 0.01em;
+  --type-tracking-label: 0.05em;
+  --type-tracking-overline: 0.08em;
+
   // ===== AUTH TOKENS (light defaults; themes override) =====
   --auth-tab-hover-bg: var(--color-slate-100);
   --auth-btn-secondary: var(--color-slate-100);

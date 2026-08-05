@@ -35,10 +35,10 @@
 | D | Component Migration (ADR-006) | ✅ Complete | D1–D10 done; M1 = 0, M5 = 86/86 |
 | E | Final Cleanup | ✅ Complete | M3 = 0, M4 = 0; stubs removed |
 | F | Theme Engine v2 (ADR-004/012) | ✅ Complete | F1–F5; see `THEME_ENGINE.md` |
-| G | Premium UI / Animations / Polish | 🔄 In Progress | G1–G4 done |
+| G | Premium UI / Animations / Polish | 🔄 In Progress | G1–G5 done |
 
 ### Current Blockers
-- None. Epic G in progress (G5 typography next).
+- None. Epic G in progress (G6 admin tables next).
 
 ### Post-C4 lessons (2026-07-29) — do not repeat
 1. **`!important` is forbidden** for new/agent work (absolute). Win with CSS variables (`--mdc-*` / `--mat-*`), specificity, or correct layer — never `!important`. Rule: `.cursor/rules/no-important.mdc` + `AI_CONSTITUTION.md`.
@@ -104,6 +104,7 @@
 
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-08-05 | Epic G5: Typography scale — `--type-*` semantic tokens (display/h1–h6/body/caption/label); mixins + `.type-*` classes; h1–h6/body/caption/label in `_base.scss`; theme presets (light/dark/glass/dark-glass). Build passes. | Implementation Engineer |
 | 2026-08-05 | Epic G4: Premium product cards — `--card-*` tokens, rewritten `_cards.scss` (badges, overlay, rating, list layout, staggered animate-in); `product-card` aligned with shop pattern (Material icons); dark/glass card token hooks. Build passes. | Implementation Engineer |
 | 2026-08-05 | Epic G3: `app-loading-spinner` + `app-skeleton-loader` (variants: line/block/circle/product-card/list-row); `_loading.scss` with theme-aware shimmer; migrated favorites, orders, similar/bought-together. Build passes. | Implementation Engineer |
 | 2026-08-05 | Epic G start: G1 motion tokens (`--motion-*`, semantic `--transition-*`, dark/glass presets, `_motion.scss`); G2 `app-empty-state` + `_empty-states.scss` (favorites, cart, orders). Build passes. | Implementation Engineer |

@@ -23,15 +23,19 @@ html {
 }
 
 body {
-  font-family: var(--font-family-primary);
-  font-size: var(--font-size-md);
-  line-height: var(--line-height-normal);
+  font-family: var(--type-font-body);
+  font-size: var(--type-size-body);
+  font-weight: var(--type-weight-body);
+  line-height: var(--type-leading-body);
+  letter-spacing: var(--type-tracking-body);
   color: var(--text-primary);
   background-color: var(--surface-primary);
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color var(--transition-normal),
+    color var(--transition-normal);
 }
 
 /* ==========================================================================
@@ -39,16 +43,6 @@ body {
    ========================================================================== */
 
 /* Headings */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  @include heading(1);
-  margin: 0 0 var(--spacing-md) 0;
-}
-
 h1 {
   @include heading(1);
 }
@@ -73,14 +67,25 @@ h6 {
   @include heading(6);
 }
 
-/* Paragraphs */
+/* Body copy */
 p {
-  @include text('md', 'normal');
+  @include type-body('md');
   margin: 0 0 var(--spacing-md) 0;
 
   &:last-child {
     margin-bottom: 0;
   }
+}
+
+small,
+.caption,
+figcaption {
+  @include type-caption;
+}
+
+label,
+.label {
+  @include type-label;
 }
 
 /* Links */

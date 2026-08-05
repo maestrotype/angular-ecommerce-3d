@@ -237,6 +237,11 @@
   --glass-blur-value: 12px;
   --glass-opacity: 0.8;
 
+  /* ===== TYPOGRAPHY OVERRIDES (Epic G5 — light/default) ===== */
+  --type-font-heading: 'Inter', var(--font-sans);
+  --type-tracking-heading: -0.02em;
+  --type-leading-body: var(--leading-normal);
+
   /* ===== LEGACY ALIASES (backward compatibility) ===== */
   /* Full --color-* legacy set lives in tokens/_semantic-tokens.scss (A4).
      Theme reasserts the theme-sensitive subset so [data-theme] specificity wins. */
