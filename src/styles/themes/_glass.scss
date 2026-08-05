@@ -106,6 +106,43 @@
   --product-detail-thumb-border: 2px solid transparent;
   --product-detail-thumb-selected-border: 2px solid #6366f1;
 
+  /* PDP premium (G11) — glass */
+  --pdp-grid-template: minmax(0, 1fr) minmax(0, 1.4fr);
+  --pdp-gallery-main-height: 36.25rem;
+  --pdp-gallery-main-radius: 2rem;
+  --pdp-gallery-main-blur: blur(30px) saturate(180%);
+  --pdp-gallery-transform: perspective(2000px) rotateY(3deg);
+  --pdp-gallery-transform-hover: perspective(2000px) rotateY(0deg) scale(1.01);
+  --pdp-gallery-filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.06));
+  --pdp-gallery-media-shadow: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.12));
+  --pdp-thumb-strip-bg: var(--surface-secondary);
+  --pdp-thumb-strip-border: 1px solid var(--border-primary);
+  --pdp-thumb-strip-radius: 1.25rem;
+  --pdp-thumb-strip-padding: var(--spacing-sm);
+  --pdp-thumb-strip-blur: var(--backdrop-blur-sm);
+  --pdp-thumb-selected-transform: translateY(calc(var(--spacing-xs) * -1));
+  --pdp-thumb-selected-shadow: 0 10px 20px rgba(var(--interactive-primary-rgb, 99, 102, 241), 0.2);
+  --pdp-info-radius: 2rem;
+  --pdp-info-blur: blur(35px) saturate(150%);
+  --pdp-info-padding: 2.5rem;
+  --pdp-info-accent-bar: linear-gradient(90deg, var(--interactive-primary), var(--border-focus));
+  --pdp-info-accent-bar-height: 3px;
+  --pdp-info-accent-bar-margin: calc(var(--pdp-info-padding) * -1) calc(var(--pdp-info-padding) * -1) var(--spacing-md);
+  --pdp-price-accent-border: 3px solid var(--border-focus);
+  --pdp-price-accent-padding: var(--spacing-md);
+  --pdp-purchase-row-bg: var(--surface-secondary);
+  --pdp-purchase-row-border: 1px solid var(--border-primary);
+  --pdp-purchase-row-radius: 1.5rem;
+  --pdp-purchase-row-padding: var(--spacing-md);
+  --pdp-cta-bg: var(--surface-secondary);
+  --pdp-cta-color: var(--text-primary);
+  --pdp-cta-border: 1.5px solid var(--border-focus);
+  --pdp-cta-radius: 1rem;
+  --pdp-cta-shadow: var(--shadow-sm);
+  --pdp-cta-hover-bg: var(--surface-highlight);
+  --pdp-cta-hover-shadow: var(--shadow-md);
+  --pdp-recommendations-margin-top: var(--spacing-2xl);
+
   /* Product Text Colors - Glass theme */
   --product-title-color: #1e293b;
   --product-meta-color: #475569;
@@ -476,20 +513,7 @@
     border-color: var(--border-default);
   }
 
-  /* Product detail info */
-  body .product-detail-info {
-    background: transparent;
-  }
-
-  body .product-info {
-    background: transparent;
-    color: var(--text-primary);
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
-  }
-
-  /* Product cards with glass */
+  /* Product info text */
   body .product-card {
     background: var(--glass-bg);
     backdrop-filter: var(--glass-blur);

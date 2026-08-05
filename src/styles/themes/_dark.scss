@@ -115,6 +115,12 @@
   --product-detail-thumb-border: 2px solid transparent;
   --product-detail-thumb-selected-border: 2px solid #007bff;
 
+  /* PDP premium (G11) — dark */
+  --pdp-gallery-main-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+  --pdp-info-shadow: var(--shadow-xl);
+  --pdp-cta-bg: var(--interactive-primary);
+  --pdp-cta-hover-bg: var(--interactive-primary-hover);
+
   /* Product Text Colors - Dark theme */
   --product-title-color: #f8fafc;
   --product-meta-color: #cbd5e1;
@@ -442,19 +448,6 @@
     background: var(--surface-secondary);
     color: var(--text-primary);
     border-color: var(--border-default);
-  }
-
-  /* Product detail info */
-  body .product-detail-info {
-    background: transparent;
-  }
-
-  body .product-info {
-    background: transparent;
-    color: var(--text-primary);
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
   }
 
   /* Product cards */

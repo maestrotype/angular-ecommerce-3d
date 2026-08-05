@@ -106,6 +106,14 @@
   --product-detail-thumb-border: 2px solid transparent;
   --product-detail-thumb-selected-border: 2px solid #007bff;
 
+  /* PDP premium (G11) — default */
+  --pdp-gallery-main-shadow: var(--shadow-md);
+  --pdp-info-shadow: var(--shadow-lg);
+  --pdp-cta-bg: var(--product-cta-bg);
+  --pdp-cta-color: var(--product-cta-color);
+  --pdp-cta-shadow: var(--product-cta-shadow);
+  --pdp-cta-hover-shadow: var(--product-cta-hover-shadow);
+
   /* Product Stepper - Default theme */
   --product-stepper-bg: #ffffff;
   --product-stepper-border: 1px solid #e5e7eb;

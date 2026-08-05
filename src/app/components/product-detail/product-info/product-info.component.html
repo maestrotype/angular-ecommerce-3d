@@ -22,6 +22,7 @@
     <div class="price-container">
       <span class="current-price">${{ getDiscountedPrice() | number:'1.2-2' }}</span>
       <span *ngIf="product.discount" class="original-price">${{ product.price | number:'1.2-2' }}</span>
+      <span *ngIf="product.discount" class="discount-pill">-{{ product.discount }}%</span>
     </div>
     <div *ngIf="product?.stock !== undefined" class="stock-line" [class.oos]="product.stock <= 0">
       <span *ngIf="product.stock > 0">{{ 'PRODUCT.STOCK.COUNT' | translate: { count: product.stock } }}</span>
@@ -29,7 +30,6 @@
     </div>
   </div>
 
-  <!-- Characteristics Section -->
   <div class="characteristics-section" *ngIf="product.specifications && getKeySpecs().length > 0">
     <div class="specs-grid">
       <div *ngFor="let spec of getKeySpecs()" class="spec-item">
@@ -41,13 +41,14 @@
 
   <div class="purchase-row" [class.disabled]="isOutOfStock()">
     <div class="stepper">
-      <button class="quantity-btn" (click)="decrementQuantity()" [disabled]="isOutOfStock()">−</button>
+      <button type="button" class="quantity-btn" (click)="decrementQuantity()" [disabled]="isOutOfStock()">−</button>
       <span class="quantity-value" aria-live="polite">{{ quantity }}</span>
-      <button class="quantity-btn" (click)="incrementQuantity()" [disabled]="isOutOfStock()">+</button>
+      <button type="button" class="quantity-btn" (click)="incrementQuantity()" [disabled]="isOutOfStock()">+</button>
     </div>
 
-    <button class="add-to-cart-btn" (click)="onAddToCart()" [disabled]="isOutOfStock()">
-      🛒 {{ 'PRODUCT.ACTIONS.ADD_TO_CART' | translate }}
+    <button type="button" class="add-to-cart-btn" (click)="onAddToCart()" [disabled]="isOutOfStock()">
+      <app-icon name="shopping-cart" [width]="20" [height]="20"></app-icon>
+      {{ 'PRODUCT.ACTIONS.ADD_TO_CART' | translate }}
     </button>
   </div>
 
