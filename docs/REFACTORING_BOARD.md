@@ -4,7 +4,7 @@
 > Статусы задач обновляются ТОЛЬКО здесь. Остальные документы (`PROJECT_STATUS.md`, `UI_AUDIT.md`, `REDESIGN_PLAN.md`) ссылаются сюда.
 >
 > **Baseline аудита**: 2026-07-28 (полный скан кодовой базы)
-> **Последнее обновление**: 2026-08-05 (Epic F closed)
+> **Последнее обновление**: 2026-08-05 (Epic G closed — рефакторинг A–G завершён)
 > **Владелец**: Principal UI Architect
 
 ---
@@ -17,7 +17,7 @@
 |---|---------|----------------------|--------|------|----------|
 | M1 | Hardcoded hex в SCSS (вне tokens/themes) | 1 336 в 68 файлах | **0** | 0 | ██████████ 100% |
 | M2 | Использований `--admin-*` | 2 335 в 43 файлах | **0 non-layout** (C6; 5 layout tokens only) | 0 (кроме layout-токенов) | ██████████ 100% |
-| M3 | `!important` | 91 в 12 файлах | **0** | 0 | ██████████ 100% |
+| M3 | `!important` | 91 в 12 файлах | **0** (4 вхождения только в комментариях) | 0 | ██████████ 100% |
 | M4 | `::ng-deep` | 40 в 12 файлах | **0** | 0 | ██████████ 100% |
 | M5 | Компоненты полностью на semantic-токенах (без hex) | 3 / 86 | **86 / 86** | 86 / 86 | ██████████ 100% |
 | M6 | Legacy `_theme-variables.scss` | 722 строки, подключён | **удалён** | удалён | ██████████ 100% |
@@ -40,36 +40,46 @@ rg -c '::ng-deep' src --glob '*.scss'
 
 ## 2. Карта состояния: что реально есть в коде
 
-Результат аудита 2026-07-28. Важно: **предыдущие записи в документации завышали прогресс** — например, «Phase 3 Complete», хотя легаси-монолит всё ещё подключён.
+**Снимок после закрытия Epic G (2026-08-05).** Baseline аудита — 2026-07-28.
 
 ### ✅ Реально работает
 
 | Что | Где | Подтверждение |
 |-----|-----|---------------|
-| Каркас токенов (primitive + semantic) | `src/styles/tokens/` | `_primitive-tokens.scss` (105 стр.), `_semantic-tokens.scss` (47 стр.) |
-| Темы переписаны на semantic-токены | `src/styles/themes/` | `_default.scss`, `_dark.scss`, `_glass.scss` |
-| Entry point imports-only | `src/styles/main.scss` | 19→22 строк, только импорты; подключён в `angular.json` |
-| Material overrides (central) | `src/styles/overrides/` | B1–B4 done; C5: admin Material leftovers modularized under `admin/styles/global/` |
-| ThemeService: переключение, персистентность, admin/front зоны | `src/app/core/themes/` | 4 темы; `data-theme` на `<html>` и `<body>` |
-| 3 компонента полностью мигрированы | `favorites`, `base-modal`, `cart-modal` | Semantic-токены, 0 hex |
-| ~29 компонентов частично мигрированы | storefront | Semantic-токены + остаточные hex |
-| Регрессии Glass/Admin-тем починены | Task-008, 015–017, 021, 022 | См. changelog в `PROJECT_STATUS.md` |
+| Каркас токенов (primitive + semantic) | `src/styles/tokens/` | `_primitive-tokens.scss`, `_semantic-tokens.scss` (~500+ стр.) |
+| Темы на semantic-токенах | `src/styles/themes/` | `_default.scss`, `_dark.scss`, `_glass.scss` + admin partials |
+| Entry point imports-only | `src/styles/main.scss` | Только импорты; подключён в `angular.json` |
+| Global component presets | `src/styles/components/` | cards, forms, modals, nav, PDP, checkout, motion, micro-interactions, page-transitions, … |
+| Material overrides (central) | `src/styles/overrides/` | B1–B4; admin `global/*` (C5) |
+| Theme Engine v2 | `src/app/core/themes/` | ADR-004/012; runtime validation; FOUC guard в `index.html` |
+| Все storefront/admin SCSS на semantic-токенах | `src/app/`, `src/admin/` | M1 = 0 hex вне tokens/themes; M5 = 86/86 |
+| Premium UI + motion | Epic G | G1–G17: empty/loading states, PDP, checkout, transitions, a11y polish |
+| Документация motion/a11y/review | `docs/` | `STYLE_ARCHITECTURE.md` §14, `POLISH_AND_QUALITY.md`, `CROSS_THEME_VISUAL_REVIEW.md` |
 
-### ❌ Главные проблемы (по убыванию веса)
+### 📋 Опционально (не блокирует закрытие рефакторинга)
 
-| # | Проблема | Масштаб | Эпик |
-|---|----------|---------|------|
-| 1 | ~~Параллельная admin-система токенов `--admin-*`~~ **C6 done** — только 5 layout ADMIN-ONLY | — | C ✅ |
-| 2 | Компоненты не мигрированы (hex повсюду) | 1 336 hex в 68 файлах; admin — 10% на semantic | D |
-| 3 | ~~Legacy-монолит `_theme-variables.scss`~~ **Удалён (A3, 2026-07-28)**: блоки перенесены в `_default`/`_dark`/`_glass` с фильтрацией дублей | — | A |
-| 4 | Material overrides размазаны | Component scatter cleared (B3); palette bound (B4); admin `.mat-` modularized (C5 `global/*`) | B ✅ / C5 ✅ |
-| 5 | ~~Orphaned `src/styles.scss`~~ **Удалён (A5)**; docs synced to `main.scss` entry (A6, 2026-07-28) | — | A |
-| 6 | ~~`_primitive-tokens.scss` существует, но НЕ импортируется — `tokens/_index.scss` дублирует примитивы инлайн~~ **Исправлено (A1, 2026-07-28)**: заодно починены нерезолвившиеся токены `--color-blue-300/400`, `--color-blue-400-rgb`, `--z-modal`, `--font-*` weights, использовавшиеся в dark/glass темах и модалках | — | A |
-| 7 | ~~`core/_variables.scss` — параллельная палитра~~ **Исправлено (A4, 2026-07-28)**: цвета перенесены в semantic legacy-алиасы; файл — только SCSS-breakpoints + non-color утилиты | — | A |
-| 8 | Заглушки `_forms.scss`, `_modals.scss`, `_navigation.scss` | по 5 строк | E |
-| 9 | TS-модель `Theme` — каталог метаданных, не применяется к DOM; не синхронизирована с SCSS (ADR-012) | 4 файла тем | F |
-| 10 | Residual `!important` (бан на новые; см. `.cursor/rules/no-important.mdc`) | M3 = 72 в 12 файлах | E |
-| 11 | Post-C4 visual lessons (tooltips / glass-border inheritance / badge transform) — documented in `PROJECT_STATUS.md` | fixed 2026-07-29; preserved in C5 overlays | C ✅ |
+| # | Что | Статус |
+|---|-----|--------|
+| 1 | Human visual sign-off (матрица страниц × темы) | ☐ `CROSS_THEME_VISUAL_REVIEW.md` §6 |
+| 2 | Human a11y/contrast smoke (Lighthouse / axe) | ☐ `POLISH_AND_QUALITY.md` §2–3 |
+| 3 | Перезамер метрик M1–M4 перед релизом | Команды в §1 (проверка 2026-08-05: M1=0, M3=0*, M4=0) |
+| 4 | Marketing screenshots | `VISUAL_ASSETS_GUIDE.md` |
+
+### 🗄️ Исторические проблемы (закрыты в эпиках A–G)
+
+| # | Проблема | Эпик |
+|---|----------|------|
+| 1 | Параллельная admin-система `--admin-*` | C6 ✅ |
+| 2 | Hex в компонентах (1 336) | D ✅ |
+| 3 | Legacy `_theme-variables.scss` | A3 ✅ |
+| 4 | Material overrides размазаны | B ✅ / C5 ✅ |
+| 5 | Orphaned `src/styles.scss` | A5 ✅ |
+| 6 | `_primitive-tokens.scss` не импортировался | A1 ✅ |
+| 7 | `core/_variables.scss` — параллельная палитра | A4 ✅ |
+| 8 | Заглушки `_forms/_modals/_navigation` | E ✅ → полные partials (G7–G9) |
+| 9 | TS Theme ↔ SCSS drift | F ✅ |
+| 10 | Residual `!important` | E ✅ |
+| 11 | Glass tooltip/badge regressions | C5 ✅ |
 
 ---
 
@@ -92,19 +102,21 @@ graph LR
     style C fill:#e8f5e9
     style D fill:#fff3e0
     style E fill:#e3f2fd
-    style F fill:#f3e5f5
-    style G fill:#f3e5f5
+    style F fill:#e8f5e9
+    style G fill:#e8f5e9
 ```
+
+**Статус roadmap: все эпики A–G завершены (2026-08-05).**
 
 | Эпик | Название | Статус | Задач | Метрики |
 |------|----------|--------|-------|---------|
 | A | Фундамент токенов | ✅ **Готово** | 6/6 | M6, M7 |
-| B | Централизация Material overrides | ✅ Done | 4/4 | M8 |
+| B | Централизация Material overrides | ✅ **Готово** | 4/4 | M8 |
 | C | Admin-унификация (ADR-011) | ✅ **Готово** | 6/6 | M2 |
 | D | Миграция компонентов (ADR-006) | ✅ **Готово** | 10/10 | M1, M5 |
 | E | Финальная зачистка | ✅ **Готово** | 4/4 | M3, M4 |
 | F | Theme Engine v2 (ADR-004, ADR-012) | ✅ **Готово** | 5/5 | — |
-| G | Premium UI, анимации, полировка | 🔄 In Progress | 11/17 | — |
+| G | Premium UI, анимации, полировка | ✅ **Готово** | 17/17 | — |
 
 ---
 
@@ -273,6 +285,7 @@ TS `ThemeDefinition` — каталог метаданных, синхрониз
 | 2026-08-05 | **G14 (Board)**: Micro-interaction tokens (`--micro-*`), `components/_micro-interactions.scss` (focus ring, hover lift/scale, press, icon-btn); spinner on tokens; cards/checkout/buttons/nav/forms wired; G1 aliases preserved. Epic G **14/17**. |
 | 2026-08-05 | **G15 (Board)**: Animation system documented — `STYLE_ARCHITECTURE.md` §14 (token layers, keyframes, utilities, theme presets, a11y/perf); `THEME_ENGINE.md` §7.1 motion preset table. Epic G **15/17**. |
 | 2026-08-05 | **G16 (Board)**: Cross-theme review — `docs/CROSS_THEME_VISUAL_REVIEW.md` (matrix + audit); payment success/error + cart modal migrated off `getThemeClass`/`glass-theme`; `_payment-result.scss`, `_cart-modal.scss`. Epic G **16/17**. |
+| 2026-08-05 | **Docs sync**: §2–§3 обновлены — все эпики A–G ✅; метрики 100%; §2 переписан под post-G snapshot. |
 | 2026-08-05 | **G17 (Board)**: Polish — `docs/POLISH_AND_QUALITY.md`; skip link + mobile nav a11y; print styles; `color-scheme`; viewport zoom; mobile main padding. **Epic G closed (17/17)**. |
 
 ---
@@ -285,7 +298,7 @@ TS `ThemeDefinition` — каталог метаданных, синхрониз
    - Статус → ✅, дата в скобках рядом со статусом;
    - Обнови затронутые метрики в дашборде (§1) — перезамерь командами из §1;
    - Одна строка в changelog `PROJECT_STATUS.md`;
-   - Если нашёл новую проблему — добавь строку в §2 «Главные проблемы» и задачу в соответствующий эпик, НЕ чини вне скоупа.
+   - Если нашёл новую проблему — добавь строку в §2 «Опционально» или в соответствующий эпик, НЕ чини вне скоупа.
 4. **Новые задачи** добавляются только в существующие эпики; новые эпики — только решением архитектора.
 5. **Запрещено**: помечать задачу ✅ без измеримого подтверждения (метрика/скрин/грep). Именно так документация разошлась с кодом в прошлый раз.
 

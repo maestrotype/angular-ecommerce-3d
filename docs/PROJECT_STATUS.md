@@ -16,7 +16,7 @@
 | E-commerce Flow | ✅ Operational | Cart, checkout, Stripe payments |
 | Admin Panel | ✅ Operational | CRUD for products, orders, users, categories |
 | Multi-language | ✅ Operational | EN / RU / UA via @ngx-translate / localize |
-| Theme System | 🔄 Being Refactored | 4 themes work; token unification in progress |
+| Theme System | ✅ Complete | 4 themes; token pipeline + Theme Engine v2; see `THEME_ENGINE.md` |
 | AI 3D Generation | 🔬 Experimental | Hunyuan3D, InstantMesh, Unique3D integrated |
 | Recommendations | ✅ Operational | Collaborative filtering API |
 
@@ -27,17 +27,19 @@
 > **Full task board with metrics**: [REFACTORING_BOARD.md](REFACTORING_BOARD.md)
 > **Baseline audit (2026-07-28)**: code was scanned to establish objective completion metrics. Statuses below reflect the actual code state, superseding earlier optimistic records.
 
-| Epic | Name | Status | Reality Check (2026-07-29) |
-|------|------|--------|----------------------------|
-| A | Token Foundation | ✅ Complete | A1–A6 done |
-| B | Material Overrides Centralization | ✅ Complete | B1–B4 done; admin Material leftovers modularized in C5 `global/` |
-| C | Admin Unification (ADR-011) | ✅ Complete | C1–C6; M2 = 0 non-layout (5 layout tokens); M3 = 72 |
-| D | Component Migration (ADR-006) | ✅ Complete | D1–D10 done; M1 = 0, M5 = 86/86 |
-| E | Final Cleanup | ✅ Complete | M3 = 0, M4 = 0; stubs removed |
-| F | Theme Engine v2 (ADR-004/012) | ✅ Complete | F1–F5; see `THEME_ENGINE.md` |
-| G | Premium UI / Animations / Polish | 🔄 In Progress | G1–G11 done |
+| Epic | Name | Status | Notes |
+|------|------|--------|-------|
+| A | Token Foundation | ✅ Complete | A1–A6 |
+| B | Material Overrides Centralization | ✅ Complete | B1–B4; admin Material in C5 `global/` |
+| C | Admin Unification (ADR-011) | ✅ Complete | C1–C6; M2 = 0 non-layout |
+| D | Component Migration (ADR-006) | ✅ Complete | D1–D10; M1 = 0, M5 = 86/86 |
+| E | Final Cleanup | ✅ Complete | M3 = 0, M4 = 0 |
+| F | Theme Engine v2 (ADR-004/012) | ✅ Complete | F1–F5; `THEME_ENGINE.md` |
+| G | Premium UI / Animations / Polish | ✅ Complete | G1–G17; Epic G closed 2026-08-05 |
 
-### Current Blockers
+**Style refactoring: complete (Epics A–G).** All board metrics at 100%.
+
+### Optional follow-up (not blockers)
 - Epic G **complete** (G1–G17). Optional: human visual sign-off per `CROSS_THEME_VISUAL_REVIEW.md` + `POLISH_AND_QUALITY.md`.
 
 ### Post-C4 lessons (2026-07-29) — do not repeat
@@ -49,13 +51,13 @@
 6. **User-facing “white corners”** were finally identified as **MatTooltip** (e.g. “Go to storefront”), not only badges/icon-buttons — always confirm the exact element from a screenshot with arrows.
 
 ### What Verifiably Works Today
-- Token scaffold + themes + `main.scss` entry
+- Token scaffold + themes + `main.scss` entry; M1 = 0 hex, M5 = 86/86 components
 - Theme Engine v2: `ThemeDefinition` catalog, SCSS source of truth, dev validation, anti-FOUC in `index.html`
 - ThemeService: 4 themes, admin/storefront persistence, area sync on navigation
-- C4: admin components off SHARED/CONFLICT `--admin-*` (layout-only kept)
-- C5: `admin-global.scss` is a 16-line orchestrator; styles in `src/admin/styles/global/` (11 partials); 0 `!important` there
-- Dark / dark-glass admin chrome polish (header border tokens, tooltip surface, badge, scrollbars, table outline tokens)
-- Hard ban on new `!important` documented for agents
+- Global component presets: cards, forms, modals, nav, PDP, checkout, loading, empty states, page transitions, micro-interactions
+- C4–C6: admin off SHARED/CONFLICT `--admin-*` (5 layout tokens only); `admin-global.scss` decomposed (C5)
+- Epic G complete: premium UI, motion system, cross-theme review docs, a11y polish (skip link, reduced-motion, print)
+- Hard ban on new `!important` documented for agents (M3 = 0)
 
 ---
 
@@ -104,7 +106,14 @@
 
 | Date | Change | Author |
 |------|--------|--------|
-| 2026-08-05 | Epic G6: Admin tables — `--table-*` semantic tokens; rewritten `global/_tables.scss` (density compact/comfortable, striped/flat, row hover/selected, paginator); `app-admin-table` gains `density`/`striped` inputs + skeleton loading. Build passes. | Implementation Engineer |
+| 2026-08-05 | **Epic G closed + docs sync**: G12–G17 (checkout, page transitions, micro-interactions, motion docs, cross-theme review, a11y/polish); `REFACTORING_BOARD.md` + `PROJECT_STATUS.md` synced — all epics A–G ✅, metrics at 100%. | Principal UI Architect |
+| 2026-08-05 | Epic G12: Checkout tokens (`--checkout-*`), `_checkout.scss` (stepper, summary, payment states); checkout/payment off `getThemeClass`. Build passes. | Implementation Engineer |
+| 2026-08-05 | Epic G13: Page transition tokens + `_page-transitions.scss`; storefront route enter via `router-outlet`. Build passes. | Implementation Engineer |
+| 2026-08-05 | Epic G14: Micro-interaction tokens + `_micro-interactions.scss`; wired to cards, buttons, nav, forms, spinner. Build passes. | Implementation Engineer |
+| 2026-08-05 | Epic G15: Animation system documented — `STYLE_ARCHITECTURE.md` §14, `THEME_ENGINE.md` §7.1. | Implementation Engineer |
+| 2026-08-05 | Epic G16: `CROSS_THEME_VISUAL_REVIEW.md`; payment-result + cart-modal migrated; `_payment-result.scss`, `_cart-modal.scss`. Build passes. | Implementation Engineer |
+| 2026-08-05 | Epic G17: `POLISH_AND_QUALITY.md`; skip link, mobile nav a11y, print styles, `color-scheme`, viewport zoom. Epic G **17/17 complete**. Build passes. | Implementation Engineer |
+| 2026-08-05 | Epic G7–G11: Forms, navigation, modals, stat cards, PDP polish — global partials + tokens. Build passes. | Implementation Engineer |
 | 2026-08-05 | Epic G5: Typography scale — `--type-*` semantic tokens (display/h1–h6/body/caption/label); mixins + `.type-*` classes; h1–h6/body/caption/label in `_base.scss`; theme presets (light/dark/glass/dark-glass). Build passes. | Implementation Engineer |
 | 2026-08-05 | Epic G4: Premium product cards — `--card-*` tokens, rewritten `_cards.scss` (badges, overlay, rating, list layout, staggered animate-in); `product-card` aligned with shop pattern (Material icons); dark/glass card token hooks. Build passes. | Implementation Engineer |
 | 2026-08-05 | Epic G3: `app-loading-spinner` + `app-skeleton-loader` (variants: line/block/circle/product-card/list-row); `_loading.scss` with theme-aware shimmer; migrated favorites, orders, similar/bought-together. Build passes. | Implementation Engineer |
@@ -169,4 +178,4 @@
 
 ---
 
-*This document is maintained by the Principal UI Architect. Last updated: 2026-07-28*
+*This document is maintained by the Principal UI Architect. Last updated: 2026-08-05*
