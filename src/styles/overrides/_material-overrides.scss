@@ -88,14 +88,17 @@
   background-color: var(--surface-table-even);
 }
 
-// Dialog
+// Dialog — Epic G9 modal tokens
 .mat-mdc-dialog-panel {
   .mat-mdc-dialog-container {
     .mdc-dialog__surface {
-      background-color: var(--surface-elevated);
-      border-radius: var(--radius-dialog);
+      background-color: var(--modal-surface, var(--surface-elevated));
+      border: 1px solid var(--modal-border, var(--border-default));
+      border-radius: var(--modal-radius, var(--radius-dialog));
       color: var(--text-primary);
-      backdrop-filter: blur(5px);
+      box-shadow: var(--modal-shadow, var(--shadow-xl));
+      backdrop-filter: var(--modal-backdrop-blur);
+      -webkit-backdrop-filter: var(--modal-backdrop-blur);
     }
 
     .mdc-dialog__title {

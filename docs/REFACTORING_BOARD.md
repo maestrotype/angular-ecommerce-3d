@@ -210,7 +210,7 @@ TS `ThemeDefinition` — каталог метаданных, синхрониз
 | G6 | Admin data tables premium styling | 7.5 | ✅ (2026-08-05) |
 | G7 | Forms: `_forms.scss` + Material form overrides | 7.6 | ✅ (2026-08-05) |
 | G8 | Navigation: header/footer/sidebar active states | 7.7 | ✅ (2026-08-05) |
-| G9 | Modals/dialogs: `_modals.scss` + backdrop motion | 7.8 | 💡 |
+| G9 | Modals/dialogs: `_modals.scss` + backdrop motion | 7.8 | ✅ (2026-08-05) |
 | G10 | Admin dashboard stat cards | 7.9 | 💡 |
 | G11 | Product detail page polish | 7.10 | 💡 |
 | G12 | Checkout flow polish | 7.11 | 💡 |
@@ -265,6 +265,7 @@ TS `ThemeDefinition` — каталог метаданных, синхрониз
 | 2026-08-05 | **Epic E closed (E1–E4)**: Removed all `!important` (admin-dark Material → `_material-overrides` with doubled selectors; glass body, print, reduced-motion, components); removed all `::ng-deep` (list-container `ViewEncapsulation.None`, CDK drag → `global/_drag-drop.scss`, glass PDP styles → `product-info`); deleted stub `_forms/_modals/_navigation.scss`. M3 = **0**; M4 = **0**; M8 = **100%**. |
 | 2026-08-05 | **G7 (Board)**: Form tokens (`--form-*`), `components/_forms.scss` (native controls, layout, validation, focus rings), Material validation/hint/disabled overrides, admin `_forms-controls` on tokens; contact-form migrated to shared `.form-control`. Epic G **7/17**. |
 | 2026-08-05 | **G8 (Board)**: Nav tokens (`--nav-*`), `components/_navigation.scss` (nav-link, mobile drawer, breadcrumb, footer links), desktop `routerLinkActive`, admin sidenav on tokens; header/footer/PDP deduped. Epic G **8/17**. |
+| 2026-08-05 | **G9 (Board)**: Modal tokens (`--modal-*`), `components/_modals.scss` (backdrop/panel motion, base-modal shell, CDK/Material dialog), Material dialog on tokens; `base-modal` deduped. Epic G **9/17**. |
 
 ---
 

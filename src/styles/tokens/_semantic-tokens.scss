@@ -137,6 +137,27 @@
   --breadcrumb-current-color: var(--text-primary);
   --breadcrumb-separator-color: var(--text-muted);
 
+  // ===== MODAL TOKENS (Epic G9) =====
+  --modal-backdrop: var(--surface-overlay-full);
+  --modal-backdrop-light: var(--surface-overlay);
+  --modal-backdrop-blur: var(--backdrop-blur-sm);
+  --modal-backdrop-blur-strong: var(--backdrop-blur);
+  --modal-surface: var(--surface-elevated);
+  --modal-border: var(--border-default);
+  --modal-radius: var(--radius-lg);
+  --modal-radius-lg: var(--radius-xl);
+  --modal-shadow: var(--shadow-xl);
+  --modal-max-width: 500px;
+  --modal-auth-max-width: 440px;
+  --modal-padding: var(--spacing-lg);
+  --modal-enter-duration: var(--motion-duration-normal);
+  --modal-leave-duration: var(--motion-duration-fast);
+  --modal-enter-easing: var(--motion-easing-enter);
+  --modal-leave-easing: var(--motion-easing-leave);
+  --modal-close-size: 2.25rem;
+  --modal-close-bg: var(--surface-tertiary);
+  --modal-close-hover-bg: var(--surface-highlight);
+
   // ===== STATE TOKENS =====
   --state-success-bg: var(--color-success-base);
   --state-success-text: var(--color-white);
