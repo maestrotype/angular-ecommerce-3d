@@ -211,7 +211,7 @@ TS `ThemeDefinition` — каталог метаданных, синхрониз
 | G7 | Forms: `_forms.scss` + Material form overrides | 7.6 | ✅ (2026-08-05) |
 | G8 | Navigation: header/footer/sidebar active states | 7.7 | ✅ (2026-08-05) |
 | G9 | Modals/dialogs: `_modals.scss` + backdrop motion | 7.8 | ✅ (2026-08-05) |
-| G10 | Admin dashboard stat cards | 7.9 | 💡 |
+| G10 | Admin dashboard stat cards | 7.9 | ✅ (2026-08-05) |
 | G11 | Product detail page polish | 7.10 | 💡 |
 | G12 | Checkout flow polish | 7.11 | 💡 |
 | G13 | Page transitions | 8.2 | 💡 |
@@ -266,6 +266,7 @@ TS `ThemeDefinition` — каталог метаданных, синхрониз
 | 2026-08-05 | **G7 (Board)**: Form tokens (`--form-*`), `components/_forms.scss` (native controls, layout, validation, focus rings), Material validation/hint/disabled overrides, admin `_forms-controls` on tokens; contact-form migrated to shared `.form-control`. Epic G **7/17**. |
 | 2026-08-05 | **G8 (Board)**: Nav tokens (`--nav-*`), `components/_navigation.scss` (nav-link, mobile drawer, breadcrumb, footer links), desktop `routerLinkActive`, admin sidenav on tokens; header/footer/PDP deduped. Epic G **8/17**. |
 | 2026-08-05 | **G9 (Board)**: Modal tokens (`--modal-*`), `components/_modals.scss` (backdrop/panel motion, base-modal shell, CDK/Material dialog), Material dialog on tokens; `base-modal` deduped. Epic G **9/17**. |
+| 2026-08-05 | **G10 (Board)**: Stat card tokens (`--stat-card-*`), `admin/global/_stat-cards.scss` (KPI shell, icons, glass shimmer via tokens), theme files on `--stat-card-*`; dashboard/order-list/list-container/payments/stat-card deduped. Epic G **10/17**. |
 
 ---
 

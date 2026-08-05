@@ -158,6 +158,40 @@
   --modal-close-bg: var(--surface-tertiary);
   --modal-close-hover-bg: var(--surface-highlight);
 
+  // ===== STAT CARD TOKENS (Epic G10 — admin KPI cards) =====
+  --stat-card-bg: var(--surface-secondary);
+  --stat-card-border: var(--border-default);
+  --stat-card-blur: none;
+  --stat-card-shadow: var(--shadow-md);
+  --stat-card-hover-shadow: var(--shadow-lg);
+  --stat-card-hover-bg: var(--surface-highlight);
+  --stat-card-hover-border: var(--border-default);
+  --stat-card-color: var(--text-primary);
+  --stat-card-radius: var(--radius-xl);
+  --stat-card-padding: var(--space-4);
+  --stat-card-min-height: 120px;
+  --stat-card-hover-transform: translateY(-4px);
+  --stat-card-motion: var(--transition-normal);
+  --stat-card-overlay: none;
+  --stat-card-overlay-opacity: 0;
+  --stat-card-shimmer-opacity: 0;
+  --stat-card-shimmer-hover-opacity: 0;
+  --stat-card-number-color: var(--text-primary);
+  --stat-card-compact-number-color: var(--interactive-primary);
+  --stat-card-number-gradient: none;
+  --stat-card-number-fill: currentColor;
+  --stat-card-number-clip: border-box;
+  --stat-card-label-color: var(--text-secondary);
+  --stat-card-label-weight: var(--font-medium);
+  --stat-card-icon-size: 48px;
+
+  --stat-icon-products: var(--color-success);
+  --stat-icon-orders: var(--interactive-primary);
+  --stat-icon-users: var(--color-warning);
+  --stat-icon-revenue: var(--color-accent);
+  --stat-icon-aov: var(--interactive-primary);
+  --stat-icon-success-rate: var(--color-success);
+
   // ===== STATE TOKENS =====
   --state-success-bg: var(--color-success-base);
   --state-success-text: var(--color-white);

@@ -10,14 +10,14 @@
   --border-opacity: 0.12;
   --border-style: solid;
 
-  --dashboard-stat-card-bg: var(--surface-secondary);
-  --dashboard-stat-card-border: var(--border-default);
-  --dashboard-stat-card-blur: none;
-  --dashboard-stat-card-shadow: var(--shadow-md);
-  --dashboard-stat-card-hover-shadow: var(--shadow-lg);
-  --dashboard-stat-card-hover-bg: var(--surface-highlight);
-  --dashboard-stat-card-hover-border: var(--border-default);
-  --dashboard-stat-card-color: var(--text-primary);
+  --dashboard-stat-card-bg: var(--stat-card-bg);
+  --dashboard-stat-card-border: var(--stat-card-border);
+  --dashboard-stat-card-blur: var(--stat-card-blur);
+  --dashboard-stat-card-shadow: var(--stat-card-shadow);
+  --dashboard-stat-card-hover-shadow: var(--stat-card-hover-shadow);
+  --dashboard-stat-card-hover-bg: var(--stat-card-hover-bg);
+  --dashboard-stat-card-hover-border: var(--stat-card-hover-border);
+  --dashboard-stat-card-color: var(--stat-card-color);
 
   --stat-icon-products: var(--color-success);
   --stat-icon-orders: var(--interactive-primary);
@@ -64,5 +64,5 @@ body.is-admin {
   --admin-list-radius: 0;
   --admin-list-shadow: var(--shadow-md);
   --admin-list-backdrop-filter: none;
-  --dashboard-stat-card-color: var(--text-primary);
+  --stat-card-color: var(--text-primary);
 }

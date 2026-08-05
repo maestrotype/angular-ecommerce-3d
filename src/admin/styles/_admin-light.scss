@@ -8,14 +8,14 @@ body.is-admin[data-theme='light'],
 html[data-theme='light'] body.is-admin {
   --backdrop-blur: none;
 
-  --dashboard-stat-card-bg: var(--surface-elevated);
-  --dashboard-stat-card-border: var(--border-default);
-  --dashboard-stat-card-shadow: var(--shadow-md);
-  --dashboard-stat-card-blur: none;
-  --dashboard-stat-card-hover-shadow: var(--shadow-lg);
-  --dashboard-stat-card-hover-bg: var(--surface-highlight);
-  --dashboard-stat-card-hover-border: var(--border-default);
-  --dashboard-stat-card-color: var(--text-primary);
+  --stat-card-bg: var(--surface-elevated);
+  --stat-card-border: var(--border-default);
+  --stat-card-shadow: var(--shadow-md);
+  --stat-card-blur: none;
+  --stat-card-hover-shadow: var(--shadow-lg);
+  --stat-card-hover-bg: var(--surface-highlight);
+  --stat-card-hover-border: var(--border-default);
+  --stat-card-color: var(--text-primary);
 
   --admin-list-bg: var(--surface-elevated);
   --admin-list-color: var(--text-primary);

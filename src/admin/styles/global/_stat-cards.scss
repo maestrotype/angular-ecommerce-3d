@@ -1,0 +1,241 @@
+// ==========================================================================
+// ADMIN STAT CARDS (Epic G10)
+// Premium KPI cards — token-driven, all themes; no ViewEncapsulation theme dumps
+// ==========================================================================
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-6);
+  margin-bottom: var(--space-12);
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+}
+
+.stats-cards,
+.list__kpis .stats-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+
+  .stat-card {
+    flex: 1;
+    min-width: 120px;
+  }
+}
+
+.list__kpis .stats-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.stat-card {
+  background-color: var(--stat-card-bg);
+  border: 1px solid var(--stat-card-border);
+  border-radius: var(--stat-card-radius);
+  box-shadow: var(--stat-card-shadow);
+  backdrop-filter: var(--stat-card-blur);
+  -webkit-backdrop-filter: var(--stat-card-blur);
+  color: var(--stat-card-color);
+  min-height: var(--stat-card-min-height);
+  padding: var(--stat-card-padding);
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform var(--stat-card-motion),
+    box-shadow var(--stat-card-motion),
+    background-color var(--stat-card-motion),
+    border-color var(--stat-card-motion);
+
+  &.mat-mdc-card {
+    padding: 0;
+    --mdc-elevated-card-container-color: transparent;
+    --mdc-elevated-card-container-shape: var(--stat-card-radius);
+    --mdc-elevated-card-container-elevation: 0;
+  }
+
+  .mat-mdc-card-content {
+    padding: var(--stat-card-padding);
+    height: 100%;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--stat-card-overlay);
+    opacity: var(--stat-card-overlay-opacity);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, var(--glass-highlight) 0%, transparent 70%);
+    opacity: var(--stat-card-shimmer-opacity);
+    transition: opacity var(--stat-card-motion);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  &:hover {
+    transform: var(--stat-card-hover-transform);
+    box-shadow: var(--stat-card-hover-shadow);
+    background-color: var(--stat-card-hover-bg);
+    border-color: var(--stat-card-hover-border);
+
+    &::after {
+      opacity: var(--stat-card-shimmer-hover-opacity);
+    }
+  }
+
+  .stat-content {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    height: 100%;
+    position: relative;
+    z-index: 2;
+  }
+
+  .stat-icon {
+    font-size: var(--stat-card-icon-size);
+    width: var(--stat-card-icon-size);
+    height: var(--stat-card-icon-size);
+    flex-shrink: 0;
+
+    &.products {
+      color: var(--stat-icon-products);
+    }
+
+    &.orders {
+      color: var(--stat-icon-orders);
+    }
+
+    &.users {
+      color: var(--stat-icon-users);
+    }
+
+    &.revenue {
+      color: var(--stat-icon-revenue);
+    }
+
+    &.aov {
+      color: var(--stat-icon-aov);
+    }
+
+    &.success-rate {
+      color: var(--stat-icon-success-rate);
+    }
+  }
+
+  .stat-info {
+    flex: 1;
+    min-width: 0;
+
+    h3 {
+      margin: 0 0 var(--space-1) 0;
+      color: var(--stat-card-label-color);
+      font-size: var(--text-sm);
+      font-weight: var(--stat-card-label-weight);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+
+  .stat-number,
+  .stat-value {
+    margin: 0;
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    color: var(--stat-card-compact-number-color, var(--interactive-primary));
+    background: var(--stat-card-number-gradient);
+    -webkit-background-clip: var(--stat-card-number-clip);
+    background-clip: var(--stat-card-number-clip);
+    -webkit-text-fill-color: var(--stat-card-number-fill);
+    text-align: center;
+  }
+
+  .stat-info .stat-number,
+  .stat-info .stat-value {
+    text-align: left;
+    color: var(--stat-card-number-color);
+  }
+
+  .stat-label {
+    font-size: var(--text-sm);
+    color: var(--stat-card-label-color);
+    font-weight: var(--stat-card-label-weight);
+    text-align: center;
+    margin-top: var(--space-2);
+    position: relative;
+    z-index: 2;
+  }
+
+  // Compact KPI layout (order-list, list-container headers)
+  &:not(:has(.stat-content)) {
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .stat-card {
+    --stat-card-min-height: 100px;
+    --stat-card-icon-size: 36px;
+
+    .stat-number,
+    .stat-value {
+      font-size: var(--text-xl);
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .page-header .list__kpis .stats-cards {
+    flex-direction: column;
+
+    .stat-card {
+      min-width: 100%;
+    }
+  }
+}
+
+// ── Theme: glass — frosted KPI cards + gradient numbers ──
+[data-theme='glass'] body.is-admin,
+[data-theme='glass'] {
+  .stat-card {
+    --stat-card-overlay: linear-gradient(
+      135deg,
+      rgba(var(--interactive-primary-rgb), 0.1) 0%,
+      rgba(var(--color-info-rgb, var(--interactive-primary-rgb)), 0.1) 50%,
+      rgba(var(--color-accent-rgb, var(--interactive-primary-rgb)), 0.1) 100%
+    );
+    --stat-card-overlay-opacity: 0.6;
+    --stat-card-shimmer-hover-opacity: 1;
+    --stat-card-hover-transform: translateY(-4px) scale(1.02);
+    --stat-card-number-color: transparent;
+    --stat-card-number-gradient: var(--lg-gradient-primary);
+    --stat-card-number-fill: transparent;
+    --stat-card-number-clip: text;
+    --stat-card-label-color: var(--lg-text-secondary, var(--text-secondary));
+    --stat-card-label-weight: var(--font-medium);
+
+    .stat-number,
+    .stat-value {
+      filter: drop-shadow(0 2px 4px rgba(var(--interactive-primary-rgb), 0.3));
+    }
+
+    .stat-label,
+    .stat-info h3 {
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+  }
+}

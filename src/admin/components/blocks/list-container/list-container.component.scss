@@ -59,37 +59,6 @@ app-list-container {
   .list__kpis {
     display: flex;
     gap: var(--space-4);
-
-    .stats-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: var(--space-4);
-
-      .stat-card {
-        background-color: var(--dashboard-stat-card-bg);
-        border-radius: var(--radius-lg);
-        padding: var(--space-4);
-        border: 1px solid var(--dashboard-stat-card-border);
-        box-shadow: var(--dashboard-stat-card-shadow);
-        backdrop-filter: var(--dashboard-stat-card-blur);
-        -webkit-backdrop-filter: var(--dashboard-stat-card-blur);
-        color: var(--dashboard-stat-card-color);
-
-        .stat-number {
-          font-size: var(--text-2xl);
-          font-weight: var(--font-bold);
-          color: var(--interactive-primary);
-          text-align: center;
-        }
-
-        .stat-label {
-          font-size: var(--text-sm);
-          color: var(--text-secondary);
-          text-align: center;
-          margin-top: var(--space-2);
-        }
-      }
-    }
   }
 
   .list__filters {
