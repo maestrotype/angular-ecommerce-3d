@@ -499,6 +499,63 @@
   --card-stock-color: #475569;
   --card-stock-border: rgba(148, 163, 184, 0.4);
 
+  /* ===== PDP — ice glass ===== */
+  --product-detail-card-bg: var(--glass-surface-soft);
+  --product-detail-card-border: 1px solid var(--glass-border-soft);
+  --product-detail-main-view-bg: var(--glass-surface-soft);
+  --product-detail-main-view-border: 1px solid var(--glass-border-soft);
+  --product-detail-thumb-bg: rgba(255, 255, 255, 0.35);
+  --product-detail-thumb-selected-border: 2px solid rgba(100, 116, 139, 0.55);
+
+  --pdp-page-bg: transparent;
+  --pdp-header-bg: var(--surface-chrome-gradient);
+  --pdp-header-border: var(--glass-border-soft);
+  --pdp-header-backdrop-filter: var(--chrome-blur);
+  --pdp-back-btn-bg: rgba(255, 255, 255, 0.45);
+  --pdp-back-btn-border: 1px solid var(--glass-border-soft);
+  --pdp-back-btn-blur: var(--backdrop-blur-sm);
+  --pdp-info-bg: var(--glass-surface-muted);
+  --pdp-info-border: 1px solid var(--glass-border-soft);
+  --pdp-info-shadow: var(--glass-shadow);
+  --pdp-info-blur: var(--glass-blur);
+  --pdp-info-accent-bar: transparent;
+  --pdp-info-accent-bar-height: 0;
+  --pdp-gallery-main-bg: var(--glass-surface-soft);
+  --pdp-gallery-main-border: 1px solid var(--glass-border-soft);
+  --pdp-gallery-main-blur: var(--glass-blur);
+  --pdp-gallery-main-shadow: var(--glass-shadow);
+  --pdp-thumb-strip-bg: rgba(255, 255, 255, 0.28);
+  --pdp-thumb-strip-border: 1px solid var(--glass-border-soft);
+  --pdp-thumb-strip-blur: var(--glass-blur);
+  --pdp-thumb-selected-border: 2px solid rgba(100, 116, 139, 0.5);
+  --pdp-thumb-selected-shadow: var(--glass-shadow);
+  --pdp-purchase-row-bg: rgba(255, 255, 255, 0.22);
+  --pdp-purchase-row-border: none;
+  --pdp-purchase-row-radius: 1.25rem;
+  --pdp-cta-bg: rgba(255, 255, 255, 0.58);
+  --pdp-cta-color: var(--text-primary);
+  --pdp-cta-border: 1px solid var(--glass-border-strong);
+  --pdp-cta-blur: var(--glass-blur);
+  --pdp-cta-shadow: var(--chrome-shadow);
+  --pdp-cta-hover-bg: rgba(255, 255, 255, 0.75);
+  --pdp-cta-hover-shadow: var(--glass-shadow-hover);
+
+  --breadcrumb-color: var(--text-secondary);
+  --breadcrumb-link-color: var(--text-secondary);
+  --breadcrumb-link-hover-color: var(--text-primary);
+  --breadcrumb-current-color: var(--text-primary);
+  --breadcrumb-separator-color: var(--text-muted);
+
+  --product-title-color: var(--text-primary);
+  --product-price-color: var(--text-primary);
+  --product-meta-color: var(--text-muted);
+  --product-stock-color: #64748b;
+  --product-stock-oos-color: #64748b;
+  --product-specs-bg: rgba(255, 255, 255, 0.28);
+  --product-specs-border: 1px solid var(--glass-border-soft);
+  --product-stepper-bg: rgba(255, 255, 255, 0.45);
+  --product-stepper-border: 1px solid var(--glass-border-soft);
+
   /* ===== COMPOSITE OVERRIDES ===== */
   --radius-card: var(--radius-xl);
   --shadow-card: var(--glass-shadow);

@@ -107,7 +107,7 @@
   "ADMIN_NAV_ORDERS": "Orders",
   "ORDERS": {
     "TITLE": "My Orders",
-    "BACK_BTN": "← Back to Shop",
+    "BACK_BTN": "Back to Shop",
     "STATUS_LOADING": "Loading...",
     "EMPTY_MSG": "No orders yet",
     "EMPTY_BTN": "Start Shopping",
@@ -1300,7 +1300,7 @@
       "SIMILAR": "Similar Products",
       "BOUGHT_TOGETHER": "Frequently Bought Together"
     },
-    "BACK_BTN": "← Back to Shop",
+    "BACK_BTN": "Back to Shop",
     "BREADCRUMBS": {
       "HOME": "Home",
       "SHOP": "Shop"

@@ -11,7 +11,7 @@
   <div class="product-meta">
     <div class="rating" *ngIf="product.rating">
       <span class="stars">
-        <span *ngFor="let star of [1,2,3,4,5]" class="star" [class.filled]="star <= product.rating!">⭐</span>
+        <span *ngFor="let star of [1,2,3,4,5]" class="star" [class.filled]="star <= product.rating!">★</span>
       </span>
       <span class="rating-value">({{ product.rating }})</span>
     </div>
