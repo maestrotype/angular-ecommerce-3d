@@ -12,6 +12,7 @@
    ========================================================================== */
 
 [data-theme="glass"] {
+  color-scheme: light;
   --card-surface: var(--glass-bg);
   --card-border: var(--border-default);
   --card-shadow-hover: var(--glass-shadow-hover, var(--shadow-lg));

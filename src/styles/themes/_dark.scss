@@ -11,6 +11,8 @@
    ========================================================================== */
 
 [data-theme="dark"] {
+  color-scheme: dark;
+
   --card-surface: var(--color-slate-700);
   --card-border: var(--color-slate-600);
   --card-shadow-hover: var(--shadow-lg);

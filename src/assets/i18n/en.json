@@ -2,6 +2,10 @@
   "LANG_EN": "English",
   "LANG_RU": "Russian",
   "LANG_UA": "Ukrainian",
+  "A11Y": {
+    "SKIP_TO_CONTENT": "Skip to main content",
+    "MOBILE_NAV": "Mobile navigation"
+  },
   "ADMIN_PANEL": "Admin Panel",
   "ADMIN_DASHBOARD": "Admin Dashboard",
   "PROFILE": "Profile",

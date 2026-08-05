@@ -2,6 +2,10 @@
   "LANG_EN": "English",
   "LANG_RU": "Русский",
   "LANG_UA": "Українська",
+  "A11Y": {
+    "SKIP_TO_CONTENT": "Перейти до основного вмісту",
+    "MOBILE_NAV": "Мобільна навігація"
+  },
   "ADMIN_PANEL": "Панель адміністратора",
   "ADMIN_DASHBOARD": "Панель керування",
   "PROFILE": "Профіль",

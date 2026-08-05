@@ -184,6 +184,26 @@ select {
    ========================================================================== */
 
 @media print {
+  app-header,
+  app-footer,
+  .footer-mobile,
+  app-base-modal,
+  .modal-container,
+  .checkout-stepper,
+  .skip-link,
+  .theme-switcher {
+    display: none;
+  }
+
+  main {
+    padding: 0;
+    min-height: auto;
+  }
+
+  .storefront-main > router-outlet + * {
+    animation: none;
+  }
+
   * {
     background: transparent;
     color: black;

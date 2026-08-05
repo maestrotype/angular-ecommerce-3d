@@ -38,7 +38,7 @@
 | G | Premium UI / Animations / Polish | 🔄 In Progress | G1–G11 done |
 
 ### Current Blockers
-- None. Epic G in progress (G17 responsive + a11y + performance polish next).
+- Epic G **complete** (G1–G17). Optional: human visual sign-off per `CROSS_THEME_VISUAL_REVIEW.md` + `POLISH_AND_QUALITY.md`.
 
 ### Post-C4 lessons (2026-07-29) — do not repeat
 1. **`!important` is forbidden** for new/agent work (absolute). Win with CSS variables (`--mdc-*` / `--mat-*`), specificity, or correct layer — never `!important`. Rule: `.cursor/rules/no-important.mdc` + `AI_CONSTITUTION.md`.

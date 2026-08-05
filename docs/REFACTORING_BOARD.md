@@ -196,7 +196,7 @@ TS `ThemeDefinition` — каталог метаданных, синхрониз
 | F4 | Переключение без FOUC/layout shift | ✅ (2026-08-05) |
 | F5 | Актуализировать `THEME_ENGINE.md` под реализацию | ✅ (2026-08-05) |
 
-### Эпик G — Premium UI, анимации, полировка 🔄
+### Эпик G — Premium UI, анимации, полировка ✅
 
 Детальный план — `REDESIGN_PLAN.md` Phases 7–9.
 
@@ -218,7 +218,7 @@ TS `ThemeDefinition` — каталог метаданных, синхрониз
 | G14 | Micro-interactions (hover/focus/spinner) | 8.3 | ✅ (2026-08-05) |
 | G15 | Theme animation presets documentation | 8.4–8.6 | ✅ (2026-08-05) |
 | G16 | Cross-theme visual review | 7.12, 9.1 | ✅ (2026-08-05) |
-| G17 | Responsive + a11y + performance polish | 9.2–9.8 | 💡 |
+| G17 | Responsive + a11y + performance polish | 9.2–9.8 | ✅ (2026-08-05) |
 
 ---
 
@@ -273,6 +273,7 @@ TS `ThemeDefinition` — каталог метаданных, синхрониз
 | 2026-08-05 | **G14 (Board)**: Micro-interaction tokens (`--micro-*`), `components/_micro-interactions.scss` (focus ring, hover lift/scale, press, icon-btn); spinner on tokens; cards/checkout/buttons/nav/forms wired; G1 aliases preserved. Epic G **14/17**. |
 | 2026-08-05 | **G15 (Board)**: Animation system documented — `STYLE_ARCHITECTURE.md` §14 (token layers, keyframes, utilities, theme presets, a11y/perf); `THEME_ENGINE.md` §7.1 motion preset table. Epic G **15/17**. |
 | 2026-08-05 | **G16 (Board)**: Cross-theme review — `docs/CROSS_THEME_VISUAL_REVIEW.md` (matrix + audit); payment success/error + cart modal migrated off `getThemeClass`/`glass-theme`; `_payment-result.scss`, `_cart-modal.scss`. Epic G **16/17**. |
+| 2026-08-05 | **G17 (Board)**: Polish — `docs/POLISH_AND_QUALITY.md`; skip link + mobile nav a11y; print styles; `color-scheme`; viewport zoom; mobile main padding. **Epic G closed (17/17)**. |
 
 ---
 

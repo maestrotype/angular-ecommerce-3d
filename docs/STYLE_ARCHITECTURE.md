@@ -694,6 +694,8 @@ When adding a theme, override **only** the tokens whose personality differs — 
 ### 14.8 Related docs
 
 - `docs/THEME_ENGINE.md` §7 — motion dimension in theme metadata
+- `docs/POLISH_AND_QUALITY.md` — responsive, a11y, print, performance checklist (G17)
+- `docs/CROSS_THEME_VISUAL_REVIEW.md` — cross-theme visual matrix (G16)
 - `docs/REFACTORING_BOARD.md` — Epic G tasks G1, G13, G14, G15
 - `docs/REDESIGN_PLAN.md` Phase 8 — animation system goals
 - `.cursor/rules/no-important.mdc` — cascade rules for interactive states
