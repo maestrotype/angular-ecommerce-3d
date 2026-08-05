@@ -1,49 +1,52 @@
-// Form Fields
+// Form Fields — admin shell; tokens + Material bridge in components/_forms.scss + overrides
 .mat-mdc-form-field {
   .mat-mdc-text-field-wrapper {
-    background-color: var(--surface-elevated);
-    color: var(--text-primary);
+    background-color: var(--form-bg);
+    color: var(--form-text);
+    border-radius: var(--form-radius);
+    transition: var(--form-transition);
 
-    // Glass theme improvements
-    [data-theme="glass"] & {
-      background: var(--glass-surface-muted);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border: 1px solid var(--border-subtle);
-      border-radius: 18px;
-      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+    [data-theme='glass'] & {
+      background: var(--glass-surface-muted, var(--form-bg));
+      backdrop-filter: var(--backdrop-blur-sm);
+      -webkit-backdrop-filter: var(--backdrop-blur-sm);
+      border: 1px solid var(--glass-border-soft, var(--form-border));
+      border-radius: var(--form-radius-pill);
+      box-shadow: var(--shadow-sm);
     }
   }
 
-  .mat-mdc-form-field-label {
-    color: var(--text-secondary);
+  .mat-mdc-form-field-label,
+  .mdc-floating-label {
+    color: var(--form-label-color);
   }
 
-  .mat-mdc-input-element {
-    color: var(--text-primary);
-  }
+  .mat-mdc-input-element,
+  .mdc-text-field__input {
+    color: var(--form-text);
 
-  .mat-mdc-input-element::placeholder {
-    color: var(--text-secondary);
+    &::placeholder {
+      color: var(--form-placeholder);
+    }
   }
 
   .mat-mdc-form-field-outline {
-    color: var(--border-default);
+    color: var(--form-border);
   }
 
   &.mat-focused .mat-mdc-form-field-outline {
-    color: var(--border-primary);
+    color: var(--form-border-focus);
   }
 }
 
 // Select
 .mat-mdc-select {
   .mat-mdc-select-value {
-    color: var(--text-primary);
+    color: var(--form-text);
   }
 
   .mat-mdc-select-arrow {
-    color: var(--text-secondary);
+    color: var(--form-label-color);
   }
 }
 
@@ -51,7 +54,7 @@
 .mat-mdc-checkbox {
   .mdc-checkbox {
     .mdc-checkbox__background {
-      border-color: var(--border-default);
+      border-color: var(--form-border);
     }
 
     .mdc-checkbox__checkmark {
@@ -71,11 +74,11 @@
 .mat-mdc-radio-button {
   .mdc-radio {
     .mdc-radio__background {
-      border-color: var(--border-default);
+      border-color: var(--form-border);
     }
 
     .mdc-radio__outer-circle {
-      border-color: var(--border-default);
+      border-color: var(--form-border);
     }
   }
 
@@ -96,7 +99,7 @@
 .mat-mdc-slide-toggle {
   .mdc-switch {
     .mdc-switch__track {
-      background-color: var(--border-default);
+      background-color: var(--form-border);
     }
   }
 

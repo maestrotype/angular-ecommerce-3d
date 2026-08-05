@@ -241,12 +241,7 @@
   .mat-mdc-text-field-wrapper.mat-focused,
   .mat-mdc-text-field-wrapper:focus-within {
     border-color: var(--input-focus-border);
-    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0);
-    /* no strong default, use below for visible focus */
-  }
-
-  .mat-mdc-text-field-wrapper.mat-focused {
-    box-shadow: 0 0 0 3px rgba(var(--interactive-primary-rgb), 0.12);
+    box-shadow: var(--form-focus-ring);
   }
 
   /* hover state (not focused) */
@@ -256,9 +251,47 @@
 
   /* disabled */
   .mat-mdc-text-field-wrapper .mat-form-field-disabled,
-  .mat-mdc-text-field-wrapper[aria-disabled="true"] {
-    opacity: 0.65;
+  .mat-mdc-text-field-wrapper[aria-disabled="true"],
+  .mat-mdc-form-field.mat-form-field-disabled .mat-mdc-text-field-wrapper {
+    opacity: var(--form-disabled-opacity);
     cursor: not-allowed;
+  }
+
+  /* ===== G7 — validation, hints, success ===== */
+  .mat-mdc-form-field.mat-form-field-invalid {
+    --mdc-outlined-text-field-outline-color: var(--form-error-color);
+    --mdc-outlined-text-field-focus-outline-color: var(--form-error-color);
+    --mdc-outlined-text-field-label-text-color: var(--form-error-color);
+    --mdc-outlined-text-field-focus-label-text-color: var(--form-error-color);
+    --mdc-filled-text-field-active-indicator-color: var(--form-error-color);
+    --mdc-filled-text-field-focus-active-indicator-color: var(--form-error-color);
+  }
+
+  .mat-mdc-form-field.mat-form-field-invalid .mat-mdc-text-field-wrapper {
+    border-color: var(--form-error-color);
+  }
+
+  .mat-mdc-form-field.mat-form-field-invalid.mat-focused .mat-mdc-text-field-wrapper {
+    box-shadow: var(--form-error-ring);
+  }
+
+  .mat-mdc-form-field-error,
+  .mat-mdc-form-field .mat-mdc-form-field-error,
+  .mat-mdc-form-field .mat-error {
+    color: var(--form-error-color);
+    font-size: var(--form-hint-size);
+  }
+
+  .mat-mdc-form-field-hint,
+  .mat-mdc-form-field .mat-mdc-form-field-hint,
+  .mat-mdc-form-field .mat-hint,
+  .mat-mdc-form-field-subscript-wrapper .mat-mdc-form-field-hint {
+    color: var(--form-hint-color);
+    font-size: var(--form-hint-size);
+  }
+
+  .mat-mdc-form-field-subscript-wrapper {
+    margin-top: var(--spacing-2xs);
   }
 
   /* ===== Selects ===== */

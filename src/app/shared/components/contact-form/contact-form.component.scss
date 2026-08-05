@@ -1,117 +1,58 @@
 form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--form-row-gap);
+}
 
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+// Button stays component-specific (glass CTA recipe)
+.cta-button-glass {
+  background: var(--glass-btn-bg);
+  border: var(--glass-btn-border);
+  color: var(--glass-btn-color);
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--glass-btn-shadow);
+  backdrop-filter: blur(12px) saturate(180%);
+  transition: all var(--transition-normal);
+  text-transform: uppercase;
+  cursor: pointer;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+  align-self: flex-start;
+  letter-spacing: 0.5px;
 
-    label {
-      font-weight: 600;
-      color: var(--text-primary);
-      font-size: 0.875rem;
-    }
-
-    input,
-    textarea {
-      background: var(--surface-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 1rem 1.5rem;
-      font-size: 1rem;
-      color: var(--text-primary);
-      transition: all 0.3s ease;
-      outline: none;
-      width: 100%;
-      box-sizing: border-box;
-
-      &:focus {
-        border-color: var(--interactive-primary);
-        box-shadow: 0 0 0 3px rgba(var(--interactive-primary-rgb), 0.08);
-        background: var(--surface-primary);
-      }
-
-      &::placeholder {
-        color: var(--text-muted);
-      }
-
-      &.invalid {
-        border-color: var(--interactive-danger);
-        background: var(--color-error-bg);
-      }
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 120px;
-      font-family: inherit;
-    }
-
-    .error-message {
-      color: var(--interactive-danger);
-      font-size: 0.75rem;
-      margin-top: 0.25rem;
-    }
+  &:hover:not(:disabled) {
+    background: var(--glass-btn-hover-bg);
+    color: var(--interactive-primary);
+    box-shadow: var(--glass-btn-hover-shadow);
+    border: var(--glass-btn-hover-border);
+    transform: translateY(-1px) scale(1.01);
   }
 
-  .cta-button-glass {
-    background: var(--glass-btn-bg);
-    border: var(--glass-btn-border);
-    color: var(--glass-btn-color);
-    padding: 1rem 2.5rem;
-    font-size: 1.1rem;
-    font-weight: 700;
-    border-radius: var(--radius-lg);
-    box-shadow: var(--glass-btn-shadow);
-    backdrop-filter: blur(12px) saturate(180%);
-    transition: all 0.3s;
-    text-transform: uppercase;
-    cursor: pointer;
-    outline: none;
-    position: relative;
-    overflow: hidden;
-    align-self: flex-start;
-    letter-spacing: 0.5px;
+  &:focus-visible {
+    outline: 2px solid var(--border-primary);
+    outline-offset: 2px;
+  }
 
-    &:hover:not(:disabled) {
-      background: var(--glass-btn-hover-bg);
-      color: var(--interactive-primary);
-      box-shadow: var(--glass-btn-hover-shadow);
-      border: var(--glass-btn-hover-border);
-      transform: translateY(-1px) scale(1.01);
-    }
-
-    &:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
+  &:disabled {
+    opacity: var(--form-disabled-opacity);
+    cursor: not-allowed;
+    transform: none;
   }
 }
 
 @media (max-width: 768px) {
   form {
-    gap: 0.8rem;
+    gap: var(--form-gap);
+  }
 
-    .form-group {
-      input,
-      textarea {
-        padding: 0.7rem 1rem;
-        font-size: 0.9rem;
-      }
-
-      textarea {
-        min-height: 70px;
-      }
-    }
-
-    .cta-button-glass {
-      padding: 0.7rem 1.2rem;
-      font-size: 0.95rem;
-      align-self: stretch;
-      text-align: center;
-    }
+  .cta-button-glass {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.95rem;
+    align-self: stretch;
+    text-align: center;
   }
 }

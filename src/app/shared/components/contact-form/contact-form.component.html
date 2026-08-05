@@ -1,7 +1,8 @@
 <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
   <div class="form-group">
     <label for="senderName">{{ 'CONTACTS.FIELDS.NAME' | translate }}</label>
-    <input type="text" id="senderName" formControlName="senderName" [class.invalid]="isFieldInvalid('senderName')"
+    <input type="text" id="senderName" formControlName="senderName" class="form-control"
+      [class.invalid]="isFieldInvalid('senderName')"
       [placeholder]="'CONTACTS.FORM.NAME' | translate" />
     <div class="error-message" *ngIf="isFieldInvalid('senderName')">
       {{ getErrorMessage('senderName') }}
@@ -10,7 +11,8 @@
 
   <div class="form-group">
     <label for="senderEmail">{{ 'CONTACTS.FIELDS.EMAIL' | translate }}</label>
-    <input type="email" id="senderEmail" formControlName="senderEmail" [class.invalid]="isFieldInvalid('senderEmail')"
+    <input type="email" id="senderEmail" formControlName="senderEmail" class="form-control"
+      [class.invalid]="isFieldInvalid('senderEmail')"
       [placeholder]="'CONTACTS.FORM.EMAIL' | translate" />
     <div class="error-message" *ngIf="isFieldInvalid('senderEmail')">
       {{ getErrorMessage('senderEmail') }}
@@ -19,7 +21,8 @@
 
   <div class="form-group">
     <label for="subject">{{ 'CONTACTS.FIELDS.SUBJECT' | translate }}</label>
-    <input type="text" id="subject" formControlName="subject" [class.invalid]="isFieldInvalid('subject')"
+    <input type="text" id="subject" formControlName="subject" class="form-control"
+      [class.invalid]="isFieldInvalid('subject')"
       [placeholder]="'CONTACTS.FORM.SUBJECT' | translate" />
     <div class="error-message" *ngIf="isFieldInvalid('subject')">
       {{ getErrorMessage('subject') }}
@@ -28,7 +31,8 @@
 
   <div class="form-group">
     <label for="message">{{ 'CONTACTS.FIELDS.MESSAGE' | translate }}</label>
-    <textarea id="message" formControlName="message" [class.invalid]="isFieldInvalid('message')"
+    <textarea id="message" formControlName="message" class="form-control"
+      [class.invalid]="isFieldInvalid('message')"
       [placeholder]="'CONTACTS.FORM.MESSAGE' | translate" rows="5"></textarea>
     <div class="error-message" *ngIf="isFieldInvalid('message')">
       {{ getErrorMessage('message') }}

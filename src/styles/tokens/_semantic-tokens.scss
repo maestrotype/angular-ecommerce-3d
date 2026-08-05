@@ -77,6 +77,40 @@
   --table-header-weight: var(--type-weight-label);
   --table-header-tracking: var(--type-tracking-label);
 
+  // ===== FORM TOKENS (Epic G7) =====
+  --form-radius: var(--radius-md);
+  --form-radius-pill: var(--radius-lg);
+  --form-padding-y: var(--spacing-sm);
+  --form-padding-x: var(--spacing-md);
+  --form-gap: var(--spacing-md);
+  --form-row-gap: var(--spacing-lg);
+  --form-label-size: var(--type-size-label);
+  --form-label-weight: var(--type-weight-label);
+  --form-label-tracking: var(--type-tracking-label);
+  --form-label-color: var(--input-label);
+  --form-text-size: var(--type-size-body);
+  --form-hint-size: var(--type-size-caption);
+  --form-hint-color: var(--text-muted);
+  --form-error-color: var(--interactive-danger);
+  --form-success-color: var(--color-success);
+  --form-success-bg: var(--color-success-bg);
+  --form-error-bg: var(--color-error-bg);
+  --form-disabled-opacity: 0.55;
+  --form-focus-ring-width: 3px;
+  --form-focus-ring-color: rgba(var(--interactive-primary-rgb), 0.18);
+  --form-focus-ring: 0 0 0 var(--form-focus-ring-width) var(--form-focus-ring-color);
+  --form-error-ring-color: rgba(239, 68, 68, 0.22);
+  --form-error-ring: 0 0 0 var(--form-focus-ring-width) var(--form-error-ring-color);
+  --form-success-ring-color: rgba(16, 185, 129, 0.22);
+  --form-success-ring: 0 0 0 var(--form-focus-ring-width) var(--form-success-ring-color);
+  --form-border: var(--input-border);
+  --form-border-focus: var(--input-focus-border);
+  --form-bg: var(--input-bg);
+  --form-text: var(--input-text);
+  --form-placeholder: var(--input-placeholder);
+  --form-transition: border-color var(--transition-fast), box-shadow var(--transition-fast),
+    background-color var(--transition-fast);
+
   // ===== STATE TOKENS =====
   --state-success-bg: var(--color-success-base);
   --state-success-text: var(--color-white);
