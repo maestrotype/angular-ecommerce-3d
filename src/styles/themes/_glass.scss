@@ -164,6 +164,15 @@
   --page-transition-offset-y: var(--spacing-lg);
   --page-transition-easing: var(--motion-easing-enter);
 
+  /* Micro-interactions (G14) — glass: elegant lift + soft focus */
+  --micro-hover-lift-y: calc(var(--spacing-sm) * -1);
+  --micro-hover-scale: 1.04;
+  --micro-press-scale: 0.97;
+  --micro-focus-ring-color: rgba(var(--interactive-primary-rgb), 0.3);
+  --micro-spinner-track: var(--glass-surface-muted);
+  --micro-spinner-accent: var(--interactive-primary);
+  --micro-spinner-duration: var(--motion-duration-slow);
+
   /* Product Text Colors - Glass theme */
   --product-title-color: #1e293b;
   --product-meta-color: #475569;

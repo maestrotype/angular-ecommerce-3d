@@ -140,6 +140,16 @@
   --page-transition-offset-y: var(--spacing-xs);
   --page-transition-easing: var(--motion-easing-enter);
 
+  /* Micro-interactions (G14) — dark: snappy, minimal lift */
+  --micro-hover-lift-y: calc(var(--spacing-2xs) * -1);
+  --micro-hover-scale: 1.015;
+  --micro-press-scale: 0.99;
+  --micro-focus-ring-color: rgba(96, 165, 250, 0.28);
+  --micro-focus-outline-color: #60a5fa;
+  --micro-spinner-track: var(--surface-tertiary);
+  --micro-spinner-accent: var(--interactive-primary);
+  --micro-spinner-duration: var(--motion-duration-normal);
+
   --product-stock-color: #34d399;
   --product-original-price-color: #94a3b8;
   --product-specs-bg: var(--surface-secondary);

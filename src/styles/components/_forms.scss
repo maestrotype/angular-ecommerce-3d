@@ -147,7 +147,7 @@
 
 [data-theme='glass'] {
   --form-radius: var(--form-radius-pill);
-  --form-focus-ring-color: rgba(var(--interactive-primary-rgb), 0.24);
+  --micro-focus-ring-color: rgba(var(--interactive-primary-rgb), 0.24);
 
   .form-control,
   .form-group input:not([type='checkbox']):not([type='radio']):not([type='file']),
@@ -164,7 +164,7 @@
 // ── Theme: dark ──
 
 [data-theme='dark'] {
-  --form-focus-ring-color: rgba(96, 165, 250, 0.22);
+  --micro-focus-ring-color: rgba(96, 165, 250, 0.22);
 
   .form-control,
   .form-group input:not([type='checkbox']):not([type='radio']):not([type='file']),
@@ -180,7 +180,7 @@
 body.is-admin[data-theme='dark-glass'],
 html[data-theme='dark-glass'] body.is-admin {
   --form-radius: var(--form-radius-pill);
-  --form-focus-ring-color: rgba(138, 180, 248, 0.22);
+  --micro-focus-ring-color: rgba(138, 180, 248, 0.22);
 
   .form-control,
   .form-group input:not([type='checkbox']):not([type='radio']):not([type='file']),

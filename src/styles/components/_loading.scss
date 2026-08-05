@@ -57,9 +57,10 @@
   &__ring {
     border-radius: var(--radius-full);
     border-style: solid;
-    border-color: var(--surface-secondary);
-    border-top-color: var(--interactive-primary);
-    animation: motion-spin var(--motion-duration-slow) linear infinite;
+    border-width: var(--micro-spinner-border-width);
+    border-color: var(--micro-spinner-track);
+    border-top-color: var(--micro-spinner-accent);
+    animation: motion-spin var(--micro-spinner-duration) linear infinite;
   }
 
   &__message {

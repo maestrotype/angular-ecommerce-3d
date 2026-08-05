@@ -17,29 +17,21 @@
   font-weight: var(--font-medium);
   font-size: var(--text-sm);
   cursor: pointer;
-  transition:
-    background-color var(--transition-fast),
-    color var(--transition-fast),
-    transform var(--transition-fast),
-    box-shadow var(--transition-fast);
+
+  @extend .micro-interactive;
+  @extend .micro-focus-ring;
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover {
+      color: var(--interactive-primary);
+      background: var(--surface-highlight);
+    }
+  }
 
   svg {
     width: 1.25rem;
     height: 1.25rem;
     flex-shrink: 0;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    &:hover {
-      background: var(--surface-highlight);
-      color: var(--interactive-primary);
-      transform: translateY(calc(var(--spacing-2xs) * -1));
-      box-shadow: var(--shadow-sm);
-    }
-
-    &:active {
-      transform: translateY(0);
-    }
   }
 }
 
@@ -402,17 +394,9 @@
   font-weight: var(--font-semibold);
   cursor: pointer;
   box-shadow: var(--checkout-submit-shadow);
-  transition:
-    transform var(--transition-fast),
-    box-shadow var(--transition-fast),
-    opacity var(--transition-fast);
 
-  @media (prefers-reduced-motion: no-preference) {
-    &:hover:not(:disabled) {
-      transform: translateY(calc(var(--spacing-2xs) * -1));
-      box-shadow: var(--checkout-submit-hover-shadow);
-    }
-  }
+  @extend .micro-interactive;
+  @extend .micro-focus-ring;
 
   &:disabled {
     opacity: var(--form-disabled-opacity);
@@ -651,17 +635,9 @@
   font-weight: var(--font-semibold);
   cursor: pointer;
   box-shadow: var(--shadow-md);
-  transition:
-    transform var(--transition-fast),
-    box-shadow var(--transition-fast),
-    opacity var(--transition-fast);
 
-  @media (prefers-reduced-motion: no-preference) {
-    &:hover:not(:disabled) {
-      transform: translateY(calc(var(--spacing-2xs) * -1));
-      box-shadow: var(--shadow-lg);
-    }
-  }
+  @extend .micro-interactive;
+  @extend .micro-focus-ring;
 
   &:disabled {
     opacity: var(--form-disabled-opacity);

@@ -80,8 +80,8 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--nav-link-active);
-    outline-offset: 2px;
+    outline: var(--micro-focus-outline-width) solid var(--micro-focus-outline-color);
+    outline-offset: var(--micro-focus-outline-offset);
   }
 
   &.active,
@@ -133,8 +133,8 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--nav-link-active);
-    outline-offset: 2px;
+    outline: var(--micro-focus-outline-width) solid var(--micro-focus-outline-color);
+    outline-offset: var(--micro-focus-outline-offset);
   }
 
   &.active,
@@ -224,8 +224,8 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--nav-link-active);
-    outline-offset: 2px;
+    outline: var(--micro-focus-outline-width) solid var(--micro-focus-outline-color);
+    outline-offset: var(--micro-focus-outline-offset);
     border-radius: var(--radius-sm);
   }
 }
@@ -276,8 +276,8 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--nav-link-active);
-    outline-offset: 2px;
+    outline: var(--micro-focus-outline-width) solid var(--micro-focus-outline-color);
+    outline-offset: var(--micro-focus-outline-offset);
     border-radius: var(--radius-sm);
   }
 

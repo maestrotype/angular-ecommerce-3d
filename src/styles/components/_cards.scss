@@ -35,7 +35,7 @@
 
   @media (prefers-reduced-motion: no-preference) {
     &:hover {
-      transform: translateY(calc(var(--spacing-xs) * -1));
+      transform: translate3d(0, var(--micro-hover-lift-y), 0);
       box-shadow: var(--card-shadow-hover);
       border-color: var(--border-medium);
     }
@@ -158,33 +158,13 @@
   .action-btn,
   .cart-icon-btn,
   .cart-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    @extend .micro-icon-btn;
     width: var(--card-action-size);
     height: var(--card-action-size);
     padding: 0;
-    border: 1px solid var(--border-subtle);
-    border-radius: var(--radius-full);
-    background: var(--surface-elevated);
-    color: var(--text-primary);
-    box-shadow: var(--shadow-sm);
-    cursor: pointer;
-    transition:
-      transform var(--transition-fast),
-      box-shadow var(--transition-fast),
-      background-color var(--transition-fast),
-      border-color var(--transition-fast);
 
     .material-icons {
       font-size: 1.25rem;
-    }
-
-    &:hover {
-      background: var(--surface-hover);
-      border-color: var(--border-medium);
-      transform: scale(1.06);
-      box-shadow: var(--shadow-md);
     }
 
     &.favorite-btn {

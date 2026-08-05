@@ -1,0 +1,123 @@
+/* ==========================================================================
+   MICRO-INTERACTIONS (Epic G14)
+   Hover, focus, press feedback + spinner accents — token-driven per theme
+   ========================================================================== */
+
+// ── Focus utilities ──
+
+.micro-focus-ring {
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--micro-focus-ring);
+  }
+}
+
+.micro-focus-outline {
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: var(--micro-focus-outline-width) solid var(--micro-focus-outline-color);
+    outline-offset: var(--micro-focus-outline-offset);
+  }
+}
+
+// ── Hover / press utilities ──
+
+.micro-hover-lift {
+  transition: var(--micro-transition);
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover {
+      transform: translate3d(0, var(--micro-hover-lift-y), 0);
+      box-shadow: var(--shadow-md);
+    }
+  }
+}
+
+.micro-hover-scale {
+  transition: var(--micro-transition);
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover {
+      transform: scale(var(--micro-hover-scale));
+    }
+  }
+}
+
+.micro-press {
+  transition: var(--micro-transition);
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:active {
+      transform: scale(var(--micro-press-scale));
+    }
+  }
+}
+
+.micro-interactive {
+  transition: var(--micro-transition);
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover {
+      transform: translate3d(0, var(--micro-hover-lift-y), 0);
+      box-shadow: var(--shadow-md);
+    }
+
+    &:active {
+      transform: translate3d(0, 0, 0) scale(var(--micro-press-scale));
+      box-shadow: var(--shadow-sm);
+    }
+  }
+}
+
+// Circular icon action (card overlays, toolbar chips)
+.micro-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  background: var(--surface-elevated);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: var(--micro-transition);
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--micro-focus-ring), var(--shadow-sm);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover {
+      transform: translate3d(0, var(--micro-hover-lift-y), 0) scale(var(--micro-hover-scale));
+      box-shadow: var(--shadow-md);
+      border-color: var(--border-medium);
+      background: var(--surface-highlight);
+    }
+
+    &:active {
+      transform: translate3d(0, 0, 0) scale(var(--micro-press-scale));
+      box-shadow: var(--shadow-sm);
+    }
+  }
+}
+
+// Backward-compatible aliases (Epic G1 → G14)
+.transition-interactive {
+  transition: var(--micro-transition);
+}
+
+.hover-lift {
+  @extend .micro-hover-lift;
+}

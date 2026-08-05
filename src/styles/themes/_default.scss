@@ -169,6 +169,11 @@
   --page-transition-duration: var(--motion-duration-normal);
   --page-transition-offset-y: var(--spacing-md);
 
+  /* Micro-interactions (G14) — default/light */
+  --micro-hover-lift-y: calc(var(--spacing-xs) * -1);
+  --micro-hover-scale: 1.02;
+  --micro-spinner-border-width: 3px;
+
   /* Product Stepper - Default theme */
   --product-stepper-bg: #ffffff;
   --product-stepper-border: 1px solid #e5e7eb;

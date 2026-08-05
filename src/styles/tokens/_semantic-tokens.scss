@@ -96,8 +96,27 @@
   --form-success-bg: var(--color-success-bg);
   --form-error-bg: var(--color-error-bg);
   --form-disabled-opacity: 0.55;
-  --form-focus-ring-width: 3px;
-  --form-focus-ring-color: rgba(var(--interactive-primary-rgb), 0.18);
+
+  // ===== MICRO-INTERACTIONS (Epic G14) =====
+  --micro-hover-lift-y: calc(var(--spacing-xs) * -1);
+  --micro-hover-scale: 1.02;
+  --micro-press-scale: 0.98;
+  --micro-focus-ring-width: 3px;
+  --micro-focus-ring-color: rgba(var(--interactive-primary-rgb), 0.22);
+  --micro-focus-ring: 0 0 0 var(--micro-focus-ring-width) var(--micro-focus-ring-color);
+  --micro-focus-outline-width: 2px;
+  --micro-focus-outline-offset: 2px;
+  --micro-focus-outline-color: var(--interactive-primary);
+  --micro-spinner-track: var(--surface-secondary);
+  --micro-spinner-accent: var(--interactive-primary);
+  --micro-spinner-border-width: 3px;
+  --micro-spinner-duration: var(--motion-duration-slow);
+  --micro-transition: transform var(--transition-fast), box-shadow var(--transition-fast),
+    background-color var(--transition-fast), border-color var(--transition-fast),
+    color var(--transition-fast), opacity var(--transition-fast);
+
+  --form-focus-ring-width: var(--micro-focus-ring-width);
+  --form-focus-ring-color: var(--micro-focus-ring-color);
   --form-focus-ring: 0 0 0 var(--form-focus-ring-width) var(--form-focus-ring-color);
   --form-error-ring-color: rgba(239, 68, 68, 0.22);
   --form-error-ring: 0 0 0 var(--form-focus-ring-width) var(--form-error-ring-color);
@@ -120,7 +139,7 @@
   --nav-link-bg-active: rgba(var(--interactive-primary-rgb), 0.12);
   --nav-indicator-color: var(--interactive-primary);
   --nav-indicator-width: 3px;
-  --nav-focus-ring: var(--form-focus-ring);
+  --nav-focus-ring: var(--micro-focus-ring);
   --nav-item-radius: var(--radius-md);
   --nav-item-padding-y: var(--spacing-sm);
   --nav-item-padding-x: var(--spacing-md);
