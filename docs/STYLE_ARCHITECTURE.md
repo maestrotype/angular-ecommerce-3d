@@ -372,7 +372,7 @@ body { margin: 0; }  // This leaks globally due to Angular encapsulation
 | Aspect | Current | Target |
 |--------|---------|--------|
 | Token definitions | ✅ Primitive + semantic pipeline | Keep single-source primitives |
-| Theme variables | ✅ Per-theme partials (`_default`/`_dark`/`_glass`) | Maintain; sync TS model (Epic F) |
+| Theme variables | ✅ Per-theme partials (`_default`/`_dark`/`_glass`) | ✅ TS `ThemeDefinition` synced (Epic F) |
 | Admin styles | C6: shim deleted; mixins semantic; 5 ADMIN-ONLY layout; M2 = 0 non-layout | Shared tokens + admin layout only |
 | Material overrides | Component `.mat-` cleared (B3); palette↔tokens (B4); residual admin-global/themes | All rules in `_material-overrides.scss` + token bridge (Epic B ✅; C5 residual) |
 | Hardcoded colors | Present in many components | Zero — all use tokens (Epic D) |

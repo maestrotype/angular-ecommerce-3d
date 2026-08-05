@@ -34,11 +34,11 @@
 | C | Admin Unification (ADR-011) | ✅ Complete | C1–C6; M2 = 0 non-layout (5 layout tokens); M3 = 72 |
 | D | Component Migration (ADR-006) | ✅ Complete | D1–D10 done; M1 = 0, M5 = 86/86 |
 | E | Final Cleanup | ✅ Complete | M3 = 0, M4 = 0; stubs removed |
-| F | Theme Engine v2 (ADR-004/012) | ⏳ Next | |
-| G | Premium UI / Animations / Polish | 💡 Planned | |
+| F | Theme Engine v2 (ADR-004/012) | ✅ Complete | F1–F5; see `THEME_ENGINE.md` |
+| G | Premium UI / Animations / Polish | ⏳ Next | |
 
 ### Current Blockers
-- None. Epic F (Theme Engine v2) is next.
+- None. Epic G (Premium UI) is next.
 
 ### Post-C4 lessons (2026-07-29) — do not repeat
 1. **`!important` is forbidden** for new/agent work (absolute). Win with CSS variables (`--mdc-*` / `--mat-*`), specificity, or correct layer — never `!important`. Rule: `.cursor/rules/no-important.mdc` + `AI_CONSTITUTION.md`.
@@ -50,7 +50,8 @@
 
 ### What Verifiably Works Today
 - Token scaffold + themes + `main.scss` entry
-- ThemeService: 4 themes, admin/storefront persistence
+- Theme Engine v2: `ThemeDefinition` catalog, SCSS source of truth, dev validation, anti-FOUC in `index.html`
+- ThemeService: 4 themes, admin/storefront persistence, area sync on navigation
 - C4: admin components off SHARED/CONFLICT `--admin-*` (layout-only kept)
 - C5: `admin-global.scss` is a 16-line orchestrator; styles in `src/admin/styles/global/` (11 partials); 0 `!important` there
 - Dark / dark-glass admin chrome polish (header border tokens, tooltip surface, badge, scrollbars, table outline tokens)
@@ -92,11 +93,10 @@
 ### Medium Priority
 - [x] M3 = 0 `!important` (Epic E)
 - [x] M4 = 0 `::ng-deep` (Epic E)
-- [ ] TS `Theme` interface not synced with SCSS (ADR-012) — Epic F
+- [x] TS `ThemeDefinition` synced with SCSS (ADR-012) — Epic F
 
 ### Low Priority
 - [x] Stub files: `_forms.scss`, `_modals.scss`, `_navigation.scss` — deleted (Epic E3)
-- [ ] TS `Theme` interface not synced with SCSS (ADR-012)
 
 ---
 
@@ -104,6 +104,7 @@
 
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-08-05 | Epic F (Board): Theme Engine v2 — slim `ThemeDefinition` catalog synced with SCSS; deleted legacy per-theme TS files; `theme-contract.ts` + `theme-validator.ts` (dev-mode semantic token check); anti-FOUC bootstrap in `index.html` (admin/storefront storage + `is-admin`); rewrote `THEME_ENGINE.md`. Epic F **5/5 complete**. `npm run build` passes. | Implementation Engineer |
 | 2026-08-05 | Epic E (Board): Removed all `!important` and `::ng-deep`; admin-dark Material rules → `_material-overrides`; list-container `ViewEncapsulation.None`; CDK drag styles → `global/_drag-drop.scss`; glass PDP overrides → `product-info`; deleted stub SCSS files. M3 = **0**; M4 = **0**. Epic E **4/4 complete**. `npm run build` passes. | Implementation Engineer |
 | 2026-08-05 | Task D10 (Board): Cleared remaining 148 hex in 13 global/admin SCSS files; atmosphere gradients promoted to `--admin-atmosphere-gradient` in admin theme files; removed hex fallbacks from `var()`. M1 = **0**; M5 = **86/86**. Epic D **10/10 complete**. `npm run build` passes. | Implementation Engineer |
 | 2026-07-29 | Task C6 (Board): Deleted `admin-variables.scss` shim; remapped residual consumers; rewrote `admin-mixins` on semantic; extracted `_admin-root-defaults.scss` (dashboard/MDC defaults). M2 = **0 non-layout** (5 layout tokens kept). Admin theme files kept for chrome/promotions. Note: `docs/migration/_c6-admin-variables-shim-removal.md`. Epic C **6/6**. `npm run build` passes. | Implementation Engineer |

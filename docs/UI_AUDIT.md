@@ -83,7 +83,7 @@ Fully clean components: `favorites`, `base-modal`, `cart-modal`.
 | Duplication | Locations | Resolution |
 |-------------|-----------|------------|
 | ~~Primitive tokens defined twice~~ | ~~`tokens/_primitive-tokens.scss` AND inlined in `tokens/_index.scss`~~ | ✅ RESOLVED (A1, 2026-07-28): `_index.scss` imports the file; inline copies deleted |
-| Color palette defined in parallel | `tokens/` vs TS `light-theme.ts` (SCSS `core/_variables` palette removed in A4) | Task F1 |
+| Color palette defined in parallel | ~~`tokens/` vs TS `light-theme.ts`~~ → resolved: `theme-definitions.ts` preview only; SCSS owns values (Epic F1) |
 | ~~Theme variables monolith~~ | ~~`tokens/_theme-variables.scss`~~ | ✅ Done (A3): deleted, themes absorb leftover vars |
 | `--admin-*` system | ~180 defined / **~463** usages (M2); C4–C5 path; shim until C6 | ✅ C5 (2026-07-29); residual **C6** — see §4.1 |
 
@@ -282,7 +282,7 @@ Location: `src/app/core/themes/`
 Key findings:
 - Switching works via `data-theme` attribute on `<html>` and `<body>`; area detection via `body.is-admin`; persistence in localStorage (`selected-theme`, `selected-theme-admin`).
 - Storefront exposes 3 themes (`dark-glass` filtered out); admin exposes all 4.
-- **The TS theme objects are metadata catalogs** — `theme.service.ts` does not apply `colors`/`layout`/`components` values to the DOM. All visuals come from SCSS `[data-theme]` blocks. TS ↔ SCSS ↔ docs are out of sync → ADR-012, Epic F.
+- **The TS theme catalog mirrors SCSS** — `ThemeService` sets `data-theme` only; visuals from SCSS `[data-theme]` blocks. Synced in Epic F (ADR-012).
 
 ---
 

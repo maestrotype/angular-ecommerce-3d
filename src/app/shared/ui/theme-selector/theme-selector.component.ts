@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, HostListener, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
-import { Theme } from '../../../core/themes/theme.model';
+import { ThemeDefinition } from '../../../core/themes/theme.model';
 import { ThemeService } from '../../../core/themes/theme.service';
 
 @Component({
@@ -10,9 +10,9 @@ import { ThemeService } from '../../../core/themes/theme.service';
   styleUrls: ['./theme-selector.component.scss']
 })
 export class ThemeSelectorComponent implements OnInit, OnDestroy {
-  themes: Theme[] = [];
-  currentTheme: Theme | null = null;
-  previewingTheme: Theme | null = null;
+  themes: ThemeDefinition[] = [];
+  currentTheme: ThemeDefinition | null = null;
+  previewingTheme: ThemeDefinition | null = null;
   isHovering = false;
   private destroy$ = new Subject<void>();
   private hoverTimeout: any;
@@ -56,20 +56,20 @@ export class ThemeSelectorComponent implements OnInit, OnDestroy {
     this.themeService.setTheme(themeId);
   }
 
-  getMiniPreviewStyle(theme: Theme): any {
+  getMiniPreviewStyle(theme: ThemeDefinition): Record<string, string> {
+    const p = theme.preview;
     return {
-      '--preview-primary': theme.colors.primary,
-      '--preview-secondary': theme.colors.secondary,
-      '--preview-accent': theme.colors.accent,
-      '--preview-bg': theme.colors['bg-primary'],
-      '--preview-surface': theme.colors['surface-primary'],
-      '--preview-text': theme.colors['text-primary'],
-      '--preview-blur': theme.id.includes('glass') ? '10px' : '0px'
+      '--preview-primary': p.primary,
+      '--preview-secondary': p.secondary,
+      '--preview-accent': p.accent,
+      '--preview-bg': p.background,
+      '--preview-surface': p.surface,
+      '--preview-text': p.text,
+      '--preview-blur': p.glassBlur,
     };
   }
 
-  showPreview(theme: Theme, immediate: boolean = false): void {
-    console.log('showPreview called', theme.name, 'immediate:', immediate);
+  showPreview(theme: ThemeDefinition, immediate: boolean = false): void {
 
     // If modal is open and we're hovering over a different theme, close it first
     if (this.previewingTheme && this.previewingTheme.id !== theme.id && !immediate) {
@@ -87,24 +87,20 @@ export class ThemeSelectorComponent implements OnInit, OnDestroy {
     // If immediate (click), show right away
     if (immediate) {
       this.previewingTheme = theme;
-      console.log('Showing preview immediately');
       if (this.drawerContent) {
         this.drawerContent.style.zIndex = '2';
       }
       return;
     }
 
-    // Otherwise debounce for hover
     this.hoverTimeout = setTimeout(() => {
       if (this.isHovering) {
         this.previewingTheme = theme;
-        console.log('Showing preview after debounce');
       }
     }, 300);
   }
 
   hidePreview(): void {
-    console.log('hidePreview called');
     this.isHovering = false;
     if (this.hoverTimeout) {
       clearTimeout(this.hoverTimeout);
@@ -113,28 +109,27 @@ export class ThemeSelectorComponent implements OnInit, OnDestroy {
     if (this.drawerContent) {
       this.drawerContent.style.zIndex = '1';
     }
-    console.log('Preview hidden, previewingTheme:', this.previewingTheme);
   }
 
   onModalBackdropClick(): void {
-    console.log('Backdrop clicked, closing modal');
     this.hidePreview();
   }
 
-  getMainColors(theme: Theme): Array<{ name: string, label: string, value: string }> {
+  getMainColors(theme: ThemeDefinition): Array<{ name: string; label: string; value: string }> {
+    const p = theme.preview;
     return [
-      { name: 'Primary', label: 'P', value: theme.colors.primary },
-      { name: 'Secondary', label: 'S', value: theme.colors.secondary },
-      { name: 'Accent', label: 'A', value: theme.colors.accent },
-      { name: 'Background', label: 'BG', value: theme.colors['bg-primary'] },
-      { name: 'Surface', label: 'SF', value: theme.colors['surface-primary'] },
-      { name: 'Success', label: '✓', value: theme.colors.success },
-      { name: 'Warning', label: '⚠', value: theme.colors.warning },
-      { name: 'Error', label: '✕', value: theme.colors.error }
+      { name: 'Primary', label: 'P', value: p.primary },
+      { name: 'Secondary', label: 'S', value: p.secondary },
+      { name: 'Accent', label: 'A', value: p.accent },
+      { name: 'Background', label: 'BG', value: p.background },
+      { name: 'Surface', label: 'SF', value: p.surface },
+      { name: 'Success', label: '✓', value: p.success },
+      { name: 'Warning', label: '⚠', value: p.warning },
+      { name: 'Error', label: '✕', value: p.error },
     ];
   }
 
-  applyAndClose(theme: Theme): void {
+  applyAndClose(theme: ThemeDefinition): void {
     this.selectTheme(theme.id);
     this.hidePreview();
   }

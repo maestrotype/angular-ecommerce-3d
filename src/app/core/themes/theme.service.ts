@@ -1,10 +1,12 @@
-import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
+import { Injectable, PLATFORM_ID, Inject, isDevMode } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { Theme } from './theme.model';
+import { Theme, ThemeDefinition, ThemeId } from './theme.model';
 import { AVAILABLE_THEMES, DEFAULT_THEME_ID } from './theme-config';
+import { THEME_DOM_ID } from './theme-contract';
+import { validateThemeTokens, ThemeValidationResult } from './theme-validator';
 
 export type Area = 'frontend' | 'admin';
 
@@ -12,10 +14,14 @@ export type Area = 'frontend' | 'admin';
   providedIn: 'root'
 })
 export class ThemeService {
-  private currentThemeSubject = new BehaviorSubject<Theme>(this.getThemeById(DEFAULT_THEME_ID));
+  private currentThemeSubject = new BehaviorSubject<ThemeDefinition>(
+    this.getThemeById(DEFAULT_THEME_ID)
+  );
   public currentTheme$ = this.currentThemeSubject.asObservable();
 
-  private adminThemeSubject = new BehaviorSubject<Theme>(this.getThemeById(DEFAULT_THEME_ID));
+  private adminThemeSubject = new BehaviorSubject<ThemeDefinition>(
+    this.getThemeById(DEFAULT_THEME_ID)
+  );
   public adminTheme$ = this.adminThemeSubject.asObservable();
 
   constructor(
@@ -51,7 +57,6 @@ export class ThemeService {
     this.adminThemeSubject.next(adminTheme);
     localStorage.setItem('selected-theme-admin', adminTheme.id);
 
-    // Apply only the relevant theme to the DOM
     this.updateArea(isAdminArea ? 'admin' : 'frontend');
   }
 
@@ -73,25 +78,28 @@ export class ThemeService {
 
     const isAdminArea = this.router.url.startsWith('/admin');
     if (isAdminArea) {
+      document.body.classList.add('is-admin');
       this.applyTheme(this.getCurrentAdminTheme(), 'admin');
     } else {
+      document.body.classList.remove('is-admin');
       this.applyTheme(this.getCurrentTheme(), 'frontend');
     }
   }
 
-  getDomThemeId(): string | null {
+  getDomThemeId(): ThemeId | null {
     if (!isPlatformBrowser(this.platformId)) return null;
-    return document.documentElement.getAttribute('data-theme');
+    const attr = document.documentElement.getAttribute('data-theme');
+    return attr as ThemeId | null;
   }
 
-  private normalizeStoredThemeId(themeId: string | null, area: Area): string {
+  private normalizeStoredThemeId(themeId: string | null, area: Area): ThemeId {
     if (!themeId) {
       return DEFAULT_THEME_ID;
     }
     return this.resolveThemeId(themeId, area);
   }
 
-  private resolveThemeId(themeId: string, area: Area): string {
+  private resolveThemeId(themeId: string, area: Area): ThemeId {
     if (themeId === 'default') {
       return 'light';
     }
@@ -100,41 +108,42 @@ export class ThemeService {
         return 'dark';
       }
       const frontendIds = this.getThemesByArea('frontend').map(t => t.id);
-      if (!frontendIds.includes(themeId)) {
+      if (!frontendIds.includes(themeId as ThemeId)) {
         return DEFAULT_THEME_ID;
       }
     }
-    return themeId;
+    return themeId as ThemeId;
   }
 
-  getThemeById(themeId: string, area: Area = 'frontend'): Theme {
+  getThemeById(themeId: string, area: Area = 'frontend'): ThemeDefinition {
     const resolvedId = this.resolveThemeId(themeId, area);
-    return AVAILABLE_THEMES.find(theme => theme.id === resolvedId) ||
+    return (
+      AVAILABLE_THEMES.find(theme => theme.id === resolvedId) ||
       AVAILABLE_THEMES.find(theme => theme.id === DEFAULT_THEME_ID) ||
-      AVAILABLE_THEMES[0];
+      AVAILABLE_THEMES[0]
+    );
   }
 
   /**
    * Returns themes filtered by area.
-   * Frontend: 3 themes (light, dark, glass)
-   * Admin: 4 themes (light, dark, glass, dark-glass)
+   * Frontend: light, dark, glass
+   * Admin: all four including dark-glass
    */
-  getThemesByArea(area: Area): Theme[] {
+  getThemesByArea(area: Area): ThemeDefinition[] {
     if (area === 'frontend') {
-      return AVAILABLE_THEMES.filter(t => t.id !== 'dark-glass');
+      return AVAILABLE_THEMES.filter(t => t.areas.includes('frontend') && t.id !== 'dark-glass');
     }
-    return AVAILABLE_THEMES;
+    return AVAILABLE_THEMES.filter(t => t.areas.includes('admin'));
   }
 
   setTheme(themeId: string, area: Area = 'frontend'): void {
-    const resolvedId = this.resolveThemeId(themeId, area);
-    const theme = this.getThemeById(resolvedId, area);
+    const theme = this.getThemeById(themeId, area);
 
     if (isPlatformBrowser(this.platformId)) {
       const storageKey = area === 'admin' ? 'selected-theme-admin' : 'selected-theme';
       localStorage.setItem(storageKey, theme.id);
       if (area === 'admin') {
-        localStorage.setItem('adminTheme', themeId); // Compatibility with old key
+        localStorage.setItem('adminTheme', themeId);
       }
     }
 
@@ -147,21 +156,39 @@ export class ThemeService {
     this.applyTheme(theme, area);
   }
 
-  private applyTheme(theme: Theme, area: Area = 'frontend'): void {
-    if (!theme || !theme.id || !isPlatformBrowser(this.platformId)) {
+  private applyTheme(theme: ThemeDefinition, area: Area = 'frontend'): void {
+    if (!theme?.id || !isPlatformBrowser(this.platformId)) {
       return;
     }
 
-    const domThemeId = this.resolveThemeId(theme.id, area);
+    const domThemeId = THEME_DOM_ID[this.resolveThemeId(theme.id, area)];
     document.documentElement.setAttribute('data-theme', domThemeId);
     document.body.setAttribute('data-theme', domThemeId);
+
+    if (isDevMode()) {
+      requestAnimationFrame(() => {
+        const result = this.validateCurrentTheme();
+        if (!result.ok) {
+          console.warn(
+            `[ThemeEngine] Missing semantic tokens for "${result.themeId}":`,
+            result.missing.join(', ')
+          );
+        }
+      });
+    }
   }
 
-  getCurrentTheme(): Theme {
+  /** F3 — verify required semantic CSS variables resolve after theme apply */
+  validateCurrentTheme(): ThemeValidationResult {
+    const themeId = (this.getDomThemeId() || DEFAULT_THEME_ID) as ThemeId;
+    return validateThemeTokens(themeId);
+  }
+
+  getCurrentTheme(): ThemeDefinition {
     return this.currentThemeSubject.value;
   }
 
-  getCurrentAdminTheme(): Theme {
+  getCurrentAdminTheme(): ThemeDefinition {
     return this.adminThemeSubject.value;
   }
 
@@ -170,7 +197,6 @@ export class ThemeService {
     const current = this.getCurrentAdminTheme();
     const currentIndex = adminThemes.findIndex(t => t.id === current.id);
     const nextIndex = (currentIndex + 1) % adminThemes.length;
-    const nextTheme = adminThemes[nextIndex];
-    this.setTheme(nextTheme.id, 'admin');
+    this.setTheme(adminThemes[nextIndex].id, 'admin');
   }
 }
