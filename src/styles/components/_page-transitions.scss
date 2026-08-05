@@ -1,0 +1,32 @@
+/* ==========================================================================
+   PAGE TRANSITIONS (Epic G13)
+   Storefront route enter — token-driven, theme motion presets, GPU-safe
+   ========================================================================== */
+
+@keyframes motion-page-enter {
+  from {
+    opacity: var(--page-transition-opacity-from);
+    transform: translate3d(0, var(--page-transition-offset-y), 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.storefront-main {
+  position: relative;
+
+  &.is-page-entering > router-outlet + * {
+    animation: motion-page-enter var(--page-transition-duration) var(--page-transition-easing) both;
+    will-change: opacity, transform;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &.is-page-entering > router-outlet + * {
+      animation: none;
+      will-change: auto;
+    }
+  }
+}

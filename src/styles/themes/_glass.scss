@@ -159,6 +159,11 @@
   --checkout-submit-color: var(--text-primary);
   --checkout-submit-shadow: var(--shadow-sm);
 
+  /* Page transitions (G13) — glass: elegant slow fade-up */
+  --page-transition-duration: var(--motion-duration-normal);
+  --page-transition-offset-y: var(--spacing-lg);
+  --page-transition-easing: var(--motion-easing-enter);
+
   /* Product Text Colors - Glass theme */
   --product-title-color: #1e293b;
   --product-meta-color: #475569;

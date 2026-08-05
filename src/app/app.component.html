@@ -2,8 +2,12 @@
   <app-header></app-header>
 </div>
 
-<main [class.admin-main]="isAdminRoute()">
-  <router-outlet></router-outlet>
+<main
+  [class.admin-main]="isAdminRoute()"
+  [class.storefront-main]="!isAdminRoute() && !isViewerRoute()"
+  [class.is-page-entering]="pageEntering"
+>
+  <router-outlet (activate)="onRouteActivate()"></router-outlet>
 </main>
 
 <div *ngIf="!isAdminRoute() && !isViewerRoute()">

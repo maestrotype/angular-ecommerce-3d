@@ -165,6 +165,10 @@
   --checkout-panel-shadow: var(--shadow-sm);
   --checkout-submit-bg: linear-gradient(135deg, var(--interactive-primary), var(--color-accent));
 
+  /* Page transitions (G13) — default/light: snappy fade-up */
+  --page-transition-duration: var(--motion-duration-normal);
+  --page-transition-offset-y: var(--spacing-md);
+
   /* Product Stepper - Default theme */
   --product-stepper-bg: #ffffff;
   --product-stepper-border: 1px solid #e5e7eb;

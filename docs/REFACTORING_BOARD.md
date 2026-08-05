@@ -214,7 +214,7 @@ TS `ThemeDefinition` — каталог метаданных, синхрониз
 | G10 | Admin dashboard stat cards | 7.9 | ✅ (2026-08-05) |
 | G11 | Product detail page polish | 7.10 | ✅ (2026-08-05) |
 | G12 | Checkout flow polish | 7.11 | ✅ (2026-08-05) |
-| G13 | Page transitions | 8.2 | 💡 |
+| G13 | Page transitions | 8.2 | ✅ (2026-08-05) |
 | G14 | Micro-interactions (hover/focus/spinner) | 8.3 | 💡 |
 | G15 | Theme animation presets documentation | 8.4–8.6 | 💡 |
 | G16 | Cross-theme visual review | 7.12, 9.1 | 💡 |
@@ -268,6 +268,8 @@ TS `ThemeDefinition` — каталог метаданных, синхрониз
 | 2026-08-05 | **G9 (Board)**: Modal tokens (`--modal-*`), `components/_modals.scss` (backdrop/panel motion, base-modal shell, CDK/Material dialog), Material dialog on tokens; `base-modal` deduped. Epic G **9/17**. |
 | 2026-08-05 | **G10 (Board)**: Stat card tokens (`--stat-card-*`), `admin/global/_stat-cards.scss` (KPI shell, icons, glass shimmer via tokens), theme files on `--stat-card-*`; dashboard/order-list/list-container/payments/stat-card deduped. Epic G **10/17**. |
 | 2026-08-05 | **G11 (Board)**: PDP tokens (`--pdp-*`), `components/_product-detail.scss` (gallery frame, sticky info panel, thumbnails/3D badge, CTA, recommendations wrapper); glass HUD removed → accent bar via tokens; loading/not-found → spinner + empty-state; component SCSS deduped. Epic G **11/17**. |
+| 2026-08-05 | **G12 (Board)**: Checkout tokens (`--checkout-*`), `components/_checkout.scss` (3-step stepper, summary, forms, payment/status states); checkout/payment deduped; shared form classes; `getThemeClass` removed. Epic G **12/17**. |
+| 2026-08-05 | **G13 (Board)**: Page transition tokens (`--page-transition-*`), `components/_page-transitions.scss` (storefront route enter via `router-outlet + *`); theme presets default/dark/glass; `prefers-reduced-motion` + admin/viewer excluded. Epic G **13/17**. |
 
 ---
 

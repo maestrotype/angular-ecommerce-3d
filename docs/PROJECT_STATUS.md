@@ -38,7 +38,7 @@
 | G | Premium UI / Animations / Polish | 🔄 In Progress | G1–G11 done |
 
 ### Current Blockers
-- None. Epic G in progress (G13 page transitions next).
+- None. Epic G in progress (G14 micro-interactions next).
 
 ### Post-C4 lessons (2026-07-29) — do not repeat
 1. **`!important` is forbidden** for new/agent work (absolute). Win with CSS variables (`--mdc-*` / `--mat-*`), specificity, or correct layer — never `!important`. Rule: `.cursor/rules/no-important.mdc` + `AI_CONSTITUTION.md`.

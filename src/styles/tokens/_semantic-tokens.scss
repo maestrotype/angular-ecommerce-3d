@@ -471,4 +471,10 @@
   --transition-slow: var(--motion-duration-slow) var(--motion-easing-default);
   --transition-enter: var(--motion-duration-normal) var(--motion-easing-enter);
   --transition-leave: var(--motion-duration-fast) var(--motion-easing-leave);
+
+  // ===== PAGE TRANSITIONS (Epic G13) =====
+  --page-transition-duration: var(--motion-duration-normal);
+  --page-transition-easing: var(--motion-easing-enter);
+  --page-transition-offset-y: var(--spacing-md);
+  --page-transition-opacity-from: 0;
 }

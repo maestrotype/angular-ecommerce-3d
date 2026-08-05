@@ -135,6 +135,11 @@
   --checkout-panel-shadow: var(--shadow-lg);
   --checkout-total-highlight-bg: var(--surface-secondary);
 
+  /* Page transitions (G13) — dark: fast opacity-led enter */
+  --page-transition-duration: var(--motion-duration-fast);
+  --page-transition-offset-y: var(--spacing-xs);
+  --page-transition-easing: var(--motion-easing-enter);
+
   --product-stock-color: #34d399;
   --product-original-price-color: #94a3b8;
   --product-specs-bg: var(--surface-secondary);
