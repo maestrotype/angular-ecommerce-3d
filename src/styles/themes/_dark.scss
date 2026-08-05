@@ -11,7 +11,9 @@
    ========================================================================== */
 
 [data-theme="dark"] {
-  /* ===== MIGRATED FROM tokens/_theme-variables.scss (Task A3) ===== */
+  --card-surface: var(--color-slate-700);
+  --card-border: var(--color-slate-600);
+  --card-shadow-hover: var(--shadow-lg);
   /* Dark theme variables */
   --hero-bg-gradient: linear-gradient(135deg,
   #1e293b 0%,
@@ -457,8 +459,8 @@
 
   body .product-card:hover {
     background: var(--color-slate-600);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--card-shadow-hover);
+    transform: translateY(calc(var(--spacing-xs) * -0.5));
   }
 
   /* Favorites page */

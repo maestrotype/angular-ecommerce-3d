@@ -12,7 +12,10 @@
    ========================================================================== */
 
 [data-theme="glass"] {
-  /* ===== MIGRATED FROM tokens/_theme-variables.scss (Task A3) ===== */
+  --card-surface: var(--glass-bg);
+  --card-border: var(--border-default);
+  --card-shadow-hover: var(--glass-shadow-hover, var(--shadow-lg));
+  --card-overlay-bg: var(--surface-overlay-hover);
   /* Glass theme variables */
   --hero-bg-gradient: linear-gradient(135deg,
   rgba(255, 255, 255, 0.3) 0%,
@@ -488,9 +491,9 @@
   }
 
   body .product-card:hover {
-    background: rgba(255, 255, 255, 0.08);
-    transform: translateY(-2px);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+    background: var(--glass-bg-hover, rgba(255, 255, 255, 0.08));
+    transform: translateY(calc(var(--spacing-xs) * -0.5));
+    box-shadow: var(--card-shadow-hover);
   }
 
   /* Favorites page */

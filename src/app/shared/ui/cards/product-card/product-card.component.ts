@@ -34,8 +34,8 @@ export class ProductCardComponent {
     this.favoriteToggle.emit(event);
   }
 
-  onAddToCart(event: Event): void {
-    event.stopPropagation();
+  onAddToCart(event?: Event): void {
+    event?.stopPropagation();
     this.addToCart.emit(this.product);
   }
 
@@ -57,8 +57,7 @@ export class ProductCardComponent {
 
   onQuickView(event: Event): void {
     event.stopPropagation();
-    // TODO: Implement quick view functionality
-
+    this.onProductClick();
   }
 
   get cardClasses(): string {
