@@ -3,16 +3,14 @@
    Epic D3: semantic tokens + theme-scoped --similar-products-* vars.
    ========================================================================== */
 
-$skeleton-shimmer: linear-gradient(
-  90deg,
-  var(--surface-secondary) 25%,
-  var(--surface-tertiary) 50%,
-  var(--surface-secondary) 75%
-);
-
 .similar-products {
   margin: 2rem 0;
   padding: 2rem 0;
+
+  app-skeleton-loader {
+    display: block;
+    padding: 0 1rem;
+  }
   background: var(--similar-products-bg, var(--surface-page));
   border-radius: var(--radius-md);
 
@@ -375,56 +373,6 @@ $skeleton-shimmer: linear-gradient(
     }
   }
 
-  .loading-skeleton {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    padding: 0 1rem;
-
-    .skeleton-card {
-      background: var(--similar-products-card-bg, var(--surface-card));
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-sm);
-      overflow: hidden;
-
-      .skeleton-image,
-      .skeleton-title,
-      .skeleton-meta,
-      .skeleton-price {
-        background: $skeleton-shimmer;
-        background-size: 200% 100%;
-        animation: skeleton-loading 1.5s infinite;
-      }
-
-      .skeleton-image {
-        height: 200px;
-      }
-
-      .skeleton-content {
-        padding: 1rem;
-
-        .skeleton-title {
-          height: 1rem;
-          margin-bottom: 0.5rem;
-          border-radius: var(--radius-xs, 4px);
-        }
-
-        .skeleton-meta {
-          height: 0.8rem;
-          width: 60%;
-          margin-bottom: 0.75rem;
-          border-radius: var(--radius-xs, 4px);
-        }
-
-        .skeleton-price {
-          height: 1rem;
-          width: 40%;
-          border-radius: var(--radius-xs, 4px);
-        }
-      }
-    }
-  }
-
   .error-state,
   .empty-state {
     display: flex;
@@ -497,12 +445,3 @@ $skeleton-shimmer: linear-gradient(
   }
 }
 
-@keyframes skeleton-loading {
-  0% {
-    background-position: 200% 0;
-  }
-
-  100% {
-    background-position: -200% 0;
-  }
-}

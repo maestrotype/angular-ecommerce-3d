@@ -104,7 +104,7 @@ graph LR
 | D | Миграция компонентов (ADR-006) | ✅ **Готово** | 10/10 | M1, M5 |
 | E | Финальная зачистка | ✅ **Готово** | 4/4 | M3, M4 |
 | F | Theme Engine v2 (ADR-004, ADR-012) | ✅ **Готово** | 5/5 | — |
-| G | Premium UI, анимации, полировка | 🔄 In Progress | 2/17 | — |
+| G | Premium UI, анимации, полировка | 🔄 In Progress | 3/17 | — |
 
 ---
 
@@ -204,7 +204,7 @@ TS `ThemeDefinition` — каталог метаданных, синхрониз
 |----|--------|----------|--------|
 | G1 | Motion-токены: duration/easing scale, semantic `--transition-*`, theme presets | 8.1 | ✅ (2026-08-05) |
 | G2 | Empty state: shared component + `_empty-states.scss`, cart/favorites/orders | 7.3 | ✅ (2026-08-05) |
-| G3 | Loading state: skeleton + spinner components + `_loading.scss` | 7.4 | 💡 |
+| G3 | Loading state: skeleton + spinner components + `_loading.scss` | 7.4 | ✅ (2026-08-05) |
 | G4 | Premium product cards polish | 7.1 | 💡 |
 | G5 | Typography hierarchy per theme | 7.2 | 💡 |
 | G6 | Admin data tables premium styling | 7.5 | 💡 |

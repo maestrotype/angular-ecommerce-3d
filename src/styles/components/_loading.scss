@@ -1,0 +1,183 @@
+/* ==========================================================================
+   LOADING STATES (Epic G3)
+   Spinner + skeleton shimmer — token-driven, theme-aware
+   ========================================================================== */
+
+:root {
+  --skeleton-base: var(--surface-secondary);
+  --skeleton-highlight: var(--surface-tertiary);
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-base) 25%,
+    var(--skeleton-highlight) 50%,
+    var(--skeleton-base) 75%
+  );
+  background-size: 200% 100%;
+  animation: motion-shimmer var(--motion-duration-slow) linear infinite;
+}
+
+/* ----- Spinner ----- */
+
+.app-loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-2xl) var(--spacing-md);
+  color: var(--text-secondary);
+  animation: motion-fade-in var(--motion-duration-fast) var(--motion-easing-enter) both;
+
+  &--inline {
+    flex-direction: row;
+    padding: var(--spacing-md);
+  }
+
+  &--sm .app-loading-spinner__ring {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-width: 2px;
+  }
+
+  &--md .app-loading-spinner__ring {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-width: 3px;
+  }
+
+  &--lg .app-loading-spinner__ring {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-width: 4px;
+  }
+
+  &__ring {
+    border-radius: var(--radius-full);
+    border-style: solid;
+    border-color: var(--surface-secondary);
+    border-top-color: var(--interactive-primary);
+    animation: motion-spin var(--motion-duration-slow) linear infinite;
+  }
+
+  &__message {
+    margin: 0;
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--text-secondary);
+  }
+}
+
+/* ----- Skeleton primitives ----- */
+
+.app-skeleton-line {
+  height: 0.875rem;
+  border-radius: var(--radius-sm);
+  width: 100%;
+
+  &--short {
+    width: 60%;
+  }
+
+  &--medium {
+    width: 80%;
+  }
+
+  &--price {
+    width: 40%;
+    height: 1.125rem;
+    margin-top: var(--spacing-xs);
+  }
+}
+
+.app-skeleton-block {
+  border-radius: var(--radius-md);
+  width: 100%;
+  min-height: 1rem;
+}
+
+.app-skeleton-circle {
+  border-radius: var(--radius-full);
+  width: 2.5rem;
+  height: 2.5rem;
+  flex-shrink: 0;
+}
+
+/* ----- Product card grid skeleton ----- */
+
+.app-skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, var(--skeleton-card-min, 250px)), 1fr)
+  );
+  gap: var(--spacing-lg);
+  width: 100%;
+}
+
+.app-skeleton-card {
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-sm);
+
+  &__image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-md);
+  }
+}
+
+/* ----- List row skeleton (tables / order lists) ----- */
+
+.app-skeleton-list {
+  display: grid;
+  gap: var(--spacing-sm);
+  width: 100%;
+}
+
+.app-skeleton-list-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-card);
+
+  &__primary {
+    flex: 1;
+    max-width: 12rem;
+    height: 0.875rem;
+    border-radius: var(--radius-sm);
+  }
+
+  &__secondary {
+    width: 5rem;
+    height: 0.875rem;
+    border-radius: var(--radius-sm);
+  }
+
+  &__meta {
+    width: 3.5rem;
+    height: 0.875rem;
+    border-radius: var(--radius-sm);
+  }
+}
+
+.app-skeleton-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  width: 100%;
+}

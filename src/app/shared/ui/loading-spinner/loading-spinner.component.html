@@ -1,0 +1,4 @@
+<div [class]="hostClasses">
+  <div class="app-loading-spinner__ring" role="status" [attr.aria-label]="message || 'Loading'"></div>
+  <p class="app-loading-spinner__message" *ngIf="message">{{ message }}</p>
+</div>

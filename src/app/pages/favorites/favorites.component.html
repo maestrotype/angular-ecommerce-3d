@@ -20,10 +20,10 @@
     <div class="favorites-content">
       <div class="container">
         <!-- Loading State -->
-        <div *ngIf="isLoading" class="loading-state">
-          <div class="loading-spinner"></div>
-          <p>{{ 'FAVORITES.LOADING' | translate }}</p>
-        </div>
+        <app-loading-spinner
+          *ngIf="isLoading"
+          [message]="'FAVORITES.LOADING' | translate"
+        ></app-loading-spinner>
 
         <!-- Empty State -->
         <app-empty-state

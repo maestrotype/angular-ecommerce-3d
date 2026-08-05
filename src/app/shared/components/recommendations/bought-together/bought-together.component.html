@@ -5,16 +5,11 @@
   </div>
 
   <!-- Loading State -->
-  <div class="loading-skeleton" *ngIf="loading">
-    <div class="skeleton-card" *ngFor="let item of [1,2,3,4]">
-      <div class="skeleton-image"></div>
-      <div class="skeleton-content">
-        <div class="skeleton-title"></div>
-        <div class="skeleton-meta"></div>
-        <div class="skeleton-price"></div>
-      </div>
-    </div>
-  </div>
+  <app-skeleton-loader
+    *ngIf="loading"
+    variant="product-card"
+    [count]="4"
+  ></app-skeleton-loader>
 
   <!-- Error State -->
   <div class="error-state" *ngIf="error && !loading">

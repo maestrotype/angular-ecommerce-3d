@@ -75,10 +75,10 @@ src/
 │   ├── components/                # Global component style presets
 │   │   ├── _index.scss            # Re-exports component presets
 │   │   ├── _buttons.scss
+│   │   ├── _motion.scss
 │   │   ├── _cards.scss
-│   │   ├── _forms.scss            # stub (Epic E)
-│   │   ├── _modals.scss           # stub (Epic E)
-│   │   ├── _navigation.scss       # stub (Epic E)
+│   │   ├── _empty-states.scss
+│   │   ├── _loading.scss
 │   │   ├── _theme-switcher.scss
 │   │   └── _glass-helpers.scss    # .glass-theme, cart controls, .theme-price
 │   │

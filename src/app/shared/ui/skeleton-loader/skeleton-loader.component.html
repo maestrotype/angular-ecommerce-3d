@@ -1,0 +1,52 @@
+<ng-container [ngSwitch]="variant">
+  <div
+    *ngSwitchCase="'product-card'"
+    class="app-skeleton-grid"
+    [style.--skeleton-card-min]="cardMinWidth"
+  >
+    <article class="app-skeleton-card" *ngFor="let _ of items">
+      <div class="app-skeleton-card__image skeleton-shimmer"></div>
+      <div class="app-skeleton-card__body">
+        <div class="app-skeleton-line skeleton-shimmer"></div>
+        <div class="app-skeleton-line skeleton-shimmer app-skeleton-line--short"></div>
+        <div class="app-skeleton-line skeleton-shimmer app-skeleton-line--price"></div>
+      </div>
+    </article>
+  </div>
+
+  <div *ngSwitchCase="'list-row'" class="app-skeleton-list">
+    <div class="app-skeleton-list-row" *ngFor="let _ of items">
+      <div class="app-skeleton-list-row__primary skeleton-shimmer"></div>
+      <div class="app-skeleton-list-row__meta skeleton-shimmer"></div>
+      <div class="app-skeleton-list-row__secondary skeleton-shimmer"></div>
+    </div>
+  </div>
+
+  <div *ngSwitchCase="'circle'" class="app-skeleton-stack">
+    <div
+      *ngFor="let _ of items"
+      class="app-skeleton-circle skeleton-shimmer"
+      [style.width]="width"
+      [style.height]="height"
+    ></div>
+  </div>
+
+  <div *ngSwitchCase="'block'" class="app-skeleton-stack">
+    <div
+      *ngFor="let _ of items"
+      class="app-skeleton-block skeleton-shimmer"
+      [style.width]="width"
+      [style.height]="height"
+    ></div>
+  </div>
+
+  <div *ngSwitchDefault class="app-skeleton-stack">
+    <div
+      *ngFor="let _ of items; let index = index"
+      class="app-skeleton-line skeleton-shimmer"
+      [class.app-skeleton-line--short]="index % 3 === 1"
+      [class.app-skeleton-line--medium]="index % 3 === 2"
+      [style.width]="width"
+    ></div>
+  </div>
+</ng-container>
