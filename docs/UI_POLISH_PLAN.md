@@ -10,7 +10,7 @@
 
 ## North star: liquid glass
 
-Пока пользователь не скажет «это то что нужно» — ищем эталон на **header + footer**.
+Эталон атмосферы/chrome: **ice / water** (светло-серый). Дальше — секции и карточки в том же языке.
 
 | Свойство | Не то (было) | Цель |
 |----------|--------------|------|
@@ -28,15 +28,16 @@
 
 | ID | Задача | Статус |
 |----|--------|--------|
-| **U0** | Зафиксировать liquid-glass recipe (tokens + atmosphere) | 🔄 **ждём визуальный OK** |
-| **U1** | Footer → liquid chrome | 🔄 вместе с U0 |
-| **U2** | Header → liquid chrome | 🔄 вместе с U0 |
-| **U3** | Glass section leftovers (hero cards, categories, about…) | 📋 после OK эталона |
-| **U4** | `color-scheme: dark` | ✅ |
+| **U0** | Ice / water liquid-glass recipe (tokens + atmosphere) | ✅ эталон цвета OK |
+| **U1** | Footer → liquid chrome | ✅ |
+| **U2** | Header → liquid chrome | ✅ |
+| **U3** | Glass product cards (frost + accents + stars + stock) | ✅ |
+| **U4** | `color-scheme` for glass | ✅ light (ice) |
 | **U5** | Убрать legacy `.glass-theme` | 📋 |
 | **U6** | Home visual pass по эталону | 📋 |
 | **U7** | Cross-theme parity (light/dark не ломать) | 📋 |
 | **U8** | Footer code hygiene | 📋 |
+| **U9** | Theme-based shop grid columns (light 2 / dark 4 / glass 3) | ✅ |
 
 ---
 

@@ -13,10 +13,7 @@
 
 [data-theme="glass"] {
   color-scheme: light;
-  --card-surface: var(--glass-bg);
-  --card-border: var(--border-default);
-  --card-shadow-hover: var(--glass-shadow-hover, var(--shadow-lg));
-  --card-overlay-bg: var(--surface-overlay-hover);
+  /* Product cards — set fully in liquid ice recipe below */
   /* Glass theme variables */
   --hero-bg-gradient: linear-gradient(135deg,
   rgba(255, 255, 255, 0.3) 0%,
@@ -300,7 +297,7 @@
   --border-focus: #3b82f6;
 
   /* CARD COMPONENT */
-  --card-radius: 24px;
+  /* --card-radius set in ice product-card block */
   /* ===== END MIGRATED (Task A3) ===== */
 
   /* ===== SURFACE OVERRIDES (ice / water glass) ===== */
@@ -475,6 +472,28 @@
   --hero-text-color: var(--text-primary);
   --hero-accent-color: #3b82f6;
 
+  /* ===== PRODUCT CARDS — frosted ice pane ===== */
+  --card-surface: var(--glass-surface-soft);
+  --card-border: var(--glass-border-soft);
+  --card-shadow: var(--glass-shadow);
+  --card-shadow-hover: var(--glass-shadow-hover);
+  --card-image-bg: rgba(255, 255, 255, 0.22);
+  --card-info-bg: rgba(255, 255, 255, 0.12);
+  --card-overlay-bg: rgba(236, 242, 248, 0.45);
+  --card-radius: 1.5rem;
+  --card-backdrop-filter: var(--glass-blur);
+  --card-star: rgba(100, 116, 139, 0.35);
+  --card-star-filled: #64748b;
+  --card-category-bg: rgba(255, 255, 255, 0.5);
+  --card-category-border: rgba(255, 255, 255, 0.7);
+  --card-category-color: #475569;
+  --card-cart-bg: rgba(255, 255, 255, 0.58);
+  --card-cart-border: rgba(255, 255, 255, 0.75);
+  --card-cart-color: #1e293b;
+  --card-stock-bg: rgba(148, 163, 184, 0.22);
+  --card-stock-color: #475569;
+  --card-stock-border: rgba(148, 163, 184, 0.4);
+
   /* ===== COMPOSITE OVERRIDES ===== */
   --radius-card: var(--radius-xl);
   --shadow-card: var(--glass-shadow);
@@ -579,7 +598,27 @@
   /* ===== COMPONENT-SPECIFIC OVERRIDES (high specificity) ===== */
 
   /* Cards and surfaces with glass effect */
-  body .product-card,
+  body .product-card {
+    background: var(--card-surface);
+    backdrop-filter: var(--card-backdrop-filter);
+    -webkit-backdrop-filter: var(--card-backdrop-filter);
+    color: var(--text-primary);
+    border: 1px solid var(--card-border);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+
+    .product-image {
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.55) 0%, transparent 62%),
+        var(--card-image-bg);
+    }
+
+    .product-info {
+      background: var(--card-info-bg);
+      border-top-color: var(--card-border);
+    }
+  }
+
   body .card,
   body .filters-section,
   body .order-summary,
@@ -590,7 +629,7 @@
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
     color: var(--text-primary);
-    border: var(--border-default);
+    border: 1px solid var(--border-default);
     box-shadow: var(--glass-shadow);
   }
 

@@ -6,6 +6,8 @@ import { CartService } from '../../core/services/cart.service';
 import { FavoritesService } from '../../core/services/favorites.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { OptimizationService } from '../../core/services/optimization.service';
+import { ThemeService } from '../../core/themes/theme.service';
+import { ThemeId } from '../../core/themes/theme.model';
 import { TranslateService } from '@ngx-translate/core';
 import { getLocalizedString } from '../../../shared/utils/localization.util';
 import { Product } from 'src/shared/models/product.model';
@@ -44,8 +46,15 @@ export class ShopComponent implements OnInit, OnDestroy {
   totalPages: number = 1;
   paginatedProducts: Product[] = [];
 
-  // View mode
-  viewMode: 'list' | 'grid-2' | 'grid-3' | 'grid-4' = 'grid-4';
+  // View mode — default columns follow active theme (light 2 / dark 4 / glass 3)
+  viewMode: 'list' | 'grid-2' | 'grid-3' | 'grid-4' = 'grid-2';
+
+  private readonly themeGridDefaults: Record<ThemeId, 'grid-2' | 'grid-3' | 'grid-4'> = {
+    light: 'grid-2',
+    dark: 'grid-4',
+    glass: 'grid-3',
+    'dark-glass': 'grid-4',
+  };
 
   // Filter sidebar properties
   isFilterSidebarOpen = false;
@@ -78,6 +87,7 @@ export class ShopComponent implements OnInit, OnDestroy {
     private favoritesService: FavoritesService,
     private notificationService: NotificationService,
     private optimizationService: OptimizationService,
+    private themeService: ThemeService,
     private translate: TranslateService,
     private router: Router,
     private route: ActivatedRoute
@@ -85,15 +95,27 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initOptions();
+    this.applyThemeGridDefault(this.themeService.getCurrentTheme().id);
     this.loadProducts();
     this.loadCategories();
     this.setupRouteParams();
+
+    this.themeService.currentTheme$.pipe(takeUntil(this.destroy$)).subscribe((theme) => {
+      this.applyThemeGridDefault(theme.id);
+    });
 
     // Refresh options on lang change
     this.translate.onLangChange.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.initOptions();
       this.loadCategories(); // To refresh "All categories" label
     });
+  }
+
+  private applyThemeGridDefault(themeId: ThemeId): void {
+    if (this.viewMode === 'list') {
+      return;
+    }
+    this.viewMode = this.themeGridDefaults[themeId] ?? 'grid-3';
   }
 
   private initOptions(): void {

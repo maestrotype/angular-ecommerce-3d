@@ -293,14 +293,15 @@
     }
 
     .product-card {
+      /* Visuals from global `_cards.scss` + theme `--card-*` tokens */
       .product-info {
         .product-rating {
           .star {
-            color: rgba(var(--color-warning-rgb, 251, 191, 36), 0.7);
+            color: var(--card-star);
 
             &:hover,
             &.filled {
-              color: var(--color-warning);
+              color: var(--card-star-filled);
             }
           }
 
@@ -310,10 +311,10 @@
           }
 
           .product-category {
-            background: rgba(var(--interactive-primary-rgb), 0.2);
-            border: 1px solid rgba(var(--interactive-primary-rgb), 0.3);
-            color: var(--color-accent);
-            font-weight: 700;
+            background: var(--card-category-bg);
+            border: 1px solid var(--card-category-border);
+            color: var(--card-category-color);
+            font-weight: 600;
           }
         }
 
@@ -331,27 +332,27 @@
           }
 
           .cart-btn {
-            background: var(--interactive-primary);
-            border: 1px solid var(--interactive-primary-border);
-            color: var(--text-on-primary);
+            background: var(--card-cart-bg);
+            border: 1px solid var(--card-cart-border);
+            color: var(--card-cart-color);
             box-shadow: var(--shadow-sm);
 
             &:hover {
-              background: var(--interactive-primary-hover);
+              filter: brightness(1.05);
             }
 
             .material-icons {
-              color: var(--text-on-primary);
+              color: var(--card-cart-color);
             }
           }
         }
 
         .stock-indicator {
-          color: var(--interactive-danger);
-          background: var(--color-error-bg);
+          color: var(--card-stock-color);
+          background: var(--card-stock-bg);
           padding: 4px 8px;
           border-radius: var(--radius-md);
-          border: 1px solid rgba(var(--color-error-rgb, 239, 68, 68), 0.2);
+          border: 1px solid var(--card-stock-border);
         }
       }
     }

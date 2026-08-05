@@ -167,9 +167,7 @@
               <div class="stars">
                 <span class="star" *ngFor="let star of [1,2,3,4,5]; let i = index"
                   [class.filled]="i < Math.floor(product.rating || 0)" (click)="rateProduct(product, i + 1)"
-                  [title]="('SHOP.PRODUCT.RATE' | translate) + ' ' + (i + 1) + ' ' + ('SHOP.PRODUCT.STARS' | translate)">
-                  ⭐
-                </span>
+                  [title]="('SHOP.PRODUCT.RATE' | translate) + ' ' + (i + 1) + ' ' + ('SHOP.PRODUCT.STARS' | translate)">★</span>
               </div>
               <span class="rating-value">({{ product.rating || 0 }})</span>
               <span class="rating-count" *ngIf="product.ratingCount">({{ product.ratingCount }} {{
