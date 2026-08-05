@@ -1,7 +1,8 @@
 import { Component, ViewChild, ElementRef, OnInit, OnDestroy, Inject, PLATFORM_ID, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { CartService } from '../../core/services/cart.service';
 import { FavoritesService } from '../../core/services/favorites.service';
 import { ProductService } from '../../core/services/product.service';
@@ -68,6 +69,11 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   enableNewThemeSwitcher = false;
   showNewThemeMenu = false;
 
+  /** Active home-page section (#about, #contacts) — overrides route-based Home highlight */
+  activeSectionId: string | null = null;
+  private scrollSpyObserver?: IntersectionObserver;
+  private routerSubscription?: Subscription;
+
   constructor(
     private router: Router,
     private productService: ProductService,
@@ -108,6 +114,10 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
     this.searchTerm = '';
     this.searchResults = [];
+
+    this.routerSubscription = this.router.events
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe(() => this.onRouteChange());
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -136,6 +146,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.cartSubscription.unsubscribe();
     this.favoritesSubscription.unsubscribe();
     this.themeSubscription.unsubscribe();
+    this.routerSubscription?.unsubscribe();
+    this.teardownScrollSpy();
 
     if (isPlatformBrowser(this.platformId)) {
       document.removeEventListener('click', this.onDocumentClick.bind(this));
@@ -208,10 +220,12 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
           console.warn('API returned empty menu, using fallback.');
           this.menuItems = this.FALLBACK_MENU_ITEMS;
         }
+        this.onRouteChange();
       },
       error: err => {
         console.error('Error loading menu items, using fallback:', err);
         this.menuItems = this.FALLBACK_MENU_ITEMS;
+        this.onRouteChange();
       }
     });
   }
@@ -402,19 +416,15 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   handleMenuClick(menuItem: MenuItem, event?: MouseEvent): void {
-    // Only close search and mobile menu
     this.isSearchOpen = false;
     this.closeMobileMenu();
-    
-    console.log('[Header] Menu click:', menuItem.url);
 
     if (menuItem.url.startsWith('#')) {
       const sectionId = menuItem.url.substring(1);
+      this.activeSectionId = sectionId;
       this.scrollToSection(sectionId);
     } else if (menuItem.url.startsWith('/')) {
-      this.router.navigate([menuItem.url]);
-      this.searchTerm = '';
-      this.searchResults = [];
+      this.onRouteMenuClick(menuItem);
     } else {
       if (isPlatformBrowser(this.platformId)) {
         window.open(menuItem.url, '_blank');
@@ -422,10 +432,112 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
+  onRouteMenuClick(menuItem: MenuItem): void {
+    this.activeSectionId = null;
+    this.searchTerm = '';
+    this.searchResults = [];
+
+    if (menuItem.url === '/home' && isPlatformBrowser(this.platformId)) {
+      const path = this.router.url.split('?')[0];
+      if (path === '/home') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  }
+
+  isMenuItemActive(item: MenuItem): boolean {
+    const url = item.url;
+
+    if (url.startsWith('#')) {
+      return this.activeSectionId === url.substring(1);
+    }
+
+    if (!url.startsWith('/')) {
+      return false;
+    }
+
+    const currentPath = this.router.url.split('?')[0];
+
+    if (url === '/home') {
+      return currentPath === '/home' && !this.activeSectionId;
+    }
+
+    if (url === '/admin') {
+      return currentPath.startsWith('/admin');
+    }
+
+    return currentPath === url || currentPath.startsWith(`${url}/`);
+  }
+
+  private onRouteChange(): void {
+    const path = this.router.url.split('?')[0];
+
+    if (path !== '/home') {
+      this.activeSectionId = null;
+      this.teardownScrollSpy();
+      return;
+    }
+
+    if (!this.activeSectionId) {
+      this.setupScrollSpy();
+    }
+  }
+
+  private setupScrollSpy(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    this.teardownScrollSpy();
+
+    const sectionIds = this.menuItems
+      .filter(item => item.url.startsWith('#'))
+      .map(item => item.url.substring(1));
+
+    if (!sectionIds.length) {
+      return;
+    }
+
+    this.scrollSpyObserver = new IntersectionObserver(
+      entries => {
+        const visible = entries
+          .filter(entry => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+        if (visible.length > 0) {
+          this.activeSectionId = visible[0].target.id;
+          return;
+        }
+
+        if (window.scrollY < 120) {
+          this.activeSectionId = null;
+        }
+      },
+      { rootMargin: '-15% 0px -55% 0px', threshold: [0, 0.2, 0.45] }
+    );
+
+    const observeSections = () => {
+      sectionIds.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+          this.scrollSpyObserver?.observe(element);
+        }
+      });
+    };
+
+    observeSections();
+    setTimeout(observeSections, 400);
+  }
+
+  private teardownScrollSpy(): void {
+    this.scrollSpyObserver?.disconnect();
+    this.scrollSpyObserver = undefined;
+  }
+
   scrollToSection(sectionId: string): void {
-    console.log('[Header] Scroll to section:', sectionId);
-    if (this.router.url !== '/home') {
+    if (this.router.url.split('?')[0] !== '/home') {
       this.router.navigate(['/home']).then(() => {
+        this.setupScrollSpy();
         this.scrollToElement(sectionId);
       });
     } else {
