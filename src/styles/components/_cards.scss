@@ -125,11 +125,11 @@
     }
 
     .new-badge {
-      background: var(--state-success-bg, #27ae60);
+      background: var(--state-success-bg);
     }
 
     .discount-badge {
-      background: var(--state-warning-bg, #f39c12);
+      background: var(--state-warning-bg);
     }
 
     .out-of-stock-badge {

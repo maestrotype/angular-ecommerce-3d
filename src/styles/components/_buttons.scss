@@ -168,7 +168,6 @@
   &.btn-glass {
     @include glass-effect;
     color: var(--color-text-primary);
-    color: #333;
     
     &:hover:not(:disabled) {
       background: rgba(255, 255, 255, 0.2);

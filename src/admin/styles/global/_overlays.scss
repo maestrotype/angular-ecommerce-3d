@@ -17,58 +17,58 @@
 
   &.error-snackbar,
   &.admin-snackbar-error {
-    --mdc-snackbar-container-color: var(--interactive-danger, #d32f2f);
-    --mdc-snackbar-supporting-text-color: #ffffff;
-    --mat-snack-bar-button-color: #ffffff;
+    --mdc-snackbar-container-color: var(--interactive-danger);
+    --mdc-snackbar-supporting-text-color: var(--text-on-primary);
+    --mat-snack-bar-button-color: var(--text-on-primary);
 
     .mdc-snackbar__surface.mdc-snackbar__surface {
-      background-color: var(--mdc-snackbar-container-color, var(--interactive-danger, #d32f2f));
-      color: var(--mdc-snackbar-supporting-text-color, #ffffff);
+      background-color: var(--mdc-snackbar-container-color);
+      color: var(--mdc-snackbar-supporting-text-color);
     }
 
     .mdc-snackbar__label.mdc-snackbar__label {
-      color: var(--mdc-snackbar-supporting-text-color, #ffffff);
+      color: var(--mdc-snackbar-supporting-text-color);
     }
 
     .mat-mdc-snack-bar-action,
     .mat-mdc-snack-bar-action .mdc-button__label {
-      color: var(--mat-snack-bar-button-color, #ffffff);
+      color: var(--mat-snack-bar-button-color);
     }
   }
 
   &.success-snackbar,
   &.admin-snackbar-success {
-    --mdc-snackbar-container-color: var(--color-success, #2e7d32);
-    --mdc-snackbar-supporting-text-color: #ffffff;
-    --mat-snack-bar-button-color: #ffffff;
+    --mdc-snackbar-container-color: var(--color-success);
+    --mdc-snackbar-supporting-text-color: var(--text-on-primary);
+    --mat-snack-bar-button-color: var(--text-on-primary);
 
     .mdc-snackbar__surface.mdc-snackbar__surface {
-      background: var(--mdc-snackbar-container-color, var(--color-success, #2e7d32));
-      color: var(--mdc-snackbar-supporting-text-color, #ffffff);
+      background: var(--mdc-snackbar-container-color);
+      color: var(--mdc-snackbar-supporting-text-color);
     }
 
     .mdc-snackbar__label.mdc-snackbar__label,
     .mat-mdc-snack-bar-action,
     .mat-mdc-snack-bar-action .mdc-button__label {
-      color: var(--mdc-snackbar-supporting-text-color, #ffffff);
+      color: var(--mdc-snackbar-supporting-text-color);
     }
   }
 
   &.warning-snackbar,
   &.admin-snackbar-warning {
-    --mdc-snackbar-container-color: var(--color-warning, #ed6c02);
-    --mdc-snackbar-supporting-text-color: #ffffff;
-    --mat-snack-bar-button-color: #ffffff;
+    --mdc-snackbar-container-color: var(--color-warning);
+    --mdc-snackbar-supporting-text-color: var(--text-on-primary);
+    --mat-snack-bar-button-color: var(--text-on-primary);
 
     .mdc-snackbar__surface.mdc-snackbar__surface {
-      background: var(--mdc-snackbar-container-color, var(--color-warning, #ed6c02));
-      color: var(--mdc-snackbar-supporting-text-color, #ffffff);
+      background: var(--mdc-snackbar-container-color);
+      color: var(--mdc-snackbar-supporting-text-color);
     }
 
     .mdc-snackbar__label.mdc-snackbar__label,
     .mat-mdc-snack-bar-action,
     .mat-mdc-snack-bar-action .mdc-button__label {
-      color: var(--mdc-snackbar-supporting-text-color, #ffffff);
+      color: var(--mdc-snackbar-supporting-text-color);
     }
   }
 
@@ -80,9 +80,9 @@
   }
 
   &:not(.error-snackbar):not(.success-snackbar):not(.warning-snackbar):not(.admin-snackbar-error):not(.admin-snackbar-success):not(.admin-snackbar-warning):not(.admin-snackbar-info) {
-    --mdc-snackbar-container-color: var(--surface-secondary, #1e1e1e);
-    --mdc-snackbar-supporting-text-color: var(--text-primary, #ffffff);
-    --mat-snack-bar-button-color: var(--interactive-primary, #bb86fc);
+    --mdc-snackbar-container-color: var(--surface-secondary);
+    --mdc-snackbar-supporting-text-color: var(--text-primary);
+    --mat-snack-bar-button-color: var(--interactive-primary);
 
     .mdc-snackbar__surface.mdc-snackbar__surface {
       background-color: var(--mdc-snackbar-container-color);

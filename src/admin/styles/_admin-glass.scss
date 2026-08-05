@@ -151,4 +151,15 @@ html[data-theme='glass'] body.is-admin {
   --stat-icon-revenue: var(--color-accent);
   --stat-icon-aov: var(--interactive-primary);
   --stat-icon-success-rate: var(--color-success);
+
+  /* Page atmosphere — consumed by global/_atmospheres.scss */
+  --admin-atmosphere-gradient: linear-gradient(
+    135deg,
+    #5b87b4 0%,
+    #4d7aa8 22%,
+    #446f9a 45%,
+    #3a638c 68%,
+    #446f9a 85%,
+    #527fad 100%
+  );
 }

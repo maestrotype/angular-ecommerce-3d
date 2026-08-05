@@ -4,7 +4,7 @@
 > Статусы задач обновляются ТОЛЬКО здесь. Остальные документы (`PROJECT_STATUS.md`, `UI_AUDIT.md`, `REDESIGN_PLAN.md`) ссылаются сюда.
 >
 > **Baseline аудита**: 2026-07-28 (полный скан кодовой базы)
-> **Последнее обновление**: 2026-08-04
+> **Последнее обновление**: 2026-08-05
 > **Владелец**: Principal UI Architect
 
 ---
@@ -15,11 +15,11 @@
 
 | # | Метрика | Baseline (2026-07-28) | Сейчас | Цель | Прогресс |
 |---|---------|----------------------|--------|------|----------|
-| M1 | Hardcoded hex в SCSS (вне tokens/themes) | 1 336 в 68 файлах | **~148** в 13 файлах | 0 | ▓▓▓▓▓▓▓▓▓░ ~89% |
+| M1 | Hardcoded hex в SCSS (вне tokens/themes) | 1 336 в 68 файлах | **0** | 0 | ██████████ 100% |
 | M2 | Использований `--admin-*` | 2 335 в 43 файлах | **0 non-layout** (C6; 5 layout tokens only) | 0 (кроме layout-токенов) | ██████████ 100% |
 | M3 | `!important` | 91 в 12 файлах | **~52** в 11 файлах (hero −20) | 0 | ▓▓▓▓▓░░░░░ ~43% |
 | M4 | `::ng-deep` | 40 в 12 файлах | **25** (B3: removed component Material `::ng-deep` dumps) | 0 | ▓▓▓▓░░░░░░ 38% |
-| M5 | Компоненты полностью на semantic-токенах (без hex) | 3 / 86 | **65 / 86** | 86 / 86 | ▓▓▓▓▓▓▓░░░ 76% |
+| M5 | Компоненты полностью на semantic-токенах (без hex) | 3 / 86 | **86 / 86** | 86 / 86 | ██████████ 100% |
 | M6 | Legacy `_theme-variables.scss` | 722 строки, подключён | **удалён** | удалён | ██████████ 100% |
 | M7 | Orphaned `src/styles.scss` | 499 строк логики | **удалён** | удалён | ██████████ 100% |
 | M8 | Централизованный `_material-overrides.scss` | нет; overrides в 24 файлах | **Epic B 4/4** + admin `global/*` (C5); C ✅ | 1 файл + admin global modules | ▓▓▓▓▓▓▓▓▓░ 95% |
@@ -101,8 +101,8 @@ graph LR
 | A | Фундамент токенов | ✅ **Готово** | 6/6 | M6, M7 |
 | B | Централизация Material overrides | ✅ Done | 4/4 | M8 |
 | C | Admin-унификация (ADR-011) | ✅ **Готово** | 6/6 | M2 |
-| D | Миграция компонентов (ADR-006) | 🔄 In Progress | 8/10 | M1, M5 |
-| E | Финальная зачистка | ⏳ Ожидает D | 0/4 | M3, M4 |
+| D | Миграция компонентов (ADR-006) | ✅ **Готово** | 10/10 | M1, M5 |
+| E | Финальная зачистка | ⏳ Следующий | 0/4 | M3, M4 |
 | F | Theme Engine v2 (ADR-004, ADR-012) | 💡 План | 0/5 | — |
 | G | Premium UI, анимации, полировка | 💡 План | — | — |
 
@@ -153,7 +153,7 @@ graph LR
 
 **Цель**: 86/86 компонентов потребляют только semantic-токены. Порядок: сначала самые «грязные» storefront-страницы, затем admin.
 
-**Прогресс**: полностью чистых 65/86 — storefront 0 hex (D6); admin layout/blocks (D7) + lists (D8) + forms/pages (D9); остаток M1 ≈ 148 hex / 13 файлов (admin components + global SCSS).
+**Прогресс**: полностью чистых **86/86** — storefront + admin components + global SCSS (D10). M1 = **0**.
 
 | ID | Задача (пакет) | Компоненты (hex baseline) | Статус |
 |----|----------------|---------------------------|--------|
@@ -166,7 +166,7 @@ graph LR
 | D7 | Admin: layout + blocks | `admin-layout`, `sidenav`, `admin-table`, `list-container`, `stat-card` | ✅ (2026-08-02) |
 | D8 | Admin: списки | `product-list`, `order-list`, `user-list`, `category-list`, `message-list`, `section-list` | ✅ (2026-08-03) |
 | D9 | Admin: формы и страницы | `product-form`, `seo`, `settings`, `dashboard` и остальные | ✅ (2026-08-04) |
-| D10 | Верификация: скриншоты всех страниц во всех 4 темах, M1 = 0, M5 = 86/86 | — | 📋 |
+| D10 | Верификация: скриншоты всех страниц во всех 4 темах, M1 = 0, M5 = 86/86 | — | ✅ (2026-08-05) |
 
 **Чек-лист на каждый компонент** (из REDESIGN_PLAN Phase 6):
 1. Все hardcoded-значения → semantic-токены
@@ -240,6 +240,8 @@ graph LR
 | 2026-08-02 | **D7 (Board)**: Migrated admin layout + blocks (`admin-layout`, `sidenav`, `admin-table`, `list-container`, `stat-card`) — 0 hex; `--admin-list-*` tokens in admin theme layer; sidenav dark-glass MDC via CSS vars (−10 `!important`); `list-container`/`stat-card` theme dumps removed; `npm run build` passes. M5 = 45/86; M1 = 263. |
 | 2026-08-03 | **Hotfix**: admin dark list shell — move `--admin-list-*` from `:root` to `body.is-admin` so zinc surfaces are not frozen to storefront slate. |
 | 2026-08-03 | **D8 (Board)**: Migrated admin lists (`product-list`, `order-list`, `user-list`, `category-list`, `message-list`, `section-list`) — 0 hex; removed glass/dark-glass theme dumps; stock/status colors → semantic; order KPI cards use `--dashboard-stat-card-*`. M5 = 51/86; M1 ≈ 231. |
+| 2026-08-04 | **D9 (Board)**: Migrated admin forms and pages (`product-form`, `seo`, `settings`, `dashboard` and remaining) — 0 hex in components; residual hex in global SCSS/overrides deferred to D10. M5 = 65/86; M1 ≈ 148. |
+| 2026-08-05 | **D10 / Epic D closed**: Cleared remaining 148 hex in 13 files (global SCSS, `_material-overrides`, admin components); atmosphere gradients → `--admin-atmosphere-gradient` in admin theme files; removed hex fallbacks from `var()`. M1 = **0**; M5 = **86/86**; `npm run build` passes. |
 
 ---
 

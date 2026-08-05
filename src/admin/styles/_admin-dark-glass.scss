@@ -145,6 +145,17 @@ html[data-theme='dark-glass'] body.is-admin {
   --admin-list-backdrop-filter: none;
   --dashboard-stat-card-color: rgba(255, 255, 255, 0.95);
 
+  /* Page atmosphere — consumed by global/_atmospheres.scss */
+  --admin-atmosphere-gradient: linear-gradient(
+    135deg,
+    #1a0a1e 0%,
+    #2a1a2e 20%,
+    #3a2535 40%,
+    #2a1a2e 60%,
+    #1a0a1e 80%,
+    #0a0510 100%
+  );
+
   .mat-toolbar,
   .admin-header.mat-toolbar,
   mat-toolbar.admin-header {

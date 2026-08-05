@@ -1,6 +1,6 @@
 # Project Status
 
-**Last Updated**: 2026-07-29
+**Last Updated**: 2026-08-05
 **Maintainer**: Principal UI Architect
 
 > This document tracks high-level project status. For refactoring task tracking and progress metrics, see **[REFACTORING_BOARD.md](REFACTORING_BOARD.md)** (single source of truth for progress). For architectural decisions, see `STYLE_REFACTOR_PLAN.md`.
@@ -32,13 +32,13 @@
 | A | Token Foundation | ✅ Complete | A1–A6 done |
 | B | Material Overrides Centralization | ✅ Complete | B1–B4 done; admin Material leftovers modularized in C5 `global/` |
 | C | Admin Unification (ADR-011) | ✅ Complete | C1–C6; M2 = 0 non-layout (5 layout tokens); M3 = 72 |
-| D | Component Migration (ADR-006) | ⏳ Ready | Next epic — storefront hex first (D1+), then admin |
-| E | Final Cleanup | ⏳ Pending | M3 = 72 `!important` (12 files); hard ban for **new** code (`.cursor/rules/no-important.mdc`) |
+| D | Component Migration (ADR-006) | ✅ Complete | D1–D10 done; M1 = 0, M5 = 86/86 |
+| E | Final Cleanup | ⏳ Next | M3 ≈ 42 `!important`; M4 ≈ 24 `::ng-deep` |
 | F | Theme Engine v2 (ADR-004/012) | 💡 Planned | |
 | G | Premium UI / Animations / Polish | 💡 Planned | |
 
 ### Current Blockers
-- None. Smoke admin themes after C6 if visuals regress (login + dashboard + list × 4 themes). Epic D can start.
+- None. Epic E (final cleanup: `!important`, `::ng-deep`, stub files) is next.
 
 ### Post-C4 lessons (2026-07-29) — do not repeat
 1. **`!important` is forbidden** for new/agent work (absolute). Win with CSS variables (`--mdc-*` / `--mat-*`), specificity, or correct layer — never `!important`. Rule: `.cursor/rules/no-important.mdc` + `AI_CONSTITUTION.md`.
@@ -82,7 +82,7 @@
 
 ### High Priority
 - [x] Parallel `--admin-*` unified (C6) — only 5 layout ADMIN-ONLY tokens remain
-- [ ] 1,336 hardcoded hex colors outside token/theme sources (Epic D)
+- [x] 1,336 hardcoded hex colors outside token/theme sources (Epic D — M1 = 0)
 - [x] Legacy `_theme-variables.scss` deleted (A3)
 - [x] Orphaned `src/styles.scss` deleted (A5)
 - [x] Material overrides Epic B (B1–B4)
@@ -103,6 +103,7 @@
 
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-08-05 | Task D10 (Board): Cleared remaining 148 hex in 13 global/admin SCSS files; atmosphere gradients promoted to `--admin-atmosphere-gradient` in admin theme files; removed hex fallbacks from `var()`. M1 = **0**; M5 = **86/86**. Epic D **10/10 complete**. `npm run build` passes. | Implementation Engineer |
 | 2026-07-29 | Task C6 (Board): Deleted `admin-variables.scss` shim; remapped residual consumers; rewrote `admin-mixins` on semantic; extracted `_admin-root-defaults.scss` (dashboard/MDC defaults). M2 = **0 non-layout** (5 layout tokens kept). Admin theme files kept for chrome/promotions. Note: `docs/migration/_c6-admin-variables-shim-removal.md`. Epic C **6/6**. `npm run build` passes. | Implementation Engineer |
 | 2026-07-29 | Glass balance: lighter chrome (header/sidebar ~0.36 airy blue); darker content blocks (`--surface-card`/`elevated`/stat cards navy glass). Epic C still **5/6**. | Implementation Engineer |
 | 2026-07-29 | Glass chrome lighten: restore prod medium steel-blue `rgba(25,60,105,.5)` (was over-dark .78 charcoal). Header≡sidebar kept. Epic C still **5/6**. | Implementation Engineer |

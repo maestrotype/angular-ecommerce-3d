@@ -781,7 +781,7 @@
   .mat-mdc-raised-button.mat-primary,
   .mat-mdc-button.mat-primary {
     background: rgba(255, 255, 255, 0.3);
-    color: #0f172a; // TODO Epic C: map to semantic
+    color: var(--text-primary);
     border: 1px solid rgba(255, 255, 255, 0.4);
     box-shadow:
       0 4px 16px rgba(31, 41, 55, 0.2),
@@ -1015,7 +1015,7 @@
     border-color: rgba(255, 255, 255, 0.7);
   }
 
-  /* ===== Sidenav / Drawer — charcoal glass (prod: --surface-header #4d4a4e) ===== */
+  /* ===== Sidenav / Drawer — charcoal glass ===== */
   .mat-sidenav-container .mat-sidenav,
   .mat-drawer-container .mat-drawer,
   mat-sidenav.mat-sidenav,
@@ -1105,7 +1105,7 @@
   }
 
   /* ===== Toolbar / Header - DARK glass =====
-     Opaque --surface-header (#4d4a4e): no backdrop-filter.
+     Opaque --surface-header: no backdrop-filter.
      backdrop-filter on the toolbar breaks overflow:hidden clipping on
      child icon-buttons → square white hover corners in Chrome. */
   .mat-toolbar.mat-toolbar,
@@ -1242,7 +1242,7 @@
   --mat-tab-header-inactive-hover-label-text-color: rgba(255, 255, 255, 0.9);
 
   /* Tooltips: no white square under rounded surface */
-  --mdc-plain-tooltip-container-color: #27272a;
+  --mdc-plain-tooltip-container-color: var(--surface-tertiary);
   --mdc-plain-tooltip-supporting-text-color: rgba(250, 250, 250, 0.95);
   --mdc-plain-tooltip-container-shape: 8px;
 
@@ -1259,17 +1259,16 @@
   }
 
   .mat-datepicker-content {
-    background-color: #0f172a; // TODO Epic C: map to semantic
+    background-color: var(--surface-elevated);
   }
 
   /* primary raised/filled buttons - dark theme */
   .mat-mdc-raised-button.mat-primary,
   .mat-mdc-button.mat-primary {
-    // --mdc-protected-button-container-color: #607d8b;
-    --mdc-protected-button-container-color: #313638; // TODO Epic C
-    --mdc-protected-button-label-text-color: white;
-    --mat-protected-button-state-layer-color: white;
-    background-color: #313638; // TODO Epic C: map to semantic
+    --mdc-protected-button-container-color: var(--surface-tertiary);
+    --mdc-protected-button-label-text-color: var(--text-on-primary);
+    --mat-protected-button-state-layer-color: var(--text-on-primary);
+    background-color: var(--surface-tertiary);
     position: relative;
     overflow: hidden;
   }
@@ -1419,20 +1418,20 @@
   }
 
   .mat-mdc-menu-item:hover {
-    background-color: #f3f4f6; // TODO Epic C: map to semantic
+    background-color: var(--surface-highlight);
   }
 }
 
 /* Dark theme specific menu styles */
 [data-theme='dark'] {
   .mat-mdc-menu-panel {
-    background-color: #1f2937; // TODO Epic C: map to semantic
+    background-color: var(--surface-elevated);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3);
-    border-color: #374151; // TODO Epic C: map to semantic
+    border-color: var(--border-strong);
   }
 
   .mat-mdc-menu-item:hover {
-    background-color: #374151; // TODO Epic C: map to semantic
+    background-color: var(--surface-highlight);
   }
 
   /* Force Deep Dark Sidebar for Dark Theme */
@@ -1440,13 +1439,13 @@
   .mat-drawer-container .mat-drawer,
   mat-sidenav.mat-sidenav,
   mat-drawer.mat-drawer {
-    background-color: #0f1115; // TODO Epic C: map to semantic
+    background-color: var(--surface-secondary);
     border-right: 1px solid rgba(255, 255, 255, 0.05);
     box-shadow: none;
   }
 }
 
-/* Glass theme specific menu styles */
+/* Glass theme specific menu styles — storefront frosted light */
 [data-theme='glass'] {
   .mat-mdc-menu-panel {
     background: rgba(255, 255, 255, 0.85);
@@ -1463,10 +1462,50 @@
   }
 }
 
+/* Admin glass: dark frosted menus (profile, actions) — overrides storefront-white above */
+body.is-admin[data-theme='glass'],
+html[data-theme='glass'] body.is-admin {
+  .mat-mdc-menu-panel {
+    --mat-menu-container-color: transparent;
+    --mat-menu-item-label-text-color: var(--text-primary);
+    --mat-menu-item-icon-color: var(--text-secondary);
+    background: var(--glass-surface-muted);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid var(--glass-border-soft);
+    box-shadow: var(--glass-shadow-lg);
+
+    .mdc-menu-surface {
+      background: transparent;
+    }
+  }
+
+  .mat-mdc-menu-item {
+    color: var(--text-primary);
+
+    .mat-icon {
+      color: var(--text-secondary);
+    }
+
+    .mat-mdc-menu-item-text {
+      color: var(--text-primary);
+    }
+
+    &:hover,
+    &:focus {
+      background-color: var(--surface-highlight);
+    }
+  }
+
+  .mat-divider {
+    border-top-color: var(--glass-divider);
+  }
+}
+
 /* Dark Glass theme specific menu styles */
 [data-theme='dark-glass'] {
   .mat-datepicker-content {
-    background-color: #5a5550; // TODO Epic C: map to semantic
+    background-color: var(--surface-elevated);
     color: rgba(255, 255, 255, 0.7);
     margin-bottom: 15px;
   }
@@ -1492,7 +1531,7 @@
   --mat-datepicker-toggle-icon-color: rgba(255, 255, 255, 0.7);
 
   /* Tooltips: outer host stays transparent; only surface is filled (no white square corners) */
-  --mdc-plain-tooltip-container-color: #3a3739;
+  --mdc-plain-tooltip-container-color: var(--surface-tertiary);
   --mdc-plain-tooltip-supporting-text-color: rgba(255, 255, 255, 0.95);
   --mdc-plain-tooltip-container-shape: 8px;
 
@@ -1503,7 +1542,7 @@
   .mat-mdc-tooltip.mat-mdc-tooltip {
     background-color: transparent;
     background-image: none;
-    --mdc-plain-tooltip-container-color: #3a3739;
+    --mdc-plain-tooltip-container-color: var(--surface-tertiary);
     --mdc-plain-tooltip-supporting-text-color: rgba(255, 255, 255, 0.95);
     --mdc-plain-tooltip-container-shape: 8px;
 
@@ -1512,7 +1551,7 @@
     }
 
     .mdc-tooltip__surface {
-      background-color: #3a3739;
+      background-color: var(--surface-tertiary);
       color: rgba(255, 255, 255, 0.95);
       border-radius: 8px;
       overflow: hidden;
@@ -1635,8 +1674,8 @@
     --mdc-icon-button-hover-state-layer-opacity: 0;
     --mdc-icon-button-focus-state-layer-opacity: 0;
     --mdc-icon-button-pressed-state-layer-opacity: 0;
-    -webkit-mask-image: radial-gradient(closest-side, #000 99%, transparent 100%);
-    mask-image: radial-gradient(closest-side, #000 99%, transparent 100%);
+    -webkit-mask-image: radial-gradient(closest-side, black 99%, transparent 100%);
+    mask-image: radial-gradient(closest-side, black 99%, transparent 100%);
     transform: translateZ(0);
 
     &:hover,
@@ -1741,17 +1780,17 @@ app-user-list .mat-chip {
 
   &.mat-chip-selected.mat-primary {
     background-color: var(--interactive-primary);
-    color: var(--text-on-primary, #fff);
+    color: var(--text-on-primary);
   }
 
   &.mat-chip-selected.mat-accent {
     background-color: var(--color-accent, var(--interactive-primary)); // TODO Epic C
-    color: var(--text-on-primary, #fff);
+    color: var(--text-on-primary);
   }
 
   &.mat-chip-selected.mat-warn {
     background-color: var(--interactive-danger, var(--color-warning));
-    color: var(--text-on-primary, #fff);
+    color: var(--text-on-primary);
   }
 }
 
@@ -1913,13 +1952,13 @@ app-section-form .form-wrapper.drawer-mode .mat-mdc-tab-header {
 }
 
 app-section-form .form-wrapper.drawer-mode .mat-mdc-tab-header .mat-mdc-tab {
-  --mdc-tab-indicator-active-indicator-color: #ffffff;
-  --mat-tab-header-active-label-text-color: #ffffff;
+  --mdc-tab-indicator-active-indicator-color: var(--text-on-primary);
+  --mat-tab-header-active-label-text-color: var(--text-on-primary);
   --mat-tab-header-inactive-label-text-color: rgba(255, 255, 255, 0.4);
 }
 
 app-section-form .header-actions mat-chip-listbox {
-  --mdc-chip-label-text-color: #fff;
+  --mdc-chip-label-text-color: var(--text-on-primary);
   --mdc-chip-elevated-container-color: rgba(var(--interactive-primary-rgb), 0.1);
   --mdc-chip-selected-elevated-container-color: var(--interactive-primary);
 }
@@ -1962,7 +2001,7 @@ app-section-list .drawer-lang-switcher .mat-mdc-standard-chip {
 }
 
 app-section-list .drawer-lang-switcher .mat-mdc-standard-chip.mat-mdc-chip-selected {
-  --mdc-chip-label-text-color: #ffffff;
+  --mdc-chip-label-text-color: var(--text-on-primary);
   background: var(--interactive-primary);
   box-shadow: 0 0 12px rgba(var(--interactive-primary-rgb), 0.4);
 }
@@ -2000,7 +2039,7 @@ app-image-processor .loading-container .mat-mdc-progress-spinner circle {
 
 app-image-processor .actions button.mat-primary {
   background: var(--interactive-primary);
-  color: var(--text-on-primary, #1a1a1a);
+  color: var(--text-on-primary);
 
   &:hover:not(:disabled) {
     background: var(--interactive-primary-hover, var(--interactive-primary)); // TODO Epic C
@@ -2022,7 +2061,7 @@ app-image-processor .actions button.mat-warn {
 .confirmation-dialog .mat-dialog-title,
 .confirmation-dialog .mat-mdc-dialog-title {
   margin: 0;
-  color: var(--text-primary, #212121);
+  color: var(--text-primary);
   font-weight: 600;
   font-size: 1.25rem;
   display: flex;
@@ -2035,9 +2074,9 @@ app-image-processor .actions button.mat-warn {
   width: 1.5rem;
   height: 1.5rem;
 
-  &.danger { color: var(--interactive-danger, #f44336); }
-  &.warning { color: var(--status-warning, #ff9800); }
-  &.info { color: var(--interactive-primary, #1976d2); }
+  &.danger { color: var(--interactive-danger); }
+  &.warning { color: var(--color-warning); }
+  &.info { color: var(--interactive-primary); }
 }
 
 .confirmation-dialog .mat-dialog-content,
@@ -2046,7 +2085,7 @@ app-image-processor .actions button.mat-warn {
 
   p {
     margin: 0;
-    color: var(--text-secondary, #757575);
+    color: var(--text-secondary);
     line-height: 1.6;
     font-size: 1rem;
   }
@@ -2063,20 +2102,20 @@ app-image-processor .actions button.mat-warn {
   }
 
   button[color='warn'] {
-    background-color: var(--interactive-danger, #f44336);
-    color: #fff;
+    background-color: var(--interactive-danger);
+    color: var(--text-on-primary);
 
     &:hover {
-      background-color: var(--interactive-danger, #d32f2f); // TODO Epic C
+      background-color: var(--color-error-dark);
     }
   }
 
   button[mat-button] {
-    color: var(--text-secondary, #757575);
-    border: 1px solid var(--border-subtle, #f0f0f0);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-subtle);
 
     &:hover {
-      background-color: var(--surface-highlight, #f5f5f5);
+      background-color: var(--surface-highlight);
     }
   }
 }

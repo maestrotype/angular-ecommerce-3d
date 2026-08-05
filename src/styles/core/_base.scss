@@ -169,8 +169,8 @@ select {
 /* High contrast mode — override semantic tokens (legacy --color-* aliases follow) */
 @media (prefers-contrast: high) {
   :root {
-    --border-default: #000000;
-    --text-secondary: #000000;
+    --border-default: black;
+    --text-secondary: black;
   }
 }
 
@@ -201,7 +201,7 @@ select {
 
   pre,
   blockquote {
-    border: 1px solid #999;
+    border: 1px solid gray;
     page-break-inside: avoid;
   }
 

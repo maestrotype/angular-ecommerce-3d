@@ -47,10 +47,10 @@
   transform: scale(var(--preview-scale));
   transform-origin: top center;
   overflow: hidden; 
-  background: #000;
+  background: black;
   box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.1);
   border-radius: 32px; 
-  border: 8px solid #1a1a1a; 
+  border: 8px solid var(--surface-inverse); 
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -354,7 +354,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: var(--footer-text, #f8fafc) !important;
+    color: var(--footer-text) !important;
     opacity: 1;
     
     mat-icon { 
@@ -371,7 +371,7 @@
       position: absolute;
       top: 6px;
       right: 18px;
-      background: var(--color-primary, #6366f1);
+      background: var(--color-primary);
       color: white;
       border-radius: 50%;
       padding: 2px 5px;

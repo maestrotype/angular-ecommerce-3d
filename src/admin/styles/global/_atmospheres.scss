@@ -12,16 +12,7 @@
 body.is-admin[data-theme="glass"] {
   min-height: 100vh;
   position: relative;
-  /* Prod-like mid steel-blue field (liquid glass samples this through chrome) */
-  background: linear-gradient(
-    135deg,
-    #5b87b4 0%,
-    #4d7aa8 22%,
-    #446f9a 45%,
-    #3a638c 68%,
-    #446f9a 85%,
-    #527fad 100%
-  );
+  background: var(--admin-atmosphere-gradient);
   background-size: 400% 400%;
   animation: gradientShift 18s ease infinite;
   background-attachment: fixed;
@@ -56,15 +47,7 @@ body.is-admin[data-theme="glass"] {
    * frosted table/container blur has atmosphere to sample.
    */
   .admin-main {
-    background: linear-gradient(
-      135deg,
-      #5b87b4 0%,
-      #4d7aa8 22%,
-      #446f9a 45%,
-      #3a638c 68%,
-      #446f9a 85%,
-      #527fad 100%
-    );
+    background: var(--admin-atmosphere-gradient);
     background-size: 400% 400%;
     background-attachment: fixed;
     animation: gradientShift 18s ease infinite;
@@ -74,18 +57,11 @@ body.is-admin[data-theme="glass"] {
 body.is-admin[data-theme="dark-glass"] {
   min-height: 100vh;
   position: relative;
-  background: linear-gradient(135deg,
-      #1a0a1e 0%,
-      #2a1a2e 20%,
-      #3a2535 40%,
-      #2a1a2e 60%,
-      #1a0a1e 80%,
-      #0a0510 100%);
+  background: var(--admin-atmosphere-gradient);
   background-size: 400% 400%;
   animation: gradientShift 15s ease infinite;
   background-attachment: fixed;
 
-  // STRONG warm orange/pink overlay (sunset effect)
   &::before {
     content: '';
     position: fixed;
@@ -98,7 +74,6 @@ body.is-admin[data-theme="dark-glass"] {
     pointer-events: none;
   }
 
-  // Blurred warm depth (stronger)
   &::after {
     content: '';
     position: fixed;
