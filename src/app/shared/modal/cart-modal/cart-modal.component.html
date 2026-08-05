@@ -24,13 +24,13 @@
           <p class="item-price theme-price">${{ item.price | number:'1.2-2' }}</p>
 
           <div class="quantity-controls">
-            <button class="quantity-btn glass-theme" (click)="updateQuantity(item.productId, -1)">-</button>
+            <button type="button" class="quantity-btn" (click)="updateQuantity(item.productId, -1)">-</button>
             <span>{{ item.quantity }}</span>
-            <button class="quantity-btn glass-theme" (click)="updateQuantity(item.productId, 1)">+</button>
+            <button type="button" class="quantity-btn" (click)="updateQuantity(item.productId, 1)">+</button>
           </div>
         </div>
 
-        <button class="remove-btn glass-theme" (click)="removeItem(item.productId)">
+        <button type="button" class="remove-btn" (click)="removeItem(item.productId)">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
             <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" />
           </svg>
@@ -48,10 +48,10 @@
       </div>
 
       <div class="checkout-actions">
-        <button class="continue-btn glass-theme" (click)="onClose()">
+        <button type="button" class="continue-btn" (click)="onClose()">
           {{ 'MODALS.CART.CONTINUE_SHOPPING' | translate }}
         </button>
-        <button class="checkout-btn glass-theme" (click)="checkout()">
+        <button type="button" class="checkout-btn" (click)="checkout()">
           {{ 'MODALS.CART.PLACE_ORDER' | translate }}
         </button>
       </div>

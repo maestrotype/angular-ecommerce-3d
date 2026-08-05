@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ThemeService } from '../../core/themes/theme.service';
-import { Theme } from '../../core/themes/theme.model';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -10,37 +8,26 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./payment-error.component.scss']
 })
 export class PaymentErrorComponent implements OnInit {
-  currentTheme = 'default';
-  errorMessage: string = '';
+  errorMessage = '';
   orderId: string | null = null;
   amount: number | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private themeService: ThemeService,
     private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
-    this.loadTheme();
     this.loadErrorData();
   }
 
-  private loadTheme(): void {
-    this.themeService.currentTheme$.subscribe((theme: Theme) => {
-      this.currentTheme = theme.id;
-    });
-  }
-
   private loadErrorData(): void {
-    // Get data from route params
     this.errorMessage = this.route.snapshot.queryParamMap.get('error') || this.translate.instant('PAYMENT.ERROR_PAGE.DEFAULT_ERROR');
     this.orderId = this.route.snapshot.queryParamMap.get('orderId');
     const amountStr = this.route.snapshot.queryParamMap.get('amount');
     this.amount = amountStr ? parseFloat(amountStr) : null;
 
-    // Fallback to localStorage if no route params
     if (!this.orderId) {
       const orderData = localStorage.getItem('lastPayment');
       if (orderData) {
@@ -49,10 +36,6 @@ export class PaymentErrorComponent implements OnInit {
         this.amount = data.amount;
       }
     }
-  }
-
-  getThemeClass(baseClass: string): string {
-    return `${baseClass} ${this.currentTheme}-theme`;
   }
 
   tryAgain(): void {
@@ -68,10 +51,10 @@ export class PaymentErrorComponent implements OnInit {
   }
 
   goToCart(): void {
-    this.router.navigate(['/cart']);
+    this.router.navigate(['/shop']);
   }
 
   goToHome(): void {
     this.router.navigate(['/']);
   }
-} 
+}

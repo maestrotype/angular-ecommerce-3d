@@ -1,43 +1,43 @@
-<div class="payment-error-container" [class]="getThemeClass('payment-error-container')">
-  <div class="error-content">
-    <div class="error-icon">
+<div class="payment-result payment-result--error">
+  <div class="payment-result__panel">
+    <div class="payment-result__icon">
       <mat-icon>error</mat-icon>
     </div>
 
-    <h1 class="error-title">{{ 'PAYMENT.STATUS.FAILED_TITLE' | translate }}</h1>
-    <p class="error-message">{{ errorMessage }}</p>
+    <h1 class="payment-result__title">{{ 'PAYMENT.STATUS.FAILED_TITLE' | translate }}</h1>
+    <p class="payment-result__message">{{ errorMessage }}</p>
 
-    <div class="payment-details" [class]="getThemeClass('payment-details')" *ngIf="orderId || amount">
-      <div class="detail-row" *ngIf="orderId">
-        <span class="detail-label">{{ 'PAYMENT.INFO.ORDER_ID' | translate }}:</span>
-        <span class="detail-value">#{{ orderId }}</span>
+    <div class="payment-result__details" *ngIf="orderId || amount">
+      <div class="payment-result__detail-row" *ngIf="orderId">
+        <span class="payment-result__detail-label">{{ 'PAYMENT.INFO.ORDER_ID' | translate }}:</span>
+        <span class="payment-result__detail-value">#{{ orderId }}</span>
       </div>
 
-      <div class="detail-row" *ngIf="amount">
-        <span class="detail-label">{{ 'MODALS.CART.TOTAL' | translate }}:</span>
-        <span class="detail-value">${{ amount.toFixed(2) }}</span>
+      <div class="payment-result__detail-row" *ngIf="amount">
+        <span class="payment-result__detail-label">{{ 'MODALS.CART.TOTAL' | translate }}:</span>
+        <span class="payment-result__detail-value">${{ amount.toFixed(2) }}</span>
       </div>
     </div>
 
-    <div class="error-actions">
-      <button mat-raised-button color="primary" class="action-btn primary-btn" (click)="tryAgain()">
+    <div class="payment-result__actions">
+      <button type="button" class="payment-result__btn payment-result__btn--danger" (click)="tryAgain()">
         {{ 'PAYMENT.STATUS.RETRY' | translate }}
       </button>
 
-      <button mat-stroked-button class="action-btn secondary-btn" (click)="goToCart()">
+      <button type="button" class="payment-result__btn payment-result__btn--secondary" (click)="goToCart()">
         {{ 'PAYMENT.ERROR_PAGE.GO_TO_CART' | translate }}
       </button>
 
-      <button mat-stroked-button class="action-btn secondary-btn" (click)="contactSupport()">
+      <button type="button" class="payment-result__btn payment-result__btn--secondary" (click)="contactSupport()">
         {{ 'PAYMENT.ERROR_PAGE.CONTACT_SUPPORT' | translate }}
       </button>
 
-      <button mat-stroked-button class="action-btn secondary-btn" (click)="goToHome()">
+      <button type="button" class="payment-result__btn payment-result__btn--secondary" (click)="goToHome()">
         {{ 'PAYMENT.SUCCESS_PAGE.GO_HOME' | translate }}
       </button>
     </div>
 
-    <div class="error-info">
+    <div class="payment-result__info">
       <p>{{ 'PAYMENT.ERROR_PAGE.INFO' | translate }}</p>
       <p>{{ 'PAYMENT.ERROR_PAGE.NOT_CHARGED' | translate }}</p>
     </div>

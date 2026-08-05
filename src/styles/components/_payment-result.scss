@@ -1,0 +1,176 @@
+/* ==========================================================================
+   PAYMENT RESULT PAGES (Epic G16)
+   Success + error screens — token-driven, all themes via semantic layer
+   ========================================================================== */
+
+.payment-result {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+  background: var(--surface-page);
+  color: var(--text-primary);
+  animation: motion-fade-in var(--motion-duration-normal) var(--motion-easing-enter) both;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+
+  &__panel {
+    max-width: 37.5rem;
+    width: 100%;
+    text-align: center;
+    background: var(--checkout-panel-bg, var(--surface-card));
+    border: var(--checkout-panel-border, 1px solid var(--border-default));
+    border-radius: var(--checkout-panel-radius, var(--radius-lg));
+    padding: var(--spacing-2xl);
+    box-shadow: var(--checkout-panel-shadow, var(--shadow-lg));
+    backdrop-filter: var(--checkout-panel-blur, none);
+    -webkit-backdrop-filter: var(--checkout-panel-blur, none);
+  }
+
+  &__icon {
+    margin-bottom: var(--spacing-lg);
+
+    mat-icon {
+      font-size: 5rem;
+      width: 5rem;
+      height: 5rem;
+    }
+  }
+
+  &__title {
+    margin: 0 0 var(--spacing-md);
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    line-height: var(--leading-tight);
+  }
+
+  &__message {
+    margin: 0 0 var(--spacing-xl);
+    font-size: var(--text-lg);
+    color: var(--text-secondary);
+    line-height: var(--leading-relaxed);
+  }
+
+  &__details {
+    background: var(--surface-secondary);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+    border: 1px solid var(--border-subtle);
+    text-align: left;
+  }
+
+  &__detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-xs) 0;
+    border-bottom: 1px solid var(--border-subtle);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__detail-label {
+    font-weight: var(--font-medium);
+    color: var(--text-secondary);
+  }
+
+  &__detail-value {
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  &__btn {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--text-base);
+    font-weight: var(--font-medium);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    border: 1px solid transparent;
+
+    @extend .micro-interactive;
+    @extend .micro-focus-ring;
+
+    &--primary {
+      background: var(--interactive-primary);
+      color: var(--text-on-primary);
+    }
+
+    &--danger {
+      background: var(--interactive-danger);
+      color: var(--text-on-primary);
+
+      &:hover {
+        background: var(--color-error-hover, var(--interactive-danger));
+      }
+    }
+
+    &--secondary {
+      background: transparent;
+      border-color: var(--interactive-primary);
+      color: var(--interactive-primary);
+
+      &:hover {
+        background: var(--interactive-primary);
+        color: var(--text-on-primary);
+      }
+    }
+  }
+
+  &__info {
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    line-height: var(--leading-relaxed);
+
+    p {
+      margin: var(--spacing-2xs) 0;
+    }
+  }
+
+  &--success {
+    .payment-result__icon mat-icon,
+    .payment-result__title {
+      color: var(--color-success);
+    }
+  }
+
+  &--error {
+    .payment-result__icon mat-icon,
+    .payment-result__title {
+      color: var(--interactive-danger);
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .payment-result {
+    padding: var(--spacing-md);
+
+    &__panel {
+      padding: var(--spacing-xl);
+    }
+
+    &__icon mat-icon {
+      font-size: 3.75rem;
+      width: 3.75rem;
+      height: 3.75rem;
+    }
+
+    &__title {
+      font-size: var(--text-xl);
+    }
+  }
+}
