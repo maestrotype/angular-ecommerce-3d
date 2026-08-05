@@ -103,34 +103,6 @@
 
       li {
         margin-bottom: 1rem;
-
-        a {
-          color: var(--footer-link);
-          text-decoration: none;
-          font-size: 0.95rem;
-          transition: all 0.3s ease;
-          position: relative;
-
-          &::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background: currentColor;
-            transition: width 0.3s ease;
-            opacity: 0.5;
-          }
-
-          &:hover {
-            color: var(--footer-link-hover);
-
-            &::after {
-              width: 100%;
-            }
-          }
-        }
       }
     }
   }

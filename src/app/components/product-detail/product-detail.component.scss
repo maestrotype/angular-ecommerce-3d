@@ -62,43 +62,9 @@
   }
 
   .breadcrumb {
-    color: var(--breadcrumb-color, var(--text-secondary));
-    font-size: 0.85rem;
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
-
-    .breadcrumb-link {
-      color: var(--breadcrumb-link-color, var(--text-secondary));
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      white-space: nowrap;
-
-      &:hover {
-        color: var(--breadcrumb-link-hover-color, var(--interactive-primary));
-        text-decoration: underline;
-      }
-    }
-
-    .breadcrumb-separator {
-      margin: 0 0.5rem;
-      opacity: 0.5;
-    }
+    flex-grow: 1;
 
     .current {
-      color: var(--breadcrumb-current-color, var(--text-primary));
-      font-weight: 500;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
       max-width: 150px;
     }
   }

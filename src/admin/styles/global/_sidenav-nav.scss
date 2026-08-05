@@ -1,74 +1,73 @@
-// Clean sidenav navigation styles
+// Admin sidenav navigation — Epic G8 token-driven active/hover states
 .mat-mdc-nav-list a[mat-list-item].mat-mdc-list-item {
   position: relative;
   isolation: isolate;
-  border-radius: var(--radius-sm);
-  transition: box-shadow var(--duration-normal) var(--easing-default),
-    transform var(--duration-normal) var(--easing-default);
+  border-radius: var(--nav-item-radius);
+  transition:
+    box-shadow var(--transition-normal),
+    transform var(--transition-normal);
   will-change: box-shadow, transform;
 
-  // Force dark text/icon colors always
   --mdc-list-item-label-text-color: var(--text-primary);
   --mdc-list-item-leading-icon-color: var(--text-secondary);
   --mdc-list-item-trailing-icon-color: var(--text-secondary);
   --mdc-list-item-hover-label-text-color: var(--text-primary);
   --mdc-list-item-selected-label-text-color: var(--text-primary);
 
-  // Disable Material state layers
   --mdc-list-list-item-hover-state-layer-color: transparent;
   --mdc-list-list-item-hover-state-layer-opacity: 0;
   --mat-list-active-indicator-color: transparent;
 
-  // Left accent bar
   &::before {
     content: '';
     position: absolute;
     left: 0;
     top: 0;
     bottom: 0;
-    width: 3px;
+    width: var(--nav-indicator-width);
     background: transparent;
     border-radius: 2px 0 0 2px;
     pointer-events: none;
     z-index: 2;
-    transition: background-color var(--duration-normal) var(--easing-default);
+    transition: background-color var(--transition-normal);
   }
 
-  // Shadow/outline layer
   &::after {
     content: '';
     position: absolute;
     inset: 0;
-    border-radius: var(--radius-sm);
+    border-radius: var(--nav-item-radius);
     box-shadow: none;
     pointer-events: none;
     z-index: 1;
-    transition: box-shadow var(--duration-normal) var(--easing-default);
+    transition: box-shadow var(--transition-normal);
   }
 
-  // Hover state
   &:hover {
     background: transparent;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, .20), 0 0 0 1px var(--border-default);
-    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 0 1px var(--border-default);
+    transform: translateY(calc(var(--spacing-2xs) * -1));
   }
 
   &:hover::before {
-    background: var(--interactive-primary);
+    background: var(--nav-indicator-color);
   }
 
-  // Active/selected state
+  &:focus-visible {
+    outline: 2px solid var(--nav-link-active);
+    outline-offset: 2px;
+  }
+
   &:is(.mdc-list-item--activated, .mat-mdc-list-item-selected, .active, [aria-current='page']) {
     background: transparent;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, .22), 0 0 0 1px var(--border-default);
-    transform: translateY(-1px);
+    box-shadow: var(--nav-sidenav-active-shadow);
+    transform: translateY(calc(var(--spacing-2xs) * -1));
   }
 
   &:is(.mdc-list-item--activated, .mat-mdc-list-item-selected, .active, [aria-current='page'])::before {
-    background: var(--interactive-primary);
+    background: var(--nav-indicator-color);
   }
 
-  // Force dark text in all states
   .mdc-list-item__primary-text,
   .mdc-list-item__text,
   .mat-mdc-list-item-title {
@@ -80,7 +79,6 @@
     color: var(--text-secondary);
   }
 
-  // Keep ripple below our layers
   .mdc-list-item__ripple {
     z-index: 0;
   }
@@ -92,14 +90,10 @@
   }
 }
 
-// Scoped admin sidenav tokens (container-level)
 .sidenav-nav {
-  // text/icon colors
   --mdc-list-item-label-text-color: var(--text-primary);
   --mdc-list-item-leading-icon-color: var(--text-secondary);
   --mdc-list-item-trailing-icon-color: var(--text-secondary);
-
-  // hover/focus layers off and colors stay dark
   --mdc-list-list-item-hover-state-layer-color: transparent;
   --mdc-list-list-item-hover-state-layer-opacity: 0;
   --mdc-list-item-hover-label-text-color: var(--text-primary);
@@ -107,8 +101,6 @@
   --mdc-list-list-item-focus-state-layer-color: transparent;
   --mdc-list-list-item-focus-state-layer-opacity: 0;
   --mdc-list-item-focus-label-text-color: var(--text-primary);
-
-  // selected/active colors and indicator off
   --mat-list-active-indicator-color: transparent;
   --mdc-list-item-selected-label-text-color: var(--text-primary);
   --mdc-list-item-selected-leading-icon-color: var(--text-secondary);

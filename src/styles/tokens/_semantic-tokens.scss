@@ -111,6 +111,32 @@
   --form-transition: border-color var(--transition-fast), box-shadow var(--transition-fast),
     background-color var(--transition-fast);
 
+  // ===== NAVIGATION TOKENS (Epic G8) =====
+  --nav-link-color: var(--text-secondary);
+  --nav-link-hover: var(--interactive-primary);
+  --nav-link-active: var(--interactive-primary);
+  --nav-link-bg: transparent;
+  --nav-link-bg-hover: var(--surface-highlight);
+  --nav-link-bg-active: rgba(var(--interactive-primary-rgb), 0.12);
+  --nav-indicator-color: var(--interactive-primary);
+  --nav-indicator-width: 3px;
+  --nav-focus-ring: var(--form-focus-ring);
+  --nav-item-radius: var(--radius-md);
+  --nav-item-padding-y: var(--spacing-sm);
+  --nav-item-padding-x: var(--spacing-md);
+  --nav-drawer-bg: var(--surface-elevated);
+  --nav-drawer-overlay: var(--surface-overlay-full);
+  --nav-drawer-border: var(--border-subtle);
+  --nav-drawer-width: min(90vw, 400px);
+  --nav-mobile-link-size: var(--type-size-h4);
+  --nav-sidenav-active-shadow: 0 4px 14px rgba(0, 0, 0, 0.22), 0 0 0 1px var(--border-default);
+
+  --breadcrumb-color: var(--text-muted);
+  --breadcrumb-link-color: var(--text-secondary);
+  --breadcrumb-link-hover-color: var(--interactive-primary);
+  --breadcrumb-current-color: var(--text-primary);
+  --breadcrumb-separator-color: var(--text-muted);
+
   // ===== STATE TOKENS =====
   --state-success-bg: var(--color-success-base);
   --state-success-text: var(--color-white);

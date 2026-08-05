@@ -8,6 +8,7 @@
     <nav class="nav" [class.nav-compressed]="isSearchOpen">
       <ng-container *ngFor="let item of menuItems">
         <a *ngIf="item.url.startsWith('/')" [routerLink]="item.url" class="nav-link"
+          routerLinkActive="active"
           [class.hidden]="!canAccessMenuItem(item)">
           {{ item.title | localized }}
         </a>
