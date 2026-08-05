@@ -259,6 +259,15 @@
   --border-medium: var(--color-slate-600);
   --border-emphasis: var(--color-slate-500);
 
+  /* ===== MOTION OVERRIDES (Epic G1 — snappy dark) ===== */
+  --motion-duration-fast: 120ms;
+  --motion-duration-normal: 220ms;
+  --motion-easing-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --motion-easing-enter: cubic-bezier(0.2, 0, 0, 1);
+  --transition-fast: var(--motion-duration-fast) var(--motion-easing-default);
+  --transition-normal: var(--motion-duration-normal) var(--motion-easing-default);
+  --transition-enter: var(--motion-duration-normal) var(--motion-easing-enter);
+
   /* ===== INTERACTIVE OVERRIDES ===== */
   --interactive-primary: var(--color-brand-base);
   --interactive-primary-hover: var(--color-brand-light);

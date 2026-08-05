@@ -267,6 +267,15 @@
   --border-medium: rgba(255, 255, 255, 0.2);
   --border-emphasis: rgba(255, 255, 255, 0.35);
 
+  /* ===== MOTION OVERRIDES (Epic G1 — elegant glass) ===== */
+  --motion-duration-normal: 400ms;
+  --motion-duration-slow: 600ms;
+  --motion-easing-default: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --motion-easing-enter: cubic-bezier(0.22, 1, 0.36, 1);
+  --transition-normal: var(--motion-duration-normal) var(--motion-easing-default);
+  --transition-slow: var(--motion-duration-slow) var(--motion-easing-default);
+  --transition-enter: var(--motion-duration-normal) var(--motion-easing-enter);
+
   /* ===== INTERACTIVE OVERRIDES ===== */
   --interactive-primary: var(--color-brand-base);
   --interactive-primary-hover: var(--color-brand-light);

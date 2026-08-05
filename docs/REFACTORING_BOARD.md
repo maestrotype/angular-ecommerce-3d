@@ -103,8 +103,8 @@ graph LR
 | C | Admin-унификация (ADR-011) | ✅ **Готово** | 6/6 | M2 |
 | D | Миграция компонентов (ADR-006) | ✅ **Готово** | 10/10 | M1, M5 |
 | E | Финальная зачистка | ✅ **Готово** | 4/4 | M3, M4 |
-| F | Theme Engine v2 (ADR-004, ADR-012) | ⏳ Следующий | 0/5 | — |
-| G | Premium UI, анимации, полировка | 💡 План | — | — |
+| F | Theme Engine v2 (ADR-004, ADR-012) | ✅ **Готово** | 5/5 | — |
+| G | Premium UI, анимации, полировка | 🔄 In Progress | 2/17 | — |
 
 ---
 
@@ -196,9 +196,29 @@ TS `ThemeDefinition` — каталог метаданных, синхрониз
 | F4 | Переключение без FOUC/layout shift | ✅ (2026-08-05) |
 | F5 | Актуализировать `THEME_ENGINE.md` под реализацию | ✅ (2026-08-05) |
 
-### Эпик G — Premium UI, анимации, полировка 💡
+### Эпик G — Premium UI, анимации, полировка 🔄
 
-Детальный план — `REDESIGN_PLAN.md` Phases 7–9 (карточки, типографика, empty/loading states, формы, дашборд, PDP, checkout; motion-токены; кросс-темный аудит, a11y, производительность). Декомпозируется на задачи после завершения эпика E.
+Детальный план — `REDESIGN_PLAN.md` Phases 7–9.
+
+| ID | Задача | REDESIGN | Статус |
+|----|--------|----------|--------|
+| G1 | Motion-токены: duration/easing scale, semantic `--transition-*`, theme presets | 8.1 | ✅ (2026-08-05) |
+| G2 | Empty state: shared component + `_empty-states.scss`, cart/favorites/orders | 7.3 | ✅ (2026-08-05) |
+| G3 | Loading state: skeleton + spinner components + `_loading.scss` | 7.4 | 💡 |
+| G4 | Premium product cards polish | 7.1 | 💡 |
+| G5 | Typography hierarchy per theme | 7.2 | 💡 |
+| G6 | Admin data tables premium styling | 7.5 | 💡 |
+| G7 | Forms: `_forms.scss` + Material form overrides | 7.6 | 💡 |
+| G8 | Navigation: header/footer/sidebar active states | 7.7 | 💡 |
+| G9 | Modals/dialogs: `_modals.scss` + backdrop motion | 7.8 | 💡 |
+| G10 | Admin dashboard stat cards | 7.9 | 💡 |
+| G11 | Product detail page polish | 7.10 | 💡 |
+| G12 | Checkout flow polish | 7.11 | 💡 |
+| G13 | Page transitions | 8.2 | 💡 |
+| G14 | Micro-interactions (hover/focus/spinner) | 8.3 | 💡 |
+| G15 | Theme animation presets documentation | 8.4–8.6 | 💡 |
+| G16 | Cross-theme visual review | 7.12, 9.1 | 💡 |
+| G17 | Responsive + a11y + performance polish | 9.2–9.8 | 💡 |
 
 ---
 

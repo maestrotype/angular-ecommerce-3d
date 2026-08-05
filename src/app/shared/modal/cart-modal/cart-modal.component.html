@@ -4,12 +4,14 @@
   </div>
 
   <div class="cart-content">
-    <div *ngIf="cartItems.length === 0" class="empty-cart">
-      <p>{{ 'MODALS.CART.EMPTY_MESSAGE' | translate }}</p>
-      <button class="continue-shopping-btn glass-theme" (click)="onClose()">
-        {{ 'MODALS.CART.CONTINUE_SHOPPING' | translate }}
-      </button>
-    </div>
+    <app-empty-state
+      *ngIf="cartItems.length === 0"
+      icon="shopping_cart"
+      size="compact"
+      [description]="'MODALS.CART.EMPTY_MESSAGE' | translate"
+      [actionLabel]="'MODALS.CART.CONTINUE_SHOPPING' | translate"
+      (actionClick)="onClose()"
+    ></app-empty-state>
 
     <div *ngIf="cartItems.length > 0" class="cart-items">
       <div *ngFor="let item of cartItems" class="cart-item">

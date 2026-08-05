@@ -187,4 +187,20 @@
   --color-shadow-light: rgba(0, 0, 0, 0.1);
   --color-shadow-medium: rgba(0, 0, 0, 0.15);
   --color-shadow-heavy: rgba(0, 0, 0, 0.25);
+
+  // ===== MOTION TOKENS (Epic G1 / ADR-004) =====
+  --motion-duration-instant: var(--duration-instant);
+  --motion-duration-fast: var(--duration-fast);
+  --motion-duration-normal: var(--duration-normal);
+  --motion-duration-slow: var(--duration-slow);
+  --motion-easing-default: var(--easing-default);
+  --motion-easing-enter: var(--easing-enter);
+  --motion-easing-leave: var(--easing-leave);
+  --motion-easing-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --transition-fast: var(--motion-duration-fast) var(--motion-easing-default);
+  --transition-normal: var(--motion-duration-normal) var(--motion-easing-default);
+  --transition-slow: var(--motion-duration-slow) var(--motion-easing-default);
+  --transition-enter: var(--motion-duration-normal) var(--motion-easing-enter);
+  --transition-leave: var(--motion-duration-fast) var(--motion-easing-leave);
 }

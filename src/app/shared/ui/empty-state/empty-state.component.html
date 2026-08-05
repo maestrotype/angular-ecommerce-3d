@@ -1,0 +1,18 @@
+<div [class]="hostClasses">
+  <div class="app-empty-state__icon" *ngIf="icon">
+    <mat-icon *ngIf="iconType === 'material'">{{ icon }}</mat-icon>
+    <span *ngIf="iconType === 'emoji'" aria-hidden="true">{{ icon }}</span>
+  </div>
+
+  <h2 class="app-empty-state__title" *ngIf="title">{{ title }}</h2>
+  <p class="app-empty-state__description" *ngIf="description">{{ description }}</p>
+
+  <button
+    *ngIf="actionLabel"
+    type="button"
+    class="app-empty-state__action"
+    (click)="onAction()"
+  >
+    {{ actionLabel }}
+  </button>
+</div>

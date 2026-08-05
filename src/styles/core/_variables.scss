@@ -87,12 +87,8 @@ $breakpoint-xxl: 1400px;
   --z-index-toast: 1080;
 
   /* ==========================================================================
-     TRANSITIONS (duration + easing combined — used by mixins/components)
+     TRANSITIONS — defined in tokens/_semantic-tokens.scss (Epic G1)
      ========================================================================== */
-
-  --transition-fast: 0.15s ease;
-  --transition-normal: 0.3s ease;
-  --transition-slow: 0.5s ease;
 
   /* ==========================================================================
      LAYOUT
