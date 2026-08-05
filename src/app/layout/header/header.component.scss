@@ -31,7 +31,11 @@
   display: flex;
   justify-content: space-around;
   background: var(--header-bg);
+  background-color: var(--surface-chrome, transparent);
   backdrop-filter: var(--header-backdrop-filter);
+  -webkit-backdrop-filter: var(--header-backdrop-filter);
+  border-bottom: var(--header-border, none);
+  box-shadow: var(--header-shadow, none);
   color: var(--header-text);
   position: fixed;
   top: 0;
@@ -853,31 +857,39 @@
   }
 }
 
-:host-context(body[data-theme="glass"]) .header {
-  border-bottom: 1px solid var(--glass-border-soft);
-  --header-text: var(--text-inverse);
-  --header-link: var(--glass-highlight);
+:host-context([data-theme="glass"]) .header {
+  /* Ice frost chrome — dark ink on light glass */
+  --header-bg: var(--surface-chrome-gradient);
+  --header-backdrop-filter: var(--chrome-blur);
+  --header-text: var(--text-primary);
+  --header-link: var(--text-secondary);
   --header-link-hover: var(--text-on-primary);
-  --header-search-text: var(--text-inverse);
-  --header-text-rgb: 255, 255, 255;
+  --header-search-bg: rgba(255, 255, 255, 0.55);
+  --header-search-text: var(--text-primary);
+  --header-text-rgb: 30, 41, 59;
+  --header-border: var(--chrome-border);
+  --header-shadow: var(--chrome-shadow);
 
   .hamburger span {
-    background: var(--text-on-primary);
+    background: var(--text-primary);
   }
 
   .theme-switcher__popover,
   .lang-switcher__popover {
     background: var(--glass-surface-muted);
-    backdrop-filter: blur(24px) saturate(160%);
-    -webkit-backdrop-filter: blur(24px) saturate(160%);
-    border-color: var(--glass-border-soft);
+    backdrop-filter: var(--chrome-blur);
+    -webkit-backdrop-filter: var(--chrome-blur);
+    border: var(--chrome-border);
+    box-shadow: var(--chrome-shadow);
+    color: var(--text-primary);
 
     .theme-switcher__option,
     .lang-switcher__option {
-      color: var(--glass-highlight);
+      color: var(--text-secondary);
 
       &:hover {
         background: var(--surface-overlay-light);
+        color: var(--text-primary);
       }
     }
 

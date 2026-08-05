@@ -52,12 +52,7 @@
   --categories-card-border: rgba(255, 255, 255, 0.5);
   --categories-icon-filter: none;
 
-  /* Footer section - Glass theme */
-  --footer-bg: rgba(255, 255, 255, 0.2);
-  --footer-backdrop-filter: blur(20px) saturate(180%);
-  --footer-text: #1e293b;
-  --footer-link: #475569;
-  --footer-link-hover: #1e293b;
+  /* Footer — overridden below by liquid glass chrome recipe */
 
   /* About section - Glass theme */
   --about-bg: rgba(255, 255, 255, 0.15);
@@ -87,15 +82,7 @@
   --contacts-button-bg: rgba(99, 102, 241, 0.8);
   --contacts-button-hover: rgba(79, 70, 229, 0.9);
 
-  /* Header section - Glass theme */
-  --header-bg: rgba(255, 255, 255, 0.25);
-  --header-backdrop-filter: blur(25px) saturate(180%);
-  --header-text: #1e293b;
-  --header-link: #334155;
-  --header-link-hover: #0f172a;
-  --header-search-bg: rgba(255, 255, 255, 0.4);
-  --header-search-text: #1e293b;
-  --header-text-rgb: 30, 41, 59;
+  /* Header — overridden below by liquid glass chrome recipe */
 
   /* Product Detail section - Glass theme */
   --product-detail-bg: rgba(255, 255, 255, 0.1);
@@ -316,34 +303,37 @@
   --card-radius: 24px;
   /* ===== END MIGRATED (Task A3) ===== */
 
-  /* ===== SURFACE OVERRIDES (Glass) ===== */
-  --surface-primary: rgba(0, 0, 0, 0.5);
-  --surface-secondary: rgba(255, 255, 255, 0.05);
-  --surface-tertiary: rgba(255, 255, 255, 0.08);
-  --surface-overlay: rgba(0, 0, 0, 0.7);
+  /* ===== SURFACE OVERRIDES (ice / water glass) ===== */
+  --surface-primary: transparent;
+  --surface-secondary: var(--surface-chrome);
+  --surface-tertiary: rgba(255, 255, 255, 0.35);
+  --surface-overlay: rgba(148, 163, 184, 0.28);
   --surface-inverse: var(--color-white);
   --surface-page: transparent;
-  --surface-card: var(--glass-bg);
-  --surface-elevated: rgba(255, 255, 255, 0.08);
-  --surface-highlight: rgba(255, 255, 255, 0.12);
-  --surface-overlay-light: rgba(255, 255, 255, 0.08);
-  --surface-overlay-full: rgba(0, 0, 0, 0.6);
+  --surface-card: rgba(255, 255, 255, 0.42);
+  --surface-elevated: rgba(255, 255, 255, 0.55);
+  --surface-elevated-rgb: 255, 255, 255;
+  --surface-highlight: rgba(255, 255, 255, 0.55);
+  --surface-overlay-light: rgba(255, 255, 255, 0.35);
+  --surface-overlay-full: rgba(226, 232, 240, 0.55);
+  --surface-header: var(--surface-chrome);
 
-  /* ===== TEXT OVERRIDES ===== */
-  --text-primary: var(--color-white);
-  --text-secondary: rgba(255, 255, 255, 0.9);
-  --text-muted: rgba(255, 255, 255, 0.55);
-  --text-inverse: var(--color-slate-900);
-  --text-on-primary: var(--color-white);
-  --text-link: var(--color-blue-400);
+  /* ===== TEXT OVERRIDES (dark ink on ice) ===== */
+  --text-primary: #1e293b;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --text-muted-rgb: 100, 116, 139;
+  --text-inverse: var(--color-white);
+  --text-on-primary: #0f172a;
+  --text-link: #2563eb;
 
-  /* ===== BORDER OVERRIDES (Glass) ===== */
-  --border-default: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.15);
-  --border-primary: var(--color-brand-base);
-  --border-subtle: rgba(255, 255, 255, 0.1);
-  --border-medium: rgba(255, 255, 255, 0.2);
-  --border-emphasis: rgba(255, 255, 255, 0.35);
+  /* ===== BORDER OVERRIDES (frost edges) ===== */
+  --border-default: rgba(148, 163, 184, 0.35);
+  --border-strong: rgba(100, 116, 139, 0.45);
+  --border-primary: rgba(59, 130, 246, 0.55);
+  --border-subtle: rgba(148, 163, 184, 0.22);
+  --border-medium: rgba(148, 163, 184, 0.4);
+  --border-emphasis: rgba(71, 85, 105, 0.5);
 
   /* ===== MOTION OVERRIDES (Epic G1 — elegant glass) ===== */
   --motion-duration-normal: 400ms;
@@ -389,29 +379,124 @@
   --state-error-bg: var(--color-error-base);
   --state-error-text: var(--color-white);
 
-  /* ===== GLASS-SPECIFIC TOKENS ===== */
-  --glass-blur: blur(20px) saturate(160%);
-  --glass-border: 1px solid rgba(255, 255, 255, 0.08);
-  --glass-bg: rgba(0, 0, 0, 0.5);
-  --glass-bg-hover: rgba(255, 255, 255, 0.05);
-  --glass-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
-  --glass-opacity: 0.5;
-  --glass-border-hover: rgba(255, 255, 255, 0.25);
-  --glass-shadow-hover: 0 20px 45px rgba(0, 0, 0, 0.7);
+  /* ===== LIQUID GLASS RECIPE — ice / water (light frost) ===== */
+  --glass-surface-strong: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.72) 0%,
+    rgba(236, 242, 248, 0.55) 45%,
+    rgba(214, 226, 236, 0.42) 100%
+  );
+  --glass-surface-soft: rgba(255, 255, 255, 0.48);
+  --glass-surface-muted: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(226, 236, 244, 0.4) 55%,
+    rgba(210, 222, 232, 0.35) 100%
+  );
+  --glass-border-strong: rgba(255, 255, 255, 0.85);
+  --glass-border-soft: rgba(255, 255, 255, 0.55);
+  --glass-divider: rgba(148, 163, 184, 0.28);
+  --glass-highlight: rgba(255, 255, 255, 0.95);
+  --glass-inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  --glass-blur: blur(28px) saturate(140%);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.55);
+  --glass-bg: rgba(255, 255, 255, 0.42);
+  --glass-bg-hover: rgba(255, 255, 255, 0.58);
+  --glass-shadow:
+    0 12px 40px rgba(100, 116, 139, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  --glass-opacity: 0.42;
+  --glass-border-hover: rgba(255, 255, 255, 0.8);
+  --glass-shadow-hover:
+    0 18px 48px rgba(100, 116, 139, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
   --backdrop-blur: var(--glass-blur);
+
+  /* Chrome (header ≡ footer) — frosted ice pane */
+  --surface-chrome: rgba(255, 255, 255, 0.38);
+  --surface-chrome-gradient: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(236, 242, 248, 0.4) 48%,
+    rgba(220, 230, 238, 0.36) 100%
+  );
+  --chrome-blur: blur(32px) saturate(135%);
+  --chrome-border: 1px solid rgba(255, 255, 255, 0.65);
+  --chrome-shadow:
+    0 8px 28px rgba(100, 116, 139, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+  /* ===== SECTION CHROME — ice glass ===== */
+  --footer-bg: var(--surface-chrome-gradient);
+  --footer-backdrop-filter: var(--chrome-blur);
+  --footer-text: var(--text-primary);
+  --footer-link: var(--text-secondary);
+  --footer-link-hover: var(--text-on-primary);
+  --footer-border: var(--glass-border-soft);
+  --footer-text-rgb: 30, 41, 59;
+  --footer-bg-rgb: 236, 242, 248;
+  --footer-shadow: var(--chrome-shadow);
+
+  --header-bg: var(--surface-chrome-gradient);
+  --header-backdrop-filter: var(--chrome-blur);
+  --header-text: var(--text-primary);
+  --header-link: var(--text-secondary);
+  --header-link-hover: var(--text-on-primary);
+  --header-search-bg: rgba(255, 255, 255, 0.55);
+  --header-search-text: var(--text-primary);
+  --header-text-rgb: 30, 41, 59;
+  --header-bg-rgb: 236, 242, 248;
+  --header-border: var(--chrome-border);
+  --header-shadow: var(--chrome-shadow);
+
+  --categories-bg: transparent;
+  --categories-text: var(--text-primary);
+  --categories-card-bg: var(--glass-surface-soft);
+  --categories-card-hover: var(--glass-bg-hover);
+  --categories-card-border: var(--glass-border-soft);
+
+  --about-bg: transparent;
+  --about-text: var(--text-primary);
+  --about-title: var(--text-primary);
+  --about-subtitle: var(--text-secondary);
+
+  --brands-bg: transparent;
+  --brands-text: var(--text-primary);
+
+  --contacts-bg: transparent;
+  --contacts-text: var(--text-primary);
+  --contacts-title: var(--text-primary);
+  --contacts-subtitle: var(--text-secondary);
+  --contacts-card-bg: var(--glass-surface-soft);
+  --contacts-card-text: var(--text-primary);
+  --contacts-input-bg: rgba(255, 255, 255, 0.55);
+  --contacts-input-text: var(--text-primary);
+
+  --hero-text-color: var(--text-primary);
+  --hero-accent-color: #3b82f6;
 
   /* ===== COMPOSITE OVERRIDES ===== */
   --radius-card: var(--radius-xl);
   --shadow-card: var(--glass-shadow);
 
   /* ===== OVERLAY OVERRIDES ===== */
-  --surface-overlay-hover: rgba(0, 0, 0, 0.4);
+  --surface-overlay-hover: rgba(255, 255, 255, 0.35);
 
-  /* ===== BACKGROUND (Deep Dark HUD) ===== */
-  --bg-page: #08090a;
-  --bg-gradient-1: radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.12) 0px, transparent 50%);
-  --bg-gradient-2: radial-gradient(at 100% 0%, rgba(79, 70, 229, 0.1) 0px, transparent 50%);
-  --bg-gradient-3: radial-gradient(at 50% 100%, rgba(30, 41, 59, 0.2) 0px, transparent 50%);
+  /* ===== ATMOSPHERE — ice water / light frost ===== */
+  --bg-page: #e8eef2;
+  --storefront-atmosphere-gradient: linear-gradient(
+    135deg,
+    #f4f7f9 0%,
+    #e8eef2 18%,
+    #dde6ed 38%,
+    #d2dde6 55%,
+    #c8d5e0 72%,
+    #d8e2ea 88%,
+    #eef3f6 100%
+  );
+  --bg-gradient-1: radial-gradient(circle at 18% 22%, rgba(255, 255, 255, 0.7) 0%, transparent 42%);
+  --bg-gradient-2: radial-gradient(circle at 82% 12%, rgba(186, 210, 228, 0.45) 0%, transparent 48%);
+  --bg-gradient-3: radial-gradient(circle at 50% 100%, rgba(176, 196, 212, 0.35) 0%, transparent 50%);
 
   /* ===== LEGACY ALIASES (backward compatibility) ===== */
   /* Full --color-* legacy set lives in tokens/_semantic-tokens.scss (A4). */
@@ -823,15 +908,50 @@ html[data-theme="glass"] body.is-admin {
   }
 }
 
-/* ===== BODY-LEVEL GLASS BACKGROUND (non-admin only) ===== */
+/* ===== BODY-LEVEL ICE / WATER ATMOSPHERE (storefront) ===== */
 body:not(.is-admin)[data-theme="glass"],
 html[data-theme="glass"] body:not(.is-admin) {
-  background: var(--bg-page);
-  background-image:
-    var(--bg-gradient-1),
-    var(--bg-gradient-2),
-    var(--bg-gradient-3);
-  background-attachment: fixed;
-  color: var(--color-white);
+  position: relative;
   min-height: 100vh;
+  color: var(--text-primary);
+  background: var(--storefront-atmosphere-gradient, var(--bg-page));
+  background-size: 400% 400%;
+  background-attachment: fixed;
+  animation: storefrontGlassAtmosphere 22s ease infinite;
+
+  &::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      var(--bg-gradient-1),
+      var(--bg-gradient-2),
+      var(--bg-gradient-3);
+  }
+
+  &::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    filter: blur(80px);
+    background:
+      radial-gradient(circle at 14% 20%, rgba(255, 255, 255, 0.75), transparent 42%),
+      radial-gradient(circle at 86% 78%, rgba(190, 214, 230, 0.5), transparent 45%),
+      radial-gradient(circle at 48% 48%, rgba(210, 224, 234, 0.4), transparent 50%);
+  }
+}
+
+@keyframes storefrontGlassAtmosphere {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
 }
