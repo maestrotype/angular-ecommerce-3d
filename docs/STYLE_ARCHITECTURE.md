@@ -3,7 +3,7 @@
 This document defines the complete style architecture for the application. It is the single source of truth for how styles are organized, how themes work, how tokens flow, and how Angular Material is integrated.
 
 **Role**: Principal UI Architect
-**Last Updated**: 2026-07-28
+**Last Updated**: 2026-08-05
 
 ---
 
@@ -76,9 +76,16 @@ src/
 │   │   ├── _index.scss            # Re-exports component presets
 │   │   ├── _buttons.scss
 │   │   ├── _motion.scss
+│   │   ├── _micro-interactions.scss
+│   │   ├── _page-transitions.scss
 │   │   ├── _cards.scss
 │   │   ├── _empty-states.scss
 │   │   ├── _loading.scss
+│   │   ├── _forms.scss
+│   │   ├── _navigation.scss
+│   │   ├── _modals.scss
+│   │   ├── _product-detail.scss
+│   │   ├── _checkout.scss
 │   │   ├── _theme-switcher.scss
 │   │   └── _glass-helpers.scss    # .glass-theme, cart controls, .theme-price
 │   │
@@ -215,9 +222,13 @@ Theme (abstract)
 │   └── letter-spacing
 │
 ├── Motion Dimension
-│   ├── durations
-│   ├── easing curves
-│   └── transition preferences
+│   ├── durations (`--motion-duration-*`, `--duration-*` primitives)
+│   ├── easing curves (`--motion-easing-*`, `--easing-*` primitives)
+│   ├── composite transitions (`--transition-*`)
+│   ├── page transitions (`--page-transition-*`)
+│   └── micro-interactions (`--micro-*`) — hover, focus, spinner
+│
+│   → Full reference: **§14 Animation & Motion System**
 │
 └── Layout Dimension
     ├── sidebar style
@@ -543,7 +554,150 @@ This follows the pattern: **define in theme/root, consume in component**.
 | Dashboard cards | `--dashboard-stat-card-*` | `_admin-root-defaults.scss` + themes |
 | Stat icons | `--stat-icon-*` | `_admin-root-defaults.scss` + themes |
 | Material tokens | `--mdc-*`, `--mat-*` | All admin theme files |
+| Motion / animation | `--motion-*`, `--transition-*`, `--page-transition-*`, `--micro-*`, `--modal-*` | `_primitive-tokens.scss` → `_semantic-tokens.scss` → theme partials; see **§14** |
 
 ---
 
-*This document is maintained by the Principal UI Architect. Last updated: 2026-07-29 (C6: shim removed)*
+## 14. Animation & Motion System
+
+**Epic G1, G13, G14, G15** — token-driven motion language shared by all storefront themes. Admin reuses the same semantic motion tokens unless a theme partial overrides them.
+
+**Last documented**: 2026-08-05
+
+### 14.1 Token layers
+
+Motion values flow bottom-up. Components and partials consume semantic/feature tokens — never hardcoded durations or cubic-bezier values.
+
+```
+_primitive-tokens.scss          _semantic-tokens.scss           theme partials
+─────────────────────          ─────────────────────           ──────────────
+--duration-instant: 0ms         --motion-duration-*             [data-theme="dark"] {
+--duration-fast: 150ms          --motion-easing-*                 --motion-duration-normal: 220ms;
+--duration-normal: 300ms        --transition-*                    --page-transition-offset-y: …;
+--duration-slow: 500ms          --page-transition-*               --micro-hover-lift-y: …;
+--easing-default: ease          --micro-*                       }
+--easing-enter: cubic-bezier…   --modal-enter-*                 [data-theme="glass"] { … }
+--easing-leave: cubic-bezier…   --form-focus-ring → --micro-focus-ring
+```
+
+| Layer | Prefix | Defined in | Purpose |
+|-------|--------|------------|---------|
+| Primitives | `--duration-*`, `--easing-*` | `tokens/_primitive-tokens.scss` | Raw timing scale |
+| Motion core | `--motion-*`, `--transition-*` | `tokens/_semantic-tokens.scss` | Shared duration/easing + shorthand transitions |
+| Page routes | `--page-transition-*` | semantic + `themes/_*.scss` | Storefront route enter animation |
+| Micro UI | `--micro-*` | semantic + `themes/_*.scss` | Hover, focus, press, spinner accents |
+| Modals | `--modal-enter-*`, `--modal-leave-*` | semantic | Backdrop/panel enter (G9) |
+
+### 14.2 SCSS partials (implementation map)
+
+| File | Epic | Responsibility |
+|------|------|----------------|
+| `_motion.scss` | G1 | Shared `@keyframes` (`motion-fade-in`, `motion-fade-in-up`, `motion-spin`, `motion-shimmer`) + utility classes `.animate-*`, `.transition-surface` |
+| `_micro-interactions.scss` | G14 | Focus/hover/press utilities: `.micro-focus-ring`, `.micro-interactive`, `.micro-icon-btn`; aliases `.hover-lift`, `.transition-interactive` |
+| `_page-transitions.scss` | G13 | `.storefront-main.is-page-entering > router-outlet + *` route enter |
+| `_loading.scss` | G3 | Spinner ring uses `--micro-spinner-*`; skeleton uses `motion-shimmer` |
+| `_modals.scss` | G9 | `motion-modal-backdrop-in`, `motion-modal-panel-in` |
+| `_cards.scss`, `_checkout.scss`, `_product-detail.scss`, … | G4–G12 | Feature enter animations referencing `--motion-duration-normal` + `--motion-easing-enter` |
+
+**Trigger (routes)**: `app.component.html` — `(activate)` on `<router-outlet>` toggles `.is-page-entering` on `.storefront-main`. Skipped for admin, `/viewer`, and the initial page load.
+
+### 14.3 Keyframes catalog
+
+| Keyframe | Partial | Animated properties | Typical use |
+|----------|---------|---------------------|-------------|
+| `motion-fade-in` | `_motion.scss` | `opacity` | Empty states, panels |
+| `motion-fade-in-up` | `_motion.scss` | `opacity`, `translateY` | Product cards grid, PDP sections |
+| `motion-spin` | `_motion.scss` | `transform: rotate` | Loading spinner ring |
+| `motion-shimmer` | `_motion.scss` | `background-position` | Skeleton placeholders |
+| `motion-page-enter` | `_page-transitions.scss` | `opacity`, `translate3d` | Route enter (storefront) |
+| `motion-modal-backdrop-in` | `_modals.scss` | `opacity` | Modal backdrop |
+| `motion-modal-panel-in` | `_modals.scss` | `opacity`, `scale`, `translateY` | Modal panel |
+| `checkout-progress` | `_checkout.scss` | `width` | Payment pending bar (scoped) |
+
+**Rule**: New keyframes belong in the relevant global partial (`_motion.scss` if shared). Animate **only** `opacity` and `transform` (prefer `translate3d` / `scale`) for GPU compositing. Do not animate `width`, `height`, `top`, `left`, or `margin` except for existing scoped cases (e.g. progress bars).
+
+### 14.4 Utility classes
+
+| Class | Behavior |
+|-------|----------|
+| `.animate-fade-in` | One-shot fade using motion tokens |
+| `.animate-fade-in-up` | Fade + upward slide |
+| `.animate-spin` | Continuous rotation |
+| `.micro-focus-ring` | `:focus-visible` → `box-shadow: var(--micro-focus-ring)` |
+| `.micro-focus-outline` | `:focus-visible` → outline using `--micro-focus-outline-*` |
+| `.micro-hover-lift` | Hover: `translate3d` + shadow |
+| `.micro-interactive` | Hover lift + active press scale |
+| `.micro-icon-btn` | Circular action button preset (card overlays) |
+| `.hover-lift` | Alias → `.micro-hover-lift` (G1 compat) |
+| `.transition-interactive` | Alias → `--micro-transition` property set |
+
+Prefer `@extend .micro-interactive` / `.micro-focus-ring` in global partials over duplicating hover/focus blocks in component SCSS.
+
+### 14.5 Theme animation presets
+
+Baseline primitives (`--duration-normal: 300ms`, `--easing-enter: cubic-bezier(0.22, 1, 0.36, 1)`) apply to **light/default**. Dark and glass override the motion **personality** in their theme partials.
+
+| Preset | Personality | Duration scale | Page enter | Micro hover | Focus ring | Spinner |
+|--------|-------------|----------------|------------|-------------|------------|---------|
+| **light / default** | Snappy, neutral | 300ms normal | `--spacing-md` lift | `1.02` scale, xs lift | Primary @ 22% | 3px, slow |
+| **dark** | Fast, minimal | 120ms fast / 220ms normal | `--spacing-xs` lift | `1.015` scale, 2xs lift | Blue `#60a5fa` @ 28% | normal duration |
+| **glass** | Elegant, fluid | 400ms normal / 600ms slow | `--spacing-lg` lift | `1.04` scale, sm lift | Primary @ 30% | slow, glass track |
+| **dark-glass** (admin) | Inherits dark motion + glass form focus | — | N/A (admin) | — | `@ 22%` in forms block | — |
+
+Theme override locations:
+
+- `src/styles/themes/_default.scss` — light baseline + page/micro defaults
+- `src/styles/themes/_dark.scss` — `--motion-duration-*`, `--page-transition-*`, `--micro-*`
+- `src/styles/themes/_glass.scss` — longer durations, elegant easing, larger lifts
+
+When adding a theme, override **only** the tokens whose personality differs — do not copy entire partials.
+
+### 14.6 Accessibility & performance
+
+**Reduced motion** (required):
+
+1. Global fallback in `core/_base.scss` — `@media (prefers-reduced-motion: reduce)` sets all animation/transition durations to `0.01ms`.
+2. Feature partials additionally disable specific animations where a static fallback is clearer (`_page-transitions.scss`, `_modals.scss`, `_product-detail.scss`, card hovers wrapped in `@media (prefers-reduced-motion: no-preference)`).
+
+**Performance checklist**:
+
+- ✅ Animate `opacity` + `transform` only (composite-friendly)
+- ✅ Use `translate3d(0, …, 0)` for vertical motion
+- ✅ Set `will-change: opacity, transform` only on short-lived enter animations (page transition); remove or avoid on persistent elements
+- ❌ No `!important` to win animation conflicts — fix selector ownership
+- ❌ No `@angular/animations` for route transitions — CSS tokens + outlet class keeps themes swappable without TS duration logic
+- ❌ No inline `style="transition:…"` or hardcoded `300ms ease` in components
+
+### 14.7 Adding motion to new UI
+
+1. **Enter animation** — use existing keyframe + tokens:
+   ```scss
+   .my-panel {
+     animation: motion-fade-in-up var(--motion-duration-normal) var(--motion-easing-enter) both;
+   }
+   ```
+2. **Interactive control** — extend micro utilities in a global partial:
+   ```scss
+   .my-cta {
+     @extend .micro-interactive;
+     @extend .micro-focus-ring;
+   }
+   ```
+3. **Theme-specific feel** — add overrides to `themes/_<name>.scss`, not the component:
+   ```scss
+   [data-theme='glass'] {
+     --micro-hover-lift-y: calc(var(--spacing-sm) * -1);
+   }
+   ```
+4. **New shared keyframe** — add to `_motion.scss`, reference via semantic tokens in consumers.
+
+### 14.8 Related docs
+
+- `docs/THEME_ENGINE.md` §7 — motion dimension in theme metadata
+- `docs/REFACTORING_BOARD.md` — Epic G tasks G1, G13, G14, G15
+- `docs/REDESIGN_PLAN.md` Phase 8 — animation system goals
+- `.cursor/rules/no-important.mdc` — cascade rules for interactive states
+
+---
+
+*This document is maintained by the Principal UI Architect. Last updated: 2026-08-05 (G15: animation system documented)*

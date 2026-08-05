@@ -199,11 +199,26 @@ Nine dimensions describe **what each theme customizes** (metadata in TS; values 
 | radius | `--radius-sm` … `--radius-xl` |
 | elevation | `--shadow-*`, `--elevation-style` |
 | density | `--density-mode`, `--line-height-density` |
-| motion | `--duration-*`, `--easing-*` |
+| motion | `--motion-*`, `--transition-*`, `--page-transition-*`, `--micro-*`, `--modal-enter-*` — see `STYLE_ARCHITECTURE.md` §14 |
 | layout | `--sidebar-width`, `--header-height`, `--content-max-width` |
 | effects | `--glass-blur`, `--glass-opacity`, backdrop filters |
 
 Light theme lists all baseline dimensions; dark/glass/dark-glass document partial overrides only.
+
+### 7.1 Motion presets (storefront)
+
+Each storefront theme defines a **motion personality** by overriding semantic tokens in its SCSS partial. Implementation lives in global partials (`_motion.scss`, `_micro-interactions.scss`, `_page-transitions.scss`); themes only change token values.
+
+| Theme | File | Overrides (examples) |
+|-------|------|---------------------|
+| light / default | `themes/_default.scss` | Baseline `--page-transition-offset-y`, `--micro-hover-scale` |
+| dark | `themes/_dark.scss` | Faster `--motion-duration-fast/normal`, smaller lifts, blue focus ring |
+| glass | `themes/_glass.scss` | 400/600ms durations, elegant `--motion-easing-enter`, larger page lift |
+| dark-glass | `admin/_admin-dark-glass.scss` + forms block | Admin forms focus ring; inherits dark timing |
+
+**Do not** embed theme-specific `@keyframes` or durations inside `*.component.scss`. Switching `[data-theme]` must re-style motion without recompiling components.
+
+Full token tables, keyframes, utilities, and performance rules: **`docs/STYLE_ARCHITECTURE.md` §14**.
 
 ---
 
@@ -235,9 +250,9 @@ Legacy value `default` → `light`. Storefront rejects `dark-glass` (falls back 
 
 - ADR-004 — multi-dimensional themes  
 - ADR-012 — TS ↔ SCSS ↔ docs three-way mirror  
-- `docs/STYLE_ARCHITECTURE.md` — token layers and import order  
+- `docs/STYLE_ARCHITECTURE.md` — token layers and import order; **§14 Animation & Motion System**  
 - `docs/REFACTORING_BOARD.md` — Epic F task status  
 
 ---
 
-*Maintained by Principal UI Architect. Reflects Epic F implementation (2026-08-05).*
+*Maintained by Principal UI Architect. Reflects Epic F implementation (2026-08-05); motion presets documented in G15.*
