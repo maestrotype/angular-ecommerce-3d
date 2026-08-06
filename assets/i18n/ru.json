@@ -2,6 +2,10 @@
   "LANG_EN": "English",
   "LANG_RU": "Русский",
   "LANG_UA": "Украинский",
+  "A11Y": {
+    "SKIP_TO_CONTENT": "Перейти к основному содержимому",
+    "MOBILE_NAV": "Мобильная навигация"
+  },
   "ADMIN_PANEL": "Панель администратора",
   "ADMIN_DASHBOARD": "Панель управления",
   "PROFILE": "Профиль",
@@ -103,7 +107,7 @@
   "ADMIN_NAV_ORDERS": "Заказы",
   "ORDERS": {
     "TITLE": "Мои заказы",
-    "BACK_BTN": "← Вернуться в магазин",
+    "BACK_BTN": "Вернуться в магазин",
     "STATUS_LOADING": "Загрузка...",
     "EMPTY_MSG": "Заказов еще нет",
     "EMPTY_BTN": "Начать покупки",
@@ -701,6 +705,12 @@
   "NO_PAYMENTS_FOUND": "Платежи не найдены",
   "LOADING_PAYMENTS": "Загрузка платежей...",
   "CHECKOUT": {
+    "STEPS": {
+      "LABEL": "Прогресс оформления",
+      "CART": "Корзина",
+      "CHECKOUT": "Оформление",
+      "PAYMENT": "Оплата"
+    },
     "HEADER": {
       "BACK_TO_CART": "Вернуться в корзину",
       "TITLE": "Оформление заказа"
@@ -1105,6 +1115,28 @@
         "FACEBOOK": "Продолжить через Facebook",
         "GITHUB": "Продолжить через GitHub",
         "APPLE": "Продолжить через Apple"
+      },
+      "STRENGTH": {
+        "WEAK": "Слабый",
+        "MEDIUM": "Средний",
+        "STRONG": "Надёжный"
+      },
+      "ERRORS": {
+        "REQUIRED_EMAIL_PASSWORD": "Укажите email и пароль",
+        "AUTH_ERROR": "Ошибка входа. Попробуйте снова.",
+        "REG_ERROR": "Ошибка регистрации. Попробуйте снова.",
+        "SOCIAL_ERROR": "Не удалось войти через {{provider}}. Попробуйте снова.",
+        "GITHUB_COMING_SOON": "Вход через GitHub скоро будет доступен",
+        "APPLE_COMING_SOON": "Вход через Apple скоро будет доступен",
+        "NAME_MIN_LENGTH": "Имя должно содержать минимум 2 символа",
+        "EMAIL_REQUIRED": "Укажите email",
+        "EMAIL_INVALID": "Введите корректный email",
+        "EMAIL_ALREADY_REGISTERED": "Этот email уже зарегистрирован",
+        "PASSWORD_MIN_LENGTH": "Пароль должен быть не короче 8 символов",
+        "PASSWORD_UPPERCASE": "Пароль должен содержать заглавную букву",
+        "PASSWORD_LOWERCASE": "Пароль должен содержать строчную букву",
+        "PASSWORD_NUMBER": "Пароль должен содержать цифру",
+        "PASSWORDS_MISMATCH": "Пароли не совпадают"
       }
     },
     "IMAGE": {
@@ -1288,7 +1320,7 @@
       "SIMILAR": "Похожие товары",
       "BOUGHT_TOGETHER": "Рекомендации"
     },
-    "BACK_BTN": "← Вернуться в магазин",
+    "BACK_BTN": "Вернуться в магазин",
     "BREADCRUMBS": {
       "HOME": "Главная",
       "SHOP": "Магазин"
@@ -1319,6 +1351,7 @@
   "LOCAL_STORAGE_WARNING": "ВНИМАНИЕ: Этот файл хранится на временном диске сервера. При перезагрузке сервера он будет УДАЛЕН. Нажмите 'Архивировать в Cloudinary' для вечного хранения.",
   "MODEL_3D_READY_SAVED": "3D модель сохранена в базу!",
   "MODEL_DOWNLOAD_STARTED": "Загрузка началась...",
+  "MODEL_HOSTING_WARNING": "⚠️ Эта модель хранится локально и может быть недоступна на живом сайте. Архивируйте в Cloudinary для надёжного хостинга.",
   "MODEL_SYNCED_TO_CLOUD": "3D-модель успешно синхронизирована с облаком!",
   "SYNCING_TO_PRODUCTION": "Синхронизация локальной модели с ПРОДАКШН-сервером...",
   "PROD_SYNC_GUIDE_TITLE": "Синхронизация с живым сайтом",

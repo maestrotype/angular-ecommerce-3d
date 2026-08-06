@@ -2,6 +2,10 @@
   "LANG_EN": "English",
   "LANG_RU": "Russian",
   "LANG_UA": "Ukrainian",
+  "A11Y": {
+    "SKIP_TO_CONTENT": "Skip to main content",
+    "MOBILE_NAV": "Mobile navigation"
+  },
   "ADMIN_PANEL": "Admin Panel",
   "ADMIN_DASHBOARD": "Admin Dashboard",
   "PROFILE": "Profile",
@@ -103,7 +107,7 @@
   "ADMIN_NAV_ORDERS": "Orders",
   "ORDERS": {
     "TITLE": "My Orders",
-    "BACK_BTN": "← Back to Shop",
+    "BACK_BTN": "Back to Shop",
     "STATUS_LOADING": "Loading...",
     "EMPTY_MSG": "No orders yet",
     "EMPTY_BTN": "Start Shopping",
@@ -702,6 +706,12 @@
   "NO_PAYMENTS_FOUND": "No payments found",
   "LOADING_PAYMENTS": "Loading payments...",
   "CHECKOUT": {
+    "STEPS": {
+      "LABEL": "Checkout progress",
+      "CART": "Cart",
+      "CHECKOUT": "Checkout",
+      "PAYMENT": "Payment"
+    },
     "HEADER": {
       "BACK_TO_CART": "Back to Cart",
       "TITLE": "Checkout"
@@ -1087,6 +1097,28 @@
         "FACEBOOK": "Continue with Facebook",
         "GITHUB": "Continue with GitHub",
         "APPLE": "Continue with Apple"
+      },
+      "STRENGTH": {
+        "WEAK": "Weak",
+        "MEDIUM": "Medium",
+        "STRONG": "Strong"
+      },
+      "ERRORS": {
+        "REQUIRED_EMAIL_PASSWORD": "Email and password are required",
+        "AUTH_ERROR": "Authentication failed. Please try again.",
+        "REG_ERROR": "Registration failed. Please try again.",
+        "SOCIAL_ERROR": "Could not sign in with {{provider}}. Please try again.",
+        "GITHUB_COMING_SOON": "GitHub sign-in is coming soon",
+        "APPLE_COMING_SOON": "Apple sign-in is coming soon",
+        "NAME_MIN_LENGTH": "Name must be at least 2 characters",
+        "EMAIL_REQUIRED": "Email is required",
+        "EMAIL_INVALID": "Please enter a valid email address",
+        "EMAIL_ALREADY_REGISTERED": "This email is already registered",
+        "PASSWORD_MIN_LENGTH": "Password must be at least 8 characters",
+        "PASSWORD_UPPERCASE": "Password must contain an uppercase letter",
+        "PASSWORD_LOWERCASE": "Password must contain a lowercase letter",
+        "PASSWORD_NUMBER": "Password must contain a number",
+        "PASSWORDS_MISMATCH": "Passwords do not match"
       }
     },
     "IMAGE": {
@@ -1290,7 +1322,7 @@
       "SIMILAR": "Similar Products",
       "BOUGHT_TOGETHER": "Frequently Bought Together"
     },
-    "BACK_BTN": "← Back to Shop",
+    "BACK_BTN": "Back to Shop",
     "BREADCRUMBS": {
       "HOME": "Home",
       "SHOP": "Shop"
@@ -1437,6 +1469,7 @@
   },
   "MODEL_3D_READY_SAVED": "3D model saved to Database!",
   "MODEL_DOWNLOAD_STARTED": "Download started...",
+  "MODEL_HOSTING_WARNING": "⚠️ This model is stored locally and may not be accessible on the live site. Archive to Cloudinary for reliable hosting.",
   "PAGES": "Pages",
   "ADD_PAGE": "Add Page",
   "EDIT_PAGE": "Edit Page",
