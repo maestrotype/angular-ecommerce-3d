@@ -93,4 +93,20 @@ TypeORM handles the schema synchronization. In production, use manual migrations
 cd backend
 npm run migration:run
 ```
-Default Admin Credentials: `admin@example.com` / `admin123`.
+
+## Admin Bootstrap
+
+There are **no hardcoded admin credentials**. Set in `backend/.env`:
+
+```env
+ADMIN_EMAIL=admin@yourdomain.com
+ADMIN_PASSWORD=YourSecurePassword123!
+```
+
+Then create the admin user:
+
+```bash
+curl -X POST http://localhost:3002/api/auth/create-admin
+```
+
+For production bootstrap, see [First Deploy Security Checklist](INSTALLATION.md#-first-deploy-security-checklist).

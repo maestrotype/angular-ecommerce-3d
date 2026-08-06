@@ -1,11 +1,22 @@
 import { resolveApiUrl } from '../app/core/utils/api-url.util';
 
+/** Optional local-only login prefill (leave empty before commit). */
+export interface AdminLoginPrefill {
+  email: string;
+  password: string;
+}
+
 export const environment = {
   production: false,
   get apiUrl() {
     return resolveApiUrl();
   },
   fallbackApiUrl: 'https://angular-ecommerce-backend.onrender.com/api',
-  stripePublishableKey: 'pk_test_mock_key_for_testing_only',
-  paypalClientId: 'mock_paypal_client_id_for_testing'
+  /** Configure Stripe/PayPal in Admin → Settings; env keys are optional fallbacks. */
+  stripePublishableKey: '',
+  paypalClientId: '',
+  adminLoginPrefill: {
+    email: '',
+    password: '',
+  } satisfies AdminLoginPrefill,
 };

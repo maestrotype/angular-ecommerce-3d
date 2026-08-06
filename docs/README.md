@@ -57,6 +57,14 @@ Technical reference for the Angular 17+ 3D E-commerce Platform.
 
 ---
 
+## Business & Launch
+
+| Document | Purpose |
+|----------|---------|
+| [MARKETPLACE_LAUNCH_ROADMAP.md](MARKETPLACE_LAUNCH_ROADMAP.md) | Template launch checklist (Track A) and enterprise hardening path (Track B) |
+
+---
+
 ## Document Navigation Map
 
 ```

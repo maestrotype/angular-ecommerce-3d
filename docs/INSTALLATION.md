@@ -184,6 +184,12 @@ DATABASE_NAME=ecommerce_db
 JWT_SECRET=generate_a_random_32_character_secret_key_here
 JWT_EXPIRES_IN=7d
 
+# Admin bootstrap (for POST /api/auth/create-admin)
+ADMIN_EMAIL=admin@yourdomain.com
+ADMIN_PASSWORD=change_me_min_12_chars
+ADMIN_NAME=Admin User
+ADMIN_BOOTSTRAP_TOKEN=generate_a_random_one_time_token
+
 # OPTIONAL: Payment Gateways (can configure later)
 STRIPE_SECRET_KEY=sk_test_...
 STRIPE_PUBLISHABLE_KEY=pk_test_...
@@ -212,9 +218,38 @@ For production, edit `src/environments/environment.prod.ts`:
 export const environment = {
   production: true,
   apiUrl: 'https://your-backend-api.com/api',
-  stripePublishableKey: 'pk_live_...'
+  stripePublishableKey: '',  // configure in Admin → Settings
+  paypalClientId: '',        // configure in Admin → Settings
 };
 ```
+
+> Payment keys are loaded from the Admin Panel at runtime. Keep environment payment fields **empty** in production builds unless you intentionally inject build-time fallbacks.
+
+---
+
+## 🔐 First Deploy Security Checklist
+
+Complete this before exposing the app to the public internet.
+
+| Step | Action |
+|------|--------|
+| 1 | Set a unique `JWT_SECRET` (≥32 chars). Production **refuses to start** with placeholder values. |
+| 2 | Set strong `ADMIN_EMAIL` / `ADMIN_PASSWORD` (≥12 chars) in `backend/.env`. |
+| 3 | Bootstrap admin once: `POST /api/auth/create-admin` (dev) or with `x-admin-bootstrap-token` header (production). |
+| 4 | Generate `ADMIN_BOOTSTRAP_TOKEN` for production bootstrap, then remove or rotate it after first admin exists. |
+| 5 | Do **not** pre-fill admin login credentials in frontend environment files. |
+| 6 | Configure Stripe/PayPal in Admin → Settings — do not ship mock payment keys in `environment.prod.ts`. |
+| 7 | Set `JWT_SECRET` in Docker/host env — `docker compose` requires it (no insecure default). |
+| 8 | Change default PostgreSQL credentials in production. |
+
+### Production admin bootstrap
+
+```bash
+curl -X POST https://your-api.example.com/api/auth/create-admin \
+  -H "x-admin-bootstrap-token: YOUR_ADMIN_BOOTSTRAP_TOKEN"
+```
+
+Requires `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and matching `ADMIN_BOOTSTRAP_TOKEN` in backend environment.
 
 ---
 
@@ -242,21 +277,23 @@ npm run start:dev
 
 ### Step 2: Create Admin User
 
-While backend is running, open a **new terminal**:
+1. Add bootstrap credentials to `backend/.env` (see `backend/.env.example`):
+
+```env
+ADMIN_EMAIL=admin@yourdomain.com
+ADMIN_PASSWORD=YourSecurePassword123!
+ADMIN_NAME=Admin User
+```
+
+2. While the backend is running, open a **new terminal**:
 
 ```bash
 curl -X POST http://localhost:3002/api/auth/create-admin
 ```
 
-**Expected response:**
-```json
-{
-  "message": "Admin user created successfully",
-  "email": "admin@example.com"
-}
-```
+**Expected response:** JSON user object with your `ADMIN_EMAIL`.
 
-> 📝 **Note**: Default password is `admin123` - change it after first login!
+> **Security:** Credentials come from `.env` — there are no hardcoded default passwords. Use at least 12 characters for `ADMIN_PASSWORD`.
 
 ### Step 3: Start Frontend
 
@@ -276,11 +313,9 @@ npm start
 
 ### Step 4: Verify Installation
 
-1. Open http://localhost:4200 - You should see the homepage
+1. Open http://localhost:4200 — You should see the homepage
 2. Navigate to http://localhost:4200/admin
-3. Login with:
-   - Email: `admin@example.com`
-   - Password: `admin123`
+3. Login with the `ADMIN_EMAIL` / `ADMIN_PASSWORD` from your `backend/.env`
 4. You should see the admin dashboard
 
 **🎉 Success!** Your development environment is ready!

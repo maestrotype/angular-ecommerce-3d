@@ -14,8 +14,11 @@ import { join } from "path";
 import { AllExceptionsFilter } from "./common/filters/http-exception.filter";
 import { LoggingInterceptor } from "./common/interceptors/logging.interceptor";
 import { json, urlencoded } from 'express';
+import { assertProductionSecrets } from './config/production-secrets';
 
 async function bootstrap() {
+  assertProductionSecrets();
+
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   
   // Increase payload limits for 3D models and images
