@@ -335,6 +335,8 @@
   "AI_3D_ENGINE_DESC": "Select and configure your preferred AI 3D service",
   "ACTIVE_PROVIDER": "Active Provider",
   "HIGH_QUALITY_PAID": "High Quality, Paid",
+  "FREE_TIER_AVAILABLE": "Free tier available",
+  "CLOUD_API": "Cloud API",
   "CUSTOM_WEBHOOK_LOCAL": "Custom Webhook / Local Server",
   "TRIPO_KEY_START_TSK": "Tripo3D key starts with tsk_...",
   "TRIPO_API_KEY_LABEL": "Tripo3D API Key",

@@ -324,6 +324,8 @@
   "AI_3D_ENGINE_DESC": "Виберіть та налаштуйте бажаний сервіс для генерації 3D-моделей",
   "ACTIVE_PROVIDER": "Активний провайдер",
   "HIGH_QUALITY_PAID": "Висока якість, платний",
+  "FREE_TIER_AVAILABLE": "Є безкоштовний тариф",
+  "CLOUD_API": "Хмарний API",
   "CUSTOM_WEBHOOK_LOCAL": "Власний вебхук / Локальний сервер",
   "TRIPO_KEY_START_TSK": "Ключ Tripo3D починається з tsk_...",
   "TRIPO_API_KEY_LABEL": "API ключ Tripo3D",

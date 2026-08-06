@@ -91,6 +91,10 @@ export class IntegrationsComponent implements OnInit {
             this.cloudinaryForm.patchValue(settings.cloudinary);
           }
           if (settings.ai) {
+            const brokenLocal = ['unique3d', 'hunyuan_v2'];
+            if (brokenLocal.includes(settings.ai.activeProvider)) {
+              settings.ai.activeProvider = 'tripo3d';
+            }
             this.aiForm.patchValue(settings.ai);
           }
           if (settings.smtp) {

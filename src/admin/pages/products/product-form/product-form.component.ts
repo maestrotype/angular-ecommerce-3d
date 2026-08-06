@@ -162,13 +162,11 @@ export class ProductFormComponent implements OnInit {
         const providerId = settings.ai?.activeProvider || 'tripo3d';
         const key = providerId.toUpperCase();
         // Map provider ID to translation key
-        const providerMap: any = {
-          'tripo3d': 'Tripo3D (High Quality Paid)',
+        const providerMap: Record<string, string> = {
+          'tripo3d': 'Tripo3D',
           'hunyuan3d': 'HUNYUAN_TENCENT',
           'meshy': 'MESHY_AI',
           'luma': 'LUMA_AI',
-          'unique3d': 'UNIQUE3D_LOCAL_HQ',
-          'hunyuan_v2': 'HUNYUAN_V2_CLOUD_FREE',
           'custom': 'CUSTOM_WEBHOOK_LOCAL'
         };
         
@@ -279,30 +277,28 @@ export class ProductFormComponent implements OnInit {
 
 
   private showAiWarningDialog(provider: string, imageUrl: string): void {
-    const isUnique3d = provider === 'unique3d';
-    
     const dialogRef = this.dialog.open(AiWarningDialogComponent, {
       width: '500px',
       data: {
         provider: provider,
         title: 'AI_PROVIDER.PROBLEMATIC_TITLE',
         message: 'AI_PROVIDER.PROBLEMATIC_MSG',
-        instructions: isUnique3d ? 'AI_PROVIDER.UNIQUE3D_INSTRUCTIONS' : 'AI_PROVIDER.HUNYUAN_V1_INSTRUCTIONS'
+        instructions: 'AI_PROVIDER.HUNYUAN_V1_INSTRUCTIONS'
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'switch') {
-        // Navigate to settings or ideally just update the setting to hunyuan_v2
         this.isLoading = true;
         this.aiStatusMessage = 'Switching engine...';
         
         this.settingsService.getSettings().subscribe(settings => {
           if (settings.ai) {
-            settings.ai.activeProvider = 'hunyuan_v2';
+            settings.ai.activeProvider = 'tripo3d';
             this.settingsService.updateAiSettings(settings.ai).subscribe(() => {
               this.isLoading = false;
-              this.snackBar.open('Switched to HunyuanV2!', 'OK', { duration: 3000 });
+              this.fetchActiveEngineName();
+              this.snackBar.open('Switched to Tripo3D', 'OK', { duration: 3000 });
               this.startAiGeneration(imageUrl);
             });
           }
@@ -331,7 +327,20 @@ export class ProductFormComponent implements OnInit {
           return;
         }
 
-        if (activeProvider === 'unique3d' || activeProvider === 'hunyuan3d') {
+        // Local engines removed — migrate silently to Tripo3D
+        if (activeProvider === 'unique3d' || activeProvider === 'hunyuan_v2') {
+          settings.ai.activeProvider = 'tripo3d';
+          this.settingsService.updateAiSettings(settings.ai).subscribe({
+            next: () => {
+              this.fetchActiveEngineName();
+              this.startAiGeneration(imageUrl);
+            },
+            error: () => this.startAiGeneration(imageUrl)
+          });
+          return;
+        }
+
+        if (activeProvider === 'hunyuan3d') {
           this.showAiWarningDialog(activeProvider, imageUrl);
           return;
         }
