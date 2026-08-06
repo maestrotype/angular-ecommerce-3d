@@ -1305,7 +1305,11 @@
     "STOCK": {
       "ONLY_LEFT": "Only {{count}} left in stock!",
       "OUT_OF_STOCK": "OUT OF STOCK",
-      "COUNT": "In stock: {{count}}"
+      "COUNT": "In stock: {{count}}",
+      "IN_STOCK": "In stock"
+    },
+    "META": {
+      "NO_REVIEWS": "No reviews yet"
     },
     "BADGES": {
       "SPECIAL": "SPECIAL OFFER",
@@ -1339,9 +1343,11 @@
       "MSG": "The product you're looking for doesn't exist."
     },
     "TABS": {
+      "ABOUT": "About product",
       "DESCRIPTION": "Description",
       "CHARACTERISTICS": "Characteristics",
-      "DELIVERY": "Delivery and Payment"
+      "DELIVERY": "Delivery and Payment",
+      "REVIEWS": "Reviews"
     },
     "PECULIARITIES": "Peculiarities:",
     "TECHNICAL_SPECS": "Technical specifications",
