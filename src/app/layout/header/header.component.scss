@@ -328,8 +328,13 @@
           background: var(--surface-highlight);
         }
 
-        &.active .theme-switcher__label {
-          font-weight: 700;
+        &.active {
+          background: var(--surface-highlight);
+          color: var(--interactive-primary);
+
+          .theme-switcher__label {
+            font-weight: 700;
+          }
         }
 
         .theme-switcher__swatch {
@@ -417,6 +422,11 @@
 
       &:hover {
         background: var(--surface-highlight);
+      }
+
+      &.active {
+        background: rgba(var(--interactive-primary-rgb), 0.12);
+        color: var(--interactive-primary);
       }
 
       .lang-switcher__label {
@@ -807,53 +817,165 @@
       gap: 12px;
     }
 
-    .mobile-theme-selector {
-      background: rgba(var(--header-text-rgb), 0.05);
-      padding: 12px;
-      border-radius: 16px;
+    .mobile-preferences {
+      gap: 18px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .mobile-pref-row {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
 
-      .selector-label {
-        font-size: 0.85rem;
+      &__label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+      }
+    }
+
+    /* Theme: icon cards — active = soft lift + thin brand rim (no blue fill) */
+    .mobile-theme-segment {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+
+      &__btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        min-width: 0;
+        padding: 12px 8px 10px;
+        border-radius: 14px;
+        border: 1px solid var(--border-subtle);
+        background: transparent;
+        color: var(--text-secondary);
+        font-size: 0.75rem;
         font-weight: 600;
-        color: var(--text-primary);
-        opacity: 0.8;
+        cursor: pointer;
+        transition:
+          background-color 0.2s ease,
+          border-color 0.2s ease,
+          color 0.2s ease,
+          box-shadow 0.2s ease;
+
+        &:hover {
+          border-color: var(--border-emphasis);
+          color: var(--text-primary);
+          background: color-mix(in srgb, var(--text-primary) 6%, transparent);
+        }
+
+        &.active {
+          background: color-mix(in srgb, var(--text-primary) 10%, transparent);
+          border-color: color-mix(in srgb, var(--text-primary) 32%, transparent);
+          color: var(--text-primary);
+        }
       }
 
-      .theme-chips {
+      &__icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 11px;
+        flex-shrink: 0;
+      }
+
+      &__btn[data-theme-id='light'] .mobile-theme-segment__icon {
+        background: linear-gradient(160deg, #fffbeb 0%, #fde68a 50%, #f59e0b 100%);
+        color: #92400e;
+      }
+
+      &__btn[data-theme-id='dark'] .mobile-theme-segment__icon {
+        background: linear-gradient(160deg, #334155 0%, #0f172a 100%);
+        color: #f1f5f9;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+      }
+
+      &__btn[data-theme-id='glass'] .mobile-theme-segment__icon {
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.85), rgba(148, 186, 220, 0.4));
+        color: #1e3a5f;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.75),
+          0 0 0 1px rgba(148, 163, 184, 0.4);
+      }
+
+      &__text {
+        line-height: 1.1;
+        text-align: center;
+      }
+    }
+
+    /* Language: vertical flag list — different layout from theme cards */
+    .mobile-lang-segment {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 4px;
+      border-radius: 12px;
+      background: color-mix(in srgb, var(--text-primary) 5%, transparent);
+      border: 1px solid var(--border-subtle);
+
+      &__btn {
         display: flex;
-        flex-wrap: wrap; // Important for Fold 6 to avoid clipping
-        gap: 8px;
-        padding-bottom: 4px;
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid transparent;
+        border-radius: 10px;
+        background: transparent;
+        color: var(--text-secondary);
+        font-size: 0.8125rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        cursor: pointer;
+        text-align: left;
+        transition:
+          background-color 0.2s ease,
+          border-color 0.2s ease,
+          color 0.2s ease;
 
-        button {
-          background: var(--surface-2, rgba(255, 255, 255, 0.2));
-          border: 1px solid rgba(0, 0, 0, 0.08);
-          padding: 8px 12px;
-          border-radius: 20px;
+        &:hover {
+          background: color-mix(in srgb, var(--text-primary) 7%, transparent);
           color: var(--text-primary);
-          font-size: 0.75rem;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          flex: 0 1 auto;
-          min-width: 75px;
-          text-align: center;
-          white-space: nowrap;
-
-          &.active {
-            background: var(--header-link-hover);
-            color: var(--header-bg);
-            box-shadow: var(--shadow-md);
-          }
-
-          &:not(.active) {
-            background: rgba(var(--header-text-rgb), 0.1);
-            color: var(--header-text);
-            border: 1px solid rgba(var(--header-text-rgb), 0.1);
-          }
         }
+
+        &.active {
+          background: color-mix(in srgb, var(--text-primary) 12%, transparent);
+          border-color: color-mix(in srgb, var(--text-primary) 24%, transparent);
+          color: var(--text-primary);
+          box-shadow: inset 3px 0 0 0 color-mix(in srgb, var(--text-primary) 45%, transparent);
+        }
+      }
+
+      &__flag {
+        width: 32px;
+        height: 22px;
+        border-radius: 3px;
+        overflow: hidden;
+        flex-shrink: 0;
+        box-shadow:
+          0 0 0 1px rgba(0, 0, 0, 0.22),
+          0 1px 3px rgba(0, 0, 0, 0.25);
+
+        svg {
+          display: block;
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      &__code {
+        line-height: 1;
+        flex: 1;
       }
     }
 
