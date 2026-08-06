@@ -96,12 +96,10 @@
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>{{ 'ACTIVE_PROVIDER' | translate }}</mat-label>
               <mat-select formControlName="activeProvider">
-                <mat-option value="tripo3d">Tripo3D ({{ 'HIGH_QUALITY_PAID' | translate }})</mat-option>
-                <mat-option value="hunyuan3d">{{ 'HUNYUAN_TENCENT' | translate }} ({{ 'AI_PROVIDER.LEGACY' | translate }})</mat-option>
-                <mat-option value="meshy">{{ 'MESHY_AI' | translate }}</mat-option>
+                <mat-option value="tripo3d">Tripo3D ({{ 'FREE_TIER_AVAILABLE' | translate }})</mat-option>
+                <mat-option value="meshy">{{ 'MESHY_AI' | translate }} ({{ 'FREE_TIER_AVAILABLE' | translate }})</mat-option>
+                <mat-option value="hunyuan3d">{{ 'HUNYUAN_TENCENT' | translate }} ({{ 'CLOUD_API' | translate }})</mat-option>
                 <mat-option value="luma">{{ 'LUMA_AI' | translate }}</mat-option>
-                <mat-option value="unique3d">{{ 'UNIQUE3D_LOCAL_HQ' | translate }} ({{ 'AI_PROVIDER.INCOMPATIBLE' | translate }})</mat-option>
-                <mat-option value="hunyuan_v2">{{ 'HUNYUAN_V2_CLOUD_FREE' | translate }}</mat-option>
                 <mat-option value="custom">{{ 'CUSTOM_WEBHOOK_LOCAL' | translate }}</mat-option>
               </mat-select>
             </mat-form-field>
