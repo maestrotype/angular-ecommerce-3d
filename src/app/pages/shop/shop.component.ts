@@ -1,5 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { take, timeout, catchError } from 'rxjs/operators';
+import { of, Subject, takeUntil } from 'rxjs';
 import { ProductService } from '../../core/services/product.service';
 import { CategoryService } from '../../core/services/category.service';
 import { CartService } from '../../core/services/cart.service';
@@ -9,11 +11,12 @@ import { OptimizationService } from '../../core/services/optimization.service';
 import { ThemeService } from '../../core/themes/theme.service';
 import { ThemeId } from '../../core/themes/theme.model';
 import { TranslateService } from '@ngx-translate/core';
+import { SectionService } from 'src/admin/services/section.service';
 import { getLocalizedString } from '../../../shared/utils/localization.util';
 import { Product } from 'src/shared/models/product.model';
 import { Category } from 'src/shared/models/category.model';
 import { CartItem } from 'src/shared/models/cart-item.model';
-import { Subject, takeUntil } from 'rxjs';
+import { Section } from 'src/shared/models/section.model';
 
 interface DropdownOption {
   value: string;
@@ -46,11 +49,11 @@ export class ShopComponent implements OnInit, OnDestroy {
   totalPages: number = 1;
   paginatedProducts: Product[] = [];
 
-  // View mode — default columns follow active theme (light 2 / dark 4 / glass 3)
-  viewMode: 'list' | 'grid-2' | 'grid-3' | 'grid-4' = 'grid-2';
+  // View mode — default columns follow active theme (light 5 / dark 4 / glass 3)
+  viewMode: 'list' | 'grid-2' | 'grid-3' | 'grid-4' | 'grid-5' = 'grid-5';
 
-  private readonly themeGridDefaults: Record<ThemeId, 'grid-2' | 'grid-3' | 'grid-4'> = {
-    light: 'grid-2',
+  private readonly themeGridDefaults: Record<ThemeId, 'grid-2' | 'grid-3' | 'grid-4' | 'grid-5'> = {
+    light: 'grid-5',
     dark: 'grid-4',
     glass: 'grid-3',
     'dark-glass': 'grid-4',
@@ -61,6 +64,9 @@ export class ShopComponent implements OnInit, OnDestroy {
   minPrice: number | null = null;
   maxPrice: number | null = null;
   showOnlyOnSale = false;
+  showShopHero = false;
+  shopSections: Section[] = [];
+  sectionsLoading = true;
 
   // Filter categories for sidebar - will be populated from API
   filterCategories: FilterCategory[] = [];
@@ -88,6 +94,7 @@ export class ShopComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private optimizationService: OptimizationService,
     private themeService: ThemeService,
+    private sectionService: SectionService,
     private translate: TranslateService,
     private router: Router,
     private route: ActivatedRoute
@@ -96,12 +103,14 @@ export class ShopComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.initOptions();
     this.applyThemeGridDefault(this.themeService.getCurrentTheme().id);
+    this.loadShopSections();
     this.loadProducts();
     this.loadCategories();
     this.setupRouteParams();
 
     this.themeService.currentTheme$.pipe(takeUntil(this.destroy$)).subscribe((theme) => {
       this.applyThemeGridDefault(theme.id);
+      this.updateShopHeroVisibility();
     });
 
     // Refresh options on lang change
@@ -109,6 +118,42 @@ export class ShopComponent implements OnInit, OnDestroy {
       this.initOptions();
       this.loadCategories(); // To refresh "All categories" label
     });
+  }
+
+  private loadShopSections(): void {
+    this.sectionsLoading = true;
+    this.sectionService.getActiveSections('shop').pipe(
+      take(1),
+      timeout(15000),
+      catchError((err) => {
+        console.error('Error loading shop sections', err);
+        return of([]);
+      })
+    ).subscribe({
+      next: (sections) => {
+        this.shopSections = (sections || [])
+          .filter((section) => section.type !== 'header' && section.type !== 'footer')
+          .sort((a, b) => (a.order || 0) - (b.order || 0));
+        this.sectionsLoading = false;
+        this.updateShopHeroVisibility();
+      },
+      error: () => {
+        this.sectionsLoading = false;
+        this.updateShopHeroVisibility();
+      },
+      complete: () => {
+        this.sectionsLoading = false;
+        this.updateShopHeroVisibility();
+      }
+    });
+  }
+
+  private updateShopHeroVisibility(): void {
+    const isGlass = this.themeService.getCurrentTheme().id === 'glass';
+    const hasConfiguredHero = this.shopSections.some(
+      (section) => section.type === 'hero-glass' || section.type === 'hero'
+    );
+    this.showShopHero = isGlass && !hasConfiguredHero && !this.sectionsLoading;
   }
 
   private applyThemeGridDefault(themeId: ThemeId): void {
@@ -161,17 +206,47 @@ export class ShopComponent implements OnInit, OnDestroy {
   }
 
   private updateFilterCategories(): void {
-    // Create filter categories from real categories and count products
-    this.filterCategories = this.categories.map(category => {
+    this.filterCategories = this.categories.map((category) => {
       const name = getLocalizedString(category.name, this.translate.currentLang);
-      const count = this.products.filter(product => product.category === name).length;
+      const slug = this.getCategorySlug(category, name);
       return {
-        id: name,
-        name: name,
-        count: count,
-        selected: false
+        id: slug,
+        name,
+        count: this.countProductsInCategory(slug, name),
+        selected:
+          this.selectedCategory !== 'all' &&
+          this.categoryRefsMatch(this.selectedCategory, slug, name),
       };
     });
+  }
+
+  private getCategorySlug(category: Category, displayName?: string): string {
+    const name = displayName ?? getLocalizedString(category.name, this.translate.currentLang);
+    return category.slug || this.normalizeCategoryRef(name);
+  }
+
+  private normalizeCategoryRef(value: string): string {
+    return value.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+  }
+
+  private categoryRefsMatch(...values: string[]): boolean {
+    const normalized = values.map((value) => this.normalizeCategoryRef(value));
+    const anchor = normalized[0];
+    return normalized.every((value) => value === anchor);
+  }
+
+  private productMatchesCategory(product: Product, categorySlug: string, categoryName: string): boolean {
+    const productCategory = product.category || '';
+    return (
+      this.categoryRefsMatch(productCategory, categorySlug) ||
+      this.categoryRefsMatch(productCategory, categoryName)
+    );
+  }
+
+  private countProductsInCategory(categorySlug: string, categoryName: string): number {
+    return this.products.filter((product) =>
+      this.productMatchesCategory(product, categorySlug, categoryName)
+    ).length;
   }
 
   private loadProducts(): void {
@@ -228,26 +303,47 @@ export class ShopComponent implements OnInit, OnDestroy {
   }
 
   applyFilters(): void {
-    // Update category counts
-    this.updateCategoryCounts();
+    this.runFilters(true);
+  }
 
-    // Sync selectedCategory with sidebar selections
-    const selectedCategories = this.filterCategories.filter(cat => cat.selected).map(cat => cat.id);
+  onLiveFilterChange(): void {
+    this.runFilters(false);
+  }
+
+  clearAllFilters(): void {
+    this.filterCategories.forEach((category) => {
+      category.selected = false;
+    });
+    this.minPrice = null;
+    this.maxPrice = null;
+    this.showOnlyOnSale = false;
+    this.selectedCategory = 'all';
+    this.runFilters(false);
+  }
+
+  private runFilters(closeSidebar: boolean): void {
+    this.currentPage = 1;
+    this.updateCategoryCounts();
+    this.syncSelectedCategoryFromSidebar();
+
+    if (closeSidebar) {
+      this.isFilterSidebarOpen = false;
+    }
+
+    this.filterProducts();
+    this.updateUrl();
+  }
+
+  private syncSelectedCategoryFromSidebar(): void {
+    const selectedCategories = this.filterCategories.filter((cat) => cat.selected).map((cat) => cat.id);
     if (selectedCategories.length === 1) {
       this.selectedCategory = selectedCategories[0];
     } else if (selectedCategories.length === 0) {
       this.selectedCategory = 'all';
     }
-    // If multiple categories selected, keep current selectedCategory but filter by all selected
-
-    // Close sidebar
-    this.isFilterSidebarOpen = false;
-
-    // Trigger product filtering
-    this.filterProducts();
   }
 
-  changeViewMode(mode: 'list' | 'grid-2' | 'grid-3' | 'grid-4'): void {
+  changeViewMode(mode: 'list' | 'grid-2' | 'grid-3' | 'grid-4' | 'grid-5'): void {
     this.viewMode = mode;
   }
 
@@ -255,12 +351,26 @@ export class ShopComponent implements OnInit, OnDestroy {
     let filtered = [...this.products];
 
     // Filter by selected categories from sidebar
-    const selectedCategories = this.filterCategories.filter(cat => cat.selected).map(cat => cat.id);
+    const selectedCategories = this.filterCategories.filter((cat) => cat.selected);
     if (selectedCategories.length > 0) {
-      filtered = filtered.filter(product => selectedCategories.includes(product.category || ''));
+      filtered = filtered.filter((product) =>
+        selectedCategories.some((category) =>
+          this.productMatchesCategory(product, category.id, category.name)
+        )
+      );
     } else if (this.selectedCategory !== 'all') {
-      // Fallback to dropdown category filter
-      filtered = filtered.filter(product => product.category === this.selectedCategory);
+      const routeCategory = this.filterCategories.find((category) =>
+        this.categoryRefsMatch(category.id, this.selectedCategory)
+      );
+      if (routeCategory) {
+        filtered = filtered.filter((product) =>
+          this.productMatchesCategory(product, routeCategory.id, routeCategory.name)
+        );
+      } else {
+        filtered = filtered.filter((product) =>
+          this.categoryRefsMatch(product.category || '', this.selectedCategory)
+        );
+      }
     }
 
     // Filter by search term
@@ -376,10 +486,54 @@ export class ShopComponent implements OnInit, OnDestroy {
     return product.id;
   }
 
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updatePagination();
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.updatePagination();
+    }
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.updatePagination();
+    }
+  }
+
+  rateProduct(product: Product, rating: number, event?: Event): void {
+    event?.stopPropagation();
+
+    if (!product.userRating) {
+      product.userRating = rating;
+      product.ratingCount = (product.ratingCount || 0) + 1;
+    } else {
+      product.userRating = rating;
+    }
+
+    this.updateProductRating(product);
+
+    const productName = getLocalizedString(product.name, this.translate.currentLang);
+    this.notificationService.showSuccess(`Rated ${productName} with ${rating} stars!`);
+  }
+
+  private updateProductRating(product: Product): void {
+    if (!product.ratingCount) {
+      product.rating = product.userRating || 0;
+      return;
+    }
+    product.rating = product.userRating || product.rating || 0;
+  }
+
   private updateCategoryCounts(): void {
-    this.filterCategories.forEach(filterCategory => {
-      const count = this.products.filter(product => product.category === filterCategory.id).length;
-      filterCategory.count = count;
+    this.filterCategories.forEach((filterCategory) => {
+      filterCategory.count = this.countProductsInCategory(filterCategory.id, filterCategory.name);
     });
   }
 }

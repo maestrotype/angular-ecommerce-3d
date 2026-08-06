@@ -1,6 +1,13 @@
 <div class="shop" id="shop">
-  <!-- Header Section -->
-  <div class="shop-header">
+  <!-- Configurable sections (Site Architect → pageTarget: shop) -->
+  <ng-container *ngIf="!sectionsLoading">
+    <ng-container *ngFor="let section of shopSections">
+      <app-section-renderer [section]="section"></app-section-renderer>
+    </ng-container>
+  </ng-container>
+
+  <!-- Fallback hero when glass theme has no hero section in constructor -->
+  <div class="shop-header" *ngIf="showShopHero">
     <div class="container">
       <div class="header-content">
         <span class="section-subtitle">{{ 'SHOP.HEADER.SUBTITLE' | translate }}</span>
@@ -19,55 +26,75 @@
     </div>
   </div>
 
-  <!-- Filter Sidebar -->
-  <div class="filter-sidebar" [class.open]="isFilterSidebarOpen">
-    <div class="sidebar-content">
-      <div class="sidebar-header">
-        <h3>{{ 'SHOP.FILTERS.TITLE' | translate }}</h3>
-        <button class="close-btn" (click)="toggleFilterSidebar()">×</button>
-      </div>
-
-      <div class="filter-section">
-        <h4>{{ 'SHOP.FILTERS.CATEGORIES' | translate }}</h4>
-        <div class="category-list">
-          <label *ngFor="let category of filterCategories" class="category-item">
-            <input type="checkbox" [value]="category.id" [(ngModel)]="category.selected">
-            <span class="checkmark"></span>
-            <span class="category-name">{{ category.name }}</span>
-            <span class="category-count">({{ category.count }})</span>
-          </label>
-        </div>
-      </div>
-
-      <div class="filter-section">
-        <h4>{{ 'SHOP.FILTERS.PRICE' | translate }}</h4>
-        <div class="price-range">
-          <div class="price-inputs">
-            <input type="number" [(ngModel)]="minPrice" [placeholder]="'SHOP.FILTERS.MIN' | translate"
-              class="price-input">
-            <span class="price-separator">-</span>
-            <input type="number" [(ngModel)]="maxPrice" [placeholder]="'SHOP.FILTERS.MAX' | translate"
-              class="price-input">
-          </div>
-          <div class="price-display">
-            {{ 'SHOP.FILTERS.PRICE_DISPLAY' | translate:{min: minPrice || 0, max: maxPrice || 1000} }}
-          </div>
-        </div>
-      </div>
-
-      <button class="filter-apply-btn" (click)="applyFilters()">{{ 'SHOP.FILTERS.APPLY' | translate }}</button>
-    </div>
-  </div>
-
-  <!-- Filter Overlay -->
+  <!-- Filter Overlay (drawer mode) -->
   <div class="filter-overlay" [class.open]="isFilterSidebarOpen" (click)="toggleFilterSidebar()"></div>
 
+  <div class="shop-layout">
+    <aside class="shop-layout__sidebar" [attr.aria-label]="'SHOP.FILTERS.TITLE' | translate">
+      <div class="filter-sidebar" [class.open]="isFilterSidebarOpen">
+        <div class="sidebar-content">
+          <div class="sidebar-header">
+            <h3>{{ 'SHOP.FILTERS.TITLE' | translate }}</h3>
+            <button type="button" class="close-btn" (click)="toggleFilterSidebar()">×</button>
+          </div>
+
+          <div class="filter-section">
+            <h4>{{ 'SHOP.FILTERS.CATEGORIES' | translate }}</h4>
+            <div class="category-list">
+              <label *ngFor="let category of filterCategories" class="category-item">
+                <input type="checkbox" [value]="category.id" [(ngModel)]="category.selected"
+                  (ngModelChange)="onLiveFilterChange()">
+                <span class="checkmark"></span>
+                <span class="category-name">{{ category.name }}</span>
+                <span class="category-count">({{ category.count }})</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="filter-section">
+            <h4>{{ 'SHOP.FILTERS.PRICE' | translate }}</h4>
+            <div class="price-range">
+              <div class="price-inputs">
+                <input type="number" [(ngModel)]="minPrice" [placeholder]="'SHOP.FILTERS.MIN' | translate"
+                  class="price-input" (blur)="onLiveFilterChange()" (keyup.enter)="onLiveFilterChange()">
+                <span class="price-separator">-</span>
+                <input type="number" [(ngModel)]="maxPrice" [placeholder]="'SHOP.FILTERS.MAX' | translate"
+                  class="price-input" (blur)="onLiveFilterChange()" (keyup.enter)="onLiveFilterChange()">
+              </div>
+              <div class="price-display">
+                {{ 'SHOP.FILTERS.PRICE_DISPLAY' | translate:{min: minPrice || 0, max: maxPrice || 1000} }}
+              </div>
+            </div>
+          </div>
+
+          <div class="filter-section filter-section--sale">
+            <label class="sale-checkbox">
+              <input type="checkbox" [(ngModel)]="showOnlyOnSale" (ngModelChange)="onLiveFilterChange()">
+              <span class="checkmark"></span>
+              {{ 'SHOP.FILTERS.ON_SALE' | translate }}
+            </label>
+          </div>
+
+          <div class="filter-actions">
+            <button type="button" class="filter-clear-btn" (click)="clearAllFilters()">
+              {{ 'SHOP.FILTERS.CLEAR_ALL' | translate }}
+            </button>
+          </div>
+
+          <button type="button" class="filter-apply-btn filter-apply-btn--drawer" (click)="applyFilters()">
+            {{ 'SHOP.FILTERS.APPLY' | translate }}
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <div class="shop-layout__main">
   <!-- Filters and Sort Bar -->
-  <div class="filters-sort-bar">
+  <div class="filters-sort-bar catalog-toolbar">
     <div class="container">
-      <div class="filters-sort-content">
-        <!-- Left side -->
-        <div class="filters-left">
+      <div class="filters-sort-content catalog-toolbar__inner">
+        <!-- Sort + results -->
+        <div class="filters-left catalog-toolbar__sort">
           <button class="filter-btn" (click)="toggleFilterSidebar()">
             <span class="hamburger-icon">☰</span>
             {{ 'SHOP.FILTERS.TOGGLE' | translate }}
@@ -76,12 +103,15 @@
           <app-custom-dropdown class="sort-dropdown" [options]="sortOptions" [selectedValue]="sortBy"
             [placeholder]="'SHOP.SORT.PLACEHOLDER' | translate" (valueChange)="onSortChange($event)">
           </app-custom-dropdown>
+          <span class="results-count">
+            {{ 'SHOP.RESULTS.COUNT' | translate:{ count: filteredProducts.length } }}
+          </span>
         </div>
 
-        <!-- Middle -->
-        <div class="filters-middle">
-          <label class="sale-checkbox">
-            <input type="checkbox" [(ngModel)]="showOnlyOnSale">
+        <!-- Show per page -->
+        <div class="filters-middle catalog-toolbar__show">
+          <label class="sale-checkbox sale-checkbox--toolbar">
+            <input type="checkbox" [(ngModel)]="showOnlyOnSale" (ngModelChange)="onLiveFilterChange()">
             <span class="checkmark"></span>
             {{ 'SHOP.FILTERS.ON_SALE' | translate }}
           </label>
@@ -92,19 +122,22 @@
           </app-custom-dropdown>
         </div>
 
-        <!-- Right side - View toggles -->
-        <div class="view-toggles">
+        <!-- Grid density -->
+        <div class="view-toggles catalog-toolbar__density">
           <button class="view-btn" [class.active]="viewMode === 'list'" (click)="changeViewMode('list')">
             <span class="view-icon">☰</span>
           </button>
-          <button class="view-btn" [class.active]="viewMode === 'grid-2'" (click)="changeViewMode('grid-2')">
-            <span class="view-icon">||</span>
-          </button>
-          <button class="view-btn" [class.active]="viewMode === 'grid-3'" (click)="changeViewMode('grid-3')">
+          <button class="view-btn view-btn--dense" [class.active]="viewMode === 'grid-3'" (click)="changeViewMode('grid-3')">
             <span class="view-icon">|||</span>
           </button>
-          <button class="view-btn" [class.active]="viewMode === 'grid-4'" (click)="changeViewMode('grid-4')">
+          <button class="view-btn view-btn--dense" [class.active]="viewMode === 'grid-4'" (click)="changeViewMode('grid-4')">
             <span class="view-icon">||||</span>
+          </button>
+          <button class="view-btn view-btn--dense" [class.active]="viewMode === 'grid-5'" (click)="changeViewMode('grid-5')">
+            <span class="view-icon">|||||</span>
+          </button>
+          <button class="view-btn view-btn--legacy" [class.active]="viewMode === 'grid-2'" (click)="changeViewMode('grid-2')">
+            <span class="view-icon">||</span>
           </button>
         </div>
       </div>
@@ -166,7 +199,7 @@
             <div class="product-rating">
               <div class="stars">
                 <span class="star" *ngFor="let star of [1,2,3,4,5]; let i = index"
-                  [class.filled]="i < Math.floor(product.rating || 0)" (click)="rateProduct(product, i + 1)"
+                  [class.filled]="i < Math.floor(product.rating || 0)" (click)="rateProduct(product, i + 1, $event)"
                   [title]="('SHOP.PRODUCT.RATE' | translate) + ' ' + (i + 1) + ' ' + ('SHOP.PRODUCT.STARS' | translate)">★</span>
               </div>
               <span class="rating-value">({{ product.rating || 0 }})</span>
@@ -223,6 +256,8 @@
           <p class="no-products-suggestion">{{ 'SHOP.NO_PRODUCTS.SUGGESTION' | translate }}</p>
         </div>
       </div>
+    </div>
+  </div>
     </div>
   </div>
 </div>
