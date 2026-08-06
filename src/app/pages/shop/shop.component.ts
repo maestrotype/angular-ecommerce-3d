@@ -46,11 +46,11 @@ export class ShopComponent implements OnInit, OnDestroy {
   totalPages: number = 1;
   paginatedProducts: Product[] = [];
 
-  // View mode — default columns follow active theme (light 2 / dark 4 / glass 3)
-  viewMode: 'list' | 'grid-2' | 'grid-3' | 'grid-4' = 'grid-2';
+  // View mode — default columns follow active theme (light 5 / dark 4 / glass 3)
+  viewMode: 'list' | 'grid-2' | 'grid-3' | 'grid-4' | 'grid-5' = 'grid-5';
 
-  private readonly themeGridDefaults: Record<ThemeId, 'grid-2' | 'grid-3' | 'grid-4'> = {
-    light: 'grid-2',
+  private readonly themeGridDefaults: Record<ThemeId, 'grid-2' | 'grid-3' | 'grid-4' | 'grid-5'> = {
+    light: 'grid-5',
     dark: 'grid-4',
     glass: 'grid-3',
     'dark-glass': 'grid-4',
@@ -247,7 +247,7 @@ export class ShopComponent implements OnInit, OnDestroy {
     this.filterProducts();
   }
 
-  changeViewMode(mode: 'list' | 'grid-2' | 'grid-3' | 'grid-4'): void {
+  changeViewMode(mode: 'list' | 'grid-2' | 'grid-3' | 'grid-4' | 'grid-5'): void {
     this.viewMode = mode;
   }
 
