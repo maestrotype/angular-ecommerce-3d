@@ -85,17 +85,8 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     
     this.initResizeListeners();
 
-    // Read the site's current active theme from document to make preview match
-    const docTheme = document.documentElement.getAttribute('data-theme') ||
-                     document.body.getAttribute('data-theme') || '';
-    // Map to supported preview themes: 'default' (light), 'dark', 'glass'
-    if (docTheme === 'dark') {
-      this.themeMode = 'dark';
-    } else if (docTheme === 'glass') {
-      this.themeMode = 'glass';
-    } else {
-      this.themeMode = 'default'; // Explicit 'default' to override any inherited dark vars
-    }
+    // Site Architect preview defaults to storefront light (independent of admin chrome theme).
+    this.themeMode = 'default';
   }
 
   private initResizeListeners(): void {

@@ -278,8 +278,9 @@
         gap: 2px;
         margin-left: 5px;
         
-        .profile-icon span, .lang-switcher span { display: none; }
-        .theme-switcher span { display: none; }
+        .profile-icon span { display: none; }
+        /* Only hide toggle chrome — not popover labels/checks */
+        .lang-switcher__toggle .current-lang { display: none; }
     }
   }
 

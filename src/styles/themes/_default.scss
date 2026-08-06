@@ -15,6 +15,46 @@
   --shop-card-price-size: 0.9375rem;
   --shop-card-cart-size: 2rem;
 
+  /* ===== FULLSCREEN VIEWER (product / 3D) ===== */
+  --viewer-page-bg: var(--surface-page);
+  --viewer-page-text: var(--text-primary);
+  --viewer-header-bg: var(--surface-primary);
+  --viewer-header-border: var(--border-subtle);
+  --viewer-header-backdrop: none;
+  --viewer-chrome-bg: var(--surface-primary);
+  --viewer-chrome-border: var(--border-default);
+  --viewer-chrome-text: var(--text-primary);
+  --viewer-chrome-muted: var(--text-secondary);
+  --viewer-tabs-bg: var(--surface-secondary);
+  --viewer-bar-bg: var(--surface-primary);
+  --viewer-bar-border: var(--border-subtle);
+  --viewer-host-bg: var(--surface-secondary);
+  --viewer-loader-overlay: var(--surface-primary);
+  --viewer-loader-backdrop: var(--backdrop-blur-sm);
+  --viewer-loader-title: var(--text-muted);
+  --viewer-loader-percent: var(--text-primary);
+  --viewer-loader-track: var(--border-subtle);
+  --viewer-loader-ring: var(--border-default);
+  --viewer-error-overlay: var(--surface-overlay-full);
+  --viewer-error-card-bg: var(--surface-elevated);
+  --viewer-error-card-border: var(--border-default);
+  --viewer-error-card-shadow: var(--shadow-lg);
+  --viewer-error-title: var(--text-primary);
+  --viewer-error-body: var(--text-secondary);
+  --viewer-error-hint-bg: var(--surface-highlight);
+  --viewer-error-hint-border: var(--border-subtle);
+  --viewer-error-hint-text: var(--text-muted);
+  --viewer-hint-bg: var(--surface-elevated);
+  --viewer-hint-text: var(--text-muted);
+  --viewer-hint-border: var(--border-default);
+  --viewer-hd-bg: var(--surface-elevated);
+  --viewer-hd-border: var(--border-default);
+  --viewer-hd-text: var(--text-secondary);
+  --preview-device-frame-bg: var(--color-slate-200);
+  --preview-device-frame-border: var(--color-slate-300);
+  --preview-device-shadow: var(--shadow-lg);
+  --preview-canvas-bg: var(--surface-page);
+
   /* ===== PRODUCT CARDS + GRID (light) ===== */
   --product-grid-columns: 5;
   --card-surface: var(--surface-card);
@@ -301,13 +341,15 @@
      Layer 3: themes/_default.scss      — Theme-specific overrides (this file)
    ========================================================================== */
 
-[data-theme="default"] {
+[data-theme="default"],
+[data-theme="light"] {
   /* ===== SURFACE OVERRIDES ===== */
   --surface-primary: var(--color-white);
   --surface-secondary: var(--color-slate-50);
   --surface-tertiary: var(--color-slate-100);
   --surface-overlay: var(--color-white);
   --surface-inverse: var(--color-slate-900);
+  --surface-page: var(--color-slate-50);
 
   /* ===== TEXT OVERRIDES ===== */
   --text-primary: var(--color-slate-900);

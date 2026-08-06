@@ -302,6 +302,46 @@
   --surface-overlay-full: rgba(226, 232, 240, 0.55);
   --surface-header: var(--surface-chrome);
 
+  /* ===== FULLSCREEN VIEWER (glass) ===== */
+  --viewer-page-bg: var(--bg-page);
+  --viewer-page-text: var(--text-primary);
+  --viewer-header-bg: var(--surface-chrome);
+  --viewer-header-border: var(--chrome-border);
+  --viewer-header-backdrop: var(--chrome-blur);
+  --viewer-chrome-bg: var(--surface-chrome);
+  --viewer-chrome-border: var(--border-default);
+  --viewer-chrome-text: var(--text-primary);
+  --viewer-chrome-muted: var(--text-secondary);
+  --viewer-tabs-bg: var(--surface-overlay-light);
+  --viewer-bar-bg: var(--surface-chrome);
+  --viewer-bar-border: var(--chrome-border);
+  --viewer-host-bg: var(--surface-secondary);
+  --viewer-loader-overlay: var(--surface-overlay-full);
+  --viewer-loader-backdrop: var(--chrome-blur);
+  --viewer-loader-title: var(--text-muted);
+  --viewer-loader-percent: var(--text-primary);
+  --viewer-loader-track: var(--border-subtle);
+  --viewer-loader-ring: var(--border-default);
+  --viewer-error-overlay: var(--surface-overlay-full);
+  --viewer-error-card-bg: var(--surface-elevated);
+  --viewer-error-card-border: var(--border-default);
+  --viewer-error-card-shadow: var(--shadow-md);
+  --viewer-error-title: var(--text-primary);
+  --viewer-error-body: var(--text-secondary);
+  --viewer-error-hint-bg: var(--surface-overlay-light);
+  --viewer-error-hint-border: var(--border-default);
+  --viewer-error-hint-text: var(--text-muted);
+  --viewer-hint-bg: var(--surface-elevated);
+  --viewer-hint-text: var(--text-muted);
+  --viewer-hint-border: var(--border-default);
+  --viewer-hd-bg: var(--surface-chrome);
+  --viewer-hd-border: var(--border-default);
+  --viewer-hd-text: var(--text-secondary);
+  --preview-device-frame-bg: var(--bg-page);
+  --preview-device-frame-border: var(--chrome-border);
+  --preview-device-shadow: var(--chrome-shadow);
+  --preview-canvas-bg: var(--storefront-atmosphere-gradient);
+
   /* ===== TEXT OVERRIDES (dark ink on ice) ===== */
   --text-primary: #1e293b;
   --text-secondary: #334155;

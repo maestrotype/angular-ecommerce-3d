@@ -119,6 +119,18 @@
         <div class="architect-header">
           <h3><mat-icon>visibility</mat-icon> {{ 'SITE_ARCHITECT' | translate }}</h3>
           <div class="device-switcher">
+            <div class="theme-pills">
+              <button mat-icon-button [class.active]="themeMode === 'default'" (click)="setThemeMode('default')" matTooltip="Light">
+                <mat-icon>light_mode</mat-icon>
+              </button>
+              <button mat-icon-button [class.active]="themeMode === 'dark'" (click)="setThemeMode('dark')" matTooltip="Dark">
+                <mat-icon>dark_mode</mat-icon>
+              </button>
+              <button mat-icon-button [class.active]="themeMode === 'glass'" (click)="setThemeMode('glass')" matTooltip="Glass">
+                <mat-icon>blur_on</mat-icon>
+              </button>
+            </div>
+            <div class="divider-v"></div>
             <button mat-icon-button [class.active]="previewMode === 'desktop'" (click)="setPreviewMode('desktop')" matTooltip="Desktop"><mat-icon>desktop_windows</mat-icon></button>
             <button mat-icon-button [class.active]="previewMode === 'tablet'" (click)="setPreviewMode('tablet')" matTooltip="Tablet"><mat-icon>tablet_mac</mat-icon></button>
             <button mat-icon-button [class.active]="previewMode === 'mobile'" (click)="setPreviewMode('mobile')" matTooltip="Smartphone (iPhone)"><mat-icon>smartphone</mat-icon></button>
