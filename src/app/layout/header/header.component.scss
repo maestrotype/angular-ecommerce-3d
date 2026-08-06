@@ -165,14 +165,20 @@
     }
   }
 
-  // Mobile Search
+  // Mobile Search (shown when expanded on phones)
+  .mobile-search-toggle {
+    display: none;
+  }
+
   .mobile-search {
     display: none;
     flex: 1;
+    min-width: 0;
     margin: 0 15px;
 
     .mobile-search-input {
       width: 100%;
+      min-width: 0;
       padding: 8px 16px;
       border: 1px solid var(--border-default);
       border-radius: 20px;
@@ -277,9 +283,11 @@
     @media (max-width: 1100px) {
         gap: 2px;
         margin-left: 5px;
-        
-        .profile-icon span, .lang-switcher span { display: none; }
-        .theme-switcher span { display: none; }
+
+        /* Hide only toggle chrome — keep popover labels/swatch/check visible */
+        .lang-switcher__toggle .current-lang {
+          display: none;
+        }
     }
   }
 
@@ -312,7 +320,7 @@
         border-radius: 8px;
         width: 100%;
         transition: background 0.15s ease;
-        color: var(--header-link);
+        color: var(--text-primary);
         font-size: 14px;
         font-weight: 500;
 
@@ -336,6 +344,7 @@
         .theme-switcher__label {
           flex: 1;
           text-align: left;
+          color: inherit;
         }
 
         .theme-switcher__check {
@@ -401,13 +410,17 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      color: var(--header-text);
+      color: var(--text-primary);
       font-size: 14px;
       font-weight: 500;
       transition: all 0.2s;
 
       &:hover {
         background: var(--surface-highlight);
+      }
+
+      .lang-switcher__label {
+        color: inherit;
       }
 
       .lang-switcher__check {
@@ -420,38 +433,52 @@
   .hamburger {
     display: none;
     flex-direction: column;
-    background: none;
-    border: none;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    background: var(--surface-secondary, rgba(0, 0, 0, 0.04));
+    border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.06));
     cursor: pointer;
-    padding: 8px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 12px;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 
     span {
-      width: 25px;
-      height: 3px;
+      display: block;
+      width: 18px;
+      height: 2px;
       background: var(--header-text);
-      margin: 3px 0;
-      transition: all 0.3s ease;
-      border-radius: 2px;
+      margin: 0;
+      transition: all 0.25s ease;
+      border-radius: 999px;
     }
 
     &.active {
+      background: rgba(var(--interactive-primary-rgb), 0.12);
+      border-color: rgba(var(--interactive-primary-rgb), 0.25);
+
       span:nth-child(1) {
-        transform: rotate(-45deg) translate(-5px, 6px);
+        transform: translateY(7px) rotate(45deg);
       }
 
       span:nth-child(2) {
         opacity: 0;
+        transform: scaleX(0);
       }
 
       span:nth-child(3) {
-        transform: rotate(45deg) translate(-5px, -6px);
+        transform: translateY(-7px) rotate(-45deg);
       }
     }
 
     &:hover {
-      background: rgba(0, 0, 0, 0.1);
+      background: var(--surface-highlight, rgba(0, 0, 0, 0.06));
+    }
+
+    &:active {
+      transform: scale(0.96);
     }
   }
 }
@@ -568,6 +595,8 @@
 // Mobile-only styles and overrides
 @container (max-width: 768px) {
   .header {
+    height: 64px;
+
     .nav {
       display: none;
     }
@@ -576,19 +605,80 @@
       display: none;
     }
 
+    .logo {
+      flex: 0 0 auto;
+      max-width: none;
+
+      &:hover {
+        transform: none;
+      }
+    }
+
+    .mobile-search-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      margin-left: auto;
+      margin-right: 6px;
+      padding: 0;
+      border: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.06));
+      border-radius: 12px;
+      background: var(--surface-secondary, rgba(0, 0, 0, 0.04));
+      color: var(--header-link, var(--header-text));
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.2s ease, color 0.2s ease;
+
+      &:hover,
+      &:active {
+        color: var(--interactive-primary);
+        background: var(--surface-highlight, rgba(0, 0, 0, 0.06));
+      }
+    }
+
     .mobile-search {
       display: flex;
-      flex: 1;
-      margin: 0 10px;
-      max-width: none;
+      align-items: center;
+      flex: 1 1 auto;
+      min-width: 0;
+      margin: 0 8px 0 auto;
+      gap: 6px;
+
+      .mobile-search-input {
+        min-width: 0;
+        width: 100%;
+        padding: 10px 14px;
+        font-size: 16px;
+        border-radius: 12px;
+        text-overflow: ellipsis;
+      }
+
+      .mobile-search-close {
+        flex-shrink: 0;
+        width: 36px;
+        height: 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        border-radius: 10px;
+        background: var(--surface-secondary, rgba(0, 0, 0, 0.05));
+        color: var(--header-text);
+        cursor: pointer;
+      }
     }
 
     .header-container {
-      padding: 0 15px;
+      padding: 0 12px;
+      gap: 8px;
     }
 
     .user-actions {
-      gap: 10px;
+      gap: 6px;
+      margin-left: 0;
+      flex-shrink: 0;
 
       .search-icon,
       .favorites,
@@ -602,27 +692,44 @@
       .hamburger {
         display: flex;
         z-index: 10001;
-
-        span {
-          background: var(--header-text);
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
       }
     }
   }
 
   .search-results {
     position: fixed;
-    top: 80px;
+    top: 64px;
     left: 0;
     right: 0;
     width: 100%;
     transform: none;
     border-radius: 0;
-    max-height: calc(calc(var(--vh, 1vh) * 100) - 80px);
+    max-height: calc(calc(var(--vh, 1vh) * 100) - 64px - 72px);
     background: var(--header-bg);
     backdrop-filter: blur(20px);
     z-index: 10002;
+  }
+}
+
+// Fold cover only: slightly tighter logo, still with text
+@container (max-width: 340px) {
+  .header {
+    .header-container {
+      padding: 0 8px;
+      gap: 4px;
+    }
+
+    .logo {
+      transform: scale(0.92);
+      transform-origin: left center;
+    }
+  }
+}
+
+.mobile-menu-overlay {
+  // Match drawer: start below header so chrome doesn't stack logos
+  @media (max-width: 768px) {
+    top: 64px;
   }
 }
 
@@ -632,9 +739,20 @@
   backdrop-filter: blur(30px) saturate(180%);
   -webkit-backdrop-filter: blur(30px) saturate(180%);
   box-shadow: -10px 0 50px rgba(0, 0, 0, 0.2);
+  // Sit below fixed header so logo isn't "doubled" under the drawer chrome
+  top: 64px;
+  height: calc(calc(var(--vh, 1vh) * 100) - 64px);
+  padding-top: 0;
 
   @container (max-width: 350px) {
     width: 100%;
+    left: 0;
+    right: 0;
+  }
+
+  @media (min-width: 769px) {
+    top: 0;
+    height: calc(var(--vh, 1vh) * 100);
   }
 
   .mobile-menu-header {
@@ -782,24 +900,18 @@
   }
 }
 
-// Extra-small devices adjustment
+// Extra-small devices — keep brand readable
 @container (max-width: 380px) {
   .header .logo {
-    span {
-      display: none;
-    }
+    max-width: 132px;
   }
 }
 
-// Galaxy Fold & very narrow devices — prevents hamburger from being clipped by frame border-radius
+// Galaxy Fold cover — keep padding inside rounded frame
 @container (max-width: 340px) {
   .header {
     .header-container {
-      padding: 0 6px; // Reduce from 15px to give hamburger room inside rounded frame
-    }
-
-    .mobile-search {
-      margin: 0 4px; // Tighter search margin
+      padding: 0 8px;
     }
   }
 }
@@ -885,11 +997,15 @@
 
     .theme-switcher__option,
     .lang-switcher__option {
-      color: var(--text-secondary);
+      color: var(--text-primary);
 
       &:hover {
         background: var(--surface-overlay-light);
-        color: var(--text-primary);
+      }
+
+      .theme-switcher__label,
+      .lang-switcher__label {
+        color: inherit;
       }
     }
 

@@ -29,8 +29,8 @@
             <div class="glass-particle particle-3"></div>
             <div class="glass-particle particle-4"></div>
           </div>
-          <div class="wrap-model">
-            <app-three-d-viewer *ngIf="data?.show3d && data?.model3dUrl" [modelPath]="data?.model3dUrl"
+          <div class="wrap-model" *ngIf="data?.show3d && data?.model3dUrl">
+            <app-three-d-viewer [modelPath]="data?.model3dUrl"
               [scale]="modelScale" [position]="modelPosition" [previewOnly]="true" [autoRotate]="true"></app-three-d-viewer>
           </div>
         </div>

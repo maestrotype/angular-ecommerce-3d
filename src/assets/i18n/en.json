@@ -926,6 +926,7 @@
   "ANSWERED": "Answered",
   "HEADER": {
     "SEARCH_PLACEHOLDER": "Search products...",
+    "SEARCH_PLACEHOLDER_SHORT": "Search...",
     "SEARCH_RESULTS": "Search Results",
     "VIEW_ALL_RESULTS": "View All Results",
     "MENU": "Menu",
@@ -934,7 +935,10 @@
       "SHOP": "Shop",
       "ABOUT": "About",
       "CONTACTS": "Contacts",
-      "ADMIN_PANEL": "Admin Panel"
+      "ADMIN_PANEL": "Admin Panel",
+      "FAVORITES": "Saved",
+      "CART": "Cart",
+      "ACCOUNT": "Account"
     },
     "THEME": "Theme",
     "THEMES": {

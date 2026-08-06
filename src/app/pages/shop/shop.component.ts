@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { take, timeout, catchError } from 'rxjs/operators';
 import { of, Subject, takeUntil } from 'rxjs';
@@ -82,6 +82,7 @@ export class ShopComponent implements OnInit, OnDestroy {
   ];
 
   private destroy$ = new Subject<void>();
+  private wasMobileCatalog: boolean | null = null;
 
   // Math object for template usage
   Math = Math;
@@ -424,10 +425,33 @@ export class ShopComponent implements OnInit, OnDestroy {
   }
 
   private updatePagination(): void {
-    this.totalPages = Math.ceil(this.filteredProducts.length / this.itemsPerPage);
+    const isMobileCatalog = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
+    this.wasMobileCatalog = isMobileCatalog;
+
+    // Mobile: full 2-col grid — no pagination chrome
+    if (isMobileCatalog) {
+      this.totalPages = 1;
+      this.currentPage = 1;
+      this.paginatedProducts = this.filteredProducts;
+      return;
+    }
+
+    this.totalPages = Math.ceil(this.filteredProducts.length / this.itemsPerPage) || 1;
+    if (this.currentPage > this.totalPages) {
+      this.currentPage = this.totalPages;
+    }
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     this.paginatedProducts = this.filteredProducts.slice(startIndex, endIndex);
+  }
+
+  @HostListener('window:resize')
+  onWindowResize(): void {
+    const isMobileCatalog = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
+    if (this.wasMobileCatalog === isMobileCatalog) {
+      return;
+    }
+    this.updatePagination();
   }
 
   private updateUrl(): void {

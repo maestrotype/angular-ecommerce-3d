@@ -25,22 +25,31 @@
 
 <!-- Mobile Navigation -->
 <nav *ngIf="!isAdminRoute() && !isViewerRoute()" class="footer-mobile" [class.footer-hidden]="isHidden" [attr.aria-label]="'A11Y.MOBILE_NAV' | translate">
-  <button type="button" class="favorites-link" (click)="openFavoritesPage()" [attr.aria-label]="'HEADER.NAV.FAVORITES' | translate">
-    <app-icon name="heart" stroke="currentColor"></app-icon>
-    <span class="favorites-count" *ngIf="favoritesCount > 0" aria-hidden="true">{{ favoritesCount }}</span>
+  <button type="button" class="nav-item favorites-link" (click)="openFavoritesPage()" [attr.aria-label]="'HEADER.NAV.FAVORITES' | translate">
+    <span class="nav-item__icon">
+      <app-icon name="heart" stroke="currentColor"></app-icon>
+      <span class="nav-item__badge" *ngIf="favoritesCount > 0" aria-hidden="true">{{ favoritesCount }}</span>
+    </span>
+    <span class="nav-item__label">{{ 'HEADER.NAV.FAVORITES' | translate }}</span>
   </button>
-  <button type="button" class="cart" (click)="openCartModal()" [attr.aria-label]="'HEADER.NAV.CART' | translate">
-    <app-icon name="shopping-cart" stroke="currentColor"></app-icon>
-    <span class="cart-count" *ngIf="cartCount > 0" aria-hidden="true">{{ cartCount }}</span>
+  <button type="button" class="nav-item cart" (click)="openCartModal()" [attr.aria-label]="'HEADER.NAV.CART' | translate">
+    <span class="nav-item__icon">
+      <app-icon name="shopping-cart" stroke="currentColor"></app-icon>
+      <span class="nav-item__badge" *ngIf="cartCount > 0" aria-hidden="true">{{ cartCount }}</span>
+    </span>
+    <span class="nav-item__label">{{ 'HEADER.NAV.CART' | translate }}</span>
   </button>
-  <button type="button" class="profile-icon" (click)="openAuthModal()" [attr.aria-label]="'HEADER.LOGIN_REGISTER' | translate">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path
-        d="M19 21V19C19 17.9391 18.5786 16.9217 17.8284 16.1716C17.0783 15.4214 16.0609 15 15 15H9C7.93913 15 6.92172 15.4214 6.17157 16.1716C5.42143 16.9217 5 17.9391 5 19V21"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-      <path
-        d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-    </svg>
+  <button type="button" class="nav-item profile-icon" (click)="openAuthModal()" [attr.aria-label]="'HEADER.LOGIN_REGISTER' | translate">
+    <span class="nav-item__icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path
+          d="M19 21V19C19 17.9391 18.5786 16.9217 17.8284 16.1716C17.0783 15.4214 16.0609 15 15 15H9C7.93913 15 6.92172 15.4214 6.17157 16.1716C5.42143 16.9217 5 17.9391 5 19V21"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        <path
+          d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </span>
+    <span class="nav-item__label">{{ 'HEADER.NAV.ACCOUNT' | translate }}</span>
   </button>
 </nav>

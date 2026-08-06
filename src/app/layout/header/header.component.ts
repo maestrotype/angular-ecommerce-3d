@@ -31,6 +31,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   cartCount = 0;
   favoritesCount = 0;
   isMobile = false;
+  isMobileSearchExpanded = false;
   private cartSubscription: Subscription = new Subscription();
   private favoritesSubscription: Subscription = new Subscription();
   private themeSubscription: Subscription = new Subscription();
@@ -164,9 +165,23 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
     if (isPlatformBrowser(this.platformId)) {
       this.isMobile = window.innerWidth <= 768;
+      if (!this.isMobile) {
+        this.isMobileSearchExpanded = false;
+      }
     } else {
       this.isMobile = false; // Default to desktop on server
     }
+  }
+
+  expandMobileSearch(): void {
+    this.isMobileSearchExpanded = true;
+    setTimeout(() => this.mobileSearchInput?.nativeElement?.focus(), 50);
+  }
+
+  collapseMobileSearch(): void {
+    this.isMobileSearchExpanded = false;
+    this.searchTerm = '';
+    this.searchResults = [];
   }
 
   private onDocumentClick(event: MouseEvent): void {

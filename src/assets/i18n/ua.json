@@ -906,6 +906,7 @@
   "ANSWERED": "Відповілено",
   "HEADER": {
     "SEARCH_PLACEHOLDER": "Пошук товарів...",
+    "SEARCH_PLACEHOLDER_SHORT": "Пошук...",
     "SEARCH_RESULTS": "Результати пошуку",
     "VIEW_ALL_RESULTS": "Дивитися всі результати",
     "MENU": "Меню",
@@ -914,7 +915,10 @@
       "SHOP": "Магазин",
       "ABOUT": "Про нас",
       "CONTACTS": "Контакти",
-      "ADMIN_PANEL": "Панель адміна"
+      "ADMIN_PANEL": "Панель адміна",
+      "FAVORITES": "Обране",
+      "CART": "Кошик",
+      "ACCOUNT": "Профіль"
     },
     "THEME": "Тема",
     "THEMES": {
