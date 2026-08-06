@@ -7,6 +7,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ThreeDViewerComponent } from '../../components/three-d-viewer/three-d-viewer.component';
+import { SectionRendererComponent } from '../../components/section-renderer/section-renderer.component';
 import { TranslateModule } from '@ngx-translate/core';
 
 const routes: Routes = [
@@ -24,6 +25,7 @@ const routes: Routes = [
     MatIconModule,
     MatButtonModule,
     ThreeDViewerComponent,
+    SectionRendererComponent,
     TranslateModule,
     RouterModule.forChild(routes)
   ]

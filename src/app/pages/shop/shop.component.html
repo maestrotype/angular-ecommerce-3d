@@ -1,5 +1,12 @@
 <div class="shop" id="shop">
-  <!-- Header Section (glass theme only; future: shop page constructor) -->
+  <!-- Configurable sections (Site Architect → pageTarget: shop) -->
+  <ng-container *ngIf="!sectionsLoading">
+    <ng-container *ngFor="let section of shopSections">
+      <app-section-renderer [section]="section"></app-section-renderer>
+    </ng-container>
+  </ng-container>
+
+  <!-- Fallback hero when glass theme has no hero section in constructor -->
   <div class="shop-header" *ngIf="showShopHero">
     <div class="container">
       <div class="header-content">
@@ -83,11 +90,11 @@
 
     <div class="shop-layout__main">
   <!-- Filters and Sort Bar -->
-  <div class="filters-sort-bar">
+  <div class="filters-sort-bar catalog-toolbar">
     <div class="container">
-      <div class="filters-sort-content">
-        <!-- Left side -->
-        <div class="filters-left">
+      <div class="filters-sort-content catalog-toolbar__inner">
+        <!-- Sort + results -->
+        <div class="filters-left catalog-toolbar__sort">
           <button class="filter-btn" (click)="toggleFilterSidebar()">
             <span class="hamburger-icon">☰</span>
             {{ 'SHOP.FILTERS.TOGGLE' | translate }}
@@ -101,8 +108,8 @@
           </span>
         </div>
 
-        <!-- Middle -->
-        <div class="filters-middle">
+        <!-- Show per page -->
+        <div class="filters-middle catalog-toolbar__show">
           <label class="sale-checkbox sale-checkbox--toolbar">
             <input type="checkbox" [(ngModel)]="showOnlyOnSale" (ngModelChange)="onLiveFilterChange()">
             <span class="checkmark"></span>
@@ -115,8 +122,8 @@
           </app-custom-dropdown>
         </div>
 
-        <!-- Right side - View toggles -->
-        <div class="view-toggles">
+        <!-- Grid density -->
+        <div class="view-toggles catalog-toolbar__density">
           <button class="view-btn" [class.active]="viewMode === 'list'" (click)="changeViewMode('list')">
             <span class="view-icon">☰</span>
           </button>
@@ -192,7 +199,7 @@
             <div class="product-rating">
               <div class="stars">
                 <span class="star" *ngFor="let star of [1,2,3,4,5]; let i = index"
-                  [class.filled]="i < Math.floor(product.rating || 0)" (click)="rateProduct(product, i + 1)"
+                  [class.filled]="i < Math.floor(product.rating || 0)" (click)="rateProduct(product, i + 1, $event)"
                   [title]="('SHOP.PRODUCT.RATE' | translate) + ' ' + (i + 1) + ' ' + ('SHOP.PRODUCT.STARS' | translate)">★</span>
               </div>
               <span class="rating-value">({{ product.rating || 0 }})</span>
