@@ -1075,6 +1075,28 @@
         "FACEBOOK": "Продовжити через Facebook",
         "GITHUB": "Продовжити через GitHub",
         "APPLE": "Продовжити через Apple"
+      },
+      "STRENGTH": {
+        "WEAK": "Слабкий",
+        "MEDIUM": "Середній",
+        "STRONG": "Надійний"
+      },
+      "ERRORS": {
+        "REQUIRED_EMAIL_PASSWORD": "Вкажіть email і пароль",
+        "AUTH_ERROR": "Помилка входу. Спробуйте ще раз.",
+        "REG_ERROR": "Помилка реєстрації. Спробуйте ще раз.",
+        "SOCIAL_ERROR": "Не вдалося увійти через {{provider}}. Спробуйте ще раз.",
+        "GITHUB_COMING_SOON": "Вхід через GitHub незабаром буде доступний",
+        "APPLE_COMING_SOON": "Вхід через Apple незабаром буде доступний",
+        "NAME_MIN_LENGTH": "Ім'я має містити щонайменше 2 символи",
+        "EMAIL_REQUIRED": "Вкажіть email",
+        "EMAIL_INVALID": "Введіть коректний email",
+        "EMAIL_ALREADY_REGISTERED": "Цей email вже зареєстровано",
+        "PASSWORD_MIN_LENGTH": "Пароль має бути не коротшим за 8 символів",
+        "PASSWORD_UPPERCASE": "Пароль має містити велику літеру",
+        "PASSWORD_LOWERCASE": "Пароль має містити малу літеру",
+        "PASSWORD_NUMBER": "Пароль має містити цифру",
+        "PASSWORDS_MISMATCH": "Паролі не збігаються"
       }
     },
     "IMAGE": {

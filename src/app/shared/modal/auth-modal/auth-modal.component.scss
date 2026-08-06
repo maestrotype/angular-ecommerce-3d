@@ -1,29 +1,46 @@
+:host {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 100%;
+  max-height: var(--modal-auth-max-height);
+}
+
 .auth-modal {
   width: 100%;
   max-width: 440px;
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: var(--modal-auth-max-height);
   background: var(--auth-modal-bg);
   border-radius: var(--auth-modal-radius, var(--radius-lg));
   box-shadow: var(--auth-modal-shadow);
   border: var(--auth-modal-border);
   backdrop-filter: var(--auth-modal-blur, none);
   -webkit-backdrop-filter: var(--auth-modal-blur, none);
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 
   .auth-header {
+    flex-shrink: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--auth-close-size, 2.75rem);
+    align-items: stretch;
     background: var(--auth-header-bg);
     border-bottom: var(--auth-header-border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 var(--spacing-md);
 
     .auth-tabs {
-      display: flex;
-      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      min-width: 0;
+      position: relative;
 
       .auth-tab {
-        flex: 1;
-        background: none;
+        flex: unset;
+        background: transparent;
         border: none;
         padding: var(--spacing-md) var(--spacing-lg);
         cursor: pointer;
@@ -36,7 +53,11 @@
           background-color var(--transition-fast),
           color var(--transition-fast);
         position: relative;
-        border-radius: var(--radius-md) var(--radius-md) 0 0;
+        border-radius: 0;
+
+        &:first-child {
+          border-top-left-radius: calc(var(--auth-modal-radius, var(--radius-lg)) - 1px);
+        }
 
         &:hover:not(.active) {
           background: var(--auth-tab-hover-bg);
@@ -45,25 +66,81 @@
 
         &.active {
           color: var(--auth-tab-active);
-          background: var(--auth-tab-active-bg);
+          background: var(--auth-tab-active-bg, transparent);
+          font-weight: var(--font-weight-bold);
 
           &::after {
             content: '';
             position: absolute;
             bottom: 0;
-            left: 0;
-            right: 0;
+            left: var(--spacing-md);
+            right: var(--spacing-md);
             height: 2px;
+            border-radius: var(--radius-full);
             background: var(--auth-tab-indicator, var(--interactive-primary));
           }
         }
       }
     }
+
+    .auth-close-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-self: stretch;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      border: none;
+      border-top-right-radius: calc(var(--auth-modal-radius, var(--radius-lg)) - 1px);
+      background: var(--auth-close-bg, transparent);
+      color: var(--auth-close-color, var(--text-secondary));
+      cursor: pointer;
+      position: relative;
+      transition:
+        background-color var(--transition-fast),
+        color var(--transition-fast);
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 22%;
+        bottom: 22%;
+        width: 1px;
+        background: var(--auth-header-divider-color, var(--border-subtle));
+        opacity: 0.85;
+      }
+
+      &:hover {
+        background: var(--auth-close-hover-bg, var(--auth-tab-hover-bg));
+        color: var(--auth-close-hover-color, var(--text-primary));
+      }
+
+      &:focus-visible {
+        outline: var(--micro-focus-outline-width, 2px) solid var(--micro-focus-outline-color, var(--border-focus));
+        outline-offset: calc(var(--micro-focus-outline-offset, 2px) * -1);
+      }
+
+      svg {
+        width: 1.125rem;
+        height: 1.125rem;
+      }
+    }
   }
 
   .auth-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    scroll-padding-top: var(--spacing-sm);
+    scroll-padding-bottom: var(--spacing-lg);
     background: var(--auth-content-bg);
     padding: var(--spacing-xl);
+    padding-bottom: calc(var(--spacing-xl) + var(--spacing-sm));
 
     .profile-summary {
       display: flex;
@@ -331,6 +408,7 @@
 
 .social-auth {
   margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-xs);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
@@ -374,6 +452,7 @@
     display: flex;
     justify-content: center;
     gap: var(--spacing-sm);
+    padding-bottom: var(--spacing-xs);
 
     .social-btn {
       width: 48px;
@@ -385,7 +464,10 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: all var(--transition-normal);
+      transition:
+        background-color var(--transition-fast),
+        border-color var(--transition-fast),
+        filter var(--transition-fast);
       color: var(--text-primary);
 
       mat-icon {
@@ -396,7 +478,7 @@
 
       &:hover {
         background: var(--auth-btn-primary-hover, var(--surface-secondary));
-        transform: translateY(-2px);
+        filter: brightness(1.04);
         border-color: var(--glass-border-strong, var(--border-emphasis));
         color: var(--text-primary);
       }
@@ -418,6 +500,7 @@
 
     .auth-content {
       padding: var(--spacing-lg);
+      padding-bottom: calc(var(--spacing-lg) + var(--spacing-sm));
     }
   }
 }

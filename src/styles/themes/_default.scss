@@ -392,19 +392,12 @@
   --auth-btn-primary: var(--color-brand-base);
   --auth-btn-primary-hover: var(--color-brand-dark);
   --auth-btn-danger-color: var(--interactive-danger);
-
-  /* ===== COMPONENT: Auth Modal Tabs ===== */
-  .auth-modal {
-    .auth-header {
-      .auth-tabs {
-        .auth-tab {
-          &.active {
-            border-radius: var(--radius-md) 0 0 0;
-          }
-        }
-      }
-    }
-  }
+  --auth-close-bg: transparent;
+  --auth-close-hover-bg: var(--color-slate-100);
+  --auth-close-color: var(--text-muted);
+  --auth-close-hover-color: var(--text-primary);
+  --auth-close-border: 1px solid var(--border-subtle);
+  --auth-header-divider-color: var(--border-subtle);
 }
 
 /* Default theme is applied when no [data-theme] is set */

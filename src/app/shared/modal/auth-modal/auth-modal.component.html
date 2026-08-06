@@ -1,13 +1,30 @@
 <div class="auth-modal">
   <div class="auth-header">
     <div class="auth-tabs">
-      <button class="auth-tab" [class.active]="currentView === 'login'" (click)="switchView('login')">
+      <button type="button" class="auth-tab" [class.active]="currentView === 'login'" (click)="switchView('login')">
         {{ 'MODALS.AUTH.TABS.LOGIN' | translate }}
       </button>
-      <button class="auth-tab" [class.active]="currentView === 'register'" (click)="switchView('register')">
+      <button type="button" class="auth-tab" [class.active]="currentView === 'register'" (click)="switchView('register')">
         {{ 'MODALS.AUTH.TABS.REGISTER' | translate }}
       </button>
     </div>
+    <button
+      *ngIf="config?.options?.showCloseButton !== false"
+      type="button"
+      class="auth-close-btn"
+      (click)="onClose()"
+      [attr.aria-label]="'CLOSE_BTN' | translate"
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M18 6L6 18M6 6L18 18"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
   </div>
 
   <div class="auth-content">

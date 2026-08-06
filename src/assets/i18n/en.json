@@ -1097,6 +1097,28 @@
         "FACEBOOK": "Continue with Facebook",
         "GITHUB": "Continue with GitHub",
         "APPLE": "Continue with Apple"
+      },
+      "STRENGTH": {
+        "WEAK": "Weak",
+        "MEDIUM": "Medium",
+        "STRONG": "Strong"
+      },
+      "ERRORS": {
+        "REQUIRED_EMAIL_PASSWORD": "Email and password are required",
+        "AUTH_ERROR": "Authentication failed. Please try again.",
+        "REG_ERROR": "Registration failed. Please try again.",
+        "SOCIAL_ERROR": "Could not sign in with {{provider}}. Please try again.",
+        "GITHUB_COMING_SOON": "GitHub sign-in is coming soon",
+        "APPLE_COMING_SOON": "Apple sign-in is coming soon",
+        "NAME_MIN_LENGTH": "Name must be at least 2 characters",
+        "EMAIL_REQUIRED": "Email is required",
+        "EMAIL_INVALID": "Please enter a valid email address",
+        "EMAIL_ALREADY_REGISTERED": "This email is already registered",
+        "PASSWORD_MIN_LENGTH": "Password must be at least 8 characters",
+        "PASSWORD_UPPERCASE": "Password must contain an uppercase letter",
+        "PASSWORD_LOWERCASE": "Password must contain a lowercase letter",
+        "PASSWORD_NUMBER": "Password must contain a number",
+        "PASSWORDS_MISMATCH": "Passwords do not match"
       }
     },
     "IMAGE": {

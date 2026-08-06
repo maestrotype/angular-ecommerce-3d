@@ -168,7 +168,14 @@
   --modal-shadow: var(--shadow-xl);
   --modal-max-width: 500px;
   --modal-auth-max-width: 440px;
+  --modal-auth-max-height: min(
+    90vh,
+    calc(
+      100dvh - 2 * var(--modal-padding) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)
+    )
+  );
   --modal-padding: var(--spacing-lg);
+  --z-modal-stack: 10100;
   --modal-enter-duration: var(--motion-duration-normal);
   --modal-leave-duration: var(--motion-duration-fast);
   --modal-enter-easing: var(--motion-easing-enter);
@@ -412,7 +419,7 @@
   --auth-header-bg: var(--surface-secondary);
   --auth-header-border: 1px solid var(--border-subtle);
   --auth-content-bg: var(--surface-primary);
-  --auth-tab-active-bg: var(--surface-primary);
+  --auth-tab-active-bg: transparent;
   --auth-tab-indicator: var(--interactive-primary);
   --auth-input-bg: var(--surface-primary);
   --auth-input-border: 1px solid var(--border-default);
@@ -423,6 +430,12 @@
   --auth-btn-danger-border: 1px solid color-mix(in srgb, var(--interactive-danger) 35%, var(--border-default));
   --auth-btn-danger-hover-bg: color-mix(in srgb, var(--interactive-danger) 10%, transparent);
   --auth-input-focus: var(--color-brand-base);
+  --auth-close-size: 2.75rem;
+  --auth-close-bg: transparent;
+  --auth-close-hover-bg: var(--color-slate-100);
+  --auth-close-color: var(--text-muted);
+  --auth-close-hover-color: var(--text-primary);
+  --auth-close-border: 1px solid var(--border-subtle);
 
   // ===== LEGACY COLOR ALIASES (Task A4) =====
   // Former parallel palette from core/_variables.scss.

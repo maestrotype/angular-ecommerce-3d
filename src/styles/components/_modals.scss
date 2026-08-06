@@ -30,7 +30,7 @@
 .modal-container {
   position: fixed;
   inset: 0;
-  z-index: var(--z-modal, 9999);
+  z-index: var(--z-modal-stack, 10100);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -68,6 +68,14 @@
     background: var(--modal-backdrop-light);
     backdrop-filter: var(--modal-backdrop-blur);
     -webkit-backdrop-filter: var(--modal-backdrop-blur);
+  }
+
+  &.modal-backdrop-auth {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    align-items: flex-start;
+    justify-content: center;
+    -webkit-overflow-scrolling: touch;
   }
 
   &.modal-backdrop-notification {
@@ -118,9 +126,22 @@
   &.modal-content-auth {
     width: 100%;
     max-width: var(--modal-auth-max-width);
+    max-height: var(--modal-auth-max-height);
+    margin-block: auto;
     background: transparent;
     border: none;
     box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    app-auth-modal {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
   }
 
   &.modal-content-notification {
@@ -259,14 +280,25 @@ html[data-theme='dark-glass'] body.is-admin {
 }
 
 @media (max-width: 768px) {
-  .modal-backdrop {
-    padding: var(--spacing-md);
+  .modal-backdrop-auth {
+    align-items: flex-start;
+    padding-top: max(var(--spacing-md), env(safe-area-inset-top, 0px));
+    padding-bottom: max(var(--spacing-md), env(safe-area-inset-bottom, 0px));
   }
 
   .modal-content {
     &.modal-content-cart,
     &.modal-content-auth {
       max-width: calc(100vw - 2rem);
+    }
+
+    &.modal-content-auth {
+      max-height: min(
+        90vh,
+        calc(
+          100dvh - 2 * var(--spacing-md) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)
+        )
+      );
     }
   }
 }

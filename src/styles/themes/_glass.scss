@@ -556,7 +556,7 @@
   --auth-tab-active: var(--text-primary);
   --auth-tab-inactive: #475569;
   --auth-tab-hover: var(--text-primary);
-  --auth-tab-active-bg: rgba(255, 255, 255, 0.32);
+  --auth-tab-active-bg: transparent;
   --auth-tab-indicator: rgba(100, 116, 139, 0.55);
   --auth-tab-hover-bg: rgba(255, 255, 255, 0.2);
   --auth-input-bg: rgba(255, 255, 255, 0.42);
@@ -577,6 +577,13 @@
   --auth-btn-danger-border: 1px solid rgba(148, 163, 184, 0.38);
   --auth-btn-danger-hover-bg: rgba(148, 163, 184, 0.12);
   --auth-btn-danger-hover-color: #64748b;
+  --auth-close-size: 2.75rem;
+  --auth-close-bg: rgba(255, 255, 255, 0.12);
+  --auth-close-hover-bg: rgba(255, 255, 255, 0.24);
+  --auth-close-color: var(--text-secondary);
+  --auth-close-hover-color: var(--text-primary);
+  --auth-close-border: 1px solid var(--glass-border-soft);
+  --auth-header-divider-color: rgba(148, 163, 184, 0.35);
 
   /* ===== COMPOSITE OVERRIDES ===== */
   --radius-card: var(--radius-xl);
@@ -656,19 +663,6 @@
 
   /* ===== PAGE-SPECIFIC: Product Image ===== */
   --product-image-bg: transparent;
-
-  /* ===== COMPONENT: Auth Modal Tabs ===== */
-  .auth-modal {
-    .auth-header {
-      .auth-tabs {
-        .auth-tab {
-          &.active {
-            border-radius: var(--radius-md) 0 0 0;
-          }
-        }
-      }
-    }
-  }
 
   /* ===== COMPONENT-SPECIFIC OVERRIDES (high specificity) ===== */
 
