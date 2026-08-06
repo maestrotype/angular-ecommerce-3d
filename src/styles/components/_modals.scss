@@ -218,14 +218,17 @@ body.modal-open {
 // ── Theme: glass ──
 
 [data-theme='glass'] {
-  --modal-backdrop: rgba(15, 23, 42, 0.55);
-  --modal-backdrop-light: rgba(15, 23, 42, 0.45);
-  --modal-surface: var(--glass-surface-muted, var(--surface-card));
+  --modal-backdrop: rgba(148, 163, 184, 0.35);
+  --modal-backdrop-light: rgba(186, 210, 228, 0.28);
+  --modal-surface: transparent;
   --modal-border: var(--glass-border-soft);
-  --modal-radius: var(--modal-radius-lg);
-  --auth-modal-bg: var(--modal-surface);
+  --modal-radius: var(--auth-modal-radius, var(--modal-radius-lg));
+  --auth-modal-bg: rgba(255, 255, 255, 0.38);
+  --auth-modal-blur: blur(32px) saturate(140%);
   --auth-modal-border: 1px solid var(--glass-border-soft);
-  --auth-modal-shadow: var(--modal-shadow);
+  --auth-modal-shadow: var(--glass-shadow);
+  --modal-backdrop-blur: blur(12px);
+  --modal-backdrop-blur-strong: blur(24px) saturate(140%);
 
   .modal-content:not(.modal-content-auth):not(.modal-content-image):not(.modal-content-notification) {
     backdrop-filter: var(--modal-backdrop-blur-strong);

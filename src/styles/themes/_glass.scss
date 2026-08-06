@@ -277,20 +277,7 @@
   /* Compatibility variables used in components */
   --color-text-inverse: #000000;
 
-  /* Auth Modal section - Glass theme */
-  --auth-modal-bg: rgba(0, 0, 0, 0.6);
-  --auth-modal-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);
-  --auth-modal-border: 1px solid rgba(255, 255, 255, 0.1);
-  --auth-header-bg: transparent;
-  --auth-header-border: 1px solid rgba(255, 255, 255, 0.08);
-  --auth-tab-text: rgba(255, 255, 255, 0.6);
-  --auth-tab-active: #ffffff;
-  --auth-tab-inactive: rgba(255, 255, 255, 0.4);
-  --auth-tab-hover: #ffffff;
-  --auth-tab-active-bg: rgba(255, 255, 255, 0.1);
-  --auth-content-bg: transparent;
-  --auth-input-bg: rgba(255, 255, 255, 0.05);
-  --auth-input-border: 1px solid rgba(255, 255, 255, 0.1);
+  /* Auth modal — ice glass tokens set in reconciliation block below */
 
   /* Border variables */
   --border-secondary: rgba(255, 255, 255, 0.05);
@@ -556,6 +543,41 @@
   --product-stepper-bg: rgba(255, 255, 255, 0.45);
   --product-stepper-border: 1px solid var(--glass-border-soft);
 
+  /* ===== AUTH MODAL — ice glass ===== */
+  --auth-modal-bg: rgba(255, 255, 255, 0.38);
+  --auth-modal-blur: blur(32px) saturate(140%);
+  --auth-modal-border: 1px solid var(--glass-border-soft);
+  --auth-modal-shadow: var(--glass-shadow);
+  --auth-modal-radius: 2rem;
+  --auth-header-bg: transparent;
+  --auth-header-border: 1px solid var(--glass-border-soft);
+  --auth-content-bg: transparent;
+  --auth-tab-text: var(--text-secondary);
+  --auth-tab-active: var(--text-primary);
+  --auth-tab-inactive: #475569;
+  --auth-tab-hover: var(--text-primary);
+  --auth-tab-active-bg: rgba(255, 255, 255, 0.32);
+  --auth-tab-indicator: rgba(100, 116, 139, 0.55);
+  --auth-tab-hover-bg: rgba(255, 255, 255, 0.2);
+  --auth-input-bg: rgba(255, 255, 255, 0.42);
+  --auth-input-border: 1px solid var(--glass-border-soft);
+  --auth-input-focus: rgba(100, 116, 139, 0.65);
+  --auth-profile-bg: rgba(255, 255, 255, 0.16);
+  --auth-avatar-bg: rgba(255, 255, 255, 0.35);
+  --auth-profile-border: 1px solid var(--glass-border-soft);
+  --auth-profile-radius: 1.25rem;
+  --auth-btn-primary: rgba(255, 255, 255, 0.55);
+  --auth-btn-primary-hover: rgba(255, 255, 255, 0.72);
+  --auth-btn-primary-color: var(--text-primary);
+  --auth-btn-primary-border: 1px solid var(--glass-border-strong);
+  --auth-btn-secondary: rgba(255, 255, 255, 0.28);
+  --auth-btn-secondary-border: 1px solid var(--glass-border-soft);
+  --auth-btn-secondary-text: var(--text-secondary);
+  --auth-btn-danger-color: var(--text-secondary);
+  --auth-btn-danger-border: 1px solid rgba(148, 163, 184, 0.38);
+  --auth-btn-danger-hover-bg: rgba(148, 163, 184, 0.12);
+  --auth-btn-danger-hover-color: #64748b;
+
   /* ===== COMPOSITE OVERRIDES ===== */
   --radius-card: var(--radius-xl);
   --shadow-card: var(--glass-shadow);
@@ -635,15 +657,6 @@
   /* ===== PAGE-SPECIFIC: Product Image ===== */
   --product-image-bg: transparent;
 
-  /* ===== PAGE-SPECIFIC: Auth ===== */
-  --auth-btn-primary: var(--color-brand-base);
-  --auth-btn-primary-hover: var(--color-brand-light);
-  --auth-tab-hover-bg: rgba(255, 255, 255, 0.08);
-  --auth-btn-secondary: rgba(255, 255, 255, 0.06);
-  --auth-btn-secondary-border: 1px solid rgba(255, 255, 255, 0.15);
-  --auth-btn-secondary-text: rgba(255, 255, 255, 0.9);
-  --auth-input-focus: var(--color-blue-400);
-
   /* ===== COMPONENT: Auth Modal Tabs ===== */
   .auth-modal {
     .auth-header {
@@ -685,8 +698,7 @@
   body .filters-section,
   body .order-summary,
   body .checkout-form,
-  body .auth-modal,
-  body .modal-content {
+  body .modal-content:not(.modal-content-auth):not(.modal-content-notification):not(.modal-content-image) {
     background: var(--glass-bg);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);

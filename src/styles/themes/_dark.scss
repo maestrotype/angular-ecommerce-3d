@@ -440,7 +440,11 @@
   --auth-btn-secondary: rgba(255, 255, 255, 0.08);
   --auth-btn-secondary-border: 1px solid rgba(255, 255, 255, 0.15);
   --auth-btn-secondary-text: var(--color-slate-100);
+  --auth-btn-danger-color: var(--interactive-danger);
   --auth-input-focus: var(--color-blue-400);
+  --auth-modal-bg: var(--surface-secondary);
+  --auth-header-bg: var(--surface-tertiary);
+  --auth-content-bg: var(--surface-secondary);
 
   /* ===== COMPONENT: Auth Modal Tabs ===== */
   .auth-modal {
