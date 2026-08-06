@@ -1,190 +1,122 @@
-[data-theme='dark'] {
-  /* ==========================================================================
-     ADMIN DARK THEME: Neutral/Zinc Palette (Grey-focused)
-     Refined for high contrast, depth and modern aesthetics.
-     ========================================================================== */
+/* ==========================================================================
+   ADMIN DARK THEME — C3/C4 fix (ADR-011)
+   Storefront dark = slate. Admin dark keeps intentional zinc chrome
+   (pre-C3 admin look) promoted onto semantic under body.is-admin only.
+   ========================================================================== */
 
-  // Base Colors - Zinc Palette (Neutral Greys)
-  --admin-bg-primary: #09090b;     // Zinc 950 (Main Background)
-  --admin-bg-secondary: #0f0f12;   // Deeper Neutral (Sidebar / Header)
-  --admin-bg-tertiary: #18181b;    // Zinc 900 (Inner surfaces)
-  --admin-bg-card: #0f0f12;        // Card Background
-  --admin-bg-hover: rgba(255, 255, 255, 0.04);
-  
-  --admin-header-bg: #0f0f12;
-  --admin-bg-overlay: rgba(0, 0, 0, 0.8);
-  
-  // Text Colors
-  --admin-text-primary: #fafafa;   // Zinc 50
-  --admin-text-secondary: #a1a1aa; // Zinc 400
-  --admin-text-tertiary: #71717a;  // Zinc 500
-  --admin-text-disabled: #3f3f46;  // Zinc 700
-  --admin-text-inverse: #000000;
-  
-  // Semantic / Accents (Keep some dark blue/indigo vibe but more muted)
-  // User requested to replace red with blue
-  --admin-primary: #3b82f6;        // Blue 500
-  --admin-primary-hover: #60a5fa;  // Blue 400
-  --admin-secondary: #71717a;
-  
-  --admin-success: #22c55e;        // Green 500
-  --admin-warning: #f59e0b;        // Amber 500
-  --admin-error: #3b82f6;          // REPLACED RED WITH BLUE AS REQUESTED
-  --admin-info: #3b82f6;
-  --admin-danger: #3b82f6;         // REPLACED RED WITH BLUE
-  --admin-submit-btn: #3b82f6;
-  --admin-submit-btn-hover: #60a5fa;
-  --admin-submit-btn-text: #ffffff;
-  --admin-cancel-btn: #3f3f46;
-  --admin-cancel-btn-hover: #52525b;
-  
-  // Borders
-  --admin-border-primary: rgba(255, 255, 255, 0.12); // Increased visibility for row borders
-  --admin-border-secondary: rgba(255, 255, 255, 0.06);
-  --admin-border-focus: #3b82f6;
-  --admin-border-error: #3b82f6;   // ALSO BLUE
+body.is-admin[data-theme='dark'],
+html[data-theme='dark'] body.is-admin {
+  --backdrop-blur: none;
 
-  // Input Fields
-  --admin-input-bg: #09090b;       // Match primary bg or card bg
-  --admin-input-text: #fafafa;
-  --admin-input-border: rgba(255, 255, 255, 0.12);
-  --admin-input-label: #a1a1aa;
-  --admin-input-placeholder: rgba(255, 255, 255, 0.7);
-  --admin-input-focus-border: #3b82f6;
+  /* Intentional admin zinc surfaces (was parallel --admin-bg-* before C3) */
+  --surface-page: #09090b;
+  --surface-primary: #09090b;
+  --surface-secondary: #0f0f12;
+  --surface-tertiary: #18181b;
+  --surface-elevated: #0f0f12;
+  --surface-elevated-rgb: 15, 15, 18;
+  --surface-card: #0f0f12;
+  --surface-overlay: #18181b;
+  --surface-overlay-full: rgba(0, 0, 0, 0.8);
+  --surface-overlay-light: rgba(255, 255, 255, 0.06);
+  --surface-highlight: rgba(255, 255, 255, 0.04);
+  --surface-header: #1c1c21;
 
-  // Effects & Depth
-  --admin-card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
-  // Keep a hint of blue in the gradient for "depth"
-  --admin-card-gradient: linear-gradient(135deg, #18181b 0%, #09090b 100%);
-  --admin-surface-glow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
-  
-  // Custom Color for Headers matches even table rows (More distinct grey)
-  --admin-header-bg: #1c1c21; 
-  --admin-table-header-bg: #1c1c21;
-  --admin-selection-bg: #1a1a24;
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  --text-muted-rgb: 113, 113, 122;
+  --text-inverse: #000000;
+  --text-on-primary: #ffffff;
 
+  --border-default: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --border-medium: rgba(255, 255, 255, 0.12);
+  --border-emphasis: rgba(255, 255, 255, 0.2);
+  --border-primary: var(--interactive-primary);
 
-  /* Dropdown Panel Fix */
-  --admin-select-panel-bg: #18181b;
+  /* Re-bind glass aliases (inherited computed light values from :root otherwise stick) */
+  --glass-border-soft: var(--border-subtle);
+  --glass-border-strong: var(--border-strong);
+  --glass-divider: var(--border-default);
 
-  /* Mappings for legacy or cross-theme variables */
-  --color-bg: var(--admin-bg-primary);
-  --color-text: var(--admin-text-primary);
-  --color-primary: var(--admin-primary);
-  --color-surface: var(--admin-bg-card);
-  
-  background-color: var(--color-bg);
-  color: var(--color-text);
+  --input-bg: #09090b;
+  --input-text: #fafafa;
+  --input-border: rgba(255, 255, 255, 0.1);
+  --input-label: #a1a1aa;
+  --input-focus-border: var(--interactive-primary);
+  --input-placeholder: #71717a;
 
-  a {
-    color: var(--admin-primary);
-  }
+  --surface-table: transparent;
+  --surface-table-header: #1c1c21;
+  --surface-table-even: #1c1c21;
+  --surface-table-row: transparent;
+  --surface-paginator: #1c1c21;
+  --surface-select-panel: #18181b;
+  --text-table-header: var(--text-primary);
+  --text-table-row: var(--text-primary);
+  --text-table-even: var(--text-primary);
+  --text-paginator: var(--text-primary);
 
-  p {
-    color: var(--color-text);
-  }
+  --surface-card-gradient: linear-gradient(135deg, #18181b 0%, #09090b 100%);
+  --surface-glow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  --shadow-card: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.5);
 
-  // Table Specifics
-  // Header bg already set above via variable
-  --admin-table-bg: transparent;
-  --admin-table-border: var(--admin-border-primary); // Using the more visible border
-  --admin-table-even-bg: #1c1c21;   // Lightened to a more distinct grey for zebra effect
-  --admin-table-row-bg: transparent;
-  
-  // Order Detail / List Overrides
-  --admin-popup-bg: #18181b;
-  --admin-order-detail-header-bg: #18181b;
-  --admin-order-detail-card-bg: #0f0f12;
-  --admin-order-detail-text-primary: #fafafa;
-  --admin-order-detail-text-secondary: #a1a1aa;
-  --admin-order-detail-price-color: var(--admin-success);
-  
-  --admin-order-list-bg: #09090b;
-  --admin-order-list-card-bg: #18181b;
-  --admin-order-list-header-bg: #18181b;
-  --admin-order-list-row-hover: rgba(255, 255, 255, 0.06);
+  /* Material toolbar slots — prevent light-theme white chrome */
+  --mat-toolbar-container-background-color: var(--surface-header);
+  --mat-toolbar-container-text-color: var(--text-primary);
 
-// Common Order Status Colors
-  --admin-order-status-pending: #f59e0b;
-  --admin-order-status-processing: #3b82f6;
-  --admin-order-status-shipped: #22c55e;
-  --admin-order-status-delivered: #22c55e;
-  --admin-order-status-cancelled: #3b82f6; // Changed from red to blue
+  --stat-card-bg: var(--surface-secondary);
+  --stat-card-border: var(--border-default);
+  --stat-card-shadow: var(--shadow-md);
+  --stat-card-blur: none;
+  --stat-card-hover-shadow: var(--shadow-lg);
+  --stat-card-hover-bg: var(--surface-highlight);
+  --stat-card-hover-border: var(--border-default);
+  --stat-card-color: var(--text-primary);
 
-  /* ==========================================================================
-     MATERIAL COMPONENT DEPTH ADJUSTMENTS
-     ========================================================================== */
-     
-  .mat-mdc-card, .mat-card {
-    background: var(--admin-card-gradient) !important;
-    border: 1px solid var(--admin-border-primary) !important;
-    box-shadow: var(--admin-card-shadow) !important;
-    position: relative;
-    
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      border-radius: inherit;
-      box-shadow: var(--admin-surface-glow);
-    }
-  }
+  --dashboard-shell-bg: var(--surface-elevated);
+  --dashboard-chart-bg: var(--surface-tertiary);
+  --surface-card: #18181b;
 
-  /* Force sidebar active background to match */
-  .mat-mdc-nav-list a[mat-list-item].mat-mdc-list-item {
-    &.active, &.mdc-list-item--activated, &.mat-mdc-list-item-selected {
-       background-color: var(--admin-selection-bg) !important;
-       box-shadow: 0 4px 14px rgba(0, 0, 0, .2) !important;
-    }
-  }
+  /* Rebind list shell to admin zinc (same element as --surface-elevated) */
+  --admin-list-bg: var(--surface-elevated);
+  --admin-list-color: var(--text-primary);
+  --admin-list-title-color: var(--text-primary);
+  --admin-list-border: none;
+  --admin-list-radius: 0;
+  --admin-list-shadow: var(--shadow-md);
+  --admin-list-backdrop-filter: none;
 
-  /* Material Select & Menu Overrides for Dark Theme */
-  .mat-mdc-select-panel, .mat-select-panel {
-    background-color: var(--admin-select-panel-bg) !important;
-    border: 1px solid var(--admin-border-primary) !important;
-  }
+  --stat-icon-products: var(--color-success);
+  --stat-icon-orders: var(--interactive-primary);
+  --stat-icon-users: var(--color-warning);
+  --stat-icon-revenue: var(--color-accent);
+  --stat-icon-aov: var(--interactive-primary);
+  --stat-icon-success-rate: var(--color-success);
 
+  --mdc-list-list-item-label-text-color: var(--text-primary);
+  --mdc-list-list-item-supporting-text-color: var(--text-secondary);
+  --mdc-list-list-item-disabled-text-color: var(--text-muted);
+  --mdc-list-list-item-leading-icon-color: var(--text-secondary);
+  --mdc-list-list-item-trailing-icon-color: var(--text-secondary);
 
-  .mat-mdc-option, .mat-option {
-    color: var(--admin-text-primary) !important;
-    background-color: transparent !important;
-    
-    &:hover:not(.mdc-list-item--disabled) {
-      background-color: var(--admin-bg-hover) !important;
-    }
-    
-    &.mdc-list-item--selected:not(.mdc-list-item--disabled) {
-      background-color: rgba(59, 130, 246, 0.1) !important;
-      .mdc-list-item__primary-text {
-        color: var(--admin-primary) !important;
-      }
-    }
-  }
-
-  /* Force logout and danger buttons to blue per user request */
-  .logout-btn, .btn-danger, .mat-mdc-button.mat-warn, .mat-mdc-icon-button.mat-warn {
-    color: var(--admin-primary) !important;
-    
-    mat-icon {
-      color: var(--admin-primary) !important;
-    }
-  }
-
-
-  /* Material Design List item variables (dark theme) */
-  --mdc-list-list-item-label-text-color: var(--admin-text-primary);
-  --mdc-list-list-item-supporting-text-color: var(--admin-text-secondary);
-  --mdc-list-list-item-disabled-text-color: var(--admin-text-disabled);
-  --mdc-list-list-item-leading-icon-color: var(--admin-text-secondary);
-  --mdc-list-list-item-trailing-icon-color: var(--admin-text-secondary);
-  
-  /* Ensure MDC card container tokens are transparent to allow our gradients to show */
   --mdc-elevated-card-container-color: transparent;
   --mdc-filled-card-container-color: transparent;
   --mdc-outlined-card-container-color: transparent;
 
-  // Custom Avatar Variables
-  --admin-avatar-bg: rgba(59, 130, 246, 0.15); 
-  --admin-avatar-color: #60a5fa;
+  background-color: var(--surface-page);
+  color: var(--text-primary);
+
+  a {
+    color: var(--interactive-primary);
+  }
+
+  p {
+    color: var(--text-primary);
+  }
 }

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Backend Architecture — angular-ecommerce-3d</title>
+<style>
+:root{--bg:#0d1117;--s:#161b22;--b:#30363d;--t:#c9d1d9;--d:#8b949e;--br:#d29922;--brb:rgba(210,153,34,.1);--brd:rgba(210,153,34,.3);--gn:#3fb950;--gnb:rgba(63,185,80,.1);--gnd:rgba(63,185,80,.3);--bl:#58a6ff;--blb:rgba(88,166,255,.1);--bld:rgba(88,166,255,.3);--pu:#bc8cff;--pub:rgba(188,140,255,.1);--pud:rgba(188,140,255,.3);--rd:#f85149;--rdb:rgba(248,81,73,.1);--rdd:rgba(248,81,73,.3);--cy:#39d2c0;--cyb:rgba(57,210,192,.1);--cyd:rgba(57,210,192,.3);--or:#f0883e;--orb:rgba(240,136,62,.1);--ord:rgba(240,136,62,.3);--pk:#f778ba;--pkb:rgba(247,120,186,.1);--pkd:rgba(247,120,186,.3);--yl:#e3b341;--ylb:rgba(227,179,65,.1);--yld:rgba(227,179,65,.3);--te:#a5d6ff;--teb:rgba(165,214,255,.1);--ted:rgba(165,214,255,.3)}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--t);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;line-height:1.5;padding:2rem}h1{text-align:center;font-size:2rem;margin-bottom:.5rem;background:linear-gradient(135deg,var(--cy),var(--bl));-webkit-background-clip:text;-webkit-text-fill-color:transparent}.sub{text-align:center;color:var(--d);margin-bottom:3rem;font-size:.95rem}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(500px,1fr));gap:2rem;max-width:1600px;margin:0 auto}.dia{background:var(--s);border:1px solid var(--b);border-radius:12px;padding:1.5rem}.dia h2{font-size:1rem;margin-bottom:1.25rem;padding-bottom:.75rem;border-bottom:1px solid var(--b);display:flex;align-items:center;gap:.5rem}.n{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:6px;font-size:.8rem;font-weight:700}.flow{display:flex;flex-direction:column;gap:.5rem}.ar{text-align:center;color:var(--d);font-size:1.2rem;line-height:1}.row{display:flex;gap:.5rem;align-items:stretch}.bk{padding:.6rem .8rem;border-radius:8px;font-size:.82rem;border:1px solid}.bk .l{font-weight:600}.bk .c{font-size:.75rem;opacity:.7;margin-top:.15rem}.br-c{background:var(--brb);border-color:var(--brd);color:var(--br)}.gn-c{background:var(--gnb);border-color:var(--gnd);color:var(--gn)}.bl-c{background:var(--blb);border-color:var(--bld);color:var(--bl)}.pu-c{background:var(--pub);border-color:var(--pud);color:var(--pu)}.rd-c{background:var(--rdb);border-color:var(--rdd);color:var(--rd)}.cy-c{background:var(--cyb);border-color:var(--cyd);color:var(--cy)}.or-c{background:var(--orb);border-color:var(--ord);color:var(--or)}.pk-c{background:var(--pkb);border-color:var(--pkd);color:var(--pk)}.yl-c{background:var(--ylb);border-color:var(--yld);color:var(--yl)}.te-c{background:var(--teb);border-color:var(--ted);color:var(--te)}.subs{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.4rem}.s{padding:.2rem .5rem;border-radius:4px;font-size:.7rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--d)}.fw{grid-column:1/-1}.leg{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-bottom:2rem;font-size:.8rem}.li{display:flex;align-items:center;gap:.35rem}.dt{width:12px;height:12px;border-radius:3px;border:1px solid}.dt.br-c{background:var(--brb);border-color:var(--brd)}.dt.gn-c{background:var(--gnb);border-color:var(--gnd)}.dt.bl-c{background:var(--blb);border-color:var(--bld)}.dt.pu-c{background:var(--pub);border-color:var(--pud)}.dt.rd-c{background:var(--rdb);border-color:var(--rdd)}.dt.cy-c{background:var(--cyb);border-color:var(--cyd)}.dt.or-c{background:var(--orb);border-color:var(--ord)}.dt.pk-c{background:var(--pkb);border-color:var(--pkd)}.dt.yl-c{background:var(--ylb);border-color:var(--yld)}.dt.te-c{background:var(--teb);border-color:var(--ted)}.tc{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.ts{grid-column:1/-1;background:var(--s);border:1px solid var(--b);border-radius:12px;padding:1.5rem}.ts h2{font-size:1rem;margin-bottom:1.25rem;padding-bottom:.75rem;border-bottom:1px solid var(--b)}.ts table{width:100%;border-collapse:collapse;font-size:.82rem}.ts th{text-align:left;padding:.5rem .75rem;background:rgba(255,255,255,.03);border-bottom:1px solid var(--b);color:var(--d);font-weight:600}.ts td{padding:.5rem .75rem;border-bottom:1px solid var(--b)}.bd{display:inline-block;padding:.15rem .5rem;border-radius:4px;font-size:.72rem;font-weight:600}.bd.cy-c{background:var(--cyb);color:var(--cy)}.bd.gn-c{background:var(--gnb);color:var(--gn)}.bd.bl-c{background:var(--blb);color:var(--bl)}.bd.pu-c{background:var(--pub);color:var(--pu)}.bd.rd-c{background:var(--rdb);color:var(--rd)}.bd.or-c{background:var(--orb);color:var(--or)}.bd.pk-c{background:var(--pkb);color:var(--pk)}.bd.te-c{background:var(--teb);color:var(--te)}.bd.yl-c{background:var(--ylb);color:var(--yl)}@media(max-width:1200px){.grid{grid-template-columns:1fr}.tc{grid-template-columns:1fr}}@media(max-width:600px){body{padding:1rem}.grid{grid-template-columns:1fr;min-width:0}.dia{padding:1rem}.row{flex-direction:column}}
+</style>
+</head>
+<body>
+<h1>⚙️ Backend Architecture</h1>
+<p class="sub">NestJS API · SQLite · Stripe · AI 3D Pipeline · Angular Frontend</p>
+<div class="leg">
+<div class="li"><span class="dt cy-c"></span>NestJS</div>
+<div class="li"><span class="dt gn-c"></span>Modules</div>
+<div class="li"><span class="dt bl-c"></span>Controllers</div>
+<div class="li"><span class="dt pu-c"></span>Services</div>
+<div class="li"><span class="dt rd-c"></span>Guards</div>
+<div class="li"><span class="dt or-c"></span>Database</div>
+<div class="li"><span class="dt pk-c"></span>External</div>
+<div class="li"><span class="dt yl-c"></span>Frontend</div>
+<div class="li"><span class="dt te-c"></span>AI/3D</div>
+</div>
+<div class="grid">
+
+<div class="dia fw"><h2><span class="n cy-c">1</span>System Overview</h2>
+<div class="row">
+<div style="flex:1"><div class="flow"><div class="bk yl-c"><span class="l">🌐 Store (Angular)</span><div class="subs"><span class="s">Catalog</span><span class="s">3D Viewer</span><span class="s">Cart</span></div></div><div class="ar">↓ HTTP</div><div class="bk cy-c"><span class="l">Public API</span></div></div></div>
+<div style="flex:1.5"><div class="flow"><div class="bk cy-c"><span class="l">🔧 NestJS</span><div class="subs"><span class="s">Controllers</span><span class="s">Services</span><span class="s">Guards</span></div></div><div class="ar">↓</div><div class="row"><div class="bk or-c" style="flex:1"><span class="l">📦 SQLite</span></div><div class="bk br-c" style="flex:1"><span class="l">📁 Files</span></div></div></div></div>
+<div style="flex:1"><div class="flow"><div class="bk yl-c"><span class="l">🛡️ Admin</span><div class="subs"><span class="s">Dashboard</span><span class="s">CRUD</span></div></div><div class="ar">↓ JWT</div><div class="bk cy-c"><span class="l">Admin API</span></div></div></div>
+</div>
+<div class="ar">↓</div>
+<div class="row">
+<div class="bk pk-c" style="flex:1"><span class="l">💳 Stripe</span></div>
+<div class="bk pk-c" style="flex:1"><span class="l">📧 Email</span></div>
+<div class="bk te-c" style="flex:1"><span class="l">🤖 AI Worker</span></div>
+<div class="bk pk-c" style="flex:1"><span class="l">🔐 OAuth</span></div>
+</div></div>
+
+<div class="dia"><h2><span class="n gn-c">2</span>NestJS Modules</h2>
+<div class="flow"><div class="bk cy-c"><span class="l">📦 AppModule</span></div><div class="ar">↓</div>
+<div class="row"><div style="flex:1"><div class="flow" style="gap:.4rem"><div class="bk gn-c"><span class="l">Auth</span></div><div class="bk gn-c"><span class="l">Users</span></div><div class="bk gn-c"><span class="l">Products</span></div><div class="bk gn-c"><span class="l">Orders</span></div></div></div>
+<div style="flex:1"><div class="flow" style="gap:.4rem"><div class="bk gn-c"><span class="l">Payments</span></div><div class="bk gn-c"><span class="l">Categories</span></div><div class="bk gn-c"><span class="l">Sections</span></div><div class="bk gn-c"><span class="l">Uploads</span></div></div></div></div>
+<div class="ar">↓</div><div class="row"><div class="bk gn-c" style="flex:1"><span class="l">SEO</span></div><div class="bk gn-c" style="flex:1"><span class="l">Settings</span></div><div class="bk gn-c" style="flex:1"><span class="l">Notifications</span></div></div>
+<div class="ar">↓</div><div class="row"><div class="bk gn-c" style="flex:1"><span class="l">Messages</span></div><div class="bk gn-c" style="flex:1"><span class="l">Recommendations</span></div><div class="bk gn-c" style="flex:1"><span class="l">AI Generation</span></div></div></div></div>
+
+<div class="dia"><h2><span class="n bl-c">3</span>Request Lifecycle</h2>
+<div class="flow"><div class="bk yl-c"><span class="l">🌐 Request</span></div><div class="ar">↓</div>
+<div class="bk rd-c"><span class="l">① Interceptors</span></div><div class="ar">↓</div>
+<div class="bk rd-c"><span class="l">② Guards (JWT, Roles)</span></div><div class="ar">↓</div>
+<div class="bk bl-c"><span class="l">③ Controller</span></div><div class="ar">↓</div>
+<div class="bk pu-c"><span class="l">④ Service</span></div><div class="ar">↓</div>
+<div class="bk or-c"><span class="l">⑤ Repository</span></div><div class="ar">↓</div>
+<div class="bk br-c"><span class="l">📦 SQLite</span></div><div class="ar">↑ Response ↑</div>
+<div class="bk rd-c"><span class="l">⑥ Exception Filter</span></div><div class="ar">↓</div>
+<div class="bk yl-c"><span class="l">📡 JSON Response</span></div></div></div>
+
+<div class="dia"><h2><span class="n rd-c">4</span>Authentication</h2>
+<div class="tc"><div class="flow"><div class="bk yl-c"><span class="l">🔑 Email/Password</span></div><div class="ar">↓</div><div class="bk bl-c"><span class="l">AuthController</span></div><div class="ar">↓</div><div class="bk pu-c"><span class="l">AuthService</span></div><div class="ar">↓</div><div class="bk or-c"><span class="l">User Repo</span></div><div class="ar">↓</div><div class="bk gn-c"><span class="l">{ token, user }</span></div></div>
+<div class="flow"><div class="bk yl-c"><span class="l">🔐 OAuth</span></div><div class="ar">↓</div><div class="bk bl-c"><span class="l">AuthController</span></div><div class="ar">↓</div><div class="bk pk-c"><span class="l">Passport OAuth2</span></div><div class="ar">↓</div><div class="bk pu-c"><span class="l">Find/Create User</span></div><div class="ar">↓</div><div class="bk gn-c"><span class="l">{ token, user }</span></div></div></div></div>
+
+<div class="dia"><h2><span class="n pk-c">5</span>Payments (Stripe)</h2>
+<div class="flow"><div class="bk yl-c"><span class="l">🛒 Submit Order</span></div><div class="ar">↓</div><div class="bk pu-c"><span class="l">Create Order (pending)</span></div><div class="ar">↓</div><div class="bk pk-c"><span class="l">💳 PaymentIntent</span></div><div class="ar">↓</div><div class="bk yl-c"><span class="l">Stripe Checkout</span></div><div class="ar">↓</div><div class="bk pk-c"><span class="l">Webhook: succeeded</span></div><div class="ar">↓</div><div class="bk gn-c"><span class="l">Order → paid + Email</span></div></div></div>
+
+<div class="dia"><h2><span class="n te-c">6</span>AI / 3D Pipeline</h2>
+<div class="flow"><div class="bk yl-c"><span class="l">📸 Upload Images</span></div><div class="ar">↓</div><div class="bk br-c"><span class="l">📁 uploads/</span></div><div class="ar">↓</div><div class="bk te-c"><span class="l">🤖 Queue Task</span></div><div class="ar">↓</div><div class="bk te-c"><span class="l">Python Worker</span><div class="subs"><span class="s">Hunyuan3D</span><span class="s">InstantMesh</span></div></div><div class="ar">↓</div><div class="bk br-c"><span class="l">📁 products-3d/</span></div><div class="ar">↓</div><div class="bk gn-c"><span class="l">Update modelUrl</span></div></div></div>
+
+<div class="dia"><h2><span class="n or-c">7</span>Database Entities</h2>
+<div class="row"><div style="flex:1"><div class="flow" style="gap:.4rem"><div class="bk or-c"><span class="l">User</span><div class="subs"><span class="s">id</span><span class="s">email</span><span class="s">role</span></div></div><div class="bk or-c"><span class="l">Product</span><div class="subs"><span class="s">id</span><span class="s">name</span><span class="s">price</span><span class="s">modelUrl</span></div></div><div class="bk or-c"><span class="l">Category</span><div class="subs"><span class="s">id</span><span class="s">name</span><span class="s">parent</span></div></div><div class="bk or-c"><span class="l">Order</span><div class="subs"><span class="s">id</span><span class="s">user</span><span class="s">status</span></div></div></div></div>
+<div style="flex:1"><div class="flow" style="gap:.4rem"><div class="bk or-c"><span class="l">Payment</span><div class="subs"><span class="s">id</span><span class="s">order</span><span class="s">stripeId</span></div></div><div class="bk or-c"><span class="l">Section</span><div class="subs"><span class="s">id</span><span class="s">title</span></div></div><div class="bk or-c"><span class="l">Message</span><div class="subs"><span class="s">id</span><span class="s">from</span></div></div><div class="bk or-c"><span class="l">Setting</span><div class="subs"><span class="s">key</span><span class="s">value</span></div></div></div></div></div></div>
+
+<div class="dia"><h2><span class="n yl-c">8</span>Frontend ↔ Backend</h2>
+<div class="tc"><div class="flow"><div class="bk yl-c"><span class="l">🌐 Store</span></div><div class="ar">↓</div><div style="display:flex;flex-direction:column;gap:.3rem"><div class="bk bl-c" style="font-size:.75rem"><span class="l">ProductService</span> <span style="opacity:.6">→ /api/products</span></div><div class="bk bl-c" style="font-size:.75rem"><span class="l">CartService</span> <span style="opacity:.6">→ /api/orders</span></div><div class="bk bl-c" style="font-size:.75rem"><span class="l">AuthService</span> <span style="opacity:.6">→ /api/auth</span></div></div></div>
+<div class="flow"><div class="bk yl-c"><span class="l">🛡️ Admin</span></div><div class="ar">↓</div><div style="display:flex;flex-direction:column;gap:.3rem"><div class="bk bl-c" style="font-size:.75rem"><span class="l">AdminProductSvc</span> <span style="opacity:.6">→ CRUD /products</span></div><div class="bk bl-c" style="font-size:.75rem"><span class="l">AdminOrderSvc</span> <span style="opacity:.6">→ CRUD /orders</span></div><div class="bk bl-c" style="font-size:.75rem"><span class="l">UploadService</span> <span style="opacity:.6">→ /upload/*</span></div></div></div></div></div>
+
+<div class="ts"><h2><span class="n cy-c">9</span>Tech Stack</h2>
+<table><tr><th>Layer</th><th>Tech</th><th>Purpose</th></tr>
+<tr><td>Runtime</td><td><span class="bd cy-c">Node.js 20+</span></td><td>Server</td></tr>
+<tr><td>Framework</td><td><span class="bd cy-c">NestJS 10+</span></td><td>Backend</td></tr>
+<tr><td>ORM</td><td><span class="bd or-c">TypeORM</span></td><td>Data access</td></tr>
+<tr><td>Database</td><td><span class="bd or-c">SQLite 3</span></td><td>Storage</td></tr>
+<tr><td>Auth</td><td><span class="bd rd-c">Passport + JWT</span></td><td>Authentication</td></tr>
+<tr><td>Validation</td><td><span class="bd pu-c">class-validator</span></td><td>DTOs</td></tr>
+<tr><td>Files</td><td><span class="bd br-c">multer</span></td><td>Uploads</td></tr>
+<tr><td>Payments</td><td><span class="bd pk-c">Stripe</span></td><td>Payments</td></tr>
+<tr><td>Email</td><td><span class="bd pk-c">nodemailer</span></td><td>Emails</td></tr>
+<tr><td>AI Worker</td><td><span class="bd te-c">Python 3.10+</span></td><td>3D Generation</td></tr>
+<tr><td>3D Models</td><td><span class="bd te-c">Hunyuan3D/InstantMesh</span></td><td>ML Models</td></tr>
+<tr><td>Frontend</td><td><span class="bd yl-c">Angular 17+</span></td><td>Store + Admin</td></tr>
+<tr><td>SSR</td><td><span class="bd yl-c">Angular Universal</span></td><td>Server-side rendering</td></tr>
+</table></div>
+
+<div class="ts"><h2><span class="n pu-c">10</span>Project Structure</h2>
+<div style="font-family:'SF Mono',monospace;font-size:.78rem;line-height:1.8;color:var(--d)"><span class="l" style="color:var(--bl);font-weight:600">backend/src/</span>
+<br><span style="padding-left:1rem">├── <span style="color:var(--cy)">app.module.ts</span></span>
+<br><span style="padding-left:1rem">├── <span style="color:var(--cy)">main.ts</span></span>
+<br><span style="padding-left:1rem">├── <span style="color:var(--bl)">auth/</span> <span style="opacity:.6"># JWT, Passport, OAuth</span></span>
+<br><span style="padding-left:1rem">├── <span style="color:var(--bl)">users/</span> <span style="opacity:.6"># User CRUD, Roles</span></span>
+<br><span style="padding-left:1rem">├── <span style="color:var(--bl)">products/</span> <span style="opacity:.6"># Product CRUD, 3D</span></span>
+<br><span style="padding-left:1rem">├── <span style="color:var(--bl)">orders/</span> <span style="opacity:.6"># Order management</span></span>
+<br><span style="padding-left:1rem">├── <span style="color:var(--bl)">payments/</span> <span style="opacity:.6"># Stripe integration</span></span>
+<br><span style="padding-left:1rem">├── <span style="color:var(--bl)">categories/</span> <span style="opacity:.6"># Category tree</span></span>
+<br><span style="padding-left:1rem">├── <span style="color:var(--bl)">sections/</span> <span style="opacity:.6"># CMS sections</span></span>
+<br><span style="padding-left:1rem">├── <span style="color:var(--bl)">upload-module/</span> <span style="opacity:.6"># File uploads</span></span>
+<br><span style="padding-left:1rem">├── <span style="color:var(--bl)">ai-generation/</span> <span style="opacity:.6"># 3D gen queue</span></span>
+<br><span style="padding-left:1rem">├── <span style="color:var(--bl)">seo/</span> <span style="opacity:.6"># SEO settings</span></span>
+<br><span style="padding-left:1rem">├── <span style="color:var(--bl)">settings/</span> <span style="opacity:.6"># Global config</span></span>
+<br><span style="padding-left:1rem">├── <span style="color:var(--bl)">notifications/</span> <span style="opacity:.6"># Email, push</span></span>
+<br><span style="padding-left:1rem">├── <span style="color:var(--bl)">messages/</span> <span style="opacity:.6"># Support chat</span></span>
+<br><span style="padding-left:1rem">└── <span style="color:var(--bl)">recommendations/</span> <span style="opacity:.6"># AI recs</span></span></div></div>
+
+</div>
+</body>
+</html>
+</write_to_file>

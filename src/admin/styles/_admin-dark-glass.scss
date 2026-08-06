@@ -1,200 +1,180 @@
-// Dark Glass Theme Variables (iOS26 style - warm dark background)
-[data-theme="dark-glass"] {
-  // Background Colors - LIGHT TRANSPARENT GLASS (liquid glass)
-  --admin-header-bg: #4d4a4e;
-  --admin-bg-primary: rgba(90, 85, 80, 0.7);
-  --admin-bg-secondary: rgba(85, 80, 75, 0.45);
-  --admin-bg-tertiary: rgba(80, 75, 70, 0.4);
-  --admin-bg-card: rgba(90, 85, 80, 0.7);
-  --admin-bg-hover: rgba(100, 95, 90, 0.5);
-  --admin-back-btn: rgba(100, 95, 90, 0.5);
-  --admin-bg-overlay: rgba(0, 0, 0, 0.4);
-  --admin-bg-container: rgba(90, 85, 80, 0.7);;
-  --dashboard-stat-card-bg: rgba(85, 80, 75, 0.45);;
-  
-  // Table colors - LIGHT GRAY-BROWN liquid glass (MORE transparent)
-  --admin-basic-bg: rgba(90, 85, 80, 0.7);
-  --admin-table-bg: rgba(90, 85, 80, 0.7);
-  --admin-table-border: rgba(255, 255, 255, 0.2);
-  --admin-table-header-bg: rgba(80, 75, 70, 0.55);
-  --admin-table-even-bg: rgb(70, 65, 60);
-  
-  // Text Colors - Dark Glass Theme (light text for dark background)
-  --admin-text-primary: rgba(255, 255, 255, 0.95);
-  --admin-text-secondary: rgba(255, 255, 255, 0.7);
-  --admin-text-disabled: rgba(255, 255, 255, 0.4);
-  --admin-text-inverse: #1a1a1a;
-  
-  // Border Colors - Dark Glass Theme
-  --admin-border-primary: rgba(255, 255, 255, 0.2);
-  --admin-border-secondary: rgba(255, 255, 255, 0.15);
-  --admin-border-focus: #8ab4f8;
-  --admin-border-error: #f28b82;
-  --border-radius-dark-glass: 28px;
-  
-  // Order Details / List dark glass overrides - GRAY-BROWN
-  --admin-popup-bg: rgba(75, 70, 65, 0.65);
-  --admin-order-detail-header-bg: rgba(65, 60, 55, 0.7);
-  --admin-order-detail-card-bg: rgba(70, 65, 60, 0.6);
-  --admin-order-detail-border: rgba(255, 255, 255, 0.15);
-  --admin-order-detail-text-primary: var(--admin-text-primary);
-  --admin-order-detail-text-secondary: var(--admin-text-secondary);
-  --admin-order-list-bg: rgba(75, 70, 65, 0.65);
-  --admin-order-list-card-bg: rgba(70, 65, 60, 0.6);
-  --admin-order-list-border: rgba(255, 255, 255, 0.15);
-  --admin-order-list-text-primary: var(--admin-text-primary);
-  --admin-order-list-text-secondary: var(--admin-text-secondary);
-  /* Panel background token for selects (used by shared material overrides) */
-  --admin-select-panel-bg: var(--admin-order-list-bg);
-  
-  /* Dark-glass: select / form-field overrides to avoid bright white inset artifacts */
-  body[data-theme="dark-glass"] .mat-mdc-form-field.mat-mdc-form-field:has(.mat-mdc-select) .mat-mdc-text-field-wrapper {
-    background: var(--admin-bg-card);
-    border: 1px solid var(--admin-border-secondary);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 8px 24px rgba(0,0,0,0.45);
-    border-radius: 12px;
-  }
+/* ==========================================================================
+   ADMIN DARK-GLASS THEME — C3 (ADR-011)
+   Admin-only theme (no storefront counterpart). Recipes promoted onto semantic
+   tokens. Layout ADMIN-ONLY tokens remain in `_admin-layout-tokens.scss` (C6).
+   ========================================================================== */
 
-  body[data-theme="dark-glass"] .mat-mdc-select-panel.mat-mdc-select-panel,
-  body[data-theme="dark-glass"] .mat-select-panel.mat-select-panel {
-    background: var(--admin-order-list-bg);
-    backdrop-filter: blur(12px) saturate(140%);
-    -webkit-backdrop-filter: blur(12px) saturate(140%);
-    border: 1px solid var(--admin-border-secondary);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.45);
-    border-radius: 12px;
-  }
-  --admin-order-list-header-bg: rgba(65, 60, 55, 0.7);
-  --admin-order-list-row-hover: rgba(85, 80, 75, 0.5);
-  --admin-order-list-pagination-bg: rgba(65, 60, 55, 0.7);
-  --admin-order-list-pagination-border: rgba(255, 255, 255, 0.15);
-  
-  // Component-specific colors
-  --admin-primary: #8ab4f8;
-  --admin-tab-active: #ffffff;
-  --admin-primary-hover: #aec7f9;
-  --admin-secondary: #f8bbd0;
-  --admin-accent: #ffcc80;
-  --admin-success: #81c784;
-  --admin-warning: #ffb74d;
-  --admin-error: #f28b82;
-  --admin-info: #64b5f6;
-  --admin-danger: #f28b82;
-  
-  // Button colors
-  --admin-button: #8ab4f8;
-  --admin-button-hover: #aec7f9;
-  --admin-button-text: #1a1a1a;
-  
-  // Input colors - LIGHT GLASS
-  --admin-input-bg: rgba(90, 85, 80, 0.7);
-  --admin-input-text: rgba(255, 255, 255, 1);
-  --admin-input-border: rgba(255, 255, 255, 0.2);
-  --admin-input-label: rgba(255, 255, 255, 0.9);
-  --admin-input-focus-border: #8ab4f8;
+[data-theme='dark-glass'] {
+  --border-radius-dark-glass: 28px;
+  --radius-dialog: var(--border-radius-dark-glass);
+
+  /* ===== TYPOGRAPHY OVERRIDES (Epic G5 — admin dark-glass) ===== */
+  --type-font-heading: 'Roboto', var(--font-sans);
+  --type-weight-heading: var(--font-medium);
+  --type-tracking-heading: 0;
+  --type-tracking-label: 0.06em;
+  --type-leading-body: var(--leading-relaxed);
+
+  --stat-card-bg: rgba(85, 80, 75, 0.45);
+  --stat-card-border: rgba(255, 255, 255, 0.18);
+  --stat-card-shadow: var(--shadow-md);
+  --stat-card-blur: blur(16px) saturate(140%);
+  --stat-card-hover-shadow: var(--shadow-lg);
+  --stat-card-hover-bg: rgba(100, 95, 90, 0.55);
+  --stat-card-hover-border: rgba(255, 255, 255, 0.28);
+  --stat-card-color: rgba(255, 255, 255, 0.95);
+  --stat-card-number-color: rgba(255, 255, 255, 0.95);
+  --stat-card-number-fill: currentColor;
+  --stat-card-number-clip: border-box;
+  --stat-card-number-gradient: none;
+
+  --dashboard-shell-bg: rgba(70, 65, 60, 0.5);
+  --dashboard-chart-bg: rgba(90, 85, 80, 0.72);
+  --dashboard-shell-border: transparent;
+
+  --stat-icon-products: #81c784;
+  --stat-icon-orders: #8ab4f8;
+  --stat-icon-users: #ffb74d;
+  --stat-icon-revenue: #ce93f8;
+  --stat-icon-aov: #64b5f6;
+  --stat-icon-success-rate: #81c784;
+
+  --mat-card-subtitle-text-color: #e5e7eb;
+  --mdc-form-field-label-text-color: #e5e7eb;
   --mat-select-placeholder-text-color: rgba(255, 255, 255, 0.75);
   --mdc-outlined-text-field-input-text-color: rgba(255, 255, 255, 0.98);
   --mdc-outlined-text-field-input-text-placeholder-color: rgba(255, 255, 255, 0.75);
   --mdc-filled-text-field-input-text-color: rgba(255, 255, 255, 0.98);
   --mdc-filled-text-field-input-text-placeholder-color: rgba(255, 255, 255, 0.75);
-  
-  // MDC card container tokens
+
   --mdc-elevated-card-container-color: transparent;
   --mdc-filled-card-container-color: transparent;
   --mdc-outlined-card-container-color: transparent;
 
-  // Background Colors - LIGHT TRANSPARENT GLASS (liquid glass)
-  --admin-bg-primary: rgba(90, 85, 80, 0.7);
-  --admin-bg-secondary: rgba(85, 80, 75, 0.45);
-  --admin-bg-tertiary: rgba(80, 75, 70, 0.4);
-  --admin-bg-card: rgba(90, 85, 80, 0.7);
-  --admin-bg-container: rgba(90, 85, 80, 0.7);;
-  --admin-bg-hover: rgba(100, 95, 90, 0.5);
-  --admin-bg-overlay: rgba(0, 0, 0, 0.4);
-  
-  // Table colors - LIGHT GRAY-BROWN liquid glass (MORE transparent)
-  --admin-basic-bg: rgba(90, 85, 80, 0.7);
-  --admin-table-bg: rgba(90, 85, 80, 0.7);
-  --admin-table-border: rgba(255, 255, 255, 0.2);
-  --admin-table-header-bg: rgba(80, 75, 70, 0.55);
-  
-  // Text Colors - Dark Glass Theme (light text for dark background)
-  --admin-text-primary: rgba(255, 255, 255, 0.95);
-  --admin-text-secondary: rgba(255, 255, 255, 0.7);
-  --admin-text-disabled: rgba(255, 255, 255, 0.4);
-  --admin-text-inverse: #1a1a1a;
-  --mat-card-subtitle-text-color: #e5e7eb;
-  --mdc-form-field-label-text-color: #e5e7eb;
-  
-  // Border Colors - Dark Glass Theme
-  --admin-border-primary: rgba(255, 255, 255, 0.2);
-  --admin-border-secondary: rgba(255, 255, 255, 0.15);
-  --admin-border-focus: #8ab4f8;
-  --admin-border-error: #f28b82;
-  
-  // Order Details / List dark glass overrides - GRAY-BROWN
-  --admin-popup-bg: rgba(75, 70, 65, 0.65);
-  --admin-order-detail-header-bg: rgba(65, 60, 55, 0.7);
-  --admin-order-detail-card-bg: rgba(70, 65, 60, 0.6);
-  --admin-order-detail-border: rgba(255, 255, 255, 0.15);
-  --admin-order-detail-text-primary: var(--admin-text-primary);
-  --admin-order-detail-text-secondary: var(--admin-text-secondary);
-  --admin-order-list-bg: rgba(75, 70, 65, 0.65);
-  --admin-order-list-card-bg: rgba(70, 65, 60, 0.6);
-  --admin-order-list-border: rgba(255, 255, 255, 0.15);
-  --admin-order-list-text-primary: var(--admin-text-primary);
-  --admin-order-list-text-secondary: var(--admin-text-secondary);
-  --admin-order-list-header-bg: rgba(65, 60, 55, 0.7);
-  --admin-order-list-row-hover: rgba(85, 80, 75, 0.5);
-  --admin-order-list-pagination-bg: rgba(65, 60, 55, 0.7);
-  --admin-order-list-pagination-border: rgba(255, 255, 255, 0.15);
-  
-  // Component-specific colors
-  --admin-primary: #8ab4f8;
-  --admin-tab-active: #ffffff;
-  --admin-primary-rgb: 138, 180, 248;
-  --admin-primary-hover: #aec7f9;
-  --admin-secondary: #f8bbd0;
-  --admin-accent: #ffcc80;
-  --admin-success: #81c784;
-  --admin-warning: #ffb74d;
-  --admin-error: #f28b82;
-  --admin-info: #64b5f6;
-  --admin-danger: #f28b82;
-  
-  // Button colors
-  --admin-button: #8ab4f8;
-  --admin-button-hover: #aec7f9;
-  --admin-button-text: #1a1a1a;
-  
-  --admin-submit-btn: #8ab4f8;
-  --admin-submit-btn-hover: #aec7f9;
-  --admin-submit-btn-text: #1a1a1a;
-  
-  --admin-cancel-btn: rgba(255, 255, 255, 0.1);
-  --admin-cancel-btn-hover: rgba(255, 255, 255, 0.2);
-  --admin-cancel-btn-text: #ffffff;
-  
-  // Input colors - LIGHT GLASS
-  --admin-input-bg: rgba(90, 85, 80, 0.7);
-  --admin-input-text: rgba(255, 255, 255, 1);
-  --admin-input-border: rgba(255, 255, 255, 0.2);
-  --admin-input-label: rgba(255, 255, 255, 0.9);
-  --admin-input-focus-border: #8ab4f8;
-  --mat-select-placeholder-text-color: rgba(255, 255, 255, 0.75);
-  --mdc-outlined-text-field-input-text-color: rgba(255, 255, 255, 0.98);
-  --mdc-outlined-text-field-input-text-placeholder-color: rgba(255, 255, 255, 0.75);
-  --mdc-filled-text-field-input-text-color: rgba(255, 255, 255, 0.98);
-  --mdc-filled-text-field-input-text-placeholder-color: rgba(255, 255, 255, 0.75);
-
-  // Borders
   --border-width: 0.5px;
   --border-color: rgba(255, 255, 255, 0.18);
   --border-opacity: 0.18;
-  
-  // MDC card container tokens
-  --mdc-elevated-card-container-color: transparent;
-  --mdc-filled-card-container-color: transparent;
-  --mdc-outlined-card-container-color: transparent;
+
+  /* Select / form-field: avoid bright white inset artifacts */
+  .mat-mdc-form-field.mat-mdc-form-field:has(.mat-mdc-select) .mat-mdc-text-field-wrapper {
+    background: var(--surface-elevated);
+    border: 1px solid var(--border-subtle);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 8px 24px rgba(0, 0, 0, 0.45);
+    border-radius: var(--radius-lg);
+  }
+
+  .mat-mdc-select-panel.mat-mdc-select-panel,
+  .mat-select-panel.mat-select-panel {
+    background: var(--surface-select-panel);
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    border-radius: var(--radius-lg);
+  }
 }
 
+/* Promote dark-glass recipes onto semantic (admin-only theme) */
+body.is-admin[data-theme='dark-glass'],
+html[data-theme='dark-glass'] body.is-admin {
+  --interactive-primary: #8ab4f8;
+  --interactive-primary-hover: #aec7f9;
+  --interactive-primary-rgb: 138, 180, 248;
+  --interactive-button: #8ab4f8;
+  --interactive-primary-text: #1a1a1a;
+  --interactive-danger: #f28b82;
+  --interactive-secondary: rgba(255, 255, 255, 0.1);
+  --interactive-secondary-hover: rgba(255, 255, 255, 0.2);
+
+  --color-success: #81c784;
+  --color-warning: #ffb74d;
+  --color-info: #64b5f6;
+  --color-accent: #ffcc80;
+  --color-accent-pink: #f8bbd0;
+
+  --surface-page: rgba(90, 85, 80, 0.7);
+  --surface-primary: rgba(90, 85, 80, 0.7);
+  --surface-secondary: rgba(85, 80, 75, 0.45);
+  --surface-tertiary: rgba(80, 75, 70, 0.4);
+  --surface-elevated: rgba(90, 85, 80, 0.7);
+  --surface-elevated-rgb: 90, 85, 80;
+  --surface-card: rgba(90, 85, 80, 0.7);
+  --surface-highlight: rgba(85, 80, 75, 0.5);
+  --surface-overlay-full: rgba(0, 0, 0, 0.4);
+  --surface-header: #4d4a4e;
+  --surface-table: rgba(90, 85, 80, 0.7);
+  --surface-table-header: rgba(65, 60, 55, 0.7);
+  --surface-table-even: rgb(70, 65, 60);
+  --surface-table-row: var(--surface-table);
+  --surface-paginator: var(--surface-table-header);
+  --surface-select-panel: rgba(75, 70, 65, 0.65);
+
+  --text-primary: rgba(255, 255, 255, 0.95);
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-muted: rgba(255, 255, 255, 0.4);
+  --text-muted-rgb: 255, 255, 255;
+  --text-inverse: #1a1a1a;
+  --text-on-primary: #ffffff;
+  --text-table-header: var(--text-primary);
+  --text-table-row: var(--text-primary);
+  --text-table-even: var(--text-primary);
+  --text-paginator: var(--text-primary);
+
+  --border-default: rgba(255, 255, 255, 0.12);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.2);
+  --border-medium: rgba(255, 255, 255, 0.1);
+  --border-emphasis: rgba(255, 255, 255, 0.16);
+  --border-primary: #8ab4f8;
+
+  /* Re-declare glass border aliases HERE — inherited computed #f1f5f9 from :root
+     does not follow --border-subtle overrides (CSS custom property inheritance). */
+  --glass-border-soft: var(--border-subtle);
+  --glass-border-strong: var(--border-strong);
+  --glass-divider: var(--border-default);
+
+  --input-bg: rgba(90, 85, 80, 0.7);
+  --input-text: rgba(255, 255, 255, 1);
+  --input-border: rgba(255, 255, 255, 0.2);
+  --input-label: rgba(255, 255, 255, 0.9);
+  --input-focus-border: #8ab4f8;
+  --input-placeholder: var(--input-label);
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+
+  /* Toolbar slots — Material light defaults must not paint a white header */
+  --mat-toolbar-container-background-color: var(--surface-header);
+  --mat-toolbar-container-text-color: var(--text-primary);
+
+  /* List shell — must beat body.is-admin defaults (same specificity tier + theme attr) */
+  --admin-list-bg: rgba(90, 85, 80, 0.62);
+  --admin-list-color: rgba(255, 255, 255, 1);
+  --admin-list-title-color: rgba(255, 255, 255, 0.95);
+  --admin-list-border: 1.5px solid rgba(255, 255, 255, 0.18);
+  --admin-list-radius: 28px;
+  --admin-list-shadow:
+    0 16px 60px 0 rgba(0, 0, 0, 0.35),
+    0 2px 24px rgba(255, 180, 120, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    inset 0 0 60px rgba(255, 255, 255, 0.03);
+  --admin-list-backdrop-filter: none;
+  --stat-card-color: rgba(255, 255, 255, 0.95);
+
+  /* Page atmosphere — consumed by global/_atmospheres.scss */
+  --admin-atmosphere-gradient: linear-gradient(
+    135deg,
+    #1a0a1e 0%,
+    #2a1a2e 20%,
+    #3a2535 40%,
+    #2a1a2e 60%,
+    #1a0a1e 80%,
+    #0a0510 100%
+  );
+
+  .mat-toolbar,
+  .admin-header.mat-toolbar,
+  mat-toolbar.admin-header {
+    background-color: var(--surface-header);
+    color: var(--text-primary);
+  }
+}

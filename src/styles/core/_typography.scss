@@ -1,7 +1,42 @@
 /* ==========================================================================
-   TYPOGRAPHY STYLES
-   Comprehensive text utilities and typography classes
+   TYPOGRAPHY STYLES (Epic G5)
+   Token-driven type scale + utilities
    ========================================================================== */
+
+/* ==========================================================================
+   SEMANTIC TYPE CLASSES
+   ========================================================================== */
+
+.type-display {
+  @include type-display;
+}
+
+.type-body {
+  @include type-body('md');
+}
+
+.type-body-sm {
+  @include type-body('sm');
+}
+
+.type-caption {
+  @include type-caption;
+}
+
+.type-label {
+  @include type-label;
+}
+
+.type-overline {
+  @include type-overline;
+}
+
+.h1 { @include heading(1); }
+.h2 { @include heading(2); }
+.h3 { @include heading(3); }
+.h4 { @include heading(4); }
+.h5 { @include heading(5); }
+.h6 { @include heading(6); }
 
 /* ==========================================================================
    TEXT UTILITY CLASSES
@@ -141,35 +176,29 @@
 
 /* Display text for hero sections */
 .display-text {
-  font-size: clamp(2rem, 5vw, 4rem);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--line-height-tight);
-  color: var(--color-text-primary);
+  @include type-display;
 }
 
 /* Lead text for introductions */
 .lead-text {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-normal);
-  line-height: var(--line-height-relaxed);
-  color: var(--color-text-secondary);
+  @include type-body('lg');
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
 }
 
 /* Small text for captions and metadata */
 .small-text {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-tertiary);
-  line-height: var(--line-height-normal);
+  @include type-caption;
 }
 
 /* Monospace text for code and technical content */
 .mono-text {
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-sm);
-  background: var(--color-bg-tertiary);
+  font-family: var(--type-font-mono);
+  font-size: var(--type-size-body-sm);
+  background: var(--surface-secondary);
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--radius-sm);
-  border: 1px solid var(--color-border-secondary);
+  border: 1px solid var(--border-subtle);
 }
 
 /* ==========================================================================
@@ -177,11 +206,11 @@
    ========================================================================== */
 
 /* Letter spacing */
-.tracking-tight { letter-spacing: -0.025em; }
-.tracking-normal { letter-spacing: 0; }
-.tracking-wide { letter-spacing: 0.025em; }
-.tracking-wider { letter-spacing: 0.05em; }
-.tracking-widest { letter-spacing: 0.1em; }
+.tracking-tight { letter-spacing: var(--type-tracking-heading); }
+.tracking-normal { letter-spacing: var(--type-tracking-body); }
+.tracking-wide { letter-spacing: var(--type-tracking-label); }
+.tracking-wider { letter-spacing: calc(var(--type-tracking-label) * 1.2); }
+.tracking-widest { letter-spacing: var(--type-tracking-overline); }
 
 /* Word spacing */
 .word-spacing-tight { word-spacing: -0.1em; }

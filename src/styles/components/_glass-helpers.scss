@@ -1,0 +1,14 @@
+/* ==========================================================================
+   GLASS HELPERS
+   Legacy utilities — prefer theme tokens + scoped partials (cart-modal, etc.)
+   ========================================================================== */
+
+.theme-price {
+  color: var(--color-accent);
+}
+
+/* Legacy `.glass-theme` — deprecated; cart modal uses `_cart-modal.scss` (G16).
+   Kept as no-op shell for any external/marketplace snippets still referencing the class. */
+.glass-theme {
+  transition: var(--micro-transition);
+}

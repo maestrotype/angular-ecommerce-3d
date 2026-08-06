@@ -1,17 +1,18 @@
 .admin-header {
   height: 64px;
   min-height: 64px;
-  background-color: var(--admin-header-bg);
-  color: var(--admin-text-primary);
-  box-shadow: none;
-  transition: background-color var(--admin-transition-normal),
-    color var(--admin-transition-normal),
-    border-color var(--admin-transition-normal);
+  background-color: var(--surface-header);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+  border-bottom: 1px solid var(--border-default);
+  transition: background-color var(--duration-normal) var(--easing-default),
+    color var(--duration-normal) var(--easing-default),
+    border-color var(--duration-normal) var(--easing-default);
 
   .header-title {
-    font-size: var(--admin-font-size-lg);
-    font-weight: var(--admin-font-weight-medium);
-    color: var(--admin-text-primary);
+    font-size: var(--text-lg);
+    font-weight: var(--font-medium);
+    color: var(--text-primary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -24,25 +25,62 @@
   .header-actions {
     display: flex;
     align-items: center;
-    gap: var(--admin-spacing-sm);
+    gap: var(--space-2);
 
-    button {
-      color: var(--admin-text-primary);
-      transition: color var(--admin-transition-normal),
-        background-color var(--admin-transition-normal);
+    // Circular hover via MDC state-layer tokens + radial-gradient (no cascade hacks).
+    button.mat-mdc-icon-button.mat-mdc-button-base,
+    button.mat-mdc-icon-button {
+      color: var(--text-primary);
+      border-radius: 50%;
+      overflow: hidden;
+      background-color: transparent;
+      background-image: none;
+      --mdc-icon-button-hover-state-layer-opacity: 0;
+      --mdc-icon-button-focus-state-layer-opacity: 0;
+      --mdc-icon-button-pressed-state-layer-opacity: 0;
+      --mat-icon-button-state-layer-color: transparent;
+      --mat-icon-button-ripple-color: transparent;
+      -webkit-mask-image: radial-gradient(closest-side, black 99%, transparent 100%);
+      mask-image: radial-gradient(closest-side, black 99%, transparent 100%);
+      transform: translateZ(0);
+      transition: color var(--duration-normal) var(--easing-default);
 
-      &:hover {
-        background-color: var(--admin-bg-hover);
-        color: var(--admin-primary);
+      &:hover,
+      &:focus,
+      &:focus-visible,
+      &.cdk-focused,
+      &.cdk-program-focused,
+      &.cdk-mouse-focused {
+        background-color: transparent;
+        background-image: radial-gradient(
+          circle at center,
+          color-mix(in srgb, currentColor 14%, transparent) 0%,
+          color-mix(in srgb, currentColor 14%, transparent) 64%,
+          transparent 65%
+        );
+        color: var(--interactive-primary);
+      }
+
+      .mat-mdc-button-persistent-ripple::before {
+        opacity: 0;
+        background-color: transparent;
+      }
+
+      .mat-focus-indicator::before {
+        content: none;
+        display: none;
       }
     }
   }
 
-  .menu-button {
-    color: var(--admin-text-primary);
+  .menu-button.mat-mdc-icon-button {
+    color: var(--text-primary);
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: transparent;
 
     &:hover {
-      background-color: var(--admin-bg-hover);
+      background-color: transparent;
     }
   }
 
@@ -53,49 +91,47 @@
   }
 }
 
-.notification-menu.mat-mdc-menu-panel {
+.notification-menu {
   min-width: 360px;
   max-width: 420px;
   
   .notification-header {
     padding: 8px 10px;
-    background: rgba(var(--admin-bg-card-rgb, 31, 41, 55), 0.95);
+    background: rgba(var(--surface-elevated-rgb, 31, 41, 55), 0.95);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--admin-border-primary);
+    border-bottom: 1px solid var(--border-default);
     display: flex;
     justify-content: space-between;
     align-items: center;
     
     .notification-title {
-      font-weight: var(--admin-font-weight-bold);
+      font-weight: var(--font-bold);
       font-size: 18px;
       letter-spacing: 0.3px;
-      color: var(--admin-text-primary);
+      color: var(--text-primary);
     }
     
-    button.mark-all-read.mat-mdc-button {
+    button.mark-all-read {
       font-size: 13px;
-      font-weight: var(--admin-font-weight-medium);
+      font-weight: var(--font-medium);
       padding: 6px 12px;
       border-radius: 6px;
-      background-color: var(--admin-button-muted);
-      transition: all var(--admin-transition-normal);
+      background-color: var(--interactive-secondary);
+      transition: all var(--duration-normal) var(--easing-default);
       line-height: 1.5;
-      color: #ffffff;
+      color: var(--text-on-primary);
       
       * {
-        color: #ffffff;
+        color: var(--text-on-primary);
       }
       
-      span,
-      .mdc-button__label,
-      .mat-button-wrapper {
-        color: #ffffff;
+      span {
+        color: var(--text-on-primary);
       }
       
       &:hover {
-        background-color: var(--admin-button-muted-hover);
+        background-color: var(--interactive-secondary-hover);
         transform: translateY(-1px);
       }
     }
@@ -115,11 +151,11 @@
     }
     
     &::-webkit-scrollbar-thumb {
-      background: var(--admin-border-primary);
+      background: var(--border-default);
       border-radius: 3px;
       
       &:hover {
-        background: var(--admin-text-disabled);
+        background: var(--text-muted);
       }
     }
   }
@@ -127,11 +163,11 @@
   .notification-item {
     padding: 18px 16px;
     margin-bottom: 12px;
-    border-radius: var(--admin-border-radius-md);
-    border: 1px solid var(--admin-border-primary);
-    transition: all var(--admin-transition-normal);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-default);
+    transition: all var(--duration-normal) var(--easing-default);
     cursor: pointer;
-    background-color: var(--admin-bg-card);
+    background-color: var(--surface-elevated);
     position: relative;
     overflow: hidden;
     
@@ -142,9 +178,9 @@
       top: 0;
       bottom: 0;
       width: 4px;
-      background: linear-gradient(135deg, var(--admin-primary), var(--admin-success));
+      background: linear-gradient(135deg, var(--interactive-primary), var(--color-success));
       opacity: 0;
-      transition: opacity var(--admin-transition-normal);
+      transition: opacity var(--duration-normal) var(--easing-default);
     }
     
     &::after {
@@ -154,25 +190,25 @@
       left: 16px;
       right: 16px;
       height: 1px;
-      background: linear-gradient(90deg, transparent, var(--admin-border-primary), transparent);
+      background: linear-gradient(90deg, transparent, var(--border-default), transparent);
       opacity: 0;
     }
     
     &.unread {
-      background-color: rgba(var(--admin-primary-rgb, 59, 130, 246), 0.08);
-      border-color: rgba(var(--admin-primary-rgb, 59, 130, 246), 0.2);
+      background-color: rgba(var(--interactive-primary-rgb, 59, 130, 246), 0.08);
+      border-color: rgba(var(--interactive-primary-rgb, 59, 130, 246), 0.2);
       
       &::before {
         opacity: 1;
       }
     }
 
-    &:hover {
-      background-color: var(--admin-bg-hover);
-      border-color: var(--admin-primary);
-      transform: translateX(4px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
+    // &:hover {
+    //   background-color: var(--surface-highlight);
+    //   border-color: var(--interactive-primary);
+    //   transform: translateX(4px);
+    //   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    // }
 
     &:last-child {
       margin-bottom: 0;
@@ -195,13 +231,13 @@
         align-items: center;
         justify-content: center;
         border-radius: 10px;
-        background: linear-gradient(135deg, rgba(var(--admin-primary-rgb, 59, 130, 246), 0.1), rgba(var(--admin-primary-rgb, 59, 130, 246), 0.2));
+        background: linear-gradient(135deg, rgba(var(--interactive-primary-rgb, 59, 130, 246), 0.1), rgba(var(--interactive-primary-rgb, 59, 130, 246), 0.2));
         
         mat-icon {
           font-size: 20px;
           width: 20px;
           height: 20px;
-          color: var(--admin-primary);
+          color: var(--interactive-primary);
         }
       }
       
@@ -210,15 +246,15 @@
         min-width: 0;
         
         .notification-title {
-          font-weight: var(--admin-font-weight-semibold);
-          color: var(--admin-text-primary);
+          font-weight: var(--font-semibold);
+          color: var(--text-primary);
           margin-bottom: 6px;
           font-size: 15px;
           line-height: 1.4;
         }
 
         .notification-message {
-          color: var(--admin-text-secondary);
+          color: var(--text-secondary);
           font-size: 14px;
           margin-bottom: 6px;
           line-height: 1.5;
@@ -230,16 +266,16 @@
         }
 
         .notification-time {
-          color: var(--admin-text-disabled);
+          color: var(--text-muted);
           font-size: 12px;
-          font-weight: var(--admin-font-weight-medium);
+          font-weight: var(--font-medium);
           display: inline-flex;
           align-items: center;
           gap: 4px;
           
           &::before {
             content: '•';
-            color: var(--admin-primary);
+            color: var(--interactive-primary);
           }
         }
       }
@@ -252,8 +288,8 @@
           width: 10px;
           height: 10px;
           border-radius: 50%;
-          background: linear-gradient(135deg, var(--admin-primary), var(--admin-success));
-          box-shadow: 0 0 8px rgba(var(--admin-primary-rgb, 59, 130, 246), 0.5);
+          background: linear-gradient(135deg, var(--interactive-primary), var(--color-success));
+          box-shadow: 0 0 8px rgba(var(--interactive-primary-rgb, 59, 130, 246), 0.5);
           animation: pulse-dot 2s ease-in-out infinite;
         }
       }
@@ -263,41 +299,41 @@
   .no-notifications {
     padding: 56px 32px;
     text-align: center;
-    color: var(--admin-text-secondary);
+    color: var(--text-secondary);
     margin: 16px;
-    border-radius: var(--admin-border-radius-md);
-    background-color: rgba(var(--admin-text-disabled-rgb, 128, 128, 128), 0.05);
+    border-radius: var(--radius-md);
+    background-color: rgba(var(--text-muted-rgb, 128, 128, 128), 0.05);
     
     mat-icon {
       font-size: 64px;
       width: 64px;
       height: 64px;
       margin-bottom: 16px;
-      color: var(--admin-text-disabled);
+      color: var(--text-muted);
       opacity: 0.5;
     }
     
     span {
       display: block;
       font-size: 15px;
-      font-weight: var(--admin-font-weight-medium);
+      font-weight: var(--font-medium);
     }
   }
 
   .notification-actions {
     padding: 12px;
-    border-top: 1px solid var(--admin-border-primary);
-    background-color: var(--admin-bg-secondary);
+    border-top: 1px solid var(--border-default);
+    background-color: var(--surface-secondary);
     text-align: center;
 
     button {
-      color: var(--admin-text-primary);
+      color: var(--text-primary);
       font-size: 14px;
-      font-weight: var(--admin-font-weight-medium);
+      font-weight: var(--font-medium);
       width: 100%;
 
       &:hover {
-        background-color: var(--admin-bg-hover);
+        background-color: var(--surface-highlight);
       }
     }
   }
@@ -316,7 +352,7 @@
 
 // Dark Glass theme - notification menu
 [data-theme="dark-glass"] {
-  .notification-menu.mat-mdc-menu-panel {
+  .notification-menu {
     .notification-header {
       background: rgba(90, 85, 80, 0.5);
       backdrop-filter: blur(40px) saturate(200%);
@@ -327,11 +363,11 @@
         color: rgba(255, 255, 255, 0.95);
       }
       
-      button.mark-all-read.mat-mdc-button {
-        background-color: var(--admin-button-muted);
+      button.mark-all-read {
+        background-color: var(--interactive-secondary);
         
         &:hover {
-          background-color: var(--admin-button-muted-hover);
+          background-color: var(--interactive-secondary-hover);
         }
       }
     }
@@ -425,34 +461,34 @@
 
 // Light theme - notification menu enhancements
 [data-theme="light"] {
-  .notification-menu.mat-mdc-menu-panel {
+  .notification-menu {
     .notification-header {
       background: rgba(255, 255, 255, 0.98);
-      border-bottom-color: #e5e7eb;
+      border-bottom-color: var(--border-default);
       
       .notification-title {
-        color: #111827;
+        color: var(--text-primary);
       }
       
-      button.mark-all-read.mat-mdc-button {
-        background-color: var(--admin-button-muted);
+      button.mark-all-read {
+        background-color: var(--interactive-secondary);
         
         &:hover {
-          background-color: var(--admin-button-muted-hover);
+          background-color: var(--interactive-secondary-hover);
         }
       }
     }
     
     .notification-list {
-      background: #f9fafb;
+      background: var(--surface-secondary);
     }
     
     .notification-item {
-      background-color: #ffffff;
-      border-color: #e5e7eb;
+      background-color: var(--surface-elevated);
+      border-color: var(--border-default);
       
       &::after {
-        background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
+        background: linear-gradient(90deg, transparent, var(--border-default), transparent);
       }
       
       &:hover {
@@ -464,144 +500,188 @@
 
 [data-theme="light"] {
   .admin-header {
-    background-color: #fff;
+    background-color: var(--surface-header);
+    border-bottom: 1px solid var(--glass-border-soft);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+}
+
+// Dark / dark-glass headers — use :host-context (data-theme lives on body)
+:host-context(body[data-theme='dark']) .admin-header,
+:host-context(body[data-theme='dark-glass']) .admin-header {
+  background-color: var(--surface-header);
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-default);
+}
+
+// Dark theme - header (legacy selector retained for global piercing contexts)
+[data-theme="dark"] {
+  .admin-header {
+    background-color: var(--surface-header);
+    border-bottom: 1px solid var(--glass-border-soft, var(--border-default));
   }
 }
 
 // Dark theme - notification menu enhancements
 [data-theme="dark"] {
-  .notification-menu.mat-mdc-menu-panel {
-    background-color: var(--admin-bg-secondary);
-    border: 1px solid var(--admin-border-primary);
-    box-shadow: var(--admin-card-shadow);
+  .notification-menu {
+    background-color: var(--surface-secondary);
+    border: 1px solid var(--border-default);
+    box-shadow: var(--shadow-card);
 
     .notification-header {
-      background: var(--admin-bg-tertiary);
-      border-bottom-color: var(--admin-border-primary);
+      background: var(--surface-tertiary);
+      border-bottom-color: var(--border-default);
       
       .notification-title {
-        color: var(--admin-text-primary);
+        color: var(--text-primary);
       }
       
-      button.mark-all-read.mat-mdc-button {
-        background-color: var(--admin-primary);
-        color: #ffffff;
+      button.mark-all-read {
+        background-color: var(--interactive-primary);
+        color: var(--text-on-primary);
         
         &:hover {
-          background-color: var(--admin-primary-hover);
+          background-color: var(--interactive-primary-hover);
         }
       }
     }
     
     .notification-list {
-      background: var(--admin-bg-secondary);
+      background: var(--surface-secondary);
       
       &::-webkit-scrollbar-thumb {
-        background: var(--admin-border-primary);
+        background: var(--border-default);
       }
     }
     
     .notification-item {
-      background-color: var(--admin-bg-tertiary);
-      border-color: var(--admin-border-secondary);
+      background-color: var(--surface-tertiary);
+      border-color: var(--border-subtle);
       
       &::after {
-        background: linear-gradient(90deg, transparent, var(--admin-border-primary), transparent);
+        background: linear-gradient(90deg, transparent, var(--border-default), transparent);
       }
       
       &:hover {
-        background-color: var(--admin-bg-hover);
-        border-color: var(--admin-primary);
+        background-color: var(--surface-highlight);
+        border-color: var(--interactive-primary);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
       }
 
       .notification-content {
         .notification-text {
           .notification-title {
-            color: var(--admin-text-primary);
+            color: var(--text-primary);
           }
           .notification-message {
-            color: var(--admin-text-secondary);
+            color: var(--text-secondary);
           }
         }
       }
     }
 
     .notification-actions {
-      background-color: var(--admin-bg-tertiary);
-      border-top-color: var(--admin-border-primary);
+      background-color: var(--surface-tertiary);
+      border-top-color: var(--border-default);
       
       button {
-        color: var(--admin-text-primary);
+        color: var(--text-primary);
       }
     }
   }
 }
 
 
-// Glass theme adjustments
-[data-theme="glass"] {
-  // Layout specific overrides only, colors and glass effects are handled globally via tokens
-  .admin-header {
-    border-bottom: var(--glass-border, 1px solid rgba(255, 255, 255, 0.2));
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
-  }
+// Glass — prod medium chrome ≡ sidebar
+:host-context(body[data-theme='glass']) .admin-header.mat-toolbar,
+:host-context(body[data-theme='glass']) mat-toolbar.admin-header {
+  background: var(--surface-chrome-gradient, var(--surface-chrome));
+  background-color: var(--surface-chrome);
+  border-bottom: var(--chrome-border, 1px solid rgba(255, 255, 255, 0.3));
+  box-shadow: var(--chrome-shadow);
+  backdrop-filter: var(--chrome-blur, blur(22px) saturate(145%));
+  -webkit-backdrop-filter: var(--chrome-blur, blur(22px) saturate(145%));
+  --mat-toolbar-container-background-color: transparent;
 }
 
 // User menu
 .user-menu {
   .user-info {
-    padding: var(--admin-spacing-md);
-    border-bottom: 1px solid var(--admin-border-primary);
-    background-color: var(--admin-bg-secondary);
+    padding: var(--space-4);
+    border-bottom: 1px solid var(--border-default);
+    background-color: var(--surface-secondary);
 
     .user-name {
-      font-weight: var(--admin-font-weight-medium);
-      color: var(--admin-text-primary);
-      margin-bottom: var(--admin-spacing-xs);
+      font-weight: var(--font-medium);
+      color: var(--text-primary);
+      margin-bottom: var(--space-1);
     }
 
     .user-email {
-      color: var(--admin-text-secondary);
-      font-size: var(--admin-font-size-sm);
+      color: var(--text-secondary);
+      font-size: var(--text-sm);
     }
   }
 
   .user-actions {
     button {
-      color: var(--admin-text-primary);
+      color: var(--text-primary);
       width: 100%;
       text-align: left;
-      padding: var(--admin-spacing-sm) var(--admin-spacing-md);
-      transition: background-color var(--admin-transition-normal);
+      padding: var(--space-2) var(--space-4);
+      transition: background-color var(--duration-normal) var(--easing-default);
 
       &:hover {
-        background-color: var(--admin-bg-hover);
+        background-color: var(--surface-highlight);
       }
 
       mat-icon {
-        margin-right: var(--admin-spacing-sm);
-        color: var(--admin-text-secondary);
+        margin-right: var(--space-2);
+        color: var(--text-secondary);
       }
     }
   }
 }
 
 // Theme toggle button
-.theme-toggle {
-  color: var(--admin-text-primary);
-  transition: color var(--admin-transition-normal),
-    background-color var(--admin-transition-normal);
+.theme-toggle.mat-mdc-icon-button.mat-mdc-button-base,
+.theme-toggle.mat-mdc-icon-button {
+  color: var(--text-primary);
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: transparent;
+  background-image: none;
+  --mat-icon-button-state-layer-color: transparent;
+  --mdc-icon-button-hover-state-layer-opacity: 0;
+  --mdc-icon-button-focus-state-layer-opacity: 0;
+  --mdc-icon-button-pressed-state-layer-opacity: 0;
+  -webkit-mask-image: radial-gradient(closest-side, black 99%, transparent 100%);
+  mask-image: radial-gradient(closest-side, black 99%, transparent 100%);
+  transform: translateZ(0);
+  transition: color var(--duration-normal) var(--easing-default);
 
-  &:hover {
-    background-color: var(--admin-bg-hover);
-    color: var(--admin-primary);
+  &:hover,
+  &:focus,
+  &:focus-visible {
+    background-color: transparent;
+    background-image: radial-gradient(
+      circle at center,
+      color-mix(in srgb, currentColor 14%, transparent) 0%,
+      color-mix(in srgb, currentColor 14%, transparent) 64%,
+      transparent 65%
+    );
+    color: var(--interactive-primary);
+  }
+
+  .mat-mdc-button-persistent-ripple::before {
+    opacity: 0;
+    background-color: transparent;
   }
 
   mat-icon {
-    color: var(--admin-text-primary);
-    transition: color var(--admin-transition-normal);
+    color: inherit;
+    transition: color var(--duration-normal) var(--easing-default);
   }
 }
 
@@ -609,11 +689,11 @@
 @media (max-width: 768px) {
   .admin-header {
     .header-title {
-      font-size: var(--admin-font-size-md);
+      font-size: var(--text-base);
     }
 
     .header-actions {
-      gap: var(--admin-spacing-xs);
+      gap: var(--space-1);
     }
   }
 }
@@ -622,20 +702,14 @@
   // Light theme - white header
   [data-theme="light"] {
     .admin-header {
-      border-bottom: 1px solid #e5e7eb;
+      border-bottom: 1px solid var(--border-default);
     }
   }
   
-  // Dark theme - dark header
-  [data-theme="dark"] {
-    .admin-header {
-      border-bottom: 1px solid #374151;
-    }
-  }
   
   .admin-header {
     .header-title {
-      font-size: var(--admin-font-size-sm);
+      font-size: var(--text-sm);
     }
 
     .header-actions {

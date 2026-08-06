@@ -1,0 +1,107 @@
+// Admin sidenav navigation — Epic G8 token-driven active/hover states
+.mat-mdc-nav-list a[mat-list-item].mat-mdc-list-item {
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--nav-item-radius);
+  transition:
+    box-shadow var(--transition-normal),
+    transform var(--transition-normal);
+  will-change: box-shadow, transform;
+
+  --mdc-list-item-label-text-color: var(--text-primary);
+  --mdc-list-item-leading-icon-color: var(--text-secondary);
+  --mdc-list-item-trailing-icon-color: var(--text-secondary);
+  --mdc-list-item-hover-label-text-color: var(--text-primary);
+  --mdc-list-item-selected-label-text-color: var(--text-primary);
+
+  --mdc-list-list-item-hover-state-layer-color: transparent;
+  --mdc-list-list-item-hover-state-layer-opacity: 0;
+  --mat-list-active-indicator-color: transparent;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: var(--nav-indicator-width);
+    background: transparent;
+    border-radius: 2px 0 0 2px;
+    pointer-events: none;
+    z-index: 2;
+    transition: background-color var(--transition-normal);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--nav-item-radius);
+    box-shadow: none;
+    pointer-events: none;
+    z-index: 1;
+    transition: box-shadow var(--transition-normal);
+  }
+
+  &:hover {
+    background: transparent;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 0 1px var(--border-default);
+    transform: translateY(calc(var(--spacing-2xs) * -1));
+  }
+
+  &:hover::before {
+    background: var(--nav-indicator-color);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--nav-link-active);
+    outline-offset: 2px;
+  }
+
+  &:is(.mdc-list-item--activated, .mat-mdc-list-item-selected, .active, [aria-current='page']) {
+    background: transparent;
+    box-shadow: var(--nav-sidenav-active-shadow);
+    transform: translateY(calc(var(--spacing-2xs) * -1));
+  }
+
+  &:is(.mdc-list-item--activated, .mat-mdc-list-item-selected, .active, [aria-current='page'])::before {
+    background: var(--nav-indicator-color);
+  }
+
+  .mdc-list-item__primary-text,
+  .mdc-list-item__text,
+  .mat-mdc-list-item-title {
+    color: var(--text-primary);
+  }
+
+  mat-icon[matListItemIcon],
+  .mat-mdc-list-item-icon {
+    color: var(--text-secondary);
+  }
+
+  .mdc-list-item__ripple {
+    z-index: 0;
+  }
+
+  .mdc-list-item__ripple::before,
+  .mdc-list-item__ripple::after {
+    opacity: 0;
+    background: transparent;
+  }
+}
+
+.sidenav-nav {
+  --mdc-list-item-label-text-color: var(--text-primary);
+  --mdc-list-item-leading-icon-color: var(--text-secondary);
+  --mdc-list-item-trailing-icon-color: var(--text-secondary);
+  --mdc-list-list-item-hover-state-layer-color: transparent;
+  --mdc-list-list-item-hover-state-layer-opacity: 0;
+  --mdc-list-item-hover-label-text-color: var(--text-primary);
+  --mdc-list-item-hover-leading-icon-color: var(--text-secondary);
+  --mdc-list-list-item-focus-state-layer-color: transparent;
+  --mdc-list-list-item-focus-state-layer-opacity: 0;
+  --mdc-list-item-focus-label-text-color: var(--text-primary);
+  --mat-list-active-indicator-color: transparent;
+  --mdc-list-item-selected-label-text-color: var(--text-primary);
+  --mdc-list-item-selected-leading-icon-color: var(--text-secondary);
+}

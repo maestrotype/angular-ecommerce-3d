@@ -3,16 +3,23 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <script>
-    (function() {
+    (function () {
       try {
-        let savedTheme = localStorage.getItem('selected-theme') || 'light';
-        if (savedTheme === 'default') savedTheme = 'light';
-        if (savedTheme === 'dark-glass') savedTheme = 'dark';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-      } catch (e) {}
+        var path = window.location.pathname || '';
+        var isAdmin = /^\/admin(\/|$)/.test(path);
+        var storageKey = isAdmin ? 'selected-theme-admin' : 'selected-theme';
+        var saved = localStorage.getItem(storageKey);
+        if (isAdmin && !saved) {
+          saved = localStorage.getItem('adminTheme');
+        }
+        saved = saved || 'light';
+        if (saved === 'default') saved = 'light';
+        if (!isAdmin && saved === 'dark-glass') saved = 'dark';
+        document.documentElement.setAttribute('data-theme', saved);
+      } catch (e) { /* private mode / blocked storage */ }
     })();
   </script>
 
@@ -125,6 +132,17 @@
 </head>
 
 <body class="mat-typography">
+  <script>
+    (function () {
+      try {
+        if (/^\/admin(\/|$)/.test(window.location.pathname || '')) {
+          document.body.classList.add('is-admin');
+          var t = document.documentElement.getAttribute('data-theme');
+          if (t) document.body.setAttribute('data-theme', t);
+        }
+      } catch (e) { /* ignore */ }
+    })();
+  </script>
   <app-root></app-root>
   <noscript>Please enable JavaScript to continue using this application.</noscript>
 </body>

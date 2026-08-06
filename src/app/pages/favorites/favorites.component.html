@@ -20,20 +20,20 @@
     <div class="favorites-content">
       <div class="container">
         <!-- Loading State -->
-        <div *ngIf="isLoading" class="loading-state">
-          <div class="loading-spinner"></div>
-          <p>{{ 'FAVORITES.LOADING' | translate }}</p>
-        </div>
+        <app-loading-spinner
+          *ngIf="isLoading"
+          [message]="'FAVORITES.LOADING' | translate"
+        ></app-loading-spinner>
 
         <!-- Empty State -->
-        <div *ngIf="!isLoading && favorites.length === 0" class="empty-state">
-          <div class="empty-icon">💔</div>
-          <h2>{{ 'FAVORITES.EMPTY_TITLE' | translate }}</h2>
-          <p>{{ 'FAVORITES.EMPTY_MSG' | translate }}</p>
-          <button class="shop-now-btn" (click)="onShopNow()">
-            {{ 'FAVORITES.EXPLORE_BTN' | translate }}
-          </button>
-        </div>
+        <app-empty-state
+          *ngIf="!isLoading && favorites.length === 0"
+          icon="favorite_border"
+          [title]="'FAVORITES.EMPTY_TITLE' | translate"
+          [description]="'FAVORITES.EMPTY_MSG' | translate"
+          [actionLabel]="'FAVORITES.EXPLORE_BTN' | translate"
+          (actionClick)="onShopNow()"
+        ></app-empty-state>
 
         <!-- Favorites List -->
         <div *ngIf="!isLoading && favorites.length > 0" class="favorites-section">

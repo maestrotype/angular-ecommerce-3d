@@ -1,0 +1,17 @@
+/* ========================================
+   ADMIN LAYOUT TOKENS (ADR-011)
+   ========================================
+   Structural values unique to the admin shell.
+   Colors/spacing/typography: shared semantic tokens.
+   ======================================== */
+
+:root {
+  // Shell dimensions
+  --admin-sidebar-width: 260px;
+  --admin-toolbar-height: 64px;
+  --admin-content-padding: 24px;
+
+  // Mobile shell padding
+  --admin-mobile-padding-vertical: 22px;
+  --admin-mobile-padding-horizontal: 8px;
+}

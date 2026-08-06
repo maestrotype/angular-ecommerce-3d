@@ -17,3 +17,6 @@
 
 // Import component styles
 @import './components/index';
+
+// Material / MDC / CDK overrides (ADR-005) — after tokens, themes, and presets
+@import './overrides/index';

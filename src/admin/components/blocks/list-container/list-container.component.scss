@@ -1,18 +1,14 @@
-::ng-deep {
+app-list-container {
   .list {
-    padding: var(--admin-spacing-lg);
-    background-color: var(--admin-bg-card);
+    padding: var(--space-6);
+    background-color: var(--admin-list-bg, var(--surface-elevated));
     min-height: calc(100vh - 64px);
-    color: var(--admin-text-primary);
-    box-shadow: var(--admin-shadow-md);
-    border-radius: 0;
-  }
-  
-  // Dark Glass theme - white text + transparent
-  [data-theme="dark-glass"] .list {
-    color: rgba(255, 255, 255, 1);
-    background-color: transparent;
-    box-shadow: none;
+    color: var(--admin-list-color, var(--text-primary));
+    box-shadow: var(--admin-list-shadow);
+    border-radius: var(--admin-list-radius);
+    border: var(--admin-list-border);
+    backdrop-filter: var(--admin-list-backdrop-filter);
+    -webkit-backdrop-filter: var(--admin-list-backdrop-filter);
   }
 
   .list__header {
@@ -29,15 +25,16 @@
     align-items: flex-start;
     gap: 16px;
     width: 100%;
+
     .header-section {
       width: 100%;
     }
 
     h1 {
       margin: 0;
-      color: var(--admin-text-primary);
-      font-size: var(--admin-font-size-xxl);
-      font-weight: var(--admin-font-weight-bold);
+      color: var(--admin-list-title-color);
+      font-size: var(--text-2xl);
+      font-weight: var(--font-bold);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -46,61 +43,29 @@
 
   .list__title {
     margin: 0;
-    color: var(--admin-text-primary);
-    font-size: var(--admin-font-size-xxl);
-    font-weight: var(--admin-font-weight-bold);
+    color: var(--admin-list-title-color);
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
   }
 
-  ::ng-deep .header-section h1 {
+  .header-section h1 {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     max-width: 100%;
-  }
-  
-  // Dark Glass theme - white titles
-  [data-theme="dark-glass"] .list__title,
-  [data-theme="dark-glass"] h1 {
-    color: rgba(255, 255, 255, 0.95);
+    color: var(--admin-list-title-color);
   }
 
   .list__kpis {
     display: flex;
-    gap: var(--admin-spacing-md);
-
-    .stats-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: var(--admin-spacing-md);
-
-      .stat-card {
-        background-color: var(--admin-order-list-card-bg);
-        border-radius: var(--admin-border-radius-lg);
-        padding: var(--admin-spacing-md);
-        border: 1px solid var(--admin-border-primary);
-
-        .stat-number {
-          font-size: var(--admin-font-size-xxl);
-          font-weight: var(--admin-font-weight-bold);
-          color: var(--admin-primary);
-          text-align: center;
-        }
-
-        .stat-label {
-          font-size: var(--admin-font-size-sm);
-          color: var(--admin-text-secondary);
-          text-align: center;
-          margin-top: var(--admin-spacing-sm);
-        }
-      }
-    }
+    gap: var(--space-4);
   }
 
   .list__filters {
     display: flex;
     justify-content: flex-start;
-    gap: var(--admin-spacing-md);
-    margin-bottom: var(--admin-spacing-lg);
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
     flex-wrap: wrap;
 
     .search-field {
@@ -115,120 +80,102 @@
     display: flex;
     justify-content: flex-start;
     align-items: baseline;
-    gap: var(--admin-spacing-lg);
+    gap: var(--space-6);
     flex-wrap: wrap;
     width: 100%;
   }
 
-  [data-theme="glass"] .list {
+  .list__content {
     background: transparent;
-    box-shadow: none;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
-  
-  [data-theme="glass"] .list__content {
-    background: transparent;
-    padding: 0;
-  }
-
-  [data-theme="glass"] .list__header,
-  [data-theme="glass"] .list__filters,
-  [data-theme="glass"] .filter-section {
-    position: relative;
-    z-index: 1;
-    background: transparent;
-    padding-left: 0;
-    padding-right: 0;
-  }
-
-  [data-theme="glass"] .list__filters {
-    margin-top: 24px;
-    margin-bottom: 32px;
-    padding-bottom: 16px;
-  }
-  
-  // Dark Glass theme - remove backgrounds
-  [data-theme="dark-glass"] .list__header,
-  [data-theme="dark-glass"] .list__filters,
-  [data-theme="dark-glass"] .filter-section,
-  [data-theme="dark-glass"] .header-section {
-    background: transparent;
-    background-color: transparent;
-  }
-
-  [data-theme="glass"] .stats-cards .stat-card {
-    background: rgba(248, 250, 252, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 
-      0 4px 16px rgba(31, 41, 55, 0.12),
-      inset 0 1px 0 rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    color: var(--admin-text-primary);
-  }
-  
-  // Dark Glass theme - LIGHT GRAY-BROWN (liquid glass)
-  [data-theme="dark-glass"] .list {
-    background: rgba(90, 85, 80, 0.62);
-    border-radius: 28px;
-    border: 1.5px solid rgba(255,255,255,0.18);
-    box-shadow: 0 16px 60px 0 rgba(0,0,0,0.35), 0 2px 24px rgba(255, 180, 120, 0.10), inset 0 1px 0 rgba(255,255,255,0.34), inset 0 0 60px rgba(255,255,255,0.03);
-  }
-  
-  [data-theme="dark-glass"] .stats-cards .stat-card {
-    background: rgba(70, 65, 60, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 
-      0 4px 20px rgba(0, 0, 0, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.25);
-    color: rgba(255, 255, 255, 0.95);
   }
 }
 
 @media (max-width: 768px) {
-  ::ng-deep .list {
-    padding: var(--admin-mobile-padding-vertical) var(--admin-mobile-padding-horizontal);
-    padding-bottom: calc(var(--admin-mobile-padding-vertical) + var(--admin-spacing-md));
-  }
-
-  .list__header {
-    flex-direction: column;
-    gap: 16px;
-    align-items: stretch;
-    padding: 0;
-    margin-bottom: 16px;
-
-    h1 {
-      text-align: center;
-      font-size: 1.5rem;
+  app-list-container {
+    .list {
+      padding: var(--admin-mobile-padding-vertical) var(--admin-mobile-padding-horizontal);
+      padding-bottom: calc(var(--admin-mobile-padding-vertical) + var(--space-4));
     }
-  }
 
-  ::ng-deep .header-section h1 {
-    text-align: center;
-    font-size: 1.25rem;
-  }
+    .list__header {
+      flex-direction: column;
+      gap: 16px;
+      align-items: stretch;
+      padding: 16px;
+      margin-bottom: 16px;
 
-  .list__kpis .stats-cards {
-    justify-content: center;
-  }
+      h1 {
+        text-align: center;
+        font-size: 1.5rem;
+      }
+    }
 
-  .list__filters {
-    flex-direction: column;
-    gap: 12px;
-    padding: 0;
-    align-items: stretch;
+    .list__kpis {
+      padding: 0 16px;
 
-    .search-field {
-      min-width: none;
-      max-width: none;
+      .stats-cards {
+        justify-content: center;
+      }
+    }
+
+    .list__filters,
+    .filter-section {
+      flex-direction: column;
+      gap: 12px;
+      align-items: stretch;
+
+      .search-field {
+        min-width: 0;
+        max-width: none;
+      }
+    }
+
+    .header-section h1 {
+      text-align: center;
+      font-size: 1.25rem;
     }
   }
 }
 
 @media (max-width: 400px) {
-  ::ng-deep .header-section h1 {
+  app-list-container .header-section h1 {
     font-size: 1.1rem;
+  }
+}
+
+@media (min-width: 690px) and (max-width: 768px) {
+  app-list-container {
+    .list__header {
+      flex-direction: row;
+      gap: 1rem;
+      align-items: flex-start;
+      padding: 16px 16px 0 16px;
+
+      h1 {
+        text-align: left;
+        font-size: 1.5rem;
+      }
+    }
+
+    .list__kpis {
+      padding: 0 16px;
+
+      .stats-cards {
+        justify-content: flex-end;
+      }
+    }
+
+    .list__filters,
+    .filter-section {
+      flex-direction: row;
+      gap: 12px;
+      padding: 0 16px;
+      align-items: center;
+
+      .search-field {
+        min-width: 150px;
+        max-width: 300px;
+      }
+    }
   }
 }

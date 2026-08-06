@@ -2,8 +2,8 @@
   padding: 24px;
   max-width: 1000px;
   margin: 0 auto;
-  background-color: var(--admin-bg-card);
-  color: var(--admin-text-primary);
+  background-color: var(--surface-elevated);
+  color: var(--text-primary);
   position: relative;
 }
 
@@ -13,7 +13,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(31, 41, 55, 0.9);
+  background-color: rgba(var(--surface-elevated-rgb), 0.9);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -21,31 +21,31 @@
   gap: 16px;
   z-index: 1000;
   border-radius: 8px;
-  
+
   span {
-    color: var(--admin-text-primary);
+    color: var(--text-primary);
     font-size: 16px;
     font-weight: 500;
   }
-  
+
   mat-spinner {
-    filter: drop-shadow(0 4px 8px rgba(96, 165, 250, 0.3));
+    filter: drop-shadow(0 4px 8px rgba(var(--interactive-primary-rgb), 0.3));
   }
 }
 
 .settings-header {
   margin-bottom: 32px;
-  
+
   .page-title {
     font-size: 28px;
     font-weight: 600;
-    color: var(--admin-text-primary);
+    color: var(--text-primary);
     margin: 0 0 8px 0;
   }
-  
+
   .page-subtitle {
     font-size: 16px;
-    color: var(--admin-text-secondary);
+    color: var(--text-secondary);
     margin: 0;
   }
 }
@@ -57,23 +57,23 @@
 }
 
 .settings-card, .translate-card {
-  box-shadow: var(--admin-shadow-md);
+  box-shadow: var(--shadow-md);
   border-radius: 8px;
-  background-color: var(--admin-bg-card);
-  border: 1px solid var(--admin-border-primary);
-  
+  background-color: var(--surface-elevated);
+  border: 1px solid var(--border-default);
+
   mat-card-header {
     margin-bottom: 16px;
-    
+
     mat-card-title {
       font-size: 20px;
       font-weight: 600;
-      color: var(--admin-text-primary);
+      color: var(--text-primary);
     }
-    
+
     mat-card-subtitle {
       font-size: 14px;
-      color: var(--admin-text-secondary);
+      color: var(--text-secondary);
       margin-top: 4px;
     }
   }
@@ -88,11 +88,11 @@
 .form-row {
   display: flex;
   gap: 16px;
-  
+
   .full-width {
     flex: 1;
   }
-  
+
   .half-width {
     flex: 1;
   }
@@ -102,24 +102,24 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  
+
   .toggle-item {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    
+
     mat-slide-toggle {
       margin-bottom: 4px;
     }
-    
+
     .toggle-description {
       font-size: 14px;
-      color: var(--admin-text-secondary);
+      color: var(--text-secondary);
       margin: 0;
       margin-left: 4px;
     }
   }
-  
+
   mat-divider {
     margin: 8px 0;
   }
@@ -131,11 +131,11 @@
   gap: 12px;
   justify-content: flex-end;
   margin-top: 16px;
-  
+
   button {
     min-width: 180px;
     height: 44px;
-    
+
     mat-icon {
       margin-right: 8px;
     }
@@ -148,31 +148,27 @@
 
 mat-form-field {
   width: 100%;
-  
-  .mat-mdc-form-field-subscript-wrapper {
-    margin-top: 4px;
-  }
 }
 
 .payment-gateway-section {
   margin: 24px 0;
   padding: 20px;
-  border: 1px solid var(--admin-border-primary);
+  border: 1px solid var(--border-default);
   border-radius: 8px;
-  background-color: var(--admin-bg-card);
+  background-color: var(--surface-elevated);
 
   h3 {
     margin: 0 0 16px 0;
-    color: var(--admin-text-primary);
+    color: var(--text-primary);
     font-size: 18px;
     font-weight: 500;
-    border-bottom: 2px solid var(--admin-primary);
+    border-bottom: 2px solid var(--interactive-primary);
     padding-bottom: 8px;
   }
 
   .form-row {
     margin-bottom: 16px;
-    
+
     &:last-child {
       margin-bottom: 0;
     }
@@ -184,22 +180,22 @@ mat-form-field {
 }
 
 .payment-gateway-section:hover {
-  border-color: var(--admin-primary);
-  background-color: var(--admin-bg-hover);
+  border-color: var(--interactive-primary);
+  background-color: var(--surface-highlight);
 }
 
 @media (max-width: 768px) {
   .settings-container {
     padding: 16px;
   }
-  
+
   .form-row {
     flex-direction: column;
   }
-  
+
   .form-actions {
     justify-content: stretch;
-    
+
     button {
       width: 100%;
     }

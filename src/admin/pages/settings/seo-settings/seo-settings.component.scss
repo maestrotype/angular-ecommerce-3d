@@ -1,113 +1,50 @@
 .seo-settings-container {
-  padding: var(--admin-spacing-lg);
+  padding: var(--space-6);
   max-width: 1200px;
   margin: 0 auto;
-  color: var(--admin-text-primary);
+  color: var(--text-primary);
 
   .seo-settings-header {
-    margin-bottom: var(--admin-spacing-xl);
+    margin-bottom: var(--space-8);
 
     .page-title {
-      font-size: var(--admin-font-size-xxl);
-      font-weight: var(--admin-font-weight-bold);
-      color: var(--admin-text-primary);
-      margin-bottom: var(--admin-spacing-sm);
+      font-size: var(--text-2xl);
+      font-weight: var(--font-bold);
+      color: var(--text-primary);
+      margin-bottom: var(--space-2);
     }
 
     .page-subtitle {
-      color: var(--admin-text-secondary);
-      font-size: var(--admin-font-size-md);
+      color: var(--text-secondary);
+      font-size: var(--text-base);
       margin: 0;
     }
   }
 
   .seo-settings-content {
-    .seo-tabs {
-      ::ng-deep {
-        .mat-mdc-tab-header {
-          border-bottom: 1px solid var(--admin-border-primary);
-        }
-
-        .mat-mdc-tab-body-content {
-          padding: var(--admin-spacing-lg) 0;
-        }
-
-        // Tab text colors - uses global theme variables
-        .mat-mdc-tab.mat-mdc-tab {
-          font-weight: var(--admin-font-weight-medium);
-          transition: color 0.3s ease;
-          
-          .mat-mdc-tab-label-content,
-          .mdc-tab__text-label {
-            color: var(--admin-text-secondary);
-          }
-          
-          // Active tab color
-          &.mat-mdc-tab-active {
-            .mat-mdc-tab-label-content,
-            .mdc-tab__text-label {
-              color: var(--admin-tab-active, var(--admin-primary));
-            }
-          }
-          
-          // Hover tab color
-          &:hover {
-            .mat-mdc-tab-label-content,
-            .mdc-tab__text-label {
-              color: var(--admin-tab-active, var(--admin-primary));
-            }
-          }
-        }
-        
-        // Active indicator bar
-        .mat-mdc-tab-header .mdc-tab-indicator__content--underline,
-        .mat-mdc-tab-indicator .mdc-tab-indicator__content {
-          border-color: var(--admin-tab-active, var(--admin-primary));
-          background-color: var(--admin-tab-active, var(--admin-primary));
-        }
-      }
-    }
+    .seo-tabs {}
 
     .settings-card {
-      margin-bottom: var(--admin-spacing-lg);
-      box-shadow: var(--admin-shadow-md);
-      background-color: var(--admin-bg-card);
-      border: 1px solid var(--admin-border-primary);
+      margin-bottom: var(--space-6);
+      box-shadow: var(--shadow-md);
+      background-color: var(--surface-elevated);
+      border: 1px solid var(--border-default);
 
-      .mat-card-header {
-        padding-bottom: var(--admin-spacing-md);
-        border-bottom: 1px solid var(--admin-border-secondary);
-
-        .mat-card-title {
-          font-size: var(--admin-font-size-xl);
-          font-weight: var(--admin-font-weight-bold);
-          color: var(--admin-text-primary);
-          margin-bottom: var(--admin-spacing-xs);
-        }
-
-        .mat-card-subtitle {
-          color: var(--admin-text-secondary);
-          font-size: var(--admin-font-size-sm);
-        }
-      }
-
-      .mat-card-content {
-        padding-top: var(--admin-spacing-lg);
-      }
+      // Card header/content → overrides (B3)
     }
 
     .settings-form {
       .form-row {
-        margin-bottom: var(--admin-spacing-lg);
+        margin-bottom: var(--space-6);
 
         &.checkbox-row {
           display: flex;
-          gap: var(--admin-spacing-xl);
+          gap: var(--space-8);
           align-items: center;
-          margin-top: var(--admin-spacing-md);
+          margin-top: var(--space-4);
 
           mat-checkbox {
-            margin-right: var(--admin-spacing-md);
+            margin-right: var(--space-4);
           }
         }
 
@@ -120,74 +57,46 @@
         }
 
         mat-form-field {
-          .mat-form-field-wrapper {
-            padding-bottom: 0;
-          }
-
-          .mat-form-field-outline {
-            border-radius: var(--admin-border-radius-md);
-          }
-
-          .mat-form-field-label {
-            color: var(--admin-text-secondary);
-          }
-
-          .mat-form-field-outline-thick {
-            color: var(--admin-primary);
-          }
-
-          .mat-icon {
-            color: var(--admin-text-secondary);
-          }
-
-          .mat-error {
-            font-size: var(--admin-font-size-xs);
-            margin-top: var(--admin-spacing-xs);
-          }
-
-          .mat-hint {
-            font-size: var(--admin-font-size-xs);
-            color: var(--admin-text-secondary);
-          }
+          // Material field chrome → overrides (B3)
         }
       }
 
       .form-actions {
-        margin-top: var(--admin-spacing-xl);
-        padding-top: var(--admin-spacing-lg);
-        border-top: 1px solid var(--admin-border-secondary);
+        margin-top: var(--space-8);
+        padding-top: var(--space-6);
+        border-top: 1px solid var(--border-subtle);
 
         button {
           min-width: 120px;
           height: 40px;
-          font-weight: var(--admin-font-weight-medium);
+          font-weight: var(--font-medium);
 
           mat-icon {
-            margin-right: var(--admin-spacing-sm);
+            margin-right: var(--space-2);
           }
         }
       }
     }
 
     .og-preview {
-      margin-top: var(--admin-spacing-lg);
-      padding: var(--admin-spacing-lg);
-      background: var(--admin-bg-secondary);
-      border-radius: var(--admin-border-radius-md);
-      border: 1px solid var(--admin-border-primary);
+      margin-top: var(--space-6);
+      padding: var(--space-6);
+      background: var(--surface-secondary);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-default);
 
       h3 {
-        font-size: var(--admin-font-size-md);
-        font-weight: var(--admin-font-weight-bold);
-        color: var(--admin-text-primary);
-        margin-bottom: var(--admin-spacing-md);
+        font-size: var(--text-base);
+        font-weight: var(--font-bold);
+        color: var(--text-primary);
+        margin-bottom: var(--space-4);
       }
 
       .og-card {
         display: flex;
-        background: var(--admin-bg-card);
-        border: 1px solid var(--admin-border-primary);
-        border-radius: var(--admin-border-radius-md);
+        background: var(--surface-elevated);
+        border: 1px solid var(--border-default);
+        border-radius: var(--radius-md);
         overflow: hidden;
         max-width: 500px;
 
@@ -199,21 +108,21 @@
         }
 
         .og-content {
-          padding: var(--admin-spacing-md);
+          padding: var(--space-4);
           flex: 1;
 
           h4 {
-            font-size: var(--admin-font-size-md);
-            font-weight: var(--admin-font-weight-bold);
-            color: var(--admin-text-primary);
-            margin: 0 0 var(--admin-spacing-sm) 0;
+            font-size: var(--text-base);
+            font-weight: var(--font-bold);
+            color: var(--text-primary);
+            margin: 0 0 var(--space-2) 0;
             line-height: 1.2;
           }
 
           p {
-            font-size: var(--admin-font-size-sm);
-            color: var(--admin-text-secondary);
-            margin: 0 0 var(--admin-spacing-sm) 0;
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+            margin: 0 0 var(--space-2) 0;
             line-height: 1.4;
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -222,8 +131,8 @@
           }
 
           .og-url {
-            font-size: var(--admin-font-size-xs);
-            color: var(--admin-text-secondary);
+            font-size: var(--text-xs);
+            color: var(--text-secondary);
             text-transform: lowercase;
           }
         }
@@ -236,16 +145,16 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: var(--admin-spacing-xxl) var(--admin-spacing-lg);
-    color: var(--admin-text-primary);
+    padding: var(--space-12) var(--space-6);
+    color: var(--text-primary);
 
     mat-spinner {
-      margin-bottom: var(--admin-spacing-md);
+      margin-bottom: var(--space-4);
     }
 
     p {
-      color: var(--admin-text-secondary);
-      font-size: var(--admin-font-size-md);
+      color: var(--text-secondary);
+      font-size: var(--text-base);
       margin: 0;
     }
   }
@@ -253,11 +162,11 @@
 
 @media (max-width: 768px) {
   .seo-settings-container {
-    padding: var(--admin-spacing-md);
+    padding: var(--space-4);
 
     .seo-settings-header {
       .page-title {
-        font-size: var(--admin-font-size-xl);
+        font-size: var(--text-xl);
       }
     }
 
@@ -266,7 +175,7 @@
         .form-row {
           &.checkbox-row {
             flex-direction: column;
-            gap: var(--admin-spacing-md);
+            gap: var(--space-4);
             align-items: flex-start;
           }
 

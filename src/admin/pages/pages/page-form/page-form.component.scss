@@ -2,6 +2,7 @@
   max-width: 900px;
   margin: 0 auto;
   padding: 1rem;
+  color: var(--text-primary);
 }
 
 .form-header {
@@ -28,12 +29,12 @@
   margin-bottom: 1rem;
 
   button.active {
-    border-color: var(--accent-color, #4f8cff);
+    border-color: var(--interactive-primary);
   }
 }
 
 .sections-hint {
-  opacity: 0.8;
+  color: var(--text-secondary);
   margin: 0 0 1rem;
 }
 

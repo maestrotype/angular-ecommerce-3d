@@ -23,15 +23,19 @@ html {
 }
 
 body {
-  font-family: var(--font-family-primary);
-  font-size: var(--font-size-md);
-  line-height: var(--line-height-normal);
+  font-family: var(--type-font-body);
+  font-size: var(--type-size-body);
+  font-weight: var(--type-weight-body);
+  line-height: var(--type-leading-body);
+  letter-spacing: var(--type-tracking-body);
   color: var(--text-primary);
   background-color: var(--surface-primary);
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color var(--transition-normal),
+    color var(--transition-normal);
 }
 
 /* ==========================================================================
@@ -39,16 +43,6 @@ body {
    ========================================================================== */
 
 /* Headings */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  @include heading(1);
-  margin: 0 0 var(--spacing-md) 0;
-}
-
 h1 {
   @include heading(1);
 }
@@ -73,14 +67,25 @@ h6 {
   @include heading(6);
 }
 
-/* Paragraphs */
+/* Body copy */
 p {
-  @include text('md', 'normal');
+  @include type-body('md');
   margin: 0 0 var(--spacing-md) 0;
 
   &:last-child {
     margin-bottom: 0;
   }
+}
+
+small,
+.caption,
+figcaption {
+  @include type-caption;
+}
+
+label,
+.label {
+  @include type-label;
 }
 
 /* Links */
@@ -160,17 +165,17 @@ select {
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
   }
 }
 
-/* High contrast mode */
+/* High contrast mode — override semantic tokens (legacy --color-* aliases follow) */
 @media (prefers-contrast: high) {
   :root {
-    --color-border-primary: #000000;
-    --color-text-secondary: #000000;
+    --border-default: black;
+    --text-secondary: black;
   }
 }
 
@@ -179,11 +184,31 @@ select {
    ========================================================================== */
 
 @media print {
+  app-header,
+  app-footer,
+  .footer-mobile,
+  app-base-modal,
+  .modal-container,
+  .checkout-stepper,
+  .skip-link,
+  .theme-switcher {
+    display: none;
+  }
+
+  main {
+    padding: 0;
+    min-height: auto;
+  }
+
+  .storefront-main > router-outlet + * {
+    animation: none;
+  }
+
   * {
-    background: transparent !important;
-    color: black !important;
-    box-shadow: none !important;
-    text-shadow: none !important;
+    background: transparent;
+    color: black;
+    box-shadow: none;
+    text-shadow: none;
   }
 
   a,
@@ -201,7 +226,7 @@ select {
 
   pre,
   blockquote {
-    border: 1px solid #999;
+    border: 1px solid gray;
     page-break-inside: avoid;
   }
 

@@ -1,0 +1,147 @@
+// Cards (stat-card styling lives in global/_stat-cards.scss — Epic G10)
+.mat-mdc-card:not(.stat-card) {
+  /* Override MDC theme token to remove default grey background */
+  --mdc-elevated-card-container-color: transparent;
+  --mdc-filled-card-container-color: transparent;
+  --mdc-outlined-card-container-color: transparent;
+
+  background-color: var(--surface-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border-default);
+  transition: background-color var(--duration-normal) var(--easing-default),
+    color var(--duration-normal) var(--easing-default),
+    border-color var(--duration-normal) var(--easing-default),
+    box-shadow var(--duration-normal) var(--easing-default);
+
+  // Glass theme effects
+  [data-theme="glass"] & {
+    background: var(--surface-elevated);
+    border: 1px solid var(--border-default);
+    border-radius: 28px;
+    box-shadow: var(--glass-shadow);
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.35), transparent 70%);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+  }
+}
+
+// Menu
+.mat-mdc-menu-panel {
+  background-color: var(--surface-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border-default);
+
+  [data-theme="glass"] & {
+    background: var(--glass-surface-muted);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-color: var(--border-subtle);
+    box-shadow: var(--glass-shadow);
+  }
+}
+
+.mat-mdc-menu-item {
+  color: var(--text-primary);
+
+  &:hover {
+    background-color: var(--surface-highlight);
+  }
+}
+
+// Toolbar
+.mat-toolbar {
+  background-color: var(--surface-header, var(--surface-elevated));
+  color: var(--text-primary, var(--text-primary));
+  border-bottom: var(--glass-border-soft, 1px solid var(--border-default));
+  backdrop-filter: var(--backdrop-blur, none);
+  -webkit-backdrop-filter: var(--backdrop-blur, none);
+
+  [data-theme="glass"] & {
+    --mat-toolbar-container-background-color: transparent;
+    background: var(--surface-chrome-gradient, var(--surface-chrome));
+    background-color: var(--surface-chrome);
+    backdrop-filter: var(--chrome-blur, blur(22px) saturate(145%));
+    -webkit-backdrop-filter: var(--chrome-blur, blur(22px) saturate(145%));
+    border-bottom: var(--chrome-border, 1px solid rgba(255, 255, 255, 0.3));
+    box-shadow: var(--chrome-shadow);
+  }
+}
+
+// Sidenav
+.mat-drawer {
+  background-color: var(--surface-secondary);
+  color: var(--text-primary);
+  border-right: 1px solid var(--border-default);
+
+  // Glass: transparent shell — liquid fill is on .sidenav-wrapper only
+  [data-theme="glass"] & {
+    background: transparent;
+    background-image: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-right: none;
+    box-shadow: none;
+  }
+}
+
+.mat-drawer-content {
+  background-color: var(--surface-page);
+  color: var(--text-primary);
+}
+
+// List wrapper baseline (nav lists stay transparent under glass)
+.mat-mdc-list {
+  background-color: var(--surface-elevated);
+  color: var(--text-primary);
+
+  [data-theme="glass"] & {
+    background-color: transparent;
+  }
+}
+
+// (removed global .mat-mdc-list-item block; visuals are handled in .sidenav-nav scope)
+
+// Ensure sidenav nav-list items keep text color on hover
+
+.mat-mdc-nav-list a[mat-list-item].mat-mdc-list-item .mdc-list-item__primary-text,
+.mat-mdc-nav-list a[mat-list-item].mat-mdc-list-item .mat-mdc-list-item-title,
+.mat-mdc-nav-list a[mat-list-item].mat-mdc-list-item:hover .mdc-list-item__primary-text,
+.mat-mdc-nav-list a[mat-list-item].mat-mdc-list-item:hover .mat-mdc-list-item-title {
+  color: var(--text-primary);
+}
+
+// Dark-glass: brighter icons than default secondary
+[data-theme='dark-glass'] .mat-mdc-nav-list a[mat-list-item].mat-mdc-list-item {
+  --mdc-list-item-leading-icon-color: rgba(255, 255, 255, 0.9);
+  --mdc-list-item-trailing-icon-color: rgba(255, 255, 255, 0.9);
+  --mdc-list-item-label-text-color: rgba(255, 255, 255, 0.95);
+}
+
+// Paginator
+.mat-mdc-paginator {
+  background-color: var(--surface-elevated);
+  color: var(--text-primary);
+  border-top: 1px solid var(--border-default);
+
+  .mat-mdc-paginator-page-size-label,
+  .mat-mdc-paginator-range-label {
+    color: var(--text-primary);
+  }
+
+  .mat-mdc-icon-button {
+    color: var(--text-primary);
+
+    &:disabled {
+      color: var(--text-muted);
+    }
+  }
+}

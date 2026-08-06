@@ -1,6 +1,304 @@
 /* ==========================================================================
-   MODAL COMPONENTS
-   Modal styles using the new design system
+   MODALS (Epic G9)
+   Storefront modal shell + Material dialog backdrop — token-driven, all themes
    ========================================================================== */
 
-// Modal styles will be implemented here 
+@keyframes motion-modal-backdrop-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes motion-modal-panel-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(calc(var(--spacing-md) * -1));
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+// ── Custom modal stack (base-modal) ──
+
+.modal-container {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal-stack, 10100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+
+  > * {
+    pointer-events: auto;
+  }
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--modal-padding);
+  background: var(--modal-backdrop-light);
+  backdrop-filter: var(--modal-backdrop-blur);
+  -webkit-backdrop-filter: var(--modal-backdrop-blur);
+  animation: motion-modal-backdrop-in var(--modal-enter-duration) var(--modal-enter-easing) both;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+
+  &.modal-backdrop-image {
+    background: var(--modal-backdrop);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  &.modal-backdrop-cart,
+  &.modal-backdrop-auth {
+    background: var(--modal-backdrop-light);
+    backdrop-filter: var(--modal-backdrop-blur);
+    -webkit-backdrop-filter: var(--modal-backdrop-blur);
+  }
+
+  &.modal-backdrop-auth {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    align-items: flex-start;
+    justify-content: center;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  &.modal-backdrop-notification {
+    background: var(--surface-overlay-light);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: var(--spacing-xl);
+  }
+}
+
+.modal-content {
+  position: relative;
+  background: var(--modal-surface);
+  border: 1px solid var(--modal-border);
+  border-radius: var(--modal-radius);
+  box-shadow: var(--modal-shadow);
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: hidden;
+  animation: motion-modal-panel-in var(--modal-enter-duration) var(--modal-enter-easing) both;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: motion-modal-backdrop-in var(--modal-enter-duration) var(--modal-enter-easing) both;
+  }
+
+  &.modal-content-image {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    max-width: 100vw;
+    max-height: 100vh;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &.modal-content-cart {
+    width: 100%;
+    max-width: var(--modal-max-width);
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  &.modal-content-auth {
+    width: 100%;
+    max-width: var(--modal-auth-max-width);
+    max-height: var(--modal-auth-max-height);
+    margin-block: auto;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    app-auth-modal {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+  }
+
+  &.modal-content-notification {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    max-width: none;
+    max-height: none;
+    overflow: visible;
+    animation: motion-fade-in-up var(--modal-enter-duration) var(--modal-enter-easing) both;
+  }
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  z-index: 10;
+  width: var(--modal-close-size);
+  height: var(--modal-close-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--modal-border);
+  border-radius: var(--radius-full);
+  background: var(--modal-close-bg);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition:
+    transform var(--transition-fast),
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+
+  &:hover {
+    transform: scale(1.05);
+    background: var(--modal-close-hover-bg);
+    border-color: transparent;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--interactive-primary);
+    outline-offset: 2px;
+  }
+
+  .modal-content-image & {
+    top: var(--spacing-sm);
+    right: var(--spacing-md);
+    background: var(--glass-surface-soft, var(--surface-overlay-light));
+    border-color: var(--glass-border-soft, var(--border-subtle));
+    color: var(--text-on-primary, var(--text-primary));
+  }
+
+  .modal-content-notification & {
+    top: var(--spacing-xs);
+    right: var(--spacing-xs);
+    width: 2rem;
+    height: 2rem;
+  }
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+// ── Material CDK / MDC dialogs ──
+
+.cdk-overlay-dark-backdrop,
+.cdk-global-overlay-wrapper .cdk-overlay-backdrop {
+  background: var(--modal-backdrop);
+  backdrop-filter: var(--modal-backdrop-blur);
+  -webkit-backdrop-filter: var(--modal-backdrop-blur);
+  animation: motion-modal-backdrop-in var(--modal-enter-duration) var(--modal-enter-easing) both;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+.mat-mdc-dialog-panel .mat-mdc-dialog-container .mdc-dialog__surface,
+.mat-mdc-dialog-panel .mat-mdc-dialog-container {
+  animation: motion-modal-panel-in var(--modal-enter-duration) var(--modal-enter-easing) both;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+// ── Theme: glass ──
+
+[data-theme='glass'] {
+  --modal-backdrop: rgba(148, 163, 184, 0.35);
+  --modal-backdrop-light: rgba(186, 210, 228, 0.28);
+  --modal-surface: transparent;
+  --modal-border: var(--glass-border-soft);
+  --modal-radius: var(--auth-modal-radius, var(--modal-radius-lg));
+  --auth-modal-bg: rgba(255, 255, 255, 0.38);
+  --auth-modal-blur: blur(32px) saturate(140%);
+  --auth-modal-border: 1px solid var(--glass-border-soft);
+  --auth-modal-shadow: var(--glass-shadow);
+  --modal-backdrop-blur: blur(12px);
+  --modal-backdrop-blur-strong: blur(24px) saturate(140%);
+
+  .modal-content:not(.modal-content-auth):not(.modal-content-image):not(.modal-content-notification) {
+    backdrop-filter: var(--modal-backdrop-blur-strong);
+    -webkit-backdrop-filter: var(--modal-backdrop-blur-strong);
+  }
+}
+
+// ── Theme: dark ──
+
+[data-theme='dark'] {
+  --modal-backdrop: rgba(0, 0, 0, 0.72);
+  --modal-backdrop-light: rgba(15, 23, 42, 0.65);
+  --modal-surface: var(--surface-secondary);
+  --modal-border: var(--border-subtle);
+  --auth-modal-bg: var(--surface-secondary);
+  --auth-modal-border: 1px solid var(--border-subtle);
+  --auth-modal-shadow: var(--modal-shadow);
+}
+
+// ── Theme: dark-glass (admin) ──
+
+body.is-admin[data-theme='dark-glass'],
+html[data-theme='dark-glass'] body.is-admin {
+  --modal-backdrop: rgba(0, 0, 0, 0.55);
+  --modal-surface: rgba(90, 85, 80, 0.92);
+  --modal-border: var(--border-subtle);
+  --modal-radius: var(--radius-dialog);
+}
+
+@media (max-width: 768px) {
+  .modal-backdrop-auth {
+    align-items: flex-start;
+    padding-top: max(var(--spacing-md), env(safe-area-inset-top, 0px));
+    padding-bottom: max(var(--spacing-md), env(safe-area-inset-bottom, 0px));
+  }
+
+  .modal-content {
+    &.modal-content-cart,
+    &.modal-content-auth {
+      max-width: calc(100vw - 2rem);
+    }
+
+    &.modal-content-auth {
+      max-height: min(
+        90vh,
+        calc(
+          100dvh - 2 * var(--spacing-md) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)
+        )
+      );
+    }
+  }
+}

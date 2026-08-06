@@ -1,3 +1,8 @@
+/* ==========================================================================
+   FULLSCREEN PRODUCT VIEWER
+   Epic D5: immersive dark chrome via semantic tokens.
+   ========================================================================== */
+
 :host {
   display: block;
   width: 100%;
@@ -7,23 +12,22 @@
 .viewer-page {
   position: fixed;
   inset: 0;
-  background: #0a0a0f;
+  background: var(--surface-inverse);
   display: flex;
   flex-direction: column;
   z-index: 9999;
   user-select: none;
 }
 
-/* ── HEADER ─────────────────────────────────── */
 .viewer-header {
   display: flex;
   align-items: center;
   gap: 1rem;
   padding: 0 1.5rem;
   height: 64px;
-  background: rgba(15, 15, 20, 0.95);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  background: var(--surface-overlay-full);
+  backdrop-filter: var(--backdrop-blur);
+  border-bottom: 1px solid var(--glass-border-soft);
   flex-shrink: 0;
 }
 
@@ -32,18 +36,18 @@
   align-items: center;
   gap: 0.5rem;
   background: none;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 10px;
-  color: #fff;
+  border: 1px solid var(--glass-border-soft);
+  border-radius: var(--radius-md);
+  color: var(--text-on-primary);
   padding: 0.4rem 1rem 0.4rem 0.6rem;
   cursor: pointer;
   font-size: 0.875rem;
   font-weight: 500;
   transition: all 0.2s;
-  
+
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.3);
+    background: var(--surface-overlay-light);
+    border-color: var(--glass-border-hover);
   }
 }
 
@@ -51,19 +55,20 @@
   flex: 1;
   font-size: 1rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-on-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  opacity: 0.9;
 }
 
 .mode-tabs {
   display: flex;
   gap: 0.25rem;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
+  background: var(--surface-overlay-light);
+  border-radius: var(--radius-md);
   padding: 3px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--glass-border-soft);
 }
 
 .tab-btn {
@@ -72,7 +77,7 @@
   gap: 0.4rem;
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   padding: 0.5rem 1rem;
   border-radius: 9px;
   cursor: pointer;
@@ -80,21 +85,22 @@
   font-weight: 500;
   transition: all 0.2s;
 
-  svg { transition: stroke 0.2s; }
+  svg {
+    transition: stroke 0.2s;
+  }
 
   &.active {
-    background: rgba(99, 102, 241, 0.8);
-    color: #fff;
-    box-shadow: 0 2px 12px rgba(99, 102, 241, 0.5);
+    background: rgba(var(--interactive-primary-rgb), 0.8);
+    color: var(--text-on-primary);
+    box-shadow: 0 2px 12px rgba(var(--interactive-primary-rgb), 0.5);
   }
 
   &:hover:not(.active) {
-    color: rgba(255, 255, 255, 0.8);
-    background: rgba(255, 255, 255, 0.08);
+    color: var(--glass-highlight);
+    background: var(--surface-overlay-light);
   }
 }
 
-/* ── CANVAS ─────────────────────────────────── */
 .viewer-canvas {
   flex: 1;
   position: relative;
@@ -112,7 +118,6 @@
   }
 }
 
-/* ── IMAGE ─────────────────────────────────── */
 .image-container {
   position: relative;
   width: 100%;
@@ -131,15 +136,14 @@
   pointer-events: none;
 }
 
-/* ── ARROWS ─────────────────────────────────── */
 .nav-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   z-index: 10;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(12px);
+  background: var(--surface-overlay-light);
+  border: 1px solid var(--glass-border-soft);
+  backdrop-filter: var(--backdrop-blur-sm);
   border-radius: 50%;
   width: 52px;
   height: 52px;
@@ -147,36 +151,39 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #fff;
+  color: var(--text-on-primary);
   transition: all 0.2s;
 
   &:hover {
-    background: rgba(99, 102, 241, 0.7);
-    border-color: rgba(99, 102, 241, 0.8);
+    background: rgba(var(--interactive-primary-rgb), 0.7);
+    border-color: rgba(var(--interactive-primary-rgb), 0.8);
     transform: translateY(-50%) scale(1.08);
-    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+    box-shadow: 0 4px 20px rgba(var(--interactive-primary-rgb), 0.4);
   }
 
-  &.arrow-left { left: 1.5rem; }
-  &.arrow-right { right: 1.5rem; }
+  &.arrow-left {
+    left: 1.5rem;
+  }
+
+  &.arrow-right {
+    right: 1.5rem;
+  }
 }
 
-/* ── COUNTER ─────────────────────────────────── */
 .image-counter {
   position: absolute;
   bottom: 1rem;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.8);
+  background: var(--surface-overlay-full);
+  backdrop-filter: var(--backdrop-blur-sm);
+  border: 1px solid var(--glass-border-soft);
+  color: var(--glass-highlight);
   padding: 0.4rem 1rem;
   border-radius: 20px;
   font-size: 0.875rem;
 }
 
-/* ── ZOOM CONTROLS ─────────────────────────────── */
 .zoom-controls {
   position: absolute;
   top: 1rem;
@@ -184,16 +191,16 @@
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  background: var(--surface-overlay-full);
+  backdrop-filter: var(--backdrop-blur-sm);
+  border: 1px solid var(--glass-border-soft);
+  border-radius: var(--radius-md);
   padding: 0.3rem 0.5rem;
-  
+
   button {
     background: none;
     border: none;
-    color: #fff;
+    color: var(--text-on-primary);
     font-size: 1.2rem;
     cursor: pointer;
     width: 28px;
@@ -201,42 +208,44 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     transition: background 0.2s;
-    
-    &:hover { background: rgba(255, 255, 255, 0.15); }
-    
+
+    &:hover {
+      background: var(--surface-overlay-light);
+    }
+
     &.reset-btn {
       font-size: 1rem;
-      color: rgba(250, 204, 21, 0.9);
+      color: var(--color-warning);
     }
   }
-  
+
   span {
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-muted);
     font-size: 0.75rem;
     min-width: 40px;
     text-align: center;
   }
 }
 
-/* ── HINT ─────────────────────────────────── */
 .image-hint {
   position: absolute;
   bottom: 1rem;
   right: 1.5rem;
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--text-muted);
   font-size: 0.75rem;
   display: none;
-  
-  @media (min-width: 768px) { display: block; }
+
+  @media (min-width: 768px) {
+    display: block;
+  }
 }
 
-/* ── THUMBNAILS ─────────────────────────────── */
 .thumbnails-bar {
   height: 90px;
-  background: rgba(10, 10, 15, 0.95);
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  background: var(--surface-overlay-full);
+  border-top: 1px solid var(--glass-border-soft);
   display: flex;
   align-items: center;
   flex-shrink: 0;
@@ -249,13 +258,19 @@
   overflow-x: auto;
   padding: 0.5rem 0;
   scrollbar-width: thin;
-  scrollbar-color: rgba(99, 102, 241, 0.5) transparent;
-  
-  &::-webkit-scrollbar { height: 4px; }
-  &::-webkit-scrollbar-track { background: transparent; }
-  &::-webkit-scrollbar-thumb { 
-    background: rgba(99, 102, 241, 0.5); 
-    border-radius: 2px; 
+  scrollbar-color: rgba(var(--interactive-primary-rgb), 0.5) transparent;
+
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(var(--interactive-primary-rgb), 0.5);
+    border-radius: 2px;
   }
 }
 
@@ -263,7 +278,7 @@
   flex-shrink: 0;
   width: 64px;
   height: 64px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   overflow: hidden;
   cursor: pointer;
   border: 2px solid transparent;
@@ -276,15 +291,20 @@
     object-fit: cover;
   }
 
-  &.active, &:hover {
+  &.active,
+  &:hover {
     opacity: 1;
-    border-color: rgba(99, 102, 241, 0.9);
-    box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+    border-color: rgba(var(--interactive-primary-rgb), 0.9);
+    box-shadow: 0 0 12px rgba(var(--interactive-primary-rgb), 0.4);
   }
 }
 
 .thumb-3d {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.3));
+  background: linear-gradient(
+    135deg,
+    rgba(var(--interactive-primary-rgb), 0.3),
+    rgba(var(--color-accent-rgb, 139, 92, 246), 0.3)
+  );
   display: flex;
   align-items: center;
   justify-content: center;
@@ -300,38 +320,58 @@
     app-three-d-viewer {
       width: 100%;
       height: 100%;
-      pointer-events: none; // Thumbnail should not be interactive
+      pointer-events: none;
     }
 
     .thumb-3d-badge {
       position: absolute;
       top: 4px;
       right: 4px;
-      background: rgba(99, 102, 241, 0.9);
-      color: white;
+      background: rgba(var(--interactive-primary-rgb), 0.9);
+      color: var(--text-on-primary);
       font-size: 0.6rem;
       font-weight: 800;
       padding: 1px 4px;
-      border-radius: 4px;
+      border-radius: var(--radius-xs, 4px);
       z-index: 2;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      box-shadow: var(--shadow-sm);
     }
   }
 
-  &.active, &:hover {
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.7), rgba(139, 92, 246, 0.7));
+  &.active,
+  &:hover {
+    background: linear-gradient(
+      135deg,
+      rgba(var(--interactive-primary-rgb), 0.7),
+      rgba(var(--color-accent-rgb, 139, 92, 246), 0.7)
+    );
   }
 }
 
-/* ── MOBILE ─────────────────────────────────── */
 @media (max-width: 768px) {
-  .nav-arrow { 
-    width: 40px; 
-    height: 40px; 
-    &.arrow-left { left: 0.75rem; }
-    &.arrow-right { right: 0.75rem; }
+  .nav-arrow {
+    width: 40px;
+    height: 40px;
+
+    &.arrow-left {
+      left: 0.75rem;
+    }
+
+    &.arrow-right {
+      right: 0.75rem;
+    }
   }
-  .viewer-header { padding: 0 1rem; }
-  .back-btn span { display: none; }
-  .zoom-controls { top: auto; bottom: 5.5rem; }
+
+  .viewer-header {
+    padding: 0 1rem;
+  }
+
+  .back-btn span {
+    display: none;
+  }
+
+  .zoom-controls {
+    top: auto;
+    bottom: 5.5rem;
+  }
 }

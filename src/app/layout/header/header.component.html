@@ -8,6 +8,8 @@
     <nav class="nav" [class.nav-compressed]="isSearchOpen">
       <ng-container *ngFor="let item of menuItems">
         <a *ngIf="item.url.startsWith('/')" [routerLink]="item.url" class="nav-link"
+          [class.active]="isMenuItemActive(item)"
+          (click)="onRouteMenuClick(item)"
           [class.hidden]="!canAccessMenuItem(item)">
           {{ item.title | localized }}
         </a>
@@ -15,6 +17,7 @@
            href="javascript:void(0)"
            (click)="handleMenuClick(item, $event)" 
            class="nav-link"
+           [class.active]="isMenuItemActive(item)"
            [class.hidden]="!canAccessMenuItem(item)">
           {{ item.title | localized }}
         </a>
@@ -191,15 +194,16 @@
       <ng-container *ngFor="let item of menuItems">
         <!-- Regular Router Links -->
         <a *ngIf="canAccessMenuItem(item) && item.url.startsWith('/')" 
-           [routerLink]="item.url" (click)="closeMobileMenu()" 
-           class="mobile-nav-link" routerLinkActive="active">
+           [routerLink]="item.url" (click)="onRouteMenuClick(item); closeMobileMenu()" 
+           class="mobile-nav-link" [class.active]="isMenuItemActive(item)">
           {{ item.title | localized }}
         </a>
         <!-- Anchor Links -->
         <a *ngIf="canAccessMenuItem(item) && item.url.startsWith('#')" 
            href="javascript:void(0)"
            (click)="handleMenuClick(item, $event)" 
-           class="mobile-nav-link">
+           class="mobile-nav-link"
+           [class.active]="isMenuItemActive(item)">
           {{ item.title | localized }}
         </a>
       </ng-container>

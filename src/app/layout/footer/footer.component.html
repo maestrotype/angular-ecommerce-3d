@@ -2,7 +2,7 @@
   <div class="container footer-desktop">
     <div class="footer-content">
       <div class="footer-column">
-        <div class="footer-logo" (click)="goHome()" style="cursor: pointer;">
+        <div class="footer-logo" (click)="goHome()">
           <app-logo [height]="45" [showText]="true"></app-logo>
         </div>
         <p class="footer-description">
@@ -34,7 +34,7 @@
           </ng-template>
 
           <ng-template #emptyColHint>
-            <p class="footer-description" style="opacity: 0.5; font-size: 0.8rem;">(No links yet)</p>
+            <p class="footer-description footer-empty-hint">(No links yet)</p>
           </ng-template>
         </div>
       </ng-container>

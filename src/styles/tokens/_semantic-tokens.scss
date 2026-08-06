@@ -1,0 +1,524 @@
+:root {
+  // ===== SURFACE TOKENS =====
+  --surface-primary: var(--color-white);
+  --surface-secondary: var(--color-slate-50);
+  --surface-tertiary: var(--color-slate-100);
+  --surface-overlay: var(--color-white);
+  --surface-inverse: var(--color-slate-900);
+  --surface-page: var(--color-slate-50);
+  --surface-card: rgba(255, 255, 255, 0.85);
+  --surface-elevated: var(--color-white);
+  --surface-highlight: var(--color-slate-100);
+  --surface-overlay-light: rgba(255, 255, 255, 0.2);
+  --surface-overlay-full: rgba(15, 23, 42, 0.5);
+
+  // ===== TEXT TOKENS =====
+  --text-primary: var(--color-slate-900);
+  --text-secondary: var(--color-slate-500);
+  --text-muted: var(--color-slate-400);
+  --text-inverse: var(--color-white);
+  --text-on-primary: var(--color-white);
+  --text-link: var(--color-primary-base);
+
+  // ===== BORDER TOKENS =====
+  --border-default: var(--color-slate-200);
+  --border-strong: var(--color-slate-300);
+  --border-primary: var(--color-primary-base);
+  --border-subtle: var(--color-slate-100);
+  --border-medium: var(--color-slate-300);
+  --border-emphasis: var(--color-slate-400);
+
+  // ===== INTERACTIVE TOKENS =====
+  --interactive-primary: var(--color-primary-base);
+  --interactive-primary-hover: var(--color-slate-700);
+  --interactive-secondary: var(--color-slate-200);
+  --interactive-secondary-hover: var(--color-slate-300);
+  --interactive-danger: var(--color-error-base);
+  --interactive-disabled: var(--color-slate-300);
+  --interactive-primary-bg: var(--color-primary-base);
+  --interactive-primary-text: var(--color-white);
+  --interactive-primary-border: var(--color-primary-base);
+  // RGB triplet for rgba(var(--interactive-primary-rgb), a) focus rings (B2 bridge)
+  --interactive-primary-rgb: 59, 130, 246;
+  --interactive-button: var(--interactive-primary);
+
+  // ===== INPUT TOKENS (B2 Material bridge) =====
+  --input-bg: var(--surface-primary);
+  --input-text: var(--text-primary);
+  --input-border: var(--border-strong);
+  --input-label: var(--text-secondary);
+  --input-focus-border: var(--border-primary);
+  --input-placeholder: var(--text-muted);
+
+  // ===== TABLE / MATERIAL SURFACE TOKENS (B2 bridge) =====
+  --surface-header: var(--surface-secondary);
+  --surface-table: var(--surface-primary);
+  --surface-table-header: var(--surface-tertiary);
+  --surface-table-row: var(--surface-primary);
+  --surface-table-even: var(--surface-secondary);
+  --surface-paginator: var(--surface-table-header);
+  --surface-select-panel: var(--surface-elevated);
+  --text-table-header: var(--text-primary);
+  --text-table-row: var(--text-primary);
+  --text-table-even: var(--text-primary);
+  --text-paginator: var(--text-primary);
+
+  --table-shell-bg: var(--surface-card);
+  --table-border: var(--border-default);
+  --table-radius: var(--radius-lg);
+  --table-cell-padding-y: var(--spacing-sm);
+  --table-cell-padding-x: var(--spacing-md);
+  --table-header-padding-y: var(--spacing-sm);
+  --table-row-divider: var(--border-subtle);
+  --table-header-divider: var(--border-default);
+  --table-row-hover: var(--surface-highlight);
+  --table-row-selected: rgba(var(--interactive-primary-rgb), 0.12);
+  --table-header-size: var(--type-size-label);
+  --table-header-weight: var(--type-weight-label);
+  --table-header-tracking: var(--type-tracking-label);
+
+  // ===== FORM TOKENS (Epic G7) =====
+  --form-radius: var(--radius-md);
+  --form-radius-pill: var(--radius-lg);
+  --form-padding-y: var(--spacing-sm);
+  --form-padding-x: var(--spacing-md);
+  --form-gap: var(--spacing-md);
+  --form-row-gap: var(--spacing-lg);
+  --form-label-size: var(--type-size-label);
+  --form-label-weight: var(--type-weight-label);
+  --form-label-tracking: var(--type-tracking-label);
+  --form-label-color: var(--input-label);
+  --form-text-size: var(--type-size-body);
+  --form-hint-size: var(--type-size-caption);
+  --form-hint-color: var(--text-muted);
+  --form-error-color: var(--interactive-danger);
+  --form-success-color: var(--color-success);
+  --form-success-bg: var(--color-success-bg);
+  --form-error-bg: var(--color-error-bg);
+  --form-disabled-opacity: 0.55;
+
+  // ===== MICRO-INTERACTIONS (Epic G14) =====
+  --micro-hover-lift-y: calc(var(--spacing-xs) * -1);
+  --micro-hover-scale: 1.02;
+  --micro-press-scale: 0.98;
+  --micro-focus-ring-width: 3px;
+  --micro-focus-ring-color: rgba(var(--interactive-primary-rgb), 0.22);
+  --micro-focus-ring: 0 0 0 var(--micro-focus-ring-width) var(--micro-focus-ring-color);
+  --micro-focus-outline-width: 2px;
+  --micro-focus-outline-offset: 2px;
+  --micro-focus-outline-color: var(--interactive-primary);
+  --micro-spinner-track: var(--surface-secondary);
+  --micro-spinner-accent: var(--interactive-primary);
+  --micro-spinner-border-width: 3px;
+  --micro-spinner-duration: var(--motion-duration-slow);
+  --micro-transition: transform var(--transition-fast), box-shadow var(--transition-fast),
+    background-color var(--transition-fast), border-color var(--transition-fast),
+    color var(--transition-fast), opacity var(--transition-fast);
+
+  --form-focus-ring-width: var(--micro-focus-ring-width);
+  --form-focus-ring-color: var(--micro-focus-ring-color);
+  --form-focus-ring: 0 0 0 var(--form-focus-ring-width) var(--form-focus-ring-color);
+  --form-error-ring-color: rgba(239, 68, 68, 0.22);
+  --form-error-ring: 0 0 0 var(--form-focus-ring-width) var(--form-error-ring-color);
+  --form-success-ring-color: rgba(16, 185, 129, 0.22);
+  --form-success-ring: 0 0 0 var(--form-focus-ring-width) var(--form-success-ring-color);
+  --form-border: var(--input-border);
+  --form-border-focus: var(--input-focus-border);
+  --form-bg: var(--input-bg);
+  --form-text: var(--input-text);
+  --form-placeholder: var(--input-placeholder);
+  --form-transition: border-color var(--transition-fast), box-shadow var(--transition-fast),
+    background-color var(--transition-fast);
+
+  // ===== NAVIGATION TOKENS (Epic G8) =====
+  --nav-link-color: var(--text-secondary);
+  --nav-link-hover: var(--interactive-primary);
+  --nav-link-active: var(--interactive-primary);
+  --nav-link-bg: transparent;
+  --nav-link-bg-hover: var(--surface-highlight);
+  --nav-link-bg-active: rgba(var(--interactive-primary-rgb), 0.12);
+  --nav-indicator-color: var(--interactive-primary);
+  --nav-indicator-width: 3px;
+  --nav-focus-ring: var(--micro-focus-ring);
+  --nav-item-radius: var(--radius-md);
+  --nav-item-padding-y: var(--spacing-sm);
+  --nav-item-padding-x: var(--spacing-md);
+  --nav-drawer-bg: var(--surface-elevated);
+  --nav-drawer-overlay: var(--surface-overlay-full);
+  --nav-drawer-border: var(--border-subtle);
+  --nav-drawer-width: min(90vw, 400px);
+  --nav-mobile-link-size: var(--type-size-h4);
+  --nav-sidenav-active-shadow: 0 4px 14px rgba(0, 0, 0, 0.22), 0 0 0 1px var(--border-default);
+
+  --breadcrumb-color: var(--text-muted);
+  --breadcrumb-link-color: var(--text-secondary);
+  --breadcrumb-link-hover-color: var(--interactive-primary);
+  --breadcrumb-current-color: var(--text-primary);
+  --breadcrumb-separator-color: var(--text-muted);
+
+  // ===== MODAL TOKENS (Epic G9) =====
+  --modal-backdrop: var(--surface-overlay-full);
+  --modal-backdrop-light: var(--surface-overlay);
+  --modal-backdrop-blur: var(--backdrop-blur-sm);
+  --modal-backdrop-blur-strong: var(--backdrop-blur);
+  --modal-surface: var(--surface-elevated);
+  --modal-border: var(--border-default);
+  --modal-radius: var(--radius-lg);
+  --modal-radius-lg: var(--radius-xl);
+  --modal-shadow: var(--shadow-xl);
+  --modal-max-width: 500px;
+  --modal-auth-max-width: 440px;
+  --modal-auth-max-height: min(
+    90vh,
+    calc(
+      100dvh - 2 * var(--modal-padding) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)
+    )
+  );
+  --modal-padding: var(--spacing-lg);
+  --z-modal-stack: 10100;
+  --modal-enter-duration: var(--motion-duration-normal);
+  --modal-leave-duration: var(--motion-duration-fast);
+  --modal-enter-easing: var(--motion-easing-enter);
+  --modal-leave-easing: var(--motion-easing-leave);
+  --modal-close-size: 2.25rem;
+  --modal-close-bg: var(--surface-tertiary);
+  --modal-close-hover-bg: var(--surface-highlight);
+
+  // ===== STAT CARD TOKENS (Epic G10 — admin KPI cards) =====
+  --stat-card-bg: var(--surface-secondary);
+  --stat-card-border: var(--border-default);
+  --stat-card-blur: none;
+  --stat-card-shadow: var(--shadow-md);
+  --stat-card-hover-shadow: var(--shadow-lg);
+  --stat-card-hover-bg: var(--surface-highlight);
+  --stat-card-hover-border: var(--border-default);
+  --stat-card-color: var(--text-primary);
+  --stat-card-radius: var(--radius-xl);
+  --stat-card-padding: var(--space-4);
+  --stat-card-min-height: 120px;
+  --stat-card-hover-transform: translateY(-4px);
+  --stat-card-motion: var(--transition-normal);
+  --stat-card-overlay: none;
+  --stat-card-overlay-opacity: 0;
+  --stat-card-shimmer-opacity: 0;
+  --stat-card-shimmer-hover-opacity: 0;
+  --stat-card-number-color: var(--text-primary);
+  --stat-card-compact-number-color: var(--interactive-primary);
+  --stat-card-number-gradient: none;
+  --stat-card-number-fill: currentColor;
+  --stat-card-number-clip: border-box;
+  --stat-card-label-color: var(--text-secondary);
+  --stat-card-label-weight: var(--font-medium);
+  --stat-card-icon-size: 48px;
+
+  --stat-icon-products: var(--color-success);
+  --stat-icon-orders: var(--interactive-primary);
+  --stat-icon-users: var(--color-warning);
+  --stat-icon-revenue: var(--color-accent);
+  --stat-icon-aov: var(--interactive-primary);
+  --stat-icon-success-rate: var(--color-success);
+
+  // ===== PRODUCT DETAIL PAGE (Epic G11) =====
+  --pdp-page-bg: var(--product-detail-bg, var(--surface-page));
+  --pdp-header-bg: var(--surface-secondary);
+  --pdp-header-border: var(--border-default);
+  --pdp-header-height: 3.75rem;
+  --pdp-content-max-width: 75rem;
+  --pdp-grid-gap: var(--spacing-2xl);
+  --pdp-grid-template: minmax(0, 31.25rem) minmax(0, 1fr);
+  --pdp-gallery-width: 31.25rem;
+  --pdp-gallery-transform: none;
+  --pdp-gallery-transform-hover: none;
+  --pdp-gallery-filter: none;
+  --pdp-gallery-main-height: 26.25rem;
+  --pdp-gallery-main-bg: var(--product-detail-main-view-bg, var(--surface-primary));
+  --pdp-gallery-main-border: var(--product-detail-main-view-border, 1px solid var(--border-default));
+  --pdp-gallery-main-radius: var(--radius-lg);
+  --pdp-gallery-main-shadow: var(--shadow-md);
+  --pdp-gallery-main-blur: none;
+  --pdp-gallery-media-padding: var(--spacing-lg);
+  --pdp-gallery-media-shadow: none;
+  --pdp-thumb-size: 3.75rem;
+  --pdp-thumb-gap: var(--spacing-sm);
+  --pdp-thumb-strip-bg: transparent;
+  --pdp-thumb-strip-border: none;
+  --pdp-thumb-strip-radius: var(--radius-md);
+  --pdp-thumb-strip-padding: 0;
+  --pdp-thumb-strip-blur: none;
+  --pdp-thumb-bg: var(--product-detail-thumb-bg, var(--surface-primary));
+  --pdp-thumb-border: var(--product-detail-thumb-border, 2px solid transparent);
+  --pdp-thumb-selected-border: var(--product-detail-thumb-selected-border, 2px solid var(--interactive-primary));
+  --pdp-thumb-selected-shadow: 0 2px 8px rgba(var(--interactive-primary-rgb, 99, 102, 241), 0.2);
+  --pdp-thumb-selected-transform: none;
+  --pdp-info-bg: var(--product-detail-card-bg, var(--surface-card));
+  --pdp-info-border: var(--product-detail-card-border, 1px solid var(--border-default));
+  --pdp-info-radius: var(--radius-xl);
+  --pdp-info-shadow: var(--shadow-lg);
+  --pdp-info-padding: var(--spacing-xl);
+  --pdp-info-blur: none;
+  --pdp-info-sticky-top: var(--spacing-lg);
+  --pdp-info-accent-bar: none;
+  --pdp-info-accent-bar-height: 0;
+  --pdp-expand-overlay-bg: var(--surface-overlay-hover);
+  --pdp-expand-chip-bg: var(--surface-overlay-full);
+  --pdp-expand-chip-color: var(--text-on-primary);
+  --pdp-recommendations-margin-top: var(--spacing-2xl);
+  --pdp-cta-bg: var(--product-cta-bg, var(--interactive-primary));
+  --pdp-cta-color: var(--product-cta-color, var(--text-on-primary));
+  --pdp-cta-border: 1px solid transparent;
+  --pdp-cta-radius: var(--product-cta-radius, var(--radius-md));
+  --pdp-cta-shadow: var(--product-cta-shadow, var(--shadow-md));
+  --pdp-cta-hover-bg: var(--interactive-primary-hover);
+  --pdp-cta-hover-shadow: var(--product-cta-hover-shadow, var(--shadow-lg));
+  --pdp-purchase-row-bg: transparent;
+  --pdp-purchase-row-border: none;
+  --pdp-purchase-row-radius: 0;
+  --pdp-purchase-row-padding: 0;
+  --pdp-price-accent-border: none;
+  --pdp-price-accent-padding: 0;
+
+  // ===== CHECKOUT FLOW (G12) =====
+  --checkout-page-bg: var(--surface-page);
+  --checkout-page-padding-y: var(--spacing-2xl);
+  --checkout-content-max-width: var(--container-max-width, 75rem);
+  --checkout-grid-gap: var(--spacing-2xl);
+  --checkout-grid-template: minmax(0, 1fr) minmax(0, 1.5fr);
+  --checkout-header-gap: var(--spacing-xl);
+  --checkout-panel-bg: var(--surface-card);
+  --checkout-panel-border: 1px solid var(--glass-border-soft);
+  --checkout-panel-radius: var(--radius-lg);
+  --checkout-panel-padding: var(--spacing-xl);
+  --checkout-panel-shadow: var(--shadow-sm);
+  --checkout-panel-blur: none;
+  --checkout-section-title-border: 2px solid var(--interactive-primary);
+  --checkout-stepper-indicator-size: 2rem;
+  --checkout-stepper-line-color: var(--border-default);
+  --checkout-stepper-upcoming-color: var(--text-muted);
+  --checkout-stepper-active-color: var(--interactive-primary);
+  --checkout-stepper-active-bg: rgba(var(--interactive-primary-rgb, 99, 102, 241), 0.12);
+  --checkout-stepper-completed-color: var(--color-success);
+  --checkout-stepper-completed-bg: var(--color-success-bg);
+  --checkout-price-color: var(--interactive-primary);
+  --checkout-total-highlight-bg: var(--surface-highlight);
+  --checkout-total-final-color: var(--color-success);
+  --checkout-back-btn-bg: var(--surface-primary);
+  --checkout-submit-bg: linear-gradient(135deg, var(--interactive-primary), var(--color-accent));
+  --checkout-submit-color: var(--text-on-primary);
+  --checkout-submit-shadow: var(--shadow-md);
+  --checkout-submit-hover-shadow: var(--shadow-lg);
+  --checkout-method-bg: var(--surface-secondary);
+  --checkout-method-hover-bg: var(--surface-highlight);
+  --checkout-method-selected-border: var(--interactive-primary);
+  --checkout-warning-border: var(--color-warning);
+  --checkout-warning-bg: var(--color-warning-bg);
+  --checkout-warning-text: var(--color-warning-dark);
+  --checkout-status-pending-bg: var(--color-warning-bg);
+  --checkout-status-pending-color: var(--color-warning-dark);
+  --checkout-status-success-bg: var(--color-success-bg);
+  --checkout-status-success-color: var(--color-success-dark);
+  --checkout-status-error-bg: var(--color-error-bg);
+  --checkout-status-error-color: var(--color-error-dark);
+  --checkout-loading-panel-bg: var(--surface-primary);
+
+  // ===== STATE TOKENS =====
+  --state-success-bg: var(--color-success-base);
+  --state-success-text: var(--color-white);
+  --state-warning-bg: var(--color-warning-base);
+  --state-warning-text: var(--color-slate-900);
+  --state-error-bg: var(--color-error-base);
+  --state-error-text: var(--color-white);
+  --state-danger-bg: var(--color-error-base);
+  --state-danger-text: var(--color-white);
+
+  // ===== COMPOSITE TOKENS =====
+  --radius-card: var(--radius-md);
+  --radius-dialog: var(--radius-md);
+  --shadow-card: var(--shadow-sm);
+
+  // ===== OVERLAY TOKENS =====
+  --surface-overlay-hover: rgba(0, 0, 0, 0.3);
+  // NOTE: --glass-blur must be a full CSS function (blur(...)) because it is consumed
+  // by backdrop-filter: var(--glass-blur). A raw pixel value would be invalid.
+  --glass-blur: blur(12px);
+  --glass-blur-value: 12px; // raw value for JS or filter() usage
+  --glass-opacity: 0.8;
+
+  // ===== EFFECT TOKENS =====
+  // Same blur(...) function rule as --glass-blur above.
+  --backdrop-blur: blur(12px);
+  --backdrop-blur-sm: blur(8px);
+  --glass-border-hover: rgba(255, 255, 255, 0.3);
+  --glass-shadow-hover: 0 20px 40px rgba(31, 38, 135, 0.15);
+
+  // ===== GLASS SURFACE RECIPES (C3 — promoted from --admin-glass-*; themes override) =====
+  --glass-surface-strong: var(--surface-elevated);
+  --glass-surface-soft: var(--surface-card);
+  --glass-surface-muted: var(--surface-secondary);
+  --glass-border-strong: var(--border-strong);
+  --glass-border-soft: var(--border-subtle);
+  --glass-divider: var(--border-default);
+  --glass-highlight: rgba(255, 255, 255, 0.65);
+  --glass-shadow: var(--shadow-lg);
+  --glass-shadow-lg: var(--shadow-xl);
+  --glass-inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+
+  // ===== SURFACE EFFECTS (C3 — promoted from --admin-card-* / --surface-glow) =====
+  --surface-card-gradient: var(--surface-elevated);
+  --surface-glow: none;
+  // RGB companions for rgba(var(--surface-elevated-rgb), a) until C4 migrates consumers
+  --surface-elevated-rgb: 255, 255, 255;
+  --text-muted-rgb: 148, 163, 184;
+
+  // ===== SPACING ALIASES =====
+  // Extend the --spacing-* scale (core/_variables.scss) at both ends.
+  --spacing-2xs: 0.125rem;
+  --spacing-2xl: 3rem;
+  --spacing-page: var(--space-6);
+
+  // ===== TYPOGRAPHY SCALE (Epic G5 / ADR-004) =====
+  --type-font-body: var(--font-sans);
+  --type-font-heading: 'Inter', var(--font-sans);
+  --type-font-mono: var(--font-mono);
+
+  --type-size-display: clamp(2rem, 4.5vw, 2.25rem);
+  --type-size-h1: var(--text-3xl);
+  --type-size-h2: var(--text-2xl);
+  --type-size-h3: var(--text-xl);
+  --type-size-h4: var(--text-lg);
+  --type-size-h5: var(--text-base);
+  --type-size-h6: var(--text-sm);
+  --type-size-body: var(--text-base);
+  --type-size-body-sm: var(--text-sm);
+  --type-size-caption: var(--text-xs);
+  --type-size-label: var(--text-xs);
+  --type-size-overline: var(--text-xs);
+
+  --type-weight-display: var(--font-bold);
+  --type-weight-heading: var(--font-bold);
+  --type-weight-subheading: var(--font-semibold);
+  --type-weight-body: var(--font-normal);
+  --type-weight-caption: var(--font-normal);
+  --type-weight-label: var(--font-medium);
+
+  --type-leading-display: var(--leading-tight);
+  --type-leading-heading: var(--leading-tight);
+  --type-leading-body: var(--leading-normal);
+  --type-leading-caption: var(--leading-normal);
+
+  --type-tracking-display: -0.03em;
+  --type-tracking-heading: -0.02em;
+  --type-tracking-body: 0;
+  --type-tracking-caption: 0.01em;
+  --type-tracking-label: 0.05em;
+  --type-tracking-overline: 0.08em;
+
+  // ===== AUTH TOKENS (light defaults; themes override) =====
+  --auth-modal-bg: var(--surface-primary);
+  --auth-modal-border: 1px solid var(--border-subtle);
+  --auth-modal-shadow: var(--modal-shadow);
+  --auth-header-bg: var(--surface-secondary);
+  --auth-header-border: 1px solid var(--border-subtle);
+  --auth-content-bg: var(--surface-primary);
+  --auth-tab-active-bg: transparent;
+  --auth-tab-indicator: var(--interactive-primary);
+  --auth-input-bg: var(--surface-primary);
+  --auth-input-border: 1px solid var(--border-default);
+  --auth-tab-hover-bg: var(--color-slate-100);
+  --auth-btn-secondary: var(--color-slate-100);
+  --auth-btn-secondary-border: 1px solid var(--color-slate-300);
+  --auth-btn-secondary-text: var(--color-slate-700);
+  --auth-btn-danger-border: 1px solid color-mix(in srgb, var(--interactive-danger) 35%, var(--border-default));
+  --auth-btn-danger-hover-bg: color-mix(in srgb, var(--interactive-danger) 10%, transparent);
+  --auth-input-focus: var(--color-brand-base);
+  --auth-close-size: 2.75rem;
+  --auth-close-bg: transparent;
+  --auth-close-hover-bg: var(--color-slate-100);
+  --auth-close-color: var(--text-muted);
+  --auth-close-hover-color: var(--text-primary);
+  --auth-close-border: 1px solid var(--border-subtle);
+
+  // ===== LEGACY COLOR ALIASES (Task A4) =====
+  // Former parallel palette from core/_variables.scss.
+  // Maps old --color-* names onto semantic/primitive tokens so components
+  // keep working until Epic D migrates them. Themes override the semantic
+  // targets; these aliases follow automatically.
+  --color-primary: var(--interactive-primary);
+  --color-primary-light: var(--color-brand-light);
+  --color-primary-dark: var(--color-brand-dark);
+  --color-primary-hover: var(--interactive-primary-hover);
+
+  --color-secondary: var(--color-secondary-base);
+  --color-secondary-dark: var(--color-slate-600);
+
+  --color-accent: var(--color-accent-base);
+
+  --color-success: var(--color-success-base);
+  --color-success-light: var(--color-emerald-500);
+  --color-success-dark: var(--color-emerald-600);
+  --color-success-hover: var(--color-emerald-600);
+  --color-success-bg: rgba(16, 185, 129, 0.1);
+
+  --color-warning: var(--color-warning-base);
+  --color-warning-light: var(--color-amber-500);
+  --color-warning-dark: var(--color-amber-500);
+  --color-warning-hover: var(--color-amber-500);
+  --color-warning-bg: rgba(245, 158, 11, 0.1);
+
+  --color-error: var(--color-error-base);
+  --color-error-light: var(--color-red-500);
+  --color-error-dark: var(--color-red-500);
+  --color-error-hover: var(--color-red-500);
+  --color-error-bg: rgba(239, 68, 68, 0.1);
+
+  --color-info: var(--color-blue-500);
+  --color-info-hover: var(--color-blue-600);
+  --color-info-bg: rgba(59, 130, 246, 0.1);
+
+  --color-bg-primary: var(--surface-page);
+  --color-bg-secondary: var(--surface-primary);
+  --color-bg-tertiary: var(--surface-secondary);
+  --color-bg-hover: var(--surface-highlight);
+
+  --color-surface-primary: var(--surface-primary);
+  --color-surface-secondary: var(--surface-secondary);
+  --color-surface-tertiary: var(--surface-tertiary);
+  --color-surface-hover: var(--surface-highlight);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-muted);
+  --color-text-disabled: var(--interactive-disabled);
+  --color-text-inverse: var(--text-inverse);
+  --color-text-accent: var(--text-link);
+
+  --color-border-primary: var(--border-default);
+  --color-border-secondary: var(--border-subtle);
+  --color-border-tertiary: var(--border-subtle);
+  --color-border-focus: var(--border-primary);
+
+  --color-shadow-light: rgba(0, 0, 0, 0.1);
+  --color-shadow-medium: rgba(0, 0, 0, 0.15);
+  --color-shadow-heavy: rgba(0, 0, 0, 0.25);
+
+  // ===== MOTION TOKENS (Epic G1 / ADR-004) =====
+  --motion-duration-instant: var(--duration-instant);
+  --motion-duration-fast: var(--duration-fast);
+  --motion-duration-normal: var(--duration-normal);
+  --motion-duration-slow: var(--duration-slow);
+  --motion-easing-default: var(--easing-default);
+  --motion-easing-enter: var(--easing-enter);
+  --motion-easing-leave: var(--easing-leave);
+  --motion-easing-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --transition-fast: var(--motion-duration-fast) var(--motion-easing-default);
+  --transition-normal: var(--motion-duration-normal) var(--motion-easing-default);
+  --transition-slow: var(--motion-duration-slow) var(--motion-easing-default);
+  --transition-enter: var(--motion-duration-normal) var(--motion-easing-enter);
+  --transition-leave: var(--motion-duration-fast) var(--motion-easing-leave);
+
+  // ===== PAGE TRANSITIONS (Epic G13) =====
+  --page-transition-duration: var(--motion-duration-normal);
+  --page-transition-easing: var(--motion-easing-enter);
+  --page-transition-offset-y: var(--spacing-md);
+  --page-transition-opacity-from: 0;
+}

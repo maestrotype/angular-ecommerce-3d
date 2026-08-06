@@ -19,6 +19,11 @@ import { AnalyticsService } from './core/services/analytics.service';
 export class AppComponent implements OnInit, OnDestroy {
   title = 'angular-ecommerce';
   private adminRoute = false;
+  private skipInitialPageTransition = true;
+  pageEntering = false;
+  private pageTransitionTimer: ReturnType<typeof setTimeout> | null = null;
+
+  private static readonly PAGE_TRANSITION_MAX_MS = 700;
 
   // Mobile Footer State
   isHidden = false;
@@ -88,6 +93,44 @@ export class AppComponent implements OnInit, OnDestroy {
     this.cartSubscription.unsubscribe();
     this.favoritesSubscription.unsubscribe();
     this.scrollSubject.complete();
+    this.clearPageTransitionTimer();
+  }
+
+  onRouteActivate(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    if (this.skipInitialPageTransition) {
+      this.skipInitialPageTransition = false;
+      return;
+    }
+
+    if (this.isAdminRoute() || this.isViewerRoute()) {
+      return;
+    }
+
+    this.triggerPageTransition();
+  }
+
+  private triggerPageTransition(): void {
+    this.clearPageTransitionTimer();
+    this.pageEntering = false;
+
+    requestAnimationFrame(() => {
+      this.pageEntering = true;
+      this.pageTransitionTimer = setTimeout(() => {
+        this.pageEntering = false;
+        this.pageTransitionTimer = null;
+      }, AppComponent.PAGE_TRANSITION_MAX_MS);
+    });
+  }
+
+  private clearPageTransitionTimer(): void {
+    if (this.pageTransitionTimer !== null) {
+      clearTimeout(this.pageTransitionTimer);
+      this.pageTransitionTimer = null;
+    }
   }
 
   @HostListener('window:scroll')

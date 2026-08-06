@@ -1,74 +1,53 @@
 /* ==========================================================================
-   ADMIN LIGHT THEME VARIABLES
+   ADMIN LIGHT THEME — C3 (ADR-011)
+   Semantic SoT from shared tokens. Layout ADMIN-ONLY tokens in `_admin-layout-tokens.scss` (C6).
+   Admin chrome scoped to body.is-admin.
    ========================================================================== */
 
-[data-theme='light'] {
-  --admin-bg-main: #f9fafb;
-  --admin-bg-card: #ffffff;
-  --admin-bg-secondary: #f3f4f6;
-  --admin-bg-hover: #f5f6f8;
-  --admin-back-btn: #f5f6f8;
-  --admin-submit-btn: #3b82f6;
-  --admin-submit-btn-hover: #2563eb;
-  --admin-submit-btn-text: #ffffff;
-  --admin-cancel-btn: #6b7280;
-  --admin-cancel-btn-hover: #4b5563;
-  --admin-border-color: #d1d5db;
-  --admin-text-primary: #111827;
-  --admin-text-secondary: #6b7280;
-  --admin-primary: #3b82f6;
-  --admin-primary-rgb: 59, 130, 246;
-  --admin-input-bg: #ffffff;
-  --admin-input-text: #111827;
-  --admin-input-border: #111827;
-  --admin-input-label: #6b7280;
-  --admin-text-label: #6b7280;
-  --admin-input-focus-border: var(--admin-primary);
-  --admin-danger: #3b82f6; // Changed from red to blue
-  --add-btn: #313638;
-  --add-btn-hover: #3a464b;
-  --mat-card-subtitle-text-color: #111827;
+body.is-admin[data-theme='light'],
+html[data-theme='light'] body.is-admin {
+  --backdrop-blur: none;
 
-  // Background Colors - Light Theme
-  --admin-bg-primary: #f0f2f5;
-  --admin-bg-secondary: #f0f2f5;
-  --admin-bg-tertiary: #ffffff;
-  --admin-bg-card: #ffffff;
-  --admin-table-bg: #ffffff;
-  --admin-table-border: #e5e7eb;
-  --admin-table-header-bg: #f8fafc;
-  --admin-bg-hover: rgba(59, 130, 246, 0.05);
-  --admin-bg-overlay: rgba(0, 0, 0, 0.3);
-  --admin-basic-bg: #ffffff;
-  --admin-order-list-card-bg: #ffffff;
-  
-  // Text Colors - Light Theme
-  --admin-text-primary: #111827;
-  --admin-text-secondary: #6b7280;
-  --admin-text-disabled: #9ca3af;
-  --admin-text-inverse: #ffffff;
-  
-  // Border Colors - Light Theme
-  --admin-border-primary: #e5e7eb;
-  --admin-border-secondary: #f3f4f6;
-  --admin-border-focus: #3b82f6;
-  --admin-border-error: #3b82f6; // Changed from red to blue
-  
-  // Custom Avatar Variables
-  --admin-avatar-bg: rgba(59, 130, 246, 0.1); 
-  --admin-avatar-color: #3b82f6;
+  --stat-card-bg: var(--color-white);
+  --stat-card-border: var(--border-default);
+  --stat-card-shadow: var(--shadow-md);
+  --stat-card-blur: none;
+  --stat-card-hover-shadow: var(--shadow-lg);
+  --stat-card-hover-bg: var(--surface-highlight);
+  --stat-card-hover-border: var(--border-default);
+  --stat-card-color: var(--text-primary);
 
-  // Ensure MDC card container tokens are transparent in light theme
+  --dashboard-shell-bg: var(--color-slate-50);
+  --dashboard-chart-bg: var(--color-white);
+
+  --admin-list-bg: var(--surface-elevated);
+  --admin-list-color: var(--text-primary);
+  --admin-list-title-color: var(--text-primary);
+  --admin-list-border: none;
+  --admin-list-radius: 0;
+  --admin-list-shadow: var(--shadow-md);
+  --admin-list-backdrop-filter: none;
+
+  --stat-icon-products: var(--color-success);
+  --stat-icon-orders: var(--interactive-primary);
+  --stat-icon-users: var(--color-warning);
+  --stat-icon-revenue: var(--color-accent);
+  --stat-icon-aov: var(--interactive-primary);
+  --stat-icon-success-rate: var(--color-success);
+
+  --mat-card-subtitle-text-color: var(--text-primary);
+
   --mdc-elevated-card-container-color: transparent;
   --mdc-filled-card-container-color: transparent;
   --mdc-outlined-card-container-color: transparent;
-  
-  // MDC list hover tokens (light)
-  --mdc-list-list-item-hover-label-text-color: var(--admin-text-primary);
+
+  --mdc-list-list-item-hover-label-text-color: var(--text-primary);
   --mdc-list-list-item-hover-state-layer-color: transparent;
   --mdc-list-list-item-hover-state-layer-opacity: 0;
-  --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
-  --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
-}
+  --mdc-list-item-hover-label-text-color: var(--text-primary);
+  --mdc-list-item-hover-leading-icon-color: var(--text-secondary);
 
-  
+  // Legacy add-btn (non-semantic aliases used by older controls)
+  --add-btn: var(--color-slate-700);
+  --add-btn-hover: var(--color-slate-600);
+}

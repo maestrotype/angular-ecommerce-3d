@@ -1,93 +1,17 @@
-// Override list-container styles to match Orders structure
-:host ::ng-deep {
-  .list {
-    background-color: var(--admin-bg-card);
-    min-height: calc(100vh - 64px);
-    color: var(--admin-text-primary);
-
-    [data-theme="glass"] & {
-      background-color: transparent;
-      box-shadow: none;
-    }
-  }
-
-  .list__header {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 12px;
-    padding: 0;
-  }
-
-  .list__filters {
-    justify-content: flex-start;
-    display: flex;
-    gap: 16px;
-    margin-bottom: 12px;
-    align-items: baseline;
-    flex-wrap: wrap;
-    padding: 0;
-  }
-
-  .list__content {
-    padding: 0;
-  }
-  
-  // Dark Glass theme - transparent background for list
-  [data-theme="dark-glass"] .list {
-    background-color: transparent;
-    color: rgba(255, 255, 255, 1);
-  }
-  
-  // Add borders between table rows
-  .mat-mdc-table.mat-mdc-table {
-    .mat-mdc-row .mat-mdc-cell {
-      border-bottom: 1px solid var(--admin-order-list-border);
-    }
-    
-    .mat-mdc-row:last-child .mat-mdc-cell {
-      border-bottom: none;
-    }
-  }
-  
-  // Override admin-table-container styles to match Orders
-  .admin-table-container.admin-table-container {
-    background: var(--admin-basic-bg);
-    border-radius: var(--admin-border-radius-md);
-    box-shadow: var(--admin-shadow-md);
-    overflow: hidden;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-
-    [data-theme="glass"] & {
-      background: var(--admin-bg-card);
-      border-radius: 20px;
-      border: none;
-      box-shadow: var(--admin-glass-shadow);
-      backdrop-filter: blur(16px) saturate(155%);
-      -webkit-backdrop-filter: blur(16px) saturate(155%);
-    }
-  }
-  
-  // Ensure table inside has proper styling
-  .admin-table-container .mat-mdc-table {
-    background-color: transparent;
-  }
-}
-
 .header-section {
   display: flex;
   flex-direction: column;
   width: 100%;
 
   h1 {
-    color: var(--admin-text-primary);
+    color: var(--text-primary);
     margin: 0 0 4px 0;
     font-size: 2rem;
     font-weight: 600;
   }
 
   .subtitle {
-    color: var(--admin-text-secondary);
+    color: var(--text-secondary);
     font-size: 1rem;
     margin: 0;
   }
@@ -95,25 +19,22 @@
 
 .users-table {
   width: 100%;
-  
-  // Table styles are now in _admin-theme-material.scss
-  // Only user-specific styles remain here
-  
+
   td {
     .user-info {
       display: flex;
       align-items: center;
-      gap: var(--admin-spacing-md);
+      gap: var(--space-4);
 
       .user-avatar {
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        background-color: var(--admin-avatar-bg);
+        background-color: var(--color-info-bg);
         display: flex;
         align-items: center;
         justify-content: center;
-        color: var(--admin-avatar-color);
+        color: var(--interactive-primary);
 
         mat-icon {
           font-size: 24px;
@@ -122,126 +43,41 @@
         }
       }
 
-
       .user-name {
-        font-weight: var(--admin-font-weight-medium);
-        color: var(--admin-text-primary);
-        margin-bottom: var(--admin-spacing-xs);
+        font-weight: var(--font-medium);
+        color: var(--text-primary);
+        margin-bottom: var(--space-1);
       }
 
       .user-phone {
-        font-size: var(--admin-font-size-sm);
-        color: var(--admin-text-secondary);
+        font-size: var(--text-sm);
+        color: var(--text-secondary);
       }
     }
 
     .action-buttons {
       display: flex;
-      gap: var(--admin-spacing-xs);
+      gap: var(--space-1);
       align-items: center;
     }
   }
-  
-  // Row separation and hover styles are now in _admin-theme-material.scss
 }
 
 .error-container {
   text-align: center;
-  padding: var(--admin-spacing-xxl) var(--admin-spacing-lg);
-  color: var(--admin-text-primary);
-  margin: var(--admin-spacing-lg);
+  padding: var(--space-12) var(--space-6);
+  color: var(--text-primary);
+  margin: var(--space-6);
 
   mat-icon {
     font-size: 48px;
     width: 48px;
     height: 48px;
-    margin-bottom: var(--admin-spacing-md);
+    margin-bottom: var(--space-4);
   }
 
   p {
-    margin: var(--admin-spacing-md) 0;
-    font-size: var(--admin-font-size-lg);
+    margin: var(--space-4) 0;
+    font-size: var(--text-lg);
   }
 }
-
-::ng-deep {
-  .mat-icon-button {
-    color: var(--admin-text-primary);
-
-    &.mat-button-disabled {
-      color: var(--admin-text-disabled);
-    }
-  }
-
-  .mat-form-field {
-    .mat-form-field-label {
-      color: var(--admin-text-secondary);
-    }
-
-    .mat-input-element {
-      color: var(--admin-text-primary);
-    }
-
-    .mat-form-field-outline {
-      color: var(--admin-border-primary);
-    }
-
-    &.mat-focused {
-      .mat-form-field-outline-thick {
-        color: var(--admin-primary);
-      }
-
-      .mat-form-field-label {
-        color: var(--admin-primary);
-      }
-    }
-  }
-
-  .mat-chip {
-    font-size: var(--admin-font-size-sm);
-    padding: 4px 12px;
-    min-height: 28px;
-
-    &.mat-chip-selected {
-      &.mat-primary {
-        background-color: var(--admin-primary);
-        color: white;
-      }
-
-      &.mat-accent {
-        background-color: var(--admin-accent);
-        color: white;
-      }
-
-      &.mat-warn {
-        background-color: var(--admin-warn);
-        color: white;
-      }
-    }
-  }
-
-  .mat-paginator {
-    background-color: var(--admin-bg-secondary);
-    color: var(--admin-text-primary);
-    border-top: 1px solid var(--admin-border-primary);
-
-    .mat-paginator-page-size-label,
-    .mat-paginator-range-label {
-      color: var(--admin-text-primary);
-    }
-
-    .mat-icon-button {
-      color: var(--admin-text-primary);
-    }
-
-    .mat-select {
-      color: var(--admin-text-primary);
-    }
-  }
-}
-
-
-
-
-
-

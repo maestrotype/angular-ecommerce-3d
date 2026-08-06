@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UI Architecture — angular-ecommerce-3d</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --text-dim: #8b949e;
+    --brown: #d29922;
+    --brown-bg: rgba(210, 153, 34, 0.1);
+    --brown-border: rgba(210, 153, 34, 0.3);
+    --green: #3fb950;
+    --green-bg: rgba(63, 185, 80, 0.1);
+    --green-border: rgba(63, 185, 80, 0.3);
+    --blue: #58a6ff;
+    --blue-bg: rgba(88, 166, 255, 0.1);
+    --blue-border: rgba(88, 166, 255, 0.3);
+    --purple: #bc8cff;
+    --purple-bg: rgba(188, 140, 255, 0.1);
+    --purple-border: rgba(188, 140, 255, 0.3);
+    --red: #f85149;
+    --red-bg: rgba(248, 81, 73, 0.1);
+    --red-border: rgba(248, 81, 73, 0.3);
+    --cyan: #39d2c0;
+    --cyan-bg: rgba(57, 210, 192, 0.1);
+    --cyan-border: rgba(57, 210, 192, 0.3);
+    --orange: #f0883e;
+    --orange-bg: rgba(240, 136, 62, 0.1);
+    --orange-border: rgba(240, 136, 62, 0.3);
+    --pink: #f778ba;
+    --pink-bg: rgba(247, 120, 186, 0.1);
+    --pink-border: rgba(247, 120, 186, 0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    padding: 2rem;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, var(--brown), var(--orange));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: var(--text-dim);
+    margin-bottom: 3rem;
+    font-size: 0.95rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 2rem;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    position: relative;
+  }
+
+  .diagram h2 {
+    font-size: 1rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .diagram h2 .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .flow { display: flex; flex-direction: column; gap: 0.5rem; }
+
+  .arrow-down {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 1.2rem;
+    line-height: 1;
+    margin: 0 -0.25rem;
+  }
+
+  .arrow-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dim);
+    font-size: 1.2rem;
+    padding: 0 0.5rem;
+  }
+
+  .row { display: flex; gap: 0.5rem; align-items: stretch; }
+  .row .arrow-right { flex-shrink: 0; }
+
+  .block {
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    border: 1px solid;
+    position: relative;
+  }
+
+  .block .label {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .block .desc {
+    font-size: 0.75rem;
+    opacity: 0.7;
+    margin-top: 0.15rem;
+  }
+
+  .block.brown { background: var(--brown-bg); border-color: var(--brown-border); color: var(--brown); }
+  .block.green { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
+  .block.blue { background: var(--blue-bg); border-color: var(--blue-border); color: var(--blue); }
+  .block.purple { background: var(--purple-bg); border-color: var(--purple-border); color: var(--purple); }
+  .block.red { background: var(--red-bg); border-color: var(--red-border); color: var(--red); }
+  .block.cyan { background: var(--cyan-bg); border-color: var(--cyan-border); color: var(--cyan); }
+  .block.orange { background: var(--orange-bg); border-color: var(--orange-border); color: var(--orange); }
+  .block.pink { background: var(--pink-bg); border-color: var(--pink-border); color: var(--pink); }
+
+  .sub-blocks {
+    display: flex;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+    margin-top: 0.4rem;
+  }
+
+  .sub {
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--text-dim);
+  }
+
+  .full-width { grid-column: 1 / -1; }
+
+  .legend {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 2rem;
+    font-size: 0.8rem;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    border: 1px solid;
+  }
+
+  .legend-dot.brown { background: var(--brown-bg); border-color: var(--brown-border); }
+  .legend-dot.green { background: var(--green-bg); border-color: var(--green-border); }
+  .legend-dot.blue { background: var(--blue-bg); border-color: var(--blue-border); }
+  .legend-dot.purple { background: var(--purple-bg); border-color: var(--purple-border); }
+  .legend-dot.red { background: var(--red-bg); border-color: var(--red-border); }
+  .legend-dot.cyan { background: var(--cyan-bg); border-color: var(--cyan-border); }
+  .legend-dot.orange { background: var(--orange-bg); border-color: var(--orange-border); }
+  .legend-dot.pink { background: var(--pink-bg); border-color: var(--pink-border); }
+
+  .doc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .doc-card {
+    padding: 0.75rem;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    font-size: 0.8rem;
+  }
+
+  .doc-card .filename {
+    font-weight: 600;
+    color: var(--cyan);
+    font-family: 'SF Mono', Monaco, Consolas, monospace;
+    font-size: 0.75rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .doc-card .purpose {
+    color: var(--text-dim);
+    font-size: 0.72rem;
+  }
+
+  @media (max-width: 1100px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 1rem; }
+    .grid { grid-template-columns: 1fr; min-width: 0; }
+    .diagram { padding: 1rem; }
+    .row { flex-direction: column; }
+    .row .arrow-right { transform: rotate(90deg); }
+  }
+</style>
+</head>
+<body>
+
+<h1>🏗️ UI Architecture — angular-ecommerce-3d</h1>
+<p class="subtitle">Style system, theme engine & component architecture specification</p>
+
+<div class="legend">
+  <div class="legend-item"><span class="legend-dot brown"></span> Global / Source of Truth</div>
+  <div class="legend-item"><span class="legend-dot green"></span> Theme Level</div>
+  <div class="legend-item"><span class="legend-dot blue"></span> Component Level</div>
+  <div class="legend-item"><span class="legend-dot purple"></span> Angular Material</div>
+  <div class="legend-item"><span class="legend-dot red"></span> Infrastructure</div>
+  <div class="legend-item"><span class="legend-dot cyan"></span> Runtime / DOM</div>
+  <div class="legend-item"><span class="legend-dot orange"></span> Layout</div>
+  <div class="legend-item"><span class="legend-dot pink"></span> Feature</div>
+</div>
+
+<div class="grid">
+
+  <!-- 1. PROJECT ARCHITECTURE -->
+  <div class="diagram">
+    <h2><span class="num brown" style="background:var(--brown-bg);color:var(--brown)">1</span> Project Architecture (High-Level)</h2>
+    <div class="flow">
+      <div class="block blue"><span class="label">🌐 Browser</span></div>
+      <div class="arrow-down">↓</div>
+      <div class="block red">
+        <span class="label">🅰️ Angular Application</span>
+        <div class="sub-blocks">
+          <span class="sub">App Core</span>
+          <span class="sub">Routing</span>
+          <span class="sub">Guards</span>
+          <span class="sub">Interceptors</span>
+          <span class="sub">Services</span>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="block pink">
+        <span class="label">Feature Modules</span>
+        <div class="sub-blocks">
+          <span class="sub">Products</span>
+          <span class="sub">Editor</span>
+          <span class="sub">Users</span>
+          <span class="sub">Dashboard</span>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="block orange">
+        <span class="label">Shared Layer</span>
+        <div class="sub-blocks">
+          <span class="sub">Components</span>
+          <span class="sub">Directives</span>
+          <span class="sub">Pipes</span>
+          <span class="sub">Utilities</span>
+          <span class="sub">Models</span>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="block purple">
+        <span class="label">UI Layer</span>
+        <div class="sub-blocks">
+          <span class="sub">Angular Material</span>
+          <span class="sub">Custom Components</span>
+          <span class="sub">CDK</span>
+          <span class="sub">Animations</span>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="block cyan"><span class="label">State Management — Signals / RxJS / Services</span></div>
+      <div class="arrow-down">↓</div>
+      <div class="block green"><span class="label">API Layer — HTTP Client / WebSocket</span></div>
+      <div class="arrow-down">↓</div>
+      <div class="block brown"><span class="label">☁️ Backend API</span></div>
+    </div>
+  </div>
+
+  <!-- 2. MODULE ARCHITECTURE -->
+  <div class="diagram">
+    <h2><span class="num red" style="background:var(--red-bg);color:var(--red)">2</span> Module Architecture</h2>
+    <div class="flow">
+      <div class="block red"><span class="label">📦 AppModule (Root)</span></div>
+      <div class="arrow-down">↓</div>
+      <div class="row">
+        <div class="block cyan" style="flex:1">
+          <span class="label">CoreModule</span>
+          <div class="sub-blocks">
+            <span class="sub">Auth</span>
+            <span class="sub">Guards</span>
+            <span class="sub">Interceptors</span>
+            <span class="sub">Services</span>
+            <span class="sub">State</span>
+            <span class="sub">Config</span>
+          </div>
+        </div>
+        <div class="block green" style="flex:1">
+          <span class="label">Feature Modules</span>
+          <div class="sub-blocks">
+            <span class="sub">ProjectsModule</span>
+            <span class="sub">EditorModule</span>
+            <span class="sub">ProductsModule</span>
+            <span class="sub">UsersModule</span>
+            <span class="sub">DashboardModule</span>
+          </div>
+        </div>
+        <div class="block blue" style="flex:1">
+          <span class="label">SharedModule</span>
+          <div class="sub-blocks">
+            <span class="sub">UI Components</span>
+            <span class="sub">Directives</span>
+            <span class="sub">Pipes</span>
+            <span class="sub">Utils</span>
+            <span class="sub">Models</span>
+            <span class="sub">Constants</span>
+          </div>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="block brown">
+        <span class="label">Core UI Infrastructure</span>
+        <div class="sub-blocks">
+          <span class="sub">Angular Material</span>
+          <span class="sub">CDK</span>
+          <span class="sub">Theme Engine</span>
+          <span class="sub">Design Tokens</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. STYLE SYSTEM ARCHITECTURE -->
+  <div class="diagram">
+    <h2><span class="num brown" style="background:var(--brown-bg);color:var(--brown)">3</span> Style System Architecture</h2>
+    <div class="flow">
+      <div class="block brown">
+        <span class="label">🎨 Global Design Tokens</span>
+        <div class="desc">Single source of truth</div>
+        <div class="sub-blocks">
+          <span class="sub">Colors</span>
+          <span class="sub">Typography</span>
+          <span class="sub">Spacing</span>
+          <span class="sub">Radius</span>
+          <span class="sub">Elevation</span>
+          <span class="sub">Motion</span>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="block green">
+        <span class="label">Theme Tokens (per theme)</span>
+        <div class="sub-blocks">
+          <span class="sub">Semantic Colors</span>
+          <span class="sub">Component Colors</span>
+          <span class="sub">State Colors</span>
+          <span class="sub">Surface Colors</span>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="block blue">
+        <span class="label">Component Tokens (component level)</span>
+        <div class="sub-blocks">
+          <span class="sub">Card</span>
+          <span class="sub">Button</span>
+          <span class="sub">Input</span>
+          <span class="sub">Dialog</span>
+          <span class="sub">Table</span>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="block cyan">
+        <span class="label">CSS Variables (Runtime)</span>
+        <div class="desc">Applied to :root or [data-theme]</div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="block purple">
+        <span class="label">Angular Material Theme</span>
+        <div class="desc">Generated from tokens</div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="block orange">
+        <span class="label">Component Styles</span>
+        <div class="desc">Use ONLY tokens / CSS variables</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. TOKEN & THEME FLOW -->
+  <div class="diagram">
+    <h2><span class="num cyan" style="background:var(--cyan-bg);color:var(--cyan)">4</span> Token & Theme Flow</h2>
+    <div class="flow">
+      <div class="block blue"><span class="label">Theme Selection (user or system)</span></div>
+      <div class="arrow-down">↓</div>
+      <div class="block green"><span class="label">Active Theme (e.g. "Professional Dark")</span></div>
+      <div class="arrow-down">↓</div>
+      <div class="block brown"><span class="label">Theme Manifest — Defines all theme-level values</span></div>
+      <div class="arrow-down">↓</div>
+      <div class="block cyan"><span class="label">Theme Tokens — Semantic mapping for current theme</span></div>
+      <div class="arrow-down">↓</div>
+      <div class="block blue"><span class="label">Component Tokens — Component-level mapping</span></div>
+      <div class="arrow-down">↓</div>
+      <div class="block orange"><span class="label">CSS Variables — Applied to DOM</span></div>
+      <div class="arrow-down">↓</div>
+      <div class="row">
+        <div class="block purple" style="flex:1"><span class="label">Angular Material Theme</span><div class="desc">MAT colors, typography, density</div></div>
+        <div class="block red" style="flex:1"><span class="label">Custom Component Styles</span><div class="desc">Use variables + tokens</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. COMPONENT STRUCTURE -->
+  <div class="diagram">
+    <h2><span class="num orange" style="background:var(--orange-bg);color:var(--orange)">5</span> Component Structure</h2>
+    <div class="flow">
+      <div class="block blue"><span class="label">Page / View (Smart / Container)</span></div>
+      <div class="arrow-down">↓</div>
+      <div class="block orange"><span class="label">Layout Components — Header, Sidebar, Footer, Panels</span></div>
+      <div class="arrow-down">↓</div>
+      <div class="block pink"><span class="label">Feature Components — Project Card, Editor Panel, Product Card</span></div>
+      <div class="arrow-down">↓</div>
+      <div class="block green"><span class="label">Shared UI Components — Button, Input, Dialog, Table, Tabs</span></div>
+      <div class="arrow-down">↓</div>
+      <div class="block red"><span class="label">Base Components — Primitives, Icon, Typography</span></div>
+      <div class="arrow-down">↓</div>
+      <div class="block purple"><span class="label">Angular Material + CDK</span></div>
+    </div>
+  </div>
+
+  <!-- 6. ANGULAR MATERIAL & THEME INTERACTION -->
+  <div class="diagram">
+    <h2><span class="num purple" style="background:var(--purple-bg);color:var(--purple)">6</span> Angular Material & Theme Interaction</h2>
+    <div class="row">
+      <div style="flex:1">
+        <div class="flow">
+          <div class="block green"><span class="label">Theme Engine</span><div class="desc">Active Theme</div></div>
+          <div class="arrow-down">↓</div>
+          <div class="block brown">
+            <span class="label">Theme Tokens</span>
+            <div class="sub-blocks">
+              <span class="sub">Primary</span>
+              <span class="sub">Warn</span>
+              <span class="sub">Bottom</span>
+              <span class="sub">Surface</span>
+              <span class="sub">Surfance</span>
+              <span class="sub">Text</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow-right">→</div>
+      <div style="flex:1">
+        <div class="flow">
+          <div class="block purple"><span class="label">Angular Material Theme</span><div class="desc">Generated</div></div>
+          <div class="arrow-down">↓</div>
+          <div class="block blue">
+            <span class="label">Material Color Palette</span>
+            <div class="sub-blocks">
+              <span class="sub">Primary</span>
+              <span class="sub">Accent</span>
+              <span class="sub">Warn</span>
+              <span class="sub">Background</span>
+              <span class="sub">Surface</span>
+              <span class="sub">Text</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="arrow-down">↓</div>
+    <div class="row">
+      <div class="block purple" style="flex:1"><span class="label">Angular Material Components</span><div class="desc">Buttons, Inputs, Dialogs, Tables, etc.</div></div>
+      <div class="block red" style="flex:1"><span class="label">Custom Components</span><div class="desc">Use CSS Variables + Tokens</div></div>
+    </div>
+  </div>
+
+  <!-- 7. DOCUMENTATION STRUCTURE -->
+  <div class="diagram full-width">
+    <h2><span class="num cyan" style="background:var(--cyan-bg);color:var(--cyan)">7</span> Documentation Structure</h2>
+    <div class="doc-grid">
+      <div class="doc-card">
+        <div class="filename">📄 AI_CONSTITUTION.md</div>
+        <div class="purpose">Правила работы AI<br>Стандарты<br>Принципы</div>
+      </div>
+      <div class="doc-card">
+        <div class="filename">📄 PROJECT_STATUS.md</div>
+        <div class="purpose">Текущее состояние<br>Активные задачи<br>Прогресс</div>
+      </div>
+      <div class="doc-card">
+        <div class="filename">📄 REDESIGN_PLAN.md</div>
+        <div class="purpose">Дорожная карта<br>Этапы<br>Атомарные задачи</div>
+      </div>
+      <div class="doc-card">
+        <div class="filename">📄 STYLE_ARCHITECTURE.md</div>
+        <div class="purpose">Архитектура стилей<br>Дизайн-система<br>Система тем</div>
+      </div>
+      <div class="doc-card">
+        <div class="filename">📄 THEME_ENGINE.md</div>
+        <div class="purpose">Движок тем<br>Темы<br>Процесс переключения</div>
+      </div>
+      <div class="doc-card">
+        <div class="filename">📄 UI_AUDIT.md</div>
+        <div class="purpose">Аудит<br>Проблемы<br>Прогресс исправлений</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer style="text-align:center; margin-top:3rem; color:var(--text-dim); font-size:0.8rem;">
+  angular-ecommerce-3d · UI Architecture Specification · Last updated 2026-07-05
+</footer>
+
+</body>
+</html>

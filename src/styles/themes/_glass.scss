@@ -1,66 +1,1064 @@
 /* ==========================================================================
-   GLASS THEME STYLES - DEEP DARK HUD OPTIMIZED
+   GLASS THEME
+   Maps semantic tokens to glass-specific primitive design tokens.
+   
+   Layer model (ADR-001):
+     Layer 1: tokens/_index.scss        — Primitive tokens (colors, spacing, etc.)
+     Layer 2: tokens/_semantic-tokens.scss — Semantic defaults (overridable by themes)
+     Layer 3: themes/_glass.scss        — Glass theme overrides (this file)
+   
+   Pattern: same structure as _default.scss and _dark.scss.
+   Glass-specific: transparency, backdrop-filter, glow effects.
    ========================================================================== */
 
-body:not(.is-admin)[data-theme="glass"], html[data-theme="glass"] body:not(.is-admin) {
-  /* Глубокий темный фон с градиентами (как в сайдбаре) */
-  background: #08090a !important;
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(79, 70, 229, 0.1) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, rgba(30, 41, 59, 0.2) 0px, transparent 50%) !important;
-  background-attachment: fixed !important;
-  color: #ffffff !important;
-  min-height: 100vh;
-  
-  /* ТОКЕНЫ ТЕМНОГО СТЕКЛА */
-  --glass-blur: blur(20px) saturate(160%);
-  --glass-border: 1px solid rgba(255, 255, 255, 0.08);
-  --glass-bg: rgba(0, 0, 0, 0.5); /* ТЕМНЫЙ ФОН СТЕКЛА */
-  --glass-bg-hover: rgba(255, 255, 255, 0.05);
-  --glass-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+[data-theme="glass"] {
+  color-scheme: light;
+  /* Product cards — set fully in liquid ice recipe below */
+  /* Glass theme variables */
+  --hero-bg-gradient: linear-gradient(135deg,
+  rgba(255, 255, 255, 0.3) 0%,
+  rgba(255, 255, 255, 0.1) 100%);
 
-  /* Контентная область всегда прозрачна, чтобы видеть фон темы */
-  .admin-container, mat-sidenav-content, .admin-content {
-    background: transparent !important;
+  --hero-backdrop-filter: blur(20px) saturate(180%);
+  --hero-text-color: #1e293b;
+  --hero-accent-color: #6366f1;
+
+  /* Special Offer section - Light glass */
+  --special-offer-bg: linear-gradient(135deg,
+  rgba(255, 255, 255, 0.3) 0%,
+  rgba(255, 255, 255, 0.1) 100%);
+
+  --special-offer-backdrop-filter: blur(25px) saturate(180%);
+  --special-offer-text: #1e293b;
+  --special-offer-accent: rgba(255, 255, 255, 0.2);
+  --color-special-offer-button-text: #0f172a;
+  --color-special-offer-button-hover: rgba(255, 255, 255, 0.35);
+  --color-special-offer-button-shadow:
+  0 12px 30px rgba(0, 0, 0, 0.12),
+  inset 0 1px 2px rgba(255, 255, 255, 0.9),
+  inset 0 12px 24px rgba(255, 255, 255, 0.3),
+  inset 0 -12px 24px rgba(0, 0, 0, 0.04);
+  --special-offer-button-border: 1px solid rgba(255, 255, 255, 0.4);
+  --special-offer-button-blur: blur(32px) saturate(250%);
+
+  /* Categories section - Glass theme */
+  --categories-bg: rgba(255, 255, 255, 0.15);
+  --categories-text: #1e293b;
+  --categories-card-bg: rgba(255, 255, 255, 0.25);
+  --categories-card-hover: rgba(255, 255, 255, 0.4);
+  --categories-card-border: rgba(255, 255, 255, 0.5);
+  --categories-icon-filter: none;
+
+  /* Footer — overridden below by liquid glass chrome recipe */
+
+  /* About section - Glass theme */
+  --about-bg: rgba(255, 255, 255, 0.15);
+  --about-text: #1e293b;
+  --about-title: #1e293b;
+  --about-subtitle: #475569;
+  --about-button-bg: rgba(239, 68, 68, 0.8);
+  --about-button-hover: rgba(220, 38, 38, 0.9);
+
+  /* Brands section - Glass theme */
+  --brands-bg: rgba(255, 255, 255, 0.15);
+  --brands-text: #1e293b;
+  --brands-logo-opacity: 0.6;
+  --brands-logo-hover-opacity: 1;
+  --brands-logo-filter: grayscale(100%);
+  --brands-logo-hover-filter: grayscale(0%);
+
+  /* Contacts section - Glass theme */
+  --contacts-bg: rgba(255, 255, 255, 0.15);
+  --contacts-text: #1e293b;
+  --contacts-title: #1e293b;
+  --contacts-subtitle: #475569;
+  --contacts-card-bg: rgba(255, 255, 255, 0.3);
+  --contacts-card-text: #1e293b;
+  --contacts-input-bg: rgba(255, 255, 255, 0.45);
+  --contacts-input-text: #1e293b;
+  --contacts-button-bg: rgba(99, 102, 241, 0.8);
+  --contacts-button-hover: rgba(79, 70, 229, 0.9);
+
+  /* Header — overridden below by liquid glass chrome recipe */
+
+  /* Product Detail section - Glass theme */
+  --product-detail-bg: rgba(255, 255, 255, 0.1);
+  --product-detail-card-bg: rgba(255, 255, 255, 0.25);
+  --product-detail-card-border: 1px solid rgba(255, 255, 255, 0.5);
+  --product-detail-main-view-bg: rgba(255, 255, 255, 0.25);
+  --product-detail-main-view-border: 1px solid rgba(255, 255, 255, 0.5);
+  --product-detail-thumb-bg: rgba(255, 255, 255, 0.25);
+  --product-detail-thumb-border: 2px solid transparent;
+  --product-detail-thumb-selected-border: 2px solid #6366f1;
+
+  /* PDP premium (G11) — glass */
+  --pdp-page-bg: transparent;
+  --pdp-info-bg: var(--product-detail-card-bg);
+  --pdp-info-border: var(--product-detail-card-border);
+  --pdp-gallery-main-bg: var(--product-detail-main-view-bg);
+  --pdp-gallery-main-border: var(--product-detail-main-view-border);
+  --pdp-thumb-bg: var(--product-detail-thumb-bg);
+  --pdp-header-bg: var(--surface-primary);
+  --pdp-grid-template: minmax(0, 1fr) minmax(0, 1.4fr);
+  --pdp-gallery-main-height: 36.25rem;
+  --pdp-gallery-main-radius: 2rem;
+  --pdp-gallery-main-blur: blur(30px) saturate(180%);
+  --pdp-gallery-transform: perspective(2000px) rotateY(3deg);
+  --pdp-gallery-transform-hover: perspective(2000px) rotateY(0deg) scale(1.01);
+  --pdp-gallery-filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.06));
+  --pdp-gallery-media-shadow: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.12));
+  --pdp-thumb-strip-bg: var(--surface-secondary);
+  --pdp-thumb-strip-border: 1px solid var(--border-primary);
+  --pdp-thumb-strip-radius: 1.25rem;
+  --pdp-thumb-strip-padding: var(--spacing-sm);
+  --pdp-thumb-strip-blur: var(--backdrop-blur-sm);
+  --pdp-thumb-selected-transform: translateY(calc(var(--spacing-xs) * -1));
+  --pdp-thumb-selected-shadow: 0 10px 20px rgba(var(--interactive-primary-rgb, 99, 102, 241), 0.2);
+  --pdp-info-radius: 2rem;
+  --pdp-info-blur: blur(35px) saturate(150%);
+  --pdp-info-padding: 2.5rem;
+  --pdp-price-accent-border: none;
+  --pdp-price-accent-padding: 0;
+  --pdp-purchase-row-bg: var(--surface-secondary);
+  --pdp-purchase-row-border: 1px solid var(--border-primary);
+  --pdp-purchase-row-radius: 1.5rem;
+  --pdp-purchase-row-padding: var(--spacing-md);
+  --pdp-cta-bg: var(--surface-secondary);
+  --pdp-cta-color: var(--text-primary);
+  --pdp-cta-border: 1.5px solid var(--border-focus);
+  --pdp-cta-radius: 1rem;
+  --pdp-cta-shadow: var(--shadow-sm);
+  --pdp-cta-hover-bg: var(--surface-highlight);
+  --pdp-cta-hover-shadow: var(--shadow-md);
+  --pdp-recommendations-margin-top: var(--spacing-2xl);
+
+  /* Checkout flow (G12) — glass */
+  --checkout-page-bg: transparent;
+  --checkout-panel-bg: var(--glass-surface-soft);
+  --checkout-panel-border: 1px solid var(--glass-border-soft);
+  --checkout-panel-blur: var(--backdrop-blur-sm);
+  --checkout-panel-shadow: var(--glass-shadow);
+  --checkout-back-btn-bg: var(--glass-surface-muted);
+  --checkout-method-bg: var(--glass-surface-muted);
+  --checkout-submit-bg: var(--surface-secondary);
+  --checkout-submit-color: var(--text-primary);
+  --checkout-submit-shadow: var(--shadow-sm);
+
+  /* Page transitions (G13) — glass: elegant slow fade-up */
+  --page-transition-duration: var(--motion-duration-normal);
+  --page-transition-offset-y: var(--spacing-lg);
+  --page-transition-easing: var(--motion-easing-enter);
+
+  /* Micro-interactions (G14) — glass: elegant lift + soft focus */
+  --micro-hover-lift-y: calc(var(--spacing-sm) * -1);
+  --micro-hover-scale: 1.04;
+  --micro-press-scale: 0.97;
+  --micro-focus-ring-color: rgba(var(--interactive-primary-rgb), 0.3);
+  --micro-spinner-track: var(--glass-surface-muted);
+  --micro-spinner-accent: var(--interactive-primary);
+  --micro-spinner-duration: var(--motion-duration-slow);
+
+  /* Product Text Colors - Glass theme */
+  --product-title-color: #1e293b;
+  --product-meta-color: #475569;
+  --product-price-color: #4f46e5;
+  --product-description-color: #334155;
+  --product-specs-label-color: #475569;
+  --product-specs-value-color: #0f172a;
+  --product-stock-color: #059669;
+  --product-stock-oos-color: #dc2626;
+  --product-original-price-color: #64748b;
+  --product-specs-bg: rgba(255, 255, 255, 0.15);
+  --product-specs-border: 1px solid var(--border-primary);
+  --product-specs-radius: var(--radius-md);
+  --product-specs-padding: var(--spacing-md);
+
+  /* Breadcrumb and Navigation - Glass theme */
+  --breadcrumb-color: #475569;
+  --breadcrumb-link-color: #475569;
+  --breadcrumb-link-hover-color: #4f46e5;
+  --breadcrumb-current-color: #1e293b;
+
+  /* Similar Products - Glass theme */
+  --similar-products-title-color: #1e293b;
+  --similar-products-subtitle-color: #475569;
+  --similar-products-bg: rgba(255, 255, 255, 0.1);
+  --similar-products-card-bg: rgba(255, 255, 255, 0.25);
+  --similar-products-card-border: 1px solid rgba(255, 255, 255, 0.5);
+  --similar-products-card-text: #1e293b;
+  --similar-products-card-price: #4f46e5;
+
+  /* Bought Together - Glass theme */
+  --bought-together-title-color: #1e293b;
+  --bought-together-subtitle-color: #475569;
+  --bought-together-bg: rgba(255, 255, 255, 0.1);
+  --bought-together-card-bg: rgba(255, 255, 255, 0.25);
+  --bought-together-card-border: 1px solid rgba(255, 255, 255, 0.5);
+  --bought-together-card-text: #1e293b;
+  --bought-together-card-price: #4f46e5;
+
+  /* Product Stepper - Glass theme */
+  --product-stepper-bg: rgba(255, 255, 255, 0.3);
+  --product-stepper-border: 1px solid rgba(255, 255, 255, 0.5);
+  --product-stepper-radius: 10px;
+  --product-stepper-shadow: 0 4px 16px rgba(31, 38, 135, 0.1);
+  --product-stepper-btn-bg: rgba(255, 255, 255, 0.2);
+  --product-stepper-btn-hover: rgba(255, 255, 255, 0.4);
+  --product-stepper-btn-color: #1e293b;
+  --product-stepper-value-color: #1e293b;
+
+  /* Glass Style Buttons - Glass theme */
+  --glass-btn-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.2) 100%);
+  --glass-btn-border: 1px solid rgba(255, 255, 255, 0.5);
+  --glass-btn-color: #1e293b;
+  --glass-btn-shadow: 0 8px 32px rgba(31, 38, 135, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  --glass-btn-hover-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.3) 100%);
+  --glass-btn-hover-border: 1px solid rgba(255, 255, 255, 0.7);
+  --glass-btn-hover-shadow: 0 12px 40px rgba(31, 38, 135, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+  /* Product Tabs - Glass theme */
+  --product-tabs-bg: rgba(255, 255, 255, 0.3);
+  --product-tabs-border: 1px solid rgba(255, 255, 255, 0.5);
+  --product-tabs-radius: 12px;
+  --product-tabs-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+  --product-tabs-nav-bg: rgba(255, 255, 255, 0.2);
+  --product-tabs-nav-border: 1px solid rgba(255, 255, 255, 0.3);
+  --product-tabs-active-bg: rgba(255, 255, 255, 0.5);
+  --product-tabs-active-color: #1e293b;
+  --product-tabs-active-border: #3b82f6;
+  --product-tabs-hover-bg: rgba(255, 255, 255, 0.3);
+  --product-tabs-hover-color: #1e293b;
+  --product-tabs-text-color: #475569;
+  --product-tabs-content-color: #1e293b;
+
+  /* Delivery Options - Glass theme */
+  --delivery-option-bg: rgba(255, 255, 255, 0.3);
+  --delivery-option-border: 1px solid rgba(255, 255, 255, 0.5);
+  --delivery-option-text: #1e293b;
+  --delivery-option-title: #1e293b;
+  --delivery-option-subtitle: #475569;
+
+  /* Best Sellers section - Glass theme */
+  --best-sellers-bg: radial-gradient(circle at 0% 0%,
+  rgba(99, 102, 241, 0.15) 0%,
+  transparent 55%),
+  linear-gradient(135deg,
+  rgba(0, 0, 0, 0.4) 0%,
+  rgba(0, 0, 0, 0.2) 40%,
+  rgba(0, 0, 0, 0.1) 100%);
+  --best-sellers-text: #ffffff;
+  --best-sellers-subtitle: rgba(255, 255, 255, 0.7);
+
+  /* Favorites section - Glass theme */
+  --favorites-text: #ffffff;
+  --favorites-top-bar-bg: rgba(255, 255, 255, 0.05);
+  --favorites-top-bar-text: #ffffff;
+  --favorites-clear-btn-bg: rgba(255, 255, 255, 0.15);
+  --favorites-clear-btn-text: #ffffff;
+  --favorites-clear-btn-hover-bg: rgba(255, 255, 255, 0.25);
+  --favorites-product-name-color: #ffffff;
+  --favorites-product-category-color: #818cf8;
+  --favorites-product-price-color: #818cf8;
+  --favorites-add-to-cart-bg: rgba(255, 255, 255, 0.1);
+  --favorites-add-to-cart-text: #ffffff;
+  --favorites-add-to-cart-hover-bg: rgba(255, 255, 255, 0.2);
+
+  /* Surface variables - DEEP DARK Glass effect */
+  --surface-hover: rgba(255, 255, 255, 0.08);
+
+  /* Button specific variables - Glass morphism style */
+  --button-primary-bg: rgba(255, 255, 255, 0.1);
+  --button-primary-text: #ffffff;
+  --button-primary-border: rgba(255, 255, 255, 0.2);
+
+  /* Text variables - FORCE WHITE ON DARK GLASS */
+  --text-tertiary: rgba(255, 255, 255, 0.5);
+
+  /* Compatibility variables used in components */
+  --color-text-inverse: #000000;
+
+  /* Auth modal — ice glass tokens set in reconciliation block below */
+
+  /* Border variables */
+  --border-secondary: rgba(255, 255, 255, 0.05);
+  --border-focus: #3b82f6;
+
+  /* CARD COMPONENT */
+  /* --card-radius set in ice product-card block */
+  /* ===== END MIGRATED (Task A3) ===== */
+
+  /* ===== SURFACE OVERRIDES (ice / water glass) ===== */
+  --surface-primary: transparent;
+  --surface-secondary: var(--surface-chrome);
+  --surface-tertiary: rgba(255, 255, 255, 0.35);
+  --surface-overlay: rgba(148, 163, 184, 0.28);
+  --surface-inverse: var(--color-white);
+  --surface-page: transparent;
+  --surface-card: rgba(255, 255, 255, 0.42);
+  --surface-elevated: rgba(255, 255, 255, 0.55);
+  --surface-elevated-rgb: 255, 255, 255;
+  --surface-highlight: rgba(255, 255, 255, 0.55);
+  --surface-overlay-light: rgba(255, 255, 255, 0.35);
+  --surface-overlay-full: rgba(226, 232, 240, 0.55);
+  --surface-header: var(--surface-chrome);
+
+  /* ===== TEXT OVERRIDES (dark ink on ice) ===== */
+  --text-primary: #1e293b;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --text-muted-rgb: 100, 116, 139;
+  --text-inverse: var(--color-white);
+  --text-on-primary: #0f172a;
+  --text-link: #2563eb;
+
+  /* ===== BORDER OVERRIDES (frost edges) ===== */
+  --border-default: rgba(148, 163, 184, 0.35);
+  --border-strong: rgba(100, 116, 139, 0.45);
+  --border-primary: rgba(59, 130, 246, 0.55);
+  --border-subtle: rgba(148, 163, 184, 0.22);
+  --border-medium: rgba(148, 163, 184, 0.4);
+  --border-emphasis: rgba(71, 85, 105, 0.5);
+
+  /* ===== MOTION OVERRIDES (Epic G1 — elegant glass) ===== */
+  --motion-duration-normal: 400ms;
+  --motion-duration-slow: 600ms;
+  --motion-easing-default: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --motion-easing-enter: cubic-bezier(0.22, 1, 0.36, 1);
+  --transition-normal: var(--motion-duration-normal) var(--motion-easing-default);
+  --transition-slow: var(--motion-duration-slow) var(--motion-easing-default);
+  --transition-enter: var(--motion-duration-normal) var(--motion-easing-enter);
+
+  /* ===== TYPOGRAPHY OVERRIDES (Epic G5 — elegant glass) ===== */
+  --type-font-heading: 'Poppins', var(--font-sans);
+  --type-weight-display: var(--font-semibold);
+  --type-weight-heading: var(--font-semibold);
+  --type-tracking-heading: -0.01em;
+  --type-tracking-display: -0.02em;
+  --type-leading-display: 1.15;
+  --type-size-display: clamp(2rem, 5vw, 3rem);
+
+  /* ===== INTERACTIVE OVERRIDES ===== */
+  --interactive-primary: var(--color-brand-base);
+  --interactive-primary-hover: var(--color-brand-light);
+  --interactive-secondary: rgba(255, 255, 255, 0.1);
+  --interactive-secondary-hover: rgba(255, 255, 255, 0.15);
+  --interactive-danger: var(--color-error-base);
+  --interactive-disabled: rgba(255, 255, 255, 0.3);
+  --interactive-primary-rgb: 59, 130, 246;
+  --interactive-button: var(--interactive-primary);
+
+  /* ===== B2 Material bridge (storefront inputs; admin table zebra stays in admin themes) ===== */
+  --input-bg: var(--surface-elevated);
+  --input-text: var(--text-primary);
+  --input-border: var(--border-strong);
+  --input-label: var(--text-secondary);
+  --input-focus-border: var(--border-primary);
+  --input-placeholder: var(--text-muted);
+
+  /* ===== STATE OVERRIDES ===== */
+  --state-success-bg: var(--color-success-base);
+  --state-success-text: var(--color-white);
+  --state-warning-bg: var(--color-warning-base);
+  --state-warning-text: var(--color-slate-900);
+  --state-error-bg: var(--color-error-base);
+  --state-error-text: var(--color-white);
+
+  /* ===== LIQUID GLASS RECIPE — ice / water (light frost) ===== */
+  --glass-surface-strong: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.72) 0%,
+    rgba(236, 242, 248, 0.55) 45%,
+    rgba(214, 226, 236, 0.42) 100%
+  );
+  --glass-surface-soft: rgba(255, 255, 255, 0.48);
+  --glass-surface-muted: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(226, 236, 244, 0.4) 55%,
+    rgba(210, 222, 232, 0.35) 100%
+  );
+  --glass-border-strong: rgba(255, 255, 255, 0.85);
+  --glass-border-soft: rgba(255, 255, 255, 0.55);
+  --glass-divider: rgba(148, 163, 184, 0.28);
+  --glass-highlight: rgba(255, 255, 255, 0.95);
+  --glass-inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  --glass-blur: blur(28px) saturate(140%);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.55);
+  --glass-bg: rgba(255, 255, 255, 0.42);
+  --glass-bg-hover: rgba(255, 255, 255, 0.58);
+  --glass-shadow:
+    0 12px 40px rgba(100, 116, 139, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  --glass-opacity: 0.42;
+  --glass-border-hover: rgba(255, 255, 255, 0.8);
+  --glass-shadow-hover:
+    0 18px 48px rgba(100, 116, 139, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  --backdrop-blur: var(--glass-blur);
+
+  /* Chrome (header ≡ footer) — frosted ice pane */
+  --surface-chrome: rgba(255, 255, 255, 0.38);
+  --surface-chrome-gradient: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(236, 242, 248, 0.4) 48%,
+    rgba(220, 230, 238, 0.36) 100%
+  );
+  --chrome-blur: blur(32px) saturate(135%);
+  --chrome-border: 1px solid rgba(255, 255, 255, 0.65);
+  --chrome-shadow:
+    0 8px 28px rgba(100, 116, 139, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+  /* ===== SECTION CHROME — ice glass ===== */
+  --footer-bg: var(--surface-chrome-gradient);
+  --footer-backdrop-filter: var(--chrome-blur);
+  --footer-text: var(--text-primary);
+  --footer-link: var(--text-secondary);
+  --footer-link-hover: var(--text-on-primary);
+  --footer-border: var(--glass-border-soft);
+  --footer-text-rgb: 30, 41, 59;
+  --footer-bg-rgb: 236, 242, 248;
+  --footer-shadow: var(--chrome-shadow);
+
+  --header-bg: var(--surface-chrome-gradient);
+  --header-backdrop-filter: var(--chrome-blur);
+  --header-text: var(--text-primary);
+  --header-link: var(--text-secondary);
+  --header-link-hover: var(--text-on-primary);
+  --header-search-bg: rgba(255, 255, 255, 0.55);
+  --header-search-text: var(--text-primary);
+  --header-text-rgb: 30, 41, 59;
+  --header-bg-rgb: 236, 242, 248;
+  --header-border: var(--chrome-border);
+  --header-shadow: var(--chrome-shadow);
+
+  --categories-bg: transparent;
+  --categories-text: var(--text-primary);
+  --categories-card-bg: var(--glass-surface-soft);
+  --categories-card-hover: var(--glass-bg-hover);
+  --categories-card-border: var(--glass-border-soft);
+
+  --about-bg: transparent;
+  --about-text: var(--text-primary);
+  --about-title: var(--text-primary);
+  --about-subtitle: var(--text-secondary);
+
+  --brands-bg: transparent;
+  --brands-text: var(--text-primary);
+
+  --contacts-bg: transparent;
+  --contacts-text: var(--text-primary);
+  --contacts-title: var(--text-primary);
+  --contacts-subtitle: var(--text-secondary);
+  --contacts-card-bg: var(--glass-surface-soft);
+  --contacts-card-text: var(--text-primary);
+  --contacts-input-bg: rgba(255, 255, 255, 0.55);
+  --contacts-input-text: var(--text-primary);
+
+  --hero-text-color: var(--text-primary);
+  --hero-accent-color: #3b82f6;
+
+  --best-sellers-bg: transparent;
+  --best-sellers-text: var(--text-primary);
+  --best-sellers-subtitle: var(--text-muted);
+
+  /* ===== PRODUCT CARDS — frosted ice pane ===== */
+  --product-grid-columns: 3;
+  --card-surface: var(--glass-surface-soft);
+  --card-border: var(--glass-border-soft);
+  --card-shadow: var(--glass-shadow);
+  --card-shadow-hover: var(--glass-shadow-hover);
+  --card-image-bg: rgba(255, 255, 255, 0.22);
+  --card-info-bg: rgba(255, 255, 255, 0.12);
+  --card-overlay-bg: rgba(236, 242, 248, 0.45);
+  --card-radius: 1.5rem;
+  --card-backdrop-filter: var(--glass-blur);
+  --card-star: rgba(100, 116, 139, 0.35);
+  --card-star-filled: #64748b;
+  --card-category-bg: rgba(255, 255, 255, 0.5);
+  --card-category-border: rgba(255, 255, 255, 0.7);
+  --card-category-color: #475569;
+  --card-cart-bg: rgba(255, 255, 255, 0.58);
+  --card-cart-border: rgba(255, 255, 255, 0.75);
+  --card-cart-color: #1e293b;
+  --card-stock-bg: rgba(148, 163, 184, 0.22);
+  --card-stock-color: #475569;
+  --card-stock-border: rgba(148, 163, 184, 0.4);
+
+  /* ===== PDP — ice glass ===== */
+  --product-detail-card-bg: var(--glass-surface-soft);
+  --product-detail-card-border: 1px solid var(--glass-border-soft);
+  --product-detail-main-view-bg: var(--glass-surface-soft);
+  --product-detail-main-view-border: 1px solid var(--glass-border-soft);
+  --product-detail-thumb-bg: rgba(255, 255, 255, 0.35);
+  --product-detail-thumb-selected-border: 2px solid rgba(100, 116, 139, 0.55);
+
+  --pdp-page-bg: transparent;
+  --pdp-header-bg: var(--surface-chrome-gradient);
+  --pdp-header-border: var(--glass-border-soft);
+  --pdp-header-backdrop-filter: var(--chrome-blur);
+  --pdp-back-btn-bg: rgba(255, 255, 255, 0.45);
+  --pdp-back-btn-border: 1px solid var(--glass-border-soft);
+  --pdp-back-btn-blur: var(--backdrop-blur-sm);
+  --pdp-info-bg: var(--glass-surface-muted);
+  --pdp-info-border: 1px solid var(--glass-border-soft);
+  --pdp-info-shadow: var(--glass-shadow);
+  --pdp-info-blur: var(--glass-blur);
+  --pdp-info-accent-bar: transparent;
+  --pdp-info-accent-bar-height: 0;
+  --pdp-gallery-main-bg: var(--glass-surface-soft);
+  --pdp-gallery-main-border: 1px solid var(--glass-border-soft);
+  --pdp-gallery-main-blur: var(--glass-blur);
+  --pdp-gallery-main-shadow: var(--glass-shadow);
+  --pdp-thumb-strip-bg: rgba(255, 255, 255, 0.28);
+  --pdp-thumb-strip-border: 1px solid var(--glass-border-soft);
+  --pdp-thumb-strip-blur: var(--glass-blur);
+  --pdp-thumb-selected-border: 2px solid rgba(100, 116, 139, 0.5);
+  --pdp-thumb-selected-shadow: var(--glass-shadow);
+  --pdp-purchase-row-bg: rgba(255, 255, 255, 0.22);
+  --pdp-purchase-row-border: none;
+  --pdp-purchase-row-radius: 1.25rem;
+  --pdp-cta-bg: rgba(255, 255, 255, 0.58);
+  --pdp-cta-color: var(--text-primary);
+  --pdp-cta-border: 1px solid var(--glass-border-strong);
+  --pdp-cta-blur: var(--glass-blur);
+  --pdp-cta-shadow: var(--chrome-shadow);
+  --pdp-cta-hover-bg: rgba(255, 255, 255, 0.75);
+  --pdp-cta-hover-shadow: var(--glass-shadow-hover);
+
+  --breadcrumb-color: var(--text-secondary);
+  --breadcrumb-link-color: var(--text-secondary);
+  --breadcrumb-link-hover-color: var(--text-primary);
+  --breadcrumb-current-color: var(--text-primary);
+  --breadcrumb-separator-color: var(--text-muted);
+
+  --product-title-color: var(--text-primary);
+  --product-price-color: var(--text-primary);
+  --product-meta-color: var(--text-muted);
+  --product-stock-color: #64748b;
+  --product-stock-oos-color: #64748b;
+  --product-specs-bg: rgba(255, 255, 255, 0.28);
+  --product-specs-border: 1px solid var(--glass-border-soft);
+  --product-stepper-bg: rgba(255, 255, 255, 0.45);
+  --product-stepper-border: 1px solid var(--glass-border-soft);
+
+  /* ===== AUTH MODAL — ice glass ===== */
+  --auth-modal-bg: rgba(255, 255, 255, 0.38);
+  --auth-modal-blur: blur(32px) saturate(140%);
+  --auth-modal-border: 1px solid var(--glass-border-soft);
+  --auth-modal-shadow: var(--glass-shadow);
+  --auth-modal-radius: 2rem;
+  --auth-header-bg: transparent;
+  --auth-header-border: 1px solid var(--glass-border-soft);
+  --auth-content-bg: transparent;
+  --auth-tab-text: var(--text-secondary);
+  --auth-tab-active: var(--text-primary);
+  --auth-tab-inactive: #475569;
+  --auth-tab-hover: var(--text-primary);
+  --auth-tab-active-bg: transparent;
+  --auth-tab-indicator: rgba(100, 116, 139, 0.55);
+  --auth-tab-hover-bg: rgba(255, 255, 255, 0.2);
+  --auth-input-bg: rgba(255, 255, 255, 0.42);
+  --auth-input-border: 1px solid var(--glass-border-soft);
+  --auth-input-focus: rgba(100, 116, 139, 0.65);
+  --auth-profile-bg: rgba(255, 255, 255, 0.16);
+  --auth-avatar-bg: rgba(255, 255, 255, 0.35);
+  --auth-profile-border: 1px solid var(--glass-border-soft);
+  --auth-profile-radius: 1.25rem;
+  --auth-btn-primary: rgba(255, 255, 255, 0.55);
+  --auth-btn-primary-hover: rgba(255, 255, 255, 0.72);
+  --auth-btn-primary-color: var(--text-primary);
+  --auth-btn-primary-border: 1px solid var(--glass-border-strong);
+  --auth-btn-secondary: rgba(255, 255, 255, 0.28);
+  --auth-btn-secondary-border: 1px solid var(--glass-border-soft);
+  --auth-btn-secondary-text: var(--text-secondary);
+  --auth-btn-danger-color: var(--text-secondary);
+  --auth-btn-danger-border: 1px solid rgba(148, 163, 184, 0.38);
+  --auth-btn-danger-hover-bg: rgba(148, 163, 184, 0.12);
+  --auth-btn-danger-hover-color: #64748b;
+  --auth-close-size: 2.75rem;
+  --auth-close-bg: rgba(255, 255, 255, 0.12);
+  --auth-close-hover-bg: rgba(255, 255, 255, 0.24);
+  --auth-close-color: var(--text-secondary);
+  --auth-close-hover-color: var(--text-primary);
+  --auth-close-border: 1px solid var(--glass-border-soft);
+  --auth-header-divider-color: rgba(148, 163, 184, 0.35);
+
+  /* ===== COMPOSITE OVERRIDES ===== */
+  --radius-card: var(--radius-xl);
+  --shadow-card: var(--glass-shadow);
+
+  /* ===== OVERLAY OVERRIDES ===== */
+  --surface-overlay-hover: rgba(255, 255, 255, 0.35);
+
+  /* ===== ATMOSPHERE — ice water / light frost ===== */
+  --bg-page: #e8eef2;
+  --storefront-atmosphere-gradient: linear-gradient(
+    135deg,
+    #f4f7f9 0%,
+    #e8eef2 18%,
+    #dde6ed 38%,
+    #d2dde6 55%,
+    #c8d5e0 72%,
+    #d8e2ea 88%,
+    #eef3f6 100%
+  );
+  --bg-gradient-1: radial-gradient(circle at 18% 22%, rgba(255, 255, 255, 0.7) 0%, transparent 42%);
+  --bg-gradient-2: radial-gradient(circle at 82% 12%, rgba(186, 210, 228, 0.45) 0%, transparent 48%);
+  --bg-gradient-3: radial-gradient(circle at 50% 100%, rgba(176, 196, 212, 0.35) 0%, transparent 50%);
+
+  /* ===== LEGACY ALIASES (backward compatibility) ===== */
+  /* Full --color-* legacy set lives in tokens/_semantic-tokens.scss (A4). */
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-muted);
+  /* Glass keeps pure black inverse (set above in migrated block); reaffirm after aliases. */
+  --color-text-inverse: #000000;
+  --color-border-primary: var(--border-default);
+  --color-border-secondary: var(--border-subtle);
+  --color-border-focus: var(--border-primary);
+  --color-surface-primary: var(--surface-primary);
+  --color-surface-secondary: var(--surface-secondary);
+  --color-surface-tertiary: var(--surface-tertiary);
+  --color-surface-hover: var(--surface-highlight);
+  --color-bg-primary: var(--surface-page);
+  --color-bg-secondary: var(--surface-primary);
+  --color-bg-tertiary: var(--surface-secondary);
+  --color-bg-hover: var(--surface-highlight);
+  --color-primary: var(--interactive-primary);
+  --color-primary-hover: var(--interactive-primary-hover);
+  --color-cards-background: var(--glass-bg);
+  --color-cards-border: var(--border-default);
+  --color-cards-shadow: var(--glass-shadow);
+
+  /* ===== PAGE-SPECIFIC: Favorites ===== */
+  --favorites-bg: linear-gradient(135deg, #08090a 0%, var(--color-slate-900) 100%);
+  --favorites-header-bg: var(--glass-bg);
+  --favorites-header-text: var(--color-white);
+  --favorites-header-overlay: rgba(255, 255, 255, 0.05);
+  --favorites-header-blur: var(--glass-blur);
+  --favorites-back-btn-bg: rgba(255, 255, 255, 0.1);
+  --favorites-back-btn-text: var(--color-white);
+  --favorites-back-btn-border: rgba(255, 255, 255, 0.15);
+  --favorites-back-btn-blur: blur(12px);
+  --favorites-back-btn-hover-bg: rgba(255, 255, 255, 0.18);
+  --favorites-back-btn-hover-border: rgba(255, 255, 255, 0.3);
+  --favorites-title-size: var(--text-3xl);
+  --favorites-title-weight: var(--font-weight-bold);
+  --favorites-heart-color: var(--color-accent-pink);
+  --favorites-subtitle-size: var(--text-lg);
+  --favorites-subtitle-opacity: 0.9;
+  --favorites-card-bg: var(--glass-bg);
+  --favorites-card-shadow: var(--glass-shadow);
+  --favorites-card-blur: var(--glass-blur);
+  --favorites-card-border: var(--border-default);
+  --favorites-card-hover-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+  --favorites-card-hover-bg: rgba(255, 255, 255, 0.08);
+  --favorites-header-shadow: var(--shadow-lg);
+  --favorites-section-wrapper: transparent;
+
+  /* ===== PAGE-SPECIFIC: Theme Switcher ===== */
+  --theme-switcher-bg: var(--glass-bg);
+
+  /* ===== PAGE-SPECIFIC: Product Image ===== */
+  --product-image-bg: transparent;
+
+  /* ===== COMPONENT-SPECIFIC OVERRIDES (high specificity) ===== */
+
+  /* Cards and surfaces with glass effect */
+  body .product-card {
+    background: var(--card-surface);
+    backdrop-filter: var(--card-backdrop-filter);
+    -webkit-backdrop-filter: var(--card-backdrop-filter);
+    color: var(--text-primary);
+    border: 1px solid var(--card-border);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+
+    .product-image {
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.55) 0%, transparent 62%),
+        var(--card-image-bg);
+    }
+
+    .product-info {
+      background: var(--card-info-bg);
+      border-top-color: var(--card-border);
+    }
   }
 
-  /* Читаемость заголовков */
+  body .card,
+  body .filters-section,
+  body .order-summary,
+  body .checkout-form,
+  body .modal-content:not(.modal-content-auth):not(.modal-content-notification):not(.modal-content-image) {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--text-primary);
+    border: 1px solid var(--border-default);
+    box-shadow: var(--glass-shadow);
+  }
+
+  /* Dropdowns and selects */
+  body .filter-select,
+  body .dropdown-trigger,
+  body .mat-select-panel,
+  body .mat-option,
+  body .custom-dropdown .dropdown-trigger,
+  body .custom-dropdown .dropdown-menu {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--text-primary);
+    border-color: var(--border-default);
+  }
+
+  /* Recommendation sections */
+  body .similar-products,
+  body .bought-together {
+    background: transparent;
+  }
+
+  /* Product info text (storefront cards — exclude PDP; G11 owns .product-detail .product-info) */
+  body .product-card .product-name,
+  body .product-card .product-category,
+  body .product-card .product-price,
+  body .product-card .product-info h3,
+  body .product-card .product-info p,
+  body .product-card .product-info span {
+    color: var(--text-primary);
+  }
+
+  /* Buttons */
+  body .action-btn,
+  body .cart-icon-btn,
+  body .favorite-btn,
+  body .overlay-actions button {
+    background: var(--glass-bg-hover);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--text-primary);
+    border-color: var(--border-default);
+  }
+
+  /* Product info text */
+  body .product-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--text-primary);
+    border: var(--border-default);
+    border-radius: var(--radius-xl);
+  }
+
+  body .product-card:hover {
+    background: var(--glass-bg-hover, rgba(255, 255, 255, 0.08));
+    transform: translateY(calc(var(--spacing-xs) * -0.5));
+    box-shadow: var(--card-shadow-hover);
+  }
+
+  /* Favorites page */
+  body .favorites-page {
+    background: transparent;
+    color: var(--text-primary);
+  }
+
+  body .favorites-page .favorites-content {
+    background: transparent;
+    color: var(--text-primary);
+  }
+
+  body .favorites-page .section-wrapper .favorites-header {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--favorites-header-text);
+  }
+
+  body .favorites-page .section-wrapper .favorites-header .page-title,
+  body .favorites-page .section-wrapper .favorites-header .page-subtitle,
+  body .favorites-page .section-wrapper .favorites-header .header-content .page-subtitle {
+    color: var(--text-primary);
+  }
+
+  body .favorites-page .favorites-header .back-btn {
+    background: var(--favorites-back-btn-bg);
+    backdrop-filter: var(--favorites-back-btn-blur);
+    -webkit-backdrop-filter: var(--favorites-back-btn-blur);
+    color: var(--favorites-back-btn-text);
+    border: 1px solid var(--favorites-back-btn-border);
+    padding: 16px 32px;
+    border-radius: var(--radius-md);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  body .favorites-page .favorites-header .back-btn:hover {
+    background: var(--favorites-back-btn-hover-bg);
+    border-color: var(--favorites-back-btn-hover-border);
+  }
+
+  body .favorites-page .actions-bar {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--text-primary);
+    border: 1px solid var(--border-default);
+    padding: 24px 32px;
+    border-radius: var(--radius-lg);
+  }
+
+  body .favorites-page .favorites-count {
+    color: var(--text-primary);
+    font-size: 18px;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  body .favorites-page .clear-all-btn {
+    background: var(--color-slate-500);
+    color: var(--color-white);
+    padding: 12px 24px;
+    border-radius: var(--radius-sm);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  body .favorites-page .clear-all-btn:hover {
+    background: var(--color-slate-400);
+  }
+
+  body .favorites-page .product-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--text-primary);
+    border: var(--border-default);
+    box-shadow: var(--glass-shadow);
+  }
+
+  body .favorites-page .product-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+  }
+
+  body .favorites-page .product-name {
+    color: var(--text-primary);
+  }
+
+  body .favorites-page .product-category {
+    background: var(--color-blue-400);
+    color: var(--color-white);
+  }
+
+  body .favorites-page .current-price {
+    color: var(--color-blue-400);
+  }
+
+  body .favorites-page .action-btn {
+    background: var(--glass-bg-hover);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--text-primary);
+  }
+
+  body .favorites-page .action-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--color-blue-400);
+  }
+
+  /* Breadcrumb */
+  body .breadcrumb {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  body .breadcrumb .breadcrumb-link {
+    color: rgba(255, 255, 255, 0.8);
+
+    &:hover {
+      color: var(--color-blue-400);
+    }
+  }
+
+  /* Back button */
+  body .back-btn {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 12px 24px;
+    border-radius: var(--radius-sm);
+    font-weight: var(--font-weight-semibold);
+    transition: all var(--transition-normal);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.3);
+      color: var(--color-blue-400);
+    }
+  }
+
+  /* Buttons */
+  body .btn-primary {
+    background: var(--color-blue-400);
+    color: var(--color-white);
+    border: 1px solid var(--color-blue-400);
+
+    &:hover {
+      background: var(--color-blue-500);
+      border-color: var(--color-blue-500);
+    }
+  }
+
+  body .btn-secondary {
+    background: var(--glass-bg-hover);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--text-primary);
+    border: 1px solid var(--border-default);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  /* Form controls */
+  body .form-control {
+    background: var(--glass-bg-hover);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--text-primary);
+    border: 1px solid var(--border-default);
+
+    &:focus {
+      background: var(--glass-bg-hover);
+      color: var(--text-primary);
+      border-color: var(--color-blue-400);
+      box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2);
+    }
+  }
+
+  body .input-group .form-control {
+    background: var(--glass-bg-hover);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--text-primary);
+    border: 1px solid var(--border-default);
+  }
+
+  /* Quantity input */
+  body .quantity-value {
+    background: var(--glass-bg-hover);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    color: var(--text-primary);
+    border: 1px solid var(--border-default);
+  }
+
+}
+
+/* ==========================================================================
+   ADMIN GLASS OVERRIDES
+   Proper selector: html[data-theme="glass"] body.is-admin
+   Fixes: selector was [data-theme="glass"].is-admin which never matched
+   because data-theme is on <html> and .is-admin is on <body>.
+   ========================================================================== */
+html[data-theme="glass"] body.is-admin {
+  /* Admin container transparent to show theme background */
+  .admin-container, mat-sidenav-content, .admin-content {
+    background: transparent;
+  }
+
+  /* Headers with glow */
   h1, h2, h3, .admin-header-title, .section-title {
-    color: #ffffff !important;
+    color: var(--color-white);
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
   }
 
-  /* Карточки дашборда - Глубокое темное стекло */
-  .mat-mdc-card, .glass-card, .dashboard-card {
-    background: var(--glass-bg) !important;
-    backdrop-filter: var(--glass-blur) !important;
-    -webkit-backdrop-filter: var(--glass-blur) !important;
-    border: var(--glass-border) !important;
-    box-shadow: var(--glass-shadow) !important;
-    border-radius: 20px !important;
-    color: #ffffff !important;
+  /* Admin cards - Deep dark glass (stat-card excluded — admin/global/_stat-cards.scss) */
+  .mat-mdc-card:not(.stat-card),
+  .glass-card,
+  .dashboard-card {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: var(--border-default);
+    box-shadow: var(--glass-shadow);
+    border-radius: var(--radius-xl);
+    color: var(--color-white);
 
-    /* Внутренние элементы карточек */
     .mat-mdc-card-title, .mat-mdc-card-subtitle, p, span {
-      color: rgba(255, 255, 255, 0.9) !important;
+      color: rgba(255, 255, 255, 0.9);
     }
-    
-    mat-icon {
-      color: #ffffff !important;
+
+    mat-icon:not(.stat-icon) {
+      color: var(--color-white);
       filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
     }
   }
 
-  /* Хедер в режиме Glass */
+  /* Admin header — prod medium chrome ≡ sidebar */
   .mat-toolbar.admin-header {
-    background: rgba(0, 0, 0, 0.3) !important;
-    backdrop-filter: var(--glass-blur) !important;
-    border-bottom: var(--glass-border) !important;
-    color: #ffffff !important;
-    
+    --mat-toolbar-container-background-color: transparent;
+    background: var(--surface-chrome-gradient, var(--surface-chrome));
+    background-color: var(--surface-chrome);
+    backdrop-filter: var(--chrome-blur, blur(22px) saturate(145%));
+    -webkit-backdrop-filter: var(--chrome-blur, blur(22px) saturate(145%));
+    border-bottom: var(--chrome-border, 1px solid rgba(255, 255, 255, 0.3));
+    box-shadow: var(--chrome-shadow);
+    color: var(--text-primary);
+
     mat-icon, button {
-      color: #ffffff !important;
+      color: var(--text-primary);
     }
+  }
+}
+
+/* ===== BODY-LEVEL ICE / WATER ATMOSPHERE (storefront) ===== */
+body:not(.is-admin)[data-theme="glass"],
+html[data-theme="glass"] body:not(.is-admin) {
+  position: relative;
+  min-height: 100vh;
+  color: var(--text-primary);
+  background: var(--storefront-atmosphere-gradient, var(--bg-page));
+  background-size: 400% 400%;
+  background-attachment: fixed;
+  animation: storefrontGlassAtmosphere 22s ease infinite;
+
+  &::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      var(--bg-gradient-1),
+      var(--bg-gradient-2),
+      var(--bg-gradient-3);
+  }
+
+  &::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    filter: blur(80px);
+    background:
+      radial-gradient(circle at 14% 20%, rgba(255, 255, 255, 0.75), transparent 42%),
+      radial-gradient(circle at 86% 78%, rgba(190, 214, 230, 0.5), transparent 45%),
+      radial-gradient(circle at 48% 48%, rgba(210, 224, 234, 0.4), transparent 50%);
+  }
+}
+
+@keyframes storefrontGlassAtmosphere {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
   }
 }

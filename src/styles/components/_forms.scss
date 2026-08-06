@@ -1,6 +1,191 @@
 /* ==========================================================================
-   FORM COMPONENTS
-   Form styles using the new design system
+   FORMS (Epic G7)
+   Premium form preset — native controls, layout, validation, focus rings
+   Material fields styled via overrides/_material-overrides.scss
    ========================================================================== */
 
-// Form styles will be implemented here 
+// ── Layout ──
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--form-gap);
+  align-items: start;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--form-gap);
+  align-items: flex-start;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--form-gap);
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: var(--form-row-gap);
+}
+
+.form-field--full,
+.full-width {
+  width: 100%;
+}
+
+// ── Field group ──
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  width: 100%;
+}
+
+.form-label {
+  font-size: var(--form-label-size);
+  font-weight: var(--form-label-weight);
+  letter-spacing: var(--form-label-tracking);
+  color: var(--form-label-color);
+  text-transform: uppercase;
+}
+
+.form-hint {
+  font-size: var(--form-hint-size);
+  color: var(--form-hint-color);
+  line-height: var(--leading-normal);
+}
+
+.form-error,
+.error-message {
+  font-size: var(--form-hint-size);
+  color: var(--form-error-color);
+  line-height: var(--leading-normal);
+}
+
+// ── Native controls ──
+
+.form-control,
+.form-group input:not([type='checkbox']):not([type='radio']):not([type='file']),
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--form-padding-y) var(--form-padding-x);
+  border: 1px solid var(--form-border);
+  border-radius: var(--form-radius);
+  background: var(--form-bg);
+  color: var(--form-text);
+  font-size: var(--form-text-size);
+  font-family: inherit;
+  line-height: var(--leading-normal);
+  outline: none;
+  transition: var(--form-transition);
+
+  &::placeholder {
+    color: var(--form-placeholder);
+    opacity: 1;
+  }
+
+  &:hover:not(:disabled):not(.is-disabled) {
+    border-color: var(--form-border-focus);
+  }
+
+  &:focus,
+  &:focus-visible {
+    border-color: var(--form-border-focus);
+    box-shadow: var(--form-focus-ring);
+    background: var(--form-bg);
+  }
+
+  &:disabled,
+  &.is-disabled {
+    opacity: var(--form-disabled-opacity);
+    cursor: not-allowed;
+  }
+
+  &.invalid,
+  &.is-invalid,
+  &.ng-invalid.ng-touched {
+    border-color: var(--form-error-color);
+    background: var(--form-error-bg);
+
+    &:focus,
+    &:focus-visible {
+      box-shadow: var(--form-error-ring);
+    }
+  }
+
+  &.is-valid,
+  &.ng-valid.ng-dirty {
+    border-color: var(--form-success-color);
+
+    &:focus,
+    &:focus-visible {
+      box-shadow: var(--form-success-ring);
+    }
+  }
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 7.5rem;
+}
+
+// ── Theme: glass ──
+
+[data-theme='glass'] {
+  --form-radius: var(--form-radius-pill);
+  --micro-focus-ring-color: rgba(var(--interactive-primary-rgb), 0.24);
+
+  .form-control,
+  .form-group input:not([type='checkbox']):not([type='radio']):not([type='file']),
+  .form-group textarea,
+  .form-group select {
+    background: var(--glass-surface-muted, var(--form-bg));
+    backdrop-filter: var(--backdrop-blur-sm);
+    -webkit-backdrop-filter: var(--backdrop-blur-sm);
+    border-color: var(--glass-border-soft, var(--form-border));
+    border-radius: var(--form-radius-pill);
+  }
+}
+
+// ── Theme: dark ──
+
+[data-theme='dark'] {
+  --micro-focus-ring-color: rgba(96, 165, 250, 0.22);
+
+  .form-control,
+  .form-group input:not([type='checkbox']):not([type='radio']):not([type='file']),
+  .form-group textarea,
+  .form-group select {
+    background: var(--surface-secondary);
+    border-color: var(--border-subtle);
+  }
+}
+
+// ── Theme: dark-glass (admin) ──
+
+body.is-admin[data-theme='dark-glass'],
+html[data-theme='dark-glass'] body.is-admin {
+  --form-radius: var(--form-radius-pill);
+  --micro-focus-ring-color: rgba(138, 180, 248, 0.22);
+
+  .form-control,
+  .form-group input:not([type='checkbox']):not([type='radio']):not([type='file']),
+  .form-group textarea,
+  .form-group select {
+    border-radius: var(--form-radius-pill);
+  }
+}

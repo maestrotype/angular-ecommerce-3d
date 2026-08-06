@@ -1,11 +1,10 @@
 
-
 .error-dialog {
-  background: #ffffff;
-  border: 1px solid #e0e0e0;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-default);
   border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--duration-normal) var(--easing-default);
   max-width: 500px;
   margin: 0;
   
@@ -23,18 +22,18 @@
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      background: #fafafa;
+      background: var(--surface-highlight);
       
       mat-icon {
         font-size: 24px;
         width: 24px;
         height: 24px;
-        color: #f44336;
+        color: var(--interactive-danger);
       }
     }
     
     .dialog-title {
-      color: #212121;
+      color: var(--text-primary);
       font-size: 18px;
       font-weight: 600;
       margin: 0;
@@ -45,11 +44,11 @@
       position: absolute;
       top: 0;
       right: 0;
-      color: #757575;
+      color: var(--text-secondary);
       
       &:hover {
-        color: #212121;
-        background: #f5f5f5;
+        color: var(--text-primary);
+        background: var(--surface-highlight);
       }
     }
   }
@@ -58,37 +57,37 @@
     margin-bottom: 24px;
     
     .dialog-message {
-      color: #212121;
+      color: var(--text-primary);
       font-size: 14px;
       margin: 0 0 16px 0;
       line-height: 1.6;
     }
     
     .dialog-details {
-      background: #fafafa;
-      border: 1px solid #e0e0e0;
+      background: var(--surface-highlight);
+      border: 1px solid var(--border-default);
       border-radius: 4px;
       padding: 16px;
       
       h4 {
-        color: #757575;
+        color: var(--text-secondary);
         font-size: 14px;
         font-weight: 500;
         margin: 0 0 8px 0;
       }
       
       .details-text {
-        color: #757575;
+        color: var(--text-secondary);
         margin: 0;
         white-space: pre-wrap;
         word-break: break-word;
         font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
         font-size: 12px;
         line-height: 1.4;
-        background: #ffffff;
+        background: var(--surface-elevated);
         padding: 8px;
         border-radius: 4px;
-        border: 1px solid #f0f0f0;
+        border: 1px solid var(--border-subtle);
       }
     }
   }
@@ -111,35 +110,34 @@
       font-weight: 500;
       text-decoration: none;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all var(--duration-normal) var(--easing-default);
       min-height: 40px;
       
       &.primary {
-        background: #f44336;
-        color: white;
+        background: var(--interactive-danger);
+        color: var(--text-on-primary);
         
         &:hover {
-          background: #d32f2f;
+          background: var(--color-error-dark);
           transform: translateY(-1px);
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          box-shadow: var(--shadow-md);
         }
       }
       
       &.secondary {
         background: transparent;
-        color: #212121;
-        border: 1px solid #e0e0e0;
+        color: var(--text-primary);
+        border: 1px solid var(--border-default);
         
         &:hover {
-          background: #f5f5f5;
-          border-color: #1976d2;
+          background: var(--surface-highlight);
+          border-color: var(--interactive-primary);
         }
       }
     }
   }
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .error-dialog {
     .dialog-header {
@@ -161,4 +159,4 @@
       }
     }
   }
-} 
+}

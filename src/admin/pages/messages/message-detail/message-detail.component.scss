@@ -1,24 +1,23 @@
-
 .message-detail-container {
   max-width: 800px;
-  background-color: var(--admin-bg-card);
-  color: var(--admin-text-primary, var(--mdc-list-list-item-label-text-color));
+  background-color: var(--surface-elevated);
+  color: var(--text-primary);
   border: var(--border-width) var(--border-style) var(--border-color);
   border-radius: var(--border-radius-dark-glass);
-  box-shadow: var(--admin-shadow-lg, 0 16px 60px rgba(0, 0, 0, 0.35));
+  box-shadow: var(--shadow-lg);
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--admin-header-bg);
+  background-color: var(--surface-header);
   padding: 3px;
   margin-bottom: 24px;
 
   h2 {
     margin: 0;
-    color: var(--mdc-list-list-item-label-text-color);
+    color: var(--text-primary);
   }
 }
 
@@ -28,11 +27,11 @@
 }
 
 .message-info {
-  background: var(--admin-message-info-bg);
+  background: var(--color-info-bg);
   padding: 16px;
   border-radius: 8px;
   margin-bottom: 24px;
-  border: 1px solid var(--admin-border-primary, #404040);
+  border: 1px solid var(--border-default);
 
   .info-row {
     margin-bottom: 12px;
@@ -46,7 +45,7 @@
 
     strong {
       min-width: 80px;
-      color: #9ca3af;
+      color: var(--text-secondary);
     }
   }
 }
@@ -56,52 +55,44 @@
 
   h4 {
     margin: 0 0 12px 0;
-    color: var(--mdc-list-list-item-label-text-color);
+    color: var(--text-primary);
     font-weight: 500;
   }
 
   .content-text, .reply-text {
-    background: var(--admin-bg-hover);
+    background: var(--surface-highlight);
     padding: 16px;
     border-radius: 8px;
-    border: 1px solid var(--admin-border-primary, #404040);
+    border: 1px solid var(--border-default);
     white-space: pre-wrap;
     line-height: 1.6;
-    color: var(--mdc-list-list-item-label-text-color);
+    color: var(--text-primary);
   }
 
   .reply-date {
     margin-top: 8px;
     text-align: right;
-    
+
     small {
-      color: #9ca3af;
+      color: var(--text-secondary);
     }
   }
 }
 
 .admin-reply .reply-text {
-  background: rgba(59, 130, 246, 0.1);
-  border-color: var(--admin-primary, #3b82f6);
-  color: var(--admin-text-primary);
-
-  [data-theme="dark"] &,
-  [data-theme="glass"] &,
-  [data-theme="dark-glass"] & {
-    background: rgba(30, 58, 138, 0.6);
-    border-color: var(--admin-primary, #3b82f6);
-    color: #f8fafc;
-  }
+  background: rgba(var(--interactive-primary-rgb), 0.1);
+  border-color: var(--interactive-primary);
+  color: var(--text-primary);
 }
 
 .reply-form {
   margin-top: 24px;
   padding-top: 24px;
-  border-top: 1px solid var(--admin-border-primary, #404040);
+  border-top: 1px solid var(--border-default);
 
   h4 {
     margin: 0 0 16px 0;
-    color: var(--mdc-list-list-item-label-text-color);
+    color: var(--text-primary);
     font-weight: 500;
   }
 
@@ -122,61 +113,6 @@
   justify-content: flex-end;
   gap: 12px;
   padding-top: 16px;
-  background-color: var(--admin-header-bg);
+  background-color: var(--surface-header);
   margin-top: 24px;
 }
-
-// Material Design overrides for dark theme
-::ng-deep {
-  .mat-dialog-container {
-    background-color: var(--admin-bg-card) ;
-    color: var(--admin-text-primary, var(--mdc-list-list-item-label-text-color));
-  }
-  
-  .mat-dialog-title {
-    color: var(--admin-text-primary, var(--mdc-list-list-item-label-text-color));
-  }
-  
-  .mat-dialog-content {
-    color: var(--admin-text-primary, var(--mdc-list-list-item-label-text-color));
-  }
-  
-  .mat-form-field {
-    .mat-form-field-label {
-      color: var(--admin-text-secondary, var(--mdc-list-list-item-label-text-color));
-    }
-    
-    .mat-input-element {
-      color: var(--admin-text-primary, var(--mdc-list-list-item-label-text-color));
-    }
-    
-    .mat-form-field-outline {
-      color: var(--admin-border-primary, #6b7280) ;
-    }
-    
-    &.mat-focused {
-      .mat-form-field-outline-thick {
-        color: #3b82f6 ;
-      }
-      
-      .mat-form-field-label {
-        color: #3b82f6 ;
-      }
-    }
-  }
-  
-  .mat-chip {
-    background-color: #3b82f6 ;
-    color: #ffffff ;
-  }
-  
-  .mat-button {
-    color: var(--admin-text-primary, var(--mdc-list-list-item-label-text-color));
-  }
-  
-  .mat-raised-button.mat-primary {
-    background-color: #3b82f6 ;
-    color: #ffffff ;
-  }
-}
-  

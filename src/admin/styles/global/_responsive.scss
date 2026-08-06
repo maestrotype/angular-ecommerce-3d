@@ -1,0 +1,46 @@
+@media (max-width: 480px) {
+  // Light theme - white header
+  [data-theme="light"] {
+    .admin-header {
+      border-bottom: 1px solid var(--border-default);
+    }
+  }
+
+  // Dark theme - dark header
+  [data-theme="dark"] {
+    .admin-header {
+      border-bottom: 1px solid var(--border-default);
+    }
+  }
+
+  .admin-header {
+    .header-title {
+      font-size: var(--text-sm);
+    }
+
+    .header-actions {
+      gap: 4px;
+
+      button {
+        padding: 6px;
+
+        mat-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .filters-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filters-actions {
+    flex-direction: column;
+  }
+}

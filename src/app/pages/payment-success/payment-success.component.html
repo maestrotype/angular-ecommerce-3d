@@ -1,44 +1,44 @@
-<div class="payment-success-container" [class]="getThemeClass('payment-success-container')">
-  <div class="success-content">
-    <div class="success-icon">
+<div class="payment-result payment-result--success">
+  <div class="payment-result__panel">
+    <div class="payment-result__icon">
       <mat-icon>check_circle</mat-icon>
     </div>
 
-    <h1 class="success-title">{{ 'PAYMENT.STATUS.SUCCESS_TITLE' | translate }}</h1>
-    <p class="success-message">{{ 'PAYMENT.SUCCESS_PAGE.MESSAGE' | translate }}</p>
+    <h1 class="payment-result__title">{{ 'PAYMENT.STATUS.SUCCESS_TITLE' | translate }}</h1>
+    <p class="payment-result__message">{{ 'PAYMENT.SUCCESS_PAGE.MESSAGE' | translate }}</p>
 
-    <div class="payment-details" [class]="getThemeClass('payment-details')">
-      <div class="detail-row">
-        <span class="detail-label">{{ 'PAYMENT.INFO.ORDER_ID' | translate }}:</span>
-        <span class="detail-value">#{{ orderId || 'N/A' }}</span>
+    <div class="payment-result__details">
+      <div class="payment-result__detail-row">
+        <span class="payment-result__detail-label">{{ 'PAYMENT.INFO.ORDER_ID' | translate }}:</span>
+        <span class="payment-result__detail-value">#{{ orderId || 'N/A' }}</span>
       </div>
 
-      <div class="detail-row" *ngIf="amount">
-        <span class="detail-label">{{ 'MODALS.CART.TOTAL' | translate }}:</span>
-        <span class="detail-value">${{ amount.toFixed(2) }}</span>
+      <div class="payment-result__detail-row" *ngIf="amount">
+        <span class="payment-result__detail-label">{{ 'MODALS.CART.TOTAL' | translate }}:</span>
+        <span class="payment-result__detail-value">${{ amount.toFixed(2) }}</span>
       </div>
 
-      <div class="detail-row" *ngIf="paymentMethod">
-        <span class="detail-label">{{ 'PAYMENT.STATUS.METHOD' | translate }}:</span>
-        <span class="detail-value">{{ paymentMethod | titlecase }}</span>
+      <div class="payment-result__detail-row" *ngIf="paymentMethod">
+        <span class="payment-result__detail-label">{{ 'PAYMENT.STATUS.METHOD' | translate }}:</span>
+        <span class="payment-result__detail-value">{{ paymentMethod | titlecase }}</span>
       </div>
     </div>
 
-    <div class="success-actions">
-      <button mat-raised-button color="primary" class="action-btn primary-btn" (click)="continueShopping()">
+    <div class="payment-result__actions">
+      <button type="button" class="payment-result__btn payment-result__btn--primary" (click)="continueShopping()">
         {{ 'PAYMENT.SUCCESS_PAGE.CONTINUE_SHOPPING' | translate }}
       </button>
 
-      <button mat-stroked-button class="action-btn secondary-btn" (click)="viewOrderDetails()" *ngIf="orderId">
+      <button type="button" class="payment-result__btn payment-result__btn--secondary" (click)="viewOrderDetails()" *ngIf="orderId">
         {{ 'PAYMENT.STATUS.VIEW_DETAILS' | translate }}
       </button>
 
-      <button mat-stroked-button class="action-btn secondary-btn" (click)="goToHome()">
+      <button type="button" class="payment-result__btn payment-result__btn--secondary" (click)="goToHome()">
         {{ 'PAYMENT.SUCCESS_PAGE.GO_HOME' | translate }}
       </button>
     </div>
 
-    <div class="success-info">
+    <div class="payment-result__info">
       <p>{{ 'PAYMENT.SUCCESS_PAGE.EMAIL_INFO' | translate }}</p>
       <p>{{ 'PAYMENT.SUCCESS_PAGE.THANK_YOU' | translate }}</p>
     </div>

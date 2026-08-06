@@ -1,63 +1,63 @@
-// Admin Panel Mixins
+// Admin Panel Mixins — C6: semantic tokens only (ADR-011)
+// Layout ADMIN-ONLY tokens remain in `_admin-layout-tokens.scss`.
 
-// Button Mixins
 @mixin admin-button($variant: 'primary') {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--admin-spacing-sm);
-  padding: var(--admin-spacing-sm) var(--admin-spacing-md);
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
   border: none;
-  border-radius: var(--admin-border-radius-md);
-  font-family: var(--admin-font-family);
-  font-size: var(--admin-font-size-sm);
-  font-weight: var(--admin-font-weight-medium);
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
   text-decoration: none;
   cursor: pointer;
-  transition: all var(--admin-transition-normal);
+  transition: all var(--duration-normal) var(--easing-default);
   min-height: 40px;
-  
+
   @if $variant == 'primary' {
-    background: var(--admin-primary);
-    color: var(--admin-text-inverse);
-    
+    background: var(--interactive-primary);
+    color: var(--text-inverse);
+
     &:hover {
-      background: var(--admin-primary-hover);
+      background: var(--interactive-primary-hover);
       transform: translateY(-1px);
-      box-shadow: var(--admin-shadow-md);
+      box-shadow: var(--shadow-md);
     }
   } @else if $variant == 'secondary' {
     background: transparent;
-    color: var(--admin-text-primary);
-    border: 1px solid var(--admin-border-primary);
-    
+    color: var(--text-primary);
+    border: 1px solid var(--border-default);
+
     &:hover {
-      background: var(--admin-bg-hover);
-      border-color: var(--admin-border-focus);
+      background: var(--surface-highlight);
+      border-color: var(--border-primary);
     }
   } @else if $variant == 'success' {
-    background: var(--admin-success);
-    color: var(--admin-text-inverse);
-    
+    background: var(--color-success);
+    color: var(--text-inverse);
+
     &:hover {
-      background: var(--admin-success-hover);
+      background: var(--color-success-hover);
     }
   } @else if $variant == 'warning' {
-    background: var(--admin-warning);
-    color: var(--admin-text-inverse);
-    
+    background: var(--color-warning);
+    color: var(--text-inverse);
+
     &:hover {
-      background: var(--admin-warning-hover);
+      background: var(--color-warning-hover);
     }
   } @else if $variant == 'error' {
-    background: var(--admin-error);
-    color: var(--admin-text-inverse);
-    
+    background: var(--interactive-danger);
+    color: var(--text-inverse);
+
     &:hover {
-      background: var(--admin-error-hover);
+      background: var(--color-error-hover);
     }
   }
-  
+
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
@@ -65,162 +65,178 @@
   }
 }
 
-// Card Mixins
 @mixin admin-card {
-  background: var(--admin-bg-card);
-  border: 1px solid var(--admin-border-primary);
-  border-radius: var(--admin-border-radius-lg);
-  box-shadow: var(--admin-shadow-sm);
-  transition: all var(--admin-transition-normal);
-  
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--duration-normal) var(--easing-default);
+
   &:hover {
-    box-shadow: var(--admin-shadow-md);
+    box-shadow: var(--shadow-md);
   }
 }
 
 @mixin admin-card-hover {
   transform: translateY(-2px);
-  box-shadow: var(--admin-shadow-lg);
+  box-shadow: var(--shadow-lg);
 }
 
-// Form Mixins
 @mixin admin-form-field {
   width: 100%;
-  padding: var(--admin-spacing-sm) var(--admin-spacing-md);
-  border: 1px solid var(--admin-border-primary);
-  border-radius: var(--admin-border-radius-md);
-  font-family: var(--admin-font-family);
-  font-size: var(--admin-font-size-sm);
-  background: var(--admin-bg-primary);
-  color: var(--admin-text-primary);
-  transition: all var(--admin-transition-normal);
-  
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  background: var(--surface-page);
+  color: var(--text-primary);
+  transition: all var(--duration-normal) var(--easing-default);
+
   &:focus {
     outline: none;
-    border-color: var(--admin-border-focus);
+    border-color: var(--border-primary);
     box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
   }
-  
+
   &:disabled {
-    background: var(--admin-bg-secondary);
-    color: var(--admin-text-disabled);
+    background: var(--surface-secondary);
+    color: var(--text-muted);
     cursor: not-allowed;
   }
 }
 
 @mixin admin-form-label {
   display: block;
-  margin-bottom: var(--admin-spacing-xs);
-  font-family: var(--admin-font-family);
-  font-size: var(--admin-font-size-sm);
-  font-weight: var(--admin-font-weight-medium);
-  color: var(--admin-text-primary);
+  margin-bottom: var(--space-1);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: var(--text-primary);
 }
 
-// Layout Mixins
 @mixin admin-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 var(--admin-spacing-md);
+  padding: 0 var(--space-4);
 }
 
 @mixin admin-row {
   display: flex;
   flex-wrap: wrap;
-  margin: 0 calc(-1 * var(--admin-spacing-sm));
+  margin: 0 calc(-1 * var(--space-2));
 }
 
 @mixin admin-col($columns: 1) {
   flex: 0 0 calc(100% / 12 * #{$columns});
   max-width: calc(100% / 12 * #{$columns});
-  padding: 0 var(--admin-spacing-sm);
+  padding: 0 var(--space-2);
 }
 
-// Typography Mixins
 @mixin admin-heading($level: 1) {
-  font-family: var(--admin-font-family);
-  font-weight: var(--admin-font-weight-bold);
-  color: var(--admin-text-primary);
-  margin: 0 0 var(--admin-spacing-md) 0;
-  
+  font-family: var(--font-sans);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+  margin: 0 0 var(--space-4) 0;
+
   @if $level == 1 {
-    font-size: var(--admin-font-size-xxl);
+    font-size: var(--text-2xl);
   } @else if $level == 2 {
-    font-size: var(--admin-font-size-xl);
+    font-size: var(--text-xl);
   } @else if $level == 3 {
-    font-size: var(--admin-font-size-lg);
+    font-size: var(--text-lg);
   } @else if $level == 4 {
-    font-size: var(--admin-font-size-md);
+    font-size: var(--text-base);
   }
 }
 
 @mixin admin-text($size: 'md', $weight: 'normal') {
-  font-family: var(--admin-font-family);
-  font-size: var(--admin-font-size-#{$size});
-  font-weight: var(--admin-font-weight-#{$weight});
-  color: var(--admin-text-primary);
+  font-family: var(--font-sans);
+  color: var(--text-primary);
   line-height: 1.6;
   margin: 0;
+
+  @if $size == 'xs' {
+    font-size: var(--text-xs);
+  } @else if $size == 'sm' {
+    font-size: var(--text-sm);
+  } @else if $size == 'lg' {
+    font-size: var(--text-lg);
+  } @else if $size == 'xl' {
+    font-size: var(--text-xl);
+  } @else if $size == 'xxl' {
+    font-size: var(--text-2xl);
+  } @else {
+    font-size: var(--text-base);
+  }
+
+  @if $weight == 'light' {
+    font-weight: var(--font-light);
+  } @else if $weight == 'medium' {
+    font-weight: var(--font-medium);
+  } @else if $weight == 'semibold' {
+    font-weight: var(--font-semibold);
+  } @else if $weight == 'bold' {
+    font-weight: var(--font-bold);
+  } @else {
+    font-weight: var(--font-normal);
+  }
 }
 
-// Animation Mixins
 @mixin admin-fade-in {
-  animation: adminFadeIn var(--admin-transition-normal) ease-in-out;
+  animation: adminFadeIn var(--duration-normal) var(--easing-default);
 }
 
 @mixin admin-slide-in($direction: 'up') {
-  animation: adminSlideIn#{$direction} var(--admin-transition-normal) ease-out;
+  animation: adminSlideIn#{$direction} var(--duration-normal) var(--easing-default);
 }
 
-// Responsive Mixins
 @mixin admin-mobile {
-  @media (max-width: var(--admin-breakpoint-md)) {
+  @media (max-width: 768px) {
     @content;
   }
 }
 
 @mixin admin-tablet {
-  @media (min-width: var(--admin-breakpoint-md)) and (max-width: var(--admin-breakpoint-lg)) {
+  @media (min-width: 768px) and (max-width: 992px) {
     @content;
   }
 }
 
 @mixin admin-desktop {
-  @media (min-width: var(--admin-breakpoint-lg)) {
+  @media (min-width: 992px) {
     @content;
   }
 }
 
-// Status Mixins
 @mixin admin-status($type: 'info') {
   display: inline-flex;
   align-items: center;
-  gap: var(--admin-spacing-xs);
-  padding: var(--admin-spacing-xs) var(--admin-spacing-sm);
-  border-radius: var(--admin-border-radius-sm);
-  font-size: var(--admin-font-size-xs);
-  font-weight: var(--admin-font-weight-medium);
-  
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+
   @if $type == 'success' {
     background: rgba(76, 175, 80, 0.1);
-    color: var(--admin-success);
+    color: var(--color-success);
     border: 1px solid rgba(76, 175, 80, 0.2);
   } @else if $type == 'warning' {
     background: rgba(255, 152, 0, 0.1);
-    color: var(--admin-warning);
+    color: var(--color-warning);
     border: 1px solid rgba(255, 152, 0, 0.2);
   } @else if $type == 'error' {
     background: rgba(244, 67, 54, 0.1);
-    color: var(--admin-error);
+    color: var(--interactive-danger);
     border: 1px solid rgba(244, 67, 54, 0.2);
   } @else {
     background: rgba(33, 150, 243, 0.1);
-    color: var(--admin-info);
+    color: var(--color-info);
     border: 1px solid rgba(33, 150, 243, 0.2);
   }
 }
 
-// Keyframes
 @keyframes adminFadeIn {
   from {
     opacity: 0;
@@ -272,4 +288,4 @@
     transform: translateX(0);
     opacity: 1;
   }
-} 
+}

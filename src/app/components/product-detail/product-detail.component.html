@@ -2,18 +2,18 @@
   <!-- Header -->
   <div class="product-header">
     <div class="container">
-      <button class="back-btn glass-theme" (click)="goBack()">
+      <button type="button" class="back-btn" (click)="goBack()">
         <app-icon name="arrow-left" [width]="16" [height]="16"></app-icon>
         <span class="btn-text">{{ 'PRODUCT.BACK_BTN' | translate }}</span>
       </button>
-      <nav class="breadcrumb">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
         <a class="breadcrumb-link" (click)="navigateToHome()">{{ 'PRODUCT.BREADCRUMBS.HOME' | translate }}</a>
         <span class="breadcrumb-separator">/</span>
         <a class="breadcrumb-link" (click)="navigateToShop()">{{ 'PRODUCT.BREADCRUMBS.SHOP' | translate }}</a>
         <span class="breadcrumb-separator">/</span>
         <a class="breadcrumb-link" (click)="navigateToCategory()">{{ product.category }}</a>
         <span class="breadcrumb-separator">/</span>
-        <span class="current">{{ product.name | localized }}</span>
+        <span class="current breadcrumb-current">{{ product.name | localized }}</span>
       </nav>
     </div>
   </div>
@@ -32,11 +32,11 @@
             <app-three-d-viewer *ngIf="selectedType === '3d' && product?.model3dUrl" [modelPath]="product.model3dUrl" [hdModelPath]="product['localModel3dUrl']"
               class="main-3d-viewer" [previewOnly]="false" [scale]="[9, 9, 9]"
               [position]="[0, 0, 0]" (click)="$event.stopPropagation()"></app-three-d-viewer>
-            <!-- Expand overlay -->
             <div class="expand-overlay">
-              <div class="expand-icon" (click)="onImageClicked()">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round">
+              <div class="expand-icon" (click)="onImageClicked()" role="button" tabindex="0"
+                (keydown.enter)="onImageClicked()" (keydown.space)="onImageClicked(); $event.preventDefault()">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <polyline points="15 3 21 3 21 9"></polyline>
                   <polyline points="9 21 3 21 3 15"></polyline>
                   <line x1="21" y1="3" x2="14" y2="10"></line>
@@ -51,17 +51,19 @@
             <img *ngFor="let img of product?.images; let i = index" [src]="img" [class.selected]="
                 selectedType === 'image' && selectedImageIndex === i
               " (click)="onThumbnailSelected('image', i)" alt="Product thumbnail" class="thumb-image" />
-            <app-three-d-viewer *ngIf="product?.model3dUrl" [modelPath]="product.model3dUrl" [hdModelPath]="product['localModel3dUrl']" class="thumb-3d"
-              [class.selected]="selectedType === '3d'" (click)="onThumbnailSelected('3d')" [previewOnly]="true"
-              [scale]="[9, 9, 9]" [position]="[0, 0, 0]" [autoRotate]="true"></app-three-d-viewer>
+            <div *ngIf="product?.model3dUrl" class="thumb-3d-wrap"
+              [class.selected]="selectedType === '3d'"
+              (click)="onThumbnailSelected('3d')">
+              <app-three-d-viewer [modelPath]="product.model3dUrl" [hdModelPath]="product['localModel3dUrl']" class="thumb-3d"
+                [previewOnly]="true" [scale]="[9, 9, 9]" [position]="[0, 0, 0]" [autoRotate]="true"></app-three-d-viewer>
+              <span class="thumb-3d-badge">3D</span>
+            </div>
           </div>
         </div>
         <div class="product-detail-info">
-          <!-- Product Info Component -->
           <app-product-info [product]="product" [quantity]="quantity" (quantityChanged)="onQuantityChanged($event)"
             (addToCart)="onAddToCart()">
           </app-product-info>
-          <!-- Dynamic Modular Sections (Product Info Area) -->
           <ng-container *ngFor="let section of sections">
             <app-section-renderer 
               *ngIf="section.type === 'product-tabs'"
@@ -72,7 +74,6 @@
         </div>
       </div>
 
-      <!-- Dynamic Modular Sections (Full Width Area) -->
       <ng-container *ngFor="let section of sections">
         <div class="modular-section-wrapper" *ngIf="section.type !== 'product-tabs'">
           <app-section-renderer 
@@ -86,23 +87,20 @@
 </div>
 
 <!-- Loading State -->
-<div class="loading" *ngIf="loading">
+<div class="product-detail-page-state" *ngIf="loading">
   <div class="container">
-    <div class="loading-content">
-      <p>{{ 'PRODUCT.LOADING' | translate }}</p>
-    </div>
+    <app-loading-spinner size="lg" [message]="'PRODUCT.LOADING' | translate"></app-loading-spinner>
   </div>
 </div>
 
 <!-- Product Not Found -->
-<div class="not-found" *ngIf="!loading && !product">
+<div class="product-detail-page-state" *ngIf="!loading && !product">
   <div class="container">
-    <div class="not-found-content">
-      <h2>{{ 'PRODUCT.NOT_FOUND.TITLE' | translate }}</h2>
-      <p>{{ 'PRODUCT.NOT_FOUND.MSG' | translate }}</p>
-      <button class="back-btn glass-theme" (click)="goBack()">
-        {{ 'PRODUCT.BACK_BTN' | translate }}
-      </button>
-    </div>
+    <app-empty-state
+      [title]="'PRODUCT.NOT_FOUND.TITLE' | translate"
+      [description]="'PRODUCT.NOT_FOUND.MSG' | translate"
+      [actionLabel]="'PRODUCT.BACK_BTN' | translate"
+      (actionClick)="goBack()">
+    </app-empty-state>
   </div>
 </div>

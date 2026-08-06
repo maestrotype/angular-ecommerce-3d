@@ -1,6 +1,13 @@
-@forward './theme-variables';
+/* ========================================
+   TOKEN PIPELINE ENTRY
+   ========================================
+   Layer 1: _primitive-tokens.scss — raw design values (single source)
+   Layer 2: _semantic-tokens.scss — contextual mappings consumed by components
+   Legacy monolith _theme-variables.scss decomposed into themes/ (Task A3, 2026-07-28).
 
+   Rule: primitives are defined ONLY in _primitive-tokens.scss.
+   Never redeclare token values in this file.
+   ======================================== */
 
-
-
-
+@import './primitive-tokens';
+@import './semantic-tokens';

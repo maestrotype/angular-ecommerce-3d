@@ -1,0 +1,120 @@
+// Form Fields — admin shell; tokens + Material bridge in components/_forms.scss + overrides
+.mat-mdc-form-field {
+  .mat-mdc-text-field-wrapper {
+    background-color: var(--form-bg);
+    color: var(--form-text);
+    border-radius: var(--form-radius);
+    transition: var(--form-transition);
+
+    [data-theme='glass'] & {
+      background: var(--glass-surface-muted, var(--form-bg));
+      backdrop-filter: var(--backdrop-blur-sm);
+      -webkit-backdrop-filter: var(--backdrop-blur-sm);
+      border: 1px solid var(--glass-border-soft, var(--form-border));
+      border-radius: var(--form-radius-pill);
+      box-shadow: var(--shadow-sm);
+    }
+  }
+
+  .mat-mdc-form-field-label,
+  .mdc-floating-label {
+    color: var(--form-label-color);
+  }
+
+  .mat-mdc-input-element,
+  .mdc-text-field__input {
+    color: var(--form-text);
+
+    &::placeholder {
+      color: var(--form-placeholder);
+    }
+  }
+
+  .mat-mdc-form-field-outline {
+    color: var(--form-border);
+  }
+
+  &.mat-focused .mat-mdc-form-field-outline {
+    color: var(--form-border-focus);
+  }
+}
+
+// Select
+.mat-mdc-select {
+  .mat-mdc-select-value {
+    color: var(--form-text);
+  }
+
+  .mat-mdc-select-arrow {
+    color: var(--form-label-color);
+  }
+}
+
+// Checkbox
+.mat-mdc-checkbox {
+  .mdc-checkbox {
+    .mdc-checkbox__background {
+      border-color: var(--form-border);
+    }
+
+    .mdc-checkbox__checkmark {
+      color: var(--text-inverse);
+    }
+  }
+
+  &.mat-mdc-checkbox-checked {
+    .mdc-checkbox__background {
+      background-color: var(--interactive-primary);
+      border-color: var(--interactive-primary);
+    }
+  }
+}
+
+// Radio Button
+.mat-mdc-radio-button {
+  .mdc-radio {
+    .mdc-radio__background {
+      border-color: var(--form-border);
+    }
+
+    .mdc-radio__outer-circle {
+      border-color: var(--form-border);
+    }
+  }
+
+  &.mat-mdc-radio-checked {
+    .mdc-radio__background {
+      .mdc-radio__outer-circle {
+        border-color: var(--interactive-primary);
+      }
+
+      .mdc-radio__inner-circle {
+        border-color: var(--interactive-primary);
+      }
+    }
+  }
+}
+
+// Slide Toggle
+.mat-mdc-slide-toggle {
+  .mdc-switch {
+    .mdc-switch__track {
+      background-color: var(--form-border);
+    }
+  }
+
+  &.mat-mdc-slide-toggle-checked {
+    .mdc-switch {
+      .mdc-switch__track {
+        background-color: var(--interactive-primary);
+      }
+    }
+  }
+}
+
+// Progress Spinner
+.mat-mdc-progress-spinner {
+  circle {
+    stroke: var(--interactive-primary);
+  }
+}

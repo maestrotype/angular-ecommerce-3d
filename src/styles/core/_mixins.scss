@@ -5,34 +5,35 @@
 
 /* ==========================================================================
    RESPONSIVE MIXINS
+   Breakpoints from core/_variables.scss ($breakpoint-*)
    ========================================================================== */
 
 @mixin mobile {
-  @media (max-width: 767px) {
+  @media (max-width: #{$breakpoint-md - 1}) {
     @content;
   }
 }
 
 @mixin tablet {
-  @media (min-width: 768px) and (max-width: 991px) {
+  @media (min-width: #{$breakpoint-md}) and (max-width: #{$breakpoint-lg - 1}) {
     @content;
   }
 }
 
 @mixin desktop {
-  @media (min-width: 992px) {
+  @media (min-width: #{$breakpoint-lg}) {
     @content;
   }
 }
 
 @mixin mobile-and-tablet {
-  @media (max-width: 991px) {
+  @media (max-width: #{$breakpoint-lg - 1}) {
     @content;
   }
 }
 
 @mixin tablet-and-desktop {
-  @media (min-width: 768px) {
+  @media (min-width: #{$breakpoint-md}) {
     @content;
   }
 }
@@ -42,31 +43,103 @@
    ========================================================================== */
 
 @mixin heading($level: 1) {
-  font-family: var(--font-family-primary);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  font-family: var(--type-font-heading);
+  font-weight: var(--type-weight-heading);
+  color: var(--text-primary);
+  letter-spacing: var(--type-tracking-heading);
   margin: 0 0 var(--spacing-md) 0;
-  line-height: var(--line-height-tight);
 
   @if $level == 1 {
-    font-size: var(--font-size-xxxl);
+    font-size: var(--type-size-h1);
+    line-height: var(--type-leading-heading);
   } @else if $level == 2 {
-    font-size: var(--font-size-xxl);
+    font-size: var(--type-size-h2);
+    line-height: var(--type-leading-heading);
   } @else if $level == 3 {
-    font-size: var(--font-size-xl);
+    font-size: var(--type-size-h3);
+    line-height: var(--type-leading-heading);
   } @else if $level == 4 {
-    font-size: var(--font-size-lg);
+    font-size: var(--type-size-h4);
+    line-height: var(--type-leading-heading);
+  } @else if $level == 5 {
+    font-size: var(--type-size-h5);
+    line-height: var(--type-leading-body);
+    font-weight: var(--type-weight-subheading);
   } @else {
-    font-size: var(--font-size-md);
+    font-size: var(--type-size-h6);
+    line-height: var(--type-leading-body);
+    font-weight: var(--type-weight-subheading);
   }
 }
 
+@mixin type-display {
+  font-family: var(--type-font-heading);
+  font-size: var(--type-size-display);
+  font-weight: var(--type-weight-display);
+  line-height: var(--type-leading-display);
+  letter-spacing: var(--type-tracking-display);
+  color: var(--text-primary);
+}
+
+@mixin type-body($size: 'md') {
+  font-family: var(--type-font-body);
+  font-weight: var(--type-weight-body);
+  line-height: var(--type-leading-body);
+  letter-spacing: var(--type-tracking-body);
+  color: var(--text-primary);
+  font-size: var(--type-size-body);
+
+  @if $size == 'sm' {
+    font-size: var(--type-size-body-sm);
+  } @else if $size == 'lg' {
+    font-size: var(--type-size-h4);
+  }
+}
+
+@mixin type-caption {
+  font-family: var(--type-font-body);
+  font-size: var(--type-size-caption);
+  font-weight: var(--type-weight-caption);
+  line-height: var(--type-leading-caption);
+  letter-spacing: var(--type-tracking-caption);
+  color: var(--text-secondary);
+}
+
+@mixin type-label {
+  font-family: var(--type-font-body);
+  font-size: var(--type-size-label);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-leading-caption);
+  letter-spacing: var(--type-tracking-label);
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+@mixin type-overline {
+  font-family: var(--type-font-body);
+  font-size: var(--type-size-overline);
+  font-weight: var(--type-weight-label);
+  line-height: var(--type-leading-caption);
+  letter-spacing: var(--type-tracking-overline);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
 @mixin text($size: 'md', $weight: 'normal') {
-  font-family: var(--font-family-primary);
-  font-size: var(--font-size-#{$size});
+  font-family: var(--type-font-body);
   font-weight: var(--font-weight-#{$weight});
-  line-height: var(--line-height-normal);
-  color: var(--color-text-primary);
+  line-height: var(--type-leading-body);
+  letter-spacing: var(--type-tracking-body);
+  color: var(--text-primary);
+  font-size: var(--type-size-body);
+
+  @if $size == 'sm' {
+    font-size: var(--type-size-body-sm);
+  } @else if $size == 'lg' {
+    font-size: var(--type-size-h4);
+  } @else if $size == 'xl' {
+    font-size: var(--type-size-h3);
+  }
 }
 
 @mixin text-secondary {
@@ -105,8 +178,8 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--color-border-focus);
-    outline-offset: 2px;
+    outline: none;
+    box-shadow: var(--micro-focus-ring);
   }
 }
 

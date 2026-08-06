@@ -1,8 +1,20 @@
+/* ==========================================================================
+   BOUGHT TOGETHER RECOMMENDATIONS
+   Epic D3: semantic tokens + theme-scoped --bought-together-* vars.
+   ========================================================================== */
+
 .bought-together {
   margin: 2rem 0;
   padding: 2rem 0;
-  background: var(--bought-together-bg, var(--color-surface-primary, #f8f9fa));
-  border-radius: 12px;
+
+  app-skeleton-loader {
+    display: block;
+    padding: 0 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  background: var(--bought-together-bg, var(--surface-page));
+  border-radius: var(--radius-md);
 
   .recommendations-header {
     text-align: center;
@@ -12,12 +24,12 @@
     .recommendations-title {
       font-size: 1.5rem;
       font-weight: 600;
-      color: var(--bought-together-title-color, var(--color-text-primary, #333));
+      color: var(--bought-together-title-color, var(--text-primary));
       margin-bottom: 0.5rem;
     }
 
     .recommendations-subtitle {
-      color: var(--bought-together-subtitle-color, var(--color-text-secondary, #666));
+      color: var(--bought-together-subtitle-color, var(--text-secondary));
       font-size: 0.9rem;
     }
   }
@@ -38,10 +50,10 @@
   }
 
   .product-card {
-    background: var(--bought-together-card-bg, var(--color-surface-primary, #ffffff));
-    border: var(--bought-together-card-border, 1px solid #f0f0f0);
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: var(--bought-together-card-bg, var(--surface-card));
+    border: var(--bought-together-card-border, 1px solid var(--border-default));
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
     overflow: hidden;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -57,7 +69,7 @@
 
     &:hover {
       transform: translateY(-8px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      box-shadow: var(--shadow-lg);
 
       .product-overlay {
         opacity: 1;
@@ -68,7 +80,7 @@
       position: relative;
       aspect-ratio: 1;
       overflow: hidden;
-      background-color: var(--bought-together-card-bg, var(--color-surface-primary, #F7F7F7));
+      background-color: var(--bought-together-card-bg, var(--surface-secondary));
       display: flex;
       justify-content: center;
       align-items: center;
@@ -83,11 +95,8 @@
 
       .product-overlay {
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.4);
+        inset: 0;
+        background: var(--surface-overlay-hover);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -95,8 +104,8 @@
         transition: opacity 0.3s ease;
 
         .action-btn {
-          background: rgba(255, 255, 255, 0.9);
-          border: none;
+          background: var(--surface-elevated);
+          border: 1px solid var(--border-subtle);
           border-radius: 50%;
           width: 50px;
           height: 50px;
@@ -105,16 +114,16 @@
           justify-content: center;
           cursor: pointer;
           transition: all 0.3s ease;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+          box-shadow: var(--shadow-md);
 
           &:hover {
-            background: #fff;
+            background: var(--surface-primary);
             transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: var(--shadow-lg);
           }
 
           .material-icons {
-            color: #333;
+            color: var(--text-primary);
             font-size: 24px;
           }
         }
@@ -122,13 +131,12 @@
 
       .special-badge,
       .new-badge,
-      .out-of-stock-badge,
-      .discount-badge {
+      .out-of-stock-badge {
         position: absolute;
         top: 12px;
         left: 12px;
-        background: linear-gradient(135deg, #10B981, #059669);
-        color: white;
+        background: linear-gradient(135deg, var(--color-success), var(--color-success-dark));
+        color: var(--text-on-primary);
         padding: 0.5rem 1rem;
         border-radius: 20px;
         font-size: 0.75rem;
@@ -137,19 +145,23 @@
         letter-spacing: 0.5px;
       }
 
+      .out-of-stock-badge {
+        background: var(--text-muted);
+      }
+
       .discount-badge {
         position: absolute;
         top: 12px;
         right: 12px;
-        background: linear-gradient(135deg, #EF4444, #DC2626);
-        color: white;
+        background: linear-gradient(135deg, var(--color-error), var(--color-error-dark));
+        color: var(--text-on-primary);
         padding: 0.5rem 1rem;
         border-radius: 20px;
         font-size: 0.75rem;
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.5px;
-        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+        box-shadow: var(--shadow-sm);
       }
     }
 
@@ -163,7 +175,7 @@
       .product-name {
         font-size: 1.125rem;
         font-weight: 600;
-        color: var(--bought-together-card-text, #333);
+        color: var(--bought-together-card-text, var(--text-primary));
         margin-bottom: 0.5rem;
       }
 
@@ -183,37 +195,34 @@
         .star {
           cursor: pointer;
           font-size: 18px;
-          color: #d1d5db;
+          color: var(--border-emphasis);
           transition: all 0.2s ease;
 
-          &:hover {
-            transform: scale(1.2);
-            color: #fbbf24;
-          }
-
+          &:hover,
           &.filled {
-            color: #fbbf24;
+            transform: scale(1.2);
+            color: var(--color-warning);
           }
         }
 
         .rating-value {
-          color: var(--bought-together-card-text, #6b7280);
+          color: var(--bought-together-card-text, var(--text-secondary));
           font-size: 14px;
           font-weight: 500;
         }
 
         .rating-count {
-          color: var(--bought-together-card-text, #9ca3af);
+          color: var(--text-muted);
           font-size: 12px;
         }
 
         .product-category {
-          color: #6366f1;
+          color: var(--color-accent);
           font-size: 0.75rem;
           font-weight: 600;
           text-transform: uppercase;
           letter-spacing: 0.5px;
-          background: rgba(99, 102, 241, 0.1);
+          background: rgba(var(--interactive-primary-rgb), 0.1);
           padding: 2px 8px;
           border-radius: 12px;
           margin-left: auto;
@@ -237,20 +246,20 @@
             .current-price {
               font-size: 1.25rem;
               font-weight: 700;
-              color: var(--bought-together-card-price, #111827);
+              color: var(--bought-together-card-price, var(--text-primary));
             }
 
             .original-price {
               font-size: 1rem;
-              color: #9ca3af;
+              color: var(--text-muted);
               text-decoration: line-through;
             }
           }
         }
 
         .cart-btn {
-          background: var(--color-primary, #3b82f6);
-          color: white;
+          background: var(--interactive-primary);
+          color: var(--text-on-primary);
           border: none;
           border-radius: 50%;
           width: 40px;
@@ -260,12 +269,12 @@
           justify-content: center;
           cursor: pointer;
           transition: all 0.3s ease;
-          box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+          box-shadow: var(--shadow-sm);
 
           &:hover {
-            background: var(--color-primary-hover, #2563eb);
+            background: var(--interactive-primary-hover);
             transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+            box-shadow: var(--shadow-md);
           }
 
           .material-icons {
@@ -277,9 +286,9 @@
       .stock-indicator {
         margin-top: 0.5rem;
         padding: 0.25rem 0.5rem;
-        background: rgba(239, 68, 68, 0.1);
-        color: #dc2626;
-        border-radius: 6px;
+        background: var(--color-error-bg);
+        color: var(--color-error-dark);
+        border-radius: var(--radius-sm);
         font-size: 0.75rem;
         font-weight: 600;
         text-align: center;
@@ -287,77 +296,6 @@
     }
   }
 
-  // Loading skeleton styles
-  .loading-skeleton {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    padding: 0 1rem;
-    max-width: 1200px;
-    margin: 0 auto;
-
-    .skeleton-card {
-      background: var(--bought-together-card-bg, #ffffff);
-      border-radius: 12px;
-      padding: 1rem;
-      height: 400px;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-
-      .skeleton-image {
-        height: 200px;
-        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-        background-size: 200% 100%;
-        animation: skeleton-loading 1.5s infinite;
-        border-radius: 8px;
-      }
-
-      .skeleton-content {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-
-        .skeleton-title {
-          height: 20px;
-          background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-          background-size: 200% 100%;
-          animation: skeleton-loading 1.5s infinite;
-          border-radius: 4px;
-        }
-
-        .skeleton-meta {
-          height: 16px;
-          background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-          background-size: 200% 100%;
-          animation: skeleton-loading 1.5s infinite;
-          border-radius: 4px;
-          width: 60%;
-        }
-
-        .skeleton-price {
-          height: 24px;
-          background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-          background-size: 200% 100%;
-          animation: skeleton-loading 1.5s infinite;
-          border-radius: 4px;
-          width: 40%;
-        }
-      }
-    }
-  }
-
-  @keyframes skeleton-loading {
-    0% {
-      background-position: -200% 0;
-    }
-
-    100% {
-      background-position: 200% 0;
-    }
-  }
-
-  // Error and empty states
   .error-state,
   .empty-state {
     text-align: center;
@@ -378,22 +316,22 @@
       .empty-title {
         font-size: 1.25rem;
         font-weight: 600;
-        color: var(--bought-together-card-text, #333);
+        color: var(--bought-together-card-text, var(--text-primary));
         margin-bottom: 0.5rem;
       }
 
       .error-message,
       .empty-message {
-        color: var(--bought-together-subtitle-color, #666);
+        color: var(--bought-together-subtitle-color, var(--text-secondary));
         margin-bottom: 1.5rem;
       }
 
       .retry-button {
-        background: var(--color-primary, #3b82f6);
-        color: white;
+        background: var(--interactive-primary);
+        color: var(--text-on-primary);
         border: none;
         padding: 0.75rem 1.5rem;
-        border-radius: 8px;
+        border-radius: var(--radius-md);
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s ease;
@@ -402,248 +340,14 @@
         gap: 0.5rem;
 
         &:hover {
-          background: var(--color-primary-hover, #2563eb);
+          background: var(--interactive-primary-hover);
           transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+          box-shadow: var(--shadow-md);
         }
 
         .retry-icon {
           font-size: 1rem;
         }
-      }
-    }
-  }
-}
-
-:host-context([data-theme="glass"]) .bought-together {
-  background: transparent;
-  padding: 3rem 0;
-
-  .recommendations-header {
-    margin-bottom: 3rem;
-    .recommendations-title {
-      color: var(--text-primary); 
-      font-size: 2.5rem;
-      font-weight: 900;
-      text-shadow: none;
-    }
-
-    .recommendations-subtitle {
-      color: var(--text-secondary);
-      font-size: 1.1rem;
-      font-weight: 600;
-    }
-  }
-
-  .products-grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.25rem;
-    max-width: 1400px;
-    
-    @media (max-width: 1200px) { grid-template-columns: repeat(3, 1fr); }
-    @media (max-width: 900px) { grid-template-columns: repeat(2, 1fr); }
-    @media (max-width: 600px) { grid-template-columns: 1fr; }
-  }
-
-  .product-card {
-    background: var(--surface-primary);
-    border: 1px solid var(--border-primary);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 24px;
-    height: auto;
-    padding: 0.5rem;
-
-    &:hover {
-      background: var(--surface-hover);
-      border-color: var(--border-focus);
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.06);
-      transform: translateY(-8px);
-    }
-
-    .product-image {
-      background-color: var(--surface-tertiary);
-      border-radius: 20px;
-      margin-bottom: 0.5rem;
-      border-bottom: none;
-      height: 220px;
-
-      img { height: 100%; width: 100%; object-fit: contain; }
-
-      .product-overlay {
-        background: var(--surface-tertiary);
-        backdrop-filter: blur(8px);
-
-        .action-btn {
-          background: var(--surface-primary);
-          border: 1px solid var(--border-secondary);
-          color: var(--text-primary);
-          &:hover { color: var(--border-focus); }
-        }
-      }
-    }
-
-    .product-info {
-        padding: 1rem 0.5rem;
-      .product-name {
-        color: var(--text-primary);
-        font-weight: 800;
-        font-size: 1.1rem;
-      }
-
-      .product-rating {
-        .star {
-          color: var(--text-tertiary);
-          &.filled { color: #fbbf24; }
-        }
-        .rating-value, .rating-count { color: var(--text-secondary); }
-        .product-category {
-          background: var(--surface-secondary);
-          border: 1px solid var(--border-secondary);
-          color: var(--border-focus);
-          font-weight: 700;
-        }
-      }
-
-      .product-footer {
-        margin-top: 1.5rem;
-        .product-price {
-          .current-price {
-            color: var(--product-price-color);
-            font-weight: 850;
-            font-size: 1.3rem;
-          }
-          .original-price { color: var(--text-tertiary); }
-        }
-
-        .cart-btn {
-          background: var(--text-primary);
-          border: none;
-          width: 44px;
-          height: 44px;
-          color: var(--text-inverse);
-          &:hover { background: #000; transform: scale(1.1); }
-        }
-      }
-    }
-  }
-}
-
-// Dark theme styles
-[data-theme="dark"] .bought-together {
-  .product-card {
-    background: var(--bought-together-card-bg, #1e293b);
-    border: var(--bought-together-card-border, 1px solid #334155);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-
-    &:hover {
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    }
-
-    .product-image {
-      background-color: var(--bought-together-card-bg, #1e293b);
-      border-bottom: 1px solid #334155;
-
-      .product-overlay {
-        background: rgba(0, 0, 0, 0.6);
-
-        .action-btn {
-          background: rgba(255, 255, 255, 0.2);
-          border: 1px solid rgba(255, 255, 255, 0.3);
-          backdrop-filter: blur(10px);
-
-          &:hover {
-            background: rgba(255, 255, 255, 0.3);
-            border-color: rgba(255, 255, 255, 0.5);
-          }
-
-          .material-icons {
-            color: rgba(255, 255, 255, 0.9);
-          }
-        }
-      }
-
-      .special-badge,
-      .new-badge,
-      .out-of-stock-badge,
-      .discount-badge {
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        color: #1e293b;
-        font-weight: 700;
-      }
-    }
-
-    .product-info {
-      .product-name {
-        color: var(--bought-together-card-text, #f8fafc);
-        font-weight: 700;
-        text-shadow: 0 1px 2px rgba(255, 255, 255, 0.1);
-      }
-
-      .product-rating {
-        .star {
-          color: rgba(251, 191, 36, 0.7);
-
-          &:hover {
-            color: #fbbf24;
-            text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
-          }
-
-          &.filled {
-            color: #fbbf24;
-            text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
-          }
-        }
-
-        .rating-value,
-        .rating-count {
-          color: var(--bought-together-card-text, #cbd5e1);
-        }
-
-        .product-category {
-          background: rgba(99, 102, 241, 0.2);
-          border: 1px solid rgba(99, 102, 241, 0.3);
-          backdrop-filter: blur(10px);
-          color: #6366f1;
-          font-weight: 700;
-        }
-      }
-
-      .product-footer {
-        .product-price {
-          .price-main {
-            .current-price {
-              color: var(--bought-together-card-price, #60a5fa);
-            }
-
-            .original-price {
-              color: #9ca3af;
-            }
-          }
-        }
-      }
-
-      .stock-indicator {
-        background: rgba(239, 68, 68, 0.2);
-        color: #fca5a5;
-        border: 1px solid rgba(239, 68, 68, 0.3);
-      }
-    }
-  }
-
-  .loading-skeleton {
-    .skeleton-card {
-      background: var(--bought-together-card-bg, #1e293b);
-      border: var(--bought-together-card-border, 1px solid #334155);
-
-      .skeleton-image,
-      .skeleton-title,
-      .skeleton-meta,
-      .skeleton-price {
-        background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
-        background-size: 200% 100%;
       }
     }
   }

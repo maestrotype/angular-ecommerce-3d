@@ -1,0 +1,79 @@
+/* ==========================================================================
+   EMPTY STATES (Epic G2)
+   Styles for app-empty-state — token-driven, all themes
+   ========================================================================== */
+
+.app-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  color: var(--text-primary);
+  animation: motion-fade-in var(--motion-duration-normal) var(--motion-easing-enter) both;
+
+  &--compact {
+    padding: var(--spacing-xl) var(--spacing-md);
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4rem;
+    height: 4rem;
+    margin-bottom: var(--spacing-md);
+    border-radius: var(--radius-full);
+    background: var(--surface-secondary);
+    color: var(--text-secondary);
+    font-size: 2rem;
+    line-height: 1;
+
+    .material-icons {
+      font-size: 2rem;
+    }
+  }
+
+  &__title {
+    margin: 0 0 var(--spacing-xs);
+    font-size: var(--text-2xl);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--leading-tight);
+    color: var(--text-primary);
+  }
+
+  &__description {
+    margin: 0 0 var(--spacing-lg);
+    max-width: 28rem;
+    font-size: var(--text-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--text-secondary);
+  }
+
+  &__action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border: 1px solid var(--interactive-primary-border);
+    border-radius: var(--radius-full);
+    background: var(--interactive-primary-bg);
+    color: var(--interactive-primary-text);
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+
+    &:hover {
+      transform: translateY(calc(var(--spacing-xs) * -0.5));
+      box-shadow: var(--shadow-md);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--border-primary);
+      outline-offset: 2px;
+    }
+  }
+}

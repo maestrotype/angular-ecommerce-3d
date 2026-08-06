@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -6,7 +6,8 @@ import { CommonModule } from '@angular/common';
   templateUrl: './list-container.component.html',
   styleUrls: ['./list-container.component.scss'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule],
+  encapsulation: ViewEncapsulation.None,
 })
 export class ListContainerComponent {
   @Input() title = '';

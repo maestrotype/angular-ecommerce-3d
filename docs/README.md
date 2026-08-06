@@ -2,42 +2,105 @@
 
 Technical reference for the Angular 17+ 3D E-commerce Platform.
 
-## AI Agent Workflow (New)
+---
+
+## AI Agent Workflow
 
 > **Для ИИ-ассистентов**: Начните работу с этих файлов.
 
-| Файл | Назначение |
-|------|-----------|
-| [AI_PROJECT_PROMPT.md](AI_PROJECT_PROMPT.md) | Системный промпт: правила кода, дизайн-система, prompt templates |
-| [PROJECT_STATUS.md](PROJECT_STATUS.md) | Текущий статус проекта, активная задача, дорожная карта |
-| [tasks/](tasks/) | Описание задач в формате `task_XXX_name.md` |
-| [templates/task-template.md](templates/task-template.md) | Шаблон для создания новой задачи |
-
-## Documentation Modules
-
-1. **[Quick Start Guide](GETTING_STARTED.md)**
-   System requirements, environment configuration, and local deployment instructions.
-
-2. **[Core Architecture](ARCHITECTURE.md)**
-   Technical overview of the SSR engine, hydration strategy, and backend service layer.
-
-3. **[Customization & Branding](CUSTOMIZATION.md)**
-   Guide on theme tokens, 3D viewer configuration, and localization.
-
-4. **[API Reference](BACKEND_API.md)**
-   Overview of the NestJS REST API, authentication guards, and DTO structures.
-
-5. **[Admin Dashboard Guide](ADMIN_GUIDE.md)**
-   Operational guide for managing products, categories, and SEO settings via the Admin UI.
-
-6. **[Troubleshooting](TROUBLESHOOTING.md)**
-   Common issues related to SSR hydration, 3D rendering, and database connectivity.
-
-## Technical Stack
-- **Frontend**: Angular 17 (Standalone Components, SSR, Signals-ready architecture).
-- **3D Engine**: Three.js with GLTFLoader and Meshopt decoder support.
-- **Backend**: NestJS 10 (TypeORM, JWT, Passport).
-- **Database**: PostgreSQL (Relational).
+| File | Purpose |
+|------|---------|
+| [AI_CONSTITUTION.md](AI_CONSTITUTION.md) | **Read First** — Rules all AI agents must follow |
+| [REFACTORING_BOARD.md](REFACTORING_BOARD.md) | **Single source of truth for refactoring progress** — metrics, epics, tasks (Done / In Progress / To Do / Planned) |
+| [PROJECT_STATUS.md](PROJECT_STATUS.md) | High-level project status and changelog |
+| [tasks/](tasks/) | Task descriptions (`task_XXX_name.md`) |
+| [templates/task-template.md](templates/task-template.md) | Template for creating new tasks |
 
 ---
+
+## Architecture Decision Records (ADRs)
+
+> **ADR**s document significant architectural decisions, their context, and consequences.
+> See [adr/](adr/) for the full list.
+
+| ADR | Title | Status |
+|-----|-------|--------|
+| [ADR-001](adr/001-style-architecture-refactoring.md) | Style Architecture Refactoring | proposed |
+
+---
+
+## UI Architecture Documentation
+
+> **Read before making any style, theme, or component changes.**
+
+| Document | Purpose | When to Read |
+|----------|---------|--------------|
+| [STYLE_REFACTOR_PLAN.md](STYLE_REFACTOR_PLAN.md) | Migration plan — Phase-by-phase refactoring roadmap | Before any architectural style changes |
+| [STYLE_ARCHITECTURE.md](STYLE_ARCHITECTURE.md) | Style hierarchy, token flow, SCSS structure, forbidden patterns | Before any CSS/SCSS changes |
+| [THEME_ENGINE.md](THEME_ENGINE.md) | Multi-dimensional theme engine specification | When adding/modifying themes |
+| [REDESIGN_PLAN.md](REDESIGN_PLAN.md) | Phased redesign roadmap with atomic tasks | Before starting UI work |
+| [UI_AUDIT.md](UI_AUDIT.md) | Architecture cleanup tracker — update after every style task | After completing style tasks |
+| [COMPONENT_GUIDELINES.md](COMPONENT_GUIDELINES.md) | Component styling patterns and best practices | When creating new components |
+
+---
+
+## Application Documentation
+
+| Module | Description |
+|--------|-------------|
+| [Quick Start Guide](GETTING_STARTED.md) | System requirements, environment configuration, local deployment |
+| [Core Architecture](ARCHITECTURE.md) | SSR engine, hydration strategy, backend service layer |
+| [Customization & Branding](CUSTOMIZATION.md) | Theme tokens (quick ref), 3D viewer config, i18n, social auth |
+| [API Reference](BACKEND_API.md) | NestJS REST API, authentication guards, DTO structures |
+| [Admin Dashboard Guide](ADMIN_GUIDE.md) | Managing products, categories, SEO via Admin UI |
+| [Troubleshooting](TROUBLESHOOTING.md) | SSR hydration, 3D rendering, database connectivity issues |
+
+---
+
+## Document Navigation Map
+
+```
+                        Need to understand the project?
+                               │
+        ┌──────────────────────┼──────────────────────┐
+        ▼                      ▼                      ▼
+   AI_CONSTITUTION.md    PROJECT_STATUS.md      ARCHITECTURE.md
+   (AI rules)            (Current state)        (App architecture)
+
+                        Need a task to work on?
+                               │
+                               ▼
+                      REFACTORING_BOARD.md
+                (Progress metrics, epics A–G, task statuses)
+
+                         Need to change styles?
+                                │
+         ┌──────────────────────────────────────────────┐
+         ▼                                              ▼
+    STYLE_REFACTOR_PLAN.md                     Need implementation details?
+    (Architecture decisions, contracts)                  │
+         ┌──────────────────────┼──────────────────────┐
+         ▼                      ▼                      ▼
+    STYLE_ARCHITECTURE.md  THEME_ENGINE.md      COMPONENT_GUIDELINES.md
+    (How styles work)     (Theme system)        (Component patterns)
+
+                        Need to customize?
+                               │
+        ┌──────────────────────┼──────────────────────┐
+        ▼                      ▼                      ▼
+   CUSTOMIZATION.md      GETTING_STARTED.md   TROUBLESHOOTING.md
+   (Dev customization)   (Setup guide)         (Problem solving)
+```
+
+---
+
+## Technical Stack
+
+- **Frontend**: Angular 17 (Standalone Components, SSR, Signals-ready architecture)
+- **3D Engine**: Three.js with GLTFLoader and Meshopt decoder support
+- **Backend**: NestJS 10 (TypeORM, JWT, Passport)
+- **Database**: PostgreSQL (Relational)
+
+---
+
 *For high-level project information, refer to the root [README.md](../README.md).*

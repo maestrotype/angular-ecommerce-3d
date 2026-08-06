@@ -1,28 +1,49 @@
-@use '@angular/material' as mat;
+/* ==========================================================================
+   MATERIAL THEME ENTRY (angular.json styles[])
+   --------------------------------------------------------------------------
+   B4: palettes + MDC CSS slots bound to design tokens.
+   Compile-time maps: src/styles/tokens/_material-palettes.scss
+   Runtime bridge:    material-color-bridge → semantic CSS vars
 
-$light-primary: mat.define-palette(mat.$indigo-palette);
-$light-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
-$dark-primary: mat.define-palette(mat.$blue-grey-palette);
-$dark-accent: mat.define-palette(mat.$deep-orange-palette, A200, A100, A400);
+   DoD: changing --interactive-primary / --color-accent / --interactive-danger
+   updates Material primary / accent / warn components.
+   ========================================================================== */
+
+@use '@angular/material' as mat;
+@use '../../styles/tokens/material-palettes' as tokens;
+
+@include mat.core();
+
+$primary: mat.define-palette(tokens.$brand-primary-palette);
+$accent: mat.define-palette(tokens.$brand-accent-palette, 500, 200, 700);
+$warn: mat.define-palette(tokens.$brand-warn-palette);
 
 $light-theme: mat.define-light-theme((
   color: (
-    primary: $light-primary,
-    accent: $light-accent
-  )
+    primary: $primary,
+    accent: $accent,
+    warn: $warn,
+  ),
 ));
 
 $dark-theme: mat.define-dark-theme((
   color: (
-    primary: $dark-primary,
-    accent: $dark-accent
-  )
+    primary: $primary,
+    accent: $accent,
+    warn: $warn,
+  ),
 ));
 
-[data-theme='light'] {
-  @include mat.all-component-themes($light-theme);
+// Default + light + glass: light Material structure at root
+@include mat.all-component-themes($light-theme);
+
+// Dark + dark-glass: recolor only (typography/density already from light theme)
+[data-theme='dark'],
+[data-theme='dark-glass'] {
+  @include mat.all-component-colors($dark-theme);
 }
 
-[data-theme='dark'] {
-  @include mat.all-component-themes($dark-theme);
+// Runtime: Material color slots → semantic tokens (all themes)
+:root {
+  @include tokens.material-color-bridge;
 }

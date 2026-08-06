@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
+import { EmptyStateComponent } from './ui/empty-state/empty-state.component';
+import { LoadingSpinnerComponent } from './ui/loading-spinner/loading-spinner.component';
+import { SkeletonLoaderComponent } from './ui/skeleton-loader/skeleton-loader.component';
 import { BaseButtonComponent } from './ui/buttons/base-button/base-button.component';
 import { ProductCardComponent } from './ui/cards/product-card/product-card.component';
 import { FavoriteButtonComponent } from './favorite-button/favorite-button.component';
@@ -23,6 +26,9 @@ import { ImageUrlPipe } from '@app-shared/pipes/image-url.pipe';
 @NgModule({
   declarations: [
     BaseButtonComponent,
+    EmptyStateComponent,
+    LoadingSpinnerComponent,
+    SkeletonLoaderComponent,
     ProductCardComponent,
     FavoriteButtonComponent,
     CustomDropdownComponent,
@@ -50,6 +56,9 @@ import { ImageUrlPipe } from '@app-shared/pipes/image-url.pipe';
   exports: [
     CommonModule,
     BaseButtonComponent,
+    EmptyStateComponent,
+    LoadingSpinnerComponent,
+    SkeletonLoaderComponent,
     ProductCardComponent,
     FavoriteButtonComponent,
     CustomDropdownComponent,

@@ -1,11 +1,10 @@
-
 .dynamic-page-container {
   min-height: 60vh;
 
   .loading-overlay {
     position: fixed;
     inset: 0;
-    background: var(--bg-primary, #0f172a);
+    background: var(--surface-page);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,15 +13,17 @@
     .spinner {
       width: 40px;
       height: 40px;
-      border: 3px solid rgba(79, 140, 255, 0.2);
-      border-top: 3px solid var(--accent-color, #4f8cff);
+      border: 3px solid rgba(var(--interactive-primary-rgb), 0.2);
+      border-top: 3px solid var(--interactive-primary);
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
   }
 
   @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   .page-content {
@@ -30,8 +31,15 @@
   }
 
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .simple-page {
@@ -40,8 +48,12 @@
       justify-content: center;
       padding: 120px 0 48px;
       background:
-        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(79, 140, 255, 0.18), transparent),
-        linear-gradient(180deg, rgba(15, 23, 42, 0.4) 0%, transparent 100%);
+        radial-gradient(
+          ellipse 80% 60% at 50% -10%,
+          rgba(var(--interactive-primary-rgb), 0.18),
+          transparent
+        ),
+        linear-gradient(180deg, var(--surface-overlay-full) 0%, transparent 100%);
 
       .page-eyebrow {
         display: inline-block;
@@ -49,7 +61,7 @@
         font-weight: 600;
         letter-spacing: 0.12em;
         text-transform: uppercase;
-        color: var(--accent-color, #4f8cff);
+        color: var(--interactive-primary);
         margin-bottom: 0.75rem;
       }
 
@@ -58,7 +70,7 @@
         font-weight: 700;
         line-height: 1.1;
         margin: 0 0 0.75rem;
-        color: var(--text-primary, #f8fafc);
+        color: var(--text-primary);
       }
 
       .page-hero-desc {
@@ -66,7 +78,7 @@
         margin: 0;
         font-size: 1.05rem;
         line-height: 1.6;
-        color: var(--text-secondary, rgba(248, 250, 252, 0.72));
+        color: var(--text-secondary);
       }
     }
 
@@ -77,18 +89,18 @@
     }
 
     .content-card {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 20px;
+      background: var(--surface-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
       padding: clamp(1.5rem, 4vw, 2.5rem);
-      backdrop-filter: blur(16px);
-      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
-      color: var(--text-primary, #e8e8e8);
+      backdrop-filter: var(--backdrop-blur-sm);
+      box-shadow: var(--shadow-lg);
+      color: var(--text-primary);
       line-height: 1.7;
 
       :deep(.lead) {
         font-size: 1.125rem;
-        color: var(--text-secondary, rgba(248, 250, 252, 0.8));
+        color: var(--text-secondary);
         margin: 0 0 1.75rem;
       }
 
@@ -99,23 +111,27 @@
         margin-bottom: 1rem;
       }
 
+      :deep(.info-card),
+      :deep(.info-step) {
+        background: var(--surface-secondary);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius-md);
+      }
+
       :deep(.info-card) {
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        border-radius: 14px;
         padding: 1.25rem;
 
         h3 {
           margin: 0 0 0.5rem;
           font-size: 1rem;
           font-weight: 600;
-          color: var(--text-primary, #fff);
+          color: var(--text-primary);
         }
 
         p {
           margin: 0;
           font-size: 0.95rem;
-          color: var(--text-secondary, rgba(248, 250, 252, 0.75));
+          color: var(--text-secondary);
         }
       }
 
@@ -131,9 +147,6 @@
         gap: 1rem;
         align-items: flex-start;
         padding: 1rem 1.25rem;
-        border-radius: 14px;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.06);
 
         .step-num {
           flex-shrink: 0;
@@ -145,8 +158,8 @@
           justify-content: center;
           font-weight: 700;
           font-size: 0.875rem;
-          background: rgba(79, 140, 255, 0.2);
-          color: var(--accent-color, #4f8cff);
+          background: rgba(var(--interactive-primary-rgb), 0.2);
+          color: var(--interactive-primary);
         }
 
         h3 {
@@ -156,21 +169,21 @@
 
         p {
           margin: 0;
-          color: var(--text-secondary, rgba(248, 250, 252, 0.75));
+          color: var(--text-secondary);
         }
       }
 
       :deep(.info-note) {
         margin-top: 0.5rem;
         padding: 1rem 1.25rem;
-        border-radius: 12px;
-        background: rgba(79, 140, 255, 0.08);
-        border: 1px solid rgba(79, 140, 255, 0.2);
+        border-radius: var(--radius-md);
+        background: rgba(var(--interactive-primary-rgb), 0.08);
+        border: 1px solid rgba(var(--interactive-primary-rgb), 0.2);
         font-size: 0.95rem;
       }
 
       :deep(a) {
-        color: var(--accent-color, #4f8cff);
+        color: var(--interactive-primary);
         text-decoration: none;
         font-weight: 500;
 
@@ -184,38 +197,12 @@
   .not-found {
     padding: 140px 24px 80px;
     text-align: center;
-    color: var(--text-primary, #fff);
+    color: var(--text-primary);
 
     a {
-      color: var(--accent-color, #4f8cff);
+      color: var(--interactive-primary);
       margin-top: 1rem;
       display: inline-block;
-    }
-  }
-}
-
-:host-context([data-theme="light"]),
-:host-context([data-theme="default"]) {
-  .dynamic-page-container .simple-page {
-    .page-hero h1 { color: #0f172a; }
-    .page-hero .page-hero-desc { color: #475569; }
-    .content-card {
-      background: #fff;
-      border-color: rgba(15, 23, 42, 0.08);
-      color: #1e293b;
-      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
-
-      :deep(.info-card),
-      :deep(.info-step) {
-        background: #f8fafc;
-        border-color: rgba(15, 23, 42, 0.06);
-      }
-
-      :deep(.info-card p),
-      :deep(.info-step p),
-      :deep(.lead) {
-        color: #64748b;
-      }
     }
   }
 }

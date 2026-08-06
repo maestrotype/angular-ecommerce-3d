@@ -8,7 +8,6 @@ import { CreateOrderRequest } from '../../../shared/models/create-order-request.
 import { Order } from '../../../shared/models/order.model';
 import { NotificationService } from '../../core/services/notification.service';
 import { ModalService } from '../../core/services/modal.service';
-import { ThemeService } from '../../core/themes/theme.service';
 import { PaymentSettingsService } from '../../core/services/payment-settings.service';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -27,7 +26,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   paymentMethods: Array<{ id: string, name: string, icon: string, description: string }> = [];
   selectedPaymentMethod = 'liqpay';
-  currentTheme = 'default';
 
   constructor(
     private fb: FormBuilder,
@@ -35,7 +33,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     private router: Router,
     private notificationService: NotificationService,
     private modalService: ModalService,
-    private themeService: ThemeService,
     private paymentSettingsService: PaymentSettingsService,
     private translate: TranslateService
   ) {
@@ -53,7 +50,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadCartData();
-    this.loadTheme();
     this.loadPaymentMethods();
   }
 
@@ -62,34 +58,19 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  private loadTheme(): void {
-    this.themeService.currentTheme$.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(theme => {
-      this.currentTheme = theme.id;
-    });
-  }
-
   private loadPaymentMethods(): void {
-
-
     this.paymentSettingsService.getEnabledPaymentMethods().pipe(
       takeUntil(this.destroy$)
     ).subscribe(methods => {
-
       this.paymentMethods = methods;
 
-      // Get default payment method from settings
       this.paymentSettingsService.getPaymentSettings().pipe(
         takeUntil(this.destroy$)
       ).subscribe(settings => {
-        // Set default payment method if available and valid
         if (settings.defaultPaymentMethod && methods.some(m => m.id === settings.defaultPaymentMethod)) {
           this.selectedPaymentMethod = settings.defaultPaymentMethod;
-
         } else if (methods.length > 0) {
           this.selectedPaymentMethod = methods[0].id;
-
         }
       });
     });
@@ -104,8 +85,6 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     ).subscribe(([items, total]) => {
       this.cartItems = items;
       this.totalPrice = total;
-
-
 
       if (items.length === 0) {
         this.router.navigate(['/shop']);
@@ -141,37 +120,41 @@ export class CheckoutComponent implements OnInit, OnDestroy {
         paymentMethod: this.selectedPaymentMethod
       };
 
-
-
       this.cartService.createOrder(orderData).pipe(
         takeUntil(this.destroy$)
       ).subscribe({
         next: (order: Order) => {
           this.isLoading = false;
           this.notificationService.showSuccess(this.translate.instant('CHECKOUT.ERRORS.ORDER_SUCCESS'));
-
-          // Store order data for payment page
           localStorage.setItem(`order_${order.id}`, JSON.stringify(orderData));
-
-          // Redirect to payment page
           this.router.navigate(['/payment', order.id]);
         },
-        error: (error) => {
+        error: () => {
           this.isLoading = false;
           this.notificationService.showError(this.translate.instant('CHECKOUT.ERRORS.ORDER_FAILED'));
         }
       });
     } else {
+      this.checkoutForm.markAllAsTouched();
       this.notificationService.showError(this.translate.instant('CHECKOUT.ERRORS.FILL_REQUIRED'));
     }
   }
 
   goBackToCart(): void {
-    this.router.navigate(['/shop']);
+    this.openCartModal();
   }
 
-  getThemeClass(baseClass: string): string {
-    return `${baseClass} ${this.currentTheme}-theme`;
+  openCartModal(): void {
+    this.modalService.openModal({
+      id: 'cart-modal',
+      type: 'cart',
+      data: null,
+      options: {
+        closeOnBackdrop: true,
+        closeOnEscape: true,
+        showCloseButton: true
+      }
+    });
   }
 
   getFieldError(fieldName: string): string {

@@ -1,87 +1,116 @@
-<div class="payment-page" [class]="getThemeClass('payment-page')">
+<div class="payment-page">
   <div class="container">
-    <div class="payment-header">
-      <button class="back-btn" (click)="goBackToCheckout()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+    <header class="payment-page__header">
+      <button type="button" class="checkout-back-btn" (click)="goBackToCheckout()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" />
         </svg>
         {{ 'PAYMENT.HEADER.BACK_TO_CHECKOUT' | translate }}
       </button>
-      <h1>{{ 'PAYMENT.HEADER.TITLE' | translate }}</h1>
-    </div>
 
-    <div class="payment-content">
-      <!-- Loading State -->
-      <div *ngIf="isLoading" class="loading-state" [class]="getThemeClass('loading-state')">
-        <div class="spinner"></div>
-        <h2>{{ 'PAYMENT.LOADING.CREATING' | translate }}</h2>
-        <p>{{ 'PAYMENT.LOADING.WAIT' | translate }}</p>
+      <div class="payment-page__title-row">
+        <h1>{{ 'PAYMENT.HEADER.TITLE' | translate }}</h1>
       </div>
 
-      <!-- Payment Form -->
-      <div *ngIf="!isLoading && !payment" class="payment-form" [class]="getThemeClass('payment-form')">
+      <nav class="checkout-stepper" [attr.aria-label]="'CHECKOUT.STEPS.LABEL' | translate">
+        <ol class="checkout-stepper__list">
+          <li class="checkout-stepper__item checkout-stepper__item--complete">
+            <span class="checkout-stepper__step">
+              <span class="checkout-stepper__indicator" aria-hidden="true">
+                <mat-icon>check</mat-icon>
+              </span>
+              <span class="checkout-stepper__label">{{ 'CHECKOUT.STEPS.CART' | translate }}</span>
+            </span>
+          </li>
+          <li class="checkout-stepper__item checkout-stepper__item--complete">
+            <button type="button" class="checkout-stepper__step checkout-stepper__step--clickable" (click)="goBackToCheckout()">
+              <span class="checkout-stepper__indicator" aria-hidden="true">
+                <mat-icon>check</mat-icon>
+              </span>
+              <span class="checkout-stepper__label">{{ 'CHECKOUT.STEPS.CHECKOUT' | translate }}</span>
+            </button>
+          </li>
+          <li class="checkout-stepper__item checkout-stepper__item--active" aria-current="step">
+            <span class="checkout-stepper__step">
+              <span class="checkout-stepper__indicator" aria-hidden="true">3</span>
+              <span class="checkout-stepper__label">{{ 'CHECKOUT.STEPS.PAYMENT' | translate }}</span>
+            </span>
+          </li>
+        </ol>
+      </nav>
+    </header>
+
+    <div class="payment-page__content">
+      <div *ngIf="isLoading" class="checkout-panel checkout-loading-panel">
+        <app-loading-spinner size="lg" [message]="'PAYMENT.LOADING.CREATING' | translate"></app-loading-spinner>
+        <p class="checkout-loading-panel__subtitle">{{ 'PAYMENT.LOADING.WAIT' | translate }}</p>
+      </div>
+
+      <div *ngIf="!isLoading && !payment" class="checkout-panel payment-form-panel">
         <div class="payment-info">
-          <h2>{{ 'PAYMENT.INFO.ORDER_SUMMARY' | translate }}</h2>
+          <h2 class="checkout-panel__title">{{ 'PAYMENT.INFO.ORDER_SUMMARY' | translate }}</h2>
           <div class="order-details">
             <p><strong>{{ 'PAYMENT.INFO.ORDER_ID' | translate }}:</strong> #{{ orderId }}</p>
-            <p><strong>{{ 'PAYMENT.INFO.STATUS' | translate }}:</strong> <span class="status pending">{{
-                'PAYMENT.INFO.PENDING' | translate }}</span></p>
+            <p>
+              <strong>{{ 'PAYMENT.INFO.STATUS' | translate }}:</strong>
+              <span class="status-pending">{{ 'PAYMENT.INFO.PENDING' | translate }}</span>
+            </p>
           </div>
         </div>
 
-        <div class="payment-methods">
-          <h3>{{ 'PAYMENT.METHODS.SELECTED' | translate }}</h3>
-          <div class="method-options">
-            <div class="method-option selected">
-              <div class="method-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor"
-                    stroke-width="2" />
-                </svg>
-              </div>
-              <div class="method-info">
-                <h4>{{ selectedMethod | titlecase }}</h4>
-                <p *ngIf="selectedMethod==='liqpay'">{{ 'PAYMENT.METHODS.LIQPAY_DESC' | translate }}</p>
-                <p *ngIf="selectedMethod==='stripe'">{{ 'PAYMENT.METHODS.STRIPE_DESC' | translate }}</p>
-                <p *ngIf="selectedMethod==='paypal'">{{ 'PAYMENT.METHODS.PAYPAL_DESC' | translate }}</p>
-              </div>
+        <div class="checkout-payment-methods">
+          <h3 class="checkout-panel__section-title">{{ 'PAYMENT.METHODS.SELECTED' | translate }}</h3>
+          <div class="checkout-payment-method checkout-payment-method--selected">
+            <div class="checkout-payment-method__icon">
+              <mat-icon>payments</mat-icon>
+            </div>
+            <div class="checkout-payment-method__info">
+              <h4>{{ selectedMethod | titlecase }}</h4>
+              <p *ngIf="selectedMethod === 'liqpay'">{{ 'PAYMENT.METHODS.LIQPAY_DESC' | translate }}</p>
+              <p *ngIf="selectedMethod === 'stripe'">{{ 'PAYMENT.METHODS.STRIPE_DESC' | translate }}</p>
+              <p *ngIf="selectedMethod === 'paypal'">{{ 'PAYMENT.METHODS.PAYPAL_DESC' | translate }}</p>
             </div>
           </div>
         </div>
 
-        <div class="payment-actions">
-          <button class="pay-btn" (click)="createPayment()" [disabled]="isLoading || selectedMethod!=='liqpay'">
+        <div class="checkout-payment-actions">
+          <button type="button" class="checkout-pay-btn" (click)="createPayment()" [disabled]="isLoading || selectedMethod !== 'liqpay'">
             <span *ngIf="!isLoading">{{ 'PAYMENT.ACTIONS.PAY_NOW' | translate }}</span>
             <span *ngIf="isLoading">{{ 'PAYMENT.ACTIONS.PROCESSING' | translate }}</span>
           </button>
-          <div *ngIf="selectedMethod==='stripe'" class="stripe-payment-section">
-            <button *ngIf="!stripeClientSecret" class="pay-btn" (click)="createStripePaymentIntent()"
-              [disabled]="isLoading">
+
+          <div *ngIf="selectedMethod === 'stripe'" class="checkout-stripe-section">
+            <button
+              *ngIf="!stripeClientSecret"
+              type="button"
+              class="checkout-pay-btn"
+              (click)="createStripePaymentIntent()"
+              [disabled]="isLoading"
+            >
               <span *ngIf="!isLoading">{{ 'PAYMENT.ACTIONS.INIT_STRIPE' | translate }}</span>
               <span *ngIf="isLoading">{{ 'PAYMENT.ACTIONS.CREATING_INTENT' | translate }}</span>
             </button>
 
-            <!-- Show this button if no client secret yet -->
-            <div *ngIf="!stripeClientSecret && !isLoading" class="stripe-info">
+            <div *ngIf="!stripeClientSecret && !isLoading" class="checkout-stripe-info">
               <p>{{ 'PAYMENT.ACTIONS.STRIPE_INFO' | translate }}</p>
             </div>
 
-            <!-- Simple Stripe Form -->
-            <div *ngIf="stripeClientSecret" class="stripe-form">
-              <div class="card-input-container">
-                <label for="card-element">{{ 'PAYMENT.ACTIONS.CARD_INFO' | translate }}</label>
-                <div id="card-element" class="card-element"></div>
-                <div id="card-errors" class="card-errors" role="alert"></div>
+            <div *ngIf="stripeClientSecret" class="checkout-stripe-form">
+              <div class="form-group">
+                <label class="form-label" for="card-element">{{ 'PAYMENT.ACTIONS.CARD_INFO' | translate }}</label>
+                <div id="card-element" class="checkout-card-element"></div>
+                <div id="card-errors" class="checkout-card-errors" role="alert"></div>
               </div>
 
-              <button class="pay-btn stripe-pay-btn" (click)="onStripePaymentClick()" [disabled]="isLoading">
+              <button type="button" class="checkout-pay-btn checkout-stripe-pay-btn" (click)="onStripePaymentClick()" [disabled]="isLoading">
                 <span *ngIf="!isLoading">{{ 'PAYMENT.ACTIONS.PAY_WITH_CARD' | translate }}</span>
                 <span *ngIf="isLoading">{{ 'PAYMENT.ACTIONS.PROCESSING' | translate }}</span>
               </button>
             </div>
           </div>
-          <div *ngIf="selectedMethod==='paypal'" style="margin-top:8px;">
-            <button class="pay-btn paypal-btn" (click)="createPayment()" [disabled]="isLoading">
+
+          <div *ngIf="selectedMethod === 'paypal'" class="checkout-paypal-section">
+            <button type="button" class="checkout-pay-btn" (click)="createPayment()" [disabled]="isLoading">
               <span *ngIf="!isLoading">{{ 'PAYMENT.ACTIONS.PAY_WITH_PAYPAL' | translate }}</span>
               <span *ngIf="isLoading">{{ 'PAYMENT.ACTIONS.CREATING_PAYPAL' | translate }}</span>
             </button>
@@ -89,8 +118,7 @@
         </div>
       </div>
 
-      <!-- Payment Status -->
-      <div *ngIf="payment" class="payment-status" [class]="getThemeClass('payment-status')">
+      <div *ngIf="payment" class="checkout-panel payment-status-panel">
         <div class="status-header">
           <h2>{{ 'PAYMENT.STATUS.TITLE' | translate }}</h2>
           <div class="status-badge" [class]="'status-' + paymentStatus">
@@ -109,7 +137,7 @@
           </div>
           <div class="detail-row">
             <span class="label">{{ 'MODALS.CART.TOTAL' | translate }}:</span>
-            <span class="value">${{ payment.amount }}</span>
+            <span class="value checkout-price">${{ payment.amount }}</span>
           </div>
           <div class="detail-row">
             <span class="label">{{ 'PAYMENT.STATUS.METHOD' | translate }}:</span>
@@ -121,10 +149,9 @@
           </div>
         </div>
 
-        <!-- Status-specific content -->
         <div *ngIf="paymentStatus === 'pending'" class="status-content pending">
           <div class="status-icon">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
               <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" />
             </svg>
@@ -138,37 +165,36 @@
 
         <div *ngIf="paymentStatus === 'completed'" class="status-content completed">
           <div class="status-icon">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" />
             </svg>
           </div>
           <h3>{{ 'PAYMENT.STATUS.SUCCESS_TITLE' | translate }}</h3>
           <p>{{ 'PAYMENT.STATUS.SUCCESS_MESSAGE' | translate }}</p>
-          <button class="success-btn" (click)="router.navigate(['/payment-success', orderId])">
+          <button type="button" class="success-btn" (click)="router.navigate(['/payment-success', orderId])">
             {{ 'PAYMENT.STATUS.VIEW_DETAILS' | translate }}
           </button>
         </div>
 
         <div *ngIf="paymentStatus === 'failed'" class="status-content failed">
           <div class="status-icon">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" />
             </svg>
           </div>
           <h3>{{ 'PAYMENT.STATUS.FAILED_TITLE' | translate }}</h3>
           <p>{{ 'PAYMENT.STATUS.FAILED_MESSAGE' | translate }}</p>
           <div class="error-actions">
-            <button class="retry-btn" (click)="retryPayment()">{{ 'PAYMENT.STATUS.RETRY' | translate }}</button>
-            <button class="cancel-btn" (click)="cancelPayment()">{{ 'PAYMENT.STATUS.CANCEL' | translate }}</button>
+            <button type="button" class="retry-btn" (click)="retryPayment()">{{ 'PAYMENT.STATUS.RETRY' | translate }}</button>
+            <button type="button" class="cancel-btn" (click)="cancelPayment()">{{ 'PAYMENT.STATUS.CANCEL' | translate }}</button>
           </div>
         </div>
 
-        <!-- Action buttons -->
         <div class="payment-actions">
-          <button *ngIf="paymentStatus === 'pending'" class="cancel-btn" (click)="cancelPayment()">
+          <button *ngIf="paymentStatus === 'pending'" type="button" class="cancel-btn" (click)="cancelPayment()">
             {{ 'PAYMENT.ACTIONS.CANCEL_PAYMENT' | translate }}
           </button>
-          <button *ngIf="paymentStatus === 'failed'" class="retry-btn" (click)="retryPayment()">
+          <button *ngIf="paymentStatus === 'failed'" type="button" class="retry-btn" (click)="retryPayment()">
             {{ 'PAYMENT.ACTIONS.RETRY_PAYMENT' | translate }}
           </button>
         </div>

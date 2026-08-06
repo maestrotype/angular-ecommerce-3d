@@ -1,59 +1,86 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  background: transparent;
+  line-height: 0;
+}
+
 .notification-badge-wrapper {
-    position: relative;
-    display: flex;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--text-primary);
+  background-color: transparent;
+  background-image: none;
+  transition: color var(--duration-normal) var(--easing-default);
+
+  &:hover {
+    color: var(--interactive-primary);
+    background-color: transparent;
+    background-image: radial-gradient(
+      circle at center,
+      color-mix(in srgb, currentColor 14%, transparent) 0%,
+      color-mix(in srgb, currentColor 14%, transparent) 64%,
+      transparent 65%
+    );
+  }
+
+  .material-icons {
+    font-size: 24px;
+    line-height: 1;
+  }
+
+  .notification-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    z-index: 1;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    color: var(--admin-text-primary);
-    transition: background-color var(--admin-transition-normal), color var(--admin-transition-normal);
-    padding: 6px;
-    border-radius: 50%;
-  
-    &:hover {
-      background-color: var(--admin-bg-hover);
-      color: var(--admin-primary);
-    }
-  
-    .material-icons {
-      font-size: 24px;
-    }
-  
-    .notification-badge {
-      position: absolute;
-      top: 2px;
-      right: 2px;
-      background-color: var(--admin-button);
-      color: #fff;
-      font-size: 11px;
-      font-weight: 600;
-      border-radius: 50%;
-      min-width: 18px;
-      height: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
-      transform: translate(30%, -30%);
-      transition: transform 0.2s ease, opacity 0.2s ease;
-  
-      &.pulse {
-        animation: badgePulse 1.5s infinite;
-      }
+    box-sizing: border-box;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    /* pill radius — reliable when width > height (e.g. "10", "99+") */
+    border-radius: 9999px;
+    border: none;
+    outline: none;
+    overflow: hidden;
+    /* no translate/transform — avoids Chrome white fringe on rounded layers */
+    transform: none;
+    isolation: isolate;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-mask-image: radial-gradient(closest-side, black 99%, transparent 100%);
+    mask-image: radial-gradient(closest-side, black 99%, transparent 100%);
+    background-color: var(--interactive-primary);
+    background-image: none;
+    color: var(--text-on-primary);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+    box-shadow: none;
+
+    &.pulse {
+      animation: badgePulse 1.5s ease-in-out infinite;
     }
   }
-  
-  @keyframes badgePulse {
-    0% {
-      transform: translate(30%, -30%) scale(1);
-      box-shadow: 0 0 0 0 rgba(255, 75, 75, 0.6);
-    }
-    70% {
-      transform: translate(30%, -30%) scale(1.1);
-      box-shadow: 0 0 0 6px rgba(255, 75, 75, 0);
-    }
-    100% {
-      transform: translate(30%, -30%) scale(1);
-      box-shadow: 0 0 0 0 rgba(255, 75, 75, 0);
-    }
+}
+
+@keyframes badgePulse {
+  0%,
+  100% {
+    opacity: 1;
   }
-  
+
+  50% {
+    opacity: 0.85;
+  }
+}

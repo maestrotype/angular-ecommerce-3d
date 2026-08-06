@@ -1,142 +1,168 @@
-// Glass Theme Variables
-[data-theme="glass"] {
-  // Core glass surfaces & helpers
-  --admin-glass-surface-strong: linear-gradient(
-    150deg,
-    rgba(250, 251, 255, 0.9) 0%,
-    rgba(221, 232, 255, 0.55) 45%,
-    rgba(196, 210, 239, 0.35) 100%
+/* ==========================================================================
+   ADMIN GLASS THEME — liquid glass (ADR-011)
+   Prod-aligned chrome + frosted content surfaces under body.is-admin.
+   Chrome (header ≡ sidebar) lighter/airier; content blocks deeper navy glass.
+   ========================================================================== */
+
+body.is-admin[data-theme='glass'],
+html[data-theme='glass'] body.is-admin {
+  --interactive-primary: var(--color-brand-base);
+  --interactive-primary-rgb: 59, 130, 246;
+  --interactive-button: var(--interactive-primary);
+  --interactive-primary-hover: var(--color-brand-dark);
+
+  /* —— Liquid glass recipes —— */
+  --glass-surface-strong: linear-gradient(
+    155deg,
+    rgba(70, 110, 160, 0.55) 0%,
+    rgba(35, 70, 115, 0.4) 45%,
+    rgba(22, 52, 88, 0.35) 100%
   );
-  --admin-glass-surface-soft: 
-    rgba(199, 211, 233, 0.35);
-  --admin-glass-surface-muted: linear-gradient(
+  --glass-surface-soft: rgba(40, 80, 125, 0.35);
+  --glass-surface-muted: linear-gradient(
     165deg,
-    rgba(226, 232, 240, 0.45) 0%,
-    rgba(203, 213, 225, 0.25) 60%,
-    rgba(186, 200, 216, 0.18) 100%
+    rgba(55, 95, 145, 0.4) 0%,
+    rgba(28, 60, 100, 0.32) 55%,
+    rgba(20, 48, 82, 0.28) 100%
   );
-  --admin-glass-border-strong: rgba(255, 255, 255, 0.7);
-  --admin-glass-border-soft: rgba(255, 255, 255, 0.35);
-  --admin-glass-divider: rgba(255, 255, 255, 0.45);
-  --admin-glass-highlight: rgba(255, 255, 255, 0.65);
-  --admin-glass-shadow: 0 18px 45px rgba(15, 23, 42, 0.18);
-  --admin-glass-shadow-lg: 0 28px 80px rgba(15, 23, 42, 0.25);
-  --admin-glass-inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  --glass-border-strong: rgba(255, 255, 255, 0.5);
+  --glass-border-soft: rgba(255, 255, 255, 0.28);
+  --glass-divider: rgba(255, 255, 255, 0.22);
+  --glass-highlight: rgba(255, 255, 255, 0.5);
+  --glass-shadow:
+    0 12px 40px rgba(15, 23, 42, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32);
+  --glass-shadow-lg:
+    0 22px 64px rgba(15, 23, 42, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.36);
+  --glass-inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  --glass-bg: rgba(22, 52, 88, 0.36);
 
-  // Background Colors - Glass Theme (translucent for glass effect)
-  --admin-primary: #3b82f6;
-  --admin-tab-active: #ffffff;
-  --admin-primary-rgb: 59, 130, 246;
-  --admin-bg-primary: rgba(255, 255, 255, 0.05); 
-  --admin-bg-glass: rgba(255, 255, 255, 0.1);
-  --admin-bg-secondary: rgba(25, 60, 105, 0.5);   
-  --admin-product-card-bg: rgba(255, 255, 255, 0.12);
-  --admin-bg-tertiary: rgba(255, 255, 255, 0.05);
-  --admin-bg-card: rgba(255, 255, 255, 0.15);
-  --admin-header-bg: rgba(30, 65, 110, 0.55);
-  --admin-bg-hover: rgba(59, 130, 246, 0.1);
-  --admin-back-btn: rgba(54, 63, 66, 0.3);
-  --admin-submit-btn: #3b82f6;
-  --admin-submit-btn-hover: #2563eb;
-  --admin-submit-btn-disabled: #6b7280;
-  --admin-submit-btn-text: #ffffff;
-  --admin-cancel-btn: #6b7280;
-  --admin-cancel-btn-hover: #9ca3af;
-  --admin-cancel-btn-disabled: #404040;
-  --admin-bg-overlay: rgba(15, 23, 42, 0.2);
-  --admin-message-info-bg: rgba(255, 255, 255, 0.3);
-  
-  // Table colors — two-tone zebra: dark Dashboard-card blue vs light frosted glass.
-  // Header + even rows + paginator → dark steel-blue (matches Dashboard KPI cards).
-  // Odd rows → light near-transparent so the overall rhythm reads dark / light / dark.
-  --admin-basic-bg: rgba(255, 255, 255, 0.15);
-  --admin-basic-translucent: rgba(255, 255, 255, 0.45);
-  --admin-dark-translucent: rgba(0, 0, 0, 0.06);
-  --admin-light-translucent: rgba(255, 255, 255, 0.7);
-  --admin-table-bg: rgba(255, 255, 255, 0.15);             // container wrapper level
-  --admin-table-border: transparent;                       // no borders
-  --admin-table-header-bg: rgba(25, 60, 105, 0.72);        // DARK — Dashboard KPI card blue
-  --admin-table-header-text: rgba(255, 255, 255, 0.95);    // WHITE text in header
-  --admin-table-even-bg: rgba(25, 60, 105, 0.45);          // DARK — same hue, a bit lighter
-  --admin-table-even-text: rgba(255, 255, 255, 0.90);      // WHITE text in even rows
-  --admin-table-row-bg: rgba(25, 60, 105, 0.18);           // DARKER tint — no more harsh contrast
-  --admin-table-row-text: rgba(255, 255, 255, 0.85);       // WHITE text in odd rows too
-  --admin-table-paginator-bg: rgba(25, 60, 105, 0.72);     // DARK — same as header
-  --admin-table-paginator-text: rgba(255, 255, 255, 0.90); // WHITE text in paginator
-  --admin-bg-container: #d7e1ff;
-  --dashboard-stat-card-bg: rgba(248, 250, 252, 0.2);
-  
-  --admin-text-primary: rgba(255, 255, 255, 0.95);
-  --admin-text-secondary: rgba(255, 255, 255, 0.65);
-  --admin-text-disabled: rgba(255, 255, 255, 0.35);
-  --admin-text-inverse: #1a2a4a;
+  /* Chrome (header ≡ sidebar) — lighter / airier than content blocks */
+  --surface-chrome: rgba(70, 120, 170, 0.36);
+  --surface-chrome-gradient: linear-gradient(
+    165deg,
+    rgba(100, 145, 190, 0.3) 0%,
+    rgba(65, 115, 165, 0.36) 48%,
+    rgba(55, 105, 155, 0.38) 100%
+  );
+  --chrome-blur: blur(22px) saturate(150%);
+  --chrome-border: 1px solid rgba(255, 255, 255, 0.32);
+  --chrome-shadow:
+    0 10px 32px rgba(15, 23, 42, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
 
-  --admin-border-primary: rgba(255, 255, 255, 0.2);
-  --admin-border-secondary: rgba(255, 255, 255, 0.12);
-  --admin-border-focus: rgba(100, 160, 255, 0.8);
-  --admin-border-error: #f87171;
+  --surface-page: transparent;
+  --surface-primary: transparent;
+  --surface-secondary: var(--surface-chrome);
+  --surface-tertiary: rgba(20, 48, 82, 0.28);
+  /* Content blocks — frosted navy glass (lighter alphas so tables read as glass, not solid dark) */
+  --surface-elevated: rgba(40, 85, 135, 0.32);
+  --surface-elevated-rgb: 40, 85, 135;
+  --surface-card: rgba(40, 85, 135, 0.34);
+  --surface-highlight: rgba(255, 255, 255, 0.12);
+  --surface-overlay-full: rgba(15, 23, 42, 0.28);
+  --surface-header: var(--surface-chrome);
+  --surface-table: transparent;
+  --surface-table-header: rgba(30, 70, 120, 0.42);
+  --surface-table-even: rgba(45, 95, 150, 0.22);
+  --surface-table-row: rgba(45, 95, 150, 0.1);
+  --surface-paginator: rgba(30, 70, 120, 0.42);
+  --surface-select-panel: rgba(40, 75, 120, 0.55);
+  /* Material MDC table fill — must stay transparent or the shell looks solid dark */
+  --mat-table-background-color: transparent;
 
-  --admin-input-bg: rgba(255, 255, 255, 0.12);
-  --admin-input-text: rgba(255, 255, 255, 0.95);
-  --admin-input-border: rgba(255, 255, 255, 0.2);
-  --admin-input-label: rgba(255, 255, 255, 0.6);
-  --admin-input-focus-border: rgba(100, 160, 255, 0.8);
+  --text-primary: rgba(255, 255, 255, 0.96);
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-muted: rgba(255, 255, 255, 0.4);
+  --text-muted-rgb: 255, 255, 255;
+  --text-inverse: #14243c;
+  --text-table-header: rgba(255, 255, 255, 0.95);
+  --text-table-even: rgba(255, 255, 255, 0.9);
+  --text-table-row: rgba(255, 255, 255, 0.86);
+  --text-paginator: rgba(255, 255, 255, 0.9);
 
-  --mat-card-subtitle-text-color: rgba(255, 255, 255, 0.95);
-  --mdc-form-field-label-text-color: rgba(255, 255, 255, 0.65);
-  --mat-select-placeholder-text-color: rgba(255, 255, 255, 0.5);
-  
-  // Order Details / List glass overrides - translucent
-  --admin-popup-bg: rgba(240, 242, 245, 0.25);
-  --admin-order-detail-header-bg: rgba(232, 244, 248, 0.3);
-  --admin-order-detail-card-bg: rgba(255, 255, 255, 0.2);
-  --admin-order-detail-border: rgba(208, 208, 208, 0.3);
-  --admin-order-detail-text-primary: var(--admin-text-primary);
-  --admin-order-detail-text-secondary: var(--admin-text-secondary);
-  --admin-order-list-bg: rgba(240, 242, 245, 0.25);
-  --admin-order-list-card-bg: rgba(248, 250, 252, 0.25);
-  --admin-order-list-border: rgba(208, 208, 208, 0.3);
-  --admin-order-list-text-primary: var(--admin-text-primary);
-  --admin-order-list-text-secondary: var(--admin-text-secondary);
-  --admin-order-list-header-bg: rgba(229, 231, 235, 0.3);
-  --admin-order-list-row-hover: rgba(232, 244, 248, 0.35);
-  --admin-order-list-pagination-bg: rgba(229, 231, 235, 0.3);
-  --admin-order-list-pagination-border: rgba(208, 208, 208, 0.3);
-  
-  // Neon Accents
-  --admin-neon-primary: #9ba9ff;
-  --admin-neon-secondary: #cdd6ff;
-  
-  // Material Design List item variables (glass theme)
-  --mdc-list-list-item-label-text-color: var(--admin-text-primary);
-  --mdc-list-list-item-supporting-text-color: var(--admin-text-secondary);
-  --mdc-list-list-item-disabled-text-color: var(--admin-text-disabled);
-  --mdc-list-list-item-leading-icon-color: var(--admin-text-secondary);
-  --mdc-list-list-item-trailing-icon-color: var(--admin-text-secondary);
-  // MDC list hover tokens (glass)
-  --mdc-list-list-item-hover-label-text-color: var(--admin-text-primary);
-  --mdc-list-list-item-hover-state-layer-color: rgba(255, 255, 255, 0.1);
-  --mdc-list-list-item-hover-state-layer-opacity: 0.2;
-  --mdc-list-item-hover-label-text-color: var(--admin-text-primary);
-  --mdc-list-item-hover-leading-icon-color: var(--admin-text-secondary);
-  // Ensure MDC card container tokens are transparent in glass theme
+  --border-default: rgba(255, 255, 255, 0.22);
+  --border-subtle: rgba(255, 255, 255, 0.14);
+  --border-primary: rgba(140, 185, 255, 0.75);
+  --interactive-danger: var(--color-error-base);
+
+  --input-bg: rgba(16, 40, 70, 0.42);
+  --input-text: rgba(255, 255, 255, 0.95);
+  --input-border: rgba(255, 255, 255, 0.26);
+  --input-label: rgba(255, 255, 255, 0.62);
+  --input-focus-border: rgba(140, 185, 255, 0.85);
+  --input-placeholder: var(--input-label);
+
+  --backdrop-blur: var(--chrome-blur);
+  --border-subtle: var(--glass-border-soft);
+
+  --mat-select-panel-background-color: var(--surface-select-panel);
+  --mat-card-subtitle-text-color: var(--text-primary);
+  --mdc-form-field-label-text-color: var(--text-secondary);
+  --mat-select-placeholder-text-color: var(--text-muted);
+  --radius-dialog: var(--radius-md);
+
+  --mdc-list-list-item-label-text-color: var(--text-primary);
+  --mdc-list-list-item-supporting-text-color: var(--text-secondary);
+  --mdc-list-list-item-disabled-text-color: var(--text-muted);
+  --mdc-list-list-item-leading-icon-color: var(--text-secondary);
+  --mdc-list-list-item-trailing-icon-color: var(--text-secondary);
+  --mdc-list-list-item-hover-label-text-color: var(--text-primary);
+  --mdc-list-list-item-hover-state-layer-color: rgba(255, 255, 255, 0.12);
+  --mdc-list-list-item-hover-state-layer-opacity: 0.22;
+  --mdc-list-item-hover-label-text-color: var(--text-primary);
+  --mdc-list-item-hover-leading-icon-color: var(--text-secondary);
+
   --mdc-elevated-card-container-color: transparent;
   --mdc-filled-card-container-color: transparent;
   --mdc-outlined-card-container-color: transparent;
-
-  // Select panel background — same as input field for seamless merge
-  --admin-select-panel-bg: rgba(190, 210, 240, 0.65);
-  --mat-select-panel-background-color: rgba(190, 210, 240, 0.65);
   --mdc-list-item-container-color: transparent;
 
-  // Angular Material sidenav container tokens — make transparent so body gradient shows through
   --mat-sidenav-container-background-color: transparent;
   --mat-sidenav-container-divider-color: transparent;
   --mat-sidenav-content-background-color: transparent;
   --mat-drawer-container-background-color: transparent;
   --mat-drawer-content-background-color: transparent;
 
-  // Angular Material toolbar token
-  --mat-toolbar-standard-height: 64px;
-  --mat-toolbar-mobile-height: 64px;
+  --mat-toolbar-standard-height: var(--admin-toolbar-height);
+  --mat-toolbar-mobile-height: var(--admin-toolbar-height);
+  --mat-toolbar-container-background-color: transparent;
+  --mat-toolbar-container-text-color: var(--text-primary);
+
+  --stat-card-bg: var(--glass-bg);
+  --stat-card-border: var(--border-default);
+  --stat-card-blur: var(--glass-blur);
+  --stat-card-shadow: var(--glass-shadow);
+  --stat-card-hover-shadow: var(--glass-shadow-lg);
+  --stat-card-hover-bg: var(--glass-bg-hover, rgba(255, 255, 255, 0.08));
+  --stat-card-hover-border: var(--glass-border-strong);
+
+  --dashboard-shell-bg: rgba(28, 58, 95, 0.26);
+  --dashboard-chart-bg: rgba(40, 85, 135, 0.44);
+  --dashboard-shell-border: transparent;
+  --lg-gradient-primary: linear-gradient(135deg, #93c5fd 0%, #6366f1 50%, #a78bfa 100%);
+
+  --admin-list-bg: transparent;
+  --admin-list-shadow: none;
+  --admin-list-backdrop-filter: none;
+  --admin-list-border: none;
+
+  --stat-icon-products: var(--color-success);
+  --stat-icon-orders: var(--interactive-primary);
+  --stat-icon-users: var(--color-warning);
+  --stat-icon-revenue: var(--color-accent);
+  --stat-icon-aov: var(--interactive-primary);
+  --stat-icon-success-rate: var(--color-success);
+
+  /* Page atmosphere — consumed by global/_atmospheres.scss */
+  --admin-atmosphere-gradient: linear-gradient(
+    135deg,
+    #5b87b4 0%,
+    #4d7aa8 22%,
+    #446f9a 45%,
+    #3a638c 68%,
+    #446f9a 85%,
+    #527fad 100%
+  );
 }

@@ -1,0 +1,118 @@
+/* ========================================
+   TOKEN LAYER 1 — PRIMITIVE TOKENS
+   ========================================
+   Raw design values. Components must NOT consume these directly.
+   Themes map Primitives → Semantic tokens.
+   Count: ~60 primitives (TOKEN_CONTRACT.md)
+   ======================================== */
+
+// --- Colors (Neutrals) ---
+:root {
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+
+  // --- Colors (Brand) ---
+  // Material Sass palettes mirror these hex values (B4):
+  //   src/styles/tokens/_material-palettes.scss
+  --color-primary-base: #3b82f6;
+  --color-secondary-base: #64748b;
+  --color-accent-base: #f59e0b;
+  --color-brand-base: #3b82f6;
+  --color-brand-light: #60a5fa;
+  --color-brand-dark: #2563eb;
+  --color-accent-pink: #ff6b6b;
+
+  // --- Colors (State) ---
+  --color-success-base: #10b981;
+  --color-warning-base: #f59e0b;
+  --color-error-base: #ef4444;
+
+  // --- Colors (Accents — extended palette) ---
+  --color-blue-300: #93c5fd;
+  --color-blue-400: #60a5fa;
+  --color-blue-400-rgb: 96, 165, 250;
+  --color-slate-600-rgb: 71, 85, 105;
+  --color-slate-800-rgb: 30, 41, 59;
+  --color-blue-500: #3b82f6;
+  --color-blue-600: #2563eb;
+  --color-emerald-500: #10b981;
+  --color-emerald-600: #059669;
+  --color-amber-500: #f59e0b;
+  --color-red-500: #ef4444;
+
+  // --- Spacing Scale ---
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  // --- Border Radius Scale ---
+  --radius-none: 0;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  // --- Shadows ---
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.15);
+
+  // --- Typography Scale ---
+  --font-sans: 'Roboto', sans-serif;
+  --font-mono: 'Fira Code', monospace;
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 30px;
+  --text-4xl: 36px;
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.75;
+
+  // --- Motion ---
+  --duration-instant: 0ms;
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --easing-default: ease;
+  --easing-enter: cubic-bezier(0.22, 1, 0.36, 1);
+  --easing-leave: cubic-bezier(0.4, 0, 0.2, 1);
+
+  // --- Z-Index Scale ---
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+
+  // --- Font Weights ---
+  --font-light: 300;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+}

@@ -3,9 +3,9 @@
   border-radius: 10px;
   max-width: none;
   margin: 0;
-  background-color: var(--admin-bg-card);
+  background-color: var(--surface-elevated);
   min-height: calc(100vh - 64px);
-  color: var(--mdc-list-list-item-label-text-color);
+  color: var(--text-primary);
 }
 
 .header-section {
@@ -15,19 +15,19 @@
   margin-bottom: 32px;
 
   h1 {
-    color: var(--mdc-list-list-item-label-text-color);
+    color: var(--text-primary);
     margin: 0;
     font-size: 2rem;
     font-weight: 600;
   }
 
   .back-button {
-    background-color: var(--admin-back-btn);
-    color: var(--mdc-list-list-item-label-text-color);
-    box-shadow: 0px 2px 6px 3px rgb(51 51 51 / 20%);
+    background-color: var(--surface-highlight);
+    color: var(--text-primary);
+    box-shadow: var(--shadow-md);
 
     &:hover {
-      background-color: #4b5563;
+      background-color: var(--color-slate-600);
     }
   }
 }
@@ -41,7 +41,7 @@
 
 .form-card {
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-lg);
 }
 
 .form-content {
@@ -64,29 +64,29 @@
   gap: 16px;
   justify-content: flex-end;
   padding: 24px;
-  border-top: 1px solid var(--admin-border-primary, #404040);
+  border-top: 1px solid var(--border-default);
 
   .cancel-button {
     height: 100%;
-    background-color: var(--admin-cancel-btn);
-    color: var(--mdc-list-list-item-label-text-color);
-    box-shadow: 0px 2px 6px 3px rgb(51 51 51 / 20%);
+    background-color: var(--color-secondary-base);
+    color: var(--text-primary);
+    box-shadow: var(--shadow-md);
 
     &:hover {
-      background-color: var(--admin-cancel-btn-hover);
+      background-color: var(--color-slate-600);
     }
   }
 
   .submit-button {
-    background-color: var(--admin-submit-btn);
-    color: var(--mdc-list-list-item-label-text-color);
+    background-color: var(--interactive-primary);
+    color: var(--text-primary);
 
     &:hover:not(:disabled) {
-      background-color: var(--admin-submit-btn-hover);
+      background-color: var(--interactive-primary-hover);
     }
 
     &:disabled {
-      background-color: var(--admin-submit-btn-disabled);
+      background-color: var(--interactive-disabled);
       cursor: not-allowed;
     }
   }
@@ -107,11 +107,10 @@
   }
 }
 
-
 .image-upload-section {
   margin-top: 24px;
   padding-top: 24px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border-default);
 }
 
 @media (max-width: 768px) {

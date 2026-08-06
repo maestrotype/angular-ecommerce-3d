@@ -18,38 +18,57 @@
       margin: 0;
       font-size: 1.5rem;
       font-weight: 600;
+      color: var(--text-primary);
     }
 
     .back {
       padding: 0.5rem 0.75rem;
-      border-radius: 8px;
-      border: 1px solid #e5e7eb;
-      background: #fff;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-default);
+      background: var(--surface-primary);
+      color: var(--text-primary);
       cursor: pointer;
+
+      &:hover {
+        background: var(--surface-secondary);
+      }
     }
   }
 
   .state {
-    color: #6b7280;
+    color: var(--text-secondary);
   }
 
   .state.error {
-    color: #ef4444;
+    color: var(--interactive-danger);
   }
 
   .empty {
     text-align: center;
-    color: #6b7280;
+    color: var(--text-secondary);
 
     .primary {
       margin-top: 1rem;
       padding: 0.5rem 1rem;
-      border-radius: 8px;
-      background: linear-gradient(90deg, #8b5cf6, #ec4899);
-      color: #fff;
+      border-radius: var(--radius-md);
+      background: linear-gradient(
+        90deg,
+        var(--interactive-primary),
+        var(--color-accent, var(--interactive-primary))
+      );
+      color: var(--text-on-primary);
       border: none;
       cursor: pointer;
+
+      &:hover {
+        opacity: 0.9;
+      }
     }
+  }
+
+  app-skeleton-loader {
+    display: block;
+    margin-top: 0.75rem;
   }
 
   .orders {
@@ -57,9 +76,9 @@
     gap: 0.75rem;
 
     .order {
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      background: #fff;
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      background: var(--surface-primary);
       padding: 0.75rem 1rem;
 
       .row {
@@ -72,8 +91,15 @@
           gap: 0.75rem;
           align-items: baseline;
 
-          .id { font-weight: 600; }
-          .date { color: #6b7280; font-size: 0.9rem; }
+          .id {
+            font-weight: 600;
+            color: var(--text-primary);
+          }
+
+          .date {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+          }
         }
 
         .right {
@@ -84,17 +110,21 @@
           .badge {
             padding: 0.25rem 0.5rem;
             border-radius: 9999px;
-            background: #eef2ff;
-            color: #4338ca;
+            background: var(--state-info-bg, var(--surface-secondary));
+            color: var(--interactive-primary);
             font-size: 0.8rem;
           }
 
-          .count { color: #6b7280; }
-          .total { font-weight: 600; }
+          .count {
+            color: var(--text-secondary);
+          }
+
+          .total {
+            font-weight: 600;
+            color: var(--text-primary);
+          }
         }
       }
     }
   }
 }
-
-

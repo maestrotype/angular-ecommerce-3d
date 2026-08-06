@@ -1,0 +1,1613 @@
+{
+  "metadata": {
+    "generatedAt": "2026-07-06T12:00:00+03:00",
+    "version": "1.0.0",
+    "framework": "NestJS",
+    "language": "TypeScript",
+    "database": "PostgreSQL (primary), SQLite (fallback)",
+    "orm": "TypeORM",
+    "description": "Backend architecture documentation generated from source code analysis"
+  },
+
+  "technologyStack": {
+    "runtime": "Node.js",
+    "framework": "NestJS",
+    "language": "TypeScript",
+    "orm": "TypeORM",
+    "database": "PostgreSQL (primary), SQLite (development fallback)",
+    "authentication": "JWT (passport-jwt)",
+    "fileStorage": "Cloudinary (primary), Local filesystem (fallback)",
+    "email": "Nodemailer",
+    "payments": ["LiqPay", "Stripe"],
+    "ai": {
+      "providers": ["OpenAI", "Tripo3D", "UAV Mapping"],
+      "localWorker": "Python (main.py)",
+      "queue": "BullMQ (configured but limited usage)"
+    },
+    "validation": "class-validator, class-transformer",
+    "configuration": "@nestjs/config",
+    "swagger": "@nestjs/swagger"
+  },
+
+  "modules": {
+    "AppModule": {
+      "file": "backend/src/app.module.ts",
+      "type": "root",
+      "imports": [
+        "ConfigModule (global)",
+        "DatabaseModule",
+        "AuthModule",
+        "ProductsModule",
+        "CategoriesModule",
+        "OrdersModule",
+        "CartModule",
+        "UploadModule",
+        "AiGenerationModule",
+        "MessagesModule",
+        "SectionsModule",
+        "PagesModule",
+        "SettingsModule",
+        "NotificationsModule",
+        "PaymentsModule",
+        "RecommendationsModule",
+        "SeoModule",
+        "EmailModule",
+        "HealthModule"
+      ],
+      "controllers": [],
+      "providers": []
+    },
+
+    "ConfigModule": {
+      "file": "backend/src/config/config.module.ts",
+      "type": "configuration",
+      "description": "Global configuration module using @nestjs/config with environment variables",
+      "imports": [],
+      "exports": ["ConfigService"],
+      "configFile": "backend/src/config/environment.config.ts",
+      "envVariables": {
+        "PORT": "Server port (default: 3000)",
+        "NODE_ENV": "Environment (development, production)",
+        "DATABASE_TYPE": "Database type (postgres, sqlite)",
+        "DATABASE_HOST": "PostgreSQL host",
+        "DATABASE_PORT": "PostgreSQL port",
+        "DATABASE_USERNAME": "PostgreSQL username",
+        "DATABASE_PASSWORD": "PostgreSQL password",
+        "DATABASE_NAME": "PostgreSQL database name",
+        "JWT_SECRET": "JWT signing secret",
+        "JWT_EXPIRATION": "JWT token expiration (default: 7d)",
+        "CLOUDINARY_CLOUD_NAME": "Cloudinary cloud name",
+        "CLOUDINARY_API_KEY": "Cloudinary API key",
+        "CLOUDINARY_API_SECRET": "Cloudinary API secret",
+        "SMTP_HOST": "SMTP server host",
+        "SMTP_PORT": "SMTP server port",
+        "SMTP_USER": "SMTP username",
+        "SMTP_PASSWORD": "SMTP password",
+        "EMAIL_FROM": "Default sender email",
+        "LIQPAY_PUBLIC_KEY": "LiqPay public key (base64)",
+        "LIQPAY_PRIVATE_KEY": "LiqPay private key",
+        "STRIPE_SECRET_KEY": "Stripe secret key",
+        "STRIPE_WEBHOOK_SECRET": "Stripe webhook signing secret",
+        "OPENAI_API_KEY": "OpenAI API key",
+        "TRIPO3D_API_KEY": "Tripo3D API key",
+        "UAV_MAPPING_API_URL": "UAV Mapping API URL",
+        "AI_WORKER_URL": "Local Python AI worker URL",
+        "FRONTEND_URL": "Frontend application URL",
+        "BACKEND_URL": "Backend API URL (for webhooks)",
+        "UPLOAD_DIR": "Local upload directory",
+        "REDIS_HOST": "Redis host (for BullMQ)",
+        "REDIS_PORT": "Redis port"
+      }
+    },
+
+    "DatabaseModule": {
+      "file": "backend/src/database/database.module.ts",
+      "type": "infrastructure",
+      "description": "TypeORM database connection module with PostgreSQL/SQLite auto-detection",
+      "imports": ["ConfigModule"],
+      "global": true,
+      "providers": [],
+      "exports": []
+    },
+
+    "AuthModule": {
+      "file": "backend/src/auth/auth.module.ts",
+      "type": "feature",
+      "description": "Authentication module with JWT strategy, Google OAuth, GitHub OAuth",
+      "imports": [
+        "PassportModule",
+        "JwtModule (registered with secret from config)",
+        "TypeOrmModule (User entity)"
+      ],
+      "controllers": [
+        "AuthController",
+        "UserController"
+      ],
+      "providers": [
+        "AuthService",
+        "JwtStrategy",
+        "JwtAuthGuard",
+        "AdminGuard"
+      ],
+      "entities": ["User"],
+      "exports": ["AuthService", "JwtAuthGuard", "AdminGuard"]
+    },
+
+    "ProductsModule": {
+      "file": "backend/src/products/products.module.ts",
+      "type": "feature",
+      "description": "Product CRUD with AI 3D model generation, image upload, filtering, and recommendations",
+      "imports": [
+        "TypeOrmModule (Product, ProductImage, Product3DModel entities)",
+        "UploadModule",
+        "AiGenerationModule (optional)"
+      ],
+      "controllers": ["ProductsController"],
+      "providers": [
+        "ProductsService",
+        "ProductImagesService"
+      ],
+      "entities": ["Product", "ProductImage", "Product3DModel"],
+      "exports": ["ProductsService"]
+    },
+
+    "CategoriesModule": {
+      "file": "backend/src/categories/categories.module.ts",
+      "type": "feature",
+      "description": "Category management with hierarchical support and SEO metadata",
+      "imports": ["TypeOrmModule (Category entity)"],
+      "controllers": ["CategoriesController"],
+      "providers": ["CategoriesService"],
+      "entities": ["Category"]
+    },
+
+    "OrdersModule": {
+      "file": "backend/src/orders/orders.module.ts",
+      "type": "feature",
+      "description": "Order management with status tracking, items, and customer data",
+      "imports": [
+        "TypeOrmModule (Order, OrderItem entities)",
+        "ProductsModule",
+        "AuthModule"
+      ],
+      "controllers": ["OrdersController"],
+      "providers": [
+        "OrdersService",
+        "CartService"
+      ],
+      "entities": ["Order", "OrderItem"]
+    },
+
+    "CartModule": {
+      "file": "backend/src/orders/cart.module.ts",
+      "type": "feature",
+      "description": "Shopping cart management with quantity and price calculations",
+      "imports": [
+        "TypeOrmModule (CartItem entity)",
+        "ProductsModule"
+      ],
+      "controllers": [],
+      "providers": ["CartService"],
+      "entities": ["CartItem"],
+      "exports": ["CartService"]
+    },
+
+    "UploadModule": {
+      "file": "backend/src/upload-module/upload.module.ts",
+      "type": "feature",
+      "description": "File upload handling with Cloudinary integration and local fallback for images, 3D models, and section assets",
+      "imports": ["ConfigModule"],
+      "controllers": ["UploadsController"],
+      "providers": [
+        "CloudinaryProvider",
+        "LocalStorageProvider"
+      ],
+      "exports": ["UploadModule"]
+    },
+
+    "AiGenerationModule": {
+      "file": "backend/src/ai-generation/ai-generation.module.ts",
+      "type": "feature",
+      "description": "AI-powered 3D model generation with multi-provider support (OpenAI, Tripo3D, local Python worker)",
+      "imports": ["ConfigModule"],
+      "controllers": [],
+      "providers": [
+        "AiGenerationService",
+        "OpenAiProvider",
+        "Tripo3DProvider",
+        "UavMappingProvider",
+        "LocalWorkerProvider"
+      ],
+      "exports": ["AiGenerationService"]
+    },
+
+    "MessagesModule": {
+      "file": "backend/src/messages/messages.module.ts",
+      "type": "feature",
+      "description": "Contact form messages with status tracking and admin responses",
+      "imports": [
+        "TypeOrmModule (Message entity)",
+        "EmailModule"
+      ],
+      "controllers": ["MessagesController"],
+      "providers": ["MessagesService"],
+      "entities": ["Message"]
+    },
+
+    "SectionsModule": {
+      "file": "backend/src/sections/sections.module.ts",
+      "type": "feature",
+      "description": "Homepage sections management with multilingual content, 3D models, and variant support",
+      "imports": ["TypeOrmModule (Section entity)"],
+      "controllers": ["SectionsController"],
+      "providers": ["SectionsService"],
+      "entities": ["Section"]
+    },
+
+    "PagesModule": {
+      "file": "backend/src/pages/pages.module.ts",
+      "type": "feature",
+      "description": "Dynamic CMS pages with slug-based routing, templates, and SEO metadata",
+      "imports": ["TypeOrmModule (Page entity)"],
+      "controllers": ["PagesController"],
+      "providers": ["PagesService"],
+      "entities": ["Page"]
+    },
+
+    "SettingsModule": {
+      "file": "backend/src/settings/settings.module.ts",
+      "type": "feature",
+      "description": "Key-value settings storage with type support (string, number, boolean, json) and categories",
+      "imports": ["TypeOrmModule (Settings entity)"],
+      "controllers": ["SettingsController"],
+      "providers": ["SettingsService"],
+      "entities": ["Settings"]
+    },
+
+    "NotificationsModule": {
+      "file": "backend/src/notifications/notifications.module.ts",
+      "type": "feature",
+      "description": "In-app notification system with types, status tracking, and user targeting",
+      "imports": ["TypeOrmModule (Notification entity)"],
+      "controllers": ["NotificationsController"],
+      "providers": ["NotificationsService"],
+      "entities": ["Notification"]
+    },
+
+    "PaymentsModule": {
+      "file": "backend/src/payments/payments.module.ts",
+      "type": "feature",
+      "description": "Payment processing with LiqPay and Stripe support, webhook handling, and status tracking",
+      "imports": [
+        "TypeOrmModule (Payment entity)",
+        "OrdersModule",
+        "ConfigModule"
+      ],
+      "controllers": ["PaymentsController"],
+      "providers": [
+        "PaymentsService",
+        "LiqPayService",
+        "StripeService"
+      ],
+      "entities": ["Payment"]
+    },
+
+    "RecommendationsModule": {
+      "file": "backend/src/recommendations/recommendations.module.ts",
+      "type": "feature",
+      "description": "Product recommendation engine with similar products, bought-together, and personalized recommendations",
+      "imports": [
+        "TypeOrmModule (ProductRecommendation entity)",
+        "ProductsModule"
+      ],
+      "controllers": ["RecommendationsController"],
+      "providers": [
+        "RecommendationsService",
+        "SimilarProductsStrategy",
+        "BoughtTogetherStrategy"
+      ],
+      "entities": ["ProductRecommendation"]
+    },
+
+    "SeoModule": {
+      "file": "backend/src/seo/seo.module.ts",
+      "type": "feature",
+      "description": "SEO metadata management for pages and products",
+      "imports": ["TypeOrmModule (SeoMetadata entity)"],
+      "controllers": [],
+      "providers": ["SeoService"],
+      "entities": ["SeoMetadata"],
+      "exports": ["SeoService"]
+    },
+
+    "EmailModule": {
+      "file": "backend/src/email/email.module.ts",
+      "type": "infrastructure",
+      "description": "Email sending service using Nodemailer with SMTP configuration",
+      "imports": ["ConfigModule"],
+      "controllers": [],
+      "providers": ["EmailService"],
+      "exports": ["EmailService"]
+    },
+
+    "HealthModule": {
+      "file": "backend/src/health/health.module.ts",
+      "type": "infrastructure",
+      "description": "Health check endpoints for application monitoring",
+      "imports": [],
+      "controllers": ["HealthController"],
+      "providers": [],
+      "exports": []
+    },
+
+    "CommonModule": {
+      "file": "backend/src/common/",
+      "type": "shared",
+      "description": "Shared utilities, filters, interceptors, and helpers",
+      "providers": [
+        "HttpExceptionFilter",
+        "LoggingInterceptor",
+        "LocalizationUtil"
+      ]
+    }
+  },
+
+  "controllers": {
+    "AuthController": {
+      "file": "backend/src/auth/auth.controller.ts",
+      "prefix": "/auth",
+      "endpoints": [
+        {
+          "method": "POST",
+          "route": "/auth/register",
+          "description": "Register a new user",
+          "dto": "RegisterDto",
+          "auth": false,
+          "validation": true,
+          "service": "AuthService.register()"
+        },
+        {
+          "method": "POST",
+          "route": "/auth/login",
+          "description": "Login and receive JWT token",
+          "dto": "LoginDto",
+          "auth": false,
+          "validation": true,
+          "service": "AuthService.login()"
+        },
+        {
+          "method": "GET",
+          "route": "/auth/profile",
+          "description": "Get current user profile",
+          "auth": true,
+          "guard": "JwtAuthGuard",
+          "service": "AuthService.getProfile()"
+        },
+        {
+          "method": "GET",
+          "route": "/auth/google",
+          "description": "Initiate Google OAuth flow",
+          "auth": false,
+          "service": "AuthService.googleLogin()"
+        },
+        {
+          "method": "GET",
+          "route": "/auth/google/callback",
+          "description": "Google OAuth callback handler",
+          "auth": false,
+          "service": "AuthService.googleCallback()"
+        },
+        {
+          "method": "GET",
+          "route": "/auth/github",
+          "description": "Initiate GitHub OAuth flow",
+          "auth": false,
+          "service": "AuthService.githubLogin()"
+        },
+        {
+          "method": "GET",
+          "route": "/auth/github/callback",
+          "description": "GitHub OAuth callback handler",
+          "auth": false,
+          "service": "AuthService.githubCallback()"
+        }
+      ]
+    },
+
+    "UserController": {
+      "file": "backend/src/auth/user.controller.ts",
+      "prefix": "/users",
+      "endpoints": [
+        {
+          "method": "GET",
+          "route": "/users",
+          "description": "List all users (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "service": "AuthService.findAllUsers()"
+        },
+        {
+          "method": "GET",
+          "route": "/users/:id",
+          "description": "Get user by ID (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "service": "AuthService.findOneUser()"
+        },
+        {
+          "method": "PUT",
+          "route": "/users/:id",
+          "description": "Update user (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "dto": "UpdateUserDto",
+          "service": "AuthService.updateUser()"
+        },
+        {
+          "method": "DELETE",
+          "route": "/users/:id",
+          "description": "Delete user (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "service": "AuthService.deleteUser()"
+        }
+      ]
+    },
+
+    "ProductsController": {
+      "file": "backend/src/products/products.controller.ts",
+      "prefix": "/products",
+      "endpoints": [
+        {
+          "method": "GET",
+          "route": "/products",
+          "description": "List products with filtering, pagination, and search",
+          "auth": false,
+          "queryParams": ["page", "limit", "search", "categoryId", "minPrice", "maxPrice", "sortBy", "order"],
+          "service": "ProductsService.findAll()"
+        },
+        {
+          "method": "GET",
+          "route": "/products/:id",
+          "description": "Get product by ID",
+          "auth": false,
+          "service": "ProductsService.findOne()"
+        },
+        {
+          "method": "POST",
+          "route": "/products",
+          "description": "Create a new product (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "dto": "CreateProductDto",
+          "service": "ProductsService.create()"
+        },
+        {
+          "method": "PUT",
+          "route": "/products/:id",
+          "description": "Update product (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "dto": "UpdateProductDto",
+          "service": "ProductsService.update()"
+        },
+        {
+          "method": "DELETE",
+          "route": "/products/:id",
+          "description": "Delete product (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "service": "ProductsService.remove()"
+        },
+        {
+          "method": "GET",
+          "route": "/products/best-sellers",
+          "description": "Get best-selling products",
+          "auth": false,
+          "service": "ProductsService.getBestSellers()"
+        },
+        {
+          "method": "GET",
+          "route": "/products/new-arrivals",
+          "description": "Get newest products",
+          "auth": false,
+          "service": "ProductsService.getNewArrivals()"
+        },
+        {
+          "method": "POST",
+          "route": "/products/:id/generate-3d",
+          "description": "Trigger AI 3D model generation for a product",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "service": "ProductsService.generate3DModel()"
+        }
+      ]
+    },
+
+    "CategoriesController": {
+      "file": "backend/src/categories/categories.controller.ts",
+      "prefix": "/categories",
+      "endpoints": [
+        {
+          "method": "GET",
+          "route": "/categories",
+          "description": "List all categories with hierarchy",
+          "auth": false,
+          "service": "CategoriesService.findAll()"
+        },
+        {
+          "method": "GET",
+          "route": "/categories/:id",
+          "description": "Get category by ID",
+          "auth": false,
+          "service": "CategoriesService.findOne()"
+        },
+        {
+          "method": "POST",
+          "route": "/categories",
+          "description": "Create category (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "dto": "CreateCategoryDto",
+          "service": "CategoriesService.create()"
+        },
+        {
+          "method": "PUT",
+          "route": "/categories/:id",
+          "description": "Update category (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "dto": "UpdateCategoryDto",
+          "service": "CategoriesService.update()"
+        },
+        {
+          "method": "DELETE",
+          "route": "/categories/:id",
+          "description": "Delete category (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "service": "CategoriesService.remove()"
+        }
+      ]
+    },
+
+    "OrdersController": {
+      "file": "backend/src/orders/orders.controller.ts",
+      "prefix": "/orders",
+      "endpoints": [
+        {
+          "method": "GET",
+          "route": "/orders",
+          "description": "List orders (admin: all, user: own only)",
+          "auth": true,
+          "guard": "JwtAuthGuard",
+          "service": "OrdersService.findAll()"
+        },
+        {
+          "method": "GET",
+          "route": "/orders/:id",
+          "description": "Get order by ID",
+          "auth": true,
+          "guard": "JwtAuthGuard",
+          "service": "OrdersService.findOne()"
+        },
+        {
+          "method": "POST",
+          "route": "/orders",
+          "description": "Create a new order",
+          "auth": true,
+          "guard": "JwtAuthGuard",
+          "dto": "CreateOrderDto",
+          "service": "OrdersService.create()"
+        },
+        {
+          "method": "PUT",
+          "route": "/orders/:id/status",
+          "description": "Update order status (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "dto": "UpdateOrderStatusDto",
+          "service": "OrdersService.updateStatus()"
+        },
+        {
+          "method": "DELETE",
+          "route": "/orders/:id",
+          "description": "Delete order (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "service": "OrdersService.remove()"
+        }
+      ]
+    },
+
+    "UploadsController": {
+      "file": "backend/src/upload-module/uploads.controller.ts",
+      "prefix": "/upload",
+      "endpoints": [
+        {
+          "method": "POST",
+          "route": "/upload/image",
+          "description": "Upload product image to Cloudinary or local storage",
+          "auth": true,
+          "guard": "JwtAuthGuard",
+          "contentType": "multipart/form-data",
+          "service": "UploadsService.uploadImage()"
+        },
+        {
+          "method": "POST",
+          "route": "/upload/3d-model",
+          "description": "Upload 3D model file (.glb, .gltf, .obj)",
+          "auth": true,
+          "guard": "JwtAuthGuard",
+          "contentType": "multipart/form-data",
+          "service": "UploadsService.upload3DModel()"
+        },
+        {
+          "method": "POST",
+          "route": "/upload/section-image",
+          "description": "Upload section banner image",
+          "auth": true,
+          "guard": "JwtAuthGuard",
+          "contentType": "multipart/form-data",
+          "service": "UploadsService.uploadSectionImage()"
+        },
+        {
+          "method": "DELETE",
+          "route": "/upload/:id",
+          "description": "Delete uploaded file",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "service": "UploadsService.deleteFile()"
+        }
+      ]
+    },
+
+    "MessagesController": {
+      "file": "backend/src/messages/messages.controller.ts",
+      "prefix": "/messages",
+      "endpoints": [
+        {
+          "method": "GET",
+          "route": "/messages",
+          "description": "List messages (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "service": "MessagesService.findAll()"
+        },
+        {
+          "method": "GET",
+          "route": "/messages/:id",
+          "description": "Get message by ID (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "service": "MessagesService.findOne()"
+        },
+        {
+          "method": "POST",
+          "route": "/messages",
+          "description": "Submit a new contact message (public)",
+          "auth": false,
+          "dto": "CreateMessageDto",
+          "service": "MessagesService.create()"
+        },
+        {
+          "method": "PUT",
+          "route": "/messages/:id",
+          "description": "Update message status/response (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "dto": "UpdateMessageDto",
+          "service": "MessagesService.update()"
+        }
+      ]
+    },
+
+    "SectionsController": {
+      "file": "backend/src/sections/sections.controller.ts",
+      "prefix": "/sections",
+      "endpoints": [
+        {
+          "method": "GET",
+          "route": "/sections",
+          "description": "List sections with optional pageTarget filter",
+          "auth": false,
+          "service": "SectionsService.findAll()"
+        },
+        {
+          "method": "GET",
+          "route": "/sections/:id",
+          "description": "Get section by ID",
+          "auth": false,
+          "service": "SectionsService.findOne()"
+        },
+        {
+          "method": "POST",
+          "route": "/sections",
+          "description": "Create section (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "dto": "CreateSectionDto",
+          "service": "SectionsService.create()"
+        },
+        {
+          "method": "PUT",
+          "route": "/sections/:id",
+          "description": "Update section (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "dto": "UpdateSectionDto",
+          "service": "SectionsService.update()"
+        },
+        {
+          "method": "DELETE",
+          "route": "/sections/:id",
+          "description": "Delete section (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "service": "SectionsService.remove()"
+        }
+      ]
+    },
+
+    "PagesController": {
+      "file": "backend/src/pages/pages.controller.ts",
+      "prefix": "/pages",
+      "endpoints": [
+        {
+          "method": "GET",
+          "route": "/pages",
+          "description": "List all published pages",
+          "auth": false,
+          "service": "PagesService.findAll()"
+        },
+        {
+          "method": "GET",
+          "route": "/pages/slug/:slug",
+          "description": "Get page by slug (public)",
+          "auth": false,
+          "service": "PagesService.findBySlug()"
+        },
+        {
+          "method": "POST",
+          "route": "/pages",
+          "description": "Create page (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "dto": "CreatePageDto",
+          "service": "PagesService.create()"
+        },
+        {
+          "method": "PUT",
+          "route": "/pages/:id",
+          "description": "Update page (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "dto": "UpdatePageDto",
+          "service": "PagesService.update()"
+        },
+        {
+          "method": "DELETE",
+          "route": "/pages/:id",
+          "description": "Delete page (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "service": "PagesService.remove()"
+        }
+      ]
+    },
+
+    "SettingsController": {
+      "file": "backend/src/settings/settings.controller.ts",
+      "prefix": "/settings",
+      "endpoints": [
+        {
+          "method": "GET",
+          "route": "/settings",
+          "description": "Get all settings (public for frontend config)",
+          "auth": false,
+          "service": "SettingsService.findAll()"
+        },
+        {
+          "method": "GET",
+          "route": "/settings/:key",
+          "description": "Get setting by key",
+          "auth": false,
+          "service": "SettingsService.findOne()"
+        },
+        {
+          "method": "POST",
+          "route": "/settings",
+          "description": "Create/update setting (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "dto": "CreateSettingsDto",
+          "service": "SettingsService.create()"
+        },
+        {
+          "method": "PUT",
+          "route": "/settings/:id",
+          "description": "Update setting (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "dto": "UpdateSettingsDto",
+          "service": "SettingsService.update()"
+        },
+        {
+          "method": "DELETE",
+          "route": "/settings/:id",
+          "description": "Delete setting (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "service": "SettingsService.remove()"
+        }
+      ]
+    },
+
+    "NotificationsController": {
+      "file": "backend/src/notifications/notifications.controller.ts",
+      "prefix": "/notifications",
+      "endpoints": [
+        {
+          "method": "GET",
+          "route": "/notifications",
+          "description": "List notifications (admin: all, user: own)",
+          "auth": true,
+          "guard": "JwtAuthGuard",
+          "service": "NotificationsService.findAll()"
+        },
+        {
+          "method": "GET",
+          "route": "/notifications/:id",
+          "description": "Get notification by ID",
+          "auth": true,
+          "guard": "JwtAuthGuard",
+          "service": "NotificationsService.findOne()"
+        },
+        {
+          "method": "POST",
+          "route": "/notifications",
+          "description": "Create notification (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "dto": "CreateNotificationDto",
+          "service": "NotificationsService.create()"
+        },
+        {
+          "method": "PUT",
+          "route": "/notifications/:id/read",
+          "description": "Mark notification as read",
+          "auth": true,
+          "guard": "JwtAuthGuard",
+          "service": "NotificationsService.markAsRead()"
+        },
+        {
+          "method": "DELETE",
+          "route": "/notifications/:id",
+          "description": "Delete notification (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "service": "NotificationsService.remove()"
+        }
+      ]
+    },
+
+    "PaymentsController": {
+      "file": "backend/src/payments/payments.controller.ts",
+      "prefix": "/payments",
+      "endpoints": [
+        {
+          "method": "GET",
+          "route": "/payments",
+          "description": "List payments (admin: all, user: own)",
+          "auth": true,
+          "guard": "JwtAuthGuard",
+          "service": "PaymentsService.findAll()"
+        },
+        {
+          "method": "GET",
+          "route": "/payments/:id",
+          "description": "Get payment by ID",
+          "auth": true,
+          "guard": "JwtAuthGuard",
+          "service": "PaymentsService.findOne()"
+        },
+        {
+          "method": "POST",
+          "route": "/payments/create",
+          "description": "Create payment session (LiqPay or Stripe)",
+          "auth": true,
+          "guard": "JwtAuthGuard",
+          "dto": "CreatePaymentDto",
+          "service": "PaymentsService.createPayment()"
+        },
+        {
+          "method": "POST",
+          "route": "/payments/liqpay/callback",
+          "description": "LiqPay payment callback/webhook",
+          "auth": false,
+          "service": "PaymentsService.handleLiqPayCallback()"
+        },
+        {
+          "method": "POST",
+          "route": "/payments/stripe/webhook",
+          "description": "Stripe payment webhook",
+          "auth": false,
+          "service": "PaymentsService.handleStripeWebhook()"
+        },
+        {
+          "method": "GET",
+          "route": "/payments/order/:orderId",
+          "description": "Get payments for an order",
+          "auth": true,
+          "guard": "JwtAuthGuard",
+          "service": "PaymentsService.findByOrderId()"
+        }
+      ]
+    },
+
+    "RecommendationsController": {
+      "file": "backend/src/recommendations/recommendations.controller.ts",
+      "prefix": "/recommendations",
+      "endpoints": [
+        {
+          "method": "GET",
+          "route": "/recommendations/similar/:productId",
+          "description": "Get similar products",
+          "auth": false,
+          "service": "RecommendationsService.getSimilar()"
+        },
+        {
+          "method": "GET",
+          "route": "/recommendations/bought-together/:productId",
+          "description": "Get products bought together",
+          "auth": false,
+          "service": "RecommendationsService.getBoughtTogether()"
+        },
+        {
+          "method": "GET",
+          "route": "/recommendations/personalized/:userId",
+          "description": "Get personalized recommendations",
+          "auth": true,
+          "guard": "JwtAuthGuard",
+          "service": "RecommendationsService.getPersonalized()"
+        },
+        {
+          "method": "POST",
+          "route": "/recommendations/generate",
+          "description": "Trigger recommendation generation (admin only)",
+          "auth": true,
+          "guards": ["JwtAuthGuard", "AdminGuard"],
+          "service": "RecommendationsService.generate()"
+        }
+      ]
+    },
+
+    "HealthController": {
+      "file": "backend/src/health/health.controller.ts",
+      "prefix": "/health",
+      "endpoints": [
+        {
+          "method": "GET",
+          "route": "/health",
+          "description": "Basic health check",
+          "auth": false,
+          "service": null
+        },
+        {
+          "method": "GET",
+          "route": "/health/db",
+          "description": "Database connection health check",
+          "auth": false,
+          "service": null
+        }
+      ]
+    }
+  },
+
+  "entities": {
+    "User": {
+      "file": "backend/src/auth/entities/user.entity.ts",
+      "table": "users",
+      "columns": {
+        "id": "PrimaryGeneratedColumn (number)",
+        "name": "varchar",
+        "email": "varchar (unique)",
+        "password": "varchar",
+        "role": "enum (USER, ADMIN)",
+        "avatar": "varchar (nullable)",
+        "phone": "varchar (nullable)",
+        "googleId": "varchar (unique, nullable)",
+        "githubId": "varchar (unique, nullable)",
+        "provider": "varchar (default: 'local')",
+        "isActive": "boolean (default: true)",
+        "createdAt": "CreateDateColumn",
+        "updatedAt": "UpdateDateColumn"
+      },
+      "relations": {
+        "orders": "OneToMany -> Order",
+        "cartItems": "OneToMany -> CartItem"
+      },
+      "indexes": ["email (unique)", "googleId (unique)", "githubId (unique)"]
+    },
+
+    "Product": {
+      "file": "backend/src/products/entities/product.entity.ts",
+      "table": "products",
+      "columns": {
+        "id": "PrimaryGeneratedColumn (number)",
+        "name": "jsonb (multilingual)",
+        "description": "jsonb (multilingual)",
+        "price": "decimal",
+        "comparePrice": "decimal (nullable)",
+        "currency": "varchar (default: 'UAH')",
+        "sku": "varchar (unique, nullable)",
+        "stock": "int (default: 0)",
+        "images": "jsonb (default: [])",
+        "model3dUrl": "varchar (nullable)",
+        "show3d": "boolean (default: false)",
+        "isActive": "boolean (default: true)",
+        "isBestseller": "boolean (default: false)",
+        "isNewArrival": "boolean (default: false)",
+        "weight": "decimal (nullable)",
+        "dimensions": "jsonb (nullable)",
+        "material": "varchar (nullable)",
+        "color": "varchar (nullable)",
+        "seoTitle": "jsonb (nullable)",
+        "seoDescription": "jsonb (nullable)",
+        "createdAt": "CreateDateColumn",
+        "updatedAt": "UpdateDateColumn"
+      },
+      "relations": {
+        "category": "ManyToOne <- Category",
+        "images": "OneToMany -> ProductImage",
+        "orderItems": "OneToMany -> OrderItem",
+        "recommendations": "OneToMany -> ProductRecommendation (as product)",
+        "recommendedIn": "OneToMany -> ProductRecommendation (as recommendedProduct)"
+      },
+      "indexes": ["sku (unique)"]
+    },
+
+    "ProductImage": {
+      "file": "backend/src/products/entities/product-image.entity.ts",
+      "table": "product_images",
+      "columns": {
+        "id": "PrimaryGeneratedColumn (number)",
+        "productId": "int",
+        "url": "varchar",
+        "alt": "jsonb (nullable)",
+        "order": "int (default: 0)",
+        "isPrimary": "boolean (default: false)"
+      },
+      "relations": {
+        "product": "ManyToOne <- Product (onDelete: CASCADE)"
+      }
+    },
+
+    "Product3DModel": {
+      "file": "backend/src/products/entities/product-3d-model.entity.ts",
+      "table": "product_3d_models",
+      "columns": {
+        "id": "PrimaryGeneratedColumn (number)",
+        "productId": "int",
+        "url": "varchar",
+        "thumbnailUrl": "varchar (nullable)",
+        "format": "varchar (default: 'glb')",
+        "status": "varchar (default: 'pending')",
+        "generatedAt": "Date (nullable)"
+      },
+      "relations": {
+        "product": "ManyToOne <- Product (onDelete: CASCADE)"
+      }
+    },
+
+    "Category": {
+      "file": "backend/src/categories/entities/category.entity.ts",
+      "table": "categories",
+      "columns": {
+        "id": "PrimaryGeneratedColumn (number)",
+        "name": "jsonb (multilingual)",
+        "slug": "varchar (unique)",
+        "description": "jsonb (nullable)",
+        "image": "varchar (nullable)",
+        "parentId": "int (nullable, self-referencing)",
+        "order": "int (default: 0)",
+        "isActive": "boolean (default: true)",
+        "seoTitle": "jsonb (nullable)",
+        "seoDescription": "jsonb (nullable)",
+        "createdAt": "CreateDateColumn",
+        "updatedAt": "UpdateDateColumn"
+      },
+      "relations": {
+        "parent": "ManyToOne <- Category (self, nullable)",
+        "children": "OneToMany -> Category (self)",
+        "products": "OneToMany -> Product"
+      },
+      "indexes": ["slug (unique)"]
+    },
+
+    "Order": {
+      "file": "backend/src/orders/entities/order.entity.ts",
+      "table": "orders",
+      "columns": {
+        "id": "PrimaryGeneratedColumn (number)",
+        "userId": "int",
+        "status": "enum (pending, confirmed, processing, shipped, delivered, cancelled)",
+        "totalAmount": "decimal",
+        "currency": "varchar (default: 'UAH')",
+        "shippingAddress": "jsonb",
+        "customerName": "varchar",
+        "customerEmail": "varchar",
+        "customerPhone": "varchar",
+        "notes": "text (nullable)",
+        "createdAt": "CreateDateColumn",
+        "updatedAt": "UpdateDateColumn"
+      },
+      "relations": {
+        "user": "ManyToOne <- User",
+        "items": "OneToMany -> OrderItem (cascade: true)",
+        "payments": "OneToMany -> Payment"
+      }
+    },
+
+    "OrderItem": {
+      "file": "backend/src/orders/entities/order-item.entity.ts",
+      "table": "order_items",
+      "columns": {
+        "id": "PrimaryGeneratedColumn (number)",
+        "orderId": "int",
+        "productId": "int",
+        "quantity": "int",
+        "price": "decimal",
+        "productName": "varchar (snapshot at order time)",
+        "productImage": "varchar (nullable, snapshot)"
+      },
+      "relations": {
+        "order": "ManyToOne <- Order (onDelete: CASCADE)",
+        "product": "ManyToOne <- Product"
+      }
+    },
+
+    "CartItem": {
+      "file": "backend/src/orders/entities/cart-item.entity.ts",
+      "table": "cart_items",
+      "columns": {
+        "id": "PrimaryGeneratedColumn (number)",
+        "userId": "int",
+        "productId": "int",
+        "quantity": "int (default: 1)"
+      },
+      "relations": {
+        "user": "ManyToOne <- User (onDelete: CASCADE)",
+        "product": "ManyToOne <- Product (onDelete: CASCADE)"
+      }
+    },
+
+    "Message": {
+      "file": "backend/src/messages/entities/message.entity.ts",
+      "table": "messages",
+      "columns": {
+        "id": "PrimaryGeneratedColumn (number)",
+        "senderName": "varchar",
+        "senderEmail": "varchar",
+        "subject": "varchar",
+        "message": "text",
+        "status": "varchar (default: 'new')",
+        "adminResponse": "text (nullable)",
+        "respondedAt": "Date (nullable)",
+        "createdAt": "CreateDateColumn",
+        "updatedAt": "UpdateDateColumn"
+      },
+      "relations": {}
+    },
+
+    "Section": {
+      "file": "backend/src/sections/entities/section.entity.ts",
+      "table": "sections",
+      "columns": {
+        "id": "PrimaryGeneratedColumn (number)",
+        "type": "varchar",
+        "title": "jsonb (nullable, multilingual)",
+        "subtitle": "jsonb (nullable, multilingual)",
+        "content": "jsonb (nullable, multilingual)",
+        "imageUrl": "varchar (nullable)",
+        "order": "int (default: 0)",
+        "isActive": "boolean (default: true)",
+        "settings": "jsonb (nullable)",
+        "pageTarget": "varchar (default: 'home')",
+        "variant": "varchar (default: 'default')",
+        "anchorId": "varchar (nullable)",
+        "model3dUrl": "varchar (nullable)",
+        "show3d": "boolean (default: false)",
+        "showImage": "boolean (default: true)",
+        "createdAt": "CreateDateColumn",
+        "updatedAt": "UpdateDateColumn"
+      },
+      "relations": {}
+    },
+
+    "Page": {
+      "file": "backend/src/pages/entities/page.entity.ts",
+      "table": "pages",
+      "columns": {
+        "id": "PrimaryGeneratedColumn (number)",
+        "slug": "varchar (unique)",
+        "title": "jsonb (multilingual)",
+        "content": "jsonb (nullable, multilingual)",
+        "seoDescription": "jsonb (nullable, multilingual)",
+        "template": "varchar (default: 'simple')",
+        "status": "varchar (default: 'published')",
+        "createdAt": "CreateDateColumn",
+        "updatedAt": "UpdateDateColumn"
+      },
+      "relations": {},
+      "indexes": ["slug (unique)"]
+    },
+
+    "Settings": {
+      "file": "backend/src/settings/entities/settings.entity.ts",
+      "table": "settings",
+      "columns": {
+        "id": "PrimaryGeneratedColumn (number)",
+        "key": "varchar (unique, length: 100)",
+        "value": "text",
+        "type": "varchar (default: 'string')",
+        "category": "varchar (nullable, length: 100)",
+        "description": "text (nullable)",
+        "createdAt": "CreateDateColumn",
+        "updatedAt": "UpdateDateColumn"
+      },
+      "relations": {},
+      "indexes": ["key (unique)"]
+    },
+
+    "Notification": {
+      "file": "backend/src/notifications/entities/notification.entity.ts",
+      "table": "notifications",
+      "columns": {
+        "id": "PrimaryGeneratedColumn (number)",
+        "type": "enum (ORDER_CREATED, ORDER_UPDATED, LOW_STOCK, NEW_USER, SYSTEM, PAYMENT_*)",
+        "title": "varchar",
+        "message": "text",
+        "data": "json (nullable)",
+        "status": "enum (UNREAD, READ, default: UNREAD)",
+        "userId": "int (nullable)",
+        "createdAt": "CreateDateColumn",
+        "updatedAt": "UpdateDateColumn"
+      },
+      "relations": {}
+    },
+
+    "Payment": {
+      "file": "backend/src/payments/entities/payment.entity.ts",
+      "table": "payments",
+      "columns": {
+        "id": "PrimaryGeneratedColumn (number)",
+        "orderId": "int",
+        "amount": "decimal (precision: 12, scale: 2)",
+        "currency": "enum (UAH, USD, EUR)",
+        "paymentMethod": "enum (liqpay, stripe, paypal)",
+        "status": "enum (pending, processing, completed, failed, default: pending)",
+        "description": "varchar (nullable, length: 255)",
+        "transactionId": "varchar (nullable, length: 255)",
+        "liqpayPaymentId": "varchar (nullable, length: 255)",
+        "customerEmail": "varchar (nullable, length: 255)",
+        "customerPhone": "varchar (nullable, length: 50)",
+        "metadata": "text (nullable)",
+        "errorMessage": "text (nullable)",
+        "createdAt": "CreateDateColumn",
+        "updatedAt": "UpdateDateColumn"
+      },
+      "relations": {}
+    },
+
+    "ProductRecommendation": {
+      "file": "backend/src/recommendations/entities/product-recommendation.entity.ts",
+      "table": "product_recommendations",
+      "columns": {
+        "id": "PrimaryGeneratedColumn (number)",
+        "productId": "int",
+        "recommendedProductId": "int",
+        "type": "enum (similar, bought_together, personalized, default: similar)",
+        "score": "decimal (precision: 5, scale: 4, default: 1.0)",
+        "createdAt": "CreateDateColumn",
+        "updatedAt": "UpdateDateColumn"
+      },
+      "relations": {
+        "product": "ManyToOne <- Product (onDelete: CASCADE)",
+        "recommendedProduct": "ManyToOne <- Product (onDelete: CASCADE)"
+      }
+    },
+
+    "SeoMetadata": {
+      "file": "backend/src/seo/entities/seo-metadata.entity.ts",
+      "table": "seo_metadata",
+      "columns": {
+        "id": "PrimaryGeneratedColumn (number)",
+        "entityType": "varchar",
+        "entityId": "int",
+        "title": "jsonb (nullable)",
+        "description": "jsonb (nullable)",
+        "keywords": "jsonb (nullable)",
+        "ogImage": "varchar (nullable)",
+        "canonicalUrl": "varchar (nullable)"
+      },
+      "relations": {}
+    }
+  },
+
+  "dependencyGraph": {
+    "AppModule": {
+      "imports": [
+        "ConfigModule", "DatabaseModule", "AuthModule", "ProductsModule",
+        "CategoriesModule", "OrdersModule", "CartModule", "UploadModule",
+        "AiGenerationModule", "MessagesModule", "SectionsModule", "PagesModule",
+        "SettingsModule", "NotificationsModule", "PaymentsModule",
+        "RecommendationsModule", "SeoModule", "EmailModule", "HealthModule"
+      ]
+    },
+    "AuthModule": {
+      "imports": ["PassportModule", "JwtModule", "TypeOrmModule(User)"],
+      "exports": ["AuthService", "JwtAuthGuard", "AdminGuard"]
+    },
+    "ProductsModule": {
+      "imports": ["TypeOrmModule(Product, ProductImage, Product3DModel)", "UploadModule"],
+      "exports": ["ProductsService"]
+    },
+    "OrdersModule": {
+      "imports": ["TypeOrmModule(Order, OrderItem)", "ProductsModule", "AuthModule"],
+      "exports": ["OrdersService"]
+    },
+    "CartModule": {
+      "imports": ["TypeOrmModule(CartItem)", "ProductsModule"],
+      "exports": ["CartService"]
+    },
+    "PaymentsModule": {
+      "imports": ["TypeOrmModule(Payment)", "OrdersModule", "ConfigModule"],
+      "exports": ["PaymentsService"]
+    },
+    "RecommendationsModule": {
+      "imports": ["TypeOrmModule(ProductRecommendation)", "ProductsModule"],
+      "exports": ["RecommendationsService"]
+    },
+    "MessagesModule": {
+      "imports": ["TypeOrmModule(Message)", "EmailModule"],
+      "exports": []
+    },
+    "AiGenerationModule": {
+      "imports": ["ConfigModule"],
+      "exports": ["AiGenerationService"]
+    },
+    "UploadModule": {
+      "imports": ["ConfigModule"],
+      "exports": ["UploadModule"]
+    },
+    "EmailModule": {
+      "imports": ["ConfigModule"],
+      "exports": ["EmailService"]
+    },
+    "SeoModule": {
+      "imports": ["TypeOrmModule(SeoMetadata)"],
+      "exports": ["SeoService"]
+    },
+    "DatabaseModule": {
+      "imports": ["ConfigModule"],
+      "global": true
+    },
+    "CategoriesModule": {
+      "imports": ["TypeOrmModule(Category)"],
+      "exports": []
+    },
+    "SectionsModule": {
+      "imports": ["TypeOrmModule(Section)"],
+      "exports": []
+    },
+    "PagesModule": {
+      "imports": ["TypeOrmModule(Page)"],
+      "exports": []
+    },
+    "SettingsModule": {
+      "imports": ["TypeOrmModule(Settings)"],
+      "exports": []
+    },
+    "NotificationsModule": {
+      "imports": ["TypeOrmModule(Notification)"],
+      "exports": []
+    },
+    "HealthModule": {
+      "imports": [],
+      "exports": []
+    },
+    "CommonModule": {
+      "imports": [],
+      "exports": []
+    }
+  },
+
+  "requestLifecycle": {
+    "layers": [
+      {
+        "name": "HTTP Request",
+        "description": "Incoming HTTP request to NestJS application"
+      },
+      {
+        "name": "Global Prefix",
+        "description": "API routes prefixed with /api (set in main.ts)"
+      },
+      {
+        "name": "Middleware",
+        "description": "NestJS middleware pipeline (CORS, body parser, etc.)"
+      },
+      {
+        "name": "LoggingInterceptor",
+        "description": "Global logging interceptor that logs request method, URL, and timestamp"
+      },
+      {
+        "name": "HttpExceptionFilter",
+        "description": "Global exception filter that catches HttpException and formats error responses"
+      },
+      {
+        "name": "SerializersInterceptor",
+        "description": "Class-transformer interceptor that transforms response objects using instanceToPlain"
+      },
+      {
+        "name": "ValidationPipe",
+        "description": "Global validation pipe using class-validator for DTO validation"
+      },
+      {
+        "name": "Guards",
+        "description": "JwtAuthGuard (JWT validation) -> AdminGuard (role check)",
+        "guards": ["JwtAuthGuard", "AdminGuard"]
+      },
+      {
+        "name": "Controller",
+        "description": "Route handler that receives validated request"
+      },
+      {
+        "name": "Service",
+        "description": "Business logic layer"
+      },
+      {
+        "name": "Repository",
+        "description": "TypeORM repository for database operations"
+      },
+      {
+        "name": "Database",
+        "description": "PostgreSQL (production) or SQLite (development)"
+      },
+      {
+        "name": "Response",
+        "description": "JSON response sent back to client"
+      }
+    ]
+  },
+
+  "externalIntegrations": {
+    "Cloudinary": {
+      "status": "IMPLEMENTED",
+      "purpose": "Image and 3D model file storage",
+      "configKeys": ["CLOUDINARY_CLOUD_NAME", "CLOUDINARY_API_KEY", "CLOUDINARY_API_SECRET"],
+      "fallback": "Local filesystem storage"
+    },
+    "LiqPay": {
+      "status": "IMPLEMENTED",
+      "purpose": "Ukrainian payment gateway for processing payments",
+      "configKeys": ["LIQPAY_PUBLIC_KEY", "LIQPAY_PRIVATE_KEY"],
+      "webhook": "/api/payments/liqpay/callback"
+    },
+    "Stripe": {
+      "status": "IMPLEMENTED",
+      "purpose": "International payment processing",
+      "configKeys": ["STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET"],
+      "webhook": "/api/payments/stripe/webhook"
+    },
+    "Google OAuth": {
+      "status": "IMPLEMENTED",
+      "purpose": "Social authentication via Google",
+      "configKeys": ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET"],
+      "endpoints": ["/auth/google", "/auth/google/callback"]
+    },
+    "GitHub OAuth": {
+      "status": "IMPLEMENTED",
+      "purpose": "Social authentication via GitHub",
+      "configKeys": ["GITHUB_CLIENT_ID", "GITHUB_CLIENT_SECRET"],
+      "endpoints": ["/auth/github", "/auth/github/callback"]
+    },
+    "SMTP/Nodemailer": {
+      "status": "IMPLEMENTED",
+      "purpose": "Email sending for order confirmation, contact form notifications, password reset",
+      "configKeys": ["SMTP_HOST", "SMTP_PORT", "SMTP_USER", "SMTP_PASSWORD", "EMAIL_FROM"]
+    },
+    "OpenAI": {
+      "status": "IMPLEMENTED",
+      "purpose": "AI-powered 3D model generation and image processing",
+      "configKeys": ["OPENAI_API_KEY"]
+    },
+    "Tripo3D": {
+      "status": "IMPLEMENTED",
+      "purpose": "External 3D model generation API",
+      "configKeys": ["TRIPO3D_API_KEY"]
+    },
+    "UAV Mapping": {
+      "status": "PARTIALLY_IMPLEMENTED",
+      "purpose": "Drone-based 3D mapping and photogrammetry",
+      "configKeys": ["UAV_MAPPING_API_URL"],
+      "notes": "Local Python worker exists but integration is partial"
+    },
+    "Local AI Worker": {
+      "status": "IMPLEMENTED",
+      "purpose": "Local Python-based AI model generation (Hunyuan3D-V2, InstantMesh, Unique3D)",
+      "configKeys": ["AI_WORKER_URL"],
+      "location": "local-ai-worker/"
+    },
+    "Redis/BullMQ": {
+      "status": "CONFIGURED_ONLY",
+      "purpose": "Job queue for async AI generation tasks",
+      "configKeys": ["REDIS_HOST", "REDIS_PORT"],
+      "notes": "Configuration exists but limited active usage"
+    },
+    "PayPal": {
+      "status": "NOT_IMPLEMENTED",
+      "purpose": "Payment processing (enum exists in Payment entity but no service)",
+      "notes": "PaymentMethod.PAYPAL enum value exists but no PayPalService implemented"
+    }
+  },
+
+  "directoryStructure": {
+    "backend/src/": {
+      "main.ts": "Application entry point",
+      "app.module.ts": "Root NestJS module",
+      "ai-generation/": "AI 3D model generation with multi-provider support",
+      "auth/": "Authentication (JWT, Google OAuth, GitHub OAuth)",
+      "categories/": "Product category management",
+      "common/": "Shared utilities, filters, interceptors",
+      "config/": "Environment configuration",
+      "database/": "TypeORM database connection setup",
+      "email/": "Email sending service (Nodemailer)",
+      "health/": "Health check endpoints",
+      "messages/": "Contact form messages",
+      "notifications/": "In-app notification system",
+      "orders/": "Order and cart management",
+      "pages/": "Dynamic CMS pages",
+      "payments/": "Payment processing (LiqPay, Stripe)",
+      "products/": "Product CRUD with AI 3D generation",
+      "recommendations/": "Product recommendation engine",
+      "scripts/": "Database migration and utility scripts",
+      "sections/": "Homepage sections management",
+      "seo/": "SEO metadata management",
+      "services/": "Shared services",
+      "settings/": "Application settings (key-value store)",
+      "shared/": "Shared interfaces and types",
+      "upload-module/": "File upload handling (Cloudinary, local)"
+    }
+  },
+
+  "authentication": {
+    "type": "JWT (JSON Web Tokens)",
+    "strategy": "passport-jwt",
+    "tokenExtraction": "Bearer token from Authorization header",
+    "secretSource": "JWT_SECRET environment variable",
+    "expiration": "7 days (configurable via JWT_EXPIRATION)",
+    "roles": ["USER", "ADMIN"],
+    "guards": {
+      "JwtAuthGuard": "Extends AuthGuard('jwt'), validates token and attaches user to request",
+      "AdminGuard": "CanActivate guard that checks user.role === UserRole.ADMIN"
+    },
+    "oauthProviders": {
+      "google": "Implemented with Passport Google OAuth2 strategy",
+      "github": "Implemented with Passport GitHub OAuth2 strategy"
+    },
+    "passwordHashing": "bcrypt"
+  },
+
+  "circularDependencies": [],
+  "knownTechnicalDebt": [
+    "Payment entity uses orderId as plain number instead of TypeORM relation to Order",
+    "Notification entity has userId but no @ManyToOne relation defined",
+    "CartItem entity references User and Product via plain IDs without cascade delete relations in some cases",
+    "Some DTOs lack comprehensive validation decorators",
+    "Error handling is inconsistent across controllers (some use try-catch, some rely on global filter)",
+    "No rate limiting implemented for public endpoints",
+    "Swagger documentation is configured but may not cover all endpoints",
+    "Redis/BullMQ configuration exists but queue-based processing is limited"
+  ]
+}

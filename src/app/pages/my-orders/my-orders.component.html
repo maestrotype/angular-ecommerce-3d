@@ -5,12 +5,20 @@
       <h1>{{ 'ORDERS.TITLE' | translate }}</h1>
     </div>
 
-    <div class="state" *ngIf="isLoading">{{ 'ORDERS.STATUS_LOADING' | translate }}</div>
+    <app-skeleton-loader
+      *ngIf="isLoading"
+      variant="list-row"
+      [count]="4"
+    ></app-skeleton-loader>
     <div class="state error" *ngIf="!isLoading && error">{{ error }}</div>
 
     <div class="empty" *ngIf="!isLoading && !error && orders.length === 0">
-      <p>{{ 'ORDERS.EMPTY_MSG' | translate }}</p>
-      <button class="primary" (click)="goShop()">{{ 'ORDERS.EMPTY_BTN' | translate }}</button>
+      <app-empty-state
+        icon="receipt_long"
+        [title]="'ORDERS.EMPTY_MSG' | translate"
+        [actionLabel]="'ORDERS.EMPTY_BTN' | translate"
+        (actionClick)="goShop()"
+      ></app-empty-state>
     </div>
 
     <div class="orders" *ngIf="!isLoading && !error && orders.length > 0">
