@@ -1,7 +1,7 @@
 <ng-container *ngIf="sections && sections.length > 0">
-  <div class="device-emulator" [attr.data-theme]="theme">
+  <div class="device-emulator preview-theme-root" [attr.data-theme]="previewThemeAttr">
     <div class="full-page-preview" 
-         [attr.data-theme]="theme"
+         [attr.data-theme]="previewThemeAttr"
          [class.inspecting]="isInspectionMode"
          cdkDropList 
          (cdkDropListDropped)="onDrop($event)"
@@ -90,8 +90,8 @@
 
 <!-- Single-section mode (Editor Focus) -->
 <ng-container *ngIf="(!sections || sections.length === 0) && sectionData">
-  <div class="device-emulator">
-    <div class="full-page-preview" [class.editor-mode]="isEditorMode">
+  <div class="device-emulator preview-theme-root" [attr.data-theme]="previewThemeAttr">
+    <div class="full-page-preview" [attr.data-theme]="previewThemeAttr" [class.editor-mode]="isEditorMode">
       <app-section-renderer [section]="sectionData" [mode]="mode" [key]="renderKey"></app-section-renderer>
     </div>
   </div>

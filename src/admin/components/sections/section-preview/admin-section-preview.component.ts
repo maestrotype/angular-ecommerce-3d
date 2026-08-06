@@ -13,6 +13,15 @@ export class AdminSectionPreviewComponent implements OnChanges {
   @Input() isEditorMode = false;
   @Input() mode: 'desktop' | 'tablet' | 'mobile' | 'fold' = 'desktop';
   @Input() theme: 'default' | 'dark' | 'glass' = 'default';
+
+  @HostBinding('attr.data-theme') get hostPreviewTheme() {
+    return this.previewThemeAttr;
+  }
+
+  /** Map architect theme to storefront data-theme (light, not default). */
+  get previewThemeAttr(): string {
+    return this.theme === 'default' ? 'light' : this.theme;
+  }
   @Output() sectionEdit = new EventEmitter<any>();
   @Output() reordered = new EventEmitter<any[]>();
   @Output() elementSelected = new EventEmitter<any>();

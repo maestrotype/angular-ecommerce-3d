@@ -308,6 +308,46 @@
   --surface-overlay-light: rgba(255, 255, 255, 0.1);
   --surface-overlay-full: rgba(0, 0, 0, 0.7);
 
+  /* ===== FULLSCREEN VIEWER (immersive dark) ===== */
+  --viewer-page-bg: var(--surface-page);
+  --viewer-page-text: var(--text-primary);
+  --viewer-header-bg: var(--surface-overlay-full);
+  --viewer-header-border: var(--glass-border-soft);
+  --viewer-header-backdrop: var(--backdrop-blur);
+  --viewer-chrome-bg: var(--surface-overlay-light);
+  --viewer-chrome-border: var(--glass-border-soft);
+  --viewer-chrome-text: var(--text-primary);
+  --viewer-chrome-muted: var(--text-muted);
+  --viewer-tabs-bg: var(--surface-overlay-light);
+  --viewer-bar-bg: var(--surface-overlay-full);
+  --viewer-bar-border: var(--glass-border-soft);
+  --viewer-host-bg: var(--surface-page);
+  --viewer-loader-overlay: var(--surface-overlay-full);
+  --viewer-loader-backdrop: var(--backdrop-blur);
+  --viewer-loader-title: var(--text-muted);
+  --viewer-loader-percent: var(--text-primary);
+  --viewer-loader-track: rgba(255, 255, 255, 0.08);
+  --viewer-loader-ring: rgba(255, 255, 255, 0.12);
+  --viewer-error-overlay: var(--surface-overlay-full);
+  --viewer-error-card-bg: var(--surface-elevated);
+  --viewer-error-card-border: var(--glass-border-soft);
+  --viewer-error-card-shadow: var(--shadow-lg);
+  --viewer-error-title: var(--text-primary);
+  --viewer-error-body: var(--text-secondary);
+  --viewer-error-hint-bg: var(--surface-overlay-light);
+  --viewer-error-hint-border: var(--glass-border-soft);
+  --viewer-error-hint-text: var(--text-muted);
+  --viewer-hint-bg: var(--surface-overlay-full);
+  --viewer-hint-text: var(--text-muted);
+  --viewer-hint-border: var(--glass-border-soft);
+  --viewer-hd-bg: var(--surface-overlay-full);
+  --viewer-hd-border: var(--glass-border-soft);
+  --viewer-hd-text: var(--text-muted);
+  --preview-device-frame-bg: var(--color-slate-950);
+  --preview-device-frame-border: var(--color-slate-800);
+  --preview-device-shadow: var(--shadow-lg);
+  --preview-canvas-bg: var(--surface-page);
+
   /* ===== TEXT OVERRIDES ===== */
   --text-primary: var(--color-slate-50);
   --text-secondary: var(--color-slate-400);

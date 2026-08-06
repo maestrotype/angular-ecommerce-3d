@@ -1,0 +1,20 @@
+/* ==========================================================================
+   SITE ARCHITECT — preview theme isolation
+   Storefront tokens come from [data-theme] on .preview-theme-root.
+   Admin-only structural chrome uses --preview-device-* tokens from theme layer.
+   ========================================================================== */
+
+body.is-admin app-admin-section-preview .preview-theme-root {
+  isolation: isolate;
+  position: relative;
+  color: var(--text-primary);
+  background: var(--preview-device-frame-bg);
+  border: 8px solid var(--preview-device-frame-border);
+  box-shadow: var(--preview-device-shadow);
+
+  .full-page-preview {
+    background: var(--preview-canvas-bg, var(--surface-page));
+    color: var(--text-primary);
+    min-height: 100%;
+  }
+}
