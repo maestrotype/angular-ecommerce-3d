@@ -1,7 +1,11 @@
 <header class="header">
   <div class="header-container">
     <div class="logo" (click)="goHome()" style="cursor: pointer;">
-      <app-logo></app-logo>
+      <app-logo
+        [height]="isMobile ? 44 : 60"
+        [width]="isMobile ? 148 : 200"
+        [showText]="true">
+      </app-logo>
     </div>
 
     <!-- Desktop Navigation -->
@@ -30,10 +34,35 @@
         [(ngModel)]="searchTerm" (input)="onSearch()" (keyup.enter)="performSearch()" />
     </div>
 
-    <!-- Mobile Search -->
-    <div class="mobile-search" *ngIf="showSearch">
-      <input #mobileSearchInput type="text" [placeholder]="'HEADER.SEARCH_PLACEHOLDER' | translate"
-        class="mobile-search-input" [(ngModel)]="searchTerm" (input)="onSearch()" (keyup.enter)="performSearch()" />
+    <!-- Mobile Search: icon toggle keeps logo readable -->
+    <button
+      type="button"
+      class="mobile-search-toggle"
+      *ngIf="showSearch && isMobile && !isMobileSearchExpanded"
+      (click)="expandMobileSearch()"
+      [attr.aria-label]="'HEADER.SEARCH_PLACEHOLDER' | translate">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M21 21L16.66 16.66" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
+
+    <div class="mobile-search" *ngIf="showSearch && isMobile && isMobileSearchExpanded">
+      <input #mobileSearchInput type="text"
+        [placeholder]="'HEADER.SEARCH_PLACEHOLDER_SHORT' | translate"
+        class="mobile-search-input" [(ngModel)]="searchTerm" (input)="onSearch()" (keyup.enter)="performSearch()"
+        [attr.aria-label]="'HEADER.SEARCH_PLACEHOLDER' | translate" />
+      <button
+        type="button"
+        class="mobile-search-close"
+        (click)="collapseMobileSearch()"
+        [attr.aria-label]="'CLOSE_BTN' | translate">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+      </button>
     </div>
 
     <div class="user-actions">

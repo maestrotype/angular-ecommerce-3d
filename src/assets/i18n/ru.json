@@ -944,6 +944,7 @@
   "ANSWERED": "Отвечено",
   "HEADER": {
     "SEARCH_PLACEHOLDER": "Поиск товаров...",
+    "SEARCH_PLACEHOLDER_SHORT": "Поиск...",
     "SEARCH_RESULTS": "Результаты поиска",
     "VIEW_ALL_RESULTS": "Смотреть все результаты",
     "MENU": "Меню",
@@ -952,7 +953,10 @@
       "SHOP": "Магазин",
       "ABOUT": "О нас",
       "CONTACTS": "Контакты",
-      "ADMIN_PANEL": "Панель админа"
+      "ADMIN_PANEL": "Панель админа",
+      "FAVORITES": "Избранное",
+      "CART": "Корзина",
+      "ACCOUNT": "Профиль"
     },
     "THEME": "Тема",
     "THEMES": {

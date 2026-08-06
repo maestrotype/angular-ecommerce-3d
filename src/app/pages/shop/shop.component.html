@@ -147,7 +147,7 @@
   <!-- Products Section -->
   <div class="products-section">
     <div class="container">
-      <div class="products-grid" [class]="'view-' + viewMode">
+      <div [class]="'products-grid view-' + viewMode">
         <div *ngFor="let product of paginatedProducts; trackBy: trackByProductId" class="product-card"
           [class.out-of-stock]="product?.stock !== undefined && product.stock <= 0"
           (click)="goToProductDetail(product.id)">
@@ -230,7 +230,7 @@
         </div>
       </div>
 
-      <!-- Pagination -->
+      <!-- Pagination (desktop / tablet only — mobile shows full catalog) -->
       <div class="pagination" *ngIf="totalPages > 1">
         <button type="button" class="page-btn" (click)="prevPage()" [disabled]="currentPage === 1"
           [attr.aria-label]="'SHOP.PAGINATION.PREV' | translate">
