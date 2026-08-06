@@ -61,6 +61,7 @@ export class ShopComponent implements OnInit, OnDestroy {
   minPrice: number | null = null;
   maxPrice: number | null = null;
   showOnlyOnSale = false;
+  showShopHero = false;
 
   // Filter categories for sidebar - will be populated from API
   filterCategories: FilterCategory[] = [];
@@ -95,6 +96,7 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initOptions();
+    this.showShopHero = this.themeService.getCurrentTheme().id === 'glass';
     this.applyThemeGridDefault(this.themeService.getCurrentTheme().id);
     this.loadProducts();
     this.loadCategories();
@@ -102,6 +104,7 @@ export class ShopComponent implements OnInit, OnDestroy {
 
     this.themeService.currentTheme$.pipe(takeUntil(this.destroy$)).subscribe((theme) => {
       this.applyThemeGridDefault(theme.id);
+      this.showShopHero = theme.id === 'glass';
     });
 
     // Refresh options on lang change
@@ -161,17 +164,47 @@ export class ShopComponent implements OnInit, OnDestroy {
   }
 
   private updateFilterCategories(): void {
-    // Create filter categories from real categories and count products
-    this.filterCategories = this.categories.map(category => {
+    this.filterCategories = this.categories.map((category) => {
       const name = getLocalizedString(category.name, this.translate.currentLang);
-      const count = this.products.filter(product => product.category === name).length;
+      const slug = this.getCategorySlug(category, name);
       return {
-        id: name,
-        name: name,
-        count: count,
-        selected: false
+        id: slug,
+        name,
+        count: this.countProductsInCategory(slug, name),
+        selected:
+          this.selectedCategory !== 'all' &&
+          this.categoryRefsMatch(this.selectedCategory, slug, name),
       };
     });
+  }
+
+  private getCategorySlug(category: Category, displayName?: string): string {
+    const name = displayName ?? getLocalizedString(category.name, this.translate.currentLang);
+    return category.slug || this.normalizeCategoryRef(name);
+  }
+
+  private normalizeCategoryRef(value: string): string {
+    return value.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+  }
+
+  private categoryRefsMatch(...values: string[]): boolean {
+    const normalized = values.map((value) => this.normalizeCategoryRef(value));
+    const anchor = normalized[0];
+    return normalized.every((value) => value === anchor);
+  }
+
+  private productMatchesCategory(product: Product, categorySlug: string, categoryName: string): boolean {
+    const productCategory = product.category || '';
+    return (
+      this.categoryRefsMatch(productCategory, categorySlug) ||
+      this.categoryRefsMatch(productCategory, categoryName)
+    );
+  }
+
+  private countProductsInCategory(categorySlug: string, categoryName: string): number {
+    return this.products.filter((product) =>
+      this.productMatchesCategory(product, categorySlug, categoryName)
+    ).length;
   }
 
   private loadProducts(): void {
@@ -228,23 +261,44 @@ export class ShopComponent implements OnInit, OnDestroy {
   }
 
   applyFilters(): void {
-    // Update category counts
-    this.updateCategoryCounts();
+    this.runFilters(true);
+  }
 
-    // Sync selectedCategory with sidebar selections
-    const selectedCategories = this.filterCategories.filter(cat => cat.selected).map(cat => cat.id);
+  onLiveFilterChange(): void {
+    this.runFilters(false);
+  }
+
+  clearAllFilters(): void {
+    this.filterCategories.forEach((category) => {
+      category.selected = false;
+    });
+    this.minPrice = null;
+    this.maxPrice = null;
+    this.showOnlyOnSale = false;
+    this.selectedCategory = 'all';
+    this.runFilters(false);
+  }
+
+  private runFilters(closeSidebar: boolean): void {
+    this.currentPage = 1;
+    this.updateCategoryCounts();
+    this.syncSelectedCategoryFromSidebar();
+
+    if (closeSidebar) {
+      this.isFilterSidebarOpen = false;
+    }
+
+    this.filterProducts();
+    this.updateUrl();
+  }
+
+  private syncSelectedCategoryFromSidebar(): void {
+    const selectedCategories = this.filterCategories.filter((cat) => cat.selected).map((cat) => cat.id);
     if (selectedCategories.length === 1) {
       this.selectedCategory = selectedCategories[0];
     } else if (selectedCategories.length === 0) {
       this.selectedCategory = 'all';
     }
-    // If multiple categories selected, keep current selectedCategory but filter by all selected
-
-    // Close sidebar
-    this.isFilterSidebarOpen = false;
-
-    // Trigger product filtering
-    this.filterProducts();
   }
 
   changeViewMode(mode: 'list' | 'grid-2' | 'grid-3' | 'grid-4' | 'grid-5'): void {
@@ -255,12 +309,26 @@ export class ShopComponent implements OnInit, OnDestroy {
     let filtered = [...this.products];
 
     // Filter by selected categories from sidebar
-    const selectedCategories = this.filterCategories.filter(cat => cat.selected).map(cat => cat.id);
+    const selectedCategories = this.filterCategories.filter((cat) => cat.selected);
     if (selectedCategories.length > 0) {
-      filtered = filtered.filter(product => selectedCategories.includes(product.category || ''));
+      filtered = filtered.filter((product) =>
+        selectedCategories.some((category) =>
+          this.productMatchesCategory(product, category.id, category.name)
+        )
+      );
     } else if (this.selectedCategory !== 'all') {
-      // Fallback to dropdown category filter
-      filtered = filtered.filter(product => product.category === this.selectedCategory);
+      const routeCategory = this.filterCategories.find((category) =>
+        this.categoryRefsMatch(category.id, this.selectedCategory)
+      );
+      if (routeCategory) {
+        filtered = filtered.filter((product) =>
+          this.productMatchesCategory(product, routeCategory.id, routeCategory.name)
+        );
+      } else {
+        filtered = filtered.filter((product) =>
+          this.categoryRefsMatch(product.category || '', this.selectedCategory)
+        );
+      }
     }
 
     // Filter by search term
@@ -377,9 +445,8 @@ export class ShopComponent implements OnInit, OnDestroy {
   }
 
   private updateCategoryCounts(): void {
-    this.filterCategories.forEach(filterCategory => {
-      const count = this.products.filter(product => product.category === filterCategory.id).length;
-      filterCategory.count = count;
+    this.filterCategories.forEach((filterCategory) => {
+      filterCategory.count = this.countProductsInCategory(filterCategory.id, filterCategory.name);
     });
   }
 }

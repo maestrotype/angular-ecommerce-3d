@@ -1,6 +1,6 @@
 <div class="shop" id="shop">
-  <!-- Header Section -->
-  <div class="shop-header">
+  <!-- Header Section (glass theme only; future: shop page constructor) -->
+  <div class="shop-header" *ngIf="showShopHero">
     <div class="container">
       <div class="header-content">
         <span class="section-subtitle">{{ 'SHOP.HEADER.SUBTITLE' | translate }}</span>
@@ -35,7 +35,8 @@
             <h4>{{ 'SHOP.FILTERS.CATEGORIES' | translate }}</h4>
             <div class="category-list">
               <label *ngFor="let category of filterCategories" class="category-item">
-                <input type="checkbox" [value]="category.id" [(ngModel)]="category.selected">
+                <input type="checkbox" [value]="category.id" [(ngModel)]="category.selected"
+                  (ngModelChange)="onLiveFilterChange()">
                 <span class="checkmark"></span>
                 <span class="category-name">{{ category.name }}</span>
                 <span class="category-count">({{ category.count }})</span>
@@ -48,10 +49,10 @@
             <div class="price-range">
               <div class="price-inputs">
                 <input type="number" [(ngModel)]="minPrice" [placeholder]="'SHOP.FILTERS.MIN' | translate"
-                  class="price-input">
+                  class="price-input" (blur)="onLiveFilterChange()" (keyup.enter)="onLiveFilterChange()">
                 <span class="price-separator">-</span>
                 <input type="number" [(ngModel)]="maxPrice" [placeholder]="'SHOP.FILTERS.MAX' | translate"
-                  class="price-input">
+                  class="price-input" (blur)="onLiveFilterChange()" (keyup.enter)="onLiveFilterChange()">
               </div>
               <div class="price-display">
                 {{ 'SHOP.FILTERS.PRICE_DISPLAY' | translate:{min: minPrice || 0, max: maxPrice || 1000} }}
@@ -59,7 +60,23 @@
             </div>
           </div>
 
-          <button type="button" class="filter-apply-btn" (click)="applyFilters()">{{ 'SHOP.FILTERS.APPLY' | translate }}</button>
+          <div class="filter-section filter-section--sale">
+            <label class="sale-checkbox">
+              <input type="checkbox" [(ngModel)]="showOnlyOnSale" (ngModelChange)="onLiveFilterChange()">
+              <span class="checkmark"></span>
+              {{ 'SHOP.FILTERS.ON_SALE' | translate }}
+            </label>
+          </div>
+
+          <div class="filter-actions">
+            <button type="button" class="filter-clear-btn" (click)="clearAllFilters()">
+              {{ 'SHOP.FILTERS.CLEAR_ALL' | translate }}
+            </button>
+          </div>
+
+          <button type="button" class="filter-apply-btn filter-apply-btn--drawer" (click)="applyFilters()">
+            {{ 'SHOP.FILTERS.APPLY' | translate }}
+          </button>
         </div>
       </div>
     </aside>
@@ -79,12 +96,15 @@
           <app-custom-dropdown class="sort-dropdown" [options]="sortOptions" [selectedValue]="sortBy"
             [placeholder]="'SHOP.SORT.PLACEHOLDER' | translate" (valueChange)="onSortChange($event)">
           </app-custom-dropdown>
+          <span class="results-count">
+            {{ 'SHOP.RESULTS.COUNT' | translate:{ count: filteredProducts.length } }}
+          </span>
         </div>
 
         <!-- Middle -->
         <div class="filters-middle">
-          <label class="sale-checkbox">
-            <input type="checkbox" [(ngModel)]="showOnlyOnSale">
+          <label class="sale-checkbox sale-checkbox--toolbar">
+            <input type="checkbox" [(ngModel)]="showOnlyOnSale" (ngModelChange)="onLiveFilterChange()">
             <span class="checkmark"></span>
             {{ 'SHOP.FILTERS.ON_SALE' | translate }}
           </label>
