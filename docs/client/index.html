@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentation — Angular 3D E-Commerce</title>
+<link rel="stylesheet" href="assets/client-docs.css">
+</head>
+<body>
+<button type="button" class="mobile-toggle" id="navToggle">Menu</button>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+  <a class="sidebar-brand" href="index.html">Angular 3D E-Commerce</a>
+  <div class="sidebar-tag">Client documentation</div>
+  <div class="nav-group"><div class="nav-group-title">Start here</div><a class="nav-link active" href="index.html">Documentation Hub</a>
+<a class="nav-link" href="quick-start.html">Quick Start</a>
+<a class="nav-link" href="getting-started.html">Getting Started</a>
+<a class="nav-link" href="installation.html">Installation</a></div>
+<div class="nav-group"><div class="nav-group-title">Product guides</div><a class="nav-link" href="admin-guide.html">Admin Guide</a>
+<a class="nav-link" href="admin-manual.html">Admin Manual</a>
+<a class="nav-link" href="customization.html">Customization</a>
+<a class="nav-link" href="payment-setup.html">Payment Setup</a>
+<a class="nav-link" href="social-auth.html">Social Auth</a>
+<a class="nav-link" href="local-ai.html">Local AI Setup</a></div>
+<div class="nav-group"><div class="nav-group-title">Reference</div><a class="nav-link" href="architecture.html">Architecture</a>
+<a class="nav-link" href="backend-api.html">Backend API</a>
+<a class="nav-link" href="../BACKEND_ARCHITECTURE_DIAGRAM.html">Backend Diagram</a>
+<a class="nav-link" href="faq.html">FAQ</a>
+<a class="nav-link" href="troubleshooting.html">Troubleshooting</a>
+<a class="nav-link" href="support.html">Support</a></div>
+</aside>
+<main class="main" style="max-width:none;padding:0">
+  <div class="hub-hero">
+    <h1>Documentation Hub</h1>
+    <p>Premium guides for buyers and integrators — same visual language as the architecture diagrams. Open any card or use the sidebar.</p>
+    <div class="badges" style="justify-content:center;margin-top:1rem">
+      <span class="badge cyan">NestJS</span>
+      <span class="badge blue">Angular 17</span>
+      <span class="badge green">PostgreSQL</span>
+      <span class="badge purple">Three.js</span>
+      <span class="badge pink">Cloudinary</span>
+    </div>
+  </div>
+  <div class="hub-grid">
+    <a class="hub-card" href="quick-start.html">
+      <span class="icon badge cyan">⚡</span>
+      <h3>Quick Start</h3>
+      <p>Run the stack in under 10 minutes.</p>
+    </a>
+
+    <a class="hub-card" href="getting-started.html">
+      <span class="icon badge blue">1</span>
+      <h3>Getting Started</h3>
+      <p>Environment, SSR, and deployment options.</p>
+    </a>
+
+    <a class="hub-card" href="installation.html">
+      <span class="icon badge green">2</span>
+      <h3>Installation</h3>
+      <p>Full install, Docker, and security checklist.</p>
+    </a>
+
+    <a class="hub-card" href="admin-manual.html">
+      <span class="icon badge purple">🛡</span>
+      <h3>Admin Manual</h3>
+      <p>Products, orders, SEO, integrations.</p>
+    </a>
+
+    <a class="hub-card" href="payment-setup.html">
+      <span class="icon badge pink">💳</span>
+      <h3>Payments</h3>
+      <p>Stripe, LiqPay, and PayPal setup.</p>
+    </a>
+
+    <a class="hub-card" href="customization.html">
+      <span class="icon badge orange">🎨</span>
+      <h3>Customization</h3>
+      <p>Themes, 3D viewer, i18n branding.</p>
+    </a>
+
+    <a class="hub-card" href="backend-api.html">
+      <span class="icon badge blue">API</span>
+      <h3>Backend API</h3>
+      <p>REST endpoints and auth guards.</p>
+    </a>
+
+    <a class="hub-card" href="../BACKEND_ARCHITECTURE_DIAGRAM.html">
+      <span class="icon badge cyan">⚙</span>
+      <h3>Backend Diagram</h3>
+      <p>Interactive NestJS architecture map.</p>
+    </a>
+
+    <a class="hub-card" href="faq.html">
+      <span class="icon badge yellow">?</span>
+      <h3>FAQ</h3>
+      <p>Common questions and answers.</p>
+    </a>
+
+    <a class="hub-card" href="troubleshooting.html">
+      <span class="icon badge red">🔧</span>
+      <h3>Troubleshooting</h3>
+      <p>SSR, 3D, and connectivity fixes.</p>
+    </a>
+
+    <a class="hub-card" href="support.html">
+      <span class="icon badge green">✉</span>
+      <h3>Support</h3>
+      <p>How to get help after purchase.</p>
+    </a>
+
+    <a class="hub-card" href="local-ai.html">
+      <span class="icon badge purple">🤖</span>
+      <h3>Local AI</h3>
+      <p>Optional local 3D generation setup.</p>
+    </a></div>
+  <p class="footer-note" style="max-width:1100px;margin:0 auto 2rem;padding:0 1.5rem">
+    Internal engineering docs (AI constitution, refactoring board, token contracts) stay in <code>docs/</code> as Markdown and are not part of this buyer hub.
+  </p>
+</main>
+</div>
+<script>
+document.getElementById('navToggle')?.addEventListener('click', () => {
+  document.getElementById('sidebar')?.classList.toggle('open');
+});
+</script>
+</body>
+</html>

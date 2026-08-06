@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment Setup Guide — Angular 3D E-Commerce</title>
+<link rel="stylesheet" href="assets/client-docs.css">
+</head>
+<body>
+<button type="button" class="mobile-toggle" id="navToggle">Menu</button>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+  <a class="sidebar-brand" href="index.html">Angular 3D E-Commerce</a>
+  <div class="sidebar-tag">Client documentation</div>
+  <div class="nav-group"><div class="nav-group-title">Start here</div><a class="nav-link" href="index.html">Documentation Hub</a>
+<a class="nav-link" href="quick-start.html">Quick Start</a>
+<a class="nav-link" href="getting-started.html">Getting Started</a>
+<a class="nav-link" href="installation.html">Installation</a></div>
+<div class="nav-group"><div class="nav-group-title">Product guides</div><a class="nav-link" href="admin-guide.html">Admin Guide</a>
+<a class="nav-link" href="admin-manual.html">Admin Manual</a>
+<a class="nav-link" href="customization.html">Customization</a>
+<a class="nav-link active" href="payment-setup.html">Payment Setup</a>
+<a class="nav-link" href="social-auth.html">Social Auth</a>
+<a class="nav-link" href="local-ai.html">Local AI Setup</a></div>
+<div class="nav-group"><div class="nav-group-title">Reference</div><a class="nav-link" href="architecture.html">Architecture</a>
+<a class="nav-link" href="backend-api.html">Backend API</a>
+<a class="nav-link" href="../BACKEND_ARCHITECTURE_DIAGRAM.html">Backend Diagram</a>
+<a class="nav-link" href="faq.html">FAQ</a>
+<a class="nav-link" href="troubleshooting.html">Troubleshooting</a>
+<a class="nav-link" href="support.html">Support</a></div>
+</aside>
+<main class="main">
+  <header class="page-header">
+    <h1>Payment Setup Guide</h1>
+    <p class="lead">Step-by-step guide to configure payment gateways for your e-commerce platform.</p>
+    <div class="badges"><span class="badge pink">Payments</span></div>
+  </header>
+  <article class="content">
+<p>Step-by-step guide to configure payment gateways for your e-commerce platform.</p>
+<hr>
+<h2 id="s1"><span class="n">1</span>📋 Table of Contents</h2>
+<ol>
+<li><a href="#stripe-setup">Stripe Setup</a></li>
+<li><a href="#paypal-setup">PayPal Setup</a></li>
+<li><a href="#liqpay-setup">LiqPay Setup</a></li>
+<li><a href="#testing-payments">Testing Payments</a></li>
+<li><a href="#production-deployment">Production Deployment</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+</ol>
+<hr>
+<h2 id="s2"><span class="n">2</span>💳 Stripe Setup</h2>
+<p>Stripe is the primary payment gateway supporting cards, Apple Pay, and Google Pay.</p>
+<h3>Step 1: Create Stripe Account</h3>
+<ol>
+<li>Go to <a href="https://stripe.com/register">stripe.com/register</a></li>
+<li>Fill in your business information</li>
+<li>Verify your email address</li>
+<li>Complete identity verification</li>
+</ol>
+<h3>Step 2: Get API Keys</h3>
+<h4>For Testing (Development):</h4>
+<ol>
+<li>Login to Stripe Dashboard</li>
+<li>Click <strong>Developers</strong> in left sidebar</li>
+<li>Click <strong>API Keys</strong></li>
+<li>You'll see:</li>
+</ol>
+<p>   - <strong>Publishable key</strong>: <code>pk_test_...</code></p>
+<p>   - <strong>Secret key</strong>: <code>sk_test_...</code> (click &quot;Reveal&quot;)</p>
+<h4>For Production:</h4>
+<ol>
+<li>Toggle &quot;Test Mode&quot; OFF in Stripe Dashboard</li>
+<li>Get live keys:</li>
+</ol>
+<p>   - <strong>Publishable key</strong>: <code>pk_live_...</code></p>
+<p>   - <strong>Secret key</strong>: <code>sk_live_...</code></p>
+<h3>Step 3: Configure Backend</h3>
+<p>Edit <code>backend/.env</code>:</p>
+<pre><code class="language-env"># Stripe Configuration
+STRIPE_SECRET_KEY=sk_test_51Abc123...your_secret_key_here
+STRIPE_PUBLISHABLE_KEY=pk_test_51Abc123...your_publishable_key_here</code></pre>
+<h3>Step 4: Configure Frontend</h3>
+<p>Edit <code>src/environments/environment.ts</code> (development):</p>
+<pre><code class="language-typescript">export const environment = {
+  production: false,
+  apiUrl: 'http://localhost:3002/api',
+  stripePublishableKey: 'pk_test_51Abc123...your_publishable_key_here'
+};</code></pre>
+<p>Edit <code>src/environments/environment.prod.ts</code> (production):</p>
+<pre><code class="language-typescript">export const environment = {
+  production: true,
+  apiUrl: 'https://your-api.com/api',
+  stripePublishableKey: 'pk_live_...your_live_publishable_key'
+};</code></pre>
+<h3>Step 5: Set Up Webhooks (Important!)</h3>
+<p>Webhooks notify your server about payment events.</p>
+<ol>
+<li>In Stripe Dashboard, go to <strong>Developers</strong> → <strong>Webhooks</strong></li>
+<li>Click <strong>&quot;+ Add endpoint&quot;</strong></li>
+<li>Enter endpoint URL:</li>
+</ol>
+<p>   - Development: <code>http://localhost:3002/api/webhooks/stripe</code></p>
+<p>   - Production: <code>https://your-domain.com/api/webhooks/stripe</code></p>
+<ol>
+<li>Select events to listen for:</li>
+</ol>
+<p>   - ✅ <code>payment_intent.succeeded</code></p>
+<p>   - ✅ <code>payment_intent.payment_failed</code></p>
+<p>   - ✅ <code>charge.refunded</code></p>
+<ol>
+<li>Click <strong>&quot;Add endpoint&quot;</strong></li>
+<li>Copy the <strong>Signing secret</strong> (starts with <code>whsec_</code>)</li>
+<li>Add to <code>backend/.env</code>:</li>
+</ol>
+<p>   ```env</p>
+<p>   STRIPE_WEBHOOK_SECRET=whsec_...your_webhook_secret</p>
+<p>   ```</p>
+<h3>Step 6: Enable Payment Methods</h3>
+<ol>
+<li>In Stripe Dashboard, go to <strong>Settings</strong> → <strong>Payment methods</strong></li>
+<li>Enable desired methods:</li>
+</ol>
+<p>   - ✅ Cards (Visa, Mastercard, etc.)</p>
+<p>   - ✅ Apple Pay</p>
+<p>   - ✅ Google Pay</p>
+<p>   - ✅ Link (optional)</p>
+<ol>
+<li>Click <strong>&quot;Save&quot;</strong></li>
+</ol>
+<h3>Step 7: Test Integration</h3>
+<ol>
+<li>Start your application</li>
+<li>Add product to cart</li>
+<li>Go to checkout</li>
+<li>Use Stripe test card:</li>
+</ol>
+<p>   - <strong>Card number</strong>: <code>4242 4242 4242 4242</code></p>
+<p>   - <strong>Expiry</strong>: Any future date (e.g., <code>12/34</code>)</p>
+<p>   - <strong>CVC</strong>: Any 3 digits (e.g., <code>123</code>)</p>
+<p>   - <strong>ZIP</strong>: Any 5 digits (e.g., <code>12345</code>)</p>
+<ol>
+<li>Complete payment</li>
+<li>Check Stripe Dashboard → Payments to see transaction</li>
+</ol>
+<p>✅ <strong>Success!</strong> Stripe is configured.</p>
+<hr>
+<h2 id="s3"><span class="n">3</span>🅿️ PayPal Setup</h2>
+<h3>Step 1: Create PayPal Business Account</h3>
+<ol>
+<li>Go to <a href="https://www.paypal.com/business">paypal.com/business</a></li>
+<li>Click <strong>&quot;Sign Up&quot;</strong></li>
+<li>Choose <strong>&quot;Business Account&quot;</strong></li>
+<li>Complete registration</li>
+</ol>
+<h3>Step 2: Create Developer Account</h3>
+<ol>
+<li>Go to <a href="https://developer.paypal.com/">developer.paypal.com</a></li>
+<li>Login with your PayPal account</li>
+<li>Click <strong>&quot;Dashboard&quot;</strong></li>
+</ol>
+<h3>Step 3: Create App Credentials</h3>
+<ol>
+<li>In Developer Dashboard, click <strong>&quot;My Apps &amp; Credentials&quot;</strong></li>
+<li>Ensure you're in <strong>&quot;Sandbox&quot;</strong> mode for testing</li>
+<li>Click <strong>&quot;Create App&quot;</strong></li>
+<li>Enter app name (e.g., &quot;My E-commerce Store&quot;)</li>
+<li>Choose <strong>&quot;Merchant&quot;</strong> account type</li>
+<li>Click <strong>&quot;Create App&quot;</strong></li>
+<li>You'll get:</li>
+</ol>
+<p>   - <strong>Client ID</strong>: <code>AbCd123...</code></p>
+<p>   - <strong>Secret</strong>: Click &quot;Show&quot; to reveal</p>
+<h3>Step 4: Configure Backend</h3>
+<p>Edit <code>backend/.env</code>:</p>
+<pre><code class="language-env"># PayPal Configuration
+PAYPAL_MODE=sandbox  # Use 'live' for production
+PAYPAL_CLIENT_ID=AbCd123...your_client_id_here
+PAYPAL_CLIENT_SECRET=EfGh456...your_client_secret_here</code></pre>
+<h3>Step 5: Configure Frontend</h3>
+<p>Edit <code>src/environments/environment.ts</code>:</p>
+<pre><code class="language-typescript">export const environment = {
+  paypalClientId: 'AbCd123...your_client_id_here',
+  paypalMode: 'sandbox'  // or 'live' for production
+};</code></pre>
+<h3>Step 6: Enable PayPal in Admin</h3>
+<ol>
+<li>Login to Admin Panel</li>
+<li>Go to <strong>Settings</strong> → <strong>Payments</strong></li>
+<li>Find <strong>PayPal</strong> section</li>
+<li>Toggle <strong>&quot;Enable PayPal&quot;</strong> ON</li>
+<li>Click <strong>&quot;Save&quot;</strong></li>
+</ol>
+<h3>Step 7: Test Integration</h3>
+<ol>
+<li>Go to checkout page</li>
+<li>Select &quot;PayPal&quot; as payment method</li>
+<li>Click <strong>&quot;Pay with PayPal&quot;</strong></li>
+<li>Login with sandbox test account:</li>
+</ol>
+<p>   - Email: See Developer Dashboard → Sandbox → Accounts</p>
+<p>   - Or create test account</p>
+<ol>
+<li>Complete payment</li>
+</ol>
+<h3>Step 8: Production Setup</h3>
+<p>When ready for live payments:</p>
+<ol>
+<li>In PayPal Developer Dashboard, switch to <strong>&quot;Live&quot;</strong></li>
+<li>Create new app or activate existing one</li>
+<li>Get <strong>Live</strong> Client ID and Secret</li>
+<li>Update <code>backend/.env</code>:</li>
+</ol>
+<p>   ```env</p>
+<p>   PAYPAL_MODE=live</p>
+<p>   PAYPAL_CLIENT_ID=your_live_client_id</p>
+<p>   PAYPAL_CLIENT_SECRET=your_live_client_secret</p>
+<p>   ```</p>
+<p>✅ <strong>Success!</strong> PayPal is configured.</p>
+<hr>
+<h2 id="s4"><span class="n">4</span>🇺🇦 LiqPay Setup</h2>
+<p>LiqPay is popular in Ukraine and Eastern Europe.</p>
+<h3>Step 1: Register on LiqPay</h3>
+<ol>
+<li>Go to <a href="https://www.liqpay.ua/">liqpay.ua</a></li>
+<li>Click <strong>&quot;Підключити&quot;</strong> (Connect)</li>
+<li>Complete registration and verification</li>
+<li>Provide business documents</li>
+</ol>
+<h3>Step 2: Get API Keys</h3>
+<ol>
+<li>Login to LiqPay account</li>
+<li>Go to <strong>&quot;API&quot;</strong> section</li>
+<li>You'll see:</li>
+</ol>
+<p>   - <strong>Public Key</strong>: <code>i123456789</code></p>
+<p>   - <strong>Private Key</strong>: Click to reveal</p>
+<h3>Step 3: Configure Backend</h3>
+<p>Edit <code>backend/.env</code>:</p>
+<pre><code class="language-env"># LiqPay Configuration
+LIQPAY_PUBLIC_KEY=i123456789
+LIQPAY_PRIVATE_KEY=your_private_key_here</code></pre>
+<h3>Step 4: Set Up Server Callback</h3>
+<ol>
+<li>In LiqPay account, go to <strong>Settings</strong></li>
+<li>Find <strong>&quot;Server URL&quot;</strong> field</li>
+<li>Enter your callback URL:</li>
+</ol>
+<p>   ```</p>
+<p>   https://your-domain.com/api/webhooks/liqpay</p>
+<p>   ```</p>
+<ol>
+<li>Save settings</li>
+</ol>
+<h3>Step 5: Enable LiqPay in Admin</h3>
+<ol>
+<li>Go to Admin Panel → <strong>Settings</strong> → <strong>Payments</strong></li>
+<li>Find <strong>LiqPay</strong> section</li>
+<li>Toggle <strong>&quot;Enable LiqPay&quot;</strong> ON</li>
+<li>Save</li>
+</ol>
+<h3>Step 6: Test Integration</h3>
+<p>LiqPay provides test card numbers:</p>
+<ul>
+<li><strong>Card</strong>: <code>4242 4242 4242 4242</code></li>
+<li><strong>CVV</strong>: <code>111</code></li>
+<li><strong>Expiry</strong>: Any future date</li>
+<li><strong>3D Secure code</strong>: <code>123456</code></li>
+</ul>
+<p>✅ <strong>Success!</strong> LiqPay is configured.</p>
+<hr>
+<h2 id="s5"><span class="n">5</span>🧪 Testing Payments</h2>
+<h3>Stripe Test Cards</h3>
+<table>
+<tr><th>Card Number</th><th>Scenario</th></tr>
+<tr><td><code>4242 4242 4242 4242</code></td><td>Successful payment</td></tr>
+<tr><td><code>4000 0000 0000 0002</code></td><td>Card declined</td></tr>
+<tr><td><code>4000 0025 0000 3155</code></td><td>Requires authentication (3D Secure)</td></tr>
+<tr><td><code>4000 0000 0000 9995</code></td><td>Insufficient funds</td></tr>
+</table>
+<p>Full list: <a href="https://stripe.com/docs/testing">stripe.com/docs/testing</a></p>
+<h3>PayPal Test Accounts</h3>
+<ol>
+<li>Go to Developer Dashboard → <strong>Sandbox</strong> → <strong>Accounts</strong></li>
+<li>Use provided test accounts:</li>
+</ol>
+<p>   - <strong>Personal account</strong>: For buyer testing</p>
+<p>   - <strong>Business account</strong>: For seller testing</p>
+<h3>General Testing Checklist</h3>
+<ul>
+<li>[ ] Can complete successful payment</li>
+<li>[ ] Order is created in database</li>
+<li>[ ] Order appears in Admin Panel</li>
+<li>[ ] Customer receives confirmation email</li>
+<li>[ ] Payment appears in gateway dashboard</li>
+<li>[ ] Can process refund</li>
+<li>[ ] Failed payment shows error message</li>
+<li>[ ] Webhook events are received</li>
+</ul>
+<hr>
+<h2 id="s6"><span class="n">6</span>Production Deployment</h2>
+<h3>Pre-launch Checklist</h3>
+<ul>
+<li>[ ] Switch all gateways to <strong>LIVE</strong> mode</li>
+<li>[ ] Update API keys to production keys</li>
+<li>[ ] Configure webhooks for production URLs</li>
+<li>[ ] Test with real payment (small amount)</li>
+<li>[ ] Verify SSL certificate is active (HTTPS)</li>
+<li>[ ] Review refund policies</li>
+<li>[ ] Set up payment notifications</li>
+<li>[ ] Enable fraud detection (if available)</li>
+<li>[ ] Configure currency settings</li>
+<li>[ ] Test on mobile devices</li>
+</ul>
+<h3>Security Best Practices</h3>
+<ol>
+<li><strong>Never commit API keys</strong> to version control</li>
+<li><strong>Use environment variables</strong> for all sensitive data</li>
+<li><strong>Enable webhook signature verification</strong></li>
+<li><strong>Use HTTPS</strong> for all production traffic</li>
+<li><strong>Keep dependencies updated</strong> for security patches</li>
+<li><strong>Monitor for suspicious transactions</strong></li>
+<li><strong>Implement rate limiting</strong> on payment endpoints</li>
+<li><strong>Log all payment attempts</strong> for audit trail</li>
+</ol>
+<h3>Stripe Production Checklist</h3>
+<ul>
+<li>[ ] Activate live mode in Stripe Dashboard</li>
+<li>[ ] Complete business verification</li>
+<li>[ ] Submit business documents</li>
+<li>[ ] Activate payout account</li>
+<li>[ ] Set up tax settings</li>
+<li>[ ] Configure statement descriptor</li>
+<li>[ ] Enable Radar (fraud detection)</li>
+</ul>
+<h3>PayPal Production Checklist</h3>
+<ul>
+<li>[ ] Verify business account</li>
+<li>[ ] Get <strong>Live</strong> app credentials</li>
+<li>[ ] Enable instant payment notification (IPN)</li>
+<li>[ ] Set up payout schedule</li>
+<li>[ ] Configure shipping settings</li>
+</ul>
+<hr>
+<h2 id="s7"><span class="n">7</span>🛠️ Troubleshooting</h2>
+<h3>Issue: &quot;Invalid API Key&quot;</h3>
+<p><strong>Solution:</strong></p>
+<ol>
+<li>Verify key is correct in <code>.env</code></li>
+<li>Ensure no extra spaces</li>
+<li>Check you're using correct mode (test vs live)</li>
+<li>Restart backend server</li>
+</ol>
+<h3>Issue: &quot;CORS Error&quot; on Stripe</h3>
+<p><strong>Solution:</strong></p>
+<p>Edit <code>backend/src/main.ts</code>:</p>
+<pre><code class="language-typescript">app.enableCors({
+  origin: [
+    'http://localhost:4200',
+    'https://yourdomain.com'
+  ],
+  credentials: true
+});</code></pre>
+<h3>Issue: Webhook Not Receiving Events</h3>
+<p><strong>Solution:</strong></p>
+<ol>
+<li>Verify webhook URL is accessible</li>
+<li>Check webhook signing secret is correct</li>
+<li>Test webhook with Stripe CLI:</li>
+</ol>
+<p>   ```bash</p>
+<p>   stripe listen --forward-to localhost:3002/api/webhooks/stripe</p>
+<p>   ```</p>
+<ol>
+<li>Check server logs for errors</li>
+</ol>
+<h3>Issue: Payment Succeeds but Order Not Created</h3>
+<p><strong>Solution:</strong></p>
+<ol>
+<li>Check webhook is configured</li>
+<li>Verify webhook secret in <code>.env</code></li>
+<li>Check backend logs for errors</li>
+<li>Ensure database connection is stable</li>
+</ol>
+<h3>Issue: 3D Secure Authentication Failing</h3>
+<p><strong>Solution:</strong></p>
+<ol>
+<li>Ensure proper return URL is set</li>
+<li>Check domain is whitelisted in Stripe</li>
+<li>Test with cards that require authentication</li>
+</ol>
+<h3>Issue: PayPal Sandbox Not Working</h3>
+<p><strong>Solution:</strong></p>
+<ol>
+<li>Ensure using sandbox API keys</li>
+<li>Check <code>PAYPAL_MODE=sandbox</code> in <code>.env</code></li>
+<li>Verify sandbox accounts are activated</li>
+<li>Check Developer Dashboard for errors</li>
+</ol>
+<hr>
+<h2 id="s8"><span class="n">8</span>📊 Payment Analytics</h2>
+<h3>View Transactions</h3>
+<h4>Stripe Dashboard:</h4>
+<ol>
+<li>Login to Stripe</li>
+<li>Click <strong>&quot;Payments&quot;</strong></li>
+<li>View all transactions, filter by status, export data</li>
+</ol>
+<h4>PayPal Dashboard:</h4>
+<ol>
+<li>Login to PayPal</li>
+<li>Click <strong>&quot;Activity&quot;</strong></li>
+<li>View transactions and reports</li>
+</ol>
+<h4>Your Admin Panel:</h4>
+<ol>
+<li>Go to <strong>Reports</strong> → <strong>Payments</strong></li>
+<li>View all payment transactions</li>
+<li>Filter by date, method, status</li>
+<li>Export to CSV</li>
+</ol>
+<hr>
+<h2 id="s9"><span class="n">9</span>💰 Refunds</h2>
+<h3>Process Refund via Stripe</h3>
+<ol>
+<li>Stripe Dashboard → <strong>Payments</strong></li>
+<li>Find payment</li>
+<li>Click <strong>&quot;Refund&quot;</strong></li>
+<li>Enter amount (full or partial)</li>
+<li>Add reason</li>
+<li>Click <strong>&quot;Refund&quot;</strong></li>
+</ol>
+<h3>Process Refund via Admin Panel</h3>
+<ol>
+<li>Go to <strong>Orders</strong> → Find order</li>
+<li>Click <strong>&quot;Issue Refund&quot;</strong></li>
+<li>Select amount</li>
+<li>Add reason</li>
+<li>Click <strong>&quot;Process Refund&quot;</strong></li>
+</ol>
+<p>Refund is automatically sent to payment gateway.</p>
+<hr>
+<h2 id="s10"><span class="n">10</span>📚 Additional Resources</h2>
+<ul>
+<li><a href="https://stripe.com/docs">Stripe Documentation</a></li>
+<li><a href="https://developer.paypal.com/docs/">PayPal Developer Docs</a></li>
+<li><a href="https://www.liqpay.ua/documentation/en/">LiqPay API Documentation</a></li>
+</ul>
+<hr>
+<h2 id="s11"><span class="n">11</span>🆘 Support</h2>
+<p>Need help with payments?</p>
+<ul>
+<li>📧 Email: support@angular-ecommerce3d.com</li>
+<li>📖 <a href="FAQ.md">FAQ</a></li>
+<li>💬 Payment gateway support:</li>
+</ul>
+<p>  - Stripe: <a href="https://support.stripe.com/">support.stripe.com</a></p>
+<p>  - PayPal: <a href="https://www.paypal.com/support">paypal.com/support</a></p>
+<hr>
+<p><strong>Payment Setup Guide Version</strong>: 1.0  </p>
+<p><strong>Last Updated</strong>: January 2026</p>
+  </article>
+  <p class="footer-note">Buyer-facing docs · Markdown sources remain in <code>docs/*.md</code> · Visual theme matches architecture diagrams.</p>
+</main>
+</div>
+<script>
+document.getElementById('navToggle')?.addEventListener('click', () => {
+  document.getElementById('sidebar')?.classList.toggle('open');
+});
+</script>
+</body>
+</html>

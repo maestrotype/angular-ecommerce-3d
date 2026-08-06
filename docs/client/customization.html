@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customization and Extensibility — Angular 3D E-Commerce</title>
+<link rel="stylesheet" href="assets/client-docs.css">
+</head>
+<body>
+<button type="button" class="mobile-toggle" id="navToggle">Menu</button>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+  <a class="sidebar-brand" href="index.html">Angular 3D E-Commerce</a>
+  <div class="sidebar-tag">Client documentation</div>
+  <div class="nav-group"><div class="nav-group-title">Start here</div><a class="nav-link" href="index.html">Documentation Hub</a>
+<a class="nav-link" href="quick-start.html">Quick Start</a>
+<a class="nav-link" href="getting-started.html">Getting Started</a>
+<a class="nav-link" href="installation.html">Installation</a></div>
+<div class="nav-group"><div class="nav-group-title">Product guides</div><a class="nav-link" href="admin-guide.html">Admin Guide</a>
+<a class="nav-link" href="admin-manual.html">Admin Manual</a>
+<a class="nav-link active" href="customization.html">Customization</a>
+<a class="nav-link" href="payment-setup.html">Payment Setup</a>
+<a class="nav-link" href="social-auth.html">Social Auth</a>
+<a class="nav-link" href="local-ai.html">Local AI Setup</a></div>
+<div class="nav-group"><div class="nav-group-title">Reference</div><a class="nav-link" href="architecture.html">Architecture</a>
+<a class="nav-link" href="backend-api.html">Backend API</a>
+<a class="nav-link" href="../BACKEND_ARCHITECTURE_DIAGRAM.html">Backend Diagram</a>
+<a class="nav-link" href="faq.html">FAQ</a>
+<a class="nav-link" href="troubleshooting.html">Troubleshooting</a>
+<a class="nav-link" href="support.html">Support</a></div>
+</aside>
+<main class="main">
+  <header class="page-header">
+    <h1>Customization and Extensibility</h1>
+    <p class="lead">Developer-facing instructions for extending the platform's functionality and visual style.</p>
+    <div class="badges"><span class="badge orange">Theming</span></div>
+  </header>
+  <article class="content">
+<p>Developer-facing instructions for extending the platform's functionality and visual style.</p>
+<p><strong>For theme architecture deep-dive</strong>, see <code>THEME_ENGINE.md</code> and <code>STYLE_ARCHITECTURE.md</code>.</p>
+<hr>
+<h2 id="s1"><span class="n">1</span>Theme Architecture (Quick Reference)</h2>
+<p>The platform uses a CSS variable-based token system located in <code>src/styles/themes/</code>.</p>
+<h3>Modifying Theme Tokens</h3>
+<ol>
+<li>Locate the specific theme SCSS file (e.g., <code>src/styles/themes/_default.scss</code>).</li>
+<li>Update the functional token variables (<code>--accent-primary</code>, <code>--hero-gradient</code>, etc.).</li>
+<li>The <code>ThemeService</code> handles runtime application of tokens via the <code>[data-theme]</code> attribute on <code>&lt;body&gt;</code>.</li>
+</ol>
+<p><strong>Full documentation</strong>: See <code>THEME_ENGINE.md</code> for the complete theme engine specification and <code>STYLE_ARCHITECTURE.md</code> for token flow and override rules.</p>
+<hr>
+<h2 id="s2"><span class="n">2</span>3D Viewer Configuration</h2>
+<p>The <code>ThreeDViewerComponent</code> is the core engine for product visualization.</p>
+<h3>Component Inputs</h3>
+<ul>
+<li><code>modelPath</code>: URI to the <code>.glb</code> or <code>.gltf</code> asset.</li>
+<li><code>scale</code>: <code>[x, y, z]</code> array (Default: <code>[1, 1, 1]</code>).</li>
+<li><code>position</code>: <code>[x, y, z]</code> world space coordinates.</li>
+</ul>
+<h3>Performance Adjustments</h3>
+<p>To optimize for lower-end devices, the component automatically scales the pixel ratio:</p>
+<pre><code class="language-typescript">const pixelRatio = Math.min(window.devicePixelRatio, 1.5);
+this.renderer.setPixelRatio(pixelRatio);</code></pre>
+<p>Shadow maps are dynamically disabled on mobile devices detected via <code>userAgent</code> to maintain 60 FPS.</p>
+<hr>
+<h2 id="s3"><span class="n">3</span>Localized Content (i18n)</h2>
+<p>Translation assets are managed via <code>@ngx-translate</code>.</p>
+<ul>
+<li><strong>Location</strong>: <code>src/assets/i18n/*.json</code></li>
+<li><strong>Addition</strong>: Create a new locale file (e.g., <code>fr.json</code>) and register the locale code in the <code>AppModule</code> translate configuration.</li>
+</ul>
+<hr>
+<h2 id="s4"><span class="n">4</span>API Integration &amp; DTOs</h2>
+<p>If adding new product attributes:</p>
+<ol>
+<li><strong>Backend</strong>: Update the <code>Product</code> entity and the corresponding <code>CreateProductDto</code> in <code>backend/src/products/</code>.</li>
+<li><strong>Frontend</strong>: Update the <code>Product</code> interface in <code>src/shared/models/product.model.ts</code>.</li>
+<li>The Angular <code>ProductService</code> will automatically map the new fields during the next HTTP request.</li>
+</ol>
+<hr>
+<h2 id="s5"><span class="n">5</span>Social Login Configuration (Google &amp; Facebook)</h2>
+<p>This project uses <code>@abacritt/angularx-social-login</code> to handle social authentication. For the social login buttons to work on the frontend, you must provide your own valid API credentials. Out of the box, the code contains placeholder strings to protect your API limits and security.</p>
+<h3>Step 1: Obtain API Keys</h3>
+<ul>
+<li><strong>Google Client ID</strong>: Go to the <a href="https://console.cloud.google.com/">Google Cloud Console</a>, create a new project, configure the OAuth consent screen, and create an OAuth 2.0 &quot;Client ID&quot; specifically for a &quot;Web Application&quot;. Ensure your domain is added to the authorized origins.</li>
+<li><strong>Facebook App ID</strong>: Go to the <a href="https://developers.facebook.com/">Facebook Developers Portal</a>, create a new app, set up &quot;Facebook Login&quot; for web, and copy the &quot;App ID&quot;.</li>
+</ul>
+<h3>Step 2: Configure the Frontend</h3>
+<ol>
+<li>Open the configuration file located at <code>src/app/core/configs/social-auth.config.ts</code>.</li>
+<li>Locate the <code>GoogleLoginProvider</code> and <code>FacebookLoginProvider</code> initialization scopes.</li>
+<li>Replace the placeholder strings (<code>'YOUR_GOOGLE_CLIENT_ID'</code> and <code>'YOUR_FACEBOOK_APP_ID'</code>) with your actual keys:</li>
+</ol>
+<pre><code class="language-typescript">export const socialAuthConfig: SocialAuthServiceConfig = {
+    autoLogin: false,
+    providers: [
+        {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider('YOUR_ACTUAL_GOOGLE_CLIENT_ID_HERE')
+        },
+        {
+            id: FacebookLoginProvider.PROVIDER_ID,
+            provider: new FacebookLoginProvider('YOUR_ACTUAL_FACEBOOK_APP_ID_HERE')
+        }
+    ],
+    onError: (err) =&gt; {
+        console.error('Social Auth Error:', err);
+    }
+};</code></pre>
+<ol>
+<li>Rebuild and restart the application (<code>npm run build</code> / <code>npm run serve:ssr:angular-ecommerce-3d</code>). The social login buttons in the auth modal will now successfully launch the Google and Facebook provider popups and capture user data.</li>
+</ol>
+  </article>
+  <p class="footer-note">Buyer-facing docs · Markdown sources remain in <code>docs/*.md</code> · Visual theme matches architecture diagrams.</p>
+</main>
+</div>
+<script>
+document.getElementById('navToggle')?.addEventListener('click', () => {
+  document.getElementById('sidebar')?.classList.toggle('open');
+});
+</script>
+</body>
+</html>

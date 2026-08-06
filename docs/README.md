@@ -46,14 +46,21 @@ Technical reference for the Angular 17+ 3D E-commerce Platform.
 
 ## Application Documentation
 
-| Module | Description |
-|--------|-------------|
-| [Quick Start Guide](GETTING_STARTED.md) | System requirements, environment configuration, local deployment |
-| [Core Architecture](ARCHITECTURE.md) | SSR engine, hydration strategy, backend service layer |
-| [Customization & Branding](CUSTOMIZATION.md) | Theme tokens (quick ref), 3D viewer config, i18n, social auth |
-| [API Reference](BACKEND_API.md) | NestJS REST API, authentication guards, DTO structures |
-| [Admin Dashboard Guide](ADMIN_GUIDE.md) | Managing products, categories, SEO via Admin UI |
-| [Troubleshooting](TROUBLESHOOTING.md) | SSR hydration, 3D rendering, database connectivity issues |
+> **Buyer / marketplace pack:** open the visual hub → [`client/index.html`](client/index.html)  
+> Rebuild: `npm run docs:client` (from Markdown sources below).
+
+| Module | Description | Visual HTML |
+|--------|-------------|-------------|
+| [Quick Start](QUICK_START.md) | Under-10-minute setup | [client/quick-start.html](client/quick-start.html) |
+| [Getting Started](GETTING_STARTED.md) | Environment, SSR, deploy | [client/getting-started.html](client/getting-started.html) |
+| [Installation](INSTALLATION.md) | Full install + security checklist | [client/installation.html](client/installation.html) |
+| [Architecture](ARCHITECTURE.md) | SSR & service layer overview | [client/architecture.html](client/architecture.html) |
+| [Customization](CUSTOMIZATION.md) | Themes, 3D, i18n | [client/customization.html](client/customization.html) |
+| [API Reference](BACKEND_API.md) | NestJS REST API | [client/backend-api.html](client/backend-api.html) |
+| [Admin Guide](ADMIN_GUIDE.md) / [Admin Manual](ADMIN_MANUAL.md) | Store owner docs | [client/admin-manual.html](client/admin-manual.html) |
+| [Payments](PAYMENT_SETUP.md) | Stripe / LiqPay / PayPal | [client/payment-setup.html](client/payment-setup.html) |
+| [FAQ](FAQ.md) · [Troubleshooting](TROUBLESHOOTING.md) · [Support](SUPPORT.md) | Help | [client/faq.html](client/faq.html) |
+| [Backend Diagram](BACKEND_ARCHITECTURE_DIAGRAM.html) | Interactive NestJS map | same file |
 
 ---
 

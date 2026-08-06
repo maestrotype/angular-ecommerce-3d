@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Getting Started — Angular 3D E-Commerce</title>
+<link rel="stylesheet" href="assets/client-docs.css">
+</head>
+<body>
+<button type="button" class="mobile-toggle" id="navToggle">Menu</button>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+  <a class="sidebar-brand" href="index.html">Angular 3D E-Commerce</a>
+  <div class="sidebar-tag">Client documentation</div>
+  <div class="nav-group"><div class="nav-group-title">Start here</div><a class="nav-link" href="index.html">Documentation Hub</a>
+<a class="nav-link" href="quick-start.html">Quick Start</a>
+<a class="nav-link active" href="getting-started.html">Getting Started</a>
+<a class="nav-link" href="installation.html">Installation</a></div>
+<div class="nav-group"><div class="nav-group-title">Product guides</div><a class="nav-link" href="admin-guide.html">Admin Guide</a>
+<a class="nav-link" href="admin-manual.html">Admin Manual</a>
+<a class="nav-link" href="customization.html">Customization</a>
+<a class="nav-link" href="payment-setup.html">Payment Setup</a>
+<a class="nav-link" href="social-auth.html">Social Auth</a>
+<a class="nav-link" href="local-ai.html">Local AI Setup</a></div>
+<div class="nav-group"><div class="nav-group-title">Reference</div><a class="nav-link" href="architecture.html">Architecture</a>
+<a class="nav-link" href="backend-api.html">Backend API</a>
+<a class="nav-link" href="../BACKEND_ARCHITECTURE_DIAGRAM.html">Backend Diagram</a>
+<a class="nav-link" href="faq.html">FAQ</a>
+<a class="nav-link" href="troubleshooting.html">Troubleshooting</a>
+<a class="nav-link" href="support.html">Support</a></div>
+</aside>
+<main class="main">
+  <header class="page-header">
+    <h1>Getting Started</h1>
+    <p class="lead">This document details the configuration and deployment steps required to initialize the development and production environments.</p>
+    <div class="badges"><span class="badge blue">Setup</span><span class="badge purple">SSR</span></div>
+  </header>
+  <article class="content">
+<p>This document details the configuration and deployment steps required to initialize the development and production environments.</p>
+<h2 id="s1"><span class="n">1</span>System Dependencies</h2>
+<table>
+<tr><th>Component</th><th>Requirement</th></tr>
+<tr><td>Node.js</td><td>v18.13.0+ (LTS recommended)</td></tr>
+<tr><td>npm</td><td>v9.0.0+</td></tr>
+<tr><td>PostgreSQL</td><td>v14.0+</td></tr>
+<tr><td>Angular CLI</td><td>v17.0+</td></tr>
+</table>
+<h2 id="s2"><span class="n">2</span>Installation</h2>
+<h3>Initialize Workspace</h3>
+<pre><code class="language-bash">git clone &lt;repository-url&gt;
+cd angular-ecommerce-3d
+npm install</code></pre>
+<h3>Configure Backend</h3>
+<pre><code class="language-bash">cd backend
+npm install
+cp .env.example .env # Ensure variables are correctly mapped</code></pre>
+<h2 id="s3"><span class="n">3</span>Environment Configuration</h2>
+<h3>Backend (.env)</h3>
+<p>The NestJS backend requires a <code>.env</code> file for database connectivity and security.</p>
+<ul>
+<li><code>DB_HOST</code>: Database host address.</li>
+<li><code>DB_PORT</code>: Default is 5432.</li>
+<li><code>DB_PASSWORD</code>: Password for the PostgreSQL user.</li>
+<li><code>JWT_SECRET</code>: Secret key for signing authentication tokens.</li>
+</ul>
+<h3>Frontend (environment.ts)</h3>
+<p>The application implements an <strong>Initial API Verification</strong> logic via <code>ApiConfigService</code>. </p>
+<ul>
+<li><code>apiUrl</code>: Target local endpoint (<code>http://localhost:3002/api</code>).</li>
+<li><code>fallbackApiUrl</code>: Production endpoint for failover when local services are unreachable during development.</li>
+</ul>
+<h3>Integrations (Admin Panel)</h3>
+<p>The platform uses external services to enhance capabilities. Configure these in the Admin Panel (<code>/admin/integrations</code>):</p>
+<ol>
+<li><strong>Tripo3D (AI Generation)</strong>: Requires a Tripo3D API Key (starts with <code>tsk_...</code>). Register at <a href="https://platform.tripo3d.ai">platform.tripo3d.ai</a>. Used for transforming 2D images to 3D <code>.glb</code> models.</li>
+<li><strong>Cloudinary</strong>: For reliable remote asset hosting (Optional).</li>
+<li><strong>Stripe &amp; SMTP</strong>: For payments and email notifications.</li>
+</ol>
+<h2 id="s4"><span class="n">4</span>Execution</h2>
+<h3>Development (Client-Side Rendering)</h3>
+<p>Standard development mode with HMR (Hot Module Replacement) support.</p>
+<pre><code class="language-bash"># Terminal 1: API Service
+cd backend &amp;&amp; npm run start:dev
+
+# Terminal 2: UI Service
+npm start</code></pre>
+<h3>SSR Verification (Local)</h3>
+<p>To validate Server-Side Rendering and Hydration behavior before deployment:</p>
+<pre><code class="language-bash">npm run serve:ssr:dev</code></pre>
+<p>This script triggers a multi-stage build using <code>@angular-devkit/build-angular:server</code> and executes the node-rendered bundle via <code>server-simple.mjs</code>.</p>
+<h2 id="s5"><span class="n">5</span>Deployment</h2>
+<p>The project supports multiple deployment architectures. Choose the one that matches your hosting provider.</p>
+<h3>Recommended: SSR + PWA (Cloud/Node.js)</h3>
+<p>Ideal for maximum SEO and mobile performance.</p>
+<pre><code class="language-bash">npm run deploy</code></pre>
+<p><em>Creates both browser and server bundles in <code>dist/</code>. Ready for deployment to platforms like Render, Railway, or VPS.</em></p>
+<h3>☁️ Legacy: CSR (GitHub Pages)</h3>
+<p>For static hosting without Server-Side Rendering.</p>
+<pre><code class="language-bash">npm run deploy:legacy</code></pre>
+<h3>🎯 Component-Specific Builds</h3>
+<ul>
+<li><strong>Just SSR</strong>: <code>npm run deploy:ssr</code></li>
+<li><strong>Just PWA (CSR)</strong>: <code>npm run deploy:pwa</code></li>
+</ul>
+<h2 id="s6"><span class="n">6</span>Database Management</h2>
+<p>TypeORM handles the schema synchronization. In production, use manual migrations:</p>
+<pre><code class="language-bash">cd backend
+npm run migration:run</code></pre>
+<h2 id="s7"><span class="n">7</span>Admin Bootstrap</h2>
+<p>There are <strong>no hardcoded admin credentials</strong>. Set in <code>backend/.env</code>:</p>
+<pre><code class="language-env">ADMIN_EMAIL=admin@yourdomain.com
+ADMIN_PASSWORD=YourSecurePassword123!</code></pre>
+<p>Then create the admin user:</p>
+<pre><code class="language-bash">curl -X POST http://localhost:3002/api/auth/create-admin</code></pre>
+<p>For production bootstrap, see <a href="INSTALLATION.md#-first-deploy-security-checklist">First Deploy Security Checklist</a>.</p>
+  </article>
+  <p class="footer-note">Buyer-facing docs · Markdown sources remain in <code>docs/*.md</code> · Visual theme matches architecture diagrams.</p>
+</main>
+</div>
+<script>
+document.getElementById('navToggle')?.addEventListener('click', () => {
+  document.getElementById('sidebar')?.classList.toggle('open');
+});
+</script>
+</body>
+</html>

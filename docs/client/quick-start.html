@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quick Start Guide — Angular 3D E-Commerce</title>
+<link rel="stylesheet" href="assets/client-docs.css">
+</head>
+<body>
+<button type="button" class="mobile-toggle" id="navToggle">Menu</button>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+  <a class="sidebar-brand" href="index.html">Angular 3D E-Commerce</a>
+  <div class="sidebar-tag">Client documentation</div>
+  <div class="nav-group"><div class="nav-group-title">Start here</div><a class="nav-link" href="index.html">Documentation Hub</a>
+<a class="nav-link active" href="quick-start.html">Quick Start</a>
+<a class="nav-link" href="getting-started.html">Getting Started</a>
+<a class="nav-link" href="installation.html">Installation</a></div>
+<div class="nav-group"><div class="nav-group-title">Product guides</div><a class="nav-link" href="admin-guide.html">Admin Guide</a>
+<a class="nav-link" href="admin-manual.html">Admin Manual</a>
+<a class="nav-link" href="customization.html">Customization</a>
+<a class="nav-link" href="payment-setup.html">Payment Setup</a>
+<a class="nav-link" href="social-auth.html">Social Auth</a>
+<a class="nav-link" href="local-ai.html">Local AI Setup</a></div>
+<div class="nav-group"><div class="nav-group-title">Reference</div><a class="nav-link" href="architecture.html">Architecture</a>
+<a class="nav-link" href="backend-api.html">Backend API</a>
+<a class="nav-link" href="../BACKEND_ARCHITECTURE_DIAGRAM.html">Backend Diagram</a>
+<a class="nav-link" href="faq.html">FAQ</a>
+<a class="nav-link" href="troubleshooting.html">Troubleshooting</a>
+<a class="nav-link" href="support.html">Support</a></div>
+</aside>
+<main class="main">
+  <header class="page-header">
+    <h1>Quick Start Guide</h1>
+    <p class="lead">Get your Angular E-commerce 3D platform up and running in less than 10 minutes!</p>
+    <div class="badges"><span class="badge cyan">Setup</span></div>
+  </header>
+  <article class="content">
+<p>Get your Angular E-commerce 3D platform up and running in <strong>less than 10 minutes</strong>!</p>
+<hr>
+<h2 id="s1"><span class="n">1</span>Prerequisites</h2>
+<p>Before you begin, make sure you have:</p>
+<ul>
+<li>✅ <strong>Node.js</strong> 18+ installed (<a href="https://nodejs.org/">Download</a>)</li>
+<li>✅ <strong>PostgreSQL</strong> 14+ installed (<a href="https://www.postgresql.org/download/">Download</a>)</li>
+<li>✅ <strong>Git</strong> installed (<a href="https://git-scm.com/">Download</a>)</li>
+<li>✅ Basic command line knowledge</li>
+</ul>
+<div class="card green"><div class="card-title">Note</div><p><strong>💡 Tip</strong>: If you prefer Docker, skip to the <a href="#docker-quick-start">Docker Quick Start</a> section.</p></div>
+<hr>
+<h2 id="s2"><span class="n">2</span>Installation (5 Minutes)</h2>
+<h3>Step 1: Download &amp; Extract</h3>
+<p>Extract the downloaded zip file to your desired location:</p>
+<pre><code class="language-bash">unzip angular-ecommerce-3d.zip
+cd angular-ecommerce-3d</code></pre>
+<h3>Step 2: Install Dependencies</h3>
+<pre><code class="language-bash"># Install frontend dependencies
+npm install
+
+# Install backend dependencies
+cd backend
+npm install
+cd ..</code></pre>
+<div class="card blue"><div class="card-title">Note</div><p><strong>⏱️ Expected time</strong>: 2-3 minutes</p></div>
+<hr>
+<h2 id="s3"><span class="n">3</span>Configuration (2 Minutes)</h2>
+<h3>Step 3: Create Database</h3>
+<p>Open PostgreSQL and create a database:</p>
+<pre><code class="language-sql">CREATE DATABASE ecommerce_db;</code></pre>
+<h3>Step 4: Configure Backend</h3>
+<pre><code class="language-bash"># Copy environment example
+cp backend/.env.example backend/.env</code></pre>
+<p>Edit <code>backend/.env</code> with your database credentials:</p>
+<pre><code class="language-env">DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_USERNAME=postgres
+DATABASE_PASSWORD=your_password_here
+DATABASE_NAME=ecommerce_db
+JWT_SECRET=your_secret_key_min_32_characters_long</code></pre>
+<div class="card orange"><div class="card-title">Note</div><p><strong>🔐 Security</strong>: Generate a strong JWT secret using: <code>node -e &quot;console.log(require('crypto').randomBytes(32).toString('hex'))&quot;</code></p></div>
+<h3>Step 5: Configure Frontend</h3>
+<p>The frontend is pre-configured for local development. For production deployment, see the <a href="INSTALLATION.md">Installation Guide</a>.</p>
+<hr>
+<h2 id="s4"><span class="n">4</span>Start the Application (1 Minute)</h2>
+<h3>Step 6: Start Backend Server</h3>
+<p>Open a terminal window:</p>
+<pre><code class="language-bash">cd backend
+npm run start:dev</code></pre>
+<p>✅ Backend should be running at <code>http://localhost:3002</code></p>
+<h3>Step 7: Start Frontend Server</h3>
+<p>Open a <strong>new</strong> terminal window:</p>
+<pre><code class="language-bash">npm start</code></pre>
+<p>✅ Frontend should be running at <code>http://localhost:4200</code></p>
+<hr>
+<h2 id="s5"><span class="n">5</span>🎉 Access Your Application</h2>
+<p>Open your browser and navigate to:</p>
+<ul>
+<li><strong>🏠 Frontend</strong>: http://localhost:4200</li>
+<li><strong>👨‍💼 Admin Panel</strong>: http://localhost:4200/admin</li>
+<li><strong>🔌 API</strong>: http://localhost:3002/api</li>
+</ul>
+<hr>
+<h2 id="s6"><span class="n">6</span>🔑 Default Admin Credentials</h2>
+<p>To access the admin panel, use:</p>
+<ul>
+<li><strong>Email</strong>: <code>admin@example.com</code></li>
+<li><strong>Password</strong>: <code>admin123</code></li>
+</ul>
+<div class="card orange"><div class="card-title">Note</div><p><strong>⚠️ Important</strong>: Change these credentials immediately after first login!</p></div>
+<hr>
+<h2 id="s7"><span class="n">7</span>✅ Verify Installation</h2>
+<p>Check that everything is working:</p>
+<ol>
+<li>✅ Can you see the homepage?</li>
+<li>✅ Can you browse the shop?</li>
+<li>✅ Can you view a product with 3D model?</li>
+<li>✅ Can you login to admin panel?</li>
+<li>✅ Can you see products in admin dashboard?</li>
+</ol>
+<p>If all checks pass - <strong>congratulations!</strong> 🎊 Your e-commerce platform is ready!</p>
+<hr>
+<h2 id="s8"><span class="n">8</span>🐳 Docker Quick Start</h2>
+<p>Prefer Docker? Here's how to get started even faster:</p>
+<pre><code class="language-bash"># Start all services with one command
+docker-compose up -d
+
+# Wait 30 seconds for services to initialize
+# Then access the application at http://localhost:4200</code></pre>
+<p>That's it! Docker will automatically:</p>
+<ul>
+<li>Set up PostgreSQL database</li>
+<li>Configure backend server</li>
+<li>Start frontend server</li>
+<li>Create admin user</li>
+</ul>
+<hr>
+<h2 id="s9"><span class="n">9</span>🛠️ Common Issues</h2>
+<h3>Issue: &quot;Port 4200 already in use&quot;</h3>
+<p><strong>Solution</strong>: Stop other Angular applications or change port:</p>
+<pre><code class="language-bash">npm start -- --port 4300</code></pre>
+<h3>Issue: &quot;Cannot connect to database&quot;</h3>
+<p><strong>Solution</strong>: </p>
+<ol>
+<li>Check PostgreSQL is running</li>
+<li>Verify credentials in <code>backend/.env</code></li>
+<li>Ensure database <code>ecommerce_db</code> exists</li>
+</ol>
+<h3>Issue: &quot;Admin login not working&quot;</h3>
+<p><strong>Solution</strong>: Create admin user manually:</p>
+<pre><code class="language-bash">cd backend
+npm run start:dev
+# In another terminal:
+curl -X POST http://localhost:3002/api/auth/create-admin</code></pre>
+<hr>
+<h2 id="s10"><span class="n">10</span>📚 Next Steps</h2>
+<p>Now that your application is running:</p>
+<ol>
+<li>📖 Read the <a href="ADMIN_MANUAL.md">Admin Manual</a> to learn how to manage products</li>
+<li>🎨 Check the <a href="CUSTOMIZATION.md">Customization Guide</a> to personalize your store</li>
+<li>💳 Set up <a href="PAYMENT_SETUP.md">Payment Gateways</a></li>
+<li>🌍 Deploy to production (see <a href="INSTALLATION.md">Installation Guide</a>)</li>
+</ol>
+<hr>
+<h2 id="s11"><span class="n">11</span>🆘 Need Help?</h2>
+<ul>
+<li>📖 Check the <a href="FAQ.md">FAQ</a> for common questions</li>
+<li>📧 Contact support: support@angular-ecommerce3d.com</li>
+<li>🐛 Report bugs on GitHub Issues</li>
+</ul>
+<hr>
+<p><strong>Estimated Total Time</strong>: 5-10 minutes ⏱️</p>
+<p><strong>Congratulations!</strong> You've successfully set up your Angular E-commerce 3D platform! 🚀</p>
+  </article>
+  <p class="footer-note">Buyer-facing docs · Markdown sources remain in <code>docs/*.md</code> · Visual theme matches architecture diagrams.</p>
+</main>
+</div>
+<script>
+document.getElementById('navToggle')?.addEventListener('click', () => {
+  document.getElementById('sidebar')?.classList.toggle('open');
+});
+</script>
+</body>
+</html>
