@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../core/services/product.service';
 import { ModalService } from '../../core/services/modal.service';
@@ -24,8 +24,10 @@ export class ProductDetailComponent implements OnInit {
   loading: boolean = true;
   sections: Section[] = [];
   activeSection: 'about' | 'specs' | 'reviews' = 'about';
+  carouselActiveIndex = 0;
 
   @ViewChild(ProductTabsComponent) productTabs?: ProductTabsComponent;
+  @ViewChild('carouselTrack') carouselTrack?: ElementRef<HTMLElement>;
 
   constructor(
     private route: ActivatedRoute,
@@ -59,6 +61,7 @@ export class ProductDetailComponent implements OnInit {
             // Reset view state
             this.selectedType = 'image';
             this.selectedImageIndex = 0;
+            this.carouselActiveIndex = 0;
             this.quantity = 1;
 
             // Ensure we're scrolled to top after product loads
@@ -81,11 +84,58 @@ export class ProductDetailComponent implements OnInit {
     });
   }
 
+  get carouselSlideCount(): number {
+    const imageCount = this.product?.images?.length ?? 0;
+    return imageCount + (this.product?.model3dUrl ? 1 : 0);
+  }
+
+  get carouselSlideIndices(): number[] {
+    return Array.from({ length: this.carouselSlideCount }, (_, index) => index);
+  }
+
   onThumbnailSelected(type: 'image' | '3d', index?: number): void {
     this.selectedType = type;
     if (type === 'image' && index !== undefined) {
       this.selectedImageIndex = index;
     }
+  }
+
+  onCarouselScroll(event: Event): void {
+    const track = event.target as HTMLElement;
+    const slideWidth = track.clientWidth;
+    if (slideWidth <= 0) {
+      return;
+    }
+
+    const index = Math.round(track.scrollLeft / slideWidth);
+    this.updateCarouselSelection(index);
+  }
+
+  goToCarouselSlide(index: number): void {
+    const track = this.carouselTrack?.nativeElement;
+    if (!track) {
+      return;
+    }
+
+    track.scrollTo({
+      left: index * track.clientWidth,
+      behavior: 'smooth'
+    });
+    this.updateCarouselSelection(index);
+  }
+
+  private updateCarouselSelection(index: number): void {
+    const imageCount = this.product?.images?.length ?? 0;
+    const clampedIndex = Math.max(0, Math.min(index, this.carouselSlideCount - 1));
+
+    if (clampedIndex < imageCount) {
+      this.selectedType = 'image';
+      this.selectedImageIndex = clampedIndex;
+    } else {
+      this.selectedType = '3d';
+    }
+
+    this.carouselActiveIndex = clampedIndex;
   }
 
   onImageSelected(index: number): void {
