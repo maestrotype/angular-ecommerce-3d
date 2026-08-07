@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Technical Architecture — Angular 3D E-Commerce</title>
+<link rel="stylesheet" href="assets/client-docs.css">
+</head>
+<body>
+<button type="button" class="mobile-toggle" id="navToggle">Menu</button>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+  <a class="sidebar-brand" href="index.html">Angular 3D E-Commerce</a>
+  <div class="sidebar-tag">Client documentation</div>
+  <div class="nav-group"><div class="nav-group-title">Start here</div><a class="nav-link" href="index.html">Documentation Hub</a>
+<a class="nav-link" href="quick-start.html">Quick Start</a>
+<a class="nav-link" href="getting-started.html">Getting Started</a>
+<a class="nav-link" href="installation.html">Installation</a></div>
+<div class="nav-group"><div class="nav-group-title">Product guides</div><a class="nav-link" href="admin-guide.html">Admin Guide</a>
+<a class="nav-link" href="admin-manual.html">Admin Manual</a>
+<a class="nav-link" href="customization.html">Customization</a>
+<a class="nav-link" href="payment-setup.html">Payment Setup</a>
+<a class="nav-link" href="social-auth.html">Social Auth</a>
+<a class="nav-link" href="local-ai.html">Local AI Setup</a></div>
+<div class="nav-group"><div class="nav-group-title">Reference</div><a class="nav-link active" href="architecture.html">Architecture</a>
+<a class="nav-link" href="backend-api.html">Backend API</a>
+<a class="nav-link" href="../BACKEND_ARCHITECTURE_DIAGRAM.html">Backend Diagram</a>
+<a class="nav-link" href="faq.html">FAQ</a>
+<a class="nav-link" href="troubleshooting.html">Troubleshooting</a>
+<a class="nav-link" href="support.html">Support</a></div>
+</aside>
+<main class="main">
+  <header class="page-header">
+    <h1>Technical Architecture</h1>
+    <p class="lead">A technical overview of the platform's architecture, including rendering lifecycles and service layer patterns.</p>
+    <div class="badges"><span class="badge cyan">Architecture</span></div>
+  </header>
+  <article class="content">
+<p>A technical overview of the platform's architecture, including rendering lifecycles and service layer patterns.</p>
+<h2 id="s1"><span class="n">1</span>System Interaction Flow</h2>
+<p>The platform utilizes a hybrid rendering approach, leveraging Angular SSR for initial document delivery and client-side Three.js for interactive 3D rendering.</p>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant B as Browser
+    participant S as Express (SSR Engine)
+    participant A as NestJS API
+    participant D as PostgreSQL
+
+    B-&gt;&gt;S: GET /product/:id
+    S-&gt;&gt;A: GET /api/products/:id
+    A-&gt;&gt;D: Query Product
+    D--&gt;&gt;A: Data
+    A--&gt;&gt;S: JSON Data
+    S-&gt;&gt;S: Angular Universal Rendering
+    S--&gt;&gt;B: Rendered HTML (Hydration Ready)
+    B-&gt;&gt;B: Client Hydration (Angular)
+    B-&gt;&gt;B: Initialize Three.js Engine
+    B-&gt;&gt;B: Load .GLB Model (Meshopt Decoder)</code></pre>
+<h2 id="s2"><span class="n">2</span>Frontend Internals (Angular 17)</h2>
+<h3>Rendering &amp; Hydration</h3>
+<ul>
+<li><strong>CommonEngine</strong>: Utilized within <code>server.ts</code> to execute the application bundle on the server.</li>
+<li><strong>Client Hydration</strong>: Implemented via <code>provideClientHydration()</code> in <code>AppModule</code>. This prevents &quot;flicker&quot; by reusing the server-rendered DOM.</li>
+<li><strong>Platform-Specific Logic</strong>: Critical browser-only features (Three.js, window events) are guarded using <code>isPlatformBrowser(platformId)</code>.</li>
+</ul>
+<h3>3D Execution Environment</h3>
+<ul>
+<li><strong>Engine</strong>: Three.js r158.</li>
+<li><strong>Decoder</strong>: <code>meshopt_decoder</code> is utilized for efficient geometry decompression of GLB models.</li>
+<li><strong>Lighting Model</strong>: A combination of <code>AmbientLight</code> and <code>DirectionalLight</code> (with <code>PCFSoftShadowMap</code> support on desktop) ensures high-fidelity product presentation.</li>
+</ul>
+<h2 id="s3"><span class="n">3</span>Backend Service Layer (NestJS 10)</h2>
+<h3>Reactive Pattern</h3>
+<p>The backend utilizes RxJS <code>Observable</code> streams within services (e.g., <code>AuthService</code>) to handle complex asynchronous operations like password hashing (<code>bcrypt</code>), database persistence (<code>TypeORM</code>), and event notifications.</p>
+<h3>Authentication Strategy</h3>
+<ul>
+<li><strong>JWT</strong>: Stateless authentication using signed tokens.</li>
+<li><strong>Passpost</strong>: Implements specific strategies for secure route protection.</li>
+<li><strong>DTOs</strong>: Strict input validation using <code>class-validator</code> and <code>ValidationPipe</code>.</li>
+</ul>
+<h2 id="s4"><span class="n">4</span>Data Architecture</h2>
+<ul>
+<li><strong>TypeORM Registry</strong>: Centralized entity management for consistent schema synchronization.</li>
+<li><strong>Storage</strong>: Integrated support for local file storage (uploads/) and Cloudinary CDN failover.</li>
+</ul>
+  </article>
+  <p class="footer-note">Buyer-facing docs · Markdown sources remain in <code>docs/*.md</code> · Visual theme matches architecture diagrams.</p>
+</main>
+</div>
+<script>
+document.getElementById('navToggle')?.addEventListener('click', () => {
+  document.getElementById('sidebar')?.classList.toggle('open');
+});
+</script>
+</body>
+</html>

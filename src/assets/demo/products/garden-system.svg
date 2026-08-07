@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Smart garden system">
+  <rect width="400" height="400" fill="#ecfdf5"/>
+  <rect x="40" y="40" width="320" height="320" rx="24" fill="#d1fae5"/>
+  <rect x="145" y="220" width="110" height="70" rx="12" fill="#065f46"/>
+  <path d="M200 220V130c-35 0-55 22-55 45 0 18 12 30 28 35 10-28 27-45 27-45z" fill="#22c55e"/>
+  <circle cx="200" cy="255" r="10" fill="#34d399"/>
+  <text x="200" y="360" fill="#047857" font-family="system-ui,sans-serif" font-size="16" text-anchor="middle">Garden System</text>
+</svg>

@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frequently Asked Questions (FAQ) — Angular 3D E-Commerce</title>
+<link rel="stylesheet" href="assets/client-docs.css">
+</head>
+<body>
+<button type="button" class="mobile-toggle" id="navToggle">Menu</button>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+  <a class="sidebar-brand" href="index.html">Angular 3D E-Commerce</a>
+  <div class="sidebar-tag">Client documentation</div>
+  <div class="nav-group"><div class="nav-group-title">Start here</div><a class="nav-link" href="index.html">Documentation Hub</a>
+<a class="nav-link" href="quick-start.html">Quick Start</a>
+<a class="nav-link" href="getting-started.html">Getting Started</a>
+<a class="nav-link" href="installation.html">Installation</a></div>
+<div class="nav-group"><div class="nav-group-title">Product guides</div><a class="nav-link" href="admin-guide.html">Admin Guide</a>
+<a class="nav-link" href="admin-manual.html">Admin Manual</a>
+<a class="nav-link" href="customization.html">Customization</a>
+<a class="nav-link" href="payment-setup.html">Payment Setup</a>
+<a class="nav-link" href="social-auth.html">Social Auth</a>
+<a class="nav-link" href="local-ai.html">Local AI Setup</a></div>
+<div class="nav-group"><div class="nav-group-title">Reference</div><a class="nav-link" href="architecture.html">Architecture</a>
+<a class="nav-link" href="backend-api.html">Backend API</a>
+<a class="nav-link" href="../BACKEND_ARCHITECTURE_DIAGRAM.html">Backend Diagram</a>
+<a class="nav-link active" href="faq.html">FAQ</a>
+<a class="nav-link" href="troubleshooting.html">Troubleshooting</a>
+<a class="nav-link" href="support.html">Support</a></div>
+</aside>
+<main class="main">
+  <header class="page-header">
+    <h1>Frequently Asked Questions (FAQ)</h1>
+    <p class="lead">Find answers to common questions about Angular E-commerce 3D platform.</p>
+    <div class="badges"><span class="badge yellow">FAQ</span></div>
+  </header>
+  <article class="content">
+<p>Find answers to common questions about Angular E-commerce 3D platform.</p>
+<hr>
+<h2 id="s1"><span class="n">1</span>📋 Table of Contents</h2>
+<ol>
+<li><a href="#general-questions">General Questions</a></li>
+<li><a href="#installation--setup">Installation &amp; Setup</a></li>
+<li><a href="#product-management">Product Management</a></li>
+<li><a href="#3d-models">3D Models</a></li>
+<li><a href="#payments--orders">Payments &amp; Orders</a></li>
+<li><a href="#customization">Customization</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+<li><a href="#performance--optimization">Performance &amp; Optimization</a></li>
+</ol>
+<hr>
+<h2 id="s2"><span class="n">2</span>🌐 General Questions</h2>
+<h3>Q: What technologies are used in this platform?</h3>
+<p><strong>A:</strong> </p>
+<ul>
+<li><strong>Frontend</strong>: Angular 17+, Three.js, Angular Material</li>
+<li><strong>Backend</strong>: NestJS 10+, TypeORM</li>
+<li><strong>Database</strong>: PostgreSQL 14+</li>
+<li><strong>Payments</strong>: Stripe, PayPal, LiqPay</li>
+<li><strong>3D Rendering</strong>: Three.js with WebGL</li>
+</ul>
+<h3>Q: Do I need coding knowledge to use this?</h3>
+<p><strong>A:</strong> Basic knowledge is helpful but not required for:</p>
+<ul>
+<li>Adding/editing products via admin panel</li>
+<li>Managing orders</li>
+<li>Changing themes</li>
+<li>Basic customization</li>
+</ul>
+<p>Advanced customization requires HTML/CSS/TypeScript knowledge.</p>
+<h3>Q: Can I use this for commercial projects?</h3>
+<p><strong>A:</strong> Yes! The Regular License allows use for one commercial website. For multiple sites or SaaS, purchase Extended License.</p>
+<h3>Q: Is it mobile responsive?</h3>
+<p><strong>A:</strong> Yes! The platform is fully responsive and works on all devices including desktops, tablets, and smartphones.</p>
+<h3>Q: Does it support multiple languages?</h3>
+<p><strong>A:</strong> Yes, using ngx-translate. English is included by default. You can add more languages by creating translation files.</p>
+<h3>Q: What browsers are supported?</h3>
+<p><strong>A:</strong> </p>
+<ul>
+<li>✅ Chrome 90+</li>
+<li>✅ Firefox 88+</li>
+<li>✅ Safari 14+</li>
+<li>✅ Edge 90+</li>
+<li>⚠️ IE11 is NOT supported (for 3D features)</li>
+</ul>
+<hr>
+<h2 id="s3"><span class="n">3</span>🛠️ Installation &amp; Setup</h2>
+<h3>Q: What are the minimum system requirements?</h3>
+<p><strong>A:</strong></p>
+<ul>
+<li>Node.js 18+</li>
+<li>PostgreSQL 14+</li>
+<li>4GB RAM minimum (8GB recommended)</li>
+<li>2GB free disk space</li>
+</ul>
+<h3>Q: How long does installation take?</h3>
+<p><strong>A:</strong> With the Quick Start Guide, you can be up and running in 5-10 minutes.</p>
+<h3>Q: Do I need a VPS/dedicated server?</h3>
+<p><strong>A:</strong> </p>
+<ul>
+<li><strong>Development</strong>: No, works on local machine</li>
+<li><strong>Production</strong>: Recommended for best performance</li>
+<li><strong>Shared hosting</strong>: Not recommended for backend</li>
+</ul>
+<h3>Q: Can I use MySQL instead of PostgreSQL?</h3>
+<p><strong>A:</strong> The code is written for PostgreSQL. While TypeORM supports MySQL, some features may need adjustments. PostgreSQL is strongly recommended.</p>
+<h3>Q: How do I change the default port?</h3>
+<p><strong>A:</strong></p>
+<ul>
+<li>Frontend: <code>npm start -- --port 4300</code></li>
+<li>Backend: Edit <code>PORT=3002</code> in <code>backend/.env</code></li>
+</ul>
+<h3>Q: Installation fails with &quot;npm ERR!&quot;. What do I do?</h3>
+<p><strong>A:</strong></p>
+<pre><code class="language-bash"># Clear cache and reinstall
+npm cache clean --force
+rm -rf node_modules package-lock.json
+npm install</code></pre>
+<h3>Q: Database connection error on first run?</h3>
+<p><strong>A:</strong></p>
+<ol>
+<li>Ensure PostgreSQL is running</li>
+<li>Check credentials in <code>backend/.env</code></li>
+<li>Verify database <code>ecommerce_db</code> exists</li>
+<li>Test connection: <code>psql -U postgres -d ecommerce_db</code></li>
+</ol>
+<hr>
+<h2 id="s4"><span class="n">4</span>🛍️ Product Management</h2>
+<h3>Q: How many products can I add?</h3>
+<p><strong>A:</strong> No hard limit. Tested with 10,000+ products. Performance depends on your server resources.</p>
+<h3>Q: Can I import products from CSV/Excel?</h3>
+<p><strong>A:</strong> Yes! Use the Import feature in Admin Panel → Products → Import.</p>
+<h3>Q: What image formats are supported?</h3>
+<p><strong>A:</strong> JPG, PNG, WebP, and SVG. Recommended size: 800x800px.</p>
+<h3>Q: Can I remove image backgrounds automatically?</h3>
+<p><strong>A:</strong> Yes, if you configure Remove.bg API key. See <a href="ADMIN_MANUAL.md#step-4-images">Admin Manual</a>.</p>
+<h3>Q: How do I feature a product on homepage?</h3>
+<p><strong>A:</strong> Edit product and check &quot;Featured Product&quot; option.</p>
+<h3>Q: Can I schedule products to publish later?</h3>
+<p><strong>A:</strong> Yes, use the &quot;Publish Date&quot; field when creating/editing products.</p>
+<h3>Q: How do I create product variants (sizes, colors)?</h3>
+<p><strong>A:</strong> Currently, variants are handled via specifications. Full variant support can be custom developed.</p>
+<h3>Q: Can products have multiple categories?</h3>
+<p><strong>A:</strong> Currently one category per product. Multi-category support can be custom developed.</p>
+<hr>
+<h2 id="s5"><span class="n">5</span>🎮 3D Models</h2>
+<h3>Q: What 3D file formats are supported?</h3>
+<p><strong>A:</strong> GLB (binary) and GLTF (text). GLB is recommended for better performance.</p>
+<h3>Q: What's the maximum 3D model file size?</h3>
+<p><strong>A:</strong> Technical limit is 50MB, but <strong>10MB or less</strong> is strongly recommended for optimal loading times.</p>
+<h3>Q: Where can I get 3D models?</h3>
+<p><strong>A:</strong></p>
+<ul>
+<li>Create your own with Blender (free)</li>
+<li>Purchase from Sketchfab, TurboSquid, CGTrader</li>
+<li>Use free models from Poly Haven, Free3D</li>
+</ul>
+<h3>Q: How do I optimize 3D models?</h3>
+<p><strong>A:</strong></p>
+<ol>
+<li>Use GLB format (compressed)</li>
+<li>Reduce polygon count</li>
+<li>Compress textures (max 2048x2048px)</li>
+<li>Use Draco compression</li>
+<li>Tools: Blender, gltf-pipeline</li>
+</ol>
+<h3>Q: 3D model appears too large/small?</h3>
+<p><strong>A:</strong> Adjust the &quot;Scale&quot; setting when uploading model in admin panel.</p>
+<h3>Q: Can customers interact with 3D models?</h3>
+<p><strong>A:</strong> Yes! They can:</p>
+<ul>
+<li>Rotate (click &amp; drag)</li>
+<li>Zoom (scroll wheel)</li>
+<li>Pan (right-click &amp; drag)</li>
+<li>Works on touch devices too</li>
+</ul>
+<h3>Q: Do 3D models work on mobile?</h3>
+<p><strong>A:</strong> Yes, but performance varies by device. Optimize models for mobile:</p>
+<ul>
+<li>Keep under 5MB</li>
+<li>Reduce polygon count</li>
+<li>Use simple textures</li>
+</ul>
+<h3>Q: What if my product doesn't have a 3D model?</h3>
+<p><strong>A:</strong> No problem! Products work perfectly with just 2D images. 3D is optional.</p>
+<hr>
+<h2 id="s6"><span class="n">6</span>💳 Payments &amp; Orders</h2>
+<h3>Q: Which payment gateways are included?</h3>
+<p><strong>A:</strong> </p>
+<ul>
+<li>✅ Stripe (cards, Apple Pay, Google Pay)</li>
+<li>✅ PayPal</li>
+<li>✅ LiqPay (Ukraine/Eastern Europe)</li>
+</ul>
+<h3>Q: Can I add other payment methods?</h3>
+<p><strong>A:</strong> Yes, but requires custom development. The architecture supports adding new gateways.</p>
+<h3>Q: Do I need SSL certificate?</h3>
+<p><strong>A:</strong> <strong>YES!</strong> Required for production. Payments won't work without HTTPS.</p>
+<h3>Q: How do I test payments without real money?</h3>
+<p><strong>A:</strong> Use test mode API keys and test card numbers. See <a href="PAYMENT_SETUP.md#testing-payments">Payment Setup Guide</a>.</p>
+<h3>Q: Where do payments go?</h3>
+<p><strong>A:</strong> Directly to your Stripe/PayPal/LiqPay account. Platform doesn't hold funds.</p>
+<h3>Q: What's the transaction fee?</h3>
+<p><strong>A:</strong> </p>
+<ul>
+<li><strong>Platform</strong>: No fees! </li>
+<li><strong>Payment gateways</strong>: Stripe ~2.9%, PayPal ~2.9%, LiqPay varies</li>
+</ul>
+<h3>Q: Can I process refunds?</h3>
+<p><strong>A:</strong> Yes, from Admin Panel → Orders → View Order → Issue Refund.</p>
+<h3>Q: Do customers receive order confirmation emails?</h3>
+<p><strong>A:</strong> Yes, automatically sent after successful payment (if SMTP is configured).</p>
+<h3>Q: How do I track orders?</h3>
+<p><strong>A:</strong> Admin Panel → Orders. You can update status, add tracking numbers, and view timeline.</p>
+<h3>Q: Can I export orders to CSV?</h3>
+<p><strong>A:</strong> Yes, Admin Panel → Orders → Export.</p>
+<hr>
+<h2 id="s7"><span class="n">7</span>🎨 Customization</h2>
+<h3>Q: Can I change the logo?</h3>
+<p><strong>A:</strong> Yes! Admin Panel → Settings → Appearance → Upload Logo. Or replace <code>src/assets/images/logo.png</code>.</p>
+<h3>Q: How do I change colors/theme?</h3>
+<p><strong>A:</strong> Admin Panel → Settings → Appearance → Customize. Or edit SCSS files.</p>
+<h3>Q: Can I add custom pages?</h3>
+<p><strong>A:</strong> Yes! See <a href="CUSTOMIZATION.md#adding-new-pages">Customization Guide</a>.</p>
+<h3>Q: How do I change footer text?</h3>
+<p><strong>A:</strong> Edit <code>src/app/layout/footer/footer.component.html</code> or use translation files.</p>
+<h3>Q: Can I use my own domain?</h3>
+<p><strong>A:</strong> Yes! Point your domain to server IP and update environment files.</p>
+<h3>Q: How do I add more products to homepage?</h3>
+<p><strong>A:</strong> Edit <code>itemsPerPage</code> in relevant component or mark more products as &quot;Featured&quot;.</p>
+<h3>Q: Can I hide out-of-stock products?</h3>
+<p><strong>A:</strong> Yes, set product status to &quot;Inactive&quot; or implement filter in shop component.</p>
+<h3>Q: How do I add Google Analytics?</h3>
+<p><strong>A:</strong> Admin Panel → Settings → SEO → Google Analytics ID.</p>
+<hr>
+<h2 id="s8"><span class="n">8</span>🔧 Troubleshooting</h2>
+<h3>Q: &quot;Cannot connect to backend API&quot;</h3>
+<p><strong>A:</strong></p>
+<ol>
+<li>Check backend is running (<code>npm run start:dev</code> in backend folder)</li>
+<li>Verify API URL in <code>environment.ts</code></li>
+<li>Check CORS settings in backend</li>
+<li>Check firewall/network settings</li>
+</ol>
+<h3>Q: Admin panel login not working?</h3>
+<p><strong>A:</strong></p>
+<ol>
+<li>Confirm <code>ADMIN_EMAIL</code> / <code>ADMIN_PASSWORD</code> in <code>backend/.env</code> match what you use to log in</li>
+<li>Bootstrap admin if none exists — set env vars, then:</li>
+</ol>
+<p>   ```bash</p>
+<p>   # Development</p>
+<p>   curl -X POST http://localhost:3002/api/auth/create-admin</p>
+<p>   # Production (requires bootstrap token)</p>
+<p>   curl -X POST https://your-api.example.com/api/auth/create-admin \</p>
+<p>     -H &quot;x-admin-bootstrap-token: YOUR_ADMIN_BOOTSTRAP_TOKEN&quot;</p>
+<p>   ```</p>
+<ol>
+<li>Check backend logs for errors</li>
+<li>Verify database connection</li>
+</ol>
+<p>See <a href="INSTALLATION.md#-first-deploy-security-checklist">First Deploy Security Checklist</a> in the Installation guide.</p>
+<h3>Q: 3D models not loading?</h3>
+<p><strong>A:</strong></p>
+<ol>
+<li>Check file format (must be .glb or .gltf)</li>
+<li>Verify file size (&lt; 10MB recommended)</li>
+<li>Check browser console for errors</li>
+<li>Try different model file</li>
+<li>Clear browser cache</li>
+</ol>
+<h3>Q: Images not uploading?</h3>
+<p><strong>A:</strong></p>
+<ol>
+<li>Check file size (&lt; 5MB)</li>
+<li>Verify Cloudinary credentials (if using)</li>
+<li>Check backend logs</li>
+<li>Ensure uploads folder has write permissions</li>
+</ol>
+<h3>Q: Email notifications not sending?</h3>
+<p><strong>A:</strong></p>
+<ol>
+<li>Verify SMTP settings in <code>backend/.env</code></li>
+<li>Test SMTP with online tool</li>
+<li>Check spam folder</li>
+<li>Review backend logs</li>
+</ol>
+<h3>Q: Website slow loading?</h3>
+<p><strong>A:</strong></p>
+<ol>
+<li>Optimize images (use WebP format)</li>
+<li>Optimize 3D models (reduce file size)</li>
+<li>Enable production build</li>
+<li>Use CDN for static assets</li>
+<li>Check database queries performance</li>
+</ol>
+<h3>Q: Changes not appearing after edit?</h3>
+<p><strong>A:</strong></p>
+<ol>
+<li>Clear browser cache (Ctrl+Shift+R)</li>
+<li>Check you edited correct environment file</li>
+<li>Rebuild application: <code>npm run build</code></li>
+<li>Restart servers</li>
+</ol>
+<hr>
+<h2 id="s9"><span class="n">9</span>Performance &amp; Optimization</h2>
+<h3>Q: How do I improve page load speed?</h3>
+<p><strong>A:</strong></p>
+<ol>
+<li>Enable production build: <code>npm run build:prod</code></li>
+<li>Use WebP images</li>
+<li>Enable gzip compression on server</li>
+<li>Use CDN for static assets</li>
+<li>Optimize 3D models</li>
+<li>Enable lazy loading</li>
+<li>Implement caching</li>
+</ol>
+<h3>Q: How many concurrent users can it handle?</h3>
+<p><strong>A:</strong> Depends on server resources. Typical VPS can handle:</p>
+<ul>
+<li>100-500 concurrent users comfortably</li>
+<li>Scale horizontally for more traffic</li>
+</ul>
+<h3>Q: Should I use Docker?</h3>
+<p><strong>A:</strong> Recommended for:</p>
+<ul>
+<li>Consistent environments</li>
+<li>Easy deployment</li>
+<li>Scaling</li>
+<li>Development teams</li>
+</ul>
+<p>Not required for small deployments.</p>
+<h3>Q: How do I backup my data?</h3>
+<p><strong>A:</strong></p>
+<pre><code class="language-bash"># Database backup
+pg_dump -U postgres ecommerce_db &gt; backup.sql
+
+# Restore
+psql -U postgres ecommerce_db &lt; backup.sql</code></pre>
+<h3>Q: Can I use Redis for caching?</h3>
+<p><strong>A:</strong> Yes! Redis integration can be added for:</p>
+<ul>
+<li>Session storage</li>
+<li>API response caching</li>
+<li>Cart persistence</li>
+</ul>
+<p>Requires custom configuration.</p>
+<h3>Q: How often should I update?</h3>
+<p><strong>A:</strong> </p>
+<ul>
+<li><strong>Security patches</strong>: Immediately</li>
+<li><strong>Feature updates</strong>: As needed</li>
+<li><strong>Dependencies</strong>: Monthly review recommended</li>
+</ul>
+<hr>
+<h2 id="s10"><span class="n">10</span>Security &amp; Privacy</h2>
+<h3>Q: Is it secure for production?</h3>
+<p><strong>A:</strong> Yes, but follow best practices:</p>
+<ul>
+<li>Use HTTPS</li>
+<li>Strong passwords</li>
+<li>Keep dependencies updated</li>
+<li>Regular backups</li>
+<li>Enable database encryption</li>
+<li>Configure firewall</li>
+</ul>
+<h3>Q: Is customer data encrypted?</h3>
+<p><strong>A:</strong></p>
+<ul>
+<li>Passwords: Yes (bcrypt hashing)</li>
+<li>Payment data: Handled by payment gateways (PCI compliant)</li>
+<li>Database: Can enable PostgreSQL encryption</li>
+</ul>
+<h3>Q: GDPR compliant?</h3>
+<p><strong>A:</strong> Framework is GDPR-ready. You need to:</p>
+<ul>
+<li>Add privacy policy</li>
+<li>Implement cookie consent</li>
+<li>Enable data export</li>
+<li>Implement right to deletion</li>
+<li>Add terms of service</li>
+</ul>
+<h3>Q: Can I enable two-factor authentication?</h3>
+<p><strong>A:</strong> Not included by default. Can be custom developed using:</p>
+<ul>
+<li>SMS (Twilio)</li>
+<li>TOTP (Google Authenticator)</li>
+<li>Email codes</li>
+</ul>
+<hr>
+<h2 id="s11"><span class="n">11</span>📱 Mobile &amp; Responsive</h2>
+<h3>Q: Does it work on tablets and phones?</h3>
+<p><strong>A:</strong> Yes! Fully responsive design works on all screen sizes.</p>
+<h3>Q: Can I create a mobile app?</h3>
+<p><strong>A:</strong> Platform is web-based. Options:</p>
+<ul>
+<li>Progressive Web App (PWA) - can be added</li>
+<li>Ionic wrapper - create native apps</li>
+<li>React Native/Flutter - requires rewrite</li>
+</ul>
+<h3>Q: Touch controls working for 3D?</h3>
+<p><strong>A:</strong> Yes! </p>
+<ul>
+<li>One finger: Rotate</li>
+<li>Two fingers pinch: Zoom</li>
+<li>Two fingers drag: Pan</li>
+</ul>
+<hr>
+<h2 id="s12"><span class="n">12</span>Deployment &amp; Hosting</h2>
+<h3>Q: Where should I host this?</h3>
+<p><strong>A:</strong> Recommended:</p>
+<ul>
+<li><strong>Frontend</strong>: Vercel, Netlify, GitHub Pages</li>
+<li><strong>Backend</strong>: Render, Railway, Heroku, DigitalOcean</li>
+<li><strong>Database</strong>: Managed PostgreSQL (AWS RDS, DigitalOcean)</li>
+</ul>
+<h3>Q: What's the monthly hosting cost?</h3>
+<p><strong>A:</strong> Entry level:</p>
+<ul>
+<li><strong>VPS</strong>: $5-10/month (DigitalOcean, Linode)</li>
+<li><strong>Backend</strong>: $7/month (Render.com)</li>
+<li><strong>Database</strong>: $15/month (managed PostgreSQL)</li>
+<li><strong>Total</strong>: ~$20-30/month</li>
+</ul>
+<p>Can start with free tiers for testing.</p>
+<h3>Q: Can I use shared hosting?</h3>
+<p><strong>A:</strong> Frontend only (static files). Backend requires Node.js support which most shared hosts don't provide well.</p>
+<h3>Q: How do I deploy updates?</h3>
+<p><strong>A:</strong></p>
+<ol>
+<li>Build new version locally</li>
+<li>Run tests</li>
+<li>Deploy via Git push (if using Render/Heroku)</li>
+<li>Or manually upload files</li>
+<li>Run database migrations if needed</li>
+</ol>
+<hr>
+<h2 id="s13"><span class="n">13</span>💼 Licensing &amp; Support</h2>
+<h3>Q: Can I remove &quot;Powered by&quot; credits?</h3>
+<p><strong>A:</strong> Yes, with commercial license you can remove all credits.</p>
+<h3>Q: Can I resell this product?</h3>
+<p><strong>A:</strong> No, reselling is prohibited. You can build websites for clients but cannot resell the source code.</p>
+<h3>Q: Do I get free updates?</h3>
+<p><strong>A:</strong> Yes! Free updates for lifetime (varies by marketplace). Compatible updates included.</p>
+<h3>Q: What support is included?</h3>
+<p><strong>A:</strong> </p>
+<ul>
+<li>6 months support included</li>
+<li>Email support</li>
+<li>Bug fixes</li>
+<li>Installation help</li>
+<li>Configuration guidance</li>
+</ul>
+<p>Extended support available for purchase.</p>
+<h3>Q: Can I hire you for customization?</h3>
+<p><strong>A:</strong> Contact via support email for custom development quotes.</p>
+<hr>
+<h2 id="s14"><span class="n">14</span>🆘 Still Have Questions?</h2>
+<ul>
+<li>📧 <strong>Email</strong>: support@angular-ecommerce3d.com</li>
+<li>📖 <strong>Documentation</strong>: <a href="INSTALLATION.md">Installation</a> | <a href="ADMIN_MANUAL.md">Admin Manual</a> | <a href="CUSTOMIZATION.md">Customization</a></li>
+<li>🐛 <strong>Bug Reports</strong>: Via support email with details</li>
+</ul>
+<hr>
+<p><strong>FAQ Version</strong>: 1.0  </p>
+<p><strong>Last Updated</strong>: January 2026  </p>
+<p><strong>Questions Answered</strong>: 88+</p>
+  </article>
+  <p class="footer-note">Buyer-facing docs · Markdown sources remain in <code>docs/*.md</code> · Visual theme matches architecture diagrams.</p>
+</main>
+</div>
+<script>
+document.getElementById('navToggle')?.addEventListener('click', () => {
+  document.getElementById('sidebar')?.classList.toggle('open');
+});
+</script>
+</body>
+</html>

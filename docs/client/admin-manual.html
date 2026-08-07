@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel Manual — Angular 3D E-Commerce</title>
+<link rel="stylesheet" href="assets/client-docs.css">
+</head>
+<body>
+<button type="button" class="mobile-toggle" id="navToggle">Menu</button>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+  <a class="sidebar-brand" href="index.html">Angular 3D E-Commerce</a>
+  <div class="sidebar-tag">Client documentation</div>
+  <div class="nav-group"><div class="nav-group-title">Start here</div><a class="nav-link" href="index.html">Documentation Hub</a>
+<a class="nav-link" href="quick-start.html">Quick Start</a>
+<a class="nav-link" href="getting-started.html">Getting Started</a>
+<a class="nav-link" href="installation.html">Installation</a></div>
+<div class="nav-group"><div class="nav-group-title">Product guides</div><a class="nav-link" href="admin-guide.html">Admin Guide</a>
+<a class="nav-link active" href="admin-manual.html">Admin Manual</a>
+<a class="nav-link" href="customization.html">Customization</a>
+<a class="nav-link" href="payment-setup.html">Payment Setup</a>
+<a class="nav-link" href="social-auth.html">Social Auth</a>
+<a class="nav-link" href="local-ai.html">Local AI Setup</a></div>
+<div class="nav-group"><div class="nav-group-title">Reference</div><a class="nav-link" href="architecture.html">Architecture</a>
+<a class="nav-link" href="backend-api.html">Backend API</a>
+<a class="nav-link" href="../BACKEND_ARCHITECTURE_DIAGRAM.html">Backend Diagram</a>
+<a class="nav-link" href="faq.html">FAQ</a>
+<a class="nav-link" href="troubleshooting.html">Troubleshooting</a>
+<a class="nav-link" href="support.html">Support</a></div>
+</aside>
+<main class="main">
+  <header class="page-header">
+    <h1>Admin Panel Manual</h1>
+    <p class="lead">Complete guide to managing your Angular E-commerce 3D platform.</p>
+    <div class="badges"><span class="badge purple">Admin</span></div>
+  </header>
+  <article class="content">
+<p>Complete guide to managing your Angular E-commerce 3D platform.</p>
+<hr>
+<h2 id="s1"><span class="n">1</span>📋 Table of Contents</h2>
+<ol>
+<li><a href="#getting-started">Getting Started</a></li>
+<li><a href="#dashboard-overview">Dashboard Overview</a></li>
+<li><a href="#managing-products">Managing Products</a></li>
+<li><a href="#managing-orders">Managing Orders</a></li>
+<li><a href="#managing-users">Managing Users</a></li>
+<li><a href="#managing-categories">Managing Categories</a></li>
+<li><a href="#messages--support">Messages &amp; Support</a></li>
+<li><a href="#settings">Settings</a></li>
+<li><a href="#theme-management">Theme Management</a></li>
+<li><a href="#reports--analytics">Reports &amp; Analytics</a></li>
+</ol>
+<hr>
+<h2 id="s2"><span class="n">2</span>Getting Started</h2>
+<h3>Accessing the Admin Panel</h3>
+<ol>
+<li>Navigate to: <code>http://yourdomain.com/admin</code></li>
+<li>Enter your credentials:</li>
+</ol>
+<p>   - <strong>Email</strong>: Your admin email</p>
+<p>   - <strong>Password</strong>: Your admin password</p>
+<div class="card orange"><div class="card-title">Note</div><p><strong>⚠️ First Login</strong>: Default credentials are <code>admin@example.com</code> / <code>admin123</code>. <strong>Change these immediately!</strong></p></div>
+<h3>Changing Your Password</h3>
+<ol>
+<li>Click on profile icon (top right)</li>
+<li>Select &quot;Profile Settings&quot;</li>
+<li>Click &quot;Change Password&quot;</li>
+<li>Enter current and new password</li>
+<li>Click &quot;Save Changes&quot;</li>
+</ol>
+<hr>
+<h2 id="s3"><span class="n">3</span>📊 Dashboard Overview</h2>
+<p>After logging in, you'll see the main dashboard with:</p>
+<h3>Key Metrics (Top Cards)</h3>
+<table>
+<tr><th>Metric</th><th>Description</th></tr>
+<tr><td><strong>Total Revenue</strong></td><td>Total sales this month</td></tr>
+<tr><td><strong>Total Orders</strong></td><td>Number of orders this month</td></tr>
+<tr><td><strong>Total Products</strong></td><td>Active products in catalog</td></tr>
+<tr><td><strong>Total Users</strong></td><td>Registered customers</td></tr>
+</table>
+<h3>Sales Chart</h3>
+<ul>
+<li><strong>Visualization</strong>: Monthly sales trends</li>
+<li><strong>Period</strong>: Last 12 months</li>
+<li><strong>Interaction</strong>: Hover to see exact values</li>
+</ul>
+<h3>Recent Orders</h3>
+<ul>
+<li>Shows last 10 orders</li>
+<li>Quick status overview</li>
+<li>Click order to view details</li>
+</ul>
+<h3>Low Stock Alerts</h3>
+<ul>
+<li>Products with stock &lt; 10 units</li>
+<li>Quick restock actions</li>
+<li>Click to edit product</li>
+</ul>
+<hr>
+<h2 id="s4"><span class="n">4</span>🛍️ Managing Products</h2>
+<h3>View All Products</h3>
+<ol>
+<li>Navigate to <strong>Products</strong> → <strong>Product List</strong></li>
+<li>You'll see a table with all products:</li>
+</ol>
+<p>   - Product name &amp; image</p>
+<p>   - Category</p>
+<p>   - Price</p>
+<p>   - Stock quantity</p>
+<p>   - Status (Active/Inactive)</p>
+<p>   - Actions</p>
+<h3>Filter &amp; Search Products</h3>
+<ul>
+<li><strong>Search</strong>: Use search box to find by name/SKU</li>
+<li><strong>Filter by Category</strong>: Dropdown menu</li>
+<li><strong>Filter by Status</strong>: Active/Inactive</li>
+<li><strong>Sort</strong>: Click column headers</li>
+</ul>
+<h3>Add New Product</h3>
+<h4>Step 1: Basic Information</h4>
+<ol>
+<li>Click <strong>&quot;+ Add New Product&quot;</strong> button</li>
+<li>Fill in basic details:</li>
+</ol>
+<p>   - <strong>Product Name</strong> (required)</p>
+<p>   - <strong>SKU</strong> - Auto-generated or custom</p>
+<p>   - <strong>Category</strong> (required)</p>
+<p>   - <strong>Brand</strong></p>
+<p>   - <strong>Description</strong> (required)</p>
+<h4>Step 2: Pricing</h4>
+<ul>
+<li><strong>Regular Price</strong> (required)</li>
+<li><strong>Sale Price</strong> (optional)</li>
+<li><strong>Discount Percentage</strong> - Auto-calculated</li>
+</ul>
+<h4>Step 3: Inventory</h4>
+<ul>
+<li><strong>Stock Quantity</strong> (required)</li>
+<li><strong>Track Inventory</strong> - Enable/disable</li>
+<li><strong>Low Stock Threshold</strong> - Default: 10</li>
+<li><strong>Allow Backorders</strong> - Yes/No</li>
+</ul>
+<h4>Step 4: Images</h4>
+<p><strong>Main Product Image:</strong></p>
+<ol>
+<li>Click &quot;Upload Image&quot; or drag &amp; drop</li>
+<li>Supported formats: JPG, PNG, WebP</li>
+<li>Recommended size: 800x800px</li>
+<li>Max size: 5MB</li>
+</ol>
+<p><strong>Additional Images (Gallery):</strong></p>
+<ol>
+<li>Click &quot;+ Add More Images&quot;</li>
+<li>Upload up to 10 additional images</li>
+<li>Drag to reorder</li>
+<li>Click ❌ to remove</li>
+</ol>
+<p><strong>AI Background Removal:</strong></p>
+<ul>
+<li>Enable toggle if Remove.bg API is configured</li>
+<li>Automatically removes background</li>
+<li>Saves transparent PNG</li>
+</ul>
+<h4>Step 5: 3D Model Upload</h4>
+<p>This is the <strong>unique feature</strong> of your platform!</p>
+<p><strong>Upload 3D Model:</strong></p>
+<ol>
+<li>Scroll to &quot;3D Model&quot; section</li>
+<li>Click &quot;Upload 3D Model&quot;</li>
+<li>Select file:</li>
+</ol>
+<p>   - <strong>Formats</strong>: .glb, .gltf</p>
+<p>   - <strong>Max size</strong>: 50MB (10MB recommended)</p>
+<p>   - <strong>Optimization</strong>: Use compressed models</p>
+<ol>
+<li>Preview will load automatically</li>
+</ol>
+<p><strong>3D Model Settings:</strong></p>
+<ul>
+<li><strong>Enable 3D Viewer</strong> - Show/hide on product page</li>
+<li><strong>Auto-rotate</strong> - Enable/disable auto-rotation</li>
+<li><strong>Camera Position</strong> - Default view angle</li>
+<li><strong>Scale</strong> - Adjust model size</li>
+</ul>
+<p><strong>Tips for 3D Models:</strong></p>
+<ul>
+<li>Use Blender or similar tools to create models</li>
+<li>Export as GLB (binary) for best performance</li>
+<li>Optimize textures (max 2048x2048px)</li>
+<li>Test on mobile devices</li>
+</ul>
+<h4>Step 6: Specifications &amp; Features</h4>
+<p><strong>Specifications:</strong></p>
+<ol>
+<li>Click &quot;+ Add Specification&quot;</li>
+<li>Enter key-value pairs:</li>
+</ol>
+<p>   - Example: &quot;Material&quot; → &quot;Stainless Steel&quot;</p>
+<p>   - Example: &quot;Weight&quot; → &quot;2.5 kg&quot;</p>
+<p><strong>Features:</strong></p>
+<ol>
+<li>Click &quot;+ Add Feature&quot;</li>
+<li>Enter feature description</li>
+<li>Drag to reorder</li>
+<li>Features appear as bullet points</li>
+</ol>
+<h4>Step 7: SEO Settings</h4>
+<ul>
+<li><strong>Meta Title</strong> - Page title for search engines</li>
+<li><strong>Meta Description</strong> - Search result description</li>
+<li><strong>URL Slug</strong> - Auto-generated or custom</li>
+<li><strong>Keywords</strong> - Comma-separated</li>
+</ul>
+<h4>Step 8: Advanced Options</h4>
+<ul>
+<li><strong>Featured Product</strong> - Show on homepage</li>
+<li><strong>New Arrival</strong> - Show in &quot;New&quot; section</li>
+<li><strong>Best Seller</strong> - Show in &quot;Best Sellers&quot;</li>
+<li><strong>Publish Date</strong> - Schedule for future</li>
+<li><strong>Status</strong> - Active/Inactive/Draft</li>
+</ul>
+<h4>Step 9: Save</h4>
+<ol>
+<li>Click <strong>&quot;Save Product&quot;</strong> - Save and return to list</li>
+<li>Click <strong>&quot;Save &amp; Add Another&quot;</strong> - Save and add new</li>
+<li>Click <strong>&quot;Preview&quot;</strong> - See how it looks</li>
+</ol>
+<h3>Edit Existing Product</h3>
+<ol>
+<li>Go to <strong>Products</strong> → <strong>Product List</strong></li>
+<li>Click <strong>✏️ Edit</strong> icon on product row</li>
+<li>Modify any fields</li>
+<li>Click <strong>&quot;Update Product&quot;</strong></li>
+</ol>
+<h3>Delete Product</h3>
+<ol>
+<li>Find product in list</li>
+<li>Click <strong>🗑️ Delete</strong> icon</li>
+<li>Confirm deletion</li>
+</ol>
+<div class="card orange"><div class="card-title">Note</div><p><strong>⚠️ Warning</strong>: Deleted products cannot be recovered!</p></div>
+<p><strong>Better Alternative</strong>: Set status to &quot;Inactive&quot; instead of deleting.</p>
+<h3>Bulk Actions</h3>
+<ol>
+<li>Select multiple products (checkboxes)</li>
+<li>Choose action from dropdown:</li>
+</ol>
+<p>   - Activate</p>
+<p>   - Deactivate</p>
+<p>   - Delete</p>
+<p>   - Change Category</p>
+<p>   - Export to CSV</p>
+<ol>
+<li>Click <strong>&quot;Apply&quot;</strong></li>
+</ol>
+<h3>Import Products (CSV)</h3>
+<ol>
+<li>Go to <strong>Products</strong> → <strong>Import</strong></li>
+<li>Download CSV template</li>
+<li>Fill in product data</li>
+<li>Upload CSV file</li>
+<li>Map columns</li>
+<li>Click <strong>&quot;Import&quot;</strong></li>
+</ol>
+<p><strong>CSV Format:</strong></p>
+<pre><code class="language-csv">name,sku,category,price,stock,description,imageUrl
+Product Name,SKU123,Electronics,99.99,50,&quot;Description&quot;,https://...</code></pre>
+<h3>Export Products</h3>
+<ol>
+<li>Go to <strong>Products</strong> → <strong>Product List</strong></li>
+<li>Click <strong>&quot;Export&quot;</strong> button</li>
+<li>Choose format: CSV or Excel</li>
+<li>Download file</li>
+</ol>
+<hr>
+<h2 id="s5"><span class="n">5</span>Managing Orders</h2>
+<h3>View All Orders</h3>
+<ol>
+<li>Navigate to <strong>Orders</strong> → <strong>Order List</strong></li>
+<li>Table shows:</li>
+</ol>
+<p>   - Order number</p>
+<p>   - Customer name</p>
+<p>   - Date</p>
+<p>   - Total amount</p>
+<p>   - Payment status</p>
+<p>   - Order status</p>
+<p>   - Actions</p>
+<h3>Order Statuses</h3>
+<table>
+<tr><th>Status</th><th>Meaning</th><th>Next Action</th></tr>
+<tr><td><strong>Pending</strong></td><td>Payment not confirmed</td><td>Wait for payment</td></tr>
+<tr><td><strong>Processing</strong></td><td>Payment received</td><td>Prepare shipment</td></tr>
+<tr><td><strong>Shipped</strong></td><td>Order dispatched</td><td>Update tracking</td></tr>
+<tr><td><strong>Delivered</strong></td><td>Customer received</td><td>Mark complete</td></tr>
+<tr><td><strong>Cancelled</strong></td><td>Order cancelled</td><td>Issue refund</td></tr>
+<tr><td><strong>Refunded</strong></td><td>Money returned</td><td>Close order</td></tr>
+</table>
+<h3>View Order Details</h3>
+<ol>
+<li>Click on order number or <strong>👁️ View</strong> icon</li>
+<li>You'll see:</li>
+</ol>
+<p><strong>Customer Information:</strong></p>
+<ul>
+<li>Name, email, phone</li>
+<li>Shipping address</li>
+<li>Billing address</li>
+</ul>
+<p><strong>Order Items:</strong></p>
+<ul>
+<li>Product names &amp; images</li>
+<li>Quantities</li>
+<li>Prices</li>
+<li>Subtotal</li>
+</ul>
+<p><strong>Payment Information:</strong></p>
+<ul>
+<li>Payment method</li>
+<li>Transaction ID</li>
+<li>Payment status</li>
+<li>Total amount</li>
+</ul>
+<p><strong>Order Timeline:</strong></p>
+<ul>
+<li>All status changes</li>
+<li>Timestamps</li>
+<li>Admin notes</li>
+</ul>
+<h3>Update Order Status</h3>
+<ol>
+<li>Open order details</li>
+<li>Click <strong>&quot;Change Status&quot;</strong> dropdown</li>
+<li>Select new status:</li>
+</ol>
+<p>   - Processing</p>
+<p>   - Shipped</p>
+<p>   - Delivered</p>
+<p>   - Cancelled</p>
+<ol>
+<li>(Optional) Add tracking number</li>
+<li>(Optional) Send email notification</li>
+<li>Click <strong>&quot;Update&quot;</strong></li>
+</ol>
+<h3>Add Order Notes</h3>
+<ol>
+<li>Open order details</li>
+<li>Scroll to &quot;Order Notes&quot; section</li>
+<li>Type note (visible only to admins)</li>
+<li>Click <strong>&quot;Add Note&quot;</strong></li>
+</ol>
+<h3>Process Refund</h3>
+<ol>
+<li>Open order details</li>
+<li>Click <strong>&quot;Issue Refund&quot;</strong> button</li>
+<li>Select refund type:</li>
+</ol>
+<p>   - Full refund</p>
+<p>   - Partial refund</p>
+<ol>
+<li>Enter amount (for partial)</li>
+<li>Enter reason</li>
+<li>Click <strong>&quot;Process Refund&quot;</strong></li>
+</ol>
+<div class="card blue"><div class="card-title">Note</div><p><strong>Note</strong>: Refunds are processed through original payment gateway.</p></div>
+<h3>Print Invoice</h3>
+<ol>
+<li>Open order details</li>
+<li>Click <strong>&quot;Print Invoice&quot;</strong> button</li>
+<li>Invoice PDF will download</li>
+</ol>
+<h3>Send Order Email</h3>
+<ol>
+<li>Open order details</li>
+<li>Click <strong>&quot;Send Email&quot;</strong> dropdown</li>
+<li>Choose template:</li>
+</ol>
+<p>   - Order Confirmation</p>
+<p>   - Shipping Notification</p>
+<p>   - Delivery Confirmation</p>
+<ol>
+<li>Click <strong>&quot;Send&quot;</strong></li>
+</ol>
+<hr>
+<h2 id="s6"><span class="n">6</span>👥 Managing Users</h2>
+<h3>View All Users</h3>
+<ol>
+<li>Navigate to <strong>Users</strong> → <strong>User List</strong></li>
+<li>Table shows:</li>
+</ol>
+<p>   - Name &amp; email</p>
+<p>   - Registration date</p>
+<p>   - Role (Admin/Customer)</p>
+<p>   - Status (Active/Blocked)</p>
+<p>   - Total orders</p>
+<p>   - Actions</p>
+<h3>Add New User</h3>
+<ol>
+<li>Click <strong>&quot;+ Add User&quot;</strong> button</li>
+<li>Fill in details:</li>
+</ol>
+<p>   - Full Name</p>
+<p>   - Email (unique)</p>
+<p>   - Password</p>
+<p>   - Role: Admin or Customer</p>
+<p>   - Status: Active or Blocked</p>
+<ol>
+<li>Click <strong>&quot;Create User&quot;</strong></li>
+</ol>
+<h3>Edit User</h3>
+<ol>
+<li>Click <strong>✏️ Edit</strong> icon</li>
+<li>Modify details (cannot change email)</li>
+<li>Click <strong>&quot;Update User&quot;</strong></li>
+</ol>
+<h3>Block/Unblock User</h3>
+<ol>
+<li>Find user in list</li>
+<li>Toggle <strong>Status</strong> switch</li>
+<li>Blocked users cannot login</li>
+</ol>
+<h3>View User Orders</h3>
+<ol>
+<li>Click <strong>&quot;View Orders&quot;</strong> link on user row</li>
+<li>See all orders by this customer</li>
+<li>Click order to view details</li>
+</ol>
+<h3>Delete User</h3>
+<ol>
+<li>Click <strong>🗑️ Delete</strong> icon</li>
+<li>Confirm deletion</li>
+</ol>
+<div class="card orange"><div class="card-title">Note</div><p><strong>⚠️ Warning</strong>: Deletes user but keeps their orders.</p></div>
+<hr>
+<h2 id="s7"><span class="n">7</span>📁 Managing Categories</h2>
+<h3>View All Categories</h3>
+<ol>
+<li>Navigate to <strong>Products</strong> → <strong>Categories</strong></li>
+<li>Hierarchical tree view</li>
+<li>Shows product count</li>
+</ol>
+<h3>Add Category</h3>
+<ol>
+<li>Click <strong>&quot;+ Add Category&quot;</strong></li>
+<li>Enter:</li>
+</ol>
+<p>   - Category Name</p>
+<p>   - Slug (auto-generated)</p>
+<p>   - Parent Category (optional)</p>
+<p>   - Description</p>
+<p>   - Image (optional)</p>
+<p>   - SEO Meta tags</p>
+<ol>
+<li>Click <strong>&quot;Save&quot;</strong></li>
+</ol>
+<h3>Edit Category</h3>
+<ol>
+<li>Click on category name</li>
+<li>Modify details</li>
+<li>Click <strong>&quot;Update&quot;</strong></li>
+</ol>
+<h3>Delete Category</h3>
+<ol>
+<li>Click <strong>🗑️ Delete</strong> icon</li>
+<li>Choose what to do with products:</li>
+</ol>
+<p>   - Move to another category</p>
+<p>   - Delete products</p>
+<p>   - Make products uncategorized</p>
+<ol>
+<li>Confirm</li>
+</ol>
+<hr>
+<h2 id="s8"><span class="n">8</span>💬 Messages &amp; Support</h2>
+<h3>View Customer Messages</h3>
+<ol>
+<li>Navigate to <strong>Messages</strong></li>
+<li>Inbox shows:</li>
+</ol>
+<p>   - Customer name</p>
+<p>   - Subject</p>
+<p>   - Date received</p>
+<p>   - Read/Unread status</p>
+<h3>Reply to Message</h3>
+<ol>
+<li>Click on message</li>
+<li>Read customer inquiry</li>
+<li>Type reply in text box</li>
+<li>Click <strong>&quot;Send Reply&quot;</strong></li>
+</ol>
+<h3>Mark as Resolved</h3>
+<ol>
+<li>Open message</li>
+<li>Click <strong>&quot;Mark as Resolved&quot;</strong></li>
+<li>Message moves to &quot;Resolved&quot; folder</li>
+</ol>
+<hr>
+<h2 id="s9"><span class="n">9</span>Settings</h2>
+<h3>General Settings</h3>
+<ol>
+<li>Navigate to <strong>Settings</strong> → <strong>General</strong></li>
+</ol>
+<p><strong>Store Information:</strong></p>
+<ul>
+<li>Store Name</li>
+<li>Tagline</li>
+<li>Email</li>
+<li>Phone</li>
+<li>Address</li>
+</ul>
+<p><strong>Social Media:</strong></p>
+<ul>
+<li>Facebook URL</li>
+<li>Instagram URL</li>
+<li>Twitter URL</li>
+<li>YouTube URL</li>
+</ul>
+<p><strong>Timezone &amp; Currency:</strong></p>
+<ul>
+<li>Default Timezone</li>
+<li>Currency (USD, EUR, etc.)</li>
+<li>Currency Symbol Position</li>
+</ul>
+<h3>Payment Settings</h3>
+<ol>
+<li>Go to <strong>Settings</strong> → <strong>Payments</strong></li>
+</ol>
+<p><strong>Stripe:</strong></p>
+<ul>
+<li>Enable/Disable</li>
+<li>Publishable Key</li>
+<li>Secret Key</li>
+<li>Webhook Secret</li>
+</ul>
+<p><strong>PayPal:</strong></p>
+<ul>
+<li>Enable/Disable</li>
+<li>Client ID</li>
+<li>Client Secret</li>
+<li>Mode (Sandbox/Live)</li>
+</ul>
+<p><strong>LiqPay:</strong></p>
+<ul>
+<li>Enable/Disable</li>
+<li>Public Key</li>
+<li>Private Key</li>
+</ul>
+<p>See <a href="PAYMENT_SETUP.md">Payment Setup Guide</a> for details.</p>
+<h3>Email Settings</h3>
+<ol>
+<li>Go to <strong>Settings</strong> → <strong>Email</strong></li>
+</ol>
+<p><strong>SMTP Configuration:</strong></p>
+<ul>
+<li>Host</li>
+<li>Port</li>
+<li>Username</li>
+<li>Password</li>
+<li>From Name</li>
+<li>From Email</li>
+</ul>
+<p><strong>Email Templates:</strong></p>
+<ul>
+<li>Order Confirmation</li>
+<li>Shipping Notification</li>
+<li>Password Reset</li>
+<li>Welcome Email</li>
+</ul>
+<h3>SEO Settings</h3>
+<ol>
+<li>Go to <strong>Settings</strong> → <strong>SEO</strong></li>
+</ol>
+<ul>
+<li>Site Title</li>
+<li>Meta Description</li>
+<li>Meta Keywords</li>
+<li>Google Analytics ID</li>
+<li>Google Tag Manager ID</li>
+<li>Facebook Pixel ID</li>
+</ul>
+<h3>Shipping Settings</h3>
+<ol>
+<li>Go to <strong>Settings</strong> → <strong>Shipping</strong></li>
+</ol>
+<p><strong>Shipping Methods:</strong></p>
+<ul>
+<li>Standard Shipping</li>
+<li>Express Shipping</li>
+<li>Free Shipping (threshold)</li>
+</ul>
+<p><strong>Shipping Zones:</strong></p>
+<ul>
+<li>Domestic</li>
+<li>International</li>
+<li>Custom zones</li>
+</ul>
+<hr>
+<h2 id="s10"><span class="n">10</span>🎨 Theme Management</h2>
+<p>Your platform includes <strong>4 premium themes</strong>!</p>
+<h3>Change Active Theme</h3>
+<ol>
+<li>Navigate to <strong>Settings</strong> → <strong>Appearance</strong></li>
+<li>View theme previews:</li>
+</ol>
+<p>   - <strong>Light Theme</strong> - Clean, minimal design</p>
+<p>   - <strong>Dark Theme</strong> - Modern dark mode</p>
+<p>   - <strong>Glass Theme</strong> - Glassmorphism effects</p>
+<p>   - <strong>Dark Glass Theme</strong> - Liquid glass, Apple-inspired</p>
+<ol>
+<li>Click <strong>&quot;Activate&quot;</strong> on desired theme</li>
+<li>Click <strong>&quot;Preview&quot;</strong> to see before activating</li>
+</ol>
+<h3>Customize Theme</h3>
+<ol>
+<li>Go to <strong>Settings</strong> → <strong>Appearance</strong> → <strong>Customize</strong></li>
+</ol>
+<p><strong>Colors:</strong></p>
+<ul>
+<li>Primary Color</li>
+<li>Secondary Color</li>
+<li>Accent Color</li>
+<li>Background Color</li>
+<li>Text Color</li>
+</ul>
+<p><strong>Typography:</strong></p>
+<ul>
+<li>Font Family</li>
+<li>Font Sizes</li>
+<li>Line Heights</li>
+</ul>
+<p><strong>Layout:</strong></p>
+<ul>
+<li>Header Style</li>
+<li>Footer Style</li>
+<li>Sidebar Position</li>
+</ul>
+<p><strong>Buttons:</strong></p>
+<ul>
+<li>Button Style</li>
+<li>Border Radius</li>
+<li>Hover Effects</li>
+</ul>
+<ol>
+<li>Click <strong>&quot;Save Changes&quot;</strong></li>
+</ol>
+<h3>Upload Custom Logo</h3>
+<ol>
+<li>Go to <strong>Settings</strong> → <strong>Appearance</strong></li>
+<li>Click &quot;Upload Logo&quot;</li>
+<li>Recommended size: 200x60px</li>
+<li>Format: PNG with transparent background</li>
+<li>Click <strong>&quot;Save&quot;</strong></li>
+</ol>
+<hr>
+<h2 id="s11"><span class="n">11</span>📈 Reports &amp; Analytics</h2>
+<h3>Sales Reports</h3>
+<ol>
+<li>Navigate to <strong>Reports</strong> → <strong>Sales</strong></li>
+</ol>
+<p><strong>Views:</strong></p>
+<ul>
+<li>Daily sales</li>
+<li>Monthly sales</li>
+<li>Yearly sales</li>
+<li>Custom date range</li>
+</ul>
+<p><strong>Metrics:</strong></p>
+<ul>
+<li>Total revenue</li>
+<li>Average order value</li>
+<li>Number of orders</li>
+<li>Top selling products</li>
+</ul>
+<p><strong>Export:</strong></p>
+<ul>
+<li>CSV</li>
+<li>PDF</li>
+<li>Excel</li>
+</ul>
+<h3>Product Performance</h3>
+<ol>
+<li>Go to <strong>Reports</strong> → <strong>Products</strong></li>
+</ol>
+<p><strong>Metrics:</strong></p>
+<ul>
+<li>Best sellers</li>
+<li>Worst performers</li>
+<li>Stock levels</li>
+<li>Out of stock items</li>
+</ul>
+<h3>Customer Reports</h3>
+<ol>
+<li>Go to <strong>Reports</strong> → <strong>Customers</strong></li>
+</ol>
+<p><strong>Metrics:</strong></p>
+<ul>
+<li>New customers (period)</li>
+<li>Repeat customers</li>
+<li>Customer lifetime value</li>
+<li>Top customers</li>
+</ul>
+<hr>
+<h2 id="s12"><span class="n">12</span>Security Best Practices</h2>
+<h3>Recommended Actions</h3>
+<ol>
+<li><strong>Change default admin password</strong> immediately</li>
+<li><strong>Use strong passwords</strong> (12+ characters, mixed case, numbers, symbols)</li>
+<li><strong>Enable two-factor authentication</strong> (if available)</li>
+<li><strong>Review user permissions</strong> regularly</li>
+<li><strong>Keep software updated</strong></li>
+<li><strong>Backup database</strong> weekly</li>
+<li><strong>Monitor admin login attempts</strong></li>
+<li><strong>Use HTTPS</strong> in production</li>
+</ol>
+<h3>Backup Database</h3>
+<pre><code class="language-bash"># From backend directory
+npm run backup
+
+# Or manually with pg_dump
+pg_dump -U postgres ecommerce_db &gt; backup.sql</code></pre>
+<hr>
+<h2 id="s13"><span class="n">13</span>🆘 Common Tasks</h2>
+<h3>How to feature a product on homepage?</h3>
+<ol>
+<li>Edit product</li>
+<li>Check &quot;Featured Product&quot;</li>
+<li>Save</li>
+</ol>
+<h3>How to create a sale/discount?</h3>
+<ol>
+<li>Edit product</li>
+<li>Enter &quot;Sale Price&quot; lower than regular price</li>
+<li>System auto-calculates discount %</li>
+<li>Save</li>
+</ol>
+<h3>How to handle out-of-stock products?</h3>
+<ol>
+<li>Edit product</li>
+<li>Set stock to 0</li>
+<li>Or set status to &quot;Inactive&quot;</li>
+<li>Save</li>
+</ol>
+<h3>How to add a new admin user?</h3>
+<ol>
+<li>Go to <strong>Users</strong> → <strong>Add User</strong></li>
+<li>Fill details</li>
+<li>Set <strong>Role</strong> to &quot;Admin&quot;</li>
+<li>Save</li>
+</ol>
+<hr>
+<h2 id="s14"><span class="n">14</span>📚 Next Steps</h2>
+<ul>
+<li>🎨 <a href="CUSTOMIZATION.md">Customize Your Store</a></li>
+<li>💳 <a href="PAYMENT_SETUP.md">Set Up Payment Gateways</a></li>
+<li>❓ <a href="FAQ.md">Read FAQ</a></li>
+</ul>
+<hr>
+<h2 id="s15"><span class="n">15</span>🆘 Support</h2>
+<p>Need help?</p>
+<ul>
+<li>📧 Email: support@angular-ecommerce3d.com</li>
+<li>📖 <a href="FAQ.md">FAQ</a></li>
+<li>🐛 Report issues via support channel</li>
+</ul>
+<hr>
+<p><strong>Admin Manual Version</strong>: 1.0  </p>
+<p><strong>Last Updated</strong>: January 2026</p>
+  </article>
+  <p class="footer-note">Buyer-facing docs · Markdown sources remain in <code>docs/*.md</code> · Visual theme matches architecture diagrams.</p>
+</main>
+</div>
+<script>
+document.getElementById('navToggle')?.addEventListener('click', () => {
+  document.getElementById('sidebar')?.classList.toggle('open');
+});
+</script>
+</body>
+</html>

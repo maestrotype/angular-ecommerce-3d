@@ -69,6 +69,9 @@
               <p *ngIf="selectedMethod === 'liqpay'">{{ 'PAYMENT.METHODS.LIQPAY_DESC' | translate }}</p>
               <p *ngIf="selectedMethod === 'stripe'">{{ 'PAYMENT.METHODS.STRIPE_DESC' | translate }}</p>
               <p *ngIf="selectedMethod === 'paypal'">{{ 'PAYMENT.METHODS.PAYPAL_DESC' | translate }}</p>
+              <p *ngIf="selectedMethod === 'paypal'" class="payment-mock-notice" role="note">
+                {{ 'PAYMENT.METHODS.PAYPAL_MOCK_NOTICE' | translate }}
+              </p>
             </div>
           </div>
         </div>

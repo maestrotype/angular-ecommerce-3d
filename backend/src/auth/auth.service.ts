@@ -1,5 +1,5 @@
 
-import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ConflictException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
@@ -125,19 +125,34 @@ export class AuthService {
   }
 
   createAdminUser(): Observable<User> {
+    const email = process.env.ADMIN_EMAIL?.trim();
+    const password = process.env.ADMIN_PASSWORD;
+
+    if (!email || !password) {
+      return throwError(() => new BadRequestException(
+        'Set ADMIN_EMAIL and ADMIN_PASSWORD in backend/.env before bootstrapping an admin user.',
+      ));
+    }
+
+    if (password.length < 12) {
+      return throwError(() => new BadRequestException(
+        'ADMIN_PASSWORD must be at least 12 characters.',
+      ));
+    }
+
     return from(this.userRepository.findOne({
-      where: { email: 'admin@example.com' },
+      where: { email },
     })).pipe(
       switchMap(existingAdmin => {
         if (existingAdmin) {
           return of(existingAdmin);
         }
 
-        return from(bcrypt.hash('admin123', 12)).pipe(
+        return from(bcrypt.hash(password, 12)).pipe(
           switchMap(hashedPassword => {
             const adminUser = this.userRepository.create({
-              email: 'admin@example.com',
-              name: 'Admin User',
+              email,
+              name: process.env.ADMIN_NAME?.trim() || 'Admin User',
               password: hashedPassword,
               role: UserRole.ADMIN,
             });

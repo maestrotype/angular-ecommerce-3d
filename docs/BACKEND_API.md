@@ -4,9 +4,13 @@ Technical reference for the NestJS-based REST API.
 
 ## API Specification
 
-The API follows RESTful principles and is fully documented via Swagger.
-- **Local Access**: `http://localhost:3002/api/docs`
-- **Prefix**: All endpoints are prefixed with `/api`.
+The API follows RESTful principles. **Interactive OpenAPI (Swagger) UI** is available when the backend is running:
+
+- **Swagger UI**: `http://localhost:3002/api/docs`
+- **OpenAPI JSON**: `http://localhost:3002/api/docs-json`
+- **Route prefix**: all REST endpoints are under `/api`
+
+This markdown file complements Swagger with architecture notes and module overview.
 
 ## Authentication & Security
 

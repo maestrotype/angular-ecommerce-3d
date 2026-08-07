@@ -9,13 +9,17 @@ dotenv.config({ path: envPath });
 import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { ValidationPipe } from "@nestjs/common";
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
 import { join } from "path";
 import { AllExceptionsFilter } from "./common/filters/http-exception.filter";
 import { LoggingInterceptor } from "./common/interceptors/logging.interceptor";
 import { json, urlencoded } from 'express';
+import { assertProductionSecrets } from './config/production-secrets';
 
 async function bootstrap() {
+  assertProductionSecrets();
+
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   
   // Increase payload limits for 3D models and images
@@ -79,6 +83,20 @@ async function bootstrap() {
 
   // Global prefix for API routes
   app.setGlobalPrefix("api");
+
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle("Angular E-commerce 3D API")
+    .setDescription(
+      "REST API for storefront, admin, payments, and uploads. Protected routes require JWT Bearer auth.",
+    )
+    .setVersion("1.0")
+    .addBearerAuth()
+    .build();
+  const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
+  SwaggerModule.setup("docs", app, swaggerDocument, {
+    useGlobalPrefix: true,
+    jsonDocumentUrl: "docs-json",
+  });
 
   const port = process.env.PORT || 3002;
   setInterval(() => {

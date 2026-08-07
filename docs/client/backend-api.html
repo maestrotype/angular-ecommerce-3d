@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backend API Architecture — Angular 3D E-Commerce</title>
+<link rel="stylesheet" href="assets/client-docs.css">
+</head>
+<body>
+<button type="button" class="mobile-toggle" id="navToggle">Menu</button>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+  <a class="sidebar-brand" href="index.html">Angular 3D E-Commerce</a>
+  <div class="sidebar-tag">Client documentation</div>
+  <div class="nav-group"><div class="nav-group-title">Start here</div><a class="nav-link" href="index.html">Documentation Hub</a>
+<a class="nav-link" href="quick-start.html">Quick Start</a>
+<a class="nav-link" href="getting-started.html">Getting Started</a>
+<a class="nav-link" href="installation.html">Installation</a></div>
+<div class="nav-group"><div class="nav-group-title">Product guides</div><a class="nav-link" href="admin-guide.html">Admin Guide</a>
+<a class="nav-link" href="admin-manual.html">Admin Manual</a>
+<a class="nav-link" href="customization.html">Customization</a>
+<a class="nav-link" href="payment-setup.html">Payment Setup</a>
+<a class="nav-link" href="social-auth.html">Social Auth</a>
+<a class="nav-link" href="local-ai.html">Local AI Setup</a></div>
+<div class="nav-group"><div class="nav-group-title">Reference</div><a class="nav-link" href="architecture.html">Architecture</a>
+<a class="nav-link active" href="backend-api.html">Backend API</a>
+<a class="nav-link" href="../BACKEND_ARCHITECTURE_DIAGRAM.html">Backend Diagram</a>
+<a class="nav-link" href="faq.html">FAQ</a>
+<a class="nav-link" href="troubleshooting.html">Troubleshooting</a>
+<a class="nav-link" href="support.html">Support</a></div>
+</aside>
+<main class="main">
+  <header class="page-header">
+    <h1>Backend API Architecture</h1>
+    <p class="lead">Technical reference for the NestJS-based REST API.</p>
+    <div class="badges"><span class="badge blue">API</span></div>
+  </header>
+  <article class="content">
+<p>Technical reference for the NestJS-based REST API.</p>
+<h2 id="s1"><span class="n">1</span>API Specification</h2>
+<p>The API follows RESTful principles. <strong>Interactive OpenAPI (Swagger) UI</strong> is available when the backend is running:</p>
+<ul>
+<li><strong>Swagger UI</strong>: <code>http://localhost:3002/api/docs</code></li>
+<li><strong>OpenAPI JSON</strong>: <code>http://localhost:3002/api/docs-json</code></li>
+<li><strong>Route prefix</strong>: all REST endpoints are under <code>/api</code></li>
+</ul>
+<p>This markdown file complements Swagger with architecture notes and module overview.</p>
+<h2 id="s2"><span class="n">2</span>Authentication &amp; Security</h2>
+<h3>Authorization Header</h3>
+<p>All protected routes require a JSON Web Token (JWT).</p>
+<pre><code class="language-http">Authorization: Bearer &lt;JWT_TOKEN&gt;</code></pre>
+<h3>Authentication Guards</h3>
+<ul>
+<li><strong>JwtAuthGuard</strong>: Validates the presence and integrity of the JWT.</li>
+<li><strong>RolesGuard</strong>: Verifies permissions (e.g., <code>admin</code> role) using the <code>@Roles()</code> decorator.</li>
+</ul>
+<h2 id="s3"><span class="n">3</span>Core Modules &amp; Endpoints</h2>
+<h3>Authentication (<code>/auth</code>)</h3>
+<ul>
+<li><code>POST /auth/register</code>: Public registration (returns token).</li>
+<li><code>POST /auth/login</code>: Identity verification.</li>
+<li><code>GET /auth/profile</code>: Retrieves current user context (requires JWT).</li>
+</ul>
+<h3>Products (<code>/products</code>)</h3>
+<ul>
+<li><code>GET /products</code>: Paginated product list with search/category support.</li>
+<li><code>POST /products</code>: Multi-part request for product metadata and 3D assets (Admin only).</li>
+<li><code>DELETE /products/:id</code>: Cascading deletion of product assets.</li>
+</ul>
+<h3>Orders (<code>/orders</code>)</h3>
+<ul>
+<li><code>GET /orders</code>: Fetch order history for the authenticated user.</li>
+<li><code>POST /orders</code>: Checkout initialization.</li>
+</ul>
+<h3>Sections &amp; Content (<code>/sections</code>)</h3>
+<ul>
+<li><code>GET /sections</code>: Fetch dynamic homepage components and 3D scene settings.</li>
+<li><code>PUT /sections/:id</code>: Update dynamic section content (Admin only).</li>
+</ul>
+<h2 id="s4"><span class="n">4</span>Data Validation (DTOs)</h2>
+<p>The backend utilizes <code>class-validator</code> for strict payload verification.</p>
+<ul>
+<li><strong>Transform</strong>: Incoming payloads are automatically transformed to DTO instances via <code>ValidationPipe({ transform: true })</code>.</li>
+<li><strong>Validation</strong>: Rejects requests with malformed or unwhitelisted properties to prevent overposting attacks.</li>
+</ul>
+<h2 id="s5"><span class="n">5</span>Integration Services</h2>
+<h3>Dynamic SEO Service</h3>
+<p>The <code>SeoService</code> dynamically serves meta-tags and site-wide configuration based on the current entity (Product/Category), optimized for high-performance indexing.</p>
+<h3>Health &amp; Monitoring</h3>
+<ul>
+<li><code>GET /health</code>: System heartbeat endpoint used by the frontend for dynamic service detection.</li>
+</ul>
+  </article>
+  <p class="footer-note">Buyer-facing docs · Markdown sources remain in <code>docs/*.md</code> · Visual theme matches architecture diagrams.</p>
+</main>
+</div>
+<script>
+document.getElementById('navToggle')?.addEventListener('click', () => {
+  document.getElementById('sidebar')?.classList.toggle('open');
+});
+</script>
+</body>
+</html>

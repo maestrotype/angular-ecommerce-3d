@@ -1,8 +1,10 @@
 # Backend Architecture Documentation
 
-> **Generated from source code** - 2026-07-06
+> **Generated from source code** - 2026-07-06 · **Diagram + overview refreshed** 2026-08-06  
+> Visual overview: [`BACKEND_ARCHITECTURE_DIAGRAM.html`](BACKEND_ARCHITECTURE_DIAGRAM.html)  
 > This document is the single source of truth for backend architecture.
-> JSON model: `docs/backend-architecture.json`
+> JSON model: `docs/backend-architecture.json`  
+> **Note:** Older sections below may still mention SQLite/OAuth/Python worker — prefer the diagram and Technology Stack table above when they conflict; a full doc pass is tracked under marketplace Track A.
 
 ---
 
@@ -34,18 +36,17 @@
 
 ## Overview
 
-This is a **NestJS + TypeORM + SQLite** backend powering an Angular e-commerce platform with 3D model capabilities. The system supports product catalog management, order processing, payment integration, AI-powered 3D model generation, and admin dashboard functionality.
+This is a **NestJS + TypeORM + PostgreSQL** backend powering an Angular e-commerce platform with 3D model capabilities. The system supports product catalog management, order processing, multi-provider payment integration, AI-powered 3D model generation (external provider APIs), and admin dashboard functionality.
 
 ### Key Characteristics
 
 - **Monolithic architecture** with modular NestJS structure
 - **Type-safe** end-to-end (TypeScript backend + TypeScript frontend)
-- **SQLite database** for development and lightweight deployment
+- **PostgreSQL database** via TypeORM (`database.config.ts`)
 - **JWT authentication** with role-based access control (USER, ADMIN)
-- **OAuth2 social login** via Google and GitHub
-- **Cloudinary** for image storage
-- **Stripe** for payment processing
-- **AI worker** (Python) for 3D model generation
+- **Cloudinary** for image and GLB storage (with local `uploads/` fallback)
+- **Payments**: Stripe, LiqPay, PayPal (strategy pattern)
+- **AI generation**: NestJS provider adapters (Tripo3D, Meshy, Hunyuan, Luma, Unique3D, Custom)
 
 ---
 
@@ -56,19 +57,16 @@ This is a **NestJS + TypeORM + SQLite** backend powering an Angular e-commerce p
 | Framework | NestJS | 10.x |
 | Language | TypeScript | ^5.4.0 |
 | ORM | TypeORM | 0.3.x |
-| Database | SQLite (better-sqlite3) | Latest |
+| Database | PostgreSQL | 14+ |
 | Validation | class-validator + class-transformer | Latest |
-| Authentication | @nestjs/passport + JWT | Latest |
+| Authentication | @nestjs/passport + JWT + bcrypt | Latest |
 | File Upload | multer + @nestjs/platform-express | Latest |
 | Cloud Storage | cloudinary | Latest |
-| Payments | @stripe/stripe-js (backend: stripe SDK) | Latest |
-| Email | nodemailer + @nestjs/mailers | Latest |
-| Queue | bullmq + @nestjs/bullmq | Latest |
-| Cache/Redis | ioredis | Latest |
-| API Docs | @nestjs/swagger | Latest |
-| Testing | jest + @nestjs/testing | Latest |
-| HTTP Client | @nestjs/axios (axios) | Latest |
-| PDF Generation | puppeteer | Latest |
+| Payments | Stripe · LiqPay · PayPal strategies | Latest |
+| Email | nodemailer (EmailModule) | Latest |
+| AI 3D | External provider HTTP APIs | Latest |
+| Testing | jest + @nestjs/testing | Configured |
+| HTTP Client | axios | Latest |
 
 ---
 

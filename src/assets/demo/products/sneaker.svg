@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="3D showcase sneaker">
+  <rect width="400" height="400" fill="#111827"/>
+  <rect x="40" y="40" width="320" height="320" rx="24" fill="#1f2937"/>
+  <path d="M95 245c25-10 55-12 85-8 35 5 70 0 110-18l25 18c-35 28-75 40-115 40-35 0-70-10-105-32z" fill="#ef4444"/>
+  <path d="M120 220c30-18 70-22 110-15 18 4 35 12 50 22l-15 18c-22-12-48-18-75-18-25 0-48 5-70 15z" fill="#f87171"/>
+  <circle cx="285" cy="228" r="14" fill="#fff"/>
+  <text x="200" y="360" fill="#9ca3af" font-family="system-ui,sans-serif" font-size="18" text-anchor="middle">3D Sneaker Demo</text>
+</svg>

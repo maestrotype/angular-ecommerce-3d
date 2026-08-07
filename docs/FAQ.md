@@ -297,10 +297,20 @@ npm install
 ### Q: Admin panel login not working?
 
 **A:**
-1. Verify credentials (default: `admin@example.com` / `admin123`)
-2. Check backend logs for errors
-3. Verify database connection
-4. Try creating new admin: `curl -X POST http://localhost:3002/api/auth/create-admin`
+1. Confirm `ADMIN_EMAIL` / `ADMIN_PASSWORD` in `backend/.env` match what you use to log in
+2. Bootstrap admin if none exists — set env vars, then:
+   ```bash
+   # Development
+   curl -X POST http://localhost:3002/api/auth/create-admin
+
+   # Production (requires bootstrap token)
+   curl -X POST https://your-api.example.com/api/auth/create-admin \
+     -H "x-admin-bootstrap-token: YOUR_ADMIN_BOOTSTRAP_TOKEN"
+   ```
+3. Check backend logs for errors
+4. Verify database connection
+
+See [First Deploy Security Checklist](INSTALLATION.md#-first-deploy-security-checklist) in the Installation guide.
 
 ### Q: 3D models not loading?
 

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Installation Guide — Angular 3D E-Commerce</title>
+<link rel="stylesheet" href="assets/client-docs.css">
+</head>
+<body>
+<button type="button" class="mobile-toggle" id="navToggle">Menu</button>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+  <a class="sidebar-brand" href="index.html">Angular 3D E-Commerce</a>
+  <div class="sidebar-tag">Client documentation</div>
+  <div class="nav-group"><div class="nav-group-title">Start here</div><a class="nav-link" href="index.html">Documentation Hub</a>
+<a class="nav-link" href="quick-start.html">Quick Start</a>
+<a class="nav-link" href="getting-started.html">Getting Started</a>
+<a class="nav-link active" href="installation.html">Installation</a></div>
+<div class="nav-group"><div class="nav-group-title">Product guides</div><a class="nav-link" href="admin-guide.html">Admin Guide</a>
+<a class="nav-link" href="admin-manual.html">Admin Manual</a>
+<a class="nav-link" href="customization.html">Customization</a>
+<a class="nav-link" href="payment-setup.html">Payment Setup</a>
+<a class="nav-link" href="social-auth.html">Social Auth</a>
+<a class="nav-link" href="local-ai.html">Local AI Setup</a></div>
+<div class="nav-group"><div class="nav-group-title">Reference</div><a class="nav-link" href="architecture.html">Architecture</a>
+<a class="nav-link" href="backend-api.html">Backend API</a>
+<a class="nav-link" href="../BACKEND_ARCHITECTURE_DIAGRAM.html">Backend Diagram</a>
+<a class="nav-link" href="faq.html">FAQ</a>
+<a class="nav-link" href="troubleshooting.html">Troubleshooting</a>
+<a class="nav-link" href="support.html">Support</a></div>
+</aside>
+<main class="main">
+  <header class="page-header">
+    <h1>Installation Guide</h1>
+    <p class="lead">Complete installation guide for Angular E-commerce 3D platform.</p>
+    <div class="badges"><span class="badge green">Setup</span><span class="badge orange">Security</span></div>
+  </header>
+  <article class="content">
+<p>Complete installation guide for Angular E-commerce 3D platform.</p>
+<hr>
+<h2 id="s1"><span class="n">1</span>📋 Table of Contents</h2>
+<ol>
+<li><a href="#system-requirements">System Requirements</a></li>
+<li><a href="#development-installation">Development Installation</a></li>
+<li><a href="#production-installation">Production Installation</a></li>
+<li><a href="#docker-installation">Docker Installation</a></li>
+<li><a href="#database-setup">Database Setup</a></li>
+<li><a href="#environment-configuration">Environment Configuration</a></li>
+<li><a href="#first-run-setup">First Run Setup</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+</ol>
+<hr>
+<h2 id="s2"><span class="n">2</span>System Requirements</h2>
+<h3>Minimum Requirements</h3>
+<table>
+<tr><th>Component</th><th>Requirement</th></tr>
+<tr><td><strong>Operating System</strong></td><td>Windows 10+, macOS 10.14+, Ubuntu 18.04+</td></tr>
+<tr><td><strong>Node.js</strong></td><td>18.0 or higher</td></tr>
+<tr><td><strong>npm</strong></td><td>9.0 or higher</td></tr>
+<tr><td><strong>PostgreSQL</strong></td><td>14.0 or higher</td></tr>
+<tr><td><strong>RAM</strong></td><td>4 GB minimum, 8 GB recommended</td></tr>
+<tr><td><strong>Storage</strong></td><td>2 GB free space</td></tr>
+<tr><td><strong>Browser</strong></td><td>Chrome 90+, Firefox 88+, Safari 14+, Edge 90+</td></tr>
+</table>
+<h3>Optional (Recommended)</h3>
+<ul>
+<li><strong>Git</strong> - For version control</li>
+<li><strong>Docker</strong> - For containerized deployment</li>
+<li><strong>Visual Studio Code</strong> - Recommended IDE</li>
+</ul>
+<hr>
+<h2 id="s3"><span class="n">3</span>Development Installation</h2>
+<h3>Step 1: Install Prerequisites</h3>
+<h4>Install Node.js</h4>
+<ol>
+<li>Download from <a href="https://nodejs.org/">nodejs.org</a></li>
+<li>Choose LTS version (18.x or higher)</li>
+<li>Run installer with default settings</li>
+<li>Verify installation:</li>
+</ol>
+<pre><code class="language-bash">node --version  # Should show v18.x.x or higher
+npm --version   # Should show 9.x.x or higher</code></pre>
+<h4>Install PostgreSQL</h4>
+<p><strong>Windows:</strong></p>
+<ol>
+<li>Download from <a href="https://www.postgresql.org/download/windows/">postgresql.org</a></li>
+<li>Run installer, remember your password</li>
+<li>Default port: 5432</li>
+</ol>
+<p><strong>macOS:</strong></p>
+<pre><code class="language-bash">brew install postgresql@14
+brew services start postgresql@14</code></pre>
+<p><strong>Linux (Ubuntu):</strong></p>
+<pre><code class="language-bash">sudo apt update
+sudo apt install postgresql postgresql-contrib
+sudo systemctl start postgresql</code></pre>
+<p>Verify installation:</p>
+<pre><code class="language-bash">psql --version  # Should show 14.x or higher</code></pre>
+<h3>Step 2: Download Project</h3>
+<p>Extract the purchased zip file:</p>
+<pre><code class="language-bash">unzip angular-ecommerce-3d.zip
+cd angular-ecommerce-3d</code></pre>
+<h3>Step 3: Install Frontend Dependencies</h3>
+<pre><code class="language-bash">npm install</code></pre>
+<p><strong>Expected output:</strong></p>
+<pre><code class="language-">added 1234 packages in 45s</code></pre>
+<h3>Step 4: Install Backend Dependencies</h3>
+<pre><code class="language-bash">cd backend
+npm install
+cd ..</code></pre>
+<p><strong>Expected output:</strong></p>
+<pre><code class="language-">added 567 packages in 30s</code></pre>
+<hr>
+<h2 id="s4"><span class="n">4</span>🗄️ Database Setup</h2>
+<h3>Step 1: Create Database</h3>
+<h4>Using pgAdmin (GUI)</h4>
+<ol>
+<li>Open pgAdmin 4</li>
+<li>Right-click &quot;Databases&quot; → &quot;Create&quot; → &quot;Database&quot;</li>
+<li>Name: <code>ecommerce_db</code></li>
+<li>Owner: <code>postgres</code></li>
+<li>Click &quot;Save&quot;</li>
+</ol>
+<h4>Using Command Line</h4>
+<p><strong>macOS/Linux:</strong></p>
+<pre><code class="language-bash">sudo -u postgres psql
+CREATE DATABASE ecommerce_db;
+\q</code></pre>
+<p><strong>Windows (as postgres user):</strong></p>
+<pre><code class="language-bash">psql -U postgres
+CREATE DATABASE ecommerce_db;
+\q</code></pre>
+<h3>Step 2: Verify Database</h3>
+<pre><code class="language-bash">psql -U postgres -l</code></pre>
+<p>You should see <code>ecommerce_db</code> in the list.</p>
+<hr>
+<h2 id="s5"><span class="n">5</span>Environment Configuration</h2>
+<h3>Backend Configuration</h3>
+<h4>Step 1: Create Environment File</h4>
+<pre><code class="language-bash">cp backend/.env.example backend/.env</code></pre>
+<h4>Step 2: Edit Configuration</h4>
+<p>Open <code>backend/.env</code> in a text editor and configure:</p>
+<pre><code class="language-env"># APPLICATION
+NODE_ENV=development
+PORT=3002
+FRONTEND_URL=http://localhost:4200
+
+# DATABASE
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_USERNAME=postgres
+DATABASE_PASSWORD=your_actual_password_here
+DATABASE_NAME=ecommerce_db
+
+# JWT (Generate a secure secret!)
+JWT_SECRET=generate_a_random_32_character_secret_key_here
+JWT_EXPIRES_IN=7d
+
+# Admin bootstrap (for POST /api/auth/create-admin)
+ADMIN_EMAIL=admin@yourdomain.com
+ADMIN_PASSWORD=change_me_min_12_chars
+ADMIN_NAME=Admin User
+ADMIN_BOOTSTRAP_TOKEN=generate_a_random_one_time_token
+
+# OPTIONAL: Payment Gateways (can configure later)
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_PUBLISHABLE_KEY=pk_test_...
+
+# OPTIONAL: Image Storage
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+
+# OPTIONAL: Background Removal
+REMOVE_BG_API_KEY=your_remove_bg_api_key</code></pre>
+<div class="card blue"><div class="card-title">Note</div><p><strong>🔐 Generate JWT Secret:</strong> ``<code>bash node -e &quot;console.log(require('crypto').randomBytes(32).toString('hex'))&quot; </code>``</p></div>
+<h3>Frontend Configuration</h3>
+<p>For development, the default configuration works out of the box.</p>
+<p>For production, edit <code>src/environments/environment.prod.ts</code>:</p>
+<pre><code class="language-typescript">export const environment = {
+  production: true,
+  apiUrl: 'https://your-backend-api.com/api',
+  stripePublishableKey: '',  // configure in Admin → Settings
+  paypalClientId: '',        // configure in Admin → Settings
+};</code></pre>
+<div class="card blue"><div class="card-title">Note</div><p>Payment keys are loaded from the Admin Panel at runtime. Keep environment payment fields <strong>empty</strong> in production builds unless you intentionally inject build-time fallbacks.</p></div>
+<hr>
+<h2 id="s6"><span class="n">6</span>First Deploy Security Checklist</h2>
+<p>Complete this before exposing the app to the public internet.</p>
+<table>
+<tr><th>Step</th><th>Action</th></tr>
+<tr><td>1</td><td>Set a unique <code>JWT_SECRET</code> (≥32 chars). Production <strong>refuses to start</strong> with placeholder values.</td></tr>
+<tr><td>2</td><td>Set strong <code>ADMIN_EMAIL</code> / <code>ADMIN_PASSWORD</code> (≥12 chars) in <code>backend/.env</code>.</td></tr>
+<tr><td>3</td><td>Bootstrap admin once: <code>POST /api/auth/create-admin</code> (dev) or with <code>x-admin-bootstrap-token</code> header (production).</td></tr>
+<tr><td>4</td><td>Generate <code>ADMIN_BOOTSTRAP_TOKEN</code> for production bootstrap, then remove or rotate it after first admin exists.</td></tr>
+<tr><td>5</td><td>Do <strong>not</strong> pre-fill admin login credentials in frontend environment files.</td></tr>
+<tr><td>6</td><td>Configure Stripe/PayPal in Admin → Settings — do not ship mock payment keys in <code>environment.prod.ts</code>.</td></tr>
+<tr><td>7</td><td>For Docker: fill <code>backend/.env</code> before <code>docker compose up</code> (Compose loads it via <code>env_file</code>).</td></tr>
+<tr><td>8</td><td>Change default PostgreSQL credentials in production.</td></tr>
+</table>
+<h3>Production admin bootstrap</h3>
+<pre><code class="language-bash">curl -X POST https://your-api.example.com/api/auth/create-admin \
+  -H &quot;x-admin-bootstrap-token: YOUR_ADMIN_BOOTSTRAP_TOKEN&quot;</code></pre>
+<p>Requires <code>ADMIN_EMAIL</code>, <code>ADMIN_PASSWORD</code>, and matching <code>ADMIN_BOOTSTRAP_TOKEN</code> in backend environment.</p>
+<hr>
+<h2 id="s7"><span class="n">7</span>First Run Setup</h2>
+<h3>Step 1: Start Backend</h3>
+<p>Open a terminal:</p>
+<pre><code class="language-bash">cd backend
+npm run start:dev</code></pre>
+<p><strong>Expected output:</strong></p>
+<pre><code class="language-">[Nest] 12345  - INFO [NestFactory] Starting Nest application...
+[Nest] 12345  - INFO [InstanceLoader] AppModule dependencies initialized
+[Nest] 12345  - INFO [RoutesResolver] ProductsController {/api/products}
+...
+[Nest] 12345  - INFO Application is running on: http://localhost:3002</code></pre>
+<div class="card green"><div class="card-title">Note</div><p>✅ <strong>Success Indicator</strong>: You should see &quot;Application is running on: http://localhost:3002&quot;</p></div>
+<h3>Step 2: Create Admin User</h3>
+<ol>
+<li>Add bootstrap credentials to <code>backend/.env</code> (see <code>backend/.env.example</code>):</li>
+</ol>
+<pre><code class="language-env">ADMIN_EMAIL=admin@yourdomain.com
+ADMIN_PASSWORD=YourSecurePassword123!
+ADMIN_NAME=Admin User</code></pre>
+<ol>
+<li>While the backend is running, open a <strong>new terminal</strong>:</li>
+</ol>
+<pre><code class="language-bash">curl -X POST http://localhost:3002/api/auth/create-admin</code></pre>
+<p><strong>Expected response:</strong> JSON user object with your <code>ADMIN_EMAIL</code>.</p>
+<div class="card orange"><div class="card-title">Note</div><p><strong>Security:</strong> Credentials come from <code>.env</code> — there are no hardcoded default passwords. Use at least 12 characters for <code>ADMIN_PASSWORD</code>.</p></div>
+<h3>Step 3: Start Frontend</h3>
+<p>In a <strong>new terminal</strong>:</p>
+<pre><code class="language-bash">npm start</code></pre>
+<p><strong>Expected output:</strong></p>
+<pre><code class="language-">** Angular Live Development Server is listening on localhost:4200 **
+✔ Compiled successfully.</code></pre>
+<div class="card green"><div class="card-title">Note</div><p>✅ <strong>Success Indicator</strong>: Browser should automatically open to http://localhost:4200</p></div>
+<h3>Step 4: Verify Installation</h3>
+<ol>
+<li>Open http://localhost:4200 — You should see the homepage</li>
+<li>Navigate to http://localhost:4200/admin</li>
+<li>Login with the <code>ADMIN_EMAIL</code> / <code>ADMIN_PASSWORD</code> from your <code>backend/.env</code></li>
+<li>You should see the admin dashboard</li>
+</ol>
+<p><strong>🎉 Success!</strong> Your development environment is ready!</p>
+<hr>
+<h2 id="s8"><span class="n">8</span>Production Installation</h2>
+<h3>Option 1: Manual Deployment</h3>
+<h4>Build Frontend</h4>
+<pre><code class="language-bash">npm run build:prod</code></pre>
+<p>Output will be in <code>dist/angular-ecommerce-3d/</code> directory.</p>
+<h4>Build Backend</h4>
+<pre><code class="language-bash">cd backend
+npm run build</code></pre>
+<p>Output will be in <code>backend/dist/</code> directory.</p>
+<h4>Deploy</h4>
+<ol>
+<li>Upload <code>dist/</code> folder to your web server (nginx/Apache)</li>
+<li>Upload <code>backend/dist/</code> to Node.js server</li>
+<li>Set up PostgreSQL database on server</li>
+<li>Configure environment variables</li>
+<li>Start backend: <code>npm run start:prod</code></li>
+</ol>
+<h3>Option 2: Docker Deployment</h3>
+<p>See <a href="#docker-installation">Docker Installation</a> section.</p>
+<h3>Option 3: Cloud Platforms</h3>
+<h4>Deploy to Render.com</h4>
+<ol>
+<li>Connect GitHub repository</li>
+<li>Create Web Service for backend</li>
+<li>Create Static Site for frontend</li>
+<li>Add environment variables in dashboard</li>
+<li>Deploy</li>
+</ol>
+<h4>Deploy to Heroku</h4>
+<pre><code class="language-bash"># Backend
+heroku create your-app-backend
+heroku addons:create heroku-postgresql:hobby-dev
+git push heroku main
+
+# Frontend
+heroku create your-app-frontend
+heroku buildpacks:add heroku/nodejs
+git push heroku main</code></pre>
+<hr>
+<h2 id="s9"><span class="n">9</span>🐳 Docker Installation</h2>
+<h3>Prerequisites</h3>
+<ul>
+<li>Docker Desktop installed</li>
+<li>Docker Compose installed</li>
+</ul>
+<h3>Step 1: Configure Environment</h3>
+<pre><code class="language-bash">cp backend/.env.example backend/.env
+# Edit backend/.env — set JWT_SECRET, DATABASE_PASSWORD, ADMIN_EMAIL, ADMIN_PASSWORD</code></pre>
+<div class="card blue"><div class="card-title">Note</div><p>Docker Compose loads <code>backend/.env</code> via <code>env_file</code>. You do not need a separate root <code>.env</code> unless overriding postgres credentials (see root <code>.env.example</code>).</p></div>
+<h3>Step 2: Start Services</h3>
+<pre><code class="language-bash">docker compose up -d --build</code></pre>
+<p>This will:</p>
+<ul>
+<li>✅ Start PostgreSQL container</li>
+<li>✅ Start backend container (NestJS on port 3002)</li>
+<li>✅ Start frontend container (nginx CSR on port 4200)</li>
+<li>✅ Auto-create database schema via TypeORM on backend startup</li>
+</ul>
+<h3>Step 3: Access Application</h3>
+<ul>
+<li>Frontend: http://localhost:4200</li>
+<li>Backend API: http://localhost:3002/api</li>
+<li>Database: localhost:5432</li>
+</ul>
+<h3>Step 4: Create Admin User</h3>
+<p>Ensure <code>ADMIN_EMAIL</code> and <code>ADMIN_PASSWORD</code> are set in <code>backend/.env</code>, then:</p>
+<pre><code class="language-bash">curl -X POST http://localhost:3002/api/auth/create-admin</code></pre>
+<p>In production, pass <code>x-admin-bootstrap-token</code> header — see <a href="#-first-deploy-security-checklist">First Deploy Security Checklist</a>.</p>
+<h3>Useful Docker Commands</h3>
+<pre><code class="language-bash"># View logs
+docker compose logs -f
+
+# Stop services
+docker compose down
+
+# Rebuild after code changes
+docker compose up -d --build
+
+# Access database
+docker compose exec postgres psql -U postgres ecommerce_db</code></pre>
+<hr>
+<h2 id="s10"><span class="n">10</span>🔧 Advanced Configuration</h2>
+<h3>SSL/HTTPS Setup</h3>
+<p>For production, configure SSL certificate:</p>
+<p><strong>nginx configuration:</strong></p>
+<pre><code class="language-nginx">server {
+    listen 443 ssl;
+    server_name yourdomain.com;
+    
+    ssl_certificate /path/to/certificate.crt;
+    ssl_certificate_key /path/to/private.key;
+    
+    location / {
+        proxy_pass http://localhost:4200;
+    }
+    
+    location /api {
+        proxy_pass http://localhost:3002;
+    }
+}</code></pre>
+<h3>Custom Domain</h3>
+<ol>
+<li>Point your domain to server IP</li>
+<li>Update <code>FRONTEND_URL</code> in <code>backend/.env</code></li>
+<li>Update <code>apiUrl</code> in frontend environment files</li>
+<li>Configure CORS in backend</li>
+</ol>
+<h3>Email Configuration</h3>
+<p>For order notifications, configure SMTP:</p>
+<pre><code class="language-env">SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your-email@gmail.com
+SMTP_PASSWORD=your-app-password</code></pre>
+<hr>
+<h2 id="s11"><span class="n">11</span>🛠️ Troubleshooting</h2>
+<h3>Issue: &quot;npm install&quot; fails</h3>
+<p><strong>Solution:</strong></p>
+<pre><code class="language-bash"># Clear npm cache
+npm cache clean --force
+# Remove node_modules
+rm -rf node_modules package-lock.json
+# Reinstall
+npm install</code></pre>
+<h3>Issue: Database connection error</h3>
+<p><strong>Symptoms:</strong></p>
+<pre><code class="language-">[TypeORM] Connection failed: password authentication failed</code></pre>
+<p><strong>Solution:</strong></p>
+<ol>
+<li>Verify PostgreSQL is running:</li>
+</ol>
+<p>   ```bash</p>
+<p>   # macOS/Linux</p>
+<p>   sudo systemctl status postgresql</p>
+<p>   # or</p>
+<p>   brew services list</p>
+<p>   ```</p>
+<ol>
+<li>Check credentials in <code>backend/.env</code></li>
+<li>Test connection manually:</li>
+</ol>
+<p>   ```bash</p>
+<p>   psql -U postgres -d ecommerce_db</p>
+<p>   ```</p>
+<h3>Issue: Port already in use</h3>
+<p><strong>Symptoms:</strong></p>
+<pre><code class="language-">Port 4200 is already in use</code></pre>
+<p><strong>Solution:</strong></p>
+<pre><code class="language-bash"># Find process using port
+lsof -i :4200  # macOS/Linux
+netstat -ano | findstr :4200  # Windows
+
+# Kill process or use different port
+npm start -- --port 4300</code></pre>
+<h3>Issue: 3D models not loading</h3>
+<p><strong>Solution:</strong></p>
+<ol>
+<li>Check file format (must be .glb or .gltf)</li>
+<li>Verify file size (&lt; 10MB recommended)</li>
+<li>Check browser console for errors</li>
+<li>Ensure CORS is configured correctly</li>
+</ol>
+<h3>Issue: Payment integration not working</h3>
+<p><strong>Solution:</strong></p>
+<ol>
+<li>Verify API keys in <code>backend/.env</code></li>
+<li>Check you're using test keys in development</li>
+<li>Enable Stripe webhooks</li>
+<li>Check firewall/network settings</li>
+</ol>
+<hr>
+<h2 id="s12"><span class="n">12</span>📊 Performance Optimization</h2>
+<h3>Production Checklist</h3>
+<ul>
+<li>[ ] Enable gzip compression</li>
+<li>[ ] Configure CDN for static assets</li>
+<li>[ ] Set up Redis for caching</li>
+<li>[ ] Enable database connection pooling</li>
+<li>[ ] Configure image optimization</li>
+<li>[ ] Set up monitoring (e.g., PM2)</li>
+</ul>
+<h3>Recommended PM2 Configuration</h3>
+<pre><code class="language-bash"># Install PM2
+npm install -g pm2
+
+# Start backend with PM2
+cd backend
+pm2 start dist/main.js --name ecommerce-backend
+
+# Save PM2 configuration
+pm2 save
+pm2 startup</code></pre>
+<hr>
+<h2 id="s13"><span class="n">13</span>📚 Next Steps</h2>
+<p>After successful installation:</p>
+<ol>
+<li>✅ <a href="ADMIN_MANUAL.md">Configure Admin Panel</a></li>
+<li>✅ <a href="CUSTOMIZATION.md">Customize Your Store</a></li>
+<li>✅ <a href="PAYMENT_SETUP.md">Set Up Payments</a></li>
+<li>✅ <a href="FAQ.md">Review FAQ</a></li>
+</ol>
+<hr>
+<h2 id="s14"><span class="n">14</span>🆘 Support</h2>
+<p>Need help with installation?</p>
+<ul>
+<li>📧 Email: support@angular-ecommerce3d.com</li>
+<li>📖 Check <a href="FAQ.md">FAQ</a></li>
+<li>🐛 GitHub Issues (if applicable)</li>
+</ul>
+<hr>
+<p><strong>Installation Guide Version</strong>: 1.0  </p>
+<p><strong>Last Updated</strong>: January 2026</p>
+  </article>
+  <p class="footer-note">Buyer-facing docs · Markdown sources remain in <code>docs/*.md</code> · Visual theme matches architecture diagrams.</p>
+</main>
+</div>
+<script>
+document.getElementById('navToggle')?.addEventListener('click', () => {
+  document.getElementById('sidebar')?.classList.toggle('open');
+});
+</script>
+</body>
+</html>

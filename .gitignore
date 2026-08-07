@@ -3,3 +3,6 @@
 **/.DS_Store
 .angular
 .env
+test-results/
+playwright-report/
+blob-report/
