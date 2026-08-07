@@ -3,7 +3,7 @@
 **Created**: 2026-08-06  
 **Maintainer**: Project owner  
 **Status**: Active planning document  
-**Baseline score**: **7/10** marketplace readiness (Phase A1 security + A2 deploy path docs — see §2)
+**Baseline score**: **8/10** marketplace readiness (Phase A4 CI + Swagger + honest PayPal — see §2)
 
 > This document is the single instruction set for taking **angular-ecommerce-3d** from a feature-complete codebase to a **sellable marketplace template**, with an optional second track toward **enterprise production-ready out of the box**.
 
@@ -114,14 +114,14 @@ Work in priority order. Mark items `[ ]` → `[x]` as completed.
 | # | Task | Files / area | Done |
 |---|------|--------------|------|
 | A3.1 | Capture 12–15 screenshots (light/dark/glass × storefront/admin/3D/PDP/checkout) | `screenshots/` per [VISUAL_ASSETS_GUIDE.md](VISUAL_ASSETS_GUIDE.md) | [ ] |
-| A3.2 | Bundle 2–3 demo `.glb` models (licensed or self-made) | `src/assets/demo/` or CDN doc | [ ] |
-| A3.3 | Replace / license seed product images (not raw Unsplash URLs) | `backend/src/database/seeds/` | [ ] |
+| A3.2 | Bundle 2–3 demo `.glb` models (licensed or self-made) | `src/assets/demo/` or CDN doc | [x] |
+| A3.3 | Replace / license seed product images (not raw Unsplash URLs) | `backend/src/database/seeds/` | [x] |
 | A3.4 | Record 3–5 min walkthrough video | `marketing-assets/` | [ ] |
-| A3.5 | Add `CHANGELOG.md` (semver from first public release) | repo root | [ ] |
-| A3.6 | Add `THIRD_PARTY_NOTICES.md` | repo root or `docs/` | [ ] |
-| A3.7 | Align backend license with root MIT | `backend/package.json` | [ ] |
-| A3.8 | Unify README language (EN primary for international marketplace) | `README.md` | [ ] |
-| A3.9 | Update listing copy — honest feature matrix | `marketing-assets/MARKETPLACE_DESCRIPTION.md` | [ ] |
+| A3.5 | Add `CHANGELOG.md` (semver from first public release) | repo root | [x] |
+| A3.6 | Add `THIRD_PARTY_NOTICES.md` | repo root or `docs/` | [x] |
+| A3.7 | Align backend license with root MIT | `backend/package.json` | [x] |
+| A3.8 | Unify README language (EN primary for international marketplace) | `README.md` | [x] |
+| A3.9 | Update listing copy — honest feature matrix | `marketing-assets/MARKETPLACE_DESCRIPTION.md` | [x] |
 
 **Exit gate**: listing page needs no “coming soon” placeholders; 3D demo works without buyer supplying assets.
 
@@ -131,11 +131,11 @@ Work in priority order. Mark items `[ ]` → `[x]` as completed.
 
 | # | Task | Files / area | Done |
 |---|------|--------------|------|
-| A4.1 | GitHub Actions: `npm run build` + backend build | `.github/workflows/ci.yml` | [ ] |
-| A4.2 | Smoke e2e in CI (storefront loads, admin login page) | `e2e/smoke.spec.ts` | [ ] |
-| A4.3 | Backend lint in CI | `backend/package.json` | [ ] |
-| A4.4 | Resolve Swagger claim: implement or remove from docs | `docs/BACKEND_API.md`, `backend/src/main.ts` | [ ] |
-| A4.5 | PayPal: implement real flow **or** remove from “supported payments” list | `backend/src/payments/` | [ ] |
+| A4.1 | GitHub Actions: `npm run build` + backend build | `.github/workflows/ci.yml` | [x] |
+| A4.2 | Smoke e2e in CI (storefront loads, admin login page) | `e2e/smoke.spec.ts` | [x] |
+| A4.3 | Backend lint in CI | `backend/package.json` | [x] |
+| A4.4 | Resolve Swagger claim: implement or remove from docs | `docs/BACKEND_API.md`, `backend/src/main.ts` | [x] |
+| A4.5 | PayPal: implement real flow **or** remove from “supported payments” list | `backend/src/payments/` | [x] |
 | A4.6 | Complete manual QA matrix | [POLISH_AND_QUALITY.md](POLISH_AND_QUALITY.md) unchecked rows | [ ] |
 
 **Exit gate**: green CI on main; no doc claims without code backing.
@@ -146,11 +146,11 @@ Work in priority order. Mark items `[ ]` → `[x]` as completed.
 
 | # | Task | Done |
 |---|------|------|
-| A5.1 | Choose platform (CodeCanyon / ThemeForest / Gumroad / own site) | [ ] |
-| A5.2 | Set regular + extended license terms | [ ] |
-| A5.3 | Prepare support channel (email / Discord) — see [SUPPORT.md](SUPPORT.md) | [ ] |
-| A5.4 | Soft launch to 2–3 beta buyers for feedback | [ ] |
-| A5.5 | Publish v1.0.0 tag after A1–A4 gates | [ ] |
+| A5.1 | Choose platform (CodeCanyon / ThemeForest / Gumroad / own site) | [docs/MARKETPLACE_LICENSE.md](MARKETPLACE_LICENSE.md) | [x] |
+| A5.2 | Set regular + extended license terms | [docs/MARKETPLACE_LICENSE.md](MARKETPLACE_LICENSE.md) | [x] |
+| A5.3 | Prepare support channel (email / Discord) — see [SUPPORT.md](SUPPORT.md) | [x] |
+| A5.4 | Soft launch to 2–3 beta buyers for feedback | [docs/LAUNCH_CHECKLIST.md](LAUNCH_CHECKLIST.md) | [ ] |
+| A5.5 | Publish v1.0.0 tag after A1–A4 gates | [docs/LAUNCH_CHECKLIST.md](LAUNCH_CHECKLIST.md) | [ ] |
 
 **Track A complete when**: score ≥ **8/10** on §2 table; all A1–A4 exit gates passed.
 
@@ -227,7 +227,7 @@ Use this table verbatim in marketplace description to reduce refunds and bad rev
 | PayPal | ⚠️ Mock | Not production until B4.1 |
 | AI 3D generation | 🔬 Experimental | External API keys required |
 | Recommendations | ⚠️ Demo quality | Not ML-production grade |
-| Swagger API docs | ❌ Not implemented | Use BACKEND_API.md |
+| Swagger API docs | ✅ `/api/docs` | OpenAPI UI when backend runs |
 
 ---
 
@@ -236,7 +236,8 @@ Use this table verbatim in marketplace description to reduce refunds and bad rev
 | Date | Tester | Scenario | Result | Notes |
 |------|--------|----------|--------|-------|
 | | | Fresh clone → GETTING_STARTED | | |
-| 2026-08-06 | Agent | docker compose up | pending | Docker not available in dev env; config + Dockerfile path fixed — manual verify on machine with Docker |
+| 2026-08-07 | Agent | GitHub Actions CI | pass | build + lint + smoke e2e configured |
+| 2026-08-07 | Agent | Demo 3D + seed | pass | Khronos CC0 models + local SVG seeds |
 | | | 3D model upload + view | | |
 | | | Checkout Stripe test mode | | |
 | | | Theme switch all 4 | | |

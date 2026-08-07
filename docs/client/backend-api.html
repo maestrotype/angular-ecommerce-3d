@@ -38,11 +38,13 @@
   <article class="content">
 <p>Technical reference for the NestJS-based REST API.</p>
 <h2 id="s1"><span class="n">1</span>API Specification</h2>
-<p>The API follows RESTful principles and is fully documented via Swagger.</p>
+<p>The API follows RESTful principles. <strong>Interactive OpenAPI (Swagger) UI</strong> is available when the backend is running:</p>
 <ul>
-<li><strong>Local Access</strong>: <code>http://localhost:3002/api/docs</code></li>
-<li><strong>Prefix</strong>: All endpoints are prefixed with <code>/api</code>.</li>
+<li><strong>Swagger UI</strong>: <code>http://localhost:3002/api/docs</code></li>
+<li><strong>OpenAPI JSON</strong>: <code>http://localhost:3002/api/docs-json</code></li>
+<li><strong>Route prefix</strong>: all REST endpoints are under <code>/api</code></li>
 </ul>
+<p>This markdown file complements Swagger with architecture notes and module overview.</p>
 <h2 id="s2"><span class="n">2</span>Authentication &amp; Security</h2>
 <h3>Authorization Header</h3>
 <p>All protected routes require a JSON Web Token (JWT).</p>

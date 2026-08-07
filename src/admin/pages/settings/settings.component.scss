@@ -166,6 +166,17 @@ mat-form-field {
     padding-bottom: 8px;
   }
 
+  .gateway-mock-notice {
+    margin: 0 0 16px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border-default);
+    background-color: var(--surface-muted);
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
+
   .form-row {
     margin-bottom: 16px;
 

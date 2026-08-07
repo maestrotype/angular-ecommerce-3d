@@ -106,4 +106,20 @@ Then create the admin user:
 curl -X POST http://localhost:3002/api/auth/create-admin
 ```
 
+### Demo products (optional)
+
+Populate the catalog with bundled local assets (no Unsplash URLs):
+
+```bash
+cd backend && npm run seed
+npm run demo:models   # optional: avocado + water-bottle GLB (~17 MB)
+```
+
 For production bootstrap, see [First Deploy Security Checklist](INSTALLATION.md#-first-deploy-security-checklist).
+
+### API documentation (Swagger)
+
+With the backend running:
+
+- Swagger UI: `http://localhost:3002/api/docs`
+- OpenAPI JSON: `http://localhost:3002/api/docs-json`

@@ -106,7 +106,7 @@ export class Bag3dFirstComponent implements AfterViewInit {
     const loader = new GLTFLoader();
     
     // Resolve relative path using base URI for production environments
-    let modelPath = fixBackendUrl('assets/models/bag/bag1.glb'); // Corrected path to include bag folder
+    let modelPath = fixBackendUrl('assets/demo/models/duck.glb');
     if (isPlatformBrowser(this.platformId)) {
       const base = document.baseURI;
       if (base) {

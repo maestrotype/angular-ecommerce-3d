@@ -1,110 +1,134 @@
-# 🛍️ Angular E-commerce 3D Platform (Premium SaaS)
+# Angular E-commerce 3D Platform
 
 <div align="center">
 
 ![Angular 17+](https://img.shields.io/badge/Angular-17+-DD0031?style=for-the-badge&logo=angular)
 ![NestJS 10+](https://img.shields.io/badge/NestJS-10+-E0234E?style=for-the-badge&logo=nestjs)
 ![Three.js 3D](https://img.shields.io/badge/Three.js-3D-000000?style=for-the-badge&logo=three.js)
-![Modern UI](https://img.shields.io/badge/Style-Premium_Zinc-3b82f6?style=for-the-badge)
-![SEO Ready](https://img.shields.io/badge/SEO-Optimized-success?style=for-the-badge)
+![MIT License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
-**The most advanced full-stack e-commerce solution featuring interactive 3D product previews, deep analytics, and an Apple-inspired glass-glassmorphism management panel.**
+**Full-stack e-commerce with interactive 3D product previews, multi-theme design system, and NestJS admin API.**
 
-[Live Demo](https://demo.angular-ecommerce3d.com) • [Documentation](docs/client/index.html) • [Video Presentation](marketing-assets/WALKTHROUGH.md) • [Support](docs/SUPPORT.md)
+[Live Demo](https://demo.angular-ecommerce3d.com) · [Documentation](docs/client/index.html) · [Walkthrough Script](marketing-assets/VIDEO_SCRIPT.md) · [Support](docs/SUPPORT.md)
 
 </div>
 
 ---
 
-## 🏆 Почему этот проект — лучший выбор?
+## Why this template
 
-Это не просто шаблон магазина. Это **готовый коммерческий продукт**, созданный для брендов, которым нужно нечто большее, чем плоский интерфейс.
+This is a **commercial-grade starter**, not a minimal shop demo:
 
-*   **💎 Премиальная эстетика**: Фокус на нейтральных тонах Slate/Zinc с синими акцентами. Интерфейс выглядит дорого и минималистично (в стиле Apple/Vercel).
-*   **🚀 3D First**: Интеграция Three.js позволяет покупателям взаимодействовать с товарами в реальном времени, что снижает возвраты и повышает вовлеченность.
-*   **📈 Enterprise Дашборд**: Профессиональная аналитика продаж с использованием Chart.js, визуализация топовых товаров и графики активности.
-*   **🔍 SEO-Engineered**: Полная поддержка Angular Universal (SSR) с предварительной гидратацией гарантирует высокий рейтинг в Google.
+- **3D-first storefront** — Three.js GLB viewer on PDP, shop, and configurable sections
+- **Token-based themes** — light, dark, glass, and admin dark-glass via CSS design tokens
+- **Production-shaped stack** — Angular 17, NestJS 10, PostgreSQL, Docker Compose, SSR build path
+- **Bundled demo assets** — local product images + CC0 sample `.glb` models (works offline)
 
----
-
-## ✨ Ключевые особенности
-
-### 🎯 Интерактивный 3D-опыт
--   **Движок Three.js** — высокопроизводительный 3D рендеринг с управлением камерой.
--   **Загрузка GLTF/GLB** — встроена в админ-панель. Просто перетащите модель, и она уже в магазине.
--   **PBR материалы** — реалистичное освещение и отражения металлов.
-
-### 🎨 Современные Темы
--   **Neutral Zinc Edition** — профессиональная темная тема в спокойных серых тонах.
--   **Ultra Glass (Glassmorphism)** — изысканный полупрозрачный интерфейс для SaaS решений.
--   **Управление цветами** — смените основной акцент (синий, изумрудный, фиолетовый) одной переменной в SCSS.
-
-### 💰 Мощный E-commerce
--   **Stripe / PayPal / LiqPay** — предустановленные глобальные и региональные платежные шлюзы.
--   **Stripe Elements** — нативный процесс оформления заказа (SCA Ready).
--   **Мультиязычность (i18n)** — проект готов к глобальному рынку с встроенными механизмами перевода.
-
-### 🛠️ Продвинутое Управление
--   **Дашборд Аналитики** — Area-графики для отслеживания дневных и недельных трендов продаж.
--   **Smart Image AI** — интеграция с Remove.bg для автоматического удаления фона товаров.
--   **Auto-SEO** — Мета-теги, динамический Sitemap и редактор Robots.txt прямо в админке.
--   **Apple-style Sidebar** — современное меню и стеклянные виджеты статистики.
+See [CHANGELOG.md](CHANGELOG.md) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for release and attribution details.
 
 ---
 
-## 🏗️ Техническая Архитектура
+## Key features
 
-Проект следует модульной архитектуре, разработанной для масштабирования.
+| Area | Included |
+|------|----------|
+| Storefront | Catalog, PDP (Rozetka-style layout), cart, checkout, favorites, orders |
+| 3D | GLB upload in admin, viewer with orbit/zoom, bundled Khronos demo models |
+| Admin | Dashboard, products, orders, users, sections CMS, SEO, settings |
+| Payments | **Stripe** (real integration), **LiqPay**, **PayPal** (mock — labeled in admin & checkout) |
+| i18n | English, Ukrainian, Russian |
+| Themes | 4 visual themes, semantic CSS tokens (no hardcoded component colors) |
+| Deploy | Docker Compose (CSR nginx + API), SSR via `server-simple.mjs`, docs hub |
 
--   **Frontend**: Angular 17+ (RxJS, SCSS BEM).
--   **Backend**: NestJS 10+ (Node.js, TypeORM, PostgreSQL).
--   **Rendering**: SSR (Angular Universal) для мгновенной загрузки.
--   **Storage**: Cloudinary для оптимизированной доставки изображений.
--   **DevOps**: Docker-compose для быстрого развертывания.
+**Not included out of the box:** PayPal live API (mock mode with UI labels), compliance certifications, hosted demo DB.
 
 ---
 
-## 🚀 Быстрый старт (Dev Environment)
+## Tech stack
 
-### Требования
--   Node.js 18+ & npm
--   PostgreSQL 14+
+- **Frontend:** Angular 17, TypeScript, SCSS, Three.js, Angular Material, ngx-translate
+- **Backend:** NestJS 10, TypeORM, PostgreSQL, JWT auth
+- **Ops:** Docker Compose, optional Cloudinary for media
 
-### Установка
+Architecture docs: [docs/BACKEND_ARCHITECTURE.md](docs/BACKEND_ARCHITECTURE.md) · [docs/client/architecture.html](docs/client/architecture.html)
+
+---
+
+## Quick start
+
+### Requirements
+
+- Node.js 18+
+- PostgreSQL 14+
+- npm 9+
+
+### Install
+
 ```bash
-# Клонируйте репозиторий
 git clone https://github.com/maestrotype/angular-ecommerce-3d.git
+cd angular-ecommerce-3d
 
-# Установка зависимостей
 npm install
-
-# Установка Backend
 cd backend && npm install && cd ..
 
-# Настройка переменных окружения (backend)
 cp backend/.env.example backend/.env
-# Отредактируйте backend/.env — см. docs/GETTING_STARTED.md
+# Edit backend/.env — DATABASE_*, JWT_SECRET, ADMIN_EMAIL, ADMIN_PASSWORD
+```
 
-# Запуск (HMR включен)
-# Terminal 1: cd backend && npm run start:dev
-# Terminal 2:
+### Run (development)
+
+```bash
+# Terminal 1 — API
+cd backend && npm run start:dev
+
+# Terminal 2 — storefront (http://localhost:4200)
 npm start
+```
+
+### Demo data
+
+```bash
+cd backend && npm run seed
+curl -X POST http://localhost:3002/api/auth/create-admin
+```
+
+Full guide: [docs/GETTING_STARTED.md](docs/GETTING_STARTED.md) · [docs/INSTALLATION.md](docs/INSTALLATION.md)
+
+### Docker
+
+```bash
+cp backend/.env.example backend/.env
+docker compose up -d --build
 ```
 
 ---
 
-## 🤝 Поддержка и Кастомизация
-Нужна помощь в настройке или новые функции?
--   📧 **Email**: support@maestrotype.com
--   💬 **Discord**: Присоединяйтесь к нашему комьюнити.
--   🌟 **Рейтинг**: Если вам нравится этот проект, поставьте ему звезду!
+## Marketplace assets
+
+| Asset | Location |
+|-------|----------|
+| Demo 3D models | `npm run demo:models` (duck bundled; others downloaded) |
+| Demo product images | `src/assets/demo/products/` |
+| Screenshot capture | `npm run screenshots:capture` (requires dev servers) |
+| Listing copy | [marketing-assets/MARKETPLACE_DESCRIPTION.md](marketing-assets/MARKETPLACE_DESCRIPTION.md) |
+| Launch checklist | [docs/LAUNCH_CHECKLIST.md](docs/LAUNCH_CHECKLIST.md) |
+| Visual guide | [docs/VISUAL_ASSETS_GUIDE.md](docs/VISUAL_ASSETS_GUIDE.md) |
 
 ---
 
+## License
+
+MIT — see [LICENSE](LICENSE). Demo Khronos models are [CC0](src/assets/demo/README.md).
+
+---
+
+## Support
+
+- Email: support@maestrotype.com
+- Docs: [docs/SUPPORT.md](docs/SUPPORT.md)
+
 <div align="center">
 
-**[⬆ Наверх](#-angular-e-commerce-3d-platform-premium-saas)**
-
-*"Мы строим будущее электронной коммерции, по одному измерению за раз."* ❤️
+**[Back to top](#angular-e-commerce-3d-platform)**
 
 </div>

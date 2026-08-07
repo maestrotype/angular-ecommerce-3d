@@ -1,569 +1,192 @@
-# Angular 3D E-Commerce - Full-Stack E-Commerce Platform
+# Angular 3D E-Commerce — Marketplace Listing Copy
 
-> 🚀 Modern, feature-rich e-commerce platform with interactive 3D product viewer built with Angular & NestJS
+> Modern full-stack e-commerce with interactive 3D product viewer · Angular 17 + NestJS 10 + PostgreSQL
 
 [![Angular](https://img.shields.io/badge/Angular-17+-DD0031?style=flat&logo=angular)](https://angular.io/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat&logo=typescript)](https://www.typescriptlang.org/)
 [![NestJS](https://img.shields.io/badge/NestJS-10+-E0234E?style=flat&logo=nestjs)](https://nestjs.com/)
-[![Three.js](https://img.shields.io/badge/Three.js-Latest-000000?style=flat&logo=three.js)](https://threejs.org/)
+[![Three.js](https://img.shields.io/badge/Three.js-GLB_Viewer-000000?style=flat&logo=three.js)](https://threejs.org/)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=flat)](../LICENSE)
 
 ---
 
-## 🎯 Overview
+## Overview
 
-**Angular 3D E-Commerce** is a cutting-edge, full-stack e-commerce solution that revolutionizes online shopping with interactive 3D product visualization. Built with the latest Angular framework and powered by NestJS backend, this platform delivers exceptional performance, stunning UI/UX, and seamless shopping experience.
+**Angular 3D E-Commerce** is a full-stack starter for agencies and product teams building shops where products benefit from **interactive 3D preview** (footwear, furniture, accessories, collectibles).
 
-Perfect for:
-- 🛍️ Fashion & Apparel Stores
-- 👟 Footwear & Accessories Shops
-- 🎨 Art & Design Marketplaces
-- 🏠 Furniture & Home Decor
-- 💎 Jewelry & Luxury Goods
-- 🎮 Gaming & Collectibles
+**Promise:** Premium Angular + NestJS codebase with admin panel, multi-theme UI, Stripe checkout, and bundled demo 3D assets — ready to customize and deploy.
+
+**Not included out of the box:** PayPal live API (mock mode with UI labels), compliance certifications, hosted demo DB.
 
 ---
 
-## ✨ Key Features
+## Feature matrix (honest)
 
-### 🎨 Interactive 3D Product Viewer
-- **Three.js Integration** - Smooth, realistic 3D model rendering
-- **360° Rotation** - Full product visualization from any angle
-- **Zoom & Pan Controls** - Detailed product inspection
-- **GLB/GLTF Support** - Industry-standard 3D formats
-- **Real-time Lighting** - Professional product presentation
-
-### 🛒 Complete E-Commerce Functionality
-- **Product Catalog** - Beautiful grid layout with filtering
-- **Advanced Search** - Quick product discovery
-- **Shopping Cart** - Intuitive cart management
-- **Wishlist/Favorites** - Save products for later
-- **Order Management** - Track purchases and history
-- **Multi-step Checkout** - Streamlined purchase flow
-
-### 💳 Payment Integration
-- **Stripe Integration** - Secure payment processing
-- **Multiple Payment Methods** - Cards, wallets, and more
-- **Order Confirmation** - Email receipts and notifications
-- **Payment History** - Transaction records
-
-### 👤 User Management
-- **User Authentication** - Secure login/register system
-- **JWT Tokens** - Modern authentication
-- **User Profiles** - Account management
-- **Order History** - Past purchases tracking
-- **Email Verification** - Account security
-
-### 🔐 Admin Panel
-- **Dashboard Analytics** - Revenue, orders, users metrics
-- **Product Management** - CRUD operations for products
-- **Order Management** - Process and track orders
-- **User Management** - Customer administration
-- **Category Management** - Organize product catalog
-- **SEO Tools** - Meta tags and optimization
-
-### 🎨 Modern UI/UX
-- **Responsive Design** - Perfect on all devices
-- **Dark Mode Ready** - Eye-friendly interface
-- **Smooth Animations** - Professional transitions
-- **Loading States** - Enhanced user experience
-- **Error Handling** - User-friendly messages
-- **Glassmorphism Effects** - Modern design aesthetics
-
-### ⚡ Performance & Core (NEW in v1.1.0)
-- **Server-Side Rendering (SSR)** - Full Angular Universal integration for SEO and speed
-- **Hydration Support** - Smooth transition from server to client-side interactivity
-- **Dynamic API Fallback** - Intelligent backend detection with automatic failover to Production
-- **Optimized SEO** - Dynamic meta tags, canonical URLs, and automated sitemap generation
-- **Type-Safe Architecture** - Strictly typed TypeScript 5.x throughout
-
-### 🚀 Legacy Performance & SEO
-- **Lazy Loading** - Optimized resource loading
-- **Code Splitting** - Faster page loads
-- **Image Optimization** - Fast loading times
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Storefront catalog & PDP | ✅ Ready | Rozetka-style product page layout |
+| Three.js GLB viewer | ✅ Ready | Bundled CC0 demo models included |
+| Admin CRUD (products, orders, users) | ✅ Ready | JWT-protected |
+| 4 themes (light / dark / glass / admin dark-glass) | ✅ Ready | CSS token architecture |
+| Stripe payments | ✅ Ready | Configure keys in Admin → Settings |
+| LiqPay | ✅ Ready | Regional gateway |
+| PayPal | ⚠️ Mock (labeled in UI) | Simulated checkout without API keys |
+| SSR build | ✅ Ready | `npm run build:prod` + `server-simple.mjs` |
+| Docker Compose | ✅ Ready | nginx CSR + NestJS + PostgreSQL |
+| i18n (EN / UA / RU) | ✅ Ready | ngx-translate |
+| AI 3D generation | ⚠️ Optional | Tripo3D / Meshy / etc. — requires buyer API keys |
+| Product recommendations | ⚠️ Demo | Module present; tune for production |
+| Swagger UI | ✅ Ready | `http://localhost:3002/api/docs` when backend runs |
+| Bundled screenshots / video | 📦 Partial | Capture script + script provided; record locally |
 
 ---
 
-## 🛠️ Technologies Used
+## Key selling points
 
-### Frontend
-- **Angular 17+** - Latest framework version
-- **TypeScript 5.0+** - Type-safe development
-- **Three.js** - 3D graphics library
-- **RxJS** - Reactive programming
-- **Angular Material** - UI components
-- **SCSS** - Advanced styling
+### Interactive 3D
+- GLB/GLTF upload in admin
+- Orbit, zoom, lighting on storefront
+- **3 bundled Khronos CC0 models** — demo works immediately
 
-### Backend
-- **NestJS 10+** - Node.js framework
-- **TypeORM** - Database ORM
-- **PostgreSQL** - Relational database
-- **JWT** - Authentication
-- **Passport** - Auth strategies
-- **Swagger** - API documentation
+### E-commerce core
+- Catalog, filters, cart, checkout, favorites, order history
+- Multi-step checkout with Stripe Elements
 
-### Payment & APIs
-- **Stripe** - Payment processing
-- **Nodemailer** - Email service
-- **Cloudinary** - Image hosting (optional)
+### Admin panel
+- Dashboard (Chart.js), products, orders, users, categories
+- Sections CMS for homepage blocks
+- SEO: meta, sitemap, robots.txt editor
 
-### Development Tools
-- **ESLint** - Code quality
-- **Prettier** - Code formatting
-- **Husky** - Git hooks
-- **Docker** - Containerization ready
+### Design system
+- Semantic CSS tokens — no `!important` wars with Material
+- Four themes, responsive layout, glassmorphism option
 
 ---
 
-## 📋 Requirements
+## Tech stack
 
-### Minimum Requirements
-- Node.js 18.x or higher
-- npm 9.x or higher
-- PostgreSQL 14.x or higher
-- 2GB RAM
-- Modern web browser (Chrome, Firefox, Safari, Edge)
-
-### Recommended
-- Node.js 20.x LTS
-- npm 10.x
-- PostgreSQL 16.x
-- 4GB+ RAM
-- SSD storage
+| Layer | Technology |
+|-------|------------|
+| Frontend | Angular 17, TypeScript, SCSS, Three.js, Angular Material |
+| Backend | NestJS 10, TypeORM, PostgreSQL, JWT |
+| Media | Cloudinary optional; local uploads supported |
+| Deploy | Docker Compose, SSR Node server, static nginx |
 
 ---
 
-## 🚀 Quick Start Installation
+## Requirements
 
-### 1. Extract Files
+- Node.js 18+, npm 9+
+- PostgreSQL 14+
+- Modern browser (Chrome 90+, Safari 14+, Firefox 88+)
+
+---
+
+## Quick start (buyer)
+
 ```bash
-unzip angular-3d-ecommerce.zip
-cd angular-ecommerce-3d
+unzip angular-ecommerce-3d.zip && cd angular-ecommerce-3d
+npm install && cd backend && npm install && cd ..
+cp backend/.env.example backend/.env
+# Set DATABASE_*, JWT_SECRET, ADMIN_EMAIL, ADMIN_PASSWORD
+
+cd backend && npm run start:dev          # Terminal 1
+npm start                                 # Terminal 2 → http://localhost:4200
+
+cd backend && npm run seed
+curl -X POST http://localhost:3002/api/auth/create-admin
 ```
 
-### 2. Install Dependencies
+Docker: `docker compose up -d --build` (see `docs/INSTALLATION.md`)
 
-**Backend:**
-```bash
-cd backend
-npm install
-```
-
-**Frontend:**
-```bash
-cd ../frontend
-npm install
-```
-
-### 3. Database Setup
-
-Create PostgreSQL database:
-```sql
-CREATE DATABASE ecommerce_db;
-```
-
-Configure `backend/.env`:
-```env
-# Database
-DB_HOST=localhost
-DB_PORT=5432
-DB_USERNAME=postgres
-DB_PASSWORD=your_password
-DB_DATABASE=ecommerce_db
-
-# JWT
-JWT_SECRET=your_secret_key_here
-JWT_EXPIRES_IN=7d
-
-# Stripe
-STRIPE_SECRET_KEY=your_stripe_secret_key
-
-# Server
-PORT=3002
-NODE_ENV=development
-```
-
-### 4. Run Migrations
-```bash
-cd backend
-npm run migration:run
-```
-
-### 5. Seed Database (Optional)
-```bash
-npm run seed
-```
-
-### 6. Start Development Servers
-
-**Backend:**
-```bash
-cd backend
-npm run start:dev
-```
-
-**Frontend:**
-```bash
-cd frontend
-npm start
-```
-
-### 7. Access Application
-- **Frontend:** http://localhost:4200
-- **Backend API:** http://localhost:3002
-- **API Docs:** http://localhost:3002/api
-
-**Default Admin Credentials:**
-- Email: `admin@example.com`
-- Password: `admin123`
+**Documentation hub:** `docs/client/index.html`
 
 ---
 
-## 📁 Project Structure
+## What's included
 
-```
-angular-ecommerce-3d/
-├── frontend/                 # Angular application
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── components/  # Reusable components
-│   │   │   ├── pages/       # Page components
-│   │   │   ├── services/    # API services
-│   │   │   ├── guards/      # Route guards
-│   │   │   ├── models/      # TypeScript interfaces
-│   │   │   └── shared/      # Shared utilities
-│   │   ├── assets/          # Static files
-│   │   └── environments/    # Environment configs
-│   └── package.json
-│
-├── backend/                  # NestJS API
-│   ├── src/
-│   │   ├── auth/            # Authentication module
-│   │   ├── users/           # User management
-│   │   ├── products/        # Product CRUD
-│   │   ├── orders/          # Order processing
-│   │   ├── categories/      # Category management
-│   │   ├── payments/        # Stripe integration
-│   │   └── database/        # Database config
-│   └── package.json
-│
-└── marketing-assets/         # Marketing materials
-    ├── screenshots/          # Product screenshots
-    ├── videos/              # Demo videos
-    └── SHOWCASE.html        # Interactive gallery
-```
+- ✅ Full source (monorepo: Angular root + `backend/`)
+- ✅ Bundled demo SVG product images + 3 CC0 `.glb` models
+- ✅ `npm run seed` for sample products
+- ✅ HTML + Markdown documentation for buyers
+- ✅ Docker Compose file
+- ✅ Playwright smoke tests + screenshot capture helper
+- ✅ `CHANGELOG.md`, `THIRD_PARTY_NOTICES.md`, MIT license
+- ❌ Pre-rendered marketplace screenshots (use `npm run screenshots:capture`)
+- ❌ Pre-recorded demo video (use `marketing-assets/VIDEO_SCRIPT.md`)
 
 ---
 
-## 🎨 Customization Guide
+## Customization
 
-### Branding
-1. Update logo in `frontend/src/assets/logo.png`
-2. Modify colors in `frontend/src/styles/variables.scss`
-3. Update app name in `frontend/src/index.html`
+1. **Branding** — themes in `src/styles/themes/`, logo in `src/assets/icons/`
+2. **Products** — Admin → Products or extend `backend/src/database/seeds/`
+3. **3D models** — replace files in `src/assets/demo/models/` or upload via admin
+4. **Payments** — Admin → Settings (Stripe publishable/secret keys)
 
-### Adding Products
-1. Login to Admin Panel
-2. Navigate to Products → Add New
-3. Fill product details
-4. Upload 3D model (GLB/GLTF format)
-5. Set price and category
-6. Publish
-
-### Payment Configuration
-1. Create Stripe account at https://stripe.com
-2. Get API keys from Dashboard
-3. Update `backend/.env` with keys
-4. Test with Stripe test cards
-
-### Email Setup
-Configure email service in `backend/.env`:
-```env
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your-email@gmail.com
-SMTP_PASSWORD=your-app-password
-```
+See [docs/CUSTOMIZATION.md](../docs/CUSTOMIZATION.md).
 
 ---
 
-## 🔒 Security Features
+## Security (v1.0)
 
-- ✅ JWT Authentication
-- ✅ Password Hashing (bcrypt)
-- ✅ CORS Protection
-- ✅ SQL Injection Prevention
-- ✅ XSS Protection
-- ✅ Rate Limiting
-- ✅ HTTPS Ready
-- ✅ Secure Headers (Helmet)
-- ✅ Input Validation
-- ✅ CSRF Protection
+- No default admin login in frontend builds
+- Env-driven admin bootstrap
+- JWT secret validation in production
+- See [First Deploy Security Checklist](../docs/INSTALLATION.md)
 
 ---
 
-## 📱 Browser Support
+## Browser support
 
 | Browser | Version |
 |---------|---------|
-| Chrome  | 90+     |
-| Firefox | 88+     |
-| Safari  | 14+     |
-| Edge    | 90+     |
+| Chrome | 90+ |
+| Firefox | 88+ |
+| Safari | 14+ |
+| Edge | 90+ |
 
 ---
 
-## 🚀 Production Deployment
+## License (marketplace)
 
-### Frontend Build
-```bash
-cd frontend
-npm run build
-# Output: dist/angular-ecommerce-3d
-```
+Regular / Extended license terms are set by the marketplace platform (Envato, Gumroad, etc.).
 
-### Backend Build
-```bash
-cd backend
-npm run build
-npm run start:prod
-```
-
-### Recommended Hosting
-- **Frontend:** Vercel, Netlify, AWS S3 + CloudFront
-- **Backend:** Heroku, AWS EC2, DigitalOcean, Railway
-- **Database:** AWS RDS, Heroku Postgres, Supabase
+**Source code:** MIT — see [LICENSE](../LICENSE) and [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md).
 
 ---
 
-## 📦 What's Included
+## Support
 
-- ✅ Full source code (Frontend + Backend)
-- ✅ Database schema and migrations
-- ✅ API documentation (Swagger)
-- ✅ Sample products and data
-- ✅ 3D model examples
-- ✅ Admin panel
-- ✅ User authentication system
-- ✅ Payment integration (Stripe)
-- ✅ Email templates
-- ✅ Marketing screenshots (13+)
-- ✅ Video demonstrations (4)
-- ✅ Documentation
-- ✅ Free updates (6 months)
+- Email: support@maestrotype.com
+- Docs: [docs/SUPPORT.md](../docs/SUPPORT.md)
+- Troubleshooting: [docs/TROUBLESHOOTING.md](../docs/TROUBLESHOOTING.md)
 
 ---
 
-## 🆘 Support
+## Visual assets workflow
 
-### Documentation
-- Installation guide included
-- API documentation via Swagger
-- Inline code comments
+1. Seed data: `cd backend && npm run seed`
+2. Start dev servers
+3. Capture: `npm run screenshots:capture` → `screenshots/desktop|mobile|admin/`
+4. Record video using [VIDEO_SCRIPT.md](./VIDEO_SCRIPT.md)
+5. Build previews per [VISUAL_ASSETS_GUIDE.md](../docs/VISUAL_ASSETS_GUIDE.md)
 
-### Support Channels
-- **Email Support:** Available for 6 months
-- **Bug Fixes:** Regular updates
-- **Feature Requests:** Considered for future releases
-
-### Common Issues
-See `TROUBLESHOOTING.md` for solutions to common problems.
+Gallery shell: [SHOWCASE.html](./SHOWCASE.html)
 
 ---
 
-## 📄 License
+## Changelog summary
 
-**Regular License:**
-- ✅ Use for single end product
-- ✅ Can be sold to one client
-- ✅ End product must be free
-- ❌ Cannot resell/redistribute source code
+See [CHANGELOG.md](../CHANGELOG.md) for full history.
 
-**Extended License:**
-- ✅ Use for single end product
-- ✅ Can charge end users
-- ✅ Commercial use allowed
-- ❌ Cannot resell/redistribute source code
-
----
-
-## 🔄 Changelog
-
-### Version 1.1.0 (February 2026)
-- 🚀 **Full SSR & Hydration Support** - Blazing fast initial load and SEO
-- 🔄 **Dynamic API Fallback System** - Smart failover from Local to Production
-- 🛠️ **Refined Admin Panel** - Improved layout and SEO controls
-- 🐛 **Bug Fixes** - Resolved header and 3D viewer initialization issues
-
-### Version 1.0.0 (January 2026)
-- ✨ Initial release
-- 🎨 Interactive 3D product viewer
-- 🛒 Complete e-commerce functionality
-- 💳 Stripe payment integration
-- 🔐 Admin panel with analytics
-- 📱 Responsive design
-- 🚀 SEO optimized
-
----
-
-## 🎯 Future Updates (Planned)
-
-- 🌍 Multi-language support
-- 💱 Multi-currency support
-- 📊 Advanced analytics dashboard
-- 🎨 Additional 3D viewer controls
-- 📧 Email marketing integration
-- 🔔 Real-time notifications
-- 📱 Mobile app (React Native)
-- 🤖 AI-powered product recommendations
-
----
-
-## 🏆 Why Choose This Template?
-
-### ✅ Professional Quality
-- Modern, clean code following best practices
-- Fully typed with TypeScript
-- Scalable architecture
-- Production-ready
-
-### ✅ Feature-Rich
-- Everything you need out of the box
-- No need for additional plugins
-- Extensible and customizable
-
-### ✅ Well Documented
-- Clear installation instructions
-- API documentation
-- Code comments
-- Video tutorials
-
-### ✅ Great Support
-- 6 months email support
-- Regular updates
-- Active development
-
-### ✅ Unique Features
-- **3D Product Viewer** - Stand out from competition
-- **Modern Stack** - Latest Angular & NestJS
-- **Admin Panel** - Manage everything easily
-- **Payment Ready** - Start selling immediately
-
----
-
-## 📸 Screenshots
-
-See `marketing-assets/SHOWCASE.html` for interactive gallery with all screenshots and videos.
-
-### Preview
-- 🏠 Modern Homepage with Hero Section
-- 🛍️ Product Catalog with Filters
-- 🎨 Interactive 3D Product Viewer
-- 🛒 Shopping Cart & Checkout
-- 💳 Secure Payment Processing
-- 📦 Order Management
-- 👤 User Dashboard
-- 🔐 Admin Panel with Analytics
-
----
-
-## 💡 Use Cases
-
-1. **Fashion E-Commerce** - Showcase clothing with 3D models
-2. **Furniture Store** - Let customers view furniture from all angles
-3. **Jewelry Shop** - Display intricate details in 3D
-4. **Tech Gadgets** - Interactive product exploration
-5. **Art Gallery** - Sell 3D art and sculptures
-6. **Custom Products** - Show personalization options
-
----
-
-## 🎓 Skills Required
-
-### For Installation
-- Basic Node.js knowledge
-- Understanding of npm/package managers
-- PostgreSQL basics
-- Command line familiarity
-
-### For Customization
-- Angular/TypeScript knowledge
-- HTML/CSS/SCSS
-- REST API understanding
-- NestJS basics (for backend changes)
-
-**Don't worry!** Detailed documentation guides you through everything.
-
----
-
-## ⚡ Performance
-
-- ⚡ **Lighthouse Score:** 90+ (Performance)
-- 🎨 **First Contentful Paint:** < 1.5s
-- 📱 **Mobile Optimized:** Perfect score
-- ♿ **Accessibility:** WCAG 2.1 compliant
-- 🔍 **SEO:** Fully optimized
-
----
-
-## 🌟 Customer Reviews
-
-> "Amazing template! The 3D viewer feature is a game-changer for my furniture store. Installation was smooth and the code is clean and well-organized."
-> - **⭐⭐⭐⭐⭐** John S., Furniture Store Owner
-
-> "Professional quality code and excellent documentation. The admin panel makes managing products and orders a breeze. Highly recommended!"
-> - **⭐⭐⭐⭐⭐** Maria K., Developer
-
-> "Best e-commerce template I've used. The support team is responsive and helpful. The 3D feature sets my store apart from competitors."
-> - **⭐⭐⭐⭐⭐** David L., Fashion Retailer
-
----
-
-## 📞 Pre-Sale Questions?
-
-Have questions before purchasing? Contact us at:
-- 📧 Email: support@example.com
-- 💬 Live Chat: Available on product page
-- 📱 WhatsApp: +1234567890
-
----
-
-## 🎁 Bonus Included
-
-- 🎨 **10 Sample 3D Models** - Ready to use
-- 📧 **Email Templates** - Professional designs
-- 🎯 **SEO Checklist** - Optimize your store
-- 📊 **Marketing Guide** - Grow your business
-- 🎬 **Video Tutorials** - Step-by-step guides
+**v1.0.0** — Initial marketplace release: 3D viewer, admin, Stripe, themes, Docker, docs hub, bundled demo assets.
 
 ---
 
 <div align="center">
 
-## 🚀 Start Building Your 3D E-Commerce Store Today!
+**Angular 3D E-Commerce** — *Sell products in three dimensions.*
 
-**[PURCHASE NOW](#)** | **[LIVE DEMO](#)** | **[DOCUMENTATION](#)**
-
----
-
-*Regular Updates • Professional Support • Money-Back Guarantee*
-
-**⭐⭐⭐⭐⭐** Rated 5.0 by 100+ customers
+[Documentation](../docs/client/index.html) · [Live Demo](https://demo.angular-ecommerce3d.com)
 
 </div>
-
----
-
-## 📜 Credits
-
-- **Three.js** - 3D rendering
-- **Angular** - Frontend framework
-- **NestJS** - Backend framework
-- **Stripe** - Payment processing
-- **Icons** - Material Icons
-- **Fonts** - Google Fonts
-
----
-
-**Copyright © 2026. All rights reserved.**
-
-*This item is licensed under the Envato Marketplace License.*

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import * as crypto from 'crypto';
 import { Observable, of } from 'rxjs';
 import { PaymentStrategy, PaymentData, PaymentResult, WebhookData } from '../interfaces/payment-strategy.interface';
 import { PaymentMethod, Currency } from '../entities/payment.entity';
@@ -131,7 +132,6 @@ export class LiqPayStrategy implements PaymentStrategy<LiqPayPaymentData> {
 
   private generateSignature(dataBase64: string): string {
     // LiqPay signature format: base64(sha1(private_key + data + private_key))
-    const crypto = require('crypto');
     const toHash = this.privateKey + dataBase64 + this.privateKey;
     return crypto.createHash('sha1').update(toHash).digest('base64');
   }

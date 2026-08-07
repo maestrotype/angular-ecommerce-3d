@@ -111,7 +111,16 @@ npm start</code></pre>
 ADMIN_PASSWORD=YourSecurePassword123!</code></pre>
 <p>Then create the admin user:</p>
 <pre><code class="language-bash">curl -X POST http://localhost:3002/api/auth/create-admin</code></pre>
+<h3>Demo products (optional)</h3>
+<p>Populate the catalog with bundled local assets (no Unsplash URLs):</p>
+<pre><code class="language-bash">cd backend &amp;&amp; npm run seed</code></pre>
 <p>For production bootstrap, see <a href="INSTALLATION.md#-first-deploy-security-checklist">First Deploy Security Checklist</a>.</p>
+<h3>API documentation (Swagger)</h3>
+<p>With the backend running:</p>
+<ul>
+<li>Swagger UI: <code>http://localhost:3002/api/docs</code></li>
+<li>OpenAPI JSON: <code>http://localhost:3002/api/docs-json</code></li>
+</ul>
   </article>
   <p class="footer-note">Buyer-facing docs · Markdown sources remain in <code>docs/*.md</code> · Visual theme matches architecture diagrams.</p>
 </main>

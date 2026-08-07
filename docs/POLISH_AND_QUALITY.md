@@ -116,4 +116,26 @@ Final quality pass for Epic G (Premium UI). Complements `docs/CROSS_THEME_VISUAL
 
 ---
 
+## 10. Marketplace launch QA (Track A)
+
+Automated in CI (`.github/workflows/ci.yml`):
+
+| Check | CI | Manual |
+|-------|-----|--------|
+| Frontend production build | ✅ `npm run build` | — |
+| Backend build + lint | ✅ | — |
+| Storefront home + shop smoke | ✅ Playwright | — |
+| Admin login page smoke | ✅ Playwright | — |
+| Fresh clone → GETTING_STARTED | — | ☐ |
+| docker compose up | — | ☐ |
+| 3D model upload + view | — | ☐ |
+| Checkout Stripe test mode | — | ☐ |
+| Theme switch all 4 | — | ☐ |
+| Mobile 375px storefront | — | ☐ |
+| Swagger `/api/docs` loads | — | ☐ |
+
+See also [MARKETPLACE_LAUNCH_ROADMAP.md §6](MARKETPLACE_LAUNCH_ROADMAP.md) QA log.
+
+---
+
 *Related: `docs/STYLE_ARCHITECTURE.md`, `docs/CROSS_THEME_VISUAL_REVIEW.md`*
