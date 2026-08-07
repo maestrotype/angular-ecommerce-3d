@@ -195,7 +195,7 @@ REMOVE_BG_API_KEY=your_remove_bg_api_key</code></pre>
 <tr><td>4</td><td>Generate <code>ADMIN_BOOTSTRAP_TOKEN</code> for production bootstrap, then remove or rotate it after first admin exists.</td></tr>
 <tr><td>5</td><td>Do <strong>not</strong> pre-fill admin login credentials in frontend environment files.</td></tr>
 <tr><td>6</td><td>Configure Stripe/PayPal in Admin → Settings — do not ship mock payment keys in <code>environment.prod.ts</code>.</td></tr>
-<tr><td>7</td><td>Set <code>JWT_SECRET</code> in Docker/host env — <code>docker compose</code> requires it (no insecure default).</td></tr>
+<tr><td>7</td><td>For Docker: fill <code>backend/.env</code> before <code>docker compose up</code> (Compose loads it via <code>env_file</code>).</td></tr>
 <tr><td>8</td><td>Change default PostgreSQL credentials in production.</td></tr>
 </table>
 <h3>Production admin bootstrap</h3>
@@ -291,16 +291,16 @@ git push heroku main</code></pre>
 </ul>
 <h3>Step 1: Configure Environment</h3>
 <pre><code class="language-bash">cp backend/.env.example backend/.env
-# Edit backend/.env with your settings</code></pre>
+# Edit backend/.env — set JWT_SECRET, DATABASE_PASSWORD, ADMIN_EMAIL, ADMIN_PASSWORD</code></pre>
+<div class="card blue"><div class="card-title">Note</div><p>Docker Compose loads <code>backend/.env</code> via <code>env_file</code>. You do not need a separate root <code>.env</code> unless overriding postgres credentials (see root <code>.env.example</code>).</p></div>
 <h3>Step 2: Start Services</h3>
-<pre><code class="language-bash">docker-compose up -d</code></pre>
+<pre><code class="language-bash">docker compose up -d --build</code></pre>
 <p>This will:</p>
 <ul>
 <li>✅ Start PostgreSQL container</li>
-<li>✅ Start backend container</li>
-<li>✅ Start frontend container</li>
-<li>✅ Create database automatically</li>
-<li>✅ Run migrations</li>
+<li>✅ Start backend container (NestJS on port 3002)</li>
+<li>✅ Start frontend container (nginx CSR on port 4200)</li>
+<li>✅ Auto-create database schema via TypeORM on backend startup</li>
 </ul>
 <h3>Step 3: Access Application</h3>
 <ul>
@@ -309,19 +309,21 @@ git push heroku main</code></pre>
 <li>Database: localhost:5432</li>
 </ul>
 <h3>Step 4: Create Admin User</h3>
-<pre><code class="language-bash">docker-compose exec backend npm run create-admin</code></pre>
+<p>Ensure <code>ADMIN_EMAIL</code> and <code>ADMIN_PASSWORD</code> are set in <code>backend/.env</code>, then:</p>
+<pre><code class="language-bash">curl -X POST http://localhost:3002/api/auth/create-admin</code></pre>
+<p>In production, pass <code>x-admin-bootstrap-token</code> header — see <a href="#-first-deploy-security-checklist">First Deploy Security Checklist</a>.</p>
 <h3>Useful Docker Commands</h3>
 <pre><code class="language-bash"># View logs
-docker-compose logs -f
+docker compose logs -f
 
 # Stop services
-docker-compose down
+docker compose down
 
 # Rebuild after code changes
-docker-compose up -d --build
+docker compose up -d --build
 
 # Access database
-docker-compose exec postgres psql -U postgres ecommerce_db</code></pre>
+docker compose exec postgres psql -U postgres ecommerce_db</code></pre>
 <hr>
 <h2 id="s10"><span class="n">10</span>🔧 Advanced Configuration</h2>
 <h3>SSL/HTTPS Setup</h3>

@@ -30,11 +30,12 @@ cp .env.example .env # Ensure variables are correctly mapped
 ## Environment Configuration
 
 ### Backend (.env)
-The NestJS backend requires a `.env` file for database connectivity and security.
-- `DB_HOST`: Database host address.
-- `DB_PORT`: Default is 5432.
-- `DB_PASSWORD`: Password for the PostgreSQL user.
-- `JWT_SECRET`: Secret key for signing authentication tokens.
+The NestJS backend requires a `.env` file in the `backend/` directory.
+- `DATABASE_HOST`: Database host address (`localhost` for local dev; Docker overrides to `postgres`).
+- `DATABASE_PORT`: Default is 5432.
+- `DATABASE_PASSWORD`: Password for the PostgreSQL user.
+- `JWT_SECRET`: Secret key for signing authentication tokens (min 32 characters).
+- `ADMIN_EMAIL` / `ADMIN_PASSWORD`: Used by `POST /api/auth/create-admin` to bootstrap the admin user.
 
 ### Frontend (environment.ts)
 The application implements an **Initial API Verification** logic via `ApiConfigService`. 
@@ -64,7 +65,7 @@ To validate Server-Side Rendering and Hydration behavior before deployment:
 ```bash
 npm run serve:ssr:dev
 ```
-This script triggers a multi-stage build using `@angular-devkit/build-angular:server` and executes the node-rendered bundle via `server-simple.mjs`.
+This runs a production browser + server build, then serves via `server-simple.mjs` on **http://localhost:4000** (matches Playwright e2e).
 
 ## Deployment
 
@@ -88,11 +89,7 @@ npm run deploy:legacy
 - **Just PWA (CSR)**: `npm run deploy:pwa`
 
 ## Database Management
-TypeORM handles the schema synchronization. In production, use manual migrations:
-```bash
-cd backend
-npm run migration:run
-```
+TypeORM synchronizes the schema automatically on startup (`synchronize: true` in `database.config.ts`). For production hardening beyond the marketplace template, add explicit migrations before go-live.
 
 ## Admin Bootstrap
 

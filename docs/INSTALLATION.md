@@ -239,7 +239,7 @@ Complete this before exposing the app to the public internet.
 | 4 | Generate `ADMIN_BOOTSTRAP_TOKEN` for production bootstrap, then remove or rotate it after first admin exists. |
 | 5 | Do **not** pre-fill admin login credentials in frontend environment files. |
 | 6 | Configure Stripe/PayPal in Admin → Settings — do not ship mock payment keys in `environment.prod.ts`. |
-| 7 | Set `JWT_SECRET` in Docker/host env — `docker compose` requires it (no insecure default). |
+| 7 | For Docker: fill `backend/.env` before `docker compose up` (Compose loads it via `env_file`). |
 | 8 | Change default PostgreSQL credentials in production. |
 
 ### Production admin bootstrap
@@ -392,21 +392,22 @@ git push heroku main
 
 ```bash
 cp backend/.env.example backend/.env
-# Edit backend/.env with your settings
+# Edit backend/.env — set JWT_SECRET, DATABASE_PASSWORD, ADMIN_EMAIL, ADMIN_PASSWORD
 ```
+
+> Docker Compose loads `backend/.env` via `env_file`. You do not need a separate root `.env` unless overriding postgres credentials (see root `.env.example`).
 
 ### Step 2: Start Services
 
 ```bash
-docker-compose up -d
+docker compose up -d --build
 ```
 
 This will:
 - ✅ Start PostgreSQL container
-- ✅ Start backend container
-- ✅ Start frontend container
-- ✅ Create database automatically
-- ✅ Run migrations
+- ✅ Start backend container (NestJS on port 3002)
+- ✅ Start frontend container (nginx CSR on port 4200)
+- ✅ Auto-create database schema via TypeORM on backend startup
 
 ### Step 3: Access Application
 
@@ -416,24 +417,28 @@ This will:
 
 ### Step 4: Create Admin User
 
+Ensure `ADMIN_EMAIL` and `ADMIN_PASSWORD` are set in `backend/.env`, then:
+
 ```bash
-docker-compose exec backend npm run create-admin
+curl -X POST http://localhost:3002/api/auth/create-admin
 ```
+
+In production, pass `x-admin-bootstrap-token` header — see [First Deploy Security Checklist](#-first-deploy-security-checklist).
 
 ### Useful Docker Commands
 
 ```bash
 # View logs
-docker-compose logs -f
+docker compose logs -f
 
 # Stop services
-docker-compose down
+docker compose down
 
 # Rebuild after code changes
-docker-compose up -d --build
+docker compose up -d --build
 
 # Access database
-docker-compose exec postgres psql -U postgres ecommerce_db
+docker compose exec postgres psql -U postgres ecommerce_db
 ```
 
 ---

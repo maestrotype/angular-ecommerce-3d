@@ -3,7 +3,7 @@
 **Created**: 2026-08-06  
 **Maintainer**: Project owner  
 **Status**: Active planning document  
-**Baseline score**: **7/10** marketplace readiness (Phase A1 security complete — see §2)
+**Baseline score**: **7/10** marketplace readiness (Phase A1 security + A2 deploy path docs — see §2)
 
 > This document is the single instruction set for taking **angular-ecommerce-3d** from a feature-complete codebase to a **sellable marketplace template**, with an optional second track toward **enterprise production-ready out of the box**.
 
@@ -98,11 +98,11 @@ Work in priority order. Mark items `[ ]` → `[x]` as completed.
 
 | # | Task | Files / area | Done |
 |---|------|--------------|------|
-| A2.1 | Fix Docker COPY path → `dist/angular-ecommerce-3d/browser` | `Dockerfile` | [ ] |
-| A2.2 | Add root `.env.example` (frontend + backend pointers) | repo root | [ ] |
-| A2.3 | Fix README broken links (`WALKTHROUGH.md`, `SUPPORT.md`) | `README.md` | [ ] |
-| A2.4 | Fix `cp .env.example` instruction (backend-only today) | `README.md`, `docs/GETTING_STARTED.md` | [ ] |
-| A2.5 | Remove or fix `serve:ssr:dev` script reference | `docs/GETTING_STARTED.md`, `playwright.config.ts`, `package.json` | [ ] |
+| A2.1 | Fix Docker COPY path → `dist/angular-ecommerce-3d/browser` | `Dockerfile` | [x] |
+| A2.2 | Add root `.env.example` (frontend + backend pointers) | repo root | [x] |
+| A2.3 | Fix README broken links (`WALKTHROUGH.md`, `SUPPORT.md`) | `README.md` | [x] |
+| A2.4 | Fix `cp .env.example` instruction (backend-only today) | `README.md`, `docs/GETTING_STARTED.md` | [x] |
+| A2.5 | Remove or fix `serve:ssr:dev` script reference | `docs/GETTING_STARTED.md`, `playwright.config.ts`, `package.json` | [x] |
 | A2.6 | Verify `docker compose up` end-to-end | manual QA log in this doc §6 | [ ] |
 
 **Exit gate**: new buyer follows Quick Start → sees storefront + admin without reading source.
@@ -236,7 +236,7 @@ Use this table verbatim in marketplace description to reduce refunds and bad rev
 | Date | Tester | Scenario | Result | Notes |
 |------|--------|----------|--------|-------|
 | | | Fresh clone → GETTING_STARTED | | |
-| | | docker compose up | | |
+| 2026-08-06 | Agent | docker compose up | pending | Docker not available in dev env; config + Dockerfile path fixed — manual verify on machine with Docker |
 | | | 3D model upload + view | | |
 | | | Checkout Stripe test mode | | |
 | | | Theme switch all 4 | | |

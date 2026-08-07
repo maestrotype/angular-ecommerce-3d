@@ -10,7 +10,7 @@
 
 **The most advanced full-stack e-commerce solution featuring interactive 3D product previews, deep analytics, and an Apple-inspired glass-glassmorphism management panel.**
 
-[Live Demo](https://demo.angular-ecommerce3d.com) • [Documentation](docs/) • [Video Presentation](WALKTHROUGH.md) • [Support](SUPPORT.md)
+[Live Demo](https://demo.angular-ecommerce3d.com) • [Documentation](docs/client/index.html) • [Video Presentation](marketing-assets/WALKTHROUGH.md) • [Support](docs/SUPPORT.md)
 
 </div>
 
@@ -81,10 +81,13 @@ npm install
 # Установка Backend
 cd backend && npm install && cd ..
 
-# Настройка переменных окружения
-cp .env.example .env
+# Настройка переменных окружения (backend)
+cp backend/.env.example backend/.env
+# Отредактируйте backend/.env — см. docs/GETTING_STARTED.md
 
 # Запуск (HMR включен)
+# Terminal 1: cd backend && npm run start:dev
+# Terminal 2:
 npm start
 ```
 
