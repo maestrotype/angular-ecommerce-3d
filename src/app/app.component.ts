@@ -10,6 +10,7 @@ import { FavoritesService } from './core/services/favorites.service';
 import { ModalService } from './core/services/modal.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AnalyticsService } from './core/services/analytics.service';
+import { MobileMenuService } from './core/services/mobile-menu.service';
 
 @Component({
   selector: 'app-root',
@@ -27,10 +28,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
   // Mobile Footer State
   isHidden = false;
+  isMobileMenuOpen = false;
   favoritesCount = 0;
   cartCount = 0;
   private cartSubscription: Subscription = new Subscription();
   private favoritesSubscription: Subscription = new Subscription();
+  private mobileMenuSubscription: Subscription = new Subscription();
   private scrollSubject = new Subject<void>();
   private lastScrollTop = 0;
 
@@ -43,6 +46,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private modalService: ModalService,
     private translate: TranslateService,
     private analyticsService: AnalyticsService,
+    private mobileMenuService: MobileMenuService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     // Initialize localization
@@ -87,11 +91,15 @@ export class AppComponent implements OnInit, OnDestroy {
     this.favoritesSubscription = this.favoritesService.favoritesCount$.subscribe(
       count => this.favoritesCount = count
     );
+    this.mobileMenuSubscription = this.mobileMenuService.isOpen$.subscribe(
+      open => this.isMobileMenuOpen = open
+    );
   }
 
   ngOnDestroy(): void {
     this.cartSubscription.unsubscribe();
     this.favoritesSubscription.unsubscribe();
+    this.mobileMenuSubscription.unsubscribe();
     this.scrollSubject.complete();
     this.clearPageTransitionTimer();
   }
@@ -139,14 +147,17 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   openAuthModal(): void {
+    this.mobileMenuService.close();
     this.modalService.openModal({ id: 'auth', type: 'auth' });
   }
 
   openCartModal(): void {
+    this.mobileMenuService.close();
     this.modalService.openModal({ id: 'cart', type: 'cart' });
   }
 
   openFavoritesPage(): void {
+    this.mobileMenuService.close();
     this.router.navigate(['/favorites']);
   }
 

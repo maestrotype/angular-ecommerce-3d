@@ -13,6 +13,7 @@ import { ThemeService } from '../../core/themes/theme.service';
 import { Theme } from '../../core/themes/theme.model';
 import { AuthService } from '../../core/services/auth.service';
 import { TranslateService } from '@ngx-translate/core';
+import { MobileMenuService } from '../../core/services/mobile-menu.service';
 
 @Component({
   selector: 'app-header',
@@ -35,6 +36,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   private cartSubscription: Subscription = new Subscription();
   private favoritesSubscription: Subscription = new Subscription();
   private themeSubscription: Subscription = new Subscription();
+  private mobileMenuSubscription: Subscription = new Subscription();
 
   // Header customization
   headerSettings: HeaderSettings | null = null;
@@ -85,6 +87,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     private themeService: ThemeService,
     private authService: AuthService,
     public translate: TranslateService,
+    private mobileMenuService: MobileMenuService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     // Initialize default language
@@ -119,6 +122,10 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.routerSubscription = this.router.events
       .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
       .subscribe(() => this.onRouteChange());
+
+    this.mobileMenuSubscription = this.mobileMenuService.isOpen$.subscribe((open) => {
+      this.isMobileMenuOpen = open;
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -129,7 +136,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
         
         // Also ensure Hamburger is closed initially
         if (changes['data'].firstChange) {
-          this.isMobileMenuOpen = false;
+          this.mobileMenuService.close();
         }
       }
 
@@ -147,6 +154,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.cartSubscription.unsubscribe();
     this.favoritesSubscription.unsubscribe();
     this.themeSubscription.unsubscribe();
+    this.mobileMenuSubscription.unsubscribe();
     this.routerSubscription?.unsubscribe();
     this.teardownScrollSpy();
 
@@ -304,11 +312,11 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   toggleMobileMenu() {
-    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+    this.mobileMenuService.toggle();
   }
 
   closeMobileMenu() {
-    this.isMobileMenuOpen = false;
+    this.mobileMenuService.close();
   }
 
   toggleSearch() {

@@ -1255,7 +1255,7 @@
     }
   },
   "FAVORITES": {
-    "BACK_TO_SHOP": "← Back to Shop",
+    "BACK_TO_SHOP": "Back to Shop",
     "TITLE": "My Favorites",
     "SUBTITLE": "Your saved items for later",
     "LOADING": "Loading your favorites...",
@@ -1263,6 +1263,8 @@
     "EMPTY_MSG": "Start exploring our products and add your favorites!",
     "EXPLORE_BTN": "Explore Products",
     "CLEAR_ALL": "Clear All",
+    "REMOVE_ITEM": "Remove from favorites",
+    "ADD_TO_CART": "Add to cart",
     "ITEMS_COUNT": "{{count}} items in favorites",
     "CLEAR_CONFIRM_MSG": "Are you sure you want to remove all favorites?"
   },

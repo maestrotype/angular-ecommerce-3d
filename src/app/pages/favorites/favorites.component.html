@@ -1,90 +1,88 @@
 <section class="favorites-page">
-  <div class="section-wrapper">
-    <!-- Header Section -->
-    <div class="favorites-header">
-      <div class="header-content">
-        <button class="back-btn" (click)="goBack()">
-          {{ 'FAVORITES.BACK_TO_SHOP' | translate }}
+  <div class="fav-shell">
+    <header class="fav-top">
+      <button type="button" class="fav-back" (click)="goBack()">
+        <app-icon name="arrow-left" [width]="16" [height]="16"></app-icon>
+        <span>{{ 'FAVORITES.BACK_TO_SHOP' | translate }}</span>
+      </button>
+
+      <div class="fav-top__row">
+        <div class="fav-heading">
+          <div class="fav-title-line">
+            <h1 class="fav-title">{{ 'FAVORITES.TITLE' | translate }}</h1>
+            <span class="fav-count" *ngIf="!isLoading && favorites.length > 0" aria-hidden="true">
+              {{ favorites.length }}
+            </span>
+          </div>
+          <p class="fav-subtitle">{{ 'FAVORITES.SUBTITLE' | translate }}</p>
+        </div>
+
+        <button
+          type="button"
+          class="fav-clear"
+          *ngIf="!isLoading && favorites.length > 0"
+          (click)="onClearFavorites()"
+          [disabled]="favorites.length === 0">
+          {{ 'FAVORITES.CLEAR_ALL' | translate }}
         </button>
-        <h1 class="page-title">
-          <span class="heart-icon">❤️</span>
-          {{ 'FAVORITES.TITLE' | translate }}
-        </h1>
-        <p class="page-subtitle">
-          {{ 'FAVORITES.SUBTITLE' | translate }}
-        </p>
       </div>
-    </div>
+    </header>
 
-    <!-- Content Section -->
-    <div class="favorites-content">
-      <div class="container">
-        <!-- Loading State -->
-        <app-loading-spinner
-          *ngIf="isLoading"
-          [message]="'FAVORITES.LOADING' | translate"
-        ></app-loading-spinner>
+    <div class="fav-body">
+      <app-loading-spinner
+        *ngIf="isLoading"
+        [message]="'FAVORITES.LOADING' | translate">
+      </app-loading-spinner>
 
-        <!-- Empty State -->
-        <app-empty-state
-          *ngIf="!isLoading && favorites.length === 0"
-          icon="favorite_border"
-          [title]="'FAVORITES.EMPTY_TITLE' | translate"
-          [description]="'FAVORITES.EMPTY_MSG' | translate"
-          [actionLabel]="'FAVORITES.EXPLORE_BTN' | translate"
-          (actionClick)="onShopNow()"
-        ></app-empty-state>
+      <app-empty-state
+        *ngIf="!isLoading && favorites.length === 0"
+        icon="favorite_border"
+        [title]="'FAVORITES.EMPTY_TITLE' | translate"
+        [description]="'FAVORITES.EMPTY_MSG' | translate"
+        [actionLabel]="'FAVORITES.EXPLORE_BTN' | translate"
+        (actionClick)="onShopNow()">
+      </app-empty-state>
 
-        <!-- Favorites List -->
-        <div *ngIf="!isLoading && favorites.length > 0" class="favorites-section">
-          <!-- Actions Bar -->
-          <div class="actions-bar">
-            <div class="favorites-count">
-              {{ 'FAVORITES.ITEMS_COUNT' | translate: { count: favorites.length } }}
-            </div>
-            <button class="clear-all-btn" (click)="onClearFavorites()" [disabled]="favorites.length === 0">
-              {{ 'FAVORITES.CLEAR_ALL' | translate }}
+      <div *ngIf="!isLoading && favorites.length > 0" class="fav-grid">
+        <article
+          *ngFor="let product of favorites; let i = index"
+          class="fav-card"
+          [style.animation-delay.ms]="i * 45"
+          (click)="onProductClick(product)">
+          <div class="fav-card__media">
+            <img
+              [src]="product.imageUrl"
+              [alt]="product.name | localized"
+              loading="lazy" />
+
+            <button
+              type="button"
+              class="fav-card__heart"
+              [attr.aria-label]="'FAVORITES.REMOVE_ITEM' | translate"
+              (click)="onRemoveFavorite(product); $event.stopPropagation()">
+              <app-icon name="heart" [width]="18" [height]="18" fill="currentColor" stroke="currentColor"></app-icon>
+            </button>
+
+            <button
+              type="button"
+              class="fav-card__cart"
+              [attr.aria-label]="'FAVORITES.ADD_TO_CART' | translate"
+              (click)="onAddToCart(product); $event.stopPropagation()">
+              <app-icon name="shopping-cart" [width]="18" [height]="18"></app-icon>
             </button>
           </div>
 
-          <!-- Products Grid -->
-          <div class="products-grid">
-            <div *ngFor="let product of favorites" class="product-card animate-in" (click)="onProductClick(product)">
-              <div class="product-image">
-                <img [src]="product.imageUrl" [alt]="product.name | localized" loading="lazy" />
-
-                <div class="product-overlay">
-                  <div class="overlay-actions">
-                    <button class="action-btn" (click)="onProductClick(product); $event.stopPropagation()">
-                      <span class="material-icons">visibility</span>
-                    </button>
-                    <button class="action-btn favorite-btn is-favorite"
-                      (click)="onRemoveFavorite(product); $event.stopPropagation()">
-                      <span class="material-icons">favorite</span>
-                    </button>
-                    <button class="action-btn" (click)="onAddToCart(product); $event.stopPropagation()">
-                      <span class="material-icons">shopping_cart</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="product-info">
-                <h3 class="product-name">{{ product.name | localized }}</h3>
-
-                <div class="product-footer">
-                  <div class="product-price">
-                    <div class="price-main">
-                      <span class="current-price">${{ getDiscountedPrice(product) | number:'1.2-2' }}</span>
-                      <span class="original-price" *ngIf="product.discount">${{ product.price | number:'1.2-2' }}</span>
-                    </div>
-                  </div>
-                  <div class="product-category">{{ product.category }}</div>
-                </div>
-              </div>
+          <div class="fav-card__info">
+            <span class="fav-card__category">{{ product.category }}</span>
+            <h2 class="fav-card__name">{{ product.name | localized }}</h2>
+            <div class="fav-card__price">
+              <span class="fav-card__price-now">${{ getDiscountedPrice(product) | number:'1.2-2' }}</span>
+              <span class="fav-card__price-was" *ngIf="product.discount">
+                ${{ product.price | number:'1.2-2' }}
+              </span>
             </div>
           </div>
-        </div>
+        </article>
       </div>
     </div>
   </div>
