@@ -113,7 +113,8 @@ ADMIN_PASSWORD=YourSecurePassword123!</code></pre>
 <pre><code class="language-bash">curl -X POST http://localhost:3002/api/auth/create-admin</code></pre>
 <h3>Demo products (optional)</h3>
 <p>Populate the catalog with bundled local assets (no Unsplash URLs):</p>
-<pre><code class="language-bash">cd backend &amp;&amp; npm run seed</code></pre>
+<pre><code class="language-bash">cd backend &amp;&amp; npm run seed
+npm run demo:models   # optional: avocado + water-bottle GLB (~17 MB)</code></pre>
 <p>For production bootstrap, see <a href="INSTALLATION.md#-first-deploy-security-checklist">First Deploy Security Checklist</a>.</p>
 <h3>API documentation (Swagger)</h3>
 <p>With the backend running:</p>
