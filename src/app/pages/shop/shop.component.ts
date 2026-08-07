@@ -49,6 +49,9 @@ export class ShopComponent implements OnInit, OnDestroy {
   totalPages: number = 1;
   paginatedProducts: Product[] = [];
 
+  // Mobile horizontal scroll state
+  isScrollContainerVisible = true;
+
   // View mode — default columns follow active theme (light 5 / dark 4 / glass 3)
   viewMode: 'list' | 'grid-2' | 'grid-3' | 'grid-4' | 'grid-5' = 'grid-5';
 
@@ -82,7 +85,8 @@ export class ShopComponent implements OnInit, OnDestroy {
   ];
 
   private destroy$ = new Subject<void>();
-  private wasMobileCatalog: boolean | null = null;
+  public wasMobileCatalog: boolean = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
+  private onResizeBound = (): void => this.checkMobileCatalog();
 
   // Math object for template usage
   Math = Math;
@@ -108,6 +112,10 @@ export class ShopComponent implements OnInit, OnDestroy {
     this.loadProducts();
     this.loadCategories();
     this.setupRouteParams();
+    this.checkMobileCatalog();
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', this.onResizeBound);
+    }
 
     this.themeService.currentTheme$.pipe(takeUntil(this.destroy$)).subscribe((theme) => {
       this.applyThemeGridDefault(theme.id);
@@ -177,6 +185,9 @@ export class ShopComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('resize', this.onResizeBound);
+    }
   }
 
   private loadCategories(): void {
@@ -424,6 +435,15 @@ export class ShopComponent implements OnInit, OnDestroy {
     }
   }
 
+  // Check and update mobile catalog state
+  checkMobileCatalog(): void {
+    const isMobileCatalog = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
+    if (this.wasMobileCatalog !== isMobileCatalog) {
+      this.wasMobileCatalog = isMobileCatalog;
+      this.filterProducts();
+    }
+  }
+
   private updatePagination(): void {
     const isMobileCatalog = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
     this.wasMobileCatalog = isMobileCatalog;
@@ -447,11 +467,7 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   @HostListener('window:resize')
   onWindowResize(): void {
-    const isMobileCatalog = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
-    if (this.wasMobileCatalog === isMobileCatalog) {
-      return;
-    }
-    this.updatePagination();
+    this.checkMobileCatalog();
   }
 
   private updateUrl(): void {
@@ -559,5 +575,26 @@ export class ShopComponent implements OnInit, OnDestroy {
     this.filterCategories.forEach((filterCategory) => {
       filterCategory.count = this.countProductsInCategory(filterCategory.id, filterCategory.name);
     });
+  }
+
+  /**
+   * Called when the mobile horizontal scroll container scrolls.
+   * Hides the gradient overlay once the user scrolls away from the left edge.
+   */
+  onScrollContainerScroll(event: Event): void {
+    const container = event.currentTarget as HTMLElement;
+    const scrollLeft = container.scrollLeft;
+    const scrollWidth = container.scrollWidth;
+    const clientWidth = container.clientWidth;
+    const maxScroll = scrollWidth - clientWidth;
+
+    // Hide gradient when scrolled more than 10px from the start
+    this.isScrollContainerVisible = scrollLeft < 10;
+
+    // Also hide when reached the end
+    if (maxScroll > 0 && scrollLeft + clientWidth >= maxScroll - 5) {
+      // Show right gradient only if not at the very end
+      this.isScrollContainerVisible = true;
+    }
   }
 }

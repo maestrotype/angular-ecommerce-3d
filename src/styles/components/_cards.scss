@@ -533,19 +533,79 @@
     }
   }
 
-  /* Shop mobile: compact 2-column grid (no peek carousel) */
+  /* Shop mobile: horizontal scroll container with snap + scroll hint */
+  .shop .products-section {
+    position: relative;
+
+    /* Gradient scroll hints on edges */
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 40px;
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    &::before {
+      left: 0;
+      background: linear-gradient(to right, var(--color-bg-surface, #fff) 0%, transparent 100%);
+    }
+
+    &::after {
+      right: 0;
+      background: linear-gradient(to left, var(--color-bg-surface, #fff) 0%, transparent 100%);
+    }
+
+    /* Show hints when scrollable (not at edges) */
+    &.has-scroll::before,
+    &.has-scroll::after {
+      opacity: 1;
+    }
+
+    /* At start of scroll: hide left hint */
+    &.scrolled-right::before {
+      opacity: 0;
+    }
+
+    /* At end of scroll: hide right hint */
+    &.at-scroll-end::after {
+      opacity: 0;
+    }
+  }
+
   .shop .products-section .products-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: flex;
+    flex-direction: row;
     gap: 0.75rem;
-    padding: 0;
-    overflow: visible;
-    scroll-snap-type: none;
+    padding: 0 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    margin: 0 -20px; /* compensate container padding */
+
+    &::-webkit-scrollbar {
+      display: none; /* Chrome/Safari */
+    }
 
     > .product-card {
-      width: 100%;
-      max-width: none;
-      min-width: 0;
+      /* Fixed width for ~1.5 cards visible on narrow screens */
+      flex: 0 0 260px;
+      max-width: 260px;
+      min-width: 260px;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
+
+    /* Show hint on last card (optional visual cue) */
+    > .product-card:last-child {
+      scroll-snap-align: end;
     }
   }
 

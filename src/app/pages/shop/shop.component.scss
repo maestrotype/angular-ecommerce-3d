@@ -3,6 +3,212 @@
    Epic D1: semantic tokens only — themes override via token layer.
    ========================================================================== */
 
+/* ── Mobile horizontal scroll catalog (≤768px) ── */
+/* Wrapped container: horizontal snap scroll with gradient edge hint */
+.mobile-scroll-grid {
+  display: flex;
+  flex-direction: row;
+  gap: 0.75rem;
+  padding: 0 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+  margin: 0 -20px;
+  min-height: 380px;
+
+  /* Hide scrollbar */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  scrollbar-width: none;
+
+  /* Gradient edge hint — right side (content continues) */
+  &.scroll-visible::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 48px;
+    pointer-events: none;
+    z-index: 2;
+    background: linear-gradient(to right, transparent, var(--surface-page, #fff));
+    border-radius: 0 var(--card-radius) var(--card-radius) 0;
+  }
+
+  /* Gradient edge hint — left side (content starts here) */
+  &.scroll-visible::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 48px;
+    pointer-events: none;
+    z-index: 2;
+    background: linear-gradient(to left, transparent, var(--surface-page, #fff));
+    border-radius: var(--card-radius) 0 0 var(--card-radius);
+  }
+
+  > .mobile-product-card {
+    /* Fixed width ~1.3 cards visible on ~390px screens */
+    flex: 0 0 300px;
+    max-width: 300px;
+    min-width: 300px;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  > .mobile-product-card:last-child {
+    scroll-snap-align: end;
+  }
+}
+
+/* ── Mobile product card: centered info block ── */
+.mobile-product-card {
+  .product-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--spacing-sm) var(--spacing-md);
+    gap: var(--spacing-2xs);
+
+    .product-name {
+      font-size: var(--text-sm);
+      -webkit-line-clamp: 1;
+      text-align: center;
+      margin: 0;
+    }
+
+    .product-rating {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: var(--spacing-2xs) var(--spacing-xs);
+
+      .stars {
+        .star {
+          font-size: 0.85rem;
+          cursor: pointer;
+        }
+      }
+
+      .rating-value,
+      .rating-count {
+        font-size: var(--text-2xs);
+        color: var(--text-secondary);
+      }
+
+      .product-category {
+        font-size: var(--text-2xs);
+        padding: 0 var(--spacing-3xs);
+      }
+    }
+
+    .product-footer {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: var(--spacing-xs);
+      width: 100%;
+
+      .price-main {
+        display: flex;
+        align-items: baseline;
+        gap: var(--spacing-xs);
+      }
+
+      .current-price {
+        font-size: var(--text-lg);
+        font-weight: var(--font-weight-bold);
+        color: var(--text-primary);
+      }
+
+      .original-price {
+        font-size: var(--text-xs);
+        color: var(--text-muted);
+        text-decoration: line-through;
+      }
+
+      .cart-btn {
+        width: 2.5rem;
+        height: 2.5rem;
+        flex-shrink: 0;
+
+        .material-icons {
+          font-size: 1.1rem;
+        }
+      }
+    }
+
+    /* Stock indicator with visual progress bar */
+    .stock-indicator {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: var(--text-2xs);
+      padding: 0;
+      margin-top: 2px;
+      width: 100%;
+    }
+
+    .stock-bar-container {
+      width: 100%;
+      height: 4px;
+      background: var(--surface-secondary, #f0f0f0);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .stock-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width var(--transition-normal), background-color var(--transition-normal);
+    }
+
+    .stock-bar-fill.low {
+      /* 1-3 left: red */
+      background-color: var(--state-error, #ef4444);
+    }
+
+    .stock-bar-fill.medium {
+      /* 4-5 left: amber */
+      background-color: var(--state-warning, #f59e0b);
+    }
+
+    .stock-bar-fill.high {
+      /* 6-10 left: green */
+      background-color: var(--state-success, #22c55e);
+    }
+
+    .stock-text {
+      color: var(--text-secondary);
+      font-weight: var(--font-weight-medium);
+      white-space: nowrap;
+    }
+  }
+
+  .product-image {
+    .special-badge,
+    .new-badge,
+    .discount-badge {
+      font-size: var(--text-2xs);
+      padding: 2px 6px;
+    }
+
+    .out-of-stock-badge {
+      font-size: var(--text-xs);
+      padding: 4px 10px;
+    }
+  }
+}
+
+
 .shop {
   min-height: 100vh;
   background: var(--surface-page);
