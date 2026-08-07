@@ -1,5 +1,5 @@
 import { resolveApiUrl } from '../app/core/utils/api-url.util';
-import type { AdminLoginPrefill } from './environment';
+import type { AdminLoginPrefill } from './environment.types';
 
 export const environment = {
   production: true,

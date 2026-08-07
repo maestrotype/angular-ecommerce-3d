@@ -4,7 +4,7 @@
  * Copy values into environment.ts (development) or environment.prod.ts (production).
  * Payment keys are normally configured in Admin → Settings / Integrations.
  */
-import type { AdminLoginPrefill } from './environment';
+import type { AdminLoginPrefill } from './environment.types';
 
 export const environment = {
   production: false,
