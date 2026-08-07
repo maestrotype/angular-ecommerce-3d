@@ -24,7 +24,7 @@
 </div>
 
 <!-- Mobile Navigation -->
-<nav *ngIf="!isAdminRoute() && !isViewerRoute()" class="footer-mobile" [class.footer-hidden]="isHidden" [attr.aria-label]="'A11Y.MOBILE_NAV' | translate">
+<nav *ngIf="!isAdminRoute() && !isViewerRoute()" class="footer-mobile" [class.footer-hidden]="isHidden || isMobileMenuOpen" [attr.aria-hidden]="isMobileMenuOpen" [attr.aria-label]="'A11Y.MOBILE_NAV' | translate">
   <button type="button" class="nav-item favorites-link" (click)="openFavoritesPage()" [attr.aria-label]="'HEADER.NAV.FAVORITES' | translate">
     <span class="nav-item__icon">
       <app-icon name="heart" stroke="currentColor"></app-icon>
