@@ -25,6 +25,7 @@
   .header-actions {
     display: flex;
     align-items: center;
+    flex-shrink: 0;
     gap: var(--space-2);
 
     // Circular hover via MDC state-layer tokens + radial-gradient (no cascade hacks).
@@ -78,6 +79,7 @@
     border-radius: 50%;
     overflow: hidden;
     background-color: transparent;
+    flex-shrink: 0;
 
     &:hover {
       background-color: transparent;

@@ -8,7 +8,9 @@
   <span class="spacer"></span>
 
   <div class="header-actions">
-    <button mat-icon-button [routerLink]="'/home'" [matTooltip]="'GO_TO_STOREFRONT' | translate" *ngIf="!isMobile">
+    <button mat-icon-button class="storefront-link" [routerLink]="'/home'"
+      [attr.aria-label]="'GO_TO_STOREFRONT' | translate"
+      [matTooltip]="'GO_TO_STOREFRONT' | translate">
       <mat-icon>storefront</mat-icon>
     </button>
 

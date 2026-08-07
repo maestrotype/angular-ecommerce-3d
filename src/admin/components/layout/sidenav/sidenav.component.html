@@ -1,8 +1,8 @@
 <div class="sidenav-wrapper">
   <!-- Mobile Header -->
   <div class="sidenav-header-mobile lg:hidden" *ngIf="isMobile">
-    <span class="menu-title">Admin Panel</span>
-    <button class="close-btn" (click)="closeSidenav.emit()">
+    <span class="menu-title">{{ 'ADMIN_PANEL' | translate }}</span>
+    <button type="button" class="close-btn" (click)="closeSidenav.emit()">
       <mat-icon>close</mat-icon>
     </button>
   </div>
