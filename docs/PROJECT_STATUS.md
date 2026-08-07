@@ -42,6 +42,33 @@
 ### Optional follow-up (not blockers)
 - Epic G **complete** (G1–G17). Optional: human visual sign-off per `CROSS_THEME_VISUAL_REVIEW.md` + `POLISH_AND_QUALITY.md`.
 
+---
+
+## Section Management & Page Builder Status
+
+> **Full plan**: [SECTIONS_ANALYSIS_AND_ROADMAP.md](../antigravity/SECTIONS_ANALYSIS_AND_ROADMAP.md)  
+> **Related**: [MARKETPLACE_LAUNCH_ROADMAP.md](MARKETPLACE_LAUNCH_ROADMAP.md)
+
+### Epic H — Sections & Page Builder Completion
+
+| Phase | Name | Status | Notes |
+|-------|------|--------|-------|
+| H1 | Quick Wins (blockers) | ⏳ Pending | Remove confirm(), console.log, fix categories i18n |
+| H2 | Section UX (duplicate, dialog, type-lock) | ⏳ Pending | Shared ConfirmDialog, Duplicate Section |
+| H3 | New Section Types | ⏳ Pending | testimonials, newsletter, features-grid, faq, stats |
+| H4 | Section Presets / Quick Start | ⏳ Pending | Demo presets + 1-click homepage wizard |
+| H5 | Page Templates | ⏳ Pending | landing-page, faq-page, collection-page |
+| H6 | Home Architecture Fix | ⏳ Pending | Remove duplicate data loading from HomeComponent |
+| H7 | Admin UX Polish | ⏳ Pending | type icons, page switcher, empty state, search |
+
+### Current Section Types (14 registered)
+
+`header` · `hero` · `hero-glass` · `best-sellers` · `categories` · `special-offer` · `brands` · `contacts` · `about` · `product-tabs` · `similar-products` · `bought-together` · `html-content` · `footer`
+
+### Missing Section Types (for competitive parity)
+
+`testimonials` 🔴 · `newsletter` 🔴 · `features-grid` 🟡 · `faq` 🟡 · `stats` 🟡 · `blog-posts` 🟢 · `video-hero` 🟢
+
 ### Post-C4 lessons (2026-07-29) — do not repeat
 1. **`!important` is forbidden** for new/agent work (absolute). Win with CSS variables (`--mdc-*` / `--mat-*`), specificity, or correct layer — never `!important`. Rule: `.cursor/rules/no-important.mdc` + `AI_CONSTITUTION.md`.
 2. **CSS custom-property inheritance gotcha:** `--glass-border-soft: var(--border-subtle)` resolves on `:root` to a **computed** light color (`#f1f5f9`); children inherit that resolved value, so theme overrides of `--border-subtle` alone do not update soft borders. **Re-declare** `--glass-border-soft` / `--glass-divider` inside theme scopes (done for admin dark + dark-glass).
@@ -106,6 +133,7 @@
 
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-08-07 | **Section Manager Analysis**: Full audit of admin/sections + admin/pages UI; identified 13 issues (P1–P13); created Epic H (7 phases, H1–H7); added testimonials/newsletter/features-grid/faq/stats to roadmap. See `SECTIONS_ANALYSIS_AND_ROADMAP.md`. | Principal UI Architect |
 | 2026-08-05 | **Epic G closed + docs sync**: G12–G17 (checkout, page transitions, micro-interactions, motion docs, cross-theme review, a11y/polish); `REFACTORING_BOARD.md` + `PROJECT_STATUS.md` synced — all epics A–G ✅, metrics at 100%. | Principal UI Architect |
 | 2026-08-05 | Epic G12: Checkout tokens (`--checkout-*`), `_checkout.scss` (stepper, summary, payment states); checkout/payment off `getThemeClass`. Build passes. | Implementation Engineer |
 | 2026-08-05 | Epic G13: Page transition tokens + `_page-transitions.scss`; storefront route enter via `router-outlet`. Build passes. | Implementation Engineer |
@@ -178,4 +206,4 @@
 
 ---
 
-*This document is maintained by the Principal UI Architect. Last updated: 2026-08-05*
+*This document is maintained by the Principal UI Architect. Last updated: 2026-08-07*

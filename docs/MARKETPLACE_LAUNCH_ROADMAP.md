@@ -70,6 +70,7 @@ Related docs: [PROJECT_STATUS.md](PROJECT_STATUS.md) · [REFACTORING_BOARD.md](R
 | Testing / QA | 3/10 | 4 test files; no CI |
 | Security | 6/10 | Bootstrap token + env-driven admin; payment keys cleared from prod env |
 | Marketplace packaging | 4/10 | Screenshots / demo GLB missing |
+| **Section/Page Builder** | **5/10** | **13 issues P1–P13; 5 missing section types; Epic H pending** |
 | Legal / licensing | 5/10 | MIT vs backend UNLICENSED; Unsplash seeds |
 
 **Overall: 7 / 10** — sellable as premium template with caveats; Phase A1 security complete.
@@ -122,6 +123,8 @@ Work in priority order. Mark items `[ ]` → `[x]` as completed.
 | A3.7 | Align backend license with root MIT | `backend/package.json` | [x] |
 | A3.8 | Unify README language (EN primary for international marketplace) | `README.md` | [x] |
 | A3.9 | Update listing copy — honest feature matrix | `marketing-assets/MARKETPLACE_DESCRIPTION.md` | [x] |
+| A3.10 | Add testimonials + newsletter + features-grid section types (Epic H3) | `src/app/layout/`, `section-map.ts`, `section-form.component.ts` | [ ] |
+| A3.11 | Add Section Presets with demo content (Epic H4) | `section-form.component.ts` + preset configs | [ ] |
 
 **Exit gate**: listing page needs no “coming soon” placeholders; 3D demo works without buyer supplying assets.
 
@@ -137,6 +140,9 @@ Work in priority order. Mark items `[ ]` → `[x]` as completed.
 | A4.4 | Resolve Swagger claim: implement or remove from docs | `docs/BACKEND_API.md`, `backend/src/main.ts` | [x] |
 | A4.5 | PayPal: implement real flow **or** remove from “supported payments” list | `backend/src/payments/` | [x] |
 | A4.6 | Complete manual QA matrix | [POLISH_AND_QUALITY.md](POLISH_AND_QUALITY.md) unchecked rows | [ ] |
+| A4.7 | Remove native `confirm()` from section-list & page-list delete (use MatDialog) | `section-list.component.ts:248` | [ ] |
+| A4.8 | Remove debug `console.log` from section-form production code | `section-form.component.ts:41,661,767` | [ ] |
+| A4.9 | Fix categories i18n bug: en/ru/ua all receive same string value | `section-form.component.ts:714` | [ ] |
 
 **Exit gate**: green CI on main; no doc claims without code backing.
 
@@ -219,6 +225,7 @@ Use this table verbatim in marketplace description to reduce refunds and bad rev
 | Storefront (shop, PDP, cart) | ✅ Ready | — |
 | Admin CRUD | ✅ Ready | Change default credentials |
 | 3D viewer (GLB upload) | ✅ Ready | Provide own models or use bundled demo |
+| Section Manager (14 types) | ✅ Ready | Drag & drop, live preview, multi-theme |
 | Themes (light/dark/glass) | ✅ Ready | dark-glass is admin-only |
 | i18n EN/RU/UA | ✅ Ready | — |
 | SSR / PWA | ✅ Ready | SSR needs Node deploy, not nginx-only Docker |
@@ -242,6 +249,8 @@ Use this table verbatim in marketplace description to reduce refunds and bad rev
 | | | Checkout Stripe test mode | | |
 | | | Theme switch all 4 | | |
 | | | Mobile 375px storefront | | |
+| | | Section create / reorder / delete | | |
+| | | Site Architect preview (desktop/mobile/dark) | | |
 
 ---
 
@@ -250,7 +259,8 @@ Use this table verbatim in marketplace description to reduce refunds and bad rev
 | Version | Scope | Target score |
 |---------|-------|--------------|
 | **v0.9-beta** | Internal QA, fix A1–A2 | 7/10 |
-| **v1.0.0** | Track A complete (marketplace launch) | 8/10 |
+| **v1.0.0** | Track A complete + H1–H2 fixes (marketplace launch) | 8/10 |
+| **v1.1.0** | H3 new section types + H4 presets | 8.5/10 |
 | **v1.x** | Buyer feedback, bugfixes | 8–8.5/10 |
 | **v2.0.0** | Track B enterprise tier | 9/10 |
 
@@ -261,11 +271,91 @@ Use this table verbatim in marketplace description to reduce refunds and bad rev
 | Track | Calendar (focused solo dev) | Outcome |
 |-------|----------------------------|---------|
 | **A — Template launch** | ~3–4 weeks | Sellable on marketplace |
+| **H1–H2 — Section blockers** | ~4–5 days (parallel with A) | Removes anti-patterns, polish |
+| **H3–H4 — New sections + presets** | ~2 weeks after A | Competitive page builder |
 | **B — Enterprise** | +6–10 weeks after A | Premium tier / higher price |
 
 ---
 
-## 9. Maintenance after launch
+## 9. Epic H — Section Builder Completion
+
+> Full task breakdown: see §Section Management in [`PROJECT_STATUS.md`](PROJECT_STATUS.md)  
+> Analysis document: see [SECTIONS_ANALYSIS_AND_ROADMAP.md](../brain/336f5a40-4fa8-42a7-b59e-553c06170d73/SECTIONS_ANALYSIS_AND_ROADMAP.md)
+
+### Phase H1 — Quick Wins / Blockers · ~1–2 days
+
+| # | Task | File | Done |
+|---|------|------|------|
+| H1.1 | Replace `confirm()` with `MatDialog` in section delete | `section-list.component.ts:248` | [ ] |
+| H1.2 | Remove debug `console.log` calls from section-form | `section-form.component.ts:41,661,767` | [ ] |
+| H1.3 | Fix categories i18n: ru/ua fields get EN value instead of locale | `section-form.component.ts:714` | [ ] |
+
+---
+
+### Phase H2 — Section UX Improvements · ~2–3 days
+
+| # | Task | File | Done |
+|---|------|------|------|
+| H2.1 | Add "Duplicate Section" action button | `section-list.component.ts/html` | [ ] |
+| H2.2 | Create shared `ConfirmDialogComponent` (reusable across admin) | `src/admin/components/ui/confirm-dialog/` | [ ] |
+| H2.3 | Lock section `type` to read-only in edit mode + hint text | `section-form.component.html:388` | [ ] |
+| H2.4 | Expand Property Adjust Toolbar (padding, bg-color, text-color) | `section-list.component.html:161–187` | [ ] |
+
+---
+
+### Phase H3 — New Section Types · ~5–7 days
+
+| # | Section Type | Admin Form | Frontend Component | Done |
+|---|-------------|------------|--------------------|------|
+| H3.1 | `testimonials` | avatar, name, role, text, rating 1–5 | Carousel / grid with stars | [ ] |
+| H3.2 | `newsletter` | title, subtitle, placeholder, button text | Email capture + backend POST /newsletter | [ ] |
+| H3.3 | `features-grid` | icon (Material), title, description × N | 3–4 col responsive grid | [ ] |
+| H3.4 | `faq` | question + answer pairs (localized) | MatExpansionPanel accordion | [ ] |
+| H3.5 | `stats` | value, label, suffix × N | Animated intersection-observer counters | [ ] |
+
+> Each type requires: entry in `section-map.ts` + `sectionTypes[]` array + `ngSwitch` form case.
+
+---
+
+### Phase H4 — Section Presets & Quick Start Wizard · ~3–4 days
+
+| # | Task | Done |
+|---|------|------|
+| H4.1 | Section Presets: "Load Demo Content" fills form with realistic sample data + images | [ ] |
+| H4.2 | Quick Start Wizard: creates full homepage section set (header+hero+best-sellers+categories+footer) in 1 click | [ ] |
+
+---
+
+### Phase H5 — Page Templates · ~3–4 days *(post-launch)*
+
+| # | Task | Done |
+|---|------|------|
+| H5.1 | Add page templates: `landing-page`, `faq-page`, `collection-page`, `brand-page` | [ ] |
+| H5.2 | Link custom pages to sections via `pageTarget` in Section Manager | [ ] |
+
+---
+
+### Phase H6 — Home Architecture Fix · ~1–2 days *(post-launch)*
+
+| # | Task | Done |
+|---|------|------|
+| H6.1 | Remove duplicate `loadBestSellers()` / `loadSpecialOffers()` from `HomeComponent` | [ ] |
+| H6.2 | Data flows through SectionRenderer `contextData` — no double API calls | [ ] |
+
+---
+
+### Phase H7 — Admin UX Polish · ~2–3 days *(post-launch)*
+
+| # | Task | Done |
+|---|------|------|
+| H7.1 | Type icons in section list (`mat-icon` per section type) | [ ] |
+| H7.2 | Site Architect page switcher (preview home / shop / product page) | [ ] |
+| H7.3 | Empty state UI when no sections exist (illustrated CTA) | [ ] |
+| H7.4 | Search + filter by type above section table | [ ] |
+
+---
+
+## 10. Maintenance after launch
 
 - **Monthly**: dependency updates, security patch release if needed
 - **Quarterly**: minor feature release (buyer-driven)
@@ -275,4 +365,4 @@ Keep [CHANGELOG.md](../CHANGELOG.md) and bump semver per [Keep a Changelog](http
 
 ---
 
-*Last reviewed: 2026-08-06. Update §2 scores after each phase gate.*
+*Last reviewed: 2026-08-07. Update §2 scores after each phase gate.*
