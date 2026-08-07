@@ -906,6 +906,7 @@
   "ANSWERED": "Відповілено",
   "HEADER": {
     "SEARCH_PLACEHOLDER": "Пошук товарів...",
+    "SEARCH_PLACEHOLDER_SHORT": "Пошук...",
     "SEARCH_RESULTS": "Результати пошуку",
     "VIEW_ALL_RESULTS": "Дивитися всі результати",
     "MENU": "Меню",
@@ -914,7 +915,10 @@
       "SHOP": "Магазин",
       "ABOUT": "Про нас",
       "CONTACTS": "Контакти",
-      "ADMIN_PANEL": "Панель адміна"
+      "ADMIN_PANEL": "Панель адміна",
+      "FAVORITES": "Обране",
+      "CART": "Кошик",
+      "ACCOUNT": "Профіль"
     },
     "THEME": "Тема",
     "THEMES": {
@@ -1283,7 +1287,11 @@
     "STOCK": {
       "ONLY_LEFT": "Залишилося всього {{count}} шт.!",
       "OUT_OF_STOCK": "НЕМАЄ В НАЯВНОСТІ",
-      "COUNT": "В наявності: {{count}}"
+      "COUNT": "В наявності: {{count}}",
+      "IN_STOCK": "Є в наявності"
+    },
+    "META": {
+      "NO_REVIEWS": "Поки немає відгуків"
     },
     "BADGES": {
       "SPECIAL": "СПЕЦПРОПОЗИЦІЯ",
@@ -1317,9 +1325,11 @@
       "MSG": "Товар, який ви шукаєте, не існує."
     },
     "TABS": {
+      "ABOUT": "Про товар",
       "DESCRIPTION": "Опис",
       "CHARACTERISTICS": "Характеристики",
-      "DELIVERY": "Доставка та оплата"
+      "DELIVERY": "Доставка та оплата",
+      "REVIEWS": "Відгуки"
     },
     "PECULIARITIES": "Особливості:",
     "TECHNICAL_SPECS": "Технічні характеристики",

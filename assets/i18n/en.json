@@ -926,6 +926,7 @@
   "ANSWERED": "Answered",
   "HEADER": {
     "SEARCH_PLACEHOLDER": "Search products...",
+    "SEARCH_PLACEHOLDER_SHORT": "Search...",
     "SEARCH_RESULTS": "Search Results",
     "VIEW_ALL_RESULTS": "View All Results",
     "MENU": "Menu",
@@ -934,7 +935,10 @@
       "SHOP": "Shop",
       "ABOUT": "About",
       "CONTACTS": "Contacts",
-      "ADMIN_PANEL": "Admin Panel"
+      "ADMIN_PANEL": "Admin Panel",
+      "FAVORITES": "Saved",
+      "CART": "Cart",
+      "ACCOUNT": "Account"
     },
     "THEME": "Theme",
     "THEMES": {
@@ -1305,7 +1309,11 @@
     "STOCK": {
       "ONLY_LEFT": "Only {{count}} left in stock!",
       "OUT_OF_STOCK": "OUT OF STOCK",
-      "COUNT": "In stock: {{count}}"
+      "COUNT": "In stock: {{count}}",
+      "IN_STOCK": "In stock"
+    },
+    "META": {
+      "NO_REVIEWS": "No reviews yet"
     },
     "BADGES": {
       "SPECIAL": "SPECIAL OFFER",
@@ -1339,9 +1347,11 @@
       "MSG": "The product you're looking for doesn't exist."
     },
     "TABS": {
+      "ABOUT": "About product",
       "DESCRIPTION": "Description",
       "CHARACTERISTICS": "Characteristics",
-      "DELIVERY": "Delivery and Payment"
+      "DELIVERY": "Delivery and Payment",
+      "REVIEWS": "Reviews"
     },
     "PECULIARITIES": "Peculiarities:",
     "TECHNICAL_SPECS": "Technical specifications",

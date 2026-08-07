@@ -944,6 +944,7 @@
   "ANSWERED": "Отвечено",
   "HEADER": {
     "SEARCH_PLACEHOLDER": "Поиск товаров...",
+    "SEARCH_PLACEHOLDER_SHORT": "Поиск...",
     "SEARCH_RESULTS": "Результаты поиска",
     "VIEW_ALL_RESULTS": "Смотреть все результаты",
     "MENU": "Меню",
@@ -952,7 +953,10 @@
       "SHOP": "Магазин",
       "ABOUT": "О нас",
       "CONTACTS": "Контакты",
-      "ADMIN_PANEL": "Панель админа"
+      "ADMIN_PANEL": "Панель админа",
+      "FAVORITES": "Избранное",
+      "CART": "Корзина",
+      "ACCOUNT": "Профиль"
     },
     "THEME": "Тема",
     "THEMES": {
@@ -1303,7 +1307,11 @@
     "STOCK": {
       "ONLY_LEFT": "Осталось всего {{count}} шт.!",
       "OUT_OF_STOCK": "НЕТ В НАЛИЧИИ",
-      "COUNT": "В наличии: {{count}}"
+      "COUNT": "В наличии: {{count}}",
+      "IN_STOCK": "Есть в наличии"
+    },
+    "META": {
+      "NO_REVIEWS": "Пока нет отзывов"
     },
     "BADGES": {
       "SPECIAL": "СПЕЦПРЕДЛОЖЕНИЕ",
@@ -1337,9 +1345,11 @@
       "MSG": "Товар, который вы ищете, не существует."
     },
     "TABS": {
+      "ABOUT": "О товаре",
       "DESCRIPTION": "Описание",
       "CHARACTERISTICS": "Характеристики",
-      "DELIVERY": "Доставка и оплата"
+      "DELIVERY": "Доставка и оплата",
+      "REVIEWS": "Отзывы"
     },
     "PECULIARITIES": "Особенности:",
     "TECHNICAL_SPECS": "Технические характеристики",
