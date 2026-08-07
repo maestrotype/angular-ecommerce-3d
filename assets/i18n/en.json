@@ -915,6 +915,7 @@
   "LIQPAY_PUBLIC_KEY": "LiqPay Public Key",
   "LIQPAY_PRIVATE_KEY": "LiqPay Private Key",
   "PAYPAL": "PayPal",
+  "PAYPAL_MOCK_NOTICE": "Demo/mock mode: simulates PayPal checkout until you add PayPal Client ID and Secret below. Stripe and LiqPay are production-ready when configured.",
   "ENABLE_PAYPAL": "Enable PayPal",
   "PAYPAL_CLIENT_ID": "PayPal Client ID",
   "PAYPAL_CLIENT_SECRET": "PayPal Client Secret",
@@ -1177,7 +1178,8 @@
       "SELECTED": "Selected Payment Method",
       "LIQPAY_DESC": "Secure online payment",
       "STRIPE_DESC": "Pay with card using Stripe",
-      "PAYPAL_DESC": "Pay with PayPal"
+      "PAYPAL_DESC": "Pay with PayPal",
+      "PAYPAL_MOCK_NOTICE": "Demo/mock mode: checkout is simulated until PayPal credentials are configured in Admin → Settings."
     },
     "ACTIONS": {
       "PAY_NOW": "Pay Now",
@@ -1255,7 +1257,7 @@
     }
   },
   "FAVORITES": {
-    "BACK_TO_SHOP": "← Back to Shop",
+    "BACK_TO_SHOP": "Back to Shop",
     "TITLE": "My Favorites",
     "SUBTITLE": "Your saved items for later",
     "LOADING": "Loading your favorites...",
@@ -1263,6 +1265,8 @@
     "EMPTY_MSG": "Start exploring our products and add your favorites!",
     "EXPLORE_BTN": "Explore Products",
     "CLEAR_ALL": "Clear All",
+    "REMOVE_ITEM": "Remove from favorites",
+    "ADD_TO_CART": "Add to cart",
     "ITEMS_COUNT": "{{count}} items in favorites",
     "CLEAR_CONFIRM_MSG": "Are you sure you want to remove all favorites?"
   },

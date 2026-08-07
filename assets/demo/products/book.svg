@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="JavaScript guide book">
+  <rect width="400" height="400" fill="#fff7ed"/>
+  <rect x="40" y="40" width="320" height="320" rx="24" fill="#ffedd5"/>
+  <rect x="120" y="90" width="160" height="210" rx="8" fill="#f97316"/>
+  <rect x="135" y="110" width="130" height="12" rx="4" fill="#fff"/>
+  <rect x="135" y="135" width="110" height="8" rx="4" fill="#fed7aa"/>
+  <rect x="135" y="155" width="120" height="8" rx="4" fill="#fed7aa"/>
+  <rect x="135" y="175" width="95" height="8" rx="4" fill="#fed7aa"/>
+  <text x="200" y="360" fill="#9a3412" font-family="system-ui,sans-serif" font-size="18" text-anchor="middle">Book</text>
+</svg>

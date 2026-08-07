@@ -895,6 +895,7 @@
   "LIQPAY_PUBLIC_KEY": "Публічний ключ LiqPay",
   "LIQPAY_PRIVATE_KEY": "Приватний ключ LiqPay",
   "PAYPAL": "PayPal",
+  "PAYPAL_MOCK_NOTICE": "Демо/mock: імітує оплату PayPal, доки не додано Client ID та Secret. Stripe і LiqPay готові після налаштування.",
   "ENABLE_PAYPAL": "Увімкнути PayPal",
   "PAYPAL_CLIENT_ID": "ID клієнта PayPal",
   "PAYPAL_CLIENT_SECRET": "Секрет клієнта PayPal",
@@ -1155,7 +1156,8 @@
       "SELECTED": "Обраний спосіб оплати",
       "LIQPAY_DESC": "Безпечна онлайн-оплата",
       "STRIPE_DESC": "Оплата карткою через Stripe",
-      "PAYPAL_DESC": "Оплата через PayPal"
+      "PAYPAL_DESC": "Оплата через PayPal",
+      "PAYPAL_MOCK_NOTICE": "Демо/mock: оплата імітується, доки PayPal не налаштовано в Admin → Settings."
     },
     "ACTIONS": {
       "PAY_NOW": "Оплатити зараз",
@@ -1233,7 +1235,7 @@
     }
   },
   "FAVORITES": {
-    "BACK_TO_SHOP": "← Повернутися до магазину",
+    "BACK_TO_SHOP": "Повернутися до магазину",
     "TITLE": "Обране",
     "SUBTITLE": "Ваші збережені товари",
     "LOADING": "Завантаження обраного...",
@@ -1241,6 +1243,8 @@
     "EMPTY_MSG": "Почніть вивчати товари та додавайте найкраще в обране!",
     "EXPLORE_BTN": "Вивчити товари",
     "CLEAR_ALL": "Очистити все",
+    "REMOVE_ITEM": "Видалити з обраного",
+    "ADD_TO_CART": "До кошика",
     "ITEMS_COUNT": "{{count}} товарів в обраному",
     "CLEAR_CONFIRM_MSG": "Ви впевнені, що хочете видалити всі товари з обраного?"
   },
