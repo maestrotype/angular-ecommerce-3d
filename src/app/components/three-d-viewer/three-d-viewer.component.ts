@@ -65,6 +65,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   private animId!: number;
   private isMobile = false;
   private isDestroyed = false;
+  private mobileTouchCleanup: (() => void) | null = null;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -77,7 +78,10 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     private threeDModelService: ThreeDModelService
   ) {
     if (isPlatformBrowser(this.platformId)) {
-      this.isMobile = /Mobi|Android/i.test(navigator.userAgent);
+      this.isMobile =
+        'ontouchstart' in window ||
+        navigator.maxTouchPoints > 0 ||
+        /Mobi|Android/i.test(navigator.userAgent);
     }
   }
 
@@ -228,6 +232,10 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     this.renderer.setSize(w, h);
+    this.renderer.domElement.style.display = 'block';
+    this.renderer.domElement.style.width = '100%';
+    this.renderer.domElement.style.height = '100%';
+    this.renderer.domElement.style.touchAction = 'none';
     this.renderer.shadowMap.enabled = !this.isMobile;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -255,10 +263,10 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
       this.controls.enableZoom = true;
     });
 
-    if (this.isMobile) {
-      this.controls.touches.ONE = null;
+    if (this.isMobile && !this.previewOnly) {
+      this.controls.touches.ONE = THREE.TOUCH.ROTATE;
       this.controls.touches.TWO = THREE.TOUCH.DOLLY_PAN;
-      this.setupThreeFingerRotation(THREE);
+      this.setupMobileTouchGuards();
     }
 
     if (this.previewOnly) {
@@ -494,32 +502,27 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     }
   };
 
-  private setupThreeFingerRotation(THREE: any) {
+  private setupMobileTouchGuards(): void {
     const el = this.renderer.domElement;
-    let lastX = 0, lastY = 0;
+    const host = this.container.nativeElement as HTMLElement;
 
-    el.addEventListener('touchstart', (e: TouchEvent) => {
-      if (e.touches.length === 3) {
-        lastX = e.touches[0].pageX;
-        lastY = e.touches[0].pageY;
-        e.preventDefault();
-      }
-    }, { passive: false });
+    host.style.touchAction = 'none';
 
-    el.addEventListener('touchmove', (e: TouchEvent) => {
-      if (e.touches.length === 3) {
-        const deltaX = e.touches[0].pageX - lastX;
-        const deltaY = e.touches[0].pageY - lastY;
-        lastX = e.touches[0].pageX;
-        lastY = e.touches[0].pageY;
-        const rotateScale = 0.5;
-        (this.controls as any).rotateLeft(2 * Math.PI * deltaX / el.clientWidth * rotateScale);
-        (this.controls as any).rotateUp(2 * Math.PI * deltaY / el.clientHeight * rotateScale);
-        this.controls.update();
-        e.preventDefault();
-        this.controls.enableZoom = true;
+    const stopScroll = (event: TouchEvent) => {
+      if (this.previewOnly) {
+        return;
       }
-    }, { passive: false });
+      event.stopPropagation();
+    };
+
+    el.addEventListener('touchstart', stopScroll, { passive: true });
+    el.addEventListener('touchmove', stopScroll, { passive: false });
+
+    this.mobileTouchCleanup = () => {
+      el.removeEventListener('touchstart', stopScroll);
+      el.removeEventListener('touchmove', stopScroll);
+      host.style.touchAction = '';
+    };
   }
 
   /**
@@ -547,6 +550,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.isDestroyed = true;
+    this.mobileTouchCleanup?.();
     this.disconnectObserver();
     if (this.modelSubscription) {
       this.modelSubscription.unsubscribe();

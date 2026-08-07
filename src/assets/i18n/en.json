@@ -1145,7 +1145,7 @@
     "MODEL_3D": "3D",
     "HINT": "Rotate model to enable zoom · Page scroll over viewer",
     "LOADING": "Loading 3D Scene",
-    "THREED_HINT": "3-finger swipe to rotate, 1-finger swipe to scroll page",
+    "THREED_HINT": "Drag with one finger to rotate, pinch with two to zoom",
     "EXPAND_3D": "View 3D Model",
     "EXPAND_PHOTO": "View Full Photo",
     "LOAD_ERROR": "3D Load Error",
