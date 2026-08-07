@@ -749,10 +749,11 @@
   backdrop-filter: blur(30px) saturate(180%);
   -webkit-backdrop-filter: blur(30px) saturate(180%);
   box-shadow: -10px 0 50px rgba(0, 0, 0, 0.2);
-  // Sit below fixed header so logo isn't "doubled" under the drawer chrome
   top: 64px;
   height: calc(calc(var(--vh, 1vh) * 100) - 64px);
   padding-top: 0;
+  min-height: 0;
+  overflow: hidden;
 
   @container (max-width: 350px) {
     width: 100%;
@@ -766,7 +767,8 @@
   }
 
   .mobile-menu-header {
-    padding: 20px 25px;
+    padding: 16px 20px;
+    flex-shrink: 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -782,34 +784,19 @@
       margin: 0;
       font-weight: 800;
     }
-
-    .close-btn {
-      background: rgba(0, 0, 0, 0.05);
-      border: none;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: var(--header-text);
-      transition: all 0.3s ease;
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.1);
-        transform: scale(1.1);
-      }
-    }
   }
 
   .mobile-nav {
     flex: 1;
-    padding: 20px 20px 40px; // Reduced side padding from 25px
+    min-height: 0;
+    padding: 16px 16px 12px;
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 20px;
+    overflow-x: hidden;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
 
     .mobile-menu-section {
       display: flex;
@@ -818,8 +805,8 @@
     }
 
     .mobile-preferences {
-      gap: 18px;
-      padding-top: 8px;
+      gap: 14px;
+      padding-top: 6px;
       border-top: 1px solid var(--border-subtle);
     }
 
@@ -912,11 +899,11 @@
       }
     }
 
-    /* Language: vertical flag list — different layout from theme cards */
+    /* Language: compact row on mobile to save vertical space */
     .mobile-lang-segment {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
       padding: 4px;
       border-radius: 12px;
       background: color-mix(in srgb, var(--text-primary) 5%, transparent);
@@ -924,20 +911,22 @@
 
       &__btn {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         align-items: center;
-        gap: 12px;
+        justify-content: center;
+        gap: 6px;
         width: 100%;
-        padding: 10px 12px;
+        min-width: 0;
+        padding: 8px 6px;
         border: 1px solid transparent;
         border-radius: 10px;
         background: transparent;
         color: var(--text-secondary);
-        font-size: 0.8125rem;
+        font-size: 0.75rem;
         font-weight: 600;
         letter-spacing: 0.02em;
         cursor: pointer;
-        text-align: left;
+        text-align: center;
         transition:
           background-color 0.2s ease,
           border-color 0.2s ease,
@@ -952,13 +941,13 @@
           background: color-mix(in srgb, var(--text-primary) 12%, transparent);
           border-color: color-mix(in srgb, var(--text-primary) 24%, transparent);
           color: var(--text-primary);
-          box-shadow: inset 3px 0 0 0 color-mix(in srgb, var(--text-primary) 45%, transparent);
+          box-shadow: none;
         }
       }
 
       &__flag {
-        width: 32px;
-        height: 22px;
+        width: 28px;
+        height: 19px;
         border-radius: 3px;
         overflow: hidden;
         flex-shrink: 0;
@@ -975,48 +964,79 @@
 
       &__code {
         line-height: 1;
-        flex: 1;
       }
     }
 
-    .mobile-auth-section {
-      margin-top: 40px; // Use fixed spacing instead of auto to raise the button
-      padding-top: 20px;
-      border-top: 1px solid rgba(0, 0, 0, 0.08);
+    @media (max-height: 740px) {
+      gap: 16px;
 
-      .mobile-auth-btn {
-        width: 100%;
-        padding: 14px; // Compacted from 16px
-        border-radius: 14px;
-        font-size: 0.95rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        border: none;
-
-        &.primary {
-          background: var(--interactive-primary);
-          color: var(--text-on-primary);
-          box-shadow: var(--shadow-md);
-        }
-
-        &.secondary {
-          background: rgba(var(--header-text-rgb), 0.1);
-          color: var(--header-text);
-        }
+      .mobile-menu-section {
+        gap: 8px;
       }
 
-      .user-info {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        align-items: center;
+      .mobile-preferences {
+        gap: 10px;
+      }
 
-        .user-name {
-          font-weight: 600;
-          color: var(--header-text);
-          font-size: 0.9rem;
-        }
+      .mobile-theme-segment__btn {
+        padding: 8px 6px 8px;
+      }
+
+      .mobile-theme-segment__icon {
+        width: 28px;
+        height: 28px;
+      }
+    }
+  }
+
+  .mobile-menu-footer {
+    flex-shrink: 0;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--border-subtle);
+    background: color-mix(in srgb, var(--header-bg, var(--surface-secondary)) 88%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    .mobile-auth-btn {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+      border: none;
+
+      &.primary {
+        background: var(--interactive-primary);
+        color: var(--text-on-primary);
+        box-shadow: var(--shadow-md);
+      }
+
+      &.secondary {
+        background: color-mix(in srgb, var(--text-primary) 10%, transparent);
+        color: var(--header-text, var(--text-primary));
+        border: 1px solid var(--border-subtle);
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: stretch;
+
+      .user-name {
+        font-weight: 600;
+        color: var(--header-text, var(--text-primary));
+        font-size: 0.8125rem;
+        text-align: center;
       }
     }
   }
