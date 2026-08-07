@@ -1,5 +1,5 @@
 <div class="product-detail" *ngIf="!loading && product">
-  <!-- Header -->
+  <!-- Header: back + breadcrumbs -->
   <div class="product-header">
     <div class="container">
       <button type="button" class="back-btn" (click)="goBack()">
@@ -18,65 +18,201 @@
     </div>
   </div>
 
-  <!-- Product Content -->
   <div class="product-content">
     <div class="container">
-      <div class="product-grid">
+      <!-- Title row (Elmir-style: full-width above columns) -->
+      <header class="pdp-title-block">
+        <h1 class="pdp-title">{{ product.name | localized }}</h1>
+      </header>
+
+      <!-- Section nav (Rozetka/Elmir tabs) -->
+      <nav class="pdp-section-nav" aria-label="Product sections">
+        <button
+          type="button"
+          class="pdp-section-link"
+          [class.active]="activeSection === 'about'"
+          (click)="scrollToSection('about')">
+          {{ 'PRODUCT.TABS.ABOUT' | translate }}
+        </button>
+        <button
+          type="button"
+          class="pdp-section-link"
+          [class.active]="activeSection === 'specs'"
+          (click)="scrollToSection('specs')">
+          {{ 'PRODUCT.TABS.CHARACTERISTICS' | translate }}
+        </button>
+        <button
+          type="button"
+          class="pdp-section-link"
+          [class.active]="activeSection === 'reviews'"
+          (click)="scrollToSection('reviews')">
+          {{ 'PRODUCT.TABS.REVIEWS' | translate }}
+        </button>
+      </nav>
+
+      <!-- Main grid: gallery | buy box -->
+      <div class="product-grid" id="pdp-about">
         <div class="product-detail-main">
-          <div class="main-view">
-            <div *ngIf="product?.stock !== undefined && product.stock <= 0" class="out-of-stock-badge">
-              {{ 'PRODUCT.STOCK.OUT_OF_STOCK' | translate }}
+          <div class="pdp-gallery-desktop">
+            <div class="main-view">
+              <div *ngIf="product?.stock !== undefined && product.stock <= 0" class="out-of-stock-badge">
+                {{ 'PRODUCT.STOCK.OUT_OF_STOCK' | translate }}
+              </div>
+              <img
+                *ngIf="selectedType === 'image' && product?.images?.length"
+                [src]="product.images[selectedImageIndex]"
+                alt="Product image"
+                class="main-image"
+                (click)="onImageClicked()" />
+              <app-three-d-viewer
+                *ngIf="selectedType === '3d' && product?.model3dUrl"
+                [modelPath]="product.model3dUrl"
+                [hdModelPath]="product['localModel3dUrl']"
+                class="main-3d-viewer"
+                [previewOnly]="false"
+                [scale]="[9, 9, 9]"
+                [position]="[0, 0, 0]"
+                (click)="$event.stopPropagation()">
+              </app-three-d-viewer>
+              <div class="expand-overlay">
+                <div
+                  class="expand-icon"
+                  (click)="onImageClicked()"
+                  role="button"
+                  tabindex="0"
+                  (keydown.enter)="onImageClicked()"
+                  (keydown.space)="onImageClicked(); $event.preventDefault()">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <polyline points="9 21 3 21 3 15"></polyline>
+                    <line x1="21" y1="3" x2="14" y2="10"></line>
+                    <line x1="3" y1="21" x2="10" y2="14"></line>
+                  </svg>
+                  <span>{{ (selectedType === '3d' ? 'VIEWER.EXPAND_3D' : 'VIEWER.EXPAND_PHOTO') | translate }}</span>
+                </div>
+              </div>
             </div>
-            <img *ngIf="selectedType === 'image' && product?.images?.length" [src]="product.images[selectedImageIndex]"
-              alt="Product image" class="main-image" (click)="onImageClicked()" />
-            <app-three-d-viewer *ngIf="selectedType === '3d' && product?.model3dUrl" [modelPath]="product.model3dUrl" [hdModelPath]="product['localModel3dUrl']"
-              class="main-3d-viewer" [previewOnly]="false" [scale]="[9, 9, 9]"
-              [position]="[0, 0, 0]" (click)="$event.stopPropagation()"></app-three-d-viewer>
-            <div class="expand-overlay">
-              <div class="expand-icon" (click)="onImageClicked()" role="button" tabindex="0"
-                (keydown.enter)="onImageClicked()" (keydown.space)="onImageClicked(); $event.preventDefault()">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+
+            <div class="thumbnails">
+              <img
+                *ngFor="let img of product?.images; let i = index"
+                [src]="img"
+                [class.selected]="selectedType === 'image' && selectedImageIndex === i"
+                (click)="onThumbnailSelected('image', i)"
+                alt="Product thumbnail"
+                class="thumb-image" />
+              <div
+                *ngIf="product?.model3dUrl"
+                class="thumb-3d-wrap"
+                [class.selected]="selectedType === '3d'"
+                (click)="onThumbnailSelected('3d')">
+                <app-three-d-viewer
+                  [modelPath]="product.model3dUrl"
+                  [hdModelPath]="product['localModel3dUrl']"
+                  class="thumb-3d"
+                  [previewOnly]="true"
+                  [scale]="[9, 9, 9]"
+                  [position]="[0, 0, 0]"
+                  [autoRotate]="true">
+                </app-three-d-viewer>
+                <span class="thumb-3d-badge">3D</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pdp-gallery-mobile" *ngIf="product?.images?.length">
+            <div class="pdp-carousel">
+              <div
+                class="pdp-carousel-track"
+                #carouselTrack
+                (scroll)="onCarouselScroll($event)">
+                <div
+                  class="pdp-carousel-slide"
+                  *ngFor="let img of product.images; let i = index">
+                  <img
+                    [src]="img"
+                    [alt]="'Product image ' + (i + 1)"
+                    class="pdp-carousel-image" />
+                </div>
+                <div
+                  class="pdp-carousel-slide pdp-carousel-slide--3d"
+                  *ngIf="product?.model3dUrl">
+                  <app-three-d-viewer
+                    [modelPath]="product.model3dUrl"
+                    [hdModelPath]="product['localModel3dUrl']"
+                    class="pdp-carousel-3d"
+                    [previewOnly]="false"
+                    [scale]="[9, 9, 9]"
+                    [position]="[0, 0, 0]"
+                    (click)="$event.stopPropagation()">
+                  </app-three-d-viewer>
+                  <span class="pdp-carousel-3d-badge">3D</span>
+                </div>
+              </div>
+
+              <div *ngIf="product?.stock !== undefined && product.stock <= 0" class="out-of-stock-badge">
+                {{ 'PRODUCT.STOCK.OUT_OF_STOCK' | translate }}
+              </div>
+
+              <button
+                type="button"
+                class="pdp-carousel-expand"
+                (click)="onImageClicked()"
+                [attr.aria-label]="(carouselActiveIndex === carouselSlideCount - 1 && product?.model3dUrl ? 'VIEWER.EXPAND_3D' : 'VIEWER.EXPAND_PHOTO') | translate">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <polyline points="15 3 21 3 21 9"></polyline>
                   <polyline points="9 21 3 21 3 15"></polyline>
                   <line x1="21" y1="3" x2="14" y2="10"></line>
                   <line x1="3" y1="21" x2="10" y2="14"></line>
                 </svg>
-                <span>{{ (selectedType === '3d' ? 'VIEWER.EXPAND_3D' : 'VIEWER.EXPAND_PHOTO') | translate }}</span>
+              </button>
+
+              <div class="pdp-carousel-footer" *ngIf="carouselSlideCount > 1">
+                <div class="pdp-carousel-dots" role="tablist" aria-label="Product images">
+                  <button
+                    type="button"
+                    *ngFor="let index of carouselSlideIndices"
+                    class="pdp-carousel-dot"
+                    [class.active]="carouselActiveIndex === index"
+                    [attr.aria-selected]="carouselActiveIndex === index"
+                    [attr.aria-label]="'Slide ' + (index + 1)"
+                    (click)="goToCarouselSlide(index)">
+                  </button>
+                </div>
+                <span class="pdp-carousel-counter">{{ carouselActiveIndex + 1 }} / {{ carouselSlideCount }}</span>
               </div>
             </div>
           </div>
-
-          <div class="thumbnails">
-            <img *ngFor="let img of product?.images; let i = index" [src]="img" [class.selected]="
-                selectedType === 'image' && selectedImageIndex === i
-              " (click)="onThumbnailSelected('image', i)" alt="Product thumbnail" class="thumb-image" />
-            <div *ngIf="product?.model3dUrl" class="thumb-3d-wrap"
-              [class.selected]="selectedType === '3d'"
-              (click)="onThumbnailSelected('3d')">
-              <app-three-d-viewer [modelPath]="product.model3dUrl" [hdModelPath]="product['localModel3dUrl']" class="thumb-3d"
-                [previewOnly]="true" [scale]="[9, 9, 9]" [position]="[0, 0, 0]" [autoRotate]="true"></app-three-d-viewer>
-              <span class="thumb-3d-badge">3D</span>
-            </div>
-          </div>
         </div>
-        <div class="product-detail-info">
-          <app-product-info [product]="product" [quantity]="quantity" (quantityChanged)="onQuantityChanged($event)"
+
+        <aside class="product-detail-info" aria-label="Purchase">
+          <app-product-info
+            [product]="product"
+            [quantity]="quantity"
+            [showTitle]="false"
+            (quantityChanged)="onQuantityChanged($event)"
             (addToCart)="onAddToCart()">
           </app-product-info>
-          <ng-container *ngFor="let section of sections">
-            <app-section-renderer 
-              *ngIf="section.type === 'product-tabs'"
-              [section]="section"
-              [contextData]="product">
-            </app-section-renderer>
-          </ng-container>
-        </div>
+        </aside>
       </div>
+
+      <!-- Detail sections below the fold -->
+      <section class="pdp-detail-sections" id="pdp-specs">
+        <app-product-tabs [product]="product"></app-product-tabs>
+      </section>
+
+      <section class="pdp-reviews-section" id="pdp-reviews">
+        <h2 class="pdp-section-heading">{{ 'PRODUCT.TABS.REVIEWS' | translate }}</h2>
+        <div class="pdp-reviews-empty">
+          <p>{{ 'PRODUCT.META.NO_REVIEWS' | translate }}</p>
+        </div>
+      </section>
 
       <ng-container *ngFor="let section of sections">
         <div class="modular-section-wrapper" *ngIf="section.type !== 'product-tabs'">
-          <app-section-renderer 
+          <app-section-renderer
             [section]="section"
             [contextData]="product">
           </app-section-renderer>

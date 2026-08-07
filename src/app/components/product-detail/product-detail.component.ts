@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../core/services/product.service';
 import { ModalService } from '../../core/services/modal.service';
@@ -9,6 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { SectionService } from 'src/admin/services/section.service';
 import { Section } from 'src/shared/models/section.model';
 import { getLocalizedString } from '../../../shared/utils/localization.util';
+import { ProductTabsComponent } from './product-tabs/product-tabs.component';
 
 @Component({
   selector: 'app-product-detail',
@@ -22,6 +23,11 @@ export class ProductDetailComponent implements OnInit {
   quantity: number = 1;
   loading: boolean = true;
   sections: Section[] = [];
+  activeSection: 'about' | 'specs' | 'reviews' = 'about';
+  carouselActiveIndex = 0;
+
+  @ViewChild(ProductTabsComponent) productTabs?: ProductTabsComponent;
+  @ViewChild('carouselTrack') carouselTrack?: ElementRef<HTMLElement>;
 
   constructor(
     private route: ActivatedRoute,
@@ -55,6 +61,7 @@ export class ProductDetailComponent implements OnInit {
             // Reset view state
             this.selectedType = 'image';
             this.selectedImageIndex = 0;
+            this.carouselActiveIndex = 0;
             this.quantity = 1;
 
             // Ensure we're scrolled to top after product loads
@@ -77,11 +84,58 @@ export class ProductDetailComponent implements OnInit {
     });
   }
 
+  get carouselSlideCount(): number {
+    const imageCount = this.product?.images?.length ?? 0;
+    return imageCount + (this.product?.model3dUrl ? 1 : 0);
+  }
+
+  get carouselSlideIndices(): number[] {
+    return Array.from({ length: this.carouselSlideCount }, (_, index) => index);
+  }
+
   onThumbnailSelected(type: 'image' | '3d', index?: number): void {
     this.selectedType = type;
     if (type === 'image' && index !== undefined) {
       this.selectedImageIndex = index;
     }
+  }
+
+  onCarouselScroll(event: Event): void {
+    const track = event.target as HTMLElement;
+    const slideWidth = track.clientWidth;
+    if (slideWidth <= 0) {
+      return;
+    }
+
+    const index = Math.round(track.scrollLeft / slideWidth);
+    this.updateCarouselSelection(index);
+  }
+
+  goToCarouselSlide(index: number): void {
+    const track = this.carouselTrack?.nativeElement;
+    if (!track) {
+      return;
+    }
+
+    track.scrollTo({
+      left: index * track.clientWidth,
+      behavior: 'smooth'
+    });
+    this.updateCarouselSelection(index);
+  }
+
+  private updateCarouselSelection(index: number): void {
+    const imageCount = this.product?.images?.length ?? 0;
+    const clampedIndex = Math.max(0, Math.min(index, this.carouselSlideCount - 1));
+
+    if (clampedIndex < imageCount) {
+      this.selectedType = 'image';
+      this.selectedImageIndex = clampedIndex;
+    } else {
+      this.selectedType = '3d';
+    }
+
+    this.carouselActiveIndex = clampedIndex;
   }
 
   onImageSelected(index: number): void {
@@ -116,26 +170,36 @@ export class ProductDetailComponent implements OnInit {
   }
 
   onAddToCart(): void {
-    if (this.product) {
-      const cartItem = {
-        productId: this.product.id,
-        name: this.product.name,
-        price: Number(this.product.price), // Convert to number
-        imageUrl: this.product.imageUrl,
-        discount: this.product.discount
-      };
-      this.cartService.addToCart(cartItem);
-      this.modalService.openModal({
-        id: 'cart-modal',
-        type: 'cart',
-        data: null,
-        options: {
-          closeOnBackdrop: true,
-          closeOnEscape: true,
-          showCloseButton: true
-        }
-      });
+    if (!this.product || this.product.stock !== undefined && this.product.stock <= 0) {
+      return;
     }
+
+    const unitPrice = this.product.discount
+      ? Number(this.product.price) * (1 - this.product.discount / 100)
+      : Number(this.product.price);
+
+    const cartItem = {
+      productId: this.product.id,
+      name: this.product.name,
+      price: unitPrice,
+      imageUrl: this.product.imageUrl,
+      discount: this.product.discount
+    };
+
+    for (let i = 0; i < this.quantity; i++) {
+      this.cartService.addToCart(cartItem);
+    }
+
+    this.modalService.openModal({
+      id: 'cart-modal',
+      type: 'cart',
+      data: null,
+      options: {
+        closeOnBackdrop: true,
+        closeOnEscape: true,
+        showCloseButton: true
+      }
+    });
   }
 
   goBack(): void {
@@ -155,6 +219,21 @@ export class ProductDetailComponent implements OnInit {
       this.router.navigate(['/shop'], {
         queryParams: { category: this.product.category }
       });
+    }
+  }
+
+  scrollToSection(section: 'about' | 'specs' | 'reviews'): void {
+    this.activeSection = section;
+
+    if (section === 'about') {
+      this.productTabs?.setActiveTab('description');
+    } else if (section === 'specs') {
+      this.productTabs?.setActiveTab('specifications');
+    }
+
+    const el = document.getElementById(`pdp-${section}`);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
 

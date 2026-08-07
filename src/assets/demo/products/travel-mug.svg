@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Travel mug">
+  <rect width="400" height="400" fill="#f1f5f9"/>
+  <rect x="40" y="40" width="320" height="320" rx="24" fill="#e2e8f0"/>
+  <rect x="145" y="110" width="90" height="180" rx="18" fill="#475569"/>
+  <rect x="155" y="120" width="70" height="20" rx="8" fill="#94a3b8"/>
+  <path d="M235 150h35c18 0 32 14 32 32v40c0 18-14 32-32 32h-35" fill="none" stroke="#64748b" stroke-width="12"/>
+  <text x="200" y="360" fill="#64748b" font-family="system-ui,sans-serif" font-size="18" text-anchor="middle">Travel Mug</text>
+</svg>

@@ -1,10 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Product } from 'src/shared/models/product.model';
-import { CartService } from '../../../core/services/cart.service';
-import { FavoritesService } from '../../../core/services/favorites.service';
 import { NotificationService } from '../../../core/services/notification.service';
-import { TranslateService } from '@ngx-translate/core';
-import { getLocalizedString } from '../../../../shared/utils/localization.util';
 
 @Component({
   selector: 'app-product-info',
@@ -14,15 +10,12 @@ import { getLocalizedString } from '../../../../shared/utils/localization.util';
 export class ProductInfoComponent {
   @Input() product!: Product;
   @Input() quantity: number = 1;
+  /** When false, title is rendered by the parent PDP page (Elmir-style). */
+  @Input() showTitle = true;
   @Output() quantityChanged = new EventEmitter<number>();
   @Output() addToCart = new EventEmitter<void>();
 
-  constructor(
-    private cartService: CartService,
-    private favoritesService: FavoritesService,
-    private notificationService: NotificationService,
-    private translate: TranslateService
-  ) { }
+  constructor(private notificationService: NotificationService) { }
 
   incrementQuantity(): void {
     if (this.isOutOfStock()) return;
@@ -43,21 +36,7 @@ export class ProductInfoComponent {
       this.notificationService.showError('This item is out of stock.');
       return;
     }
-
-    const cartItem = {
-      productId: this.product.id,
-      name: this.product.name,
-      price: this.getDiscountedPrice(),
-      imageUrl: this.product.imageUrl,
-      discount: this.product.discount
-    };
-
-    for (let i = 0; i < this.quantity; i++) {
-      this.cartService.addToCart(cartItem);
-    }
-
-    const productName = getLocalizedString(this.product.name, this.translate.currentLang);
-    this.notificationService.showSuccess(`Added ${this.quantity} ${productName} to cart!`);
+    this.addToCart.emit();
   }
 
   getDiscountedPrice(): number {

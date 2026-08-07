@@ -12,7 +12,7 @@ Learn about the support included with your purchase and how to get help.
 
 ### ✅ Support Channels
 
-- **📧 Email Support**: support@angular-ecommerce3d.com
+- **📧 Email Support**: support@maestrotype.com
 - **⏰ Response Time**: Within 24-48 hours (business days)
 - **🌍 Timezone**: Mon-Fri, 9 AM - 6 PM EST
 

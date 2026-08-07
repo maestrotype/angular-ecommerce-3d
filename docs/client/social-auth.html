@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Social Authentication Setup Guide — Angular 3D E-Commerce</title>
+<link rel="stylesheet" href="assets/client-docs.css">
+</head>
+<body>
+<button type="button" class="mobile-toggle" id="navToggle">Menu</button>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+  <a class="sidebar-brand" href="index.html">Angular 3D E-Commerce</a>
+  <div class="sidebar-tag">Client documentation</div>
+  <div class="nav-group"><div class="nav-group-title">Start here</div><a class="nav-link" href="index.html">Documentation Hub</a>
+<a class="nav-link" href="quick-start.html">Quick Start</a>
+<a class="nav-link" href="getting-started.html">Getting Started</a>
+<a class="nav-link" href="installation.html">Installation</a></div>
+<div class="nav-group"><div class="nav-group-title">Product guides</div><a class="nav-link" href="admin-guide.html">Admin Guide</a>
+<a class="nav-link" href="admin-manual.html">Admin Manual</a>
+<a class="nav-link" href="customization.html">Customization</a>
+<a class="nav-link" href="payment-setup.html">Payment Setup</a>
+<a class="nav-link active" href="social-auth.html">Social Auth</a>
+<a class="nav-link" href="local-ai.html">Local AI Setup</a></div>
+<div class="nav-group"><div class="nav-group-title">Reference</div><a class="nav-link" href="architecture.html">Architecture</a>
+<a class="nav-link" href="backend-api.html">Backend API</a>
+<a class="nav-link" href="../BACKEND_ARCHITECTURE_DIAGRAM.html">Backend Diagram</a>
+<a class="nav-link" href="faq.html">FAQ</a>
+<a class="nav-link" href="troubleshooting.html">Troubleshooting</a>
+<a class="nav-link" href="support.html">Support</a></div>
+</aside>
+<main class="main">
+  <header class="page-header">
+    <h1>Social Authentication Setup Guide</h1>
+    <p class="lead">This project includes a premium Social Login (OAuth2) integration for Google, Facebook, GitHub, and Apple. This feature significantly increases user conversion and makes your store stand out on marketplaces like ThemeForest or TemplateMonster.</p>
+    <div class="badges"><span class="badge blue">Auth</span></div>
+  </header>
+  <article class="content">
+<p>This project includes a premium Social Login (OAuth2) integration for <strong>Google, Facebook, GitHub, and Apple</strong>. This feature significantly increases user conversion and makes your store stand out on marketplaces like ThemeForest or TemplateMonster.</p>
+<h2 id="s1"><span class="n">1</span>How to Enable Social Logins</h2>
+<p>To turn on actual logins, you need to obtain Client IDs from each provider and add them to the configuration.</p>
+<h3>🔑 Configure Client IDs</h3>
+<p>Open the following file:</p>
+<p><a href="file:///Users/andriidanichkin/Documents/myProjects/angular-ecommerce-3d/src/app/core/configs/social-auth.config.ts">src/app/core/configs/social-auth.config.ts</a></p>
+<p>Replace the placeholders with your actual IDs:</p>
+<pre><code class="language-typescript">providers: [
+  {
+    id: GoogleLoginProvider.PROVIDER_ID,
+    provider: new GoogleLoginProvider('YOUR_GOOGLE_CLIENT_ID')
+  },
+  {
+    id: FacebookLoginProvider.PROVIDER_ID,
+    provider: new FacebookLoginProvider('YOUR_FACEBOOK_APP_ID')
+  }
+]</code></pre>
+<h3>📝 Register Your App with Providers</h3>
+<h4>Google</h4>
+<ol>
+<li>Go to the <a href="https://console.cloud.google.com/">Google Cloud Console</a>.</li>
+<li>Create a new project.</li>
+<li>Configure the <strong>OAuth consent screen</strong>.</li>
+<li>Create <strong>OAuth 2.0 Client IDs</strong> (Select &quot;Web application&quot;).</li>
+<li>Add <code>http://localhost:4200</code> (for dev) and your production domain to &quot;Authorized JavaScript origins&quot;.</li>
+</ol>
+<h4>Facebook</h4>
+<ol>
+<li>Go to the <a href="https://developers.facebook.com/">Meta for Developers</a> portal.</li>
+<li>Create a new App.</li>
+<li>Add <strong>Facebook Login</strong> product.</li>
+<li>Go to <strong>Settings &gt; Basic</strong> to get your App ID.</li>
+<li>Add your domain to &quot;App Domains&quot;.</li>
+</ol>
+<h4>GitHub / Apple</h4>
+<p>The UI already includes premium buttons for GitHub and Apple. To enable the logic:</p>
+<ol>
+<li>Register your app on <a href="https://github.com/settings/developers">GitHub Developer Settings</a> or <a href="https://developer.apple.com/">Apple Developer Program</a>.</li>
+<li>Follow the documentation of <code>@abacritt/angularx-social-login</code> to add these providers to the <code>social-auth.config.ts</code>.</li>
+</ol>
+<hr>
+<div class="card green"><div class="card-title">Note</div><p>[!TIP] <strong>Why this matters for your sale:</strong> Professional buyers look for &quot;Turnkey&quot; features. Mentioning &quot;Pre-integrated Social Auth for 4 Providers&quot; in your marketplace description adds immediate $50-100 to the perceived value of your project.</p></div>
+  </article>
+  <p class="footer-note">Buyer-facing docs · Markdown sources remain in <code>docs/*.md</code> · Visual theme matches architecture diagrams.</p>
+</main>
+</div>
+<script>
+document.getElementById('navToggle')?.addEventListener('click', () => {
+  document.getElementById('sidebar')?.classList.toggle('open');
+});
+</script>
+</body>
+</html>

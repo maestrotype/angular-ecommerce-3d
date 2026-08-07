@@ -1,0 +1,48 @@
+---
+description: Absolute ban on CSS !important — must apply before any style work
+alwaysApply: true
+---
+
+# FORBIDDEN: `!important`
+
+**Hard ban. No exceptions for AI/agent tasks. No “just this once.”**
+
+## Rule
+
+1. **Never write `!important`** in any stylesheet (`.scss`, `.css`, component styles, global overrides, theme files).
+2. **Never introduce `!important` to “win” against Angular Material, themes, or legacy CSS.** That is a cascade/architecture failure — fix specificity, tokens, or selector ownership instead.
+3. **Before starting any UI/style task**, confirm this rule. If an existing file still contains `!important`, do not add more; prefer removing nearby ones when touching that code.
+4. **If a style does not apply without `!important`**, stop and fix the real cause:
+   - wrong selector / theme attribute (`html[data-theme]` vs `body`)
+   - Material CSS variables (`--mdc-*`, `--mat-*`) instead of fighting painted properties
+   - load order / wrong layer (component vs `overrides/` vs theme)
+   - encapsulation — move Material chrome overrides to `src/styles/overrides/` with higher specificity (repeat classes), not `!important`
+
+## Correct patterns
+
+```scss
+/* Win with tokens Material already reads */
+.mat-mdc-icon-button {
+  --mdc-icon-button-hover-state-layer-opacity: 0;
+  --mat-icon-button-state-layer-color: transparent;
+}
+
+/* Win with specificity (no !important) */
+[data-theme='dark-glass'] .admin-header.mat-toolbar .mat-mdc-icon-button.mat-mdc-button-base {
+  border-radius: 50%;
+  background-color: transparent;
+}
+```
+
+## Forbidden
+
+```scss
+.my-button {
+  background: transparent !important; /* NEVER */
+}
+```
+
+## Related
+
+- `docs/AI_CONSTITUTION.md` — Rule #3 / contract item on `!important`
+- Epic E / M3 on `docs/REFACTORING_BOARD.md` — drive residual count to 0

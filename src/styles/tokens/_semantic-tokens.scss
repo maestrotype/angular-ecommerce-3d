@@ -225,12 +225,12 @@
   --pdp-header-height: 3.75rem;
   --pdp-content-max-width: 75rem;
   --pdp-grid-gap: var(--spacing-2xl);
-  --pdp-grid-template: minmax(0, 31.25rem) minmax(0, 1fr);
-  --pdp-gallery-width: 31.25rem;
+  --pdp-grid-template: minmax(0, 1.1fr) minmax(20rem, 0.9fr);
+  --pdp-gallery-width: 100%;
   --pdp-gallery-transform: none;
   --pdp-gallery-transform-hover: none;
   --pdp-gallery-filter: none;
-  --pdp-gallery-main-height: 26.25rem;
+  --pdp-gallery-main-height: 28rem;
   --pdp-gallery-main-bg: var(--product-detail-main-view-bg, var(--surface-primary));
   --pdp-gallery-main-border: var(--product-detail-main-view-border, 1px solid var(--border-default));
   --pdp-gallery-main-radius: var(--radius-lg);
@@ -276,6 +276,16 @@
   --pdp-purchase-row-padding: 0;
   --pdp-price-accent-border: none;
   --pdp-price-accent-padding: 0;
+  --pdp-title-size: clamp(1.25rem, 2.2vw, 1.75rem);
+  --pdp-title-weight: var(--font-weight-bold);
+  --pdp-title-color: var(--text-primary);
+  --pdp-section-nav-bg: var(--surface-primary);
+  --pdp-section-nav-border: var(--border-subtle);
+  --pdp-section-nav-link-color: var(--text-secondary);
+  --pdp-section-nav-link-active-color: var(--interactive-primary);
+  --pdp-section-nav-link-active-border: var(--interactive-primary);
+  --pdp-meta-color: var(--text-muted);
+  --pdp-code-color: var(--text-muted);
 
   // ===== CHECKOUT FLOW (G12) =====
   --checkout-page-bg: var(--surface-page);

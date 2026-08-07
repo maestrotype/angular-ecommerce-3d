@@ -2,6 +2,15 @@
 
 This folder contains all marketing materials for the Angular 3D E-Commerce project, ready for use on marketplaces like ThemeForest, TemplateMonster, CodeCanyon, etc.
 
+## 📚 Documentation (for buyers)
+
+Open the visual client hub (same palette as architecture diagrams):
+
+- [`../docs/client/index.html`](../docs/client/index.html)
+- Rebuild after Markdown edits: `npm run docs:client`
+
+---
+
 ## 📁 Structure
 
 ```

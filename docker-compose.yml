@@ -27,6 +27,8 @@ services:
       dockerfile: Dockerfile
     container_name: ecommerce-backend
     restart: unless-stopped
+    env_file:
+      - backend/.env
     environment:
       NODE_ENV: production
       PORT: 3002
@@ -35,13 +37,7 @@ services:
       DATABASE_USERNAME: ${DATABASE_USERNAME:-postgres}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD:-postgres}
       DATABASE_NAME: ${DATABASE_NAME:-ecommerce_db}
-      JWT_SECRET: ${JWT_SECRET:-your_jwt_secret_change_in_production}
-      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
-      STRIPE_PUBLISHABLE_KEY: ${STRIPE_PUBLISHABLE_KEY}
-      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
-      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
-      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
-      REMOVE_BG_API_KEY: ${REMOVE_BG_API_KEY}
+      FRONTEND_URL: http://localhost:4200
     ports:
       - "3002:3002"
     depends_on:

@@ -933,6 +933,7 @@
   "LIQPAY_PUBLIC_KEY": "Публичный ключ LiqPay",
   "LIQPAY_PRIVATE_KEY": "Приватный ключ LiqPay",
   "PAYPAL": "PayPal",
+  "PAYPAL_MOCK_NOTICE": "Демо/mock: имитирует оплату PayPal, пока не добавлены Client ID и Secret. Stripe и LiqPay готовы после настройки.",
   "ENABLE_PAYPAL": "Включить PayPal",
   "PAYPAL_CLIENT_ID": "ID клиента PayPal",
   "PAYPAL_CLIENT_SECRET": "Секрет клиента PayPal",
@@ -1175,7 +1176,8 @@
       "SELECTED": "Выбранный способ оплаты",
       "LIQPAY_DESC": "Безопасная онлайн-оплата",
       "STRIPE_DESC": "Оплата картой через Stripe",
-      "PAYPAL_DESC": "Оплата через PayPal"
+      "PAYPAL_DESC": "Оплата через PayPal",
+      "PAYPAL_MOCK_NOTICE": "Демо/mock: оплата имитируется, пока PayPal не настроен в Admin → Settings."
     },
     "ACTIONS": {
       "PAY_NOW": "Оплатить сейчас",
@@ -1309,7 +1311,11 @@
     "STOCK": {
       "ONLY_LEFT": "Осталось всего {{count}} шт.!",
       "OUT_OF_STOCK": "НЕТ В НАЛИЧИИ",
-      "COUNT": "В наличии: {{count}}"
+      "COUNT": "В наличии: {{count}}",
+      "IN_STOCK": "Есть в наличии"
+    },
+    "META": {
+      "NO_REVIEWS": "Пока нет отзывов"
     },
     "BADGES": {
       "SPECIAL": "СПЕЦПРЕДЛОЖЕНИЕ",
@@ -1343,9 +1349,11 @@
       "MSG": "Товар, который вы ищете, не существует."
     },
     "TABS": {
+      "ABOUT": "О товаре",
       "DESCRIPTION": "Описание",
       "CHARACTERISTICS": "Характеристики",
-      "DELIVERY": "Доставка и оплата"
+      "DELIVERY": "Доставка и оплата",
+      "REVIEWS": "Отзывы"
     },
     "PECULIARITIES": "Особенности:",
     "TECHNICAL_SPECS": "Технические характеристики",

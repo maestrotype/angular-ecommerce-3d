@@ -915,6 +915,7 @@
   "LIQPAY_PUBLIC_KEY": "LiqPay Public Key",
   "LIQPAY_PRIVATE_KEY": "LiqPay Private Key",
   "PAYPAL": "PayPal",
+  "PAYPAL_MOCK_NOTICE": "Demo/mock mode: simulates PayPal checkout until you add PayPal Client ID and Secret below. Stripe and LiqPay are production-ready when configured.",
   "ENABLE_PAYPAL": "Enable PayPal",
   "PAYPAL_CLIENT_ID": "PayPal Client ID",
   "PAYPAL_CLIENT_SECRET": "PayPal Client Secret",
@@ -1177,7 +1178,8 @@
       "SELECTED": "Selected Payment Method",
       "LIQPAY_DESC": "Secure online payment",
       "STRIPE_DESC": "Pay with card using Stripe",
-      "PAYPAL_DESC": "Pay with PayPal"
+      "PAYPAL_DESC": "Pay with PayPal",
+      "PAYPAL_MOCK_NOTICE": "Demo/mock mode: checkout is simulated until PayPal credentials are configured in Admin → Settings."
     },
     "ACTIONS": {
       "PAY_NOW": "Pay Now",
@@ -1311,7 +1313,11 @@
     "STOCK": {
       "ONLY_LEFT": "Only {{count}} left in stock!",
       "OUT_OF_STOCK": "OUT OF STOCK",
-      "COUNT": "In stock: {{count}}"
+      "COUNT": "In stock: {{count}}",
+      "IN_STOCK": "In stock"
+    },
+    "META": {
+      "NO_REVIEWS": "No reviews yet"
     },
     "BADGES": {
       "SPECIAL": "SPECIAL OFFER",
@@ -1345,9 +1351,11 @@
       "MSG": "The product you're looking for doesn't exist."
     },
     "TABS": {
+      "ABOUT": "About product",
       "DESCRIPTION": "Description",
       "CHARACTERISTICS": "Characteristics",
-      "DELIVERY": "Delivery and Payment"
+      "DELIVERY": "Delivery and Payment",
+      "REVIEWS": "Reviews"
     },
     "PECULIARITIES": "Peculiarities:",
     "TECHNICAL_SPECS": "Technical specifications",

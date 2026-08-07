@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Local AI 3D Generation Setup (Mac / Apple Silicon) — Angular 3D E-Commerce</title>
+<link rel="stylesheet" href="assets/client-docs.css">
+</head>
+<body>
+<button type="button" class="mobile-toggle" id="navToggle">Menu</button>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+  <a class="sidebar-brand" href="index.html">Angular 3D E-Commerce</a>
+  <div class="sidebar-tag">Client documentation</div>
+  <div class="nav-group"><div class="nav-group-title">Start here</div><a class="nav-link" href="index.html">Documentation Hub</a>
+<a class="nav-link" href="quick-start.html">Quick Start</a>
+<a class="nav-link" href="getting-started.html">Getting Started</a>
+<a class="nav-link" href="installation.html">Installation</a></div>
+<div class="nav-group"><div class="nav-group-title">Product guides</div><a class="nav-link" href="admin-guide.html">Admin Guide</a>
+<a class="nav-link" href="admin-manual.html">Admin Manual</a>
+<a class="nav-link" href="customization.html">Customization</a>
+<a class="nav-link" href="payment-setup.html">Payment Setup</a>
+<a class="nav-link" href="social-auth.html">Social Auth</a>
+<a class="nav-link active" href="local-ai.html">Local AI Setup</a></div>
+<div class="nav-group"><div class="nav-group-title">Reference</div><a class="nav-link" href="architecture.html">Architecture</a>
+<a class="nav-link" href="backend-api.html">Backend API</a>
+<a class="nav-link" href="../BACKEND_ARCHITECTURE_DIAGRAM.html">Backend Diagram</a>
+<a class="nav-link" href="faq.html">FAQ</a>
+<a class="nav-link" href="troubleshooting.html">Troubleshooting</a>
+<a class="nav-link" href="support.html">Support</a></div>
+</aside>
+<main class="main">
+  <header class="page-header">
+    <h1>Local AI 3D Generation Setup (Mac / Apple Silicon)</h1>
+    <p class="lead">This guide explains how to set up the high-performance InstantMesh (NeRF variant) local worker on your Mac (tested on M4 Max). This allows for free, private 3D generation directly in your admin panel.</p>
+    <div class="badges"><span class="badge purple">AI / 3D</span></div>
+  </header>
+  <article class="content">
+<p>This guide explains how to set up the high-performance <strong>InstantMesh</strong> (NeRF variant) local worker on your Mac (tested on M4 Max). This allows for free, private 3D generation directly in your admin panel.</p>
+<h2 id="s1"><span class="n">1</span>Prerequisites</h2>
+<ul>
+<li><strong>macOS</strong> with Apple Silicon (M1/M2/M3/M4 Max recommended).</li>
+<li><strong>Python 3.10+</strong> (3.11/3.12 recommended).</li>
+<li><strong>Git</strong>.</li>
+</ul>
+<h2 id="s2"><span class="n">2</span>Installation</h2>
+<ol>
+<li><strong>Clone the Worker</strong>:</li>
+</ol>
+<p>    Navigate to the project root and enter the worker folder:</p>
+<p>    ```bash</p>
+<p>    cd local-ai-worker</p>
+<p>    ```</p>
+<ol>
+<li><strong>Run Automated Setup</strong>:</li>
+</ol>
+<p>    The provided script creates a virtual environment and installs all necessary Mac-optimized dependencies (including MPS support and 3D processing libraries):</p>
+<p>    ```bash</p>
+<p>    chmod +x setup_mac.sh</p>
+<p>    ./setup_mac.sh</p>
+<p>    ```</p>
+<ol>
+<li><strong>Cloning the Core Model</strong>:</li>
+</ol>
+<p>    Ensure you have cloned the official InstantMesh repository inside the <code>local-ai-worker</code> folder:</p>
+<p>    ```bash</p>
+<p>    git clone https://github.com/TencentARC/InstantMesh.git</p>
+<p>    ```</p>
+<ol>
+<li><strong>Download Model Weights</strong>:</li>
+</ol>
+<p>    Run the interactive downloader. It will save the heavy model weights (~10GB) to <code>~/Documents/InstantMesh-Weights</code> to keep your project folder small.</p>
+<p>    ```bash</p>
+<p>    python download_weights.py</p>
+<p>    ```</p>
+<h2 id="s3"><span class="n">3</span>Usage</h2>
+<ol>
+<li><strong>Activate Environment</strong>:</li>
+</ol>
+<p>    ```bash</p>
+<p>    source venv/bin/activate</p>
+<p>    ```</p>
+<ol>
+<li><strong>Start the Worker</strong>:</li>
+</ol>
+<p>    ```bash</p>
+<p>    python main.py</p>
+<p>    ```</p>
+<p>    The server will start at <code>http://localhost:8000</code>.</p>
+<ol>
+<li><strong>Configure Admin Panel</strong>:</li>
+</ol>
+<p>    - Go to <strong>Admin -&gt; Integrations -&gt; AI Providers</strong>.</p>
+<p>    - Set <strong>Active Provider</strong> to <code>Custom Provider / Local Server</code>.</p>
+<p>    - Set the <strong>Custom URL</strong> to <code>http://localhost:8000/generate</code>.</p>
+<h2 id="s4"><span class="n">4</span>Technical Notes (Optimization)</h2>
+<ul>
+<li><strong>Model Variant</strong>: We use <code>instant-nerf-large.yaml</code> for stable Mac compatibility. It uses Marching Cubes for mesh extraction, which is highly efficient on CPU/MPS and does not require NVIDIA-specific libraries (like <code>nvdiffrast</code>).</li>
+<li><strong>Conversion</strong>: The worker automatically converts the raw <code>.obj</code> output to <code>.glb</code> using the <code>trimesh</code> library for seamless previewing in the browser.</li>
+<li><strong>Hardware Acceleration</strong>: The worker uses <strong>Apple Silicon (MPS)</strong> for the diffusion stage, ensuring significantly faster generation than CPU-only modes.</li>
+</ul>
+<h2 id="s5"><span class="n">5</span>Troubleshooting</h2>
+<ul>
+<li><strong>Import Errors</strong>: If you encounter <code>ModuleNotFoundError</code>, ensure you've run <code>./setup_mac.sh</code> after any major updates to install new dependencies.</li>
+<li><strong>Performance</strong>: High resolutions (e.g. over 256) will significantly increase generation time. The default is set to 256 for a good balance of quality and speed.</li>
+</ul>
+  </article>
+  <p class="footer-note">Buyer-facing docs · Markdown sources remain in <code>docs/*.md</code> · Visual theme matches architecture diagrams.</p>
+</main>
+</div>
+<script>
+document.getElementById('navToggle')?.addEventListener('click', () => {
+  document.getElementById('sidebar')?.classList.toggle('open');
+});
+</script>
+</body>
+</html>

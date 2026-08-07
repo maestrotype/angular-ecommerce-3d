@@ -1,10 +1,16 @@
 import { resolveApiUrl } from '../app/core/utils/api-url.util';
+import type { AdminLoginPrefill } from './environment.types';
 
 export const environment = {
   production: true,
   get apiUrl() {
     return resolveApiUrl();
   },
-  stripePublishableKey: 'pk_test_mock_key_for_testing_only',
-  paypalClientId: 'mock_paypal_client_id_for_testing'
+  /** Payment keys are loaded from Admin → Settings at runtime. Keep empty in production builds. */
+  stripePublishableKey: '',
+  paypalClientId: '',
+  adminLoginPrefill: {
+    email: '',
+    password: '',
+  } satisfies AdminLoginPrefill,
 };

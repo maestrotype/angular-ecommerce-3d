@@ -28,6 +28,17 @@ See [VISUAL_ASSETS_GUIDE.md](../docs/VISUAL_ASSETS_GUIDE.md) for:
 - Best practices
 - Optimization tips
 
+## Capture automatically
+
+With backend + frontend running (`npm start` + `backend npm run start:dev`):
+
+```bash
+npm run screenshots:capture
+```
+
+Output lands in `screenshots/desktop/`, `screenshots/mobile/`, and `screenshots/admin/`.
+Set `SCREENSHOT_BASE_URL` if not using default `http://localhost:4200`.
+
 ## ✅ Checklist
 
 ### Screenshots (25 files)

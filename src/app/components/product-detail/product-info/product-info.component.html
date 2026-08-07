@@ -1,46 +1,54 @@
 <div class="product-info">
-  <div class="title-row">
+  <div class="title-row" *ngIf="showTitle">
     <h1 class="product-title">{{ product.name | localized }}</h1>
-    <div class="favorite-inline">
-      <app-favorite-button [product]="product" size="small" [showText]="false"
-        (favoriteToggled)="onFavoriteToggled($event)">
-      </app-favorite-button>
-    </div>
   </div>
 
+  <!-- Meta: rating + product code (Rozetka/Elmir) -->
   <div class="product-meta">
-    <div class="rating" *ngIf="product.rating">
-      <span class="stars">
+    <div class="rating" *ngIf="product.rating; else noRating">
+      <span class="stars" aria-hidden="true">
         <span *ngFor="let star of [1,2,3,4,5]" class="star" [class.filled]="star <= product.rating!">★</span>
       </span>
-      <span class="rating-value">({{ product.rating }})</span>
+      <span class="rating-value">{{ product.rating | number:'1.1-1' }}</span>
+      <span class="rating-count" *ngIf="product.ratingCount">
+        {{ product.ratingCount }} {{ 'SHOP.PRODUCT.REVIEWS' | translate }}
+      </span>
     </div>
-    <span class="category">{{ product.category }}</span>
+    <ng-template #noRating>
+      <span class="rating-empty">{{ 'PRODUCT.META.NO_REVIEWS' | translate }}</span>
+    </ng-template>
+    <span class="product-code">{{ 'PRODUCT.CARD.CODE' | translate }}: {{ product.id }}</span>
   </div>
 
+  <!-- Stock first (Rozetka) -->
+  <div *ngIf="product?.stock !== undefined" class="stock-line" [class.oos]="product.stock <= 0">
+    <span class="stock-dot" aria-hidden="true"></span>
+    <span *ngIf="product.stock > 0">{{ 'PRODUCT.STOCK.IN_STOCK' | translate }}</span>
+    <span *ngIf="product.stock <= 0">{{ 'PRODUCT.STOCK.OUT_OF_STOCK' | translate }}</span>
+  </div>
+
+  <!-- Price block -->
   <div class="price-section">
     <div class="price-container">
-      <span class="current-price">${{ getDiscountedPrice() | number:'1.2-2' }}</span>
       <span *ngIf="product.discount" class="original-price">${{ product.price | number:'1.2-2' }}</span>
       <span *ngIf="product.discount" class="discount-pill">-{{ product.discount }}%</span>
-    </div>
-    <div *ngIf="product?.stock !== undefined" class="stock-line" [class.oos]="product.stock <= 0">
-      <span *ngIf="product.stock > 0">{{ 'PRODUCT.STOCK.COUNT' | translate: { count: product.stock } }}</span>
-      <span *ngIf="product.stock <= 0">{{ 'PRODUCT.STOCK.OUT_OF_STOCK' | translate }}</span>
+      <span class="current-price">${{ getDiscountedPrice() | number:'1.2-2' }}</span>
     </div>
   </div>
 
+  <!-- Key specs preview -->
   <div class="characteristics-section" *ngIf="product.specifications && getKeySpecs().length > 0">
     <div class="specs-grid">
       <div *ngFor="let spec of getKeySpecs()" class="spec-item">
-        <span class="spec-label">{{ spec.key }}:</span>
+        <span class="spec-label">{{ spec.key }}</span>
         <span class="spec-value">{{ spec.value }}</span>
       </div>
     </div>
   </div>
 
+  <!-- Purchase actions -->
   <div class="purchase-row" [class.disabled]="isOutOfStock()">
-    <div class="stepper">
+    <div class="stepper" aria-label="Quantity">
       <button type="button" class="quantity-btn" (click)="decrementQuantity()" [disabled]="isOutOfStock()">−</button>
       <span class="quantity-value" aria-live="polite">{{ quantity }}</span>
       <button type="button" class="quantity-btn" (click)="incrementQuantity()" [disabled]="isOutOfStock()">+</button>
@@ -50,6 +58,15 @@
       <app-icon name="shopping-cart" [width]="20" [height]="20"></app-icon>
       {{ 'PRODUCT.ACTIONS.ADD_TO_CART' | translate }}
     </button>
+
+    <div class="buy-aux">
+      <app-favorite-button
+        [product]="product"
+        size="medium"
+        [showText]="false"
+        (favoriteToggled)="onFavoriteToggled($event)">
+      </app-favorite-button>
+    </div>
   </div>
 
   <div *ngIf="isOutOfStock()" class="oos-note">{{ 'PRODUCT.STOCK.OUT_OF_STOCK' | translate }}</div>

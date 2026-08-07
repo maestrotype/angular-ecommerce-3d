@@ -6,6 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../services/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { translateErrorMessage } from '../../../shared/utils/localization.util';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-admin-login',
@@ -28,9 +29,10 @@ export class AdminLoginComponent {
   }
 
   createForm(): FormGroup {
+    const prefill = environment.adminLoginPrefill ?? { email: '', password: '' };
     return this.fb.group({
-      email: ['admin@example.com', [Validators.required, Validators.email]],
-      password: ['admin123', [Validators.required, Validators.minLength(6)]]
+      email: [prefill.email, [Validators.required, Validators.email]],
+      password: [prefill.password, [Validators.required, Validators.minLength(6)]],
     });
   }
 

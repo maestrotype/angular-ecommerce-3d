@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Organic cotton t-shirt">
+  <rect width="400" height="400" fill="#f8fafc"/>
+  <rect x="40" y="40" width="320" height="320" rx="24" fill="#e2e8f0"/>
+  <path d="M145 95l35-25 40 25 35-25 45 35-25 25v185H125V130l20-35z" fill="#10b981"/>
+  <circle cx="200" cy="180" r="28" fill="#059669"/>
+  <text x="200" y="360" fill="#64748b" font-family="system-ui,sans-serif" font-size="18" text-anchor="middle">T-Shirt</text>
+</svg>

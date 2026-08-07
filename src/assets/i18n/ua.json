@@ -895,6 +895,7 @@
   "LIQPAY_PUBLIC_KEY": "Публічний ключ LiqPay",
   "LIQPAY_PRIVATE_KEY": "Приватний ключ LiqPay",
   "PAYPAL": "PayPal",
+  "PAYPAL_MOCK_NOTICE": "Демо/mock: імітує оплату PayPal, доки не додано Client ID та Secret. Stripe і LiqPay готові після налаштування.",
   "ENABLE_PAYPAL": "Увімкнути PayPal",
   "PAYPAL_CLIENT_ID": "ID клієнта PayPal",
   "PAYPAL_CLIENT_SECRET": "Секрет клієнта PayPal",
@@ -1155,7 +1156,8 @@
       "SELECTED": "Обраний спосіб оплати",
       "LIQPAY_DESC": "Безпечна онлайн-оплата",
       "STRIPE_DESC": "Оплата карткою через Stripe",
-      "PAYPAL_DESC": "Оплата через PayPal"
+      "PAYPAL_DESC": "Оплата через PayPal",
+      "PAYPAL_MOCK_NOTICE": "Демо/mock: оплата імітується, доки PayPal не налаштовано в Admin → Settings."
     },
     "ACTIONS": {
       "PAY_NOW": "Оплатити зараз",
@@ -1289,7 +1291,11 @@
     "STOCK": {
       "ONLY_LEFT": "Залишилося всього {{count}} шт.!",
       "OUT_OF_STOCK": "НЕМАЄ В НАЯВНОСТІ",
-      "COUNT": "В наявності: {{count}}"
+      "COUNT": "В наявності: {{count}}",
+      "IN_STOCK": "Є в наявності"
+    },
+    "META": {
+      "NO_REVIEWS": "Поки немає відгуків"
     },
     "BADGES": {
       "SPECIAL": "СПЕЦПРОПОЗИЦІЯ",
@@ -1323,9 +1329,11 @@
       "MSG": "Товар, який ви шукаєте, не існує."
     },
     "TABS": {
+      "ABOUT": "Про товар",
       "DESCRIPTION": "Опис",
       "CHARACTERISTICS": "Характеристики",
-      "DELIVERY": "Доставка та оплата"
+      "DELIVERY": "Доставка та оплата",
+      "REVIEWS": "Відгуки"
     },
     "PECULIARITIES": "Особливості:",
     "TECHNICAL_SPECS": "Технічні характеристики",

@@ -102,9 +102,28 @@ The server will start on `http://localhost:3002` with API routes prefixed with `
 - `createdAt` - Creation timestamp
 - `updatedAt` - Last update timestamp
 
-## Default Admin Credentials
-- Email: `admin@example.com`
-- Password: `admin123`
+## Admin Bootstrap
+
+There are no hardcoded admin credentials. Set in `.env`:
+
+```env
+ADMIN_EMAIL=admin@yourdomain.com
+ADMIN_PASSWORD=YourSecurePassword123!
+ADMIN_BOOTSTRAP_TOKEN=your_one_time_token   # required in production
+```
+
+Then run:
+
+```bash
+# Development
+curl -X POST http://localhost:3002/api/auth/create-admin
+
+# Production
+curl -X POST https://your-api.example.com/api/auth/create-admin \
+  -H "x-admin-bootstrap-token: YOUR_ADMIN_BOOTSTRAP_TOKEN"
+```
+
+Production startup **requires** a secure `JWT_SECRET` (≥32 characters).
 
 ## Deployment
 
