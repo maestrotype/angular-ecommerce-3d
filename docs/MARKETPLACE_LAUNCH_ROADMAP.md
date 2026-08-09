@@ -321,8 +321,8 @@ Use this table verbatim in marketplace description to reduce refunds and bad rev
 
 | # | Task | Done |
 |---|------|------|
-| H4.1 | Section Presets: "Load Demo Content" fills form with realistic sample data + images | [ ] |
-| H4.2 | Quick Start Wizard: creates full homepage section set (header+hero+best-sellers+categories+footer) in 1 click | [ ] |
+| H4.1 | Section Presets: "Load Demo Content" fills form with realistic sample data + images | [x] |
+| H4.2 | Quick Start Wizard: creates full homepage section set (header+hero+best-sellers+categories+footer) in 1 click | [x] |
 
 ---
 

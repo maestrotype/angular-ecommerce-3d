@@ -1,10 +1,16 @@
 <div class="sections-page-wrapper">
   <div class="page-header">
     <h1>{{ 'PAGE_SECTIONS' | translate }}</h1>
-    <button mat-flat-button class="new-section-btn" (click)="addSection()" *ngIf="!isEditorOpen">
-      <mat-icon>add</mat-icon>
-      {{ 'ADD_SECTION' | translate }}
-    </button>
+    <div class="page-header-actions" *ngIf="!isEditorOpen">
+      <button mat-stroked-button class="quick-start-btn" (click)="runQuickStartWizard()" [disabled]="wizardRunning || loading">
+        <mat-icon>rocket_launch</mat-icon>
+        {{ 'QUICK_START_WIZARD' | translate }}
+      </button>
+      <button mat-flat-button class="new-section-btn" (click)="addSection()">
+        <mat-icon>add</mat-icon>
+        {{ 'ADD_SECTION' | translate }}
+      </button>
+    </div>
   </div>
 
   <div class="layout-body">

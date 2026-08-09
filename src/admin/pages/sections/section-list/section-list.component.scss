@@ -15,6 +15,29 @@
     flex-shrink: 0;
 
     h1 { margin: 0; font-size: 1.75rem; font-weight: 800; color: var(--text-primary); }
+
+    .page-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .quick-start-btn,
+    .new-section-btn {
+      height: 44px;
+      padding: 0 20px;
+      border-radius: 10px;
+      font-weight: 700;
+    }
+
+    .quick-start-btn {
+      border-color: var(--border-default);
+      color: var(--text-primary);
+
+      mat-icon {
+        margin-right: 6px;
+      }
+    }
     
     .new-section-btn {
       height: 44px;

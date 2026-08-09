@@ -530,6 +530,11 @@
     </div>
 
     <div [class.mat-dialog-actions]="!isDrawerMode" [class.form-actions-drawer]="isDrawerMode" align="end" class="form-footer">
+      <button mat-stroked-button type="button" (click)="loadDemoContent()" [disabled]="loading || uploading3d" class="demo-btn">
+        <mat-icon>auto_fix_high</mat-icon>
+        {{ 'LOAD_DEMO_CONTENT' | translate }}
+      </button>
+      <span class="form-footer-spacer"></span>
       <button mat-button type="button" (click)="onCancel()" class="cancel-btn">
         {{ 'CANCEL' | translate }}
       </button>

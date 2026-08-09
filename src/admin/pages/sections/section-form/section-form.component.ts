@@ -13,6 +13,9 @@ import { LocalizedString } from '../../../../shared/models/localized-string.mode
 import { getLocalizedString, resolveApiError, formatResolvedApiError } from '../../../../shared/utils/localization.util';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ImageUploadComponent } from '../../../components/ui/image-upload/image-upload.component';
+import { ConfirmationService } from '../../../services/confirmation.service';
+import { getSectionPreset, SectionPresetFormPatch } from '../section-presets';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-section-form',
@@ -114,6 +117,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     private pageService: PageService,
     private snackBar: MatSnackBar,
     private translate: TranslateService,
+    private confirmationService: ConfirmationService,
     @Optional() public dialogRef: MatDialogRef<SectionFormComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: { section: Section | null }
   ) {
@@ -1074,6 +1078,186 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     } else {
       this.dialogRef.close();
     }
+  }
+
+  loadDemoContent(): void {
+    const type = this.sectionForm.get('type')?.value;
+    const preset = getSectionPreset(type);
+
+    if (!preset) {
+      this.snackBar.open(
+        this.translate.instant('DEMO_CONTENT_NOT_AVAILABLE'),
+        this.translate.instant('CLOSE_BTN'),
+        { duration: 3000 }
+      );
+      return;
+    }
+
+    const applyPreset = () => {
+      this.applyPresetToForm(preset);
+      this.snackBar.open(
+        this.translate.instant('DEMO_CONTENT_LOADED'),
+        this.translate.instant('CLOSE_BTN'),
+        { duration: 3000 }
+      );
+    };
+
+    if (this.isEditMode) {
+      this.confirmationService.confirmAction(
+        this.translate.instant('LOAD_DEMO_CONTENT'),
+        this.translate.instant('SECTION')
+      ).pipe(take(1)).subscribe(confirmed => {
+        if (confirmed) {
+          applyPreset();
+        }
+      });
+      return;
+    }
+
+    applyPreset();
+  }
+
+  private applyPresetToForm(preset: SectionPresetFormPatch): void {
+    this.sectionForm.patchValue({
+      title_en: preset.title_en ?? this.sectionForm.get('title_en')?.value,
+      title_ru: preset.title_ru ?? this.sectionForm.get('title_ru')?.value,
+      title_ua: preset.title_ua ?? this.sectionForm.get('title_ua')?.value,
+      subtitle_en: preset.subtitle_en ?? this.sectionForm.get('subtitle_en')?.value,
+      subtitle_ru: preset.subtitle_ru ?? this.sectionForm.get('subtitle_ru')?.value,
+      subtitle_ua: preset.subtitle_ua ?? this.sectionForm.get('subtitle_ua')?.value,
+      content_en: preset.content_en ?? this.sectionForm.get('content_en')?.value,
+      content_ru: preset.content_ru ?? this.sectionForm.get('content_ru')?.value,
+      content_ua: preset.content_ua ?? this.sectionForm.get('content_ua')?.value,
+      imageUrl: preset.imageUrl ?? this.sectionForm.get('imageUrl')?.value,
+      logoUrl: preset.logoUrl ?? this.sectionForm.get('logoUrl')?.value,
+      showSearch: preset.showSearch ?? this.sectionForm.get('showSearch')?.value,
+      showCart: preset.showCart ?? this.sectionForm.get('showCart')?.value,
+      showProfile: preset.showProfile ?? this.sectionForm.get('showProfile')?.value,
+      showImage: preset.showImage ?? this.sectionForm.get('showImage')?.value,
+      show3d: preset.show3d ?? this.sectionForm.get('show3d')?.value,
+      model3dUrl: preset.model3dUrl ?? this.sectionForm.get('model3dUrl')?.value,
+      variant: preset.variant ?? this.sectionForm.get('variant')?.value,
+      anchorId: preset.anchorId ?? this.sectionForm.get('anchorId')?.value,
+      newsletterPlaceholder: preset.newsletterPlaceholder ?? this.sectionForm.get('newsletterPlaceholder')?.value,
+      newsletterButtonText: preset.newsletterButtonText ?? this.sectionForm.get('newsletterButtonText')?.value,
+      copyright: preset.copyright ?? this.sectionForm.get('copyright')?.value
+    });
+
+    if (preset.social) {
+      this.sectionForm.get('social')?.patchValue(preset.social);
+    }
+
+    if (preset.menu) {
+      this.setFormArray(this.menu, preset.menu, item =>
+        this.fb.group({
+          title: this.fb.group({
+            en: [item.title.en],
+            ru: [item.title.ru],
+            ua: [item.title.ua]
+          }),
+          url: [item.url, Validators.required],
+          access: [item.access, Validators.required],
+          isActive: [item.isActive ?? true],
+          sectionId: [null]
+        })
+      );
+    }
+
+    if (preset.categories) {
+      this.setFormArray(this.categories, preset.categories, item =>
+        this.fb.group({
+          name: [item.name, Validators.required],
+          slug: [item.slug, Validators.required],
+          icon: [item.icon],
+          isActive: [item.isActive ?? true]
+        })
+      );
+    }
+
+    if (preset.brands) {
+      this.setFormArray(this.brands, preset.brands, item =>
+        this.fb.group({
+          name: [item.name, Validators.required],
+          logo: [item.logo],
+          isActive: [item.isActive ?? true]
+        })
+      );
+    }
+
+    if (preset.testimonials) {
+      this.setFormArray(this.testimonials, preset.testimonials, item =>
+        this.fb.group({
+          name: [item.name, Validators.required],
+          role: [item.role],
+          text: [item.text, Validators.required],
+          avatar: [item.avatar],
+          rating: [item.rating ?? 5, [Validators.min(1), Validators.max(5)]],
+          isActive: [item.isActive ?? true]
+        })
+      );
+    }
+
+    if (preset.features) {
+      this.setFormArray(this.features, preset.features, item =>
+        this.fb.group({
+          icon: [item.icon, Validators.required],
+          title: [item.title, Validators.required],
+          description: [item.description, Validators.required],
+          isActive: [item.isActive ?? true]
+        })
+      );
+    }
+
+    if (preset.faqItems) {
+      this.setFormArray(this.faqItems, preset.faqItems, item =>
+        this.fb.group({
+          question: [item.question, Validators.required],
+          answer: [item.answer, Validators.required],
+          isActive: [item.isActive ?? true]
+        })
+      );
+    }
+
+    if (preset.stats) {
+      this.setFormArray(this.stats, preset.stats, item =>
+        this.fb.group({
+          value: [item.value, Validators.required],
+          label: [item.label, Validators.required],
+          suffix: [item.suffix || ''],
+          isActive: [item.isActive ?? true]
+        })
+      );
+    }
+
+    if (preset.columns) {
+      this.setFormArray(this.columns, preset.columns, col =>
+        this.fb.group({
+          title: this.fb.group({
+            en: [col.title.en],
+            ru: [col.title.ru],
+            ua: [col.title.ua]
+          }),
+          linkSource: [col.linkSource || 'manual'],
+          links: this.fb.array((col.links || []).map(link =>
+            this.fb.group({
+              label: this.fb.group({
+                en: [link.label.en],
+                ru: [link.label.ru],
+                ua: [link.label.ua]
+              }),
+              url: [link.url, Validators.required]
+            })
+          ))
+        })
+      );
+    }
+  }
+
+  private setFormArray<T>(array: FormArray, items: T[], builder: (item: T) => FormGroup): void {
+    while (array.length) {
+      array.removeAt(0);
+    }
+    items.forEach(item => array.push(builder(item)));
   }
 
   getLocalizedValue(value: any, lang: string): string {

@@ -16,6 +16,12 @@ import { ActivatedRoute } from '@angular/router';
 import { ConfirmationService } from '../../../services/confirmation.service';
 import { getLocalizedString } from 'src/shared/utils/localization.util';
 import { take } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
+import {
+  buildMissingHomepageWizardDtos,
+  HOMEPAGE_WIZARD_SECTIONS,
+  wizardSectionExists
+} from '../section-presets';
 
 @Component({
   selector: 'app-section-list',
@@ -56,6 +62,7 @@ export class SectionListComponent implements OnInit, AfterViewInit {
   isFoldExpanded = false;
   selectedElementInfo: { selector: string, section: any } | null = null;
   sidebarWidth = 640;
+  wizardRunning = false;
   private isResizing = false;
   private initialMouseX = 0;
   private initialSidebarWidth = 640;
@@ -197,6 +204,59 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     this.showPicker = true;
     this.previewData = null;
     this.isEditorOpen = true;
+  }
+
+  runQuickStartWizard(): void {
+    this.confirmationService.confirm({
+      title: this.translate.instant('QUICK_START_WIZARD'),
+      message: this.translate.instant('QUICK_START_WIZARD_CONFIRM'),
+      confirmText: this.translate.instant('CREATE'),
+      cancelText: this.translate.instant('CANCEL'),
+      type: 'info'
+    }).pipe(take(1)).subscribe(confirmed => {
+      if (!confirmed) {
+        return;
+      }
+
+      const existing = this.dataSource.data;
+      const missingEntries = HOMEPAGE_WIZARD_SECTIONS.filter(entry => !wizardSectionExists(existing, entry));
+
+      if (missingEntries.length === 0) {
+        this.snackBar.open(
+          this.translate.instant('QUICK_START_WIZARD_ALL_EXIST'),
+          this.translate.instant('CLOSE_BTN'),
+          { duration: 4000 }
+        );
+        return;
+      }
+
+      const dtos = buildMissingHomepageWizardDtos(existing);
+
+      this.wizardRunning = true;
+      forkJoin(dtos.map(dto => this.sectionService.createSection(dto))).subscribe({
+        next: () => {
+          this.wizardRunning = false;
+          const messageKey = missingEntries.length === HOMEPAGE_WIZARD_SECTIONS.length
+            ? 'QUICK_START_WIZARD_SUCCESS'
+            : 'QUICK_START_WIZARD_PARTIAL';
+          this.snackBar.open(
+            this.translate.instant(messageKey, { count: missingEntries.length }),
+            this.translate.instant('CLOSE_BTN'),
+            { duration: 4000 }
+          );
+          this.loadSections();
+        },
+        error: () => {
+          this.wizardRunning = false;
+          this.snackBar.open(
+            this.translate.instant('QUICK_START_WIZARD_ERROR'),
+            this.translate.instant('CLOSE_BTN'),
+            { duration: 4000 }
+          );
+          this.loadSections();
+        }
+      });
+    });
   }
 
   editSection(section: Section): void {
