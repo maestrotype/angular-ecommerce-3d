@@ -1,10 +1,11 @@
 import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
-import { take, timeout, catchError } from 'rxjs/operators';
+import { take, timeout, catchError, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { ProductService } from '../../core/services/product.service';
-import { Product } from 'src/shared/models/product.model';
 import { SectionService } from 'src/admin/services/section.service';
 import { Section } from 'src/shared/models/section.model';
+import { PageSectionContext } from 'src/shared/models/page-section-context.model';
+import { loadPageSectionContext } from 'src/shared/utils/page-section-context.util';
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({
@@ -14,21 +15,14 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class HomeComponent implements OnInit {
   sections: Section[] = [];
-  bestSellers: Product[] = [];
-  specialOffer: Product | undefined;
-
-  // Loading states for different content sections
+  pageContext: PageSectionContext = {};
   sectionsLoading = true;
-  bestSellersLoading = true;
-  specialOfferLoading = true;
 
-  // Enhanced skeleton data for better user experience during loading
   skeletonSections = [
     { type: 'hero', height: '600px', delay: 0 },
     { type: 'content', height: '400px', delay: 200 },
     { type: 'content', height: '500px', delay: 400 }
   ];
-  skeletonProducts = Array(4).fill(null);
 
   constructor(
     private productService: ProductService,
@@ -36,19 +30,10 @@ export class HomeComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
-  ngOnInit() {
-    // Load critical content first (above-the-fold sections)
+  ngOnInit(): void {
     this.loadSections();
-
-    // Load secondary content in parallel
-    this.loadBestSellers();
-    this.loadSpecialOffers();
   }
 
-  /**
-   * Load page sections with loading state management
-   * Optimized for faster loading without artificial delays
-   */
   private loadSections(): void {
     this.sectionsLoading = true;
     this.sectionService.getActiveSections('home').pipe(
@@ -56,77 +41,27 @@ export class HomeComponent implements OnInit {
       timeout(15000),
       catchError(err => {
         console.error('Error loading sections', err);
-        return of([]);
+        return of([] as Section[]);
+      }),
+      switchMap(sections => {
+        const sorted = (sections || []).sort((a, b) => (a.order || 0) - (b.order || 0));
+        return loadPageSectionContext(this.productService, sorted.map(section => section.type)).pipe(
+          catchError(() => of({} as PageSectionContext)),
+          switchMap(context => of({ sections: sorted, context }))
+        );
       })
     ).subscribe({
-      next: (sections) => {
-        this.sections = (sections || []).sort((a, b) => (a.order || 0) - (b.order || 0));
+      next: ({ sections, context }) => {
+        this.sections = sections;
+        this.pageContext = context;
         this.sectionsLoading = false;
       },
       error: () => {
-        this.sectionsLoading = false;
-      },
-      complete: () => {
         this.sectionsLoading = false;
       }
     });
   }
 
-  /**
-   * Load best sellers products
-   */
-  private loadBestSellers(): void {
-    this.bestSellersLoading = true;
-    this.productService.getBestSellers().pipe(
-      take(1),
-      timeout(10000),
-      catchError(err => {
-        console.error('Error loading best sellers', err);
-        return of([]);
-      })
-    ).subscribe({
-      next: (products) => {
-        this.bestSellers = products;
-        this.bestSellersLoading = false;
-      },
-      error: () => {
-        this.bestSellersLoading = false;
-      },
-      complete: () => {
-        this.bestSellersLoading = false;
-      }
-    });
-  }
-
-  /**
-   * Load special offer products
-   */
-  private loadSpecialOffers(): void {
-    this.specialOfferLoading = true;
-    this.productService.getSpecialOffers().pipe(
-      take(1),
-      timeout(10000),
-      catchError(err => {
-        console.error('Error loading special offers', err);
-        return of([]);
-      })
-    ).subscribe({
-      next: (products) => {
-        this.specialOffer = products[0];
-        this.specialOfferLoading = false;
-      },
-      error: () => {
-        this.specialOfferLoading = false;
-      },
-      complete: () => {
-        this.specialOfferLoading = false;
-      }
-    });
-  }
-
-  /**
-   * Smooth scroll to specific section
-   */
   scrollToSection(sectionId: string): void {
     if (isPlatformBrowser(this.platformId)) {
       const element = document.getElementById(sectionId);

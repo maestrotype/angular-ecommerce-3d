@@ -339,8 +339,8 @@ Use this table verbatim in marketplace description to reduce refunds and bad rev
 
 | # | Task | Done |
 |---|------|------|
-| H6.1 | Remove duplicate `loadBestSellers()` / `loadSpecialOffers()` from `HomeComponent` | [ ] |
-| H6.2 | Data flows through SectionRenderer `contextData` — no double API calls | [ ] |
+| H6.1 | Remove duplicate `loadBestSellers()` / `loadSpecialOffers()` from `HomeComponent` | [x] |
+| H6.2 | Data flows through SectionRenderer `contextData` — no double API calls | [x] |
 
 ---
 

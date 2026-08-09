@@ -41,10 +41,15 @@ export class SectionRendererComponent implements OnInit, OnChanges, OnDestroy {
       // Force full re-render by resetting previous type
       this.previousType = '';
     }
-    if ((changes['section'] && !changes['section'].firstChange) || 
+    if ((changes['section'] && !changes['section'].firstChange) ||
         (changes['mode'] && !changes['mode'].firstChange) ||
-        (changes['refreshKey'] && !changes['refreshKey'].firstChange)) {
-      this.renderSection();
+        (changes['refreshKey'] && !changes['refreshKey'].firstChange) ||
+        (changes['contextData'] && !changes['contextData'].firstChange)) {
+      if (changes['section'] || changes['refreshKey']) {
+        this.renderSection();
+      } else if (this.componentRef) {
+        this.updateComponentState();
+      }
     }
   }
 

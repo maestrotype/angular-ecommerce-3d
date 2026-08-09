@@ -5,8 +5,11 @@ import { SectionService } from '../../../admin/services/section.service';
 import { PageService } from '../../../admin/services/page.service';
 import { Section } from '../../../shared/models/section.model';
 import { Page, isSectionBasedPageTemplate } from '../../../shared/models/page.model';
-import { Subject, takeUntil, catchError, of } from 'rxjs';
+import { Subject, takeUntil, catchError, of, switchMap } from 'rxjs';
 import { SeoService } from '../../core/services/seo.service';
+import { ProductService } from '../../core/services/product.service';
+import { PageSectionContext } from '../../../shared/models/page-section-context.model';
+import { loadPageSectionContext } from '../../../shared/utils/page-section-context.util';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { getLocalizedString } from 'src/shared/utils/localization.util';
@@ -29,6 +32,7 @@ import { TranslateModule } from '@ngx-translate/core';
 export class DynamicPageComponent implements OnInit, OnDestroy {
   page: Page | null = null;
   sections: Section[] = [];
+  pageContext: PageSectionContext = {};
   loading = true;
   notFound = false;
   slug = '';
@@ -39,6 +43,7 @@ export class DynamicPageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private sectionService: SectionService,
     private pageService: PageService,
+    private productService: ProductService,
     private seoService: SeoService,
     private sanitizer: DomSanitizer,
     private translate: TranslateService,
@@ -58,6 +63,7 @@ export class DynamicPageComponent implements OnInit, OnDestroy {
     this.notFound = false;
     this.page = null;
     this.sections = [];
+    this.pageContext = {};
 
     this.pageService.getPageBySlug(slug).pipe(
       takeUntil(this.destroy$),
@@ -89,9 +95,17 @@ export class DynamicPageComponent implements OnInit, OnDestroy {
   private loadSections(slug: string): void {
     this.sectionService.getActiveSections(slug).pipe(
       takeUntil(this.destroy$),
-      catchError(() => of([])),
-    ).subscribe(sections => {
-      this.sections = (sections || []).sort((a, b) => a.order - b.order);
+      catchError(() => of([] as Section[])),
+      switchMap(sections => {
+        const sorted = (sections || []).sort((a, b) => a.order - b.order);
+        return loadPageSectionContext(this.productService, sorted.map(section => section.type)).pipe(
+          catchError(() => of({} as PageSectionContext)),
+          switchMap(context => of({ sections: sorted, context }))
+        );
+      })
+    ).subscribe(({ sections, context }) => {
+      this.sections = sections;
+      this.pageContext = context;
       this.loading = false;
     });
   }

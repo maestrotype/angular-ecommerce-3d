@@ -58,7 +58,7 @@
 | H3 | New Section Types | ✅ Complete | testimonials, newsletter, features-grid, faq, stats |
 | H4 | Section Presets / Quick Start | ✅ Complete | Demo presets + 1-click homepage wizard |
 | H5 | Page Templates | ✅ Complete | landing/faq/collection/brand templates + pageTarget filter |
-| H6 | Home Architecture Fix | ⏳ Pending | Remove duplicate data loading from HomeComponent |
+| H6 | Home Architecture Fix | ✅ Complete | Single API load via SectionRenderer contextData |
 | H7 | Admin UX Polish | ⏳ Pending | type icons, page switcher, empty state, search |
 
 ### Current Section Types (19 registered)

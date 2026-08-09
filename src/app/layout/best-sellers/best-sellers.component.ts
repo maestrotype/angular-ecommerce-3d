@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Product } from 'src/shared/models/product.model';
 import { ProductService } from '../../core/services/product.service';
 import { Section } from 'src/shared/models/section.model';
+import { PageSectionContext } from 'src/shared/models/page-section-context.model';
 import { CartService } from '../../core/services/cart.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { CommonModule } from '@angular/common';
@@ -15,6 +16,8 @@ import { LocalizedPipe } from '../../shared/pipes/localized.pipe';
 import { ImageUrlPipe } from '../../shared/pipes/image-url.pipe';
 import { FavoritesService } from '../../core/services/favorites.service';
 
+type BestSellersSectionData = Section & { context?: PageSectionContext };
+
 @Component({
     selector: 'app-best-sellers',
     templateUrl: './best-sellers.component.html',
@@ -23,15 +26,20 @@ import { FavoritesService } from '../../core/services/favorites.service';
     imports: [CommonModule, RouterModule, SharedModule, TranslateModule, LocalizedPipe, ImageUrlPipe]
 })
 export class BestSellersComponent implements OnInit {
-    @Input() data!: Section;
     bestSellers: Product[] = [];
+    private contextApplied = false;
 
-    // Alias for template compatibility
+    @Input() set data(val: BestSellersSectionData) {
+        if (val?.context?.bestSellers !== undefined) {
+            this.bestSellers = val.context.bestSellers;
+            this.contextApplied = true;
+        }
+    }
+
     get bestSellersProducts(): Product[] {
         return this.bestSellers;
     }
 
-    // Math object for template usage
     Math = Math;
 
     constructor(
@@ -45,23 +53,23 @@ export class BestSellersComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        if (this.contextApplied) {
+            return;
+        }
+
         this.productService.getBestSellers().subscribe({
             next: (products) => {
                 this.bestSellers = products;
             },
-            error: (err) => {
-
-            }
+            error: () => {}
         });
     }
 
-    // TrackBy function for performance
     trackByProductId(index: number, product: Product): number {
         return product.id;
     }
 
     quickView(product: Product): void {
-
         // Implement quick view functionality
     }
 
@@ -85,11 +93,9 @@ export class BestSellersComponent implements OnInit {
         this.cartService.addToCart(cartItem);
         const productName = getLocalizedString(product.name, this.translate.currentLang);
         this.notificationService.showSuccess(`Added ${productName} to cart!`);
-
     }
 
     onFavoriteToggled(event: any): void {
-
         // Implement favorite functionality
     }
 
@@ -101,45 +107,34 @@ export class BestSellersComponent implements OnInit {
         this.favoritesService.toggleFavorite(product);
         const name = getLocalizedString(product.name, this.translate.currentLang);
         const isFavorite = this.isFavorite(product.id);
-        
-        const messageKey = isFavorite 
-            ? 'SHOP.NOTIFICATIONS.ADDED_TO_FAVORITES' 
+
+        const messageKey = isFavorite
+            ? 'SHOP.NOTIFICATIONS.ADDED_TO_FAVORITES'
             : 'SHOP.NOTIFICATIONS.REMOVED_FROM_FAVORITES';
-        
+
         this.translate.get(messageKey, { name }).subscribe(msg => {
             this.notificationService.showSuccess(msg);
         });
     }
 
-    // Rating functionality
     rateProduct(product: Product, rating: number): void {
         event?.stopPropagation();
 
-        // Update product rating locally
         if (!product.userRating) {
             product.userRating = rating;
             product.ratingCount = (product.ratingCount || 0) + 1;
         } else {
-            // If user already rated, update their rating
-            const oldRating = product.userRating;
             product.userRating = rating;
         }
 
-        // Recalculate average rating
         this.updateProductRating(product);
 
-        // Show success message
         const productName = getLocalizedString(product.name, this.translate.currentLang);
         this.notificationService.showSuccess(`Rated ${productName} with ${rating} stars!`);
-
-
     }
 
     private updateProductRating(product: Product): void {
-        // This would typically call a service to update the rating on the backend
-        // For now, we'll just update the local rating
         if (product.userRating) {
-            // Simple average calculation (in real app, this would come from backend)
             const currentRating = product.rating || 0;
             const currentCount = product.ratingCount || 0;
 
