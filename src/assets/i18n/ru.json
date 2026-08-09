@@ -127,6 +127,27 @@
   "EXISTING_CATEGORIES": "Существующие категории",
   "SELECTED_CATEGORIES": "Выбранные категории",
   "ADD_CATEGORY": "Добавить категорию",
+  "ADD_TESTIMONIAL": "Добавить отзыв",
+  "ADD_FEATURE": "Добавить преимущество",
+  "ADD_FAQ_ITEM": "Добавить вопрос",
+  "ADD_STAT": "Добавить показатель",
+  "TESTIMONIALS": "Отзывы",
+  "FEATURES": "Преимущества",
+  "FAQ_ITEMS": "Вопросы FAQ",
+  "STATS": "Показатели",
+  "RATING": "Рейтинг",
+  "QUESTION": "Вопрос",
+  "ANSWER": "Ответ",
+  "ICON": "Иконка",
+  "SUFFIX": "Суффикс",
+  "AVATAR": "Аватар",
+  "NEWSLETTER_PLACEHOLDER": "Placeholder email",
+  "NEWSLETTER_BUTTON_TEXT": "Текст кнопки",
+  "TESTIMONIALS_SECTION": "Секция отзывов",
+  "NEWSLETTER_SECTION": "Секция рассылки",
+  "FEATURES_GRID_SECTION": "Секция преимуществ",
+  "FAQ_SECTION": "Секция FAQ",
+  "STATS_SECTION": "Секция показателей",
   "UPDATE_CATEGORY": "Обновить категорию",
   "CATEGORY_NAME": "Название категории",
   "CATEGORY_SLUG": "Слаг категории",
@@ -869,6 +890,11 @@
     "CATEGORIES": "Секция категорий",
     "SPECIAL_OFFER": "Секция спецпредложения",
     "BRANDS": "Секция брендов",
+    "TESTIMONIALS": "Секция отзывов",
+    "NEWSLETTER": "Секция рассылки",
+    "FEATURES_GRID": "Секция преимуществ",
+    "FAQ": "Секция FAQ",
+    "STATS": "Секция показателей",
     "CONTACTS": "Секция контактов",
     "ABOUT": "Секция о нас",
     "PRODUCT_TABS": "Вкладки товаров (модульно)",
@@ -1029,6 +1055,29 @@
     },
     "BRANDS": {
       "TITLE": "Нам доверяют лучшие бренды"
+    },
+    "TESTIMONIALS": {
+      "TITLE": "Что говорят наши клиенты",
+      "EMPTY": "Отзывы пока не добавлены."
+    },
+    "FEATURES": {
+      "TITLE": "Почему выбирают нас",
+      "EMPTY": "Преимущества пока не добавлены."
+    },
+    "FAQ": {
+      "TITLE": "Часто задаваемые вопросы",
+      "EMPTY": "Вопросы FAQ пока не добавлены."
+    },
+    "STATS": {
+      "TITLE": "Наши результаты в цифрах",
+      "EMPTY": "Показатели пока не добавлены."
+    },
+    "NEWSLETTER": {
+      "TITLE": "Будьте в курсе",
+      "PLACEHOLDER": "Введите email",
+      "BUTTON": "Подписаться",
+      "SUCCESS": "Спасибо за подписку!",
+      "ERROR": "Не удалось подписаться. Попробуйте снова."
     }
   },
   "SHOP": {

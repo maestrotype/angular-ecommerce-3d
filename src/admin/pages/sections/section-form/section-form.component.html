@@ -325,8 +325,8 @@
             </div>
           </mat-tab>
 
-          <!-- TAB: SPECIAL (CATEGORIES/BRANDS) -->
-          <mat-tab *ngIf="sectionForm.get('type')?.value === 'categories' || sectionForm.get('type')?.value === 'brands'">
+          <!-- TAB: SPECIAL (COMPONENTS) -->
+          <mat-tab *ngIf="['categories','brands','testimonials','features-grid','faq','stats','newsletter'].includes(sectionForm.get('type')?.value)">
             <ng-template mat-tab-label>
               <mat-icon class="tab-icon">extension</mat-icon>
               <span class="tab-label">{{ 'COMPONENTS' | translate }}</span>
@@ -371,6 +371,109 @@
                       <app-image-upload [currentImageUrl]="brand.get('logo')?.value" label="Logo" (imageUploaded)="onBrandLogoUploaded($event, i)"></app-image-upload>
                     </div>
                   </div>
+                </div>
+              </div>
+
+              <!-- TESTIMONIALS -->
+              <div *ngIf="sectionForm.get('type')?.value === 'testimonials'" class="dynamic-list">
+                <div class="list-header">
+                  <h4>{{ 'TESTIMONIALS' | translate }}</h4>
+                  <button mat-button color="primary" type="button" (click)="addTestimonial()">
+                    <mat-icon>add</mat-icon> {{ 'ADD_TESTIMONIAL' | translate }}
+                  </button>
+                </div>
+                <div cdkDropList (cdkDropListDropped)="dropTestimonial($event)" class="cdk-list">
+                  <div *ngFor="let item of testimonials.controls; let i = index" cdkDrag class="cdk-item">
+                    <div [formGroup]="$any(item)" class="item-form vertical">
+                      <div class="item-row">
+                        <mat-form-field appearance="outline"><mat-label>{{ 'NAME' | translate }}</mat-label><input matInput formControlName="name"></mat-form-field>
+                        <mat-form-field appearance="outline"><mat-label>{{ 'ROLE' | translate }}</mat-label><input matInput formControlName="role"></mat-form-field>
+                        <mat-form-field appearance="outline"><mat-label>{{ 'RATING' | translate }}</mat-label><input matInput type="number" min="1" max="5" formControlName="rating"></mat-form-field>
+                        <button mat-icon-button color="warn" (click)="removeTestimonial(i)" type="button"><mat-icon>delete</mat-icon></button>
+                      </div>
+                      <mat-form-field appearance="outline" class="full-width"><mat-label>{{ 'TEXT' | translate }}</mat-label><textarea matInput rows="3" formControlName="text"></textarea></mat-form-field>
+                      <app-image-upload [currentImageUrl]="item.get('avatar')?.value" [label]="'AVATAR' | translate" (imageUploaded)="onTestimonialAvatarUploaded($event, i)"></app-image-upload>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- FEATURES GRID -->
+              <div *ngIf="sectionForm.get('type')?.value === 'features-grid'" class="dynamic-list">
+                <div class="list-header">
+                  <h4>{{ 'FEATURES' | translate }}</h4>
+                  <button mat-button color="primary" type="button" (click)="addFeature()">
+                    <mat-icon>add</mat-icon> {{ 'ADD_FEATURE' | translate }}
+                  </button>
+                </div>
+                <div cdkDropList (cdkDropListDropped)="dropFeature($event)" class="cdk-list">
+                  <div *ngFor="let feature of features.controls; let i = index" cdkDrag class="cdk-item">
+                    <div [formGroup]="$any(feature)" class="item-form vertical">
+                      <div class="item-row">
+                        <mat-form-field appearance="outline"><mat-label>{{ 'ICON' | translate }}</mat-label><input matInput formControlName="icon" placeholder="star"></mat-form-field>
+                        <mat-form-field appearance="outline"><mat-label>{{ 'TITLE' | translate }}</mat-label><input matInput formControlName="title"></mat-form-field>
+                        <button mat-icon-button color="warn" (click)="removeFeature(i)" type="button"><mat-icon>delete</mat-icon></button>
+                      </div>
+                      <mat-form-field appearance="outline" class="full-width"><mat-label>{{ 'DESCRIPTION' | translate }}</mat-label><textarea matInput rows="2" formControlName="description"></textarea></mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- FAQ -->
+              <div *ngIf="sectionForm.get('type')?.value === 'faq'" class="dynamic-list">
+                <div class="list-header">
+                  <h4>{{ 'FAQ_ITEMS' | translate }}</h4>
+                  <button mat-button color="primary" type="button" (click)="addFaqItem()">
+                    <mat-icon>add</mat-icon> {{ 'ADD_FAQ_ITEM' | translate }}
+                  </button>
+                </div>
+                <div cdkDropList (cdkDropListDropped)="dropFaqItem($event)" class="cdk-list">
+                  <div *ngFor="let faq of faqItems.controls; let i = index" cdkDrag class="cdk-item">
+                    <div [formGroup]="$any(faq)" class="item-form vertical">
+                      <div class="item-row">
+                        <mat-form-field appearance="outline" class="full-width"><mat-label>{{ 'QUESTION' | translate }}</mat-label><input matInput formControlName="question"></mat-form-field>
+                        <button mat-icon-button color="warn" (click)="removeFaqItem(i)" type="button"><mat-icon>delete</mat-icon></button>
+                      </div>
+                      <mat-form-field appearance="outline" class="full-width"><mat-label>{{ 'ANSWER' | translate }}</mat-label><textarea matInput rows="3" formControlName="answer"></textarea></mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- STATS -->
+              <div *ngIf="sectionForm.get('type')?.value === 'stats'" class="dynamic-list">
+                <div class="list-header">
+                  <h4>{{ 'STATS' | translate }}</h4>
+                  <button mat-button color="primary" type="button" (click)="addStat()">
+                    <mat-icon>add</mat-icon> {{ 'ADD_STAT' | translate }}
+                  </button>
+                </div>
+                <div cdkDropList (cdkDropListDropped)="dropStat($event)" class="cdk-list">
+                  <div *ngFor="let stat of stats.controls; let i = index" cdkDrag class="cdk-item">
+                    <div [formGroup]="$any(stat)" class="item-form vertical">
+                      <div class="item-row">
+                        <mat-form-field appearance="outline"><mat-label>{{ 'VALUE' | translate }}</mat-label><input matInput formControlName="value"></mat-form-field>
+                        <mat-form-field appearance="outline"><mat-label>{{ 'LABEL' | translate }}</mat-label><input matInput formControlName="label"></mat-form-field>
+                        <mat-form-field appearance="outline"><mat-label>{{ 'SUFFIX' | translate }}</mat-label><input matInput formControlName="suffix" placeholder="+ / % / K"></mat-form-field>
+                        <button mat-icon-button color="warn" (click)="removeStat(i)" type="button"><mat-icon>delete</mat-icon></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- NEWSLETTER -->
+              <div *ngIf="sectionForm.get('type')?.value === 'newsletter'" class="dynamic-list">
+                <div class="form-grid">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'NEWSLETTER_PLACEHOLDER' | translate }}</mat-label>
+                    <input matInput formControlName="newsletterPlaceholder">
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'NEWSLETTER_BUTTON_TEXT' | translate }}</mat-label>
+                    <input matInput formControlName="newsletterButtonText">
+                  </mat-form-field>
                 </div>
               </div>
             </div>

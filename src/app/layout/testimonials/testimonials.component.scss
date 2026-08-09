@@ -1,0 +1,134 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.testimonials {
+  padding: 60px 0;
+  background: var(--surface-section, var(--surface-page, transparent));
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+
+    .section-subtitle {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.875rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+  }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .testimonial-card {
+    padding: 1.5rem;
+    border-radius: var(--radius-lg, 16px);
+    background: var(--surface-card);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .rating {
+    display: flex;
+    gap: 0.125rem;
+    margin-bottom: 1rem;
+
+    mat-icon {
+      width: 18px;
+      height: 18px;
+      font-size: 18px;
+      color: var(--border-default);
+
+      &.filled {
+        color: var(--color-accent, #fbbf24);
+      }
+    }
+  }
+
+  .quote {
+    margin: 0 0 1.25rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .author {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .avatar-fallback {
+    display: grid;
+    place-items: center;
+    background: var(--interactive-primary);
+    color: var(--text-on-primary, #fff);
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+
+  .meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+
+    strong {
+      color: var(--text-primary);
+    }
+
+    span {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+  }
+
+  .empty-state {
+    text-align: center;
+    color: var(--text-muted);
+  }
+}
+
+@media (max-width: 768px) {
+  .testimonials {
+    padding: 40px 0;
+
+    .container {
+      padding: 0 1rem;
+    }
+
+    .section-header .section-title {
+      font-size: 1.5rem;
+    }
+  }
+}

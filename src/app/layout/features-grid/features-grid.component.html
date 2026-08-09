@@ -1,0 +1,22 @@
+<section class="features-grid" [id]="data?.anchorId || 'features'">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-subtitle" *ngIf="data?.subtitle">{{ data.subtitle | localized }}</span>
+      <h2 class="section-title">{{ (data?.title | localized) || ('HOME.FEATURES.TITLE' | translate) }}</h2>
+    </div>
+
+    <div class="grid" *ngIf="features.length; else emptyState">
+      <article class="feature-card" *ngFor="let feature of features">
+        <div class="icon-wrap">
+          <mat-icon>{{ feature.icon }}</mat-icon>
+        </div>
+        <h3>{{ feature.title | localized }}</h3>
+        <p>{{ feature.description | localized }}</p>
+      </article>
+    </div>
+
+    <ng-template #emptyState>
+      <p class="empty-state">{{ 'HOME.FEATURES.EMPTY' | translate }}</p>
+    </ng-template>
+  </div>
+</section>

@@ -437,6 +437,27 @@
   "LOGIN_SUCCESS": "Вхід виконано успішно!",
   "LOGIN_FAILED": "Помилка входу. Перевірте облікові дані.",
   "ADD_CATEGORY": "Додати нову категорію",
+  "ADD_TESTIMONIAL": "Додати відгук",
+  "ADD_FEATURE": "Додати перевагу",
+  "ADD_FAQ_ITEM": "Додати питання",
+  "ADD_STAT": "Додати показник",
+  "TESTIMONIALS": "Відгуки",
+  "FEATURES": "Переваги",
+  "FAQ_ITEMS": "Питання FAQ",
+  "STATS": "Показники",
+  "RATING": "Рейтинг",
+  "QUESTION": "Питання",
+  "ANSWER": "Відповідь",
+  "ICON": "Іконка",
+  "SUFFIX": "Суфікс",
+  "AVATAR": "Аватар",
+  "NEWSLETTER_PLACEHOLDER": "Placeholder email",
+  "NEWSLETTER_BUTTON_TEXT": "Текст кнопки",
+  "TESTIMONIALS_SECTION": "Секція відгуків",
+  "NEWSLETTER_SECTION": "Секція розсилки",
+  "FEATURES_GRID_SECTION": "Секція переваг",
+  "FAQ_SECTION": "Секція FAQ",
+  "STATS_SECTION": "Секція показників",
   "EDIT_CATEGORY": "Редагувати категорію",
   "CATEGORY_NAME": "Назва категорії",
   "CATEGORY_NAME_REQUIRED": "Назва категорії обов'язкова",
@@ -847,6 +868,11 @@
     "CATEGORIES": "Секція категорій",
     "SPECIAL_OFFER": "Секція спецпропозиції",
     "BRANDS": "Секція брендів",
+    "TESTIMONIALS": "Секція відгуків",
+    "NEWSLETTER": "Секція розсилки",
+    "FEATURES_GRID": "Секція переваг",
+    "FAQ": "Секція FAQ",
+    "STATS": "Секція показників",
     "CONTACTS": "Секція контактів",
     "ABOUT": "Секція про нас",
     "PRODUCT_TABS": "Вкладки товарів (модульно)",
@@ -991,6 +1017,29 @@
     },
     "BRANDS": {
       "TITLE": "Нам довіряють найкращі бренди"
+    },
+    "TESTIMONIALS": {
+      "TITLE": "Що кажуть наші клієнти",
+      "EMPTY": "Відгуки ще не додані."
+    },
+    "FEATURES": {
+      "TITLE": "Чому обирають нас",
+      "EMPTY": "Переваги ще не додані."
+    },
+    "FAQ": {
+      "TITLE": "Часті запитання",
+      "EMPTY": "Питання FAQ ще не додані."
+    },
+    "STATS": {
+      "TITLE": "Наші результати в цифрах",
+      "EMPTY": "Показники ще не додані."
+    },
+    "NEWSLETTER": {
+      "TITLE": "Будьте в курсі",
+      "PLACEHOLDER": "Введіть email",
+      "BUTTON": "Підписатися",
+      "SUCCESS": "Дякуємо за підписку!",
+      "ERROR": "Не вдалося підписатися. Спробуйте ще раз."
     }
   },
   "SHOP": {

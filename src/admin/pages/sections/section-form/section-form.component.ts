@@ -66,6 +66,11 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     { value: 'categories', label: 'SECTION_TYPE_LABELS.CATEGORIES' },
     { value: 'special-offer', label: 'SECTION_TYPE_LABELS.SPECIAL_OFFER' },
     { value: 'brands', label: 'SECTION_TYPE_LABELS.BRANDS' },
+    { value: 'testimonials', label: 'SECTION_TYPE_LABELS.TESTIMONIALS' },
+    { value: 'newsletter', label: 'SECTION_TYPE_LABELS.NEWSLETTER' },
+    { value: 'features-grid', label: 'SECTION_TYPE_LABELS.FEATURES_GRID' },
+    { value: 'faq', label: 'SECTION_TYPE_LABELS.FAQ' },
+    { value: 'stats', label: 'SECTION_TYPE_LABELS.STATS' },
     { value: 'contacts', label: 'SECTION_TYPE_LABELS.CONTACTS' },
     { value: 'about', label: 'SECTION_TYPE_LABELS.ABOUT' },
     { value: 'product-tabs', label: 'SECTION_TYPE_LABELS.PRODUCT_TABS' },
@@ -254,6 +259,49 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
           })
         )
       ),
+      testimonials: this.fb.array(
+        (settings?.testimonials || []).map((item: any) =>
+          this.fb.group({
+            name: [this.getLocalizedValue(item.name, 'en'), Validators.required],
+            role: [this.getLocalizedValue(item.role, 'en')],
+            text: [this.getLocalizedValue(item.text, 'en'), Validators.required],
+            avatar: [item.avatar || ''],
+            rating: [item.rating ?? 5, [Validators.min(1), Validators.max(5)]],
+            isActive: [item.isActive ?? true]
+          })
+        )
+      ),
+      features: this.fb.array(
+        (settings?.features || []).map((item: any) =>
+          this.fb.group({
+            icon: [item.icon || 'star', Validators.required],
+            title: [this.getLocalizedValue(item.title, 'en'), Validators.required],
+            description: [this.getLocalizedValue(item.description, 'en'), Validators.required],
+            isActive: [item.isActive ?? true]
+          })
+        )
+      ),
+      faqItems: this.fb.array(
+        (settings?.items || []).map((item: any) =>
+          this.fb.group({
+            question: [this.getLocalizedValue(item.question, 'en'), Validators.required],
+            answer: [this.getLocalizedValue(item.answer, 'en'), Validators.required],
+            isActive: [item.isActive ?? true]
+          })
+        )
+      ),
+      stats: this.fb.array(
+        (settings?.stats || []).map((item: any) =>
+          this.fb.group({
+            value: [item.value || '', Validators.required],
+            label: [this.getLocalizedValue(item.label, 'en'), Validators.required],
+            suffix: [item.suffix || ''],
+            isActive: [item.isActive ?? true]
+          })
+        )
+      ),
+      newsletterPlaceholder: [this.getLocalizedValue(settings?.placeholder, 'en') || ''],
+      newsletterButtonText: [this.getLocalizedValue(settings?.buttonText, 'en') || 'Subscribe'],
       // Footer specific
       social: this.fb.group({
         instagram: [settings?.social?.instagram || ''],
@@ -339,6 +387,22 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     return this.sectionForm.get('brands') as FormArray;
   }
 
+  get testimonials(): FormArray {
+    return this.sectionForm.get('testimonials') as FormArray;
+  }
+
+  get features(): FormArray {
+    return this.sectionForm.get('features') as FormArray;
+  }
+
+  get faqItems(): FormArray {
+    return this.sectionForm.get('faqItems') as FormArray;
+  }
+
+  get stats(): FormArray {
+    return this.sectionForm.get('stats') as FormArray;
+  }
+
   get columns(): FormArray {
     return this.sectionForm.get('columns') as FormArray;
   }
@@ -419,6 +483,43 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     }));
   }
 
+  addTestimonial() {
+    this.testimonials.push(this.fb.group({
+      name: ['', Validators.required],
+      role: [''],
+      text: ['', Validators.required],
+      avatar: [''],
+      rating: [5, [Validators.min(1), Validators.max(5)]],
+      isActive: [true]
+    }));
+  }
+
+  addFeature() {
+    this.features.push(this.fb.group({
+      icon: ['star', Validators.required],
+      title: ['', Validators.required],
+      description: ['', Validators.required],
+      isActive: [true]
+    }));
+  }
+
+  addFaqItem() {
+    this.faqItems.push(this.fb.group({
+      question: ['', Validators.required],
+      answer: ['', Validators.required],
+      isActive: [true]
+    }));
+  }
+
+  addStat() {
+    this.stats.push(this.fb.group({
+      value: ['', Validators.required],
+      label: ['', Validators.required],
+      suffix: [''],
+      isActive: [true]
+    }));
+  }
+
   removeMenuItem(index: number) {
     this.menu.removeAt(index);
   }
@@ -429,6 +530,22 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
 
   removeBrand(index: number) {
     this.brands.removeAt(index);
+  }
+
+  removeTestimonial(index: number) {
+    this.testimonials.removeAt(index);
+  }
+
+  removeFeature(index: number) {
+    this.features.removeAt(index);
+  }
+
+  removeFaqItem(index: number) {
+    this.faqItems.removeAt(index);
+  }
+
+  removeStat(index: number) {
+    this.stats.removeAt(index);
   }
 
   dropMenuItem(event: CdkDragDrop<FormArray>) {
@@ -463,6 +580,33 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     const control = this.brands.at(from);
     this.brands.removeAt(from);
     this.brands.insert(to, control);
+  }
+
+  dropTestimonial(event: CdkDragDrop<FormArray>) {
+    this.dropFormArrayItem(this.testimonials, event);
+  }
+
+  dropFeature(event: CdkDragDrop<FormArray>) {
+    this.dropFormArrayItem(this.features, event);
+  }
+
+  dropFaqItem(event: CdkDragDrop<FormArray>) {
+    this.dropFormArrayItem(this.faqItems, event);
+  }
+
+  dropStat(event: CdkDragDrop<FormArray>) {
+    this.dropFormArrayItem(this.stats, event);
+  }
+
+  private dropFormArrayItem(array: FormArray, event: CdkDragDrop<FormArray>): void {
+    const from = event.previousIndex;
+    const to = event.currentIndex;
+    if (from === to) {
+      return;
+    }
+    const control = array.at(from);
+    array.removeAt(from);
+    array.insert(to, control);
   }
 
   onSectionSelect(index: number, sectionId: number | null) {
@@ -577,6 +721,10 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
 
   onBrandLogoUploaded(url: string, index: number): void {
     this.brands.at(index).patchValue({ logo: url });
+  }
+
+  onTestimonialAvatarUploaded(url: string, index: number): void {
+    this.testimonials.at(index).patchValue({ avatar: url });
   }
 
   removeBrandLogo(index: number): void {
@@ -738,6 +886,124 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
               })
             }
           };
+        } else if (formValue.type === 'testimonials') {
+          formData = {
+            type: 'testimonials',
+            title: formValue.title,
+            subtitle: formValue.subtitle,
+            content: formValue.content,
+            imageUrl: formValue.imageUrl || '',
+            isActive: formValue.isActive,
+            model3dUrl: model3dUrl || '',
+            show3d: formValue.show3d || false,
+            showImage: formValue.showImage || true,
+            pageTarget: formValue.pageTarget || 'home',
+            variant: formValue.variant || 'default',
+            anchorId: formValue.anchorId || '',
+            settings: {
+              ...existingSettings,
+              testimonials: this.mapLocalizedSettingsList(
+                formValue.testimonials,
+                (existingSettings as any)?.testimonials,
+                ['name', 'role', 'text']
+              )
+            }
+          };
+        } else if (formValue.type === 'features-grid') {
+          formData = {
+            type: 'features-grid',
+            title: formValue.title,
+            subtitle: formValue.subtitle,
+            content: formValue.content,
+            imageUrl: formValue.imageUrl || '',
+            isActive: formValue.isActive,
+            model3dUrl: model3dUrl || '',
+            show3d: formValue.show3d || false,
+            showImage: formValue.showImage || true,
+            pageTarget: formValue.pageTarget || 'home',
+            variant: formValue.variant || 'default',
+            anchorId: formValue.anchorId || '',
+            settings: {
+              ...existingSettings,
+              features: this.mapLocalizedSettingsList(
+                formValue.features,
+                (existingSettings as any)?.features,
+                ['title', 'description']
+              )
+            }
+          };
+        } else if (formValue.type === 'faq') {
+          formData = {
+            type: 'faq',
+            title: formValue.title,
+            subtitle: formValue.subtitle,
+            content: formValue.content,
+            imageUrl: formValue.imageUrl || '',
+            isActive: formValue.isActive,
+            model3dUrl: model3dUrl || '',
+            show3d: formValue.show3d || false,
+            showImage: formValue.showImage || true,
+            pageTarget: formValue.pageTarget || 'home',
+            variant: formValue.variant || 'default',
+            anchorId: formValue.anchorId || '',
+            settings: {
+              ...existingSettings,
+              items: this.mapLocalizedSettingsList(
+                formValue.faqItems,
+                (existingSettings as any)?.items,
+                ['question', 'answer']
+              )
+            }
+          };
+        } else if (formValue.type === 'stats') {
+          formData = {
+            type: 'stats',
+            title: formValue.title,
+            subtitle: formValue.subtitle,
+            content: formValue.content,
+            imageUrl: formValue.imageUrl || '',
+            isActive: formValue.isActive,
+            model3dUrl: model3dUrl || '',
+            show3d: formValue.show3d || false,
+            showImage: formValue.showImage || true,
+            pageTarget: formValue.pageTarget || 'home',
+            variant: formValue.variant || 'default',
+            anchorId: formValue.anchorId || '',
+            settings: {
+              ...existingSettings,
+              stats: this.mapLocalizedSettingsList(
+                formValue.stats,
+                (existingSettings as any)?.stats,
+                ['label']
+              )
+            }
+          };
+        } else if (formValue.type === 'newsletter') {
+          formData = {
+            type: 'newsletter',
+            title: formValue.title,
+            subtitle: formValue.subtitle,
+            content: formValue.content,
+            imageUrl: formValue.imageUrl || '',
+            isActive: formValue.isActive,
+            model3dUrl: model3dUrl || '',
+            show3d: formValue.show3d || false,
+            showImage: formValue.showImage || false,
+            pageTarget: formValue.pageTarget || 'home',
+            variant: formValue.variant || 'default',
+            anchorId: formValue.anchorId || '',
+            settings: {
+              ...existingSettings,
+              placeholder: this.buildLocalizedNameFromForm(
+                formValue.newsletterPlaceholder,
+                (existingSettings as any)?.placeholder
+              ),
+              buttonText: this.buildLocalizedNameFromForm(
+                formValue.newsletterButtonText,
+                (existingSettings as any)?.buttonText
+              )
+            }
+          };
         } else if (formValue.type === 'footer') {
           formData = {
             ...formValue,
@@ -834,6 +1100,21 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
       ru: existing.ru || '',
       ua: existing.ua || ''
     };
+  }
+
+  private mapLocalizedSettingsList(
+    items: any[] | undefined,
+    existingItems: any[] | undefined,
+    localizedFields: string[]
+  ): any[] {
+    return (items || []).map((item, index) => {
+      const existing = (existingItems || [])[index];
+      const mapped = { ...item };
+      localizedFields.forEach(field => {
+        mapped[field] = this.buildLocalizedNameFromForm(item[field], existing?.[field]);
+      });
+      return mapped;
+    });
   }
 
   private findExistingCategory(categories: any[] | undefined, cat: any, index: number): any {

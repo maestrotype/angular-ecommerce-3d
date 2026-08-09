@@ -1,0 +1,33 @@
+<section class="testimonials" [id]="data?.anchorId || 'testimonials'">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-subtitle" *ngIf="data?.subtitle">{{ data.subtitle | localized }}</span>
+      <h2 class="section-title">{{ (data?.title | localized) || ('HOME.TESTIMONIALS.TITLE' | translate) }}</h2>
+    </div>
+
+    <div class="testimonials-grid" *ngIf="testimonials.length; else emptyState">
+      <article class="testimonial-card" *ngFor="let item of testimonials">
+        <div class="rating">
+          <mat-icon *ngFor="let star of stars(item.rating)" [class.filled]="star <= item.rating">star</mat-icon>
+        </div>
+        <p class="quote">"{{ item.text | localized }}"</p>
+        <div class="author">
+          <div class="avatar" *ngIf="item.avatar; else initialsAvatar">
+            <img [src]="item.avatar" [alt]="item.name | localized" loading="lazy">
+          </div>
+          <ng-template #initialsAvatar>
+            <div class="avatar avatar-fallback">{{ getInitials(item.name) }}</div>
+          </ng-template>
+          <div class="meta">
+            <strong>{{ item.name | localized }}</strong>
+            <span>{{ item.role | localized }}</span>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <ng-template #emptyState>
+      <p class="empty-state">{{ 'HOME.TESTIMONIALS.EMPTY' | translate }}</p>
+    </ng-template>
+  </div>
+</section>

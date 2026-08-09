@@ -15,4 +15,9 @@ export const sectionComponentMap: { [key: string]: () => Promise<Type<any>> } = 
   'similar-products': () => import('../../shared/components/recommendations/similar-products/similar-products.component').then(m => m.SimilarProductsComponent),
   'bought-together': () => import('../../shared/components/recommendations/bought-together/bought-together.component').then(m => m.BoughtTogetherComponent),
   'html-content': () => import('../html-content/html-content.component').then(m => m.HtmlContentComponent),
+  testimonials: () => import('../../layout/testimonials/testimonials.component').then(m => m.TestimonialsComponent),
+  newsletter: () => import('../../layout/newsletter/newsletter.component').then(m => m.NewsletterComponent),
+  'features-grid': () => import('../../layout/features-grid/features-grid.component').then(m => m.FeaturesGridComponent),
+  faq: () => import('../../layout/faq/faq.component').then(m => m.FaqComponent),
+  stats: () => import('../../layout/stats/stats.component').then(m => m.StatsComponent),
 };

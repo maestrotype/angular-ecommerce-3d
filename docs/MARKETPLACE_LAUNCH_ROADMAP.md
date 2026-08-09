@@ -307,11 +307,11 @@ Use this table verbatim in marketplace description to reduce refunds and bad rev
 
 | # | Section Type | Admin Form | Frontend Component | Done |
 |---|-------------|------------|--------------------|------|
-| H3.1 | `testimonials` | avatar, name, role, text, rating 1–5 | Carousel / grid with stars | [ ] |
-| H3.2 | `newsletter` | title, subtitle, placeholder, button text | Email capture + backend POST /newsletter | [ ] |
-| H3.3 | `features-grid` | icon (Material), title, description × N | 3–4 col responsive grid | [ ] |
-| H3.4 | `faq` | question + answer pairs (localized) | MatExpansionPanel accordion | [ ] |
-| H3.5 | `stats` | value, label, suffix × N | Animated intersection-observer counters | [ ] |
+| H3.1 | `testimonials` | avatar, name, role, text, rating 1–5 | Carousel / grid with stars | [x] |
+| H3.2 | `newsletter` | title, subtitle, placeholder, button text | Email capture + backend POST /newsletter | [x] |
+| H3.3 | `features-grid` | icon (Material), title, description × N | 3–4 col responsive grid | [x] |
+| H3.4 | `faq` | question + answer pairs (localized) | MatExpansionPanel accordion | [x] |
+| H3.5 | `stats` | value, label, suffix × N | Animated intersection-observer counters | [x] |
 
 > Each type requires: entry in `section-map.ts` + `sectionTypes[]` array + `ngSwitch` form case.
 

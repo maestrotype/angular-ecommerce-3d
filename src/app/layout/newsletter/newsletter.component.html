@@ -1,0 +1,27 @@
+<section class="newsletter-section" [id]="data?.anchorId || 'newsletter'">
+  <div class="container">
+    <div class="content">
+      <span class="section-subtitle" *ngIf="data?.subtitle">{{ data.subtitle | localized }}</span>
+      <h2 class="section-title">{{ (data?.title | localized) || ('HOME.NEWSLETTER.TITLE' | translate) }}</h2>
+      <p class="section-text" *ngIf="data?.content">{{ data.content | localized }}</p>
+
+      <form class="newsletter-form" (ngSubmit)="subscribe()" #form="ngForm">
+        <input
+          type="email"
+          name="email"
+          [(ngModel)]="email"
+          [placeholder]="placeholder"
+          required
+          [disabled]="loading"
+          aria-label="Email">
+        <button type="submit" [disabled]="loading || !email.trim()">
+          <mat-icon *ngIf="!loading">mail</mat-icon>
+          <span>{{ buttonText }}</span>
+        </button>
+      </form>
+
+      <p class="success-message" *ngIf="success">{{ 'HOME.NEWSLETTER.SUCCESS' | translate }}</p>
+      <p class="error-message" *ngIf="error">{{ error }}</p>
+    </div>
+  </div>
+</section>

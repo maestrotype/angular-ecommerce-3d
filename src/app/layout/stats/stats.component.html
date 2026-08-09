@@ -1,0 +1,19 @@
+<section class="stats-section" [id]="data?.anchorId || 'stats'">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-subtitle" *ngIf="data?.subtitle">{{ data.subtitle | localized }}</span>
+      <h2 class="section-title">{{ (data?.title | localized) || ('HOME.STATS.TITLE' | translate) }}</h2>
+    </div>
+
+    <div class="stats-grid" *ngIf="stats.length; else emptyState">
+      <article class="stat-card" *ngFor="let stat of stats; let i = index">
+        <div class="stat-value" #statValue [attr.data-index]="i">{{ stat.displayValue }}</div>
+        <div class="stat-label">{{ stat.label | localized }}</div>
+      </article>
+    </div>
+
+    <ng-template #emptyState>
+      <p class="empty-state">{{ 'HOME.STATS.EMPTY' | translate }}</p>
+    </ng-template>
+  </div>
+</section>
