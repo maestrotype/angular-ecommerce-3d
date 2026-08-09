@@ -59,7 +59,7 @@
 | H4 | Section Presets / Quick Start | ✅ Complete | Demo presets + 1-click homepage wizard |
 | H5 | Page Templates | ✅ Complete | landing/faq/collection/brand templates + pageTarget filter |
 | H6 | Home Architecture Fix | ✅ Complete | Single API load via SectionRenderer contextData |
-| H7 | Admin UX Polish | 🔄 In Progress | **Page Sections device preview + drag & drop fix** — see [task_003](tasks/task_003_page_sections_device_preview_dnd.md) |
+| H7 | Admin UX Polish | ✅ Complete | **Task 003 done**: device preview (mobile/fold bounded frames, notch, smooth transitions) + drag-drop UX (custom badge preview, styled placeholder, grab cursor). Build ✅ |
 
 ### Epic I — 3D Viewer Polish, Configurator & AI Worker
 
@@ -144,7 +144,7 @@
 
 | Date | Change | Author |
 |------|--------|--------|
-| 2026-08-09 | **Epic H7 started — Task 003**: Page Sections device emulator fix (mobile/fold frames use correct bounded height) + CDK drag-drop UX improvements (custom preview badge, styled placeholder). See [task_003](tasks/task_003_page_sections_device_preview_dnd.md). | Implementation Engineer |
+| 2026-08-09 | **Epic H7 complete — Task 003**: Page Sections device preview fixed (mobile=844px/fold=680px bounded frames, notch decoration, smooth 0.35s transitions); CDK drag-drop UX — custom `*cdkDragPreview` badge for architect view, styled row preview + dashed placeholder for table. Build ✅. | Implementation Engineer |
 | 2026-08-09 | **Epic H4 complete**: Section demo presets ("Load Demo Content") and Quick Start Homepage wizard (header, hero, best-sellers, categories, footer). | Implementation Engineer |
 | 2026-08-09 | **Epic H3 complete**: Added 5 section types (testimonials, newsletter, features-grid, faq, stats) with admin forms, storefront components, i18n, and POST /newsletter backend. | Implementation Engineer |
 | 2026-08-09 | **Epic H1 + H2 complete**: MatDialog delete confirmations (messages/sections/users); categories/brands i18n preserve ru/ua on save; duplicate section action; section type locked in edit mode; property toolbar expanded (padding, text/bg colors). Docs synced. | Implementation Engineer |

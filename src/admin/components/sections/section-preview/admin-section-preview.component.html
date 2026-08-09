@@ -1,17 +1,16 @@
 <ng-container *ngIf="sections && sections.length > 0">
   <div class="device-emulator preview-theme-root" [attr.data-theme]="previewThemeAttr">
-    <div class="full-page-preview" 
+    <div class="full-page-preview"
          [attr.data-theme]="previewThemeAttr"
          [class.inspecting]="isInspectionMode"
-         cdkDropList 
+         cdkDropList
          (cdkDropListDropped)="onDrop($event)"
          (mousemove)="onPreviewMouseMove($event)"
          (click)="onPreviewClick($event)"
          (dblclick)="onPreviewDblClick($event)">
-      
-      <!-- [Inspector code omitted for brevity but preserved in real tool call] -->
+
       <!-- Inspector Highlighter -->
-      <div class="inspector-highlight" 
+      <div class="inspector-highlight"
            *ngIf="isInspectionMode && inspectorBox"
            [class.tag-bottom]="inspectorBox.top < 30"
            [style.top.px]="inspectorBox.top"
@@ -34,30 +33,38 @@
 
       <!-- Inspector Toolbar -->
       <div class="inspector-controls">
-        <button mat-fab 
+        <button mat-fab
                 [color]="isInspectionMode ? 'primary' : 'basic'"
-                (click)="toggleInspectionMode()" 
+                (click)="toggleInspectionMode()"
                 [matTooltip]="(isInspectionMode ? 'EXIT_INSPECTION_MODE' : 'ENTER_INSPECTION_MODE') | translate">
           <mat-icon>{{ isInspectionMode ? 'close' : 'design_services' }}</mat-icon>
         </button>
       </div>
 
-      <div class="architect-section-wrapper" 
+      <!-- Section wrappers -->
+      <div class="architect-section-wrapper"
            *ngFor="let s of renderingSections; let i = index"
            [class.active]="s.id === activeSectionId"
            [class.inspecting]="isInspectionMode"
            [attr.data-section-id]="s.id"
            (click)="!isInspectionMode && onSectionClick(s, $event)"
-           cdkDrag>
-        
-        <!-- Drag Handle -->
-        <div class="drag-handle" cdkDragHandle>
+           cdkDrag
+           [cdkDragData]="s">
+
+        <!-- ── Custom compact drag preview (renders in body at 1:1, not scaled) ── -->
+        <div *cdkDragPreview class="architect-drag-preview">
+          <mat-icon>drag_indicator</mat-icon>
+          <span>{{ s.type | titlecase }}</span>
+        </div>
+
+        <!-- ── Drag handle ── -->
+        <div class="drag-handle" cdkDragHandle (click)="$event.stopPropagation()">
           <mat-icon>drag_indicator</mat-icon>
         </div>
 
         <div class="section-badge">{{ s.type | titlecase }}</div>
-        
-        <!-- Enhanced Overlay Card -->
+
+        <!-- ── Edit overlay pill ── -->
         <div class="section-overlay" (click)="onSectionClick(s, $event)">
           <div class="edit-card-glass">
             <div class="icon-circle">
@@ -67,16 +74,16 @@
           </div>
         </div>
 
-        <app-section-renderer 
+        <app-section-renderer
           *ngIf="s.isActive"
-          [section]="s" 
+          [section]="s"
           [mode]="mode"
           [refreshKey]="renderKey + '_' + i">
         </app-section-renderer>
       </div>
     </div>
 
-    <!-- Mobile HUD Mock (Floating Bottom Bar) - NOW INSIDE EMULATOR -->
+    <!-- Mobile HUD Mock (inside emulator — scales with it) -->
     <div class="mock-footer-mobile" *ngIf="mode === 'mobile' || (mode === 'fold' && !isFoldExpanded)">
       <div class="favorites-link"><mat-icon>favorite_border</mat-icon></div>
       <div class="cart">
