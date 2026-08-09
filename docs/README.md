@@ -56,6 +56,7 @@ Technical reference for the Angular 17+ 3D E-commerce Platform.
 | [Installation](INSTALLATION.md) | Full install + security checklist | [client/installation.html](client/installation.html) |
 | [Architecture](ARCHITECTURE.md) | SSR & service layer overview | [client/architecture.html](client/architecture.html) |
 | [Customization](CUSTOMIZATION.md) | Themes, 3D, i18n | [client/customization.html](client/customization.html) |
+| [3D Platform Showcase](3D_PLATFORM_PRESENTATION.md) | Showcase of 3D features and future tasks | [client/3d-presentation.html](client/3d-presentation.html) |
 | [API Reference](BACKEND_API.md) | NestJS REST API | [client/backend-api.html](client/backend-api.html) |
 | [Admin Guide](ADMIN_GUIDE.md) / [Admin Manual](ADMIN_MANUAL.md) | Store owner docs | [client/admin-manual.html](client/admin-manual.html) |
 | [Payments](PAYMENT_SETUP.md) | Stripe / LiqPay / PayPal | [client/payment-setup.html](client/payment-setup.html) |

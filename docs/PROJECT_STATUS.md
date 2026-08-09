@@ -61,6 +61,17 @@
 | H6 | Home Architecture Fix | ✅ Complete | Single API load via SectionRenderer contextData |
 | H7 | Admin UX Polish | ⏳ Pending | type icons, page switcher, empty state, search |
 
+### Epic I — 3D Viewer Polish, Configurator & AI Worker
+
+> **Full plan**: [3D Platform Showcase & Roadmap](3D_PLATFORM_PRESENTATION.md)
+
+| Phase | Name | Status | Notes |
+|-------|------|--------|-------|
+| I1 | Mobile Scroll Trap Fix | ⏳ Pending | OrbitControls responsive touch event adjustments |
+| I2 | Signals-based Configurator | ⏳ Pending | Material/color texture swapping on PDP |
+| I3 | AI Worker Environment / MPS | ⏳ Pending | Resolve pytorch3d macOS M-series building & transformers issues |
+| I4 | Polling Status Toast Fix | ⏳ Pending | Correct frontend error string logic |
+
 ### Current Section Types (19 registered)
 
 `header` · `hero` · `hero-glass` · `best-sellers` · `categories` · `special-offer` · `brands` · `testimonials` · `newsletter` · `features-grid` · `faq` · `stats` · `contacts` · `about` · `product-tabs` · `similar-products` · `bought-together` · `html-content` · `footer`

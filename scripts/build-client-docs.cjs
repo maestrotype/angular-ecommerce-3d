@@ -32,6 +32,7 @@ const NAV = [
       { id: 'payment-setup', label: 'Payment Setup', src: 'PAYMENT_SETUP.md' },
       { id: 'social-auth', label: 'Social Auth', src: 'SOCIAL_AUTH_SETUP.md' },
       { id: 'local-ai', label: 'Local AI Setup', src: 'LOCAL_AI_SETUP.md' },
+      { id: '3d-presentation', label: '3D Platform & Roadmap', src: '3D_PLATFORM_PRESENTATION.md' },
     ],
   },
   {
@@ -306,6 +307,7 @@ function buildIndex() {
     { href: 'troubleshooting.html', icon: '🔧', tone: 'red', title: 'Troubleshooting', desc: 'SSR, 3D, and connectivity fixes.' },
     { href: 'support.html', icon: '✉', tone: 'green', title: 'Support', desc: 'How to get help after purchase.' },
     { href: 'local-ai.html', icon: '🤖', tone: 'purple', title: 'Local AI', desc: 'Optional local 3D generation setup.' },
+    { href: '3d-presentation.html', icon: '💎', tone: 'purple', title: '3D & AI Showcase', desc: 'Technical features and future roadmap.' },
   ];
 
   const grid = cards.map((c) => `
@@ -382,6 +384,7 @@ function main() {
     'payment-setup': [{ tone: 'pink', label: 'Payments' }],
     'social-auth': [{ tone: 'blue', label: 'Auth' }],
     'local-ai': [{ tone: 'purple', label: 'AI / 3D' }],
+    '3d-presentation': [{ tone: 'purple', label: 'AI / 3D' }],
     architecture: [{ tone: 'cyan', label: 'Architecture' }],
     'backend-api': [{ tone: 'blue', label: 'API' }],
     faq: [{ tone: 'yellow', label: 'FAQ' }],

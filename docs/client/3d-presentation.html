@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D-платформы — Angular 3D E-Commerce</title>
+<link rel="stylesheet" href="assets/client-docs.css">
+</head>
+<body>
+<button type="button" class="mobile-toggle" id="navToggle">Menu</button>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+  <a class="sidebar-brand" href="index.html">Angular 3D E-Commerce</a>
+  <div class="sidebar-tag">Client documentation</div>
+  <div class="nav-group"><div class="nav-group-title">Start here</div><a class="nav-link" href="index.html">Documentation Hub</a>
+<a class="nav-link" href="quick-start.html">Quick Start</a>
+<a class="nav-link" href="getting-started.html">Getting Started</a>
+<a class="nav-link" href="installation.html">Installation</a></div>
+<div class="nav-group"><div class="nav-group-title">Product guides</div><a class="nav-link" href="admin-guide.html">Admin Guide</a>
+<a class="nav-link" href="admin-manual.html">Admin Manual</a>
+<a class="nav-link" href="customization.html">Customization</a>
+<a class="nav-link" href="payment-setup.html">Payment Setup</a>
+<a class="nav-link" href="social-auth.html">Social Auth</a>
+<a class="nav-link" href="local-ai.html">Local AI Setup</a>
+<a class="nav-link active" href="3d-presentation.html">3D Platform & Roadmap</a></div>
+<div class="nav-group"><div class="nav-group-title">Reference</div><a class="nav-link" href="architecture.html">Architecture</a>
+<a class="nav-link" href="backend-api.html">Backend API</a>
+<a class="nav-link" href="../BACKEND_ARCHITECTURE_DIAGRAM.html">Backend Diagram</a>
+<a class="nav-link" href="faq.html">FAQ</a>
+<a class="nav-link" href="troubleshooting.html">Troubleshooting</a>
+<a class="nav-link" href="support.html">Support</a></div>
+</aside>
+<main class="main">
+  <header class="page-header">
+    <h1>3D-платформы</h1>
+    <p class="lead">Этот документ представляет собой обзор технических преимуществ 3D-интеграции в проекте «Angular E-commerce 3D», архитектурных решений, обеспечивающих высокую производительность, и список предстоящих задач для доработки продукта до уровня коммерческого бестселлера на маркетплейсах (ThemeForest, Gumroad и др.).</p>
+    <div class="badges"><span class="badge purple">AI / 3D</span></div>
+  </header>
+  <article class="content">
+<h2 id="s1"><span class="n">1</span>Angular 3D E-commerce Storefront</h2>
+<p>Этот документ представляет собой обзор технических преимуществ 3D-интеграции в проекте «Angular E-commerce 3D», архитектурных решений, обеспечивающих высокую производительность, и список предстоящих задач для доработки продукта до уровня коммерческого бестселлера на маркетплейсах (ThemeForest, Gumroad и др.).</p>
+<hr>
+<h2 id="s2"><span class="n">2</span>💎 Уникальное торговое предложение (USP) шаблона</h2>
+<p>Интеграция интерактивного 3D в интернет-магазины — мощный коммерческий тренд. Большинство шаблонов на рынке ограничены стандартной плоской галереей изображений. </p>
+<p>Этот шаблон предлагает <strong>3D-First подход</strong> для товаров с высоким средним чеком (мебель, обувь, аксессуары, кастомные продукты), преодолевая технические сложности интеграции WebGL в Angular:</p>
+<ol>
+<li><strong>Высокая стоимость копии</strong>: Обычные e-commerce шаблоны продаются за $30–$50. Шаблоны с 3D-конфигуратором легко оцениваются в <strong>$80–$150+</strong>.</li>
+<li><strong>Преодоление барьера производительности</strong>: WebGL и библиотеки 3D-рендеринга часто перегружают клиентские устройства. В данном шаблоне решены проблемы долгой загрузки и низкой частоты кадров (FPS).</li>
+<li><strong>Интегрированная генерация 3D через AI</strong>: Встроенный Python-сервис для автоматического создания 3D-моделей по картинке является киллер-фичей для владельцев магазинов.</li>
+</ol>
+<hr>
+<h2 id="s3"><span class="n">3</span>🛠️ Архитектурные особенности и оптимизация (Как это работает)</h2>
+<p>Кодовая база уже реализует передовые практики оптимизации 3D в вебе:</p>
+<h3>Отложенная загрузка и динамическое разделение кода (Lazy Loading &amp; Code Splitting)</h3>
+<ul>
+<li><strong>Viewport Lazy Loading</strong>: Компонент <a href="file:///Users/andrii/Documents/myProjects/angular-ecommerce-3d/src/app/components/three-d-viewer/three-d-viewer.component.ts"><code>ThreeDViewerComponent</code></a> не инициализирует холст WebGL и не скачивает ресурсы, пока товар находится вне зоны видимости. Используется <code>IntersectionObserver</code> с опережающим порогом в 100px.</li>
+<li><strong>Dynamic Bundle Splitting</strong>: Библиотеки <code>three.js</code>, <code>GLTFLoader</code>, <code>DRACOLoader</code> и <code>MeshoptDecoder</code> не входят в основной JS-бандл приложения. Они загружаются динамически (<code>Promise.all([import('three'), ...])</code>) только при активации 3D-режима, что сохраняет Google PageSpeed показатели.</li>
+</ul>
+<h3>Экстремальное сжатие моделей (Draco &amp; Meshopt)</h3>
+<ul>
+<li>Сервис <a href="file:///Users/andrii/Documents/myProjects/angular-ecommerce-3d/src/app/core/services/three-d-model.service.ts"><code>ThreeDModelService</code></a> из коробки поддерживает декодирование сжатых мешей через <strong>Draco Compression</strong> (использует Google WebAssembly декодеры) и <strong>Meshopt Decoder</strong>. Это позволяет сократить вес <code>.glb</code> файлов на 70-80% без потери качества геометрии.</li>
+</ul>
+<h3>Изоляция зоны Angular (NgZone)</h3>
+<ul>
+<li>Прямые манипуляции с DOM и рендеринг через <code>requestAnimationFrame</code> вынесены за пределы цикла обнаружения изменений Angular с помощью <code>NgZone.runOutsideAngular()</code>. </li>
+<li>Приложение сохраняет <strong>стабильные 60 FPS</strong>, так как циклы анимации Three.js не вызывают постоянный пересчет компонентов страницы. В зону Angular приложение возвращается только для обновления критического UI-статуса (завершение загрузки, индикатор прогресса, ошибки).</li>
+</ul>
+<h3>Полноценная поддержка SEO (SSR &amp; Hydration)</h3>
+<ul>
+<li>Используется серверный рендеринг Angular 17 (<code>@angular/ssr</code>). Текстовое описание товара, характеристики и структура страницы генерируются на сервере для идеального сканирования поисковыми роботами.</li>
+<li>3D-компонент защищен проверкой <code>isPlatformBrowser</code>. Холст WebGL «оживает» и гидрируется только на стороне клиента.</li>
+</ul>
+<h3>Продвинутое кэширование и управление памятью</h3>
+<ul>
+<li><code>ThreeDModelService</code> кэширует оригинальные сцены моделей и при повторном открытии клонирует их через <code>SkeletonUtils.clone</code> (для сохранения скелетной анимации).</li>
+<li>При переключении товаров или уничтожении компонента срабатывает глубокая очистка геометрии и материалов (<code>disposeModel</code>), освобождая видеопамять (GPU VRAM) и исключая падение контекста WebGL.</li>
+</ul>
+<hr>
+<h2 id="s4"><span class="n">4</span>Дорожная карта задач (Предстоящие доработки)</h2>
+<p>Для превращения шаблона в полноценный коммерческий хит необходимо реализовать следующие задачи:</p>
+<h3>📋 Эпик I — Оптимизация UX и интерактивный конфигуратор</h3>
+<pre><code class="language-mermaid">gantt
+    title Дорожная карта 3D-платформы (Epic I)
+    dateFormat  YYYY-MM-DD
+    section UX &amp; Интерактив
+    Устранение блокировки скролла на мобильных (Task I1)  :active, 2026-08-10, 2d
+    Signals-конфигуратор текстур и цветов (Task I2)      :3d
+    section AI Воркер
+    Исправление зависимостей PyTorch3D/MPS (Task I3)     :2d
+    Корректировка UI-уведомлений генерации (Task I4)     :1d</code></pre>
+<hr>
+<h3>[Task I1] Устранение блокировки скролла на мобильных (Mobile Responsive Scroll Trap)</h3>
+<ul>
+<li><strong>Проблема</strong>: В текущей реализации холст WebGL использует <code>touch-action: none</code> и перехватывает все жесты перемещения пальца (<code>event.stopPropagation()</code>). На смартфонах, если холст занимает &gt;50% экрана, пользователь застревает на 3D-модели и не может пролистать страницу вниз.</li>
+<li><strong>Решение</strong>:</li>
+</ul>
+<p>    - Добавить оверлей &quot;Tap to Orbit&quot; (Нажмите для управления 3D) на мобильных экранах. До активации кликом холст игнорирует события тача (<code>pointer-events: none</code>), позволяя прокручивать страницу.</p>
+<p>    - В качестве альтернативы настроить <code>OrbitControls</code> на распознавание жестов: поворот модели только одним пальцем, но без блокировки дефолтного скролла страницы при вертикальном движении, либо скролл страницы двумя пальцами.</p>
+<ul>
+<li><strong>Срок</strong>: 2 дня.</li>
+<li><strong>Файлы</strong>: <a href="file:///Users/andrii/Documents/myProjects/angular-ecommerce-3d/src/app/components/three-d-viewer/three-d-viewer.component.ts"><code>three-d-viewer.component.ts</code></a>, <a href="file:///Users/andrii/Documents/myProjects/angular-ecommerce-3d/src/app/components/three-d-viewer/three-d-viewer.component.scss"><code>three-d-viewer.component.scss</code></a></li>
+</ul>
+<hr>
+<h3>[Task I2] Интерактивный конфигуратор на базе Angular Signals</h3>
+<ul>
+<li><strong>Задача</strong>: Реализовать моментальное изменение цвета или текстуры отдельных частей 3D-модели (например, подошвы обуви или ткани мебели) при клике на цветовую палитру на PDP.</li>
+<li><strong>Детали реализации</strong>:</li>
+</ul>
+<p>    - Описать входной Signal или RxJS-поток в <code>ThreeDViewerComponent</code>, принимающий массив настроек материалов: <code>[{ meshName: 'Sole', color: '#ff0000' }]</code>.</p>
+<p>    - Написать обход графа сцены (<code>traverse</code>) при изменении конфигурации для поиска нужного <code>Mesh</code> и смены его материала:</p>
+<p>      ```typescript</p>
+<p>      updateMaterials(config: { meshName: string, color: string }[]) {</p>
+<p>        if (!this.model) return;</p>
+<p>        this.model.traverse((child: any) =&gt; {</p>
+<p>          if (child.isMesh) {</p>
+<p>            const match = config.find(c =&gt; child.name.includes(c.meshName));</p>
+<p>            if (match) {</p>
+<p>              child.material.color.setHex(parseInt(match.color.replace('#', '0x')));</p>
+<p>            }</p>
+<p>          }</p>
+<p>        });</p>
+<p>      }</p>
+<p>      ```</p>
+<p>    - Добавить на PDP панель выбора опций товара и связать её с компонентом просмотра.</p>
+<ul>
+<li><strong>Срок</strong>: 3 дня.</li>
+<li><strong>Файлы</strong>: <a href="file:///Users/andrii/Documents/myProjects/angular-ecommerce-3d/src/app/components/three-d-viewer/three-d-viewer.component.ts"><code>three-d-viewer.component.ts</code></a>, <a href="file:///Users/andrii/Documents/myProjects/angular-ecommerce-3d/src/app/components/product-detail/product-detail.component.html"><code>product-detail.component.html</code></a>, новые конфигурационные компоненты.</li>
+</ul>
+<hr>
+<h3>[Task I3] Настройка окружения AI-воркера и PyTorch3D на Mac (MPS)</h3>
+<ul>
+<li><strong>Проблема</strong>: Воркфлоу генерации 3D приостановлен. Установка <code>pytorch3d</code> на macOS (Apple Silicon M-серии) дает сбой из-за отсутствия готовых pre-built колес (wheels). Библиотека <code>transformers</code> в InstantMesh вызывает ошибку импорта <code>find_pruneable_heads_and_indices</code>.</li>
+<li><strong>Решение</strong>:</li>
+</ul>
+<p>    - Собрать <code>pytorch3d</code> из исходников под macOS c поддержкой MPS (Metal Performance Shaders) или заменить Unique3D на Hunyuan3D-V2 в качестве основной модели генерации, которая не требует специфичных бинарных сборников.</p>
+<p>    - Разрешить конфликты версий библиотек в <code>requirements.txt</code> воркера, зафиксировав версии <code>transformers</code> и <code>torch</code> под macOS MPS.</p>
+<ul>
+<li><strong>Срок</strong>: 2 дня.</li>
+<li><strong>Файлы</strong>: <a href="file:///Users/andrii/Documents/myProjects/angular-ecommerce-3d/local-ai-worker/requirements.txt"><code>requirements.txt</code></a>, <a href="file:///Users/andrii/Documents/myProjects/angular-ecommerce-3d/local-ai-worker/setup_mac.sh"><code>setup_mac.sh</code></a>, <a href="file:///Users/andrii/Documents/myProjects/angular-ecommerce-3d/3D_GENERATION_STATUS.md"><code>3D_GENERATION_STATUS.md</code></a></li>
+</ul>
+<hr>
+<h3>[Task I4] Исправление UI-уведомлений статуса AI-генерации (Toast Bug)</h3>
+<ul>
+<li><strong>Проблема</strong>: При сбое генерации на стороне воркера бэкенд возвращает статус <code>failed</code>, но на фронтенде отображается всплывающее окно &quot;AI Generation failed: success&quot;. Ошибка вызвана некорректным маппингом полей ответа бэкенда (вытягивается текст HTTP-статуса <code>'success'</code> вместо тела ошибки задачи).</li>
+<li><strong>Решение</strong>:</li>
+</ul>
+<p>    - Проверить модель ответа polling-интерфейса в Angular.</p>
+<p>    - Переписать вывод сообщения об ошибке, чтобы он брал значение <code>task.error</code> или <code>task.message</code>, возвращаемое сервером.</p>
+<ul>
+<li><strong>Срок</strong>: 1 день.</li>
+<li><strong>Файлы</strong>: Компоненты админки управления задачами генерации 3D.</li>
+</ul>
+  </article>
+  <p class="footer-note">Buyer-facing docs · Markdown sources remain in <code>docs/*.md</code> · Visual theme matches architecture diagrams.</p>
+</main>
+</div>
+<script>
+document.getElementById('navToggle')?.addEventListener('click', () => {
+  document.getElementById('sidebar')?.classList.toggle('open');
+});
+</script>
+</body>
+</html>
