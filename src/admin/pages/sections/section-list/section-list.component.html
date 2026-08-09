@@ -45,10 +45,13 @@
             </div>
 
             <div class="col-actions">
-              <button mat-icon-button (click)="$event.stopPropagation(); editSection(section)">
+              <button mat-icon-button (click)="$event.stopPropagation(); editSection(section)" [matTooltip]="'EDIT' | translate">
                 <mat-icon>edit</mat-icon>
               </button>
-              <button mat-icon-button color="warn" (click)="$event.stopPropagation(); deleteSection(section)">
+              <button mat-icon-button (click)="$event.stopPropagation(); duplicateSection(section)" [matTooltip]="'DUPLICATE_SECTION' | translate">
+                <mat-icon>content_copy</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="$event.stopPropagation(); deleteSection(section)" [matTooltip]="'DELETE' | translate">
                 <mat-icon>delete</mat-icon>
               </button>
             </div>
@@ -162,8 +165,10 @@
               <div class="tool-group">
                 <span class="label">{{ 'SPACING' | translate }}</span>
                 <div class="btn-row">
-                  <button mat-icon-button (click)="updateVisualOverride('margin-top', -5)"><mat-icon>expand_less</mat-icon></button>
-                  <button mat-icon-button (click)="updateVisualOverride('margin-top', 5)"><mat-icon>expand_more</mat-icon></button>
+                  <button mat-icon-button (click)="updateVisualOverride('margin-top', -5)" [matTooltip]="'MARGIN' | translate"><mat-icon>expand_less</mat-icon></button>
+                  <button mat-icon-button (click)="updateVisualOverride('margin-top', 5)" [matTooltip]="'MARGIN' | translate"><mat-icon>expand_more</mat-icon></button>
+                  <button mat-icon-button (click)="updateVisualOverride('padding-top', -5)" [matTooltip]="'PADDING' | translate"><mat-icon>unfold_less</mat-icon></button>
+                  <button mat-icon-button (click)="updateVisualOverride('padding-top', 5)" [matTooltip]="'PADDING' | translate"><mat-icon>unfold_more</mat-icon></button>
                 </div>
               </div>
     
@@ -176,12 +181,22 @@
               </div>
     
               <div class="tool-group">
-                <span class="label">{{ 'COLORS' | translate }}</span>
+                <span class="label">{{ 'TEXT_COLOR' | translate }}</span>
                 <div class="color-palette">
-                  <div class="color-swatch white" (click)="updateColorOverride('#ffffff')"></div>
+                  <div class="color-swatch white" (click)="updateColorOverride('#ffffff')" [matTooltip]="'TEXT_COLOR' | translate"></div>
                   <div class="color-swatch primary" (click)="updateColorOverride('var(--interactive-primary)')"></div>
                   <div class="color-swatch accent" (click)="updateColorOverride('#ffcc00')"></div>
                   <div class="color-swatch dark" (click)="updateColorOverride('#1a1a1a')"></div>
+                </div>
+              </div>
+
+              <div class="tool-group">
+                <span class="label">{{ 'BACKGROUND_COLOR' | translate }}</span>
+                <div class="color-palette">
+                  <div class="color-swatch white" (click)="updateColorOverride('transparent', 'background-color')"></div>
+                  <div class="color-swatch primary" (click)="updateColorOverride('var(--surface-card)', 'background-color')"></div>
+                  <div class="color-swatch accent" (click)="updateColorOverride('var(--interactive-primary)', 'background-color')"></div>
+                  <div class="color-swatch dark" (click)="updateColorOverride('#1a1a1a', 'background-color')"></div>
                 </div>
               </div>
             </div>

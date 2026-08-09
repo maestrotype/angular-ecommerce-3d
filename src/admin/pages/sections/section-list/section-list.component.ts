@@ -8,12 +8,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { SectionService } from '../../../services/section.service';
 import { SectionFormComponent } from '../section-form/section-form.component';
-import { Section } from '../../../models/section.model';
+import { Section, CreateSectionDto } from '../../../models/section.model';
+import { LocalizedString } from '../../../../shared/models/localized-string.model';
 import { MatSidenav } from '@angular/material/sidenav';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
 import { ConfirmationService } from '../../../services/confirmation.service';
 import { getLocalizedString } from 'src/shared/utils/localization.util';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-section-list',
@@ -249,19 +251,68 @@ export class SectionListComponent implements OnInit, AfterViewInit {
 
   deleteSection(section: Section): void {
     const sectionLabel = getLocalizedString(section.title, this.translate.currentLang) || section.type;
-    this.confirmationService.confirmDelete(sectionLabel).subscribe(confirmed => {
+    this.confirmationService.confirmDelete(sectionLabel).pipe(take(1)).subscribe(confirmed => {
       if (confirmed) {
         this.sectionService.deleteSection(section.id).subscribe({
           next: () => {
             this.snackBar.open(this.translate.instant('SECTION_DELETED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
             this.loadSections();
           },
-          error: (error) => {
+          error: () => {
             this.snackBar.open(this.translate.instant('ERROR_DELETING_SECTION'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
           }
         });
       }
     });
+  }
+
+  duplicateSection(section: Section): void {
+    const dto: CreateSectionDto = {
+      type: section.type,
+      title: this.buildDuplicateTitle(section.title),
+      subtitle: section.subtitle,
+      content: section.content,
+      imageUrl: section.imageUrl,
+      isActive: false,
+      settings: JSON.parse(JSON.stringify(section.settings || {})),
+      model3dUrl: section.model3dUrl,
+      show3d: section.show3d,
+      showImage: section.showImage,
+      pageTarget: section.pageTarget,
+      variant: section.variant,
+      anchorId: section.anchorId ? `${section.anchorId}-copy` : undefined,
+    };
+
+    this.sectionService.createSection(dto).subscribe({
+      next: () => {
+        this.snackBar.open(
+          this.translate.instant('SECTION_DUPLICATED_SUCCESSFULLY'),
+          this.translate.instant('CLOSE_BTN'),
+          { duration: 3000 }
+        );
+        this.loadSections();
+      },
+      error: () => {
+        this.snackBar.open(
+          this.translate.instant('ERROR_DUPLICATING_SECTION'),
+          this.translate.instant('CLOSE_BTN'),
+          { duration: 3000 }
+        );
+      }
+    });
+  }
+
+  private buildDuplicateTitle(title: string | LocalizedString): LocalizedString {
+    const suffix = this.translate.instant('COPY_SUFFIX');
+    if (typeof title === 'string') {
+      return { en: `${title}${suffix}`, ru: `${title}${suffix}`, ua: `${title}${suffix}` };
+    }
+
+    return {
+      en: `${title.en || ''}${suffix}`,
+      ru: `${title.ru || title.en || ''}${suffix}`,
+      ua: `${title.ua || title.en || ''}${suffix}`,
+    };
   }
 
   drop(event: CdkDragDrop<Section[]>): void {
@@ -328,7 +379,7 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     this.saveVisualOverride(section);
   }
 
-  updateColorOverride(color: string): void {
+  updateColorOverride(color: string, property: 'color' | 'background-color' = 'color'): void {
     if (!this.selectedElementInfo) return;
 
     const { selector, section } = this.selectedElementInfo;
@@ -339,7 +390,7 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     if (!themes[this.themeMode]) themes[this.themeMode] = {};
     if (!themes[this.themeMode][selector]) themes[this.themeMode][selector] = {};
     
-    themes[this.themeMode][selector]['color'] = color;
+    themes[this.themeMode][selector][property] = color;
 
     settings.visualOverrides = { ...settings.visualOverrides, themes };
     section.settings = settings;

@@ -53,8 +53,8 @@
 
 | Phase | Name | Status | Notes |
 |-------|------|--------|-------|
-| H1 | Quick Wins (blockers) | ⏳ Pending | Remove confirm(), console.log, fix categories i18n |
-| H2 | Section UX (duplicate, dialog, type-lock) | ⏳ Pending | Shared ConfirmDialog, Duplicate Section |
+| H1 | Quick Wins (blockers) | ✅ Complete | confirm() → MatDialog, console.log removed, categories i18n fixed |
+| H2 | Section UX (duplicate, dialog, type-lock) | ✅ Complete | Duplicate section, ConfirmationDialog, type lock, property toolbar |
 | H3 | New Section Types | ⏳ Pending | testimonials, newsletter, features-grid, faq, stats |
 | H4 | Section Presets / Quick Start | ⏳ Pending | Demo presets + 1-click homepage wizard |
 | H5 | Page Templates | ⏳ Pending | landing-page, faq-page, collection-page |
@@ -133,6 +133,7 @@
 
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-08-09 | **Epic H1 + H2 complete**: MatDialog delete confirmations (messages/sections/users); categories/brands i18n preserve ru/ua on save; duplicate section action; section type locked in edit mode; property toolbar expanded (padding, text/bg colors). Docs synced. | Implementation Engineer |
 | 2026-08-07 | **Section Manager Analysis**: Full audit of admin/sections + admin/pages UI; identified 13 issues (P1–P13); created Epic H (7 phases, H1–H7); added testimonials/newsletter/features-grid/faq/stats to roadmap. See `SECTIONS_ANALYSIS_AND_ROADMAP.md`. | Principal UI Architect |
 | 2026-08-05 | **Epic G closed + docs sync**: G12–G17 (checkout, page transitions, micro-interactions, motion docs, cross-theme review, a11y/polish); `REFACTORING_BOARD.md` + `PROJECT_STATUS.md` synced — all epics A–G ✅, metrics at 100%. | Principal UI Architect |
 | 2026-08-05 | Epic G12: Checkout tokens (`--checkout-*`), `_checkout.scss` (stepper, summary, payment states); checkout/payment off `getThemeClass`. Build passes. | Implementation Engineer |

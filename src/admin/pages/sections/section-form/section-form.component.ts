@@ -656,7 +656,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
 
     this.upload3dIfSelected().subscribe({
       next: (model3dUrl) => {
-        const rawFormValue = this.sectionForm.value;
+        const rawFormValue = this.sectionForm.getRawValue();
         const formValue = this.packLocalizedFields(rawFormValue);
         const dataSource = this.isDrawerMode ? this.data : this.dialogData;
         const existingSettings = dataSource?.section?.settings || {};
@@ -705,15 +705,15 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
             showImage: formValue.showImage || true,
             settings: {
               ...existingSettings,
-              categories: (formValue.categories || []).map((cat: any) => ({
-                ...cat,
-                name: {
-                  en: cat.name || '',
-                  ru: cat.name || '',
-                  ua: cat.name || ''
-                },
-                slug: cat.slug || getLocalizedString(cat.name).toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
-              }))
+              categories: (formValue.categories || []).map((cat: any, index: number) => {
+                const existingCat = this.findExistingCategory((existingSettings as any)?.categories, cat, index);
+                const name = this.buildLocalizedNameFromForm(cat.name, existingCat?.name);
+                return {
+                  ...cat,
+                  name,
+                  slug: cat.slug || getLocalizedString(name).toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+                };
+              })
             }
           };
         } else if (formValue.type === 'brands') {
@@ -729,14 +729,13 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
             showImage: false,
             settings: {
               ...existingSettings,
-              brands: (formValue.brands || []).map((brand: any) => ({
-                ...brand,
-                name: {
-                  en: brand.name || '',
-                  ru: brand.name || '',
-                  ua: brand.name || ''
-                }
-              }))
+              brands: (formValue.brands || []).map((brand: any, index: number) => {
+                const existingBrand = this.findExistingBrand((existingSettings as any)?.brands, brand, index);
+                return {
+                  ...brand,
+                  name: this.buildLocalizedNameFromForm(brand.name, existingBrand?.name)
+                };
+              })
             }
           };
         } else if (formValue.type === 'footer') {
@@ -815,6 +814,36 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     if (!value) return '';
     if (typeof value === 'string') return lang === 'en' ? value : '';
     return value[lang] || '';
+  }
+
+  private buildLocalizedNameFromForm(
+    formName: string,
+    existingName: string | LocalizedString | undefined
+  ): LocalizedString {
+    const existing =
+      typeof existingName === 'object' && existingName !== null
+        ? existingName
+        : {
+            en: typeof existingName === 'string' ? existingName : '',
+            ru: '',
+            ua: ''
+          };
+
+    return {
+      en: formName || '',
+      ru: existing.ru || '',
+      ua: existing.ua || ''
+    };
+  }
+
+  private findExistingCategory(categories: any[] | undefined, cat: any, index: number): any {
+    const list = categories || [];
+    return list.find((item) => item.slug && cat.slug && item.slug === cat.slug) || list[index];
+  }
+
+  private findExistingBrand(brands: any[] | undefined, brand: any, index: number): any {
+    const list = brands || [];
+    return list.find((item) => item.name && brand.name && getLocalizedString(item.name) === brand.name) || list[index];
   }
 
   private packLocalizedFields(formValue: any): any {

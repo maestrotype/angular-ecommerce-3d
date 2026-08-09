@@ -537,7 +537,6 @@ export class ProductFormComponent implements OnInit {
       model3dPublicId: this.model3dPublicId,
     };
 
-    const saveToProduction_ = saveToProduction;
     const save$ = saveToProduction
       ? this.productService.updateProductOnProduction(this.productId!, productData)
       : this.productService.updateProduct(this.productId!, productData);
