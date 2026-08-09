@@ -137,6 +137,8 @@
   --mdc-filled-text-field-hover-active-indicator-color: var(--input-focus-border);
   --mdc-filled-text-field-focus-active-indicator-color: var(--input-focus-border);
 
+  --mat-select-trigger-text-color: var(--input-text);
+  --mat-select-enabled-trigger-text-color: var(--input-text);
   --mat-select-value-text-color: var(--input-text);
   --mat-select-placeholder-text-color: var(--input-placeholder, var(--input-label));
 
@@ -148,11 +150,23 @@
 [data-theme='dark'],
 [data-theme='glass'],
 [data-theme='dark-glass'] {
+  .mat-mdc-select,
+  .mat-mdc-select-trigger,
+  .mat-mdc-select-value,
+  .mat-mdc-select-value-text,
+  .mat-mdc-select-min-line,
+  .mat-mdc-form-field .mat-mdc-select-value,
   .mat-mdc-form-field .mat-mdc-select-value-text,
   .mat-mdc-form-field .mat-mdc-select-min-line {
     color: var(--input-text);
   }
-  .mat-mdc-form-field .mdc-floating-label {
+  .mat-mdc-select-placeholder,
+  .mat-mdc-form-field .mat-mdc-select-placeholder {
+    color: var(--input-label);
+  }
+  .mat-mdc-form-field .mdc-floating-label,
+  .mat-mdc-form-field .mat-mdc-floating-label,
+  .mat-mdc-text-field-wrapper .mdc-floating-label {
     color: var(--input-label);
   }
   .mat-mdc-form-field.mat-focused .mdc-floating-label {
@@ -308,26 +322,33 @@
     color: var(--input-label);
   }
 
-  .mat-select-panel {
+  .mat-select-panel,
+  .mat-mdc-select-panel {
     background-color: var(--surface-secondary);
     color: var(--input-text);
     scrollbar-width: none; // Firefox
     -ms-overflow-style: none; // Edge/IE
-    display: none;
   }
 
-  .mat-option {
+  .mat-option,
+  .mat-mdc-option {
     background: transparent;
     color: var(--input-text);
+    --mdc-list-list-item-label-text-color: var(--input-text);
+    --mdc-list-list-item-hover-label-text-color: var(--input-text);
   }
 
-  .mat-option:hover {
+  .mat-option:hover,
+  .mat-mdc-option:hover {
     background: var(--surface-highlight);
   }
 
-  .mat-option.mat-selected {
+  .mat-option.mat-selected,
+  .mat-mdc-option.mat-selected {
     background: var(--interactive-primary);
     color: var(--text-on-primary);
+    --mdc-list-list-item-label-text-color: var(--text-on-primary);
+    --mdc-list-list-item-hover-label-text-color: var(--text-on-primary);
   }
 
   /* ===== Buttons ===== */
@@ -480,8 +501,9 @@
   }
 }
 
-/* Glass theme specific styling */
-[data-theme='glass'] {
+/* Glass theme specific styling (light glass & dark glass) */
+[data-theme='glass'],
+[data-theme='dark-glass'] {
 
   /* ===== Input fields - deep inset (strongly pressed) ===== */
   .mat-mdc-form-field .mat-mdc-text-field-wrapper,
@@ -527,12 +549,6 @@
   .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__trailing {
     border-color: transparent;
     border-width: 0;
-    opacity: 0;
-  }
-
-  .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline,
-  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline {
-    display: none;
   }
 
   /* ===== Slide Toggle Hover Cleanup ===== */
@@ -705,6 +721,8 @@
     background: transparent;
     color: var(--text-primary);
     transition: background 0.2s ease;
+    --mdc-list-list-item-label-text-color: var(--text-primary);
+    --mdc-list-list-item-hover-label-text-color: var(--text-primary);
   }
 
   .mat-option:hover,
@@ -716,6 +734,8 @@
   .mat-mdc-option.mat-selected {
     background: rgba(59, 130, 246, 0.15);
     color: var(--text-primary);
+    --mdc-list-list-item-label-text-color: var(--text-primary);
+    --mdc-list-list-item-hover-label-text-color: var(--text-primary);
   }
 
   .mat-mdc-form-field .mdc-floating-label,
@@ -865,7 +885,8 @@
 }
 
 // ── Glass theme: paginator + table overrides ──
-[data-theme='glass'] {
+[data-theme='glass'],
+[data-theme='dark-glass'] {
   // Material MDC token: prevents white background injected by the component
   --mat-paginator-container-background-color: var(--surface-paginator);
   --mat-paginator-container-text-color: var(--text-paginator);
@@ -979,7 +1000,7 @@
       0 0 0 3px rgba(138, 180, 248, 0.18);
   }
 
-  /* Remove ALL borders for dark-glass theme */
+  /* Remove ALL borders for dark-glass theme without breaking MDC layout (no display: none or opacity: 0) */
   .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline .mdc-notched-outline__leading,
   .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline .mdc-notched-outline__notch,
   .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline .mdc-notched-outline__trailing,
@@ -988,12 +1009,6 @@
   .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__trailing {
     border-color: transparent;
     border-width: 0;
-    opacity: 0;
-  }
-
-  .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline,
-  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline {
-    display: none;
   }
 
   .mat-mdc-form-field .mdc-floating-label,
@@ -1518,7 +1533,9 @@
 
 /* Admin glass: dark frosted menus (profile, actions) — overrides storefront-white above */
 body.is-admin[data-theme='glass'],
-html[data-theme='glass'] body.is-admin {
+html[data-theme='glass'] body.is-admin,
+body.is-admin[data-theme='dark-glass'],
+html[data-theme='dark-glass'] body.is-admin {
   .mat-mdc-menu-panel {
     --mat-menu-container-color: transparent;
     --mat-menu-item-label-text-color: var(--text-primary);
