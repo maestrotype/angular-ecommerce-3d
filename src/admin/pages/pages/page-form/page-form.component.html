@@ -53,8 +53,11 @@
       <textarea matInput rows="3" [formControlName]="'seoDescription_' + activeLang"></textarea>
     </mat-form-field>
 
-    <p class="sections-hint" *ngIf="pageForm.get('template')?.value === 'sections'">
+    <p class="sections-hint" *ngIf="isSectionBasedTemplate(pageForm.get('template')?.value)">
       {{ 'PAGE_SECTIONS_HINT' | translate }}
+    </p>
+    <p class="sections-hint template-desc" *ngIf="getSelectedTemplateDescription() as desc">
+      {{ desc | translate }}
     </p>
 
     <div class="form-actions">

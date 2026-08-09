@@ -5,10 +5,11 @@ import { MatSort } from '@angular/material/sort';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Page } from 'src/shared/models/page.model';
+import { Page, isSectionBasedPageTemplate } from 'src/shared/models/page.model';
 import { PageService } from '../../../services/page.service';
 import { ConfirmationService } from '../../../services/confirmation.service';
 import { getLocalizedString } from 'src/shared/utils/localization.util';
+import { isPageTemplatePreset } from '../../sections/page-template-presets';
 
 @Component({
   selector: 'app-page-list',
@@ -75,6 +76,23 @@ export class PageListComponent implements OnInit, AfterViewInit {
     this.router.navigate(['/admin/sections'], { queryParams: { pageTarget: page.slug } });
   }
 
+  applyPageTemplate(page: Page): void {
+    if (!isPageTemplatePreset(page.template)) {
+      return;
+    }
+    this.router.navigate(['/admin/sections'], {
+      queryParams: { pageTarget: page.slug, applyTemplate: page.template },
+    });
+  }
+
+  isSectionBasedPage(page: Page): boolean {
+    return isSectionBasedPageTemplate(page.template);
+  }
+
+  canApplyPageTemplate(page: Page): boolean {
+    return isPageTemplatePreset(page.template);
+  }
+
   previewPage(page: Page): void {
     window.open(`/${page.slug}`, '_blank');
   }
@@ -110,7 +128,7 @@ export class PageListComponent implements OnInit, AfterViewInit {
   }
 
   getTemplateLabel(template: string): string {
-    const key = `PAGE_TEMPLATE_${template.toUpperCase()}`;
+    const key = `PAGE_TEMPLATE_${template.replace(/-/g, '_').toUpperCase()}`;
     return this.translate.instant(key);
   }
 

@@ -4,7 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { PageService } from '../../../services/page.service';
-import { PageTemplate, PageStatus } from 'src/shared/models/page.model';
+import { PageTemplate, PageStatus, isSectionBasedPageTemplate } from 'src/shared/models/page.model';
+import { getSuggestedSlugForTemplate } from '../../sections/page-template-presets';
 
 @Component({
   selector: 'app-page-form',
@@ -18,9 +19,13 @@ export class PageFormComponent implements OnInit {
   pageId: number | null = null;
   activeLang: 'en' | 'ru' | 'ua' = 'en';
 
-  templates: { value: PageTemplate; label: string }[] = [
+  templates: { value: PageTemplate; label: string; description?: string }[] = [
     { value: 'simple', label: 'PAGE_TEMPLATE_SIMPLE' },
-    { value: 'sections', label: 'PAGE_TEMPLATE_SECTIONS' },
+    { value: 'sections', label: 'PAGE_TEMPLATE_SECTIONS', description: 'PAGE_TEMPLATE_SECTIONS_DESC' },
+    { value: 'landing-page', label: 'PAGE_TEMPLATE_LANDING_PAGE', description: 'PAGE_TEMPLATE_LANDING_PAGE_DESC' },
+    { value: 'faq-page', label: 'PAGE_TEMPLATE_FAQ_PAGE', description: 'PAGE_TEMPLATE_FAQ_PAGE_DESC' },
+    { value: 'collection-page', label: 'PAGE_TEMPLATE_COLLECTION_PAGE', description: 'PAGE_TEMPLATE_COLLECTION_PAGE_DESC' },
+    { value: 'brand-page', label: 'PAGE_TEMPLATE_BRAND_PAGE', description: 'PAGE_TEMPLATE_BRAND_PAGE_DESC' },
     { value: 'contact', label: 'PAGE_TEMPLATE_CONTACT' },
   ];
 
@@ -65,6 +70,13 @@ export class PageFormComponent implements OnInit {
 
     this.pageForm.get('template')?.valueChanges.subscribe(template => {
       this.updateContentValidators(template);
+      if (!this.isEditMode && template) {
+        const suggested = getSuggestedSlugForTemplate(template);
+        const slugControl = this.pageForm.get('slug');
+        if (suggested && slugControl && !slugControl.value) {
+          slugControl.patchValue(suggested);
+        }
+      }
     });
   }
 
@@ -135,8 +147,14 @@ export class PageFormComponent implements OnInit {
           this.translate.instant('CLOSE_BTN'),
           { duration: 3000 },
         );
-        if (!this.isEditMode && page.template === 'sections') {
-          this.router.navigate(['/admin/sections'], { queryParams: { pageTarget: page.slug, createIfMissing: true } });
+        if (!this.isEditMode && isSectionBasedPageTemplate(page.template)) {
+          this.router.navigate(['/admin/sections'], {
+            queryParams: {
+              pageTarget: page.slug,
+              applyTemplate: page.template !== 'sections' ? page.template : null,
+              createIfMissing: page.template === 'sections' ? true : null,
+            },
+          });
           return;
         }
         this.router.navigate(['/admin/pages']);
@@ -155,6 +173,16 @@ export class PageFormComponent implements OnInit {
 
   setLang(lang: 'en' | 'ru' | 'ua'): void {
     this.activeLang = lang;
+  }
+
+  isSectionBasedTemplate(template: PageTemplate | string | null | undefined): boolean {
+    return !!template && isSectionBasedPageTemplate(template);
+  }
+
+  getSelectedTemplateDescription(): string | null {
+    const template = this.pageForm.get('template')?.value as PageTemplate;
+    const match = this.templates.find(item => item.value === template);
+    return match?.description || null;
   }
 
   private getLocalized(value: any, lang: string): string {

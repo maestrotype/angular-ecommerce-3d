@@ -20,6 +20,15 @@
       display: flex;
       align-items: center;
       gap: 12px;
+
+      .page-target-filter {
+        width: 220px;
+        margin: 0;
+
+        ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+          display: none;
+        }
+      }
     }
 
     .quick-start-btn,
@@ -76,7 +85,8 @@
 
       // DEFINITIVE COLUMN WIDTHS FOR TABLE ALIGNMENT
       --col-order-w: 80px;
-      --col-type-w: 200px;
+      --col-type-w: 160px;
+      --col-page-target-w: 140px;
       --col-status-w: 100px;
       --col-actions-w: 120px;
       
@@ -95,6 +105,7 @@
         div { flex-shrink: 0; }
         .col-order { width: var(--col-order-w); }
         .col-type { width: var(--col-type-w); min-width: var(--col-type-w); }
+        .col-page-target { width: var(--col-page-target-w); min-width: var(--col-page-target-w); }
         .col-title { flex: 1; }
         .col-status { width: var(--col-status-w); text-align: center; }
         .col-actions { width: var(--col-actions-w); text-align: center; }
@@ -141,6 +152,26 @@
               font-weight: 700;
               font-size: 0.75rem;
               text-transform: uppercase;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+          }
+          .col-page-target {
+            width: var(--col-page-target-w);
+            min-width: var(--col-page-target-w);
+            padding-right: 8px;
+            overflow: hidden;
+
+            .page-target-badge {
+              display: inline-block;
+              max-width: 100%;
+              padding: 2px 8px;
+              border-radius: 999px;
+              background: var(--surface-highlight);
+              color: var(--text-secondary);
+              font-size: 0.7rem;
+              font-weight: 600;
               white-space: nowrap;
               overflow: hidden;
               text-overflow: ellipsis;

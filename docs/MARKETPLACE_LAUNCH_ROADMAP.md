@@ -330,8 +330,8 @@ Use this table verbatim in marketplace description to reduce refunds and bad rev
 
 | # | Task | Done |
 |---|------|------|
-| H5.1 | Add page templates: `landing-page`, `faq-page`, `collection-page`, `brand-page` | [ ] |
-| H5.2 | Link custom pages to sections via `pageTarget` in Section Manager | [ ] |
+| H5.1 | Add page templates: `landing-page`, `faq-page`, `collection-page`, `brand-page` | [x] |
+| H5.2 | Link custom pages to sections via `pageTarget` in Section Manager | [x] |
 
 ---
 

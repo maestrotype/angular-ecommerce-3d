@@ -488,6 +488,15 @@ export function buildMissingHomepageWizardDtos(
   );
 }
 
+export function buildSectionDtoFromPreset(
+  type: string,
+  preset: SectionPresetFormPatch,
+  pageTarget: string,
+  order?: number
+): CreateSectionDto {
+  return toCreateDto(type, preset, pageTarget, order);
+}
+
 export function wizardSectionExists(
   existingSections: Array<{ type: string; pageTarget?: string }>,
   entry: HomepageWizardSection

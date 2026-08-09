@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SectionService } from '../../../admin/services/section.service';
 import { PageService } from '../../../admin/services/page.service';
 import { Section } from '../../../shared/models/section.model';
-import { Page } from '../../../shared/models/page.model';
+import { Page, isSectionBasedPageTemplate } from '../../../shared/models/page.model';
 import { Subject, takeUntil, catchError, of } from 'rxjs';
 import { SeoService } from '../../core/services/seo.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -72,7 +72,7 @@ export class DynamicPageComponent implements OnInit, OnDestroy {
       this.page = page;
       this.updateSeo(page);
 
-      if (page.template === 'sections') {
+      if (isSectionBasedPageTemplate(page.template)) {
         this.loadSections(slug);
         return;
       }
@@ -111,5 +111,9 @@ export class DynamicPageComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  isSectionsLayout(template: string | undefined): boolean {
+    return !!template && isSectionBasedPageTemplate(template);
   }
 }

@@ -52,8 +52,11 @@
           <button mat-icon-button (click)="previewPage(page)" [matTooltip]="'PREVIEW' | translate" *ngIf="page.status === 'published'">
             <mat-icon>open_in_new</mat-icon>
           </button>
-          <button mat-icon-button (click)="openSections(page)" [matTooltip]="'EDIT_SECTIONS' | translate" *ngIf="page.template === 'sections'">
+          <button mat-icon-button (click)="openSections(page)" [matTooltip]="'EDIT_SECTIONS' | translate" *ngIf="isSectionBasedPage(page)">
             <mat-icon>view_module</mat-icon>
+          </button>
+          <button mat-icon-button (click)="applyPageTemplate(page)" [matTooltip]="'APPLY_PAGE_TEMPLATE' | translate" *ngIf="canApplyPageTemplate(page)">
+            <mat-icon>auto_fix_high</mat-icon>
           </button>
           <button mat-icon-button color="warn" (click)="deletePage(page)" [matTooltip]="'DELETE' | translate">
             <mat-icon>delete</mat-icon>

@@ -1,7 +1,26 @@
 import { LocalizedString } from './localized-string.model';
 
-export type PageTemplate = 'simple' | 'sections' | 'contact';
+export type PageTemplate =
+  | 'simple'
+  | 'sections'
+  | 'contact'
+  | 'landing-page'
+  | 'faq-page'
+  | 'collection-page'
+  | 'brand-page';
 export type PageStatus = 'draft' | 'published';
+
+export const SECTION_BASED_PAGE_TEMPLATES: PageTemplate[] = [
+  'sections',
+  'landing-page',
+  'faq-page',
+  'collection-page',
+  'brand-page'
+];
+
+export function isSectionBasedPageTemplate(template: PageTemplate | string): boolean {
+  return SECTION_BASED_PAGE_TEMPLATES.includes(template as PageTemplate);
+}
 
 export interface Page {
   id: number;

@@ -2,7 +2,15 @@
   <div class="page-header">
     <h1>{{ 'PAGE_SECTIONS' | translate }}</h1>
     <div class="page-header-actions" *ngIf="!isEditorOpen">
-      <button mat-stroked-button class="quick-start-btn" (click)="runQuickStartWizard()" [disabled]="wizardRunning || loading">
+      <mat-form-field appearance="outline" class="page-target-filter" subscriptSizing="dynamic">
+        <mat-label>{{ 'SECTION_FILTER_BY_PAGE' | translate }}</mat-label>
+        <mat-select [value]="activePageTarget" (selectionChange)="onPageTargetFilterChange($event.value)">
+          <mat-option *ngFor="let option of pageFilterOptions" [value]="option.value">
+            {{ option.translate ? (option.label | translate) : option.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-stroked-button class="quick-start-btn" (click)="runQuickStartWizard()" [disabled]="wizardRunning || loading || templateApplying">
         <mat-icon>rocket_launch</mat-icon>
         {{ 'QUICK_START_WIZARD' | translate }}
       </button>
@@ -22,6 +30,7 @@
         <div class="list-table-header">
           <div class="col-order">{{ 'TABLE_ORDER' | translate }}</div>
           <div class="col-type">{{ 'TABLE_TYPE' | translate }}</div>
+          <div class="col-page-target">{{ 'PAGE_TARGET' | translate }}</div>
           <div class="col-title">{{ 'TABLE_TITLE' | translate }}</div>
           <div class="col-status">{{ 'TABLE_STATUS' | translate }}</div>
           <div class="col-actions">{{ 'TABLE_ACTIONS' | translate }}</div>
@@ -40,6 +49,10 @@
 
             <div class="col-type">
               <span class="type-link">{{ getSectionTypeLabelKey(section.type) | translate }}</span>
+            </div>
+
+            <div class="col-page-target">
+              <span class="page-target-badge">{{ getPageTargetLabel(section.pageTarget) }}</span>
             </div>
 
             <div class="col-title">
@@ -69,6 +82,9 @@
             </div>
             <div class="col-type">
               <span class="type-link">{{ 'SECTION_TYPE_LABELS.FOOTER' | translate }}</span>
+            </div>
+            <div class="col-page-target">
+              <span class="page-target-badge">{{ getPageTargetLabel('global') }}</span>
             </div>
             <div class="col-title">
               <span class="title-text muted">{{ 'FOOTER_NOT_CREATED' | translate }}</span>
