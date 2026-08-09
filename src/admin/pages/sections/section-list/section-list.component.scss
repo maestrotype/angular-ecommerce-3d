@@ -288,32 +288,20 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            background: var(--surface-overlay-full);
+            background: var(--surface-tertiary);
+            border: 1px solid var(--border-default);
             padding: 2px 6px;
             border-radius: 99px;
 
             .theme-pills {
               display: flex;
               gap: 2px;
-              
-              button {
-                width: 32px;
-                height: 32px;
-                min-width: 32px;
-                padding: 0;
-                line-height: 32px;
-                mat-icon { font-size: 18px; width: 18px; height: 18px; }
-                opacity: 0.5;
-                transition: all 0.2s ease;
-                
-                &.active { opacity: 1; color: var(--interactive-primary); background: rgba(var(--interactive-primary-rgb), 0.1); }
-              }
             }
 
             .divider-v {
               width: 1px;
               height: 18px;
-              background: var(--border-subtle);
+              background: var(--border-default);
               margin: 0 4px;
             }
 
@@ -323,8 +311,32 @@
               min-width: 32px;
               padding: 0;
               color: var(--text-secondary);
-              &.active { color: var(--interactive-primary); background: rgba(var(--interactive-primary-rgb), 0.1); }
-              mat-icon { font-size: 18px; width: 18px; height: 18px; }
+              opacity: 0.6;
+              border-radius: 50%;
+              transition: all 0.2s ease;
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              
+              &:hover:not(.active) {
+                opacity: 0.85;
+                background: var(--surface-highlight);
+              }
+              
+              &.active {
+                opacity: 1;
+                color: var(--interactive-primary);
+                background: rgba(var(--interactive-primary-rgb), 0.12);
+              }
+              
+              mat-icon {
+                font-size: 18px;
+                width: 18px;
+                height: 18px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              }
             }
           }
         }
