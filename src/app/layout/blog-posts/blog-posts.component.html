@@ -1,0 +1,47 @@
+<section class="blog-posts-section" [id]="data?.anchorId || 'blog'">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-subtitle" *ngIf="data?.subtitle">{{ data.subtitle | localized }}</span>
+      <h2 class="section-title">{{ (data?.title | localized) || ('HOME.BLOG.TITLE' | translate) }}</h2>
+      <p class="section-description" *ngIf="data?.description">{{ data.description | localized }}</p>
+    </div>
+
+    <div class="blog-grid" [class.list-mode]="displayMode === 'list'" *ngIf="posts.length; else emptyState">
+      <article class="blog-card" *ngFor="let post of posts" [class.list-item]="displayMode === 'list'">
+        <div class="card-image" *ngIf="post.image">
+          <img [src]="post.image" [alt]="(typeof post.title === 'string' ? post.title : '')" loading="lazy">
+        </div>
+        <div class="card-content">
+          <div class="card-meta">
+            <span class="post-category" *ngIf="post.category">{{ post.category }}</span>
+            <time class="post-date" [attr.datetime]="post.date">{{ formatDate(post.date) }}</time>
+          </div>
+          <h3 class="post-title">{{ post.title | localized }}</h3>
+          <p class="post-excerpt">{{ post.excerpt | localized }}</p>
+          <div class="card-footer">
+            <span class="post-author" *ngIf="post.author">{{ post.author }}</span>
+            <a class="read-more" [href]="post.link || '#'" [attr.aria-label]="('HOME.BLOG.READ_MORE' | translate) + ' ' + (post.title | localized)">
+              {{ 'HOME.BLOG.READ_MORE' | translate }}
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                <path d="M3 9L8 6L3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <ng-template #emptyState>
+      <p class="empty-state">{{ 'HOME.BLOG.EMPTY' | translate }}</p>
+    </ng-template>
+
+    <div class="section-cta" *ngIf="data?.settings?.showCta">
+      <a class="cta-link" [href]="data?.settings?.ctaLink || '/blog'" [attr.aria-label]="('HOME.BLOG.VIEW_ALL' | translate)">
+        {{ (data?.settings?.ctaText | localized) || ('HOME.BLOG.VIEW_ALL' | translate) }}
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path d="M3 10.5L9 7L3 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>

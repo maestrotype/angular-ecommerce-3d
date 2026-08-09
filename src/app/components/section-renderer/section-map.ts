@@ -20,4 +20,6 @@ export const sectionComponentMap: { [key: string]: () => Promise<Type<any>> } = 
   'features-grid': () => import('../../layout/features-grid/features-grid.component').then(m => m.FeaturesGridComponent),
   faq: () => import('../../layout/faq/faq.component').then(m => m.FaqComponent),
   stats: () => import('../../layout/stats/stats.component').then(m => m.StatsComponent),
+  'blog-posts': () => import('../../layout/blog-posts/blog-posts.component').then(m => m.BlogPostsComponent),
+  'video-hero': () => import('../../layout/video-hero/video-hero.component').then(m => m.VideoHeroComponent),
 };
