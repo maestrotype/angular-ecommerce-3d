@@ -8,6 +8,8 @@ import { UserService } from '../../../services/user.service';
 import { User } from '../../../../shared/models/user.model';
 import { UserEditDialogComponent } from '../user-edit-dialog/user-edit-dialog.component';
 import { TranslateService } from '@ngx-translate/core';
+import { ConfirmationService } from '../../../services/confirmation.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-list',
@@ -28,7 +30,8 @@ export class UserListComponent implements OnInit, AfterViewInit {
     private userService: UserService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit(): void {
@@ -137,18 +140,19 @@ export class UserListComponent implements OnInit, AfterViewInit {
   }
 
   deleteUser(user: User): void {
-    if (confirm(`Are you sure you want to delete user ${user.name}?`)) {
-      this.userService.deleteUser(user.id).subscribe({
-        next: () => {
-          this.snackBar.open(this.translate.instant('USER_DELETED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
-          this.loadUsers();
-        },
-        error: (error) => {
-          
-          this.snackBar.open(this.translate.instant('ERROR_DELETING_USER'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
-        }
-      });
-    }
+    this.confirmationService.confirmDelete(user.name).pipe(take(1)).subscribe((confirmed) => {
+      if (confirmed) {
+        this.userService.deleteUser(user.id).subscribe({
+          next: () => {
+            this.snackBar.open(this.translate.instant('USER_DELETED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
+            this.loadUsers();
+          },
+          error: (error) => {
+            this.snackBar.open(this.translate.instant('ERROR_DELETING_USER'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
+          }
+        });
+      }
+    });
   }
 }
 

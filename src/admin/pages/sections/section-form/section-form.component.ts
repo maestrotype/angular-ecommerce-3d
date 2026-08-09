@@ -38,7 +38,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
   private _activeMenuLang = localStorage.getItem('admin_menu_lang') || 'en';
   @Input() set activeMenuLang(val: string) {
     if (val && this._activeMenuLang !== val) {
-      console.log(`[SectionFormComponent] Language changing to ${val}`);
+      // Language changed to ${val}
       this._activeMenuLang = val;
       localStorage.setItem('admin_menu_lang', val);
     }
@@ -658,8 +658,6 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
       next: (model3dUrl) => {
         const rawFormValue = this.sectionForm.value;
         const formValue = this.packLocalizedFields(rawFormValue);
-        console.log('[SectionFormComponent] Submitting form data:', formValue);
-
         const dataSource = this.isDrawerMode ? this.data : this.dialogData;
         const existingSettings = dataSource?.section?.settings || {};
         let formData: any;
@@ -763,8 +761,6 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
             // visualOverrides set by the Site Architect toolbar during an active session!
           };
         }
-
-        console.log('[DEBUG-FORM-SUBMIT] FormData immediately before pushing to service:', JSON.stringify(formData, null, 2));
 
         if (this.isEditMode && dataSource?.section?.id) {
           this.sectionService.updateSection(dataSource.section.id, formData).subscribe({

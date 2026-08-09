@@ -133,8 +133,8 @@ export class ProductFormComponent implements OnInit {
 
   loadModelPreview(modelUrl: string) {
     this.threeDService.loadModel(modelUrl).subscribe({
-      next: (modelData) => {
-        console.log('Preview model loaded:', modelData);
+      next: (_modelData) => {
+        // Model loaded successfully
       },
       error: (error) => {
         console.error('Preview loading failed:', error);
@@ -384,8 +384,6 @@ export class ProductFormComponent implements OnInit {
         const data = status.data;
         this.aiProgress = data.progress || 0;
         const apiStatus = data.status || 'unknown';
-        
-        console.log(`[AI Polling] Task: ${taskId}, Status: ${apiStatus}, Progress: ${this.aiProgress}%`);
 
         if (apiStatus === 'success' && data.result?.model) {
           this.aiStatusMessage = this.translate.instant('AI_GENERATION_SUCCESS');
@@ -539,16 +537,14 @@ export class ProductFormComponent implements OnInit {
       model3dPublicId: this.model3dPublicId,
     };
 
-    const target = saveToProduction ? 'Production' : (this.isLocalApi ? 'Local' : 'Production');
-    console.log(`[Save] Persisting 3D model to ${target} Database...`, productData);
-
+    const saveToProduction_ = saveToProduction;
     const save$ = saveToProduction
       ? this.productService.updateProductOnProduction(this.productId!, productData)
       : this.productService.updateProduct(this.productId!, productData);
 
     save$.subscribe({
       next: () => {
-        console.log(`[Save] Successfully saved to ${target} DB`);
+        // Successfully saved to DB
       },
       error: (err) => {
         console.error('Failed to update product model state:', err);
@@ -937,8 +933,6 @@ export class ProductFormComponent implements OnInit {
   private fallbackToServerArchiving(): void {
     if (this.model3dPublicId?.startsWith('LOCAL:')) {
       const localPath = this.model3dPublicId;
-      console.log(`[Bridge] Falling back to server-side archiving for path: ${localPath}`);
-      
       this.productService.archiveLocalModelOnProduction(localPath).subscribe({
         next: (res) => {
           if (!isCloudinaryUrl(res.url)) {

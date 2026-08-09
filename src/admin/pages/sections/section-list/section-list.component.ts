@@ -12,6 +12,8 @@ import { Section } from '../../../models/section.model';
 import { MatSidenav } from '@angular/material/sidenav';
 import { TranslateService } from '@ngx-translate/core';
 import { ActivatedRoute } from '@angular/router';
+import { ConfirmationService } from '../../../services/confirmation.service';
+import { getLocalizedString } from 'src/shared/utils/localization.util';
 
 @Component({
   selector: 'app-section-list',
@@ -61,7 +63,8 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private translate: TranslateService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private confirmationService: ConfirmationService
   ) {}
 
 
@@ -245,17 +248,20 @@ export class SectionListComponent implements OnInit, AfterViewInit {
   }
 
   deleteSection(section: Section): void {
-    if (confirm('Are you sure you want to delete this section?')) {
-      this.sectionService.deleteSection(section.id).subscribe({
-        next: () => {
-          this.snackBar.open(this.translate.instant('SECTION_DELETED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
-          this.loadSections();
-        },
-        error: (error) => {
-          this.snackBar.open(this.translate.instant('ERROR_DELETING_SECTION'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
-        }
-      });
-    }
+    const sectionLabel = getLocalizedString(section.title, this.translate.currentLang) || section.type;
+    this.confirmationService.confirmDelete(sectionLabel).subscribe(confirmed => {
+      if (confirmed) {
+        this.sectionService.deleteSection(section.id).subscribe({
+          next: () => {
+            this.snackBar.open(this.translate.instant('SECTION_DELETED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
+            this.loadSections();
+          },
+          error: (error) => {
+            this.snackBar.open(this.translate.instant('ERROR_DELETING_SECTION'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
+          }
+        });
+      }
+    });
   }
 
   drop(event: CdkDragDrop<Section[]>): void {

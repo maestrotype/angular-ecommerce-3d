@@ -6,6 +6,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MessageService } from '../../../services/message.service';
 import { Message } from '../../../models/message.model';
 import { MessageDetailComponent } from '../message-detail/message-detail.component';
+import { ConfirmationService } from '../../../services/confirmation.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-message-list',
@@ -25,8 +27,9 @@ export class MessageListComponent implements OnInit {
   constructor(
     private messageService: MessageService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
-    , private breakpointObserver: BreakpointObserver
+    private snackBar: MatSnackBar,
+    private breakpointObserver: BreakpointObserver,
+    private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit(): void {
@@ -100,18 +103,19 @@ export class MessageListComponent implements OnInit {
   }
 
   deleteMessage(message: Message): void {
-    if (confirm('Are you sure you want to delete this message?')) {
-      this.messageService.deleteMessage(message.id).subscribe({
-        next: () => {
-          this.snackBar.open('Message deleted', 'Close', { duration: 3000 });
-          this.loadMessages();
-        },
-        error: (error) => {
-          
-          this.snackBar.open('Error deleting message', 'Close', { duration: 3000 });
-        }
-      });
-    }
+    this.confirmationService.confirmDelete(`"${message.subject || 'Message'}"`).pipe(take(1)).subscribe((confirmed) => {
+      if (confirmed) {
+        this.messageService.deleteMessage(message.id).subscribe({
+          next: () => {
+            this.snackBar.open('Message deleted', 'Close', { duration: 3000 });
+            this.loadMessages();
+          },
+          error: (error) => {
+            this.snackBar.open('Error deleting message', 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
   }
 
   getStatusColor(status: string): string {
