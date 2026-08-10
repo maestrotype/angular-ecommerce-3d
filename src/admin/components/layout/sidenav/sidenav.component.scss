@@ -243,11 +243,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--text-on-primary);
       flex-shrink: 0;
+      --mat-icon-color: var(--text-on-primary);
 
-      mat-icon {
+      mat-icon,
+      .mat-icon {
         font-size: 24px;
+        color: var(--text-on-primary);
+        --mat-icon-color: var(--text-on-primary);
       }
 
       img {
