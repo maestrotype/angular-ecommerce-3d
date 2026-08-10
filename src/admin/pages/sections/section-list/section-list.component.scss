@@ -123,7 +123,8 @@
           padding: 12px 24px;
           align-items: center;
           border-bottom: 1px solid var(--border-subtle);
-          transition: background 0.2s;
+          transition: background 0.2s ease, box-shadow 0.2s ease;
+          cursor: default;
 
           &:hover { background: var(--surface-highlight); }
 
@@ -132,14 +133,27 @@
             border-left: 3px solid var(--interactive-primary);
           }
 
+          // Grabbing state while CDK drag is active
+          &.cdk-drag-dragging {
+            opacity: 0;
+          }
+
           div { flex-shrink: 0; }
-          .col-order { 
-            width: var(--col-order-w); 
-            display: flex; 
-            align-items: center; 
+          .col-order {
+            width: var(--col-order-w);
+            display: flex;
+            align-items: center;
             gap: 12px;
             color: var(--text-secondary);
             .order-num { color: var(--text-primary); font-weight: 600; }
+
+            .drag-handle {
+              cursor: grab;
+              color: var(--text-muted, rgba(255,255,255,0.3));
+              transition: color 0.15s, transform 0.15s;
+              &:hover { color: var(--interactive-primary); transform: scale(1.15); }
+              &:active { cursor: grabbing; }
+            }
           }
           .col-type { 
             width: var(--col-type-w);
@@ -348,9 +362,11 @@
           display: flex;
           flex-direction: column;
           align-items: center;
+          justify-content: flex-start;
           width: 100%;
-          padding: 20px 36px 48px;
+          padding: 20px 20px 48px;
           position: relative;
+          box-sizing: border-box;
           
           &::-webkit-scrollbar { width: 6px; }
           &::-webkit-scrollbar-thumb { background: var(--border-default); border-radius: 3px; }
@@ -460,8 +476,58 @@
   }
 }
 
+// ─────────────────────────────────────────────
+// CDK DRAG & DROP — SECTIONS TABLE
+// ─────────────────────────────────────────────
+
+// Smooth shift for sibling rows while dragging
 .responsive-list.cdk-drop-list-dragging .list-row-item:not(.cdk-drag-placeholder) {
-  transition: transform 300ms cubic-bezier(0, 0, 0.2, 1);
+  transition: transform 280ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+// Drag placeholder — ghost outline in the list
+.responsive-list .cdk-drag-placeholder {
+  background: rgba(var(--interactive-primary-rgb, 99, 102, 241), 0.06);
+  border: 2px dashed rgba(var(--interactive-primary-rgb, 99, 102, 241), 0.45);
+  border-radius: 10px;
+  opacity: 1;
+  min-height: 52px;
+
+  // Hide all cell content in the placeholder row
+  .col-order, .col-type, .col-page-target, .col-title, .col-status, .col-actions {
+    visibility: hidden;
+  }
+}
+
+// Custom drag preview for list rows — styled card floating while dragging
+.sections-page-wrapper .cdk-drag-preview {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  padding: 12px 24px;
+  border-radius: 12px;
+  background: var(--surface-elevated, #1e293b);
+  border: 1px solid rgba(var(--interactive-primary-rgb, 99, 102, 241), 0.55);
+  box-shadow:
+    0 20px 48px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255,255,255,0.04) inset,
+    0 0 24px rgba(var(--interactive-primary-rgb, 99, 102, 241), 0.18);
+  opacity: 0.97;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: rowDragIn 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  // Match column widths from the host CSS variables (fallback values)
+  --col-order-w: 80px;
+  --col-type-w: 160px;
+  --col-page-target-w: 140px;
+  --col-status-w: 100px;
+  --col-actions-w: 120px;
+}
+
+@keyframes rowDragIn {
+  from { transform: scale(0.97) translateY(-4px); opacity: 0.6; }
+  to   { transform: scale(1)    translateY(0);    opacity: 0.97; }
 }
 
 @keyframes slideInLeft {
