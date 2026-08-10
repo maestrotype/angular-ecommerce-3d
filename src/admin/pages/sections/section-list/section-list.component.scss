@@ -607,6 +607,10 @@
           .col-title .title-text {
             color: var(--text-primary);
           }
+
+          .col-actions button {
+            color: var(--text-primary);
+          }
         }
 
         .editor-pane-swap {
