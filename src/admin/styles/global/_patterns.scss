@@ -113,3 +113,80 @@
   gap: var(--space-4);
   margin-bottom: var(--space-6);
 }
+
+// =============================================================================
+// M2 — Admin page chrome (header / filters / CTA)
+// Mobile stack rules: global/_responsive.scss
+// =============================================================================
+
+.admin-page,
+.dashboard-container {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.page-header,
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: var(--admin-page-gap, var(--space-4));
+
+  h1 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    min-width: 0;
+  }
+}
+
+.page-header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.filter-section,
+.filters-area {
+  width: 100%;
+}
+
+app-list-container {
+  display: block;
+  width: 100%;
+
+  .list {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .list__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: var(--admin-page-gap, var(--space-4));
+    width: 100%;
+  }
+
+  .list__header-left {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .list__kpis {
+    width: 100%;
+  }
+}
+
+// =============================================================================
+// M3 — Admin form field contract
+// - Default: floatLabel="auto" + mat-label; omit placeholder on the same input.
+// - Mobile search (app-search-bar): hide mat-label, show placeholder only.
+// - Never combine floatLabel="always" with placeholder on the same control.
+// =============================================================================

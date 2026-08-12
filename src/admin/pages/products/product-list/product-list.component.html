@@ -8,9 +8,9 @@
   </div>
 
   <div list-filters class="filter-section">
-    <mat-form-field appearance="outline" class="category-filter" floatLabel="always">
+    <mat-form-field appearance="outline" class="category-filter">
       <mat-label>{{ 'CATEGORY' | translate }}</mat-label>
-      <mat-select [placeholder]="'CATEGORY' | translate" (selectionChange)="filterByCategory($event)">
+      <mat-select (selectionChange)="filterByCategory($event)">
         <mat-option value="">{{ 'CATEGORIES_ALL' | translate }}</mat-option>
         <mat-option *ngFor="let cat of categories" [value]="getCategoryValue(cat)">
           {{ cat.name | localized }}

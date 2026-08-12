@@ -4,21 +4,15 @@
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-md);
   border: 1px solid var(--dashboard-shell-border, var(--border-subtle));
-  min-height: calc(100vh - 64px);
+  min-height: calc(100vh - var(--admin-toolbar-height));
+  width: 100%;
+  box-sizing: border-box;
 
   h1 {
     margin-bottom: var(--space-8);
     color: var(--text-primary);
     font-size: var(--text-2xl);
     font-weight: var(--font-bold);
-  }
-
-  @media (max-width: 768px) {
-    padding: var(--space-6);
-
-    h1 {
-      text-align: center;
-    }
   }
 }
 

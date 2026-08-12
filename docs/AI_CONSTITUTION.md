@@ -177,8 +177,27 @@ Theme switching is performed by changing the `data-theme` attribute on `<html>`.
 2. Update the task status in `REFACTORING_BOARD.md` (§4) and affected metrics (§1) — re-measure, do not guess
 3. Update `UI_AUDIT.md` if any audit findings were resolved
 4. Add one changelog line to `PROJECT_STATUS.md` (Recent Changes)
+5. **Write a suggested English commit message** in the agent response and in the relevant tracking doc (see §6.5). Do not commit unless the user explicitly requests it.
 
 **RULE**: Never mark a task ✅ without measurable proof (metric re-scan, screenshot, or grep output). Documentation drifted from code once; it must not happen again.
+
+### 6.5 Agent completion message (English, required)
+
+Every AI agent MUST end a completed task with a **short English commit message** the user can paste into git.
+
+| Requirement | Detail |
+|-------------|--------|
+| Language | **English only** for commit titles and bodies |
+| Format | [Conventional Commits](https://www.conventionalcommits.org/): `type(scope): summary` |
+| Phase tasks | Append phase id when applicable, e.g. `(Phase M3)` |
+| Tracking doc | Update `docs/ADMIN_MOBILE_UX.md` §Suggested commits for admin mobile phases M1–M6 |
+| Git | Provide the message in chat; **do not** `git commit` unless the user asks |
+
+Example:
+
+```
+fix(admin-mobile): prevent search label and placeholder overlap (Phase M3)
+```
 
 ### 6.3 When Discovering a New Architecture Issue
 
@@ -212,7 +231,8 @@ Warnings are acceptable only if documented in `PROJECT_STATUS.md §4`.
 
 ## 8. Git Rules
 
-- Commit messages must reference the task ID: `task-0XX: description`
+- Commit messages must be in **English** and reference the task when applicable, e.g. `fix(admin-mobile): … (Phase M3)`
+- Agents must **propose** the commit message after each task; see §6.5. Do not commit unless the user explicitly requests it.
 - Do not commit generated files (`dist/`, `.build/`)
 - Do not commit dependency changes unless the task explicitly requires them
 
@@ -257,4 +277,4 @@ If the task is too large, split it into small implementation steps and execute t
 Default behavior:
 **Read → Understand → Implement. Never Read → Replan.**
 
-*This document is maintained by the Principal UI Architect. Last updated: 2026-07-06*
+*This document is maintained by the Principal UI Architect. Last updated: 2026-08-12*

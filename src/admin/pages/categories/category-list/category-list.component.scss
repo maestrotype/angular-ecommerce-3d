@@ -201,8 +201,8 @@
     align-items: stretch;
 
     h1 {
-      text-align: center;
-      font-size: 1.5rem;
+      text-align: left;
+      font-size: var(--text-xl);
     }
 
     .add-button {

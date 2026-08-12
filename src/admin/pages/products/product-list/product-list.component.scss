@@ -332,37 +332,6 @@
 }
 
 @media (min-width: 690px) and (max-width: 768px) {
-  .header-section {
-    flex-direction: row;
-    gap: 1rem;
-    align-items: flex-start;
-    padding: 16px 16px 0 16px;
-
-    h1 {
-      text-align: left;
-      font-size: 1.5rem;
-    }
-
-    .add-button {
-      width: auto;
-
-      .button-text {
-        display: inline;
-      }
-    }
-  }
-
-  .filter-section {
-    flex-direction: row;
-    gap: 12px;
-    align-items: center;
-
-    .search-field {
-      min-width: 150px;
-      max-width: 300px;
-    }
-  }
-
   .desktop-view {
     display: block;
   }
@@ -391,12 +360,12 @@
 
 @media (max-width: 768px) {
   .header-section {
-    margin-bottom: 12px;
+    margin-bottom: 0;
     padding: 0;
 
     h1 {
-      text-align: center;
-      font-size: 1.5rem;
+      text-align: left;
+      font-size: var(--text-xl);
       margin: 0;
     }
 
@@ -406,27 +375,22 @@
   }
 
   .filter-section {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    grid-template-areas:
-      'category button'
-      'search search';
-    gap: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--admin-page-gap, var(--space-4));
     padding: 0;
     width: 100%;
-    align-items: start;
+    align-items: stretch;
 
     .category-filter {
-      grid-area: category;
       width: 100%;
     }
 
     .add-button-mobile {
       display: flex;
-      grid-area: button;
-      height: 56px;
-      min-width: auto;
-      padding: 0 16px;
+      width: 100%;
+      min-height: var(--admin-page-cta-min-height, 48px);
+      justify-content: center;
 
       .button-text {
         display: inline;
@@ -435,7 +399,6 @@
 
     app-search-bar,
     .search-field {
-      grid-area: search;
       width: 100%;
     }
   }
@@ -574,27 +537,6 @@
 }
 
 @media (max-width: 400px) {
-  .filter-section {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      'category'
-      'button'
-      'search';
-
-    .category-filter {
-      width: 100%;
-    }
-
-    .add-button-mobile {
-      width: 100%;
-      justify-content: center;
-
-      .button-text {
-        display: inline;
-      }
-    }
-  }
-
   .product-card {
     padding: 6px;
     gap: 8px;

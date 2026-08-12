@@ -63,6 +63,10 @@
   padding: var(--admin-content-padding);
   scroll-behavior: smooth;
 
+  @media (max-width: 768px) {
+    padding: var(--admin-page-padding-y) var(--admin-page-padding-x);
+  }
+
   &::-webkit-scrollbar {
     width: 6px;
   }

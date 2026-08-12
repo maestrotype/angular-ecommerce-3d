@@ -1,4 +1,16 @@
 // Form Fields — admin shell; tokens + Material bridge in components/_forms.scss + overrides
+body.is-admin {
+  .mat-mdc-form-field {
+    min-width: 0;
+  }
+
+  .search-field.mat-mdc-form-field,
+  .filter-section .mat-mdc-form-field,
+  .filters-grid .mat-mdc-form-field {
+    width: 100%;
+  }
+}
+
 .mat-mdc-form-field {
   .mat-mdc-text-field-wrapper {
     background-color: var(--form-bg);
