@@ -14,6 +14,7 @@
   </div>
 
   <app-admin-table [loading]="isLoading" [dataSource]="dataSource" [displayedColumns]="displayedColumns">
+    <div class="desktop-view">
     <table mat-table [dataSource]="dataSource" matSort class="users-table">
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
@@ -102,7 +103,52 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+    </div>
   </app-admin-table>
+
+  <div class="mobile-view" *ngIf="!isLoading && !error">
+    <div class="admin-mobile-cards">
+      <article class="admin-mobile-card" *ngFor="let user of dataSource.data">
+        <div class="admin-mobile-card__header">
+          <span class="admin-mobile-card__id">#{{ user.id }}</span>
+          <mat-chip [color]="getStatusColor(user.status || 'active')" selected>
+            {{ (user.status || 'active') | titlecase }}
+          </mat-chip>
+        </div>
+
+        <h3 class="admin-mobile-card__title">{{ user.name }}</h3>
+
+        <div class="admin-mobile-card__meta">
+          <span>{{ user.email }}</span>
+          <span *ngIf="user.phone">{{ user.phone }}</span>
+          <span>{{ user.createdAt | date:'short' }}</span>
+        </div>
+
+        <div class="admin-mobile-card__row">
+          <mat-chip [color]="getRoleColor(user.role)" selected>{{ user.role | titlecase }}</mat-chip>
+        </div>
+
+        <div class="admin-mobile-card__actions">
+          <button mat-icon-button matTooltip="Edit user" (click)="editUser(user)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button
+                  [color]="user.role === 'admin' ? 'warn' : 'primary'"
+                  (click)="changeUserRole(user)">
+            <mat-icon>{{ user.role === 'admin' ? 'person_remove' : 'admin_panel_settings' }}</mat-icon>
+          </button>
+          <button mat-icon-button
+                  [color]="user.status === 'inactive' ? 'primary' : 'warn'"
+                  (click)="toggleUserStatus(user)">
+            <mat-icon>{{ user.status === 'inactive' ? 'lock_open' : 'block' }}</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteUser(user)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </article>
+    </div>
+  </div>
 
   <div *ngIf="error" class="error-container">
     <mat-icon color="warn">error</mat-icon>

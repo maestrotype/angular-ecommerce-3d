@@ -331,33 +331,6 @@
   display: none;
 }
 
-@media (min-width: 690px) and (max-width: 768px) {
-  .desktop-view {
-    display: block;
-  }
-
-  .mobile-view {
-    display: none;
-  }
-
-  .products-table {
-    th,
-    td {
-      padding: 8px 12px;
-      font-size: 13px;
-    }
-  }
-
-  .products-grid {
-    grid-template-columns: 1fr;
-    padding: 0 16px;
-  }
-
-  .table-container {
-    margin: 0 16px;
-  }
-}
-
 @media (max-width: 768px) {
   .header-section {
     margin-bottom: 0;

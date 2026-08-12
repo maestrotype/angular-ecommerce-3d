@@ -95,7 +95,7 @@
 
   <div class="mobile-view" *ngIf="!isLoading">
     <div class="orders-grid">
-      <div *ngFor="let order of dataSource.data" class="order-card">
+      <div *ngFor="let order of dataSource.data" class="admin-mobile-card order-card">
         <div class="card-header">
           <div class="order-id">#{{ order.id }}</div>
           <mat-form-field appearance="outline" class="status-select">

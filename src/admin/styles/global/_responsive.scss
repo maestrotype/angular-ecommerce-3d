@@ -316,6 +316,34 @@
       min-height: var(--admin-page-cta-min-height);
     }
   }
+
+  // ---------------------------------------------------------------------------
+  // M5 — Tables → mobile card lists
+  // ---------------------------------------------------------------------------
+  .desktop-view,
+  app-admin-table.desktop-view,
+  .admin-table-wrapper .desktop-view,
+  .payments-table-wrapper .desktop-view {
+    display: none;
+  }
+
+  .mobile-view {
+    display: block;
+  }
+
+  .list-table-header {
+    display: none;
+  }
+
+  .payments-table-wrapper {
+    margin: 0;
+    padding: var(--space-4);
+  }
+
+  .orders-grid,
+  .admin-mobile-cards {
+    padding: 0;
+  }
 }
 
 @media (max-width: 480px) {

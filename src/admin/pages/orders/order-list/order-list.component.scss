@@ -403,12 +403,12 @@
 
   .orders-grid {
     grid-template-columns: 1fr;
-    padding: 0px;
+    padding: 0;
   }
 
   .loading-container,
   .error-container {
-    margin: 0 16px;
+    margin: 0;
   }
 }
 
@@ -425,38 +425,6 @@
 
   .admin-table-wrapper .desktop-view {
     display: block;
-  }
-}
-
-// Galaxy Z Fold 5/6 unfolded (690px) - use desktop format with compact table
-@media (min-width: 690px) and (max-width: 768px) {
-  .admin-table-wrapper .desktop-view {
-    display: block;
-  }
-
-  .mobile-view {
-    display: none;
-  }
-
-  .admin-table-wrapper .order-table {
-
-    th,
-    td {
-      padding: 6px 8px;
-      font-size: 12px;
-    }
-
-    // Column widths → overrides (B3)
-  }
-
-  .orders-grid {
-    grid-template-columns: 1fr;
-    padding: 0 16px;
-  }
-
-  .loading-container,
-  .error-container {
-    margin: 0 16px;
   }
 }
 
