@@ -140,9 +140,9 @@ Work in priority order. Mark items `[ ]` → `[x]` as completed.
 | A4.4 | Resolve Swagger claim: implement or remove from docs | `docs/BACKEND_API.md`, `backend/src/main.ts` | [x] |
 | A4.5 | PayPal: implement real flow **or** remove from “supported payments” list | `backend/src/payments/` | [x] |
 | A4.6 | Complete manual QA matrix | [POLISH_AND_QUALITY.md](POLISH_AND_QUALITY.md) unchecked rows | [ ] |
-| A4.7 | Remove native `confirm()` from section-list & page-list delete (use MatDialog) | `section-list.component.ts:248` | [ ] |
-| A4.8 | Remove debug `console.log` from section-form production code | `section-form.component.ts:41,661,767` | [ ] |
-| A4.9 | Fix categories i18n bug: en/ru/ua all receive same string value | `section-form.component.ts:714` | [ ] |
+| A4.7 | Remove native `confirm()` from section-list & page-list delete (use MatDialog) | `section-list.component.ts:248` | [x] |
+| A4.8 | Remove debug `console.log` from section-form production code | `section-form.component.ts:41,661,767` | [x] |
+| A4.9 | Fix categories i18n bug: en/ru/ua all receive same string value | `section-form.component.ts:714` | [x] |
 
 **Exit gate**: green CI on main; no doc claims without code backing.
 
@@ -286,9 +286,9 @@ Use this table verbatim in marketplace description to reduce refunds and bad rev
 
 | # | Task | File | Done |
 |---|------|------|------|
-| H1.1 | Replace `confirm()` with `MatDialog` in section delete | `section-list.component.ts:248` | [ ] |
-| H1.2 | Remove debug `console.log` calls from section-form | `section-form.component.ts:41,661,767` | [ ] |
-| H1.3 | Fix categories i18n: ru/ua fields get EN value instead of locale | `section-form.component.ts:714` | [ ] |
+| H1.1 | Replace `confirm()` with `MatDialog` in section delete | `section-list.component.ts:248` | [x] |
+| H1.2 | Remove debug `console.log` calls from section-form | `section-form.component.ts:41,661,767` | [x] |
+| H1.3 | Fix categories i18n: ru/ua fields get EN value instead of locale | `section-form.component.ts:714` | [x] |
 
 ---
 
@@ -296,10 +296,10 @@ Use this table verbatim in marketplace description to reduce refunds and bad rev
 
 | # | Task | File | Done |
 |---|------|------|------|
-| H2.1 | Add "Duplicate Section" action button | `section-list.component.ts/html` | [ ] |
-| H2.2 | Create shared `ConfirmDialogComponent` (reusable across admin) | `src/admin/components/ui/confirm-dialog/` | [ ] |
-| H2.3 | Lock section `type` to read-only in edit mode + hint text | `section-form.component.html:388` | [ ] |
-| H2.4 | Expand Property Adjust Toolbar (padding, bg-color, text-color) | `section-list.component.html:161–187` | [ ] |
+| H2.1 | Add "Duplicate Section" action button | `section-list.component.ts/html` | [x] |
+| H2.2 | Create shared `ConfirmDialogComponent` (reusable across admin) | `src/admin/components/confirmation-dialog/` | [x] |
+| H2.3 | Lock section `type` to read-only in edit mode + hint text | `section-form.component.html:388` | [x] |
+| H2.4 | Expand Property Adjust Toolbar (padding, bg-color, text-color) | `section-list.component.html:161–187` | [x] |
 
 ---
 
@@ -307,11 +307,11 @@ Use this table verbatim in marketplace description to reduce refunds and bad rev
 
 | # | Section Type | Admin Form | Frontend Component | Done |
 |---|-------------|------------|--------------------|------|
-| H3.1 | `testimonials` | avatar, name, role, text, rating 1–5 | Carousel / grid with stars | [ ] |
-| H3.2 | `newsletter` | title, subtitle, placeholder, button text | Email capture + backend POST /newsletter | [ ] |
-| H3.3 | `features-grid` | icon (Material), title, description × N | 3–4 col responsive grid | [ ] |
-| H3.4 | `faq` | question + answer pairs (localized) | MatExpansionPanel accordion | [ ] |
-| H3.5 | `stats` | value, label, suffix × N | Animated intersection-observer counters | [ ] |
+| H3.1 | `testimonials` | avatar, name, role, text, rating 1–5 | Carousel / grid with stars | [x] |
+| H3.2 | `newsletter` | title, subtitle, placeholder, button text | Email capture + backend POST /newsletter | [x] |
+| H3.3 | `features-grid` | icon (Material), title, description × N | 3–4 col responsive grid | [x] |
+| H3.4 | `faq` | question + answer pairs (localized) | MatExpansionPanel accordion | [x] |
+| H3.5 | `stats` | value, label, suffix × N | Animated intersection-observer counters | [x] |
 
 > Each type requires: entry in `section-map.ts` + `sectionTypes[]` array + `ngSwitch` form case.
 
@@ -321,8 +321,8 @@ Use this table verbatim in marketplace description to reduce refunds and bad rev
 
 | # | Task | Done |
 |---|------|------|
-| H4.1 | Section Presets: "Load Demo Content" fills form with realistic sample data + images | [ ] |
-| H4.2 | Quick Start Wizard: creates full homepage section set (header+hero+best-sellers+categories+footer) in 1 click | [ ] |
+| H4.1 | Section Presets: "Load Demo Content" fills form with realistic sample data + images | [x] |
+| H4.2 | Quick Start Wizard: creates full homepage section set (header+hero+best-sellers+categories+footer) in 1 click | [x] |
 
 ---
 
@@ -330,8 +330,8 @@ Use this table verbatim in marketplace description to reduce refunds and bad rev
 
 | # | Task | Done |
 |---|------|------|
-| H5.1 | Add page templates: `landing-page`, `faq-page`, `collection-page`, `brand-page` | [ ] |
-| H5.2 | Link custom pages to sections via `pageTarget` in Section Manager | [ ] |
+| H5.1 | Add page templates: `landing-page`, `faq-page`, `collection-page`, `brand-page` | [x] |
+| H5.2 | Link custom pages to sections via `pageTarget` in Section Manager | [x] |
 
 ---
 
@@ -339,8 +339,8 @@ Use this table verbatim in marketplace description to reduce refunds and bad rev
 
 | # | Task | Done |
 |---|------|------|
-| H6.1 | Remove duplicate `loadBestSellers()` / `loadSpecialOffers()` from `HomeComponent` | [ ] |
-| H6.2 | Data flows through SectionRenderer `contextData` — no double API calls | [ ] |
+| H6.1 | Remove duplicate `loadBestSellers()` / `loadSpecialOffers()` from `HomeComponent` | [x] |
+| H6.2 | Data flows through SectionRenderer `contextData` — no double API calls | [x] |
 
 ---
 

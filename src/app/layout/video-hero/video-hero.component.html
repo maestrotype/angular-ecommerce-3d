@@ -1,0 +1,88 @@
+<section class="video-hero-section" [id]="data?.anchorId || 'video-hero'">
+  <div class="video-container" [class]="settings.alignment ?? 'center'">
+    <div class="video-wrapper" *ngIf="!videoError; else errorFallback">
+      <div class="video-overlay" [style.--overlay-opacity]="settings.overlayOpacity"></div>
+
+      <video
+        class="hero-video"
+        [src]="settings.videoUrl || data?.settings?.videoUrl"
+        [poster]="settings.posterImage || data?.settings?.posterImage"
+        [autoplay]="settings.autoplay"
+        [muted]="settings.muted"
+        [loop]="settings.loop"
+        [controls]="settings.controls"
+        playsinline
+        (canplaythrough)="onVideoLoaded()"
+        (error)="onVideoError()"
+      >
+        {{ 'HOME.VIDEO.NOT_SUPPORTED' | translate }}
+      </video>
+
+      <div class="play-button" *ngIf="settings.showPlayButton && !settings.autoplay">
+        <button
+          class="play-btn"
+          type="button"
+          (click)="togglePlay()"
+          [attr.aria-label]="('HOME.VIDEO.PLAY' | translate)"
+        >
+          <svg *ngIf="!isPlaying" width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <path d="M10 7L26 16L10 25V7Z" fill="currentColor"/>
+          </svg>
+          <svg *ngIf="isPlaying" width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <rect x="8" y="7" width="6" height="18" rx="2" fill="currentColor"/>
+            <rect x="18" y="7" width="6" height="18" rx="2" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Content overlay -->
+      <div class="hero-content" [class]="settings.alignment ?? 'center'">
+        <div class="content-inner">
+          <span class="hero-subtitle" *ngIf="data?.subtitle">{{ data.subtitle | localized }}</span>
+          <h1 class="hero-title">{{ (data?.title | localized) || ('HOME.VIDEO.TITLE' | translate) }}</h1>
+          <p class="hero-description" *ngIf="data?.description">{{ data.description | localized }}</p>
+
+          <div class="hero-actions" *ngIf="settings.ctaLink || settings.secondaryCtaLink">
+            <a
+              *ngIf="settings.ctaLink"
+              class="btn btn-primary"
+              [href]="settings.ctaLink"
+            >
+              {{ (settings.ctaText | localized) || ('HOME.VIDEO.CTA' | translate) }}
+            </a>
+            <a
+              *ngIf="settings.secondaryCtaLink"
+              class="btn btn-secondary"
+              [href]="settings.secondaryCtaLink"
+            >
+              {{ (settings.secondaryCtaText | localized) || ('HOME.VIDEO.SECONDARY_CTA' | translate) }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator" *ngIf="settings.alignment === 'center'">
+      <div class="scroll-mouse">
+        <span class="scroll-wheel"></span>
+      </div>
+      <span class="scroll-text">{{ 'HOME.VIDEO.SCROLL' | translate }}</span>
+    </div>
+  </div>
+
+  <!-- Error fallback -->
+  <ng-template #errorFallback>
+    <div class="video-error-fallback" [style.background-image]="'url(' + (settings.posterImage || '') + ')'">
+      <div class="fallback-content">
+        <h1 class="hero-title">{{ (data?.title | localized) || ('HOME.VIDEO.TITLE' | translate) }}</h1>
+        <p class="hero-description" *ngIf="data?.description">{{ data.description | localized }}</p>
+        <div class="hero-actions">
+          <a *ngIf="settings.ctaLink" class="btn btn-primary" [href]="settings.ctaLink">
+            {{ (settings.ctaText | localized) || ('HOME.VIDEO.CTA' | translate) }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</section>

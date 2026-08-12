@@ -30,10 +30,11 @@
     <app-contacts></app-contacts>
   </div>
 
-  <div *ngIf="!loading && page && page.template === 'sections'" class="page-content">
+  <div *ngIf="!loading && page && isSectionsLayout(page.template)" class="page-content">
     <app-section-renderer
       *ngFor="let section of sections"
-      [section]="section">
+      [section]="section"
+      [contextData]="pageContext">
     </app-section-renderer>
   </div>
 </div>

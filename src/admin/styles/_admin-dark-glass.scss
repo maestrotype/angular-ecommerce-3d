@@ -114,7 +114,7 @@ html[data-theme='dark-glass'] body.is-admin {
   --text-muted: rgba(255, 255, 255, 0.4);
   --text-muted-rgb: 255, 255, 255;
   --text-inverse: #1a1a1a;
-  --text-on-primary: #ffffff;
+  --text-on-primary: var(--color-white);
   --text-table-header: var(--text-primary);
   --text-table-row: var(--text-primary);
   --text-table-even: var(--text-primary);

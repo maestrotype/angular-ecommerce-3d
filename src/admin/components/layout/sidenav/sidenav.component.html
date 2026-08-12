@@ -2,9 +2,15 @@
   <!-- Mobile Header -->
   <div class="sidenav-header-mobile lg:hidden" *ngIf="isMobile">
     <span class="menu-title">{{ 'ADMIN_PANEL' | translate }}</span>
-    <button type="button" class="close-btn" (click)="closeSidenav.emit()">
-      <mat-icon>close</mat-icon>
-    </button>
+    <div class="sidenav-header-mobile__actions">
+      <a mat-icon-button class="storefront-link" routerLink="/home" (click)="onNavItemClick()"
+        [attr.aria-label]="'GO_TO_STOREFRONT' | translate">
+        <mat-icon>storefront</mat-icon>
+      </a>
+      <button type="button" class="close-btn" (click)="closeSidenav.emit()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
   </div>
 
   <div class="sidenav-header" *ngIf="!isMobile">

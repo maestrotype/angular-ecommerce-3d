@@ -10,7 +10,7 @@
   <div list-filters class="filter-section">
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>{{ 'SEARCH_PAGES' | translate }}</mat-label>
-      <input matInput (keyup)="applyFilter($event)" [placeholder]="'SEARCH_PAGES_PLACEHOLDER' | translate" />
+      <input matInput (keyup)="applyFilter($event)" />
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
   </div>
@@ -52,8 +52,11 @@
           <button mat-icon-button (click)="previewPage(page)" [matTooltip]="'PREVIEW' | translate" *ngIf="page.status === 'published'">
             <mat-icon>open_in_new</mat-icon>
           </button>
-          <button mat-icon-button (click)="openSections(page)" [matTooltip]="'EDIT_SECTIONS' | translate" *ngIf="page.template === 'sections'">
+          <button mat-icon-button (click)="openSections(page)" [matTooltip]="'EDIT_SECTIONS' | translate" *ngIf="isSectionBasedPage(page)">
             <mat-icon>view_module</mat-icon>
+          </button>
+          <button mat-icon-button (click)="applyPageTemplate(page)" [matTooltip]="'APPLY_PAGE_TEMPLATE' | translate" *ngIf="canApplyPageTemplate(page)">
+            <mat-icon>auto_fix_high</mat-icon>
           </button>
           <button mat-icon-button color="warn" (click)="deletePage(page)" [matTooltip]="'DELETE' | translate">
             <mat-icon>delete</mat-icon>

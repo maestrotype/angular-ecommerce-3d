@@ -24,7 +24,7 @@ export class UpdatePageDto extends PartialType(CreatePageDto) {
   seoDescription?: Record<string, string>;
 
   @IsOptional()
-  @IsIn(['simple', 'sections', 'contact'])
+  @IsIn(['simple', 'sections', 'contact', 'landing-page', 'faq-page', 'collection-page', 'brand-page'])
   template?: PageTemplate;
 
   @IsOptional()

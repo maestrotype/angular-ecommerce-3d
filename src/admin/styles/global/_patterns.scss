@@ -113,3 +113,199 @@
   gap: var(--space-4);
   margin-bottom: var(--space-6);
 }
+
+// =============================================================================
+// M2 — Admin page chrome (header / filters / CTA)
+// Mobile stack rules: global/_responsive.scss
+// =============================================================================
+
+.admin-page,
+.dashboard-container {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.page-header,
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: var(--admin-page-gap, var(--space-4));
+
+  h1 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    min-width: 0;
+  }
+}
+
+.page-header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.filter-section,
+.filters-area {
+  width: 100%;
+}
+
+app-list-container {
+  display: block;
+  width: 100%;
+
+  .list {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .list__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: var(--admin-page-gap, var(--space-4));
+    width: 100%;
+  }
+
+  .list__header-left {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .list__kpis {
+    width: 100%;
+  }
+}
+
+// =============================================================================
+// M3 — Admin form field contract
+// - Default: floatLabel="auto" + mat-label; omit placeholder on the same input.
+// - Mobile search (app-search-bar): hide mat-label, show placeholder only.
+// - Never combine floatLabel="always" with placeholder on the same control.
+// =============================================================================
+
+// =============================================================================
+// M4 — Status banners, info banners, card grids
+// Mobile stack rules: global/_responsive.scss
+// =============================================================================
+
+.admin-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--admin-card-grid-min)), 1fr));
+  gap: var(--admin-card-grid-gap);
+  width: 100%;
+}
+
+.admin-status-banner {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--admin-status-banner-gap);
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--color-warning) 45%, transparent);
+  background: var(--color-warning-bg);
+
+  mat-icon {
+    flex-shrink: 0;
+    color: var(--color-warning);
+  }
+
+  &.status-ok {
+    border-color: color-mix(in srgb, var(--color-success) 45%, transparent);
+    background: var(--color-success-bg);
+
+    mat-icon {
+      color: var(--color-success);
+    }
+  }
+
+  &.status-warn mat-icon {
+    color: var(--color-warning);
+  }
+
+  &.status-loading mat-icon {
+    color: var(--color-info);
+  }
+
+  &__text,
+  .status-text {
+    flex: 1 1 12rem;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    line-height: 1.45;
+    color: var(--text-primary);
+
+    strong {
+      font-weight: var(--font-semibold);
+    }
+
+    span,
+    small {
+      color: var(--text-secondary);
+      font-size: var(--text-sm);
+    }
+
+    .status-source {
+      opacity: 0.85;
+    }
+  }
+
+  &__action,
+  > button,
+  > a.mat-mdc-button,
+  > a.mat-mdc-raised-button {
+    flex-shrink: 0;
+    min-height: var(--admin-page-cta-min-height);
+  }
+}
+
+.admin-info-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--admin-status-banner-gap);
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  border-left: 4px solid var(--interactive-primary);
+  background: color-mix(in srgb, var(--interactive-primary) 10%, transparent);
+  margin-bottom: var(--space-4);
+
+  mat-icon {
+    flex-shrink: 0;
+    color: var(--interactive-primary);
+    font-size: var(--text-xl);
+    width: var(--text-xl);
+    height: var(--text-xl);
+  }
+
+  p {
+    margin: 0;
+    min-width: 0;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .external-link {
+    color: var(--color-accent);
+    text-decoration: none;
+    font-weight: var(--font-medium);
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

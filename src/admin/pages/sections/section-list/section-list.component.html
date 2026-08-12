@@ -1,76 +1,157 @@
-<div class="sections-page-wrapper">
-  <div class="page-header">
-    <h1>{{ 'PAGE_SECTIONS' | translate }}</h1>
-    <button mat-flat-button class="new-section-btn" (click)="addSection()" *ngIf="!isEditorOpen">
-      <mat-icon>add</mat-icon>
-      {{ 'ADD_SECTION' | translate }}
-    </button>
+<div class="sections-page-wrapper"
+  [class.architect-open]="mobileArchitectOpen"
+  [class.editor-open]="isEditorOpen"
+  [class.is-mobile]="isMobile">
+  <div class="page-header" *ngIf="!isEditorOpen">
+    <div class="page-header__top">
+      <h1>{{ 'PAGE_SECTIONS' | translate }}</h1>
+      <div class="page-header__tools mobile-only">
+        <button mat-icon-button type="button" class="more-btn" [matMenuTriggerFor]="pageMoreMenu"
+          [attr.aria-label]="'ACTIONS' | translate">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #pageMoreMenu="matMenu">
+          <button mat-menu-item (click)="runQuickStartWizard()" [disabled]="wizardRunning || loading || templateApplying">
+            <mat-icon>rocket_launch</mat-icon>
+            <span>{{ 'QUICK_START_WIZARD' | translate }}</span>
+          </button>
+        </mat-menu>
+
+        <button mat-flat-button class="new-section-btn" (click)="addSection()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="page-header-actions">
+      <mat-form-field appearance="outline" class="page-target-filter" subscriptSizing="dynamic">
+        <mat-label>{{ 'SECTION_FILTER_BY_PAGE' | translate }}</mat-label>
+        <mat-select [value]="activePageTarget" (selectionChange)="onPageTargetFilterChange($event.value)">
+          <mat-option *ngFor="let option of pageFilterOptions" [value]="option.value">
+            {{ option.translate ? (option.label | translate) : option.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-stroked-button class="quick-start-btn desktop-only" (click)="runQuickStartWizard()"
+        [disabled]="wizardRunning || loading || templateApplying">
+        <mat-icon>rocket_launch</mat-icon>
+        {{ 'QUICK_START_WIZARD' | translate }}
+      </button>
+
+      <button mat-flat-button class="new-section-btn desktop-only" (click)="addSection()">
+        <mat-icon>add</mat-icon>
+        <span class="btn-label">{{ 'ADD_SECTION' | translate }}</span>
+      </button>
+    </div>
   </div>
 
   <div class="layout-body">
     <!-- LEFT SIDE: Swappable Container (List <-> Editor) -->
-    <div class="list-container-side" [style.flex-basis.px]="sidebarWidth">
-      
-      <!-- STATE 1: SECTION LIST (TABLE) -->
+    <div class="list-container-side" [style.flex-basis.px]="!isMobile ? sidebarWidth : null">
+
+      <!-- STATE 1: SECTION LIST -->
       <ng-container *ngIf="!isEditorOpen">
-        <div class="list-table-header">
+        <div class="list-table-header desktop-only">
           <div class="col-order">{{ 'TABLE_ORDER' | translate }}</div>
           <div class="col-type">{{ 'TABLE_TYPE' | translate }}</div>
+          <div class="col-page-target">{{ 'PAGE_TARGET' | translate }}</div>
           <div class="col-title">{{ 'TABLE_TITLE' | translate }}</div>
           <div class="col-status">{{ 'TABLE_STATUS' | translate }}</div>
           <div class="col-actions">{{ 'TABLE_ACTIONS' | translate }}</div>
         </div>
 
         <div class="responsive-list" cdkDropList (cdkDropListDropped)="drop($event)">
-          <div *ngFor="let section of dataSource.data" 
-               cdkDrag 
-               class="list-row-item"
-               [class.active]="selectedPreviewSection?.id === section.id">
-            
-            <div class="col-order">
-              <mat-icon cdkDragHandle class="drag-handle">drag_indicator</mat-icon>
+          <div *ngFor="let section of dataSource.data"
+               cdkDrag
+               class="list-row-item section-card"
+               [class.active]="selectedPreviewSection?.id === section.id"
+               (click)="selectForPreview(section)">
+
+            <div class="col-order section-card__drag">
+              <mat-icon cdkDragHandle class="drag-handle" (click)="$event.stopPropagation()">drag_indicator</mat-icon>
               <span class="order-num">{{ section.order }}</span>
             </div>
 
-            <div class="col-type">
-              <span class="type-link">{{ getSectionTypeLabelKey(section.type) | translate }}</span>
+            <div class="section-card__body">
+              <div class="col-type section-card__type">
+                <span class="type-link">{{ getSectionTypeLabelKey(section.type) | translate }}</span>
+              </div>
+
+              <div class="col-title section-card__title">
+                <span class="title-text">{{ section.title | localized }}</span>
+              </div>
+
+              <div class="col-page-target section-card__page">
+                <span class="page-target-badge">{{ getPageTargetLabel(section.pageTarget) }}</span>
+              </div>
             </div>
 
-            <div class="col-title">
-              <span class="title-text">{{ section.title | localized }}</span>
-            </div>
+            <div class="section-card__aside">
+              <div class="col-status section-card__status" (click)="$event.stopPropagation()">
+                <mat-slide-toggle [checked]="section.isActive" (change)="toggleSection(section)"></mat-slide-toggle>
+              </div>
 
-            <div class="col-status">
-              <mat-slide-toggle [checked]="section.isActive" (change)="toggleSection(section)"></mat-slide-toggle>
-            </div>
+              <div class="col-actions section-card__actions" (click)="$event.stopPropagation()">
+                <div class="actions-desktop desktop-only">
+                  <button mat-icon-button (click)="editSection(section)" [matTooltip]="'EDIT' | translate">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button (click)="duplicateSection(section)" [matTooltip]="'DUPLICATE_SECTION' | translate">
+                    <mat-icon>content_copy</mat-icon>
+                  </button>
+                  <button mat-icon-button color="warn" (click)="deleteSection(section)" [matTooltip]="'DELETE' | translate">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
 
-            <div class="col-actions">
-              <button mat-icon-button (click)="$event.stopPropagation(); editSection(section)">
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button mat-icon-button color="warn" (click)="$event.stopPropagation(); deleteSection(section)">
-                <mat-icon>delete</mat-icon>
-              </button>
+                <button mat-icon-button class="actions-more mobile-only" [matMenuTriggerFor]="rowMenu"
+                  [attr.aria-label]="'ACTIONS' | translate">
+                  <mat-icon>more_horiz</mat-icon>
+                </button>
+                <mat-menu #rowMenu="matMenu">
+                  <button mat-menu-item (click)="editSection(section)">
+                    <mat-icon>edit</mat-icon>
+                    <span>{{ 'EDIT' | translate }}</span>
+                  </button>
+                  <button mat-menu-item (click)="duplicateSection(section)">
+                    <mat-icon>content_copy</mat-icon>
+                    <span>{{ 'DUPLICATE_SECTION' | translate }}</span>
+                  </button>
+                  <button mat-menu-item (click)="deleteSection(section)">
+                    <mat-icon>delete</mat-icon>
+                    <span>{{ 'DELETE' | translate }}</span>
+                  </button>
+                </mat-menu>
+              </div>
             </div>
           </div>
+
           <!-- Virtual Footer Row (if missing) -->
-          <div class="list-row-item virtual-row" *ngIf="!hasFooter" (click)="onSectionTypeSelected('footer')">
-            <div class="col-order">
+          <div class="list-row-item section-card virtual-row" *ngIf="!hasFooter" (click)="onSectionTypeSelected('footer')">
+            <div class="col-order section-card__drag">
               <span class="order-num">--</span>
             </div>
-            <div class="col-type">
-              <span class="type-link">{{ 'SECTION_TYPE_LABELS.FOOTER' | translate }}</span>
+            <div class="section-card__body">
+              <div class="col-type section-card__type">
+                <span class="type-link">{{ 'SECTION_TYPE_LABELS.FOOTER' | translate }}</span>
+              </div>
+              <div class="col-title section-card__title">
+                <span class="title-text muted">{{ 'FOOTER_NOT_CREATED' | translate }}</span>
+              </div>
+              <div class="col-page-target section-card__page">
+                <span class="page-target-badge">{{ getPageTargetLabel('global') }}</span>
+              </div>
             </div>
-            <div class="col-title">
-              <span class="title-text muted">{{ 'FOOTER_NOT_CREATED' | translate }}</span>
-            </div>
-            <div class="col-status">
-              <span class="status-badge error">{{ 'MISSING' | translate }}</span>
-            </div>
-            <div class="col-actions">
-              <button mat-icon-button color="primary" matTooltip="{{ 'CREATE' | translate }}">
-                <mat-icon>add_circle_outline</mat-icon>
-              </button>
+            <div class="section-card__aside">
+              <div class="col-status section-card__status">
+                <span class="status-badge error">{{ 'MISSING' | translate }}</span>
+              </div>
+              <div class="col-actions section-card__actions">
+                <button mat-icon-button color="primary" [matTooltip]="'CREATE' | translate">
+                  <mat-icon>add_circle_outline</mat-icon>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -86,21 +167,26 @@
             <h2>{{ (editorMode === 'edit' ? 'EDIT_SECTION' : 'ADD_SECTION') | translate }}</h2>
             <span class="editing-name" *ngIf="editingSection">{{ editingSection.title | localized }}</span>
           </div>
-          
+
           <mat-chip-listbox class="drawer-lang-switcher" *ngIf="!showPicker">
             <mat-chip-option [selected]="activeMenuLang === 'en'" (click)="onLangChange('en')">EN</mat-chip-option>
             <mat-chip-option [selected]="activeMenuLang === 'ru'" (click)="onLangChange('ru')">RU</mat-chip-option>
             <mat-chip-option [selected]="activeMenuLang === 'ua'" (click)="onLangChange('ua')">UA</mat-chip-option>
           </mat-chip-listbox>
 
-          <button mat-icon-button (click)="closeEditor()" class="close-btn">
+          <button mat-icon-button class="preview-in-editor mobile-only" type="button"
+            (click)="openMobileArchitect()" [attr.aria-label]="'PREVIEW' | translate">
+            <mat-icon>visibility</mat-icon>
+          </button>
+
+          <button mat-icon-button (click)="closeEditor()" class="close-btn desktop-only">
             <mat-icon>close</mat-icon>
           </button>
         </div>
 
         <div class="editor-form-wrapper">
-          <app-section-form 
-            [data]="{ section: editingSection }" 
+          <app-section-form
+            [data]="{ section: editingSection }"
             [isDrawerMode]="true"
             [activeMenuLang]="activeMenuLang"
             (formChanged)="onFormChanged($event)"
@@ -110,14 +196,24 @@
         </div>
       </div>
 
-      <div class="resizer-handle" (mousedown)="onMouseDown($event)"></div>
+      <div class="resizer-handle desktop-only" (mousedown)="onMouseDown($event)"></div>
     </div>
 
-    <!-- RIGHT SIDE: SITE ARCHITECT (PERSISTENT) -->
-    <div class="preview-container-side">
+    <!-- RIGHT SIDE / MOBILE OVERLAY: SITE ARCHITECT -->
+    <div class="preview-container-side"
+      [class.architect-overlay]="isMobile"
+      [class.is-open]="!isMobile || mobileArchitectOpen"
+      *ngIf="!isMobile || mobileArchitectOpen"
+      @fadeInOut>
       <div class="architect-card">
         <div class="architect-header">
-          <h3><mat-icon>visibility</mat-icon> {{ 'SITE_ARCHITECT' | translate }}</h3>
+          <div class="architect-header__leading">
+            <button mat-icon-button type="button" class="architect-back mobile-only"
+              (click)="closeMobileArchitect()" [attr.aria-label]="'CLOSE_BTN' | translate">
+              <mat-icon>arrow_back</mat-icon>
+            </button>
+            <h3><mat-icon>visibility</mat-icon> {{ 'SITE_ARCHITECT' | translate }}</h3>
+          </div>
           <div class="device-switcher">
             <div class="theme-pills">
               <button mat-icon-button [class.active]="themeMode === 'default'" (click)="setThemeMode('default')" matTooltip="Light">
@@ -140,8 +236,8 @@
           </div>
         </div>
         <div class="architect-content">
-          <app-admin-section-preview 
-            [sections]="dataSource.data" 
+          <app-admin-section-preview
+            [sections]="dataSource.data"
             [sectionData]="isEditorOpen ? previewData : null"
             [mode]="previewMode"
             [isFoldExpanded]="isFoldExpanded"
@@ -151,22 +247,23 @@
             (elementSelected)="onElementSelected($event)">
           </app-admin-section-preview>
 
-          <!-- PROPERTY ADJUST TOOLBAR -->
           <div class="property-adjust-toolbar" *ngIf="selectedElementInfo" @fadeInOut>
             <div class="toolbar-header">
               <span class="selector">{{ selectedElementInfo.selector }}</span>
               <button mat-icon-button (click)="selectedElementInfo = null" size="small"><mat-icon>close</mat-icon></button>
             </div>
-            
+
             <div class="tool-groups">
               <div class="tool-group">
                 <span class="label">{{ 'SPACING' | translate }}</span>
                 <div class="btn-row">
-                  <button mat-icon-button (click)="updateVisualOverride('margin-top', -5)"><mat-icon>expand_less</mat-icon></button>
-                  <button mat-icon-button (click)="updateVisualOverride('margin-top', 5)"><mat-icon>expand_more</mat-icon></button>
+                  <button mat-icon-button (click)="updateVisualOverride('margin-top', -5)" [matTooltip]="'MARGIN' | translate"><mat-icon>expand_less</mat-icon></button>
+                  <button mat-icon-button (click)="updateVisualOverride('margin-top', 5)" [matTooltip]="'MARGIN' | translate"><mat-icon>expand_more</mat-icon></button>
+                  <button mat-icon-button (click)="updateVisualOverride('padding-top', -5)" [matTooltip]="'PADDING' | translate"><mat-icon>unfold_less</mat-icon></button>
+                  <button mat-icon-button (click)="updateVisualOverride('padding-top', 5)" [matTooltip]="'PADDING' | translate"><mat-icon>unfold_more</mat-icon></button>
                 </div>
               </div>
-    
+
               <div class="tool-group">
                 <span class="label">{{ 'TEXT' | translate }}</span>
                 <div class="btn-row">
@@ -174,14 +271,24 @@
                   <button mat-icon-button (click)="updateVisualOverride('font-size', 2)"><mat-icon>text_fields</mat-icon> <small>+</small></button>
                 </div>
               </div>
-    
+
               <div class="tool-group">
-                <span class="label">{{ 'COLORS' | translate }}</span>
+                <span class="label">{{ 'TEXT_COLOR' | translate }}</span>
                 <div class="color-palette">
-                  <div class="color-swatch white" (click)="updateColorOverride('#ffffff')"></div>
+                  <div class="color-swatch white" (click)="updateColorOverride('#ffffff')" [matTooltip]="'TEXT_COLOR' | translate"></div>
                   <div class="color-swatch primary" (click)="updateColorOverride('var(--interactive-primary)')"></div>
                   <div class="color-swatch accent" (click)="updateColorOverride('#ffcc00')"></div>
                   <div class="color-swatch dark" (click)="updateColorOverride('#1a1a1a')"></div>
+                </div>
+              </div>
+
+              <div class="tool-group">
+                <span class="label">{{ 'BACKGROUND_COLOR' | translate }}</span>
+                <div class="color-palette">
+                  <div class="color-swatch white" (click)="updateColorOverride('transparent', 'background-color')"></div>
+                  <div class="color-swatch primary" (click)="updateColorOverride('var(--surface-card)', 'background-color')"></div>
+                  <div class="color-swatch accent" (click)="updateColorOverride('var(--interactive-primary)', 'background-color')"></div>
+                  <div class="color-swatch dark" (click)="updateColorOverride('#1a1a1a', 'background-color')"></div>
                 </div>
               </div>
             </div>
@@ -190,4 +297,13 @@
       </div>
     </div>
   </div>
+
+  <!-- Mobile FAB: open Site Architect -->
+  <button *ngIf="isMobile && !isEditorOpen && !mobileArchitectOpen"
+    type="button"
+    class="architect-fab"
+    (click)="openMobileArchitect()">
+    <mat-icon>visibility</mat-icon>
+    <span>{{ 'PREVIEW' | translate }}</span>
+  </button>
 </div>

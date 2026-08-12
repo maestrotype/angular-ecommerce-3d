@@ -71,6 +71,22 @@
   border: 1px solid var(--border-default);
   margin: 0 var(--space-6);
 
+  .admin-mobile-card {
+    .amount {
+      font-weight: var(--font-bold);
+      color: var(--color-success);
+      margin-right: var(--space-2);
+      font-size: var(--text-lg);
+    }
+
+    .currency {
+      font-size: var(--text-xs);
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      font-weight: var(--font-medium);
+    }
+  }
+
   .payments-table {
     // Table chrome → overrides (B3)
 

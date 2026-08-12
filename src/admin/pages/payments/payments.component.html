@@ -72,7 +72,8 @@
   </div>
 
   <div class="payments-table-wrapper">
-      <table mat-table [dataSource]="payments" class="mat-elevation-z1" *ngIf="!isLoading && payments && payments.length > 0">
+    <div class="desktop-view">
+      <table mat-table [dataSource]="payments" class="mat-elevation-z1 payments-table" *ngIf="!isLoading && payments && payments.length > 0">
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef>{{ 'PAYMENT_ID' | translate }}</th>
           <td mat-cell *matCellDef="let payment">{{ payment?.id || ('N_A' | translate) }}</td>
@@ -159,6 +160,65 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
+    </div>
+
+    <div class="mobile-view" *ngIf="!isLoading && payments && payments.length > 0">
+      <div class="admin-mobile-cards">
+        <article class="admin-mobile-card" *ngFor="let payment of payments">
+          <div class="admin-mobile-card__header">
+            <span class="admin-mobile-card__id">#{{ payment?.id || ('N_A' | translate) }}</span>
+            <span class="status-badge" [class]="getStatusColor(payment?.status)">
+              {{ payment?.status ? ('STATUS_' + payment.status.toUpperCase() | translate) : ('N_A' | translate) }}
+            </span>
+          </div>
+
+          <div class="admin-mobile-card__row">
+            <span class="admin-mobile-card__eyebrow">{{ 'AMOUNT' | translate }}</span>
+            <span>
+              <span class="amount">{{ formatAmount(payment?.amount) }}</span>
+              <span class="currency">{{ formatCurrency(payment?.currency) }}</span>
+            </span>
+          </div>
+
+          <div class="admin-mobile-card__meta">
+            <div class="payment-method">
+              <mat-icon>{{ getPaymentMethodIcon(payment?.paymentMethod) }}</mat-icon>
+              <span>{{ payment?.paymentMethod ? ('METHOD_' + payment.paymentMethod.toUpperCase() | translate) : ('N_A' | translate) }}</span>
+            </div>
+            <span>{{ 'ORDER_ID' | translate }}: {{ payment?.orderId || ('N_A' | translate) }}</span>
+            <span class="email">{{ payment?.customerEmail || ('N_A' | translate) }}</span>
+            <span *ngIf="payment?.customerPhone">{{ payment.customerPhone }}</span>
+            <span>{{ formatDate(payment?.createdAt) }}</span>
+          </div>
+
+          <div class="admin-mobile-card__actions actions">
+            <button mat-icon-button [matTooltip]="'VIEW' | translate" (click)="viewPayment(payment)" [disabled]="!payment?.id">
+              <mat-icon>visibility</mat-icon>
+            </button>
+            <button mat-icon-button [matTooltip]="'VIEW_ORDER' | translate" (click)="viewOrder(payment?.orderId)">
+              <mat-icon>shopping_cart</mat-icon>
+            </button>
+            <button mat-icon-button [matMenuTriggerFor]="mobileStatusMenu" [matTooltip]="'CHANGE_STATUS' | translate" [disabled]="!payment?.id">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <mat-menu #mobileStatusMenu="matMenu">
+              <button mat-menu-item (click)="updateStatus(payment, 'completed')" [disabled]="!payment?.id">
+                <mat-icon>check_circle</mat-icon>
+                <span>{{ 'MARK_COMPLETED' | translate }}</span>
+              </button>
+              <button mat-menu-item (click)="updateStatus(payment, 'processing')" [disabled]="!payment?.id">
+                <mat-icon>hourglass_top</mat-icon>
+                <span>{{ 'MARK_PROCESSING' | translate }}</span>
+              </button>
+              <button mat-menu-item (click)="updateStatus(payment, 'failed')" [disabled]="!payment?.id">
+                <mat-icon>cancel</mat-icon>
+                <span>{{ 'MARK_FAILED' | translate }}</span>
+              </button>
+            </mat-menu>
+          </div>
+        </article>
+      </div>
+    </div>
 
       <div *ngIf="isLoading" class="loading">
         <mat-spinner diameter="40"></mat-spinner>

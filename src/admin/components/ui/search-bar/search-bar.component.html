@@ -1,24 +1,13 @@
 <div class="search-bar" [style.width]="width" [style.maxWidth]="maxWidth">
-  <mat-form-field appearance="outline" class="search-field">
-    <mat-label>{{ label }}</mat-label>
+  <mat-form-field appearance="outline" class="search-field" [floatLabel]="floatLabelMode">
+    <mat-label *ngIf="showFloatingLabel">{{ label }}</mat-label>
     <input
       matInput
-      @Input()
       [value]="searchTerm"
       (input)="onInputChange($any($event.target).value)"
       (keyup.enter)="onSearchClick()"
-      [placeholder]="placeholder"
+      [placeholder]="inputPlaceholder"
+      [attr.aria-label]="!showFloatingLabel ? label : null"
     />
   </mat-form-field>
 </div>
-
-<!-- <button mat-raised-button color="primary" (click)="onSearchClick()" class="search-button">
-  <mat-icon>search</mat-icon>
-  <span class="button-text">Search</span>
-</button> -->
-<!-- 
-<button mat-button (click)="onClearClick()" *ngIf="searchTerm" class="clear-button">
-  <mat-icon>clear</mat-icon>
-  <span class="button-text">Clear</span>
-</button> -->
-

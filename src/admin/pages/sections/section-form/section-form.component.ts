@@ -13,6 +13,9 @@ import { LocalizedString } from '../../../../shared/models/localized-string.mode
 import { getLocalizedString, resolveApiError, formatResolvedApiError } from '../../../../shared/utils/localization.util';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ImageUploadComponent } from '../../../components/ui/image-upload/image-upload.component';
+import { ConfirmationService } from '../../../services/confirmation.service';
+import { getSectionPreset, SectionPresetFormPatch } from '../section-presets';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-section-form',
@@ -38,7 +41,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
   private _activeMenuLang = localStorage.getItem('admin_menu_lang') || 'en';
   @Input() set activeMenuLang(val: string) {
     if (val && this._activeMenuLang !== val) {
-      console.log(`[SectionFormComponent] Language changing to ${val}`);
+      // Language changed to ${val}
       this._activeMenuLang = val;
       localStorage.setItem('admin_menu_lang', val);
     }
@@ -66,6 +69,11 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     { value: 'categories', label: 'SECTION_TYPE_LABELS.CATEGORIES' },
     { value: 'special-offer', label: 'SECTION_TYPE_LABELS.SPECIAL_OFFER' },
     { value: 'brands', label: 'SECTION_TYPE_LABELS.BRANDS' },
+    { value: 'testimonials', label: 'SECTION_TYPE_LABELS.TESTIMONIALS' },
+    { value: 'newsletter', label: 'SECTION_TYPE_LABELS.NEWSLETTER' },
+    { value: 'features-grid', label: 'SECTION_TYPE_LABELS.FEATURES_GRID' },
+    { value: 'faq', label: 'SECTION_TYPE_LABELS.FAQ' },
+    { value: 'stats', label: 'SECTION_TYPE_LABELS.STATS' },
     { value: 'contacts', label: 'SECTION_TYPE_LABELS.CONTACTS' },
     { value: 'about', label: 'SECTION_TYPE_LABELS.ABOUT' },
     { value: 'product-tabs', label: 'SECTION_TYPE_LABELS.PRODUCT_TABS' },
@@ -109,6 +117,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     private pageService: PageService,
     private snackBar: MatSnackBar,
     private translate: TranslateService,
+    private confirmationService: ConfirmationService,
     @Optional() public dialogRef: MatDialogRef<SectionFormComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public dialogData: { section: Section | null }
   ) {
@@ -254,6 +263,49 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
           })
         )
       ),
+      testimonials: this.fb.array(
+        (settings?.testimonials || []).map((item: any) =>
+          this.fb.group({
+            name: [this.getLocalizedValue(item.name, 'en'), Validators.required],
+            role: [this.getLocalizedValue(item.role, 'en')],
+            text: [this.getLocalizedValue(item.text, 'en'), Validators.required],
+            avatar: [item.avatar || ''],
+            rating: [item.rating ?? 5, [Validators.min(1), Validators.max(5)]],
+            isActive: [item.isActive ?? true]
+          })
+        )
+      ),
+      features: this.fb.array(
+        (settings?.features || []).map((item: any) =>
+          this.fb.group({
+            icon: [item.icon || 'star', Validators.required],
+            title: [this.getLocalizedValue(item.title, 'en'), Validators.required],
+            description: [this.getLocalizedValue(item.description, 'en'), Validators.required],
+            isActive: [item.isActive ?? true]
+          })
+        )
+      ),
+      faqItems: this.fb.array(
+        (settings?.items || []).map((item: any) =>
+          this.fb.group({
+            question: [this.getLocalizedValue(item.question, 'en'), Validators.required],
+            answer: [this.getLocalizedValue(item.answer, 'en'), Validators.required],
+            isActive: [item.isActive ?? true]
+          })
+        )
+      ),
+      stats: this.fb.array(
+        (settings?.stats || []).map((item: any) =>
+          this.fb.group({
+            value: [item.value || '', Validators.required],
+            label: [this.getLocalizedValue(item.label, 'en'), Validators.required],
+            suffix: [item.suffix || ''],
+            isActive: [item.isActive ?? true]
+          })
+        )
+      ),
+      newsletterPlaceholder: [this.getLocalizedValue(settings?.placeholder, 'en') || ''],
+      newsletterButtonText: [this.getLocalizedValue(settings?.buttonText, 'en') || 'Subscribe'],
       // Footer specific
       social: this.fb.group({
         instagram: [settings?.social?.instagram || ''],
@@ -339,6 +391,22 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     return this.sectionForm.get('brands') as FormArray;
   }
 
+  get testimonials(): FormArray {
+    return this.sectionForm.get('testimonials') as FormArray;
+  }
+
+  get features(): FormArray {
+    return this.sectionForm.get('features') as FormArray;
+  }
+
+  get faqItems(): FormArray {
+    return this.sectionForm.get('faqItems') as FormArray;
+  }
+
+  get stats(): FormArray {
+    return this.sectionForm.get('stats') as FormArray;
+  }
+
   get columns(): FormArray {
     return this.sectionForm.get('columns') as FormArray;
   }
@@ -419,6 +487,43 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     }));
   }
 
+  addTestimonial() {
+    this.testimonials.push(this.fb.group({
+      name: ['', Validators.required],
+      role: [''],
+      text: ['', Validators.required],
+      avatar: [''],
+      rating: [5, [Validators.min(1), Validators.max(5)]],
+      isActive: [true]
+    }));
+  }
+
+  addFeature() {
+    this.features.push(this.fb.group({
+      icon: ['star', Validators.required],
+      title: ['', Validators.required],
+      description: ['', Validators.required],
+      isActive: [true]
+    }));
+  }
+
+  addFaqItem() {
+    this.faqItems.push(this.fb.group({
+      question: ['', Validators.required],
+      answer: ['', Validators.required],
+      isActive: [true]
+    }));
+  }
+
+  addStat() {
+    this.stats.push(this.fb.group({
+      value: ['', Validators.required],
+      label: ['', Validators.required],
+      suffix: [''],
+      isActive: [true]
+    }));
+  }
+
   removeMenuItem(index: number) {
     this.menu.removeAt(index);
   }
@@ -429,6 +534,22 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
 
   removeBrand(index: number) {
     this.brands.removeAt(index);
+  }
+
+  removeTestimonial(index: number) {
+    this.testimonials.removeAt(index);
+  }
+
+  removeFeature(index: number) {
+    this.features.removeAt(index);
+  }
+
+  removeFaqItem(index: number) {
+    this.faqItems.removeAt(index);
+  }
+
+  removeStat(index: number) {
+    this.stats.removeAt(index);
   }
 
   dropMenuItem(event: CdkDragDrop<FormArray>) {
@@ -463,6 +584,33 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     const control = this.brands.at(from);
     this.brands.removeAt(from);
     this.brands.insert(to, control);
+  }
+
+  dropTestimonial(event: CdkDragDrop<FormArray>) {
+    this.dropFormArrayItem(this.testimonials, event);
+  }
+
+  dropFeature(event: CdkDragDrop<FormArray>) {
+    this.dropFormArrayItem(this.features, event);
+  }
+
+  dropFaqItem(event: CdkDragDrop<FormArray>) {
+    this.dropFormArrayItem(this.faqItems, event);
+  }
+
+  dropStat(event: CdkDragDrop<FormArray>) {
+    this.dropFormArrayItem(this.stats, event);
+  }
+
+  private dropFormArrayItem(array: FormArray, event: CdkDragDrop<FormArray>): void {
+    const from = event.previousIndex;
+    const to = event.currentIndex;
+    if (from === to) {
+      return;
+    }
+    const control = array.at(from);
+    array.removeAt(from);
+    array.insert(to, control);
   }
 
   onSectionSelect(index: number, sectionId: number | null) {
@@ -579,6 +727,10 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     this.brands.at(index).patchValue({ logo: url });
   }
 
+  onTestimonialAvatarUploaded(url: string, index: number): void {
+    this.testimonials.at(index).patchValue({ avatar: url });
+  }
+
   removeBrandLogo(index: number): void {
     this.brands.at(index).patchValue({ logo: '' });
   }
@@ -656,10 +808,8 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
 
     this.upload3dIfSelected().subscribe({
       next: (model3dUrl) => {
-        const rawFormValue = this.sectionForm.value;
+        const rawFormValue = this.sectionForm.getRawValue();
         const formValue = this.packLocalizedFields(rawFormValue);
-        console.log('[SectionFormComponent] Submitting form data:', formValue);
-
         const dataSource = this.isDrawerMode ? this.data : this.dialogData;
         const existingSettings = dataSource?.section?.settings || {};
         let formData: any;
@@ -707,15 +857,15 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
             showImage: formValue.showImage || true,
             settings: {
               ...existingSettings,
-              categories: (formValue.categories || []).map((cat: any) => ({
-                ...cat,
-                name: {
-                  en: cat.name || '',
-                  ru: cat.name || '',
-                  ua: cat.name || ''
-                },
-                slug: cat.slug || getLocalizedString(cat.name).toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
-              }))
+              categories: (formValue.categories || []).map((cat: any, index: number) => {
+                const existingCat = this.findExistingCategory((existingSettings as any)?.categories, cat, index);
+                const name = this.buildLocalizedNameFromForm(cat.name, existingCat?.name);
+                return {
+                  ...cat,
+                  name,
+                  slug: cat.slug || getLocalizedString(name).toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+                };
+              })
             }
           };
         } else if (formValue.type === 'brands') {
@@ -731,14 +881,131 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
             showImage: false,
             settings: {
               ...existingSettings,
-              brands: (formValue.brands || []).map((brand: any) => ({
-                ...brand,
-                name: {
-                  en: brand.name || '',
-                  ru: brand.name || '',
-                  ua: brand.name || ''
-                }
-              }))
+              brands: (formValue.brands || []).map((brand: any, index: number) => {
+                const existingBrand = this.findExistingBrand((existingSettings as any)?.brands, brand, index);
+                return {
+                  ...brand,
+                  name: this.buildLocalizedNameFromForm(brand.name, existingBrand?.name)
+                };
+              })
+            }
+          };
+        } else if (formValue.type === 'testimonials') {
+          formData = {
+            type: 'testimonials',
+            title: formValue.title,
+            subtitle: formValue.subtitle,
+            content: formValue.content,
+            imageUrl: formValue.imageUrl || '',
+            isActive: formValue.isActive,
+            model3dUrl: model3dUrl || '',
+            show3d: formValue.show3d || false,
+            showImage: formValue.showImage || true,
+            pageTarget: formValue.pageTarget || 'home',
+            variant: formValue.variant || 'default',
+            anchorId: formValue.anchorId || '',
+            settings: {
+              ...existingSettings,
+              testimonials: this.mapLocalizedSettingsList(
+                formValue.testimonials,
+                (existingSettings as any)?.testimonials,
+                ['name', 'role', 'text']
+              )
+            }
+          };
+        } else if (formValue.type === 'features-grid') {
+          formData = {
+            type: 'features-grid',
+            title: formValue.title,
+            subtitle: formValue.subtitle,
+            content: formValue.content,
+            imageUrl: formValue.imageUrl || '',
+            isActive: formValue.isActive,
+            model3dUrl: model3dUrl || '',
+            show3d: formValue.show3d || false,
+            showImage: formValue.showImage || true,
+            pageTarget: formValue.pageTarget || 'home',
+            variant: formValue.variant || 'default',
+            anchorId: formValue.anchorId || '',
+            settings: {
+              ...existingSettings,
+              features: this.mapLocalizedSettingsList(
+                formValue.features,
+                (existingSettings as any)?.features,
+                ['title', 'description']
+              )
+            }
+          };
+        } else if (formValue.type === 'faq') {
+          formData = {
+            type: 'faq',
+            title: formValue.title,
+            subtitle: formValue.subtitle,
+            content: formValue.content,
+            imageUrl: formValue.imageUrl || '',
+            isActive: formValue.isActive,
+            model3dUrl: model3dUrl || '',
+            show3d: formValue.show3d || false,
+            showImage: formValue.showImage || true,
+            pageTarget: formValue.pageTarget || 'home',
+            variant: formValue.variant || 'default',
+            anchorId: formValue.anchorId || '',
+            settings: {
+              ...existingSettings,
+              items: this.mapLocalizedSettingsList(
+                formValue.faqItems,
+                (existingSettings as any)?.items,
+                ['question', 'answer']
+              )
+            }
+          };
+        } else if (formValue.type === 'stats') {
+          formData = {
+            type: 'stats',
+            title: formValue.title,
+            subtitle: formValue.subtitle,
+            content: formValue.content,
+            imageUrl: formValue.imageUrl || '',
+            isActive: formValue.isActive,
+            model3dUrl: model3dUrl || '',
+            show3d: formValue.show3d || false,
+            showImage: formValue.showImage || true,
+            pageTarget: formValue.pageTarget || 'home',
+            variant: formValue.variant || 'default',
+            anchorId: formValue.anchorId || '',
+            settings: {
+              ...existingSettings,
+              stats: this.mapLocalizedSettingsList(
+                formValue.stats,
+                (existingSettings as any)?.stats,
+                ['label']
+              )
+            }
+          };
+        } else if (formValue.type === 'newsletter') {
+          formData = {
+            type: 'newsletter',
+            title: formValue.title,
+            subtitle: formValue.subtitle,
+            content: formValue.content,
+            imageUrl: formValue.imageUrl || '',
+            isActive: formValue.isActive,
+            model3dUrl: model3dUrl || '',
+            show3d: formValue.show3d || false,
+            showImage: formValue.showImage || false,
+            pageTarget: formValue.pageTarget || 'home',
+            variant: formValue.variant || 'default',
+            anchorId: formValue.anchorId || '',
+            settings: {
+              ...existingSettings,
+              placeholder: this.buildLocalizedNameFromForm(
+                formValue.newsletterPlaceholder,
+                (existingSettings as any)?.placeholder
+              ),
+              buttonText: this.buildLocalizedNameFromForm(
+                formValue.newsletterButtonText,
+                (existingSettings as any)?.buttonText
+              )
             }
           };
         } else if (formValue.type === 'footer') {
@@ -763,8 +1030,6 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
             // visualOverrides set by the Site Architect toolbar during an active session!
           };
         }
-
-        console.log('[DEBUG-FORM-SUBMIT] FormData immediately before pushing to service:', JSON.stringify(formData, null, 2));
 
         if (this.isEditMode && dataSource?.section?.id) {
           this.sectionService.updateSection(dataSource.section.id, formData).subscribe({
@@ -815,10 +1080,235 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     }
   }
 
+  loadDemoContent(): void {
+    const type = this.sectionForm.get('type')?.value;
+    const preset = getSectionPreset(type);
+
+    if (!preset) {
+      this.snackBar.open(
+        this.translate.instant('DEMO_CONTENT_NOT_AVAILABLE'),
+        this.translate.instant('CLOSE_BTN'),
+        { duration: 3000 }
+      );
+      return;
+    }
+
+    const applyPreset = () => {
+      this.applyPresetToForm(preset);
+      this.snackBar.open(
+        this.translate.instant('DEMO_CONTENT_LOADED'),
+        this.translate.instant('CLOSE_BTN'),
+        { duration: 3000 }
+      );
+    };
+
+    if (this.isEditMode) {
+      this.confirmationService.confirmAction(
+        this.translate.instant('LOAD_DEMO_CONTENT'),
+        this.translate.instant('SECTION')
+      ).pipe(take(1)).subscribe(confirmed => {
+        if (confirmed) {
+          applyPreset();
+        }
+      });
+      return;
+    }
+
+    applyPreset();
+  }
+
+  private applyPresetToForm(preset: SectionPresetFormPatch): void {
+    this.sectionForm.patchValue({
+      title_en: preset.title_en ?? this.sectionForm.get('title_en')?.value,
+      title_ru: preset.title_ru ?? this.sectionForm.get('title_ru')?.value,
+      title_ua: preset.title_ua ?? this.sectionForm.get('title_ua')?.value,
+      subtitle_en: preset.subtitle_en ?? this.sectionForm.get('subtitle_en')?.value,
+      subtitle_ru: preset.subtitle_ru ?? this.sectionForm.get('subtitle_ru')?.value,
+      subtitle_ua: preset.subtitle_ua ?? this.sectionForm.get('subtitle_ua')?.value,
+      content_en: preset.content_en ?? this.sectionForm.get('content_en')?.value,
+      content_ru: preset.content_ru ?? this.sectionForm.get('content_ru')?.value,
+      content_ua: preset.content_ua ?? this.sectionForm.get('content_ua')?.value,
+      imageUrl: preset.imageUrl ?? this.sectionForm.get('imageUrl')?.value,
+      logoUrl: preset.logoUrl ?? this.sectionForm.get('logoUrl')?.value,
+      showSearch: preset.showSearch ?? this.sectionForm.get('showSearch')?.value,
+      showCart: preset.showCart ?? this.sectionForm.get('showCart')?.value,
+      showProfile: preset.showProfile ?? this.sectionForm.get('showProfile')?.value,
+      showImage: preset.showImage ?? this.sectionForm.get('showImage')?.value,
+      show3d: preset.show3d ?? this.sectionForm.get('show3d')?.value,
+      model3dUrl: preset.model3dUrl ?? this.sectionForm.get('model3dUrl')?.value,
+      variant: preset.variant ?? this.sectionForm.get('variant')?.value,
+      anchorId: preset.anchorId ?? this.sectionForm.get('anchorId')?.value,
+      newsletterPlaceholder: preset.newsletterPlaceholder ?? this.sectionForm.get('newsletterPlaceholder')?.value,
+      newsletterButtonText: preset.newsletterButtonText ?? this.sectionForm.get('newsletterButtonText')?.value,
+      copyright: preset.copyright ?? this.sectionForm.get('copyright')?.value
+    });
+
+    if (preset.social) {
+      this.sectionForm.get('social')?.patchValue(preset.social);
+    }
+
+    if (preset.menu) {
+      this.setFormArray(this.menu, preset.menu, item =>
+        this.fb.group({
+          title: this.fb.group({
+            en: [item.title.en],
+            ru: [item.title.ru],
+            ua: [item.title.ua]
+          }),
+          url: [item.url, Validators.required],
+          access: [item.access, Validators.required],
+          isActive: [item.isActive ?? true],
+          sectionId: [null]
+        })
+      );
+    }
+
+    if (preset.categories) {
+      this.setFormArray(this.categories, preset.categories, item =>
+        this.fb.group({
+          name: [item.name, Validators.required],
+          slug: [item.slug, Validators.required],
+          icon: [item.icon],
+          isActive: [item.isActive ?? true]
+        })
+      );
+    }
+
+    if (preset.brands) {
+      this.setFormArray(this.brands, preset.brands, item =>
+        this.fb.group({
+          name: [item.name, Validators.required],
+          logo: [item.logo],
+          isActive: [item.isActive ?? true]
+        })
+      );
+    }
+
+    if (preset.testimonials) {
+      this.setFormArray(this.testimonials, preset.testimonials, item =>
+        this.fb.group({
+          name: [item.name, Validators.required],
+          role: [item.role],
+          text: [item.text, Validators.required],
+          avatar: [item.avatar],
+          rating: [item.rating ?? 5, [Validators.min(1), Validators.max(5)]],
+          isActive: [item.isActive ?? true]
+        })
+      );
+    }
+
+    if (preset.features) {
+      this.setFormArray(this.features, preset.features, item =>
+        this.fb.group({
+          icon: [item.icon, Validators.required],
+          title: [item.title, Validators.required],
+          description: [item.description, Validators.required],
+          isActive: [item.isActive ?? true]
+        })
+      );
+    }
+
+    if (preset.faqItems) {
+      this.setFormArray(this.faqItems, preset.faqItems, item =>
+        this.fb.group({
+          question: [item.question, Validators.required],
+          answer: [item.answer, Validators.required],
+          isActive: [item.isActive ?? true]
+        })
+      );
+    }
+
+    if (preset.stats) {
+      this.setFormArray(this.stats, preset.stats, item =>
+        this.fb.group({
+          value: [item.value, Validators.required],
+          label: [item.label, Validators.required],
+          suffix: [item.suffix || ''],
+          isActive: [item.isActive ?? true]
+        })
+      );
+    }
+
+    if (preset.columns) {
+      this.setFormArray(this.columns, preset.columns, col =>
+        this.fb.group({
+          title: this.fb.group({
+            en: [col.title.en],
+            ru: [col.title.ru],
+            ua: [col.title.ua]
+          }),
+          linkSource: [col.linkSource || 'manual'],
+          links: this.fb.array((col.links || []).map(link =>
+            this.fb.group({
+              label: this.fb.group({
+                en: [link.label.en],
+                ru: [link.label.ru],
+                ua: [link.label.ua]
+              }),
+              url: [link.url, Validators.required]
+            })
+          ))
+        })
+      );
+    }
+  }
+
+  private setFormArray<T>(array: FormArray, items: T[], builder: (item: T) => FormGroup): void {
+    while (array.length) {
+      array.removeAt(0);
+    }
+    items.forEach(item => array.push(builder(item)));
+  }
+
   getLocalizedValue(value: any, lang: string): string {
     if (!value) return '';
     if (typeof value === 'string') return lang === 'en' ? value : '';
     return value[lang] || '';
+  }
+
+  private buildLocalizedNameFromForm(
+    formName: string,
+    existingName: string | LocalizedString | undefined
+  ): LocalizedString {
+    const existing =
+      typeof existingName === 'object' && existingName !== null
+        ? existingName
+        : {
+            en: typeof existingName === 'string' ? existingName : '',
+            ru: '',
+            ua: ''
+          };
+
+    return {
+      en: formName || '',
+      ru: existing.ru || '',
+      ua: existing.ua || ''
+    };
+  }
+
+  private mapLocalizedSettingsList(
+    items: any[] | undefined,
+    existingItems: any[] | undefined,
+    localizedFields: string[]
+  ): any[] {
+    return (items || []).map((item, index) => {
+      const existing = (existingItems || [])[index];
+      const mapped = { ...item };
+      localizedFields.forEach(field => {
+        mapped[field] = this.buildLocalizedNameFromForm(item[field], existing?.[field]);
+      });
+      return mapped;
+    });
+  }
+
+  private findExistingCategory(categories: any[] | undefined, cat: any, index: number): any {
+    const list = categories || [];
+    return list.find((item) => item.slug && cat.slug && item.slug === cat.slug) || list[index];
+  }
+
+  private findExistingBrand(brands: any[] | undefined, brand: any, index: number): any {
+    const list = brands || [];
+    return list.find((item) => item.name && brand.name && getLocalizedString(item.name) === brand.name) || list[index];
   }
 
   private packLocalizedFields(formValue: any): any {

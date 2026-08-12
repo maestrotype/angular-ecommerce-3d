@@ -355,7 +355,17 @@
     background: var(--surface-secondary);
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     gap: var(--space-4);
+
+    .form-footer-spacer {
+      flex: 1;
+    }
+
+    .demo-btn mat-icon {
+      margin-right: 4px;
+      vertical-align: middle;
+    }
 
     &.form-actions-drawer {
       position: sticky;

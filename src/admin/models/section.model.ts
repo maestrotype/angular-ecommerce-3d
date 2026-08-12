@@ -81,6 +81,7 @@ export interface CreateSectionDto {
   model3dUrl?: string;
   show3d?: boolean;
   showImage?: boolean;
+  order?: number;
   pageTarget?: string;
   variant?: string;
   anchorId?: string;

@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -8,10 +9,27 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { SectionService } from '../../../services/section.service';
 import { SectionFormComponent } from '../section-form/section-form.component';
-import { Section } from '../../../models/section.model';
+import { Section, CreateSectionDto } from '../../../models/section.model';
+import { LocalizedString } from '../../../../shared/models/localized-string.model';
 import { MatSidenav } from '@angular/material/sidenav';
 import { TranslateService } from '@ngx-translate/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ConfirmationService } from '../../../services/confirmation.service';
+import { PageService } from '../../../services/page.service';
+import { getLocalizedString } from 'src/shared/utils/localization.util';
+import { take } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
+import { isSectionBasedPageTemplate } from 'src/shared/models/page.model';
+import {
+  buildMissingHomepageWizardDtos,
+  HOMEPAGE_WIZARD_SECTIONS,
+  wizardSectionExists
+} from '../section-presets';
+import {
+  buildMissingPageTemplateSections,
+  isPageTemplatePreset,
+  PageTemplatePresetId
+} from '../page-template-presets';
 
 @Component({
   selector: 'app-section-list',
@@ -29,12 +47,28 @@ import { ActivatedRoute } from '@angular/router';
     ])
   ]
 })
-export class SectionListComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['order', 'type', 'title', 'isActive', 'createdAt', 'actions'];
+export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
+  displayedColumns: string[] = ['order', 'type', 'pageTarget', 'title', 'isActive', 'actions'];
   dataSource = new MatTableDataSource<Section>();
+  allSections: Section[] = [];
+  activePageTarget: string | null = null;
+  pageFilterOptions: { value: string | null; label: string; translate?: boolean }[] = [
+    { value: null, label: 'PAGE_TARGET_ALL', translate: true },
+    { value: 'home', label: 'TARGET_HOME', translate: true },
+    { value: 'shop', label: 'TARGET_SHOP', translate: true },
+    { value: 'product', label: 'TARGET_PRODUCT', translate: true },
+    { value: 'global', label: 'PAGE_TARGET_GLOBAL', translate: true },
+  ];
+  private readonly staticPageFilterOptions = [
+    { value: 'home', label: 'TARGET_HOME', translate: true },
+    { value: 'shop', label: 'TARGET_SHOP', translate: true },
+    { value: 'product', label: 'TARGET_PRODUCT', translate: true },
+    { value: 'global', label: 'PAGE_TARGET_GLOBAL', translate: true },
+  ];
   loading = false;
   hasHeader = false;
   hasFooter = false;
+  templateApplying = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -52,35 +86,60 @@ export class SectionListComponent implements OnInit, AfterViewInit {
   isFoldExpanded = false;
   selectedElementInfo: { selector: string, section: any } | null = null;
   sidebarWidth = 640;
+  wizardRunning = false;
+  isMobile = false;
+  mobileArchitectOpen = false;
+  private readonly resizeListener = () => this.checkScreenSize();
   private isResizing = false;
   private initialMouseX = 0;
   private initialSidebarWidth = 640;
 
   constructor(
     private sectionService: SectionService,
+    private pageService: PageService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private translate: TranslateService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router,
+    private confirmationService: ConfirmationService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
 
   ngOnInit(): void {
+    this.checkScreenSize();
+    if (isPlatformBrowser(this.platformId)) {
+      window.addEventListener('resize', this.resizeListener);
+    }
+
     this.sidebarWidth = this.computeInitialSidebarWidth();
     this.initialSidebarWidth = this.sidebarWidth;
 
+    this.loadPageFilterOptions();
+
     this.route.queryParams.subscribe(params => {
-      const target = params['pageTarget'];
-      const create = params['createIfMissing'];
-      
-      this.loadSections(() => {
-        if (target) {
-          this.filterByPageTarget(target);
-          if (create && this.dataSource.data.length === 0) {
-            this.addSectionWithTarget(target);
-          }
+      const target = params['pageTarget'] || null;
+      const create = params['createIfMissing'] === 'true' || params['createIfMissing'] === true;
+      const applyTemplate = params['applyTemplate'] as string | undefined;
+
+      this.activePageTarget = target;
+
+      const handleQueryActions = () => {
+        this.applyPageTargetFilter();
+        if (target && create && this.getSectionsForTarget(target).length === 0) {
+          this.addSectionWithTarget(target);
         }
-      });
+        if (target && applyTemplate && isPageTemplatePreset(applyTemplate)) {
+          this.applyPageTemplateSections(target, applyTemplate);
+        }
+      };
+
+      if (this.allSections.length === 0) {
+        this.loadSections(handleQueryActions);
+      } else {
+        handleQueryActions();
+      }
     });
     
     this.initResizeListeners();
@@ -141,14 +200,59 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
+  ngOnDestroy(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      window.removeEventListener('resize', this.resizeListener);
+      this.lockBodyScroll(false);
+    }
+  }
+
+  toggleMobileArchitect(): void {
+    if (this.mobileArchitectOpen) {
+      this.closeMobileArchitect();
+    } else {
+      this.openMobileArchitect();
+    }
+  }
+
+  openMobileArchitect(): void {
+    this.mobileArchitectOpen = true;
+    if (this.isMobile && this.previewMode === 'desktop') {
+      this.previewMode = 'mobile';
+    }
+    this.lockBodyScroll(true);
+  }
+
+  closeMobileArchitect(): void {
+    this.mobileArchitectOpen = false;
+    this.lockBodyScroll(false);
+  }
+
+  private checkScreenSize(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.isMobile = window.innerWidth <= 768;
+      if (!this.isMobile) {
+        this.mobileArchitectOpen = false;
+        this.lockBodyScroll(false);
+      }
+    }
+  }
+
+  private lockBodyScroll(lock: boolean): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    document.body.classList.toggle('sections-architect-locked', lock);
+  }
+
   loadSections(onLoaded?: () => void): void {
     this.loading = true;
     this.sectionService.getSections().subscribe({
       next: (sections) => {
-        // Spread to force a new array reference → triggers ngOnChanges in child components
-        this.dataSource.data = [...sections];
+        this.allSections = [...sections];
         this.hasHeader = sections.some(s => s.type === 'header');
         this.hasFooter = sections.some(s => s.type === 'footer');
+        this.applyPageTargetFilter();
         this.loading = false;
         if (onLoaded) onLoaded();
       },
@@ -163,8 +267,60 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     });
   }
 
-  private filterByPageTarget(target: string): void {
-    this.dataSource.data = this.dataSource.data.filter(s => s.pageTarget === target || s.pageTarget === 'global');
+  private loadPageFilterOptions(): void {
+    this.pageService.getPagesForAdmin().subscribe({
+      next: (pages) => {
+        const customOptions = pages
+          .filter(page => isSectionBasedPageTemplate(page.template))
+          .map(page => ({
+            value: page.slug,
+            label: getLocalizedString(page.title, this.translate.currentLang || 'en') || page.slug,
+          }));
+        this.pageFilterOptions = [
+          { value: null, label: 'PAGE_TARGET_ALL', translate: true },
+          ...this.staticPageFilterOptions,
+          ...customOptions,
+        ];
+      },
+    });
+  }
+
+  private getSectionsForTarget(target: string): Section[] {
+    if (target === 'global') {
+      return this.allSections.filter(section => section.pageTarget === 'global');
+    }
+    return this.allSections.filter(
+      section => section.pageTarget === target || section.pageTarget === 'global'
+    );
+  }
+
+  private applyPageTargetFilter(): void {
+    if (!this.activePageTarget) {
+      this.dataSource.data = [...this.allSections];
+      return;
+    }
+    this.dataSource.data = this.getSectionsForTarget(this.activePageTarget);
+  }
+
+  onPageTargetFilterChange(value: string | null): void {
+    this.activePageTarget = value;
+    this.applyPageTargetFilter();
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { pageTarget: value || null },
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  getPageTargetLabel(target: string | undefined): string {
+    if (!target) {
+      return this.translate.instant('TARGET_HOME');
+    }
+    const option = this.pageFilterOptions.find(item => item.value === target);
+    if (option?.translate) {
+      return this.translate.instant(option.label);
+    }
+    return option?.label || target;
   }
 
   private addSectionWithTarget(target: string): void {
@@ -173,9 +329,62 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     this.isEditorOpen = true;
   }
 
+  private getDefaultPageTarget(): string {
+    if (this.activePageTarget && this.activePageTarget !== 'global') {
+      return this.activePageTarget;
+    }
+    return 'home';
+  }
+
+  private applyPageTemplateSections(pageTarget: string, template: PageTemplatePresetId): void {
+    const dtos = buildMissingPageTemplateSections(pageTarget, template, this.allSections);
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { applyTemplate: null },
+      queryParamsHandling: 'merge',
+    });
+
+    if (dtos.length === 0) {
+      this.snackBar.open(
+        this.translate.instant('APPLY_PAGE_TEMPLATE_ALL_EXIST'),
+        this.translate.instant('CLOSE_BTN'),
+        { duration: 4000 }
+      );
+      return;
+    }
+
+    this.templateApplying = true;
+    forkJoin(dtos.map(dto => this.sectionService.createSection(dto))).subscribe({
+      next: () => {
+        this.templateApplying = false;
+        this.snackBar.open(
+          this.translate.instant('APPLY_PAGE_TEMPLATE_SUCCESS', { count: dtos.length }),
+          this.translate.instant('CLOSE_BTN'),
+          { duration: 4000 }
+        );
+        this.loadSections();
+      },
+      error: () => {
+        this.templateApplying = false;
+        this.snackBar.open(
+          this.translate.instant('APPLY_PAGE_TEMPLATE_ERROR'),
+          this.translate.instant('CLOSE_BTN'),
+          { duration: 4000 }
+        );
+        this.loadSections();
+      },
+    });
+  }
+
+  onLangChange(lang: 'en' | 'ru' | 'ua'): void {
+    this.activeMenuLang = lang;
+  }
+
   onSectionTypeSelected(type: string): void {
     this.editorMode = 'add';
-    this.editingSection = { type, pageTarget: 'global' } as any;
+    const pageTarget = (type === 'header' || type === 'footer') ? 'global' : this.getDefaultPageTarget();
+    this.editingSection = { type, pageTarget } as any;
     this.isEditorOpen = true;
     this.showPicker = false;
     this.previewData = { type };
@@ -188,10 +397,65 @@ export class SectionListComponent implements OnInit, AfterViewInit {
 
   addSection(): void {
     this.editorMode = 'add';
-    this.editingSection = null;
+    this.editingSection = this.activePageTarget && this.activePageTarget !== 'global'
+      ? ({ pageTarget: this.activePageTarget } as Section)
+      : null;
     this.showPicker = true;
     this.previewData = null;
     this.isEditorOpen = true;
+  }
+
+  runQuickStartWizard(): void {
+    this.confirmationService.confirm({
+      title: this.translate.instant('QUICK_START_WIZARD'),
+      message: this.translate.instant('QUICK_START_WIZARD_CONFIRM'),
+      confirmText: this.translate.instant('CREATE'),
+      cancelText: this.translate.instant('CANCEL'),
+      type: 'info'
+    }).pipe(take(1)).subscribe(confirmed => {
+      if (!confirmed) {
+        return;
+      }
+
+      const existing = this.allSections;
+      const missingEntries = HOMEPAGE_WIZARD_SECTIONS.filter(entry => !wizardSectionExists(existing, entry));
+
+      if (missingEntries.length === 0) {
+        this.snackBar.open(
+          this.translate.instant('QUICK_START_WIZARD_ALL_EXIST'),
+          this.translate.instant('CLOSE_BTN'),
+          { duration: 4000 }
+        );
+        return;
+      }
+
+      const dtos = buildMissingHomepageWizardDtos(existing);
+
+      this.wizardRunning = true;
+      forkJoin(dtos.map(dto => this.sectionService.createSection(dto))).subscribe({
+        next: () => {
+          this.wizardRunning = false;
+          const messageKey = missingEntries.length === HOMEPAGE_WIZARD_SECTIONS.length
+            ? 'QUICK_START_WIZARD_SUCCESS'
+            : 'QUICK_START_WIZARD_PARTIAL';
+          this.snackBar.open(
+            this.translate.instant(messageKey, { count: missingEntries.length }),
+            this.translate.instant('CLOSE_BTN'),
+            { duration: 4000 }
+          );
+          this.loadSections();
+        },
+        error: () => {
+          this.wizardRunning = false;
+          this.snackBar.open(
+            this.translate.instant('QUICK_START_WIZARD_ERROR'),
+            this.translate.instant('CLOSE_BTN'),
+            { duration: 4000 }
+          );
+          this.loadSections();
+        }
+      });
+    });
   }
 
   editSection(section: Section): void {
@@ -199,8 +463,11 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     this.editingSection = section;
     this.showPicker = false;
     this.previewData = { ...section };
-    this.selectedPreviewSection = null; // Close main preview if editing
+    this.selectedPreviewSection = null;
     this.isEditorOpen = true;
+    if (this.isMobile) {
+      this.closeMobileArchitect();
+    }
   }
 
   onFormChanged(data: any): void {
@@ -209,6 +476,12 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     
     // Live update the section in the main list so Architect view reflects changes
     if (this.editingSection && this.editingSection.id) {
+      const allIndex = this.allSections.findIndex(s => s.id === this.editingSection?.id);
+      if (allIndex > -1) {
+        this.allSections = this.allSections.map((section, index) =>
+          index === allIndex ? { ...section, ...data } : section
+        );
+      }
       const dataIndex = this.dataSource.data.findIndex(s => s.id === this.editingSection?.id);
       if (dataIndex > -1) {
         const updatedData = [...this.dataSource.data];
@@ -245,17 +518,69 @@ export class SectionListComponent implements OnInit, AfterViewInit {
   }
 
   deleteSection(section: Section): void {
-    if (confirm('Are you sure you want to delete this section?')) {
-      this.sectionService.deleteSection(section.id).subscribe({
-        next: () => {
-          this.snackBar.open(this.translate.instant('SECTION_DELETED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
-          this.loadSections();
-        },
-        error: (error) => {
-          this.snackBar.open(this.translate.instant('ERROR_DELETING_SECTION'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
-        }
-      });
+    const sectionLabel = getLocalizedString(section.title, this.translate.currentLang) || section.type;
+    this.confirmationService.confirmDelete(sectionLabel).pipe(take(1)).subscribe(confirmed => {
+      if (confirmed) {
+        this.sectionService.deleteSection(section.id).subscribe({
+          next: () => {
+            this.snackBar.open(this.translate.instant('SECTION_DELETED_SUCCESSFULLY'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
+            this.loadSections();
+          },
+          error: () => {
+            this.snackBar.open(this.translate.instant('ERROR_DELETING_SECTION'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
+          }
+        });
+      }
+    });
+  }
+
+  duplicateSection(section: Section): void {
+    const dto: CreateSectionDto = {
+      type: section.type,
+      title: this.buildDuplicateTitle(section.title),
+      subtitle: section.subtitle,
+      content: section.content,
+      imageUrl: section.imageUrl,
+      isActive: false,
+      settings: JSON.parse(JSON.stringify(section.settings || {})),
+      model3dUrl: section.model3dUrl,
+      show3d: section.show3d,
+      showImage: section.showImage,
+      pageTarget: section.pageTarget,
+      variant: section.variant,
+      anchorId: section.anchorId ? `${section.anchorId}-copy` : undefined,
+    };
+
+    this.sectionService.createSection(dto).subscribe({
+      next: () => {
+        this.snackBar.open(
+          this.translate.instant('SECTION_DUPLICATED_SUCCESSFULLY'),
+          this.translate.instant('CLOSE_BTN'),
+          { duration: 3000 }
+        );
+        this.loadSections();
+      },
+      error: () => {
+        this.snackBar.open(
+          this.translate.instant('ERROR_DUPLICATING_SECTION'),
+          this.translate.instant('CLOSE_BTN'),
+          { duration: 3000 }
+        );
+      }
+    });
+  }
+
+  private buildDuplicateTitle(title: string | LocalizedString): LocalizedString {
+    const suffix = this.translate.instant('COPY_SUFFIX');
+    if (typeof title === 'string') {
+      return { en: `${title}${suffix}`, ru: `${title}${suffix}`, ua: `${title}${suffix}` };
     }
+
+    return {
+      en: `${title.en || ''}${suffix}`,
+      ru: `${title.ru || title.en || ''}${suffix}`,
+      ua: `${title.ua || title.en || ''}${suffix}`,
+    };
   }
 
   drop(event: CdkDragDrop<Section[]>): void {
@@ -273,7 +598,8 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     const sectionIds = data.map(section => section.id);
     this.sectionService.reorderSections(sectionIds).subscribe({
       next: (sections) => {
-        this.dataSource.data = sections;
+        this.allSections = sections;
+        this.applyPageTargetFilter();
         this.snackBar.open(this.translate.instant('SECTIONS_REORDERED'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
       },
       error: () => {
@@ -322,7 +648,7 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     this.saveVisualOverride(section);
   }
 
-  updateColorOverride(color: string): void {
+  updateColorOverride(color: string, property: 'color' | 'background-color' = 'color'): void {
     if (!this.selectedElementInfo) return;
 
     const { selector, section } = this.selectedElementInfo;
@@ -333,7 +659,7 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     if (!themes[this.themeMode]) themes[this.themeMode] = {};
     if (!themes[this.themeMode][selector]) themes[this.themeMode][selector] = {};
     
-    themes[this.themeMode][selector]['color'] = color;
+    themes[this.themeMode][selector][property] = color;
 
     settings.visualOverrides = { ...settings.visualOverrides, themes };
     section.settings = settings;
@@ -343,7 +669,8 @@ export class SectionListComponent implements OnInit, AfterViewInit {
   private saveVisualOverride(section: any): void {
     this.sectionService.updateSection(section.id, { settings: section.settings }).subscribe({
       next: () => {
-        this.dataSource.data = this.dataSource.data.map(s => s.id === section.id ? { ...section } : s);
+        this.allSections = this.allSections.map(s => s.id === section.id ? { ...section } : s);
+        this.applyPageTargetFilter();
         
         // IMPORTANT: Sync local state so when the open form is submitted it doesn't overwrite these overrides
         if (this.editingSection && this.editingSection.id === section.id) {

@@ -74,7 +74,7 @@
       }
 
       mat-icon {
-        color: var(--interactive-primary);
+        color: var(--text-primary);
       }
     }
   }
@@ -161,13 +161,35 @@
     text-transform: uppercase;
     letter-spacing: 1.5px;
     color: var(--text-primary);
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: var(--space-2);
+  }
+
+  .storefront-link.mat-mdc-icon-button {
+    width: var(--admin-shell-touch-target, 44px);
+    height: var(--admin-shell-touch-target, 44px);
+    min-width: var(--admin-shell-touch-target, 44px);
+    min-height: var(--admin-shell-touch-target, 44px);
+    color: var(--text-primary);
+    flex-shrink: 0;
   }
 
   .close-btn {
     background: var(--surface-overlay-light);
     border: none;
-    width: 36px;
-    height: 36px;
+    width: var(--admin-shell-touch-target, 44px);
+    height: var(--admin-shell-touch-target, 44px);
+    min-width: var(--admin-shell-touch-target, 44px);
+    min-height: var(--admin-shell-touch-target, 44px);
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -243,11 +265,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--text-on-primary);
       flex-shrink: 0;
+      --mat-icon-color: var(--text-on-primary);
 
-      mat-icon {
+      mat-icon,
+      .mat-icon {
         font-size: 24px;
+        color: var(--text-on-primary);
+        --mat-icon-color: var(--text-on-primary);
       }
 
       img {

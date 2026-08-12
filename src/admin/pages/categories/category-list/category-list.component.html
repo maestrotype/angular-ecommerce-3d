@@ -10,7 +10,7 @@
   <div list-filters class="filter-section">
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>{{ 'SEARCH_CATEGORIES' | translate }}</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Search by name or description..." />
+      <input matInput (keyup)="applyFilter($event)" />
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
   </div>

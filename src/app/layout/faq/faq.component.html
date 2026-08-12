@@ -1,0 +1,21 @@
+<section class="faq-section" [id]="data?.anchorId || 'faq'">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-subtitle" *ngIf="data?.subtitle">{{ data.subtitle | localized }}</span>
+      <h2 class="section-title">{{ (data?.title | localized) || ('HOME.FAQ.TITLE' | translate) }}</h2>
+    </div>
+
+    <mat-accordion *ngIf="items.length; else emptyState" class="faq-accordion">
+      <mat-expansion-panel *ngFor="let item of items">
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{ item.question | localized }}</mat-panel-title>
+        </mat-expansion-panel-header>
+        <p>{{ item.answer | localized }}</p>
+      </mat-expansion-panel>
+    </mat-accordion>
+
+    <ng-template #emptyState>
+      <p class="empty-state">{{ 'HOME.FAQ.EMPTY' | translate }}</p>
+    </ng-template>
+  </div>
+</section>

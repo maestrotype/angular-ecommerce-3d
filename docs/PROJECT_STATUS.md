@@ -1,6 +1,6 @@
 # Project Status
 
-**Last Updated**: 2026-08-05
+**Last Updated**: 2026-08-09
 **Maintainer**: Principal UI Architect
 
 > This document tracks high-level project status. For refactoring task tracking and progress metrics, see **[REFACTORING_BOARD.md](REFACTORING_BOARD.md)** (single source of truth for progress). For architectural decisions, see `STYLE_REFACTOR_PLAN.md`.
@@ -53,21 +53,32 @@
 
 | Phase | Name | Status | Notes |
 |-------|------|--------|-------|
-| H1 | Quick Wins (blockers) | ⏳ Pending | Remove confirm(), console.log, fix categories i18n |
-| H2 | Section UX (duplicate, dialog, type-lock) | ⏳ Pending | Shared ConfirmDialog, Duplicate Section |
-| H3 | New Section Types | ⏳ Pending | testimonials, newsletter, features-grid, faq, stats |
-| H4 | Section Presets / Quick Start | ⏳ Pending | Demo presets + 1-click homepage wizard |
-| H5 | Page Templates | ⏳ Pending | landing-page, faq-page, collection-page |
-| H6 | Home Architecture Fix | ⏳ Pending | Remove duplicate data loading from HomeComponent |
-| H7 | Admin UX Polish | ⏳ Pending | type icons, page switcher, empty state, search |
+| H1 | Quick Wins (blockers) | ✅ Complete | confirm() → MatDialog, console.log removed, categories i18n fixed |
+| H2 | Section UX (duplicate, dialog, type-lock) | ✅ Complete | Duplicate section, ConfirmationDialog, type lock, property toolbar |
+| H3 | New Section Types | ✅ Complete | testimonials, newsletter, features-grid, faq, stats |
+| H4 | Section Presets / Quick Start | ✅ Complete | Demo presets + 1-click homepage wizard |
+| H5 | Page Templates | ✅ Complete | landing/faq/collection/brand templates + pageTarget filter |
+| H6 | Home Architecture Fix | ✅ Complete | Single API load via SectionRenderer contextData |
+| H7 | Admin UX Polish | ✅ Complete | **Task 003 done**: device preview (mobile/fold bounded frames, notch, smooth transitions) + drag-drop UX (custom badge preview, styled placeholder, grab cursor). Build ✅ |
 
-### Current Section Types (14 registered)
+### Epic I — 3D Viewer Polish, Configurator & AI Worker
 
-`header` · `hero` · `hero-glass` · `best-sellers` · `categories` · `special-offer` · `brands` · `contacts` · `about` · `product-tabs` · `similar-products` · `bought-together` · `html-content` · `footer`
+> **Full plan**: [3D Platform Showcase & Roadmap](3D_PLATFORM_PRESENTATION.md)
+
+| Phase | Name | Status | Notes |
+|-------|------|--------|-------|
+| I1 | Mobile Scroll Trap Fix | ⏳ Pending | OrbitControls responsive touch event adjustments |
+| I2 | Signals-based Configurator | ⏳ Pending | Material/color texture swapping on PDP |
+| I3 | AI Worker Environment / MPS | ⏳ Pending | Resolve pytorch3d macOS M-series building & transformers issues |
+| I4 | Polling Status Toast Fix | ⏳ Pending | Correct frontend error string logic |
+
+### Current Section Types (19 registered)
+
+`header` · `hero` · `hero-glass` · `best-sellers` · `categories` · `special-offer` · `brands` · `testimonials` · `newsletter` · `features-grid` · `faq` · `stats` · `contacts` · `about` · `product-tabs` · `similar-products` · `bought-together` · `html-content` · `footer`
 
 ### Missing Section Types (for competitive parity)
 
-`testimonials` 🔴 · `newsletter` 🔴 · `features-grid` 🟡 · `faq` 🟡 · `stats` 🟡 · `blog-posts` 🟢 · `video-hero` 🟢
+`blog-posts` 🟢 · `video-hero` 🟢
 
 ### Post-C4 lessons (2026-07-29) — do not repeat
 1. **`!important` is forbidden** for new/agent work (absolute). Win with CSS variables (`--mdc-*` / `--mat-*`), specificity, or correct layer — never `!important`. Rule: `.cursor/rules/no-important.mdc` + `AI_CONSTITUTION.md`.
@@ -133,6 +144,10 @@
 
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-08-09 | **Epic H7 complete — Task 003**: Page Sections device preview fixed (mobile=844px/fold=680px bounded frames, notch decoration, smooth 0.35s transitions); CDK drag-drop UX — custom `*cdkDragPreview` badge for architect view, styled row preview + dashed placeholder for table. Build ✅. | Implementation Engineer |
+| 2026-08-09 | **Epic H4 complete**: Section demo presets ("Load Demo Content") and Quick Start Homepage wizard (header, hero, best-sellers, categories, footer). | Implementation Engineer |
+| 2026-08-09 | **Epic H3 complete**: Added 5 section types (testimonials, newsletter, features-grid, faq, stats) with admin forms, storefront components, i18n, and POST /newsletter backend. | Implementation Engineer |
+| 2026-08-09 | **Epic H1 + H2 complete**: MatDialog delete confirmations (messages/sections/users); categories/brands i18n preserve ru/ua on save; duplicate section action; section type locked in edit mode; property toolbar expanded (padding, text/bg colors). Docs synced. | Implementation Engineer |
 | 2026-08-07 | **Section Manager Analysis**: Full audit of admin/sections + admin/pages UI; identified 13 issues (P1–P13); created Epic H (7 phases, H1–H7); added testimonials/newsletter/features-grid/faq/stats to roadmap. See `SECTIONS_ANALYSIS_AND_ROADMAP.md`. | Principal UI Architect |
 | 2026-08-05 | **Epic G closed + docs sync**: G12–G17 (checkout, page transitions, micro-interactions, motion docs, cross-theme review, a11y/polish); `REFACTORING_BOARD.md` + `PROJECT_STATUS.md` synced — all epics A–G ✅, metrics at 100%. | Principal UI Architect |
 | 2026-08-05 | Epic G12: Checkout tokens (`--checkout-*`), `_checkout.scss` (stepper, summary, payment states); checkout/payment off `getThemeClass`. Build passes. | Implementation Engineer |

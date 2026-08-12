@@ -10,7 +10,7 @@
     <p class="page-subtitle">{{ 'CONFIGURE_EXTERNAL_API_KEYS' | translate }}</p>
   </div>
 
-  <div class="integrations-content">
+  <div class="integrations-content admin-card-grid">
     
     <!-- Cloudinary Integration Card -->
     <mat-card class="integration-card">
@@ -22,12 +22,12 @@
 
       <mat-card-content>
         <!-- Production Cloudinary status -->
-        <div class="cloudinary-status-banner"
+        <div class="admin-status-banner"
              [class.status-ok]="productionCloudinaryStatus?.uploadReady"
              [class.status-warn]="productionCloudinaryStatus && !productionCloudinaryStatus.uploadReady"
              [class.status-loading]="isCheckingCloudinary">
           <mat-icon>{{ productionCloudinaryStatus?.uploadReady ? 'cloud_done' : (isCheckingCloudinary ? 'hourglass_top' : 'cloud_off') }}</mat-icon>
-          <div class="status-text">
+          <div class="admin-status-banner__text status-text">
             <strong>{{ (productionCloudinaryStatus?.uploadReady ? 'CLOUDINARY_STATUS_TITLE_OK' : 'CLOUDINARY_STATUS_TITLE_ISSUE') | translate }}</strong>
             <span *ngIf="isCheckingCloudinary">{{ 'CLOUDINARY_STATUS_CHECKING' | translate }}</span>
             <span *ngIf="!isCheckingCloudinary && productionCloudinaryStatus">{{ getCloudinaryStatusMessage(productionCloudinaryStatus) }}</span>
@@ -107,7 +107,7 @@
 
           <!-- Tripo3D Form -->
           <ng-container *ngIf="aiForm.get('activeProvider')?.value === 'tripo3d'">
-            <div class="info-banner"><mat-icon>info</mat-icon><p>{{ 'TRIPO_KEY_START_TSK' | translate }}</p></div>
+            <div class="admin-info-banner info-banner"><mat-icon>info</mat-icon><p>{{ 'TRIPO_KEY_START_TSK' | translate }}</p></div>
             <div class="form-row">
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>{{ 'TRIPO_API_KEY_LABEL' | translate }}</mat-label>
@@ -121,7 +121,7 @@
 
           <!-- Hunyuan3D Form -->
           <ng-container *ngIf="aiForm.get('activeProvider')?.value === 'hunyuan3d'">
-            <div class="info-banner"><mat-icon>info</mat-icon><p>{{ 'HUNYUAN_KEY_INFO' | translate }}</p></div>
+            <div class="admin-info-banner info-banner"><mat-icon>info</mat-icon><p>{{ 'HUNYUAN_KEY_INFO' | translate }}</p></div>
             <div class="form-row">
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>{{ 'HUNYUAN_API_KEY_LABEL' | translate }}</mat-label>
@@ -135,7 +135,7 @@
 
           <!-- Meshy Form -->
           <ng-container *ngIf="aiForm.get('activeProvider')?.value === 'meshy'">
-            <div class="info-banner"><mat-icon>info</mat-icon><p>{{ 'MESHY_KEY_INFO' | translate }}</p></div>
+            <div class="admin-info-banner info-banner"><mat-icon>info</mat-icon><p>{{ 'MESHY_KEY_INFO' | translate }}</p></div>
             <div class="form-row">
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>{{ 'MESHY_API_KEY_LABEL' | translate }}</mat-label>
@@ -149,7 +149,7 @@
 
           <!-- Luma Form -->
           <ng-container *ngIf="aiForm.get('activeProvider')?.value === 'luma'">
-            <div class="info-banner"><mat-icon>info</mat-icon><p>{{ 'LUMA_KEY_INFO' | translate }}</p></div>
+            <div class="admin-info-banner info-banner"><mat-icon>info</mat-icon><p>{{ 'LUMA_KEY_INFO' | translate }}</p></div>
             <div class="form-row">
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>{{ 'LUMA_API_KEY_LABEL' | translate }}</mat-label>
@@ -163,7 +163,7 @@
 
           <!-- Custom Webhook Form -->
           <ng-container *ngIf="aiForm.get('activeProvider')?.value === 'custom'">
-            <div class="info-banner"><mat-icon>info</mat-icon><p>{{ 'CUSTOM_WEBHOOK_URL_INFO' | translate }}</p></div>
+            <div class="admin-info-banner info-banner"><mat-icon>info</mat-icon><p>{{ 'CUSTOM_WEBHOOK_URL_INFO' | translate }}</p></div>
             <div class="form-row">
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>{{ 'CUSTOM_WEBHOOK_URL_LABEL' | translate }}</mat-label>

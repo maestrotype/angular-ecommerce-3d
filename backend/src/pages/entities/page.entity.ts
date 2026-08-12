@@ -1,6 +1,13 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-export type PageTemplate = 'simple' | 'sections' | 'contact';
+export type PageTemplate =
+  | 'simple'
+  | 'sections'
+  | 'contact'
+  | 'landing-page'
+  | 'faq-page'
+  | 'collection-page'
+  | 'brand-page';
 export type PageStatus = 'draft' | 'published';
 
 @Entity('pages')

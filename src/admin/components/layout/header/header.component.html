@@ -1,14 +1,24 @@
 <mat-toolbar class="admin-header">
-  <button mat-icon-button class="menu-button" (click)="toggleSidenav.emit()" aria-label="Toggle sidenav">
-    <mat-icon>menu</mat-icon>
-  </button>
+  <div class="admin-header__leading">
+    <button mat-icon-button class="menu-button" (click)="toggleSidenav.emit()" aria-label="Toggle sidenav">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <button mat-icon-button class="storefront-link storefront-link--mobile" [routerLink]="'/home'"
+      *ngIf="isMobile"
+      [attr.aria-label]="'GO_TO_STOREFRONT' | translate"
+      [matTooltip]="'GO_TO_STOREFRONT' | translate">
+      <mat-icon>storefront</mat-icon>
+    </button>
+  </div>
 
   <span class="header-title">{{ "ADMIN_PANEL" | translate }}</span>
 
   <span class="spacer"></span>
 
   <div class="header-actions">
-    <button mat-icon-button class="storefront-link" [routerLink]="'/home'"
+    <button mat-icon-button class="storefront-link storefront-link--desktop" [routerLink]="'/home'"
+      *ngIf="!isMobile"
       [attr.aria-label]="'GO_TO_STOREFRONT' | translate"
       [matTooltip]="'GO_TO_STOREFRONT' | translate">
       <mat-icon>storefront</mat-icon>
@@ -29,16 +39,17 @@
       </mat-icon>
     </button>
 
-    <!-- Notifications -->
-    <button mat-icon-button [matMenuTriggerFor]="notificationMenu" #notificationMenuTrigger="matMenuTrigger"
-      class="notification-button">
-    </button>
+    <div class="header-actions__cluster header-actions__notifications">
+      <button mat-icon-button [matMenuTriggerFor]="notificationMenu" #notificationMenuTrigger="matMenuTrigger"
+        class="notification-button">
+      </button>
 
-    <app-notification-badge [count]="unreadCount" [pulse]="unreadCount > 0"
-      (onClick)="openNotificationMenu()"></app-notification-badge>
+      <app-notification-badge [count]="unreadCount" [pulse]="unreadCount > 0"
+        (onClick)="openNotificationMenu()"></app-notification-badge>
+    </div>
 
     <!-- User Menu -->
-    <button mat-icon-button [matMenuTriggerFor]="userMenu">
+    <button mat-icon-button class="header-actions__account" [matMenuTriggerFor]="userMenu">
       <mat-icon>account_circle</mat-icon>
     </button>
   </div>

@@ -13,6 +13,7 @@ import { ProductRecommendation } from '../recommendations/entities/product-recom
 import { Payment } from '../payments/entities/payment.entity';
 import { Settings } from '../settings/entities/settings.entity';
 import { Page } from '../pages/entities/page.entity';
+import { NewsletterSubscriber } from '../newsletter/entities/newsletter-subscriber.entity';
 
 @Injectable()
 export class DatabaseConfig implements TypeOrmOptionsFactory {
@@ -26,7 +27,7 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
       username: this.configService.get('DATABASE_USERNAME'),
       password: this.configService.get('DATABASE_PASSWORD'),
       database: this.configService.get('DATABASE_NAME'),
-      entities: [Section, Message, Notification, Category, Product, Order, User, ProductRecommendation, Payment, Settings, Page],
+      entities: [Section, Message, Notification, Category, Product, Order, User, ProductRecommendation, Payment, Settings, Page, NewsletterSubscriber],
       synchronize: true, // Enable automatic sync for development
       logging: this.configService.get('NODE_ENV') === 'development',
       ssl: this.configService.get('NODE_ENV') === 'production' ? { rejectUnauthorized: false } : false,

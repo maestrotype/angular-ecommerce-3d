@@ -6,6 +6,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MessageService } from '../../../services/message.service';
 import { Message } from '../../../models/message.model';
 import { MessageDetailComponent } from '../message-detail/message-detail.component';
+import { ConfirmationService } from '../../../services/confirmation.service';
+import { take } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-message-list',
@@ -25,8 +28,10 @@ export class MessageListComponent implements OnInit {
   constructor(
     private messageService: MessageService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
-    , private breakpointObserver: BreakpointObserver
+    private snackBar: MatSnackBar,
+    private breakpointObserver: BreakpointObserver,
+    private confirmationService: ConfirmationService,
+    private translate: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -100,18 +105,28 @@ export class MessageListComponent implements OnInit {
   }
 
   deleteMessage(message: Message): void {
-    if (confirm('Are you sure you want to delete this message?')) {
-      this.messageService.deleteMessage(message.id).subscribe({
-        next: () => {
-          this.snackBar.open('Message deleted', 'Close', { duration: 3000 });
-          this.loadMessages();
-        },
-        error: (error) => {
-          
-          this.snackBar.open('Error deleting message', 'Close', { duration: 3000 });
-        }
-      });
-    }
+    const itemLabel = message.subject || this.translate.instant('MESSAGE_ITEM');
+    this.confirmationService.confirmDelete(itemLabel).pipe(take(1)).subscribe((confirmed) => {
+      if (confirmed) {
+        this.messageService.deleteMessage(message.id).subscribe({
+          next: () => {
+            this.snackBar.open(
+              this.translate.instant('MESSAGE_DELETED_SUCCESSFULLY'),
+              this.translate.instant('CLOSE_BTN'),
+              { duration: 3000 }
+            );
+            this.loadMessages();
+          },
+          error: () => {
+            this.snackBar.open(
+              this.translate.instant('ERROR_DELETING_MESSAGE'),
+              this.translate.instant('CLOSE_BTN'),
+              { duration: 3000 }
+            );
+          }
+        });
+      }
+    });
   }
 
   getStatusColor(status: string): string {

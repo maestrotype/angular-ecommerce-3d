@@ -12,7 +12,7 @@
   <div list-filters class="filter-section">
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>{{ 'SEARCH_ORDERS' | translate}}</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Search by customer, email...">
+      <input matInput (keyup)="applyFilter($event)" />
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
   </div>
@@ -95,7 +95,7 @@
 
   <div class="mobile-view" *ngIf="!isLoading">
     <div class="orders-grid">
-      <div *ngFor="let order of dataSource.data" class="order-card">
+      <div *ngFor="let order of dataSource.data" class="admin-mobile-card order-card">
         <div class="card-header">
           <div class="order-id">#{{ order.id }}</div>
           <mat-form-field appearance="outline" class="status-select">

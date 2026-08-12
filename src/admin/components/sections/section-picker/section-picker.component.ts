@@ -65,6 +65,36 @@ export class SectionPickerComponent {
       description: 'Showcase brand logos and partnerships.' 
     },
     { 
+      value: 'testimonials', 
+      label: 'TESTIMONIALS_SECTION', 
+      icon: 'reviews', 
+      description: 'Customer quotes with ratings and avatars.' 
+    },
+    { 
+      value: 'newsletter', 
+      label: 'NEWSLETTER_SECTION', 
+      icon: 'mail', 
+      description: 'Email signup block with customizable copy.' 
+    },
+    { 
+      value: 'features-grid', 
+      label: 'FEATURES_GRID_SECTION', 
+      icon: 'grid_view', 
+      description: 'Highlight product or brand features in a grid.' 
+    },
+    { 
+      value: 'faq', 
+      label: 'FAQ_SECTION', 
+      icon: 'quiz', 
+      description: 'Expandable question and answer accordion.' 
+    },
+    { 
+      value: 'stats', 
+      label: 'STATS_SECTION', 
+      icon: 'insights', 
+      description: 'Animated counters for key business metrics.' 
+    },
+    { 
       value: 'contacts', 
       label: 'CONTACTS_SECTION', 
       icon: 'contact_page', 
