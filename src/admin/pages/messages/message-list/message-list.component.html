@@ -6,7 +6,7 @@
   <div list-filters class="filter-section">
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>{{ 'SEARCH_MESSAGES' | translate }}</mat-label>
-      <input matInput [(ngModel)]="searchTerm" (keyup.enter)="onSearch()" placeholder="Search by name, email, or subject">
+      <input matInput [(ngModel)]="searchTerm" (keyup.enter)="onSearch()">
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
 

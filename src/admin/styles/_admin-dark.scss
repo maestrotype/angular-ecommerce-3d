@@ -27,7 +27,7 @@ html[data-theme='dark'] body.is-admin {
   --text-muted: #71717a;
   --text-muted-rgb: 113, 113, 122;
   --text-inverse: #000000;
-  --text-on-primary: #ffffff;
+  --text-on-primary: var(--color-white);
 
   --border-default: rgba(255, 255, 255, 0.08);
   --border-subtle: rgba(255, 255, 255, 0.06);

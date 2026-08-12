@@ -3,11 +3,9 @@
     <mat-label>{{ label }}</mat-label>
     <input
       matInput
-      @Input()
-      [value]="searchTerm"
-      (input)="onInputChange($any($event.target).value)"
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="onInputChange($event)"
       (keyup.enter)="onSearchClick()"
-      [placeholder]="placeholder"
     />
   </mat-form-field>
 </div>
