@@ -142,10 +142,14 @@ NODE_ENV=production
 
 ### Deploy to Render.com
 1. Connect your GitHub repository to Render
-2. Set up environment variables in Render dashboard
-3. Use the following build and start commands:
-   - Build Command: `npm install && npm run build`
+2. Create a **Web Service** with **Root Directory** set to `backend`
+3. Set up environment variables in Render dashboard
+4. Use the following build and start commands:
+   - Build Command: `npm ci --include=dev && npm run build`
    - Start Command: `npm run start:prod`
+5. Or apply the repo `render.yaml` Blueprint (includes backend + frontend)
+
+**If deploy fails with `Cannot find module '.../dist/main'`:** the build step did not run or failed — `@nestjs/cli` is a devDependency, so the build command must install dev dependencies (see above).
 
 ## Next Steps
 

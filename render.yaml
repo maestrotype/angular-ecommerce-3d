@@ -1,5 +1,16 @@
 services:
   - type: web
+    name: angular-ecommerce-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm run start:prod
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+
+  - type: web
     name: angular-ecommerce-3d
     env: static
     staticPublishPath: dist/angular-ecommerce-3d
