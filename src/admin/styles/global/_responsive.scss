@@ -239,6 +239,83 @@
   body.is-admin .mat-mdc-form-field .mdc-text-field__input::placeholder {
     opacity: 1;
   }
+
+  // ---------------------------------------------------------------------------
+  // M4 — Status banners, info banners, card grids, form action rows
+  // ---------------------------------------------------------------------------
+  .admin-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-status-banner {
+    flex-direction: column;
+    align-items: stretch;
+
+    &__text,
+    .status-text {
+      flex: 1 1 auto;
+      width: 100%;
+    }
+
+    &__action,
+    > button,
+    > a.mat-mdc-button,
+    > a.mat-mdc-raised-button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .admin-info-banner {
+    p {
+      font-size: var(--text-base);
+    }
+  }
+
+  .integrations-container,
+  .integrations-header {
+    padding-inline: 0;
+  }
+
+  .integrations-header {
+    margin-bottom: var(--admin-page-gap);
+
+    .page-title {
+      font-size: var(--text-xl);
+      text-align: left;
+    }
+
+    .page-subtitle {
+      font-size: var(--text-sm);
+    }
+  }
+
+  .integration-card {
+    &:hover {
+      transform: none;
+    }
+  }
+
+  .toggle-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--admin-page-gap);
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    align-items: stretch;
+
+    button {
+      width: 100%;
+      min-height: var(--admin-page-cta-min-height);
+    }
+  }
 }
 
 @media (max-width: 480px) {

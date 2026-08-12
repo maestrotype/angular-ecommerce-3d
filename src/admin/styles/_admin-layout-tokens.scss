@@ -24,4 +24,9 @@
   --admin-page-padding-y: var(--admin-mobile-padding-vertical);
   --admin-page-cta-min-height: 48px;
   --admin-page-radius-mobile: var(--radius-lg);
+
+  // M4 — Status banners & card grids
+  --admin-card-grid-min: 320px;
+  --admin-card-grid-gap: var(--space-6);
+  --admin-status-banner-gap: var(--space-3);
 }

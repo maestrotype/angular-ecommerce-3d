@@ -43,7 +43,7 @@ Unify list-container and dashboard padding so content uses full viewport width a
 | **M1** | Shell — header, sidenav, touch targets | ✅ Done | Storefront on mobile toolbar + sidenav |
 | **M2** | Page chrome — list-container, dashboard, filters/CTA stack | ✅ Done | Full-width content, shared `_responsive.scss` contract |
 | **M3** | Forms / search — no label+placeholder overlap | ✅ Done | `app-search-bar` mobile placeholder-only; list search fields cleaned |
-| **M4** | Status banners & card grids (Integrations) | ☐ Pending | |
+| **M4** | Status banners & card grids (Integrations) | ✅ Done | `admin-status-banner`, `admin-card-grid`, Integrations migrated |
 | **M5** | Tables → mobile cards (Sections, Orders, …) | ☐ Pending | |
 | **M6** | Page leftovers (section architect, touch targets) | ☐ Pending | |
 
