@@ -203,11 +203,29 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     if (isPlatformBrowser(this.platformId)) {
       window.removeEventListener('resize', this.resizeListener);
+      this.lockBodyScroll(false);
     }
   }
 
   toggleMobileArchitect(): void {
-    this.mobileArchitectOpen = !this.mobileArchitectOpen;
+    if (this.mobileArchitectOpen) {
+      this.closeMobileArchitect();
+    } else {
+      this.openMobileArchitect();
+    }
+  }
+
+  openMobileArchitect(): void {
+    this.mobileArchitectOpen = true;
+    if (this.isMobile && this.previewMode === 'desktop') {
+      this.previewMode = 'mobile';
+    }
+    this.lockBodyScroll(true);
+  }
+
+  closeMobileArchitect(): void {
+    this.mobileArchitectOpen = false;
+    this.lockBodyScroll(false);
   }
 
   private checkScreenSize(): void {
@@ -215,14 +233,16 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.isMobile = window.innerWidth <= 768;
       if (!this.isMobile) {
         this.mobileArchitectOpen = false;
+        this.lockBodyScroll(false);
       }
     }
   }
 
-  private openMobileArchitectIfNeeded(): void {
-    if (this.isMobile) {
-      this.mobileArchitectOpen = true;
+  private lockBodyScroll(lock: boolean): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
     }
+    document.body.classList.toggle('sections-architect-locked', lock);
   }
 
   loadSections(onLoaded?: () => void): void {
@@ -307,7 +327,6 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.editorMode = 'add';
     this.editingSection = { pageTarget: target } as any;
     this.isEditorOpen = true;
-    this.openMobileArchitectIfNeeded();
   }
 
   private getDefaultPageTarget(): string {
@@ -369,7 +388,6 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isEditorOpen = true;
     this.showPicker = false;
     this.previewData = { type };
-    this.openMobileArchitectIfNeeded();
   }
 
   selectForPreview(section: Section): void {
@@ -385,7 +403,6 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.showPicker = true;
     this.previewData = null;
     this.isEditorOpen = true;
-    this.openMobileArchitectIfNeeded();
   }
 
   runQuickStartWizard(): void {
@@ -446,9 +463,11 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.editingSection = section;
     this.showPicker = false;
     this.previewData = { ...section };
-    this.selectedPreviewSection = null; // Close main preview if editing
+    this.selectedPreviewSection = null;
     this.isEditorOpen = true;
-    this.openMobileArchitectIfNeeded();
+    if (this.isMobile) {
+      this.closeMobileArchitect();
+    }
   }
 
   onFormChanged(data: any): void {
@@ -483,9 +502,6 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isEditorOpen = false;
     this.editingSection = null;
     this.previewData = null;
-    if (this.isMobile) {
-      this.mobileArchitectOpen = false;
-    }
   }
 
   toggleSection(section: Section): void {
