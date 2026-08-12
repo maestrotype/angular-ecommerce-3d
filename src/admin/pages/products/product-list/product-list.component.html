@@ -23,7 +23,7 @@
       <span class="button-text">{{ 'ADD_PRODUCT' | translate }}</span>
     </button>
 
-    <app-search-bar [label]="'SEARCH_PRODUCTS' | translate" [placeholder]="'Search by name, category...'"
+    <app-search-bar [label]="'SEARCH_PRODUCTS' | translate"
       [(searchTerm)]="searchTerm" (onSearch)="onSearch()" (onClear)="clearSearch()">
     </app-search-bar>
   </div>

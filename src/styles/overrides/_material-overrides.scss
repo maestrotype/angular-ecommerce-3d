@@ -158,16 +158,16 @@
   .mat-mdc-form-field .mat-mdc-select-value,
   .mat-mdc-form-field .mat-mdc-select-value-text,
   .mat-mdc-form-field .mat-mdc-select-min-line {
-    color: var(--input-text) !important;
+    color: var(--input-text);
   }
   .mat-mdc-select-placeholder,
   .mat-mdc-form-field .mat-mdc-select-placeholder {
-    color: var(--input-label) !important;
+    color: var(--input-label);
   }
   .mat-mdc-form-field .mdc-floating-label,
   .mat-mdc-form-field .mat-mdc-floating-label,
   .mat-mdc-text-field-wrapper .mdc-floating-label {
-    color: var(--input-label) !important;
+    color: var(--input-label);
   }
   .mat-mdc-form-field.mat-focused .mdc-floating-label {
     color: var(--input-focus-border);
@@ -222,6 +222,34 @@
   /* placeholder */
   --mdc-outlined-text-field-input-text-placeholder-color: var(--input-placeholder, var(--input-label));
   --mdc-filled-text-field-input-text-placeholder-color: var(--input-placeholder, var(--input-label));
+
+  /* Floating label / placeholder contract — placeholder must stay hidden while the
+     label rests inside the field; forcing opacity: 1 globally breaks that rule. */
+  .mat-mdc-form-field:not(.mat-focused):not(.mat-form-field-should-float) {
+    .mdc-text-field__input::placeholder,
+    .mat-mdc-input-element::placeholder {
+      opacity: 0;
+      color: transparent;
+    }
+  }
+
+  .mat-mdc-form-field.mat-focused,
+  .mat-mdc-form-field.mat-form-field-should-float {
+    .mdc-text-field__input::placeholder,
+    .mat-mdc-input-element::placeholder {
+      color: var(--input-placeholder, var(--input-label));
+      opacity: 1;
+    }
+  }
+
+  /* Chrome autofill does not notify Angular Material — force label to float */
+  .mat-mdc-form-field:has(.mdc-text-field__input:-webkit-autofill) {
+    .mdc-floating-label,
+    .mat-mdc-floating-label {
+      max-width: 133.3333333333%;
+      transform: translateY(-106%) scale(0.75);
+    }
+  }
 
   /* autofill fix */
   .mat-mdc-form-field .mat-mdc-text-field-wrapper input:-webkit-autofill,
@@ -547,8 +575,8 @@
   .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__leading,
   .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__notch,
   .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__trailing {
-    border-color: transparent !important;
-    border-width: 0 !important;
+    border-color: transparent;
+    border-width: 0;
   }
 
   /* ===== Slide Toggle Hover Cleanup ===== */
@@ -604,12 +632,6 @@
     color: var(--text-secondary);
   }
 
-  /* Select label - use hint/placeholder approach */
-  .mat-mdc-form-field .mdc-text-field__input::placeholder {
-    color: var(--text-secondary);
-    opacity: 0.8;
-  }
-
   .mat-mdc-select-value,
   .mat-mdc-select-value-text,
   .mat-mdc-select-min-line {
@@ -626,15 +648,6 @@
   .mat-mdc-select-trigger .mat-mdc-select-placeholder {
     color: var(--input-label);
     opacity: 1;
-  }
-
-  .mat-mdc-form-field mat-label,
-  .mat-mdc-form-field .mat-mdc-form-field-label,
-  mat-label {
-    color: var(--input-label);
-    opacity: 1;
-    display: inline-block;
-    visibility: visible;
   }
 
   /* Select field wrapper - remove strong inset effect to match normal inputs */
@@ -758,12 +771,6 @@
   .mat-mdc-form-field .mat-mdc-text-field-wrapper .mdc-text-field__input {
     color: var(--input-text);
     opacity: 1;
-  }
-
-  .mat-mdc-input-element::placeholder,
-  .mat-input-element::placeholder {
-    color: var(--input-label);
-    opacity: 0.8;
   }
 
   /* Tables: never transform — it creates a backdrop root and kills frosted glass. */
@@ -1007,8 +1014,8 @@
   .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__leading,
   .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__notch,
   .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__trailing {
-    border-color: transparent !important;
-    border-width: 0 !important;
+    border-color: transparent;
+    border-width: 0;
   }
 
   .mat-mdc-form-field .mdc-floating-label,
@@ -1020,12 +1027,6 @@
   .mat-mdc-form-field.mat-focused .mdc-floating-label,
   .mat-mdc-form-field.mat-form-field-should-float .mdc-floating-label {
     color: var(--input-focus-border);
-  }
-
-  .mat-mdc-form-field .mdc-text-field__input::placeholder,
-  .mat-mdc-input-element::placeholder {
-    color: var(--input-placeholder);
-    opacity: 1;
   }
 
   /* Hint text (character counters) */

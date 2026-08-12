@@ -5,6 +5,7 @@ export interface Section {
   type: string; // 'hero', 'about', 'promo', ...
   title: string | LocalizedString;
   subtitle?: string | LocalizedString;
+  description?: string | LocalizedString;
   content?: string | LocalizedString;
   alt?: string | LocalizedString;
   imageUrl?: string;

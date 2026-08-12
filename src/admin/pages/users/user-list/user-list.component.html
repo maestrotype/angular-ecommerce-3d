@@ -7,7 +7,6 @@
   <div list-filters class="filter-section">
     <app-search-bar 
       [label]="'SEARCH_USERS' | translate"
-      [placeholder]="'Search by name or email'"
       [(searchTerm)]="searchTerm"
       (onSearch)="onSearch()"
       (onClear)="clearSearch()">

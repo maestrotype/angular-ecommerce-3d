@@ -9,5 +9,4 @@ import { Component, Input } from '@angular/core';
 export class FormFieldComponent {
   @Input() label = '';
   @Input() type = 'text';
-  @Input() placeholder = '';
 }

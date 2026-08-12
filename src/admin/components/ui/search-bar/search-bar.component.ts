@@ -20,7 +20,6 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   @Input() width = '100%';
   @Input() maxWidth = '500px';
   @Input() label = 'Search';
-  @Input() placeholder = 'Search...';
   @Input() searchTerm = '';
   @Output() onSearch = new EventEmitter<void>();
   @Output() onClear = new EventEmitter<void>();

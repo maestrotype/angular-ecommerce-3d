@@ -7,10 +7,8 @@
 body.is-admin[data-theme='glass'],
 html[data-theme='glass'] body.is-admin {
   --interactive-primary: var(--color-brand-base);
-  --interactive-primary-rgb: 59, 130, 246;
   --interactive-button: var(--interactive-primary);
   --interactive-primary-hover: var(--color-brand-dark);
-  --text-on-primary: #ffffff;
 
   /* —— Liquid glass recipes —— */
   --glass-surface-strong: linear-gradient(
@@ -78,6 +76,7 @@ html[data-theme='glass'] body.is-admin {
   --text-muted: rgba(255, 255, 255, 0.4);
   --text-muted-rgb: 255, 255, 255;
   --text-inverse: #14243c;
+  --text-on-primary: var(--color-white);
   --text-table-header: rgba(255, 255, 255, 0.95);
   --text-table-even: rgba(255, 255, 255, 0.9);
   --text-table-row: rgba(255, 255, 255, 0.86);
