@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -46,7 +47,7 @@ import {
     ])
   ]
 })
-export class SectionListComponent implements OnInit, AfterViewInit {
+export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns: string[] = ['order', 'type', 'pageTarget', 'title', 'isActive', 'actions'];
   dataSource = new MatTableDataSource<Section>();
   allSections: Section[] = [];
@@ -86,6 +87,9 @@ export class SectionListComponent implements OnInit, AfterViewInit {
   selectedElementInfo: { selector: string, section: any } | null = null;
   sidebarWidth = 640;
   wizardRunning = false;
+  isMobile = false;
+  mobileArchitectOpen = false;
+  private readonly resizeListener = () => this.checkScreenSize();
   private isResizing = false;
   private initialMouseX = 0;
   private initialSidebarWidth = 640;
@@ -98,11 +102,17 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     private translate: TranslateService,
     private route: ActivatedRoute,
     private router: Router,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
 
   ngOnInit(): void {
+    this.checkScreenSize();
+    if (isPlatformBrowser(this.platformId)) {
+      window.addEventListener('resize', this.resizeListener);
+    }
+
     this.sidebarWidth = this.computeInitialSidebarWidth();
     this.initialSidebarWidth = this.sidebarWidth;
 
@@ -190,6 +200,31 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
+  ngOnDestroy(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      window.removeEventListener('resize', this.resizeListener);
+    }
+  }
+
+  toggleMobileArchitect(): void {
+    this.mobileArchitectOpen = !this.mobileArchitectOpen;
+  }
+
+  private checkScreenSize(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.isMobile = window.innerWidth <= 768;
+      if (!this.isMobile) {
+        this.mobileArchitectOpen = false;
+      }
+    }
+  }
+
+  private openMobileArchitectIfNeeded(): void {
+    if (this.isMobile) {
+      this.mobileArchitectOpen = true;
+    }
+  }
+
   loadSections(onLoaded?: () => void): void {
     this.loading = true;
     this.sectionService.getSections().subscribe({
@@ -272,6 +307,7 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     this.editorMode = 'add';
     this.editingSection = { pageTarget: target } as any;
     this.isEditorOpen = true;
+    this.openMobileArchitectIfNeeded();
   }
 
   private getDefaultPageTarget(): string {
@@ -333,6 +369,7 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     this.isEditorOpen = true;
     this.showPicker = false;
     this.previewData = { type };
+    this.openMobileArchitectIfNeeded();
   }
 
   selectForPreview(section: Section): void {
@@ -348,6 +385,7 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     this.showPicker = true;
     this.previewData = null;
     this.isEditorOpen = true;
+    this.openMobileArchitectIfNeeded();
   }
 
   runQuickStartWizard(): void {
@@ -410,6 +448,7 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     this.previewData = { ...section };
     this.selectedPreviewSection = null; // Close main preview if editing
     this.isEditorOpen = true;
+    this.openMobileArchitectIfNeeded();
   }
 
   onFormChanged(data: any): void {
@@ -444,6 +483,9 @@ export class SectionListComponent implements OnInit, AfterViewInit {
     this.isEditorOpen = false;
     this.editingSection = null;
     this.previewData = null;
+    if (this.isMobile) {
+      this.mobileArchitectOpen = false;
+    }
   }
 
   toggleSection(section: Section): void {

@@ -45,7 +45,7 @@ Unify list-container and dashboard padding so content uses full viewport width a
 | **M3** | Forms / search — no label+placeholder overlap | ✅ Done | `app-search-bar` mobile placeholder-only; list search fields cleaned |
 | **M4** | Status banners & card grids (Integrations) | ✅ Done | `admin-status-banner`, `admin-card-grid`, Integrations migrated |
 | **M5** | Tables → mobile cards (Sections, Orders, Users, Payments) | ✅ Done | Shared `admin-mobile-card`, global desktop/mobile toggle |
-| **M6** | Page leftovers (section architect, touch targets) | ☐ Pending | |
+| **M6** | Page leftovers (section architect, touch targets) | ✅ Done | Collapsible Site Architect, 44px actions, compact product cards |
 
 ---
 
@@ -90,7 +90,9 @@ fix(admin-mobile): add shared mobile card layout for admin tables (Phase M5)
 ### M6 — Leftovers
 
 ```
-fix(admin-mobile): polish remaining admin mobile edge cases (Phase M6)
+fix(admin-mobile): polish section architect, touch targets, and compact cards (Phase M6)
+
+Add collapsible mobile Site Architect preview, enforce 44px list action buttons, and tighten product card spacing on small screens.
 ```
 
 ---

@@ -1,7 +1,12 @@
-<div class="sections-page-wrapper">
+<div class="sections-page-wrapper" [class.architect-open]="mobileArchitectOpen || isEditorOpen">
   <div class="page-header">
     <h1>{{ 'PAGE_SECTIONS' | translate }}</h1>
     <div class="page-header-actions" *ngIf="!isEditorOpen">
+      <button mat-stroked-button type="button" class="architect-toggle-btn" *ngIf="isMobile"
+        (click)="toggleMobileArchitect()">
+        <mat-icon>{{ mobileArchitectOpen ? 'visibility_off' : 'visibility' }}</mat-icon>
+        {{ (mobileArchitectOpen ? 'CLOSE_BTN' : 'SITE_ARCHITECT') | translate }}
+      </button>
       <mat-form-field appearance="outline" class="page-target-filter" subscriptSizing="dynamic">
         <mat-label>{{ 'SECTION_FILTER_BY_PAGE' | translate }}</mat-label>
         <mat-select [value]="activePageTarget" (selectionChange)="onPageTargetFilterChange($event.value)">

@@ -344,6 +344,34 @@
   .admin-mobile-cards {
     padding: 0;
   }
+
+  // ---------------------------------------------------------------------------
+  // M6 — Touch targets + compact mobile cards
+  // ---------------------------------------------------------------------------
+  body.is-admin {
+    .action-button.mat-mdc-icon-button,
+    .action-buttons .mat-mdc-icon-button,
+    .card-actions .mat-mdc-icon-button:not([disabled]) {
+      width: var(--admin-shell-touch-target);
+      height: var(--admin-shell-touch-target);
+      min-width: var(--admin-shell-touch-target);
+      min-height: var(--admin-shell-touch-target);
+    }
+  }
+
+  .dashboard-container {
+    .charts-section {
+      margin-bottom: var(--space-8);
+    }
+
+    .chart-wrapper {
+      height: 240px;
+    }
+
+    .stats-grid {
+      margin-bottom: var(--space-8);
+    }
+  }
 }
 
 @media (max-width: 480px) {
