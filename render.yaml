@@ -1,10 +1,9 @@
 services:
   - type: web
     name: angular-ecommerce-backend
-    runtime: node
+    runtime: docker
     rootDir: backend
-    buildCommand: npm ci --include=dev && npm run build
-    startCommand: npm run start:prod
+    dockerfilePath: ./Dockerfile
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV

@@ -141,15 +141,25 @@ NODE_ENV=production
 ```
 
 ### Deploy to Render.com
-1. Connect your GitHub repository to Render
-2. Create a **Web Service** with **Root Directory** set to `backend`
-3. Set up environment variables in Render dashboard
-4. Use the following build and start commands:
-   - Build Command: `npm ci --include=dev && npm run build`
-   - Start Command: `npm run start:prod`
-5. Or apply the repo `render.yaml` Blueprint (includes backend + frontend)
 
-**If deploy fails with `Cannot find module '.../dist/main'`:** the build step did not run or failed — `@nestjs/cli` is a devDependency, so the build command must install dev dependencies (see above).
+**Option A — Docker (recommended, uses `backend/Dockerfile`)**
+
+1. Create a **Web Service** → Runtime: **Docker**
+2. **Root Directory:** `backend`
+3. **Dockerfile Path:** `./Dockerfile`
+4. Add environment variables (DATABASE_*, JWT_*, CLOUDINARY_*, etc.)
+
+**Option B — Node runtime**
+
+1. **Root Directory:** `backend`
+2. **Build Command:** `npm ci --include=dev && npm run build`
+3. **Start Command:** `npm run start:prod`
+
+The repo also defines `heroku-postbuild` in `backend/package.json` — Render runs it automatically after `npm install` during the build phase.
+
+**If deploy fails with `Cannot find module '.../dist/main.js'`:** the TypeScript build did not run. Check **Build** logs (not Start) for `nest build` output.
+
+Or apply the repo `render.yaml` Blueprint (backend Docker + frontend static site).
 
 ## Next Steps
 
