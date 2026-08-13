@@ -10,9 +10,7 @@ const require = createRequire(join(root, 'backend/package.json'));
 const sharp = require('sharp');
 
 const sourceSvg = join(iconsDir, 'app-icon.svg');
-const faviconSvg = join(iconsDir, 'favicon.svg');
 const svgBuffer = await readFile(sourceSvg);
-const faviconBuffer = await readFile(faviconSvg);
 
 const pngTargets = [
   { name: 'favicon-16x16.png', size: 16 },
@@ -32,12 +30,20 @@ await mkdir(iconsDir, { recursive: true });
 
 for (const { name, size } of pngTargets) {
   const output = join(iconsDir, name);
-  const input = name.startsWith('favicon') || name === 'apple-touch-icon.png'
-    ? faviconBuffer
-    : svgBuffer;
-  await sharp(input).resize(size, size).png().toFile(output);
+  // Render large first, then downscale — sharper at 16/32px
+  const renderSize = Math.max(size * 4, 128);
+  const png = await sharp(svgBuffer)
+    .resize(renderSize, renderSize)
+    .png()
+    .resize(size, size, { kernel: sharp.kernel.lanczos3 })
+    .toBuffer();
+  await sharp(png).toFile(output);
   console.log(`Wrote ${name}`);
 }
 
-await sharp(faviconBuffer).resize(32, 32).png().toFile(join(root, 'src/favicon.ico'));
+await sharp(svgBuffer)
+  .resize(128, 128)
+  .png()
+  .resize(32, 32, { kernel: sharp.kernel.lanczos3 })
+  .toFile(join(root, 'src/favicon.ico'));
 console.log('Wrote src/favicon.ico');
