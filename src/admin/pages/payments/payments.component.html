@@ -1,20 +1,21 @@
 <app-list-container>
   <div list-header class="page-header">
     <h1>{{ 'PAYMENT_MANAGEMENT' | translate }}</h1>
-    <div class="list__kpis">
-      <div class="stats-cards">
-        <div class="stat-card">
-          <div class="stat-value">{{ totalPayments || 0 }}</div>
-          <div class="stat-label">{{ 'TOTAL_PAYMENTS' | translate }}</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">${{ formatAmount(totalAmount) }}</div>
-          <div class="stat-label">{{ 'TOTAL_AMOUNT' | translate }}</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value">{{ formatSuccessRate(successRate) }}%</div>
-          <div class="stat-label">{{ 'SUCCESS_RATE' | translate }}</div>
-        </div>
+  </div>
+
+  <div list-kpis>
+    <div class="stats-cards">
+      <div class="stat-card">
+        <div class="stat-value">{{ totalPayments || 0 }}</div>
+        <div class="stat-label">{{ 'TOTAL_PAYMENTS' | translate }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${{ formatAmount(totalAmount) }}</div>
+        <div class="stat-label">{{ 'TOTAL_AMOUNT' | translate }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ formatSuccessRate(successRate) }}%</div>
+        <div class="stat-label">{{ 'SUCCESS_RATE' | translate }}</div>
       </div>
     </div>
   </div>

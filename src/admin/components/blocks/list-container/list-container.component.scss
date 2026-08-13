@@ -52,8 +52,8 @@ app-list-container {
   }
 
   .list__kpis {
-    display: flex;
-    gap: var(--space-4);
+    display: block;
+    width: 100%;
   }
 
   .list__filters {
