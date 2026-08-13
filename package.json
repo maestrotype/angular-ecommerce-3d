@@ -18,7 +18,8 @@
     "e2e": "playwright test e2e/smoke.spec.ts",
     "screenshots:capture": "playwright test e2e/capture-screenshots.spec.ts --project=chromium",
     "docs:client": "node scripts/build-client-docs.cjs",
-    "demo:models": "node scripts/download-demo-models.mjs"
+    "demo:models": "node scripts/download-demo-models.mjs",
+    "icons:generate": "node scripts/generate-favicons.mjs"
   },
   "dependencies": {
     "@abacritt/angularx-social-login": "^1.2.5",
