@@ -9,8 +9,11 @@
     "node": ">=18"
   },
   "scripts": {
+    "prebuild": "rm -f tsconfig.tsbuildinfo",
     "build": "nest build",
+    "postbuild": "node -e \"require('fs').accessSync('dist/main.js')\"",
     "build:render": "npm ci --include=dev && npm run build",
+    "heroku-postbuild": "npm run build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
