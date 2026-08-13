@@ -1,17 +1,13 @@
 .page-header {
   width: 100%;
-  
+
   h1 {
-    margin: 0 0 var(--space-4) 0;
+    margin: 0;
     font-size: var(--text-2xl);
     font-weight: var(--font-bold);
     color: var(--text-primary);
     border-bottom: 2px solid var(--interactive-primary);
     padding-bottom: var(--space-2);
-  }
-
-  .list__kpis {
-    margin-top: var(--space-4);
   }
 }
 
@@ -44,8 +40,20 @@
 
     button {
       min-width: 120px;
-      height: 40px;
+      min-height: 40px;
     }
+
+    .mat-mdc-outlined-button {
+      --mdc-outlined-button-label-text-color: var(--text-primary);
+      --mdc-outlined-button-outline-color: var(--border-default);
+      color: var(--text-primary);
+    }
+  }
+
+  .mat-datepicker-toggle .mat-mdc-icon-button {
+    --mdc-icon-button-icon-color: var(--text-secondary);
+    --mat-datepicker-toggle-icon-color: var(--text-secondary);
+    color: var(--text-secondary);
   }
 }
 .no-data {
@@ -201,14 +209,3 @@
   }
 }
 
-// Responsive design
-
-@media (max-width: 600px) {
-  .page-header .list__kpis .stats-cards {
-    flex-direction: column;
-    
-    .stat-card {
-      min-width: 100%;
-    }
-  }
-}

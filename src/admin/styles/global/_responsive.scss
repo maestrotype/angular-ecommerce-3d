@@ -167,10 +167,16 @@
   }
 
   .page-header .list__kpis .stats-cards,
-  app-list-container .list__kpis .stats-cards {
+  app-list-container .list__kpis .stats-cards,
+  app-list-container .stats-cards {
     display: grid;
     grid-template-columns: 1fr;
     width: 100%;
+
+    .stat-card {
+      width: 100%;
+      min-width: 0;
+    }
   }
 
   app-list-container .list__filters,

@@ -78,6 +78,22 @@
       }
     }
   }
+
+  .sidenav-footer .logout-btn {
+    background: color-mix(in srgb, var(--interactive-danger) 14%, transparent);
+    color: var(--text-primary);
+    border: 1px solid color-mix(in srgb, var(--interactive-danger) 28%, var(--glass-border-soft));
+
+    mat-icon,
+    .logout-text {
+      color: var(--interactive-danger);
+    }
+
+    &:hover {
+      background: color-mix(in srgb, var(--interactive-danger) 22%, transparent);
+      border-color: color-mix(in srgb, var(--interactive-danger) 40%, var(--glass-border-soft));
+    }
+  }
 }
 
 :host-context(body[data-theme='dark-glass']) .sidenav-wrapper {
@@ -143,6 +159,22 @@
       .mat-mdc-list-item-title {
         color: var(--text-primary);
       }
+    }
+  }
+
+  .sidenav-footer .logout-btn {
+    background: color-mix(in srgb, var(--interactive-danger) 14%, transparent);
+    color: var(--text-primary);
+    border: 1px solid color-mix(in srgb, var(--interactive-danger) 28%, var(--glass-border-soft));
+
+    mat-icon,
+    .logout-text {
+      color: var(--interactive-danger);
+    }
+
+    &:hover {
+      background: color-mix(in srgb, var(--interactive-danger) 22%, transparent);
+      border-color: color-mix(in srgb, var(--interactive-danger) 40%, var(--glass-border-soft));
     }
   }
 }

@@ -1572,6 +1572,42 @@ html[data-theme='dark-glass'] body.is-admin {
   .mat-divider {
     border-top-color: var(--glass-divider);
   }
+
+  .mat-datepicker-toggle .mat-mdc-icon-button,
+  .mat-datepicker-toggle-default-icon {
+    --mat-datepicker-toggle-icon-color: var(--text-secondary);
+    --mdc-icon-button-icon-color: var(--text-secondary);
+    color: var(--text-secondary);
+  }
+
+  .filters-actions .mat-mdc-outlined-button.mat-mdc-button-base,
+  .filters-area .mat-mdc-outlined-button.mat-mdc-button-base {
+    --mdc-outlined-button-label-text-color: var(--text-primary);
+    --mdc-outlined-button-outline-color: var(--glass-border-soft);
+    color: var(--text-primary);
+  }
+
+  .filters-actions .mat-mdc-outlined-button.mat-mdc-button-base:hover,
+  .filters-area .mat-mdc-outlined-button.mat-mdc-button-base:hover {
+    --mdc-outlined-button-outline-color: color-mix(in srgb, var(--interactive-primary) 40%, var(--glass-border-soft));
+    background-color: var(--surface-overlay-light);
+  }
+
+  .sidenav-footer .logout-btn {
+    background: color-mix(in srgb, var(--interactive-danger) 14%, transparent);
+    color: var(--text-primary);
+    border: 1px solid color-mix(in srgb, var(--interactive-danger) 28%, var(--glass-border-soft));
+
+    mat-icon,
+    .logout-text {
+      color: var(--interactive-danger);
+    }
+
+    &:hover {
+      background: color-mix(in srgb, var(--interactive-danger) 22%, transparent);
+      border-color: color-mix(in srgb, var(--interactive-danger) 40%, var(--glass-border-soft));
+    }
+  }
 }
 
 /* ===== Admin dark — Material depth (Epic E1; moved from _admin-dark.scss) ===== */
