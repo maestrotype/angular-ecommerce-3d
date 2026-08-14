@@ -1613,8 +1613,8 @@ html[data-theme='dark-glass'] body.is-admin {
 /* ===== Admin dark — Material depth (Epic E1; moved from _admin-dark.scss) ===== */
 body.is-admin[data-theme='dark'],
 html[data-theme='dark'] body.is-admin {
-  .mat-mdc-card.mat-mdc-card,
-  .mat-card.mat-card {
+  .mat-mdc-card.mat-mdc-card:not(.stat-card):not(.chart-card),
+  .mat-card.mat-card:not(.stat-card):not(.chart-card) {
     background: var(--surface-card-gradient);
     border: 1px solid var(--border-default);
     box-shadow: var(--shadow-card);
