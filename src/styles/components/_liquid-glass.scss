@@ -1,0 +1,178 @@
+/* ==========================================================================
+   LIQUID GLASS (Kokonut-inspired)
+   SVG filters live in index.html (#liquid-glass-card, #liquid-glass-button).
+   Layers are inert outside the storefront glass theme.
+   ========================================================================== */
+
+.liquid-glass-svg {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.liquid-glass-refract,
+.liquid-glass-edge,
+.liquid-glass-shine {
+  display: none;
+}
+
+html[data-theme='glass'] body:not(.is-admin) .product-card {
+  > .liquid-glass-refract,
+  > .liquid-glass-edge,
+  > .liquid-glass-shine {
+    display: block;
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  > .liquid-glass-refract {
+    z-index: 0;
+    overflow: hidden;
+    isolation: isolate;
+    backdrop-filter: url('#liquid-glass-card');
+    -webkit-backdrop-filter: url('#liquid-glass-card');
+  }
+
+  > .liquid-glass-edge {
+    z-index: 1;
+    box-shadow: var(--liquid-glass-edge-shadow);
+  }
+
+  > .liquid-glass-shine {
+    z-index: 3;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(0, 0, 0, 0.05),
+      transparent
+    );
+    opacity: 0;
+    transition: opacity var(--transition-fast, 200ms ease);
+  }
+
+  .product-image,
+  .product-info {
+    position: relative;
+    z-index: 2;
+  }
+
+  .product-overlay {
+    z-index: 4;
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    &:hover {
+      transform: scale(1.02);
+    }
+
+    &:hover > .liquid-glass-shine {
+      opacity: 1;
+    }
+
+    &:active {
+      transform: scale(0.99);
+    }
+
+    &.out-of-stock:hover,
+    &.out-of-stock:active {
+      transform: none;
+    }
+  }
+
+  /* ----- Overlay liquid buttons (Kokonut LiquidButton) ----- */
+
+  .overlay-actions app-favorite-button {
+    display: inline-flex;
+    width: var(--card-action-size);
+    height: var(--card-action-size);
+    flex-shrink: 0;
+  }
+
+  .overlay-actions .liquid-btn,
+  .overlay-actions .favorite-button {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    width: var(--card-action-size);
+    height: var(--card-action-size);
+    min-width: var(--card-action-size);
+    padding: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: var(--text-primary);
+    box-shadow: var(--liquid-glass-drop);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    filter: none;
+    transition: transform var(--transition-fast, 200ms ease);
+
+    .liquid-glass-refract,
+    .liquid-glass-edge {
+      display: block;
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+    }
+
+    .liquid-glass-refract {
+      z-index: 0;
+      overflow: hidden;
+      isolation: isolate;
+      backdrop-filter: url('#liquid-glass-button');
+      -webkit-backdrop-filter: url('#liquid-glass-button');
+    }
+
+    .liquid-glass-edge {
+      z-index: 1;
+      box-shadow: var(--liquid-glass-edge-shadow);
+    }
+
+    .material-icons,
+    .favorite-button__icon,
+    .favorite-button__text,
+    .favorite-button__loader {
+      position: relative;
+      z-index: 2;
+    }
+  }
+
+  .overlay-actions .favorite-button {
+    &::before {
+      content: none;
+    }
+
+    &:hover,
+    &:active,
+    &.favorite-button--active:hover {
+      transform: none;
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      box-shadow: var(--liquid-glass-drop);
+    }
+  }
+
+  .overlay-actions .cart-btn:hover {
+    background: rgba(255, 255, 255, 0.18);
+    filter: none;
+    color: var(--text-primary);
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .overlay-actions .liquid-btn,
+    .overlay-actions .favorite-button {
+      &:hover {
+        transform: scale(1.08);
+      }
+
+      &:active {
+        transform: scale(0.97);
+      }
+    }
+  }
+}

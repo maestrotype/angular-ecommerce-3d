@@ -1,5 +1,8 @@
 <div [class]="cardClasses + (product?.stock !== undefined && product.stock <= 0 ? ' out-of-stock' : '')"
   (click)="onProductClick()">
+  <div class="liquid-glass-refract" aria-hidden="true"></div>
+  <div class="liquid-glass-edge" aria-hidden="true"></div>
+  <div class="liquid-glass-shine" aria-hidden="true"></div>
   <div class="product-image">
     <img [src]="product.imageUrl | imageUrl" [alt]="product.name | localized" loading="lazy" />
 
@@ -7,10 +10,12 @@
       <div class="overlay-actions">
         <button
           type="button"
-          class="action-btn quick-view-btn"
+          class="action-btn liquid-btn quick-view-btn"
           (click)="onQuickView($event)"
           [title]="'PRODUCT.ACTIONS.QUICK_VIEW' | translate"
         >
+          <span class="liquid-glass-refract" aria-hidden="true"></span>
+          <span class="liquid-glass-edge" aria-hidden="true"></span>
           <span class="material-icons">visibility</span>
         </button>
 
@@ -24,10 +29,12 @@
         <button
           *ngIf="showAddToCart && ((product?.stock ?? 0) > 0)"
           type="button"
-          class="action-btn cart-btn"
+          class="action-btn liquid-btn cart-btn"
           (click)="onAddToCart($event)"
           [title]="'PRODUCT.ACTIONS.ADD_TO_CART' | translate"
         >
+          <span class="liquid-glass-refract" aria-hidden="true"></span>
+          <span class="liquid-glass-edge" aria-hidden="true"></span>
           <span class="material-icons">shopping_cart</span>
         </button>
       </div>
