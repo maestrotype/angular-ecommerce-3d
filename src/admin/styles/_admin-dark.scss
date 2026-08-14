@@ -49,10 +49,21 @@ html[data-theme='dark'] body.is-admin {
   --input-placeholder: #71717a;
 
   --surface-table: transparent;
-  --surface-table-header: #1c1c21;
-  --surface-table-even: #1c1c21;
+  --surface-table-header: rgba(28, 28, 33, 0.72);
+  --surface-table-even: rgba(28, 28, 33, 0.42);
   --surface-table-row: transparent;
-  --surface-paginator: #1c1c21;
+  --surface-paginator: rgba(28, 28, 33, 0.72);
+  --table-row-hover: rgba(255, 255, 255, 0.05);
+  --table-border: rgba(255, 255, 255, 0.1);
+  --table-radius: 1.25rem;
+
+  --liquid-glass-input-bg: rgba(10, 10, 12, 0.62);
+  --liquid-glass-input-hover-bg: rgba(14, 14, 16, 0.7);
+  --liquid-glass-input-blur: blur(16px) saturate(150%);
+  --liquid-glass-input-border: rgba(255, 255, 255, 0.1);
+  --liquid-glass-input-focus-border: rgba(255, 255, 255, 0.16);
+  --liquid-glass-table-shell-bg: rgba(10, 10, 12, 0.55);
+  --liquid-glass-table-shell-blur: blur(18px) saturate(150%);
   --surface-select-panel: #18181b;
   --text-table-header: var(--text-primary);
   --text-table-row: var(--text-primary);
