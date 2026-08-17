@@ -64,7 +64,6 @@ export class ShopComponent implements OnInit, OnDestroy {
   minPrice: number | null = null;
   maxPrice: number | null = null;
   showOnlyOnSale = false;
-  showShopHero = false;
   shopSections: Section[] = [];
   sectionsLoading = true;
 
@@ -111,7 +110,6 @@ export class ShopComponent implements OnInit, OnDestroy {
 
     this.themeService.currentTheme$.pipe(takeUntil(this.destroy$)).subscribe((theme) => {
       this.applyThemeGridDefault(theme.id);
-      this.updateShopHeroVisibility();
     });
 
     // Refresh options on lang change
@@ -136,25 +134,14 @@ export class ShopComponent implements OnInit, OnDestroy {
           .filter((section) => section.type !== 'header' && section.type !== 'footer')
           .sort((a, b) => (a.order || 0) - (b.order || 0));
         this.sectionsLoading = false;
-        this.updateShopHeroVisibility();
       },
       error: () => {
         this.sectionsLoading = false;
-        this.updateShopHeroVisibility();
       },
       complete: () => {
         this.sectionsLoading = false;
-        this.updateShopHeroVisibility();
       }
     });
-  }
-
-  private updateShopHeroVisibility(): void {
-    const isGlass = this.themeService.getCurrentTheme().id === 'glass';
-    const hasConfiguredHero = this.shopSections.some(
-      (section) => section.type === 'hero-glass' || section.type === 'hero'
-    );
-    this.showShopHero = isGlass && !hasConfiguredHero && !this.sectionsLoading;
   }
 
   private applyThemeGridDefault(themeId: ThemeId): void {
@@ -297,6 +284,15 @@ export class ShopComponent implements OnInit, OnDestroy {
     this.itemsPerPage = parseInt(value);
     this.currentPage = 1;
     this.updatePagination();
+  }
+
+  get hasActiveFilters(): boolean {
+    return (
+      this.showOnlyOnSale ||
+      this.minPrice !== null ||
+      this.maxPrice !== null ||
+      this.filterCategories.some((category) => category.selected)
+    );
   }
 
   toggleFilterSidebar(): void {

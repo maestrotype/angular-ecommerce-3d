@@ -1086,16 +1086,17 @@
       "MAX": "Max",
       "PRICE_DISPLAY": "Price: ${{min}} – ${{max}}",
       "APPLY": "FILTER",
-      "TOGGLE": "FILTER",
+      "TOGGLE": "Filters",
       "ALL_CATEGORIES": "All categories",
       "ON_SALE": "Show only products on sale",
+      "ON_SALE_SHORT": "On sale",
       "CLEAR_ALL": "Clear all filters"
     },
     "RESULTS": {
       "COUNT": "{{count}} products"
     },
     "SORT": {
-      "LABEL": "Sort by :",
+      "LABEL": "Sort",
       "PLACEHOLDER": "Select sorting",
       "LATEST": "Latest",
       "NAME": "Name",
@@ -1104,8 +1105,16 @@
       "RATING": "Rating"
     },
     "SHOW": {
-      "LABEL": "Show :",
+      "LABEL": "Per page",
       "PLACEHOLDER": "Select items"
+    },
+    "VIEW": {
+      "LABEL": "Layout",
+      "LIST": "List view",
+      "GRID_2": "2 columns",
+      "GRID_3": "3 columns",
+      "GRID_4": "4 columns",
+      "GRID_5": "5 columns"
     },
     "PRODUCT": {
       "QUICK_VIEW": "Quick View",
