@@ -22,7 +22,7 @@
 @keyframes motion-fade-in-up {
   from {
     opacity: 0;
-    transform: translateY(var(--spacing-md));
+    transform: translateY(var(--page-transition-offset-y));
   }
 
   to {

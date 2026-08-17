@@ -96,19 +96,19 @@
       .product-overlay {
         position: absolute;
         inset: 0;
-        background: var(--surface-overlay-hover);
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        background: transparent;
         opacity: 0;
+        pointer-events: none;
         transition: opacity 0.3s ease;
 
         .action-btn {
+          position: absolute;
+          pointer-events: auto;
           background: var(--surface-elevated);
           border: 1px solid var(--border-subtle);
           border-radius: 50%;
-          width: 50px;
-          height: 50px;
+          width: 44px;
+          height: 44px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -118,13 +118,23 @@
 
           &:hover {
             background: var(--surface-primary);
-            transform: scale(1.1);
+            transform: scale(1.06);
             box-shadow: var(--shadow-lg);
           }
 
           .material-icons {
             color: var(--text-primary);
-            font-size: 24px;
+            font-size: 22px;
+          }
+
+          &.quick-view-btn {
+            left: 0;
+            bottom: 0;
+          }
+
+          &.favorite-btn {
+            top: 0;
+            right: 0;
           }
         }
       }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, Inject, PLATFORM_ID, ElementRef, NgZone, ViewChild } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { Product } from 'src/shared/models/product.model';
@@ -25,19 +25,29 @@ type BestSellersSectionData = Section & { context?: PageSectionContext };
     standalone: true,
     imports: [CommonModule, RouterModule, SharedModule, TranslateModule, LocalizedPipe, ImageUrlPipe]
 })
-export class BestSellersComponent implements OnInit {
+export class BestSellersComponent implements OnInit, OnDestroy {
     bestSellers: Product[] = [];
+    visibleCount = 0;
+    eagerImageCount = 3;
     private contextApplied = false;
+    private loadObserver?: IntersectionObserver;
+    private sentinelEl?: HTMLElement;
+    private revealing = false;
 
     @Input() set data(val: BestSellersSectionData) {
         if (val?.context?.bestSellers !== undefined) {
             this.bestSellers = val.context.bestSellers;
             this.contextApplied = true;
+            this.resetVisibleCount();
         }
     }
 
     get bestSellersProducts(): Product[] {
-        return this.bestSellers;
+        return this.bestSellers.slice(0, this.visibleCount);
+    }
+
+    get hasMore(): boolean {
+        return this.visibleCount < this.bestSellers.length;
     }
 
     Math = Math;
@@ -49,6 +59,7 @@ export class BestSellersComponent implements OnInit {
         private notificationService: NotificationService,
         private translate: TranslateService,
         private favoritesService: FavoritesService,
+        private ngZone: NgZone,
         @Inject(PLATFORM_ID) private platformId: Object
     ) { }
 
@@ -60,9 +71,112 @@ export class BestSellersComponent implements OnInit {
         this.productService.getBestSellers().subscribe({
             next: (products) => {
                 this.bestSellers = products;
+                this.resetVisibleCount();
             },
             error: () => {}
         });
+    }
+
+    ngOnDestroy(): void {
+        this.loadObserver?.disconnect();
+    }
+
+    @ViewChild('loadMoreSentinel')
+    set loadMoreSentinel(ref: ElementRef<HTMLElement> | undefined) {
+        this.sentinelEl = ref?.nativeElement;
+        this.observeLoadMore(this.sentinelEl);
+    }
+
+    private resetVisibleCount(): void {
+        if (!isPlatformBrowser(this.platformId)) {
+            this.visibleCount = this.bestSellers.length;
+            return;
+        }
+
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        const columns = this.readGridColumns();
+        this.eagerImageCount = columns;
+        this.visibleCount = isMobile
+            ? this.bestSellers.length
+            : Math.min(columns, this.bestSellers.length);
+    }
+
+    private readGridColumns(): number {
+        const raw = getComputedStyle(document.documentElement)
+            .getPropertyValue('--product-grid-columns')
+            .trim();
+        const columns = Number.parseInt(raw, 10);
+        return Number.isFinite(columns) && columns > 0 ? columns : 3;
+    }
+
+    private readRevealMargin(sentinel: HTMLElement): string {
+        return getComputedStyle(sentinel).scrollMarginTop || '0px';
+    }
+
+    private readRevealMarginPx(sentinel: HTMLElement): number {
+        const px = Number.parseFloat(this.readRevealMargin(sentinel));
+        return Number.isFinite(px) ? px : 0;
+    }
+
+    private observeLoadMore(sentinel?: HTMLElement): void {
+        if (!isPlatformBrowser(this.platformId) || !this.hasMore) {
+            this.loadObserver?.disconnect();
+            return;
+        }
+
+        if (!(sentinel instanceof HTMLElement)) {
+            this.loadObserver?.disconnect();
+            return;
+        }
+
+        this.loadObserver?.disconnect();
+        const revealMargin = this.readRevealMargin(sentinel);
+        this.loadObserver = new IntersectionObserver(
+            (entries) => {
+                if (!entries.some((entry) => entry.isIntersecting)) {
+                    return;
+                }
+                this.ngZone.run(() => this.revealNextBatch());
+            },
+            { rootMargin: `${revealMargin} 0px` }
+        );
+        this.loadObserver.observe(sentinel);
+    }
+
+    private revealNextBatch(): void {
+        if (this.revealing || !this.hasMore) {
+            if (!this.hasMore) {
+                this.loadObserver?.disconnect();
+            }
+            return;
+        }
+
+        this.revealing = true;
+        this.visibleCount = Math.min(
+            this.visibleCount + this.readGridColumns(),
+            this.bestSellers.length
+        );
+
+        requestAnimationFrame(() => {
+            this.revealing = false;
+            if (!this.hasMore) {
+                this.loadObserver?.disconnect();
+                return;
+            }
+            this.fillViewportIfNeeded();
+        });
+    }
+
+    private fillViewportIfNeeded(): void {
+        const sentinel = this.sentinelEl;
+        if (!sentinel || !this.hasMore) {
+            return;
+        }
+
+        const rect = sentinel.getBoundingClientRect();
+        if (rect.top < window.innerHeight + this.readRevealMarginPx(sentinel)) {
+            this.revealNextBatch();
+        }
     }
 
     trackByProductId(index: number, product: Product): number {
@@ -81,8 +195,8 @@ export class BestSellersComponent implements OnInit {
         });
     }
 
-    addToCart(product: Product, event: Event): void {
-        event.stopPropagation();
+    addToCart(product: Product, event?: Event): void {
+        event?.stopPropagation();
         const cartItem = {
             productId: product.id,
             name: product.name,

@@ -30,6 +30,10 @@ interface FilterCategory {
   selected: boolean;
 }
 
+type CatalogPageItem =
+  | { kind: 'page'; page: number }
+  | { kind: 'ellipsis'; id: string };
+
 @Component({
   selector: 'app-shop',
   templateUrl: './shop.component.html',
@@ -48,6 +52,7 @@ export class ShopComponent implements OnInit, OnDestroy {
   itemsPerPage: number = 18;
   totalPages: number = 1;
   paginatedProducts: Product[] = [];
+  pageItems: CatalogPageItem[] = [];
 
   // View mode — default columns follow active theme (light 5 / dark 4 / glass 3)
   viewMode: 'list' | 'grid-2' | 'grid-3' | 'grid-4' | 'grid-5' = 'grid-5';
@@ -64,7 +69,6 @@ export class ShopComponent implements OnInit, OnDestroy {
   minPrice: number | null = null;
   maxPrice: number | null = null;
   showOnlyOnSale = false;
-  showShopHero = false;
   shopSections: Section[] = [];
   sectionsLoading = true;
 
@@ -111,7 +115,6 @@ export class ShopComponent implements OnInit, OnDestroy {
 
     this.themeService.currentTheme$.pipe(takeUntil(this.destroy$)).subscribe((theme) => {
       this.applyThemeGridDefault(theme.id);
-      this.updateShopHeroVisibility();
     });
 
     // Refresh options on lang change
@@ -136,25 +139,14 @@ export class ShopComponent implements OnInit, OnDestroy {
           .filter((section) => section.type !== 'header' && section.type !== 'footer')
           .sort((a, b) => (a.order || 0) - (b.order || 0));
         this.sectionsLoading = false;
-        this.updateShopHeroVisibility();
       },
       error: () => {
         this.sectionsLoading = false;
-        this.updateShopHeroVisibility();
       },
       complete: () => {
         this.sectionsLoading = false;
-        this.updateShopHeroVisibility();
       }
     });
-  }
-
-  private updateShopHeroVisibility(): void {
-    const isGlass = this.themeService.getCurrentTheme().id === 'glass';
-    const hasConfiguredHero = this.shopSections.some(
-      (section) => section.type === 'hero-glass' || section.type === 'hero'
-    );
-    this.showShopHero = isGlass && !hasConfiguredHero && !this.sectionsLoading;
   }
 
   private applyThemeGridDefault(themeId: ThemeId): void {
@@ -299,6 +291,15 @@ export class ShopComponent implements OnInit, OnDestroy {
     this.updatePagination();
   }
 
+  get hasActiveFilters(): boolean {
+    return (
+      this.showOnlyOnSale ||
+      this.minPrice !== null ||
+      this.maxPrice !== null ||
+      this.filterCategories.some((category) => category.selected)
+    );
+  }
+
   toggleFilterSidebar(): void {
     this.isFilterSidebarOpen = !this.isFilterSidebarOpen;
   }
@@ -433,6 +434,7 @@ export class ShopComponent implements OnInit, OnDestroy {
       this.totalPages = 1;
       this.currentPage = 1;
       this.paginatedProducts = this.filteredProducts;
+      this.pageItems = [];
       return;
     }
 
@@ -443,6 +445,29 @@ export class ShopComponent implements OnInit, OnDestroy {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     this.paginatedProducts = this.filteredProducts.slice(startIndex, endIndex);
+    this.pageItems = this.buildPageItems(this.currentPage, this.totalPages);
+  }
+
+  private buildPageItems(current: number, total: number): CatalogPageItem[] {
+    if (total <= 7) {
+      return Array.from({ length: total }, (_, index) => ({ kind: 'page', page: index + 1 }));
+    }
+
+    const pages = new Set<number>([1, total, current, current - 1, current + 1]);
+    const sorted = [...pages]
+      .filter((page) => page >= 1 && page <= total)
+      .sort((a, b) => a - b);
+
+    const items: CatalogPageItem[] = [];
+    let previous = 0;
+    for (const page of sorted) {
+      if (previous && page - previous > 1) {
+        items.push({ kind: 'ellipsis', id: `e-${previous}-${page}` });
+      }
+      items.push({ kind: 'page', page });
+      previous = page;
+    }
+    return items;
   }
 
   @HostListener('window:resize')
@@ -508,6 +533,10 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   trackByProductId(index: number, product: Product): number {
     return product.id;
+  }
+
+  trackByPageItem(_index: number, item: CatalogPageItem): string | number {
+    return item.kind === 'ellipsis' ? item.id : item.page;
   }
 
   prevPage(): void {

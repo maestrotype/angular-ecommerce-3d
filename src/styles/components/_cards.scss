@@ -33,7 +33,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  min-width: 250px;
+  min-width: 0;
   overflow: hidden;
   cursor: pointer;
   background: var(--card-surface);
@@ -57,7 +57,11 @@
   }
 
   &.animate-in {
-    animation: motion-fade-in-up var(--motion-duration-normal) var(--motion-easing-enter) both;
+    animation: motion-fade-in-up var(--motion-duration-slow) var(--motion-easing-enter) both;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
   }
 
   &.out-of-stock {
@@ -118,55 +122,100 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
+      transform-origin: center center;
       transition: transform var(--transition-normal);
     }
   }
 
-  @media (prefers-reduced-motion: no-preference) {
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
     &:hover .product-image img {
-      transform: scale(1.04);
+      transform: scale(var(--card-image-zoom));
     }
   }
 
-  /* ----- Overlay actions ----- */
+  /* ----- Overlay actions: corners, not a center cluster ----- */
 
   .product-overlay {
     position: absolute;
     inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     background: var(--card-overlay-bg);
     opacity: 0;
     transition: opacity var(--transition-normal);
     z-index: 2;
+    pointer-events: none;
 
     &.top {
       inset: 0 0 auto;
-      align-items: flex-start;
-      justify-content: flex-end;
       height: auto;
       padding: var(--spacing-sm);
       background: transparent;
       opacity: 1;
-      pointer-events: none;
 
       .overlay-actions {
-        pointer-events: auto;
+        position: static;
+        inset: auto;
+      }
+
+      .quick-view-btn,
+      .favorite-btn,
+      .cart-btn,
+      app-favorite-button {
+        position: static;
       }
     }
 
     .overlay-actions {
-      display: flex;
-      gap: var(--spacing-sm);
-      align-items: center;
-      justify-content: center;
+      position: absolute;
+      inset: 0.75rem;
+      display: block;
+      pointer-events: none;
+    }
+
+    .quick-view-btn,
+    .favorite-btn,
+    .cart-btn,
+    app-favorite-button {
+      pointer-events: auto;
+    }
+
+    .quick-view-btn {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+    }
+
+    .favorite-btn,
+    app-favorite-button {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+
+    .cart-btn {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: var(--card-action-size);
+      min-width: var(--card-action-size);
+      height: var(--card-action-size);
+      padding: 0;
     }
   }
 
-  @media (prefers-reduced-motion: no-preference) {
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
     &:hover .product-overlay:not(.top) {
       opacity: 1;
+    }
+  }
+
+  @media (hover: none) {
+    .product-overlay:not(.top) {
+      opacity: 1;
+      background: transparent;
+    }
+
+    .quick-view-btn {
+      display: none;
     }
   }
 
@@ -258,8 +307,8 @@
 
   .discount-badge {
     top: var(--spacing-sm);
-    right: var(--spacing-sm);
-    left: auto;
+    left: var(--spacing-sm);
+    right: auto;
     background: var(--state-warning-bg);
     color: var(--state-warning-text, var(--text-on-primary));
   }
@@ -495,14 +544,14 @@
 .products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--spacing-lg);
+  gap: var(--product-grid-gap, var(--spacing-lg));
   padding: var(--spacing-lg);
   justify-items: stretch;
 
   .product-card.animate-in {
-    @for $i from 1 through 12 {
+    @for $i from 1 through 30 {
       &:nth-child(#{$i}) {
-        animation-delay: calc(#{$i - 1} * 60ms);
+        animation-delay: calc(#{$i - 1} * var(--motion-stagger-step));
       }
     }
   }
@@ -537,7 +586,7 @@
   .shop .products-section .products-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.75rem;
+    gap: var(--spacing-sm);
     padding: 0;
     overflow: visible;
     scroll-snap-type: none;

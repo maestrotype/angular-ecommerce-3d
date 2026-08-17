@@ -9,24 +9,24 @@
         </div>
 
         <div class="products-grid" *ngIf="bestSellersProducts.length > 0">
-            <div class="product-card animate-in" *ngFor="let product of bestSellersProducts; trackBy: trackByProductId"
+            <div class="product-card animate-in" *ngFor="let product of bestSellersProducts; let i = index; trackBy: trackByProductId"
                 (click)="goToProductDetail(product.id)"
                 [class.out-of-stock]="product?.stock !== undefined && product.stock <= 0">
                 <div class="product-image">
-                    <img [src]="product.imageUrl" [alt]="product.name" loading="lazy" />
+                    <img [src]="product.imageUrl" [alt]="product.name" [attr.loading]="i < eagerImageCount ? 'eager' : 'lazy'" />
 
-                    <div class="product-overlay">
+                    <div class="product-overlay" (click)="$event.stopPropagation()">
                         <div class="overlay-actions">
-                            <button class="action-btn"
+                            <button type="button" class="action-btn quick-view-btn"
                                 (click)="goToProductDetail(product.id); $event.stopPropagation()">
                                 <span class="material-icons">visibility</span>
                             </button>
-                            <button class="action-btn favorite-btn" [class.is-favorite]="isFavorite(product.id)"
+                            <button type="button" class="action-btn favorite-btn" [class.is-favorite]="isFavorite(product.id)"
                                 (click)="toggleFavorite(product); $event.stopPropagation()">
                                 <span class="material-icons">favorite_border</span>
                                 <span class="material-icons filled">favorite</span>
                             </button>
-                            <button class="action-btn" (click)="addToCart(product); $event.stopPropagation()">
+                            <button type="button" class="action-btn cart-btn" (click)="addToCart(product); $event.stopPropagation()">
                                 <span class="material-icons">shopping_cart</span>
                             </button>
                         </div>
@@ -57,5 +57,7 @@
                 </div>
             </div>
         </div>
+
+        <div #loadMoreSentinel class="load-more-sentinel" [hidden]="!hasMore" aria-hidden="true"></div>
     </div>
 </section>

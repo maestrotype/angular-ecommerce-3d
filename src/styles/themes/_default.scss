@@ -5,7 +5,7 @@
   --shop-layout-max-width: 1440px;
   --shop-sidebar-width: 268px;
   --shop-layout-gap: 1.25rem;
-  --shop-grid-gap: 0.75rem;
+  --shop-grid-gap: var(--space-px);
   --shop-page-padding-x: 1rem;
   --shop-section-padding-y: 1rem;
   --shop-toolbar-padding-y: 0.75rem;
@@ -57,14 +57,17 @@
 
   /* ===== PRODUCT CARDS + GRID (light) ===== */
   --product-grid-columns: 5;
+  --product-grid-gap: var(--space-px);
+  --card-image-zoom: 1.1;
   --card-surface: var(--surface-card);
-  --card-border: var(--border-subtle);
-  --card-radius: var(--radius-lg);
-  --card-shadow: var(--shadow-sm);
+  --card-border: transparent;
+  --card-radius: var(--radius-none);
+  --card-shadow: none;
   --card-shadow-hover: var(--shadow-md);
   --card-image-bg: var(--surface-secondary);
   --card-info-bg: var(--surface-primary);
-  --card-overlay-bg: rgba(241, 245, 249, 0.85);
+  --card-overlay-bg: transparent;
+  --micro-hover-lift-y: 0;
   --card-backdrop-filter: none;
   --card-star: rgba(100, 116, 139, 0.35);
   --card-star-filled: #64748b;
@@ -77,6 +80,22 @@
   --card-stock-bg: rgba(148, 163, 184, 0.14);
   --card-stock-color: #64748b;
   --card-stock-border: rgba(148, 163, 184, 0.32);
+
+  /* ===== CATALOG PAGINATION (light — editorial mosaic) ===== */
+  --pagination-rule: var(--size-hairline) solid var(--border-subtle);
+  --pagination-cluster-bg: transparent;
+  --pagination-cluster-border: none;
+  --pagination-cluster-radius: var(--radius-none);
+  --pagination-cluster-padding: var(--space-0);
+  --pagination-cluster-shadow: none;
+  --pagination-cluster-backdrop: none;
+  --pagination-cluster-gap: var(--size-hairline);
+  --pagination-btn-radius: var(--radius-none);
+  --pagination-btn-bg: var(--surface-primary);
+  --pagination-btn-active-bg: var(--text-primary);
+  --pagination-btn-active-color: var(--surface-primary);
+  --pagination-btn-active-border: var(--size-hairline) solid var(--text-primary);
+  --pagination-status-transform: uppercase;
 
   /* ===== MIGRATED FROM tokens/_theme-variables.scss (Task A3) ===== */
   /* Default theme variables */
@@ -327,7 +346,7 @@
   --border-focus: #6366f1;
 
   /* CARD COMPONENT */
-  --card-radius: 0px;
+  --card-radius: var(--radius-none);
   /* ===== END MIGRATED (Task A3) ===== */
 }
 

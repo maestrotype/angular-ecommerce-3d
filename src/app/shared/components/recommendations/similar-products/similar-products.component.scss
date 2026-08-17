@@ -98,26 +98,25 @@
       .product-overlay {
         position: absolute;
         inset: 0;
-        background: var(--surface-overlay-hover);
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        background: transparent;
         opacity: 0;
+        pointer-events: none;
         transition: opacity 0.3s ease;
 
         .overlay-actions {
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-          align-items: center;
+          position: absolute;
+          inset: 0.75rem;
+          display: block;
         }
 
         .action-btn {
+          position: absolute;
+          pointer-events: auto;
           background: var(--surface-elevated);
           border: none;
           border-radius: 50%;
-          width: 48px;
-          height: 48px;
+          width: 44px;
+          height: 44px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -127,18 +126,21 @@
           backdrop-filter: var(--backdrop-blur-sm);
 
           .material-icons {
-            font-size: 24px;
+            font-size: 22px;
             color: var(--text-primary);
             transition: all 0.3s ease;
           }
 
           &:hover {
             background: var(--surface-primary);
-            transform: scale(1.1);
+            transform: scale(1.06);
             box-shadow: var(--shadow-lg);
           }
 
           &.quick-view-btn {
+            left: 0;
+            bottom: 0;
+
             .material-icons {
               color: var(--color-accent);
             }
@@ -153,6 +155,8 @@
           }
 
           &.favorite-btn {
+            top: 0;
+            right: 0;
             .material-icons.filled {
               display: none;
               color: var(--interactive-danger);

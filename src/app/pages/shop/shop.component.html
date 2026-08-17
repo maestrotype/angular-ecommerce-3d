@@ -6,26 +6,6 @@
     </ng-container>
   </ng-container>
 
-  <!-- Fallback hero when glass theme has no hero section in constructor -->
-  <div class="shop-header" *ngIf="showShopHero">
-    <div class="container">
-      <div class="header-content">
-        <span class="section-subtitle">{{ 'SHOP.HEADER.SUBTITLE' | translate }}</span>
-        <h1 class="section-title">
-          {{ 'SHOP.HEADER.TITLE_PART1' | translate }}<br />
-          <span class="highlight">{{ 'SHOP.HEADER.TITLE_PART2' | translate }}</span>
-        </h1>
-        <div class="wrap-model">
-          <app-three-d-viewer [modelPath]="'assets/demo/models/water-bottle.glb'" [scale]="[9, 9, 9]" [position]="[0, 0, 0]"
-            loading="lazy" [previewOnly]="true" [autoRotate]="true"></app-three-d-viewer>
-        </div>
-        <p class="section-description">
-          {{ 'SHOP.HEADER.DESCRIPTION' | translate }}
-        </p>
-      </div>
-    </div>
-  </div>
-
   <!-- Filter Overlay (drawer mode) -->
   <div class="filter-overlay" [class.open]="isFilterSidebarOpen" (click)="toggleFilterSidebar()"></div>
 
@@ -93,51 +73,131 @@
   <div class="filters-sort-bar catalog-toolbar">
     <div class="container">
       <div class="filters-sort-content catalog-toolbar__inner">
-        <!-- Sort + results -->
         <div class="filters-left catalog-toolbar__sort">
-          <button class="filter-btn" (click)="toggleFilterSidebar()">
-            <span class="hamburger-icon">☰</span>
-            {{ 'SHOP.FILTERS.TOGGLE' | translate }}
+          <button
+            type="button"
+            class="filter-btn"
+            [class.is-open]="isFilterSidebarOpen"
+            [class.has-filters]="hasActiveFilters"
+            [attr.aria-label]="'SHOP.FILTERS.TOGGLE' | translate"
+            [attr.aria-expanded]="isFilterSidebarOpen"
+            (click)="toggleFilterSidebar()"
+          >
+            <mat-icon>tune</mat-icon>
+            <span>{{ 'SHOP.FILTERS.TOGGLE' | translate }}</span>
           </button>
-          <span class="sort-label">{{ 'SHOP.SORT.LABEL' | translate }}</span>
-          <app-custom-dropdown class="sort-dropdown" [options]="sortOptions" [selectedValue]="sortBy"
-            [placeholder]="'SHOP.SORT.PLACEHOLDER' | translate" (valueChange)="onSortChange($event)">
-          </app-custom-dropdown>
+
+          <div class="catalog-toolbar__field">
+            <span class="sort-label catalog-toolbar__label">{{ 'SHOP.SORT.LABEL' | translate }}</span>
+            <app-custom-dropdown
+              class="sort-dropdown is-compact"
+              [options]="sortOptions"
+              [selectedValue]="sortBy"
+              [placeholder]="'SHOP.SORT.PLACEHOLDER' | translate"
+              (valueChange)="onSortChange($event)"
+            ></app-custom-dropdown>
+          </div>
+
           <span class="results-count">
             {{ 'SHOP.RESULTS.COUNT' | translate:{ count: filteredProducts.length } }}
           </span>
         </div>
 
-        <!-- Show per page -->
         <div class="filters-middle catalog-toolbar__show">
-          <label class="sale-checkbox sale-checkbox--toolbar">
+          <label class="sale-checkbox sale-checkbox--toolbar" [class.is-on]="showOnlyOnSale">
             <input type="checkbox" [(ngModel)]="showOnlyOnSale" (ngModelChange)="onLiveFilterChange()">
-            <span class="checkmark"></span>
-            {{ 'SHOP.FILTERS.ON_SALE' | translate }}
+            <span class="sale-switch" aria-hidden="true"></span>
+            <span class="sale-text">{{ 'SHOP.FILTERS.ON_SALE_SHORT' | translate }}</span>
           </label>
-          <span class="show-label">{{ 'SHOP.SHOW.LABEL' | translate }}</span>
-          <app-custom-dropdown class="show-dropdown" [options]="itemsPerPageOptions"
-            [selectedValue]="itemsPerPage.toString()" [placeholder]="'SHOP.SHOW.PLACEHOLDER' | translate"
-            (valueChange)="onItemsPerPageChange($event)">
-          </app-custom-dropdown>
+
+          <div class="catalog-toolbar__field">
+            <span class="show-label catalog-toolbar__label">{{ 'SHOP.SHOW.LABEL' | translate }}</span>
+            <app-custom-dropdown
+              class="show-dropdown is-compact is-narrow"
+              [options]="itemsPerPageOptions"
+              [selectedValue]="itemsPerPage.toString()"
+              [placeholder]="'SHOP.SHOW.PLACEHOLDER' | translate"
+              (valueChange)="onItemsPerPageChange($event)"
+            ></app-custom-dropdown>
+          </div>
         </div>
 
-        <!-- Grid density -->
-        <div class="view-toggles catalog-toolbar__density">
-          <button class="view-btn" [class.active]="viewMode === 'list'" (click)="changeViewMode('list')">
-            <span class="view-icon">☰</span>
+        <div
+          class="view-toggles catalog-toolbar__density"
+          role="group"
+          [attr.aria-label]="'SHOP.VIEW.LABEL' | translate"
+        >
+          <button
+            type="button"
+            class="view-btn"
+            [class.active]="viewMode === 'list'"
+            [attr.aria-pressed]="viewMode === 'list'"
+            [attr.aria-label]="'SHOP.VIEW.LIST' | translate"
+            (click)="changeViewMode('list')"
+          >
+            <svg viewBox="0 0 18 18" aria-hidden="true">
+              <rect x="2" y="3" width="14" height="2.2" rx="1"/>
+              <rect x="2" y="8" width="14" height="2.2" rx="1"/>
+              <rect x="2" y="13" width="14" height="2.2" rx="1"/>
+            </svg>
           </button>
-          <button class="view-btn view-btn--dense" [class.active]="viewMode === 'grid-3'" (click)="changeViewMode('grid-3')">
-            <span class="view-icon">|||</span>
+          <button
+            type="button"
+            class="view-btn view-btn--dense"
+            [class.active]="viewMode === 'grid-3'"
+            [attr.aria-pressed]="viewMode === 'grid-3'"
+            [attr.aria-label]="'SHOP.VIEW.GRID_3' | translate"
+            (click)="changeViewMode('grid-3')"
+          >
+            <svg viewBox="0 0 18 18" aria-hidden="true">
+              <rect x="1.5" y="1.5" width="4" height="15" rx="1"/>
+              <rect x="7" y="1.5" width="4" height="15" rx="1"/>
+              <rect x="12.5" y="1.5" width="4" height="15" rx="1"/>
+            </svg>
           </button>
-          <button class="view-btn view-btn--dense" [class.active]="viewMode === 'grid-4'" (click)="changeViewMode('grid-4')">
-            <span class="view-icon">||||</span>
+          <button
+            type="button"
+            class="view-btn view-btn--dense"
+            [class.active]="viewMode === 'grid-4'"
+            [attr.aria-pressed]="viewMode === 'grid-4'"
+            [attr.aria-label]="'SHOP.VIEW.GRID_4' | translate"
+            (click)="changeViewMode('grid-4')"
+          >
+            <svg viewBox="0 0 18 18" aria-hidden="true">
+              <rect x="1.2" y="1.5" width="3" height="15" rx="0.9"/>
+              <rect x="5.4" y="1.5" width="3" height="15" rx="0.9"/>
+              <rect x="9.6" y="1.5" width="3" height="15" rx="0.9"/>
+              <rect x="13.8" y="1.5" width="3" height="15" rx="0.9"/>
+            </svg>
           </button>
-          <button class="view-btn view-btn--dense" [class.active]="viewMode === 'grid-5'" (click)="changeViewMode('grid-5')">
-            <span class="view-icon">|||||</span>
+          <button
+            type="button"
+            class="view-btn view-btn--dense"
+            [class.active]="viewMode === 'grid-5'"
+            [attr.aria-pressed]="viewMode === 'grid-5'"
+            [attr.aria-label]="'SHOP.VIEW.GRID_5' | translate"
+            (click)="changeViewMode('grid-5')"
+          >
+            <svg viewBox="0 0 18 18" aria-hidden="true">
+              <rect x="1" y="1.5" width="2.2" height="15" rx="0.7"/>
+              <rect x="4.2" y="1.5" width="2.2" height="15" rx="0.7"/>
+              <rect x="7.4" y="1.5" width="2.2" height="15" rx="0.7"/>
+              <rect x="10.6" y="1.5" width="2.2" height="15" rx="0.7"/>
+              <rect x="13.8" y="1.5" width="2.2" height="15" rx="0.7"/>
+            </svg>
           </button>
-          <button class="view-btn view-btn--legacy" [class.active]="viewMode === 'grid-2'" (click)="changeViewMode('grid-2')">
-            <span class="view-icon">||</span>
+          <button
+            type="button"
+            class="view-btn view-btn--legacy"
+            [class.active]="viewMode === 'grid-2'"
+            [attr.aria-pressed]="viewMode === 'grid-2'"
+            [attr.aria-label]="'SHOP.VIEW.GRID_2' | translate"
+            (click)="changeViewMode('grid-2')"
+          >
+            <svg viewBox="0 0 18 18" aria-hidden="true">
+              <rect x="2" y="1.5" width="6" height="15" rx="1"/>
+              <rect x="10" y="1.5" width="6" height="15" rx="1"/>
+            </svg>
           </button>
         </div>
       </div>
@@ -155,7 +215,7 @@
             <img [src]="product.imageUrl" [alt]="product.name | localized" loading="lazy" />
 
             <!-- Product Overlay with Quick View and Favorite -->
-            <div class="product-overlay">
+            <div class="product-overlay" (click)="$event.stopPropagation()">
               <div class="overlay-actions">
                 <!-- Quick View Button -->
                 <button class="action-btn quick-view-btn" (click)="quickView(product)"
@@ -231,23 +291,55 @@
       </div>
 
       <!-- Pagination (desktop / tablet only — mobile shows full catalog) -->
-      <div class="pagination" *ngIf="totalPages > 1">
-        <button type="button" class="page-btn" (click)="prevPage()" [disabled]="currentPage === 1"
-          [attr.aria-label]="'SHOP.PAGINATION.PREV' | translate">
-          &laquo;
-        </button>
+      <nav
+        class="catalog-pagination pagination"
+        *ngIf="totalPages > 1"
+        [attr.aria-label]="'SHOP.PAGINATION.LABEL' | translate"
+      >
+        <p class="catalog-pagination__status" aria-live="polite">
+          {{ 'SHOP.PAGINATION.STATUS' | translate:{ current: currentPage, total: totalPages } }}
+        </p>
+        <div class="catalog-pagination__cluster">
+          <button
+            type="button"
+            class="catalog-pagination__btn catalog-pagination__btn--nav"
+            (click)="prevPage()"
+            [disabled]="currentPage === 1"
+            [attr.aria-label]="'SHOP.PAGINATION.PREV' | translate"
+          >
+            <mat-icon>chevron_left</mat-icon>
+          </button>
 
-        <button type="button" class="page-btn" *ngFor="let page of [].constructor(totalPages); let i = index"
-          [class.active]="currentPage === (i+1)" (click)="goToPage(i+1)"
-          [attr.aria-label]="('SHOP.PAGINATION.GO_TO_PAGE' | translate) + ' ' + (i+1)">
-          {{ i+1 }}
-        </button>
+          <ng-container *ngFor="let item of pageItems; trackBy: trackByPageItem">
+            <span
+              *ngIf="item.kind === 'ellipsis'"
+              class="catalog-pagination__ellipsis"
+              aria-hidden="true"
+            >…</span>
+            <button
+              *ngIf="item.kind === 'page'"
+              type="button"
+              class="catalog-pagination__btn"
+              [class.is-active]="currentPage === item.page"
+              [attr.aria-current]="currentPage === item.page ? 'page' : null"
+              [attr.aria-label]="('SHOP.PAGINATION.GO_TO_PAGE' | translate) + ' ' + item.page"
+              (click)="goToPage(item.page)"
+            >
+              {{ item.page }}
+            </button>
+          </ng-container>
 
-        <button type="button" class="page-btn" (click)="nextPage()" [disabled]="currentPage === totalPages"
-          [attr.aria-label]="'SHOP.PAGINATION.NEXT' | translate">
-          &raquo;
-        </button>
-      </div>
+          <button
+            type="button"
+            class="catalog-pagination__btn catalog-pagination__btn--nav"
+            (click)="nextPage()"
+            [disabled]="currentPage === totalPages"
+            [attr.aria-label]="'SHOP.PAGINATION.NEXT' | translate"
+          >
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+      </nav>
 
       <!-- No Products Message -->
       <div *ngIf="filteredProducts.length === 0" class="no-products">
