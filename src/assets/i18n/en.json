@@ -1126,6 +1126,8 @@
       "LOW_STOCK": "Only {{count}} left in stock!"
     },
     "PAGINATION": {
+      "LABEL": "Catalog pagination",
+      "STATUS": "Page {{current}} of {{total}}",
       "PREV": "Previous page",
       "GO_TO_PAGE": "Go to page",
       "NEXT": "Next page"

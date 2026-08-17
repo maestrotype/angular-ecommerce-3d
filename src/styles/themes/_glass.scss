@@ -506,6 +506,27 @@
   /* ===== PRODUCT CARDS — Kokonut liquid glass ===== */
   --product-grid-columns: 3;
   --product-grid-gap: calc(var(--space-6) + var(--space-1));
+
+  /* ===== CATALOG PAGINATION (glass — frosted pill) ===== */
+  --pagination-rule: none;
+  --pagination-padding-top: var(--space-0);
+  --pagination-status-transform: none;
+  --pagination-cluster-bg: var(--glass-surface-soft);
+  --pagination-cluster-border: var(--glass-border);
+  --pagination-cluster-radius: var(--radius-full);
+  --pagination-cluster-padding: var(--space-1);
+  --pagination-cluster-shadow: var(--glass-shadow), var(--glass-inner-shadow);
+  --pagination-cluster-backdrop: var(--glass-blur);
+  --pagination-cluster-gap: var(--space-1);
+  --pagination-btn-radius: var(--radius-full);
+  --pagination-btn-bg: transparent;
+  --pagination-btn-border: none;
+  --pagination-btn-hover-bg: var(--glass-bg-hover);
+  --pagination-btn-hover-border: none;
+  --pagination-btn-active-bg: var(--glass-surface-strong);
+  --pagination-btn-active-color: var(--text-primary);
+  --pagination-btn-active-border: var(--size-hairline) solid var(--glass-border-strong);
+  --pagination-btn-active-shadow: var(--glass-inner-shadow);
   --card-image-zoom: 1;
   --liquid-glass-edge-shadow:
     inset 3px 3px 0.5px -3px rgba(0, 0, 0, 0.9),
@@ -1111,4 +1132,26 @@ html[data-theme="glass"] body:not(.is-admin) {
   50% {
     background-position: 100% 50%;
   }
+}
+
+[data-theme='dark-glass'] {
+  --pagination-rule: none;
+  --pagination-padding-top: var(--space-0);
+  --pagination-status-transform: none;
+  --pagination-cluster-bg: var(--glass-surface-soft, var(--surface-elevated));
+  --pagination-cluster-border: var(--glass-border, var(--size-hairline) solid var(--border-subtle));
+  --pagination-cluster-radius: var(--radius-full);
+  --pagination-cluster-padding: var(--space-1);
+  --pagination-cluster-shadow: var(--glass-shadow, var(--shadow-md));
+  --pagination-cluster-backdrop: var(--glass-blur, var(--backdrop-blur));
+  --pagination-cluster-gap: var(--space-1);
+  --pagination-btn-radius: var(--radius-full);
+  --pagination-btn-bg: transparent;
+  --pagination-btn-border: none;
+  --pagination-btn-hover-bg: var(--surface-highlight);
+  --pagination-btn-hover-border: none;
+  --pagination-btn-active-bg: var(--interactive-primary);
+  --pagination-btn-active-color: var(--text-on-primary);
+  --pagination-btn-active-border: none;
+  --pagination-btn-active-shadow: var(--shadow-sm);
 }

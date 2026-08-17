@@ -540,4 +540,45 @@
   --product-grid-reveal-margin: calc(var(--space-16) * 4);
   --card-image-zoom: 1.04;
   --size-hairline: var(--space-px);
+
+  // ===== CATALOG PAGINATION =====
+  --pagination-margin-block: var(--spacing-xl);
+  --pagination-padding-top: var(--spacing-lg);
+  --pagination-gap: var(--spacing-sm);
+  --pagination-rule: var(--size-hairline) solid var(--border-subtle);
+  --pagination-status-color: var(--text-muted);
+  --pagination-status-size: var(--type-size-caption);
+  --pagination-status-weight: var(--type-weight-label);
+  --pagination-status-tracking: var(--type-tracking-label);
+  --pagination-status-transform: uppercase;
+  --pagination-cluster-bg: transparent;
+  --pagination-cluster-border: none;
+  --pagination-cluster-radius: var(--radius-none);
+  --pagination-cluster-padding: var(--space-0);
+  --pagination-cluster-shadow: none;
+  --pagination-cluster-backdrop: none;
+  --pagination-cluster-gap: var(--size-hairline);
+  --pagination-btn-size: var(--space-10);
+  --pagination-btn-radius: var(--radius-none);
+  --pagination-btn-bg: var(--surface-primary);
+  --pagination-btn-color: var(--text-secondary);
+  --pagination-btn-border: var(--size-hairline) solid var(--border-default);
+  --pagination-btn-shadow: none;
+  --pagination-btn-font-size: var(--type-size-body-sm);
+  --pagination-btn-font-weight: var(--type-weight-subheading);
+  --pagination-btn-hover-bg: var(--surface-highlight);
+  --pagination-btn-hover-color: var(--text-primary);
+  --pagination-btn-hover-border: var(--size-hairline) solid var(--border-emphasis);
+  --pagination-btn-hover-shadow: none;
+  --pagination-btn-hover-transform: none;
+  --pagination-btn-active-bg: var(--text-primary);
+  --pagination-btn-active-color: var(--surface-primary);
+  --pagination-btn-active-border: var(--size-hairline) solid var(--text-primary);
+  --pagination-btn-active-shadow: none;
+  --pagination-btn-active-weight: var(--type-weight-heading);
+  --pagination-btn-disabled-opacity: 0.35;
+  --pagination-btn-focus-ring: var(--size-hairline) solid var(--interactive-primary);
+  --pagination-btn-focus-offset: var(--spacing-2xs);
+  --pagination-ellipsis-color: var(--text-muted);
+  --pagination-icon-size: var(--space-5);
 }

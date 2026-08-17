@@ -81,6 +81,22 @@
   --card-stock-color: #64748b;
   --card-stock-border: rgba(148, 163, 184, 0.32);
 
+  /* ===== CATALOG PAGINATION (light — editorial mosaic) ===== */
+  --pagination-rule: var(--size-hairline) solid var(--border-subtle);
+  --pagination-cluster-bg: transparent;
+  --pagination-cluster-border: none;
+  --pagination-cluster-radius: var(--radius-none);
+  --pagination-cluster-padding: var(--space-0);
+  --pagination-cluster-shadow: none;
+  --pagination-cluster-backdrop: none;
+  --pagination-cluster-gap: var(--size-hairline);
+  --pagination-btn-radius: var(--radius-none);
+  --pagination-btn-bg: var(--surface-primary);
+  --pagination-btn-active-bg: var(--text-primary);
+  --pagination-btn-active-color: var(--surface-primary);
+  --pagination-btn-active-border: var(--size-hairline) solid var(--text-primary);
+  --pagination-status-transform: uppercase;
+
   /* ===== MIGRATED FROM tokens/_theme-variables.scss (Task A3) ===== */
   /* Default theme variables */
   --hero-bg-gradient: linear-gradient(135deg,

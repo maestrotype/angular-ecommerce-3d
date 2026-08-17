@@ -291,23 +291,55 @@
       </div>
 
       <!-- Pagination (desktop / tablet only — mobile shows full catalog) -->
-      <div class="pagination" *ngIf="totalPages > 1">
-        <button type="button" class="page-btn" (click)="prevPage()" [disabled]="currentPage === 1"
-          [attr.aria-label]="'SHOP.PAGINATION.PREV' | translate">
-          &laquo;
-        </button>
+      <nav
+        class="catalog-pagination pagination"
+        *ngIf="totalPages > 1"
+        [attr.aria-label]="'SHOP.PAGINATION.LABEL' | translate"
+      >
+        <p class="catalog-pagination__status" aria-live="polite">
+          {{ 'SHOP.PAGINATION.STATUS' | translate:{ current: currentPage, total: totalPages } }}
+        </p>
+        <div class="catalog-pagination__cluster">
+          <button
+            type="button"
+            class="catalog-pagination__btn catalog-pagination__btn--nav"
+            (click)="prevPage()"
+            [disabled]="currentPage === 1"
+            [attr.aria-label]="'SHOP.PAGINATION.PREV' | translate"
+          >
+            <mat-icon>chevron_left</mat-icon>
+          </button>
 
-        <button type="button" class="page-btn" *ngFor="let page of [].constructor(totalPages); let i = index"
-          [class.active]="currentPage === (i+1)" (click)="goToPage(i+1)"
-          [attr.aria-label]="('SHOP.PAGINATION.GO_TO_PAGE' | translate) + ' ' + (i+1)">
-          {{ i+1 }}
-        </button>
+          <ng-container *ngFor="let item of pageItems; trackBy: trackByPageItem">
+            <span
+              *ngIf="item.kind === 'ellipsis'"
+              class="catalog-pagination__ellipsis"
+              aria-hidden="true"
+            >…</span>
+            <button
+              *ngIf="item.kind === 'page'"
+              type="button"
+              class="catalog-pagination__btn"
+              [class.is-active]="currentPage === item.page"
+              [attr.aria-current]="currentPage === item.page ? 'page' : null"
+              [attr.aria-label]="('SHOP.PAGINATION.GO_TO_PAGE' | translate) + ' ' + item.page"
+              (click)="goToPage(item.page)"
+            >
+              {{ item.page }}
+            </button>
+          </ng-container>
 
-        <button type="button" class="page-btn" (click)="nextPage()" [disabled]="currentPage === totalPages"
-          [attr.aria-label]="'SHOP.PAGINATION.NEXT' | translate">
-          &raquo;
-        </button>
-      </div>
+          <button
+            type="button"
+            class="catalog-pagination__btn catalog-pagination__btn--nav"
+            (click)="nextPage()"
+            [disabled]="currentPage === totalPages"
+            [attr.aria-label]="'SHOP.PAGINATION.NEXT' | translate"
+          >
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+      </nav>
 
       <!-- No Products Message -->
       <div *ngIf="filteredProducts.length === 0" class="no-products">
