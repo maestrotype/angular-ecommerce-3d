@@ -531,4 +531,13 @@
   --page-transition-easing: var(--motion-easing-enter);
   --page-transition-offset-y: var(--spacing-md);
   --page-transition-opacity-from: 0;
+
+  --motion-stagger-step: calc(var(--duration-fast) / 3);
+
+  // ===== PRODUCT GRID =====
+  --product-grid-columns: 3;
+  --product-grid-gap: var(--spacing-lg);
+  --product-grid-reveal-margin: calc(var(--space-16) * 4);
+  --card-image-zoom: 1.04;
+  --size-hairline: var(--space-px);
 }

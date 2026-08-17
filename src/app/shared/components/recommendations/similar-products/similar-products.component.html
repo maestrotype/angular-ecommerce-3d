@@ -32,7 +32,7 @@
         <img [src]="product.imageUrl" [alt]="product.name | localized" loading="lazy" />
 
         <!-- Product Overlay with Quick View and Favorite -->
-        <div class="product-overlay">
+            <div class="product-overlay" (click)="$event.stopPropagation()">
           <div class="overlay-actions">
             <!-- Quick View Button -->
             <button class="action-btn quick-view-btn" (click)="quickView(product)"

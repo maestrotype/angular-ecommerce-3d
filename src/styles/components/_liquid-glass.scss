@@ -86,6 +86,9 @@ html[data-theme='glass'] body:not(.is-admin) .product-card {
   /* ----- Overlay liquid buttons (Kokonut LiquidButton) ----- */
 
   .overlay-actions app-favorite-button {
+    position: absolute;
+    top: 0;
+    right: 0;
     display: inline-flex;
     width: var(--card-action-size);
     height: var(--card-action-size);
@@ -94,7 +97,6 @@ html[data-theme='glass'] body:not(.is-admin) .product-card {
 
   .overlay-actions .liquid-btn,
   .overlay-actions .favorite-button {
-    position: relative;
     isolation: isolate;
     overflow: hidden;
     width: var(--card-action-size);

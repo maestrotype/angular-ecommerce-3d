@@ -505,6 +505,8 @@
 
   /* ===== PRODUCT CARDS — Kokonut liquid glass ===== */
   --product-grid-columns: 3;
+  --product-grid-gap: calc(var(--space-6) + var(--space-1));
+  --card-image-zoom: 1;
   --liquid-glass-edge-shadow:
     inset 3px 3px 0.5px -3px rgba(0, 0, 0, 0.9),
     inset -3px -3px 0.5px -3px rgba(0, 0, 0, 0.85),
@@ -526,7 +528,7 @@
     0 0 16px rgba(255, 255, 255, 0.2);
   --card-image-bg: rgba(255, 255, 255, 0.12);
   --card-info-bg: transparent;
-  --card-overlay-bg: rgba(236, 242, 248, 0.45);
+  --card-overlay-bg: transparent;
   --card-radius: 1.75rem;
   --card-backdrop-filter: blur(2px);
   --card-star: rgba(100, 116, 139, 0.35);

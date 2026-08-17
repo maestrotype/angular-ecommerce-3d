@@ -43,10 +43,17 @@
   .products-grid {
     display: grid;
     grid-template-columns: repeat(var(--product-grid-columns, 3), minmax(0, 1fr));
-    gap: 30px;
-    max-width: 1200px;
+    gap: var(--product-grid-gap);
+    max-width: none;
     margin: 0 auto;
     justify-content: center;
+  }
+
+  .load-more-sentinel {
+    width: 100%;
+    height: var(--size-hairline);
+    scroll-margin-top: var(--product-grid-reveal-margin);
+    pointer-events: none;
   }
 
   @media (max-width: 992px) {
