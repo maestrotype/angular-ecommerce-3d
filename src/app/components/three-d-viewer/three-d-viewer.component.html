@@ -44,21 +44,8 @@
       <div class="error-actions">
         <button type="button" class="retry-btn" (click)="checkAndLoad(); $event.stopPropagation(); $event.preventDefault()">
           <mat-icon>refresh</mat-icon>
-          <span>Try Reloading</span>
+          <span>{{ 'VIEWER.RETRY' | translate }}</span>
         </button>
-        <button type="button" class="logs-btn" (click)="toggleLogs(); $event.stopPropagation(); $event.preventDefault()">
-          <mat-icon>{{ showLogs ? 'expand_less' : 'expand_more' }}</mat-icon>
-          <span>{{ (showLogs ? 'VIEWER.HIDE_LOGS' : 'VIEWER.SHOW_LOGS') | translate }}</span>
-        </button>
-      </div>
-
-      <div class="logs-container" *ngIf="showLogs" (click)="$event.stopPropagation()">
-        <div class="logs-title">{{ 'VIEWER.LOGS_TITLE' | translate }}</div>
-        <div class="log-item"><strong>URL:</strong> {{ failedUrl }}</div>
-        <div class="log-item" *ngIf="getErrorString()"><strong>Error:</strong> {{ getErrorString() }}</div>
-        <div class="log-suggestion" *ngIf="getAdvice()">
-          <strong>Suggestion:</strong> {{ getAdvice() }}
-        </div>
       </div>
     </div>
   </div>

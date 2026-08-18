@@ -82,6 +82,18 @@ export class ProductFormComponent implements OnInit {
     return this.model3dNeedsCloudinaryArchive ? 'MODEL_STORAGE_TEMPORARY' : 'MODEL_STORAGE_CLOUDINARY';
   }
 
+  get activeAiProviderName(): string {
+    return this.aiProviders.find((item) => item.id === this.selectedAiProvider)?.name
+      || this.aiStatusMessage
+      || this.selectedAiProvider;
+  }
+
+  get otherConfiguredAiProviders(): AiProviderOption[] {
+    return this.aiProviders.filter(
+      (item) => item.id !== this.selectedAiProvider && item.configured,
+    );
+  }
+
   get model3dUrlIsBlockedByMixedContent(): boolean {
     // If we are on HTTPS but the model is HTTP Localhost
     return window.location.protocol === 'https:' && this.model3dUrlIsLocal && !!this.model3dUrl?.startsWith('http:');
@@ -161,7 +173,7 @@ export class ProductFormComponent implements OnInit {
   private loadAiProviders(): void {
     this.aiService.listProviders().subscribe({
       next: (response) => {
-        this.aiProviders = (response.providers || []).filter((item) => item.implemented);
+        this.aiProviders = this.filterProductAiProviders(response.providers);
         this.selectedAiProvider = response.activeProvider || 'tripo3d';
         this.syncAiEngineLabel();
       },
@@ -193,7 +205,7 @@ export class ProductFormComponent implements OnInit {
     this.selectedAiProvider = providerId;
     this.aiService.setActiveProvider(providerId).subscribe({
       next: (response) => {
-        this.aiProviders = (response.providers || []).filter((item) => item.implemented);
+        this.aiProviders = this.filterProductAiProviders(response.providers);
         this.selectedAiProvider = response.activeProvider || providerId;
         this.syncAiEngineLabel();
         this.snackBar.open(
@@ -265,6 +277,33 @@ export class ProductFormComponent implements OnInit {
           duration: 3000
         });
       }
+    });
+  }
+
+  private filterProductAiProviders(providers: AiProviderOption[] | undefined): AiProviderOption[] {
+    return (providers || []).filter((item) => item.implemented && item.id !== 'custom');
+  }
+
+  switchEngineAndGenerate(providerId: string): void {
+    if (!providerId || providerId === this.selectedAiProvider) {
+      this.generateAi3dModel();
+      return;
+    }
+
+    this.aiService.setActiveProvider(providerId).subscribe({
+      next: (response) => {
+        this.aiProviders = this.filterProductAiProviders(response.providers);
+        this.selectedAiProvider = response.activeProvider || providerId;
+        this.syncAiEngineLabel();
+        this.generateAi3dModel();
+      },
+      error: () => {
+        this.snackBar.open(
+          this.translate.instant('FAILED_TO_SAVE_SETTINGS'),
+          this.translate.instant('CLOSE_BTN'),
+          { duration: 4000 },
+        );
+      },
     });
   }
 

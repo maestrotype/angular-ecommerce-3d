@@ -157,165 +157,112 @@
               <input type="file" #cloudinaryReuploadInput (change)="onCloudinaryReuploadSelected($event)" accept=".glb" style="display: none" />
               
                 <!-- State: No Model -->
-                <div *ngIf="!model3dUrl" class="upload-placeholder">
-                  <div class="placeholder-icon" (click)="file3dInput.click()">
-                    <mat-icon>cloud_upload</mat-icon>
+                <div *ngIf="!model3dUrl && !isAiGenerating" class="model-empty">
+                  <div class="model-empty__icon" (click)="file3dInput.click()">
+                    <mat-icon>view_in_ar</mat-icon>
                   </div>
                   <h3>{{ 'PRODUCT_3D.DRAG_DROP' | translate }}</h3>
-                  <p>{{ 'PRODUCT_3D.SUPPORT_HINT' | translate }}</p>
-                  
-                  <div class="upload-actions">
-                    <div class="action-buttons">
-                      <button type="button" class="action-btn browse-btn" (click)="file3dInput.click()">
-                        <mat-icon>folder_open</mat-icon>
-                        <span>{{ 'PRODUCT_3D.BROWSE_FILES' | translate }}</span>
-                      </button>
-                      
-                      <button type="button" class="action-btn ai-gen-btn" 
-                              (click)="generateAi3dModel()" [disabled]="isAiGenerating || isUploading3d">
-                        <mat-icon *ngIf="!isAiGenerating">auto_awesome</mat-icon>
-                        <mat-spinner *ngIf="isAiGenerating" diameter="20" class="mini-spinner"></mat-spinner>
-                        <span>{{ isAiGenerating ? ('AI_GENERATING' | translate) : ('PRODUCT_3D.GENERATE_AI' | translate) }}</span>
-                      </button>
-                    </div>
+                  <p>{{ 'PRODUCT_3D.EMPTY_HINT' | translate }}</p>
 
-                    <div class="engine-info-group" *ngIf="!isAiGenerating">
-                      <div class="info-pill engine-select-pill">
-                        <mat-icon>memory</mat-icon>
-                        <mat-select
-                          [value]="selectedAiProvider"
-                          (selectionChange)="onAiProviderChange($event.value)"
-                          [attr.aria-label]="'ACTIVE_ENGINE' | translate"
-                        >
-                          <mat-option *ngFor="let provider of aiProviders" [value]="provider.id">
-                            {{ provider.name }}
-                            <span *ngIf="!provider.configured" class="provider-key-hint">
-                              {{ 'AI_PROVIDER_NO_KEY' | translate }}
-                            </span>
-                          </mat-option>
-                        </mat-select>
-                      </div>
-                      <p class="engine-switch-hint">{{ 'AI_PROVIDER_HINT' | translate }}</p>
-                      <div class="info-pill clickable" (click)="showRecentAiTasks()">
-                        <mat-icon>history</mat-icon>
-                        <span>{{ 'RECOVER_AI_MODEL' | translate }}</span>
-                      </div>
-                    </div>
+                  <div class="model-empty__actions">
+                    <button type="button" class="model-btn model-btn--ghost" (click)="file3dInput.click()">
+                      <mat-icon>upload_file</mat-icon>
+                      <span>{{ 'PRODUCT_3D.UPLOAD_FROM_PC' | translate }}</span>
+                    </button>
+                    <button
+                      type="button"
+                      class="model-btn model-btn--ai"
+                      (click)="generateAi3dModel()"
+                      [disabled]="isUploading3d"
+                    >
+                      <mat-icon>auto_awesome</mat-icon>
+                      <span>{{ 'PRODUCT_3D.GENERATE_AI' | translate }}</span>
+                    </button>
                   </div>
 
-                  <!-- AI Progress Indicator -->
-                  <div *ngIf="isAiGenerating" class="ai-progress-container">
-                    <div class="ai-status-title">{{ 'AI_GENERATE_3D_MODEL' | translate }}</div>
-                    <div class="ai-progress-wrapper">
-                      <div class="ai-progress-bar">
-                        <div class="ai-progress-fill" [style.width.%]="aiProgress"></div>
-                      </div>
-                      <span class="ai-percent">{{ aiProgress }}%</span>
-                    </div>
-                    <div class="ai-status-info">
-                      <mat-icon class="spinning" *ngIf="aiProgress < 100">refresh</mat-icon>
-                      <mat-icon *ngIf="aiProgress === 100">check_circle</mat-icon>
-                      <span>{{ aiStatusMessage }}</span>
-                    </div>
-                    <div class="ai-tip">{{ 'AI_TIP' | translate }}</div>
+                  <div class="engine-bar">
+                    <span class="engine-bar__label">{{ 'PRODUCT_3D.ACTIVE_API' | translate }}</span>
+                    <mat-select
+                      class="engine-bar__select"
+                      [value]="selectedAiProvider"
+                      (selectionChange)="onAiProviderChange($event.value)"
+                      [attr.aria-label]="'ACTIVE_ENGINE' | translate"
+                    >
+                      <mat-option *ngFor="let provider of aiProviders" [value]="provider.id">
+                        {{ provider.name }}
+                        <span *ngIf="!provider.configured"> {{ 'AI_PROVIDER_NO_KEY' | translate }}</span>
+                      </mat-option>
+                    </mat-select>
                   </div>
                 </div>
 
-                <!-- Recovery List Overlay -->
-                <div class="ai-recovery-list" *ngIf="showRecoveryList">
-                  <div class="recovery-header">
-                    <h3>{{ 'PRODUCT_3D.RECENT_GENERATIONS' | translate }}</h3>
-                    <button mat-icon-button (click)="showRecoveryList = false">
-                      <mat-icon>close</mat-icon>
-                    </button>
+                <!-- State: Generating -->
+                <div *ngIf="isAiGenerating" class="model-generating">
+                  <div class="ai-status-title">{{ 'PRODUCT_3D.AI_GENERATING' | translate }}</div>
+                  <p class="model-generating__engine">{{ activeAiProviderName }}</p>
+                  <div class="ai-progress-wrapper">
+                    <div class="ai-progress-bar">
+                      <div class="ai-progress-fill" [style.width.%]="aiProgress"></div>
+                    </div>
+                    <span class="ai-percent">{{ aiProgress }}%</span>
                   </div>
-                  <div class="recovery-items">
-                    <div *ngFor="let task of recentAiTasks" class="recovery-item" 
-                         [class.success]="task.status === 'success'"
-                         (click)="recoverAiTask(task)">
-                      <div class="task-info">
-                        <span class="task-date">{{ task.created_at | date:'short' }}</span>
-                        <span class="task-type">Task ID: {{ task.task_id.substring(0, 8) }}...</span>
-                      </div>
-                      <div class="task-status">
-                        <mat-icon>{{ task.status === 'success' ? 'check_circle' : (task.status === 'failed' ? 'error' : 'schedule') }}</mat-icon>
-                        <span>{{ task.status }}</span>
-                      </div>
-                    </div>
-                    <div *ngIf="recentAiTasks.length === 0" class="no-tasks">
-                      {{ 'PRODUCT_3D.NO_RECENT_TASKS' | translate }}
-                    </div>
+                  <div class="ai-status-info">
+                    <mat-icon class="spinning" *ngIf="aiProgress < 100">refresh</mat-icon>
+                    <mat-icon *ngIf="aiProgress === 100">check_circle</mat-icon>
+                    <span>{{ aiStatusMessage }}</span>
                   </div>
                 </div>
 
               <input type="file" id="aiSourceImageInput" style="display: none" (change)="onAiSourceImageSelected($event)" accept="image/*">
 
-
               <!-- State: Model Loaded -->
-              <div *ngIf="model3dUrl" class="model-active-view">
+              <div *ngIf="model3dUrl && !isAiGenerating" class="model-ready">
+                <div class="model-ready__viewer">
+                  <app-three-d-viewer [key]="viewerVersion"
+                                     [modelPath]="model3dUrl"
+                                     [hdModelPath]="localModel3dUrl"
+                                     [autoRotate]="true"
+                                     [previewOnly]="false"
+                                     (modelLoaded)="onModelLoaded()"></app-three-d-viewer>
+                </div>
 
-                <div *ngIf="isLiveSite && model3dNeedsCloudinaryArchive" class="live-model-warning-banner">
-                  <mat-icon>cloud_off</mat-icon>
-                  <div class="banner-text">
-                    <strong>{{ 'LIVE_SITE_MODEL_BROKEN_TITLE' | translate }}</strong>
-                    <span>{{ 'LIVE_SITE_MODEL_BROKEN_BODY' | translate }}</span>
+                <div class="model-toolbar">
+                  <div class="engine-chip" [matTooltip]="'PRODUCT_3D.ACTIVE_API' | translate">
+                    <mat-icon>auto_awesome</mat-icon>
+                    <span>{{ activeAiProviderName }}</span>
+                  </div>
+
+                  <div class="model-toolbar__actions">
+                    <button type="button" class="model-btn model-btn--ai model-btn--compact" (click)="generateAi3dModel()">
+                      <mat-icon>autorenew</mat-icon>
+                      <span>{{ 'PRODUCT_3D.GENERATE_AGAIN' | translate }}</span>
+                    </button>
+                    <button type="button" class="model-btn model-btn--ghost model-btn--compact" (click)="file3dInput.click()">
+                      <mat-icon>upload_file</mat-icon>
+                      <span>{{ 'PRODUCT_3D.UPLOAD_FROM_PC' | translate }}</span>
+                    </button>
+                  </div>
+
+                  <div class="model-toolbar__icons">
+                    <button type="button" class="icon-btn" (click)="downloadModel()" [matTooltip]="'PRODUCT_3D.DOWNLOAD' | translate">
+                      <mat-icon>download</mat-icon>
+                    </button>
+                    <button type="button" class="icon-btn icon-btn--danger" (click)="remove3dModel()" [matTooltip]="'PRODUCT_3D.REMOVE_MODEL' | translate">
+                      <mat-icon>delete</mat-icon>
+                    </button>
                   </div>
                 </div>
 
-                <!-- 3D Viewer -->
-                <div class="viewer-container-glass">
-                  <app-three-d-viewer [key]="viewerVersion" 
-                                     [modelPath]="model3dUrl" 
-                                     [hdModelPath]="localModel3dUrl" 
-                                     [autoRotate]="true" 
-                                     [previewOnly]="false" 
-                                     (modelLoaded)="onModelLoaded()"></app-three-d-viewer>
-                  
-                  <div class="viewer-controls-overlay">
-                    <!-- LEFT: Info pills -->
-                    <div class="overlay-left">
-                      <div class="model-info-pill" 
-                           [class.local-pill]="model3dNeedsCloudinaryArchive"
-                           [matTooltip]="model3dNeedsCloudinaryArchive ? ('LOCAL_STORAGE_WARNING' | translate) : ('MODEL_STORAGE_CLOUDINARY_HINT' | translate)">
-                        <mat-icon>{{ model3dNeedsCloudinaryArchive ? 'warning' : 'cloud_done' }}</mat-icon>
-                        <span class="filename-text">{{ model3dStorageLabelKey | translate }}</span>
-                      </div>
-                      <!-- API Switcher (Dev only) -->
-                      <button type="button" class="api-env-pill" *ngIf="isDevelopment" 
-                           [class.prod]="!isLocalApi"
-                           (click)="toggleApiEnvironment($event)"
-                           [matTooltip]="isLocalApi ? ('SWITCH_TO_PROD_API' | translate) : ('SWITCH_TO_LOCAL_API' | translate)">
-                        <mat-icon>{{ isLocalApi ? 'dns' : 'public' }}</mat-icon>
-                        <span>{{ isLocalApi ? 'LOCAL' : 'PROD' }}</span>
-                      </button>
-                    </div>
-
-                    <!-- RIGHT: Action buttons -->
-                    <div class="overlay-actions">
-                      <button *ngIf="model3dNeedsCloudinaryArchive" 
-                              mat-raised-button color="accent" type="button" 
-                              class="archive-btn-overlay"
-                              (click)="archiveLocalModel()" 
-                              [disabled]="isUploading3d"
-                              [matTooltip]="(isLiveSite ? 'UPLOAD_TO_CLOUDINARY_HINT' : 'ARCHIVE_TO_CLOUDINARY') | translate">
-                        <mat-icon *ngIf="!isUploading3d">cloud_upload</mat-icon>
-                        <mat-spinner *ngIf="isUploading3d" diameter="16" class="mini-spinner-inline"></mat-spinner>
-                        <span class="archive-btn-text">{{ (isLiveSite ? 'UPLOAD_TO_CLOUDINARY' : 'ARCHIVE_TO_CLOUDINARY') | translate }}</span>
-                      </button>
-
-                      <button mat-icon-button class="download-btn-overlay"
-                              (click)="downloadModel()" 
-                              matTooltip="Download GLB to my PC">
-                        <mat-icon>download</mat-icon>
-                      </button>
-
-                      <button mat-icon-button color="warn" type="button" (click)="remove3dModel()" 
-                              [matTooltip]="'PRODUCT_3D.REMOVE_MODEL' | translate" 
-                              class="remove-btn-overlay">
-                        <mat-icon>delete</mat-icon>
-                      </button>
-                    </div>
-                  </div>
+                <div class="alt-engines" *ngIf="otherConfiguredAiProviders.length">
+                  <span>{{ 'PRODUCT_3D.TRY_ANOTHER_ENGINE' | translate }}</span>
+                  <button
+                    type="button"
+                    class="alt-engines__chip"
+                    *ngFor="let provider of otherConfiguredAiProviders"
+                    (click)="switchEngineAndGenerate(provider.id)"
+                  >
+                    {{ provider.name }}
+                  </button>
                 </div>
               </div>
 
