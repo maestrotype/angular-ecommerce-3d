@@ -376,6 +376,11 @@
   "FREE_TIER_AVAILABLE": "Есть бесплатный тариф",
   "CLOUD_API": "Облачный API",
   "CUSTOM_WEBHOOK_LOCAL": "Свой вебхук / Локальный сервер",
+  "HF_TRIPOSR_FREE": "Hugging Face TripoSR (бесплатно)",
+  "HF_TRIPOSR_INFO": "Бесплатная генерация 3D через публичный Hugging Face Space. Платный ключ не нужен. Бесплатный токен с huggingface.co/settings/tokens повышает лимиты. Space может спать или стоять в очереди.",
+  "HF_SPACE_LABEL": "Hugging Face Space",
+  "HF_TOKEN_LABEL": "Токен Hugging Face (необязательно)",
+  "HF_TOKEN_OPTIONAL": "hf_... необязательно",
   "TRIPO_KEY_START_TSK": "Ключ Tripo3D начинается с tsk_...",
   "TRIPO_API_KEY_LABEL": "API ключ Tripo3D",
   "HUNYUAN_TENCENT": "Hunyuan3D (Tencent)",
@@ -442,6 +447,13 @@
     "BROWSE_FILES": "Выбрать файлы",
     "OR": "ИЛИ",
     "GENERATE_AI": "Сгенерировать с AI",
+    "GENERATE_AI": "Сгенерировать с AI",
+    "UPLOAD_FROM_PC": "Загрузить с ПК",
+    "GENERATE_AGAIN": "Сгенерировать заново",
+    "ACTIVE_API": "Активное API",
+    "EMPTY_HINT": "Загрузите GLB с компьютера или сгенерируйте модель по фото товара.",
+    "TRY_ANOTHER_ENGINE": "Нужно другое качество? Попробуйте другой сервис:",
+    "DOWNLOAD": "Скачать GLB",
     "AI_GENERATING": "AI Генерирует...",
     "RECENT_GENERATIONS": "Недавние генерации",
     "NO_RECENT_TASKS": "Нет недавних AI задач",
@@ -1104,16 +1116,17 @@
       "MAX": "Макс",
       "PRICE_DISPLAY": "Цена: ${{min}} – ${{max}}",
       "APPLY": "ПРИМЕНИТЬ",
-      "TOGGLE": "ФИЛЬТР",
+      "TOGGLE": "Фильтры",
       "ALL_CATEGORIES": "Все категории",
       "ON_SALE": "Только товары со скидкой",
+      "ON_SALE_SHORT": "Скидка",
       "CLEAR_ALL": "Сбросить фильтры"
     },
     "RESULTS": {
       "COUNT": "{{count}} товаров"
     },
     "SORT": {
-      "LABEL": "Сортировать по :",
+      "LABEL": "Сортировка",
       "PLACEHOLDER": "Выберите сортировку",
       "LATEST": "Новинки",
       "NAME": "По названию",
@@ -1122,8 +1135,16 @@
       "RATING": "По рейтингу"
     },
     "SHOW": {
-      "LABEL": "Показать :",
+      "LABEL": "На странице",
       "PLACEHOLDER": "Количество"
+    },
+    "VIEW": {
+      "LABEL": "Вид",
+      "LIST": "Список",
+      "GRID_2": "2 колонки",
+      "GRID_3": "3 колонки",
+      "GRID_4": "4 колонки",
+      "GRID_5": "5 колонок"
     },
     "PRODUCT": {
       "QUICK_VIEW": "Быстрый просмотр",
@@ -1135,6 +1156,8 @@
       "LOW_STOCK": "Осталось всего {{count}}!"
     },
     "PAGINATION": {
+      "LABEL": "Пагинация каталога",
+      "STATUS": "Страница {{current}} из {{total}}",
       "PREV": "Предыдущая страница",
       "GO_TO_PAGE": "Перейти на страницу",
       "NEXT": "Следующая страница"
@@ -1458,6 +1481,12 @@
   "MIXED_CONTENT_EXPLANATION": "Ваш браузер блокирует загрузку локальных ресурсов (HTTP) на защищенном сайте (HTTPS). Архивация модели в Cloudinary решит эту проблему навсегда.",
   "FIX_NOW_ARCHIVE": "Исправить: Архивировать в Cloudinary",
   "ACTIVE_ENGINE": "Активный AI движок",
+  "AI_PROVIDER_NO_KEY": "(нет ключа)",
+  "AI_PROVIDER_HINT": "Если одно API недоступно, переключите движок здесь. Ключи хранятся в Integrations.",
+  "AI_PROVIDER_NOT_CONFIGURED": "У этого движка ещё нет API-ключа. Добавьте его в Integrations.",
+  "AI_OPEN_INTEGRATIONS": "Открыть Integrations",
+  "AI_PROVIDER_SWITCHED": "AI-движок переключён на {{name}}",
+  "AI_KEYS_HINT": "Сохраните ключи всех нужных провайдеров и выберите активный. На странице товара можно переключиться, если одно API не работает.",
   "UNIQUE3D_LOCAL_HQ": "Unique3D (Локальный Ultra HQ)",
   "HUNYUAN_V2_CLOUD_FREE": "Hunyuan3D v2 (SOTA Free)",
   "SPEC_VALUE_PLACEHOLDER": "например, Nike, Красный",

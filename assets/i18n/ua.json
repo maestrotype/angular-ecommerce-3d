@@ -339,6 +339,16 @@
   "FREE_TIER_AVAILABLE": "Є безкоштовний тариф",
   "CLOUD_API": "Хмарний API",
   "CUSTOM_WEBHOOK_LOCAL": "Власний вебхук / Локальний сервер",
+  "HF_TRIPOSR_FREE": "Hugging Face TripoSR (безкоштовно)",
+  "HF_TRIPOSR_INFO": "Безкоштовна генерація 3D через публічний Hugging Face Space. Платний ключ не потрібен. Безкоштовний токен з huggingface.co/settings/tokens збільшує ліміти. Space може спати або стояти в черзі.",
+  "HF_SPACE_LABEL": "Hugging Face Space",
+  "HF_TOKEN_LABEL": "Токен Hugging Face (необов'язково)",
+  "HF_TOKEN_OPTIONAL": "hf_... необов'язково",
+  "HF_TRIPOSR_FREE": "Hugging Face TripoSR (безкоштовно)",
+  "HF_TRIPOSR_INFO": "Безкоштовна генерація 3D через публічний Hugging Face Space. Платний ключ не потрібен. Безкоштовний токен з huggingface.co/settings/tokens збільшує ліміти. Space може спати або стояти в черзі.",
+  "HF_SPACE_LABEL": "Hugging Face Space",
+  "HF_TOKEN_LABEL": "Токен Hugging Face (необов'язково)",
+  "HF_TOKEN_OPTIONAL": "hf_... необов'язково",
   "TRIPO_KEY_START_TSK": "Ключ Tripo3D починається з tsk_...",
   "TRIPO_API_KEY_LABEL": "API ключ Tripo3D",
   "HUNYUAN_TENCENT": "Hunyuan3D (Tencent)",
@@ -404,6 +414,13 @@
     "BROWSE_FILES": "Обрати файли",
     "OR": "АБО",
     "GENERATE_AI": "Згенерувати з AI",
+    "GENERATE_AI": "Згенерувати з AI",
+    "UPLOAD_FROM_PC": "Завантажити з ПК",
+    "GENERATE_AGAIN": "Згенерувати знову",
+    "ACTIVE_API": "Активне API",
+    "EMPTY_HINT": "Завантажте GLB з комп’ютера або згенеруйте модель за фото товару.",
+    "TRY_ANOTHER_ENGINE": "Потрібна інша якість? Спробуйте інший сервіс:",
+    "DOWNLOAD": "Завантажити GLB",
     "AI_GENERATING": "AI Генерує...",
     "RECENT_GENERATIONS": "Нещодавні генерації",
     "NO_RECENT_TASKS": "Немає нещодавніх AI завдань",
@@ -1066,16 +1083,17 @@
       "MAX": "Макс",
       "PRICE_DISPLAY": "Ціна: ${{min}} – ${{max}}",
       "APPLY": "ЗАСТОСУВАТИ",
-      "TOGGLE": "ФІЛЬТР",
+      "TOGGLE": "Фільтри",
       "ALL_CATEGORIES": "Всі категорії",
       "ON_SALE": "Тільки товари зі знижкою",
+      "ON_SALE_SHORT": "Знижка",
       "CLEAR_ALL": "Скинути фільтри"
     },
     "RESULTS": {
       "COUNT": "{{count}} товарів"
     },
     "SORT": {
-      "LABEL": "Сортувати за :",
+      "LABEL": "Сортування",
       "PLACEHOLDER": "Виберіть сортування",
       "LATEST": "Новинки",
       "NAME": "За назвою",
@@ -1084,8 +1102,16 @@
       "RATING": "За рейтингом"
     },
     "SHOW": {
-      "LABEL": "Показати :",
+      "LABEL": "На сторінці",
       "PLACEHOLDER": "Кількість"
+    },
+    "VIEW": {
+      "LABEL": "Вигляд",
+      "LIST": "Список",
+      "GRID_2": "2 колонки",
+      "GRID_3": "3 колонки",
+      "GRID_4": "4 колонки",
+      "GRID_5": "5 колонок"
     },
     "PRODUCT": {
       "QUICK_VIEW": "Швидкий перегляд",
@@ -1097,6 +1123,8 @@
       "LOW_STOCK": "Залишилося всього {{count}}!"
     },
     "PAGINATION": {
+      "LABEL": "Пагінація каталогу",
+      "STATUS": "Сторінка {{current}} з {{total}}",
       "PREV": "Попередня сторінка",
       "GO_TO_PAGE": "Перейти на сторінку",
       "NEXT": "Наступна сторінка"
@@ -1438,6 +1466,12 @@
   "MIXED_CONTENT_EXPLANATION": "Ваш браузер блокує завантаження локальних ресурсів (HTTP) на захищеному сайті (HTTPS). Архівація моделі в Cloudinary вирішить цю проблему назавжди.",
   "FIX_NOW_ARCHIVE": "Виправити: Архівувати в Cloudinary",
   "ACTIVE_ENGINE": "Активний AI двигун",
+  "AI_PROVIDER_NO_KEY": "(немає ключа)",
+  "AI_PROVIDER_HINT": "Якщо одне API недоступне, перемкніть рушій тут. Ключі зберігаються в Integrations.",
+  "AI_PROVIDER_NOT_CONFIGURED": "У цього рушія ще немає API-ключа. Додайте його в Integrations.",
+  "AI_OPEN_INTEGRATIONS": "Відкрити Integrations",
+  "AI_PROVIDER_SWITCHED": "AI-рушій перемкнено на {{name}}",
+  "AI_KEYS_HINT": "Збережіть ключі всіх потрібних провайдерів і оберіть активний. На сторінці товару можна перемкнутися, якщо одне API не працює.",
   "UNIQUE3D_LOCAL_HQ": "Unique3D (Локальний Ultra HQ)",
   "HUNYUAN_V2_CLOUD_FREE": "Hunyuan3D v2 (SOTA Free)",
   "SPEC_VALUE_PLACEHOLDER": "напр., Nike, Червоний",

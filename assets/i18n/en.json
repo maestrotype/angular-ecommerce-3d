@@ -380,6 +380,11 @@
   "FREE_TIER_AVAILABLE": "Free tier available",
   "CLOUD_API": "Cloud API",
   "CUSTOM_WEBHOOK_LOCAL": "Custom Webhook / Local Server",
+  "HF_TRIPOSR_FREE": "Hugging Face TripoSR (free)",
+  "HF_TRIPOSR_INFO": "Free image-to-3D via the public Hugging Face Space. No paid key. A free HF token from huggingface.co/settings/tokens improves rate limits. The Space can sleep or queue.",
+  "HF_SPACE_LABEL": "Hugging Face Space",
+  "HF_TOKEN_LABEL": "Hugging Face token (optional)",
+  "HF_TOKEN_OPTIONAL": "hf_... optional",
   "TRIPO_KEY_START_TSK": "Tripo3D key starts with tsk_...",
   "TRIPO_API_KEY_LABEL": "Tripo3D API Key",
   "HUNYUAN_TENCENT": "Hunyuan3D (Tencent)",
@@ -446,6 +451,13 @@
     "BROWSE_FILES": "Browse Files",
     "OR": "OR",
     "GENERATE_AI": "Generate with AI",
+    "GENERATE_AI": "Generate with AI",
+    "UPLOAD_FROM_PC": "Upload from PC",
+    "GENERATE_AGAIN": "Generate again",
+    "ACTIVE_API": "Active API",
+    "EMPTY_HINT": "Upload a GLB from your computer or generate one from the product photo.",
+    "TRY_ANOTHER_ENGINE": "Want different quality? Try another engine:",
+    "DOWNLOAD": "Download GLB",
     "AI_GENERATING": "AI Generating...",
     "RECENT_GENERATIONS": "Recent Generations",
     "NO_RECENT_TASKS": "No recent AI tasks found",
@@ -1086,16 +1098,17 @@
       "MAX": "Max",
       "PRICE_DISPLAY": "Price: ${{min}} – ${{max}}",
       "APPLY": "FILTER",
-      "TOGGLE": "FILTER",
+      "TOGGLE": "Filters",
       "ALL_CATEGORIES": "All categories",
       "ON_SALE": "Show only products on sale",
+      "ON_SALE_SHORT": "On sale",
       "CLEAR_ALL": "Clear all filters"
     },
     "RESULTS": {
       "COUNT": "{{count}} products"
     },
     "SORT": {
-      "LABEL": "Sort by :",
+      "LABEL": "Sort",
       "PLACEHOLDER": "Select sorting",
       "LATEST": "Latest",
       "NAME": "Name",
@@ -1104,8 +1117,16 @@
       "RATING": "Rating"
     },
     "SHOW": {
-      "LABEL": "Show :",
+      "LABEL": "Per page",
       "PLACEHOLDER": "Select items"
+    },
+    "VIEW": {
+      "LABEL": "Layout",
+      "LIST": "List view",
+      "GRID_2": "2 columns",
+      "GRID_3": "3 columns",
+      "GRID_4": "4 columns",
+      "GRID_5": "5 columns"
     },
     "PRODUCT": {
       "QUICK_VIEW": "Quick View",
@@ -1117,6 +1138,8 @@
       "LOW_STOCK": "Only {{count}} left in stock!"
     },
     "PAGINATION": {
+      "LABEL": "Catalog pagination",
+      "STATUS": "Page {{current}} of {{total}}",
       "PREV": "Previous page",
       "GO_TO_PAGE": "Go to page",
       "NEXT": "Next page"
@@ -1221,6 +1244,7 @@
     "LOAD_ERROR": "3D Load Error",
     "ERROR_DESCRIPTION": "The 3D model could not be loaded. This might be due to a missing file or a temporary server issue.",
     "AI_GENERATION_PENDING": "This AI-generated model is still being processed or was not successfully uploaded. Please try again later.",
+    "RETRY": "Try Reloading",
     "SHOW_LOGS": "Show Logs",
     "HIDE_LOGS": "Hide Logs",
     "LOGS_TITLE": "Error Details & Logs",
@@ -1457,6 +1481,12 @@
   "MIXED_CONTENT_EXPLANATION": "Your browser blocks loading local assets (HTTP) while on this secure site (HTTPS). Archiving the model to Cloudinary will fix this permanently.",
   "FIX_NOW_ARCHIVE": "Fix Now: Archive to Cloudinary",
   "ACTIVE_ENGINE": "Active AI Engine",
+  "AI_PROVIDER_NO_KEY": "(no key)",
+  "AI_PROVIDER_HINT": "If one API fails, switch the engine here. Keys are stored in Integrations.",
+  "AI_PROVIDER_NOT_CONFIGURED": "This engine has no API key yet. Add it in Integrations.",
+  "AI_OPEN_INTEGRATIONS": "Open Integrations",
+  "AI_PROVIDER_SWITCHED": "AI engine switched to {{name}}",
+  "AI_KEYS_HINT": "Save keys for every provider you want to use, then pick the active engine. You can also switch it on the product page if one API is down.",
   "UNIQUE3D_LOCAL_HQ": "Unique3D (Local Ultra HQ)",
   "HUNYUAN_V2_CLOUD_FREE": "Hunyuan3D v2 (SOTA Free)",
   "SPEC_VALUE_PLACEHOLDER": "e.g., Nike, Red",
