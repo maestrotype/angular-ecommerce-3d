@@ -180,10 +180,22 @@
                     </div>
 
                     <div class="engine-info-group" *ngIf="!isAiGenerating">
-                      <div class="info-pill">
+                      <div class="info-pill engine-select-pill">
                         <mat-icon>memory</mat-icon>
-                        <span>{{ 'ACTIVE_ENGINE' | translate }}: <strong>{{ aiStatusMessage || ('CAR_LOADING' | translate) }}</strong></span>
+                        <mat-select
+                          [value]="selectedAiProvider"
+                          (selectionChange)="onAiProviderChange($event.value)"
+                          [attr.aria-label]="'ACTIVE_ENGINE' | translate"
+                        >
+                          <mat-option *ngFor="let provider of aiProviders" [value]="provider.id">
+                            {{ provider.name }}
+                            <span *ngIf="!provider.configured" class="provider-key-hint">
+                              {{ 'AI_PROVIDER_NO_KEY' | translate }}
+                            </span>
+                          </mat-option>
+                        </mat-select>
                       </div>
+                      <p class="engine-switch-hint">{{ 'AI_PROVIDER_HINT' | translate }}</p>
                       <div class="info-pill clickable" (click)="showRecentAiTasks()">
                         <mat-icon>history</mat-icon>
                         <span>{{ 'RECOVER_AI_MODEL' | translate }}</span>

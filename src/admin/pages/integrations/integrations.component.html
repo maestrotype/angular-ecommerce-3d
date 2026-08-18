@@ -100,13 +100,16 @@
                 <mat-option value="meshy">{{ 'MESHY_AI' | translate }} ({{ 'FREE_TIER_AVAILABLE' | translate }})</mat-option>
                 <mat-option value="hunyuan3d">{{ 'HUNYUAN_TENCENT' | translate }} ({{ 'CLOUD_API' | translate }})</mat-option>
                 <mat-option value="luma">{{ 'LUMA_AI' | translate }}</mat-option>
+                <mat-option value="huggingface">{{ 'HF_TRIPOSR_FREE' | translate }}</mat-option>
                 <mat-option value="custom">{{ 'CUSTOM_WEBHOOK_LOCAL' | translate }}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
 
+          <p class="ai-keys-hint">{{ 'AI_KEYS_HINT' | translate }}</p>
+
           <!-- Tripo3D Form -->
-          <ng-container *ngIf="aiForm.get('activeProvider')?.value === 'tripo3d'">
+          <ng-container>
             <div class="admin-info-banner info-banner"><mat-icon>info</mat-icon><p>{{ 'TRIPO_KEY_START_TSK' | translate }}</p></div>
             <div class="form-row">
               <mat-form-field appearance="outline" class="full-width">
@@ -120,7 +123,7 @@
           </ng-container>
 
           <!-- Hunyuan3D Form -->
-          <ng-container *ngIf="aiForm.get('activeProvider')?.value === 'hunyuan3d'">
+          <ng-container>
             <div class="admin-info-banner info-banner"><mat-icon>info</mat-icon><p>{{ 'HUNYUAN_KEY_INFO' | translate }}</p></div>
             <div class="form-row">
               <mat-form-field appearance="outline" class="full-width">
@@ -134,7 +137,7 @@
           </ng-container>
 
           <!-- Meshy Form -->
-          <ng-container *ngIf="aiForm.get('activeProvider')?.value === 'meshy'">
+          <ng-container>
             <div class="admin-info-banner info-banner"><mat-icon>info</mat-icon><p>{{ 'MESHY_KEY_INFO' | translate }}</p></div>
             <div class="form-row">
               <mat-form-field appearance="outline" class="full-width">
@@ -148,7 +151,7 @@
           </ng-container>
 
           <!-- Luma Form -->
-          <ng-container *ngIf="aiForm.get('activeProvider')?.value === 'luma'">
+          <ng-container>
             <div class="admin-info-banner info-banner"><mat-icon>info</mat-icon><p>{{ 'LUMA_KEY_INFO' | translate }}</p></div>
             <div class="form-row">
               <mat-form-field appearance="outline" class="full-width">
@@ -161,8 +164,28 @@
             </div>
           </ng-container>
 
+          <!-- Hugging Face TripoSR (free) -->
+          <ng-container>
+            <div class="admin-info-banner info-banner"><mat-icon>info</mat-icon><p>{{ 'HF_TRIPOSR_INFO' | translate }}</p></div>
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>{{ 'HF_SPACE_LABEL' | translate }}</mat-label>
+                <input matInput formControlName="hfSpace" placeholder="stabilityai/TripoSR">
+              </mat-form-field>
+            </div>
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>{{ 'HF_TOKEN_LABEL' | translate }}</mat-label>
+                <input matInput formControlName="hfToken" [type]="hideHfToken ? 'password' : 'text'" [placeholder]="'HF_TOKEN_OPTIONAL' | translate">
+                <button mat-icon-button matSuffix type="button" (click)="hideHfToken = !hideHfToken">
+                  <mat-icon>{{hideHfToken ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+              </mat-form-field>
+            </div>
+          </ng-container>
+
           <!-- Custom Webhook Form -->
-          <ng-container *ngIf="aiForm.get('activeProvider')?.value === 'custom'">
+          <ng-container>
             <div class="admin-info-banner info-banner"><mat-icon>info</mat-icon><p>{{ 'CUSTOM_WEBHOOK_URL_INFO' | translate }}</p></div>
             <div class="form-row">
               <mat-form-field appearance="outline" class="full-width">

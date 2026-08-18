@@ -71,6 +71,8 @@ export interface AiGenerationSettings {
   meshyApiKey: string;
   hunyuanApiKey: string;
   lumaApiKey: string;
+  hfToken: string;
+  hfSpace: string;
   customUrl: string;
   customUseHq: boolean;
 }
@@ -171,6 +173,8 @@ export class SettingsService {
         meshyApiKey: '',
         hunyuanApiKey: '',
         lumaApiKey: '',
+        hfToken: '',
+        hfSpace: 'stabilityai/TripoSR',
         customUrl: '',
         customUseHq: false
       },

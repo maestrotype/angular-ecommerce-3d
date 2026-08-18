@@ -28,6 +28,7 @@ export class IntegrationsComponent implements OnInit {
   hideMeshyApiKey = true;
   hideHunyuanApiKey = true;
   hideLumaApiKey = true;
+  hideHfToken = true;
   hideStripeSecret = true;
   hideStripeWebhook = true;
   hideSmtpPass = true;
@@ -51,6 +52,8 @@ export class IntegrationsComponent implements OnInit {
       meshyApiKey: [''],
       hunyuanApiKey: [''],
       lumaApiKey: [''],
+      hfToken: [''],
+      hfSpace: ['stabilityai/TripoSR'],
       customUrl: [''],
       customUseHq: [false]
     });

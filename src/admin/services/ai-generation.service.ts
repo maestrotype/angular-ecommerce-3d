@@ -8,8 +8,11 @@ export interface TripoTaskResponse {
   code: number;
   data: {
     task_id: string;
+    provider?: string;
   };
   message: string;
+  provider?: string;
+  alternatives?: AiProviderOption[];
 }
 
 export interface TripoStatusResponse {
@@ -23,8 +26,24 @@ export interface TripoStatusResponse {
     };
     localPath?: string;
     error?: string;
+    provider?: string;
   };
   message: string;
+  provider?: string;
+  alternatives?: AiProviderOption[];
+}
+
+export interface AiProviderOption {
+  id: string;
+  name: string;
+  implemented: boolean;
+  configured: boolean;
+  active: boolean;
+}
+
+export interface AiProvidersResponse {
+  activeProvider: string;
+  providers: AiProviderOption[];
 }
 
 @Injectable({
@@ -42,12 +61,20 @@ export class AiGenerationService {
 
   constructor(private http: HttpClient) {}
 
-  generateModel(imageUrl: string, isHq: boolean = false): Observable<TripoTaskResponse> {
-    return this.http.post<TripoTaskResponse>(`${this.apiUrl}/generate`, { imageUrl, isHq });
+  listProviders(): Observable<AiProvidersResponse> {
+    return this.http.get<AiProvidersResponse>(`${this.apiUrl}/providers`);
+  }
+
+  setActiveProvider(provider: string): Observable<AiProvidersResponse> {
+    return this.http.put<AiProvidersResponse>(`${this.apiUrl}/active-provider`, { provider });
+  }
+
+  generateModel(imageUrl: string, isHq: boolean = false, provider?: string): Observable<TripoTaskResponse> {
+    return this.http.post<TripoTaskResponse>(`${this.apiUrl}/generate`, { imageUrl, isHq, provider });
   }
 
   getTaskStatus(taskId: string): Observable<TripoStatusResponse> {
-    return this.http.get<TripoStatusResponse>(`${this.apiUrl}/status/${taskId}`);
+    return this.http.get<TripoStatusResponse>(`${this.apiUrl}/status/${encodeURIComponent(taskId)}`);
   }
 
   pollStatus(taskId: string): Observable<TripoStatusResponse> {

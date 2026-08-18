@@ -36,19 +36,27 @@ export function fixBackendUrl(url: string | undefined): string {
 
   if (isCloudinaryUrl(url)) return url;
 
-  // Local / Render ephemeral URLs only work where the file actually exists — never rewrite to production backend.
-  if (isLegacyLocalUrl(url)) {
-    return url;
-  }
-
   const apiBase = environment.apiUrl;
   const backendBaseUrl = apiBase.endsWith('/api') ? apiBase.substring(0, apiBase.length - 4) : apiBase;
+
+  let normalized = url.replace('/uploads/models/', '/uploads/products-3d/');
+  if (normalized.includes('localhost:4200/uploads/')) {
+    normalized = normalized.replace(/https?:\/\/localhost:4200/, backendBaseUrl);
+  }
+  if (normalized.startsWith('/uploads/')) {
+    return `${backendBaseUrl}${normalized}`;
+  }
+
+  // Local / Render ephemeral URLs only work where the file actually exists — never rewrite to production backend.
+  if (isLegacyLocalUrl(normalized)) {
+    return normalized;
+  }
 
   if (url.startsWith('http') && !url.includes(backendBaseUrl)) {
     return url;
   }
 
-  let resultUrl = url;
+  let resultUrl = normalized;
   if (!url.startsWith('http') && !url.startsWith('assets/')) {
     resultUrl = `${backendBaseUrl}/${url.replace(/^\//, '')}`;
   }
