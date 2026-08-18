@@ -311,6 +311,7 @@ export class SettingsService {
           { cat: 'ai', key: 'meshyApiKey' },
           { cat: 'ai', key: 'hunyuanApiKey' },
           { cat: 'ai', key: 'lumaApiKey' },
+          { cat: 'ai', key: 'hfToken' },
           { cat: 'smtp', key: 'pass' }
         ];
 
@@ -433,6 +434,8 @@ export class SettingsService {
       { key: 'ai.meshyApiKey', value: '', type: 'string', category: 'ai', description: 'Meshy API key' },
       { key: 'ai.hunyuanApiKey', value: '', type: 'string', category: 'ai', description: 'Hunyuan3D API key' },
       { key: 'ai.lumaApiKey', value: '', type: 'string', category: 'ai', description: 'Luma AI API key' },
+      { key: 'ai.hfToken', value: '', type: 'string', category: 'ai', description: 'Optional Hugging Face token (free account)' },
+      { key: 'ai.hfSpace', value: 'stabilityai/TripoSR', type: 'string', category: 'ai', description: 'Hugging Face Space id for free image-to-3D' },
       { key: 'ai.customUrl', value: '', type: 'string', category: 'ai', description: 'Custom Webhook URL' },
       { key: 'ai.customUseHq', value: 'false', type: 'boolean', category: 'ai', description: 'Use HQ mode for custom provider' },
       

@@ -197,7 +197,11 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
 
     // If no product ID found, use the original URL preparation
     let url = fixBackendUrl(pathToLoad);
-    if (url && !url.startsWith('http')) {
+    if (url && !url.startsWith('http') && url.startsWith('/uploads/')) {
+      const apiBase = environment.apiUrl;
+      const backendBaseUrl = apiBase.endsWith('/api') ? apiBase.substring(0, apiBase.length - 4) : apiBase;
+      url = `${backendBaseUrl}${url}`;
+    } else if (url && !url.startsWith('http')) {
       url = this.location.prepareExternalUrl(url);
     }
     return url;
@@ -282,13 +286,21 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   private loadModel() {
     const pathToLoad = this.isHdMode && this.hdModelPath ? this.hdModelPath : this.modelPath;
     
+    const lowerPath = (pathToLoad || '').toLowerCase();
     this.isAiGeneration = !!pathToLoad && (
-      pathToLoad.toLowerCase().includes('task_') || 
-      pathToLoad.toLowerCase().includes('ai-gen') || 
-      pathToLoad.toLowerCase().includes('product3d-ai')
+      lowerPath.includes('task_') ||
+      lowerPath.includes('ai-gen') ||
+      lowerPath.includes('product3d-ai') ||
+      lowerPath.includes('huggingface') ||
+      lowerPath.includes('triposr')
     );
-    
-    this._upsideDown = this.isAiGeneration;
+
+    // Old Tripo3D GLBs were exported inverted. Hugging Face TripoSR is already Y-up.
+    const isHuggingFaceModel =
+      lowerPath.includes('huggingface') ||
+      lowerPath.includes('triposr') ||
+      /(?:^|\/)hf-/.test(lowerPath);
+    this._upsideDown = this.isAiGeneration && !isHuggingFaceModel;
 
     if (this.currentLoadedPath === pathToLoad && this.model) return;
     

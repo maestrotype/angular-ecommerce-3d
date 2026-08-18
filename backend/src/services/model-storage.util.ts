@@ -1,6 +1,28 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
+export function getUploadsRoot(): string {
+  return join(process.cwd(), 'uploads');
+}
+
+export function getProduct3dDir(): string {
+  const dir = join(getUploadsRoot(), 'products-3d');
+  if (!existsSync(dir)) {
+    mkdirSync(dir, { recursive: true });
+  }
+  return dir;
+}
+
+export function resolveLocalUploadPath(url: string): string | null {
+  const marker = '/uploads/';
+  const index = url.indexOf(marker);
+  if (index === -1) {
+    return null;
+  }
+  const relative = url.slice(index + marker.length).split('?')[0];
+  return join(getUploadsRoot(), relative);
+}
+
 export function getServerBaseUrl(): string {
   if (process.env.RENDER_EXTERNAL_URL) {
     return process.env.RENDER_EXTERNAL_URL.replace(/\/$/, '');
@@ -35,7 +57,7 @@ export function saveModelToLocalDisk(
   originalName: string,
 ): LocalModelSaveResult {
   const subFolder = isProduct ? 'products-3d' : 'sections-3d';
-  const finalDir = join(__dirname, '..', '..', 'uploads', subFolder);
+  const finalDir = isProduct ? getProduct3dDir() : join(getUploadsRoot(), subFolder);
   if (!existsSync(finalDir)) {
     mkdirSync(finalDir, { recursive: true });
   }

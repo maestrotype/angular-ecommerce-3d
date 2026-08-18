@@ -33,14 +33,20 @@ export class MeshyProvider implements AiGenerationProvider {
           'https://api.meshy.ai/openapi/v1/image-to-3d',
           {
             image_url: imageUrl,
-            ai_model: 'meshy-4',
-            enable_pbr: true
+            ai_model: 'latest',
+            enable_pbr: true,
+            should_remesh: true,
+            should_texture: true,
           },
           { headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' } }
         )
       );
-      
-      return { taskId: response.data.result };
+
+      const taskId = response.data.result ?? response.data.result ?? response.data.id;
+      if (!taskId) {
+        throw new HttpException('Meshy did not return a task id', HttpStatus.BAD_GATEWAY);
+      }
+      return { taskId };
     } catch (error) {
       this.handleError(error, 'generateTask');
     }
@@ -54,19 +60,20 @@ export class MeshyProvider implements AiGenerationProvider {
           headers: { Authorization: `Bearer ${apiKey}` },
         })
       );
-      
+
       const task = response.data;
       let status: 'queued' | 'running' | 'success' | 'failed' = 'running';
-      
+
       if (task.status === 'SUCCEEDED') status = 'success';
       else if (task.status === 'FAILED' || task.status === 'EXPIRED') status = 'failed';
       else if (task.status === 'PENDING') status = 'queued';
 
       return {
-        taskId: task.id,
+        taskId: task.id || taskId,
         status,
         progress: task.progress || 0,
-        modelUrl: task.model_urls?.glb || null
+        modelUrl: task.model_urls?.glb || null,
+        error: task.task_error?.message || undefined,
       };
     } catch (error) {
       this.handleError(error, 'getTaskStatus');

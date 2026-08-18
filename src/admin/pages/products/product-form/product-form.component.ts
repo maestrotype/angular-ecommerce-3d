@@ -18,7 +18,7 @@ import { PROD_API_URL } from '../../../../app/core/utils/api-url.util';
 import { SettingsService, CloudinaryStatus } from "../../../services/settings.service";
 import { OnboardingDialogComponent } from "../../../components/shared/onboarding-dialog/onboarding-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
-import { AiGenerationService } from "../../../services/ai-generation.service";
+import { AiGenerationService, AiProviderOption } from "../../../services/ai-generation.service";
 import { AiWarningDialogComponent } from "../../../components/shared/ai-warning-dialog/ai-warning-dialog.component";
 import { finalize } from "rxjs/operators";
 import { switchMap, of, EMPTY } from "rxjs";
@@ -61,6 +61,8 @@ export class ProductFormComponent implements OnInit {
   isDevelopment: boolean = false;
   isLocalApi: boolean = false;
   viewerVersion: number = 0;
+  aiProviders: AiProviderOption[] = [];
+  selectedAiProvider = 'tripo3d';
 
   @ViewChild('cloudinaryReuploadInput') cloudinaryReuploadInput?: ElementRef<HTMLInputElement>;
 
@@ -122,7 +124,7 @@ export class ProductFormComponent implements OnInit {
         this.loadProduct(this.productId);
       }
     });
-    this.fetchActiveEngineName();
+    this.loadAiProviders();
     this.checkApiEnvironment();
   }
 
@@ -156,17 +158,72 @@ export class ProductFormComponent implements OnInit {
     }
   }
 
+  private loadAiProviders(): void {
+    this.aiService.listProviders().subscribe({
+      next: (response) => {
+        this.aiProviders = (response.providers || []).filter((item) => item.implemented);
+        this.selectedAiProvider = response.activeProvider || 'tripo3d';
+        this.syncAiEngineLabel();
+      },
+      error: () => this.fetchActiveEngineName(),
+    });
+  }
+
+  private syncAiEngineLabel(): void {
+    const current = this.aiProviders.find((item) => item.id === this.selectedAiProvider);
+    this.aiStatusMessage = current?.name || this.selectedAiProvider;
+  }
+
+  onAiProviderChange(providerId: string): void {
+    if (!providerId || providerId === this.selectedAiProvider) {
+      return;
+    }
+
+    const selected = this.aiProviders.find((item) => item.id === providerId);
+    if (selected && !selected.configured) {
+      this.snackBar.open(
+        this.translate.instant('AI_PROVIDER_NOT_CONFIGURED'),
+        this.translate.instant('AI_OPEN_INTEGRATIONS'),
+        { duration: 6000 },
+      ).onAction().subscribe(() => {
+        this.router.navigate(['/admin/integrations']);
+      });
+    }
+
+    this.selectedAiProvider = providerId;
+    this.aiService.setActiveProvider(providerId).subscribe({
+      next: (response) => {
+        this.aiProviders = (response.providers || []).filter((item) => item.implemented);
+        this.selectedAiProvider = response.activeProvider || providerId;
+        this.syncAiEngineLabel();
+        this.snackBar.open(
+          this.translate.instant('AI_PROVIDER_SWITCHED', { name: this.aiStatusMessage }),
+          this.translate.instant('CLOSE_BTN'),
+          { duration: 3000 },
+        );
+      },
+      error: () => {
+        this.snackBar.open(
+          this.translate.instant('FAILED_TO_SAVE_SETTINGS'),
+          this.translate.instant('CLOSE_BTN'),
+          { duration: 4000 },
+        );
+        this.loadAiProviders();
+      },
+    });
+  }
+
   private fetchActiveEngineName(): void {
     this.settingsService.getSettings().subscribe({
       next: (settings) => {
         const providerId = settings.ai?.activeProvider || 'tripo3d';
-        const key = providerId.toUpperCase();
-        // Map provider ID to translation key
+        this.selectedAiProvider = providerId;
         const providerMap: Record<string, string> = {
           'tripo3d': 'Tripo3D',
           'hunyuan3d': 'HUNYUAN_TENCENT',
           'meshy': 'MESHY_AI',
           'luma': 'LUMA_AI',
+          'huggingface': 'HF_TRIPOSR_FREE',
           'custom': 'CUSTOM_WEBHOOK_LOCAL'
         };
         
@@ -359,14 +416,16 @@ export class ProductFormComponent implements OnInit {
     this.aiStatusMessage = this.translate.instant('AI_SUBMITTING_TASK');
     this.aiProgress = 0;
     
-    this.aiService.generateModel(imageUrl).subscribe({
+    this.aiService.generateModel(imageUrl, false, this.selectedAiProvider).subscribe({
       next: (response) => {
         if (response.code === 0 && response.data.task_id) {
           this.pollAiStatus(response.data.task_id);
         } else {
           this.resetAiState();
           const errorMsg = translateErrorMessage(response.message, this.translate);
-          this.snackBar.open(this.translate.instant('AI_ERROR_PREFIX') + errorMsg, this.translate.instant('CLOSE_BTN'), { duration: 5000 });
+          const alt = (response.alternatives || []).map((item) => item.name).join(', ');
+          const suffix = alt ? ` ${this.translate.instant('AI_PROVIDER_HINT')}` : '';
+          this.snackBar.open(this.translate.instant('AI_ERROR_PREFIX') + errorMsg + suffix, this.translate.instant('CLOSE_BTN'), { duration: 7000 });
         }
       },
       error: (err) => {
@@ -417,7 +476,7 @@ export class ProductFormComponent implements OnInit {
   }
 
   private finalizeAiModel(modelUrl: string, taskId: string): void {
-    const filename = `ai-gen-${taskId}.glb`;
+    const filename = `ai-gen-${String(taskId).replace(/[^a-zA-Z0-9_-]/g, '-')}.glb`;
     this.aiStatusMessage = this.translate.instant('AI_DOWNLOADING_MODEL');
     
     // Bridge Upload: If the URL is localhost, fetch it in the browser and upload as a file
@@ -466,6 +525,11 @@ export class ProductFormComponent implements OnInit {
           }
         },
         error: (err) => {
+          if (modelUrl.includes('/uploads/')) {
+            this.applyModelChangesAndSave(modelUrl, modelUrl, null);
+            this.resetAiState();
+            return;
+          }
           this.resetAiState();
           const errorMsg = translateErrorMessage(err.error?.message || 'FAILED_TO_DOWNLOAD_AI_MODEL', this.translate);
           this.snackBar.open(errorMsg, this.translate.instant('CLOSE_BTN'), { duration: 5000 });

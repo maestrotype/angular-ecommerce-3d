@@ -178,6 +178,14 @@ export class UpdateAiSettingsDto {
 
   @IsOptional()
   @IsString()
+  hfToken?: string;
+
+  @IsOptional()
+  @IsString()
+  hfSpace?: string;
+
+  @IsOptional()
+  @IsString()
   customUrl?: string;
 
   @IsOptional()
