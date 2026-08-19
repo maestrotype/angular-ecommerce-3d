@@ -6,27 +6,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { OrderService } from '../../../services/order.service';
 import { OrderDetailComponent } from '../order-detail/order-detail.component';
+import { Order } from '../../../models/order.model';
 import { TranslateService } from '@ngx-translate/core';
-
-export interface Order {
-  id: number;
-  customerName: string;
-  customerEmail: string;
-  customerPhone?: string;
-  items: {
-    productId: number;
-    name: string;
-    price: number;
-    quantity: number;
-    image: string;
-  }[];
-  totalAmount: number;
-  status: string;
-  shippingAddress?: string;
-  notes?: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
 
 @Component({
   selector: 'app-order-list',
@@ -128,7 +109,9 @@ export class OrderListComponent implements OnInit {
       width: '900px',
       maxWidth: '95vw',
       maxHeight: '90vh',
-      data: { orderId: order.id }
+      autoFocus: false,
+      panelClass: 'order-detail-dialog',
+      data: { orderId: order.id, order }
     });
 
     dialogRef.afterClosed().subscribe(result => {
