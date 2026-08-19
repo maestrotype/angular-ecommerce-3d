@@ -473,7 +473,8 @@ textarea {
   min-height: 22rem;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  background: var(--surface-page);
+  background: var(--surface-tertiary);
+  --viewer-host-bg: var(--surface-tertiary);
 
   app-three-d-viewer {
     display: block;
@@ -840,7 +841,8 @@ textarea {
   flex: 1;
   min-height: 22rem;
   overflow: hidden;
-  background: var(--surface-page);
+  background: var(--surface-tertiary);
+  --viewer-host-bg: var(--surface-tertiary);
 
   app-three-d-viewer {
     display: block;

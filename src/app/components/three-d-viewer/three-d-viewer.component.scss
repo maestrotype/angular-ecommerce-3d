@@ -10,7 +10,7 @@
   height: 100%;
   overflow: hidden;
   border-radius: inherit;
-  background: var(--viewer-host-bg);
+  background: var(--viewer-host-bg, var(--surface-secondary));
 }
 
 .three-canvas {
@@ -31,6 +31,7 @@
     width: 100%;
     height: 100%;
     touch-action: none;
+    background: transparent;
   }
 }
 
