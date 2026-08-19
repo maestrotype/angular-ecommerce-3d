@@ -131,6 +131,12 @@ html[data-theme='dark'] body.is-admin {
   --mdc-elevated-card-container-color: transparent;
   --mdc-filled-card-container-color: transparent;
   --mdc-outlined-card-container-color: transparent;
+  --mdc-chip-elevated-container-color: var(--surface-tertiary);
+  --mdc-chip-selected-elevated-container-color: var(--interactive-primary);
+  --mdc-chip-label-text-color: var(--text-primary);
+  --mdc-chip-with-icon-icon-color: var(--text-secondary);
+  --mdc-chip-outline-color: var(--border-default);
+  --mat-chip-elevated-container-color: var(--surface-tertiary);
 
   background-color: var(--surface-page);
   color: var(--text-primary);

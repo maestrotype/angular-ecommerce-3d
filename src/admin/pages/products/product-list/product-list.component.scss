@@ -19,6 +19,18 @@
     padding: 12px 24px;
     height: 48px;
     min-height: 48px;
+    --mdc-protected-button-container-color: var(--interactive-primary);
+    --mdc-protected-button-label-text-color: var(--text-primary);
+    --mdc-protected-button-icon-color: var(--text-primary);
+    --mat-protected-button-label-text-color: var(--text-primary);
+    background-color: var(--interactive-primary);
+    color: var(--text-primary);
+
+    mat-icon,
+    .button-text,
+    .mdc-button__label {
+      color: var(--text-primary);
+    }
   }
 }
 
@@ -91,6 +103,7 @@
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-default);
   padding: 2px;
+  background-color: var(--surface-header, var(--surface-elevated));
 }
 
 .no-image-placeholder {
@@ -143,15 +156,13 @@
 
 .stock-low {
   color: var(--interactive-danger);
-  font-weight: bold;
+  font-weight: var(--font-semibold);
 }
 
-.stock-medium {
-  color: var(--color-warning);
-}
-
+.stock-medium,
 .stock-high {
-  color: var(--color-success);
+  color: var(--text-secondary);
+  font-weight: var(--font-medium);
 }
 
 .desktop-view {
@@ -171,14 +182,14 @@
 
 .product-card {
   background: var(--surface-card);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
-  padding: 10px;
+  padding: var(--space-4);
   border: 1px solid var(--border-default);
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-3);
 
   &:hover {
     box-shadow: var(--shadow-lg);
@@ -193,7 +204,7 @@
     overflow: hidden;
     border-radius: var(--radius-md);
     border: 1px solid var(--border-default);
-    background-color: var(--surface-primary);
+    background-color: var(--surface-header, var(--surface-elevated));
 
     .product-image {
       position: absolute;
@@ -278,12 +289,27 @@
 
     .product-category {
       margin-bottom: 10px;
+      justify-self: start;
+      width: max-content;
+      max-width: 100%;
 
       mat-chip {
         font-size: 14px;
         height: 30px;
         font-weight: 600;
         padding: 0 14px;
+        display: inline-flex;
+        width: max-content;
+        max-width: 100%;
+        --mdc-chip-elevated-container-color: var(--surface-header, var(--surface-tertiary));
+        --mdc-chip-label-text-color: var(--text-primary);
+        --mdc-chip-outline-color: transparent;
+        --mdc-chip-outline-width: 0;
+        --mat-chip-elevated-container-color: var(--surface-header, var(--surface-tertiary));
+        background-color: transparent;
+        color: var(--text-primary);
+        box-shadow: none;
+        border: none;
       }
     }
 
@@ -291,9 +317,9 @@
       margin-bottom: 6px;
 
       .price {
-        font-size: 28px;
-        font-weight: 800;
-        color: var(--color-success);
+        font-size: var(--text-xl);
+        font-weight: var(--font-bold);
+        color: var(--text-primary);
         letter-spacing: -0.5px;
       }
     }
@@ -314,14 +340,23 @@
     border-top: 1px solid var(--border-default);
 
     .action-button {
-      width: 52px;
-      height: 52px;
-      line-height: 52px;
+      width: 44px;
+      height: 44px;
+      color: var(--text-secondary);
 
       mat-icon {
-        font-size: 28px;
-        width: 28px;
-        height: 28px;
+        font-size: 22px;
+        width: 22px;
+        height: 22px;
+        color: inherit;
+      }
+
+      &--edit:hover {
+        color: var(--interactive-primary);
+      }
+
+      &--delete:hover {
+        color: var(--interactive-danger);
       }
     }
   }
@@ -373,6 +408,7 @@
     app-search-bar,
     .search-field {
       width: 100%;
+      max-width: none;
     }
   }
 
@@ -389,9 +425,23 @@
     gap: var(--admin-mobile-card-compact-gap, var(--space-3));
   }
 
+  .add-button-mobile {
+    --mdc-protected-button-container-color: var(--interactive-primary);
+    --mdc-protected-button-label-text-color: var(--text-primary);
+    --mdc-protected-button-icon-color: var(--text-primary);
+    background-color: var(--interactive-primary);
+    color: var(--text-primary);
+
+    .button-text,
+    mat-icon,
+    .mdc-button__label {
+      color: var(--text-primary);
+    }
+  }
+
   .product-card {
-    padding: var(--space-3);
-    gap: var(--admin-mobile-card-compact-gap, var(--space-2));
+    padding: var(--space-4);
+    gap: var(--space-3);
 
     .card-image-container {
       padding-bottom: 100%;
@@ -417,13 +467,14 @@
       display: grid;
       grid-template-columns: 1fr auto;
       grid-template-areas:
-        'id id'
-        'name actions'
-        'category actions'
-        'price actions'
-        'stock actions';
-      gap: var(--admin-mobile-card-compact-gap, var(--space-2)) var(--space-3);
-      align-items: start;
+        'id actions'
+        'name name'
+        'category category'
+        'price price'
+        'stock stock';
+      gap: var(--space-2) var(--space-3);
+      align-items: center;
+      padding-inline: var(--space-1);
     }
 
     .card-header {
@@ -454,10 +505,20 @@
       .product-category {
         grid-area: category;
         margin-bottom: 0;
+        justify-self: start;
+        width: max-content;
+        max-width: 100%;
 
         mat-chip {
           font-size: var(--text-sm);
           height: 26px;
+          display: inline-flex;
+          width: max-content;
+          max-width: 100%;
+          --mdc-chip-outline-color: transparent;
+          --mdc-chip-outline-width: 0;
+          box-shadow: none;
+          border: none;
         }
       }
 
@@ -469,9 +530,10 @@
         justify-content: center;
 
         .price {
-          font-size: var(--text-xl);
+          font-size: var(--text-lg);
           font-weight: var(--font-bold);
           line-height: 1.1;
+          color: var(--text-primary);
         }
       }
 
@@ -487,13 +549,13 @@
     .card-actions {
       grid-area: actions;
       display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
+      flex-direction: row;
+      gap: var(--space-1);
       margin-top: 0;
       padding-top: 0;
       border-top: none;
       justify-self: end;
-      align-self: start;
+      align-self: center;
 
       .action-button {
         width: var(--admin-shell-touch-target, 44px);

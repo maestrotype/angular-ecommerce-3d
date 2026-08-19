@@ -23,8 +23,12 @@
       <span class="button-text">{{ 'ADD_PRODUCT' | translate }}</span>
     </button>
 
-    <app-search-bar [label]="'SEARCH_PRODUCTS' | translate"
-      [(searchTerm)]="searchTerm" (onSearch)="onSearch()" (onClear)="clearSearch()">
+    <app-search-bar
+      [label]="'SEARCH_PRODUCTS' | translate"
+      [placeholder]="'SEARCH_PLACEHOLDER' | translate"
+      [(searchTerm)]="searchTerm"
+      (onSearch)="onSearch()"
+      (onClear)="clearSearch()">
     </app-search-bar>
   </div>
 
@@ -143,10 +147,10 @@
           </div>
 
           <div class="card-actions">
-            <button mat-icon-button color="primary" (click)="editProduct(product)" class="action-button">
+            <button mat-icon-button type="button" (click)="editProduct(product)" class="action-button action-button--edit">
               <mat-icon>edit</mat-icon>
             </button>
-            <button mat-icon-button color="warn" (click)="deleteProduct(product)" class="action-button">
+            <button mat-icon-button type="button" (click)="deleteProduct(product)" class="action-button action-button--delete">
               <mat-icon>delete</mat-icon>
             </button>
           </div>
