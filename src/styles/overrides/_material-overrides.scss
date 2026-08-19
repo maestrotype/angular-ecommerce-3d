@@ -1548,6 +1548,41 @@
 }
 
 /* Admin glass: dark frosted menus (profile, actions) — overrides storefront-white above */
+body.is-admin[data-theme='dark'],
+html[data-theme='dark'] body.is-admin,
+body.is-admin[data-theme='glass'],
+html[data-theme='glass'] body.is-admin,
+body.is-admin[data-theme='dark-glass'],
+html[data-theme='dark-glass'] body.is-admin {
+  .mat-mdc-chip.mat-mdc-standard-chip {
+    --mdc-chip-elevated-container-color: var(--surface-header, var(--surface-tertiary));
+    --mdc-chip-label-text-color: var(--text-primary);
+    --mdc-chip-with-icon-icon-color: var(--text-secondary);
+    --mdc-chip-outline-color: transparent;
+    --mdc-chip-outlined-outline-color: transparent;
+    --mdc-chip-outline-width: 0;
+    --mdc-chip-focus-outline-color: var(--border-strong);
+    --mat-chip-elevated-container-color: var(--surface-header, var(--surface-tertiary));
+    background-color: transparent;
+    color: var(--text-primary);
+    width: max-content;
+    max-width: 100%;
+    box-shadow: none;
+    border: none;
+  }
+
+  .mat-mdc-chip.mat-mdc-standard-chip .mdc-evolution-chip__cell--primary,
+  .mat-mdc-chip.mat-mdc-standard-chip .mdc-evolution-chip__action--primary {
+    background-color: transparent;
+  }
+
+  .mat-mdc-chip.mat-mdc-standard-chip .mdc-evolution-chip__action--primary::before {
+    background-color: var(--surface-header, var(--surface-tertiary));
+    box-shadow: none;
+    border: none;
+  }
+}
+
 body.is-admin[data-theme='glass'],
 html[data-theme='glass'] body.is-admin,
 body.is-admin[data-theme='dark-glass'],

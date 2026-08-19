@@ -50,6 +50,12 @@
   --mdc-elevated-card-container-color: transparent;
   --mdc-filled-card-container-color: transparent;
   --mdc-outlined-card-container-color: transparent;
+  --mdc-chip-elevated-container-color: var(--surface-header, var(--surface-elevated));
+  --mdc-chip-selected-elevated-container-color: var(--interactive-primary);
+  --mdc-chip-label-text-color: var(--text-primary);
+  --mdc-chip-with-icon-icon-color: var(--text-secondary);
+  --mdc-chip-outline-color: var(--border-default);
+  --mat-chip-elevated-container-color: var(--surface-header, var(--surface-elevated));
 
   --border-width: 0.5px;
   --border-color: rgba(255, 255, 255, 0.18);

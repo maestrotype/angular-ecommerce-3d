@@ -118,6 +118,12 @@ html[data-theme='glass'] body.is-admin {
   --mdc-filled-card-container-color: transparent;
   --mdc-outlined-card-container-color: transparent;
   --mdc-list-item-container-color: transparent;
+  --mdc-chip-elevated-container-color: var(--surface-header);
+  --mdc-chip-selected-elevated-container-color: var(--interactive-primary);
+  --mdc-chip-label-text-color: var(--text-primary);
+  --mdc-chip-with-icon-icon-color: var(--text-secondary);
+  --mdc-chip-outline-color: var(--border-default);
+  --mat-chip-elevated-container-color: var(--surface-header);
 
   --mat-sidenav-container-background-color: transparent;
   --mat-sidenav-container-divider-color: transparent;

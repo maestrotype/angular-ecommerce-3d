@@ -49,11 +49,11 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   }
 
   get showFloatingLabel(): boolean {
-    return !this.isMobile;
+    return true;
   }
 
   get inputPlaceholder(): string {
-    return this.isMobile ? this.placeholder : '';
+    return this.placeholder || this.label || '';
   }
 
   onSearchClick(): void {
