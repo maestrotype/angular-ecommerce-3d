@@ -69,6 +69,12 @@
       background: transparent;
       padding: 24px 0 0 0;
     }
+  }
+
+  .order-detail-container {
+    max-width: none;
+    width: 100%;
+    box-sizing: border-box;
 
     .message-info,
     .order-info,
@@ -231,6 +237,17 @@
           }
         }
       }
+    }
+  }
+
+  .order-detail-container {
+    max-width: none;
+    width: 100%;
+    box-sizing: border-box;
+
+    .actions {
+      justify-content: space-between;
+      align-items: center;
     }
   }
 }
