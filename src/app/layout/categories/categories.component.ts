@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Section } from 'src/shared/models/section.model';
 import { CommonModule } from '@angular/common';
@@ -8,7 +8,6 @@ import { LocalizedPipe } from '../../shared/pipes/localized.pipe';
 import { getLocalizedString } from '../../../shared/utils/localization.util';
 import { CategoryService } from '../../core/services/category.service';
 import { ImageUrlPipe } from '../../shared/pipes/image-url.pipe';
-import { ChangeDetectorRef } from '@angular/core';
 
 interface CategoryDisplay {
     id?: number;
@@ -23,7 +22,8 @@ interface CategoryDisplay {
     templateUrl: './categories.component.html',
     styleUrls: ['./categories.component.scss'],
     standalone: true,
-    imports: [CommonModule, TranslateModule, LocalizedPipe, ImageUrlPipe]
+    imports: [CommonModule, TranslateModule, LocalizedPipe, ImageUrlPipe],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CategoriesComponent implements OnInit {
     @Input() data!: Section;
@@ -95,7 +95,7 @@ export class CategoriesComponent implements OnInit {
                         };
                         return categoryItem;
                     });
-                    this.cdr.detectChanges();
+                    this.cdr.markForCheck();
                 },
                 error: (err) => {
                     console.error('Error loading categories from API for section categories:', err);
@@ -110,7 +110,7 @@ export class CategoriesComponent implements OnInit {
                             isActive: cat.isActive
                         };
                     });
-                    this.cdr.detectChanges();
+                    this.cdr.markForCheck();
                 }
             });
         } else {
@@ -126,13 +126,17 @@ export class CategoriesComponent implements OnInit {
                             slug: (cat as any).slug || getLocalizedString(cat.name).toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
                             isActive: cat.isActive
                         }));
-                    this.cdr.detectChanges();
+                    this.cdr.markForCheck();
                 },
                 error: (err) => {
                     console.error('Error loading categories from API:', err);
                 }
             });
         }
+    }
+
+    trackByCategory(index: number, category: CategoryDisplay): number | string {
+        return category.id ?? category.slug ?? index;
     }
 
     navigateToCategory(category: CategoryDisplay): void {

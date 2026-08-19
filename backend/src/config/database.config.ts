@@ -28,9 +28,14 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
       password: this.configService.get('DATABASE_PASSWORD'),
       database: this.configService.get('DATABASE_NAME'),
       entities: [Section, Message, Notification, Category, Product, Order, User, ProductRecommendation, Payment, Settings, Page, NewsletterSubscriber],
-      synchronize: true, // Enable automatic sync for development
+      synchronize: this.configService.get('NODE_ENV') !== 'production',
       logging: this.configService.get('NODE_ENV') === 'development',
       ssl: this.configService.get('NODE_ENV') === 'production' ? { rejectUnauthorized: false } : false,
+      extra: {
+        max: 20,
+        idleTimeoutMillis: 30_000,
+        connectionTimeoutMillis: 5_000,
+      },
     };
   }
 }

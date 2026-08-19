@@ -1,11 +1,10 @@
-@keyframes gradientShift {
-  0%,
-  100% {
-    background-position: 0% 50%;
+@keyframes atmosphereDrift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
   }
 
-  50% {
-    background-position: 100% 50%;
+  to {
+    transform: translate3d(3%, 2%, 0) scale(1.05);
   }
 }
 
@@ -13,9 +12,7 @@ body.is-admin[data-theme="glass"] {
   min-height: 100vh;
   position: relative;
   background: var(--admin-atmosphere-gradient);
-  background-size: 400% 400%;
-  animation: gradientShift 18s ease infinite;
-  background-attachment: fixed;
+  background-attachment: scroll;
 
   &::before {
     content: '';
@@ -27,30 +24,26 @@ body.is-admin[data-theme="glass"] {
       radial-gradient(circle at 82% 78%, rgba(120, 170, 220, 0.35), transparent 48%),
       radial-gradient(circle at 50% 45%, rgba(70, 120, 175, 0.28), transparent 55%);
     pointer-events: none;
+    will-change: transform;
+    animation: atmosphereDrift 48s linear infinite alternate;
   }
 
   &::after {
     content: '';
     position: fixed;
-    inset: 0;
+    inset: -8%;
     z-index: -2;
     background:
-      radial-gradient(circle at 12% 18%, rgba(160, 200, 240, 0.35), transparent 40%),
-      radial-gradient(circle at 88% 82%, rgba(90, 140, 190, 0.3), transparent 42%);
-    filter: blur(72px);
+      radial-gradient(circle at 12% 18%, rgba(160, 200, 240, 0.28), transparent 40%),
+      radial-gradient(circle at 88% 82%, rgba(90, 140, 190, 0.22), transparent 42%);
     pointer-events: none;
+    will-change: transform;
+    animation: atmosphereDrift 64s linear infinite alternate-reverse;
   }
 
-  /*
-   * .admin-main is overflow:auto → backdrop root. Tables inside it cannot sample
-   * body's gradient via backdrop-filter. Re-paint the same field here (fixed) so
-   * frosted table/container blur has atmosphere to sample.
-   */
   .admin-main {
     background: var(--admin-atmosphere-gradient);
-    background-size: 400% 400%;
-    background-attachment: fixed;
-    animation: gradientShift 18s ease infinite;
+    background-attachment: scroll;
   }
 }
 
@@ -58,9 +51,7 @@ body.is-admin[data-theme="dark-glass"] {
   min-height: 100vh;
   position: relative;
   background: var(--admin-atmosphere-gradient);
-  background-size: 400% 400%;
-  animation: gradientShift 15s ease infinite;
-  background-attachment: fixed;
+  background-attachment: scroll;
 
   &::before {
     content: '';
@@ -72,18 +63,31 @@ body.is-admin[data-theme="dark-glass"] {
       radial-gradient(circle at 80% 70%, rgba(200, 80, 120, 0.3), transparent 45%),
       radial-gradient(circle at 50% 50%, rgba(210, 90, 100, 0.25), transparent 50%);
     pointer-events: none;
+    will-change: transform;
+    animation: atmosphereDrift 48s linear infinite alternate;
   }
 
   &::after {
     content: '';
     position: fixed;
-    inset: 0;
+    inset: -8%;
     z-index: -2;
     background:
-      radial-gradient(circle at 15% 20%, rgba(220, 100, 80, 0.4), transparent 40%),
-      radial-gradient(circle at 85% 80%, rgba(210, 90, 100, 0.35), transparent 40%),
-      radial-gradient(circle at 50% 50%, rgba(200, 80, 120, 0.3), transparent 50%);
-    filter: blur(100px);
+      radial-gradient(circle at 15% 20%, rgba(220, 100, 80, 0.32), transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(210, 90, 100, 0.28), transparent 40%),
+      radial-gradient(circle at 50% 50%, rgba(200, 80, 120, 0.22), transparent 50%);
     pointer-events: none;
+    will-change: transform;
+    animation: atmosphereDrift 64s linear infinite alternate-reverse;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.is-admin[data-theme="glass"]::before,
+  body.is-admin[data-theme="glass"]::after,
+  body.is-admin[data-theme="dark-glass"]::before,
+  body.is-admin[data-theme="dark-glass"]::after {
+    animation: none;
+    will-change: auto;
   }
 }

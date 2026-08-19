@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   Input,
   OnInit,
@@ -19,7 +20,8 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './section-renderer.component.html',
-  styleUrls: ['./section-renderer.component.scss']
+  styleUrls: ['./section-renderer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class SectionRendererComponent implements OnInit, OnChanges, OnDestroy {

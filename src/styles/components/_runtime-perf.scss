@@ -1,0 +1,35 @@
+/* Runtime paint budget — GPU-friendly motion, skip work offscreen. */
+
+.product-card,
+.category-card,
+.stat-card {
+  contain: content;
+  content-visibility: auto;
+  contain-intrinsic-size: 280px 360px;
+}
+
+app-three-d-viewer {
+  contain: layout style;
+}
+
+body.perf-paused .background-decor .blob,
+body.perf-paused .login-page .blob,
+body.perf-paused.is-admin[data-theme='glass']::before,
+body.perf-paused.is-admin[data-theme='glass']::after,
+body.perf-paused.is-admin[data-theme='dark-glass']::before,
+body.perf-paused.is-admin[data-theme='dark-glass']::after {
+  animation-play-state: paused;
+  will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-card,
+  .category-card,
+  .login-page .blob,
+  .background-decor .blob,
+  body.is-admin[data-theme='glass'],
+  body.is-admin[data-theme='dark-glass'],
+  body.is-admin[data-theme='glass'] .admin-main {
+    animation: none;
+  }
+}

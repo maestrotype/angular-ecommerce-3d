@@ -29,8 +29,8 @@
   .blob {
     position: absolute;
     border-radius: var(--radius-full);
-    filter: var(--glass-blur);
-    opacity: 0.28;
+    opacity: 0.22;
+    will-change: transform;
     animation: drift 22s infinite alternate cubic-bezier(0.45, 0.05, 0.55, 0.95);
   }
 
@@ -208,4 +208,12 @@
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .background-decor .blob,
+  .login-container {
+    animation: none;
+    will-change: auto;
+  }
 }

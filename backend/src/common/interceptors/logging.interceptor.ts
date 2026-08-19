@@ -17,19 +17,25 @@ export class LoggingInterceptor implements NestInterceptor {
     const { method, url, body, user } = request;
     const userAgent = request.get('User-Agent') || '';
     const ip = request.ip;
+    const verbose = process.env.NODE_ENV !== 'production';
 
     const now = Date.now();
 
-    this.logger.log(
-      `Incoming Request: ${method} ${url} - User: ${user?.id || 'anonymous'} - IP: ${ip} - UA: ${userAgent}`
-    );
+    if (verbose) {
+      this.logger.log(
+        `Incoming Request: ${method} ${url} - User: ${user?.id || 'anonymous'} - IP: ${ip} - UA: ${userAgent}`
+      );
 
-    if (body && Object.keys(body).length > 0) {
-      this.logger.debug(`Request Body: ${JSON.stringify(body)}`);
+      if (body && Object.keys(body).length > 0) {
+        this.logger.debug(`Request Body: ${JSON.stringify(body)}`);
+      }
     }
 
     return next.handle().pipe(
-      tap((response) => {
+      tap(() => {
+        if (!verbose) {
+          return;
+        }
         const responseTime = Date.now() - now;
         this.logger.log(
           `Response: ${method} ${url} - Status: 200 - Time: ${responseTime}ms`

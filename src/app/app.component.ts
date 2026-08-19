@@ -81,6 +81,11 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Theme management is now handled by ThemeService
 
+    if (isPlatformBrowser(this.platformId)) {
+      this.syncPerfPause();
+      document.addEventListener('visibilitychange', this.syncPerfPause, { passive: true });
+    }
+
     // Load and apply SEO settings from backend
     this.frontendSeoService.reloadSeoSettings().subscribe();
 
@@ -102,7 +107,14 @@ export class AppComponent implements OnInit, OnDestroy {
     this.mobileMenuSubscription.unsubscribe();
     this.scrollSubject.complete();
     this.clearPageTransitionTimer();
+    if (isPlatformBrowser(this.platformId)) {
+      document.removeEventListener('visibilitychange', this.syncPerfPause);
+    }
   }
+
+  private syncPerfPause = (): void => {
+    document.body.classList.toggle('perf-paused', document.hidden);
+  };
 
   onRouteActivate(): void {
     if (!isPlatformBrowser(this.platformId)) {

@@ -20,7 +20,10 @@ import { assertProductionSecrets } from './config/production-secrets';
 async function bootstrap() {
   assertProductionSecrets();
 
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const isProduction = process.env.NODE_ENV === 'production';
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    logger: isProduction ? ['error', 'warn'] : ['log', 'error', 'warn', 'debug', 'verbose'],
+  });
   
   // Increase payload limits for 3D models and images
   app.use(json({ limit: '100mb' }));
@@ -79,6 +82,10 @@ async function bootstrap() {
   // Enable static /uploads
   app.useStaticAssets(uploadPath, {
     prefix: '/uploads/',
+    maxAge: isProduction ? '30d' : 0,
+    etag: true,
+    lastModified: true,
+    index: false,
   });
 
   // Global prefix for API routes
@@ -99,15 +106,17 @@ async function bootstrap() {
   });
 
   const port = process.env.PORT || 3002;
-  setInterval(() => {
-    const used = process.memoryUsage();
-    console.log('Memory usage:', {
-      rss: (used.rss / 1024 / 1024).toFixed(2) + ' MB',
-      heapTotal: (used.heapTotal / 1024 / 1024).toFixed(2) + ' MB',
-      heapUsed: (used.heapUsed / 1024 / 1024).toFixed(2) + ' MB',
-      external: (used.external / 1024 / 1024).toFixed(2) + ' MB',
-    });
-  }, 60000);
+  if (!isProduction) {
+    setInterval(() => {
+      const used = process.memoryUsage();
+      console.log('Memory usage:', {
+        rss: (used.rss / 1024 / 1024).toFixed(2) + ' MB',
+        heapTotal: (used.heapTotal / 1024 / 1024).toFixed(2) + ' MB',
+        heapUsed: (used.heapUsed / 1024 / 1024).toFixed(2) + ' MB',
+        external: (used.external / 1024 / 1024).toFixed(2) + ' MB',
+      });
+    }, 60000);
+  }
   await app.listen(port);
   console.log(`Application is running on: http://localhost:${port}/api`);
 }
