@@ -615,6 +615,7 @@
   "DELIVERED": "Доставлен",
   "CANCELLED": "Отменен",
   "VIEW_DETAILS": "Просмотреть детали",
+  "MARK_AS_READ": "Отметить как прочитанное",
   "LOADING_ORDERS": "Загрузка заказов...",
   "ERROR_LOADING_ORDERS": "Ошибка загрузки заказов",
   "CATEGORY_MANAGEMENT": "Управление категориями",

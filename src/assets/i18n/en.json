@@ -612,6 +612,7 @@
   "DELIVERED": "Delivered",
   "CANCELLED": "Cancelled",
   "VIEW_DETAILS": "View Details",
+  "MARK_AS_READ": "Mark as read",
   "LOADING_ORDERS": "Loading orders...",
   "ERROR_LOADING_ORDERS": "Error loading orders",
   "CATEGORY_MANAGEMENT": "Category Management",

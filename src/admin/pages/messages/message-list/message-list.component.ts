@@ -46,7 +46,7 @@ export class MessageListComponent implements OnInit {
     this.messageService.getMessages().subscribe({
       next: (messages) => {
         this.messages = messages;
-        this.filteredMessages = messages;
+        this.applyFilters();
         this.loading = false;
       },
       error: (error) => {
@@ -58,11 +58,36 @@ export class MessageListComponent implements OnInit {
   }
 
   onSearch(): void {
-    this.loadMessages();
+    this.applyFilters();
+  }
+
+  clearSearch(): void {
+    this.searchTerm = '';
+    this.applyFilters();
   }
 
   onStatusFilterChange(): void {
-    this.loadMessages();
+    this.applyFilters();
+  }
+
+  senderInitial(name: string | undefined): string {
+    const value = (name || '').trim();
+    return value ? value.charAt(0).toUpperCase() : '?';
+  }
+
+  private applyFilters(): void {
+    const term = this.searchTerm.trim().toLowerCase();
+    this.filteredMessages = this.messages.filter((message) => {
+      const matchesStatus = this.statusFilter === 'all' || message.status === this.statusFilter;
+      if (!matchesStatus) {
+        return false;
+      }
+      if (!term) {
+        return true;
+      }
+      return [message.senderName, message.senderEmail, message.subject]
+        .some((value) => (value || '').toLowerCase().includes(term));
+    });
   }
 
   viewMessage(message: Message): void {

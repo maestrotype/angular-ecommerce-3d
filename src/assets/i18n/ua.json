@@ -611,6 +611,7 @@
   "DELIVERED": "Доставлено",
   "CANCELLED": "Скасовано",
   "VIEW_DETAILS": "Переглянути деталі",
+  "MARK_AS_READ": "Позначити як прочитане",
   "LOADING_ORDERS": "Завантаження замовлень...",
   "ERROR_LOADING_ORDERS": "Помилка завантаження замовлень",
   "CATEGORY_MANAGEMENT": "Управління категоріями",
