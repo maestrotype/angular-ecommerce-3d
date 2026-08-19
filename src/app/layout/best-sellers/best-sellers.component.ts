@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, Inject, PLATFORM_ID, ElementRef, NgZone, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, OnDestroy, Inject, PLATFORM_ID, ElementRef, NgZone, ViewChild } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { Product } from 'src/shared/models/product.model';
@@ -23,7 +23,8 @@ type BestSellersSectionData = Section & { context?: PageSectionContext };
     templateUrl: './best-sellers.component.html',
     styleUrls: ['./best-sellers.component.scss'],
     standalone: true,
-    imports: [CommonModule, RouterModule, SharedModule, TranslateModule, LocalizedPipe, ImageUrlPipe]
+    imports: [CommonModule, RouterModule, SharedModule, TranslateModule, LocalizedPipe, ImageUrlPipe],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BestSellersComponent implements OnInit, OnDestroy {
     bestSellers: Product[] = [];
@@ -39,6 +40,7 @@ export class BestSellersComponent implements OnInit, OnDestroy {
             this.bestSellers = val.context.bestSellers;
             this.contextApplied = true;
             this.resetVisibleCount();
+            this.cdr.markForCheck();
         }
     }
 
@@ -60,6 +62,7 @@ export class BestSellersComponent implements OnInit, OnDestroy {
         private translate: TranslateService,
         private favoritesService: FavoritesService,
         private ngZone: NgZone,
+        private cdr: ChangeDetectorRef,
         @Inject(PLATFORM_ID) private platformId: Object
     ) { }
 
@@ -72,6 +75,7 @@ export class BestSellersComponent implements OnInit, OnDestroy {
             next: (products) => {
                 this.bestSellers = products;
                 this.resetVisibleCount();
+                this.cdr.markForCheck();
             },
             error: () => {}
         });
@@ -131,16 +135,18 @@ export class BestSellersComponent implements OnInit, OnDestroy {
 
         this.loadObserver?.disconnect();
         const revealMargin = this.readRevealMargin(sentinel);
-        this.loadObserver = new IntersectionObserver(
-            (entries) => {
-                if (!entries.some((entry) => entry.isIntersecting)) {
-                    return;
-                }
-                this.ngZone.run(() => this.revealNextBatch());
-            },
-            { rootMargin: `${revealMargin} 0px` }
-        );
-        this.loadObserver.observe(sentinel);
+        this.ngZone.runOutsideAngular(() => {
+            this.loadObserver = new IntersectionObserver(
+                (entries) => {
+                    if (!entries.some((entry) => entry.isIntersecting)) {
+                        return;
+                    }
+                    this.ngZone.run(() => this.revealNextBatch());
+                },
+                { rootMargin: `${revealMargin} 0px` }
+            );
+            this.loadObserver.observe(sentinel);
+        });
     }
 
     private revealNextBatch(): void {
@@ -156,6 +162,7 @@ export class BestSellersComponent implements OnInit, OnDestroy {
             this.visibleCount + this.readGridColumns(),
             this.bestSellers.length
         );
+        this.cdr.markForCheck();
 
         requestAnimationFrame(() => {
             this.revealing = false;

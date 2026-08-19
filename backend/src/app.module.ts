@@ -28,7 +28,7 @@ import { HealthController } from './health/health.controller';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
-      cache: false,
+      cache: true,
     }),
     TypeOrmModule.forRootAsync({
       useClass: DatabaseConfig,

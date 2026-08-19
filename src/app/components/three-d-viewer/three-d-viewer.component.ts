@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ElementRef, Inject, PLATFORM_ID, OnDestroy, ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ElementRef, Inject, PLATFORM_ID, OnDestroy, ChangeDetectorRef, NgZone, ChangeDetectionStrategy } from '@angular/core';
 import { isPlatformBrowser, CommonModule, Location } from '@angular/common';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,7 +18,8 @@ import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
   standalone: true,
   imports: [CommonModule, TranslateModule, MatSnackBarModule, MatIconModule],
   templateUrl: './three-d-viewer.component.html',
-  styleUrls: ['./three-d-viewer.component.scss']
+  styleUrls: ['./three-d-viewer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   @ViewChild('container') container!: ElementRef;
@@ -105,16 +106,18 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
       threshold: 0.01
     };
 
-    this.intersectionObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          this.initializeViewer();
-          this.disconnectObserver();
-        }
-      });
-    }, options);
+    this.ngZone.runOutsideAngular(() => {
+      this.intersectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            this.initializeViewer();
+            this.disconnectObserver();
+          }
+        });
+      }, options);
 
-    this.intersectionObserver.observe(this.container.nativeElement);
+      this.intersectionObserver.observe(this.container.nativeElement);
+    });
   }
 
   private disconnectObserver() {
@@ -153,7 +156,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
           this.isLoading = false;
           this.hasError = true;
           this.lastErrorDetails = err;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         });
       }
     });
@@ -318,7 +321,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     this.hasError = false;
     this.lastErrorDetails = null;
     this.failedUrl = pathToLoad || '';
-    this.cdr.detectChanges();
+    this.cdr.markForCheck();
 
     if (this.modelSubscription) {
       this.modelSubscription.unsubscribe();
@@ -329,7 +332,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
         if (this.isDestroyed) return;
         if (event.type === 'progress') {
           this.loadingProgress = event.progress || 0;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         } else if (event.type === 'loaded') {
           this.ngZone.runOutsideAngular(async () => {
             const THREE = await import('three');
@@ -358,7 +361,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
           this.ngZone.run(() => {
             this.isLoading = true;
             this.hasError = false;
-            this.cdr.detectChanges();
+            this.cdr.markForCheck();
           });
 
           this.modelSubscription = this.threeDModelService.loadModel(fallbackUrl).subscribe({
@@ -366,7 +369,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
               if (this.isDestroyed) return;
               if (fbEvent.type === 'progress') {
                 this.loadingProgress = fbEvent.progress || 0;
-                this.cdr.detectChanges();
+                this.cdr.markForCheck();
               } else if (fbEvent.type === 'loaded') {
                 this.ngZone.runOutsideAngular(async () => {
                   const THREE = await import('three');
@@ -381,7 +384,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
                 this.hasError = true;
                 this.lastErrorDetails = fallbackErr;
                 this.failedUrl = fallbackUrl;
-                this.cdr.detectChanges();
+                this.cdr.markForCheck();
               });
             }
           });
@@ -393,7 +396,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
           this.hasError = true;
           this.lastErrorDetails = err;
           this.failedUrl = url;
-          this.cdr.detectChanges();
+          this.cdr.markForCheck();
         });
       }
     });
@@ -401,7 +404,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
 
   toggleLogs() {
     this.showLogs = !this.showLogs;
-    this.cdr.detectChanges();
+    this.cdr.markForCheck();
   }
 
   getErrorString(): string {
@@ -496,11 +499,11 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
 
     this.ngZone.run(() => {
       this.isLoading = false;
-      this.cdr.detectChanges();
+      this.cdr.markForCheck();
       this.modelLoaded.emit();
     });
 
-    this.animate();
+    this.ngZone.runOutsideAngular(() => this.animate());
   }
 
   private applyRotation() {

@@ -1,5 +1,5 @@
 
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SectionService } from '../../../admin/services/section.service';
 import { PageService } from '../../../admin/services/page.service';
@@ -26,7 +26,8 @@ import { TranslateModule } from '@ngx-translate/core';
   standalone: true,
   imports: [CommonModule, SectionRendererComponent, ContactsComponent, LocalizedPipe, RouterModule, TranslateModule],
   templateUrl: './dynamic-page.component.html',
-  styleUrls: ['./dynamic-page.component.scss']
+  styleUrls: ['./dynamic-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class DynamicPageComponent implements OnInit, OnDestroy {
@@ -47,6 +48,7 @@ export class DynamicPageComponent implements OnInit, OnDestroy {
     private seoService: SeoService,
     private sanitizer: DomSanitizer,
     private translate: TranslateService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -72,6 +74,7 @@ export class DynamicPageComponent implements OnInit, OnDestroy {
       if (!page) {
         this.loading = false;
         this.notFound = true;
+        this.cdr.markForCheck();
         return;
       }
 
@@ -89,6 +92,7 @@ export class DynamicPageComponent implements OnInit, OnDestroy {
       }
 
       this.loading = false;
+      this.cdr.markForCheck();
     });
   }
 
@@ -107,6 +111,7 @@ export class DynamicPageComponent implements OnInit, OnDestroy {
       this.sections = sections;
       this.pageContext = context;
       this.loading = false;
+      this.cdr.markForCheck();
     });
   }
 
@@ -129,5 +134,9 @@ export class DynamicPageComponent implements OnInit, OnDestroy {
 
   isSectionsLayout(template: string | undefined): boolean {
     return !!template && isSectionBasedPageTemplate(template);
+  }
+
+  trackBySectionId(_index: number, section: Section): number | string {
+    return section.id ?? _index;
   }
 }
