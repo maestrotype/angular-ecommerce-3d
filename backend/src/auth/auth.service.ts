@@ -94,6 +94,9 @@ export class AuthService {
           return throwError(() => new UnauthorizedException('Invalid credentials'));
         }
 
+        return this.promoteToAdminIfNeeded(user);
+      }),
+      switchMap(user => {
         const payload = { sub: user.id, email: user.email, role: user.role };
         const token = this.jwtService.sign(payload);
 
@@ -124,8 +127,28 @@ export class AuthService {
     );
   }
 
+  private promoteToAdminIfNeeded(user: User): Observable<User> {
+    if (user.role === UserRole.ADMIN) {
+      return of(user);
+    }
+
+    const bootstrapEmail = (process.env.ADMIN_EMAIL?.trim() || 'admin@example.com').toLowerCase();
+    const isBootstrapAccount = user.email.toLowerCase() === bootstrapEmail;
+
+    return from(this.userRepository.count({ where: { role: UserRole.ADMIN } })).pipe(
+      switchMap(adminCount => {
+        if (!isBootstrapAccount && adminCount > 0) {
+          return of(user);
+        }
+
+        user.role = UserRole.ADMIN;
+        return from(this.userRepository.save(user));
+      })
+    );
+  }
+
   createAdminUser(): Observable<User> {
-    const email = process.env.ADMIN_EMAIL?.trim();
+    const email = process.env.ADMIN_EMAIL?.trim() || 'admin@example.com';
     const password = process.env.ADMIN_PASSWORD;
 
     if (!email || !password) {
@@ -145,6 +168,10 @@ export class AuthService {
     })).pipe(
       switchMap(existingAdmin => {
         if (existingAdmin) {
+          if (existingAdmin.role !== UserRole.ADMIN) {
+            existingAdmin.role = UserRole.ADMIN;
+            return from(this.userRepository.save(existingAdmin));
+          }
           return of(existingAdmin);
         }
 

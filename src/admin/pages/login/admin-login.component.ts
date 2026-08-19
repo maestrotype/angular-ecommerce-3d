@@ -42,10 +42,19 @@ export class AdminLoginComponent {
       const credentials = this.loginForm.value;
 
       this.authService.login(credentials).subscribe({
-        next: (response) => {
+        next: () => {
           this.isLoading = false;
+          if (!this.authService.isAdmin()) {
+            this.authService.logout();
+            this.snackBar.open(
+              this.translate.instant('ADMIN_ACCESS_DENIED'),
+              this.translate.instant('CLOSE_BTN'),
+              { duration: 5000 }
+            );
+            return;
+          }
           this.snackBar.open(this.translate.instant('LOGIN_SUCCESSFUL'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
-          this.router.navigate(['/admin/dashboard']);
+          void this.router.navigate(['/admin/dashboard']);
         },
         error: (error) => {
           this.isLoading = false;
