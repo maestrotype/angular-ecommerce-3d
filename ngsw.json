@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1787140489785,
+  "timestamp": 1787142216069,
   "index": "/angular-ecommerce-3d/index.html",
   "assetGroups": [
     {
@@ -15,7 +15,7 @@
         "/angular-ecommerce-3d/13.5f4b262002eba83a.js",
         "/angular-ecommerce-3d/265.01aa50f6cd754a9f.js",
         "/angular-ecommerce-3d/291.7923d00b0cc3331c.js",
-        "/angular-ecommerce-3d/296.c9eba7c2391fd1d1.js",
+        "/angular-ecommerce-3d/296.6bcda38d45aed753.js",
         "/angular-ecommerce-3d/311.d9c4679da8e6447e.js",
         "/angular-ecommerce-3d/327.a9561dc46cd2fdb9.js",
         "/angular-ecommerce-3d/351.8c1af2c91320bd19.js",
@@ -23,7 +23,7 @@
         "/angular-ecommerce-3d/394.28c3da69a17b6fd5.js",
         "/angular-ecommerce-3d/40.e4bba3004e9ccb95.js",
         "/angular-ecommerce-3d/474.669f864100b05e38.js",
-        "/angular-ecommerce-3d/479.9ef30f9c6da9cb62.js",
+        "/angular-ecommerce-3d/479.4ee784e39e0eb70b.js",
         "/angular-ecommerce-3d/50.826aa1df228bc8a8.js",
         "/angular-ecommerce-3d/511.c16e24adbe75a3b7.js",
         "/angular-ecommerce-3d/561.522c1ba594f33b43.js",
@@ -42,11 +42,11 @@
         "/angular-ecommerce-3d/common.523fc26c159320c1.js",
         "/angular-ecommerce-3d/favicon.ico",
         "/angular-ecommerce-3d/index.html",
-        "/angular-ecommerce-3d/main.7b07b27b7637c731.js",
+        "/angular-ecommerce-3d/main.8bf391e1ce50c0c7.js",
         "/angular-ecommerce-3d/manifest.webmanifest",
         "/angular-ecommerce-3d/polyfills.a527a9cc31db9a9d.js",
-        "/angular-ecommerce-3d/runtime.5aa8a6faad547e7f.js",
-        "/angular-ecommerce-3d/styles.85a127f72e1059d1.css"
+        "/angular-ecommerce-3d/runtime.db16d2ce4a54eb62.js",
+        "/angular-ecommerce-3d/styles.36714f760b8a68d7.css"
       ],
       "patterns": []
     },
@@ -162,7 +162,7 @@
     "/angular-ecommerce-3d/13.5f4b262002eba83a.js": "f6563ad54215912f715dff29426bd8729281cb14",
     "/angular-ecommerce-3d/265.01aa50f6cd754a9f.js": "26e4fca6e3302f2aac39d369444bafe0f2115b96",
     "/angular-ecommerce-3d/291.7923d00b0cc3331c.js": "1c98807f7688403934be043fab0f26af76c7e405",
-    "/angular-ecommerce-3d/296.c9eba7c2391fd1d1.js": "a42df6e93af6f9bb7301f742d3ea318ae34a6b1e",
+    "/angular-ecommerce-3d/296.6bcda38d45aed753.js": "c2eb2a86dd614812c4d29f578ef47aae52c58a8c",
     "/angular-ecommerce-3d/311.d9c4679da8e6447e.js": "5e4035f9b8a9177e263774813d2e43fafa0188fa",
     "/angular-ecommerce-3d/327.a9561dc46cd2fdb9.js": "43d2ecb6c8eb19dd27c65dd4de70d280fb1be566",
     "/angular-ecommerce-3d/351.8c1af2c91320bd19.js": "1fd3d6fee44c98005c4e4bcd9013f510d9cff982",
@@ -170,7 +170,7 @@
     "/angular-ecommerce-3d/394.28c3da69a17b6fd5.js": "2b843c4df38d05930973ecc1cee6126e79a430f5",
     "/angular-ecommerce-3d/40.e4bba3004e9ccb95.js": "54a6330605c6e4acbf0b088daa799083c12aa11a",
     "/angular-ecommerce-3d/474.669f864100b05e38.js": "733de6dfdeaca5790047caf0ecfa249009583137",
-    "/angular-ecommerce-3d/479.9ef30f9c6da9cb62.js": "39f56481020cfe4ce5b0f296dfcf81b4a5c21c87",
+    "/angular-ecommerce-3d/479.4ee784e39e0eb70b.js": "9243c1f027d6488a289492148c0cf769e5aa98d8",
     "/angular-ecommerce-3d/50.826aa1df228bc8a8.js": "1e8a2fa0f96bc722e620e016e7af61198d3ed8dd",
     "/angular-ecommerce-3d/511.c16e24adbe75a3b7.js": "7a09e5a9d1907f9289dc61eb9ee8a50676c7f399",
     "/angular-ecommerce-3d/561.522c1ba594f33b43.js": "3c43cd4a52e1876340132db454ed35a5f7931258",
@@ -267,12 +267,12 @@
     "/angular-ecommerce-3d/assets/models/shoes/shoes1.glb": "6c07b477b7e6675ae2f9f262c06d4ce22728aa25",
     "/angular-ecommerce-3d/common.523fc26c159320c1.js": "57d6df55c3cb365fa07eff4cede853b757d7e17d",
     "/angular-ecommerce-3d/favicon.ico": "77df1cec8661ab113363136faa6e93d532309179",
-    "/angular-ecommerce-3d/index.html": "badea340466bf38cbc1b7d283e90eaccb860689e",
-    "/angular-ecommerce-3d/main.7b07b27b7637c731.js": "45f781d0c431516b82171fe2849f15dd0a35f887",
+    "/angular-ecommerce-3d/index.html": "9c9c284fea2c225073d8a2bf0900baa71051cc4b",
+    "/angular-ecommerce-3d/main.8bf391e1ce50c0c7.js": "145f32bef71d6a150a654d09fd58d8c5916f3d72",
     "/angular-ecommerce-3d/manifest.webmanifest": "68e4e874611f558407b7642b0fe602db24978dcb",
     "/angular-ecommerce-3d/polyfills.a527a9cc31db9a9d.js": "75b41ca06c59053b7d23f357a4cbbd22f58c0a66",
-    "/angular-ecommerce-3d/runtime.5aa8a6faad547e7f.js": "261d9d7a6fa23c6462130a67d030facdabbac5ac",
-    "/angular-ecommerce-3d/styles.85a127f72e1059d1.css": "0962151630c38842102c178e245b50809c03939b"
+    "/angular-ecommerce-3d/runtime.db16d2ce4a54eb62.js": "a9ea1180fffa5d97fa0b0890c83ad0b94ae9d311",
+    "/angular-ecommerce-3d/styles.36714f760b8a68d7.css": "5769c30d5ce80a2de91631172b421ff8b82ee384"
   },
   "navigationUrls": [
     {
