@@ -29,6 +29,6 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
   }
 
   private checkScreenSize() {
-    this.isMobile = window.innerWidth <= 768;
+    this.isMobile = window.innerWidth <= 1024;
   }
 }

@@ -5,6 +5,9 @@
 
 .admin-container {
   height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
   background-color: var(--surface-page);
   color: var(--text-primary);
   transition:
@@ -50,6 +53,9 @@
 
 .admin-content {
   height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -59,12 +65,20 @@
 
 .admin-main {
   flex: 1;
+  min-width: 0;
+  overflow-x: clip;
   overflow-y: auto;
   padding: var(--admin-content-padding);
   scroll-behavior: smooth;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     padding: var(--admin-page-padding-y) var(--admin-page-padding-x);
+  }
+
+  @media (max-width: 480px) {
+    padding-block: var(--space-3);
+    padding-inline: max(var(--space-2), env(safe-area-inset-left, 0px))
+      max(var(--space-2), env(safe-area-inset-right, 0px));
   }
 
   &::-webkit-scrollbar {
@@ -91,4 +105,11 @@
 .admin-header {
   flex-shrink: 0;
   z-index: 10;
+}
+
+@media (max-width: 1024px) {
+  .admin-content.mat-sidenav-content,
+  .admin-content.mat-drawer-content {
+    margin: 0;
+  }
 }

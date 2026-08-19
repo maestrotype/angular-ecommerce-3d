@@ -3,6 +3,12 @@
 // Shared rules for toolbar chrome; page-level layouts use filters-grid below.
 // =============================================================================
 @media (max-width: 768px) {
+  body.is-admin,
+  body.is-admin .admin-container {
+    overflow-x: clip;
+    max-width: 100%;
+  }
+
   .admin-header.mat-toolbar,
   mat-toolbar.admin-header {
     min-height: var(--admin-shell-mobile-toolbar-height);
@@ -97,8 +103,7 @@
     padding: var(--admin-page-padding-y) var(--admin-page-padding-x);
   }
 
-  .admin-page,
-  .dashboard-container {
+  .admin-page {
     width: 100%;
     max-width: none;
     box-sizing: border-box;
@@ -107,6 +112,15 @@
     box-shadow: none;
     border-radius: 0;
     background: transparent;
+    min-height: calc(100vh - var(--admin-shell-mobile-toolbar-height));
+  }
+
+  .dashboard-container {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: var(--space-5) var(--space-4);
     min-height: calc(100vh - var(--admin-shell-mobile-toolbar-height));
   }
 
@@ -366,15 +380,37 @@
   }
 
   .dashboard-container {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: clip;
+
+    .charts-section,
+    .charts-grid,
+    .chart-card,
+    .payment-errors-section,
+    .errors-card {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+    }
+
     .charts-section {
       margin-bottom: var(--space-8);
     }
 
+    .charts-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
     .chart-wrapper {
-      height: 240px;
+      height: 220px;
+      max-width: 100%;
+      overflow: hidden;
     }
 
     .stats-grid {
+      grid-template-columns: minmax(0, 1fr);
       margin-bottom: var(--space-8);
     }
   }

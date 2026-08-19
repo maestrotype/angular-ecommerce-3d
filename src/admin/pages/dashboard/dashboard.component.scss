@@ -6,6 +6,9 @@
   border: 1px solid var(--dashboard-shell-border, var(--border-subtle));
   min-height: calc(100vh - var(--admin-toolbar-height));
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: clip;
   box-sizing: border-box;
 
   h1 {
@@ -129,12 +132,14 @@
 
 .charts-grid {
   display: grid;
-  grid-template-columns: 2.2fr 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-8);
   margin-bottom: var(--space-8);
+  width: 100%;
+  min-width: 0;
 
-  @media (max-width: 1200px) {
-    grid-template-columns: 1fr;
+  @media (min-width: 1024px) {
+    grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr);
   }
 }
 
@@ -145,6 +150,9 @@
   padding: var(--space-6);
   display: flex;
   flex-direction: column;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
   transition: all 0.3s ease;
 
   &.mat-mdc-card {
@@ -188,6 +196,15 @@
   height: 320px;
   position: relative;
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+
+  canvas {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+  }
 }
 
 .top-products-list {
@@ -201,6 +218,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-width: 0;
 
   .product-meta {
     display: flex;
@@ -211,13 +229,67 @@
       font-size: 0.9rem;
       font-weight: 600;
       color: var(--text-primary);
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .percent {
       font-size: 0.85rem;
       font-weight: 700;
       color: var(--interactive-primary);
+      flex-shrink: 0;
     }
+  }
+}
+
+@media (max-width: 1024px) {
+  .dashboard-container {
+    padding: var(--space-5) var(--space-4);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: clip;
+  }
+
+  .stats-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-3);
+    width: 100%;
+  }
+
+  .chart-card {
+    padding: var(--space-4);
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .chart-wrapper {
+    height: 220px;
+  }
+
+  .payment-errors-section {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-container {
+    padding: var(--space-4) var(--space-3);
+  }
+
+  .dashboard-container h1 {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-4);
+  }
+
+  .chart-wrapper {
+    height: 200px;
+  }
+
+  .stat-card .stat-content {
+    gap: var(--space-3);
   }
 }
 
