@@ -39,6 +39,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public salesChartOptions: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
+    layout: {
+      padding: { top: 8, right: 4, bottom: 0, left: 0 }
+    },
     plugins: {
       legend: { display: false },
       tooltip: {
@@ -62,7 +65,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
         },
         ticks: {
           color: '#475569',
-          callback: (value) => '$' + value
+          maxTicksLimit: 5,
+          callback: (value) => {
+            const amount = Number(value);
+            if (amount >= 1000) {
+              return '$' + (amount / 1000).toString().replace(/\.0$/, '') + 'k';
+            }
+            return '$' + amount;
+          }
         }
       },
       x: {
@@ -70,7 +80,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
           display: false
         },
         ticks: {
-          color: '#475569'
+          color: '#475569',
+          maxRotation: 0,
+          autoSkip: true,
+          maxTicksLimit: 7
         }
       }
     }
