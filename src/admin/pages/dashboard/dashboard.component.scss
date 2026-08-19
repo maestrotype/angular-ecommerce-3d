@@ -245,7 +245,7 @@
 
 @media (max-width: 1024px) {
   .dashboard-container {
-    padding: 0;
+    padding: var(--space-5) var(--space-4);
     width: 100%;
     max-width: 100%;
     min-width: 0;
@@ -275,6 +275,10 @@
 }
 
 @media (max-width: 480px) {
+  .dashboard-container {
+    padding: var(--space-4) var(--space-3);
+  }
+
   .dashboard-container h1 {
     font-size: var(--text-lg);
     margin-bottom: var(--space-4);

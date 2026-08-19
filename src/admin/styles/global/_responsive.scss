@@ -103,8 +103,7 @@
     padding: var(--admin-page-padding-y) var(--admin-page-padding-x);
   }
 
-  .admin-page,
-  .dashboard-container {
+  .admin-page {
     width: 100%;
     max-width: none;
     box-sizing: border-box;
@@ -113,6 +112,15 @@
     box-shadow: none;
     border-radius: 0;
     background: transparent;
+    min-height: calc(100vh - var(--admin-shell-mobile-toolbar-height));
+  }
+
+  .dashboard-container {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: var(--space-5) var(--space-4);
     min-height: calc(100vh - var(--admin-shell-mobile-toolbar-height));
   }
 
