@@ -16,7 +16,16 @@ export class OrderService {
   constructor(private http: HttpClient) { }
 
   getOrders(): Observable<Order[]> {
-    return this.http.get<Order[]>(this.apiUrl);
+    return this.http.get<unknown>(this.apiUrl).pipe(
+      map(res => {
+        const list = Array.isArray(res)
+          ? res
+          : (res && typeof res === 'object' && Array.isArray((res as { data?: unknown }).data)
+            ? (res as { data: unknown[] }).data
+            : []);
+        return list.map(item => normalizeOrder(item as Record<string, unknown>));
+      })
+    );
   }
 
   getOrder(id: number): Observable<Order> {
@@ -87,7 +96,7 @@ function normalizeOrder(raw: Record<string, unknown>): Order {
     name: String(item?.name || item?.productName || ''),
     price: Number(item?.price ?? item?.unitPrice) || 0,
     quantity: Number(item?.quantity) || 0,
-    image: String(item?.image || item?.imageUrl || ''),
+    image: String(item?.image || item?.imageUrl || '').trim() || undefined,
   }));
 
   return {

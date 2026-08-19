@@ -106,7 +106,7 @@ export class OrderListComponent implements OnInit {
 
   viewOrderDetails(order: Order): void {
     const dialogRef = this.dialog.open(OrderDetailComponent, {
-      width: '900px',
+      width: '1080px',
       maxWidth: '95vw',
       maxHeight: '90vh',
       autoFocus: false,

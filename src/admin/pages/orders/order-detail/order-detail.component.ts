@@ -120,9 +120,41 @@ export class OrderDetailComponent implements OnInit {
     return (status || 'pending').toUpperCase();
   }
 
+  statusIcon(status?: string): string {
+    switch ((status || '').toLowerCase()) {
+      case 'confirmed':
+        return 'check_circle';
+      case 'processing':
+        return 'autorenew';
+      case 'shipped':
+        return 'local_shipping';
+      case 'delivered':
+        return 'done_all';
+      case 'cancelled':
+        return 'cancel';
+      default:
+        return 'schedule';
+    }
+  }
+
   display(value?: string | null): string {
     const trimmed = (value || '').trim();
     return trimmed || this.translate.instant('VALUE_UNAVAILABLE');
+  }
+
+  formatPayment(value?: string | null): string {
+    const raw = (value || '').trim();
+    if (!raw) {
+      return this.translate.instant('VALUE_UNAVAILABLE');
+    }
+    const labels: Record<string, string> = {
+      stripe: 'Stripe',
+      paypal: 'PayPal',
+      card: 'Card',
+      cash: 'Cash',
+      cod: 'Cash on delivery',
+    };
+    return labels[raw.toLowerCase()] || raw.charAt(0).toUpperCase() + raw.slice(1);
   }
 
   itemImage(item: OrderItem): string {
@@ -152,12 +184,12 @@ export class OrderDetailComponent implements OnInit {
     if (!this.order) {
       return this.translate.instant('VALUE_UNAVAILABLE');
     }
-    const parts = [
+    const parts = this.uniqueAddressParts([
       this.order.shippingAddress,
       this.order.city,
       this.order.postalCode,
       this.order.country,
-    ].filter((part) => !!part && part.trim());
+    ]);
     return parts.length ? parts.join(', ') : this.translate.instant('VALUE_UNAVAILABLE');
   }
 
@@ -168,5 +200,34 @@ export class OrderDetailComponent implements OnInit {
   private applyOrder(order: Order): void {
     this.order = order;
     this.selectedStatus = order.status || 'pending';
+  }
+
+  private uniqueAddressParts(values: Array<string | undefined>): string[] {
+    const result: string[] = [];
+
+    for (const value of values) {
+      const pieces = (value || '')
+        .split(',')
+        .map((piece) => this.collapseRepeatedText(piece.trim()))
+        .filter(Boolean);
+
+      for (const piece of pieces) {
+        const key = piece.toLowerCase();
+        const duplicate = result.some((existing) => {
+          const existingKey = existing.toLowerCase();
+          return existingKey === key || existingKey.includes(key) || key.includes(existingKey);
+        });
+        if (!duplicate) {
+          result.push(piece);
+        }
+      }
+    }
+
+    return result;
+  }
+
+  private collapseRepeatedText(value: string): string {
+    const doubled = value.match(/^(.*)\1$/i);
+    return doubled ? doubled[1].trim() : value;
   }
 }

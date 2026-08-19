@@ -2,8 +2,12 @@
   <div class="header">
     <div class="header-copy">
       <h2>{{ 'ORDER_DETAILS' | translate }}</h2>
-      <p *ngIf="order?.id" class="header-meta">#{{ order?.id }}</p>
+      <p *ngIf="order?.id" class="header-meta">#{{ order?.id }} · {{ order?.createdAt | date:'mediumDate' }}</p>
     </div>
+    <span *ngIf="order" class="status-badge" [ngClass]="statusClass(order.status)">
+      <mat-icon>{{ statusIcon(order.status) }}</mat-icon>
+      {{ statusKey(order.status) | translate }}
+    </span>
     <button mat-icon-button type="button" (click)="close()" class="close-button" [attr.aria-label]="'CLOSE_BTN' | translate">
       <mat-icon>close</mat-icon>
     </button>
@@ -28,128 +32,107 @@
       <span>{{ error }}</span>
     </div>
 
-    <div class="order-info">
-      <div class="info-row">
-        <div class="info-item">
-          <label>{{ 'ORDER_ID' | translate }}</label>
-          <span>#{{ order.id }}</span>
+    <div class="detail-layout">
+      <section class="panel customer-info">
+        <h3>{{ 'CUSTOMER_INFORMATION' | translate }}</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>{{ 'NAME' | translate }}</label>
+            <span>{{ display(order.customerName) }}</span>
+          </div>
+          <div class="info-item">
+            <label>{{ 'EMAIL' | translate }}</label>
+            <a *ngIf="order.customerEmail" class="info-link" [href]="'mailto:' + order.customerEmail">{{ order.customerEmail }}</a>
+            <span *ngIf="!order.customerEmail">{{ display(order.customerEmail) }}</span>
+          </div>
+          <div class="info-item">
+            <label>{{ 'PHONE' | translate }}</label>
+            <span>{{ display(order.customerPhone) }}</span>
+          </div>
+          <div class="info-item">
+            <label>{{ 'PAYMENT_METHOD' | translate }}</label>
+            <span>{{ formatPayment(order.paymentMethod) }}</span>
+          </div>
+          <div class="info-item info-item--wide">
+            <label>{{ 'SHIPPING_ADDRESS' | translate }}</label>
+            <span>{{ shippingLine() }}</span>
+          </div>
         </div>
-        <div class="info-item">
-          <label>{{ 'DATE' | translate }}</label>
-          <span>{{ order.createdAt | date:'medium' }}</span>
-        </div>
-        <div class="info-item">
-          <label>{{ 'STATUS' | translate }}</label>
-          <span class="status-badge" [ngClass]="statusClass(order.status)">
-            {{ statusKey(order.status) | translate }}
-          </span>
-        </div>
-      </div>
-    </div>
+      </section>
 
-    <div class="customer-info">
-      <h3>{{ 'CUSTOMER_INFORMATION' | translate }}</h3>
-      <div class="info-grid">
-        <div class="info-item">
-          <label>{{ 'NAME' | translate }}</label>
-          <span>{{ display(order.customerName) }}</span>
+      <section class="panel order-items">
+        <div class="panel-header">
+          <h3>{{ 'ORDER_ITEMS' | translate }}</h3>
+          <span class="item-count">{{ order.items?.length || 0 }}</span>
         </div>
-        <div class="info-item">
-          <label>{{ 'EMAIL' | translate }}</label>
-          <span>{{ display(order.customerEmail) }}</span>
-        </div>
-        <div class="info-item">
-          <label>{{ 'PHONE' | translate }}</label>
-          <span>{{ display(order.customerPhone) }}</span>
-        </div>
-        <div class="info-item">
-          <label>{{ 'PAYMENT_METHOD' | translate }}</label>
-          <span>{{ display(order.paymentMethod) }}</span>
-        </div>
-        <div class="info-item info-item--wide">
-          <label>{{ 'SHIPPING_ADDRESS' | translate }}</label>
-          <span>{{ shippingLine() }}</span>
-        </div>
-      </div>
-    </div>
 
-    <div class="order-items">
-      <h3>{{ 'ORDER_ITEMS' | translate }}</h3>
-
-      <div class="items-empty" *ngIf="!order.items?.length">
-        <mat-icon>inventory_2</mat-icon>
-        <p>{{ 'NO_ORDER_ITEMS' | translate }}</p>
-      </div>
-
-      <div class="items-table" *ngIf="order.items?.length">
-        <div class="table-header">
-          <div class="col-product">{{ 'PRODUCT_NAME' | translate }}</div>
-          <div class="col-price">{{ 'PRICE' | translate }}</div>
-          <div class="col-quantity">{{ 'QUANTITY' | translate }}</div>
-          <div class="col-total">{{ 'TOTAL' | translate }}</div>
+        <div class="items-empty" *ngIf="!order.items?.length">
+          <mat-icon>inventory_2</mat-icon>
+          <p>{{ 'NO_ORDER_ITEMS' | translate }}</p>
         </div>
-        <div class="table-row" *ngFor="let item of order.items">
-          <div class="col-product">
-            <div class="product-info">
-              <img *ngIf="itemImage(item)" [src]="itemImage(item)" [alt]="item.name" class="product-image">
-              <div class="product-image product-image--placeholder" *ngIf="!itemImage(item)">
-                <mat-icon>image</mat-icon>
-              </div>
-              <div class="product-details">
+
+        <div class="items-table" *ngIf="order.items?.length">
+          <div class="table-header">
+            <div class="col-product">{{ 'PRODUCT_NAME' | translate }}</div>
+            <div class="col-price">{{ 'PRICE' | translate }}</div>
+            <div class="col-quantity">{{ 'QUANTITY' | translate }}</div>
+            <div class="col-total">{{ 'TOTAL' | translate }}</div>
+          </div>
+          <div class="table-row" *ngFor="let item of order.items">
+            <div class="col-product">
+              <div class="product-info">
+                <img *ngIf="itemImage(item)" [src]="itemImage(item)" [alt]="item.name" class="product-image">
+                <div class="product-image product-image--placeholder" *ngIf="!itemImage(item)">
+                  <mat-icon>image</mat-icon>
+                </div>
                 <div class="product-name">{{ display(item.name) }}</div>
               </div>
             </div>
+            <div class="col-price">${{ item.price | number:'1.2-2' }}</div>
+            <div class="col-quantity">{{ item.quantity }}</div>
+            <div class="col-total">${{ lineTotal(item) | number:'1.2-2' }}</div>
           </div>
-          <div class="col-price">${{ item.price | number:'1.2-2' }}</div>
-          <div class="col-quantity">{{ item.quantity }}</div>
-          <div class="col-total">${{ lineTotal(item) | number:'1.2-2' }}</div>
         </div>
-      </div>
+
+        <div class="order-summary">
+          <div class="summary-row">
+            <span>{{ 'SUBTOTAL' | translate }}</span>
+            <span>${{ getSubtotal() | number:'1.2-2' }}</span>
+          </div>
+          <div class="summary-row total">
+            <span>{{ 'TOTAL' | translate }}</span>
+            <span>${{ getOrderTotal() | number:'1.2-2' }}</span>
+          </div>
+        </div>
+      </section>
     </div>
 
-    <div class="order-summary">
-      <div class="summary-row">
-        <span>{{ 'SUBTOTAL' | translate }}</span>
-        <span>${{ getSubtotal() | number:'1.2-2' }}</span>
-      </div>
-      <div class="summary-row total">
-        <span>{{ 'TOTAL' | translate }}</span>
-        <span>${{ getOrderTotal() | number:'1.2-2' }}</span>
-      </div>
-    </div>
-
-    <div class="status-update">
-      <h3>{{ 'UPDATE_STATUS' | translate }}</h3>
-      <div class="status-controls">
-        <mat-form-field appearance="outline">
-          <mat-label>{{ 'ORDER_STATUS' | translate }}</mat-label>
-          <mat-select [value]="selectedStatus" (selectionChange)="selectedStatus = $event.value">
-            <mat-option *ngFor="let status of statuses" [value]="status">
-              {{ statusKey(status) | translate }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-
-    <div class="order-notes" *ngIf="order.notes">
+    <section class="panel order-notes" *ngIf="order.notes">
       <h3>{{ 'ORDER_NOTES' | translate }}</h3>
-      <div class="notes-content">
-        {{ order.notes }}
-      </div>
-    </div>
+      <div class="notes-content">{{ order.notes }}</div>
+    </section>
   </div>
 
   <div class="actions" *ngIf="order && !loading">
-    <button mat-button type="button" (click)="close()">{{ 'CLOSE_BTN' | translate }}</button>
-    <button
-      mat-raised-button
-      color="primary"
-      type="button"
-      (click)="saveStatus()"
-      [disabled]="!hasStatusChanged || saving">
-      <mat-icon *ngIf="saving">hourglass_empty</mat-icon>
-      {{ 'SAVE_CHANGES' | translate }}
-    </button>
+    <mat-form-field appearance="outline" subscriptSizing="dynamic" class="status-field">
+      <mat-label>{{ 'ORDER_STATUS' | translate }}</mat-label>
+      <mat-select [value]="selectedStatus" (selectionChange)="selectedStatus = $event.value">
+        <mat-option *ngFor="let status of statuses" [value]="status">
+          {{ statusKey(status) | translate }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div class="action-buttons">
+      <button mat-button type="button" (click)="close()">{{ 'CLOSE_BTN' | translate }}</button>
+      <button
+        mat-raised-button
+        color="primary"
+        type="button"
+        (click)="saveStatus()"
+        [disabled]="!hasStatusChanged || saving">
+        <mat-icon *ngIf="saving">hourglass_empty</mat-icon>
+        {{ 'SAVE_CHANGES' | translate }}
+      </button>
+    </div>
   </div>
 </div>

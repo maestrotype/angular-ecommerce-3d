@@ -244,5 +244,10 @@
     max-width: none;
     width: 100%;
     box-sizing: border-box;
+
+    .actions {
+      justify-content: space-between;
+      align-items: center;
+    }
   }
 }
