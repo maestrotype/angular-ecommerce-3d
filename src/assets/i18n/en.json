@@ -330,6 +330,7 @@
   "SERVER_ERROR_SECTIONS": "Server error: please check backend logs or try again later.",
   "CONFIRM_DELETE_SECTION": "Are you sure you want to delete this section?",
   "LOGIN_SUCCESSFUL": "Login successful!",
+  "ADMIN_ACCESS_DENIED": "This account does not have admin access.",
   "LOGIN_FAILED_MSG": "Login failed. Please check your credentials.",
   "PAYMENT_STATUS_UPDATED": "Payment status updated successfully",
   "FILE_TOO_LARGE_TITLE": "File too large",

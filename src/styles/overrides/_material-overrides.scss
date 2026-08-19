@@ -2326,3 +2326,34 @@ app-settings mat-form-field .mat-mdc-form-field-subscript-wrapper,
 app-profile mat-form-field .mat-mdc-form-field-subscript-wrapper {
   margin-top: 4px;
 }
+
+/* Admin login — Material chrome follows theme tokens (no !important) */
+app-admin-login .login-card.mat-mdc-card {
+  --mdc-elevated-card-container-color: var(--surface-card);
+  --mdc-filled-card-container-color: var(--surface-card);
+  background: var(--surface-card);
+  color: var(--text-primary);
+}
+
+app-admin-login .login-card .mat-mdc-card-title {
+  color: var(--text-primary);
+}
+
+app-admin-login .login-card .mat-mdc-card-subtitle {
+  color: var(--text-secondary);
+}
+
+app-admin-login .login-button.mat-mdc-unelevated-button,
+app-admin-login .login-button.mat-mdc-button-base {
+  --mdc-filled-button-container-color: var(--interactive-primary);
+  --mdc-filled-button-label-text-color: var(--interactive-primary-text);
+  --mdc-filled-button-disabled-container-color: var(--interactive-disabled);
+  --mdc-filled-button-disabled-label-text-color: var(--text-muted);
+  background-color: var(--interactive-primary);
+  color: var(--interactive-primary-text);
+}
+
+app-admin-login .login-button.mat-mdc-unelevated-button .mdc-button__label,
+app-admin-login .login-button.mat-mdc-button-base .mdc-button__label {
+  color: var(--interactive-primary-text);
+}
