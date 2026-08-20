@@ -53,22 +53,28 @@
 
 .admin-content {
   height: 100vh;
-  width: 100%;
+  /* Do NOT set width: 100% — Material adds margin-left for side sidenav,
+     so 100% + margin overflows the viewport and clips content on the right. */
+  width: auto;
   max-width: 100%;
   min-width: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  box-sizing: border-box;
   background-color: var(--surface-page);
   transition: background-color var(--duration-normal) var(--easing-default);
 }
 
 .admin-main {
   flex: 1;
+  width: 100%;
+  max-width: 100%;
   min-width: 0;
   overflow-x: clip;
   overflow-y: auto;
   padding: var(--admin-content-padding);
+  box-sizing: border-box;
   scroll-behavior: smooth;
 
   @media (max-width: 1024px) {
@@ -111,5 +117,6 @@
   .admin-content.mat-sidenav-content,
   .admin-content.mat-drawer-content {
     margin: 0;
+    width: 100%;
   }
 }

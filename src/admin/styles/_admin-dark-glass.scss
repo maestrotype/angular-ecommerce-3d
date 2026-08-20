@@ -54,7 +54,9 @@
   --mdc-chip-selected-elevated-container-color: var(--interactive-primary);
   --mdc-chip-label-text-color: var(--text-primary);
   --mdc-chip-with-icon-icon-color: var(--text-secondary);
-  --mdc-chip-outline-color: var(--border-default);
+  --mdc-chip-outline-color: transparent;
+  --mdc-chip-outlined-outline-color: transparent;
+  --mdc-chip-outline-width: 0;
   --mat-chip-elevated-container-color: var(--surface-header, var(--surface-elevated));
 
   --border-width: 0.5px;
