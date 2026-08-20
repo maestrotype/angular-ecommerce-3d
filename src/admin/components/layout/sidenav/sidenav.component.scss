@@ -44,7 +44,7 @@
     }
 
     .user-role {
-      color: var(--text-secondary);
+      color: var(--interactive-primary);
     }
   }
 
@@ -110,6 +110,14 @@
   .user-info {
     background: var(--surface-overlay-light);
     border: 1px solid var(--glass-border-soft);
+
+    .user-name {
+      color: var(--text-primary);
+    }
+
+    .user-role {
+      color: var(--interactive-primary);
+    }
   }
 
   mat-nav-list a,
@@ -332,7 +340,8 @@
       .user-role {
         font-size: 10px;
         text-transform: uppercase;
-        color: var(--text-secondary);
+        letter-spacing: 0.06em;
+        color: var(--interactive-primary);
         font-weight: 600;
       }
     }

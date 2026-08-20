@@ -1272,14 +1272,17 @@
   .mat-mdc-button.mat-primary,
   .mat-mdc-raised-button.mat-accent,
   .mat-mdc-button.mat-accent {
-    background: rgba(var(--interactive-primary-rgb), 0.3);
-    color: var(--text-on-primary);
-    border: 1px solid rgba(var(--interactive-primary-rgb), 0.5);
+    --mdc-protected-button-label-text-color: var(--text-primary);
+    --mdc-protected-button-icon-color: var(--text-primary);
+    --mat-protected-button-label-text-color: var(--text-primary);
+    background: color-mix(in srgb, var(--surface-header, var(--surface-elevated)) 55%, transparent);
+    color: var(--text-primary);
+    border: none;
     box-shadow:
-      0 4px 16px rgba(var(--interactive-primary-rgb), 0.25),
-      inset 0 1px 0 rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(15px) saturate(150%);
-    -webkit-backdrop-filter: blur(15px) saturate(150%);
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 8px 22px rgba(0, 0, 0, 0.28);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
     border-radius: 12px;
     font-weight: 500;
     will-change: transform;
@@ -1290,19 +1293,30 @@
   .mat-mdc-button.mat-primary:hover,
   .mat-mdc-raised-button.mat-accent:hover,
   .mat-mdc-button.mat-accent:hover {
-    background: rgba(var(--interactive-primary-rgb), 0.4);
-    border-color: rgba(var(--interactive-primary-rgb), 0.6);
+    background: color-mix(in srgb, var(--surface-header, var(--surface-elevated)) 68%, transparent);
+    border: none;
     box-shadow:
-      0 6px 20px rgba(var(--interactive-primary-rgb), 0.35),
-      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      inset 0 1px 0 rgba(255, 255, 255, 0.16),
+      0 10px 26px rgba(0, 0, 0, 0.32);
   }
 
   .mat-mdc-raised-button.mat-primary:active,
   .mat-mdc-button.mat-primary:active,
   .mat-mdc-raised-button.mat-accent:active,
   .mat-mdc-button.mat-accent:active {
-    background: rgba(var(--interactive-primary-rgb), 0.35);
+    background: color-mix(in srgb, var(--surface-header, var(--surface-elevated)) 62%, transparent);
     transform: translateY(1px);
+  }
+
+  .mat-mdc-raised-button.mat-primary .mat-icon,
+  .mat-mdc-button.mat-primary .mat-icon,
+  .mat-mdc-raised-button.mat-primary .mdc-button__label,
+  .mat-mdc-button.mat-primary .mdc-button__label,
+  .mat-mdc-raised-button.mat-accent .mat-icon,
+  .mat-mdc-button.mat-accent .mat-icon,
+  .mat-mdc-raised-button.mat-accent .mdc-button__label,
+  .mat-mdc-button.mat-accent .mdc-button__label {
+    color: var(--text-primary);
   }
 }
 
@@ -1425,6 +1439,13 @@
   }
 }
 
+body.is-admin[data-theme='dark-glass'] .sidenav-nav .user-info .user-role,
+html[data-theme='dark-glass'] body.is-admin .sidenav-nav .user-info .user-role,
+body.is-admin[data-theme='glass'] .sidenav-nav .user-info .user-role,
+html[data-theme='glass'] body.is-admin .sidenav-nav .user-info .user-role {
+  color: var(--interactive-primary);
+}
+
 /* ===== Mat Menu Styles ===== */
 [data-theme='light'],
 [data-theme='dark'],
@@ -1479,9 +1500,14 @@
     margin: 8px 0;
   }
 
-  /* Product list mobile CTA: glass, no white frame */
+  /* List CTAs: glass, readable light label (not dark --text-on-primary) */
   app-product-list .add-button.mat-mdc-raised-button.mat-primary,
-  app-product-list .add-button.add-button-mobile.mat-mdc-raised-button.mat-primary {
+  app-product-list .add-button.add-button-mobile.mat-mdc-raised-button.mat-primary,
+  app-category-list .add-button.mat-mdc-raised-button.mat-primary,
+  app-page-list .add-button.mat-mdc-raised-button.mat-primary,
+  app-user-list .add-button.mat-mdc-raised-button.mat-primary,
+  app-order-list .add-button.mat-mdc-raised-button.mat-primary,
+  app-section-list .add-button.mat-mdc-raised-button.mat-primary {
     --mdc-protected-button-container-color: transparent;
     --mdc-protected-button-label-text-color: var(--text-primary);
     --mdc-protected-button-icon-color: var(--text-primary);
@@ -1500,8 +1526,18 @@
   app-product-list .add-button.mat-mdc-raised-button.mat-primary .mat-icon,
   app-product-list .add-button.add-button-mobile.mat-mdc-raised-button.mat-primary .mat-icon,
   app-product-list .add-button.mat-mdc-raised-button.mat-primary .mdc-button__label,
-  app-product-list .add-button.add-button-mobile.mat-mdc-raised-button.mat-primary .mdc-button__label {
+  app-product-list .add-button.add-button-mobile.mat-mdc-raised-button.mat-primary .mdc-button__label,
+  app-category-list .add-button.mat-mdc-raised-button.mat-primary .mat-icon,
+  app-category-list .add-button.mat-mdc-raised-button.mat-primary .mdc-button__label,
+  app-page-list .add-button.mat-mdc-raised-button.mat-primary .mat-icon,
+  app-page-list .add-button.mat-mdc-raised-button.mat-primary .mdc-button__label {
     color: var(--text-primary);
+  }
+
+  /* Sidebar role label: primary accent, never warn/danger red */
+  .sidenav-nav .user-info .user-role,
+  .sidenav-wrapper .user-info .user-role {
+    color: var(--interactive-primary);
   }
 
   app-product-list .product-card {

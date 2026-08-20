@@ -7,7 +7,7 @@
   gap: var(--space-4);
 
   h1 {
-    color: var(--mdc-list-list-item-label-text-color);
+    color: var(--text-primary);
     margin: 0;
     flex: 1;
   }
@@ -19,9 +19,23 @@
     padding: 12px 24px;
     height: 48px;
     min-height: 48px;
-    
-    .button-text {
-      margin-left: 0;
+    --mdc-protected-button-container-color: transparent;
+    --mdc-protected-button-label-text-color: var(--text-primary);
+    --mdc-protected-button-icon-color: var(--text-primary);
+    --mat-protected-button-label-text-color: var(--text-primary);
+    background: color-mix(in srgb, var(--surface-header, var(--surface-elevated)) 55%, transparent);
+    color: var(--text-primary);
+    border: none;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.12),
+      0 8px 22px rgba(0, 0, 0, 0.28);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+
+    mat-icon,
+    .button-text,
+    .mdc-button__label {
+      color: var(--text-primary);
     }
   }
 }
