@@ -109,7 +109,22 @@
                 <div class="preview-container">
                   <img [src]="imageUrl" [alt]="'Product image ' + (i + 1)" />
                   <div class="preview-overlay">
-                    <button type="button" class="remove-btn" (click)="removeImageAt(i)" mat-icon-button>
+                    <button
+                      type="button"
+                      class="preview-action preview-action--download"
+                      (click)="downloadImageAt(i); $event.stopPropagation()"
+                      mat-icon-button
+                      [matTooltip]="'DOWNLOAD_IMAGE' | translate"
+                      [attr.aria-label]="'DOWNLOAD_IMAGE' | translate">
+                      <mat-icon>download</mat-icon>
+                    </button>
+                    <button
+                      type="button"
+                      class="preview-action preview-action--remove"
+                      (click)="removeImageAt(i); $event.stopPropagation()"
+                      mat-icon-button
+                      [matTooltip]="'DELETE' | translate"
+                      [attr.aria-label]="'DELETE' | translate">
                       <mat-icon>close</mat-icon>
                     </button>
                   </div>

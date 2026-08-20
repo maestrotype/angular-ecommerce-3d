@@ -856,6 +856,53 @@ export class ProductFormComponent implements OnInit {
     this.imageUrls.splice(index, 1);
   }
 
+  downloadImageAt(index: number): void {
+    const rawUrl = this.imageUrls[index];
+    if (!rawUrl) return;
+
+    const url = fixBackendUrl(rawUrl);
+    const filename =
+      url.split('/').pop()?.split('?')[0] || `product-image-${index + 1}.jpg`;
+
+    fetch(url)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        return response.blob();
+      })
+      .then((blob) => {
+        const objectUrl = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = objectUrl;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(objectUrl);
+        this.snackBar.open(
+          this.translate.instant('IMAGE_DOWNLOAD_STARTED'),
+          this.translate.instant('CLOSE_BTN'),
+          { duration: 2500 }
+        );
+      })
+      .catch(() => {
+        const link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        this.snackBar.open(
+          this.translate.instant('IMAGE_DOWNLOAD_STARTED'),
+          this.translate.instant('CLOSE_BTN'),
+          { duration: 2500 }
+        );
+      });
+  }
+
   on3dFileSelected(event: any): void {
     const file = event.target.files?.[0];
     if (!file) return;

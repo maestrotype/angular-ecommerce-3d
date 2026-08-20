@@ -1600,6 +1600,8 @@
   },
   "MODEL_3D_READY_SAVED": "3D model saved to Database!",
   "MODEL_DOWNLOAD_STARTED": "Download started...",
+  "DOWNLOAD_IMAGE": "Download image",
+  "IMAGE_DOWNLOAD_STARTED": "Image download started...",
   "MODEL_HOSTING_WARNING": "⚠️ This model is stored locally and may not be accessible on the live site. Archive to Cloudinary for reliable hosting.",
   "PAGES": "Pages",
   "ADD_PAGE": "Add Page",

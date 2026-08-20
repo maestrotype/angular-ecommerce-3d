@@ -2424,6 +2424,33 @@ app-product-form .mat-mdc-form-field {
   width: 100%;
 }
 
+app-product-form .mat-mdc-form-field .mdc-floating-label,
+app-product-form .mat-mdc-form-field .mat-mdc-floating-label,
+app-product-form .mat-mdc-text-field-wrapper .mdc-floating-label {
+  color: var(--input-label, var(--text-secondary));
+  opacity: 1;
+}
+
+app-product-form .mat-mdc-form-field.mat-focused .mdc-floating-label,
+app-product-form .mat-mdc-form-field.mat-form-field-should-float .mdc-floating-label {
+  color: var(--input-focus-border, var(--interactive-primary));
+}
+
+app-product-form .mat-mdc-form-field .mat-mdc-input-element,
+app-product-form .mat-mdc-form-field .mat-mdc-select-value,
+app-product-form .mat-mdc-form-field .mat-mdc-select-min-line {
+  color: var(--input-text, var(--text-primary));
+}
+
+app-product-form .back-button.mat-mdc-button,
+app-product-form .upload-button.mat-mdc-outlined-button {
+  --mdc-outlined-button-outline-color: transparent;
+  --mdc-outlined-button-label-text-color: var(--text-primary);
+  --mdc-text-button-label-text-color: var(--text-primary);
+  border: none;
+  color: var(--text-primary);
+}
+
 app-product-form .switches-group mat-slide-toggle .mdc-form-field {
   color: var(--text-primary);
   font-weight: 500;
