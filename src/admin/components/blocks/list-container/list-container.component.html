@@ -2,7 +2,6 @@
   <div class="list__header">
     <div class="list__header-left">
       <ng-content select="[list-header]"></ng-content>
-      <h1 class="list__title" *ngIf="!title && !false"></h1>
       <h1 class="list__title" *ngIf="title">{{ title }}</h1>
     </div>
     <div class="list__kpis">
