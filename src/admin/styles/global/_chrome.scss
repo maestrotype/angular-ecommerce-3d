@@ -96,6 +96,11 @@
 .mat-drawer-content {
   background-color: var(--surface-page);
   color: var(--text-primary);
+  /* Keep content inside remaining space when side sidenav is open */
+  width: auto;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 // List wrapper baseline (nav lists stay transparent under glass)

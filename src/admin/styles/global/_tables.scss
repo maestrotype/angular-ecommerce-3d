@@ -14,6 +14,9 @@
   border-radius: var(--table-radius);
   background: var(--table-shell-bg);
   box-shadow: none;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   overflow: hidden;
 
   &.admin-table--compact {
@@ -37,7 +40,10 @@
 }
 
 .admin-table-wrapper {
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  min-width: 0;
   background: transparent;
   --mat-table-background-color: transparent;
 

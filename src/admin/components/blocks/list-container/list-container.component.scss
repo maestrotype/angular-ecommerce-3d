@@ -1,6 +1,16 @@
 app-list-container {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+
   .list {
     padding: var(--space-6);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
     background-color: var(--admin-list-bg, var(--surface-elevated));
     min-height: calc(100vh - var(--admin-toolbar-height));
     color: var(--admin-list-color, var(--text-primary));
@@ -9,6 +19,7 @@ app-list-container {
     border: var(--admin-list-border);
     backdrop-filter: var(--admin-list-backdrop-filter);
     -webkit-backdrop-filter: var(--admin-list-backdrop-filter);
+    overflow-x: clip;
   }
 
   .list__header {
