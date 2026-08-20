@@ -10,25 +10,39 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0px 24px 0 24px;
+  padding: 0 24px;
   background: transparent;
-  height: 100px;
+  min-height: 88px;
+  gap: var(--space-4);
 
   h1 {
-    color: var(--text-secondary);
+    color: var(--text-primary);
     margin: 0;
     font-size: 2rem;
     font-weight: 600;
   }
-  
+
   .back-button {
-    background-color: transparent;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: color-mix(in srgb, var(--surface-header, var(--surface-elevated)) 55%, transparent);
     color: var(--text-primary);
-    border: 1px solid var(--border-default);
-    box-shadow: none;
-    
-    &:hover { 
-      background-color: var(--surface-highlight); 
+    border: none;
+    border-radius: 12px;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 6px 18px rgba(0, 0, 0, 0.22);
+    backdrop-filter: blur(12px) saturate(140%);
+    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    padding: 8px 16px;
+
+    mat-icon {
+      color: var(--text-primary);
+    }
+
+    &:hover {
+      background: color-mix(in srgb, var(--surface-header, var(--surface-elevated)) 70%, transparent);
     }
   }
 }
@@ -42,9 +56,20 @@
 }
 
 .form-card {
-  background: transparent;
+  background: color-mix(in srgb, var(--surface-card, var(--surface-elevated)) 82%, transparent);
+  border: none;
   border-radius: 28px;
   margin-bottom: 24px;
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+
+  mat-card-title,
+  .mat-mdc-card-title {
+    color: var(--text-primary);
+  }
 }
 
 .form-content {
@@ -90,25 +115,36 @@ textarea {
   flex-direction: column;
   gap: 20px;
   padding: 24px;
-  background: var(--surface-secondary);
+  background: color-mix(in srgb, var(--surface-secondary) 78%, transparent);
   border-radius: 16px;
-  border: 1px solid var(--border-default);
+  border: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
   margin-bottom: 24px;
   width: 100%;
 
   mat-slide-toggle {
     width: 100%;
-    // slide-toggle label → overrides (B3)
   }
 }
 
 .localization-group {
   margin-bottom: 24px;
-  background: var(--surface-secondary);
+  background: color-mix(in srgb, var(--surface-secondary) 78%, transparent);
   border-radius: 20px;
   padding: 28px;
-  border: 1px solid var(--border-default);
+  border: none;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
   width: 100%;
+
+  .group-label {
+    display: block;
+    margin: 0 0 16px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+  }
 
   .group-header {
     display: flex;
@@ -116,9 +152,15 @@ textarea {
     gap: 12px;
     margin-bottom: 24px;
     color: var(--interactive-primary);
-    
+
     mat-icon { font-size: 24px; width: 24px; height: 24px; }
     h3 { margin: 0; font-size: 1.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+  }
+
+  .lang-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
 }
 
@@ -157,10 +199,10 @@ textarea {
   .section-label {
     display: block;
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--text-secondary);
+    color: var(--text-primary);
     margin-bottom: 12px;
   }
 }
@@ -170,21 +212,24 @@ textarea {
 }
 
 .drop-zone {
-  border: 2px dashed var(--border-default);
+  border: 2px dashed color-mix(in srgb, var(--border-default) 70%, transparent);
   border-radius: 16px;
-  background: var(--surface-secondary);
+  background: color-mix(in srgb, var(--surface-secondary) 75%, transparent);
   padding: 28px 20px;
   text-align: center;
   cursor: pointer;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
   min-height: 220px;
   display: flex;
   align-items: center;
   justify-content: center;
+  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
 
   &:hover {
     border-color: var(--interactive-primary);
-    background: var(--surface-highlight);
+    background: color-mix(in srgb, var(--surface-highlight) 80%, transparent);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
   }
 
   .upload-content {
@@ -218,6 +263,22 @@ textarea {
 
     .upload-button {
       pointer-events: none;
+      --mdc-outlined-button-label-text-color: var(--text-primary);
+      --mdc-outlined-button-outline-color: transparent;
+      background: color-mix(in srgb, var(--surface-header, var(--surface-elevated)) 55%, transparent);
+      color: var(--text-primary);
+      border: none;
+      border-radius: 12px;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        0 6px 16px rgba(0, 0, 0, 0.22);
+      backdrop-filter: blur(12px) saturate(140%);
+      -webkit-backdrop-filter: blur(12px) saturate(140%);
+
+      mat-icon,
+      .mdc-button__label {
+        color: var(--text-primary);
+      }
     }
   }
 }
@@ -245,8 +306,9 @@ textarea {
   aspect-ratio: 1;
   border-radius: 12px;
   overflow: hidden;
-  border: 1px solid var(--border-default);
+  border: none;
   background: var(--surface-secondary);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
 
   img {
     display: block;
@@ -261,11 +323,12 @@ textarea {
     display: flex;
     align-items: flex-start;
     justify-content: flex-end;
-    padding: 6px;
+    gap: 6px;
+    padding: 8px;
     background: linear-gradient(
       180deg,
-      rgba(0, 0, 0, 0.35) 0%,
-      transparent 40%
+      rgba(0, 0, 0, 0.45) 0%,
+      transparent 42%
     );
     opacity: 0;
     transition: opacity 0.2s ease;
@@ -276,22 +339,36 @@ textarea {
     opacity: 1;
   }
 
-  .remove-btn {
-    width: 32px;
-    height: 32px;
-    background: rgba(0, 0, 0, 0.55);
-    color: #fff;
+  .preview-action {
+    width: 34px;
+    height: 34px;
+    background: color-mix(in srgb, var(--surface-header, #1a1a1a) 70%, transparent);
+    color: var(--text-primary);
+    border: none;
     border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
+    backdrop-filter: blur(10px);
 
     mat-icon {
       font-size: 18px;
       width: 18px;
       height: 18px;
+      color: var(--text-primary);
     }
 
-    &:hover {
-      background: var(--color-error);
+    &--download:hover {
+      background: color-mix(in srgb, var(--interactive-primary) 35%, transparent);
     }
+
+    &--remove:hover {
+      background: color-mix(in srgb, var(--interactive-danger) 45%, transparent);
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .preview-container .preview-overlay {
+    opacity: 1;
   }
 }
 
