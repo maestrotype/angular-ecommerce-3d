@@ -99,6 +99,23 @@
   // ---------------------------------------------------------------------------
   // M2 — Page chrome (content area, headers, filters, CTAs)
   // ---------------------------------------------------------------------------
+  app-product-form {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  app-product-form .mat-mdc-card-header,
+  app-product-form .mat-mdc-card-content {
+    padding-inline: 0;
+  }
+
+  app-product-form .mat-mdc-card-header {
+    padding-top: var(--space-2);
+    padding-bottom: var(--space-2);
+  }
+
   .admin-main {
     padding: var(--admin-page-padding-y) var(--admin-page-padding-x);
   }
@@ -136,6 +153,29 @@
     padding-bottom: calc(var(--admin-page-padding-y) + var(--space-4));
     min-height: calc(100vh - var(--admin-shell-mobile-toolbar-height));
     border-radius: var(--admin-page-radius-mobile);
+  }
+
+  /* Glass mobile: drop list shell frame so cards can breathe edge-to-edge */
+  [data-theme='glass'] app-list-container .list,
+  [data-theme='dark-glass'] app-list-container .list,
+  body.is-admin[data-theme='glass'] app-list-container .list,
+  body.is-admin[data-theme='dark-glass'] app-list-container .list {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    padding-inline: var(--space-2);
+  }
+
+  app-category-list .categories-grid {
+    gap: var(--space-2);
+  }
+
+  app-category-list .category-card {
+    width: 100%;
+    max-width: 100%;
   }
 
   app-list-container .list__header,

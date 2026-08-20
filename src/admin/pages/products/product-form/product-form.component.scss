@@ -372,6 +372,187 @@ textarea {
   }
 }
 
+/* ===== Mobile / Fold: use full content width, flatten nested chrome ===== */
+@media (max-width: 1024px) {
+  :host {
+    display: block;
+    width: calc(100% + 2 * var(--admin-page-padding-x, 8px));
+    max-width: none;
+    margin-inline: calc(-1 * var(--admin-page-padding-x, 8px));
+    box-sizing: border-box;
+  }
+
+  .product-form-container {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+  }
+
+  .header-section {
+    flex-direction: column;
+    align-items: stretch;
+    min-height: 0;
+    padding: var(--space-3) var(--space-3) var(--space-2);
+    gap: var(--space-3);
+
+    h1 {
+      font-size: var(--text-xl);
+      line-height: 1.25;
+    }
+
+    .back-button {
+      width: 100%;
+      justify-content: center;
+      min-height: var(--admin-page-cta-min-height, 48px);
+    }
+  }
+
+  .product-form {
+    gap: var(--space-4);
+    padding: 0 var(--space-3) var(--space-4);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .form-card,
+  .model3d-card {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 0 var(--space-3);
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+    background-color: transparent;
+    background-image: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    --mdc-elevated-card-container-color: transparent;
+    --mdc-filled-card-container-color: transparent;
+    --mdc-outlined-card-container-color: transparent;
+  }
+
+  .form-content {
+    padding: 0;
+  }
+
+  .form-grid {
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+
+  .localization-group,
+  .switches-group {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: var(--space-3);
+    padding: var(--space-2) 0;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+    background-color: transparent;
+  }
+
+  .localization-group .group-label {
+    margin-bottom: var(--space-2);
+  }
+
+  .image-upload-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+
+  .drop-zone {
+    min-height: 160px;
+    padding: var(--space-4) var(--space-3);
+    border-radius: var(--radius-md);
+    box-shadow: none;
+  }
+
+  .preview-section {
+    gap: var(--space-3);
+  }
+
+  .image-preview-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .preview-container {
+    border: none;
+    box-shadow: none;
+    border-radius: var(--radius-md);
+  }
+
+  .model3d-upload-zone {
+    margin: var(--space-3) 0;
+    min-height: 360px;
+    border-radius: var(--radius-md);
+  }
+
+  .form-actions {
+    padding: var(--space-3) 0;
+    border-top: none;
+    flex-direction: column-reverse;
+
+    button {
+      width: 100%;
+      min-height: var(--admin-page-cta-min-height, 48px);
+    }
+  }
+}
+
+/* Glass / dark-glass mobile: strip nested frames entirely */
+:host-context([data-theme='glass']),
+:host-context([data-theme='dark-glass']) {
+  @media (max-width: 1024px) {
+    .form-card,
+    .model3d-card,
+    .localization-group,
+    .switches-group,
+    .drop-zone,
+    .preview-container {
+      border: none;
+      box-shadow: none;
+      outline: none;
+    }
+
+    .form-card,
+    .model3d-card {
+      background: transparent;
+      background-color: transparent;
+      background-image: none;
+      border-radius: 0;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+
+    .localization-group,
+    .switches-group {
+      background: transparent;
+      background-color: transparent;
+      padding-inline: 0;
+      padding-block: var(--space-2);
+      border-radius: 0;
+    }
+
+    .drop-zone {
+      background: color-mix(in srgb, var(--surface-secondary) 35%, transparent);
+      border: 1px dashed color-mix(in srgb, var(--border-default) 50%, transparent);
+    }
+
+    .header-section .back-button,
+    .drop-zone .upload-button {
+      box-shadow: none;
+      border: none;
+    }
+  }
+}
+
 // --- 3D EXPERIENCE CARD ---
 .model3d-card {
   margin-top: 24px;
