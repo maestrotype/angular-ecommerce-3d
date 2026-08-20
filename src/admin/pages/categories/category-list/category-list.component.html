@@ -8,7 +8,7 @@
   </div>
 
   <div list-filters class="filter-section">
-    <mat-form-field appearance="outline" class="search-field">
+    <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
       <mat-label>{{ 'SEARCH_CATEGORIES' | translate }}</mat-label>
       <input matInput (keyup)="applyFilter($event)" />
       <mat-icon matSuffix>search</mat-icon>

@@ -26,6 +26,10 @@ app-list-container {
     margin-bottom: var(--space-6);
   }
 
+  .list__filters {
+    margin-bottom: var(--space-4);
+  }
+
   .list__header-left {
     display: flex;
     align-items: flex-start;
