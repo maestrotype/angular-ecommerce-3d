@@ -19,6 +19,7 @@ export class OrderListComponent implements OnInit {
   dataSource = new MatTableDataSource<Order>();
   isLoading = false;
   error: string | null = null;
+  searchTerm = '';
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -57,13 +58,9 @@ export class OrderListComponent implements OnInit {
     });
   }
 
-  applyFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+  applySearch(value: string): void {
+    this.dataSource.filter = (value || '').trim().toLowerCase();
+    this.dataSource.paginator?.firstPage();
   }
 
   getStatusClass(status: string): string {

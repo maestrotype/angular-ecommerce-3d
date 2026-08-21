@@ -399,11 +399,55 @@
 
   .mobile-view {
     display: block;
+    width: 100%;
   }
 
   .orders-grid {
     grid-template-columns: 1fr;
     padding: 0;
+    width: 100%;
+    gap: var(--space-3);
+  }
+
+  .order-card {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: var(--space-4);
+    transform: none;
+
+    &:hover {
+      transform: none;
+    }
+
+    .card-header {
+      gap: var(--space-3);
+      margin-bottom: var(--space-3);
+      align-items: center;
+      flex-wrap: nowrap;
+
+      .order-id {
+        flex: 0 0 auto;
+        min-width: 0;
+        padding: var(--space-1) var(--space-2);
+        margin: 0;
+        line-height: 1.3;
+      }
+
+      .status-select {
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: 180px;
+        margin: 0 0 0 auto;
+      }
+    }
+
+    .card-content {
+      .customer-info,
+      .items-info {
+        margin-bottom: var(--space-3);
+      }
+    }
   }
 
   .loading-container,
@@ -425,6 +469,16 @@
 
   .admin-table-wrapper .desktop-view {
     display: block;
+  }
+}
+
+:host-context([data-theme='glass']),
+:host-context([data-theme='dark-glass']) {
+  @media (max-width: 768px) {
+    .order-card {
+      background: color-mix(in srgb, var(--surface-elevated) 55%, transparent);
+      box-shadow: none;
+    }
   }
 }
 

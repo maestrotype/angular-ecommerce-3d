@@ -294,6 +294,28 @@
     padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom, 0px));
   }
 
+  app-order-list .filter-section,
+  app-order-list .orders-grid,
+  app-order-list .order-card,
+  app-order-list app-search-bar {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  app-order-list .filter-section {
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+  }
+
+  app-order-list .filter-section .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
+
+  app-order-list .mobile-view {
+    padding-bottom: var(--space-2);
+  }
+
   app-list-container .list__header,
   app-list-container .list__header-left,
   .page-header,
@@ -496,6 +518,101 @@
   // ---------------------------------------------------------------------------
   // M5 — Tables → mobile card lists
   // ---------------------------------------------------------------------------
+  app-list-container .list__content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+  }
+
+  app-list-container .list__content > .mobile-view {
+    order: 1;
+    width: 100%;
+  }
+
+  app-list-container .list__content > app-admin-table {
+    order: 2;
+    width: 100%;
+  }
+
+  .admin-table-container,
+  .admin-table-wrapper {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow: visible;
+  }
+
+  [data-theme='glass'] .admin-table-container,
+  [data-theme='dark-glass'] .admin-table-container,
+  body.is-admin[data-theme='glass'] .admin-table-container,
+  body.is-admin[data-theme='dark-glass'] .admin-table-container {
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: transparent;
+    border-radius: 0;
+  }
+
+  body.is-admin .mat-mdc-paginator {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: var(--space-3) 0 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  body.is-admin .mat-mdc-paginator-outer-container,
+  body.is-admin .mat-mdc-paginator-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    width: 100%;
+    min-height: var(--admin-shell-touch-target);
+    padding: var(--space-3) 0;
+    box-sizing: border-box;
+  }
+
+  body.is-admin .mat-mdc-paginator-page-size {
+    align-items: center;
+    margin: 0;
+  }
+
+  body.is-admin .mat-mdc-paginator-page-size-label {
+    display: none;
+  }
+
+  body.is-admin .mat-mdc-paginator-page-size-select {
+    margin: 0;
+  }
+
+  body.is-admin .mat-mdc-paginator-range-label {
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  body.is-admin .mat-mdc-paginator-range-actions {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-1);
+  }
+
+  body.is-admin .mat-mdc-paginator .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
+
+  body.is-admin .mat-mdc-paginator .mat-mdc-text-field-wrapper {
+    padding-top: 0;
+  }
+
   .desktop-view,
   app-admin-table.desktop-view,
   .admin-table-wrapper .desktop-view,

@@ -2118,6 +2118,38 @@ app-category-list .action-button .mat-mdc-button-touch-target {
     font-size: 16px;
     margin: 0 16px;
   }
+
+  body.is-admin .mat-mdc-paginator,
+  [data-theme='glass'] .mat-mdc-paginator,
+  [data-theme='dark-glass'] .mat-mdc-paginator {
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    --mat-paginator-container-background-color: transparent;
+  }
+
+  body.is-admin .mat-mdc-paginator-page-size-label {
+    display: none;
+  }
+
+  body.is-admin .mat-mdc-paginator-container {
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    min-height: var(--admin-shell-touch-target, 44px);
+    padding: var(--space-3) 0;
+    gap: var(--space-2);
+    box-sizing: border-box;
+  }
+
+  body.is-admin .mat-mdc-paginator-range-label {
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  app-order-list .order-card .status-select .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
 }
 
 /* —— Fold compact column widths —— */
