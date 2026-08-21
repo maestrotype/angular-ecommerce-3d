@@ -21,6 +21,11 @@ html[data-theme='dark'] body.is-admin {
   --surface-overlay-light: rgba(255, 255, 255, 0.06);
   --surface-highlight: rgba(255, 255, 255, 0.04);
   --surface-header: #1c1c21;
+  --surface-chrome: var(--surface-header);
+  --surface-chrome-gradient: var(--surface-header);
+  --chrome-blur: none;
+  --chrome-border: 1px solid var(--border-default);
+  --chrome-shadow: none;
 
   --text-primary: #fafafa;
   --text-secondary: #a1a1aa;

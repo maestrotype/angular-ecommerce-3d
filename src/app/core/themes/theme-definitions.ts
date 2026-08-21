@@ -35,7 +35,7 @@ export const lightTheme: ThemeDefinition = {
 export const darkTheme: ThemeDefinition = {
   id: 'dark',
   name: 'Dark',
-  description: 'Slate dark mode — semantic overrides in _dark.scss',
+  description: 'Unified slate dark — one hue, chrome ≡ page, top-lit cards',
   areas: ['frontend', 'admin'],
   scssSource: 'src/styles/themes/_dark.scss',
   dimensions: ['appearance', 'elevation', 'motion', 'effects'],
