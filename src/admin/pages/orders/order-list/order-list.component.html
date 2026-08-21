@@ -10,11 +10,14 @@
   </div>
 
   <div list-filters class="filter-section">
-    <mat-form-field appearance="outline" class="search-field">
-      <mat-label>{{ 'SEARCH_ORDERS' | translate}}</mat-label>
-      <input matInput (keyup)="applyFilter($event)" />
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
+    <app-search-bar
+      [label]="'SEARCH_ORDERS' | translate"
+      [placeholder]="'SEARCH_ORDERS' | translate"
+      [maxWidth]="'100%'"
+      [prefixIcon]="'search'"
+      [(searchTerm)]="searchTerm"
+      (searchTermChange)="applySearch($event)">
+    </app-search-bar>
   </div>
 
   <app-admin-table [loading]="isLoading" [dataSource]="dataSource" [displayedColumns]="displayedColumns">
@@ -98,9 +101,9 @@
       <div *ngFor="let order of dataSource.data" class="admin-mobile-card order-card">
         <div class="card-header">
           <div class="order-id">#{{ order.id }}</div>
-          <mat-form-field appearance="outline" class="status-select">
-            <mat-select 
-              [value]="order.status" 
+          <mat-form-field appearance="outline" class="status-select" subscriptSizing="dynamic">
+            <mat-select
+              [value]="order.status"
               (selectionChange)="updateOrderStatus(order, $event.value)"
               [class]="getStatusClass(order.status)">
               <mat-option value="pending">{{ 'PENDING' | translate}}</mat-option>
