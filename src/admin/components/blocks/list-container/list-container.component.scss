@@ -45,9 +45,9 @@ app-list-container {
       color: var(--admin-list-title-color);
       font-size: var(--text-2xl);
       font-weight: var(--font-bold);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+      white-space: normal;
     }
   }
 
@@ -56,14 +56,17 @@ app-list-container {
     color: var(--admin-list-title-color);
     font-size: var(--text-2xl);
     font-weight: var(--font-bold);
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+    white-space: normal;
   }
 
   .header-section h1 {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     max-width: 100%;
     color: var(--admin-list-title-color);
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+    white-space: normal;
   }
 
   .list__kpis {

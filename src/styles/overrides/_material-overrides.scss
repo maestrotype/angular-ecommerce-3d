@@ -2118,6 +2118,26 @@ app-category-list .action-button .mat-mdc-button-touch-target {
     font-size: 16px;
     margin: 0 16px;
   }
+
+  app-order-list .mobile-paginator .mat-mdc-paginator-container {
+    padding: 12px;
+    min-height: 56px;
+  }
+
+  app-order-list .mobile-paginator .mat-mdc-paginator-page-size {
+    font-size: 16px;
+  }
+
+  app-order-list .mobile-paginator .mat-mdc-paginator-range-label {
+    font-size: 16px;
+    margin: 0 8px;
+  }
+
+  app-order-list .order-card .status-select .mat-mdc-form-field-infix {
+    min-height: 40px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
 }
 
 /* —— Fold compact column widths —— */

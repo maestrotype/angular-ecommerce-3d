@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 import { OrderService } from '../../../services/order.service';
 import { OrderDetailComponent } from '../order-detail/order-detail.component';
 import { Order } from '../../../models/order.model';
@@ -14,14 +15,18 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './order-list.component.html',
   styleUrls: ['./order-list.component.scss']
 })
-export class OrderListComponent implements OnInit {
+export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns: string[] = ['id', 'customer', 'items', 'total', 'status', 'date', 'actions'];
   dataSource = new MatTableDataSource<Order>();
   isLoading = false;
   error: string | null = null;
+  pagedOrders: Order[] = [];
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChildren(MatPaginator) paginators!: QueryList<MatPaginator>;
   @ViewChild(MatSort) sort!: MatSort;
+
+  private paginatorSub?: Subscription;
+  private pageSub?: Subscription;
 
   constructor(
     private orderService: OrderService,
@@ -35,8 +40,41 @@ export class OrderListComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.bindActivePaginator();
+    this.paginatorSub = this.paginators.changes.subscribe(() => this.bindActivePaginator());
+  }
+
+  ngOnDestroy(): void {
+    this.paginatorSub?.unsubscribe();
+    this.pageSub?.unsubscribe();
+  }
+
+  private bindActivePaginator(): void {
+    const paginators = this.paginators?.toArray() ?? [];
+    if (!paginators.length) {
+      return;
+    }
+
+    const isMobile = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
+    // Desktop table paginator is first; mobile-paginator is last when both exist.
+    const paginator = isMobile ? paginators[paginators.length - 1] : paginators[0];
+
+    this.dataSource.paginator = paginator;
+    this.pageSub?.unsubscribe();
+    this.pageSub = paginator.page.subscribe(() => this.refreshPagedOrders());
+    this.refreshPagedOrders();
+  }
+
+  private refreshPagedOrders(): void {
+    const filtered = this.dataSource.filteredData ?? this.dataSource.data ?? [];
+    const paginator = this.dataSource.paginator;
+    if (!paginator) {
+      this.pagedOrders = filtered;
+      return;
+    }
+    const start = paginator.pageIndex * paginator.pageSize;
+    this.pagedOrders = filtered.slice(start, start + paginator.pageSize);
   }
 
   loadOrders(): void {
@@ -47,9 +85,12 @@ export class OrderListComponent implements OnInit {
       next: (orders) => {
         this.dataSource.data = orders;
         this.isLoading = false;
+        queueMicrotask(() => {
+          this.bindActivePaginator();
+          this.refreshPagedOrders();
+        });
       },
-      error: (error) => {
-        
+      error: () => {
         this.error = this.translate.instant('ERROR_LOADING_ORDERS_MSG');
         this.snackBar.open(this.translate.instant('ERROR_LOADING_ORDERS_MSG'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
         this.isLoading = false;
@@ -64,6 +105,7 @@ export class OrderListComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+    this.refreshPagedOrders();
   }
 
   getStatusClass(status: string): string {

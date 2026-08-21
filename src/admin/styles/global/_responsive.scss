@@ -231,6 +231,48 @@
     white-space: normal;
   }
 
+  /* Order list: compact mobile cards + usable paginator */
+  app-order-list .header-section {
+    gap: var(--space-2);
+    margin-bottom: 0;
+  }
+
+  app-order-list .orders-grid {
+    gap: var(--space-2);
+  }
+
+  app-order-list .filter-section .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
+
+  app-order-list .filter-section .mat-mdc-form-field {
+    margin-bottom: 0;
+  }
+
+  app-order-list .mobile-view {
+    padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom, 0px));
+  }
+
+  app-order-list .mobile-paginator,
+  app-order-list .mobile-paginator .mat-mdc-paginator-container {
+    flex-wrap: wrap;
+    justify-content: center;
+    min-height: 0;
+    padding: var(--space-3);
+    gap: var(--space-2);
+    box-sizing: border-box;
+  }
+
+  app-order-list .mobile-paginator .mat-mdc-paginator-range-label,
+  app-order-list .mobile-paginator .mat-mdc-paginator-page-size-label {
+    margin: 0;
+    white-space: normal;
+  }
+
+  app-order-list .mobile-paginator .mat-mdc-paginator-page-size {
+    margin: 0;
+  }
+
   app-list-container .list__header,
   app-list-container .list__header-left,
   .page-header,

@@ -10,15 +10,18 @@
   </div>
 
   <div list-filters class="filter-section">
-    <mat-form-field appearance="outline" class="search-field">
+    <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
       <mat-label>{{ 'SEARCH_ORDERS' | translate}}</mat-label>
       <input matInput (keyup)="applyFilter($event)" />
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
   </div>
 
-  <app-admin-table [loading]="isLoading" [dataSource]="dataSource" [displayedColumns]="displayedColumns">
-    <div class="desktop-view">
+  <app-admin-table
+    class="desktop-view"
+    [loading]="isLoading"
+    [dataSource]="dataSource"
+    [displayedColumns]="displayedColumns">
       <table mat-table [dataSource]="dataSource" matSort class="order-table">
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'ORDER_NUMBER' | translate}}</th>
@@ -90,17 +93,19 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
-    </div>
   </app-admin-table>
 
   <div class="mobile-view" *ngIf="!isLoading">
     <div class="orders-grid">
-      <div *ngFor="let order of dataSource.data" class="admin-mobile-card order-card">
-        <div class="card-header">
-          <div class="order-id">#{{ order.id }}</div>
-          <mat-form-field appearance="outline" class="status-select">
-            <mat-select 
-              [value]="order.status" 
+      <article *ngFor="let order of pagedOrders" class="order-card">
+        <div class="order-card__top">
+          <div class="order-card__identity">
+            <span class="order-id">#{{ order.id }}</span>
+            <h3 class="customer-name">{{ order.customerName }}</h3>
+          </div>
+          <mat-form-field appearance="outline" class="status-select" subscriptSizing="dynamic">
+            <mat-select
+              [value]="order.status"
               (selectionChange)="updateOrderStatus(order, $event.value)"
               [class]="getStatusClass(order.status)">
               <mat-option value="pending">{{ 'PENDING' | translate}}</mat-option>
@@ -113,43 +118,43 @@
           </mat-form-field>
         </div>
 
-        <div class="card-content">
-          <div class="customer-info">
-            <h3>{{ order.customerName }}</h3>
-            <div class="customer-email">
-              <mat-icon>email</mat-icon>
-              <span>{{ order.customerEmail }}</span>
-            </div>
-            <div class="customer-phone" *ngIf="order.customerPhone">
-              <mat-icon>phone</mat-icon>
-              <span>{{ order.customerPhone }}</span>
-            </div>
+        <div class="order-card__meta">
+          <div class="meta-row" *ngIf="order.customerEmail">
+            <mat-icon>email</mat-icon>
+            <span>{{ order.customerEmail }}</span>
           </div>
-          
-          <div class="items-info">
-            <h4>{{ 'ITEMS' | translate}}</h4>
-            <p>{{ getItemsDisplay(order.items) }}</p>
+          <div class="meta-row" *ngIf="order.customerPhone">
+            <mat-icon>phone</mat-icon>
+            <span>{{ order.customerPhone }}</span>
           </div>
-          
-          <div class="order-total">
-            <span class="total-label">{{ 'TOTAL' | translate}}:</span>
-            <span class="total-amount">${{ order.totalAmount | number:'1.2-2' }}</span>
-          </div>
-          
-          <div class="order-date">
-            <mat-icon>schedule</mat-icon>
-            <span>{{ order.createdAt | date:'short' }}</span>
+          <div class="meta-row">
+            <mat-icon>inventory_2</mat-icon>
+            <span>{{ getItemsDisplay(order.items) }}</span>
           </div>
         </div>
 
-        <div class="card-actions">
-          <button mat-icon-button color="primary" (click)="viewOrderDetails(order)" 
-                  class="action-button">
+        <div class="order-card__footer">
+          <div class="order-card__totals">
+            <span class="total-amount">${{ order.totalAmount | number:'1.2-2' }}</span>
+            <span class="order-date">{{ order.createdAt | date:'short' }}</span>
+          </div>
+          <button
+            mat-icon-button
+            type="button"
+            (click)="viewOrderDetails(order)"
+            class="action-button"
+            [attr.aria-label]="'ORDER_DETAILS' | translate">
             <mat-icon>visibility</mat-icon>
           </button>
         </div>
-      </div>
+      </article>
     </div>
+
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 20]"
+      showFirstLastButtons
+      class="mobile-paginator">
+    </mat-paginator>
   </div>
 
   <div *ngIf="isLoading" class="loading-container">
