@@ -22,6 +22,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   @Input() label = 'Search';
   @Input() placeholder = 'Search...';
   @Input() searchTerm = '';
+  @Input() prefixIcon: string | null = null;
   @Output() onSearch = new EventEmitter<void>();
   @Output() onClear = new EventEmitter<void>();
   @Output() searchTermChange = new EventEmitter<string>();
@@ -49,7 +50,7 @@ export class SearchBarComponent implements OnInit, OnDestroy {
   }
 
   get showFloatingLabel(): boolean {
-    return true;
+    return !this.isMobile;
   }
 
   get inputPlaceholder(): string {

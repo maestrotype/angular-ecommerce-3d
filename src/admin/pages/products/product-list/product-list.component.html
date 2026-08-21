@@ -8,28 +8,31 @@
   </div>
 
   <div list-filters class="filter-section">
-    <mat-form-field appearance="outline" class="category-filter">
-      <mat-label>{{ 'CATEGORY' | translate }}</mat-label>
-      <mat-select (selectionChange)="filterByCategory($event)">
+    <div class="filter-toolbar">
+      <app-search-bar
+        [label]="'SEARCH_PRODUCTS' | translate"
+        [placeholder]="'SEARCH_PLACEHOLDER' | translate"
+        [maxWidth]="'100%'"
+        [prefixIcon]="'search'"
+        [(searchTerm)]="searchTerm"
+        (onSearch)="onSearch()"
+        (onClear)="clearSearch()">
+      </app-search-bar>
+      <button mat-icon-button type="button" class="filter-toolbar__add" (click)="addProduct()"
+        [attr.aria-label]="'ADD_PRODUCT' | translate">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+
+    <mat-form-field appearance="outline" class="category-filter" subscriptSizing="dynamic">
+      <mat-icon matPrefix>tune</mat-icon>
+      <mat-select [placeholder]="'CATEGORY' | translate" (selectionChange)="filterByCategory($event)">
         <mat-option value="">{{ 'CATEGORIES_ALL' | translate }}</mat-option>
         <mat-option *ngFor="let cat of categories" [value]="getCategoryValue(cat)">
           {{ cat.name | localized }}
         </mat-option>
       </mat-select>
     </mat-form-field>
-
-    <button mat-raised-button color="primary" (click)="addProduct()" class="add-button add-button-mobile">
-      <mat-icon>add</mat-icon>
-      <span class="button-text">{{ 'ADD_PRODUCT' | translate }}</span>
-    </button>
-
-    <app-search-bar
-      [label]="'SEARCH_PRODUCTS' | translate"
-      [placeholder]="'SEARCH_PLACEHOLDER' | translate"
-      [(searchTerm)]="searchTerm"
-      (onSearch)="onSearch()"
-      (onClear)="clearSearch()">
-    </app-search-bar>
   </div>
 
   <app-admin-table [loading]="isLoading" [dataSource]="dataSource" [displayedColumns]="displayedColumns"
@@ -106,56 +109,43 @@
     </table>
   </app-admin-table>
 
-  <!-- Mobile Card View -->
+  <!-- Mobile list rows — not .product-card (storefront G4 owns that class) -->
   <div class="mobile-view" *ngIf="!isLoading">
     <div class="products-grid">
-      <div *ngFor="let product of dataSource.data" class="product-card">
-        <!-- Left: Image -->
-        <div class="card-image-container">
+      <article *ngFor="let product of dataSource.data" class="admin-product-row">
+        <div class="admin-product-row__thumb">
           <img *ngIf="hasValidImage(product)" [src]="getImageUrl(product)" [alt]="product.name | localized"
-            class="product-image" (error)="onImageError($event, product)" />
-          <div *ngIf="!hasValidImage(product)" class="no-image-placeholder">
+            (error)="onImageError($event, product)" />
+          <div *ngIf="!hasValidImage(product)" class="admin-product-row__placeholder">
             <mat-icon>image</mat-icon>
-            <span>{{ 'NO_IMAGE' | translate}}</span>
           </div>
         </div>
 
-        <!-- Right: All content -->
-        <div class="card-main">
-          <div class="card-header">
-            <div class="product-id">#{{ product.id }}</div>
-          </div>
-
-          <div class="card-content">
-            <div class="product-name">
-              <h3>{{ product.name | localized }}</h3>
-            </div>
-
-            <div class="product-category">
-              <span class="category-chip">{{ getCategoryNameBySlug(product.category) | localized }}</span>
-            </div>
-
-            <div class="product-price">
-              <span class="price">${{ product.price | number : "1.2-2" }}</span>
-            </div>
-
-            <div class="product-stock">
-              <span [class]="getStockClass(product.stock)">
-                {{ 'STOCK' | translate}}: {{ product.stock }}
-              </span>
-            </div>
-          </div>
-
-          <div class="card-actions">
-            <button mat-icon-button type="button" (click)="editProduct(product)" class="action-button action-button--edit">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button type="button" (click)="deleteProduct(product)" class="action-button action-button--delete">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
+        <div class="admin-product-row__body">
+          <h3 class="admin-product-row__title">{{ product.name | localized }}</h3>
+          <p class="admin-product-row__meta">
+            <span class="admin-product-row__id">#{{ product.id }}</span>
+            <span class="admin-product-row__chip">{{ getCategoryNameBySlug(product.category) | localized }}</span>
+          </p>
+          <p class="admin-product-row__stats">
+            <span class="admin-product-row__price">${{ product.price | number : "1.2-2" }}</span>
+            <span class="admin-product-row__stock" [class]="getStockClass(product.stock)">
+              {{ 'STOCK' | translate }}: {{ product.stock }}
+            </span>
+          </p>
         </div>
-      </div>
+
+        <div class="admin-product-row__actions">
+          <button mat-icon-button type="button" (click)="editProduct(product)" class="action-button action-button--edit"
+            [attr.aria-label]="'EDIT' | translate">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button type="button" (click)="deleteProduct(product)" class="action-button action-button--delete"
+            [attr.aria-label]="'DELETE' | translate">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </article>
     </div>
   </div>
 
