@@ -216,19 +216,25 @@
     padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom, 0px));
   }
 
-  app-category-list .mobile-paginator,
-  app-category-list .mobile-paginator .mat-mdc-paginator-container {
-    flex-wrap: wrap;
-    justify-content: center;
-    min-height: 0;
-    padding: var(--space-2) 0;
-    gap: var(--space-1);
+  app-order-list .header-section {
+    gap: var(--space-2);
+    margin-bottom: 0;
   }
 
-  app-category-list .mobile-paginator .mat-mdc-paginator-range-label,
-  app-category-list .mobile-paginator .mat-mdc-paginator-page-size-label {
-    margin: 0;
-    white-space: normal;
+  app-order-list .orders-grid {
+    gap: var(--space-2);
+  }
+
+  app-order-list .filter-section .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
+
+  app-order-list .filter-section .mat-mdc-form-field {
+    margin-bottom: 0;
+  }
+
+  app-order-list .mobile-view {
+    padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom, 0px));
   }
 
   app-list-container .list__header,
@@ -444,18 +450,57 @@
     display: block;
   }
 
+  app-list-container .list__content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  app-list-container .list__content > app-admin-table {
+    order: 2;
+  }
+
+  app-list-container .list__content > .mobile-view {
+    order: 1;
+  }
+
   .list-table-header {
     display: none;
   }
 
   .payments-table-wrapper {
     margin: 0;
-    padding: var(--space-4);
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
   }
 
   .orders-grid,
-  .admin-mobile-cards {
+  .admin-mobile-cards,
+  .pages-grid {
     padding: 0;
+    gap: var(--admin-mobile-card-compact-gap, var(--space-2));
+  }
+
+  .admin-mobile-card {
+    padding: var(--space-3);
+    gap: var(--space-2);
+  }
+
+  [data-theme='glass'] .admin-mobile-card,
+  [data-theme='dark-glass'] .admin-mobile-card,
+  body.is-admin[data-theme='glass'] .admin-mobile-card,
+  body.is-admin[data-theme='dark-glass'] .admin-mobile-card {
+    border: none;
+    box-shadow: none;
+    background: color-mix(in srgb, var(--surface-elevated) 55%, transparent);
+  }
+
+  app-admin-table + .mobile-view,
+  .mat-mdc-paginator + .mobile-view,
+  .mobile-view + .mat-mdc-paginator {
+    margin-top: var(--space-3);
   }
 
   // ---------------------------------------------------------------------------

@@ -3,6 +3,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TranslateService } from '@ngx-translate/core';
 import { MessageService } from '../../../services/message.service';
 import { Message, ReplyMessageDto } from '../../../models/message.model';
 
@@ -21,6 +22,7 @@ export class MessageDetailComponent implements OnInit {
     private fb: FormBuilder,
     private messageService: MessageService,
     private snackBar: MatSnackBar,
+    private translate: TranslateService,
     public dialogRef: MatDialogRef<MessageDetailComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { message: Message }
   ) {
@@ -65,14 +67,14 @@ export class MessageDetailComponent implements OnInit {
       this.messageService.replyToMessage(this.message.id, replyData).subscribe({
         next: (updatedMessage) => {
           this.message = updatedMessage;
-          this.snackBar.open('Reply sent successfully', 'Close', { duration: 3000 });
+          this.snackBar.open(this.translate.instant('REPLY_SENT'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
           this.showReplyForm = false;
           this.replyForm.reset();
           this.loading = false;
         },
         error: (error) => {
           
-          this.snackBar.open('Error sending reply', 'Close', { duration: 3000 });
+          this.snackBar.open(this.translate.instant('ERROR_SENDING_REPLY'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
           this.loading = false;
         }
       });

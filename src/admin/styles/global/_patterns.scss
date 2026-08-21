@@ -197,7 +197,8 @@ app-list-container {
 
 .admin-card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--admin-card-grid-min)), 1fr));
+  /* auto-fit collapses empty tracks so cards expand instead of staying ~160px wide */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--admin-card-grid-min)), 1fr));
   gap: var(--admin-card-grid-gap);
   width: 100%;
 }

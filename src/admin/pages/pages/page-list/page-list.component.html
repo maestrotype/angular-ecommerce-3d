@@ -8,7 +8,7 @@
   </div>
 
   <div list-filters class="filter-section">
-    <mat-form-field appearance="outline" class="search-field">
+    <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
       <mat-label>{{ 'SEARCH_PAGES' | translate }}</mat-label>
       <input matInput (keyup)="applyFilter($event)" />
       <mat-icon matSuffix>search</mat-icon>
@@ -16,6 +16,7 @@
   </div>
 
   <app-admin-table [loading]="isLoading" [dataSource]="dataSource" [displayedColumns]="displayedColumns">
+    <div class="desktop-view">
     <table mat-table [dataSource]="dataSource" matSort class="pages-table">
       <ng-container matColumnDef="slug">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'PAGE_SLUG' | translate }}</th>
@@ -67,6 +68,38 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
+    </div>
   </app-admin-table>
+
+  <div class="mobile-view" *ngIf="!isLoading">
+    <div class="pages-grid">
+      <article class="page-card" *ngFor="let page of pagedPages">
+        <div class="page-card__main">
+          <code class="page-card__slug">/{{ page.slug }}</code>
+          <h3 class="page-card__title">{{ page.title | localized }}</h3>
+          <p class="page-card__meta">{{ getTemplateLabel(page.template) }}</p>
+        </div>
+        <div class="page-card__side">
+          <span class="status-badge" [class.published]="page.status === 'published'">
+            {{ getStatusLabel(page.status) }}
+          </span>
+          <div class="page-card__actions">
+            <button mat-icon-button type="button" (click)="editPage(page)" [attr.aria-label]="'EDIT' | translate">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button type="button" (click)="previewPage(page)" [attr.aria-label]="'PREVIEW' | translate" *ngIf="page.status === 'published'">
+              <mat-icon>open_in_new</mat-icon>
+            </button>
+            <button mat-icon-button type="button" (click)="openSections(page)" [attr.aria-label]="'EDIT_SECTIONS' | translate" *ngIf="isSectionBasedPage(page)">
+              <mat-icon>view_module</mat-icon>
+            </button>
+            <button mat-icon-button type="button" color="warn" (click)="deletePage(page)" [attr.aria-label]="'DELETE' | translate">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
   
 </app-list-container>

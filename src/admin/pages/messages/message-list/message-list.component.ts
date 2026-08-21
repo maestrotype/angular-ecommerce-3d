@@ -93,6 +93,9 @@ export class MessageListComponent implements OnInit {
   viewMessage(message: Message): void {
     const dialogRef = this.dialog.open(MessageDetailComponent, {
       width: '800px',
+      maxWidth: '95vw',
+      autoFocus: false,
+      panelClass: 'message-detail-dialog',
       data: { message }
     });
 
