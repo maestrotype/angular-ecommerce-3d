@@ -251,3 +251,61 @@
     }
   }
 }
+
+@media (max-width: 768px) {
+  [data-theme='glass'] .message-detail-container,
+  [data-theme='dark-glass'] .message-detail-container,
+  [data-theme='glass'] .order-detail-container,
+  [data-theme='dark-glass'] .order-detail-container {
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+
+    .header {
+      background: transparent;
+      padding: 0 0 var(--space-3);
+      margin: 0;
+      border: none;
+      border-radius: 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .message-info,
+    .order-info,
+    .customer-info,
+    .order-items,
+    .order-summary {
+      padding: 0;
+      margin-bottom: var(--space-4);
+      background: transparent;
+      border: none;
+      border-radius: 0;
+    }
+
+    .info-row {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 2px;
+
+      strong {
+        min-width: 0;
+      }
+    }
+
+    .actions {
+      flex-direction: column-reverse;
+      align-items: stretch;
+      background: transparent;
+      margin: var(--space-3) 0 0;
+      padding: var(--space-3) 0 0;
+      border: none;
+      border-radius: 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+
+      button {
+        width: 100%;
+        min-height: var(--admin-page-cta-min-height, 48px);
+      }
+    }
+  }
+}

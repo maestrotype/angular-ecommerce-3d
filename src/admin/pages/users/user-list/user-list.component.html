@@ -108,7 +108,7 @@
 
   <div class="mobile-view" *ngIf="!isLoading && !error">
     <div class="admin-mobile-cards">
-      <article class="admin-mobile-card" *ngFor="let user of dataSource.data">
+      <article class="admin-mobile-card" *ngFor="let user of pagedUsers">
         <div class="admin-mobile-card__header">
           <span class="admin-mobile-card__id">#{{ user.id }}</span>
           <mat-chip [color]="getStatusColor(user.status || 'active')" selected>

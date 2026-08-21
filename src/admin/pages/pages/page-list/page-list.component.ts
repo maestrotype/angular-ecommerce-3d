@@ -41,6 +41,16 @@ export class PageListComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
+  get pagedPages(): Page[] {
+    const data = this.dataSource.filteredData ?? this.dataSource.data ?? [];
+    const paginator = this.dataSource.paginator;
+    if (!paginator) {
+      return data;
+    }
+    const start = paginator.pageIndex * paginator.pageSize;
+    return data.slice(start, start + paginator.pageSize);
+  }
+
   loadPages(): void {
     this.isLoading = true;
     this.pageService.getPagesForAdmin().subscribe({
