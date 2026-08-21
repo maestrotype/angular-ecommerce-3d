@@ -16,18 +16,27 @@
   --product-grid-columns: 4;
   --product-grid-gap: var(--space-5);
   --card-image-zoom: 1;
-  --card-overlay-bg: linear-gradient(180deg, transparent 35%, var(--surface-overlay-full) 100%);
-  --card-surface: var(--color-slate-700);
-  --card-border: var(--color-slate-600);
+  /* One card language: top-lit slate gradient (shop cards) — reused on PDP */
+  --card-surface: linear-gradient(
+    165deg,
+    var(--color-slate-700) 0%,
+    var(--color-slate-800) 68%,
+    color-mix(in srgb, var(--color-slate-900) 55%, var(--color-slate-800)) 100%
+  );
+  --card-border: rgba(255, 255, 255, 0.08);
   --card-radius: var(--radius-lg);
-  --card-shadow: var(--shadow-sm);
-  --card-shadow-hover: var(--shadow-lg);
+  --card-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --card-shadow-hover:
+    0 16px 40px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
   --card-image-bg: var(--color-slate-800);
-  --card-info-bg: var(--color-slate-800);
-  --card-overlay-bg: rgba(15, 23, 42, 0.55);
+  --card-info-bg: transparent;
+  --card-overlay-bg: linear-gradient(180deg, transparent 40%, rgba(15, 23, 42, 0.55) 100%);
   --card-backdrop-filter: none;
   --card-star: rgba(148, 163, 184, 0.45);
-  --card-star-filled: #94a3b8;
+  --card-star-filled: var(--color-slate-400);
   --card-category-bg: rgba(255, 255, 255, 0.08);
   --card-category-border: rgba(255, 255, 255, 0.14);
   --card-category-color: var(--text-secondary);
@@ -35,7 +44,7 @@
   --card-cart-border: rgba(255, 255, 255, 0.22);
   --card-cart-color: var(--text-primary);
   --card-stock-bg: rgba(100, 116, 139, 0.22);
-  --card-stock-color: #94a3b8;
+  --card-stock-color: var(--color-slate-400);
   --card-stock-border: rgba(148, 163, 184, 0.35);
 
   /* ===== CATALOG PAGINATION (dark — inset track) ===== */
@@ -61,88 +70,89 @@
 
   /* Dark theme variables */
   --hero-bg-gradient: linear-gradient(135deg,
-  #1e293b 0%,
-  #334155 50%,
-  #475569 100%);
+    var(--color-slate-900) 0%,
+    var(--color-slate-800) 55%,
+    var(--color-slate-700) 100%);
 
   --hero-backdrop-filter: blur(20px);
-  --hero-text-color: #f8fafc;
-  --hero-accent-color: #60a5fa;
+  --hero-text-color: var(--color-slate-50);
+  --hero-accent-color: var(--color-brand-light);
 
   /* Global Text Colors */
 
   /* Special Offer section - Dark theme */
   --special-offer-bg: linear-gradient(135deg,
-  rgba(15, 23, 42, 0.95) 0%,
-  rgba(30, 41, 59, 0.9) 30%,
-  rgba(51, 65, 85, 0.85) 70%,
-  rgba(71, 85, 105, 0.9) 100%);
+    rgba(15, 23, 42, 0.95) 0%,
+    rgba(30, 41, 59, 0.9) 40%,
+    rgba(51, 65, 85, 0.88) 100%);
 
   --special-offer-backdrop-filter: blur(20px);
-  --special-offer-text: #f8fafc;
-  --special-offer-accent: #60a5fa;
-  --color-special-offer-button-text: #ffffff;
-  --color-special-offer-button-hover: #3b82f6;
+  --special-offer-text: var(--color-slate-50);
+  --special-offer-accent: var(--color-brand-light);
+  --color-special-offer-button-text: var(--color-white);
+  --color-special-offer-button-hover: var(--color-brand-base);
   --color-special-offer-button-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
   --special-offer-button-border: 1px solid transparent;
   --special-offer-button-blur: none;
 
-  /* Categories section - Dark theme (admin palette) - light grey icons */
-  --categories-bg: #1e293b;
-  --categories-text: #f8fafc;
-  --categories-card-bg: #334155;
-  --categories-card-hover: #475569;
-  --categories-card-border: #475569;
+  /* Categories — same canvas as the page, elevated cards */
+  --categories-bg: transparent;
+  --categories-text: var(--text-primary);
+  --categories-card-bg: var(--surface-secondary);
+  --categories-card-hover: var(--surface-highlight);
+  --categories-card-border: var(--border-default);
   --categories-icon-filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(80%) contrast(100%);
 
-  /* Footer section - Dark theme */
-  --footer-bg: rgba(15, 23, 42, 0.95);
-  --footer-backdrop-filter: blur(15px) saturate(180%);
-  --footer-text: #f8fafc;
-  --footer-link: #cbd5e1;
-  --footer-link-hover: #ffffff;
+  /* Footer ≡ header chrome */
+  --footer-bg: var(--surface-chrome-gradient, var(--color-slate-900));
+  --footer-backdrop-filter: var(--chrome-blur, blur(16px) saturate(108%));
+  --footer-text: var(--text-primary);
+  --footer-link: var(--text-secondary);
+  --footer-link-hover: var(--text-primary);
+  --footer-border: var(--chrome-border, 1px solid var(--border-subtle));
+  --footer-shadow: var(--chrome-shadow, none);
   --footer-text-rgb: 248, 250, 252;
 
-  /* About section - Dark theme (admin palette) */
-  --about-bg: #1e293b;
-  --about-text: #f8fafc;
-  --about-title: #ffffff;
-  --about-subtitle: #cbd5e1;
-  --about-button-bg: #ef4444;
-  --about-button-hover: #dc2626;
-  --auth-tab-text: #f8fafc;
-  --auth-tab-active: #cbd5e1;
-  --auth-tab-inactive: #64748b;
-  --auth-tab-hover: #cbd5e1;
+  /* About / brands / contacts — transparent canvas, shared elevated cards */
+  --about-bg: transparent;
+  --about-text: var(--text-primary);
+  --about-title: var(--text-primary);
+  --about-subtitle: var(--text-secondary);
+  --about-button-bg: var(--interactive-danger);
+  --about-button-hover: var(--color-error-dark, var(--color-red-500));
+  --auth-tab-text: var(--text-primary);
+  --auth-tab-active: var(--text-secondary);
+  --auth-tab-inactive: var(--text-muted);
+  --auth-tab-hover: var(--text-secondary);
 
-  /* Brands section - Dark theme (admin palette) - light grey text */
-  --brands-bg: #334155;
-  --brands-text: #cbd5e1;
+  --brands-bg: transparent;
+  --brands-text: var(--text-secondary);
   --brands-logo-opacity: 1;
   --brands-logo-hover-opacity: 1;
   --brands-logo-filter: brightness(0) invert(1);
   --brands-logo-hover-filter: brightness(0) invert(1);
 
-  /* Contacts section - Dark theme (admin palette) - same as categories cards */
-  --contacts-bg: #334155;
-  --contacts-text: #f8fafc;
-  --contacts-title: #ffffff;
-  --contacts-subtitle: #cbd5e1;
-  --contacts-card-bg: #374151;
-  --contacts-card-text: #f8fafc;
-  --contacts-input-bg: rgba(255, 255, 255, 0.35);
-  --contacts-input-text: #1e293b;
-  --contacts-button-bg: #60a5fa;
-  --contacts-button-hover: #3b82f6;
+  --contacts-bg: transparent;
+  --contacts-text: var(--text-primary);
+  --contacts-title: var(--text-primary);
+  --contacts-subtitle: var(--text-secondary);
+  --contacts-card-bg: var(--surface-elevated);
+  --contacts-card-text: var(--text-primary);
+  --contacts-input-bg: var(--surface-secondary);
+  --contacts-input-text: var(--text-primary);
+  --contacts-button-bg: var(--interactive-primary);
+  --contacts-button-hover: var(--interactive-primary-hover);
 
-  /* Header section - Dark theme (admin palette) - semi-transparent like contact form */
-  --header-bg: rgba(15, 23, 42, 0.8);
-  --header-backdrop-filter: blur(20px) saturate(180%);
-  --header-text: #f8fafc;
-  --header-link: #cbd5e1;
-  --header-link-hover: #ffffff;
-  --header-search-bg: rgba(255, 255, 255, 0.1);
-  --header-search-text: #f8fafc;
+  /* Header — same hue as the page; saturate kept low so blur does not punch navy */
+  --header-bg: var(--surface-chrome-gradient, var(--color-slate-900));
+  --header-backdrop-filter: var(--chrome-blur, blur(16px) saturate(108%));
+  --header-text: var(--text-primary);
+  --header-link: var(--text-secondary);
+  --header-link-hover: var(--text-primary);
+  --header-search-bg: rgba(255, 255, 255, 0.08);
+  --header-search-text: var(--text-primary);
+  --header-border: var(--chrome-border, 1px solid var(--border-subtle));
+  --header-shadow: var(--chrome-shadow, none);
 
   /* RGB Variables for transparencies (Dark Theme) */
   --header-bg-rgb: 15, 23, 42;
@@ -150,29 +160,32 @@
   --footer-bg-rgb: 15, 23, 42;
   --footer-text-rgb: 248, 250, 252;
 
-  /* Product Detail section - Dark theme */
-  --product-detail-bg: #0f172a;
-  --product-detail-card-bg: #1e293b;
-  --product-detail-card-border: 1px solid #334155;
-  --product-detail-main-view-bg: #1e293b;
-  --product-detail-main-view-border: 1px solid #334155;
-  --product-detail-thumb-bg: #1e293b;
+  /* Product Detail — inherit the surface ladder, do not invent a second room */
+  --product-detail-bg: var(--surface-page);
+  --product-detail-card-bg: var(--card-surface);
+  --product-detail-card-border: 1px solid var(--card-border);
+  --product-detail-main-view-bg: var(--card-surface);
+  --product-detail-main-view-border: 1px solid var(--card-border);
+  --product-detail-thumb-bg: var(--surface-secondary);
   --product-detail-thumb-border: 2px solid transparent;
-  --product-detail-thumb-selected-border: 2px solid #007bff;
+  --product-detail-thumb-selected-border: 2px solid var(--interactive-primary);
 
   /* PDP premium (G11) — dark */
-  --pdp-page-bg: var(--product-detail-bg);
-  --pdp-info-bg: var(--product-detail-card-bg);
+  --pdp-page-bg: var(--surface-page);
+  --pdp-info-bg: var(--card-surface);
   --pdp-info-border: var(--product-detail-card-border);
-  --pdp-gallery-main-bg: var(--product-detail-main-view-bg);
+  --pdp-gallery-main-bg: var(--card-surface);
   --pdp-gallery-main-border: var(--product-detail-main-view-border);
   --pdp-thumb-bg: var(--product-detail-thumb-bg);
-  --pdp-header-bg: var(--surface-secondary);
-  --pdp-gallery-main-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
-  --pdp-info-shadow: var(--shadow-xl);
+  --pdp-header-bg: var(--surface-chrome-gradient, var(--surface-secondary));
+  --pdp-header-border: var(--border-subtle);
+  --pdp-gallery-main-shadow: var(--card-shadow);
+  --pdp-info-shadow: var(--card-shadow);
   --pdp-cta-bg: var(--interactive-primary);
   --pdp-cta-color: var(--text-on-primary);
   --pdp-cta-hover-bg: var(--interactive-primary-hover);
+  --pdp-section-nav-bg: transparent;
+  --pdp-section-nav-border: var(--border-subtle);
 
   /* Checkout flow (G12) — dark */
   --checkout-page-bg: var(--surface-page);
@@ -190,147 +203,171 @@
   --micro-hover-scale: 1.015;
   --micro-press-scale: 0.99;
   --micro-focus-ring-color: rgba(96, 165, 250, 0.28);
-  --micro-focus-outline-color: #60a5fa;
+  --micro-focus-outline-color: var(--color-brand-light);
   --micro-spinner-track: var(--surface-tertiary);
   --micro-spinner-accent: var(--interactive-primary);
   --micro-spinner-duration: var(--motion-duration-normal);
 
-  --product-stock-color: #34d399;
-  --product-original-price-color: #94a3b8;
+  --product-stock-color: var(--color-emerald-500);
+  --product-original-price-color: var(--text-muted);
   --product-specs-bg: var(--surface-secondary);
   --product-specs-border: 1px solid var(--border-default);
   --product-specs-radius: var(--radius-md);
   --product-specs-padding: var(--spacing-md);
 
   /* Product Text Colors - Dark theme */
-  --product-title-color: #f8fafc;
-  --product-meta-color: #cbd5e1;
-  --product-price-color: #60a5fa;
-  --product-description-color: #e2e8f0;
-  --product-specs-label-color: #cbd5e1;
-  --product-specs-value-color: #f1f5f9;
+  --product-title-color: var(--text-primary);
+  --product-meta-color: var(--text-secondary);
+  --product-price-color: var(--text-primary);
+  --product-description-color: var(--color-slate-200);
+  --product-specs-label-color: var(--text-secondary);
+  --product-specs-value-color: var(--color-slate-100);
 
   /* Breadcrumb and Navigation - Dark theme */
-  --breadcrumb-color: #cbd5e1;
-  --breadcrumb-link-color: #cbd5e1;
-  --breadcrumb-link-hover-color: #60a5fa;
-  --breadcrumb-current-color: #f8fafc;
+  --breadcrumb-color: var(--text-secondary);
+  --breadcrumb-link-color: var(--text-secondary);
+  --breadcrumb-link-hover-color: var(--interactive-primary);
+  --breadcrumb-current-color: var(--text-primary);
 
-  /* Similar Products - Dark theme */
-  --similar-products-title-color: #f8fafc;
-  --similar-products-subtitle-color: #cbd5e1;
-  --similar-products-bg: #0f172a;
-  --similar-products-card-bg: #1e293b;
-  --similar-products-card-border: 1px solid #334155;
-  --similar-products-card-text: #f8fafc;
-  --similar-products-card-price: #60a5fa;
+  /* Similar Products / Bought Together — same canvas, same cards */
+  --similar-products-title-color: var(--text-primary);
+  --similar-products-subtitle-color: var(--text-secondary);
+  --similar-products-bg: transparent;
+  --similar-products-card-bg: var(--card-surface);
+  --similar-products-card-border: 1px solid var(--card-border);
+  --similar-products-card-text: var(--text-primary);
+  --similar-products-card-price: var(--text-primary);
 
-  /* Bought Together - Dark theme */
-  --bought-together-title-color: #f8fafc;
-  --bought-together-subtitle-color: #cbd5e1;
-  --bought-together-bg: #0f172a;
-  --bought-together-card-bg: #1e293b;
-  --bought-together-card-border: 1px solid #334155;
-  --bought-together-card-text: #f8fafc;
-  --bought-together-card-price: #60a5fa;
+  --bought-together-title-color: var(--text-primary);
+  --bought-together-subtitle-color: var(--text-secondary);
+  --bought-together-bg: transparent;
+  --bought-together-card-bg: var(--card-surface);
+  --bought-together-card-border: 1px solid var(--card-border);
+  --bought-together-card-text: var(--text-primary);
+  --bought-together-card-price: var(--text-primary);
 
   /* Product Stepper - Dark theme */
-  --product-stepper-bg: #334155;
-  --product-stepper-border: 1px solid #475569;
+  --product-stepper-bg: var(--surface-secondary);
+  --product-stepper-border: 1px solid var(--border-default);
   --product-stepper-radius: 10px;
-  --product-stepper-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --product-stepper-btn-bg: #475569;
-  --product-stepper-btn-hover: #64748b;
-  --product-stepper-btn-color: #f8fafc;
-  --product-stepper-value-color: #f8fafc;
+  --product-stepper-shadow: var(--shadow-sm);
+  --product-stepper-btn-bg: var(--surface-tertiary);
+  --product-stepper-btn-hover: var(--surface-highlight);
+  --product-stepper-btn-color: var(--text-primary);
+  --product-stepper-value-color: var(--text-primary);
 
   /* Glass Style Buttons - Dark theme */
   --glass-btn-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
   --glass-btn-border: 1px solid rgba(255, 255, 255, 0.2);
-  --glass-btn-color: #f8fafc;
+  --glass-btn-color: var(--text-primary);
   --glass-btn-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   --glass-btn-hover-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 100%);
   --glass-btn-hover-border: 1px solid rgba(255, 255, 255, 0.3);
   --glass-btn-hover-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 
   /* Product Tabs - Dark theme */
-  --product-tabs-bg: #1e293b;
-  --product-tabs-border: 1px solid #334155;
+  --product-tabs-bg: var(--surface-secondary);
+  --product-tabs-border: 1px solid var(--border-default);
   --product-tabs-radius: 12px;
-  --product-tabs-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-  --product-tabs-nav-bg: #334155;
-  --product-tabs-nav-border: 1px solid #475569;
-  --product-tabs-active-bg: #475569;
-  --product-tabs-active-color: #f8fafc;
-  --product-tabs-active-border: #60a5fa;
-  --product-tabs-hover-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-  --product-tabs-hover-color: #e2e8f0;
-  --product-tabs-text-color: #cbd5e1;
-  --product-tabs-content-color: #f1f5f9;
+  --product-tabs-shadow: var(--shadow-md);
+  --product-tabs-nav-bg: var(--surface-tertiary);
+  --product-tabs-nav-border: 1px solid var(--border-default);
+  --product-tabs-active-bg: var(--surface-highlight);
+  --product-tabs-active-color: var(--text-primary);
+  --product-tabs-active-border: var(--interactive-primary);
+  --product-tabs-hover-bg: rgba(255, 255, 255, 0.06);
+  --product-tabs-hover-color: var(--color-slate-200);
+  --product-tabs-text-color: var(--text-secondary);
+  --product-tabs-content-color: var(--color-slate-100);
 
   /* Delivery Options - Dark theme */
-  --delivery-option-bg: #334155;
-  --delivery-option-border: 1px solid #475569;
-  --delivery-option-text: #f8fafc;
-  --delivery-option-title: #ffffff;
-  --delivery-option-subtitle: #cbd5e1;
+  --delivery-option-bg: var(--surface-secondary);
+  --delivery-option-border: 1px solid var(--border-default);
+  --delivery-option-text: var(--text-primary);
+  --delivery-option-title: var(--text-primary);
+  --delivery-option-subtitle: var(--text-secondary);
 
-  /* Best Sellers section - Dark theme (admin palette) - richer gradient */
+  /* Best Sellers — same hue family, no near-black jump */
   --best-sellers-bg: radial-gradient(circle at 0% 0%,
-  rgba(96, 165, 250, 0.25) 0%,
-  transparent 55%),
-  linear-gradient(135deg,
-  #020617 0%,
-  #0b1120 35%,
-  #111827 70%,
-  #020617 100%);
-  --best-sellers-text: #e5e7eb;
-  --best-sellers-subtitle: #bfdbfe;
+    rgba(59, 130, 246, 0.12) 0%,
+    transparent 55%),
+    var(--color-slate-900);
+  --best-sellers-text: var(--color-slate-200);
+  --best-sellers-subtitle: var(--color-slate-400);
 
   /* Favorites section - Dark theme */
-  --favorites-text: #f8fafc;
-  --favorites-top-bar-bg: #334155;
-  --favorites-top-bar-text: #f8fafc;
-  --favorites-clear-btn-bg: #6c757d;
-  --favorites-clear-btn-text: #ffffff;
-  --favorites-clear-btn-hover-bg: #5a6268;
-  --favorites-product-name-color: #f8fafc;
-  --favorites-product-category-color: #60a5fa;
-  --favorites-product-price-color: #60a5fa;
+  --favorites-text: var(--text-primary);
+  --favorites-top-bar-bg: var(--surface-secondary);
+  --favorites-top-bar-text: var(--text-primary);
+  --favorites-clear-btn-bg: var(--surface-tertiary);
+  --favorites-clear-btn-text: var(--text-primary);
+  --favorites-clear-btn-hover-bg: var(--surface-highlight);
+  --favorites-product-name-color: var(--text-primary);
+  --favorites-product-category-color: var(--text-secondary);
+  --favorites-product-price-color: var(--text-primary);
   --favorites-add-to-cart-bg: rgba(255, 255, 255, 0.1);
-  --favorites-add-to-cart-text: #f8fafc;
+  --favorites-add-to-cart-text: var(--text-primary);
   --favorites-add-to-cart-hover-bg: rgba(255, 255, 255, 0.2);
 
-  /* Surface variables - Different for different elements */
-  --surface-hover: #3b82f6;
+  /* Surface hover — keep in-family, do not jump to brand blue */
+  --surface-hover: var(--surface-highlight);
 
   /* Button specific variables */
-  --button-primary-bg: #6366f1;
-  --button-primary-text: #ffffff;
-  --button-primary-border: #6366f1;
-  /* Text variables */
-  --text-tertiary: #94a3b8;
+  --button-primary-bg: var(--interactive-primary);
+  --button-primary-text: var(--text-on-primary);
+  --button-primary-border: var(--interactive-primary);
+  --text-tertiary: var(--color-slate-400);
 
-  /* Border variables */
-  --border-secondary: rgba(255, 255, 255, 0.2);
-  --border-focus: #6366f1;
+  --border-secondary: rgba(255, 255, 255, 0.16);
+  --border-focus: var(--interactive-primary);
 
   /* CARD COMPONENT */
-  --card-radius: 8px;
+  --card-radius: var(--radius-lg);
   /* ===== END MIGRATED (Task A3) ===== */
 
-  /* ===== SURFACE OVERRIDES ===== */
+  /* ===== SURFACE LADDER (one hue: slate) =====
+     page  → canvas
+     chrome → header / footer / PDP bar (slightly lifted, same hue)
+     card  → shop + PDP panels (top-lit gradient)
+     Do not invent per-section hex. */
+  --bg-page: var(--color-slate-900);
+  --storefront-atmosphere-gradient:
+    radial-gradient(ellipse 90% 55% at 50% -18%, rgba(51, 65, 85, 0.55) 0%, transparent 62%),
+    radial-gradient(ellipse 45% 35% at 92% 0%, rgba(59, 130, 246, 0.07) 0%, transparent 48%),
+    var(--color-slate-900);
+
+  --surface-chrome: var(--color-slate-900);
+  --surface-chrome-gradient: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-slate-800) 32%, var(--color-slate-900)) 0%,
+    var(--color-slate-900) 100%
+  );
+  --chrome-blur: blur(16px) saturate(108%);
+  --chrome-border: 1px solid rgba(255, 255, 255, 0.08);
+  --chrome-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
   --surface-primary: var(--color-slate-800);
   --surface-secondary: var(--color-slate-700);
   --surface-tertiary: var(--color-slate-600);
   --surface-overlay: var(--color-slate-800);
   --surface-inverse: var(--color-white);
   --surface-page: var(--color-slate-900);
-  --surface-card: rgba(var(--color-slate-800-rgb), 0.85);
-  --surface-elevated: var(--color-slate-700);
-  --surface-highlight: var(--color-slate-600);
-  --surface-overlay-light: rgba(255, 255, 255, 0.1);
+  --surface-card: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-slate-800) 70%, var(--color-slate-700)) 0%,
+    var(--color-slate-800) 100%
+  );
+  --surface-elevated: var(--color-slate-800);
+  --surface-highlight: rgba(255, 255, 255, 0.06);
+  --surface-overlay-light: rgba(255, 255, 255, 0.08);
   --surface-overlay-full: rgba(0, 0, 0, 0.7);
+  --surface-header: var(--surface-chrome);
+
+  --glass-border-soft: var(--border-subtle);
+  --glass-border-strong: var(--border-strong);
+  --glass-divider: var(--border-default);
 
   /* ===== FULLSCREEN VIEWER (immersive dark) ===== */
   --viewer-page-bg: var(--surface-page);
@@ -432,7 +469,7 @@
 
   /* ===== COMPOSITE OVERRIDES ===== */
   --radius-card: var(--radius-md);
-  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-card: var(--card-shadow);
   --glass-blur: blur(12px);
   --glass-blur-value: 12px;
   --glass-opacity: 0.8;
@@ -518,15 +555,14 @@
 
   /* ===== COMPONENT-SPECIFIC OVERRIDES (high specificity) ===== */
 
-  /* Cards and surfaces */
-  body .product-card,
+  /* Cards and surfaces — consume the ladder; do not flatten product cards */
   body .card,
   body .filters-section,
   body .order-summary,
   body .checkout-form,
   body .auth-modal,
   body .modal-content {
-    background: var(--surface-primary);
+    background: var(--surface-card);
     color: var(--text-primary);
   }
 
@@ -537,7 +573,7 @@
   body .mat-option,
   body .custom-dropdown .dropdown-trigger,
   body .custom-dropdown .dropdown-menu {
-    background: var(--surface-primary);
+    background: var(--surface-elevated);
     color: var(--text-primary);
     border-color: var(--border-default);
   }
@@ -545,7 +581,7 @@
   /* Recommendation sections */
   body .similar-products,
   body .bought-together {
-    background: var(--color-slate-900);
+    background: var(--similar-products-bg, transparent);
   }
 
   /* Product info text (storefront cards — exclude PDP; G11 owns .product-detail .product-info) */
@@ -568,27 +604,28 @@
     border-color: var(--border-default);
   }
 
-  /* Product cards */
+  /* Product cards — keep the token gradient; hover lifts shadow only */
   body .product-card {
-    background: var(--color-slate-700);
+    background: var(--card-surface);
     color: var(--text-primary);
-    border: 1px solid var(--color-slate-600);
+    border: 1px solid var(--card-border);
+    box-shadow: var(--card-shadow);
   }
 
   body .product-card:hover {
-    background: var(--color-slate-600);
+    background: var(--card-surface);
+    border-color: var(--border-medium);
     box-shadow: var(--card-shadow-hover);
-    transform: translateY(calc(var(--spacing-xs) * -0.5));
   }
 
   /* Favorites page */
   body .favorites-page {
-    background: var(--color-slate-900);
+    background: var(--surface-page);
     color: var(--text-primary);
   }
 
   body .favorites-page .favorites-content {
-    background: var(--color-slate-900);
+    background: var(--surface-page);
     color: var(--text-primary);
   }
 
@@ -644,16 +681,15 @@
   }
 
   body .favorites-page .product-card {
-    background: var(--color-slate-700);
+    background: var(--card-surface);
     color: var(--text-primary);
-    border: 1px solid var(--color-slate-600);
-    box-shadow: var(--favorites-card-shadow);
+    border: 1px solid var(--card-border);
+    box-shadow: var(--card-shadow);
   }
 
   body .favorites-page .product-card:hover {
-    border-color: rgba(var(--color-blue-400-rgb), 0.35);
-    box-shadow: var(--favorites-card-hover-shadow), 0 0 20px rgba(var(--color-blue-400-rgb), 0.08);
-    transform: translateY(-4px);
+    border-color: var(--border-medium);
+    box-shadow: var(--card-shadow-hover);
   }
 
   body .favorites-page .product-name {
@@ -667,7 +703,7 @@
   }
 
   body .favorites-page .current-price {
-    color: var(--color-blue-400);
+    color: var(--text-primary);
   }
 
   body .favorites-page .action-btn {
@@ -682,14 +718,14 @@
 
   /* Breadcrumb */
   body .breadcrumb {
-    color: var(--color-slate-300);
+    color: var(--breadcrumb-color);
   }
 
   body .breadcrumb .breadcrumb-link {
-    color: var(--color-slate-300);
+    color: var(--breadcrumb-link-color);
 
     &:hover {
-      color: var(--color-blue-400);
+      color: var(--breadcrumb-link-hover-color);
     }
   }
 
@@ -712,13 +748,13 @@
 
   /* Buttons */
   body .btn-primary {
-    background: var(--color-blue-400);
-    color: var(--color-white);
-    border: 1px solid var(--color-blue-400);
+    background: var(--interactive-primary);
+    color: var(--text-on-primary);
+    border: 1px solid var(--interactive-primary);
 
     &:hover {
-      background: var(--color-blue-500);
-      border-color: var(--color-blue-500);
+      background: var(--interactive-primary-hover);
+      border-color: var(--interactive-primary-hover);
     }
   }
 
@@ -759,4 +795,16 @@
     color: var(--text-primary);
     border: 1px solid var(--surface-tertiary);
   }
+}
+
+/* ===== STOREFRONT ATMOSPHERE — one room for header + page + PDP =====
+   Admin dark keeps zinc via body.is-admin (higher specificity). */
+body:not(.is-admin)[data-theme="dark"],
+html[data-theme="dark"] body:not(.is-admin) {
+  --surface-page: transparent;
+  --pdp-page-bg: transparent;
+  --product-detail-bg: transparent;
+  background: var(--storefront-atmosphere-gradient, var(--bg-page));
+  background-attachment: fixed;
+  color: var(--text-primary);
 }
