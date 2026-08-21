@@ -1,5 +1,6 @@
 <div class="search-bar" [style.width]="width" [style.maxWidth]="maxWidth">
-  <mat-form-field appearance="outline" class="search-field" [floatLabel]="floatLabelMode">
+  <mat-form-field appearance="outline" class="search-field" [floatLabel]="floatLabelMode" subscriptSizing="dynamic">
+    <mat-icon *ngIf="prefixIcon" matPrefix>{{ prefixIcon }}</mat-icon>
     <mat-label *ngIf="showFloatingLabel">{{ label }}</mat-label>
     <input
       matInput
