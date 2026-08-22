@@ -277,6 +277,23 @@
   &.is-open &__caret {
     transform: rotate(180deg);
   }
+
+  &--icon {
+    justify-content: center;
+    gap: 6px;
+    min-height: 44px;
+    padding: 8px;
+
+    .pref-chip__meta {
+      display: none;
+    }
+
+    .pref-chip__code {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+  }
 }
 
 .pref-dock__panel {

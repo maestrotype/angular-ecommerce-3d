@@ -90,15 +90,35 @@
     }
   }
 
-  .menu-button.mat-mdc-icon-button {
+  .menu-button.mat-mdc-icon-button,
+  .storefront-link.mat-mdc-icon-button {
     color: var(--text-primary);
-    border-radius: 50%;
-    overflow: hidden;
+    border-radius: 10px;
+    overflow: visible;
     background-color: transparent;
+    background-image: none;
     flex-shrink: 0;
+    -webkit-mask-image: none;
+    mask-image: none;
+    --mdc-icon-button-hover-state-layer-opacity: 0;
+    --mdc-icon-button-focus-state-layer-opacity: 0;
+    --mdc-icon-button-pressed-state-layer-opacity: 0;
+    --mat-icon-button-state-layer-color: transparent;
+    --mat-icon-button-ripple-color: transparent;
 
-    &:hover {
+    .mat-mdc-button-persistent-ripple::before {
+      opacity: 0;
       background-color: transparent;
+    }
+
+    .mat-focus-indicator::before {
+      content: none;
+      display: none;
+    }
+
+    &:hover,
+    &:focus-visible {
+      background-color: color-mix(in srgb, var(--text-primary) 8%, transparent);
     }
   }
 

@@ -1,9 +1,14 @@
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
   height: 100%;
+  min-height: 0;
 }
 
 .sidenav-wrapper {
+  flex: 1 1 auto;
+  min-height: 0;
+
   .mat-icon.material-icons-outlined {
     font-family: 'Material Icons Outlined', 'Material Icons', sans-serif;
     font-weight: normal;
@@ -269,15 +274,7 @@
     gap: var(--space-2);
   }
 
-  .storefront-link.mat-mdc-icon-button {
-    width: var(--admin-shell-touch-target, 44px);
-    height: var(--admin-shell-touch-target, 44px);
-    min-width: var(--admin-shell-touch-target, 44px);
-    min-height: var(--admin-shell-touch-target, 44px);
-    color: var(--text-primary);
-    flex-shrink: 0;
-  }
-
+  .header-icon-btn,
   .close-btn {
     background: var(--surface-overlay-light);
     border: none;
@@ -291,6 +288,8 @@
     justify-content: center;
     color: var(--text-primary);
     cursor: pointer;
+    text-decoration: none;
+    box-sizing: border-box;
 
     mat-icon {
       font-size: 20px;
@@ -651,6 +650,9 @@
 }
 
 .sidenav-wrapper.is-mobile {
+  height: 100%;
+  min-height: 0;
+
   .sidenav-nav {
     padding: 12px 12px 8px;
     overflow-y: auto;
@@ -658,11 +660,18 @@
   }
 
   .sidenav-footer {
-    padding: 10px 12px calc(12px + env(safe-area-inset-bottom, 0px));
+    padding: 8px 12px calc(12px + env(safe-area-inset-bottom, 0px));
   }
 
   .user-info {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+    padding: 10px 12px;
+    border-radius: 14px;
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+    }
   }
 
   @media (max-height: 740px) {

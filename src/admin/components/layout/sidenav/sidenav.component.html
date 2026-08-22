@@ -5,7 +5,7 @@
       <span class="menu-title">{{ 'ADMIN_PANEL' | translate }}</span>
     </div>
     <div class="sidenav-header-mobile__actions">
-      <a mat-icon-button class="storefront-link" routerLink="/home" (click)="onNavItemClick()"
+      <a class="header-icon-btn" routerLink="/home" (click)="onNavItemClick()"
         [attr.aria-label]="'GO_TO_STOREFRONT' | translate">
         <mat-icon fontSet="material-icons-outlined">storefront</mat-icon>
       </a>
@@ -25,7 +25,7 @@
   <div class="sidenav-extra-sections" *ngIf="isMobile">
     <div class="pref-dock">
       <div class="pref-dock__chips">
-        <button type="button" class="pref-chip"
+        <button type="button" class="pref-chip pref-chip--icon"
           [class.is-open]="prefPanel === 'theme'"
           [attr.aria-expanded]="prefPanel === 'theme'"
           [attr.aria-label]="'HEADER.THEME' | translate"
@@ -33,16 +33,12 @@
           <span class="pref-chip__jewel" [attr.data-theme-id]="currentTheme" aria-hidden="true">
             <ng-container [ngTemplateOutlet]="themeGlyphTpl" [ngTemplateOutletContext]="{ $implicit: currentTheme }"></ng-container>
           </span>
-          <span class="pref-chip__meta">
-            <span class="pref-chip__kicker">{{ 'HEADER.THEME' | translate }}</span>
-            <span class="pref-chip__value">{{ 'HEADER.THEMES.' + themeI18nKey(currentTheme) | translate }}</span>
-          </span>
           <svg class="pref-chip__caret" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </button>
 
-        <button type="button" class="pref-chip"
+        <button type="button" class="pref-chip pref-chip--icon"
           [class.is-open]="prefPanel === 'lang'"
           [attr.aria-expanded]="prefPanel === 'lang'"
           [attr.aria-label]="'HEADER.LANGUAGE' | translate"
@@ -50,10 +46,7 @@
           <span class="pref-chip__flag" aria-hidden="true">
             <ng-container [ngTemplateOutlet]="langFlagTpl" [ngTemplateOutletContext]="{ $implicit: currentLang }"></ng-container>
           </span>
-          <span class="pref-chip__meta">
-            <span class="pref-chip__kicker">{{ 'HEADER.LANGUAGE' | translate }}</span>
-            <span class="pref-chip__value">{{ currentLang | uppercase }}</span>
-          </span>
+          <span class="pref-chip__code">{{ currentLang | uppercase }}</span>
           <svg class="pref-chip__caret" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
           </svg>

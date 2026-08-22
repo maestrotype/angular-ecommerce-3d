@@ -16,6 +16,7 @@
   </div>
 
   <app-admin-table [loading]="isLoading" [dataSource]="dataSource" [displayedColumns]="displayedColumns">
+    <div class="desktop-view">
     <table mat-table [dataSource]="dataSource" matSort class="pages-table">
       <ng-container matColumnDef="slug">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'PAGE_SLUG' | translate }}</th>
@@ -67,6 +68,43 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
+    </div>
   </app-admin-table>
-  
+
+  <div class="mobile-view" *ngIf="!isLoading">
+    <div class="admin-mobile-cards">
+      <article class="admin-mobile-card" *ngFor="let page of dataSource.filteredData">
+        <div class="admin-mobile-card__header">
+          <code>/{{ page.slug }}</code>
+          <span class="status-badge" [class.published]="page.status === 'published'">
+            {{ getStatusLabel(page.status) }}
+          </span>
+        </div>
+
+        <h3 class="admin-mobile-card__title">{{ page.title | localized }}</h3>
+
+        <div class="admin-mobile-card__meta">
+          <span>{{ getTemplateLabel(page.template) }}</span>
+        </div>
+
+        <div class="admin-mobile-card__actions">
+          <button mat-icon-button color="primary" (click)="editPage(page)" [matTooltip]="'EDIT' | translate">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button (click)="previewPage(page)" [matTooltip]="'PREVIEW' | translate" *ngIf="page.status === 'published'">
+            <mat-icon>open_in_new</mat-icon>
+          </button>
+          <button mat-icon-button (click)="openSections(page)" [matTooltip]="'EDIT_SECTIONS' | translate" *ngIf="isSectionBasedPage(page)">
+            <mat-icon>view_module</mat-icon>
+          </button>
+          <button mat-icon-button (click)="applyPageTemplate(page)" [matTooltip]="'APPLY_PAGE_TEMPLATE' | translate" *ngIf="canApplyPageTemplate(page)">
+            <mat-icon>auto_fix_high</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deletePage(page)" [matTooltip]="'DELETE' | translate">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </article>
+    </div>
+  </div>
 </app-list-container>
