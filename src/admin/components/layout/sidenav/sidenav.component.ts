@@ -59,6 +59,22 @@ export class SidenavComponent implements OnInit, OnDestroy {
     return themeId.replace(/-/g, '_').toUpperCase();
   }
 
+  prefPanel: 'theme' | 'lang' | null = null;
+
+  togglePrefPanel(panel: 'theme' | 'lang'): void {
+    this.prefPanel = this.prefPanel === panel ? null : panel;
+  }
+
+  pickTheme(themeId: string): void {
+    this.changeTheme(themeId);
+    this.prefPanel = null;
+  }
+
+  pickLanguage(langCode: string): void {
+    this.changeLanguage(langCode);
+    this.prefPanel = null;
+  }
+
 
   constructor(
     private router: Router,
@@ -119,9 +135,14 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
 
+  closeMobileDrawer(): void {
+    this.prefPanel = null;
+    this.closeSidenav.emit();
+  }
+
   onNavItemClick(): void {
     if (window.innerWidth <= 768) {
-      this.closeSidenav.emit();
+      this.closeMobileDrawer();
     }
   }
 
