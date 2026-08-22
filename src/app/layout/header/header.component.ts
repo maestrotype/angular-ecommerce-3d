@@ -492,6 +492,34 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     return currentPath === url || currentPath.startsWith(`${url}/`);
   }
 
+  menuGlyph(item: MenuItem): 'home' | 'shop' | 'about' | 'contacts' | 'admin' | 'page' {
+    const url = (item.url || '').toLowerCase();
+    if (url.includes('admin')) {
+      return 'admin';
+    }
+    if (url.includes('shop')) {
+      return 'shop';
+    }
+    if (url.includes('contact')) {
+      return 'contacts';
+    }
+    if (url.includes('about') || url.includes('brand')) {
+      return 'about';
+    }
+    if (url.includes('home') || url === '/' || url === '') {
+      return 'home';
+    }
+    return 'page';
+  }
+
+  isAdminMenuItem(item: MenuItem): boolean {
+    return (item.url || '').toLowerCase().includes('admin');
+  }
+
+  themeI18nKey(themeId: string): string {
+    return themeId.replace(/-/g, '_').toUpperCase();
+  }
+
   private onRouteChange(): void {
     const path = this.router.url.split('?')[0];
 

@@ -41,23 +41,23 @@ export class SidenavComponent implements OnInit, OnDestroy {
   currentTheme = 'light';
 
   navItems: NavItem[] = [
-    { label: "DASHBOARD", route: "/admin/dashboard", icon: "dashboard" },
-    { label: "PRODUCTS", route: "/admin/products", icon: "inventory" },
+    { label: "DASHBOARD", route: "/admin/dashboard", icon: "space_dashboard" },
+    { label: "PRODUCTS", route: "/admin/products", icon: "inventory_2" },
     { label: "CATEGORIES", route: "/admin/categories", icon: "category" },
-    {
-      label: "ADMIN_NAV_ORDERS",
-      route: "/admin/orders",
-      icon: "shopping_cart",
-    },
-    { label: "USERS", route: "/admin/users", icon: "people" },
-    { label: "MESSAGES", route: "/admin/messages", icon: "email" },
-    { label: "PAGE_SECTIONS", route: "/admin/sections", icon: "view_module" },
+    { label: "ADMIN_NAV_ORDERS", route: "/admin/orders", icon: "shopping_bag" },
+    { label: "USERS", route: "/admin/users", icon: "group" },
+    { label: "MESSAGES", route: "/admin/messages", icon: "mail" },
+    { label: "PAGE_SECTIONS", route: "/admin/sections", icon: "dashboard_customize" },
     { label: "PAGES", route: "/admin/pages", icon: "article" },
-    { label: "SEO", route: "/admin/seo", icon: "search" },
-    { label: "PAYMENTS", route: "/admin/payments", icon: "payment" },
-    { label: "INTEGRATIONS", route: "/admin/integrations", icon: "extension" },
-    { label: "SETTINGS", route: "/admin/settings", icon: "settings" },
+    { label: "SEO", route: "/admin/seo", icon: "travel_explore" },
+    { label: "PAYMENTS", route: "/admin/payments", icon: "credit_card" },
+    { label: "INTEGRATIONS", route: "/admin/integrations", icon: "hub" },
+    { label: "SETTINGS", route: "/admin/settings", icon: "tune" },
   ];
+
+  themeI18nKey(themeId: string): string {
+    return themeId.replace(/-/g, '_').toUpperCase();
+  }
 
 
   constructor(
