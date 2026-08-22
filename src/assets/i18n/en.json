@@ -1015,7 +1015,8 @@
     "THEMES": {
       "LIGHT": "Light",
       "DARK": "Dark",
-      "GLASS": "Glass"
+      "GLASS": "Glass",
+      "DARK_GLASS": "Dark Glass"
     },
     "LANGUAGE": "Language",
     "LOGIN_REGISTER": "Login / Register",

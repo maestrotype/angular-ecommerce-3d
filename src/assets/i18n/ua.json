@@ -999,8 +999,10 @@
     "THEME": "Тема",
     "THEMES": {
       "DEFAULT": "Світла",
+      "LIGHT": "Світла",
       "DARK": "Темна",
-      "GLASS": "Скло"
+      "GLASS": "Скло",
+      "DARK_GLASS": "Темне скло"
     },
     "LANGUAGE": "Мова",
     "LOGIN_REGISTER": "Вхід / Реєстрація",
