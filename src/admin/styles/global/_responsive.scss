@@ -9,6 +9,28 @@
     max-width: 100%;
   }
 
+  body.is-admin .admin-sidenav.mat-sidenav,
+  body.is-admin .admin-sidenav.mat-drawer {
+    height: 100%;
+    max-height: 100%;
+  }
+
+  body.is-admin .admin-sidenav .mat-drawer-inner-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: 100%;
+    overflow: hidden;
+  }
+
+  body.is-admin .admin-sidenav app-admin-sidenav {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    height: 100%;
+  }
+
   .admin-header.mat-toolbar,
   mat-toolbar.admin-header {
     min-height: var(--admin-shell-mobile-toolbar-height);
@@ -56,6 +78,45 @@
     min-height: var(--admin-shell-touch-target);
     padding: 0;
     flex-shrink: 0;
+  }
+
+  /* Leading chrome: icon only — no circular mask that clips/skews the glyph */
+  body.is-admin .admin-header.mat-toolbar .menu-button.mat-mdc-icon-button.mat-mdc-button-base,
+  body.is-admin mat-toolbar.admin-header .menu-button.mat-mdc-icon-button.mat-mdc-button-base,
+  body.is-admin .admin-header.mat-toolbar .storefront-link.mat-mdc-icon-button.mat-mdc-button-base,
+  body.is-admin mat-toolbar.admin-header .storefront-link.mat-mdc-icon-button.mat-mdc-button-base {
+    border-radius: 10px;
+    overflow: visible;
+    background-color: transparent;
+    background-image: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+    transform: none;
+    --mdc-icon-button-hover-state-layer-opacity: 0;
+    --mdc-icon-button-focus-state-layer-opacity: 0;
+    --mdc-icon-button-pressed-state-layer-opacity: 0;
+    --mat-icon-button-state-layer-color: transparent;
+    --mat-icon-button-ripple-color: transparent;
+
+    .mat-mdc-button-persistent-ripple::before {
+      opacity: 0;
+      background-color: transparent;
+    }
+
+    .mat-focus-indicator::before {
+      content: none;
+      display: none;
+    }
+
+    &:hover,
+    &:focus,
+    &:focus-visible,
+    &.cdk-focused,
+    &.cdk-program-focused,
+    &.cdk-mouse-focused {
+      background-color: color-mix(in srgb, var(--text-primary) 8%, transparent);
+      background-image: none;
+    }
   }
 
   .admin-header .header-actions app-notification-badge {
