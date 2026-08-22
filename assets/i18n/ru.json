@@ -1033,7 +1033,8 @@
     "THEMES": {
       "LIGHT": "Светлая",
       "DARK": "Темная",
-      "GLASS": "Стекло"
+      "GLASS": "Стекло",
+      "DARK_GLASS": "Тёмное стекло"
     },
     "LANGUAGE": "Язык",
     "LOGIN_REGISTER": "Вход / Регистрация",
