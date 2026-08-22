@@ -125,6 +125,9 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
     this.mobileMenuSubscription = this.mobileMenuService.isOpen$.subscribe((open) => {
       this.isMobileMenuOpen = open;
+      if (!open) {
+        this.prefPanel = null;
+      }
     });
   }
 
@@ -518,6 +521,22 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   themeI18nKey(themeId: string): string {
     return themeId.replace(/-/g, '_').toUpperCase();
+  }
+
+  prefPanel: 'theme' | 'lang' | null = null;
+
+  togglePrefPanel(panel: 'theme' | 'lang'): void {
+    this.prefPanel = this.prefPanel === panel ? null : panel;
+  }
+
+  pickTheme(themeId: string): void {
+    this.changeTheme(themeId);
+    this.prefPanel = null;
+  }
+
+  pickLanguage(langCode: string): void {
+    this.changeLanguage(langCode);
+    this.prefPanel = null;
   }
 
   private onRouteChange(): void {

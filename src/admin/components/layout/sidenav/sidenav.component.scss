@@ -450,11 +450,11 @@
 
 .sidenav-extra-sections {
   flex-shrink: 0;
-  padding: 12px 16px 14px;
+  padding: 10px 12px 12px;
   background: var(--surface-secondary);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0;
   border-bottom: 1px solid var(--border-default);
 
   .section-label {
