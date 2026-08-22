@@ -1070,11 +1070,13 @@
       "ALT_TEXT": "Популярный товар"
     },
     "CATEGORIES": {
+      "BROWSE": "Обзор",
       "TITLE": "Поиск по категориям"
     },
     "BEST_SELLERS": {
       "SUBTITLE_DEFAULT": "ТОП ТОВАРОВ",
       "TITLE_DEFAULT": "Хиты продаж",
+      "VIEW_ALL": "Все",
       "BADGE_SPECIAL": "Особое",
       "BADGE_NEW": "Новое",
       "BADGE_OUT_OF_STOCK": "Нет в наличии"

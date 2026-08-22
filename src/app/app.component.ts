@@ -168,9 +168,22 @@ export class AppComponent implements OnInit, OnDestroy {
     this.modalService.openModal({ id: 'cart', type: 'cart' });
   }
 
+  openShopPage(): void {
+    this.mobileMenuService.close();
+    this.router.navigate(['/shop']);
+  }
+
   openFavoritesPage(): void {
     this.mobileMenuService.close();
     this.router.navigate(['/favorites']);
+  }
+
+  isShopRoute(): boolean {
+    return this.router.url.startsWith('/shop');
+  }
+
+  isFavoritesRoute(): boolean {
+    return this.router.url.startsWith('/favorites');
   }
 
   isAdminRoute(): boolean {

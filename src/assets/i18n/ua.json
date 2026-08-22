@@ -1037,11 +1037,13 @@
       "ALT_TEXT": "Популярний товар"
     },
     "CATEGORIES": {
+      "BROWSE": "Огляд",
       "TITLE": "Пошук за категоріями"
     },
     "BEST_SELLERS": {
       "SUBTITLE_DEFAULT": "ТОП ТОВАРІВ",
       "TITLE_DEFAULT": "Хіти продажу",
+      "VIEW_ALL": "Усі",
       "BADGE_SPECIAL": "Особливе",
       "BADGE_NEW": "Нове",
       "BADGE_OUT_OF_STOCK": "Немає в наявності"

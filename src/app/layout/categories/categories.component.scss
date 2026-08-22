@@ -18,7 +18,19 @@
         text-align: center;
         margin-bottom: 4rem;
 
+        .section-subtitle {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--categories-text);
+            font-size: 0.8125rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            opacity: 0.65;
+        }
+
         .section-title {
+            margin: 0;
             font-size: 2.5rem;
             font-weight: 700;
             color: var(--categories-text);
@@ -76,21 +88,78 @@
     }
 }
 
-@container (max-width: 768px) {
+@media (max-width: 768px) {
     .categories {
-        padding: 60px 0;
+        padding: 24px 0 36px;
 
         .container {
+            padding: 0;
+        }
+
+        .section-header {
+            text-align: left;
+            margin-bottom: 0.85rem;
             padding: 0 1rem;
+
+            .section-subtitle {
+                margin-bottom: 4px;
+                font-size: 11px;
+            }
+
+            .section-title {
+                font-size: 1.25rem;
+                line-height: 1.2;
+            }
         }
 
         .categories-grid {
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1.5rem;
+            display: flex;
+            flex-wrap: nowrap;
+            grid-template-columns: none;
+            gap: 0.5rem;
+            padding: 0 1rem 0.25rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
         }
 
         .category-card {
-            padding: 2rem 1rem;
+            display: flex;
+            flex: 0 0 auto;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 0;
+            padding: 0.5rem 0.85rem;
+            border-radius: 999px;
+            border-width: 1px;
+            scroll-snap-align: start;
+
+            &:hover {
+                transform: none;
+            }
+
+            .category-icon {
+                flex-shrink: 0;
+                height: 28px;
+                margin: 0;
+
+                img {
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 6px;
+                }
+            }
+
+            .category-name {
+                font-size: 0.875rem;
+                font-weight: 600;
+                white-space: nowrap;
+            }
         }
     }
 }
