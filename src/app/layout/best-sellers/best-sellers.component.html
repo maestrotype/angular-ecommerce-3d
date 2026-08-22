@@ -1,11 +1,14 @@
 <section id="best-sellers" class="best-sellers">
     <div class="section-wrapper">
         <div class="section-header">
-            <span class="section-subtitle">{{ (data?.subtitle | localized) || ('HOME.BEST_SELLERS.SUBTITLE_DEFAULT' |
-                translate)
-                }}</span>
-            <h2 class="section-title">{{ (data?.title | localized) || ('HOME.BEST_SELLERS.TITLE_DEFAULT' | translate) }}
-            </h2>
+            <div class="section-heading">
+                <span class="section-subtitle">{{ (data?.subtitle | localized) || ('HOME.BEST_SELLERS.SUBTITLE_DEFAULT' |
+                    translate)
+                    }}</span>
+                <h2 class="section-title">{{ (data?.title | localized) || ('HOME.BEST_SELLERS.TITLE_DEFAULT' | translate) }}
+                </h2>
+            </div>
+            <a routerLink="/shop" class="section-link">{{ 'HOME.BEST_SELLERS.VIEW_ALL' | translate }}</a>
         </div>
 
         <div class="products-grid" *ngIf="bestSellersProducts.length > 0">
@@ -15,19 +18,13 @@
                 <div class="product-image">
                     <img [src]="product.imageUrl" [alt]="product.name" [attr.loading]="i < eagerImageCount ? 'eager' : 'lazy'" />
 
-                    <div class="product-overlay" (click)="$event.stopPropagation()">
+                    <div class="product-overlay top" (click)="$event.stopPropagation()">
                         <div class="overlay-actions">
-                            <button type="button" class="action-btn quick-view-btn"
-                                (click)="goToProductDetail(product.id); $event.stopPropagation()">
-                                <span class="material-icons">visibility</span>
-                            </button>
                             <button type="button" class="action-btn favorite-btn" [class.is-favorite]="isFavorite(product.id)"
-                                (click)="toggleFavorite(product); $event.stopPropagation()">
+                                (click)="toggleFavorite(product); $event.stopPropagation()"
+                                [attr.aria-label]="'HEADER.NAV.FAVORITES' | translate">
                                 <span class="material-icons">favorite_border</span>
                                 <span class="material-icons filled">favorite</span>
-                            </button>
-                            <button type="button" class="action-btn cart-btn" (click)="addToCart(product); $event.stopPropagation()">
-                                <span class="material-icons">shopping_cart</span>
                             </button>
                         </div>
                     </div>
@@ -42,17 +39,25 @@
                 </div>
 
                 <div class="product-info">
+                    <span class="product-category" *ngIf="product.category">{{ product.category }}</span>
                     <h3 class="product-name">{{ product.name | localized }}</h3>
 
                     <div class="product-footer">
                         <div class="product-price">
                             <div class="price-main">
-                                <span class="current-price">${{ product.price }}</span>
-                                <span class="original-price" *ngIf="product.originalPrice">${{ product.originalPrice
+                                <span class="current-price">${{ product.price | number:'1.0-0' }}</span>
+                                <span class="original-price" *ngIf="product.originalPrice">${{ product.originalPrice | number:'1.0-0'
                                     }}</span>
                             </div>
                         </div>
-                        <div class="product-category">{{ product.category }}</div>
+                        <button
+                            type="button"
+                            class="action-btn cart-btn"
+                            *ngIf="(product?.stock ?? 1) > 0"
+                            (click)="addToCart(product, $event)"
+                            [attr.aria-label]="'SHOP.PRODUCT.ADD_TO_CART' | translate">
+                            <span class="material-icons">add</span>
+                        </button>
                     </div>
                 </div>
             </div>

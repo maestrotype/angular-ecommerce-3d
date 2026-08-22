@@ -25,7 +25,16 @@
 
 <!-- Mobile Navigation -->
 <nav *ngIf="!isAdminRoute() && !isViewerRoute()" class="footer-mobile" [class.footer-hidden]="isHidden || isMobileMenuOpen" [attr.aria-hidden]="isMobileMenuOpen" [attr.aria-label]="'A11Y.MOBILE_NAV' | translate">
-  <button type="button" class="nav-item favorites-link" (click)="openFavoritesPage()" [attr.aria-label]="'HEADER.NAV.FAVORITES' | translate">
+  <button type="button" class="nav-item shop-link" [class.active]="isShopRoute()" (click)="openShopPage()" [attr.aria-label]="'HEADER.NAV.SHOP' | translate">
+    <span class="nav-item__icon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M4 9H20L19.2 19.1C19.09 20.18 18.18 21 17.09 21H6.91C5.82 21 4.91 20.18 4.8 19.1L4 9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M8 9V7C8 4.79 9.79 3 12 3C14.21 3 16 4.79 16 7V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+    <span class="nav-item__label">{{ 'HEADER.NAV.SHOP' | translate }}</span>
+  </button>
+  <button type="button" class="nav-item favorites-link" [class.active]="isFavoritesRoute()" (click)="openFavoritesPage()" [attr.aria-label]="'HEADER.NAV.FAVORITES' | translate">
     <span class="nav-item__icon">
       <app-icon name="heart" stroke="currentColor"></app-icon>
       <span class="nav-item__badge" *ngIf="favoritesCount > 0" aria-hidden="true">{{ favoritesCount }}</span>
@@ -41,7 +50,7 @@
   </button>
   <button type="button" class="nav-item profile-icon" (click)="openAuthModal()" [attr.aria-label]="'HEADER.LOGIN_REGISTER' | translate">
     <span class="nav-item__icon">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path
           d="M19 21V19C19 17.9391 18.5786 16.9217 17.8284 16.1716C17.0783 15.4214 16.0609 15 15 15H9C7.93913 15 6.92172 15.4214 6.17157 16.1716C5.42143 16.9217 5 17.9391 5 19V21"
           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />

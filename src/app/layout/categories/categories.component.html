@@ -1,7 +1,7 @@
 <section id="categories" class="categories">
     <div class="container">
         <div class="section-header">
-            <span class="section-subtitle">{{ data?.subtitle | localized }}</span>
+            <span class="section-subtitle">{{ (data?.subtitle | localized) || ('HOME.CATEGORIES.BROWSE' | translate) }}</span>
             <h2 class="section-title">{{ (data?.title | localized) || ('HOME.CATEGORIES.TITLE' | translate) }}</h2>
         </div>
 

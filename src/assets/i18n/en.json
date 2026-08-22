@@ -1052,11 +1052,13 @@
       "ALT_TEXT": "Featured Product"
     },
     "CATEGORIES": {
+      "BROWSE": "Browse",
       "TITLE": "Shop by Category"
     },
     "BEST_SELLERS": {
       "SUBTITLE_DEFAULT": "TOP PRODUCTS",
       "TITLE_DEFAULT": "Best Sellers",
+      "VIEW_ALL": "All",
       "BADGE_SPECIAL": "Special",
       "BADGE_NEW": "New",
       "BADGE_OUT_OF_STOCK": "Out of Stock"
