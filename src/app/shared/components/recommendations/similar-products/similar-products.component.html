@@ -1,121 +1,105 @@
-<div class="similar-products" *ngIf="similarProducts.length > 0 || loading || error">
-  <div class="recommendations-header" *ngIf="showTitle">
-    <h3 class="recommendations-title">{{ title || ('PRODUCT.SECTIONS.SIMILAR' | translate) }}</h3>
-    <p class="recommendations-subtitle">{{ 'PRODUCT.SECTIONS.SIMILAR_SUBTITLE' | translate }}</p>
-  </div>
-
-  <!-- Loading State -->
-  <app-skeleton-loader
-    *ngIf="loading"
-    variant="product-card"
-    [count]="4"
-  ></app-skeleton-loader>
-
-  <!-- Error State -->
-  <div class="error-state" *ngIf="error && !loading">
-    <div class="error-content">
-      <div class="error-icon">⚠️</div>
-      <h4 class="error-title">{{ 'PRODUCT.ERRORS.LOAD_SIMILAR_FAILED' | translate }}</h4>
-      <p class="error-message">{{ 'PRODUCT.ERRORS.LOAD_FAILED_MSG' | translate }}</p>
-      <button class="retry-button" (click)="retryLoad()">
-        <span class="retry-icon">🔄</span>
-        {{ 'PAYMENT.STATUS.RETRY' | translate }}
+<section class="recommendation-shelf similar-products" *ngIf="similarProducts.length > 0 || loading || error">
+  <div class="section-wrapper">
+    <div class="section-header" *ngIf="showTitle">
+      <div class="section-heading">
+        <span class="section-subtitle">{{ 'PRODUCT.SECTIONS.SIMILAR_SUBTITLE' | translate }}</span>
+        <h2 class="section-title">{{ (title | localized) || ('PRODUCT.SECTIONS.SIMILAR' | translate) }}</h2>
+      </div>
+      <button type="button" class="section-link" (click)="goToShop()">
+        {{ 'HOME.BEST_SELLERS.VIEW_ALL' | translate }}
       </button>
     </div>
-  </div>
 
-  <!-- Products Grid -->
-  <div class="products-grid" *ngIf="!loading && !error && similarProducts.length > 0">
-    <div class="product-card" *ngFor="let product of similarProducts; trackBy: trackByProductId"
-      (click)="onProductClick(product)" [class.out-of-stock]="product?.stock !== undefined && product.stock <= 0">
-      <div class="product-image">
-        <img [src]="product.imageUrl" [alt]="product.name | localized" loading="lazy" />
+    <app-skeleton-loader
+      *ngIf="loading"
+      variant="product-card"
+      [count]="4"
+      cardMinWidth="228px"
+    ></app-skeleton-loader>
 
-        <!-- Product Overlay with Quick View and Favorite -->
-            <div class="product-overlay" (click)="$event.stopPropagation()">
-          <div class="overlay-actions">
-            <!-- Quick View Button -->
-            <button class="action-btn quick-view-btn" (click)="quickView(product)"
-              [title]="'PRODUCT.ACTIONS.QUICK_VIEW' | translate">
-              <span class="material-icons">visibility</span>
-            </button>
-
-            <!-- Favorite Button -->
-            <button class="action-btn favorite-btn" (click)="onFavoriteToggled($event)"
-              [title]="'SHOP.PRODUCT.ADD_TO_FAVORITES' | translate" [class.is-favorite]="product.isFavorite">
-              <span class="material-icons">favorite_border</span>
-              <span class="material-icons filled">favorite</span>
-            </button>
-          </div>
+    <div class="shelf-state" *ngIf="error && !loading">
+      <div class="shelf-state__content">
+        <div class="shelf-state__icon" aria-hidden="true">
+          <span class="material-icons">error_outline</span>
         </div>
-
-        <!-- Special Offer Badge -->
-        <div class="special-badge" *ngIf="product.isSpecial">
-          {{ 'PRODUCT.BADGES.SPECIAL' | translate }}
-        </div>
-
-        <!-- New Badge -->
-        <div class="new-badge" *ngIf="product.isNew">
-          {{ 'PRODUCT.BADGES.NEW' | translate }}
-        </div>
-
-        <!-- Out of Stock Badge -->
-        <div class="out-of-stock-badge" *ngIf="product?.stock !== undefined && product.stock <= 0">
-          {{ 'PRODUCT.STOCK.OUT_OF_STOCK' | translate }}
-        </div>
-
-        <!-- Discount Badge -->
-        <div class="discount-badge" *ngIf="product.discount">
-          -{{ product.discount }}%
-        </div>
+        <h4 class="shelf-state__title">{{ 'PRODUCT.ERRORS.LOAD_SIMILAR_FAILED' | translate }}</h4>
+        <p class="shelf-state__message">{{ 'PRODUCT.ERRORS.LOAD_FAILED_MSG' | translate }}</p>
+        <button type="button" class="shelf-state__retry" (click)="retryLoad()">
+          <span class="material-icons">refresh</span>
+          {{ 'PAYMENT.STATUS.RETRY' | translate }}
+        </button>
       </div>
+    </div>
 
-      <div class="product-info">
-        <h3 class="product-name">{{ product.name | localized }}</h3>
+    <div class="products-grid" *ngIf="!loading && !error && similarProducts.length > 0">
+      <div
+        class="product-card animate-in"
+        *ngFor="let product of similarProducts; trackBy: trackByProductId"
+        (click)="onProductClick(product)"
+        [class.out-of-stock]="product?.stock !== undefined && product.stock <= 0">
+        <div class="product-image">
+          <img [src]="product.imageUrl | imageUrl" [alt]="product.name | localized" loading="lazy" />
 
-        <div class="product-rating">
-          <div class="stars">
-            <span class="star" *ngFor="let star of [1,2,3,4,5]; let i = index"
-              [class.filled]="i < Math.floor(product.rating || 0)" (click)="rateProduct(product, i + 1)"
-              [title]="('SHOP.PRODUCT.RATE' | translate) + ' ' + (i + 1) + ' ' + ('SHOP.PRODUCT.STARS' | translate)">
-              ⭐
-            </span>
-          </div>
-          <span class="rating-value">({{ product.rating || 0 }})</span>
-          <span class="rating-count" *ngIf="product.ratingCount">({{ product.ratingCount }} {{ 'SHOP.PRODUCT.REVIEWS' |
-            translate }})</span>
-          <span class="product-category">{{ product.category }}</span>
-        </div>
-
-        <div class="product-footer">
-          <div class="product-price">
-            <div class="price-main">
-              <span class="current-price">${{ product.price }}</span>
-              <span class="original-price" *ngIf="product.originalPrice">${{ product.originalPrice }}</span>
+          <div class="product-overlay top" (click)="$event.stopPropagation()">
+            <div class="overlay-actions">
+              <button
+                type="button"
+                class="action-btn favorite-btn"
+                [class.is-favorite]="isFavorite(product.id)"
+                (click)="toggleFavorite(product, $event)"
+                [attr.aria-label]="'HEADER.NAV.FAVORITES' | translate">
+                <span class="material-icons">favorite_border</span>
+                <span class="material-icons filled">favorite</span>
+              </button>
             </div>
           </div>
 
-          <!-- Cart Button - Always Visible -->
-          <button class="cart-btn" (click)="addToCart(product, $event)"
-            [title]="'PRODUCT.ACTIONS.ADD_TO_CART' | translate">
-            <span class="material-icons">shopping_cart</span>
-          </button>
+          <div class="special-badge" *ngIf="product.isSpecial">{{ 'PRODUCT.BADGES.SPECIAL' | translate }}</div>
+          <div class="new-badge" *ngIf="product.isNew">{{ 'PRODUCT.BADGES.NEW' | translate }}</div>
+          <div class="discount-badge" *ngIf="product.discount">-{{ product.discount }}%</div>
+          <div class="out-of-stock-badge" *ngIf="product?.stock !== undefined && product.stock <= 0">
+            {{ 'PRODUCT.STOCK.OUT_OF_STOCK' | translate }}
+          </div>
         </div>
 
-        <!-- Stock Indicator -->
-        <div class="stock-indicator" *ngIf="product?.stock !== undefined && product.stock > 0 && product.stock <= 5">
-          {{ 'PRODUCT.STOCK.ONLY_LEFT' | translate:{count: product.stock} }}
+        <div class="product-info">
+          <div class="product-meta">
+            <span class="product-category" *ngIf="product.category">{{ product.category }}</span>
+            <span class="rating-chip" *ngIf="hasRating(product)">
+              <span class="material-icons" aria-hidden="true">star</span>
+              <span class="rating-chip__value">{{ product.rating | number:'1.1-1' }}</span>
+            </span>
+          </div>
+          <h3 class="product-name">{{ product.name | localized }}</h3>
+
+          <div class="product-footer">
+            <div class="product-price">
+              <div class="price-main">
+                <span class="current-price">${{ getDiscountedPrice(product) | number:'1.0-0' }}</span>
+                <span class="original-price" *ngIf="product.originalPrice">${{ product.originalPrice | number:'1.0-0' }}</span>
+              </div>
+            </div>
+            <button
+              type="button"
+              class="action-btn cart-btn"
+              *ngIf="(product?.stock ?? 1) > 0"
+              (click)="addToCart(product, $event)"
+              [attr.aria-label]="'SHOP.PRODUCT.ADD_TO_CART' | translate">
+              <span class="material-icons">add</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Empty State -->
-  <div class="empty-state" *ngIf="!loading && !error && similarProducts.length === 0">
-    <div class="empty-content">
-      <div class="empty-icon">🔍</div>
-      <h4 class="empty-title">{{ 'PRODUCT.EMPTY.NO_SIMILAR' | translate }}</h4>
-      <p class="empty-message">{{ 'PRODUCT.EMPTY.NO_SIMILAR_MSG' | translate }}</p>
+    <div class="shelf-state shelf-state--empty" *ngIf="!loading && !error && similarProducts.length === 0">
+      <div class="shelf-state__content">
+        <div class="shelf-state__icon" aria-hidden="true">
+          <span class="material-icons">search_off</span>
+        </div>
+        <h4 class="shelf-state__title">{{ 'PRODUCT.EMPTY.NO_SIMILAR' | translate }}</h4>
+        <p class="shelf-state__message">{{ 'PRODUCT.EMPTY.NO_SIMILAR_MSG' | translate }}</p>
+      </div>
     </div>
   </div>
-</div>
+</section>

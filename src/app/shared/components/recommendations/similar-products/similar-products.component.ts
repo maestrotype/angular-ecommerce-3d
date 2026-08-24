@@ -7,6 +7,9 @@ import { Product } from 'src/shared/models/product.model';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { CartService } from '../../../../core/services/cart.service';
 import { AnalyticsService } from '../../../../core/services/analytics.service';
+import { FavoritesService } from '../../../../core/services/favorites.service';
+import { TranslateService } from '@ngx-translate/core';
+import { getLocalizedString } from 'src/shared/utils/localization.util';
 import {
   resolveProductFromSectionContext,
   resolveRecommendationProductId,
@@ -26,7 +29,7 @@ export class SimilarProductsComponent implements OnInit, OnDestroy {
       this.showTitle = val.settings.showTitle ?? this.showTitle;
     }
     if (val?.title) {
-      this.title = typeof val.title === 'string' ? val.title : val.title.en;
+      this.title = val.title;
     }
 
     this.contextApplied = true;
@@ -35,7 +38,7 @@ export class SimilarProductsComponent implements OnInit, OnDestroy {
   }
   @Input() limit: number = 4;
   @Input() showTitle: boolean = true;
-  @Input() title: string = 'Similar Products';
+  @Input() title: string | Record<string, string> = '';
 
   similarProducts: RecommendationProduct[] = [];
   loading: boolean = false;
@@ -46,15 +49,14 @@ export class SimilarProductsComponent implements OnInit, OnDestroy {
   private lastLoadedKey: string | null = null;
   private destroy$ = new Subject<void>();
 
-  // Math object for template usage
-  Math = Math;
-
   constructor(
     private recommendationsService: RecommendationsService,
     private router: Router,
     private notificationService: NotificationService,
     private cartService: CartService,
     private analyticsService: AnalyticsService,
+    private favoritesService: FavoritesService,
+    private translate: TranslateService,
     private cdr: ChangeDetectorRef,
   ) {}
 
@@ -79,14 +81,29 @@ export class SimilarProductsComponent implements OnInit, OnDestroy {
     return product.id;
   }
 
-  quickView(product: RecommendationProduct): void {
-    
-    // Implement quick view functionality
+  hasRating(product: RecommendationProduct): boolean {
+    return Number(product.rating) > 0;
   }
 
-  onFavoriteToggled(event: any): void {
-    
-    // Implement favorite functionality
+  goToShop(): void {
+    this.router.navigate(['/shop']);
+  }
+
+  isFavorite(productId: number): boolean {
+    return this.favoritesService.isFavorite(productId);
+  }
+
+  toggleFavorite(product: RecommendationProduct, event?: Event): void {
+    event?.stopPropagation();
+    this.favoritesService.toggleFavorite(product as Product);
+    const name = getLocalizedString(product.name, this.translate.currentLang);
+    const messageKey = this.isFavorite(product.id)
+      ? 'SHOP.NOTIFICATIONS.ADDED_TO_FAVORITES'
+      : 'SHOP.NOTIFICATIONS.REMOVED_FROM_FAVORITES';
+
+    this.translate.get(messageKey, { name }).subscribe(msg => {
+      this.notificationService.showSuccess(msg);
+    });
   }
 
   addToCart(product: RecommendationProduct, event: Event): void {
@@ -99,9 +116,9 @@ export class SimilarProductsComponent implements OnInit, OnDestroy {
       discount: product.discount
     };
     this.cartService.addToCart(cartItem);
-    this.notificationService.showSuccess(`Added ${product.name} to cart!`);
-    
-    // Track add to cart event
+    const productName = getLocalizedString(product.name, this.translate.currentLang);
+    this.notificationService.showSuccess(`Added ${productName} to cart!`);
+
     this.analyticsService.trackEvent('recommendation_add_to_cart', {
       product_id: product.id,
       product_name: product.name,
