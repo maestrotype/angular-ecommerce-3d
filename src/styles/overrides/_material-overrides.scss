@@ -1410,16 +1410,7 @@
   }
 }
 
-// Dark Glass theme - Logout button transparent
-[data-theme='dark-glass'] {
-
-  .sidenav-footer button.mat-mdc-button,
-  .sidenav-footer .logout-btn {
-    background: transparent;
-    border: none;
-    box-shadow: none;
-  }
-}
+// Dark Glass theme — logout inherits sidenav ghost styles (no override needed)
 
 body.is-admin[data-theme='dark-glass'] .sidenav-nav .user-info .user-role,
 html[data-theme='dark-glass'] body.is-admin .sidenav-nav .user-info .user-role,
