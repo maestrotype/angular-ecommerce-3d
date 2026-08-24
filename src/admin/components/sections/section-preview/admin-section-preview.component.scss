@@ -2,18 +2,20 @@
   display: grid;
   grid-template-columns: 100%;
   place-items: start center;
+  max-width: 100%;
+  min-width: 0;
 
   // === DESKTOP (default) ===
-  // Long scrollable page — no height cap on device frame
   --preview-width-raw: 1200px;
-  --preview-height-raw: 3500px; // intentionally tall — desktop scrolls freely
-  --preview-scale: 0.46;
+  --preview-height-raw: 3500px;
+  --preview-scale-cap: 0.46;
+  --preview-scale: var(--preview-scale-cap);
 
   // === TABLET (iPad) ===
   &[data-mode="tablet"] {
     --preview-width-raw: 768px;
     --preview-height-raw: 1024px;
-    --preview-scale: 0.58;
+    --preview-scale-cap: 0.58;
     --preview-border-radius: 28px;
   }
 
@@ -21,7 +23,7 @@
   &[data-mode="mobile"] {
     --preview-width-raw: 390px;
     --preview-height-raw: 844px;
-    --preview-scale: 0.82;
+    --preview-scale-cap: 0.82;
     --preview-border-radius: 44px;
   }
 
@@ -29,19 +31,17 @@
   &[data-mode="fold"] {
     --preview-width-raw: 323px;
     --preview-height-raw: 680px;
-    --preview-scale: 0.88;
+    --preview-scale-cap: 0.88;
     --preview-border-radius: 22px;
 
-    // Expanded (inner screen / tablet mode)
     &.is-expanded {
       --preview-width-raw: 700px;
       --preview-height-raw: 900px;
-      --preview-scale: 0.64;
+      --preview-scale-cap: 0.64;
       --preview-border-radius: 16px;
     }
   }
 
-  // Host box = device frame footprint (scaled)
   width: calc(var(--preview-width-raw) * var(--preview-scale));
   height: calc(var(--preview-height-raw) * var(--preview-scale));
   margin: 0 auto;
@@ -49,6 +49,12 @@
   transition:
     width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
     height 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@supports (width: 1cqi) {
+  :host {
+    --preview-scale: min(var(--preview-scale-cap), calc(100cqi / var(--preview-width-raw)));
+  }
 }
 
 // ─────────────────────────────────────────────

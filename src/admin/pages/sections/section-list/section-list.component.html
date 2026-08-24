@@ -52,21 +52,23 @@
 
       <!-- STATE 1: SECTION LIST -->
       <ng-container *ngIf="!isEditorOpen">
-        <div class="list-table-header desktop-only">
-          <div class="col-order">{{ 'TABLE_ORDER' | translate }}</div>
-          <div class="col-type">{{ 'TABLE_TYPE' | translate }}</div>
-          <div class="col-page-target">{{ 'PAGE_TARGET' | translate }}</div>
-          <div class="col-title">{{ 'TABLE_TITLE' | translate }}</div>
-          <div class="col-status">{{ 'TABLE_STATUS' | translate }}</div>
-          <div class="col-actions">{{ 'TABLE_ACTIONS' | translate }}</div>
-        </div>
-
         <div class="responsive-list" cdkDropList (cdkDropListDropped)="drop($event)">
-          <div *ngFor="let section of dataSource.data"
+          <article *ngFor="let section of dataSource.data; trackBy: trackBySectionId"
                cdkDrag
+               cdkDragLockAxis="y"
                class="list-row-item section-card"
                [class.active]="selectedPreviewSection?.id === section.id"
                (click)="selectForPreview(section)">
+
+            <div *cdkDragPlaceholder class="section-drag-placeholder"></div>
+
+            <div *cdkDragPreview class="section-drag-preview">
+              <mat-icon>drag_indicator</mat-icon>
+              <div class="section-drag-preview__body">
+                <span class="section-drag-preview__type">{{ getSectionTypeLabelKey(section.type) | translate }}</span>
+                <span class="section-drag-preview__title">{{ section.title | localized }}</span>
+              </div>
+            </div>
 
             <div class="col-order section-card__drag">
               <mat-icon cdkDragHandle class="drag-handle" (click)="$event.stopPropagation()">drag_indicator</mat-icon>
@@ -125,7 +127,7 @@
                 </mat-menu>
               </div>
             </div>
-          </div>
+          </article>
 
           <!-- Virtual Footer Row (if missing) -->
           <div class="list-row-item section-card virtual-row" *ngIf="!hasFooter" (click)="onSectionTypeSelected('footer')">

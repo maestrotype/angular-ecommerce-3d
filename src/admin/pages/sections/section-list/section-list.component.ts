@@ -192,7 +192,7 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
       return 640;
     }
     const contentWidth = window.innerWidth - 280;
-    return Math.min(860, Math.max(500, Math.floor(contentWidth * 0.52)));
+    return Math.min(720, Math.max(420, Math.floor(contentWidth * 0.46)));
   }
 
   ngAfterViewInit(): void {
@@ -583,7 +583,14 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
     };
   }
 
+  trackBySectionId(_index: number, section: Section): number | string {
+    return section.id;
+  }
+
   drop(event: CdkDragDrop<Section[]>): void {
+    if (event.previousIndex === event.currentIndex) {
+      return;
+    }
     const data = [...this.dataSource.data];
     moveItemInArray(data, event.previousIndex, event.currentIndex);
     this.updateSectionOrder(data);

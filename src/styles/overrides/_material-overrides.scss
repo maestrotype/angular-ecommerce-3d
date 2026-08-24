@@ -39,6 +39,28 @@
     width: auto;
   }
 
+  .mat-mdc-icon-button.mat-mdc-button-base {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-sizing: border-box;
+    line-height: 0;
+  }
+
+  .mat-mdc-icon-button.mat-mdc-button-base .mat-icon,
+  .mat-mdc-icon-button.mat-mdc-button-base mat-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 24px;
+    line-height: 24px;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
   .mat-datepicker-content {
     padding-bottom: 10px;
   }
@@ -1925,6 +1947,11 @@ html[data-theme='dark'] body.is-admin {
     overflow: hidden;
     background-color: transparent;
     background-image: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    line-height: 0;
     --mat-icon-button-state-layer-color: transparent;
     --mdc-icon-button-hover-state-layer-opacity: 0;
     --mdc-icon-button-focus-state-layer-opacity: 0;
@@ -1932,6 +1959,16 @@ html[data-theme='dark'] body.is-admin {
     -webkit-mask-image: radial-gradient(closest-side, black 99%, transparent 100%);
     mask-image: radial-gradient(closest-side, black 99%, transparent 100%);
     transform: translateZ(0);
+
+    .mat-icon {
+      width: 24px;
+      height: 24px;
+      font-size: 24px;
+      line-height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
 
     &:hover,
     &:focus,
