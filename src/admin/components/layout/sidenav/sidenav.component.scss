@@ -32,18 +32,9 @@
   background-color: var(--surface-secondary);
   color: var(--text-primary);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
   border-right: 1px solid var(--border-default);
   position: relative;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-
-  &::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-    display: none;
-  }
 
   &.is-mobile {
     overflow: hidden;
@@ -112,22 +103,6 @@
     &.active {
       background: var(--surface-highlight);
       border-color: var(--glass-border-soft);
-    }
-  }
-
-  .sidenav-footer .logout-btn {
-    background: color-mix(in srgb, var(--interactive-danger) 14%, transparent);
-    color: var(--text-primary);
-    border: 1px solid color-mix(in srgb, var(--interactive-danger) 28%, var(--glass-border-soft));
-
-    mat-icon,
-    .logout-text {
-      color: var(--interactive-danger);
-    }
-
-    &:hover {
-      background: color-mix(in srgb, var(--interactive-danger) 22%, transparent);
-      border-color: color-mix(in srgb, var(--interactive-danger) 40%, var(--glass-border-soft));
     }
   }
 }
@@ -212,22 +187,6 @@
 
     &.active {
       background: var(--surface-highlight);
-    }
-  }
-
-  .sidenav-footer .logout-btn {
-    background: color-mix(in srgb, var(--interactive-danger) 14%, transparent);
-    color: var(--text-primary);
-    border: 1px solid color-mix(in srgb, var(--interactive-danger) 28%, var(--glass-border-soft));
-
-    mat-icon,
-    .logout-text {
-      color: var(--interactive-danger);
-    }
-
-    &:hover {
-      background: color-mix(in srgb, var(--interactive-danger) 22%, transparent);
-      border-color: color-mix(in srgb, var(--interactive-danger) 40%, var(--glass-border-soft));
     }
   }
 }
@@ -398,9 +357,22 @@
 }
 
 .sidenav-nav {
-  flex: 1;
+  flex: 1 1 auto;
   min-height: 0;
-  padding: 25px 15px 0 15px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 25px 15px var(--space-3) 15px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-default) transparent;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--border-default);
+    border-radius: 4px;
+  }
 
   mat-nav-list {
     display: flex;
@@ -690,8 +662,10 @@
 
 .sidenav-footer {
   flex-shrink: 0;
-  padding: 20px 15px;
+  margin-top: auto;
+  padding: 16px 15px 20px;
   border-top: 1px solid var(--border-default);
+  background: var(--surface-secondary);
 
   .logout-btn {
     width: 100%;
@@ -700,14 +674,30 @@
     gap: 12px;
     padding: 12px 15px;
     border-radius: 12px;
-    background: var(--color-error-bg);
-    color: var(--interactive-danger);
-    border: 1px solid color-mix(in srgb, var(--interactive-danger) 10%, transparent);
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-subtle);
     cursor: pointer;
     font-weight: 600;
+    transition:
+      background-color var(--transition-fast),
+      border-color var(--transition-fast),
+      color var(--transition-fast);
+
+    mat-icon,
+    .logout-text {
+      color: inherit;
+    }
 
     &:hover {
-      background: color-mix(in srgb, var(--interactive-danger) 15%, transparent);
+      background: var(--surface-highlight);
+      border-color: var(--border-default);
+      color: var(--text-primary);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--interactive-primary);
+      outline-offset: 2px;
     }
   }
 }

@@ -17,7 +17,7 @@ export class AdminTableComponent {
   @Input() showFirstLastButtons = true;
   @Input() showPaginator = true;
   @Input() density: AdminTableDensity = 'default';
-  @Input() striped = true;
+  @Input() striped = false;
   @Input() skeletonRows = 6;
 
   @Output() sortChange = new EventEmitter<Sort>();
@@ -28,8 +28,8 @@ export class AdminTableComponent {
     if (this.density !== 'default') {
       classes.push(`admin-table--${this.density}`);
     }
-    if (!this.striped) {
-      classes.push('admin-table--flat');
+    if (this.striped) {
+      classes.push('admin-table--striped');
     }
     return classes.join(' ');
   }
