@@ -1,7 +1,6 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { MatTableDataSource } from "@angular/material/table";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatSort } from "@angular/material/sort";
+import { PageEvent } from "@angular/material/paginator";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
@@ -13,30 +12,25 @@ import { CategoryService } from "../../../services/category.service";
 import { Category } from "../../../models/category.model";
 import { TranslateService } from '@ngx-translate/core';
 
+export type CatalogSort = 'newest' | 'name' | 'price' | 'stock';
+export type StockTone = 'out' | 'low' | 'ok';
+
 @Component({
   selector: "app-product-list",
   templateUrl: "./product-list.component.html",
   styleUrls: ["./product-list.component.scss"],
 })
 export class ProductListComponent implements OnInit {
-  displayedColumns: string[] = [
-    "id",
-    "image",
-    "name",
-    "category",
-    "price",
-    "stock",
-    "actions",
-  ];
   dataSource = new MatTableDataSource<Product>([]);
   isLoading = false;
   error: string | null = null;
   allProducts: Product[] = [];
   categories: Category[] = [];
   searchTerm = '';
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  catalogSort: CatalogSort = 'newest';
+  pageIndex = 0;
+  pageSize = 10;
+  pageSizeOptions = [10, 20, 50];
 
   constructor(
     private router: Router,
@@ -50,13 +44,20 @@ export class ProductListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.dataSource.filterPredicate = (product, filter) =>
+      this.matchesProductFilter(product, filter);
     this.loadProducts();
     this.loadCategories();
   }
 
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+  get filteredCount(): number {
+    return this.dataSource.filteredData.length;
+  }
+
+  get catalogProducts(): Product[] {
+    const sorted = this.sortProducts([...this.dataSource.filteredData]);
+    const start = this.pageIndex * this.pageSize;
+    return sorted.slice(start, start + this.pageSize);
   }
 
   loadProducts(): void {
@@ -67,6 +68,7 @@ export class ProductListComponent implements OnInit {
       next: (products) => {
         this.allProducts = products;
         this.dataSource.data = products;
+        this.resetPage();
         this.isLoading = false;
       },
       error: (err) => {
@@ -95,26 +97,29 @@ export class ProductListComponent implements OnInit {
 
   onSearch(): void {
     this.dataSource.filter = this.searchTerm.trim().toLowerCase();
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+    this.resetPage();
   }
 
   clearSearch(): void {
     this.searchTerm = '';
     this.dataSource.filter = '';
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+    this.resetPage();
   }
 
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.searchTerm = filterValue.trim();
     this.dataSource.filter = filterValue.trim().toLowerCase();
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+    this.resetPage();
+  }
+
+  onCatalogSortChange(): void {
+    this.resetPage();
+  }
+
+  onPage(event: PageEvent): void {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
   }
 
   getCategoryValue(category: any): string {
@@ -139,17 +144,20 @@ export class ProductListComponent implements OnInit {
     } else {
       this.dataSource.data = this.allProducts;
     }
+    this.resetPage();
   }
 
   addProduct(): void {
     this.router.navigate(["/admin/products/new"]);
   }
 
-  editProduct(product: Product): void {
+  editProduct(product: Product, event?: Event): void {
+    event?.stopPropagation();
     this.router.navigate(["/admin/products/edit", product.id]);
   }
 
-  deleteProduct(product: Product): void {
+  deleteProduct(product: Product, event?: Event): void {
+    event?.stopPropagation();
     const productName = typeof product.name === 'string'
       ? product.name
       : (product.name['en'] || Object.values(product.name)[0] || 'Product');
@@ -173,11 +181,10 @@ export class ProductListComponent implements OnInit {
     });
   }
 
-  getStockClass(stock: number | undefined): string {
-    if (!stock) return "stock-low";
-    if (stock < 10) return "stock-low";
-    if (stock < 50) return "stock-medium";
-    return "stock-high";
+  stockTone(stock: number | undefined): StockTone {
+    if (stock == null || stock <= 0) return 'out';
+    if (stock < 10) return 'low';
+    return 'ok';
   }
 
   hasValidImage(product: Product): boolean {
@@ -189,7 +196,6 @@ export class ProductListComponent implements OnInit {
   }
 
   getImageUrl(product: Product): string {
-    // Return the imageUrl directly if it exists and is not a placeholder
     if (
       product.imageUrl &&
       product.imageUrl.trim() !== "" &&
@@ -209,11 +215,69 @@ export class ProductListComponent implements OnInit {
       }
     }
 
-    // Return empty string if no valid image found
     return "";
   }
 
   onImageError(event: any, product: any): void {
     // Handle image error silently
+  }
+
+  trackByProductId(_index: number, product: Product): number {
+    return product.id;
+  }
+
+  private resetPage(): void {
+    this.pageIndex = 0;
+  }
+
+  private matchesProductFilter(product: Product, filter: string): boolean {
+    if (!filter) return true;
+    const haystack = [
+      this.displayName(product),
+      this.asSearchText(product.name),
+      String(product.id ?? ''),
+      product.category || '',
+      this.asSearchText(this.getCategoryNameBySlug(product.category)),
+    ].join(' ').toLowerCase();
+    return haystack.includes(filter);
+  }
+
+  private sortProducts(products: Product[]): Product[] {
+    switch (this.catalogSort) {
+      case 'name':
+        return products.sort((a, b) =>
+          this.displayName(a).localeCompare(this.displayName(b), undefined, { sensitivity: 'base' })
+        );
+      case 'price':
+        return products.sort((a, b) => (a.price || 0) - (b.price || 0));
+      case 'stock':
+        return products.sort((a, b) => (a.stock || 0) - (b.stock || 0));
+      default:
+        return products.sort((a, b) => {
+          const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+          const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+          if (timeA !== timeB) return timeB - timeA;
+          return (b.id || 0) - (a.id || 0);
+        });
+    }
+  }
+
+  private displayName(product: Product): string {
+    const name = product.name;
+    if (!name) return '';
+    if (typeof name === 'string') return name;
+    const lang = this.translate.currentLang || 'en';
+    return name[lang] || name.en || Object.values(name).find(Boolean) || '';
+  }
+
+  private asSearchText(value: unknown): string {
+    if (value == null) return '';
+    if (typeof value === 'string') return value;
+    if (typeof value === 'object') {
+      return Object.values(value as Record<string, unknown>)
+        .filter((part) => typeof part === 'string')
+        .join(' ');
+    }
+    return String(value);
   }
 }

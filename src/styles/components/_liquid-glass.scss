@@ -366,28 +366,20 @@ body.is-admin[data-theme='dark'] {
     }
   }
 
-  /* Data table shell — glass container, sharp rows inside */
+  /* Data table — card rows, no nested spreadsheet shell */
   .admin-table-container.admin-table-container {
     position: relative;
     isolation: isolate;
-    overflow: hidden;
-    background: var(--liquid-glass-table-shell-bg);
-    backdrop-filter: var(--liquid-glass-table-shell-blur);
-    -webkit-backdrop-filter: var(--liquid-glass-table-shell-blur);
-    border: 1px solid var(--table-border);
-    border-radius: var(--table-radius);
-    box-shadow: var(--shadow-md), var(--liquid-glass-edge-shadow-dark);
+    overflow: visible;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
 
     &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      border-radius: inherit;
-      box-shadow: var(--liquid-glass-edge-shadow-dark);
-      backdrop-filter: url('#liquid-glass-card');
-      -webkit-backdrop-filter: url('#liquid-glass-card');
+      content: none;
     }
 
     .admin-table-wrapper,
@@ -413,7 +405,7 @@ body.is-admin[data-theme='dark'] {
 
     .mat-mdc-header-row,
     .mat-mdc-header-row.mat-mdc-header-row {
-      background-color: var(--surface-table-header);
+      background-color: transparent;
     }
 
     .mat-mdc-row,
@@ -425,19 +417,10 @@ body.is-admin[data-theme='dark'] {
       background-color: var(--surface-table-row);
     }
 
-    .mat-mdc-row:nth-child(even),
-    .mat-mdc-row:nth-child(even).mat-mdc-row {
-      background-color: var(--surface-table-even);
-    }
-
-    .mat-mdc-row:nth-child(even) .mat-mdc-cell {
-      background-color: var(--surface-table-even);
-    }
-
     .mat-mdc-paginator,
     .mat-paginator {
-      background-color: var(--surface-paginator);
-      border-top: 1px solid var(--border-subtle);
+      background-color: transparent;
+      border-top: none;
     }
   }
 }
