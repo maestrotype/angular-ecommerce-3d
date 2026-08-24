@@ -175,7 +175,7 @@
 
 @container (max-width: 768px) {
   .footer {
-    padding: 12px 0 calc(8px + 56px + env(safe-area-inset-bottom));
+    padding: var(--spacing-md) 0 calc(var(--spacing-sm) + 64px + env(safe-area-inset-bottom));
 
     .container {
       padding: 0 1rem;
@@ -223,7 +223,7 @@
 // Viewport fallback — same as container query (host width can disagree)
 @media (max-width: 768px) {
   .footer {
-    padding: 12px 0 calc(8px + 56px + env(safe-area-inset-bottom));
+    padding: var(--spacing-md) 0 calc(var(--spacing-sm) + 64px + env(safe-area-inset-bottom));
 
     .container {
       padding: 0 1rem;

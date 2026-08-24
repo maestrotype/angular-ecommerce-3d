@@ -77,7 +77,11 @@
   padding: var(--space-6);
   box-shadow: var(--shadow-md);
   border: 1px solid var(--border-default);
-  margin: 0 var(--space-6);
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 
   .admin-mobile-card {
     .amount {
@@ -205,6 +209,35 @@
         height: 3rem;
         opacity: 0.5;
       }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .payments-table-wrapper {
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  .no-data {
+    padding: var(--space-8) var(--space-2);
+  }
+
+  .filters-area .filters-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+
+  .filters-area .filters-actions {
+    justify-content: stretch;
+
+    button {
+      flex: 1 1 0;
+      min-width: 0;
     }
   }
 }
