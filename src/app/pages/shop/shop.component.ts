@@ -252,9 +252,10 @@ export class ShopComponent implements OnInit, OnDestroy {
           this.updateFilterCategories();
           this.applyFilters();
         },
-        error: (error) => {
-
-          this.notificationService.showError(this.translate.instant('SHOP.NOTIFICATIONS.ERROR_LOADING'));
+        error: () => {
+          this.translate.get('SHOP.NOTIFICATIONS.ERROR_LOADING').subscribe((message) => {
+            this.notificationService.showError(message);
+          });
         }
       });
   }

@@ -20,8 +20,8 @@ main {
 @media (max-width: 768px) {
     main:not(.admin-main) {
         padding-top: 64px;
-        padding-bottom: calc(64px + env(safe-area-inset-bottom) + var(--spacing-sm));
-        min-height: calc(100vh - 64px);
+        padding-bottom: 0;
+        min-height: 0;
     }
 }
 

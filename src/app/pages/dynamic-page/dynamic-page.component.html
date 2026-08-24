@@ -31,10 +31,12 @@
   </div>
 
   <div *ngIf="!loading && page && isSectionsLayout(page.template)" class="page-content">
-    <app-section-renderer
-      *ngFor="let section of sections; trackBy: trackBySectionId"
-      [section]="section"
-      [contextData]="pageContext">
-    </app-section-renderer>
+    <ng-container *ngFor="let section of sections; trackBy: trackBySectionId">
+      <app-section-renderer
+        *ngIf="section.type !== 'header' && section.type !== 'footer'"
+        [section]="section"
+        [contextData]="pageContext">
+      </app-section-renderer>
+    </ng-container>
   </div>
 </div>

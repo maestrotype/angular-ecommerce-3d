@@ -81,7 +81,7 @@
 
 @media (max-width: 768px) {
     .brands {
-        padding: 28px 0 20px;
+        padding: var(--spacing-xl, 2rem) 0;
 
         .container {
             padding: 0 1rem;
@@ -113,7 +113,7 @@
 
 @media (max-width: 360px) {
     .brands {
-        padding: 20px 0 12px;
+        padding: var(--spacing-lg, 1.5rem) 0;
 
         .brands-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
