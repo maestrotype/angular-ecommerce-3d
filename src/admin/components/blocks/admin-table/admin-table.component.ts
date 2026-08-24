@@ -15,6 +15,7 @@ export class AdminTableComponent {
   @Input() loading = false;
   @Input() pageSizeOptions: number[] = [5, 10, 20];
   @Input() showFirstLastButtons = true;
+  @Input() showPaginator = true;
   @Input() density: AdminTableDensity = 'default';
   @Input() striped = true;
   @Input() skeletonRows = 6;
