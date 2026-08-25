@@ -75,8 +75,17 @@ export interface SectionPresetFormPatch {
     isActive: boolean;
   }>;
   carouselSource?: 'new' | 'best-sellers' | 'special' | 'all';
+  carouselMode?: 'products' | 'custom';
   carouselLimit?: number;
   carouselAutoplay?: boolean;
+  carouselSlides?: Array<{
+    image: string;
+    title: string;
+    subtitle?: string;
+    link?: string;
+    price?: number;
+    isActive: boolean;
+  }>;
   lookbookSlides?: Array<{
     image: string;
     title: string;
@@ -87,6 +96,12 @@ export interface SectionPresetFormPatch {
   }>;
   videoUrl?: string;
   videoAutoplay?: boolean;
+  videoMuted?: boolean;
+  videoLoop?: boolean;
+  videoControls?: boolean;
+  videoShowPlayButton?: boolean;
+  videoOverlayOpacity?: number;
+  videoAlignment?: 'center' | 'left' | 'right';
   videoCtaText?: string;
   videoCtaLink?: string;
   videoSecondaryCtaText?: string;
@@ -405,8 +420,14 @@ const VIDEO_HERO_PRESET: SectionPresetFormPatch = {
   showImage: true,
   variant: 'default',
   anchorId: 'video-hero',
-  videoUrl: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+  videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
   videoAutoplay: true,
+  videoMuted: true,
+  videoLoop: true,
+  videoControls: false,
+  videoShowPlayButton: true,
+  videoOverlayOpacity: 0.5,
+  videoAlignment: 'center',
   videoCtaText: 'Shop the film',
   videoCtaLink: '/shop',
   videoSecondaryCtaText: 'Our story',
@@ -646,9 +667,15 @@ function buildSettingsFromPreset(type: string, preset: SectionPresetFormPatch): 
 
   if (type === 'product-carousel') {
     return {
+      mode: preset.carouselMode || 'products',
       source: preset.carouselSource || 'new',
       limit: preset.carouselLimit ?? 8,
-      autoplay: preset.carouselAutoplay !== false
+      autoplay: preset.carouselAutoplay !== false,
+      slides: (preset.carouselSlides || []).map(slide => ({
+        ...slide,
+        title: L(slide.title, slide.title, slide.title),
+        subtitle: L(slide.subtitle || '', slide.subtitle || '', slide.subtitle || '')
+      }))
     };
   }
 
@@ -669,12 +696,12 @@ function buildSettingsFromPreset(type: string, preset: SectionPresetFormPatch): 
       videoUrl: preset.videoUrl || '',
       posterImage: preset.imageUrl || '',
       autoplay: preset.videoAutoplay !== false,
-      muted: true,
-      loop: true,
-      controls: false,
-      overlayOpacity: 0.5,
-      alignment: 'center',
-      showPlayButton: true,
+      muted: preset.videoMuted !== false,
+      loop: preset.videoLoop !== false,
+      controls: preset.videoControls === true,
+      overlayOpacity: preset.videoOverlayOpacity ?? 0.5,
+      alignment: preset.videoAlignment || 'center',
+      showPlayButton: preset.videoShowPlayButton !== false,
       ctaText: L(
         preset.videoCtaText || 'Shop now',
         preset.videoCtaText || 'В магазин',

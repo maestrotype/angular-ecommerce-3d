@@ -184,7 +184,8 @@
     padding: var(--space-4);
   }
 
-  .threed-upload-container {
+  .threed-upload-container,
+  .video-upload-container {
     height: 200px;
     display: flex;
     flex-direction: column;
@@ -193,6 +194,10 @@
     cursor: pointer;
     transition: all 0.2s ease;
     text-align: center;
+    background: var(--surface-secondary);
+    border: 1px dashed var(--border-default);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-4);
 
     &:hover {
       background: var(--surface-highlight);
@@ -208,6 +213,7 @@
         color: var(--text-secondary);
       }
       p { margin: 0; font-weight: 500; }
+      small { font-size: 12px; color: var(--text-secondary); }
       .hint { font-size: 12px; color: var(--text-secondary); }
     }
 
@@ -219,7 +225,16 @@
       padding: var(--space-4);
 
       mat-icon { font-size: 32px; height: 32px; width: 32px; }
-      
+
+      .file-name {
+        flex: 1;
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: left;
+      }
+
       .file-details {
         flex: 1;
         display: flex;
@@ -238,11 +253,18 @@
         .status-badge {
           font-size: 11px;
           color: var(--color-accent);
-          
+
           &.ready { color: var(--color-success); }
         }
       }
     }
+  }
+
+  .playback-toggles {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
   }
 
   .dynamic-list {

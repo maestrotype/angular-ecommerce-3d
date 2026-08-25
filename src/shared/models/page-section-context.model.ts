@@ -4,4 +4,5 @@ import { Product } from './product.model';
 export interface PageSectionContext {
   bestSellers?: Product[];
   specialOffers?: Product[];
+  catalog?: Product[];
 }
