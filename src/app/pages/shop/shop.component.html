@@ -254,38 +254,36 @@
           </div>
 
           <div class="product-info">
+            <span class="product-category" *ngIf="product.category">{{ product.category }}</span>
             <h3 class="product-name">{{ product.name | localized }}</h3>
 
-            <div class="product-rating">
+            <div class="product-rating" *ngIf="product.rating">
               <div class="stars">
                 <span class="star" *ngFor="let star of [1,2,3,4,5]; let i = index"
                   [class.filled]="i < Math.floor(product.rating || 0)" (click)="rateProduct(product, i + 1, $event)"
                   [title]="('SHOP.PRODUCT.RATE' | translate) + ' ' + (i + 1) + ' ' + ('SHOP.PRODUCT.STARS' | translate)">★</span>
               </div>
-              <span class="rating-value">({{ product.rating || 0 }})</span>
+              <span class="rating-value">({{ product.rating }})</span>
               <span class="rating-count" *ngIf="product.ratingCount">({{ product.ratingCount }} {{
                 'SHOP.PRODUCT.REVIEWS' | translate }})</span>
-              <span class="product-category">{{ product.category }}</span>
             </div>
 
             <div class="product-footer">
               <div class="price-main">
-                <span class="current-price">${{ product.price }}</span>
-                <span class="original-price" *ngIf="product.originalPrice">${{ product.originalPrice }}</span>
+                <span class="current-price">${{ product.price | number:'1.0-2' }}</span>
+                <span class="original-price" *ngIf="product.originalPrice">${{ product.originalPrice | number:'1.0-2' }}</span>
               </div>
 
-              <!-- Cart Button - Always Visible -->
               <button class="cart-btn" (click)="addToCart(product, $event)"
                 [title]="'SHOP.PRODUCT.ADD_TO_CART' | translate">
                 <span class="material-icons">shopping_cart</span>
               </button>
             </div>
 
-            <!-- Stock Indicator -->
-            <div class="stock-indicator"
+            <p class="stock-indicator"
               *ngIf="product?.stock !== undefined && product.stock > 0 && product.stock <= 5">
               {{ 'SHOP.PRODUCT.LOW_STOCK' | translate:{count: product.stock} }}
-            </div>
+            </p>
           </div>
         </div>
       </div>

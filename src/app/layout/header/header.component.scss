@@ -23,13 +23,13 @@
 }
 
 .header {
-  height: 80px;
+  height: 64px;
   --nav-link-color: var(--header-link);
   --nav-link-hover: var(--header-link-hover);
   --nav-drawer-bg: var(--header-bg);
   width: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   background: var(--header-bg);
   background-color: var(--surface-chrome, transparent);
   backdrop-filter: var(--header-backdrop-filter);
@@ -47,21 +47,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 16px;
     max-width: 1240px;
     width: 100%;
-    padding: 0 20px;
+    padding: 0 24px;
     position: relative;
-
-    &:after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-      width: 100%;
-      height: 10px;
-      background: radial-gradient(circle at 50% 100%, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
-      z-index: -1;
-    }
   }
 
   .logo {
@@ -73,14 +63,12 @@
     cursor: pointer;
 
     &:hover {
-      transform: translateY(-2px);
-      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
       opacity: 0.8;
     }
 
     .logo-image {
-      max-height: 50px;
-      max-width: 150px;
+      max-height: 40px;
+      max-width: 140px;
       object-fit: contain;
       transition: all 0.3s ease;
     }
@@ -92,10 +80,10 @@
 
   .nav {
     display: flex;
-    gap: 12px;
-    flex: 1;
-    justify-content: center;
-    margin: 0 20px;
+    gap: 4px;
+    flex: 1 1 auto;
+    justify-content: flex-start;
+    margin: 0 8px;
     min-width: 0;
     transition: all var(--transition-normal);
 
@@ -200,10 +188,42 @@
 
   .user-actions {
     display: flex;
-    gap: 8px; // Reduced from 15px to fit more icons
+    gap: 4px;
     align-items: center;
-    flex-shrink: 0; // Prevent icons from shrinking or being pushed out
-    margin-left: 10px;
+    flex-shrink: 0;
+    margin-left: auto;
+
+    .user-actions__cluster {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+
+      & + .user-actions__cluster {
+        margin-left: 6px;
+        padding-left: 10px;
+        border-left: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
+      }
+    }
+
+    .admin-entry {
+      display: inline-flex;
+      align-items: center;
+      height: 36px;
+      padding: 0 10px;
+      border-radius: 8px;
+      color: var(--header-link);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: color 0.2s ease, background-color 0.2s ease;
+
+      &:hover {
+        color: var(--interactive-primary);
+        background: color-mix(in srgb, var(--interactive-primary) 8%, transparent);
+      }
+    }
 
     .search-icon,
     .profile-icon,
@@ -212,9 +232,9 @@
     .theme-toggle {
       font-size: 1.2em;
       cursor: pointer;
-      padding: 0.75rem;
+      padding: 0.5rem;
       border-radius: var(--radius-md, 12px);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: color 0.2s ease, background-color 0.2s ease;
       position: relative;
       color: var(--header-link);
       background: transparent;
@@ -223,14 +243,12 @@
 
       &:hover {
         color: var(--interactive-primary);
-        transform: translateX(5px) translateY(-2px);
-        background: transparent;
+        background: color-mix(in srgb, var(--interactive-primary) 8%, transparent);
       }
 
       &:active {
         color: var(--interactive-primary);
-        transform: translateX(2px) translateY(0px);
-        background: transparent;
+        background: color-mix(in srgb, var(--interactive-primary) 12%, transparent);
       }
 
       &:focus,

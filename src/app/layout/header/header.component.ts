@@ -425,10 +425,14 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   canAccessMenuItem(menuItem: MenuItem): boolean {
     if (menuItem.url.includes('admin')) {
-      const user = this.authService.getUser();
-      return user && user.role === 'admin';
+      return this.hasAdminAccess;
     }
     return true;
+  }
+
+  get hasAdminAccess(): boolean {
+    const user = this.authService.getUser();
+    return !!(user && user.role === 'admin');
   }
 
   isLoggedIn(): boolean {
