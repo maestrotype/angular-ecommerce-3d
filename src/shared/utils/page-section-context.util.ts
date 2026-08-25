@@ -9,10 +9,22 @@ export function loadPageSectionContext(
   sectionTypes: Iterable<string>
 ): Observable<PageSectionContext> {
   const types = new Set(sectionTypes);
-  const requests: { bestSellers?: ReturnType<ProductService['getBestSellers']> } = {};
+  const requests: {
+    bestSellers?: ReturnType<ProductService['getBestSellers']>;
+    specialOffers?: ReturnType<ProductService['getSpecialOffers']>;
+    catalog?: ReturnType<ProductService['getProducts']>;
+  } = {};
 
   if (types.has('best-sellers')) {
     requests.bestSellers = productService.getBestSellers().pipe(catchError(() => of([])));
+  }
+
+  if (types.has('product-carousel')) {
+    requests.catalog = productService.getProducts().pipe(catchError(() => of([])));
+    requests.specialOffers = productService.getSpecialOffers().pipe(catchError(() => of([])));
+    if (!requests.bestSellers) {
+      requests.bestSellers = productService.getBestSellers().pipe(catchError(() => of([])));
+    }
   }
 
   if (Object.keys(requests).length === 0) {
