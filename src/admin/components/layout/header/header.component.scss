@@ -52,6 +52,11 @@
       overflow: hidden;
       background-color: transparent;
       background-image: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      line-height: 0;
       --mdc-icon-button-hover-state-layer-opacity: 0;
       --mdc-icon-button-focus-state-layer-opacity: 0;
       --mdc-icon-button-pressed-state-layer-opacity: 0;
@@ -61,6 +66,16 @@
       mask-image: radial-gradient(closest-side, black 99%, transparent 100%);
       transform: translateZ(0);
       transition: color var(--duration-normal) var(--easing-default);
+
+      .mat-icon {
+        width: 24px;
+        height: 24px;
+        font-size: 24px;
+        line-height: 24px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
 
       &:hover,
       &:focus,
@@ -98,6 +113,10 @@
     background-color: transparent;
     background-image: none;
     flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
     -webkit-mask-image: none;
     mask-image: none;
     --mdc-icon-button-hover-state-layer-opacity: 0;

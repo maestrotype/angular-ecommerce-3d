@@ -11,6 +11,11 @@
   box-sizing: border-box;
 }
 
+.integrations-content.admin-card-grid {
+  --admin-card-grid-min: 420px;
+  align-items: start;
+}
+
 .integrations-header {
   margin-bottom: var(--space-8);
 
@@ -30,6 +35,7 @@
 }
 
 .integration-card {
+  min-width: 0;
   background: var(--surface-elevated);
   backdrop-filter: var(--glass-blur);
   border: 1px solid var(--border-subtle);
@@ -51,11 +57,15 @@
       font-size: var(--text-xl);
       font-weight: var(--font-medium);
       color: var(--text-primary);
+      white-space: normal;
+      overflow: visible;
+      text-overflow: unset;
     }
 
     mat-card-subtitle {
       color: var(--text-secondary);
       margin-top: var(--space-1);
+      white-space: normal;
     }
   }
 

@@ -169,7 +169,7 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
       const deltaX = event.clientX - this.initialMouseX;
       const newWidth = this.initialSidebarWidth + deltaX;
       const maxWidth = Math.floor(window.innerWidth * 0.78);
-      if (newWidth > 400 && newWidth < maxWidth) {
+      if (newWidth > 560 && newWidth < maxWidth) {
         this.sidebarWidth = newWidth;
       }
     });
@@ -192,7 +192,7 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
       return 640;
     }
     const contentWidth = window.innerWidth - 280;
-    return Math.min(860, Math.max(500, Math.floor(contentWidth * 0.52)));
+    return Math.min(860, Math.max(560, Math.floor(contentWidth * 0.52)));
   }
 
   ngAfterViewInit(): void {
@@ -583,7 +583,14 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
     };
   }
 
+  trackBySectionId(_index: number, section: Section): number | string {
+    return section.id;
+  }
+
   drop(event: CdkDragDrop<Section[]>): void {
+    if (event.previousIndex === event.currentIndex) {
+      return;
+    }
     const data = [...this.dataSource.data];
     moveItemInArray(data, event.previousIndex, event.currentIndex);
     this.updateSectionOrder(data);
