@@ -326,6 +326,8 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
   private addSectionWithTarget(target: string): void {
     this.editorMode = 'add';
     this.editingSection = { pageTarget: target } as any;
+    this.showPicker = true;
+    this.previewData = null;
     this.isEditorOpen = true;
   }
 
@@ -383,11 +385,21 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onSectionTypeSelected(type: string): void {
     this.editorMode = 'add';
-    const pageTarget = (type === 'header' || type === 'footer') ? 'global' : this.getDefaultPageTarget();
+    const pageTarget = (type === 'header' || type === 'footer')
+      ? 'global'
+      : (this.editingSection?.pageTarget || this.getDefaultPageTarget());
     this.editingSection = { type, pageTarget } as any;
     this.isEditorOpen = true;
     this.showPicker = false;
     this.previewData = { type };
+  }
+
+  backToPicker(): void {
+    const pageTarget = this.editingSection?.pageTarget || this.getDefaultPageTarget();
+    this.editorMode = 'add';
+    this.editingSection = { pageTarget } as any;
+    this.previewData = null;
+    this.showPicker = true;
   }
 
   selectForPreview(section: Section): void {
@@ -502,6 +514,7 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isEditorOpen = false;
     this.editingSection = null;
     this.previewData = null;
+    this.showPicker = false;
   }
 
   toggleSection(section: Section): void {

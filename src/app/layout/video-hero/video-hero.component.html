@@ -1,12 +1,13 @@
 <section class="video-hero-section" [id]="data?.anchorId || 'video-hero'">
   <div class="video-container" [class]="settings.alignment ?? 'center'">
-    <div class="video-wrapper" *ngIf="!videoError; else errorFallback">
+    <div class="video-wrapper" *ngIf="settings.videoUrl && !videoError; else errorFallback">
       <div class="video-overlay" [style.--overlay-opacity]="settings.overlayOpacity"></div>
 
       <video
+        #heroVideo
         class="hero-video"
-        [src]="settings.videoUrl || data?.settings?.videoUrl"
-        [poster]="settings.posterImage || data?.settings?.posterImage"
+        [src]="settings.videoUrl"
+        [poster]="settings.posterImage"
         [autoplay]="settings.autoplay"
         [muted]="settings.muted"
         [loop]="settings.loop"
@@ -40,7 +41,7 @@
         <div class="content-inner">
           <span class="hero-subtitle" *ngIf="data?.subtitle">{{ data.subtitle | localized }}</span>
           <h1 class="hero-title">{{ (data?.title | localized) || ('HOME.VIDEO.TITLE' | translate) }}</h1>
-          <p class="hero-description" *ngIf="data?.description">{{ data.description | localized }}</p>
+          <p class="hero-description" *ngIf="data?.content || data?.description">{{ (data.content || data.description) | localized }}</p>
 
           <div class="hero-actions" *ngIf="settings.ctaLink || settings.secondaryCtaLink">
             <a
@@ -76,7 +77,7 @@
     <div class="video-error-fallback" [style.background-image]="'url(' + (settings.posterImage || '') + ')'">
       <div class="fallback-content">
         <h1 class="hero-title">{{ (data?.title | localized) || ('HOME.VIDEO.TITLE' | translate) }}</h1>
-        <p class="hero-description" *ngIf="data?.description">{{ data.description | localized }}</p>
+        <p class="hero-description" *ngIf="data?.content || data?.description">{{ (data.content || data.description) | localized }}</p>
         <div class="hero-actions">
           <a *ngIf="settings.ctaLink" class="btn btn-primary" [href]="settings.ctaLink">
             {{ (settings.ctaText | localized) || ('HOME.VIDEO.CTA' | translate) }}

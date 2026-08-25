@@ -3,13 +3,13 @@
     <div class="section-header">
       <span class="section-subtitle" *ngIf="data?.subtitle">{{ data.subtitle | localized }}</span>
       <h2 class="section-title">{{ (data?.title | localized) || ('HOME.BLOG.TITLE' | translate) }}</h2>
-      <p class="section-description" *ngIf="data?.description">{{ data.description | localized }}</p>
+      <p class="section-description" *ngIf="data?.content || data?.description">{{ (data.content || data.description) | localized }}</p>
     </div>
 
     <div class="blog-grid" [class.list-mode]="displayMode === 'list'" *ngIf="posts.length; else emptyState">
       <article class="blog-card" *ngFor="let post of posts" [class.list-item]="displayMode === 'list'">
         <div class="card-image" *ngIf="post.image">
-          <img [src]="post.image" [alt]="post.title | localized" loading="lazy">
+          <img [src]="post.image | imageUrl" [alt]="post.title | localized" loading="lazy">
         </div>
         <div class="card-content">
           <div class="card-meta">

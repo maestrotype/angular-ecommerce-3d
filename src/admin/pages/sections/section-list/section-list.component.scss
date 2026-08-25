@@ -381,6 +381,13 @@
             h2 { margin: 0; font-size: 1.1rem; font-weight: 800; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
             .editing-name { font-size: 0.8rem; color: var(--interactive-primary); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
           }
+          .change-type-btn {
+            flex-shrink: 0;
+            mat-icon {
+              margin-right: 4px;
+            }
+          }
+
           .drawer-lang-switcher {
             margin-right: 12px;
             // Lang chips → overrides (B3)
