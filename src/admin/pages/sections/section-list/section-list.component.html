@@ -184,8 +184,18 @@
           </button>
           <div class="header-title">
             <h2>{{ (editorMode === 'edit' ? 'EDIT_SECTION' : 'ADD_SECTION') | translate }}</h2>
-            <span class="editing-name" *ngIf="editingSection">{{ editingSection.title | localized }}</span>
+            <span class="editing-name" *ngIf="!showPicker && editingSection?.title">{{ editingSection.title | localized }}</span>
           </div>
+
+          <button
+            mat-stroked-button
+            type="button"
+            class="change-type-btn"
+            *ngIf="editorMode === 'add' && !showPicker"
+            (click)="backToPicker()">
+            <mat-icon>apps</mat-icon>
+            {{ 'CHANGE_SECTION_TYPE' | translate }}
+          </button>
 
           <mat-chip-listbox class="drawer-lang-switcher" *ngIf="!showPicker">
             <mat-chip-option [selected]="activeMenuLang === 'en'" (click)="onLangChange('en')">EN</mat-chip-option>
@@ -204,7 +214,13 @@
         </div>
 
         <div class="editor-form-wrapper">
+          <app-section-picker
+            *ngIf="showPicker"
+            (sectionSelected)="onSectionTypeSelected($event)">
+          </app-section-picker>
+
           <app-section-form
+            *ngIf="!showPicker"
             [data]="{ section: editingSection }"
             [isDrawerMode]="true"
             [activeMenuLang]="activeMenuLang"
@@ -256,7 +272,7 @@
         </div>
         <div class="architect-content">
           <app-admin-section-preview
-            [sections]="dataSource.data"
+            [sections]="previewSections"
             [sectionData]="isEditorOpen ? previewData : null"
             [mode]="previewMode"
             [isFoldExpanded]="isFoldExpanded"

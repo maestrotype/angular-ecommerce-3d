@@ -6,11 +6,17 @@
   --surface-overlay: var(--color-white);
   --surface-inverse: var(--color-slate-900);
   --surface-page: var(--color-slate-50);
+  --surface-section: var(--surface-page);
+  --video-hero-bg: var(--hero-bg-gradient, var(--surface-section));
+  --video-hero-text: var(--hero-text-color, var(--text-primary));
+  --video-hero-muted: var(--text-secondary);
+  --video-hero-overlay-color: var(--surface-page);
   --surface-card: rgba(255, 255, 255, 0.85);
   --surface-elevated: var(--color-white);
   --surface-highlight: var(--color-slate-100);
   --surface-overlay-light: rgba(255, 255, 255, 0.2);
   --surface-overlay-full: rgba(15, 23, 42, 0.5);
+  --surface-scrim: #050505;
 
   // ===== TEXT TOKENS =====
   --text-primary: var(--color-slate-900);
@@ -18,6 +24,7 @@
   --text-muted: var(--color-slate-400);
   --text-inverse: var(--color-white);
   --text-on-primary: var(--color-white);
+  --text-on-media: var(--color-white);
   --text-link: var(--color-primary-base);
 
   // ===== BORDER TOKENS =====

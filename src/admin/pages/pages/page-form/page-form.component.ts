@@ -4,8 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { PageService } from '../../../services/page.service';
+import { ConfirmationService } from '../../../services/confirmation.service';
 import { PageTemplate, PageStatus, isSectionBasedPageTemplate } from 'src/shared/models/page.model';
-import { getSuggestedSlugForTemplate } from '../../sections/page-template-presets';
+import { getPageDemoPatch, getSuggestedSlugForTemplate } from '../../sections/page-template-presets';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-page-form',
@@ -41,6 +43,7 @@ export class PageFormComponent implements OnInit {
     private pageService: PageService,
     private snackBar: MatSnackBar,
     private translate: TranslateService,
+    private confirmationService: ConfirmationService,
   ) {
     this.pageForm = this.fb.group({
       slug: ['', [Validators.required, Validators.pattern(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)]],
@@ -165,6 +168,53 @@ export class PageFormComponent implements OnInit {
         this.snackBar.open(message, this.translate.instant('CLOSE_BTN'), { duration: 5000 });
       },
     });
+  }
+
+  fillDemoData(): void {
+    const apply = () => {
+      const template = (this.pageForm.get('template')?.value || 'simple') as PageTemplate;
+      const demo = getPageDemoPatch(template);
+      const slugControl = this.pageForm.get('slug');
+      const patch: Record<string, string> = {
+        title_en: demo.title_en,
+        title_ru: demo.title_ru,
+        title_ua: demo.title_ua,
+        seoDescription_en: demo.seoDescription_en,
+        seoDescription_ru: demo.seoDescription_ru,
+        seoDescription_ua: demo.seoDescription_ua,
+      };
+
+      if (demo.content_en !== undefined) {
+        patch['content_en'] = demo.content_en;
+        patch['content_ru'] = demo.content_ru || '';
+        patch['content_ua'] = demo.content_ua || '';
+      }
+
+      if (!this.isEditMode && slugControl && !slugControl.disabled && !slugControl.value && demo.slug) {
+        patch['slug'] = demo.slug;
+      }
+
+      this.pageForm.patchValue(patch);
+      this.snackBar.open(
+        this.translate.instant('DEMO_CONTENT_LOADED'),
+        this.translate.instant('CLOSE_BTN'),
+        { duration: 3000 },
+      );
+    };
+
+    if (this.isEditMode) {
+      this.confirmationService.confirmAction(
+        this.translate.instant('FILL_DEMO_DATA'),
+        this.translate.instant('PAGE'),
+      ).pipe(take(1)).subscribe(confirmed => {
+        if (confirmed) {
+          apply();
+        }
+      });
+      return;
+    }
+
+    apply();
   }
 
   cancel(): void {

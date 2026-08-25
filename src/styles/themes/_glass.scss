@@ -22,6 +22,10 @@
   --hero-backdrop-filter: blur(20px) saturate(180%);
   --hero-text-color: #1e293b;
   --hero-accent-color: #6366f1;
+  --video-hero-bg: var(--hero-bg-gradient);
+  --video-hero-text: var(--hero-text-color);
+  --video-hero-muted: var(--text-secondary);
+  --video-hero-overlay-color: rgba(255, 255, 255, 0.72);
 
   /* Special Offer section - Light glass */
   --special-offer-bg: linear-gradient(135deg,
@@ -294,6 +298,7 @@
   --surface-overlay: rgba(148, 163, 184, 0.28);
   --surface-inverse: var(--color-white);
   --surface-page: transparent;
+  --surface-section: rgba(255, 255, 255, 0.08);
   --surface-card: rgba(255, 255, 255, 0.42);
   --surface-elevated: rgba(255, 255, 255, 0.55);
   --surface-elevated-rgb: 255, 255, 255;

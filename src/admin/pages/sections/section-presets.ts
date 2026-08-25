@@ -74,6 +74,37 @@ export interface SectionPresetFormPatch {
     suffix: string;
     isActive: boolean;
   }>;
+  carouselSource?: 'new' | 'best-sellers' | 'special' | 'all';
+  carouselLimit?: number;
+  carouselAutoplay?: boolean;
+  lookbookSlides?: Array<{
+    image: string;
+    title: string;
+    subtitle: string;
+    ctaLabel: string;
+    ctaUrl: string;
+    isActive: boolean;
+  }>;
+  videoUrl?: string;
+  videoAutoplay?: boolean;
+  videoCtaText?: string;
+  videoCtaLink?: string;
+  videoSecondaryCtaText?: string;
+  videoSecondaryCtaLink?: string;
+  blogDisplayMode?: 'grid' | 'list';
+  blogShowCta?: boolean;
+  blogCtaText?: string;
+  blogCtaLink?: string;
+  blogPosts?: Array<{
+    title: string;
+    excerpt: string;
+    image: string;
+    date: string;
+    author: string;
+    category: string;
+    link: string;
+    isActive: boolean;
+  }>;
   columns?: Array<{
     title: LocalizedString;
     linkSource: 'manual' | 'shop-categories';
@@ -110,6 +141,57 @@ const HERO_PRESET: SectionPresetFormPatch = {
   show3d: false,
   variant: 'default',
   anchorId: 'hero'
+};
+
+const PRODUCT_CAROUSEL_PRESET: SectionPresetFormPatch = {
+  title_en: 'New This Season',
+  title_ru: 'Новинки сезона',
+  title_ua: 'Новинки сезону',
+  subtitle_en: 'Just landed',
+  subtitle_ru: 'Только поступили',
+  subtitle_ua: 'Щойно надійшли',
+  variant: 'default',
+  anchorId: 'product-carousel',
+  carouselSource: 'new',
+  carouselLimit: 8,
+  carouselAutoplay: true
+};
+
+const LOOKBOOK_PRESET: SectionPresetFormPatch = {
+  title_en: 'Lookbook',
+  title_ru: 'Лукбук',
+  title_ua: 'Лукбук',
+  subtitle_en: 'Campaign',
+  subtitle_ru: 'Кампания',
+  subtitle_ua: 'Кампанія',
+  variant: 'default',
+  anchorId: 'lookbook',
+  lookbookSlides: [
+    {
+      image: 'assets/demo/products/sneaker.svg',
+      title: 'Spring Drop',
+      subtitle: 'Sculpted silhouettes in motion.',
+      ctaLabel: 'Shop the look',
+      ctaUrl: '/shop',
+      isActive: true
+    },
+    {
+      image: 'assets/demo/products/headphones.svg',
+      title: 'Sound in 3D',
+      subtitle: 'Hear the collection before you buy.',
+      ctaLabel: 'Explore audio',
+      ctaUrl: '/shop',
+      isActive: true
+    },
+    {
+      image: 'assets/demo/products/t-shirt.svg',
+      title: 'Essentials',
+      subtitle: 'Quiet luxury, everyday wear.',
+      ctaLabel: 'See pieces',
+      ctaUrl: '/shop',
+      isActive: true
+    }
+  ]
 };
 
 const BEST_SELLERS_PRESET: SectionPresetFormPatch = {
@@ -309,11 +391,137 @@ const HTML_CONTENT_PRESET: SectionPresetFormPatch = {
   content_ua: '<p>Ми поєднуємо преміальну добірку товарів з immersive 3D-шопінгом.</p>'
 };
 
+const VIDEO_HERO_PRESET: SectionPresetFormPatch = {
+  title_en: 'Move in 3D',
+  title_ru: 'Движение в 3D',
+  title_ua: 'Рух у 3D',
+  subtitle_en: 'Campaign film',
+  subtitle_ru: 'Фильм кампании',
+  subtitle_ua: 'Фільм кампанії',
+  content_en: 'A cinematic look at this season’s silhouettes, textures, and sound.',
+  content_ru: 'Кинематографичный взгляд на силуэты, текстуры и звук этого сезона.',
+  content_ua: 'Кінематографічний погляд на силуети, текстури та звук цього сезону.',
+  imageUrl: 'assets/demo/products/sneaker.svg',
+  showImage: true,
+  variant: 'default',
+  anchorId: 'video-hero',
+  videoUrl: 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+  videoAutoplay: true,
+  videoCtaText: 'Shop the film',
+  videoCtaLink: '/shop',
+  videoSecondaryCtaText: 'Our story',
+  videoSecondaryCtaLink: '/about'
+};
+
+const BLOG_POSTS_PRESET: SectionPresetFormPatch = {
+  title_en: 'From the Journal',
+  title_ru: 'Из журнала',
+  title_ua: 'З журналу',
+  subtitle_en: 'Stories & style notes',
+  subtitle_ru: 'Истории и заметки о стиле',
+  subtitle_ua: 'Історії та нотатки про стиль',
+  content_en: 'Editorial notes on materials, 3D fitting, and how we build each drop.',
+  content_ru: 'Редакторские заметки о материалах, 3D-примерке и том, как мы собираем дропы.',
+  content_ua: 'Редакторські нотатки про матеріали, 3D-примірку і те, як ми збираємо дропи.',
+  variant: 'default',
+  anchorId: 'blog',
+  blogDisplayMode: 'grid',
+  blogShowCta: true,
+  blogCtaText: 'View all stories',
+  blogCtaLink: '/shop',
+  blogPosts: [
+    {
+      title: 'How 3D fitting changed our studio',
+      excerpt: 'A look at the tools we use before a sample ever hits the floor.',
+      image: 'assets/demo/products/sneaker.svg',
+      date: '2026-03-12',
+      author: 'Maya Cole',
+      category: 'Studio',
+      link: '/shop',
+      isActive: true
+    },
+    {
+      title: 'Sound, space, and the next drop',
+      excerpt: 'Why we treat audio products like sculpture — and how to listen in 3D.',
+      image: 'assets/demo/products/headphones.svg',
+      date: '2026-04-02',
+      author: 'Leo Hart',
+      category: 'Audio',
+      link: '/shop',
+      isActive: true
+    },
+    {
+      title: 'Quiet luxury, everyday knits',
+      excerpt: 'Fabric notes from the essentials capsule: weight, drape, and wash care.',
+      image: 'assets/demo/products/t-shirt.svg',
+      date: '2026-04-18',
+      author: 'Elena Voss',
+      category: 'Apparel',
+      link: '/shop',
+      isActive: true
+    }
+  ]
+};
+
+const CONTACTS_PRESET: SectionPresetFormPatch = {
+  title_en: 'Get in Touch',
+  title_ru: 'Свяжитесь с нами',
+  title_ua: 'Зв’яжіться з нами',
+  subtitle_en: 'We reply within one business day.',
+  subtitle_ru: 'Отвечаем в течение одного рабочего дня.',
+  subtitle_ua: 'Відповідаємо протягом одного робочого дня.',
+  content_en: 'Questions about orders, 3D previews, or wholesale? Send a note.',
+  content_ru: 'Вопросы по заказам, 3D-превью или опту? Напишите нам.',
+  content_ua: 'Питання щодо замовлень, 3D-прев’ю чи опту? Напишіть нам.',
+  anchorId: 'contacts'
+};
+
+const ABOUT_PRESET: SectionPresetFormPatch = {
+  title_en: 'Crafted for',
+  title_ru: 'Создано для',
+  title_ua: 'Створено для',
+  subtitle_en: 'A 3D-first studio for modern essentials.',
+  subtitle_ru: '3D-студия современных базовых вещей.',
+  subtitle_ua: '3D-студія сучасних базових речей.',
+  content_en: 'the 3D era',
+  content_ru: 'эпохи 3D',
+  content_ua: 'епохи 3D',
+  imageUrl: 'assets/demo/products/sneaker.svg',
+  showImage: true,
+  show3d: false,
+  anchorId: 'about'
+};
+
+const PRODUCT_TABS_PRESET: SectionPresetFormPatch = {
+  title_en: 'Product Details',
+  title_ru: 'О товаре',
+  title_ua: 'Про товар',
+  anchorId: 'product-tabs'
+};
+
+const SIMILAR_PRODUCTS_PRESET: SectionPresetFormPatch = {
+  title_en: 'You May Also Like',
+  title_ru: 'Вам также может понравиться',
+  title_ua: 'Вам також може сподобатися',
+  anchorId: 'similar-products'
+};
+
+const BOUGHT_TOGETHER_PRESET: SectionPresetFormPatch = {
+  title_en: 'Frequently Bought Together',
+  title_ru: 'С этим часто покупают',
+  title_ua: 'З цим часто купують',
+  anchorId: 'bought-together'
+};
+
 const PRESET_MAP: Record<string, SectionPresetFormPatch> = {
   header: HEADER_PRESET,
   hero: HERO_PRESET,
   'hero-glass': { ...HERO_PRESET, variant: 'glass' },
   'best-sellers': BEST_SELLERS_PRESET,
+  'product-carousel': PRODUCT_CAROUSEL_PRESET,
+  lookbook: LOOKBOOK_PRESET,
+  'video-hero': VIDEO_HERO_PRESET,
+  'blog-posts': BLOG_POSTS_PRESET,
   categories: CATEGORIES_PRESET,
   brands: BRANDS_PRESET,
   testimonials: TESTIMONIALS_PRESET,
@@ -323,7 +531,12 @@ const PRESET_MAP: Record<string, SectionPresetFormPatch> = {
   stats: STATS_PRESET,
   footer: FOOTER_PRESET,
   'special-offer': SPECIAL_OFFER_PRESET,
-  'html-content': HTML_CONTENT_PRESET
+  'html-content': HTML_CONTENT_PRESET,
+  contacts: CONTACTS_PRESET,
+  about: ABOUT_PRESET,
+  'product-tabs': PRODUCT_TABS_PRESET,
+  'similar-products': SIMILAR_PRODUCTS_PRESET,
+  'bought-together': BOUGHT_TOGETHER_PRESET
 };
 
 export function getSectionPreset(type: string): SectionPresetFormPatch | null {
@@ -428,6 +641,78 @@ function buildSettingsFromPreset(type: string, preset: SectionPresetFormPatch): 
         ...item,
         label: L(item.label, item.label, item.label)
       }))
+    };
+  }
+
+  if (type === 'product-carousel') {
+    return {
+      source: preset.carouselSource || 'new',
+      limit: preset.carouselLimit ?? 8,
+      autoplay: preset.carouselAutoplay !== false
+    };
+  }
+
+  if (type === 'lookbook') {
+    return {
+      autoplay: true,
+      slides: (preset.lookbookSlides || []).map(slide => ({
+        ...slide,
+        title: L(slide.title, slide.title, slide.title),
+        subtitle: L(slide.subtitle, slide.subtitle, slide.subtitle),
+        ctaLabel: L(slide.ctaLabel, slide.ctaLabel, slide.ctaLabel)
+      }))
+    };
+  }
+
+  if (type === 'video-hero') {
+    return {
+      videoUrl: preset.videoUrl || '',
+      posterImage: preset.imageUrl || '',
+      autoplay: preset.videoAutoplay !== false,
+      muted: true,
+      loop: true,
+      controls: false,
+      overlayOpacity: 0.5,
+      alignment: 'center',
+      showPlayButton: true,
+      ctaText: L(
+        preset.videoCtaText || 'Shop now',
+        preset.videoCtaText || 'В магазин',
+        preset.videoCtaText || 'До магазину'
+      ),
+      ctaLink: preset.videoCtaLink || '/shop',
+      secondaryCtaText: L(
+        preset.videoSecondaryCtaText || 'Learn more',
+        preset.videoSecondaryCtaText || 'Подробнее',
+        preset.videoSecondaryCtaText || 'Детальніше'
+      ),
+      secondaryCtaLink: preset.videoSecondaryCtaLink || '/about'
+    };
+  }
+
+  if (type === 'blog-posts') {
+    return {
+      displayMode: preset.blogDisplayMode || 'grid',
+      showCta: preset.blogShowCta !== false,
+      ctaText: L(
+        preset.blogCtaText || 'View all stories',
+        'Все материалы',
+        'Усі матеріали'
+      ),
+      ctaLink: preset.blogCtaLink || '/shop',
+      blogPosts: (preset.blogPosts || []).map(post => ({
+        ...post,
+        title: L(post.title, post.title, post.title),
+        excerpt: L(post.excerpt, post.excerpt, post.excerpt)
+      }))
+    };
+  }
+
+  if (type === 'about') {
+    return {
+      subtitle: preset.subtitle_en
+        ? L(preset.subtitle_en, preset.subtitle_ru || preset.subtitle_en, preset.subtitle_ua || preset.subtitle_en)
+        : undefined
     };
   }
 

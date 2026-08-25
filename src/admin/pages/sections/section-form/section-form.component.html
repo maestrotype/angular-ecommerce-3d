@@ -326,7 +326,7 @@
           </mat-tab>
 
           <!-- TAB: SPECIAL (COMPONENTS) -->
-          <mat-tab *ngIf="['categories','brands','testimonials','features-grid','faq','stats','newsletter'].includes(sectionForm.get('type')?.value)">
+          <mat-tab *ngIf="['categories','brands','testimonials','features-grid','faq','stats','newsletter','product-carousel','lookbook','video-hero','blog-posts'].includes(sectionForm.get('type')?.value)">
             <ng-template mat-tab-label>
               <mat-icon class="tab-icon">extension</mat-icon>
               <span class="tab-label">{{ 'COMPONENTS' | translate }}</span>
@@ -476,6 +476,133 @@
                   </mat-form-field>
                 </div>
               </div>
+
+              <!-- PRODUCT CAROUSEL -->
+              <div *ngIf="sectionForm.get('type')?.value === 'product-carousel'" class="dynamic-list">
+                <div class="form-grid">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'CAROUSEL_SOURCE' | translate }}</mat-label>
+                    <mat-select formControlName="carouselSource">
+                      <mat-option value="new">{{ 'CAROUSEL_SOURCE_NEW' | translate }}</mat-option>
+                      <mat-option value="best-sellers">{{ 'CAROUSEL_SOURCE_BEST' | translate }}</mat-option>
+                      <mat-option value="special">{{ 'CAROUSEL_SOURCE_SPECIAL' | translate }}</mat-option>
+                      <mat-option value="all">{{ 'CAROUSEL_SOURCE_ALL' | translate }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'CAROUSEL_LIMIT' | translate }}</mat-label>
+                    <input matInput type="number" min="3" max="16" formControlName="carouselLimit">
+                  </mat-form-field>
+                </div>
+                <mat-slide-toggle formControlName="carouselAutoplay" color="primary">
+                  {{ 'CAROUSEL_AUTOPLAY' | translate }}
+                </mat-slide-toggle>
+              </div>
+
+              <!-- LOOKBOOK -->
+              <div *ngIf="sectionForm.get('type')?.value === 'lookbook'" class="dynamic-list">
+                <div class="list-header">
+                  <h4>{{ 'LOOKBOOK_SLIDES' | translate }}</h4>
+                  <button mat-button color="primary" type="button" (click)="addLookbookSlide()">
+                    <mat-icon>add</mat-icon> {{ 'ADD_LOOKBOOK_SLIDE' | translate }}
+                  </button>
+                </div>
+                <mat-slide-toggle formControlName="carouselAutoplay" color="primary">
+                  {{ 'CAROUSEL_AUTOPLAY' | translate }}
+                </mat-slide-toggle>
+                <div cdkDropList (cdkDropListDropped)="dropLookbookSlide($event)" class="cdk-list">
+                  <div *ngFor="let slide of lookbookSlides.controls; let i = index" cdkDrag class="cdk-item">
+                    <div [formGroup]="$any(slide)" class="item-form vertical">
+                      <div class="item-row">
+                        <mat-form-field appearance="outline"><mat-label>{{ 'TITLE' | translate }}</mat-label><input matInput formControlName="title"></mat-form-field>
+                        <mat-form-field appearance="outline"><mat-label>{{ 'CTA_URL' | translate }}</mat-label><input matInput formControlName="ctaUrl"></mat-form-field>
+                        <button mat-icon-button color="warn" (click)="removeLookbookSlide(i)" type="button"><mat-icon>delete</mat-icon></button>
+                      </div>
+                      <mat-form-field appearance="outline" class="full-width"><mat-label>{{ 'SUBTITLE' | translate }}</mat-label><input matInput formControlName="subtitle"></mat-form-field>
+                      <mat-form-field appearance="outline" class="full-width"><mat-label>{{ 'CTA_LABEL' | translate }}</mat-label><input matInput formControlName="ctaLabel"></mat-form-field>
+                      <app-image-upload [currentImageUrl]="slide.get('image')?.value" [label]="'IMAGE' | translate" (imageUploaded)="onLookbookSlideImageUploaded($event, i)"></app-image-upload>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- VIDEO HERO -->
+              <div *ngIf="sectionForm.get('type')?.value === 'video-hero'" class="dynamic-list">
+                <div class="form-grid">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>{{ 'VIDEO_URL' | translate }}</mat-label>
+                    <input matInput formControlName="videoUrl">
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'CTA_LABEL' | translate }}</mat-label>
+                    <input matInput formControlName="videoCtaText">
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'CTA_URL' | translate }}</mat-label>
+                    <input matInput formControlName="videoCtaLink">
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'SECONDARY_CTA_LABEL' | translate }}</mat-label>
+                    <input matInput formControlName="videoSecondaryCtaText">
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'SECONDARY_CTA_URL' | translate }}</mat-label>
+                    <input matInput formControlName="videoSecondaryCtaLink">
+                  </mat-form-field>
+                </div>
+                <mat-slide-toggle formControlName="videoAutoplay" color="primary">
+                  {{ 'VIDEO_AUTOPLAY' | translate }}
+                </mat-slide-toggle>
+                <p class="field-hint">{{ 'VIDEO_POSTER_HINT' | translate }}</p>
+              </div>
+
+              <!-- BLOG POSTS -->
+              <div *ngIf="sectionForm.get('type')?.value === 'blog-posts'" class="dynamic-list">
+                <div class="form-grid">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'BLOG_DISPLAY_MODE' | translate }}</mat-label>
+                    <mat-select formControlName="blogDisplayMode">
+                      <mat-option value="grid">{{ 'BLOG_DISPLAY_GRID' | translate }}</mat-option>
+                      <mat-option value="list">{{ 'BLOG_DISPLAY_LIST' | translate }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'CTA_LABEL' | translate }}</mat-label>
+                    <input matInput formControlName="blogCtaText">
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'CTA_URL' | translate }}</mat-label>
+                    <input matInput formControlName="blogCtaLink">
+                  </mat-form-field>
+                </div>
+                <mat-slide-toggle formControlName="blogShowCta" color="primary">
+                  {{ 'BLOG_SHOW_CTA' | translate }}
+                </mat-slide-toggle>
+                <div class="list-header">
+                  <h4>{{ 'BLOG_POSTS' | translate }}</h4>
+                  <button mat-button color="primary" type="button" (click)="addBlogPost()">
+                    <mat-icon>add</mat-icon> {{ 'ADD_BLOG_POST' | translate }}
+                  </button>
+                </div>
+                <div cdkDropList (cdkDropListDropped)="dropBlogPost($event)" class="cdk-list">
+                  <div *ngFor="let post of blogPosts.controls; let i = index" cdkDrag class="cdk-item">
+                    <div [formGroup]="$any(post)" class="item-form vertical">
+                      <div class="item-row">
+                        <mat-form-field appearance="outline"><mat-label>{{ 'TITLE' | translate }}</mat-label><input matInput formControlName="title"></mat-form-field>
+                        <mat-form-field appearance="outline"><mat-label>{{ 'BLOG_CATEGORY' | translate }}</mat-label><input matInput formControlName="category"></mat-form-field>
+                        <button mat-icon-button color="warn" (click)="removeBlogPost(i)" type="button"><mat-icon>delete</mat-icon></button>
+                      </div>
+                      <mat-form-field appearance="outline" class="full-width"><mat-label>{{ 'BLOG_EXCERPT' | translate }}</mat-label><textarea matInput rows="2" formControlName="excerpt"></textarea></mat-form-field>
+                      <div class="item-row">
+                        <mat-form-field appearance="outline"><mat-label>{{ 'BLOG_AUTHOR' | translate }}</mat-label><input matInput formControlName="author"></mat-form-field>
+                        <mat-form-field appearance="outline"><mat-label>{{ 'BLOG_DATE' | translate }}</mat-label><input matInput type="date" formControlName="date"></mat-form-field>
+                        <mat-form-field appearance="outline"><mat-label>{{ 'BLOG_LINK' | translate }}</mat-label><input matInput formControlName="link"></mat-form-field>
+                      </div>
+                      <app-image-upload [currentImageUrl]="post.get('image')?.value" [label]="'IMAGE' | translate" (imageUploaded)="onBlogPostImageUploaded($event, i)"></app-image-upload>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </mat-tab>
 
@@ -532,7 +659,7 @@
     <div [class.mat-dialog-actions]="!isDrawerMode" [class.form-actions-drawer]="isDrawerMode" align="end" class="form-footer">
       <button mat-stroked-button type="button" (click)="loadDemoContent()" [disabled]="loading || uploading3d" class="demo-btn">
         <mat-icon>auto_fix_high</mat-icon>
-        {{ 'LOAD_DEMO_CONTENT' | translate }}
+        {{ 'FILL_DEMO_DATA' | translate }}
       </button>
       <span class="form-footer-spacer"></span>
       <button mat-button type="button" (click)="onCancel()" class="cancel-btn">

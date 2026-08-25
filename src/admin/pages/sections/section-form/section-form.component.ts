@@ -15,6 +15,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ImageUploadComponent } from '../../../components/ui/image-upload/image-upload.component';
 import { ConfirmationService } from '../../../services/confirmation.service';
 import { getSectionPreset, SectionPresetFormPatch } from '../section-presets';
+import { getSectionHash, findSectionByHash } from '../../../../shared/utils/section-anchor.util';
 import { take } from 'rxjs/operators';
 
 @Component({
@@ -66,6 +67,10 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     { value: 'hero', label: 'SECTION_TYPE_LABELS.HERO' },
     { value: 'hero-glass', label: 'SECTION_TYPE_LABELS.HERO_GLASS' },
     { value: 'best-sellers', label: 'SECTION_TYPE_LABELS.BEST_SELLERS' },
+    { value: 'product-carousel', label: 'SECTION_TYPE_LABELS.PRODUCT_CAROUSEL' },
+    { value: 'lookbook', label: 'SECTION_TYPE_LABELS.LOOKBOOK' },
+    { value: 'video-hero', label: 'SECTION_TYPE_LABELS.VIDEO_HERO' },
+    { value: 'blog-posts', label: 'SECTION_TYPE_LABELS.BLOG_POSTS' },
     { value: 'categories', label: 'SECTION_TYPE_LABELS.CATEGORIES' },
     { value: 'special-offer', label: 'SECTION_TYPE_LABELS.SPECIAL_OFFER' },
     { value: 'brands', label: 'SECTION_TYPE_LABELS.BRANDS' },
@@ -127,7 +132,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     const dataSource = this.isDrawerMode ? this.data : this.dialogData;
-    this.isEditMode = !!dataSource?.section;
+    this.isEditMode = !!dataSource?.section?.id;
     this.sectionForm = this.createForm(dataSource?.section);
 
     if (this.isEditMode && dataSource?.section?.model3dUrl) {
@@ -145,6 +150,14 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
       const previewData = { ...val, ...packed };
       this.formChanged.emit(previewData);
     });
+
+    if (!dataSource?.section?.id) {
+      const type = this.sectionForm.get('type')?.value;
+      const preset = type ? getSectionPreset(type) : null;
+      if (preset) {
+        this.applyPresetToForm(preset);
+      }
+    }
   }
 
   ngAfterViewInit(): void {
@@ -160,7 +173,29 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
 
   private loadAvailableSections(): void {
     this.sectionService.getSections().subscribe(sections => {
-      this.availableSections = sections.filter(s => s.type !== 'header');
+      this.availableSections = sections.filter(
+        section =>
+          section.type !== 'header' &&
+          section.type !== 'footer' &&
+          section.isActive !== false &&
+          section.pageTarget === 'home'
+      );
+      this.syncMenuSectionIdsFromUrls();
+    });
+  }
+
+  /** Resolve legacy `#type` menu links to sectionId after sections load. */
+  private syncMenuSectionIdsFromUrls(): void {
+    this.menu.controls.forEach(control => {
+      const url = control.get('url')?.value as string;
+      const currentId = control.get('sectionId')?.value;
+      if (!url?.startsWith('#') || currentId) {
+        return;
+      }
+      const match = findSectionByHash(this.availableSections, url);
+      if (match?.id) {
+        control.patchValue({ sectionId: match.id }, { emitEvent: false });
+      }
     });
   }
 
@@ -304,6 +339,45 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
           })
         )
       ),
+      carouselSource: [settings?.source || 'new'],
+      carouselLimit: [settings?.limit ?? 8, [Validators.min(3), Validators.max(16)]],
+      carouselAutoplay: [settings?.autoplay !== false],
+      lookbookSlides: this.fb.array(
+        (settings?.slides || []).map((item: any) =>
+          this.fb.group({
+            image: [item.image || '', Validators.required],
+            title: [this.getLocalizedValue(item.title, 'en'), Validators.required],
+            subtitle: [this.getLocalizedValue(item.subtitle, 'en')],
+            ctaLabel: [this.getLocalizedValue(item.ctaLabel, 'en')],
+            ctaUrl: [item.ctaUrl || '/shop'],
+            isActive: [item.isActive ?? true]
+          })
+        )
+      ),
+      videoUrl: [settings?.videoUrl || ''],
+      videoCtaText: [this.getLocalizedValue(settings?.ctaText, 'en') || ''],
+      videoCtaLink: [settings?.ctaLink || '/shop'],
+      videoSecondaryCtaText: [this.getLocalizedValue(settings?.secondaryCtaText, 'en') || ''],
+      videoSecondaryCtaLink: [settings?.secondaryCtaLink || '/about'],
+      videoAutoplay: [settings?.autoplay !== false],
+      blogDisplayMode: [settings?.displayMode || 'grid'],
+      blogShowCta: [settings?.showCta ?? true],
+      blogCtaText: [this.getLocalizedValue(settings?.ctaText, 'en') || ''],
+      blogCtaLink: [settings?.ctaLink || '/shop'],
+      blogPosts: this.fb.array(
+        (settings?.blogPosts || []).map((item: any) =>
+          this.fb.group({
+            title: [this.getLocalizedValue(item.title, 'en'), Validators.required],
+            excerpt: [this.getLocalizedValue(item.excerpt, 'en')],
+            image: [item.image || ''],
+            date: [item.date || ''],
+            author: [item.author || ''],
+            category: [item.category || ''],
+            link: [item.link || '/shop'],
+            isActive: [item.isActive ?? true]
+          })
+        )
+      ),
       newsletterPlaceholder: [this.getLocalizedValue(settings?.placeholder, 'en') || ''],
       newsletterButtonText: [this.getLocalizedValue(settings?.buttonText, 'en') || 'Subscribe'],
       // Footer specific
@@ -405,6 +479,14 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
 
   get stats(): FormArray {
     return this.sectionForm.get('stats') as FormArray;
+  }
+
+  get lookbookSlides(): FormArray {
+    return this.sectionForm.get('lookbookSlides') as FormArray;
+  }
+
+  get blogPosts(): FormArray {
+    return this.sectionForm.get('blogPosts') as FormArray;
   }
 
   get columns(): FormArray {
@@ -524,6 +606,30 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     }));
   }
 
+  addLookbookSlide() {
+    this.lookbookSlides.push(this.fb.group({
+      image: ['', Validators.required],
+      title: ['', Validators.required],
+      subtitle: [''],
+      ctaLabel: [''],
+      ctaUrl: ['/shop'],
+      isActive: [true]
+    }));
+  }
+
+  addBlogPost() {
+    this.blogPosts.push(this.fb.group({
+      title: ['', Validators.required],
+      excerpt: [''],
+      image: [''],
+      date: [''],
+      author: [''],
+      category: [''],
+      link: ['/shop'],
+      isActive: [true]
+    }));
+  }
+
   removeMenuItem(index: number) {
     this.menu.removeAt(index);
   }
@@ -550,6 +656,14 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
 
   removeStat(index: number) {
     this.stats.removeAt(index);
+  }
+
+  removeLookbookSlide(index: number) {
+    this.lookbookSlides.removeAt(index);
+  }
+
+  removeBlogPost(index: number) {
+    this.blogPosts.removeAt(index);
   }
 
   dropMenuItem(event: CdkDragDrop<FormArray>) {
@@ -602,6 +716,14 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     this.dropFormArrayItem(this.stats, event);
   }
 
+  dropLookbookSlide(event: CdkDragDrop<FormArray>) {
+    this.dropFormArrayItem(this.lookbookSlides, event);
+  }
+
+  dropBlogPost(event: CdkDragDrop<FormArray>) {
+    this.dropFormArrayItem(this.blogPosts, event);
+  }
+
   private dropFormArrayItem(array: FormArray, event: CdkDragDrop<FormArray>): void {
     const from = event.previousIndex;
     const to = event.currentIndex;
@@ -618,7 +740,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     if (sectionId) {
       const section = this.availableSections.find(s => s.id === sectionId);
       if (section) {
-        menuItem.patchValue({ url: `#${section.type}`, sectionId });
+        menuItem.patchValue({ url: getSectionHash(section), sectionId });
       }
     } else {
       menuItem.patchValue({ sectionId: null });
@@ -729,6 +851,14 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
 
   onTestimonialAvatarUploaded(url: string, index: number): void {
     this.testimonials.at(index).patchValue({ avatar: url });
+  }
+
+  onLookbookSlideImageUploaded(url: string, index: number): void {
+    this.lookbookSlides.at(index).patchValue({ image: url });
+  }
+
+  onBlogPostImageUploaded(url: string, index: number): void {
+    this.blogPosts.at(index).patchValue({ image: url });
   }
 
   removeBrandLogo(index: number): void {
@@ -982,6 +1112,118 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
               )
             }
           };
+        } else if (formValue.type === 'product-carousel') {
+          formData = {
+            type: 'product-carousel',
+            title: formValue.title,
+            subtitle: formValue.subtitle,
+            content: formValue.content,
+            imageUrl: formValue.imageUrl || '',
+            isActive: formValue.isActive,
+            model3dUrl: model3dUrl || '',
+            show3d: false,
+            showImage: false,
+            pageTarget: formValue.pageTarget || 'home',
+            variant: formValue.variant || 'default',
+            anchorId: formValue.anchorId || '',
+            settings: {
+              ...existingSettings,
+              source: formValue.carouselSource || 'new',
+              limit: Number(formValue.carouselLimit) || 8,
+              autoplay: formValue.carouselAutoplay !== false
+            }
+          };
+        } else if (formValue.type === 'lookbook') {
+          formData = {
+            type: 'lookbook',
+            title: formValue.title,
+            subtitle: formValue.subtitle,
+            content: formValue.content,
+            imageUrl: formValue.imageUrl || '',
+            isActive: formValue.isActive,
+            model3dUrl: model3dUrl || '',
+            show3d: false,
+            showImage: true,
+            pageTarget: formValue.pageTarget || 'home',
+            variant: formValue.variant || 'default',
+            anchorId: formValue.anchorId || '',
+            settings: {
+              ...existingSettings,
+              autoplay: formValue.carouselAutoplay !== false,
+              slides: this.mapLocalizedSettingsList(
+                formValue.lookbookSlides,
+                (existingSettings as any)?.slides,
+                ['title', 'subtitle', 'ctaLabel']
+              )
+            }
+          };
+        } else if (formValue.type === 'video-hero') {
+          formData = {
+            type: 'video-hero',
+            title: formValue.title,
+            subtitle: formValue.subtitle,
+            content: formValue.content,
+            imageUrl: formValue.imageUrl || '',
+            isActive: formValue.isActive,
+            model3dUrl: '',
+            show3d: false,
+            showImage: true,
+            pageTarget: formValue.pageTarget || 'home',
+            variant: formValue.variant || 'default',
+            anchorId: formValue.anchorId || '',
+            settings: {
+              ...existingSettings,
+              videoUrl: formValue.videoUrl || '',
+              posterImage: formValue.imageUrl || '',
+              autoplay: formValue.videoAutoplay !== false,
+              muted: true,
+              loop: true,
+              controls: false,
+              overlayOpacity: (existingSettings as any)?.overlayOpacity ?? 0.5,
+              alignment: (existingSettings as any)?.alignment || 'center',
+              showPlayButton: true,
+              ctaText: this.buildLocalizedNameFromForm(
+                formValue.videoCtaText,
+                (existingSettings as any)?.ctaText
+              ),
+              ctaLink: formValue.videoCtaLink || '/shop',
+              secondaryCtaText: this.buildLocalizedNameFromForm(
+                formValue.videoSecondaryCtaText,
+                (existingSettings as any)?.secondaryCtaText
+              ),
+              secondaryCtaLink: formValue.videoSecondaryCtaLink || '/about'
+            }
+          };
+        } else if (formValue.type === 'blog-posts') {
+          formData = {
+            type: 'blog-posts',
+            title: formValue.title,
+            subtitle: formValue.subtitle,
+            content: formValue.content,
+            imageUrl: formValue.imageUrl || '',
+            isActive: formValue.isActive,
+            model3dUrl: '',
+            show3d: false,
+            showImage: true,
+            pageTarget: formValue.pageTarget || 'home',
+            variant: formValue.variant || 'default',
+            anchorId: formValue.anchorId || '',
+            settings: {
+              ...existingSettings,
+              displayMode: formValue.blogDisplayMode || 'grid',
+              showCta: formValue.blogShowCta !== false,
+              ctaText: this.buildLocalizedNameFromForm(
+                formValue.blogCtaText,
+                (existingSettings as any)?.ctaText
+              ),
+              ctaLink: formValue.blogCtaLink || '/shop',
+              blogPosts: this.mapLocalizedSettingsList(
+                formValue.blogPosts,
+                (existingSettings as any)?.blogPosts,
+                ['title', 'excerpt']
+              )
+            }
+          };
         } else if (formValue.type === 'newsletter') {
           formData = {
             type: 'newsletter',
@@ -1104,7 +1346,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
 
     if (this.isEditMode) {
       this.confirmationService.confirmAction(
-        this.translate.instant('LOAD_DEMO_CONTENT'),
+        this.translate.instant('FILL_DEMO_DATA'),
         this.translate.instant('SECTION')
       ).pipe(take(1)).subscribe(confirmed => {
         if (confirmed) {
@@ -1140,7 +1382,20 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
       anchorId: preset.anchorId ?? this.sectionForm.get('anchorId')?.value,
       newsletterPlaceholder: preset.newsletterPlaceholder ?? this.sectionForm.get('newsletterPlaceholder')?.value,
       newsletterButtonText: preset.newsletterButtonText ?? this.sectionForm.get('newsletterButtonText')?.value,
-      copyright: preset.copyright ?? this.sectionForm.get('copyright')?.value
+      copyright: preset.copyright ?? this.sectionForm.get('copyright')?.value,
+      carouselSource: preset.carouselSource ?? this.sectionForm.get('carouselSource')?.value,
+      carouselLimit: preset.carouselLimit ?? this.sectionForm.get('carouselLimit')?.value,
+      carouselAutoplay: preset.carouselAutoplay ?? this.sectionForm.get('carouselAutoplay')?.value,
+      videoUrl: preset.videoUrl ?? this.sectionForm.get('videoUrl')?.value,
+      videoCtaText: preset.videoCtaText ?? this.sectionForm.get('videoCtaText')?.value,
+      videoCtaLink: preset.videoCtaLink ?? this.sectionForm.get('videoCtaLink')?.value,
+      videoSecondaryCtaText: preset.videoSecondaryCtaText ?? this.sectionForm.get('videoSecondaryCtaText')?.value,
+      videoSecondaryCtaLink: preset.videoSecondaryCtaLink ?? this.sectionForm.get('videoSecondaryCtaLink')?.value,
+      videoAutoplay: preset.videoAutoplay ?? this.sectionForm.get('videoAutoplay')?.value,
+      blogDisplayMode: preset.blogDisplayMode ?? this.sectionForm.get('blogDisplayMode')?.value,
+      blogShowCta: preset.blogShowCta ?? this.sectionForm.get('blogShowCta')?.value,
+      blogCtaText: preset.blogCtaText ?? this.sectionForm.get('blogCtaText')?.value,
+      blogCtaLink: preset.blogCtaLink ?? this.sectionForm.get('blogCtaLink')?.value
     });
 
     if (preset.social) {
@@ -1224,6 +1479,34 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
           value: [item.value, Validators.required],
           label: [item.label, Validators.required],
           suffix: [item.suffix || ''],
+          isActive: [item.isActive ?? true]
+        })
+      );
+    }
+
+    if (preset.lookbookSlides) {
+      this.setFormArray(this.lookbookSlides, preset.lookbookSlides, item =>
+        this.fb.group({
+          image: [item.image, Validators.required],
+          title: [item.title, Validators.required],
+          subtitle: [item.subtitle],
+          ctaLabel: [item.ctaLabel],
+          ctaUrl: [item.ctaUrl || '/shop'],
+          isActive: [item.isActive ?? true]
+        })
+      );
+    }
+
+    if (preset.blogPosts) {
+      this.setFormArray(this.blogPosts, preset.blogPosts, item =>
+        this.fb.group({
+          title: [item.title, Validators.required],
+          excerpt: [item.excerpt],
+          image: [item.image || ''],
+          date: [item.date || ''],
+          author: [item.author || ''],
+          category: [item.category || ''],
+          link: [item.link || '/shop'],
           isActive: [item.isActive ?? true]
         })
       );
@@ -1331,6 +1614,57 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
       ru: formValue.content_ru,
       ua: formValue.content_ua
     };
+
+    if (formValue.type === 'lookbook') {
+      data.settings = {
+        autoplay: formValue.carouselAutoplay !== false,
+        slides: this.mapLocalizedSettingsList(
+          formValue.lookbookSlides,
+          undefined,
+          ['title', 'subtitle', 'ctaLabel']
+        )
+      };
+    }
+
+    if (formValue.type === 'product-carousel') {
+      data.settings = {
+        source: formValue.carouselSource || 'new',
+        limit: Number(formValue.carouselLimit) || 8,
+        autoplay: formValue.carouselAutoplay !== false
+      };
+    }
+
+    if (formValue.type === 'video-hero') {
+      data.settings = {
+        videoUrl: formValue.videoUrl || '',
+        posterImage: formValue.imageUrl || '',
+        autoplay: formValue.videoAutoplay !== false,
+        muted: true,
+        loop: true,
+        controls: false,
+        overlayOpacity: 0.5,
+        alignment: 'center',
+        showPlayButton: true,
+        ctaText: formValue.videoCtaText || '',
+        ctaLink: formValue.videoCtaLink || '/shop',
+        secondaryCtaText: formValue.videoSecondaryCtaText || '',
+        secondaryCtaLink: formValue.videoSecondaryCtaLink || '/about'
+      };
+    }
+
+    if (formValue.type === 'blog-posts') {
+      data.settings = {
+        displayMode: formValue.blogDisplayMode || 'grid',
+        showCta: formValue.blogShowCta !== false,
+        ctaText: formValue.blogCtaText || '',
+        ctaLink: formValue.blogCtaLink || '/shop',
+        blogPosts: this.mapLocalizedSettingsList(
+          formValue.blogPosts,
+          undefined,
+          ['title', 'excerpt']
+        )
+      };
+    }
 
     // Cleanup temporary fields
     delete data.title_en; delete data.title_ru; delete data.title_ua;

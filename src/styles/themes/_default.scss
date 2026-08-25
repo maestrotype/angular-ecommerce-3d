@@ -108,6 +108,10 @@
   --hero-backdrop-filter: blur(25px) saturate(180%);
   --hero-text-color: #1e293b;
   --hero-accent-color: #3b82f6;
+  --video-hero-bg: var(--hero-bg-gradient);
+  --video-hero-text: var(--hero-text-color);
+  --video-hero-muted: var(--text-secondary);
+  --video-hero-overlay-color: var(--surface-page);
 
   /* Global Text Colors */
 
@@ -369,6 +373,7 @@
   --surface-overlay: var(--color-white);
   --surface-inverse: var(--color-slate-900);
   --surface-page: var(--color-slate-50);
+  --surface-section: var(--surface-secondary);
 
   /* ===== TEXT OVERRIDES ===== */
   --text-primary: var(--color-slate-900);

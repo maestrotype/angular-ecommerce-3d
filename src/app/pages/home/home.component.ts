@@ -7,6 +7,7 @@ import { Section } from 'src/shared/models/section.model';
 import { PageSectionContext } from 'src/shared/models/page-section-context.model';
 import { loadPageSectionContext } from 'src/shared/utils/page-section-context.util';
 import { isPlatformBrowser } from '@angular/common';
+import { findSectionElement } from 'src/shared/utils/section-anchor.util';
 
 @Component({
   selector: 'app-home',
@@ -64,7 +65,7 @@ export class HomeComponent implements OnInit {
 
   scrollToSection(sectionId: string): void {
     if (isPlatformBrowser(this.platformId)) {
-      const element = document.getElementById(sectionId);
+      const element = findSectionElement(sectionId);
       if (element) {
         element.scrollIntoView({
           behavior: 'smooth',

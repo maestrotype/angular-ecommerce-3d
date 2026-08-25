@@ -256,6 +256,12 @@
 
       h4 { margin: 0; }
     }
+
+    .field-hint {
+      margin: var(--space-3) 0 0;
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
   }
 
   .cdk-list {
