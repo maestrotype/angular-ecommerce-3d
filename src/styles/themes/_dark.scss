@@ -77,6 +77,10 @@
   --hero-backdrop-filter: blur(20px);
   --hero-text-color: var(--color-slate-50);
   --hero-accent-color: var(--color-brand-light);
+  --video-hero-bg: var(--hero-bg-gradient);
+  --video-hero-text: var(--hero-text-color);
+  --video-hero-muted: var(--text-secondary);
+  --video-hero-overlay-color: var(--surface-page);
 
   /* Global Text Colors */
 
@@ -354,6 +358,7 @@
   --surface-overlay: var(--color-slate-800);
   --surface-inverse: var(--color-white);
   --surface-page: var(--color-slate-900);
+  --surface-section: var(--color-slate-800);
   --surface-card: linear-gradient(
     180deg,
     color-mix(in srgb, var(--color-slate-800) 70%, var(--color-slate-700)) 0%,

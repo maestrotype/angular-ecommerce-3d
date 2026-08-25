@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 
 import { sectionComponentMap } from './section-map';
+import { getSectionAnchorId } from 'src/shared/utils/section-anchor.util';
 
 import { CommonModule } from '@angular/common';
 
@@ -112,14 +113,6 @@ export class SectionRendererComponent implements OnInit, OnChanges, OnDestroy {
       element.classList.add(`variant-${this.section.variant}`);
     }
 
-    // Always set an id for CSS override targeting
-    const elementId = this.section.anchorId || (this.section.id ? `section-${this.section.id}` : null);
-    if (elementId) {
-      element.id = elementId;
-    } else {
-      element.removeAttribute('id');
-    }
-    
     this.componentRef.changeDetectorRef.markForCheck();
     this.componentRef.changeDetectorRef.detectChanges();
     
@@ -134,7 +127,7 @@ export class SectionRendererComponent implements OnInit, OnChanges, OnDestroy {
       return;
     }
 
-    const sectionId = this.section.anchorId || `section-${this.section.id}`;
+    const sectionId = getSectionAnchorId(this.section) || (this.section.id ? `section-${this.section.id}` : '');
     let css = '';
 
     // 1. Process Viewports (Media Queries)
@@ -143,12 +136,13 @@ export class SectionRendererComponent implements OnInit, OnChanges, OnDestroy {
     if (viewports.tablet) css += `@media (max-width: 991px) { ${this.generateSelectorStyles(`#${sectionId}`, viewports.tablet)} }\n`;
     if (viewports.mobile) css += `@media (max-width: 575px) { ${this.generateSelectorStyles(`#${sectionId}`, viewports.mobile)} }\n`;
 
-    // 2. Process Themes
+    // 2. Process Themes (architect stores "default"; storefront DOM uses "light")
     const themes = overrides.themes || {};
     Object.keys(themes).forEach(theme => {
-      // Repeat ID to naturally boost CSS specificity without using !important (e.g. data-theme="..." #id#id .selector)
-      const themeSelector = `[data-theme="${theme}"] #${sectionId}#${sectionId}`;
-      css += this.generateSelectorStyles(themeSelector, themes[theme]);
+      this.domThemeAttrs(theme).forEach(attr => {
+        const themeSelector = `[data-theme="${attr}"] #${sectionId}#${sectionId}`;
+        css += this.generateSelectorStyles(themeSelector, themes[theme]);
+      });
     });
 
     if (css) {
@@ -161,6 +155,13 @@ export class SectionRendererComponent implements OnInit, OnChanges, OnDestroy {
     } else {
       this.removeStyles();
     }
+  }
+
+  private domThemeAttrs(theme: string): string[] {
+    if (theme === 'default' || theme === 'light') {
+      return ['light', 'default'];
+    }
+    return [theme];
   }
 
   private generateSelectorStyles(baseSelector: string, selectorMap: any): string {
@@ -189,5 +190,10 @@ export class SectionRendererComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy(): void {
     this.isDestroyed = true;
+    this.removeStyles();
+  }
+
+  get wrapperId(): string {
+    return getSectionAnchorId(this.section);
   }
 }

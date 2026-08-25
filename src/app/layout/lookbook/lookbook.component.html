@@ -1,4 +1,4 @@
-<section class="lookbook" [id]="data?.anchorId || 'lookbook'">
+<section class="lookbook">
   <div class="lookbook__intro" *ngIf="data?.title || data?.subtitle">
     <span class="lookbook__kicker" *ngIf="data?.subtitle">{{ data.subtitle | localized }}</span>
     <h2 class="lookbook__heading">{{ (data?.title | localized) || ('HOME.LOOKBOOK.TITLE' | translate) }}</h2>

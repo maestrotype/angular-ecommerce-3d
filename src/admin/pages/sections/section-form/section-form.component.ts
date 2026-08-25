@@ -15,6 +15,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ImageUploadComponent } from '../../../components/ui/image-upload/image-upload.component';
 import { ConfirmationService } from '../../../services/confirmation.service';
 import { getSectionPreset, SectionPresetFormPatch } from '../section-presets';
+import { getSectionHash, findSectionByHash } from '../../../../shared/utils/section-anchor.util';
 import { take } from 'rxjs/operators';
 
 @Component({
@@ -172,7 +173,29 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
 
   private loadAvailableSections(): void {
     this.sectionService.getSections().subscribe(sections => {
-      this.availableSections = sections.filter(s => s.type !== 'header');
+      this.availableSections = sections.filter(
+        section =>
+          section.type !== 'header' &&
+          section.type !== 'footer' &&
+          section.isActive !== false &&
+          section.pageTarget === 'home'
+      );
+      this.syncMenuSectionIdsFromUrls();
+    });
+  }
+
+  /** Resolve legacy `#type` menu links to sectionId after sections load. */
+  private syncMenuSectionIdsFromUrls(): void {
+    this.menu.controls.forEach(control => {
+      const url = control.get('url')?.value as string;
+      const currentId = control.get('sectionId')?.value;
+      if (!url?.startsWith('#') || currentId) {
+        return;
+      }
+      const match = findSectionByHash(this.availableSections, url);
+      if (match?.id) {
+        control.patchValue({ sectionId: match.id }, { emitEvent: false });
+      }
     });
   }
 
@@ -717,7 +740,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     if (sectionId) {
       const section = this.availableSections.find(s => s.id === sectionId);
       if (section) {
-        menuItem.patchValue({ url: `#${section.type}`, sectionId });
+        menuItem.patchValue({ url: getSectionHash(section), sectionId });
       }
     } else {
       menuItem.patchValue({ sectionId: null });

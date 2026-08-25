@@ -14,6 +14,7 @@ import { Theme } from '../../core/themes/theme.model';
 import { AuthService } from '../../core/services/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MobileMenuService } from '../../core/services/mobile-menu.service';
+import { findSectionElement } from 'src/shared/utils/section-anchor.util';
 
 @Component({
   selector: 'app-header',
@@ -59,8 +60,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   private readonly FALLBACK_MENU_ITEMS: MenuItem[] = [
     { title: 'Home', url: '/home', access: 'all', isActive: true },
     { title: 'Shop', url: '/shop', access: 'all', isActive: true },
-    { title: 'About', url: '#about', access: 'all', isActive: true },
-    { title: 'Contacts', url: '#contacts', access: 'all', isActive: true },
+    { title: 'About', url: '/about', access: 'all', isActive: true },
+    { title: 'Contacts', url: '/contacts', access: 'all', isActive: true },
     { title: 'Admin Panel', url: '/admin', access: 'admin', isActive: true }
   ];
 
@@ -552,9 +553,23 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       return;
     }
 
-    if (!this.activeSectionId) {
-      this.setupScrollSpy();
+    this.syncActiveSectionFromHash();
+    this.setupScrollSpy();
+
+    if (isPlatformBrowser(this.platformId)) {
+      const hash = window.location.hash.replace(/^#/, '');
+      if (hash) {
+        setTimeout(() => this.scrollToElement(hash), 350);
+      }
     }
+  }
+
+  private syncActiveSectionFromHash(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    const hash = window.location.hash.replace(/^#/, '');
+    this.activeSectionId = hash || null;
   }
 
   private setupScrollSpy(): void {
@@ -592,7 +607,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
     const observeSections = () => {
       sectionIds.forEach(id => {
-        const element = document.getElementById(id);
+        const element = findSectionElement(id);
         if (element) {
           this.scrollSpyObserver?.observe(element);
         }
@@ -626,9 +641,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     const maxRetries = 20;
 
     const tryScroll = () => {
-      const element = document.getElementById(elementId);
-      console.log(`[Header] Retry ${retries}: Finding element '${elementId}'...`, element ? 'Found' : 'Not Found');
-      
+      const element = findSectionElement(elementId);
+
       if (element) {
         // Use scrollIntoView which is more robust
         // No manual window.scrollBy here to avoid flickering

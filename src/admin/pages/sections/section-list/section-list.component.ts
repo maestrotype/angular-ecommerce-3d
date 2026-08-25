@@ -31,6 +31,41 @@ import {
   PageTemplatePresetId
 } from '../page-template-presets';
 
+/** Build preview list matching storefront page composition (active, exact pageTarget, sorted). */
+export function buildStorefrontPreviewSections(
+  allSections: Section[],
+  pageTarget: string
+): Section[] {
+  const active = allSections.filter(section => section.isActive !== false);
+  const byOrder = (list: Section[]) =>
+    [...list].sort((a, b) => (a.order || 0) - (b.order || 0));
+
+  if (pageTarget === 'global') {
+    return byOrder(active.filter(section => section.pageTarget === 'global'));
+  }
+
+  const header = active.find(section => section.type === 'header' && section.pageTarget === 'global');
+  const footer = active.find(section => section.type === 'footer' && section.pageTarget === 'global');
+  const body = byOrder(
+    active.filter(
+      section =>
+        section.pageTarget === pageTarget &&
+        section.type !== 'header' &&
+        section.type !== 'footer'
+    )
+  );
+
+  const result: Section[] = [];
+  if (header) {
+    result.push(header);
+  }
+  result.push(...body);
+  if (footer) {
+    result.push(footer);
+  }
+  return result;
+}
+
 @Component({
   selector: 'app-section-list',
   templateUrl: './section-list.component.html',
@@ -51,7 +86,7 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns: string[] = ['order', 'type', 'pageTarget', 'title', 'isActive', 'actions'];
   dataSource = new MatTableDataSource<Section>();
   allSections: Section[] = [];
-  activePageTarget: string | null = null;
+  activePageTarget: string | null = 'home';
   pageFilterOptions: { value: string | null; label: string; translate?: boolean }[] = [
     { value: null, label: 'PAGE_TARGET_ALL', translate: true },
     { value: 'home', label: 'TARGET_HOME', translate: true },
@@ -119,15 +154,15 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loadPageFilterOptions();
 
     this.route.queryParams.subscribe(params => {
-      const target = params['pageTarget'] || null;
+      const target = params['pageTarget'];
       const create = params['createIfMissing'] === 'true' || params['createIfMissing'] === true;
       const applyTemplate = params['applyTemplate'] as string | undefined;
 
-      this.activePageTarget = target;
+      this.activePageTarget = target === undefined || target === null || target === '' ? 'home' : target;
 
       const handleQueryActions = () => {
         this.applyPageTargetFilter();
-        if (target && create && this.getSectionsForTarget(target).length === 0) {
+        if (target && create && this.getStorefrontTableSections(target).length === 0) {
           this.addSectionWithTarget(target);
         }
         if (target && applyTemplate && isPageTemplatePreset(applyTemplate)) {
@@ -285,21 +320,59 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private getSectionsForTarget(target: string): Section[] {
-    if (target === 'global') {
-      return this.allSections.filter(section => section.pageTarget === 'global');
-    }
-    return this.allSections.filter(
-      section => section.pageTarget === target || section.pageTarget === 'global'
-    );
-  }
-
   private applyPageTargetFilter(): void {
     if (!this.activePageTarget) {
-      this.dataSource.data = [...this.allSections];
+      this.dataSource.data = [...this.allSections].sort(
+        (a, b) => (a.order || 0) - (b.order || 0)
+      );
       return;
     }
-    this.dataSource.data = this.getSectionsForTarget(this.activePageTarget);
+    if (this.activePageTarget === 'global') {
+      this.dataSource.data = this.allSections
+        .filter(section => section.pageTarget === 'global')
+        .sort((a, b) => (a.order || 0) - (b.order || 0));
+      return;
+    }
+    this.dataSource.data = this.getStorefrontTableSections(this.activePageTarget);
+  }
+
+  /** Table rows for a page — same scope as GET /sections?pageTarget=… */
+  private getStorefrontTableSections(pageTarget: string): Section[] {
+    return this.allSections
+      .filter(section => section.pageTarget === pageTarget)
+      .sort((a, b) => (a.order || 0) - (b.order || 0));
+  }
+
+  /** Sections passed to Site Architect — mirrors storefront composition. */
+  get previewSections(): Section[] {
+    const target = this.activePageTarget || 'home';
+    let sections = buildStorefrontPreviewSections(this.allSections, target);
+
+    if (this.isEditorOpen && this.previewData) {
+      if (this.previewData.id) {
+        sections = sections.map(section =>
+          section.id === this.previewData.id ? { ...section, ...this.previewData } : section
+        );
+      } else if (this.previewData.type) {
+        const draft = {
+          ...this.previewData,
+          isActive: this.previewData.isActive !== false,
+          pageTarget: this.previewData.pageTarget || target,
+          order: this.previewData.order ?? 9999
+        };
+        const header = sections.find(s => s.type === 'header');
+        const footer = sections.find(s => s.type === 'footer');
+        const body = sections.filter(s => s.type !== 'header' && s.type !== 'footer');
+        sections = [
+          ...(header ? [header] : []),
+          ...body,
+          draft,
+          ...(footer ? [footer] : [])
+        ];
+      }
+    }
+
+    return sections;
   }
 
   onPageTargetFilterChange(value: string | null): void {

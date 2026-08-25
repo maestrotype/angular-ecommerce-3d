@@ -160,13 +160,13 @@ export class HeaderService {
       },
       {
         title: 'About',
-        url: '#about',
+        url: '/about',
         access: 'all',
         isActive: true
       },
       {
         title: 'Contacts',
-        url: '#contacts',
+        url: '/contacts',
         access: 'all',
         isActive: true
       },
