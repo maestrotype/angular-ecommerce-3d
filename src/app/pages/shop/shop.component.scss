@@ -1109,11 +1109,11 @@
 
     .shop-layout__sidebar {
       position: sticky;
-      top: calc(80px + var(--spacing-sm));
+      top: calc(64px + var(--spacing-sm));
       align-self: start;
       width: auto;
       height: auto;
-      max-height: calc(100dvh - 80px - var(--spacing-lg));
+      max-height: calc(100dvh - 64px - var(--spacing-lg));
       overflow-y: auto;
       overflow-x: hidden;
       z-index: 2;

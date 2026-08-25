@@ -2,27 +2,26 @@
   <div class="header-container">
     <div class="logo" (click)="goHome()" style="cursor: pointer;">
       <app-logo
-        [height]="isMobile ? 44 : 60"
-        [width]="isMobile ? 148 : 200"
+        [height]="isMobile ? 40 : 44"
+        [width]="isMobile ? 132 : 160"
         [showText]="true">
       </app-logo>
     </div>
 
     <!-- Desktop Navigation -->
-    <nav class="nav" [class.nav-compressed]="isSearchOpen">
+    <nav class="nav">
       <ng-container *ngFor="let item of menuItems">
-        <a *ngIf="item.url.startsWith('/')" [routerLink]="item.url" class="nav-link"
+        <a *ngIf="item.url.startsWith('/') && canAccessMenuItem(item) && !isAdminMenuItem(item)"
+          [routerLink]="item.url" class="nav-link"
           [class.active]="isMenuItemActive(item)"
-          (click)="onRouteMenuClick(item)"
-          [class.hidden]="!canAccessMenuItem(item)">
+          (click)="onRouteMenuClick(item)">
           {{ item.title | localized }}
         </a>
-        <a *ngIf="item.url.startsWith('#')" 
+        <a *ngIf="item.url.startsWith('#') && canAccessMenuItem(item) && !isAdminMenuItem(item)"
            href="javascript:void(0)"
-           (click)="handleMenuClick(item, $event)" 
+           (click)="handleMenuClick(item, $event)"
            class="nav-link"
-           [class.active]="isMenuItemActive(item)"
-           [class.hidden]="!canAccessMenuItem(item)">
+           [class.active]="isMenuItemActive(item)">
           {{ item.title | localized }}
         </a>
       </ng-container>
@@ -66,6 +65,7 @@
     </div>
 
     <div class="user-actions">
+      <div class="user-actions__cluster user-actions__cluster--commerce" *ngIf="!isMobile">
       <span class="search-icon" (click)="toggleSearch()" *ngIf="showSearch && !isMobile">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M21 21L16.66 16.66" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -85,8 +85,11 @@
         <app-icon name="shopping-cart"></app-icon>
         <span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span>
       </a>
+      </div>
+
+      <div class="user-actions__cluster user-actions__cluster--prefs" *ngIf="!isMobile">
       <!-- Theme Switcher -->
-      <div class="theme-switcher" *ngIf="!isMobile">
+      <div class="theme-switcher">
         <button class="theme-toggle" (click)="toggleThemeMenu()">
           <svg width="26" height="26" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -132,7 +135,7 @@
       </div>
 
       <!-- Language Switcher -->
-      <div class="lang-switcher" *ngIf="!isMobile">
+      <div class="lang-switcher">
         <button class="lang-switcher__toggle" (click)="toggleLangMenu()" aria-label="Language switcher">
           <!-- Small globe icon -->
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -154,6 +157,13 @@
           </button>
         </div>
       </div>
+      </div>
+
+      <div class="user-actions__cluster user-actions__cluster--account" *ngIf="!isMobile">
+      <a class="admin-entry" routerLink="/admin" *ngIf="hasAdminAccess && !isMobile"
+        [attr.aria-label]="'HEADER.NAV.ADMIN_PANEL' | translate">
+        {{ 'ADMIN' | translate }}
+      </a>
       <span class="profile-icon" (click)="openAuthModal()" *ngIf="showProfile && !isMobile">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -164,6 +174,7 @@
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </span>
+      </div>
 
       <!-- Mobile Hamburger Button -->
       <button class="hamburger" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
@@ -188,7 +199,7 @@
         <img [src]="product.imageUrl" [alt]="product.name | localized" class="result-image">
         <div class="result-info">
           <h4 class="result-name">{{ product.name | localized }}</h4>
-          <p class="result-price">${{ product.price }}</p>
+          <p class="result-price">${{ product.price | number:'1.0-2' }}</p>
           <span class="result-category">{{ product.category }}</span>
         </div>
       </div>

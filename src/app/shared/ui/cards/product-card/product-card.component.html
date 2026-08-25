@@ -58,7 +58,7 @@
   </div>
 
   <div class="product-info">
-    <div class="product-meta">
+    <div class="product-meta" *ngIf="product.category">
       <span class="product-category">{{ product.category }}</span>
     </div>
 
@@ -73,7 +73,7 @@
         <span *ngFor="let star of getStarsArray()" class="star" [class.filled]="star.filled">★</span>
       </div>
       <span class="rating-value">{{ product.rating }}</span>
-      <span class="reviews-count">({{ product.reviewsCount || 0 }})</span>
+      <span class="reviews-count" *ngIf="product.reviewsCount">({{ product.reviewsCount }})</span>
     </div>
 
     <p *ngIf="layout === 'list' && product.description" class="product-description">
@@ -101,5 +101,10 @@
         </app-base-button>
       </div>
     </div>
+
+    <p class="stock-indicator"
+      *ngIf="product?.stock !== undefined && product.stock > 0 && product.stock <= 5">
+      {{ 'PRODUCT.STOCK.ONLY_LEFT' | translate:{ count: product.stock } }}
+    </p>
   </div>
 </div>
