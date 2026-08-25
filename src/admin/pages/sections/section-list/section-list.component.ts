@@ -169,7 +169,7 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
       const deltaX = event.clientX - this.initialMouseX;
       const newWidth = this.initialSidebarWidth + deltaX;
       const maxWidth = Math.floor(window.innerWidth * 0.78);
-      if (newWidth > 400 && newWidth < maxWidth) {
+      if (newWidth > 560 && newWidth < maxWidth) {
         this.sidebarWidth = newWidth;
       }
     });
@@ -192,7 +192,7 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
       return 640;
     }
     const contentWidth = window.innerWidth - 280;
-    return Math.min(720, Math.max(420, Math.floor(contentWidth * 0.46)));
+    return Math.min(860, Math.max(560, Math.floor(contentWidth * 0.52)));
   }
 
   ngAfterViewInit(): void {
