@@ -2284,6 +2284,33 @@ app-section-form .form-wrapper.drawer-mode .mat-mdc-tab-header .mat-mdc-tab {
   --mat-tab-header-inactive-hover-label-text-color: var(--text-primary);
 }
 
+app-section-form .section-type-tabs .mat-mdc-tab-body-content,
+app-section-form .section-type-tabs .mat-mdc-tab-body.mat-mdc-tab-body-active .mat-mdc-tab-body-content {
+  overflow: visible;
+}
+
+body:has(.sections-page-wrapper.editor-open) .cdk-overlay-container,
+body.sections-editor-open .cdk-overlay-container {
+  z-index: 15000;
+}
+
+body:has(.sections-page-wrapper.editor-open) .cdk-overlay-pane .mat-mdc-select-panel,
+body:has(.sections-page-wrapper.editor-open) .cdk-overlay-pane .mat-select-panel,
+body.sections-editor-open .cdk-overlay-pane .mat-mdc-select-panel,
+body.sections-editor-open .cdk-overlay-pane .mat-select-panel {
+  background-color: var(--surface-elevated, var(--surface-secondary));
+  color: var(--text-primary);
+  border: 1px solid var(--border-default);
+  box-shadow: var(--shadow-lg, 0 12px 32px rgba(15, 23, 42, 0.18));
+}
+
+body:has(.sections-page-wrapper.editor-open) .cdk-overlay-pane .mat-mdc-option,
+body:has(.sections-page-wrapper.editor-open) .cdk-overlay-pane .mat-mdc-option .mdc-list-item__primary-text,
+body.sections-editor-open .cdk-overlay-pane .mat-mdc-option,
+body.sections-editor-open .cdk-overlay-pane .mat-mdc-option .mdc-list-item__primary-text {
+  color: var(--text-primary);
+}
+
 app-section-form .header-actions mat-chip-listbox {
   --mdc-chip-label-text-color: var(--text-on-primary);
   --mdc-chip-elevated-container-color: rgba(var(--interactive-primary-rgb), 0.1);
@@ -2303,6 +2330,46 @@ app-section-form .header-actions .mat-mdc-chip-option.mat-mdc-chip-selected {
 
 app-section-form .header-actions .mat-mdc-chip-option.mat-mdc-chip-selected .mdc-chip__checkmark {
   display: none;
+}
+
+app-section-form .carousel-toggle-group.mat-button-toggle-group {
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: none;
+}
+
+app-section-form .carousel-toggle-group .mat-button-toggle {
+  background: var(--surface-secondary);
+  color: var(--text-secondary);
+  border: none;
+}
+
+app-section-form .carousel-toggle-group .mat-button-toggle-checked {
+  background: color-mix(in srgb, var(--interactive-primary) 14%, var(--surface-elevated));
+  color: var(--interactive-primary);
+}
+
+app-section-form .carousel-toggle-group .mat-button-toggle .mat-button-toggle-label-content {
+  line-height: 38px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+app-section-form .category-chip-list .mat-mdc-chip-option {
+  --mdc-chip-elevated-container-color: var(--surface-secondary);
+  --mdc-chip-label-text-color: var(--text-primary);
+  border: 1px solid var(--border-default);
+}
+
+app-section-form .category-chip-list .mat-mdc-chip-option.mat-mdc-chip-selected {
+  --mdc-chip-elevated-container-color: color-mix(in srgb, var(--interactive-primary) 16%, var(--surface-elevated));
+  --mdc-chip-label-text-color: var(--interactive-primary);
+  border-color: color-mix(in srgb, var(--interactive-primary) 40%, var(--border-default));
+}
+
+app-section-form .carousel-limit-row {
+  max-width: 160px;
 }
 
 /* —— Section list: warn actions + lang chips + glass switch track —— */

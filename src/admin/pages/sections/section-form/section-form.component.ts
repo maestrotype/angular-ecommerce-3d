@@ -8,10 +8,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { SectionService } from '../../../services/section.service';
 import { PageService } from '../../../services/page.service';
+import { CategoryService } from '../../../services/category.service';
+import { Category } from '../../../models/category.model';
 import { Section, CreateSectionDto, UpdateSectionDto, MenuItem } from '../../../models/section.model';
 import { LocalizedString } from '../../../../shared/models/localized-string.model';
 import { getLocalizedString, resolveApiError, formatResolvedApiError } from '../../../../shared/utils/localization.util';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { MatChipListboxChange } from '@angular/material/chips';
 import { ImageUploadComponent } from '../../../components/ui/image-upload/image-upload.component';
 import { ConfirmationService } from '../../../services/confirmation.service';
 import { getSectionPreset, SectionPresetFormPatch } from '../section-presets';
@@ -117,11 +120,19 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
   ];
 
   availableSections: Section[] = [];
+  productFilterCategories: Category[] = [];
+  readonly carouselSortOptions = [
+    { value: 'newest', label: 'CATALOG_SORT_NEWEST' },
+    { value: 'name', label: 'CATALOG_SORT_NAME' },
+    { value: 'price', label: 'CATALOG_SORT_PRICE' },
+    { value: 'stock', label: 'CATALOG_SORT_STOCK' },
+  ] as const;
 
   constructor(
     private fb: FormBuilder,
     private sectionService: SectionService,
     private pageService: PageService,
+    private categoryService: CategoryService,
     private snackBar: MatSnackBar,
     private translate: TranslateService,
     private confirmationService: ConfirmationService,
@@ -149,6 +160,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
 
     this.loadAvailableSections();
     this.loadPageTargets();
+    this.loadCategories();
 
     // Live Sync for Preview
     this.sectionForm.valueChanges.subscribe(val => {
@@ -227,6 +239,30 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     });
   }
 
+  private loadCategories(): void {
+    this.categoryService.getAllCategories().subscribe({
+      next: (categories) => {
+        this.productFilterCategories = categories;
+      },
+    });
+  }
+
+  getProductCategorySlug(category: Category): string {
+    const name = typeof category.name === 'string'
+      ? category.name
+      : category.name?.en || '';
+    return category.slug || name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+  }
+
+  onCarouselCategoriesChange(event: MatChipListboxChange): void {
+    const value = Array.isArray(event.value)
+      ? event.value
+      : event.value
+        ? [event.value]
+        : [];
+    this.sectionForm.get('carouselCategories')?.setValue(value);
+  }
+
   private createForm(section?: Section | null): FormGroup {
     // Map database type to display type
     let displayType = section?.type || 'hero';
@@ -287,7 +323,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
         })
       ),
       categories: this.fb.array(
-        (settings?.categories || []).map((category: any) =>
+        (displayType === 'categories' ? (settings?.categories || []) : []).map((category: any) =>
           this.fb.group({
             name: [this.getLocalizedValue(category.name, 'en'), Validators.required],
             slug: [category.slug || '', Validators.required],
@@ -348,6 +384,12 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
       ),
       carouselSource: [settings?.source || 'new'],
       carouselMode: [settings?.mode || 'products'],
+      carouselCategories: [
+        displayType === 'product-carousel' && Array.isArray(settings?.categories)
+          ? settings.categories.filter((slug: unknown): slug is string => typeof slug === 'string')
+          : [],
+      ],
+      carouselSortOrder: [settings?.sortOrder || 'newest'],
       carouselLimit: [settings?.limit ?? 8, [Validators.min(3), Validators.max(16)]],
       carouselAutoplay: [settings?.autoplay !== false],
       carouselSlides: this.fb.array(
@@ -1298,6 +1340,8 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
               ...existingSettings,
               mode: formValue.carouselMode || 'products',
               source: formValue.carouselSource || 'new',
+              categories: formValue.carouselCategories || [],
+              sortOrder: formValue.carouselSortOrder || 'newest',
               limit: Number(formValue.carouselLimit) || 8,
               autoplay: formValue.carouselAutoplay !== false,
               slides: formValue.carouselMode === 'custom'
@@ -1835,6 +1879,8 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
       data.settings = {
         mode: formValue.carouselMode || 'products',
         source: formValue.carouselSource || 'new',
+        categories: formValue.carouselCategories || [],
+        sortOrder: formValue.carouselSortOrder || 'newest',
         limit: Number(formValue.carouselLimit) || 8,
         autoplay: formValue.carouselAutoplay !== false,
         slides: formValue.carouselMode === 'custom'
