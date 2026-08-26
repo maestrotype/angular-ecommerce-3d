@@ -1681,6 +1681,7 @@
   "TABLE_STATUS": "СТАТУС",
   "TABLE_ACTIONS": "ДЕЙСТВИЯ",
   "DATE_FORMAT_PLACEHOLDER": "дд.мм.гггг",
+  "SECTION_TYPE_FIELD": "Тип секции",
   "SECTION_TYPE": {
     "HEADER": "ХЕДЕР",
     "FOOTER": "ФУТЕР",

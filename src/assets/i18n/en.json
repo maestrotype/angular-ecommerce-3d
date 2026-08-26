@@ -1680,6 +1680,7 @@
   "TABLE_STATUS": "STATUS",
   "TABLE_ACTIONS": "ACTIONS",
   "DATE_FORMAT_PLACEHOLDER": "mm/dd/yyyy",
+  "SECTION_TYPE_FIELD": "Section type",
   "SECTION_TYPE": {
     "HEADER": "HEADER",
     "FOOTER": "FOOTER",

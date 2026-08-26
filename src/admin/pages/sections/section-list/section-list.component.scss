@@ -398,7 +398,8 @@
           flex: 1;
           overflow-y: auto;
           background: var(--surface-page);
-          padding-bottom: 40px;
+          min-width: 0;
+          padding-bottom: 0;
           &::-webkit-scrollbar { width: 6px; }
           &::-webkit-scrollbar-thumb { background: var(--border-default); border-radius: 3px; }
         }

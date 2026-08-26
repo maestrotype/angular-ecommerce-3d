@@ -10,6 +10,46 @@
 
   <form [formGroup]="sectionForm" (ngSubmit)="onSubmit()" class="section-form-scroller">
     <div [class.mat-dialog-content]="!isDrawerMode" class="form-body">
+      <ng-template #sectionSettingsFields>
+        <div class="form-grid modular-settings">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'SECTION_TYPE_FIELD' | translate }}</mat-label>
+            <mat-select formControlName="type" [disabled]="isEditMode">
+              <mat-option *ngFor="let type of sectionTypes" [value]="type.value">{{ type.label | translate }}</mat-option>
+            </mat-select>
+            <mat-hint *ngIf="isEditMode">{{ 'SECTION_TYPE_LOCKED_HINT' | translate }}</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'PAGE_TARGET' | translate }}</mat-label>
+            <mat-select formControlName="pageTarget">
+              <mat-option *ngFor="let target of pageTargets" [value]="target.value">
+                {{ target.translate ? (target.label | translate) : target.label }}
+              </mat-option>
+            </mat-select>
+            <mat-hint>{{ 'WHERE_SECTION_APPEAR' | translate }}</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'VISUAL_VARIANT' | translate }}</mat-label>
+            <mat-select formControlName="variant">
+              <mat-option *ngFor="let v of variants" [value]="v.value">{{ v.label | translate }}</mat-option>
+            </mat-select>
+            <mat-hint>{{ 'COMPONENT_STYLING_THEME' | translate }}</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'ANCHOR_ID' | translate }}</mat-label>
+            <input matInput formControlName="anchorId" [placeholder]="'SCROLL_NAV_HINT' | translate">
+            <mat-hint>{{ 'SCROLL_NAV_HINT' | translate }}</mat-hint>
+          </mat-form-field>
+
+          <div class="toggle-row">
+            <mat-slide-toggle formControlName="isActive" color="primary">{{ 'ACTIVE_ON_SITE' | translate }}</mat-slide-toggle>
+          </div>
+        </div>
+      </ng-template>
+
       <ng-container [ngSwitch]="sectionForm.get('type')?.value">
         <!-- HEADER SPECIALIZED FORM -->
         <mat-tab-group *ngSwitchCase="'header'" animationDuration="250ms" color="primary">
@@ -235,11 +275,12 @@
         </mat-tab-group>
 
         <!-- VIDEO HERO SPECIALIZED FORM -->
-        <mat-tab-group *ngSwitchCase="'video-hero'" animationDuration="250ms" color="primary">
+        <ng-container *ngSwitchCase="'video-hero'">
+        <mat-tab-group animationDuration="250ms" color="primary" class="section-type-tabs" dynamicHeight>
           <mat-tab>
             <ng-template mat-tab-label>
-              <mat-icon class="tab-icon">text_fields</mat-icon>
-              <span class="tab-label">{{ 'CONTENT' | translate }}</span>
+              <mat-icon class="tab-icon">videocam</mat-icon>
+              <span class="tab-label">{{ 'VIDEO_MEDIA' | translate }}</span>
             </ng-template>
             <div class="tab-content">
               <div class="form-grid">
@@ -280,17 +321,9 @@
                   <textarea matInput formControlName="content_ua" rows="4"></textarea>
                 </mat-form-field>
               </div>
-            </div>
-          </mat-tab>
 
-          <mat-tab>
-            <ng-template mat-tab-label>
-              <mat-icon class="tab-icon">videocam</mat-icon>
-              <span class="tab-label">{{ 'VIDEO_MEDIA' | translate }}</span>
-            </ng-template>
-            <div class="tab-content">
+              <h4 class="tab-section-title">{{ 'VIDEO_FILE' | translate }}</h4>
               <div class="media-section">
-                <h4>{{ 'VIDEO_FILE' | translate }}</h4>
                 <div class="video-upload-container" (click)="videoFileInput.click()">
                   <input type="file" #videoFileInput (change)="onVideoFileSelected($event)" accept="video/mp4,video/webm,video/quicktime" hidden>
                   <div class="no-model" *ngIf="!sectionForm.get('videoUrl')?.value && !uploadingVideo">
@@ -382,45 +415,19 @@
               <span class="tab-label">{{ 'SETTINGS' | translate }}</span>
             </ng-template>
             <div class="tab-content">
-              <div class="form-grid modular-settings">
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'SECTION_TYPE' | translate }}</mat-label>
-                  <mat-select formControlName="type" [disabled]="isEditMode">
-                    <mat-option *ngFor="let type of sectionTypes" [value]="type.value">{{ type.label | translate }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'PAGE_TARGET' | translate }}</mat-label>
-                  <mat-select formControlName="pageTarget">
-                    <mat-option *ngFor="let target of pageTargets" [value]="target.value">
-                      {{ target.translate ? (target.label | translate) : target.label }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'VISUAL_VARIANT' | translate }}</mat-label>
-                  <mat-select formControlName="variant">
-                    <mat-option *ngFor="let v of variants" [value]="v.value">{{ v.label | translate }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'ANCHOR_ID' | translate }}</mat-label>
-                  <input matInput formControlName="anchorId">
-                </mat-form-field>
-                <div class="toggle-row">
-                  <mat-slide-toggle formControlName="isActive" color="primary">{{ 'ACTIVE_ON_SITE' | translate }}</mat-slide-toggle>
-                </div>
-              </div>
+              <ng-container *ngTemplateOutlet="sectionSettingsFields"></ng-container>
             </div>
           </mat-tab>
         </mat-tab-group>
+        </ng-container>
 
         <!-- PRODUCT CAROUSEL SPECIALIZED FORM -->
-        <mat-tab-group *ngSwitchCase="'product-carousel'" animationDuration="250ms" color="primary">
+        <ng-container *ngSwitchCase="'product-carousel'">
+        <mat-tab-group animationDuration="250ms" color="primary" class="section-type-tabs" dynamicHeight>
           <mat-tab>
             <ng-template mat-tab-label>
-              <mat-icon class="tab-icon">text_fields</mat-icon>
-              <span class="tab-label">{{ 'CONTENT' | translate }}</span>
+              <mat-icon class="tab-icon">view_carousel</mat-icon>
+              <span class="tab-label">{{ 'CAROUSEL' | translate }}</span>
             </ng-template>
             <div class="tab-content">
               <div class="form-grid">
@@ -461,15 +468,8 @@
                   <textarea matInput formControlName="content_ua" rows="3"></textarea>
                 </mat-form-field>
               </div>
-            </div>
-          </mat-tab>
 
-          <mat-tab>
-            <ng-template mat-tab-label>
-              <mat-icon class="tab-icon">view_carousel</mat-icon>
-              <span class="tab-label">{{ 'CAROUSEL' | translate }}</span>
-            </ng-template>
-            <div class="tab-content">
+              <h4 class="tab-section-title">{{ 'CAROUSEL' | translate }}</h4>
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>{{ 'CAROUSEL_MODE' | translate }}</mat-label>
                 <mat-select formControlName="carouselMode">
@@ -541,38 +541,11 @@
               <span class="tab-label">{{ 'SETTINGS' | translate }}</span>
             </ng-template>
             <div class="tab-content">
-              <div class="form-grid modular-settings">
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'SECTION_TYPE' | translate }}</mat-label>
-                  <mat-select formControlName="type" [disabled]="isEditMode">
-                    <mat-option *ngFor="let type of sectionTypes" [value]="type.value">{{ type.label | translate }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'PAGE_TARGET' | translate }}</mat-label>
-                  <mat-select formControlName="pageTarget">
-                    <mat-option *ngFor="let target of pageTargets" [value]="target.value">
-                      {{ target.translate ? (target.label | translate) : target.label }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'VISUAL_VARIANT' | translate }}</mat-label>
-                  <mat-select formControlName="variant">
-                    <mat-option *ngFor="let v of variants" [value]="v.value">{{ v.label | translate }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'ANCHOR_ID' | translate }}</mat-label>
-                  <input matInput formControlName="anchorId">
-                </mat-form-field>
-                <div class="toggle-row">
-                  <mat-slide-toggle formControlName="isActive" color="primary">{{ 'ACTIVE_ON_SITE' | translate }}</mat-slide-toggle>
-                </div>
-              </div>
+              <ng-container *ngTemplateOutlet="sectionSettingsFields"></ng-container>
             </div>
           </mat-tab>
         </mat-tab-group>
+        </ng-container>
 
         <!-- DEFAULT FORM (FOR OTHER SECTIONS) -->
         <mat-tab-group *ngSwitchDefault animationDuration="250ms" color="primary">
@@ -903,43 +876,7 @@
               <span class="tab-label">{{ 'SETTINGS' | translate }}</span>
             </ng-template>
             <div class="tab-content">
-              <div class="form-grid modular-settings">
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'SECTION_TYPE' | translate }}</mat-label>
-                  <mat-select formControlName="type" [disabled]="isEditMode">
-                    <mat-option *ngFor="let type of sectionTypes" [value]="type.value">{{ type.label | translate }}</mat-option>
-                  </mat-select>
-                  <mat-hint *ngIf="isEditMode">{{ 'SECTION_TYPE_LOCKED_HINT' | translate }}</mat-hint>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'PAGE_TARGET' | translate }}</mat-label>
-                  <mat-select formControlName="pageTarget">
-                    <mat-option *ngFor="let target of pageTargets" [value]="target.value">
-                      {{ target.translate ? (target.label | translate) : target.label }}
-                    </mat-option>
-                  </mat-select>
-                  <mat-hint>{{ 'WHERE_SECTION_APPEAR' | translate }}</mat-hint>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'VISUAL_VARIANT' | translate }}</mat-label>
-                  <mat-select formControlName="variant">
-                    <mat-option *ngFor="let v of variants" [value]="v.value">{{ v.label | translate }}</mat-option>
-                  </mat-select>
-                  <mat-hint>{{ 'COMPONENT_STYLING_THEME' | translate }}</mat-hint>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'ANCHOR_ID' | translate }}</mat-label>
-                  <input matInput formControlName="anchorId" placeholder="e.g. features-section">
-                  <mat-hint>{{ 'SCROLL_NAV_HINT' | translate }}</mat-hint>
-                </mat-form-field>
-
-                <div class="toggle-row">
-                  <mat-slide-toggle formControlName="isActive" color="primary">{{ 'ACTIVE_ON_SITE' | translate }}</mat-slide-toggle>
-                </div>
-              </div>
+              <ng-container *ngTemplateOutlet="sectionSettingsFields"></ng-container>
             </div>
           </mat-tab>
         </mat-tab-group>

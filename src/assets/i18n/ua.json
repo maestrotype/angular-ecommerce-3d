@@ -1660,6 +1660,7 @@
   "TABLE_STATUS": "СТАТУС",
   "TABLE_ACTIONS": "ДІЇ",
   "DATE_FORMAT_PLACEHOLDER": "дд.мм.рррр",
+  "SECTION_TYPE_FIELD": "Тип секції",
   "SECTION_TYPE": {
     "HEADER": "ХЕДЕР",
     "FOOTER": "ФУТЕР",

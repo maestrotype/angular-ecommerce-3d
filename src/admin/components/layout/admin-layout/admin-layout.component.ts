@@ -10,7 +10,7 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
   isMobile = false;
 
   constructor(private translate: TranslateService) {
-    const savedLang = localStorage.getItem('adminLang') || 'en';
+    const savedLang = localStorage.getItem('adminLang') || localStorage.getItem('preferredLanguage') || 'en';
     this.translate.setDefaultLang(savedLang);
     this.translate.use(savedLang);
   }
