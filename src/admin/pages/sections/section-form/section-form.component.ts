@@ -36,6 +36,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
   isEditMode: boolean;
   loading = false;
   uploadingImage = false;
+  uploadingVideo = false;
   uploadingLogo = false;
   uploadingCategoryIcon = false;
   uploadingBrandLogo = false;
@@ -60,6 +61,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
   model3dFile: File | null = null;
   model3dUrl: string | null = null;
   model3dFileName: string | null = null;
+  videoFileName: string | null = null;
   uploading3d = false;
 
   sectionTypes = [
@@ -138,6 +140,11 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     if (this.isEditMode && dataSource?.section?.model3dUrl) {
       this.model3dUrl = dataSource.section.model3dUrl;
       this.model3dFileName = dataSource.section.model3dUrl.split('/').pop() || null;
+    }
+
+    const videoUrl = (dataSource?.section?.settings as any)?.videoUrl || this.sectionForm.get('videoUrl')?.value;
+    if (videoUrl) {
+      this.videoFileName = videoUrl.split('/').pop()?.split('?')[0] || null;
     }
 
     this.loadAvailableSections();
@@ -241,7 +248,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
       content_en: [this.getLocalizedValue(section?.content, 'en') || ''],
       content_ru: [this.getLocalizedValue(section?.content, 'ru') || ''],
       content_ua: [this.getLocalizedValue(section?.content, 'ua') || ''],
-      imageUrl: [section?.imageUrl || ''],
+      imageUrl: [section?.imageUrl || settings?.posterImage || ''],
       isActive: [section?.isActive ?? true],
       model3dUrl: [section?.model3dUrl || ''],
       show3d: [section?.show3d ?? false],
@@ -340,8 +347,21 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
         )
       ),
       carouselSource: [settings?.source || 'new'],
+      carouselMode: [settings?.mode || 'products'],
       carouselLimit: [settings?.limit ?? 8, [Validators.min(3), Validators.max(16)]],
       carouselAutoplay: [settings?.autoplay !== false],
+      carouselSlides: this.fb.array(
+        (settings?.slides || []).map((item: any) =>
+          this.fb.group({
+            image: [item.image || '', Validators.required],
+            title: [this.getLocalizedValue(item.title, 'en'), Validators.required],
+            subtitle: [this.getLocalizedValue(item.subtitle, 'en')],
+            link: [item.link || '/shop'],
+            price: [item.price ?? ''],
+            isActive: [item.isActive ?? true]
+          })
+        )
+      ),
       lookbookSlides: this.fb.array(
         (settings?.slides || []).map((item: any) =>
           this.fb.group({
@@ -360,6 +380,12 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
       videoSecondaryCtaText: [this.getLocalizedValue(settings?.secondaryCtaText, 'en') || ''],
       videoSecondaryCtaLink: [settings?.secondaryCtaLink || '/about'],
       videoAutoplay: [settings?.autoplay !== false],
+      videoMuted: [settings?.muted !== false],
+      videoLoop: [settings?.loop !== false],
+      videoControls: [settings?.controls === true],
+      videoShowPlayButton: [settings?.showPlayButton !== false],
+      videoOverlayOpacity: [settings?.overlayOpacity ?? 0.5, [Validators.min(0), Validators.max(1)]],
+      videoAlignment: [settings?.alignment || 'center'],
       blogDisplayMode: [settings?.displayMode || 'grid'],
       blogShowCta: [settings?.showCta ?? true],
       blogCtaText: [this.getLocalizedValue(settings?.ctaText, 'en') || ''],
@@ -483,6 +509,10 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
 
   get lookbookSlides(): FormArray {
     return this.sectionForm.get('lookbookSlides') as FormArray;
+  }
+
+  get carouselSlides(): FormArray {
+    return this.sectionForm.get('carouselSlides') as FormArray;
   }
 
   get blogPosts(): FormArray {
@@ -615,6 +645,26 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
       ctaUrl: ['/shop'],
       isActive: [true]
     }));
+  }
+
+  addCarouselSlide() {
+    this.carouselSlides.push(this.fb.group({
+      image: ['', Validators.required],
+      title: ['', Validators.required],
+      subtitle: [''],
+      link: ['/shop'],
+      price: [''],
+      isActive: [true]
+    }));
+  }
+
+  removeCarouselSlide(index: number) {
+    this.carouselSlides.removeAt(index);
+  }
+
+  dropCarouselSlide(event: CdkDragDrop<FormArray>) {
+    moveItemInArray(this.carouselSlides.controls, event.previousIndex, event.currentIndex);
+    this.carouselSlides.updateValueAndValidity();
   }
 
   addBlogPost() {
@@ -752,17 +802,135 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
     this.sectionService.uploadImage(file).subscribe({
       next: (response) => {
         if (response?.url) {
-          const baseUrl = window.location.origin;
-          const imageUrl = response.url.startsWith('http') ? response.url : baseUrl + response.url;
+          const imageUrl = this.normalizeUploadedUrl(response.url);
           this.sectionForm.patchValue({ imageUrl });
         }
         this.uploadingImage = false;
       },
-      error: (error) => {
+      error: () => {
         this.uploadingImage = false;
         this.snackBar.open(this.translate.instant('ERROR_UPLOADING_IMAGE'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
       }
     });
+  }
+
+  onPosterFileSelected(file: File): void {
+    this.onImageFileSelected(file);
+  }
+
+  onVideoFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    const allowed = ['video/mp4', 'video/webm', 'video/quicktime'];
+    if (!allowed.includes(file.type)) {
+      this.snackBar.open(this.translate.instant('INVALID_VIDEO_FORMAT'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
+      return;
+    }
+
+    if (file.size > 50 * 1024 * 1024) {
+      this.snackBar.open(this.translate.instant('VIDEO_SIZE_LIMIT'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
+      return;
+    }
+
+    this.uploadingVideo = true;
+    this.sectionService.uploadVideo(file).subscribe({
+      next: (response) => {
+        if (response?.url) {
+          const videoUrl = this.normalizeUploadedUrl(response.url);
+          this.sectionForm.patchValue({ videoUrl });
+          this.videoFileName = file.name;
+        }
+        this.uploadingVideo = false;
+      },
+      error: () => {
+        this.uploadingVideo = false;
+        this.snackBar.open(this.translate.instant('ERROR_UPLOADING_VIDEO'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
+      }
+    });
+  }
+
+  removeVideo(): void {
+    this.sectionForm.patchValue({ videoUrl: '' });
+    this.videoFileName = null;
+  }
+
+  onCarouselSlideImageSelected(file: File, index: number): void {
+    this.uploadingImage = true;
+    this.sectionService.uploadImage(file).subscribe({
+      next: (response) => {
+        if (response?.url) {
+          this.carouselSlides.at(index).patchValue({ image: this.normalizeUploadedUrl(response.url) });
+        }
+        this.uploadingImage = false;
+      },
+      error: () => {
+        this.uploadingImage = false;
+        this.snackBar.open(this.translate.instant('ERROR_UPLOADING_IMAGE'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
+      }
+    });
+  }
+
+  onCarouselSlideImageUploaded(url: string, index: number): void {
+    this.carouselSlides.at(index).patchValue({ image: url });
+  }
+
+  onLookbookSlideImageSelected(file: File, index: number): void {
+    this.uploadingImage = true;
+    this.sectionService.uploadImage(file).subscribe({
+      next: (response) => {
+        if (response?.url) {
+          this.lookbookSlides.at(index).patchValue({ image: this.normalizeUploadedUrl(response.url) });
+        }
+        this.uploadingImage = false;
+      },
+      error: () => {
+        this.uploadingImage = false;
+        this.snackBar.open(this.translate.instant('ERROR_UPLOADING_IMAGE'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
+      }
+    });
+  }
+
+  onBlogPostImageSelected(file: File, index: number): void {
+    this.uploadingImage = true;
+    this.sectionService.uploadImage(file).subscribe({
+      next: (response) => {
+        if (response?.url) {
+          this.blogPosts.at(index).patchValue({ image: this.normalizeUploadedUrl(response.url) });
+        }
+        this.uploadingImage = false;
+      },
+      error: () => {
+        this.uploadingImage = false;
+        this.snackBar.open(this.translate.instant('ERROR_UPLOADING_IMAGE'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
+      }
+    });
+  }
+
+  onTestimonialAvatarSelected(file: File, index: number): void {
+    this.uploadingImage = true;
+    this.sectionService.uploadImage(file).subscribe({
+      next: (response) => {
+        if (response?.url) {
+          this.testimonials.at(index).patchValue({ avatar: this.normalizeUploadedUrl(response.url) });
+        }
+        this.uploadingImage = false;
+      },
+      error: () => {
+        this.uploadingImage = false;
+        this.snackBar.open(this.translate.instant('ERROR_UPLOADING_IMAGE'), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
+      }
+    });
+  }
+
+  private normalizeUploadedUrl(url: string): string {
+    if (url.startsWith('http')) {
+      return url;
+    }
+    return `${window.location.origin}${url.startsWith('/') ? '' : '/'}${url}`;
   }
 
   onImageUploaded(url: string): void {
@@ -1128,9 +1296,22 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
             anchorId: formValue.anchorId || '',
             settings: {
               ...existingSettings,
+              mode: formValue.carouselMode || 'products',
               source: formValue.carouselSource || 'new',
               limit: Number(formValue.carouselLimit) || 8,
-              autoplay: formValue.carouselAutoplay !== false
+              autoplay: formValue.carouselAutoplay !== false,
+              slides: formValue.carouselMode === 'custom'
+                ? this.mapLocalizedSettingsList(
+                    formValue.carouselSlides,
+                    (existingSettings as any)?.slides,
+                    ['title', 'subtitle']
+                  ).map((slide: any) => ({
+                    ...slide,
+                    price: slide.price === '' || slide.price === null || slide.price === undefined
+                      ? undefined
+                      : Number(slide.price)
+                  }))
+                : (existingSettings as any)?.slides || []
             }
           };
         } else if (formValue.type === 'lookbook') {
@@ -1176,12 +1357,12 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
               videoUrl: formValue.videoUrl || '',
               posterImage: formValue.imageUrl || '',
               autoplay: formValue.videoAutoplay !== false,
-              muted: true,
-              loop: true,
-              controls: false,
-              overlayOpacity: (existingSettings as any)?.overlayOpacity ?? 0.5,
-              alignment: (existingSettings as any)?.alignment || 'center',
-              showPlayButton: true,
+              muted: formValue.videoMuted !== false,
+              loop: formValue.videoLoop !== false,
+              controls: formValue.videoControls === true,
+              overlayOpacity: Number(formValue.videoOverlayOpacity ?? 0.5),
+              alignment: formValue.videoAlignment || 'center',
+              showPlayButton: formValue.videoShowPlayButton !== false,
               ctaText: this.buildLocalizedNameFromForm(
                 formValue.videoCtaText,
                 (existingSettings as any)?.ctaText
@@ -1384,6 +1565,7 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
       newsletterButtonText: preset.newsletterButtonText ?? this.sectionForm.get('newsletterButtonText')?.value,
       copyright: preset.copyright ?? this.sectionForm.get('copyright')?.value,
       carouselSource: preset.carouselSource ?? this.sectionForm.get('carouselSource')?.value,
+      carouselMode: preset.carouselMode ?? this.sectionForm.get('carouselMode')?.value,
       carouselLimit: preset.carouselLimit ?? this.sectionForm.get('carouselLimit')?.value,
       carouselAutoplay: preset.carouselAutoplay ?? this.sectionForm.get('carouselAutoplay')?.value,
       videoUrl: preset.videoUrl ?? this.sectionForm.get('videoUrl')?.value,
@@ -1392,6 +1574,12 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
       videoSecondaryCtaText: preset.videoSecondaryCtaText ?? this.sectionForm.get('videoSecondaryCtaText')?.value,
       videoSecondaryCtaLink: preset.videoSecondaryCtaLink ?? this.sectionForm.get('videoSecondaryCtaLink')?.value,
       videoAutoplay: preset.videoAutoplay ?? this.sectionForm.get('videoAutoplay')?.value,
+      videoMuted: preset.videoMuted ?? this.sectionForm.get('videoMuted')?.value,
+      videoLoop: preset.videoLoop ?? this.sectionForm.get('videoLoop')?.value,
+      videoControls: preset.videoControls ?? this.sectionForm.get('videoControls')?.value,
+      videoShowPlayButton: preset.videoShowPlayButton ?? this.sectionForm.get('videoShowPlayButton')?.value,
+      videoOverlayOpacity: preset.videoOverlayOpacity ?? this.sectionForm.get('videoOverlayOpacity')?.value,
+      videoAlignment: preset.videoAlignment ?? this.sectionForm.get('videoAlignment')?.value,
       blogDisplayMode: preset.blogDisplayMode ?? this.sectionForm.get('blogDisplayMode')?.value,
       blogShowCta: preset.blogShowCta ?? this.sectionForm.get('blogShowCta')?.value,
       blogCtaText: preset.blogCtaText ?? this.sectionForm.get('blogCtaText')?.value,
@@ -1495,6 +1683,23 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
           isActive: [item.isActive ?? true]
         })
       );
+    }
+
+    if (preset.carouselSlides) {
+      this.setFormArray(this.carouselSlides, preset.carouselSlides, item =>
+        this.fb.group({
+          image: [item.image, Validators.required],
+          title: [item.title, Validators.required],
+          subtitle: [item.subtitle || ''],
+          link: [item.link || '/shop'],
+          price: [item.price ?? ''],
+          isActive: [item.isActive ?? true]
+        })
+      );
+    }
+
+    if (preset.videoUrl) {
+      this.videoFileName = preset.videoUrl.split('/').pop()?.split('?')[0] || null;
     }
 
     if (preset.blogPosts) {
@@ -1628,9 +1833,22 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
 
     if (formValue.type === 'product-carousel') {
       data.settings = {
+        mode: formValue.carouselMode || 'products',
         source: formValue.carouselSource || 'new',
         limit: Number(formValue.carouselLimit) || 8,
-        autoplay: formValue.carouselAutoplay !== false
+        autoplay: formValue.carouselAutoplay !== false,
+        slides: formValue.carouselMode === 'custom'
+          ? this.mapLocalizedSettingsList(
+              formValue.carouselSlides,
+              undefined,
+              ['title', 'subtitle']
+            ).map((slide: any) => ({
+              ...slide,
+              price: slide.price === '' || slide.price === null || slide.price === undefined
+                ? undefined
+                : Number(slide.price)
+            }))
+          : []
       };
     }
 
@@ -1639,12 +1857,12 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
         videoUrl: formValue.videoUrl || '',
         posterImage: formValue.imageUrl || '',
         autoplay: formValue.videoAutoplay !== false,
-        muted: true,
-        loop: true,
-        controls: false,
-        overlayOpacity: 0.5,
-        alignment: 'center',
-        showPlayButton: true,
+        muted: formValue.videoMuted !== false,
+        loop: formValue.videoLoop !== false,
+        controls: formValue.videoControls === true,
+        overlayOpacity: Number(formValue.videoOverlayOpacity ?? 0.5),
+        alignment: formValue.videoAlignment || 'center',
+        showPlayButton: formValue.videoShowPlayButton !== false,
         ctaText: formValue.videoCtaText || '',
         ctaLink: formValue.videoCtaLink || '/shop',
         secondaryCtaText: formValue.videoSecondaryCtaText || '',

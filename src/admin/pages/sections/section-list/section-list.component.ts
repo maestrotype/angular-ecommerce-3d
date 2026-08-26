@@ -143,6 +143,11 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   ngOnInit(): void {
+    const uiLang = (this.translate.currentLang || localStorage.getItem('adminLang') || 'en') as 'en' | 'ru' | 'ua';
+    if (uiLang === 'en' || uiLang === 'ru' || uiLang === 'ua') {
+      this.activeMenuLang = uiLang;
+    }
+
     this.checkScreenSize();
     if (isPlatformBrowser(this.platformId)) {
       window.addEventListener('resize', this.resizeListener);
@@ -454,6 +459,10 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onLangChange(lang: 'en' | 'ru' | 'ua'): void {
     this.activeMenuLang = lang;
+    this.translate.use(lang);
+    localStorage.setItem('adminLang', lang);
+    localStorage.setItem('preferredLanguage', lang);
+    localStorage.setItem('admin_menu_lang', lang);
   }
 
   onSectionTypeSelected(type: string): void {

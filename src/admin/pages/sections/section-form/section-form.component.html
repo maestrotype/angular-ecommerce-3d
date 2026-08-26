@@ -10,6 +10,46 @@
 
   <form [formGroup]="sectionForm" (ngSubmit)="onSubmit()" class="section-form-scroller">
     <div [class.mat-dialog-content]="!isDrawerMode" class="form-body">
+      <ng-template #sectionSettingsFields>
+        <div class="form-grid modular-settings">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'SECTION_TYPE_FIELD' | translate }}</mat-label>
+            <mat-select formControlName="type" [disabled]="isEditMode">
+              <mat-option *ngFor="let type of sectionTypes" [value]="type.value">{{ type.label | translate }}</mat-option>
+            </mat-select>
+            <mat-hint *ngIf="isEditMode">{{ 'SECTION_TYPE_LOCKED_HINT' | translate }}</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'PAGE_TARGET' | translate }}</mat-label>
+            <mat-select formControlName="pageTarget">
+              <mat-option *ngFor="let target of pageTargets" [value]="target.value">
+                {{ target.translate ? (target.label | translate) : target.label }}
+              </mat-option>
+            </mat-select>
+            <mat-hint>{{ 'WHERE_SECTION_APPEAR' | translate }}</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'VISUAL_VARIANT' | translate }}</mat-label>
+            <mat-select formControlName="variant">
+              <mat-option *ngFor="let v of variants" [value]="v.value">{{ v.label | translate }}</mat-option>
+            </mat-select>
+            <mat-hint>{{ 'COMPONENT_STYLING_THEME' | translate }}</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'ANCHOR_ID' | translate }}</mat-label>
+            <input matInput formControlName="anchorId" [placeholder]="'SCROLL_NAV_HINT' | translate">
+            <mat-hint>{{ 'SCROLL_NAV_HINT' | translate }}</mat-hint>
+          </mat-form-field>
+
+          <div class="toggle-row">
+            <mat-slide-toggle formControlName="isActive" color="primary">{{ 'ACTIVE_ON_SITE' | translate }}</mat-slide-toggle>
+          </div>
+        </div>
+      </ng-template>
+
       <ng-container [ngSwitch]="sectionForm.get('type')?.value">
         <!-- HEADER SPECIALIZED FORM -->
         <mat-tab-group *ngSwitchCase="'header'" animationDuration="250ms" color="primary">
@@ -24,6 +64,7 @@
                   <app-image-upload 
                     [currentImageUrl]="sectionForm.get('logoUrl')?.value"
                     [label]="'LOGO_IMAGE' | translate"
+                    (fileSelected)="onLogoFileSelected($event)"
                     (imageUploaded)="onLogoUploaded($event)">
                   </app-image-upload>
                 </div>
@@ -233,6 +274,279 @@
           </mat-tab>
         </mat-tab-group>
 
+        <!-- VIDEO HERO SPECIALIZED FORM -->
+        <ng-container *ngSwitchCase="'video-hero'">
+        <mat-tab-group animationDuration="250ms" color="primary" class="section-type-tabs" dynamicHeight>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="tab-icon">videocam</mat-icon>
+              <span class="tab-label">{{ 'VIDEO_MEDIA' | translate }}</span>
+            </ng-template>
+            <div class="tab-content">
+              <div class="form-grid">
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'en'">
+                  <mat-label>{{ 'TITLE_EN' | translate }}</mat-label>
+                  <input matInput formControlName="title_en" placeholder="Enter title (EN)">
+                </mat-form-field>
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ru'">
+                  <mat-label>{{ 'TITLE_RU' | translate }}</mat-label>
+                  <input matInput formControlName="title_ru" placeholder="Enter title (RU)">
+                </mat-form-field>
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ua'">
+                  <mat-label>{{ 'TITLE_UA' | translate }}</mat-label>
+                  <input matInput formControlName="title_ua" placeholder="Enter title (UA)">
+                </mat-form-field>
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'en'">
+                  <mat-label>{{ 'SUBTITLE_EN' | translate }}</mat-label>
+                  <input matInput formControlName="subtitle_en">
+                </mat-form-field>
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ru'">
+                  <mat-label>{{ 'SUBTITLE_RU' | translate }}</mat-label>
+                  <input matInput formControlName="subtitle_ru">
+                </mat-form-field>
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ua'">
+                  <mat-label>{{ 'SUBTITLE_UA' | translate }}</mat-label>
+                  <input matInput formControlName="subtitle_ua">
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="full-width" *ngIf="activeMenuLang === 'en'">
+                  <mat-label>{{ 'CONTENT_EN' | translate }}</mat-label>
+                  <textarea matInput formControlName="content_en" rows="4"></textarea>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="full-width" *ngIf="activeMenuLang === 'ru'">
+                  <mat-label>{{ 'CONTENT_RU' | translate }}</mat-label>
+                  <textarea matInput formControlName="content_ru" rows="4"></textarea>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="full-width" *ngIf="activeMenuLang === 'ua'">
+                  <mat-label>{{ 'CONTENT_UA' | translate }}</mat-label>
+                  <textarea matInput formControlName="content_ua" rows="4"></textarea>
+                </mat-form-field>
+              </div>
+
+              <h4 class="tab-section-title">{{ 'VIDEO_FILE' | translate }}</h4>
+              <div class="media-section">
+                <div class="video-upload-container" (click)="videoFileInput.click()">
+                  <input type="file" #videoFileInput (change)="onVideoFileSelected($event)" accept="video/mp4,video/webm,video/quicktime" hidden>
+                  <div class="no-model" *ngIf="!sectionForm.get('videoUrl')?.value && !uploadingVideo">
+                    <mat-icon>movie</mat-icon>
+                    <p>{{ 'UPLOAD_VIDEO_HINT' | translate }}</p>
+                    <small>{{ 'VIDEO_FORMAT_HINT' | translate }}</small>
+                  </div>
+                  <div class="model-info" *ngIf="uploadingVideo">
+                    <mat-spinner diameter="24"></mat-spinner>
+                    <span>{{ 'UPLOADING_VIDEO' | translate }}</span>
+                  </div>
+                  <div class="model-info" *ngIf="sectionForm.get('videoUrl')?.value && !uploadingVideo">
+                    <mat-icon color="primary">play_circle</mat-icon>
+                    <span class="file-name">{{ videoFileName || ('VIDEO_UPLOADED' | translate) }}</span>
+                    <button mat-icon-button color="warn" (click)="removeVideo(); $event.stopPropagation()" type="button">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </div>
+                </div>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ 'VIDEO_URL' | translate }}</mat-label>
+                  <input matInput formControlName="videoUrl" placeholder="https://...">
+                  <mat-hint>{{ 'VIDEO_URL_HINT' | translate }}</mat-hint>
+                </mat-form-field>
+
+                <h4>{{ 'VIDEO_POSTER' | translate }}</h4>
+                <p class="field-hint">{{ 'VIDEO_POSTER_HINT' | translate }}</p>
+                <app-image-upload
+                  [currentImageUrl]="sectionForm.get('imageUrl')?.value"
+                  [label]="'VIDEO_POSTER' | translate"
+                  (fileSelected)="onPosterFileSelected($event)"
+                  (imageUploaded)="onImageUploaded($event)">
+                </app-image-upload>
+              </div>
+            </div>
+          </mat-tab>
+
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="tab-icon">tune</mat-icon>
+              <span class="tab-label">{{ 'VIDEO_PLAYBACK' | translate }}</span>
+            </ng-template>
+            <div class="tab-content">
+              <div class="toggle-list playback-toggles">
+                <mat-slide-toggle formControlName="videoAutoplay" color="primary">{{ 'VIDEO_AUTOPLAY' | translate }}</mat-slide-toggle>
+                <mat-slide-toggle formControlName="videoMuted" color="primary">{{ 'VIDEO_MUTED' | translate }}</mat-slide-toggle>
+                <mat-slide-toggle formControlName="videoLoop" color="primary">{{ 'VIDEO_LOOP' | translate }}</mat-slide-toggle>
+                <mat-slide-toggle formControlName="videoControls" color="primary">{{ 'VIDEO_CONTROLS' | translate }}</mat-slide-toggle>
+                <mat-slide-toggle formControlName="videoShowPlayButton" color="primary">{{ 'VIDEO_SHOW_PLAY_BUTTON' | translate }}</mat-slide-toggle>
+              </div>
+
+              <div class="form-grid">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'VIDEO_OVERLAY_OPACITY' | translate }}</mat-label>
+                  <input matInput type="number" min="0" max="1" step="0.05" formControlName="videoOverlayOpacity">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'VIDEO_ALIGNMENT' | translate }}</mat-label>
+                  <mat-select formControlName="videoAlignment">
+                    <mat-option value="center">{{ 'VIDEO_ALIGN_CENTER' | translate }}</mat-option>
+                    <mat-option value="left">{{ 'VIDEO_ALIGN_LEFT' | translate }}</mat-option>
+                    <mat-option value="right">{{ 'VIDEO_ALIGN_RIGHT' | translate }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'CTA_LABEL' | translate }}</mat-label>
+                  <input matInput formControlName="videoCtaText">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'CTA_URL' | translate }}</mat-label>
+                  <input matInput formControlName="videoCtaLink">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'SECONDARY_CTA_LABEL' | translate }}</mat-label>
+                  <input matInput formControlName="videoSecondaryCtaText">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>{{ 'SECONDARY_CTA_URL' | translate }}</mat-label>
+                  <input matInput formControlName="videoSecondaryCtaLink">
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-tab>
+
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="tab-icon">settings</mat-icon>
+              <span class="tab-label">{{ 'SETTINGS' | translate }}</span>
+            </ng-template>
+            <div class="tab-content">
+              <ng-container *ngTemplateOutlet="sectionSettingsFields"></ng-container>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+        </ng-container>
+
+        <!-- PRODUCT CAROUSEL SPECIALIZED FORM -->
+        <ng-container *ngSwitchCase="'product-carousel'">
+        <mat-tab-group animationDuration="250ms" color="primary" class="section-type-tabs" dynamicHeight>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="tab-icon">view_carousel</mat-icon>
+              <span class="tab-label">{{ 'CAROUSEL' | translate }}</span>
+            </ng-template>
+            <div class="tab-content">
+              <div class="form-grid">
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'en'">
+                  <mat-label>{{ 'TITLE_EN' | translate }}</mat-label>
+                  <input matInput formControlName="title_en">
+                </mat-form-field>
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ru'">
+                  <mat-label>{{ 'TITLE_RU' | translate }}</mat-label>
+                  <input matInput formControlName="title_ru">
+                </mat-form-field>
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ua'">
+                  <mat-label>{{ 'TITLE_UA' | translate }}</mat-label>
+                  <input matInput formControlName="title_ua">
+                </mat-form-field>
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'en'">
+                  <mat-label>{{ 'SUBTITLE_EN' | translate }}</mat-label>
+                  <input matInput formControlName="subtitle_en">
+                </mat-form-field>
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ru'">
+                  <mat-label>{{ 'SUBTITLE_RU' | translate }}</mat-label>
+                  <input matInput formControlName="subtitle_ru">
+                </mat-form-field>
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ua'">
+                  <mat-label>{{ 'SUBTITLE_UA' | translate }}</mat-label>
+                  <input matInput formControlName="subtitle_ua">
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="full-width" *ngIf="activeMenuLang === 'en'">
+                  <mat-label>{{ 'CONTENT_EN' | translate }}</mat-label>
+                  <textarea matInput formControlName="content_en" rows="3"></textarea>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="full-width" *ngIf="activeMenuLang === 'ru'">
+                  <mat-label>{{ 'CONTENT_RU' | translate }}</mat-label>
+                  <textarea matInput formControlName="content_ru" rows="3"></textarea>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="full-width" *ngIf="activeMenuLang === 'ua'">
+                  <mat-label>{{ 'CONTENT_UA' | translate }}</mat-label>
+                  <textarea matInput formControlName="content_ua" rows="3"></textarea>
+                </mat-form-field>
+              </div>
+
+              <h4 class="tab-section-title">{{ 'CAROUSEL' | translate }}</h4>
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>{{ 'CAROUSEL_MODE' | translate }}</mat-label>
+                <mat-select formControlName="carouselMode">
+                  <mat-option value="products">{{ 'CAROUSEL_MODE_PRODUCTS' | translate }}</mat-option>
+                  <mat-option value="custom">{{ 'CAROUSEL_MODE_CUSTOM' | translate }}</mat-option>
+                </mat-select>
+                <mat-hint>{{ 'CAROUSEL_MODE_HINT' | translate }}</mat-hint>
+              </mat-form-field>
+
+              <div *ngIf="sectionForm.get('carouselMode')?.value === 'products'" class="dynamic-list">
+                <div class="form-grid">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'CAROUSEL_SOURCE' | translate }}</mat-label>
+                    <mat-select formControlName="carouselSource">
+                      <mat-option value="new">{{ 'CAROUSEL_SOURCE_NEW' | translate }}</mat-option>
+                      <mat-option value="best-sellers">{{ 'CAROUSEL_SOURCE_BEST' | translate }}</mat-option>
+                      <mat-option value="special">{{ 'CAROUSEL_SOURCE_SPECIAL' | translate }}</mat-option>
+                      <mat-option value="all">{{ 'CAROUSEL_SOURCE_ALL' | translate }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'CAROUSEL_LIMIT' | translate }}</mat-label>
+                    <input matInput type="number" min="3" max="16" formControlName="carouselLimit">
+                  </mat-form-field>
+                </div>
+                <mat-slide-toggle formControlName="carouselAutoplay" color="primary">
+                  {{ 'CAROUSEL_AUTOPLAY' | translate }}
+                </mat-slide-toggle>
+              </div>
+
+              <div *ngIf="sectionForm.get('carouselMode')?.value === 'custom'" class="dynamic-list">
+                <div class="list-header">
+                  <h4>{{ 'CAROUSEL_SLIDES' | translate }}</h4>
+                  <button mat-button color="primary" type="button" (click)="addCarouselSlide()">
+                    <mat-icon>add</mat-icon> {{ 'ADD_CAROUSEL_SLIDE' | translate }}
+                  </button>
+                </div>
+                <mat-slide-toggle formControlName="carouselAutoplay" color="primary">
+                  {{ 'CAROUSEL_AUTOPLAY' | translate }}
+                </mat-slide-toggle>
+                <div cdkDropList (cdkDropListDropped)="dropCarouselSlide($event)" class="cdk-list">
+                  <div *ngFor="let slide of carouselSlides.controls; let i = index" cdkDrag class="cdk-item">
+                    <div [formGroup]="$any(slide)" class="item-form vertical">
+                      <div class="item-row">
+                        <mat-form-field appearance="outline"><mat-label>{{ 'TITLE' | translate }}</mat-label><input matInput formControlName="title"></mat-form-field>
+                        <mat-form-field appearance="outline"><mat-label>{{ 'CTA_URL' | translate }}</mat-label><input matInput formControlName="link"></mat-form-field>
+                        <button mat-icon-button color="warn" (click)="removeCarouselSlide(i)" type="button"><mat-icon>delete</mat-icon></button>
+                      </div>
+                      <div class="item-row">
+                        <mat-form-field appearance="outline"><mat-label>{{ 'SUBTITLE' | translate }}</mat-label><input matInput formControlName="subtitle"></mat-form-field>
+                        <mat-form-field appearance="outline"><mat-label>{{ 'PRICE' | translate }}</mat-label><input matInput type="number" formControlName="price"></mat-form-field>
+                      </div>
+                      <app-image-upload
+                        [currentImageUrl]="slide.get('image')?.value"
+                        [label]="'IMAGE' | translate"
+                        (fileSelected)="onCarouselSlideImageSelected($event, i)"
+                        (imageUploaded)="onCarouselSlideImageUploaded($event, i)">
+                      </app-image-upload>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="tab-icon">settings</mat-icon>
+              <span class="tab-label">{{ 'SETTINGS' | translate }}</span>
+            </ng-template>
+            <div class="tab-content">
+              <ng-container *ngTemplateOutlet="sectionSettingsFields"></ng-container>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+        </ng-container>
+
         <!-- DEFAULT FORM (FOR OTHER SECTIONS) -->
         <mat-tab-group *ngSwitchDefault animationDuration="250ms" color="primary">
           <!-- TAB: CONTENT -->
@@ -303,6 +617,7 @@
                   <app-image-upload *ngIf="sectionForm.get('showImage')?.value"
                     [currentImageUrl]="sectionForm.get('imageUrl')?.value"
                     label="SECTION_IMAGE"
+                    (fileSelected)="onImageFileSelected($event)"
                     (imageUploaded)="onImageUploaded($event)">
                   </app-image-upload>
 
@@ -326,7 +641,7 @@
           </mat-tab>
 
           <!-- TAB: SPECIAL (COMPONENTS) -->
-          <mat-tab *ngIf="['categories','brands','testimonials','features-grid','faq','stats','newsletter','product-carousel','lookbook','video-hero','blog-posts'].includes(sectionForm.get('type')?.value)">
+          <mat-tab *ngIf="['categories','brands','testimonials','features-grid','faq','stats','newsletter','lookbook','blog-posts'].includes(sectionForm.get('type')?.value)">
             <ng-template mat-tab-label>
               <mat-icon class="tab-icon">extension</mat-icon>
               <span class="tab-label">{{ 'COMPONENTS' | translate }}</span>
@@ -348,7 +663,7 @@
                         <mat-form-field appearance="outline"><mat-label>Slug</mat-label><input matInput formControlName="slug"></mat-form-field>
                         <button mat-icon-button color="warn" (click)="removeCategory(i)" type="button"><mat-icon>delete</mat-icon></button>
                       </div>
-                      <app-image-upload [currentImageUrl]="cat.get('icon')?.value" label="Icon" (imageUploaded)="onCategoryIconUploaded($event, i)"></app-image-upload>
+                      <app-image-upload [currentImageUrl]="cat.get('icon')?.value" label="Icon" (fileSelected)="onCategoryIconSelected($event, i)" (imageUploaded)="onCategoryIconUploaded($event, i)"></app-image-upload>
                     </div>
                   </div>
                 </div>
@@ -368,7 +683,7 @@
                         <mat-form-field appearance="outline"><mat-label>Brand Name</mat-label><input matInput formControlName="name"></mat-form-field>
                         <button mat-icon-button color="warn" (click)="removeBrand(i)" type="button"><mat-icon>delete</mat-icon></button>
                       </div>
-                      <app-image-upload [currentImageUrl]="brand.get('logo')?.value" label="Logo" (imageUploaded)="onBrandLogoUploaded($event, i)"></app-image-upload>
+                      <app-image-upload [currentImageUrl]="brand.get('logo')?.value" label="Logo" (fileSelected)="onBrandLogoSelected($event, i)" (imageUploaded)="onBrandLogoUploaded($event, i)"></app-image-upload>
                     </div>
                   </div>
                 </div>
@@ -392,7 +707,7 @@
                         <button mat-icon-button color="warn" (click)="removeTestimonial(i)" type="button"><mat-icon>delete</mat-icon></button>
                       </div>
                       <mat-form-field appearance="outline" class="full-width"><mat-label>{{ 'TEXT' | translate }}</mat-label><textarea matInput rows="3" formControlName="text"></textarea></mat-form-field>
-                      <app-image-upload [currentImageUrl]="item.get('avatar')?.value" [label]="'AVATAR' | translate" (imageUploaded)="onTestimonialAvatarUploaded($event, i)"></app-image-upload>
+                      <app-image-upload [currentImageUrl]="item.get('avatar')?.value" [label]="'AVATAR' | translate" (fileSelected)="onTestimonialAvatarSelected($event, i)" (imageUploaded)="onTestimonialAvatarUploaded($event, i)"></app-image-upload>
                     </div>
                   </div>
                 </div>
@@ -477,28 +792,6 @@
                 </div>
               </div>
 
-              <!-- PRODUCT CAROUSEL -->
-              <div *ngIf="sectionForm.get('type')?.value === 'product-carousel'" class="dynamic-list">
-                <div class="form-grid">
-                  <mat-form-field appearance="outline">
-                    <mat-label>{{ 'CAROUSEL_SOURCE' | translate }}</mat-label>
-                    <mat-select formControlName="carouselSource">
-                      <mat-option value="new">{{ 'CAROUSEL_SOURCE_NEW' | translate }}</mat-option>
-                      <mat-option value="best-sellers">{{ 'CAROUSEL_SOURCE_BEST' | translate }}</mat-option>
-                      <mat-option value="special">{{ 'CAROUSEL_SOURCE_SPECIAL' | translate }}</mat-option>
-                      <mat-option value="all">{{ 'CAROUSEL_SOURCE_ALL' | translate }}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                  <mat-form-field appearance="outline">
-                    <mat-label>{{ 'CAROUSEL_LIMIT' | translate }}</mat-label>
-                    <input matInput type="number" min="3" max="16" formControlName="carouselLimit">
-                  </mat-form-field>
-                </div>
-                <mat-slide-toggle formControlName="carouselAutoplay" color="primary">
-                  {{ 'CAROUSEL_AUTOPLAY' | translate }}
-                </mat-slide-toggle>
-              </div>
-
               <!-- LOOKBOOK -->
               <div *ngIf="sectionForm.get('type')?.value === 'lookbook'" class="dynamic-list">
                 <div class="list-header">
@@ -520,40 +813,10 @@
                       </div>
                       <mat-form-field appearance="outline" class="full-width"><mat-label>{{ 'SUBTITLE' | translate }}</mat-label><input matInput formControlName="subtitle"></mat-form-field>
                       <mat-form-field appearance="outline" class="full-width"><mat-label>{{ 'CTA_LABEL' | translate }}</mat-label><input matInput formControlName="ctaLabel"></mat-form-field>
-                      <app-image-upload [currentImageUrl]="slide.get('image')?.value" [label]="'IMAGE' | translate" (imageUploaded)="onLookbookSlideImageUploaded($event, i)"></app-image-upload>
+                      <app-image-upload [currentImageUrl]="slide.get('image')?.value" [label]="'IMAGE' | translate" (fileSelected)="onLookbookSlideImageSelected($event, i)" (imageUploaded)="onLookbookSlideImageUploaded($event, i)"></app-image-upload>
                     </div>
                   </div>
                 </div>
-              </div>
-
-              <!-- VIDEO HERO -->
-              <div *ngIf="sectionForm.get('type')?.value === 'video-hero'" class="dynamic-list">
-                <div class="form-grid">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>{{ 'VIDEO_URL' | translate }}</mat-label>
-                    <input matInput formControlName="videoUrl">
-                  </mat-form-field>
-                  <mat-form-field appearance="outline">
-                    <mat-label>{{ 'CTA_LABEL' | translate }}</mat-label>
-                    <input matInput formControlName="videoCtaText">
-                  </mat-form-field>
-                  <mat-form-field appearance="outline">
-                    <mat-label>{{ 'CTA_URL' | translate }}</mat-label>
-                    <input matInput formControlName="videoCtaLink">
-                  </mat-form-field>
-                  <mat-form-field appearance="outline">
-                    <mat-label>{{ 'SECONDARY_CTA_LABEL' | translate }}</mat-label>
-                    <input matInput formControlName="videoSecondaryCtaText">
-                  </mat-form-field>
-                  <mat-form-field appearance="outline">
-                    <mat-label>{{ 'SECONDARY_CTA_URL' | translate }}</mat-label>
-                    <input matInput formControlName="videoSecondaryCtaLink">
-                  </mat-form-field>
-                </div>
-                <mat-slide-toggle formControlName="videoAutoplay" color="primary">
-                  {{ 'VIDEO_AUTOPLAY' | translate }}
-                </mat-slide-toggle>
-                <p class="field-hint">{{ 'VIDEO_POSTER_HINT' | translate }}</p>
               </div>
 
               <!-- BLOG POSTS -->
@@ -598,7 +861,7 @@
                         <mat-form-field appearance="outline"><mat-label>{{ 'BLOG_DATE' | translate }}</mat-label><input matInput type="date" formControlName="date"></mat-form-field>
                         <mat-form-field appearance="outline"><mat-label>{{ 'BLOG_LINK' | translate }}</mat-label><input matInput formControlName="link"></mat-form-field>
                       </div>
-                      <app-image-upload [currentImageUrl]="post.get('image')?.value" [label]="'IMAGE' | translate" (imageUploaded)="onBlogPostImageUploaded($event, i)"></app-image-upload>
+                      <app-image-upload [currentImageUrl]="post.get('image')?.value" [label]="'IMAGE' | translate" (fileSelected)="onBlogPostImageSelected($event, i)" (imageUploaded)="onBlogPostImageUploaded($event, i)"></app-image-upload>
                     </div>
                   </div>
                 </div>
@@ -613,43 +876,7 @@
               <span class="tab-label">{{ 'SETTINGS' | translate }}</span>
             </ng-template>
             <div class="tab-content">
-              <div class="form-grid modular-settings">
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'SECTION_TYPE' | translate }}</mat-label>
-                  <mat-select formControlName="type" [disabled]="isEditMode">
-                    <mat-option *ngFor="let type of sectionTypes" [value]="type.value">{{ type.label | translate }}</mat-option>
-                  </mat-select>
-                  <mat-hint *ngIf="isEditMode">{{ 'SECTION_TYPE_LOCKED_HINT' | translate }}</mat-hint>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'PAGE_TARGET' | translate }}</mat-label>
-                  <mat-select formControlName="pageTarget">
-                    <mat-option *ngFor="let target of pageTargets" [value]="target.value">
-                      {{ target.translate ? (target.label | translate) : target.label }}
-                    </mat-option>
-                  </mat-select>
-                  <mat-hint>{{ 'WHERE_SECTION_APPEAR' | translate }}</mat-hint>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'VISUAL_VARIANT' | translate }}</mat-label>
-                  <mat-select formControlName="variant">
-                    <mat-option *ngFor="let v of variants" [value]="v.value">{{ v.label | translate }}</mat-option>
-                  </mat-select>
-                  <mat-hint>{{ 'COMPONENT_STYLING_THEME' | translate }}</mat-hint>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                  <mat-label>{{ 'ANCHOR_ID' | translate }}</mat-label>
-                  <input matInput formControlName="anchorId" placeholder="e.g. features-section">
-                  <mat-hint>{{ 'SCROLL_NAV_HINT' | translate }}</mat-hint>
-                </mat-form-field>
-
-                <div class="toggle-row">
-                  <mat-slide-toggle formControlName="isActive" color="primary">{{ 'ACTIVE_ON_SITE' | translate }}</mat-slide-toggle>
-                </div>
-              </div>
+              <ng-container *ngTemplateOutlet="sectionSettingsFields"></ng-container>
             </div>
           </mat-tab>
         </mat-tab-group>
@@ -657,7 +884,7 @@
     </div>
 
     <div [class.mat-dialog-actions]="!isDrawerMode" [class.form-actions-drawer]="isDrawerMode" align="end" class="form-footer">
-      <button mat-stroked-button type="button" (click)="loadDemoContent()" [disabled]="loading || uploading3d" class="demo-btn">
+      <button mat-stroked-button type="button" (click)="loadDemoContent()" [disabled]="loading || uploading3d || uploadingVideo" class="demo-btn">
         <mat-icon>auto_fix_high</mat-icon>
         {{ 'FILL_DEMO_DATA' | translate }}
       </button>
@@ -665,7 +892,7 @@
       <button mat-button type="button" (click)="onCancel()" class="cancel-btn">
         {{ 'CANCEL' | translate }}
       </button>
-      <button mat-raised-button color="primary" type="submit" [disabled]="loading || uploading3d" class="submit-btn" [class.loading]="loading">
+      <button mat-raised-button color="primary" type="submit" [disabled]="loading || uploading3d || uploadingVideo || uploadingImage" class="submit-btn" [class.loading]="loading">
         <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
         <span *ngIf="!loading">{{ (isEditMode ? 'SAVE_CHANGES' : 'CREATE_SECTION') | translate }}</span>
       </button>

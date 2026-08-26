@@ -120,6 +120,12 @@ export class SidenavComponent implements OnInit, OnDestroy {
       .subscribe(theme => {
         this.currentTheme = theme.id;
       });
+
+    this.translate.onLangChange
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(event => {
+        this.currentLang = event.lang;
+      });
   }
 
   changeTheme(themeId: string): void {
@@ -131,6 +137,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.translate.use(langCode);
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('preferredLanguage', langCode);
+      localStorage.setItem('adminLang', langCode);
     }
   }
 

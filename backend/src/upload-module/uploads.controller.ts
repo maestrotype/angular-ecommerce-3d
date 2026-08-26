@@ -97,6 +97,59 @@ export class UploadsController {
     );
   }
 
+  @Post("section-video")
+  @UseInterceptors(
+    FileInterceptor("video", {
+      storage: diskStorage({
+        destination: os.tmpdir(),
+        filename: (req, file, callback) => {
+          const uniqueSuffix = uuidv4();
+          callback(null, `section-video-${uniqueSuffix}`);
+        },
+      }),
+      limits: {
+        fileSize: 50 * 1024 * 1024, // 50MB
+      },
+    })
+  )
+  uploadSectionVideo(@UploadedFile() file: Express.Multer.File): Observable<{ url: string; publicId: string }> {
+    if (!file) {
+      return throwError(() => new BadRequestException("No file uploaded"));
+    }
+
+    const allowed = ["video/mp4", "video/webm", "video/quicktime"];
+    if (!allowed.includes(file.mimetype)) {
+      try {
+        unlinkSync(file.path);
+      } catch (unlinkError) {
+        console.error("Failed to delete temp file:", unlinkError);
+      }
+      return throwError(() => new BadRequestException("Only MP4, WebM, and MOV video files are allowed"));
+    }
+
+    const videoBuffer = readFileSync(file.path);
+
+    return createCloudinaryUpload("section-videos", "video", videoBuffer).pipe(
+      map((result: any) => {
+        unlinkSync(file.path);
+        return {
+          url: result.secure_url,
+          publicId: result.public_id,
+        };
+      }),
+      catchError(error => {
+        if (file.path) {
+          try {
+            unlinkSync(file.path);
+          } catch (unlinkError) {
+            console.error("Failed to delete temp file:", unlinkError);
+          }
+        }
+        return throwError(() => new BadRequestException("Section video upload failed"));
+      })
+    );
+  }
+
   private cleanupTempFiles(filePath: string, optimizedPath: string | null): void {
     try { unlinkSync(filePath); } catch (e) {}
     if (optimizedPath) {

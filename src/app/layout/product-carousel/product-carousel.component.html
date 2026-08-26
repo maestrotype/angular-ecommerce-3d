@@ -1,89 +1,96 @@
-<section class="product-carousel">
-  <div class="product-carousel__wrap">
-    <div class="product-carousel__header">
-      <div class="product-carousel__heading">
-        <span class="product-carousel__kicker" *ngIf="section?.subtitle">{{ section?.subtitle | localized }}</span>
+<section class="product-carousel" [attr.data-count]="products.length">
+  <div
+    class="product-carousel__stage"
+    *ngIf="products.length; else emptyState"
+    tabindex="0"
+    (keydown)="onKeydown($event)"
+    (pointerenter)="pauseAutoplay()"
+    (pointerleave)="resumeAutoplay()"
+    (pointerdown)="onPointerDown($event)"
+    (pointerup)="onPointerUp($event)"
+    (pointercancel)="onPointerUp($event)"
+  >
+    <article
+      *ngFor="let product of products; let i = index; trackBy: trackByProductId"
+      class="product-carousel__slide"
+      [class.is-active]="i === activeIndex"
+    >
+      <img
+        class="product-carousel__image"
+        [src]="imageOf(product) | imageUrl"
+        [alt]="product.name | localized"
+        [attr.loading]="i === 0 ? 'eager' : 'lazy'"
+      />
+    </article>
+
+    <div class="product-carousel__veil" aria-hidden="true"></div>
+    <div class="product-carousel__grain" aria-hidden="true"></div>
+
+    <div class="product-carousel__chrome">
+      <header class="product-carousel__header">
+        <span class="product-carousel__kicker" *ngIf="data?.subtitle">{{ data?.subtitle | localized }}</span>
         <h2 class="product-carousel__title">
-          {{ (section?.title | localized) || ('HOME.PRODUCT_CAROUSEL.TITLE' | translate) }}
+          {{ (data?.title | localized) || ('HOME.PRODUCT_CAROUSEL.TITLE' | translate) }}
         </h2>
+      </header>
+
+      <div class="product-carousel__copy" *ngIf="current">
+        <span class="product-carousel__badge" *ngIf="current.isNew">{{ 'HOME.BEST_SELLERS.BADGE_NEW' | translate }}</span>
+        <span class="product-carousel__badge product-carousel__badge--sale" *ngIf="current.discount">-{{ current.discount }}%</span>
+        <h3>{{ current.name | localized }}</h3>
+        <p class="product-carousel__price">${{ current.price | number:'1.0-0' }}</p>
+        <button type="button" class="product-carousel__cta" (click)="openCurrent($event)">
+          {{ 'HOME.PRODUCT_CAROUSEL.VIEW' | translate }}
+        </button>
       </div>
-      <a routerLink="/shop" class="product-carousel__all">{{ 'HOME.BEST_SELLERS.VIEW_ALL' | translate }}</a>
+
+      <div class="product-carousel__controls" *ngIf="products.length > 1">
+        <button
+          type="button"
+          class="product-carousel__nav"
+          (click)="prev($event)"
+          [attr.aria-label]="'HOME.PRODUCT_CAROUSEL.PREV' | translate"
+        >
+          <span class="material-icons" aria-hidden="true">chevron_left</span>
+        </button>
+        <span class="product-carousel__counter">{{ activeIndex + 1 }} / {{ products.length }}</span>
+        <button
+          type="button"
+          class="product-carousel__nav"
+          (click)="next($event)"
+          [attr.aria-label]="'HOME.PRODUCT_CAROUSEL.NEXT' | translate"
+        >
+          <span class="material-icons" aria-hidden="true">chevron_right</span>
+        </button>
+      </div>
     </div>
 
     <div
-      class="product-carousel__stage"
-      *ngIf="products.length; else emptyState"
-      (pointerenter)="pauseAutoplay()"
-      (pointerleave)="resumeAutoplay()"
+      class="product-carousel__progress"
+      *ngIf="autoplay && products.length > 1"
+      [attr.data-index]="activeIndex"
     >
-      <button
-        type="button"
-        class="product-carousel__nav product-carousel__nav--prev"
-        (click)="scrollByDir(-1)"
-        [attr.aria-label]="'HOME.PRODUCT_CAROUSEL.PREV' | translate"
-      >
-        <span class="material-icons" aria-hidden="true">chevron_left</span>
-      </button>
-
-      <div class="product-carousel__track" #track>
-        <article
-          class="product-card"
-          *ngFor="let product of products; trackBy: trackByProductId"
-          [class.out-of-stock]="product?.stock !== undefined && product.stock <= 0"
-          (click)="goToProductDetail(product.id)"
-        >
-          <div class="product-image">
-            <img [src]="product.imageUrl" [alt]="product.name | localized" loading="lazy" />
-            <div class="product-overlay top" (click)="$event.stopPropagation()">
-              <div class="overlay-actions">
-                <button
-                  type="button"
-                  class="action-btn favorite-btn"
-                  [class.is-favorite]="isFavorite(product.id)"
-                  (click)="toggleFavorite(product); $event.stopPropagation()"
-                  [attr.aria-label]="'HEADER.NAV.FAVORITES' | translate"
-                >
-                  <span class="material-icons">favorite_border</span>
-                  <span class="material-icons filled">favorite</span>
-                </button>
-              </div>
-            </div>
-            <div class="new-badge" *ngIf="product.isNew">{{ 'HOME.BEST_SELLERS.BADGE_NEW' | translate }}</div>
-            <div class="discount-badge" *ngIf="product.discount">-{{ product.discount }}%</div>
-          </div>
-          <div class="product-info">
-            <span class="product-category" *ngIf="product.category">{{ product.category }}</span>
-            <h3 class="product-name">{{ product.name | localized }}</h3>
-            <div class="product-footer">
-              <div class="price-main">
-                <span class="current-price">${{ product.price | number:'1.0-0' }}</span>
-              </div>
-              <button
-                type="button"
-                class="action-btn cart-btn"
-                *ngIf="(product?.stock ?? 1) > 0"
-                (click)="addToCart(product, $event)"
-                [attr.aria-label]="'SHOP.PRODUCT.ADD_TO_CART' | translate"
-              >
-                <span class="material-icons">add</span>
-              </button>
-            </div>
-          </div>
-        </article>
-      </div>
-
-      <button
-        type="button"
-        class="product-carousel__nav product-carousel__nav--next"
-        (click)="scrollByDir(1)"
-        [attr.aria-label]="'HOME.PRODUCT_CAROUSEL.NEXT' | translate"
-      >
-        <span class="material-icons" aria-hidden="true">chevron_right</span>
-      </button>
+      <span [style.animation-duration.ms]="intervalMs"></span>
     </div>
 
-    <ng-template #emptyState>
-      <p class="product-carousel__empty">{{ 'HOME.PRODUCT_CAROUSEL.EMPTY' | translate }}</p>
-    </ng-template>
+    <div class="product-carousel__thumbs" *ngIf="products.length > 1">
+      <button
+        type="button"
+        *ngFor="let product of products; let i = index; trackBy: trackByProductId"
+        class="product-carousel__thumb"
+        [class.is-active]="i === activeIndex"
+        (click)="goTo(i, $event)"
+        [attr.aria-label]="('HOME.PRODUCT_CAROUSEL.GO_TO' | translate) + ' ' + (i + 1)"
+      >
+        <img [src]="imageOf(product) | imageUrl" [alt]="product.name | localized" />
+      </button>
+    </div>
   </div>
+
+  <ng-template #emptyState>
+    <div class="product-carousel__empty">
+      <h2>{{ (data?.title | localized) || ('HOME.PRODUCT_CAROUSEL.TITLE' | translate) }}</h2>
+      <p>{{ 'HOME.PRODUCT_CAROUSEL.EMPTY' | translate }}</p>
+    </div>
+  </ng-template>
 </section>

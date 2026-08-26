@@ -2,29 +2,41 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ElementRef,
   Inject,
   Input,
   NgZone,
+  OnChanges,
   OnDestroy,
   OnInit,
   PLATFORM_ID,
-  ViewChild
+  SimpleChanges
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { Product } from 'src/shared/models/product.model';
+import { LocalizedString } from 'src/shared/models/localized-string.model';
 import { Section } from 'src/shared/models/section.model';
 import { PageSectionContext } from 'src/shared/models/page-section-context.model';
 import { ProductService } from '../../core/services/product.service';
-import { CartService } from '../../core/services/cart.service';
-import { FavoritesService } from '../../core/services/favorites.service';
-import { NotificationService } from '../../core/services/notification.service';
 import { LocalizedPipe } from '../../shared/pipes/localized.pipe';
-import { getLocalizedString } from '../../../shared/utils/localization.util';
+import { ImageUrlPipe } from '../../shared/pipes/image-url.pipe';
 
 type CarouselSource = 'new' | 'best-sellers' | 'special' | 'all';
+type CarouselMode = 'products' | 'custom';
+
+interface CarouselSlideItem {
+  image: string;
+  title: string | LocalizedString;
+  subtitle?: string | LocalizedString;
+  link?: string;
+  price?: number;
+  isActive?: boolean;
+}
+
+interface CarouselProduct extends Product {
+  customLink?: string;
+}
 type ProductCarouselData = Section & { context?: PageSectionContext };
 
 @Component({
@@ -32,83 +44,155 @@ type ProductCarouselData = Section & { context?: PageSectionContext };
   templateUrl: './product-carousel.component.html',
   styleUrls: ['./product-carousel.component.scss'],
   standalone: true,
-  imports: [CommonModule, RouterModule, TranslateModule, LocalizedPipe],
+  imports: [CommonModule, RouterModule, TranslateModule, LocalizedPipe, ImageUrlPipe],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProductCarouselComponent implements OnInit, OnDestroy {
-  products: Product[] = [];
+export class ProductCarouselComponent implements OnInit, OnChanges, OnDestroy {
+  products: CarouselProduct[] = [];
+  activeIndex = 0;
   source: CarouselSource = 'new';
+  mode: CarouselMode = 'products';
   autoplay = true;
+  readonly intervalMs = 4800;
   private limit = 8;
-  private contextApplied = false;
+  private loadedFromContext = false;
+  private fetched = false;
   private timer?: ReturnType<typeof setInterval>;
+  private dragStartX = 0;
+  private dragging = false;
 
-  @ViewChild('track') trackRef?: ElementRef<HTMLElement>;
-
-  @Input() set data(val: ProductCarouselData) {
-    this.source = this.readSource(val?.settings?.source);
-    this.limit = this.readLimit(val?.settings?.limit);
-    this.autoplay = val?.settings?.autoplay !== false;
-    this.section = val;
-
-    if (val?.context?.bestSellers && this.source === 'best-sellers') {
-      this.products = this.sliceProducts(val.context.bestSellers);
-      this.contextApplied = true;
-      this.cdr.markForCheck();
-    }
-  }
-
-  section?: ProductCarouselData;
+  @Input() data: ProductCarouselData | null = null;
 
   constructor(
     private productService: ProductService,
-    private cartService: CartService,
-    private favoritesService: FavoritesService,
-    private notificationService: NotificationService,
-    private translate: TranslateService,
     private router: Router,
     private ngZone: NgZone,
     private cdr: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
-  ngOnInit(): void {
-    if (this.contextApplied) {
-      this.startAutoplay();
-      return;
-    }
+  get current(): CarouselProduct | undefined {
+    return this.products[this.activeIndex];
+  }
 
-    this.productService.getProducts().subscribe({
-      next: (products) => {
-        this.products = this.sliceProducts(this.filterBySource(products));
-        this.cdr.markForCheck();
-        this.startAutoplay();
-      },
-      error: () => {}
-    });
+  ngOnInit(): void {
+    this.applyData(this.data);
+    if (!this.loadedFromContext) {
+      this.fetchProducts();
+    }
+    this.startAutoplay();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data'] && !changes['data'].firstChange) {
+      this.applyData(this.data);
+      if (!this.loadedFromContext && !this.fetched) {
+        this.fetchProducts();
+      }
+      this.startAutoplay();
+    }
   }
 
   ngOnDestroy(): void {
     this.stopAutoplay();
   }
 
-  trackByProductId(_index: number, product: Product): number {
+  trackByProductId(_index: number, product: CarouselProduct): number {
     return product.id;
   }
 
-  isFavorite(productId: number): boolean {
-    return this.favoritesService.isFavorite(productId);
+  imageOf(product: CarouselProduct): string {
+    return product.imageUrl || product.images?.[0] || '';
   }
 
-  toggleFavorite(product: Product): void {
-    this.favoritesService.toggleFavorite(product);
-    const name = getLocalizedString(product.name, this.translate.currentLang);
-    const messageKey = this.isFavorite(product.id)
-      ? 'SHOP.NOTIFICATIONS.ADDED_TO_FAVORITES'
-      : 'SHOP.NOTIFICATIONS.REMOVED_FROM_FAVORITES';
-    this.translate.get(messageKey, { name }).subscribe(msg => {
-      this.notificationService.showSuccess(msg);
-    });
+  goTo(index: number, event?: Event): void {
+    event?.stopPropagation();
+    if (!this.products.length) {
+      return;
+    }
+    const total = this.products.length;
+    this.activeIndex = ((index % total) + total) % total;
+    this.cdr.markForCheck();
+    this.startAutoplay();
+  }
+
+  next(event?: Event): void {
+    event?.stopPropagation();
+    this.goTo(this.activeIndex + 1);
+  }
+
+  prev(event?: Event): void {
+    event?.stopPropagation();
+    this.goTo(this.activeIndex - 1);
+  }
+
+  openCurrent(event?: Event): void {
+    event?.preventDefault();
+    event?.stopPropagation();
+    const product = this.current;
+    if (!product) {
+      return;
+    }
+    if (product.customLink) {
+      this.router.navigateByUrl(product.customLink).then(() => {
+        if (isPlatformBrowser(this.platformId)) {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+      return;
+    }
+    this.goToProductDetail(product.id);
+  }
+
+  onPointerDown(event: PointerEvent): void {
+    if (this.isChromeControl(event.target)) {
+      return;
+    }
+    this.dragging = true;
+    this.dragStartX = event.clientX;
+    this.pauseAutoplay();
+  }
+
+  onPointerUp(event: PointerEvent): void {
+    if (!this.dragging) {
+      return;
+    }
+    this.dragging = false;
+    const dx = event.clientX - this.dragStartX;
+    if (dx > 48) {
+      this.prev();
+    } else if (dx < -48) {
+      this.next();
+    } else {
+      this.resumeAutoplay();
+    }
+  }
+
+  private isChromeControl(target: EventTarget | null): boolean {
+    return !!(target as HTMLElement | null)?.closest(
+      'button, a, .product-carousel__controls, .product-carousel__thumbs'
+    );
+  }
+
+  pauseAutoplay(): void {
+    this.stopAutoplay();
+  }
+
+  resumeAutoplay(): void {
+    this.startAutoplay();
+  }
+
+  onKeydown(event: KeyboardEvent): void {
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      this.next();
+    } else if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      this.prev();
+    } else if (event.key === 'Enter') {
+      event.preventDefault();
+      this.openCurrent();
+    }
   }
 
   goToProductDetail(productId: number): void {
@@ -119,34 +203,69 @@ export class ProductCarouselComponent implements OnInit, OnDestroy {
     });
   }
 
-  addToCart(product: Product, event?: Event): void {
-    event?.stopPropagation();
-    this.cartService.addToCart({
-      productId: product.id,
-      name: product.name,
-      price: Number(product.price),
-      imageUrl: product.imageUrl,
-      discount: product.discount
-    });
-    const productName = getLocalizedString(product.name, this.translate.currentLang);
-    this.notificationService.showSuccess(`Added ${productName} to cart!`);
-  }
+  private applyData(val: ProductCarouselData | null | undefined): void {
+    this.mode = val?.settings?.mode === 'custom' ? 'custom' : 'products';
+    this.source = this.readSource(val?.settings?.source);
+    this.limit = this.readLimit(val?.settings?.limit);
+    this.autoplay = val?.settings?.autoplay !== false;
+    this.data = val || this.data;
 
-  scrollByDir(dir: -1 | 1): void {
-    const track = this.trackRef?.nativeElement;
-    if (!track) {
+    if (this.mode === 'custom') {
+      const slides = (val?.settings?.slides as CarouselSlideItem[] | undefined) || [];
+      this.products = slides
+        .filter(slide => slide.isActive !== false && !!slide.image)
+        .map((slide, index) => this.mapCustomSlide(slide, index));
+      this.activeIndex = Math.min(this.activeIndex, Math.max(0, this.products.length - 1));
+      this.loadedFromContext = true;
+      this.cdr.markForCheck();
       return;
     }
-    const amount = Math.max(track.clientWidth * 0.72, 280);
-    track.scrollBy({ left: dir * amount, behavior: 'smooth' });
+
+    const fromContext = this.productsFromContext(val?.context);
+    if (fromContext.length) {
+      this.products = this.sliceProducts(this.filterBySource(fromContext));
+      this.activeIndex = Math.min(this.activeIndex, Math.max(0, this.products.length - 1));
+      this.loadedFromContext = true;
+      this.cdr.markForCheck();
+    }
   }
 
-  pauseAutoplay(): void {
-    this.stopAutoplay();
+  private productsFromContext(context?: PageSectionContext): Product[] {
+    if (!context) {
+      return [];
+    }
+    if (this.source === 'best-sellers' && context.bestSellers?.length) {
+      return context.bestSellers;
+    }
+    if (this.source === 'special' && context.specialOffers?.length) {
+      return context.specialOffers;
+    }
+    if (context.catalog?.length) {
+      return context.catalog;
+    }
+    if (context.bestSellers?.length) {
+      return context.bestSellers;
+    }
+    return [];
   }
 
-  resumeAutoplay(): void {
-    this.startAutoplay();
+  private fetchProducts(): void {
+    if (this.mode === 'custom') {
+      return;
+    }
+    this.fetched = true;
+    this.productService.getProducts().subscribe({
+      next: (products) => {
+        this.products = this.sliceProducts(this.filterBySource(products || []));
+        this.activeIndex = 0;
+        this.cdr.markForCheck();
+        this.startAutoplay();
+      },
+      error: () => {
+        this.products = [];
+        this.cdr.markForCheck();
+      }
+    });
   }
 
   private filterBySource(products: Product[]): Product[] {
@@ -168,6 +287,28 @@ export class ProductCarouselComponent implements OnInit, OnDestroy {
     return products.slice(0, this.limit);
   }
 
+  private startAutoplay(): void {
+    this.stopAutoplay();
+    if (!this.autoplay || !isPlatformBrowser(this.platformId) || this.products.length < 2) {
+      return;
+    }
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+    this.ngZone.runOutsideAngular(() => {
+      this.timer = setInterval(() => {
+        this.ngZone.run(() => this.goTo(this.activeIndex + 1));
+      }, this.intervalMs);
+    });
+  }
+
+  private stopAutoplay(): void {
+    if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = undefined;
+    }
+  }
+
   private readSource(value: unknown): CarouselSource {
     if (value === 'best-sellers' || value === 'special' || value === 'all' || value === 'new') {
       return value;
@@ -183,25 +324,13 @@ export class ProductCarouselComponent implements OnInit, OnDestroy {
     return Math.min(16, Math.max(3, Math.round(parsed)));
   }
 
-  private startAutoplay(): void {
-    this.stopAutoplay();
-    if (!this.autoplay || !isPlatformBrowser(this.platformId) || this.products.length < 3) {
-      return;
-    }
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      return;
-    }
-    this.ngZone.runOutsideAngular(() => {
-      this.timer = setInterval(() => {
-        this.ngZone.run(() => this.scrollByDir(1));
-      }, 4800);
-    });
-  }
-
-  private stopAutoplay(): void {
-    if (this.timer) {
-      clearInterval(this.timer);
-      this.timer = undefined;
-    }
+  private mapCustomSlide(slide: CarouselSlideItem, index: number): CarouselProduct {
+    return {
+      id: -(index + 1),
+      name: slide.title,
+      price: slide.price ?? 0,
+      imageUrl: slide.image,
+      customLink: slide.link || '/shop'
+    };
   }
 }
