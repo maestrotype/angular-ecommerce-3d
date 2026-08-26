@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsBoolean, IsNumber, IsObject, ValidateIf } from 'class-validator';
+import { IsString, IsOptional, IsBoolean, IsNumber, IsObject, ValidateIf, IsArray, IsIn } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class UpdateSettingsDto {
@@ -196,6 +196,21 @@ export class UpdateAiSettingsDto {
   })
   @IsBoolean()
   customUseHq?: boolean;
+}
+
+export class UpdateShopCatalogSettingsDto {
+  @IsOptional()
+  @IsBoolean()
+  enabled?: boolean;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  categories?: string[];
+
+  @IsOptional()
+  @IsIn(['newest', 'name', 'price', 'stock'])
+  sortOrder?: string;
 }
 
 export class UpdateSMTPSettingsDto {

@@ -8,27 +8,15 @@
   </div>
 
   <div list-filters class="filter-section">
-    <div class="filter-toolbar">
-      <app-search-bar
-        [label]="'SEARCH_PRODUCTS' | translate"
-        [placeholder]="'SEARCH_PLACEHOLDER' | translate"
-        [maxWidth]="'100%'"
-        [prefixIcon]="'search'"
-        [(searchTerm)]="searchTerm"
-        (onSearch)="onSearch()"
-        (onClear)="clearSearch()">
-      </app-search-bar>
-      <button mat-icon-button type="button" class="filter-toolbar__add" (click)="addProduct()"
-        [attr.aria-label]="'ADD_PRODUCT' | translate">
-        <mat-icon>add</mat-icon>
-      </button>
-    </div>
-
-    <div class="filter-section__selects">
+    <div class="filter-section__row filter-section__row--controls">
       <mat-form-field appearance="outline" class="category-filter" subscriptSizing="dynamic">
+        <mat-label>{{ 'CATEGORY' | translate }}</mat-label>
         <mat-icon matPrefix>tune</mat-icon>
-        <mat-select [placeholder]="'CATEGORY' | translate" (selectionChange)="filterByCategory($event)">
-          <mat-option value="">{{ 'CATEGORIES_ALL' | translate }}</mat-option>
+        <mat-select
+          multiple
+          [(ngModel)]="selectedCategorySlugs"
+          (selectionChange)="filterByCategories()"
+          [placeholder]="'CATEGORIES_ALL' | translate">
           <mat-option *ngFor="let cat of categories" [value]="getCategoryValue(cat)">
             {{ cat.name | localized }}
           </mat-option>
@@ -36,16 +24,104 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="catalog-sort" subscriptSizing="dynamic">
+        <mat-label>{{ 'CATALOG_SORT' | translate }}</mat-label>
         <mat-icon matPrefix>sort</mat-icon>
-        <mat-select [(ngModel)]="catalogSort" (selectionChange)="onCatalogSortChange()"
-          [placeholder]="'CATALOG_SORT' | translate">
+        <mat-select [(ngModel)]="catalogSort" (selectionChange)="onCatalogSortChange()">
           <mat-option value="newest">{{ 'CATALOG_SORT_NEWEST' | translate }}</mat-option>
           <mat-option value="name">{{ 'CATALOG_SORT_NAME' | translate }}</mat-option>
           <mat-option value="price">{{ 'CATALOG_SORT_PRICE' | translate }}</mat-option>
           <mat-option value="stock">{{ 'CATALOG_SORT_STOCK' | translate }}</mat-option>
         </mat-select>
       </mat-form-field>
+
+      <div class="filter-toolbar">
+        <app-search-bar
+          [label]="'SEARCH_PRODUCTS' | translate"
+          [placeholder]="'SEARCH_PLACEHOLDER' | translate"
+          [maxWidth]="'100%'"
+          [prefixIcon]="'search'"
+          [(searchTerm)]="searchTerm"
+          (onSearch)="onSearch()"
+          (onClear)="clearSearch()">
+        </app-search-bar>
+        <button mat-icon-button type="button" class="filter-toolbar__add" (click)="addProduct()"
+          [attr.aria-label]="'ADD_PRODUCT' | translate">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
     </div>
+
+    <section class="storefront-publish" aria-labelledby="storefront-publish-title">
+      <div class="storefront-publish__intro">
+        <mat-icon aria-hidden="true">public</mat-icon>
+        <div>
+          <h2 id="storefront-publish-title" class="storefront-publish__title">
+            {{ 'STOREFRONT_DISPLAY_TITLE' | translate }}
+          </h2>
+          <p class="storefront-publish__hint">{{ 'STOREFRONT_DISPLAY_HINT' | translate }}</p>
+        </div>
+      </div>
+
+      <div class="storefront-publish__preview">
+        <span class="storefront-publish__preview-label">{{ 'STOREFRONT_DISPLAY_PREVIEW' | translate }}</span>
+        <span class="storefront-publish__preview-value">
+          <ng-container *ngIf="selectedCategorySlugs.length; else allCategoriesPreview">
+            {{ selectedCategoryLabels.join(', ') }}
+          </ng-container>
+          <ng-template #allCategoriesPreview>{{ 'CATEGORIES_ALL' | translate }}</ng-template>
+          · {{ 'CATALOG_SORT' | translate }}:
+          <ng-container [ngSwitch]="catalogSort">
+            <ng-container *ngSwitchCase="'name'">{{ 'CATALOG_SORT_NAME' | translate }}</ng-container>
+            <ng-container *ngSwitchCase="'price'">{{ 'CATALOG_SORT_PRICE' | translate }}</ng-container>
+            <ng-container *ngSwitchCase="'stock'">{{ 'CATALOG_SORT_STOCK' | translate }}</ng-container>
+            <ng-container *ngSwitchDefault>{{ 'CATALOG_SORT_NEWEST' | translate }}</ng-container>
+          </ng-container>
+          · {{ storefrontPreviewCount }} {{ 'STOREFRONT_DISPLAY_PRODUCTS' | translate }}
+        </span>
+      </div>
+
+      <div class="storefront-publish__targets">
+        <button
+          type="button"
+          class="storefront-target"
+          [class.storefront-target--active]="shopDisplayActive"
+          (click)="saveShopDisplay()"
+          [disabled]="isSavingShopDisplay">
+          <span class="storefront-target__icon-wrap">
+            <mat-icon>storefront</mat-icon>
+          </span>
+          <span class="storefront-target__body">
+            <span class="storefront-target__name">{{ 'STOREFRONT_TARGET_SHOP' | translate }}</span>
+            <span class="storefront-target__desc">{{ 'STOREFRONT_TARGET_SHOP_DESC' | translate }}</span>
+          </span>
+          <span class="storefront-target__status" *ngIf="shopDisplayActive">
+            <mat-icon>check_circle</mat-icon>
+            {{ 'SHOP_DISPLAY_ACTIVE' | translate }}
+          </span>
+          <span class="storefront-target__action">{{ 'STOREFRONT_TARGET_APPLY' | translate }}</span>
+        </button>
+
+        <button
+          type="button"
+          class="storefront-target"
+          [class.storefront-target--active]="bestSellersDisplayActive"
+          (click)="saveBestSellersDisplay()"
+          [disabled]="isSavingBestSellersDisplay">
+          <span class="storefront-target__icon-wrap">
+            <mat-icon>star</mat-icon>
+          </span>
+          <span class="storefront-target__body">
+            <span class="storefront-target__name">{{ 'STOREFRONT_TARGET_BEST_SELLERS' | translate }}</span>
+            <span class="storefront-target__desc">{{ 'STOREFRONT_TARGET_BEST_SELLERS_DESC' | translate }}</span>
+          </span>
+          <span class="storefront-target__status" *ngIf="bestSellersDisplayActive">
+            <mat-icon>check_circle</mat-icon>
+            {{ 'BEST_SELLERS_DISPLAY_ACTIVE' | translate }}
+          </span>
+          <span class="storefront-target__action">{{ 'STOREFRONT_TARGET_APPLY' | translate }}</span>
+        </button>
+      </div>
+    </section>
   </div>
 
   <div class="admin-product-catalog" *ngIf="!error">
