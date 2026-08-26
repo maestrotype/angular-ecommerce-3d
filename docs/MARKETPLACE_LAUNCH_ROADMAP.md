@@ -65,7 +65,7 @@ Related docs: [PROJECT_STATUS.md](PROJECT_STATUS.md) · [REFACTORING_BOARD.md](R
 | Features / scope | 8/10 | Storefront, admin, 3D, i18n, themes, SEO, SSR |
 | UI / UX polish | 7.5/10 | Token system mature; manual cross-theme QA open |
 | Documentation | 7/10 | 53 docs; broken README links, Swagger claim vs code |
-| Code architecture | 8/10 | Epics A–G complete; ADR + Theme Engine |
+| Code architecture | 7.5/10 | Style epics A–G complete; Epic J (build/DX/layer boundaries) pending — see [BUILD_AND_DEV_PERFORMANCE.md](BUILD_AND_DEV_PERFORMANCE.md) |
 | Production readiness | 6/10 | JWT fail-fast, no default admin; Docker path still pending (A2) |
 | Testing / QA | 3/10 | 4 test files; no CI |
 | Security | 6/10 | Bootstrap token + env-driven admin; payment keys cleared from prod env |
@@ -158,7 +158,26 @@ Work in priority order. Mark items `[ ]` → `[x]` as completed.
 | A5.4 | Soft launch to 2–3 beta buyers for feedback | [docs/LAUNCH_CHECKLIST.md](LAUNCH_CHECKLIST.md) | [ ] |
 | A5.5 | Publish v1.0.0 tag after A1–A4 gates | [docs/LAUNCH_CHECKLIST.md](LAUNCH_CHECKLIST.md) | [ ] |
 
-**Track A complete when**: score ≥ **8/10** on §2 table; all A1–A4 exit gates passed.
+**Track A complete when**: score ≥ **8/10** on §2 table; all A1–A4 exit gates passed; Epic J tasks J1–J5 recommended before v1.1 (buyer DX).
+
+---
+
+### Phase A6 — Developer experience & forkability · ~3–5 days (Epic J)
+
+> **Goal**: Buyers who customize the template get fast dev builds and clear code boundaries.  
+> **Audit**: [BUILD_AND_DEV_PERFORMANCE.md](BUILD_AND_DEV_PERFORMANCE.md) · **Tasks**: [tasks/](tasks/) 004–011
+
+| # | Task | Task doc | Done |
+|---|------|----------|------|
+| A6.1 | Backend: incremental build cache + dev script clarity | [task_004](tasks/task_004_backend_dev_scripts_incremental_build.md) | [ ] |
+| A6.2 | Frontend: Angular application builder migration | [task_005](tasks/task_005_angular_application_builder.md) | [ ] |
+| A6.3 | Remove storefront → admin imports (SectionService) | [task_006](tasks/task_006_storefront_admin_layer_boundaries.md) | [ ] |
+| A6.4 | AppModule layout deduplication | [task_008](tasks/task_008_app_module_layout_deduplication.md) | [ ] |
+| A6.5 | Admin lazy feature routes (sections first) | [task_007](tasks/task_007_admin_lazy_feature_routes.md) | [ ] |
+
+**Exit gate**: `BUILD_AND_DEV_PERFORMANCE.md` baseline updated; J1–J5 marked ✅ on board; buyer Quick Start unchanged or improved.
+
+**Optional post-launch (J6–J8)**: consolidate duplicate services/models, section-form split, npm workspaces.
 
 ---
 

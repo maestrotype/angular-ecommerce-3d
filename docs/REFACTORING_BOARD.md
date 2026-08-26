@@ -4,7 +4,7 @@
 > Статусы задач обновляются ТОЛЬКО здесь. Остальные документы (`PROJECT_STATUS.md`, `UI_AUDIT.md`, `REDESIGN_PLAN.md`) ссылаются сюда.
 >
 > **Baseline аудита**: 2026-07-28 (полный скан кодовой базы)
-> **Последнее обновление**: 2026-08-05 (Epic G closed — рефакторинг A–G завершён)
+> **Последнее обновление**: 2026-08-26 (Epic J — Build, DX & Architecture добавлен)
 > **Владелец**: Principal UI Architect
 
 ---
@@ -106,7 +106,7 @@ graph LR
     style G fill:#e8f5e9
 ```
 
-**Статус roadmap: все эпики A–G завершены (2026-08-05).**
+**Статус roadmap: эпики A–G завершены (2026-08-05). Epic J — активный (Build, DX & Architecture).**
 
 | Эпик | Название | Статус | Задач | Метрики |
 |------|----------|--------|-------|---------|
@@ -117,6 +117,7 @@ graph LR
 | E | Финальная зачистка | ✅ **Готово** | 4/4 | M3, M4 |
 | F | Theme Engine v2 (ADR-004, ADR-012) | ✅ **Готово** | 5/5 | — |
 | G | Premium UI, анимации, полировка | ✅ **Готово** | 17/17 | — |
+| J | Build, DX & Architecture | 🔄 **Active** | 0/8 | см. [BUILD_AND_DEV_PERFORMANCE.md](BUILD_AND_DEV_PERFORMANCE.md) |
 
 ---
 
@@ -232,6 +233,29 @@ TS `ThemeDefinition` — каталог метаданных, синхрониз
 | G16 | Cross-theme visual review | 7.12, 9.1 | ✅ (2026-08-05) |
 | G17 | Responsive + a11y + performance polish | 9.2–9.8 | ✅ (2026-08-05) |
 
+### Эпик J — Build, DX & Architecture (marketplace forkability)
+
+**Цель**: ускорить dev-сборку, исправить границы слоёв storefront/admin, снизить технический долг для покупателей шаблона. Полный аудит: [BUILD_AND_DEV_PERFORMANCE.md](BUILD_AND_DEV_PERFORMANCE.md).
+
+**Порядок выполнения**: J1 → J2 → J3 → J5 → J4 → J6 → J7 → J8.
+
+| ID | Задача | Task file | Приоритет | Статус |
+|----|--------|-----------|-----------|--------|
+| J1 | Backend incremental dev scripts (не удалять tsbuildinfo; `start:dev` для dev) | [task_004](tasks/task_004_backend_dev_scripts_incremental_build.md) | P0 | 📋 To Do |
+| J2 | Миграция на Angular `application` builder (esbuild) | [task_005](tasks/task_005_angular_application_builder.md) | P0 | 📋 To Do |
+| J3 | Storefront не импортирует `src/admin/` — перенос SectionService | [task_006](tasks/task_006_storefront_admin_layer_boundaries.md) | P1 | 📋 To Do |
+| J4 | Admin lazy feature routes (sections, products, orders…) | [task_007](tasks/task_007_admin_lazy_feature_routes.md) | P1 | 📋 To Do |
+| J5 | Убрать дубли layout-компонентов из AppModule | [task_008](tasks/task_008_app_module_layout_deduplication.md) | P1 | 📋 To Do |
+| J6 | Консолидация duplicate services/models | [task_009](tasks/task_009_consolidate_shared_services_models.md) | P2 | 📋 To Do |
+| J7 | Декомпозиция section-form (~1940 строк) | [task_010](tasks/task_010_section_form_decomposition.md) | P2 | 📋 To Do |
+| J8 | npm workspaces / Nx (опционально) | [task_011](tasks/task_011_monorepo_workspaces_optional.md) | P3 | 💡 Planned |
+
+**Definition of Done (эпик)**:
+1. Cold `ng build` и incremental dev measurably improved (записать в BUILD_AND_DEV_PERFORMANCE.md)
+2. `rg "from 'src/admin" src/app` → 0 matches
+3. Backend dev docs используют только `start:dev`
+4. `npm run build` + `cd backend && npm run build` проходят
+
 ---
 
 ## 5. История выполненного (сжато)
@@ -287,6 +311,7 @@ TS `ThemeDefinition` — каталог метаданных, синхрониз
 | 2026-08-05 | **G16 (Board)**: Cross-theme review — `docs/CROSS_THEME_VISUAL_REVIEW.md` (matrix + audit); payment success/error + cart modal migrated off `getThemeClass`/`glass-theme`; `_payment-result.scss`, `_cart-modal.scss`. Epic G **16/17**. |
 | 2026-08-05 | **Docs sync**: §2–§3 обновлены — все эпики A–G ✅; метрики 100%; §2 переписан под post-G snapshot. |
 | 2026-08-05 | **G17 (Board)**: Polish — `docs/POLISH_AND_QUALITY.md`; skip link + mobile nav a11y; print styles; `color-scheme`; viewport zoom; mobile main padding. **Epic G closed (17/17)**. |
+| 2026-08-26 | **Epic J opened**: Build/DX audit — `BUILD_AND_DEV_PERFORMANCE.md`; tasks 004–011; ARCHITECTURE.md layer boundaries; marketplace Track A Phase A6. Baseline: ng build ~14s, nest build ~4–5s. | Project owner |
 
 ---
 
