@@ -72,7 +72,7 @@
 | J1 | Backend incremental dev scripts | ⏳ Pending | [task_004](tasks/task_004_backend_dev_scripts_incremental_build.md) |
 | J2 | Angular application builder | ⏳ Pending | [task_005](tasks/task_005_angular_application_builder.md) |
 | J3 | Storefront/admin layer boundaries | ⏳ Pending | [task_006](tasks/task_006_storefront_admin_layer_boundaries.md) |
-| J4 | Admin lazy feature routes | ⏳ Pending | [task_007](tasks/task_007_admin_lazy_feature_routes.md) |
+| J4 | Admin lazy feature routes | ✅ Complete | sections/products/orders + AdminSharedModule |
 | J5 | AppModule layout deduplication | ⏳ Pending | [task_008](tasks/task_008_app_module_layout_deduplication.md) |
 | J6 | Consolidate services & models | ⏳ Pending | [task_009](tasks/task_009_consolidate_shared_services_models.md) |
 | J7 | Section form decomposition | ⏳ Pending | [task_010](tasks/task_010_section_form_decomposition.md) |

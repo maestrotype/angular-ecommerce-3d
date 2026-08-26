@@ -241,11 +241,11 @@ TS `ThemeDefinition` — каталог метаданных, синхрониз
 
 | ID | Задача | Task file | Приоритет | Статус |
 |----|--------|-----------|-----------|--------|
-| J1 | Backend incremental dev scripts (не удалять tsbuildinfo; `start:dev` для dev) | [task_004](tasks/task_004_backend_dev_scripts_incremental_build.md) | P0 | 📋 To Do |
-| J2 | Миграция на Angular `application` builder (esbuild) | [task_005](tasks/task_005_angular_application_builder.md) | P0 | 📋 To Do |
-| J3 | Storefront не импортирует `src/admin/` — перенос SectionService | [task_006](tasks/task_006_storefront_admin_layer_boundaries.md) | P1 | 📋 To Do |
-| J4 | Admin lazy feature routes (sections, products, orders…) | [task_007](tasks/task_007_admin_lazy_feature_routes.md) | P1 | 📋 To Do |
-| J5 | Убрать дубли layout-компонентов из AppModule | [task_008](tasks/task_008_app_module_layout_deduplication.md) | P1 | 📋 To Do |
+| J1 | Backend incremental dev scripts (не удалять tsbuildinfo; `start:dev` для dev) | [task_004](tasks/task_004_backend_dev_scripts_incremental_build.md) | P0 | ✅ (2026-08-26) |
+| J2 | Миграция на Angular `application` builder (esbuild) | [task_005](tasks/task_005_angular_application_builder.md) | P0 | ✅ (2026-08-26) |
+| J3 | Storefront не импортирует `src/admin/` — перенос SectionService | [task_006](tasks/task_006_storefront_admin_layer_boundaries.md) | P1 | ✅ (2026-08-26) |
+| J4 | Admin lazy feature routes (sections, products, orders…) | [task_007](tasks/task_007_admin_lazy_feature_routes.md) | P1 | ✅ (2026-08-26) |
+| J5 | Убрать дубли layout-компонентов из AppModule | [task_008](tasks/task_008_app_module_layout_deduplication.md) | P1 | ✅ (2026-08-26) |
 | J6 | Консолидация duplicate services/models | [task_009](tasks/task_009_consolidate_shared_services_models.md) | P2 | 📋 To Do |
 | J7 | Декомпозиция section-form (~1940 строк) | [task_010](tasks/task_010_section_form_decomposition.md) | P2 | 📋 To Do |
 | J8 | npm workspaces / Nx (опционально) | [task_011](tasks/task_011_monorepo_workspaces_optional.md) | P3 | 💡 Planned |
