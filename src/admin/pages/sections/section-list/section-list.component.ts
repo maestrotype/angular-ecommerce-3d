@@ -285,6 +285,13 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
     document.body.classList.toggle('sections-architect-locked', lock);
   }
 
+  private syncEditorBodyClass(open: boolean): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    document.body.classList.toggle('sections-editor-open', open);
+  }
+
   loadSections(onLoaded?: () => void): void {
     this.loading = true;
     this.sectionService.getSections().subscribe({
@@ -407,6 +414,7 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.showPicker = true;
     this.previewData = null;
     this.isEditorOpen = true;
+    this.syncEditorBodyClass(true);
   }
 
   private getDefaultPageTarget(): string {
@@ -472,6 +480,7 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
       : (this.editingSection?.pageTarget || this.getDefaultPageTarget());
     this.editingSection = { type, pageTarget } as any;
     this.isEditorOpen = true;
+    this.syncEditorBodyClass(true);
     this.showPicker = false;
     this.previewData = { type };
   }
@@ -497,6 +506,7 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.showPicker = true;
     this.previewData = null;
     this.isEditorOpen = true;
+    this.syncEditorBodyClass(true);
   }
 
   runQuickStartWizard(): void {
@@ -559,14 +569,22 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.previewData = { ...section };
     this.selectedPreviewSection = null;
     this.isEditorOpen = true;
+    this.syncEditorBodyClass(true);
     if (this.isMobile) {
       this.closeMobileArchitect();
     }
   }
 
   onFormChanged(data: any): void {
-    // Merge into existing previewData to preserve server fields like `id`
-    this.previewData = { ...this.previewData, ...data };
+    const merged = {
+      ...this.previewData,
+      ...data,
+      settings: {
+        ...(this.previewData?.settings || {}),
+        ...(data.settings || {}),
+      },
+    };
+    this.previewData = merged;
     
     // Live update the section in the main list so Architect view reflects changes
     if (this.editingSection && this.editingSection.id) {
@@ -594,6 +612,7 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   closeEditor(): void {
     this.isEditorOpen = false;
+    this.syncEditorBodyClass(false);
     this.editingSection = null;
     this.previewData = null;
     this.showPicker = false;

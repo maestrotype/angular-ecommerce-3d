@@ -423,7 +423,7 @@
 
         <!-- PRODUCT CAROUSEL SPECIALIZED FORM -->
         <ng-container *ngSwitchCase="'product-carousel'">
-        <mat-tab-group animationDuration="250ms" color="primary" class="section-type-tabs" dynamicHeight>
+        <mat-tab-group animationDuration="250ms" color="primary" class="section-type-tabs">
           <mat-tab>
             <ng-template mat-tab-label>
               <mat-icon class="tab-icon">view_carousel</mat-icon>
@@ -470,31 +470,59 @@
               </div>
 
               <h4 class="tab-section-title">{{ 'CAROUSEL' | translate }}</h4>
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>{{ 'CAROUSEL_MODE' | translate }}</mat-label>
-                <mat-select formControlName="carouselMode">
-                  <mat-option value="products">{{ 'CAROUSEL_MODE_PRODUCTS' | translate }}</mat-option>
-                  <mat-option value="custom">{{ 'CAROUSEL_MODE_CUSTOM' | translate }}</mat-option>
-                </mat-select>
-                <mat-hint>{{ 'CAROUSEL_MODE_HINT' | translate }}</mat-hint>
-              </mat-form-field>
+
+              <div class="carousel-field-block">
+                <span class="carousel-field-block__label">{{ 'CAROUSEL_MODE' | translate }}</span>
+                <mat-button-toggle-group formControlName="carouselMode" class="carousel-toggle-group">
+                  <mat-button-toggle value="products">{{ 'CAROUSEL_MODE_PRODUCTS' | translate }}</mat-button-toggle>
+                  <mat-button-toggle value="custom">{{ 'CAROUSEL_MODE_CUSTOM' | translate }}</mat-button-toggle>
+                </mat-button-toggle-group>
+                <p class="carousel-field-block__hint">{{ 'CAROUSEL_MODE_HINT' | translate }}</p>
+              </div>
 
               <div *ngIf="sectionForm.get('carouselMode')?.value === 'products'" class="dynamic-list">
-                <div class="form-grid">
-                  <mat-form-field appearance="outline">
-                    <mat-label>{{ 'CAROUSEL_SOURCE' | translate }}</mat-label>
-                    <mat-select formControlName="carouselSource">
-                      <mat-option value="new">{{ 'CAROUSEL_SOURCE_NEW' | translate }}</mat-option>
-                      <mat-option value="best-sellers">{{ 'CAROUSEL_SOURCE_BEST' | translate }}</mat-option>
-                      <mat-option value="special">{{ 'CAROUSEL_SOURCE_SPECIAL' | translate }}</mat-option>
-                      <mat-option value="all">{{ 'CAROUSEL_SOURCE_ALL' | translate }}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
+                <div class="carousel-field-block">
+                  <span class="carousel-field-block__label">{{ 'CAROUSEL_SOURCE' | translate }}</span>
+                  <mat-button-toggle-group formControlName="carouselSource" class="carousel-toggle-group carousel-toggle-group--wrap">
+                    <mat-button-toggle value="new">{{ 'CAROUSEL_SOURCE_NEW' | translate }}</mat-button-toggle>
+                    <mat-button-toggle value="best-sellers">{{ 'CAROUSEL_SOURCE_BEST' | translate }}</mat-button-toggle>
+                    <mat-button-toggle value="special">{{ 'CAROUSEL_SOURCE_SPECIAL' | translate }}</mat-button-toggle>
+                    <mat-button-toggle value="all">{{ 'CAROUSEL_SOURCE_ALL' | translate }}</mat-button-toggle>
+                  </mat-button-toggle-group>
+                </div>
+
+                <div class="carousel-field-block">
+                  <span class="carousel-field-block__label">{{ 'CAROUSEL_CATEGORIES' | translate }}</span>
+                  <mat-chip-listbox
+                    class="category-chip-list"
+                    multiple
+                    [value]="sectionForm.get('carouselCategories')?.value || []"
+                    (change)="onCarouselCategoriesChange($event)">
+                    <mat-chip-option *ngFor="let cat of productFilterCategories" [value]="getProductCategorySlug(cat)">
+                      {{ cat.name | localized }}
+                    </mat-chip-option>
+                  </mat-chip-listbox>
+                  <p class="carousel-field-block__hint">
+                    {{ (sectionForm.get('carouselCategories')?.value?.length ? 'CAROUSEL_CATEGORIES_SELECTED' : 'CAROUSEL_CATEGORIES_HINT') | translate }}
+                  </p>
+                </div>
+
+                <div class="carousel-field-block">
+                  <span class="carousel-field-block__label">{{ 'CATALOG_SORT' | translate }}</span>
+                  <mat-button-toggle-group formControlName="carouselSortOrder" class="carousel-toggle-group carousel-toggle-group--wrap">
+                    <mat-button-toggle *ngFor="let option of carouselSortOptions" [value]="option.value">
+                      {{ option.label | translate }}
+                    </mat-button-toggle>
+                  </mat-button-toggle-group>
+                </div>
+
+                <div class="form-grid carousel-limit-row">
                   <mat-form-field appearance="outline">
                     <mat-label>{{ 'CAROUSEL_LIMIT' | translate }}</mat-label>
                     <input matInput type="number" min="3" max="16" formControlName="carouselLimit">
                   </mat-form-field>
                 </div>
+
                 <mat-slide-toggle formControlName="carouselAutoplay" color="primary">
                   {{ 'CAROUSEL_AUTOPLAY' | translate }}
                 </mat-slide-toggle>

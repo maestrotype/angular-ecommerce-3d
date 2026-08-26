@@ -21,6 +21,11 @@ import { PageSectionContext } from 'src/shared/models/page-section-context.model
 import { ProductService } from '../../core/services/product.service';
 import { LocalizedPipe } from '../../shared/pipes/localized.pipe';
 import { ImageUrlPipe } from '../../shared/pipes/image-url.pipe';
+import {
+  AdminCatalogSort,
+  filterProductsByCategorySlugs,
+  sortProductsByAdminSort,
+} from '../../../shared/utils/shop-catalog.util';
 
 type CarouselSource = 'new' | 'best-sellers' | 'special' | 'all';
 type CarouselMode = 'products' | 'custom';
@@ -55,13 +60,46 @@ export class ProductCarouselComponent implements OnInit, OnChanges, OnDestroy {
   autoplay = true;
   readonly intervalMs = 4800;
   private limit = 8;
+  private categorySlugs: string[] = [];
+  private sortOrder: AdminCatalogSort = 'newest';
   private loadedFromContext = false;
   private fetched = false;
   private timer?: ReturnType<typeof setInterval>;
   private dragStartX = 0;
   private dragging = false;
 
-  @Input() data: ProductCarouselData | null = null;
+  @Input() set data(val: ProductCarouselData | null) {
+    const previousKey = this.catalogSettingsKey(this._data);
+    this._data = val;
+    const nextKey = this.catalogSettingsKey(val);
+
+    if (previousKey !== nextKey) {
+      this.loadedFromContext = false;
+      this.fetched = false;
+    }
+
+    this.applyData(val);
+
+    if (this.mode === 'custom') {
+      this.cdr.markForCheck();
+      return;
+    }
+
+    if (!this.loadedFromContext && !this.fetched) {
+      this.fetchProducts();
+    } else if (previousKey !== nextKey && !this.loadedFromContext) {
+      this.refetchProducts();
+    }
+
+    this.startAutoplay();
+    this.cdr.markForCheck();
+  }
+
+  get data(): ProductCarouselData | null {
+    return this._data;
+  }
+
+  private _data: ProductCarouselData | null = null;
 
   constructor(
     private productService: ProductService,
@@ -76,6 +114,9 @@ export class ProductCarouselComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
+    if (this._data) {
+      return;
+    }
     this.applyData(this.data);
     if (!this.loadedFromContext) {
       this.fetchProducts();
@@ -85,11 +126,7 @@ export class ProductCarouselComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['data'] && !changes['data'].firstChange) {
-      this.applyData(this.data);
-      if (!this.loadedFromContext && !this.fetched) {
-        this.fetchProducts();
-      }
-      this.startAutoplay();
+      this.data = changes['data'].currentValue;
     }
   }
 
@@ -208,7 +245,10 @@ export class ProductCarouselComponent implements OnInit, OnChanges, OnDestroy {
     this.source = this.readSource(val?.settings?.source);
     this.limit = this.readLimit(val?.settings?.limit);
     this.autoplay = val?.settings?.autoplay !== false;
-    this.data = val || this.data;
+    this.categorySlugs = Array.isArray(val?.settings?.categories)
+      ? val!.settings!.categories.filter((slug): slug is string => typeof slug === 'string')
+      : [];
+    this.sortOrder = this.readSortOrder(val?.settings?.sortOrder);
 
     if (this.mode === 'custom') {
       const slides = (val?.settings?.slides as CarouselSlideItem[] | undefined) || [];
@@ -223,10 +263,13 @@ export class ProductCarouselComponent implements OnInit, OnChanges, OnDestroy {
 
     const fromContext = this.productsFromContext(val?.context);
     if (fromContext.length) {
-      this.products = this.sliceProducts(this.filterBySource(fromContext));
-      this.activeIndex = Math.min(this.activeIndex, Math.max(0, this.products.length - 1));
-      this.loadedFromContext = true;
-      this.cdr.markForCheck();
+      const filtered = this.sliceProducts(this.filterBySource(fromContext));
+      if (filtered.length) {
+        this.products = filtered;
+        this.activeIndex = Math.min(this.activeIndex, Math.max(0, this.products.length - 1));
+        this.loadedFromContext = true;
+        this.cdr.markForCheck();
+      }
     }
   }
 
@@ -268,19 +311,49 @@ export class ProductCarouselComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
+  private refetchProducts(): void {
+    this.fetched = false;
+    this.fetchProducts();
+  }
+
+  private catalogSettingsKey(val: ProductCarouselData | null | undefined): string {
+    const settings = val?.settings;
+    return JSON.stringify({
+      mode: settings?.mode,
+      source: settings?.source,
+      categories: settings?.categories,
+      sortOrder: settings?.sortOrder,
+      limit: settings?.limit,
+    });
+  }
+
   private filterBySource(products: Product[]): Product[] {
+    let result: Product[];
+
     if (this.source === 'new') {
       const fresh = products.filter(item => item.isNew);
-      return fresh.length ? fresh : products;
-    }
-    if (this.source === 'special') {
+      result = fresh.length ? fresh : products;
+    } else if (this.source === 'special') {
       const specials = products.filter(item => item.isSpecial || !!item.discount);
-      return specials.length ? specials : products;
+      result = specials.length ? specials : products;
+    } else if (this.source === 'best-sellers') {
+      result = [...products].sort((a, b) => (b.rating || 0) - (a.rating || 0));
+    } else {
+      result = products;
     }
-    if (this.source === 'best-sellers') {
-      return [...products].sort((a, b) => (b.rating || 0) - (a.rating || 0));
+
+    if (this.categorySlugs.length) {
+      result = filterProductsByCategorySlugs(result, this.categorySlugs);
     }
-    return products;
+
+    return sortProductsByAdminSort(result, this.sortOrder);
+  }
+
+  private readSortOrder(value: unknown): AdminCatalogSort {
+    if (value === 'name' || value === 'price' || value === 'stock') {
+      return value;
+    }
+    return 'newest';
   }
 
   private sliceProducts(products: Product[]): Product[] {
