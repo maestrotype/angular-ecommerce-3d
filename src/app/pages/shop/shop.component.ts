@@ -12,6 +12,8 @@ import { ThemeService } from '../../core/themes/theme.service';
 import { ThemeId } from '../../core/themes/theme.model';
 import { TranslateService } from '@ngx-translate/core';
 import { SectionService } from 'src/admin/services/section.service';
+import { ShopCatalogSettingsService } from '../../core/services/shop-catalog-settings.service';
+import { mapAdminSortToShopSort, ShopCatalogDisplaySettings } from '../../../shared/utils/shop-catalog.util';
 import { getLocalizedString } from '../../../shared/utils/localization.util';
 import { Product } from 'src/shared/models/product.model';
 import { Category } from 'src/shared/models/category.model';
@@ -74,6 +76,8 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   // Filter categories for sidebar - will be populated from API
   filterCategories: FilterCategory[] = [];
+  private shopCatalogSettings: ShopCatalogDisplaySettings | null = null;
+  private catalogSettingsApplied = false;
 
   // Dropdown options
   categoryOptions: DropdownOption[] = [];
@@ -102,13 +106,15 @@ export class ShopComponent implements OnInit, OnDestroy {
     private sectionService: SectionService,
     private translate: TranslateService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private shopCatalogSettingsService: ShopCatalogSettingsService,
   ) { }
 
   ngOnInit(): void {
     this.initOptions();
     this.applyThemeGridDefault(this.themeService.getCurrentTheme().id);
     this.loadShopSections();
+    this.loadShopCatalogSettings();
     this.loadProducts();
     this.loadCategories();
     this.setupRouteParams();
@@ -162,8 +168,43 @@ export class ShopComponent implements OnInit, OnDestroy {
       { value: 'name', label: this.translate.instant('SHOP.SORT.NAME') },
       { value: 'price-low', label: this.translate.instant('SHOP.SORT.PRICE_LOW') },
       { value: 'price-high', label: this.translate.instant('SHOP.SORT.PRICE_HIGH') },
+      { value: 'stock', label: this.translate.instant('SHOP.SORT.STOCK') },
       { value: 'rating', label: this.translate.instant('SHOP.SORT.RATING') }
     ];
+  }
+
+  private loadShopCatalogSettings(): void {
+    this.shopCatalogSettingsService.getSettings()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((settings) => {
+        this.shopCatalogSettings = settings;
+        this.tryApplyShopCatalogSettings();
+      });
+  }
+
+  private tryApplyShopCatalogSettings(): void {
+    const settings = this.shopCatalogSettings;
+    if (!settings?.enabled || this.catalogSettingsApplied || this.categories.length === 0) {
+      return;
+    }
+
+    const routeCategory = this.route.snapshot.queryParams['category'];
+    const routeSearch = this.route.snapshot.queryParams['search'];
+    if (!routeCategory && !routeSearch) {
+      if (settings.categories.length > 0) {
+        this.filterCategories.forEach((category) => {
+          category.selected = settings.categories.some((slug) =>
+            this.categoryRefsMatch(category.id, slug)
+          );
+        });
+        this.syncSelectedCategoryFromSidebar();
+      }
+
+      this.sortBy = mapAdminSortToShopSort(settings.sortOrder);
+    }
+
+    this.catalogSettingsApplied = true;
+    this.applyFilters();
   }
 
   ngOnDestroy(): void {
@@ -191,6 +232,7 @@ export class ShopComponent implements OnInit, OnDestroy {
 
           // Update filter categories with real data and counts
           this.updateFilterCategories();
+          this.tryApplyShopCatalogSettings();
         },
         error: (error) => {
 
@@ -419,6 +461,8 @@ export class ShopComponent implements OnInit, OnDestroy {
         return products.sort((a, b) => a.price - b.price);
       case 'price-high':
         return products.sort((a, b) => b.price - a.price);
+      case 'stock':
+        return products.sort((a, b) => (a.stock || 0) - (b.stock || 0));
       case 'rating':
         return products.sort((a, b) => (b.rating || 0) - (a.rating || 0));
       default:

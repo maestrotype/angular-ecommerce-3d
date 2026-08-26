@@ -11,8 +11,10 @@ import { ErrorHandlerService } from "../../../services/error-handler.service";
 import { CategoryService } from "../../../services/category.service";
 import { Category } from "../../../models/category.model";
 import { TranslateService } from '@ngx-translate/core';
+import { SettingsService } from '../../../services/settings.service';
+import { AdminCatalogSort, CatalogDisplaySettings } from '../../../../shared/utils/shop-catalog.util';
 
-export type CatalogSort = 'newest' | 'name' | 'price' | 'stock';
+export type CatalogSort = AdminCatalogSort;
 export type StockTone = 'out' | 'low' | 'ok';
 
 @Component({
@@ -28,6 +30,11 @@ export class ProductListComponent implements OnInit {
   categories: Category[] = [];
   searchTerm = '';
   catalogSort: CatalogSort = 'newest';
+  selectedCategorySlugs: string[] = [];
+  shopDisplayActive = false;
+  bestSellersDisplayActive = false;
+  isSavingShopDisplay = false;
+  isSavingBestSellersDisplay = false;
   pageIndex = 0;
   pageSize = 10;
   pageSizeOptions = [10, 20, 50];
@@ -40,7 +47,8 @@ export class ProductListComponent implements OnInit {
     private categoryService: CategoryService,
     private confirmationService: ConfirmationService,
     private errorHandler: ErrorHandlerService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private settingsService: SettingsService,
   ) { }
 
   ngOnInit(): void {
@@ -48,6 +56,7 @@ export class ProductListComponent implements OnInit {
       this.matchesProductFilter(product, filter);
     this.loadProducts();
     this.loadCategories();
+    this.loadStorefrontDisplaySettings();
   }
 
   get filteredCount(): number {
@@ -88,10 +97,94 @@ export class ProductListComponent implements OnInit {
     this.categoryService.getAllCategories().subscribe({
       next: (categories) => {
         this.categories = categories;
+        this.applyCategoryFilter();
       },
       error: (error) => {
         console.error('Error loading categories:', error);
       }
+    });
+  }
+
+  get storefrontPreviewCount(): number {
+    return this.dataSource.filteredData.length;
+  }
+
+  get selectedCategoryLabels(): string[] {
+    const lang = this.translate.currentLang || 'en';
+    return this.selectedCategorySlugs.map((slug) => {
+      const name = this.getCategoryNameBySlug(slug);
+      if (typeof name === 'string') {
+        return name;
+      }
+      if (name && typeof name === 'object') {
+        return name[lang] || name.en || slug;
+      }
+      return slug;
+    });
+  }
+
+  loadStorefrontDisplaySettings(): void {
+    this.settingsService.getShopCatalogSettings().subscribe({
+      next: (settings) => {
+        this.shopDisplayActive = settings.enabled;
+        if (settings.enabled) {
+          this.selectedCategorySlugs = [...settings.categories];
+          this.catalogSort = settings.sortOrder;
+          this.applyCategoryFilter();
+        }
+      },
+    });
+
+    this.settingsService.getBestSellersCatalogSettings().subscribe({
+      next: (settings) => {
+        this.bestSellersDisplayActive = settings.enabled;
+      },
+    });
+  }
+
+  private buildDisplaySettings(): CatalogDisplaySettings {
+    return {
+      enabled: true,
+      categories: [...this.selectedCategorySlugs],
+      sortOrder: this.catalogSort,
+    };
+  }
+
+  saveShopDisplay(): void {
+    this.isSavingShopDisplay = true;
+    this.settingsService.updateShopCatalogSettings(this.buildDisplaySettings()).subscribe({
+      next: () => {
+        this.shopDisplayActive = true;
+        this.isSavingShopDisplay = false;
+        this.errorHandler.showSuccess(this.translate.instant('SHOP_DISPLAY_SAVED'));
+      },
+      error: () => {
+        this.isSavingShopDisplay = false;
+        this.errorHandler.showError({
+          title: this.translate.instant('ERROR'),
+          message: this.translate.instant('SHOP_DISPLAY_SAVE_ERROR'),
+          type: 'error',
+        });
+      },
+    });
+  }
+
+  saveBestSellersDisplay(): void {
+    this.isSavingBestSellersDisplay = true;
+    this.settingsService.updateBestSellersCatalogSettings(this.buildDisplaySettings()).subscribe({
+      next: () => {
+        this.bestSellersDisplayActive = true;
+        this.isSavingBestSellersDisplay = false;
+        this.errorHandler.showSuccess(this.translate.instant('BEST_SELLERS_DISPLAY_SAVED'));
+      },
+      error: () => {
+        this.isSavingBestSellersDisplay = false;
+        this.errorHandler.showError({
+          title: this.translate.instant('ERROR'),
+          message: this.translate.instant('BEST_SELLERS_DISPLAY_SAVE_ERROR'),
+          type: 'error',
+        });
+      },
     });
   }
 
@@ -135,16 +228,35 @@ export class ProductListComponent implements OnInit {
     return category ? category.name : slug;
   }
 
-  filterByCategory(event: any): void {
-    const categorySlug = event.value;
-    if (categorySlug) {
-      this.dataSource.data = this.allProducts.filter(
-        (p) => p.category === categorySlug
-      );
-    } else {
+  filterByCategories(): void {
+    this.applyCategoryFilter();
+  }
+
+  private applyCategoryFilter(): void {
+    if (this.selectedCategorySlugs.length === 0) {
       this.dataSource.data = this.allProducts;
+    } else {
+      this.dataSource.data = this.allProducts.filter((product) =>
+        this.productMatchesCategorySlugs(product.category || '', this.selectedCategorySlugs)
+      );
     }
     this.resetPage();
+  }
+
+  private productMatchesCategorySlugs(productCategory: string, slugs: string[]): boolean {
+    const normalizedProduct = this.normalizeCategoryRef(productCategory);
+    return slugs.some((slug) => {
+      const normalizedSlug = this.normalizeCategoryRef(slug);
+      if (normalizedProduct === normalizedSlug) {
+        return true;
+      }
+      const categoryName = this.asSearchText(this.getCategoryNameBySlug(slug));
+      return this.normalizeCategoryRef(categoryName) === normalizedProduct;
+    });
+  }
+
+  private normalizeCategoryRef(value: string): string {
+    return value.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
   }
 
   addProduct(): void {
