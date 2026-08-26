@@ -60,7 +60,6 @@ export class ProductCarouselComponent implements OnInit, OnChanges, OnDestroy {
   private timer?: ReturnType<typeof setInterval>;
   private dragStartX = 0;
   private dragging = false;
-  private skipClick = false;
 
   @Input() data: ProductCarouselData | null = null;
 
@@ -128,13 +127,13 @@ export class ProductCarouselComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   openCurrent(event?: Event): void {
+    event?.preventDefault();
     event?.stopPropagation();
-    if (this.skipClick) {
-      this.skipClick = false;
+    const product = this.current;
+    if (!product) {
       return;
     }
-    const product = this.current;
-    if (product?.customLink) {
+    if (product.customLink) {
       this.router.navigateByUrl(product.customLink).then(() => {
         if (isPlatformBrowser(this.platformId)) {
           window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -142,16 +141,16 @@ export class ProductCarouselComponent implements OnInit, OnChanges, OnDestroy {
       });
       return;
     }
-    if (product) {
-      this.goToProductDetail(product.id);
-    }
+    this.goToProductDetail(product.id);
   }
 
   onPointerDown(event: PointerEvent): void {
+    if (this.isChromeControl(event.target)) {
+      return;
+    }
     this.dragging = true;
     this.dragStartX = event.clientX;
     this.pauseAutoplay();
-    (event.currentTarget as HTMLElement).setPointerCapture?.(event.pointerId);
   }
 
   onPointerUp(event: PointerEvent): void {
@@ -160,7 +159,6 @@ export class ProductCarouselComponent implements OnInit, OnChanges, OnDestroy {
     }
     this.dragging = false;
     const dx = event.clientX - this.dragStartX;
-    this.skipClick = Math.abs(dx) > 12;
     if (dx > 48) {
       this.prev();
     } else if (dx < -48) {
@@ -168,6 +166,12 @@ export class ProductCarouselComponent implements OnInit, OnChanges, OnDestroy {
     } else {
       this.resumeAutoplay();
     }
+  }
+
+  private isChromeControl(target: EventTarget | null): boolean {
+    return !!(target as HTMLElement | null)?.closest(
+      'button, a, .product-carousel__controls, .product-carousel__thumbs'
+    );
   }
 
   pauseAutoplay(): void {

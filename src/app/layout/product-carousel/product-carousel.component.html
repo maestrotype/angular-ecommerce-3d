@@ -34,12 +34,14 @@
         </h2>
       </header>
 
-      <div class="product-carousel__copy" *ngIf="current" (click)="openCurrent($event)">
+      <div class="product-carousel__copy" *ngIf="current">
         <span class="product-carousel__badge" *ngIf="current.isNew">{{ 'HOME.BEST_SELLERS.BADGE_NEW' | translate }}</span>
         <span class="product-carousel__badge product-carousel__badge--sale" *ngIf="current.discount">-{{ current.discount }}%</span>
         <h3>{{ current.name | localized }}</h3>
         <p class="product-carousel__price">${{ current.price | number:'1.0-0' }}</p>
-        <span class="product-carousel__cta">{{ 'HOME.PRODUCT_CAROUSEL.VIEW' | translate }}</span>
+        <button type="button" class="product-carousel__cta" (click)="openCurrent($event)">
+          {{ 'HOME.PRODUCT_CAROUSEL.VIEW' | translate }}
+        </button>
       </div>
 
       <div class="product-carousel__controls" *ngIf="products.length > 1">
