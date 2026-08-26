@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Section } from '@shared/models/section.model';
-import { SectionService } from 'src/admin/services/section.service';
+import { SectionService } from '../../core/services/section.service';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 

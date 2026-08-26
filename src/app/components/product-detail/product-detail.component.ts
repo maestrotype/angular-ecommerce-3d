@@ -6,7 +6,7 @@ import { Product } from 'src/shared/models/product.model';
 import { CartService } from 'src/app/core/services/cart.service';
 import { ViewportScroller } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
-import { SectionService } from 'src/admin/services/section.service';
+import { SectionService } from '../../core/services/section.service';
 import { Section } from 'src/shared/models/section.model';
 import { getLocalizedString } from '../../../shared/utils/localization.util';
 import { ProductTabsComponent } from './product-tabs/product-tabs.component';

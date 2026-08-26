@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { take, timeout, catchError, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { ProductService } from '../../core/services/product.service';
-import { SectionService } from 'src/admin/services/section.service';
+import { SectionService } from '../../core/services/section.service';
 import { Section } from 'src/shared/models/section.model';
 import { PageSectionContext } from 'src/shared/models/page-section-context.model';
 import { loadPageSectionContext } from 'src/shared/utils/page-section-context.util';

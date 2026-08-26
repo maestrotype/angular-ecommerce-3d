@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
 
 // Type-only imports to prevent bundling heavy libraries in the main chunk
 import type * as THREE from 'three';
-import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 @Component({
   selector: 'app-three-d-viewer',
@@ -135,7 +135,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     this.ngZone.runOutsideAngular(async () => {
       try {
         const THREE = await import('three');
-        const { OrbitControls } = await import('three/examples/jsm/controls/OrbitControls');
+        const { OrbitControls } = await import('three/examples/jsm/controls/OrbitControls.js');
 
         if (this.isDestroyed) return;
 
