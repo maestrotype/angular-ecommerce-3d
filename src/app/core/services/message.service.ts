@@ -1,39 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, catchError, of } from 'rxjs';
+import {
+  Message,
+  CreateMessageDto,
+  UpdateMessageDto,
+  MessageStatus,
+} from '../../../shared/models/message.model';
 import { environment } from '../../../environments/environment';
 
-export interface Message {
-  id: number;
-  senderName: string;
-  senderEmail: string;
-  subject: string;
-  message: string;
-  status: MessageStatus;
-  createdAt: Date;
-  updatedAt: Date;
-  adminResponse?: string;
-  respondedAt?: Date;
-}
-
-export enum MessageStatus {
-  NEW = 'new',
-  IN_PROGRESS = 'in_progress',
-  ANSWERED = 'answered',
-  CLOSED = 'closed'
-}
-
-export interface CreateMessageDto {
-  senderName: string;
-  senderEmail: string;
-  subject: string;
-  message: string;
-}
-
-export interface UpdateMessageDto {
-  status?: MessageStatus;
-  adminResponse?: string;
-}
+export type { Message, CreateMessageDto, UpdateMessageDto, MessageStatus };
 
 export interface MessageFilters {
   status?: MessageStatus;

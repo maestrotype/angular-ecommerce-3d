@@ -246,7 +246,7 @@ TS `ThemeDefinition` — каталог метаданных, синхрониз
 | J3 | Storefront не импортирует `src/admin/` — перенос SectionService | [task_006](tasks/task_006_storefront_admin_layer_boundaries.md) | P1 | ✅ (2026-08-26) |
 | J4 | Admin lazy feature routes (sections, products, orders…) | [task_007](tasks/task_007_admin_lazy_feature_routes.md) | P1 | ✅ (2026-08-26) |
 | J5 | Убрать дубли layout-компонентов из AppModule | [task_008](tasks/task_008_app_module_layout_deduplication.md) | P1 | ✅ (2026-08-26) |
-| J6 | Консолидация duplicate services/models | [task_009](tasks/task_009_consolidate_shared_services_models.md) | P2 | 📋 To Do |
+| J6 | Консолидация duplicate services/models | [task_009](tasks/task_009_consolidate_shared_services_models.md) | P2 | ✅ Done |
 | J7 | Декомпозиция section-form (~1940 строк) | [task_010](tasks/task_010_section_form_decomposition.md) | P2 | 📋 To Do |
 | J8 | npm workspaces / Nx (опционально) | [task_011](tasks/task_011_monorepo_workspaces_optional.md) | P3 | 💡 Planned |
 

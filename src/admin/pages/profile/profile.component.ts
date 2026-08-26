@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProfileService } from '../../services/profile.service';
-import { AuthService } from '../../services/auth.service';
+import { AdminAuthService } from '../../services/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -19,7 +19,7 @@ export class ProfileComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private profileService: ProfileService,
-    private authService: AuthService,
+    private authService: AdminAuthService,
     private snackBar: MatSnackBar,
     private translate: TranslateService
   ) {

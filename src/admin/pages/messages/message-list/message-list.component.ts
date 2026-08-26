@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MessageService } from '../../../services/message.service';
+import { AdminMessageService } from '../../../services/message.service';
 import { Message } from '../../../models/message.model';
 import { MessageDetailComponent } from '../message-detail/message-detail.component';
 import { ConfirmationService } from '../../../services/confirmation.service';
@@ -26,7 +26,7 @@ export class MessageListComponent implements OnInit {
   displayedColumns: string[] = ['senderName', 'senderEmail', 'subject', 'status', 'createdAt', 'actions'];
 
   constructor(
-    private messageService: MessageService,
+    private messageService: AdminMessageService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private breakpointObserver: BreakpointObserver,

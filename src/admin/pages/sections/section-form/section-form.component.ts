@@ -8,7 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { SectionService } from '../../../services/section.service';
 import { PageService } from '../../../services/page.service';
-import { CategoryService } from '../../../services/category.service';
+import { CategoryService } from "src/app/core/services/category.service";
 import { Category } from '../../../models/category.model';
 import { Section, CreateSectionDto, UpdateSectionDto, MenuItem } from '../../../models/section.model';
 import { LocalizedString } from '../../../../shared/models/localized-string.model';

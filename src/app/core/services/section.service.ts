@@ -5,7 +5,7 @@ import {
   CreateSectionDto,
   Section,
   UpdateSectionDto,
-} from 'src/admin/models/section.model';
+} from 'src/shared/models/section.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({

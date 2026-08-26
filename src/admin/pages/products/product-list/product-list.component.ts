@@ -5,10 +5,10 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { Product } from "../../../models/product.model";
-import { ProductService } from "../../../services/product.service";
+import { AdminProductService } from "../../../services/product.service";
 import { ConfirmationService } from "../../../services/confirmation.service";
 import { ErrorHandlerService } from "../../../services/error-handler.service";
-import { CategoryService } from "../../../services/category.service";
+import { CategoryService } from "src/app/core/services/category.service";
 import { Category } from "../../../models/category.model";
 import { TranslateService } from '@ngx-translate/core';
 import { SettingsService } from '../../../services/settings.service';
@@ -43,7 +43,7 @@ export class ProductListComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private productService: ProductService,
+    private productService: AdminProductService,
     private categoryService: CategoryService,
     private confirmationService: ConfirmationService,
     private errorHandler: ErrorHandlerService,

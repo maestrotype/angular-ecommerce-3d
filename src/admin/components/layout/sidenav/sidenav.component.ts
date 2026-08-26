@@ -1,8 +1,8 @@
 import { Component, Output, EventEmitter, OnInit, OnDestroy, Inject, PLATFORM_ID } from "@angular/core";
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from "@angular/router";
-import { AuthService } from "../../../services/auth.service";
-import { OrderService } from "../../../services/order.service";
+import { AdminAuthService } from "../../../services/auth.service";
+import { AdminOrderService } from "../../../services/order.service";
 import { ThemeService } from "../../../../app/core/themes/theme.service";
 import { TranslateService } from "@ngx-translate/core";
 import { Theme } from "../../../../app/core/themes/theme.model";
@@ -78,8 +78,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private authService: AuthService,
-    private orderService: OrderService,
+    private authService: AdminAuthService,
+    private orderService: AdminOrderService,
     private themeService: ThemeService,
     public translate: TranslateService,
     @Inject(PLATFORM_ID) private platformId: Object

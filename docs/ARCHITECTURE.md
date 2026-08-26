@@ -148,13 +148,21 @@ npm start           # ⚠️ full rebuild — avoid for dev
 
 ---
 
-## Duplicate services (technical debt)
+## Service ownership
 
-The following classes exist **twice** (admin vs storefront) with the same name:
+| Domain | Storefront (`app/core/services/`) | Admin (`app/core/services/admin/`) | Models |
+|--------|-----------------------------------|-------------------------------------|--------|
+| Product | `ProductService` | `AdminProductService` | `shared/models/product.model.ts` |
+| Auth | `AuthService` | `AdminAuthService` | `shared/models/user.model.ts` |
+| Category | `CategoryService` | *(same service)* | `shared/models/category.model.ts` |
+| Order | — | `AdminOrderService` | `shared/models/order.model.ts` (`AdminOrder`) |
+| Payment | `PaymentService` (checkout) | `AdminPaymentService` | `shared/models/payment.model.ts` |
+| Message | `MessageService` (contact form) | `AdminMessageService` | `shared/models/message.model.ts` |
+| Notification | `NotificationService` (modals/toasts) | `AdminNotificationService` | inline in admin service |
+| Section | `SectionService` | *(same service)* | `shared/models/section.model.ts` |
+| Page | `PageService` | *(same service)* | `shared/models/page.model.ts` |
 
-- `ProductService`, `AuthService`, `CategoryService`, `PaymentService`, `MessageService`, `NotificationService`
-
-Consolidation tracked in [task_009](tasks/task_009_consolidate_shared_services_models.md).
+Admin `src/admin/services/*.ts` files re-export from `core` for backward compatibility during migration. Admin `src/admin/models/*.model.ts` re-export from `shared/models/`.
 
 ---
 
