@@ -76,7 +76,7 @@
 | J5 | AppModule layout deduplication | ⏳ Pending | [task_008](tasks/task_008_app_module_layout_deduplication.md) |
 | J6 | Consolidate services & models | ⏳ Pending | [task_009](tasks/task_009_consolidate_shared_services_models.md) |
 | J7 | Section form decomposition | ⏳ Pending | [task_010](tasks/task_010_section_form_decomposition.md) |
-| J8 | Monorepo / workspaces (optional) | 💡 Planned | [task_011](tasks/task_011_monorepo_workspaces_optional.md) |
+| J8 | Monorepo / workspaces (optional) | ✅ Done | [task_011](tasks/task_011_monorepo_workspaces_optional.md) |
 
 ### Epic I — 3D Viewer Polish, Configurator & AI Worker
 

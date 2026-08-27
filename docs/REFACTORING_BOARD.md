@@ -106,7 +106,7 @@ graph LR
     style G fill:#e8f5e9
 ```
 
-**Статус roadmap: эпики A–G завершены (2026-08-05). Epic J — активный (Build, DX & Architecture).**
+**Статус roadmap: эпики A–G завершены (2026-08-05). Epic J — завершён (2026-08-27, Build, DX & Architecture).**
 
 | Эпик | Название | Статус | Задач | Метрики |
 |------|----------|--------|-------|---------|
@@ -248,13 +248,13 @@ TS `ThemeDefinition` — каталог метаданных, синхрониз
 | J5 | Убрать дубли layout-компонентов из AppModule | [task_008](tasks/task_008_app_module_layout_deduplication.md) | P1 | ✅ (2026-08-26) |
 | J6 | Консолидация duplicate services/models | [task_009](tasks/task_009_consolidate_shared_services_models.md) | P2 | ✅ Done |
 | J7 | Декомпозиция section-form (~1940 строк) | [task_010](tasks/task_010_section_form_decomposition.md) | P2 | ✅ Done |
-| J8 | npm workspaces / Nx (опционально) | [task_011](tasks/task_011_monorepo_workspaces_optional.md) | P3 | 💡 Planned |
+| J8 | npm workspaces / Nx (опционально) | [task_011](tasks/task_011_monorepo_workspaces_optional.md) | P3 | ✅ Done |
 
 **Definition of Done (эпик)**:
 1. Cold `ng build` и incremental dev measurably improved (записать в BUILD_AND_DEV_PERFORMANCE.md)
 2. `rg "from 'src/admin" src/app` → 0 matches
 3. Backend dev docs используют только `start:dev`
-4. `npm run build` + `cd backend && npm run build` проходят
+4. `npm ci && npm run build:all` проходят (root workspaces)
 
 ---
 

@@ -145,15 +145,15 @@ NODE_ENV=production
 **Option A — Docker (recommended, uses `backend/Dockerfile`)**
 
 1. Create a **Web Service** → Runtime: **Docker**
-2. **Root Directory:** `backend`
-3. **Dockerfile Path:** `./Dockerfile`
+2. **Root Directory:** `.` (repository root — monorepo workspace)
+3. **Dockerfile Path:** `backend/Dockerfile`
 4. Add environment variables (DATABASE_*, JWT_*, CLOUDINARY_*, etc.)
 
 **Option B — Node runtime**
 
-1. **Root Directory:** `backend`
-2. **Build Command:** `npm ci --include=dev && npm run build`
-3. **Start Command:** `npm run start:prod`
+1. **Root Directory:** `.` (repository root)
+2. **Build Command:** `npm ci --include=dev && npm run backend:build`
+3. **Start Command:** `npm run start:prod --workspace=angular-ecommerce-backend`
 
 The repo also defines `heroku-postbuild` in `backend/package.json` — Render runs it automatically after `npm install` during the build phase.
 

@@ -1,39 +1,34 @@
-# Stage 1: Build
+# Monorepo workspace build — Docker context must be the repository root.
+# See render.yaml (rootDir: .) and docs/GETTING_STARTED.md.
+
 FROM node:18-alpine AS build
 
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+COPY package.json package-lock.json ./
+COPY backend/package.json ./backend/
 
-# Install dependencies
-RUN npm ci
+RUN npm ci --include=dev
 
-# Copy source code
-COPY . .
+COPY backend ./backend
 
-# Build
-RUN npm run build
+RUN npm run build --workspace=angular-ecommerce-backend
 
-# Stage 2: Production
 FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+COPY package.json package-lock.json ./
+COPY backend/package.json ./backend/
 
-# Install production dependencies only
-RUN npm ci --omit=dev
+RUN npm ci --omit=dev --workspace=angular-ecommerce-backend
 
-# Copy built app from build stage
-COPY --from=build /app/dist ./dist
+COPY --from=build /app/backend/dist ./backend/dist
 
-# Create uploads directory
+WORKDIR /app/backend
+
 RUN mkdir -p uploads
 
-# Expose port
 EXPOSE 3002
 
-# Start app
 CMD ["node", "dist/main.js"]

@@ -167,9 +167,37 @@ src/
 | J5 — AppModule layout deduplication | P1 | ~2–4 h | [task_008](tasks/task_008_app_module_layout_deduplication.md) |
 | J6 — Consolidate services & models | P2 | ~2–3 d | [task_009](tasks/task_009_consolidate_shared_services_models.md) |
 | J7 — Section form decomposition | P2 | ~3–5 d | [task_010](tasks/task_010_section_form_decomposition.md) |
-| J8 — Monorepo / npm workspaces (optional) | P3 | ~1–2 d | [task_011](tasks/task_011_monorepo_workspaces_optional.md) |
+| J8 — Monorepo / npm workspaces (optional) | P3 | ~1–2 d | [task_011](tasks/task_011_monorepo_workspaces_optional.md) ✅ Option A |
 
 Execute in order **J1 → J2 → J3 → J5 → J4 → J6 → J7 → J8** unless blocked.
+
+---
+
+## 4. npm workspaces (J8 — Option A)
+
+**Decision:** Root npm workspaces with `backend` as nested package. Nx / split Angular apps deferred.
+
+```bash
+# Single install (frontend + backend)
+npm install
+
+# Dev
+npm start                    # Angular
+npm run backend:start:dev    # NestJS API
+
+# Build all
+npm run build:all
+```
+
+| Metric | Before | After |
+|--------|--------|-------|
+| Combined `node_modules` | ~1.33 GB | ~1.20 GB |
+| Install commands | 2 (`npm install` × root + backend) | 1 |
+| Lockfiles | 2 | 1 (root) |
+
+TypeScript is pinned to `~5.4.5` at the root via `overrides` so Angular 17 and NestJS share a compatible compiler version.
+
+Docker / Render backend deploy uses **repository root** as build context (`render.yaml` → `rootDir: .`, `backend/Dockerfile`).
 
 ---
 
@@ -180,11 +208,11 @@ Execute in order **J1 → J2 → J3 → J5 → J4 → J6 → J7 → J8** unless 
 npm run build
 
 # Backend build
-cd backend && npm run build
+npm run backend:build
 
 # Measure build time (macOS)
 /usr/bin/time -p npm run build
-/usr/bin/time -p sh -c 'cd backend && npm run build'
+/usr/bin/time -p sh -c 'npm run backend:build'
 
 # Count TS files in compilation scope
 find src -name '*.ts' | wc -l
@@ -200,6 +228,7 @@ rg "from 'src/admin|from \"src/admin" src/app
 
 | Date | Change |
 |------|--------|
+| 2026-08-27 | J8: npm workspaces (Option A); ~10% smaller install; unified lockfile |
 | 2026-08-26 | Initial audit; Epic J tasks J1–J8 created; linked from ARCHITECTURE, REFACTORING_BOARD, MARKETPLACE_LAUNCH_ROADMAP |
 
 ---
