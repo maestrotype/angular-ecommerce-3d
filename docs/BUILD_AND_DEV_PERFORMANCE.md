@@ -55,7 +55,14 @@ src/app/components/product-detail/...      → same
 
 **Fix**: Task [006](tasks/task_006_storefront_admin_layer_boundaries.md) — move public API services to `src/app/core/services/` or `src/shared/`.
 
-#### God component: `section-form.component.ts` (~1940 lines)
+#### `section-form` (decomposed — J7 ✅)
+
+Formerly a ~1940-line god component; now an orchestration shell (~320 lines TS) with:
+
+- `section-form/shared/` — factory, localization, submit payload, preset, constants
+- `section-form/types/` — `header-form`, `footer-form`, `product-carousel-form`, `hero-form`, `section-components-form`
+
+Parent owns `createForm` via factory, submit/preview/preset utilities, and `video-hero` UI (not yet extracted).
 
 Any edit to section admin triggers recompilation of the entire admin module graph.
 

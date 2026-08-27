@@ -1,6 +1,6 @@
 # Task 010: Section form decomposition
 
-## Status: ⏳ PENDING
+## Status: ✅ DONE
 
 ## Goal
 Split `section-form.component.ts` (~1940 lines) into type-specific sub-forms or a registry pattern, reducing compile scope and improving maintainability for marketplace customization.
