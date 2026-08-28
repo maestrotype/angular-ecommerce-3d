@@ -42,6 +42,23 @@ export class AdminSectionPreviewComponent implements OnChanges {
   
   renderKey = 0;
   computedSections: any[] = [];
+  private readonly previewFooterPlaceholder = {
+    id: -1,
+    type: 'footer',
+    isActive: true,
+    order: 999,
+    pageTarget: 'global',
+    settings: {
+      columns: [
+        { title: { en: 'Demo Links', ru: 'Ссылки' }, links: [] }
+      ],
+      copyright: '© 2026 3D Store. Architect Preview Mode.'
+    }
+  };
+
+  trackBySectionId(index: number, section: { id?: number | string; type?: string }): number | string {
+    return section?.id ?? `${section?.type || 'section'}-${index}`;
+  }
 
   toggleUnfold() {
     this.isUnfolded = !this.isUnfolded;
@@ -49,9 +66,20 @@ export class AdminSectionPreviewComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['sectionData'] || changes['sections']) {
+      const before = this.sectionListIdentity(this.computedSections);
       this.updateComputedSections();
-      this.renderKey++;
+      const after = this.sectionListIdentity(this.computedSections);
+      // Parent `previewSections` is a getter that allocates a new array every CD.
+      // Bumping renderKey on reference-only changes remounts every storefront
+      // section and leaves the device frame blank.
+      if (before !== after) {
+        this.renderKey++;
+      }
     }
+  }
+
+  private sectionListIdentity(sections: any[]): string {
+    return (sections || []).map(section => String(section?.id ?? section?.type ?? '')).join(',');
   }
 
   private updateComputedSections(): void {
@@ -62,28 +90,14 @@ export class AdminSectionPreviewComponent implements OnChanges {
 
     if (!this.sectionData || !this.sectionData.id) {
       this.computedSections = this.sections;
-      return;
+    } else {
+      this.computedSections = this.sections.map(s =>
+        s.id === this.sectionData.id ? { ...s, ...this.sectionData } : s
+      );
     }
 
-    this.computedSections = this.sections.map(s => 
-      s.id === this.sectionData.id ? { ...s, ...this.sectionData } : s
-    );
-
-    // If no footer exists, add a placeholder for preview purposes
     if (!this.computedSections.some(s => s.type === 'footer')) {
-      this.computedSections.push({
-        id: -1, // Special ID for placeholder
-        type: 'footer',
-        isActive: true,
-        order: 999,
-        pageTarget: 'global',
-        settings: {
-          columns: [
-            { title: { en: 'Demo Links', ru: 'Ссылки' }, links: [] }
-          ],
-          copyright: '© 2026 3D Store. Architect Preview Mode.'
-        }
-      });
+      this.computedSections = [...this.computedSections, this.previewFooterPlaceholder];
     }
   }
 

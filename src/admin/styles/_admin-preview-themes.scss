@@ -17,4 +17,13 @@ body.is-admin app-admin-section-preview .preview-theme-root {
     color: var(--text-primary);
     min-height: 100%;
   }
+
+  /* Storefront sections use 80vh/100dvh of the admin window; cap them to the device frame. */
+  .hero,
+  .video-hero-section,
+  .video-container,
+  .video-wrapper,
+  .video-error-fallback {
+    min-height: 360px;
+  }
 }

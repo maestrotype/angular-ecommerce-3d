@@ -477,7 +477,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   isMenuItemActive(item: MenuItem): boolean {
-    const url = item.url;
+    const url = item.url || '';
 
     if (url.startsWith('#')) {
       return this.activeSectionId === url.substring(1);
@@ -580,7 +580,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.teardownScrollSpy();
 
     const sectionIds = this.menuItems
-      .filter(item => item.url.startsWith('#'))
+      .filter(item => (item.url || '').startsWith('#'))
       .map(item => item.url.substring(1));
 
     if (!sectionIds.length) {

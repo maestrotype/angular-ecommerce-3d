@@ -11,13 +11,13 @@
     <!-- Desktop Navigation -->
     <nav class="nav">
       <ng-container *ngFor="let item of menuItems">
-        <a *ngIf="item.url.startsWith('/') && canAccessMenuItem(item) && !isAdminMenuItem(item)"
+        <a *ngIf="item.url?.startsWith('/') && canAccessMenuItem(item) && !isAdminMenuItem(item)"
           [routerLink]="item.url" class="nav-link"
           [class.active]="isMenuItemActive(item)"
           (click)="onRouteMenuClick(item)">
           {{ item.title | localized }}
         </a>
-        <a *ngIf="item.url.startsWith('#') && canAccessMenuItem(item) && !isAdminMenuItem(item)"
+        <a *ngIf="item.url?.startsWith('#') && canAccessMenuItem(item) && !isAdminMenuItem(item)"
            href="javascript:void(0)"
            (click)="handleMenuClick(item, $event)"
            class="nav-link"
@@ -279,7 +279,7 @@
 
     <div class="mobile-nav-tiles">
       <ng-container *ngFor="let item of menuItems">
-        <a *ngIf="canAccessMenuItem(item) && item.url.startsWith('/')"
+        <a *ngIf="canAccessMenuItem(item) && item.url?.startsWith('/')"
            [routerLink]="item.url"
            (click)="onRouteMenuClick(item); closeMobileMenu()"
            class="mobile-nav-tile"
@@ -290,7 +290,7 @@
           </span>
           <span class="mobile-nav-tile__label">{{ item.title | localized }}</span>
         </a>
-        <a *ngIf="canAccessMenuItem(item) && item.url.startsWith('#')"
+        <a *ngIf="canAccessMenuItem(item) && item.url?.startsWith('#')"
            href="javascript:void(0)"
            (click)="handleMenuClick(item, $event)"
            class="mobile-nav-tile"

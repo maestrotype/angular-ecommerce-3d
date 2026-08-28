@@ -122,8 +122,11 @@
   overflow-y: auto;
   overflow-x: hidden;
 
-  // CSS container for responsive section rendering
-  container-type: inline-size;
+  // Storefront heroes use --vh; bind it to the device frame, not the admin window.
+  --vh: calc(var(--preview-height-raw) / 100);
+
+  // CSS container for responsive section rendering (cqh for preview-capped heights)
+  container-type: size;
 
   background: var(--preview-canvas-bg, var(--surface-page));
   color: var(--text-primary);
