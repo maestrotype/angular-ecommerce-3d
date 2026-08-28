@@ -1,0 +1,1 @@
+var n=["en","ru","ua"];function u(e){let t=(e||"en").toLowerCase().replace("_","-");return t.startsWith("ru")?"ru":t.startsWith("uk")||t.startsWith("ua")?"ua":t.startsWith("en")?"en":n.find(r=>r===t)||"en"}export{u as a};
