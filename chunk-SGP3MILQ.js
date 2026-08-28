@@ -1,0 +1,1 @@
+function o(e){return!e||typeof e!="object"?!1:"bestSellers"in e||"specialOffers"in e}function u(e){if(!e||typeof e!="object"||o(e))return null;let t=e;return typeof t.id=="number"&&Number.isFinite(t.id)&&t.id>0?t:null}function s(e,t){let i=u(e);if(i)return i.id;let r=t?.productId,n=typeof r=="number"?r:Number(r);return Number.isFinite(n)&&n>0?n:null}export{u as a,s as b};
