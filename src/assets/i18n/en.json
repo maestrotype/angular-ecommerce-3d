@@ -1650,6 +1650,8 @@
   "HEADER_ACTIVE": "Header Active",
   "MENU_NAVIGATION": "Menu Navigation",
   "MENU_ITEMS": "Menu Items",
+  "MENU_ITEMS_HINT": "Drag to reorder. Use a page URL or jump to a home-page section.",
+  "MENU_ITEMS_EMPTY": "No menu items yet. Add a link to start building the header navigation.",
   "ADD_ITEM": "Add Item",
   "MENU_ITEM_TITLE": "Menu Item Title",
   "JUMP_TO_SECTION": "Jump to Section",
