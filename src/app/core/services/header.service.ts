@@ -2,11 +2,13 @@ import { Injectable, Inject, PLATFORM_ID, makeStateKey, TransferState } from '@a
 import { HttpClient } from '@angular/common/http';
 import { LocalizedString } from 'src/shared/models/localized-string.model';
 import { Observable, of } from 'rxjs';
-import { map, catchError, tap } from 'rxjs/operators';
+import { map, catchError, tap, shareReplay } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { isPlatformBrowser } from '@angular/common';
+import { Section } from 'src/shared/models/section.model';
+import { mergeHeaderMenuWithHomeSections } from 'src/shared/utils/section-nav.util';
 
-const HEADER_KEY = makeStateKey<HeaderSection[]>('header_sections');
+const HEADER_KEY = makeStateKey<Section[]>('header_sections');
 
 export interface MenuItem {
   title: string | LocalizedString;
@@ -36,6 +38,7 @@ export interface HeaderSection {
 })
 export class HeaderService {
   private apiUrl = `${environment.apiUrl}/sections`;
+  private sections$?: Observable<Section[]>;
 
   constructor(
     private http: HttpClient,
@@ -44,21 +47,7 @@ export class HeaderService {
   ) { }
 
   getHeaderSection(): Observable<HeaderSection | null> {
-    if (this.state.hasKey(HEADER_KEY)) {
-      const sections = this.state.get(HEADER_KEY, []);
-      // Clear the state after reading to allow fresh fetches later if needed
-      if (isPlatformBrowser(this.platformId)) {
-        this.state.remove(HEADER_KEY);
-      }
-      return of(this.processSections(sections));
-    }
-
-    return this.http.get<HeaderSection[]>(this.apiUrl).pipe(
-      tap(sections => {
-        if (!isPlatformBrowser(this.platformId)) {
-          this.state.set(HEADER_KEY, sections);
-        }
-      }),
+    return this.loadSections().pipe(
       map(sections => this.processSections(sections)),
       catchError(error => {
         console.error('Error loading header section:', error);
@@ -67,21 +56,54 @@ export class HeaderService {
     );
   }
 
-  private processSections(sections: HeaderSection[]): HeaderSection | null {
+  private loadSections(): Observable<Section[]> {
+    if (!this.sections$) {
+      this.sections$ = this.fetchSections().pipe(shareReplay(1));
+    }
+    return this.sections$;
+  }
+
+  private fetchSections(): Observable<Section[]> {
+    if (this.state.hasKey(HEADER_KEY)) {
+      const sections = this.state.get(HEADER_KEY, []);
+      if (isPlatformBrowser(this.platformId)) {
+        this.state.remove(HEADER_KEY);
+      }
+      return of(sections);
+    }
+
+    return this.http.get<Section[]>(this.apiUrl).pipe(
+      tap(sections => {
+        if (!isPlatformBrowser(this.platformId)) {
+          this.state.set(HEADER_KEY, sections);
+        }
+      }),
+      catchError(error => {
+        console.error('Error loading sections for header:', error);
+        return of([]);
+      })
+    );
+  }
+
+  private processSections(sections: Section[]): HeaderSection | null {
     const headerSection = sections.find(section =>
       section.type === 'header' && section.isActive
     );
-    return headerSection || null;
+    return (headerSection as HeaderSection) || null;
   }
 
   getMenuItems(): Observable<MenuItem[]> {
-    return this.getHeaderSection().pipe(
-      map(headerSection => {
-        if (headerSection?.settings?.menu) {
-          return headerSection.settings.menu.filter(item => item.isActive);
-        }
-        return this.getDefaultMenuItems();
-      })
+    return this.loadSections().pipe(
+      map(sections => {
+        const headerSection = this.processSections(sections);
+        const configured = headerSection?.settings?.menu?.filter(item => item.isActive)
+          ?? this.getDefaultMenuItems();
+        const homeSections = sections.filter(
+          section => section.type !== 'header' && section.type !== 'footer'
+        );
+        return mergeHeaderMenuWithHomeSections(configured, homeSections);
+      }),
+      catchError(() => of(this.getDefaultMenuItems()))
     );
   }
 
