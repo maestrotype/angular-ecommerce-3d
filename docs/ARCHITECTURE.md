@@ -6,7 +6,7 @@ A technical overview of the platform's architecture, including rendering lifecyc
 > **Refactoring tasks**: [REFACTORING_BOARD.md](REFACTORING_BOARD.md) § Epic J  
 > **Backend detail**: [BACKEND_ARCHITECTURE.md](BACKEND_ARCHITECTURE.md)
 
-**Last updated**: 2026-08-26
+**Last updated**: 2026-08-28
 
 ---
 
@@ -44,7 +44,7 @@ angular-ecommerce-3d/
 │   ├── admin/            # Admin panel (lazy route /admin)
 │   ├── shared/           # Models, utils — safe for app + admin
 │   └── environments/
-├── backend/              # NestJS API (separate package.json)
+├── backend/              # NestJS API (npm workspace member)
 ├── docs/                 # Developer + marketplace documentation
 └── angular.json          # Single Angular app (storefront + admin)
 ```
@@ -58,7 +58,7 @@ angular-ecommerce-3d/
 | Shared | `src/shared/` | `shared/` only |
 | Backend | `backend/src/` | Nest modules only |
 
-**Current violation (Epic J3)**: storefront pages import `SectionService` from `src/admin/services/`. Target: public services in `src/app/core/services/`.
+**Layer boundaries (Epic J3 ✅)**: storefront (`src/app/`) does not import from `src/admin/`. Public services live in `src/app/core/services/`; admin-specific variants use `Admin*` naming in `src/app/core/services/admin/`.
 
 ---
 
@@ -70,9 +70,9 @@ angular-ecommerce-3d/
 |------|---------|-------|
 | Root | `AppModule` (NgModule) | Bootstraps app, global providers, PWA, i18n |
 | Storefront pages | Lazy `loadChildren` | `home`, `shop`, `product-detail` |
-| Admin | Lazy `/admin` → `AdminModule` | **Monolithic** — most pages eager inside module (~1.6 MB chunk) |
+| Admin | Lazy `/admin` → feature modules | J4 ✅ sections, products, orders lazy-loaded |
 | Page sections | `SectionRendererComponent` + `section-map.ts` | Dynamic `import()` per section type ✅ |
-| Layout components | Standalone + section-map | **Also** eagerly imported in `AppModule` ⚠️ duplicate |
+| Layout components | Section-map only | J5 ✅ not duplicated in `AppModule` |
 
 ### Rendering & Hydration
 
@@ -103,11 +103,12 @@ flowchart LR
 
 ### Build pipeline (summary)
 
-| Setting | Current | Target (Epic J) |
-|---------|---------|-----------------|
-| Builder | `browser` (webpack) | `application` (esbuild) |
-| TS scope | All `src/**/*.ts` | Optional split projects |
-| Dev command | `npm start` / `ng serve` | Same; faster after J2 |
+| Setting | Current |
+|---------|---------|
+| Builder | `application` (esbuild) |
+| TS scope | All `src/**/*.ts` (single project) |
+| Dev command | `npm start` / `ng serve`; backend via `npm run backend:start:dev` |
+| Monorepo | npm workspaces — single root `npm install` |
 
 See [BUILD_AND_DEV_PERFORMANCE.md](BUILD_AND_DEV_PERFORMANCE.md) for measured times and task list.
 
@@ -132,10 +133,12 @@ RxJS `Observable` streams in services for async work (bcrypt, TypeORM, external 
 ### Development commands
 
 ```bash
-cd backend
-npm run start:dev   # ✅ daily development (watch)
-npm run start:prod  # production
-npm start           # ⚠️ full rebuild — avoid for dev
+# From repo root (preferred)
+npm run backend:start:dev
+
+# Or from backend/
+cd backend && npm run start:dev
+npm run start:prod   # production
 ```
 
 ---

@@ -2,7 +2,7 @@
 
 **Created**: 2026-08-26  
 **Maintainer**: Project owner  
-**Status**: Active — baseline for Epic J (Build, DX & Architecture)  
+**Status**: Complete — Epic J closed 2026-08-28  
 **Audience**: AI agents, contributors, marketplace buyers who fork the template
 
 > **Related**: [ARCHITECTURE.md](ARCHITECTURE.md) · [REFACTORING_BOARD.md](REFACTORING_BOARD.md) § Epic J · [tasks/](tasks/) · [MARKETPLACE_LAUNCH_ROADMAP.md](MARKETPLACE_LAUNCH_ROADMAP.md)
@@ -11,74 +11,46 @@
 
 ## 1. Executive summary
 
-The codebase is **functionally sound** (style epics A–G complete, NestJS modular backend). The main pain point for developers is **slow perceived dev compilation**, caused by configuration and structural choices—not by broken architecture.
+The codebase is **functionally sound** (style epics A–G complete, NestJS modular backend). **Epic J (Build, DX & Architecture) is complete** — the structural bottlenecks identified in the 2026-08-26 audit have been addressed.
 
-| Area | Cold build (measured 2026-08-26) | Root cause of slow *dev* experience |
-|------|----------------------------------|-------------------------------------|
-| Frontend (`ng build`) | ~14 s | Webpack `browser` builder; single TS project includes admin + storefront; duplicate eager imports in `AppModule` |
-| Backend (`nest build`) | ~4–5 s | Scripts delete incremental cache; `npm start` runs full rebuild; `deleteOutDir: true` |
+| Area | Baseline (2026-08-26) | After Epic J (2026-08-28) |
+|------|------------------------|---------------------------|
+| Frontend (`ng build`) | ~14 s (webpack `browser` builder) | `application` builder (esbuild); AppModule dedup; lazy admin features |
+| Backend (`nest build`) | ~4–5 s; cache wiped on start | Incremental cache preserved; `start:dev` default |
+| Install | ~1.33 GB (dual `npm install`) | ~1.20 GB (npm workspaces, single lockfile) |
+| Layer boundaries | Storefront imported `src/admin/` | `SectionService` + `Admin*` services in core |
+| Admin DX | ~1940-line section-form | Orchestrator ~320 lines + type-specific sub-forms |
 
-**Marketplace angle**: Buyers who customize admin forms or section builder will hit the slowest rebuild paths. Epic J tasks reduce friction and improve template quality scores (DX, maintainability, forkability).
+**Marketplace angle**: Buyers get faster dev builds, clearer service ownership, and a single `npm install` at the repo root.
 
 ---
 
 ## 2. Frontend build pipeline
 
-### 2.1 Current configuration
+### 2.1 Current configuration (post Epic J)
 
-| Setting | Value | Impact |
-|---------|-------|--------|
-| Builder | `@angular-devkit/build-angular:browser` (webpack) | Slower than Angular 17 `application` builder (esbuild) |
-| TS scope | `tsconfig.app.json` → `src/**/*.ts` (~217 files) | Admin + storefront compiled together |
-| Lazy admin route | `/admin` → `AdminModule` (~1.6 MB chunk) | Route lazy, but module eagerly declares all admin pages |
-| Section renderer | Dynamic imports via `section-map.ts` | Good — storefront sections lazy-loaded |
-| Global styles | `material-theme.scss` + `admin.scss` + `main.scss` | Full Material + admin theme in every build |
-| SSR | Separate `server` target in `angular.json` | Extra build step for production SSR |
+| Setting | Value | Notes |
+|---------|-------|-------|
+| Builder | `@angular-devkit/build-angular:application` (esbuild) | J2 ✅ |
+| TS scope | `tsconfig.app.json` → `src/**/*.ts` | Admin + storefront still one project (Nx split deferred) |
+| Lazy admin route | `/admin` → lazy feature modules | J4 ✅ sections/products/orders split |
+| Section renderer | Dynamic imports via `section-map.ts` | Layout components not duplicated in AppModule (J5 ✅) |
+| Global styles | `material-theme.scss` + `admin.scss` + `main.scss` | Unchanged |
+| SSR | Separate `server` target in `angular.json` | Works with application builder |
 
-### 2.2 Structural bottlenecks
+### 2.2 Resolved bottlenecks (Epic J)
 
-#### Duplicate layout imports in `AppModule`
+| Issue | Fix | Task |
+|-------|-----|------|
+| Duplicate layout imports in `AppModule` | Removed; section-map only | J5 ✅ |
+| Storefront → admin coupling | `SectionService` in `core/services` | J3 ✅ |
+| ~1940-line `section-form` | Decomposed to ~320-line orchestrator + sub-forms | J7 ✅ |
+| Duplicate service classes | `Admin*` services + shared models | J6 ✅ |
+| Monolithic admin chunk | Lazy feature routes | J4 ✅ |
 
-`HeroComponent`, `CategoriesComponent`, `BestSellersComponent`, etc. are imported in **`app.module.ts`** AND lazy-loaded via **`section-map.ts`**. This inflates `main.js` (~1 MB) and forces the compiler to track both graphs.
+**J7 residual**: `video-hero` UI remains in the parent section-form template (not extracted).
 
-**Fix**: Task [004](tasks/task_008_app_module_layout_deduplication.md) — keep layout components only in section-map / feature modules.
-
-#### Storefront → admin coupling
-
-Storefront pages import services from `src/admin/`:
-
-```
-src/app/pages/home/home.component.ts       → SectionService from src/admin/services/
-src/app/pages/shop/shop.component.ts       → same
-src/app/components/product-detail/...      → same
-```
-
-**Fix**: Task [006](tasks/task_006_storefront_admin_layer_boundaries.md) — move public API services to `src/app/core/services/` or `src/shared/`.
-
-#### `section-form` (decomposed — J7 ✅)
-
-Formerly a ~1940-line god component; now an orchestration shell (~320 lines TS) with:
-
-- `section-form/shared/` — factory, localization, submit payload, preset, constants
-- `section-form/types/` — `header-form`, `footer-form`, `product-carousel-form`, `hero-form`, `section-components-form`
-
-Parent owns `createForm` via factory, submit/preview/preset utilities, and `video-hero` UI (not yet extracted).
-
-Any edit to section admin triggers recompilation of the entire admin module graph.
-
-**Fix**: Task [010](tasks/task_010_section_form_decomposition.md).
-
-#### Duplicate service classes (same name, different files)
-
-| Class | Storefront | Admin |
-|-------|-----------|-------|
-| `ProductService` | `app/core/services/product.service.ts` | `admin/services/product.service.ts` |
-| `AuthService` | `app/core/services/auth.service.ts` | `admin/services/auth.service.ts` |
-| + Category, Payment, Message, Notification | both | both |
-
-DI works (different class tokens), but imports are error-prone for buyers and agents.
-
-**Fix**: Task [009](tasks/task_009_consolidate_shared_services_models.md).
+**Optional future**: split storefront/admin TypeScript projects (Nx Option B — deferred at J8).
 
 ### 2.3 Recommended dev commands (frontend)
 
@@ -92,14 +64,16 @@ ng serve
 npm run build:prod
 ```
 
-### 2.4 Target state (Epic J)
+### 2.4 Epic J outcomes
 
-| Metric | Baseline | Target |
-|--------|----------|--------|
-| `ng serve` initial compile | ~30–60 s (typical on buyer hardware) | −30–50% after application builder |
-| `ng serve` incremental (storefront-only change) | Rebuilds admin graph | Isolated rebuild with split projects |
-| `main.js` size (dev) | ~1 MB | −20% after AppModule dedup |
-| Admin chunk | ~1.6 MB monolith | Split by lazy feature routes |
+| Metric | Baseline | After Epic J |
+|--------|----------|--------------|
+| Builder | webpack `browser` | esbuild `application` |
+| Storefront → admin imports | SectionService from admin | 0 imports (`core/services`) |
+| AppModule layout dupes | Hero, categories, etc. eager | Section-map only |
+| Admin chunk | ~1.6 MB monolith | Lazy feature modules (~505 KB shell) |
+| section-form | ~1940 lines | ~320 lines orchestrator |
+| Install | dual lockfile, ~1.33 GB | workspaces, ~1.20 GB |
 
 ---
 
@@ -119,16 +93,14 @@ npm run build:prod
 ### 3.2 Recommended dev commands (backend)
 
 ```bash
-cd backend
+# ✅ Development — from repo root (preferred)
+npm run backend:start:dev
 
-# ✅ Development — always use this
-npm run start:dev
+# ✅ Equivalent from backend/ folder
+cd backend && npm run start:dev
 
 # ✅ Production
-npm run start:prod
-
-# ❌ Avoid for daily dev — runs full rebuild every time
-npm start
+npm run backend:build && cd backend && npm run start:prod
 ```
 
 ### 3.3 TypeORM dev settings
@@ -151,7 +123,7 @@ src/
 
 1. **Storefront (`src/app/`) must not import from `src/admin/`** — except the lazy-loaded `AdminModule` route in `app-routing.module.ts`.
 2. **Shared contracts** (models, DTO shapes, public API services) live in `src/shared/` or `src/app/core/services/`.
-3. **Admin-only services** stay in `src/admin/services/` and use distinct names if overlapping (e.g. `AdminProductService`) until consolidation (Task 009).
+3. **Admin-only services** stay in `src/admin/services/` (re-exporting from `core/services/admin/`) with distinct `Admin*` names where overlapping.
 4. **Never use `!important`** in styles — see [AI_CONSTITUTION.md](AI_CONSTITUTION.md) and `.cursor/rules/no-important.mdc`.
 
 ---
@@ -160,16 +132,16 @@ src/
 
 | Task | Priority | Effort | File |
 |------|----------|--------|------|
-| J1 — Backend incremental dev scripts | P0 | ~1 h | [task_004](tasks/task_004_backend_dev_scripts_incremental_build.md) |
-| J2 — Angular application builder | P0 | ~4–8 h | [task_005](tasks/task_005_angular_application_builder.md) |
-| J3 — Storefront/admin layer boundaries | P1 | ~2–4 h | [task_006](tasks/task_006_storefront_admin_layer_boundaries.md) |
-| J4 — Admin lazy feature routes | P1 | ~1–2 d | [task_007](tasks/task_007_admin_lazy_feature_routes.md) |
-| J5 — AppModule layout deduplication | P1 | ~2–4 h | [task_008](tasks/task_008_app_module_layout_deduplication.md) |
-| J6 — Consolidate services & models | P2 | ~2–3 d | [task_009](tasks/task_009_consolidate_shared_services_models.md) |
-| J7 — Section form decomposition | P2 | ~3–5 d | [task_010](tasks/task_010_section_form_decomposition.md) |
+| J1 — Backend incremental dev scripts | P0 | ~1 h | [task_004](tasks/task_004_backend_dev_scripts_incremental_build.md) ✅ |
+| J2 — Angular application builder | P0 | ~4–8 h | [task_005](tasks/task_005_angular_application_builder.md) ✅ |
+| J3 — Storefront/admin layer boundaries | P1 | ~2–4 h | [task_006](tasks/task_006_storefront_admin_layer_boundaries.md) ✅ |
+| J4 — Admin lazy feature routes | P1 | ~1–2 d | [task_007](tasks/task_007_admin_lazy_feature_routes.md) ✅ |
+| J5 — AppModule layout deduplication | P1 | ~2–4 h | [task_008](tasks/task_008_app_module_layout_deduplication.md) ✅ |
+| J6 — Consolidate services & models | P2 | ~2–3 d | [task_009](tasks/task_009_consolidate_shared_services_models.md) ✅ |
+| J7 — Section form decomposition | P2 | ~3–5 d | [task_010](tasks/task_010_section_form_decomposition.md) ✅ |
 | J8 — Monorepo / npm workspaces (optional) | P3 | ~1–2 d | [task_011](tasks/task_011_monorepo_workspaces_optional.md) ✅ Option A |
 
-Execute in order **J1 → J2 → J3 → J5 → J4 → J6 → J7 → J8** unless blocked.
+**Epic J complete** (2026-08-28). Execute order was J1 → J2 → J3 → J5 → J4 → J6 → J7 → J8.
 
 ---
 
@@ -228,6 +200,7 @@ rg "from 'src/admin|from \"src/admin" src/app
 
 | Date | Change |
 |------|--------|
+| 2026-08-28 | Epic J closed; doc sync — all J1–J8 marked complete |
 | 2026-08-27 | J8: npm workspaces (Option A); ~10% smaller install; unified lockfile |
 | 2026-08-26 | Initial audit; Epic J tasks J1–J8 created; linked from ARCHITECTURE, REFACTORING_BOARD, MARKETPLACE_LAUNCH_ROADMAP |
 

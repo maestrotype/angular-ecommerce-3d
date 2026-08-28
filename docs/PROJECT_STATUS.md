@@ -1,6 +1,6 @@
 # Project Status
 
-**Last Updated**: 2026-08-26
+**Last Updated**: 2026-08-28
 **Maintainer**: Principal UI Architect
 
 > This document tracks high-level project status. For refactoring task tracking and progress metrics, see **[REFACTORING_BOARD.md](REFACTORING_BOARD.md)** (single source of truth for progress). For architectural decisions, see `STYLE_REFACTOR_PLAN.md`.
@@ -39,10 +39,11 @@
 
 **Style refactoring: complete (Epics A–G).** All board metrics at 100%.
 
-**Build & architecture optimization: Epic J active** — see [BUILD_AND_DEV_PERFORMANCE.md](BUILD_AND_DEV_PERFORMANCE.md) and tasks 004–011.
+**Build & architecture optimization: Epic J complete (2026-08-28).** See [BUILD_AND_DEV_PERFORMANCE.md](BUILD_AND_DEV_PERFORMANCE.md) and tasks 004–011.
 
 ### Optional follow-up (not blockers)
 - Epic G **complete** (G1–G17). Optional: human visual sign-off per `CROSS_THEME_VISUAL_REVIEW.md` + `POLISH_AND_QUALITY.md`.
+- Epic J residual: extract `video-hero` UI from section-form parent; move `@gltf-transform/cli` to devDependencies; Nx / split Angular apps (Option B) deferred.
 
 ---
 
@@ -69,14 +70,14 @@
 
 | Task | Name | Status | Notes |
 |------|------|--------|-------|
-| J1 | Backend incremental dev scripts | ⏳ Pending | [task_004](tasks/task_004_backend_dev_scripts_incremental_build.md) |
-| J2 | Angular application builder | ⏳ Pending | [task_005](tasks/task_005_angular_application_builder.md) |
-| J3 | Storefront/admin layer boundaries | ⏳ Pending | [task_006](tasks/task_006_storefront_admin_layer_boundaries.md) |
+| J1 | Backend incremental dev scripts | ✅ Complete | `start:dev` default; tsbuildinfo preserved |
+| J2 | Angular application builder | ✅ Complete | esbuild `application` builder |
+| J3 | Storefront/admin layer boundaries | ✅ Complete | `SectionService` in core; 0 `src/admin` imports in app |
 | J4 | Admin lazy feature routes | ✅ Complete | sections/products/orders + AdminSharedModule |
-| J5 | AppModule layout deduplication | ⏳ Pending | [task_008](tasks/task_008_app_module_layout_deduplication.md) |
-| J6 | Consolidate services & models | ⏳ Pending | [task_009](tasks/task_009_consolidate_shared_services_models.md) |
-| J7 | Section form decomposition | ⏳ Pending | [task_010](tasks/task_010_section_form_decomposition.md) |
-| J8 | Monorepo / workspaces (optional) | ✅ Done | [task_011](tasks/task_011_monorepo_workspaces_optional.md) |
+| J5 | AppModule layout deduplication | ✅ Complete | layout components only via section-map |
+| J6 | Consolidate services & models | ✅ Complete | `Admin*` services + shared models |
+| J7 | Section form decomposition | ✅ Complete | orchestrator ~320 lines; type-specific sub-forms |
+| J8 | Monorepo / workspaces (optional) | ✅ Complete | npm workspaces; single lockfile; ~10% smaller install |
 
 ### Epic I — 3D Viewer Polish, Configurator & AI Worker
 
@@ -138,16 +139,21 @@
 
 > Quantified baseline (2026-07-28). Live numbers in [REFACTORING_BOARD.md §1](REFACTORING_BOARD.md).
 
-### High Priority (Epic J — Build & Architecture)
-- [ ] Storefront imports from `src/admin/` (SectionService) — [task_006](tasks/task_006_storefront_admin_layer_boundaries.md)
-- [ ] Backend dev scripts wipe incremental cache (`tsconfig.tsbuildinfo`) — [task_004](tasks/task_004_backend_dev_scripts_incremental_build.md)
-- [ ] Legacy webpack `browser` builder (slow dev) — [task_005](tasks/task_005_angular_application_builder.md)
-- [ ] Duplicate `ProductService` / `AuthService` in admin vs app — [task_009](tasks/task_009_consolidate_shared_services_models.md)
+### Build & Architecture (Epic J — resolved 2026-08-28)
+- [x] Storefront imports from `src/admin/` — [task_006](tasks/task_006_storefront_admin_layer_boundaries.md)
+- [x] Backend dev scripts wipe incremental cache — [task_004](tasks/task_004_backend_dev_scripts_incremental_build.md)
+- [x] Legacy webpack `browser` builder — [task_005](tasks/task_005_angular_application_builder.md)
+- [x] Duplicate `ProductService` / `AuthService` in admin vs app — [task_009](tasks/task_009_consolidate_shared_services_models.md)
+- [x] AdminModule monolithic lazy chunk — [task_007](tasks/task_007_admin_lazy_feature_routes.md)
+- [x] Duplicate layout imports in AppModule — [task_008](tasks/task_008_app_module_layout_deduplication.md)
+- [x] `section-form.component.ts` ~1940 lines — [task_010](tasks/task_010_section_form_decomposition.md)
+- [x] Separate backend lockfile / dual install — [task_011](tasks/task_011_monorepo_workspaces_optional.md)
 
-### Medium Priority (Epic J)
-- [ ] AdminModule monolithic lazy chunk (~1.6 MB) — [task_007](tasks/task_007_admin_lazy_feature_routes.md)
-- [ ] Duplicate layout imports in AppModule — [task_008](tasks/task_008_app_module_layout_deduplication.md)
-- [ ] `section-form.component.ts` ~1940 lines — [task_010](tasks/task_010_section_form_decomposition.md)
+### Optional follow-up (not blockers)
+- [ ] `video-hero` section form UI still in section-form parent (J7 residual)
+- [ ] `@gltf-transform/cli` in backend production `dependencies` (install bloat)
+- [ ] Nx monorepo / split Angular apps (Option B — deferred at J8)
+- [ ] Epic I: 3D scroll trap, configurator, AI worker, polling toast fix
 
 ### Style / UI (resolved — Epics A–G)
 - [x] 1,336 hardcoded hex colors outside token/theme sources (Epic D — M1 = 0)
@@ -171,6 +177,7 @@
 
 | Date | Change | Author |
 |------|--------|--------|
+| 2026-08-28 | **Epic J closed**: J1–J8 complete — application builder, backend incremental scripts, layer boundaries, lazy admin routes, AppModule dedup, Admin* services, section-form decomposition, npm workspaces. Docs synced (`PROJECT_STATUS`, task files, `BUILD_AND_DEV_PERFORMANCE`, `ARCHITECTURE`). | Implementation Engineer |
 | 2026-08-26 | **Epic J opened**: Build/DX architecture audit; `BUILD_AND_DEV_PERFORMANCE.md`; tasks 004–011 for agents; ARCHITECTURE.md layer boundaries; REFACTORING_BOARD Epic J. | Project owner |
 | 2026-08-09 | **Epic H7 complete — Task 003**: Page Sections device preview fixed (mobile=844px/fold=680px bounded frames, notch decoration, smooth 0.35s transitions); CDK drag-drop UX — custom `*cdkDragPreview` badge for architect view, styled row preview + dashed placeholder for table. Build ✅. | Implementation Engineer |
 | 2026-08-09 | **Epic H4 complete**: Section demo presets ("Load Demo Content") and Quick Start Homepage wizard (header, hero, best-sellers, categories, footer). | Implementation Engineer |
@@ -249,4 +256,4 @@
 
 ---
 
-*This document is maintained by the Principal UI Architect. Last updated: 2026-08-26*
+*This document is maintained by the Principal UI Architect. Last updated: 2026-08-28*

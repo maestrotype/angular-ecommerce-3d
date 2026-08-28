@@ -1,6 +1,11 @@
 # Task 005: Migrate to Angular application builder
 
-## Status: ⏳ PENDING
+## Status: ✅ DONE (2026-08-26)
+
+## Implementation
+- Migrated `angular.json` to `@angular-devkit/build-angular:application` (esbuild)
+- SSR (`build:prod`) and PWA service worker preserved
+- `npm run build` passes
 
 ## Goal
 Migrate `angular.json` from the legacy webpack `browser` builder to `@angular-devkit/build-angular:application` (esbuild-based) for faster dev server and production builds.

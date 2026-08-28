@@ -1,6 +1,11 @@
 # Task 008: AppModule layout deduplication
 
-## Status: ⏳ PENDING
+## Status: ✅ DONE (2026-08-26)
+
+## Implementation
+- Removed duplicate layout section imports from `AppModule`
+- Layout components loaded only via `section-map.ts` / `SectionRendererComponent`
+- `npm run build` passes
 
 ## Goal
 Remove duplicate eager imports of layout section components from `AppModule` that are already lazy-loaded via `section-map.ts` and `SectionRendererComponent`.

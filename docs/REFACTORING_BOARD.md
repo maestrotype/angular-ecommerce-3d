@@ -4,7 +4,7 @@
 > Статусы задач обновляются ТОЛЬКО здесь. Остальные документы (`PROJECT_STATUS.md`, `UI_AUDIT.md`, `REDESIGN_PLAN.md`) ссылаются сюда.
 >
 > **Baseline аудита**: 2026-07-28 (полный скан кодовой базы)
-> **Последнее обновление**: 2026-08-26 (Epic J — Build, DX & Architecture добавлен)
+> **Последнее обновление**: 2026-08-28 (Epic J — Build, DX & Architecture завершён)
 > **Владелец**: Principal UI Architect
 
 ---
@@ -311,6 +311,7 @@ TS `ThemeDefinition` — каталог метаданных, синхрониз
 | 2026-08-05 | **G16 (Board)**: Cross-theme review — `docs/CROSS_THEME_VISUAL_REVIEW.md` (matrix + audit); payment success/error + cart modal migrated off `getThemeClass`/`glass-theme`; `_payment-result.scss`, `_cart-modal.scss`. Epic G **16/17**. |
 | 2026-08-05 | **Docs sync**: §2–§3 обновлены — все эпики A–G ✅; метрики 100%; §2 переписан под post-G snapshot. |
 | 2026-08-05 | **G17 (Board)**: Polish — `docs/POLISH_AND_QUALITY.md`; skip link + mobile nav a11y; print styles; `color-scheme`; viewport zoom; mobile main padding. **Epic G closed (17/17)**. |
+| 2026-08-28 | **Epic J closed**: J1–J8 ✅ — application builder, backend incremental, layer boundaries, lazy admin routes, AppModule dedup, Admin* services, section-form decomposition, npm workspaces. Docs synced. | Implementation Engineer |
 | 2026-08-26 | **Epic J opened**: Build/DX audit — `BUILD_AND_DEV_PERFORMANCE.md`; tasks 004–011; ARCHITECTURE.md layer boundaries; marketplace Track A Phase A6. Baseline: ng build ~14s, nest build ~4–5s. | Project owner |
 
 ---

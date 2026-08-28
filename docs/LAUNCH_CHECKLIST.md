@@ -84,10 +84,9 @@ git archive --format=zip --prefix=angular-ecommerce-3d/ HEAD \
 Buyer first steps inside zip:
 
 ```bash
-npm install && cd backend && npm install && cd ..
-cp backend/.env.example backend/.env
+npm install && cp backend/.env.example backend/.env
 npm run demo:models
-cd backend && npm run seed
+npm run backend:seed
 ```
 
 ---

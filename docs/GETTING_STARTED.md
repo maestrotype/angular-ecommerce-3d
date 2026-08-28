@@ -118,7 +118,7 @@ curl -X POST http://localhost:3002/api/auth/create-admin
 Populate the catalog with bundled local assets (no Unsplash URLs):
 
 ```bash
-cd backend && npm run seed
+npm run backend:seed
 npm run demo:models   # optional: avocado + water-bottle GLB (~17 MB)
 ```
 

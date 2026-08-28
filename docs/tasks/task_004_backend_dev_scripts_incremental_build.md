@@ -1,6 +1,11 @@
 # Task 004: Backend incremental dev scripts
 
-## Status: ⏳ PENDING
+## Status: ✅ DONE (2026-08-26)
+
+## Implementation
+- Removed `prebuild` tsbuildinfo wipe from default build path; `build:clean` available for full rebuilds
+- `npm start` in backend delegates to `start:dev` (watch mode)
+- Docs updated to recommend `npm run backend:start:dev` from repo root
 
 ## Goal
 Fix backend npm scripts so daily development uses incremental TypeScript compilation and watch mode. Buyers and agents should never wait for a full `nest build` on every backend restart.

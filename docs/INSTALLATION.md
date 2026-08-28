@@ -89,10 +89,10 @@ unzip angular-ecommerce-3d.zip
 cd angular-ecommerce-3d
 ```
 
-### Step 3: Install Frontend Dependencies
+### Step 3: Install Dependencies (frontend + backend)
 
 ```bash
-npm install
+npm install   # npm workspaces — installs Angular app and NestJS backend
 ```
 
 **Expected output:**
@@ -100,18 +100,7 @@ npm install
 added 1234 packages in 45s
 ```
 
-### Step 4: Install Backend Dependencies
-
-```bash
-cd backend
-npm install
-cd ..
-```
-
-**Expected output:**
-```
-added 567 packages in 30s
-```
+> **Note:** A separate `cd backend && npm install` is no longer required. The repo uses npm workspaces with a single root lockfile.
 
 ---
 
@@ -260,8 +249,7 @@ Requires `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and matching `ADMIN_BOOTSTRAP_TOKEN` i
 Open a terminal:
 
 ```bash
-cd backend
-npm run start:dev
+npm run backend:start:dev
 ```
 
 **Expected output:**
@@ -337,8 +325,7 @@ Output will be in `dist/angular-ecommerce-3d/` directory.
 #### Build Backend
 
 ```bash
-cd backend
-npm run build
+npm run backend:build
 ```
 
 Output will be in `backend/dist/` directory.

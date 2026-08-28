@@ -1,6 +1,11 @@
 # Task 006: Storefront/admin layer boundaries
 
-## Status: ⏳ PENDING
+## Status: ✅ DONE (2026-08-26)
+
+## Implementation
+- `SectionService` moved to `src/app/core/services/section.service.ts`
+- `rg "from 'src/admin" src/app` → 0 matches
+- Admin section CRUD unchanged via admin re-exports
 
 ## Goal
 Remove all direct imports from `src/app/` into `src/admin/`. Public API services used by the storefront must live in `src/app/core/services/` or `src/shared/`.
