@@ -85,7 +85,14 @@
     justify-content: flex-start;
     margin: 0 8px;
     min-width: 0;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
     transition: all var(--transition-normal);
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     .nav-link.hidden {
       display: none;
