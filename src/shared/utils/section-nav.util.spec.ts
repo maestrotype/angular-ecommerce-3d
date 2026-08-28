@@ -46,8 +46,8 @@ describe('mergeHeaderMenuWithHomeSections', () => {
     expect(urls[1]).toBe('/shop');
     expect(urls).toContain('#product-carousel');
     expect(urls).toContain('#brands');
-    expect(urls).toContain('#similar-products');
     expect(urls).toContain('#contacts');
+    expect(urls).not.toContain('#similar-products');
     expect(urls).not.toContain('/brands');
     expect(urls).not.toContain('/contacts');
     expect(urls).not.toContain('#hero');

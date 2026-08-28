@@ -17,6 +17,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService } from '../../../services/confirmation.service';
 import { PageService } from '../../../services/page.service';
 import { getLocalizedString } from 'src/shared/utils/localization.util';
+import { resolveSectionTypeLabel } from 'src/shared/utils/section-type-label.util';
 import { take } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 import { isSectionBasedPageTemplate } from 'src/shared/models/page.model';
@@ -190,9 +191,8 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  getSectionTypeLabelKey(type: string): string {
-    const key = type.replace(/-/g, '_').toUpperCase();
-    return `SECTION_TYPE_LABELS.${key}`;
+  getSectionTypeLabel(type: string): string {
+    return resolveSectionTypeLabel(type, this.translate);
   }
 
   private computeInitialSidebarWidth(): number {

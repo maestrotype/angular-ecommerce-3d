@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { resolveUiLanguage } from 'src/shared/utils/ui-language.util';
 
 @Component({
   selector: 'app-admin-layout',
@@ -10,8 +11,10 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
   isMobile = false;
 
   constructor(private translate: TranslateService) {
-    const savedLang = localStorage.getItem('adminLang') || localStorage.getItem('preferredLanguage') || 'en';
-    this.translate.setDefaultLang(savedLang);
+    const savedLang = resolveUiLanguage(
+      localStorage.getItem('adminLang') || localStorage.getItem('preferredLanguage') || 'en'
+    );
+    this.translate.setDefaultLang('en');
     this.translate.use(savedLang);
   }
 

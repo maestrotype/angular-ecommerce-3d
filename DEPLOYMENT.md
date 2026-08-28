@@ -35,7 +35,8 @@ npm run deploy
 Or manually:
 
 ```bash
-npx angular-cli-ghpages --dir=dist/angular-ecommerce-3d
+npm run build:gh
+node scripts/deploy-gh-pages.cjs
 ```
 
 ### 3. Verify Deployment
@@ -77,6 +78,14 @@ app.enableCors({
 ---
 
 ## 🐛 Troubleshooting
+
+### Issue: "Unspecified error (run without silent option for detail)" on `npm run deploy`
+**Cause**: `angular-cli-ghpages` hides the real git error. The push itself often fails with `RPC failed; HTTP 400` because the demo 3D models make a large HTTPS pack (GitHub's default HTTP buffer / HTTP/2).
+**Solution**: Use `npm run deploy` (it now calls `scripts/deploy-gh-pages.cjs`, which prints git errors and raises the HTTP buffer). If a previous run already built `dist/`, retry publish only:
+
+```bash
+node scripts/deploy-gh-pages.cjs
+```
 
 ### Issue: "Failed to load resource: net::ERR_FAILED"
 **Cause**: API URL not configured correctly

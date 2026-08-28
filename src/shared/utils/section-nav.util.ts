@@ -11,6 +11,8 @@ export const NAV_EXCLUDED_SECTION_TYPES = new Set([
   'video-hero',
   'product-tabs',
   'html-content',
+  'similar-products',
+  'bought-together',
 ]);
 
 const PINNED_ROUTES = new Set(['/', '/home', '/shop']);

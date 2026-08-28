@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SettingsService } from '../../services/settings.service';
 import { TranslateService } from '@ngx-translate/core';
+import { resolveUiLanguage } from 'src/shared/utils/ui-language.util';
 
 @Component({
   selector: 'app-settings',
@@ -29,8 +30,8 @@ export class SettingsComponent implements OnInit {
     try {
       this.initializeForms();
       
-      const savedLang = localStorage.getItem('adminLang') || 'en';
-      this.translate.setDefaultLang(savedLang);
+      const savedLang = resolveUiLanguage(localStorage.getItem('adminLang') || 'en');
+      this.translate.setDefaultLang('en');
       this.translate.use(savedLang);
       
       // Load settings after forms are initialized
@@ -95,12 +96,13 @@ export class SettingsComponent implements OnInit {
   }
 
   onLanguageChange(lang: string) {
-    this.translate.use(lang);
-    localStorage.setItem('adminLang', lang);
+    const uiLang = resolveUiLanguage(lang);
+    this.translate.use(uiLang);
+    localStorage.setItem('adminLang', uiLang);
     
     // Update form value if form exists
     if (this.generalForm && this.generalForm.get('language')) {
-      this.generalForm.get('language')?.setValue(lang);
+      this.generalForm.get('language')?.setValue(uiLang);
     }
   }
 

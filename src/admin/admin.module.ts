@@ -1,7 +1,4 @@
 import { NgModule } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { BaseChartDirective } from 'ng2-charts';
 
@@ -26,9 +23,6 @@ import { OrderDetailsDialogComponent } from './pages/payments/order-details-dial
 import { IntegrationsComponent } from './pages/integrations/integrations.component';
 import { PaginatorIntlService } from './services/paginator-intl.service';
 
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-}
 
 @NgModule({
   declarations: [
@@ -54,13 +48,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     AdminSharedModule,
     AdminRoutingModule,
     BaseChartDirective,
-    TranslateModule.forChild({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient],
-      },
-    }),
   ],
   providers: [
     { provide: MatPaginatorIntl, useClass: PaginatorIntlService },

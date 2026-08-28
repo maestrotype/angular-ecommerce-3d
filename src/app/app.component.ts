@@ -9,6 +9,7 @@ import { CartService } from './core/services/cart.service';
 import { FavoritesService } from './core/services/favorites.service';
 import { ModalService } from './core/services/modal.service';
 import { TranslateService } from '@ngx-translate/core';
+import { resolveUiLanguage } from 'src/shared/utils/ui-language.util';
 import { AnalyticsService } from './core/services/analytics.service';
 import { MobileMenuService } from './core/services/mobile-menu.service';
 
@@ -54,7 +55,7 @@ export class AppComponent implements OnInit, OnDestroy {
     const browserLang = isPlatformBrowser(this.platformId)
       ? localStorage.getItem('preferredLanguage') || this.translate.getBrowserLang() || 'en'
       : 'en';
-    this.translate.use(browserLang.match(/en|ru|ua/) ? browserLang : 'en');
+    this.translate.use(resolveUiLanguage(browserLang));
 
     // Debounce scroll stop logic
     this.scrollSubject.pipe(

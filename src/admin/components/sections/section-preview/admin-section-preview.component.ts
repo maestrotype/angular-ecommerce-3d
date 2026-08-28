@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges, HostBinding, Output, EventEmitter } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, SimpleChanges, HostBinding, Output, EventEmitter } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
@@ -60,6 +60,8 @@ export class AdminSectionPreviewComponent implements OnChanges {
     return section?.id ?? `${section?.type || 'section'}-${index}`;
   }
 
+  constructor(private host: ElementRef<HTMLElement>) {}
+
   toggleUnfold() {
     this.isUnfolded = !this.isUnfolded;
   }
@@ -76,6 +78,29 @@ export class AdminSectionPreviewComponent implements OnChanges {
         this.renderKey++;
       }
     }
+
+    if (changes['activeSectionId'] || changes['sections']) {
+      this.queuePreviewScroll();
+    }
+  }
+
+  private queuePreviewScroll(): void {
+    if (this.activeSectionId == null) {
+      return;
+    }
+    requestAnimationFrame(() => this.scrollPreviewToActiveSection());
+  }
+
+  private scrollPreviewToActiveSection(): void {
+    if (this.activeSectionId == null) {
+      return;
+    }
+    const scroller = this.host.nativeElement.querySelector('.full-page-preview') as HTMLElement | null;
+    const target = scroller?.querySelector(`[data-section-id="${this.activeSectionId}"]`) as HTMLElement | null;
+    if (!scroller || !target) {
+      return;
+    }
+    scroller.scrollTo({ top: target.offsetTop, behavior: 'smooth' });
   }
 
   private sectionListIdentity(sections: any[]): string {

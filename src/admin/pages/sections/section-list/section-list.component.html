@@ -76,7 +76,7 @@
 
               <div class="col-main">
                 <span class="title-text">{{ section.title | localized }}</span>
-                <span class="type-link">{{ getSectionTypeLabelKey(section.type) | translate }}</span>
+                <span class="type-link">{{ getSectionTypeLabel(section.type) }}</span>
               </div>
 
               <div class="col-page-target">
@@ -107,7 +107,7 @@
 
             <div class="col-main">
               <span class="title-text">{{ section.title | localized }}</span>
-              <span class="type-link">{{ getSectionTypeLabelKey(section.type) | translate }}</span>
+              <span class="type-link">{{ getSectionTypeLabel(section.type) }}</span>
             </div>
 
             <div class="col-page-target">
@@ -274,6 +274,7 @@
           <app-admin-section-preview
             [sections]="previewSections"
             [sectionData]="isEditorOpen ? previewData : null"
+            [activeSectionId]="selectedPreviewSection?.id ?? null"
             [mode]="previewMode"
             [isFoldExpanded]="isFoldExpanded"
             [theme]="themeMode"

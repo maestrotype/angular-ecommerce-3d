@@ -9,7 +9,7 @@ import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpLoaderFactory } from './core/i18n/translate-http-loader.factory';
 import { SocialLoginModule } from '@abacritt/angularx-social-login';
 import { socialAuthConfig } from './core/configs/social-auth.config';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -55,9 +55,6 @@ export function initializeApp(apiConfigService: ApiConfigService) {
   return () => apiConfigService.init();
 }
 
-export function HttpLoaderFactory(http: any) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-}
 
 
 @NgModule({

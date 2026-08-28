@@ -624,14 +624,19 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   scrollToSection(sectionId: string): void {
-    if (this.router.url.split('?')[0] !== '/home') {
-      this.router.navigate(['/home']).then(() => {
-        this.setupScrollSpy();
-        this.scrollToElement(sectionId);
-      });
-    } else {
+    if (this.isStorefrontHomePath()) {
       this.scrollToElement(sectionId);
+      return;
     }
+    this.router.navigate(['/home']).then(() => {
+      this.setupScrollSpy();
+      this.scrollToElement(sectionId);
+    });
+  }
+
+  private isStorefrontHomePath(): boolean {
+    const path = this.router.url.split('?')[0];
+    return path === '/' || path === '/home' || path === '';
   }
 
   private scrollToElement(elementId: string): void {
@@ -639,18 +644,20 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
     let retries = 0;
     const maxRetries = 20;
+    let followUp = false;
 
     const tryScroll = () => {
       const element = findSectionElement(elementId);
 
       if (element) {
-        // Use scrollIntoView which is more robust
-        // No manual window.scrollBy here to avoid flickering
-        // We rely on scroll-margin-top in CSS for the offset
         element.scrollIntoView({
-          behavior: 'smooth',
+          behavior: followUp ? 'auto' : 'smooth',
           block: 'start'
         });
+        if (!followUp) {
+          followUp = true;
+          setTimeout(tryScroll, 450);
+        }
       } else if (retries < maxRetries) {
         retries++;
         setTimeout(tryScroll, 150);
