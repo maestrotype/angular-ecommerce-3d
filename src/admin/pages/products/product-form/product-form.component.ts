@@ -7,8 +7,8 @@ import {
   ProductCreateRequest,
   ProductUpdateRequest,
 } from "../../../models/product.model";
-import { ProductService } from "../../../services/product.service";
-import { CategoryService } from "../../../services/category.service";
+import { AdminProductService } from "../../../services/product.service";
+import { CategoryService } from "src/app/core/services/category.service";
 import { Category } from "../../../models/category.model";
 import { ProcessingOptions, ProcessedImageResult } from "../../../components/ui/image-processor/image-processor.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -113,7 +113,7 @@ export class ProductFormComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private productService: ProductService,
+    private productService: AdminProductService,
     private categoryService: CategoryService,
     private snackBar: MatSnackBar,
     private http: HttpClient,

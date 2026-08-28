@@ -11,7 +11,7 @@ import { OptimizationService } from '../../core/services/optimization.service';
 import { ThemeService } from '../../core/themes/theme.service';
 import { ThemeId } from '../../core/themes/theme.model';
 import { TranslateService } from '@ngx-translate/core';
-import { SectionService } from 'src/admin/services/section.service';
+import { SectionService } from '../../core/services/section.service';
 import { ShopCatalogSettingsService } from '../../core/services/shop-catalog-settings.service';
 import { mapAdminSortToShopSort, ShopCatalogDisplaySettings } from '../../../shared/utils/shop-catalog.util';
 import { getLocalizedString } from '../../../shared/utils/localization.util';

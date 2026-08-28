@@ -1,0 +1,150 @@
+<mat-tab-group animationDuration="250ms" color="primary" class="section-type-tabs">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="tab-icon">view_carousel</mat-icon>
+      <span class="tab-label">{{ 'CAROUSEL' | translate }}</span>
+    </ng-template>
+    <div class="tab-content">
+      <div class="form-grid">
+        <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'en'">
+          <mat-label>{{ 'TITLE_EN' | translate }}</mat-label>
+          <input matInput formControlName="title_en">
+        </mat-form-field>
+        <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ru'">
+          <mat-label>{{ 'TITLE_RU' | translate }}</mat-label>
+          <input matInput formControlName="title_ru">
+        </mat-form-field>
+        <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ua'">
+          <mat-label>{{ 'TITLE_UA' | translate }}</mat-label>
+          <input matInput formControlName="title_ua">
+        </mat-form-field>
+        <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'en'">
+          <mat-label>{{ 'SUBTITLE_EN' | translate }}</mat-label>
+          <input matInput formControlName="subtitle_en">
+        </mat-form-field>
+        <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ru'">
+          <mat-label>{{ 'SUBTITLE_RU' | translate }}</mat-label>
+          <input matInput formControlName="subtitle_ru">
+        </mat-form-field>
+        <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ua'">
+          <mat-label>{{ 'SUBTITLE_UA' | translate }}</mat-label>
+          <input matInput formControlName="subtitle_ua">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width" *ngIf="activeMenuLang === 'en'">
+          <mat-label>{{ 'CONTENT_EN' | translate }}</mat-label>
+          <textarea matInput formControlName="content_en" rows="3"></textarea>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width" *ngIf="activeMenuLang === 'ru'">
+          <mat-label>{{ 'CONTENT_RU' | translate }}</mat-label>
+          <textarea matInput formControlName="content_ru" rows="3"></textarea>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width" *ngIf="activeMenuLang === 'ua'">
+          <mat-label>{{ 'CONTENT_UA' | translate }}</mat-label>
+          <textarea matInput formControlName="content_ua" rows="3"></textarea>
+        </mat-form-field>
+      </div>
+
+      <h4 class="tab-section-title">{{ 'CAROUSEL' | translate }}</h4>
+
+      <div class="carousel-field-block">
+        <span class="carousel-field-block__label">{{ 'CAROUSEL_MODE' | translate }}</span>
+        <mat-button-toggle-group formControlName="carouselMode" class="carousel-toggle-group">
+          <mat-button-toggle value="products">{{ 'CAROUSEL_MODE_PRODUCTS' | translate }}</mat-button-toggle>
+          <mat-button-toggle value="custom">{{ 'CAROUSEL_MODE_CUSTOM' | translate }}</mat-button-toggle>
+        </mat-button-toggle-group>
+        <p class="carousel-field-block__hint">{{ 'CAROUSEL_MODE_HINT' | translate }}</p>
+      </div>
+
+      <div *ngIf="sectionForm.get('carouselMode')?.value === 'products'" class="dynamic-list">
+        <div class="carousel-field-block">
+          <span class="carousel-field-block__label">{{ 'CAROUSEL_SOURCE' | translate }}</span>
+          <mat-button-toggle-group formControlName="carouselSource" class="carousel-toggle-group carousel-toggle-group--wrap">
+            <mat-button-toggle value="new">{{ 'CAROUSEL_SOURCE_NEW' | translate }}</mat-button-toggle>
+            <mat-button-toggle value="best-sellers">{{ 'CAROUSEL_SOURCE_BEST' | translate }}</mat-button-toggle>
+            <mat-button-toggle value="special">{{ 'CAROUSEL_SOURCE_SPECIAL' | translate }}</mat-button-toggle>
+            <mat-button-toggle value="all">{{ 'CAROUSEL_SOURCE_ALL' | translate }}</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+
+        <div class="carousel-field-block">
+          <span class="carousel-field-block__label">{{ 'CAROUSEL_CATEGORIES' | translate }}</span>
+          <mat-chip-listbox
+            class="category-chip-list"
+            multiple
+            [value]="sectionForm.get('carouselCategories')?.value || []"
+            (change)="onCarouselCategoriesChange($event)">
+            <mat-chip-option *ngFor="let cat of productFilterCategories" [value]="getProductCategorySlug(cat)">
+              {{ cat.name | localized }}
+            </mat-chip-option>
+          </mat-chip-listbox>
+          <p class="carousel-field-block__hint">
+            {{ (sectionForm.get('carouselCategories')?.value?.length ? 'CAROUSEL_CATEGORIES_SELECTED' : 'CAROUSEL_CATEGORIES_HINT') | translate }}
+          </p>
+        </div>
+
+        <div class="carousel-field-block">
+          <span class="carousel-field-block__label">{{ 'CATALOG_SORT' | translate }}</span>
+          <mat-button-toggle-group formControlName="carouselSortOrder" class="carousel-toggle-group carousel-toggle-group--wrap">
+            <mat-button-toggle *ngFor="let option of carouselSortOptions" [value]="option.value">
+              {{ option.label | translate }}
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+
+        <div class="form-grid carousel-limit-row">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'CAROUSEL_LIMIT' | translate }}</mat-label>
+            <input matInput type="number" min="3" max="16" formControlName="carouselLimit">
+          </mat-form-field>
+        </div>
+
+        <mat-slide-toggle formControlName="carouselAutoplay" color="primary">
+          {{ 'CAROUSEL_AUTOPLAY' | translate }}
+        </mat-slide-toggle>
+      </div>
+
+      <div *ngIf="sectionForm.get('carouselMode')?.value === 'custom'" class="dynamic-list">
+        <div class="list-header">
+          <h4>{{ 'CAROUSEL_SLIDES' | translate }}</h4>
+          <button mat-button color="primary" type="button" (click)="addCarouselSlide()">
+            <mat-icon>add</mat-icon> {{ 'ADD_CAROUSEL_SLIDE' | translate }}
+          </button>
+        </div>
+        <mat-slide-toggle formControlName="carouselAutoplay" color="primary">
+          {{ 'CAROUSEL_AUTOPLAY' | translate }}
+        </mat-slide-toggle>
+        <div cdkDropList (cdkDropListDropped)="dropCarouselSlide($event)" class="cdk-list">
+          <div *ngFor="let slide of carouselSlides.controls; let i = index" cdkDrag class="cdk-item">
+            <div [formGroup]="$any(slide)" class="item-form vertical">
+              <div class="item-row">
+                <mat-form-field appearance="outline"><mat-label>{{ 'TITLE' | translate }}</mat-label><input matInput formControlName="title"></mat-form-field>
+                <mat-form-field appearance="outline"><mat-label>{{ 'CTA_URL' | translate }}</mat-label><input matInput formControlName="link"></mat-form-field>
+                <button mat-icon-button color="warn" (click)="removeCarouselSlide(i)" type="button"><mat-icon>delete</mat-icon></button>
+              </div>
+              <div class="item-row">
+                <mat-form-field appearance="outline"><mat-label>{{ 'SUBTITLE' | translate }}</mat-label><input matInput formControlName="subtitle"></mat-form-field>
+                <mat-form-field appearance="outline"><mat-label>{{ 'PRICE' | translate }}</mat-label><input matInput type="number" formControlName="price"></mat-form-field>
+              </div>
+              <app-image-upload
+                [currentImageUrl]="slide.get('image')?.value"
+                [label]="'IMAGE' | translate"
+                (fileSelected)="onCarouselSlideImageSelected($event, i)"
+                (imageUploaded)="onCarouselSlideImageUploaded($event, i)">
+              </app-image-upload>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="tab-icon">settings</mat-icon>
+      <span class="tab-label">{{ 'SETTINGS' | translate }}</span>
+    </ng-template>
+    <div class="tab-content">
+      <ng-content select="[sectionSettings]"></ng-content>
+    </div>
+  </mat-tab>
+</mat-tab-group>

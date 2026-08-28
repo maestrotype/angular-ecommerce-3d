@@ -2,10 +2,20 @@
   "name": "angular-ecommerce-3d",
   "defaultProject": "angular-ecommerce-3d",
   "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "backend"
+  ],
   "scripts": {
     "start": "ng serve",
     "build": "ng build",
     "build:prod": "ng build --configuration production && ng run angular-ecommerce-3d:server:production",
+    "build:all": "npm run build && npm run backend:build",
+    "backend:start:dev": "npm run start:dev --workspace=angular-ecommerce-backend",
+    "backend:build": "npm run build --workspace=angular-ecommerce-backend",
+    "backend:lint": "npm run lint --workspace=angular-ecommerce-backend",
+    "backend:seed": "npm run seed --workspace=angular-ecommerce-backend",
+    "backend:test": "npm run test --workspace=angular-ecommerce-backend",
     "serve:ssr:dev": "npm run build:prod && PORT=4000 node server-simple.mjs",
     "serve:ssr": "node server-simple.mjs",
     "serve:ssr:prod": "NODE_ENV=production node server-simple.mjs",
@@ -60,7 +70,10 @@
     "jest-preset-angular": "^14.0.0",
     "playwright": "^1.58.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.2.2",
+    "typescript": "~5.4.5",
     "webpack": "^5.92.1"
+  },
+  "overrides": {
+    "typescript": "~5.4.5"
   }
 }

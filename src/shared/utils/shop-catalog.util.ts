@@ -45,7 +45,8 @@ export function sortProductsByAdminSort<T extends {
   name?: string | Record<string, string>;
   price?: number;
   stock?: number;
-  createdAt?: string;
+  createdAt?: string | Date;
+  imageUrl?: string;
 }>(
   products: T[],
   sort: AdminCatalogSort,

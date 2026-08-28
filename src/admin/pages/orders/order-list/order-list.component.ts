@@ -4,7 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { OrderService } from '../../../services/order.service';
+import { AdminOrderService } from '../../../services/order.service';
 import { OrderDetailComponent } from '../order-detail/order-detail.component';
 import { Order } from '../../../models/order.model';
 import { TranslateService } from '@ngx-translate/core';
@@ -25,7 +25,7 @@ export class OrderListComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
-    private orderService: OrderService,
+    private orderService: AdminOrderService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private translate: TranslateService

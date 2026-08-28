@@ -78,10 +78,10 @@ export class ThreeDModelService {
   private async loadThreeDeps() {
     const [THREE, { GLTFLoader }, { DRACOLoader }, { MeshoptDecoder }, { clone }] = await Promise.all([
       import('three'),
-      import('three/examples/jsm/loaders/GLTFLoader'),
-      import('three/examples/jsm/loaders/DRACOLoader'),
+      import('three/examples/jsm/loaders/GLTFLoader.js'),
+      import('three/examples/jsm/loaders/DRACOLoader.js'),
       import('three/examples/jsm/libs/meshopt_decoder.module.js'),
-      import('three/examples/jsm/utils/SkeletonUtils')
+      import('three/examples/jsm/utils/SkeletonUtils.js')
     ]);
     return { THREE, GLTFLoader, DRACOLoader, MeshoptDecoder, clone };
   }

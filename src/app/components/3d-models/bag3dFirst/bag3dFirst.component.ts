@@ -1,7 +1,7 @@
 import { Component, AfterViewInit, ViewChild, ElementRef, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { fixBackendUrl } from '../../../core/utils/url-helper';
 import { ThreeDModelService } from '../../../core/services/three-d-model.service';
 

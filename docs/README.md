@@ -11,9 +11,10 @@ Technical reference for the Angular 17+ 3D E-commerce Platform.
 | File | Purpose |
 |------|---------|
 | [AI_CONSTITUTION.md](AI_CONSTITUTION.md) | **Read First** — Rules all AI agents must follow |
-| [REFACTORING_BOARD.md](REFACTORING_BOARD.md) | **Single source of truth for refactoring progress** — metrics, epics, tasks (Done / In Progress / To Do / Planned) |
+| [REFACTORING_BOARD.md](REFACTORING_BOARD.md) | **Single source of truth for refactoring progress** — metrics, epics A–G (style) + **Epic J (build/DX)** |
+| [BUILD_AND_DEV_PERFORMANCE.md](BUILD_AND_DEV_PERFORMANCE.md) | **Build audit & Epic J task index** — dev speed, layer boundaries |
 | [PROJECT_STATUS.md](PROJECT_STATUS.md) | High-level project status and changelog |
-| [tasks/](tasks/) | Task descriptions (`task_XXX_name.md`) |
+| [tasks/](tasks/) | Task descriptions (`task_XXX_name.md`) — **004–011: build/architecture** |
 | [templates/task-template.md](templates/task-template.md) | Template for creating new tasks |
 
 ---
@@ -54,7 +55,8 @@ Technical reference for the Angular 17+ 3D E-commerce Platform.
 | [Quick Start](QUICK_START.md) | Under-10-minute setup | [client/quick-start.html](client/quick-start.html) |
 | [Getting Started](GETTING_STARTED.md) | Environment, SSR, deploy | [client/getting-started.html](client/getting-started.html) |
 | [Installation](INSTALLATION.md) | Full install + security checklist | [client/installation.html](client/installation.html) |
-| [Architecture](ARCHITECTURE.md) | SSR & service layer overview | [client/architecture.html](client/architecture.html) |
+| [Architecture](ARCHITECTURE.md) | SSR, layer boundaries, build pipeline | [client/architecture.html](client/architecture.html) |
+| [Build & Dev Performance](BUILD_AND_DEV_PERFORMANCE.md) | Dev speed audit, Epic J tasks | — |
 | [Customization](CUSTOMIZATION.md) | Themes, 3D, i18n | [client/customization.html](client/customization.html) |
 | [3D Platform Showcase](3D_PLATFORM_PRESENTATION.md) | Showcase of 3D features and future tasks | [client/3d-presentation.html](client/3d-presentation.html) |
 | [API Reference](BACKEND_API.md) | NestJS REST API | [client/backend-api.html](client/backend-api.html) |

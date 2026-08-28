@@ -3,7 +3,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MessageService } from '../../../services/message.service';
+import { AdminMessageService } from '../../../services/message.service';
 import { Message, ReplyMessageDto } from '../../../models/message.model';
 
 @Component({
@@ -19,7 +19,7 @@ export class MessageDetailComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private messageService: MessageService,
+    private messageService: AdminMessageService,
     private snackBar: MatSnackBar,
     public dialogRef: MatDialogRef<MessageDetailComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { message: Message }

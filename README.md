@@ -68,8 +68,7 @@ Architecture docs: [docs/BACKEND_ARCHITECTURE.md](docs/BACKEND_ARCHITECTURE.md) 
 git clone https://github.com/maestrotype/angular-ecommerce-3d.git
 cd angular-ecommerce-3d
 
-npm install
-cd backend && npm install && cd ..
+npm install   # frontend + backend (npm workspaces)
 
 cp backend/.env.example backend/.env
 # Edit backend/.env — DATABASE_*, JWT_SECRET, ADMIN_EMAIL, ADMIN_PASSWORD
@@ -79,7 +78,7 @@ cp backend/.env.example backend/.env
 
 ```bash
 # Terminal 1 — API
-cd backend && npm run start:dev
+npm run backend:start:dev
 
 # Terminal 2 — storefront (http://localhost:4200)
 npm start
@@ -88,7 +87,7 @@ npm start
 ### Demo data
 
 ```bash
-cd backend && npm run seed
+npm run backend:seed
 curl -X POST http://localhost:3002/api/auth/create-admin
 ```
 

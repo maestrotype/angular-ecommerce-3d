@@ -1,0 +1,97 @@
+        <mat-tab-group animationDuration="250ms" color="primary">
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="tab-icon">branding_watermark</mat-icon>
+              <span class="tab-label">{{ 'LOGO_AND_SETTINGS' | translate }}</span>
+            </ng-template>
+            <div class="tab-content">
+              <div class="header-special-grid">
+                <div class="logo-upload-section">
+                  <app-image-upload 
+                    [currentImageUrl]="sectionForm.get('logoUrl')?.value"
+                    [label]="'LOGO_IMAGE' | translate"
+                    (fileSelected)="onLogoFileSelected($event)"
+                    (imageUploaded)="onLogoUploaded($event)">
+                  </app-image-upload>
+                </div>
+                
+                <div class="settings-toggles-card">
+                  <h4>{{ 'THEME_SETTINGS' | translate }}</h4>
+                  <mat-form-field appearance="outline" style="width: 100%; margin-bottom: 24px;">
+                    <mat-label>{{ 'VISUAL_VARIANT' | translate }}</mat-label>
+                    <mat-select formControlName="variant">
+                      <mat-option *ngFor="let v of variants" [value]="v.value">{{ v.label | translate }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <h4>{{ 'HEADER_UTILITIES' | translate }}</h4>
+                  <div class="toggle-list">
+                    <mat-slide-toggle formControlName="showSearch">{{ 'SHOW_SEARCH' | translate }}</mat-slide-toggle>
+                    <mat-slide-toggle formControlName="showCart">{{ 'SHOW_CART' | translate }}</mat-slide-toggle>
+                    <mat-slide-toggle formControlName="showProfile">{{ 'SHOW_PROFILE' | translate }}</mat-slide-toggle>
+                    <mat-divider></mat-divider>
+                    <mat-slide-toggle formControlName="isActive" color="primary">{{ 'HEADER_ACTIVE' | translate }}</mat-slide-toggle>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="tab-icon">menu</mat-icon>
+              <span class="tab-label">{{ 'MENU_NAVIGATION' | translate }}</span>
+            </ng-template>
+            <div class="tab-content">
+              <div class="dynamic-list">
+                <div class="list-header">
+                  <h4>{{ 'MENU_ITEMS' | translate }}</h4>
+                  <button mat-button color="primary" type="button" (click)="addMenuItem()">
+                    <mat-icon>add</mat-icon>
+                    {{ 'ADD_ITEM' | translate }}
+                  </button>
+                </div>
+
+                <div cdkDropList (cdkDropListDropped)="dropMenuItem($event)" class="cdk-list">
+                  <div *ngFor="let item of menu.controls; let i = index" cdkDrag class="cdk-item">
+                    <mat-icon cdkDragHandle class="drag-handle">drag_indicator</mat-icon>
+                    <div [formGroup]="$any(item)" class="item-form">
+                      <div class="item-row">
+                        <mat-form-field appearance="outline">
+                          <mat-label>{{ 'MENU_ITEM_TITLE' | translate }} ({{ activeMenuLang | uppercase }})</mat-label>
+                          <input matInput [formControl]="$any(item).get('title.' + activeMenuLang)" [placeholder]="'MENU_ITEM_TITLE' | translate">
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                          <mat-label>URL</mat-label>
+                          <input matInput formControlName="url" placeholder="URL">
+                        </mat-form-field>
+                        <button mat-icon-button color="warn" (click)="removeMenuItem(i)" type="button">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </div>
+                      <div class="item-row secondary">
+                         <mat-form-field appearance="outline">
+                          <mat-label>{{ 'JUMP_TO_SECTION' | translate }}</mat-label>
+                          <mat-select formControlName="sectionId" (selectionChange)="onSectionSelect(i, $event.value)">
+                            <mat-option [value]="null">{{ 'MANUAL_ENTRY' | translate }}</mat-option>
+                            <mat-option *ngFor="let s of availableSections" [value]="s.id">
+                              {{ s.title | localized }} ({{ s.type }})
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                          <mat-label>{{ 'ACCESS_LEVEL' | translate }}</mat-label>
+                          <mat-select formControlName="access">
+                            <mat-option *ngFor="let opt of menuAccessOptions" [value]="opt.value">
+                              {{ opt.label | translate }}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>

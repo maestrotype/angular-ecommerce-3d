@@ -1160,6 +1160,31 @@ Uses `class-validator` decorators for DTO validation:
 
 ---
 
+## Development Workflow & Build Performance
+
+> **Full audit (frontend + backend)**: [BUILD_AND_DEV_PERFORMANCE.md](BUILD_AND_DEV_PERFORMANCE.md) · **Task**: [task_004_backend_dev_scripts_incremental_build.md](tasks/task_004_backend_dev_scripts_incremental_build.md)
+
+### Recommended commands
+
+| Intent | Command | Notes |
+|--------|---------|-------|
+| Daily development | `npm run start:dev` | Watch mode — **use this** |
+| Production run | `npm run start:prod` | Runs compiled `dist/main.js` |
+| One-shot build + run | `npm start` | Full rebuild every time — slow |
+
+### Build configuration notes (2026-08-26)
+
+- `tsconfig.json` has `"incremental": true`, but `package.json` **`prebuild`** and **`start`/`start:dev`** scripts delete `tsconfig.tsbuildinfo`, disabling incremental compiles.
+- `nest-cli.json` sets `"deleteOutDir": true` — clean `dist/` on each build.
+- `@gltf-transform/cli` is listed in **production** `dependencies`; consider `@gltf-transform/core` + dev-only CLI ([task_004](tasks/task_004_backend_dev_scripts_incremental_build.md)).
+- Cold `nest build` baseline: **~4–5 s** (measured 2026-08-26).
+
+### TypeORM in development
+
+`database.config.ts` enables `synchronize: true` and SQL logging when `NODE_ENV !== 'production'`. Convenient for template buyers; use migrations + disable synchronize for production hardening (Track B).
+
+---
+
 ## Known Technical Debt
 
 1. **Payment Entity**: Uses `orderId` as plain number instead of TypeORM relation to Order
@@ -1172,21 +1197,24 @@ Uses `class-validator` decorators for DTO validation:
 8. **Redis/BullMQ**: Queue infrastructure exists but limited actual queue-based processing
 9. **Circular Dependencies**: None detected, but module coupling could be reduced
 10. **Service Size**: Some services (ProductsService) handle too many responsibilities
+11. **Dev scripts**: `prebuild` / `start` delete `tsconfig.tsbuildinfo` — incremental TypeScript cache wiped ([task_004](tasks/task_004_backend_dev_scripts_incremental_build.md))
+12. **Heavy prod dependency**: `@gltf-transform/cli` in `dependencies` instead of dev/runtime-minimal packages
+13. **Frontend coupling**: Storefront imports admin-layer services (tracked in Epic J3 — frontend doc)
 
 ---
 
 ## Future Improvements
 
-1. **Database Migration**: Migrate from SQLite to PostgreSQL for production
-2. **Caching Layer**: Implement Redis caching for frequently accessed data
-3. **Queue Processing**: Move email sending and AI generation to BullMQ queues
-4. **Microservices**: Consider splitting AI generation into separate microservice
-5. **API Versioning**: Add version prefix to API routes
-6. **GraphQL**: Consider GraphQL for complex queries
-7. **WebSocket**: Real-time notifications via WebSocket
-8. **Search Engine**: Integrate Elasticsearch for product search
-9. **Analytics**: Add request analytics and monitoring
-10. **Testing**: Increase unit and integration test coverage
+1. **Caching Layer**: Implement Redis caching for frequently accessed data
+2. **Queue Processing**: Move email sending and AI generation to background job queues (BullMQ or native Nest queues)
+3. **Microservices**: Consider splitting AI generation into separate microservice
+4. **API Versioning**: Add version prefix to API routes
+5. **GraphQL**: Consider GraphQL for complex queries (optional)
+6. **WebSocket**: Real-time notifications via WebSocket
+7. **Search Engine**: Integrate Elasticsearch for product search
+8. **Analytics**: Add request analytics and monitoring
+9. **Testing**: Increase unit and integration test coverage
+10. **Migrations**: Replace TypeORM `synchronize` in dev with explicit migrations for buyer production deploys
 
 ---
 
