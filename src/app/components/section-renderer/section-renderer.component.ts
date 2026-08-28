@@ -33,6 +33,7 @@ export class SectionRendererComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('container', { read: ViewContainerRef, static: true }) container!: ViewContainerRef;
   private styleTag?: HTMLStyleElement;
   private isRendering = false;
+  private pendingRender = false;
   private isDestroyed = false;
 
   ngOnInit() {
@@ -60,7 +61,11 @@ export class SectionRendererComponent implements OnInit, OnChanges, OnDestroy {
   private previousType: string = '';
 
   async renderSection() {
-    if (!this.section || !this.container || this.isRendering || this.isDestroyed) return;
+    if (!this.section || !this.container || this.isDestroyed) return;
+    if (this.isRendering) {
+      this.pendingRender = true;
+      return;
+    }
     
     // If the type hasn't changed, we can just update the existing component
     if (this.componentRef && this.section.type === this.previousType) {
@@ -82,8 +87,14 @@ export class SectionRendererComponent implements OnInit, OnChanges, OnDestroy {
         
         this.updateComponentState();
       }
+    } catch (err) {
+      console.error('Section renderer failed for type:', this.section?.type, err);
     } finally {
       this.isRendering = false;
+      if (this.pendingRender && !this.isDestroyed) {
+        this.pendingRender = false;
+        void this.renderSection();
+      }
     }
   }
 

@@ -324,3 +324,12 @@
     bottom: 1rem;
   }
 }
+
+:host-context(app-admin-section-preview) {
+  .video-hero-section,
+  .video-container,
+  .video-wrapper,
+  .video-error-fallback {
+    min-height: min(56cqh, 420px);
+  }
+}

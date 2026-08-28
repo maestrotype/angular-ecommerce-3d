@@ -30,41 +30,9 @@ import {
   isPageTemplatePreset,
   PageTemplatePresetId
 } from '../page-template-presets';
+import { buildStorefrontPreviewSections } from '../storefront-preview-sections.util';
 
-/** Build preview list matching storefront page composition (active, exact pageTarget, sorted). */
-export function buildStorefrontPreviewSections(
-  allSections: Section[],
-  pageTarget: string
-): Section[] {
-  const active = allSections.filter(section => section.isActive !== false);
-  const byOrder = (list: Section[]) =>
-    [...list].sort((a, b) => (a.order || 0) - (b.order || 0));
-
-  if (pageTarget === 'global') {
-    return byOrder(active.filter(section => section.pageTarget === 'global'));
-  }
-
-  const header = active.find(section => section.type === 'header' && section.pageTarget === 'global');
-  const footer = active.find(section => section.type === 'footer' && section.pageTarget === 'global');
-  const body = byOrder(
-    active.filter(
-      section =>
-        section.pageTarget === pageTarget &&
-        section.type !== 'header' &&
-        section.type !== 'footer'
-    )
-  );
-
-  const result: Section[] = [];
-  if (header) {
-    result.push(header);
-  }
-  result.push(...body);
-  if (footer) {
-    result.push(footer);
-  }
-  return result;
-}
+export { buildStorefrontPreviewSections } from '../storefront-preview-sections.util';
 
 @Component({
   selector: 'app-section-list',
@@ -355,6 +323,9 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
       .sort((a, b) => (a.order || 0) - (b.order || 0));
   }
 
+  private previewSectionsCache: Section[] = [];
+  private previewSectionsCacheKey = '';
+
   /** Sections passed to Site Architect — mirrors storefront composition. */
   get previewSections(): Section[] {
     const target = this.activePageTarget || 'home';
@@ -375,15 +346,27 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
         const header = sections.find(s => s.type === 'header');
         const footer = sections.find(s => s.type === 'footer');
         const body = sections.filter(s => s.type !== 'header' && s.type !== 'footer');
-        sections = [
-          ...(header ? [header] : []),
-          ...body,
-          draft,
-          ...(footer ? [footer] : [])
-        ];
+        if (draft.type === 'header') {
+          sections = [draft, ...body, ...(footer ? [footer] : [])];
+        } else if (draft.type === 'footer') {
+          sections = [...(header ? [header] : []), ...body, draft];
+        } else {
+          sections = [
+            ...(header ? [header] : []),
+            ...body,
+            draft,
+            ...(footer ? [footer] : [])
+          ];
+        }
       }
     }
 
+    const cacheKey = `${target}|${this.isEditorOpen}|${sections.map(section => `${section.id}:${section.order}:${section.isActive}`).join(',')}|${this.isEditorOpen && this.previewData ? JSON.stringify(this.previewData) : ''}`;
+    if (cacheKey === this.previewSectionsCacheKey) {
+      return this.previewSectionsCache;
+    }
+    this.previewSectionsCacheKey = cacheKey;
+    this.previewSectionsCache = sections;
     return sections;
   }
 

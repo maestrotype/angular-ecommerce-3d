@@ -396,10 +396,18 @@
     .list-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      margin-bottom: var(--space-4);
+      align-items: flex-start;
+      gap: var(--space-4);
+      margin-bottom: var(--space-5);
 
       h4 { margin: 0; }
+
+      &__copy {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        min-width: 0;
+      }
     }
 
     .field-hint {
@@ -412,45 +420,46 @@
   .cdk-list {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    gap: var(--space-4);
   }
 
   .cdk-item {
     display: flex;
     align-items: flex-start;
     gap: var(--space-2);
-    padding: var(--space-4);
+    padding: var(--space-4) var(--space-4) var(--space-3);
     background: var(--surface-secondary);
     border: 1px solid var(--border-default);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
 
     .drag-handle {
       cursor: grab;
       color: var(--text-secondary);
-      margin-top: 12px;
+      margin-top: 14px;
     }
 
     .item-form {
       flex: 1;
+      min-width: 0;
       display: flex;
       flex-direction: column;
-      gap: var(--space-2);
+      gap: var(--space-4);
 
       .item-row {
         display: flex;
-        gap: var(--space-2);
-        align-items: center;
+        gap: var(--space-3);
+        align-items: flex-start;
 
-        mat-form-field { flex: 1; }
+        mat-form-field { flex: 1; min-width: 0; }
 
         &.secondary {
           background: var(--surface-overlay-light);
-          padding: 8px;
-          border-radius: 4px;
+          padding: var(--space-4) var(--space-3) var(--space-3);
+          border-radius: var(--radius-md);
         }
 
         &.upload-only {
-          padding-top: 8px;
+          padding-top: var(--space-2);
         }
       }
     }
@@ -625,4 +634,237 @@
   border-radius: 12px;
   padding: 16px;
   margin-bottom: 24px;
+}
+
+// Child type-forms (header/footer/hero) include this stylesheet but are not
+// wrapped in `.form-wrapper`, so the nested rules above never match. Repeat
+// the layout on :host so outline labels have room inside the editor drawer.
+:host {
+  display: block;
+  width: 100%;
+  min-width: 0;
+
+  ::ng-deep .mat-mdc-tab-group {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .tab-icon {
+    margin-right: 8px;
+    font-size: 20px;
+    height: 20px;
+    width: 20px;
+    vertical-align: middle;
+  }
+
+  .tab-content {
+    padding: 24px 24px 48px;
+    animation: fadeIn 0.3s ease-out;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .header-special-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding-top: 4px;
+
+    .settings-toggles-card {
+      background: var(--surface-secondary);
+      border: 1px solid var(--border-default);
+      border-radius: 16px;
+      padding: 20px 20px 24px;
+
+      h4 {
+        margin: 0 0 16px;
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--interactive-primary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .toggle-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        mat-slide-toggle { width: 100%; }
+
+        mat-divider {
+          margin: 8px -20px;
+          opacity: 0.5;
+        }
+      }
+    }
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px 0;
+    width: 100%;
+    min-width: 0;
+
+    > mat-form-field,
+    > .full-width {
+      width: 100%;
+      min-width: 0;
+    }
+  }
+
+  .dynamic-list {
+    margin-top: 0;
+
+    .field-hint {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--space-4);
+      margin-bottom: var(--space-5);
+
+      h4 {
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 700;
+      }
+
+      &__copy {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        min-width: 0;
+      }
+
+      button mat-icon {
+        margin-right: 4px;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  .cdk-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+
+    &.is-empty {
+      display: none;
+    }
+  }
+
+  .cdk-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: 20px 16px 16px;
+    background: var(--surface-secondary);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+
+    .drag-handle {
+      cursor: grab;
+      color: var(--text-secondary);
+      margin-top: 10px;
+    }
+
+    .item-form {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+
+      .item-row {
+        display: flex;
+        gap: var(--space-3);
+        align-items: flex-start;
+
+        mat-form-field {
+          flex: 1;
+          min-width: 0;
+        }
+
+        &.secondary {
+          background: var(--surface-overlay-light);
+          padding: 16px 12px 12px;
+          border-radius: var(--radius-md);
+        }
+      }
+    }
+  }
+
+  .menu-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 40px 20px;
+    border: 1px dashed var(--border-default);
+    border-radius: var(--radius-lg);
+    color: var(--text-secondary);
+    text-align: center;
+
+    mat-icon {
+      font-size: 36px;
+      width: 36px;
+      height: 36px;
+      opacity: 0.7;
+    }
+
+    p {
+      margin: 0;
+      font-size: 0.9rem;
+    }
+  }
+
+  .menu-nav-item {
+    &__rail {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding-top: 6px;
+      flex-shrink: 0;
+    }
+
+    &__index {
+      min-width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      background: var(--surface-highlight);
+      border: 1px solid var(--border-subtle);
+    }
+
+    &__delete {
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+
+    .drag-handle {
+      margin-top: 0;
+    }
+  }
+
+  .column-header {
+    .drag-handle {
+      margin-top: 10px;
+    }
+  }
 }
