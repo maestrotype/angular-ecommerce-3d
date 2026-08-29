@@ -10,6 +10,10 @@
   --video-hero-bg: var(--hero-bg-gradient, var(--surface-section));
   --video-hero-text: var(--hero-text-color, var(--text-primary));
   --video-hero-muted: var(--text-secondary);
+  --video-hero-subtitle-color: var(--video-hero-muted);
+  --video-hero-description-color: var(--video-hero-muted);
+  --video-hero-text-shadow: none;
+  --video-hero-content-scrim: none;
   --video-hero-overlay-color: var(--surface-page);
   --surface-card: rgba(255, 255, 255, 0.85);
   --surface-elevated: var(--color-white);

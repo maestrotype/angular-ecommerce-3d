@@ -121,15 +121,27 @@
 .fallback-content {
   max-width: 800px;
   text-align: center;
+  position: relative;
+  text-shadow: var(--video-hero-text-shadow);
+}
+
+.hero-content::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--video-hero-content-scrim);
+  pointer-events: none;
+  z-index: -1;
 }
 
 .hero-subtitle {
   display: block;
   margin-bottom: 1rem;
-  color: var(--video-hero-muted, var(--text-secondary));
+  color: var(--video-hero-subtitle-color, var(--video-hero-muted, var(--text-secondary)));
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-size: 0.875rem;
+  font-weight: 600;
 }
 
 .hero-title {
@@ -142,12 +154,13 @@
 
 .hero-description {
   font-size: clamp(1rem, 2vw, 1.25rem);
-  color: var(--video-hero-muted, var(--text-secondary));
+  color: var(--video-hero-description-color, var(--video-hero-muted, var(--text-secondary)));
   margin-bottom: 2rem;
   line-height: 1.6;
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  font-weight: 500;
 }
 
 .hero-actions {
@@ -199,6 +212,7 @@
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
+  text-shadow: var(--video-hero-text-shadow);
 
   .scroll-mouse {
     width: 26px;
@@ -206,7 +220,7 @@
     border: 2px solid var(--video-hero-text, var(--text-primary));
     border-radius: 13px;
     position: relative;
-    opacity: 0.7;
+    opacity: 0.85;
 
     .scroll-wheel {
       position: absolute;
@@ -222,9 +236,9 @@
   }
 
   .scroll-text {
-    color: var(--video-hero-muted, var(--text-secondary));
+    color: var(--video-hero-subtitle-color, var(--video-hero-text, var(--text-primary)));
     font-size: 0.75rem;
-    opacity: 0.8;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.1em;
   }
