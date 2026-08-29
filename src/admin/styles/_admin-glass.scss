@@ -112,7 +112,12 @@ html[data-theme='glass'] body.is-admin {
   --mdc-list-list-item-hover-state-layer-color: rgba(255, 255, 255, 0.12);
   --mdc-list-list-item-hover-state-layer-opacity: 0.22;
   --mdc-list-item-hover-label-text-color: var(--text-primary);
-  --mdc-list-item-hover-leading-icon-color: var(--text-secondary);
+  --mdc-list-item-hover-leading-icon-color: var(--text-primary);
+
+  --mdc-outlined-text-field-input-text-color: var(--input-text);
+  --mdc-outlined-text-field-hover-label-text-color: var(--input-label);
+  --mat-select-enabled-trigger-text-color: var(--input-text);
+  --mat-select-value-text-color: var(--input-text);
 
   --mdc-elevated-card-container-color: transparent;
   --mdc-filled-card-container-color: transparent;

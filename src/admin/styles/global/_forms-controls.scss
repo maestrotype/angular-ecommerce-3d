@@ -130,3 +130,64 @@ body.is-admin {
     stroke: var(--interactive-primary);
   }
 }
+
+/* Admin selects: MDC bridge must follow input tokens (not storefront --text-primary). */
+body.is-admin[data-theme='glass'] .page-target-filter.mat-mdc-form-field,
+html[data-theme='glass'] body.is-admin .page-target-filter.mat-mdc-form-field,
+body.is-admin[data-theme='dark-glass'] .page-target-filter.mat-mdc-form-field,
+html[data-theme='dark-glass'] body.is-admin .page-target-filter.mat-mdc-form-field,
+body.is-admin[data-theme='dark'] .page-target-filter.mat-mdc-form-field,
+html[data-theme='dark'] body.is-admin .page-target-filter.mat-mdc-form-field,
+body.is-admin[data-theme='glass'] .mat-mdc-form-field:hover .mat-mdc-select,
+html[data-theme='glass'] body.is-admin .mat-mdc-form-field:hover .mat-mdc-select,
+body.is-admin[data-theme='glass'] .mat-mdc-form-field:hover .mat-mdc-select-trigger,
+html[data-theme='glass'] body.is-admin .mat-mdc-form-field:hover .mat-mdc-select-trigger,
+body.is-admin[data-theme='glass'] .mat-mdc-form-field:hover .mat-mdc-select-value,
+html[data-theme='glass'] body.is-admin .mat-mdc-form-field:hover .mat-mdc-select-value,
+body.is-admin[data-theme='glass'] .mat-mdc-form-field:hover .mat-mdc-select-value-text,
+html[data-theme='glass'] body.is-admin .mat-mdc-form-field:hover .mat-mdc-select-value-text,
+body.is-admin[data-theme='glass'] .mat-mdc-form-field:hover .mat-mdc-select-min-line,
+html[data-theme='glass'] body.is-admin .mat-mdc-form-field:hover .mat-mdc-select-min-line,
+body.is-admin[data-theme='glass'] .mat-mdc-form-field:hover .mdc-floating-label,
+html[data-theme='glass'] body.is-admin .mat-mdc-form-field:hover .mdc-floating-label,
+body.is-admin[data-theme='dark-glass'] .mat-mdc-form-field:hover .mat-mdc-select-value,
+html[data-theme='dark-glass'] body.is-admin .mat-mdc-form-field:hover .mat-mdc-select-value,
+body.is-admin[data-theme='dark'] .mat-mdc-form-field:hover .mat-mdc-select-value,
+html[data-theme='dark'] body.is-admin .mat-mdc-form-field:hover .mat-mdc-select-value {
+  --mdc-outlined-text-field-input-text-color: var(--input-text);
+  --mdc-outlined-text-field-hover-label-text-color: var(--input-label);
+  --mat-select-enabled-trigger-text-color: var(--input-text);
+  --mat-select-value-text-color: var(--input-text);
+
+  .mat-mdc-select,
+  .mat-mdc-select-trigger,
+  .mat-mdc-select-value,
+  .mat-mdc-select-value-text,
+  .mat-mdc-select-min-line,
+  .mat-mdc-select-arrow,
+  .mdc-floating-label {
+    color: var(--input-text);
+    -webkit-text-fill-color: var(--input-text);
+  }
+}
+
+body.is-admin[data-theme='glass'] .page-target-filter.mat-mdc-form-field:hover .mat-mdc-text-field-wrapper,
+html[data-theme='glass'] body.is-admin .page-target-filter.mat-mdc-form-field:hover .mat-mdc-text-field-wrapper,
+body.is-admin[data-theme='glass'] .page-target-filter.mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper,
+html[data-theme='glass'] body.is-admin .page-target-filter.mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper,
+body.is-admin[data-theme='glass'] .mat-mdc-form-field:hover .mat-mdc-text-field-wrapper,
+html[data-theme='glass'] body.is-admin .mat-mdc-form-field:hover .mat-mdc-text-field-wrapper {
+  background: var(--input-bg);
+  color: var(--input-text);
+}
+
+body.is-admin[data-theme='glass'] .mat-mdc-select-panel .mat-mdc-option,
+html[data-theme='glass'] body.is-admin .mat-mdc-select-panel .mat-mdc-option,
+body.is-admin[data-theme='dark-glass'] .mat-mdc-select-panel .mat-mdc-option,
+html[data-theme='dark-glass'] body.is-admin .mat-mdc-select-panel .mat-mdc-option,
+body.is-admin[data-theme='dark'] .mat-mdc-select-panel .mat-mdc-option,
+html[data-theme='dark'] body.is-admin .mat-mdc-select-panel .mat-mdc-option {
+  color: var(--input-text);
+  --mdc-list-list-item-label-text-color: var(--input-text);
+  --mdc-list-item-label-text-color: var(--input-text);
+}

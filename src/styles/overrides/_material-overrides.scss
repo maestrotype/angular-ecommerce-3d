@@ -639,7 +639,21 @@
   /* ===== Select dropdowns ===== */
   .mat-mdc-select-trigger,
   .mat-mdc-select {
-    color: var(--text-primary);
+    color: var(--input-text);
+  }
+
+  .mat-mdc-form-field:hover .mat-mdc-select,
+  .mat-mdc-form-field:hover .mat-mdc-select-trigger,
+  .mat-mdc-form-field:hover .mat-mdc-select-value,
+  .mat-mdc-form-field:hover .mat-mdc-select-value-text,
+  .mat-mdc-form-field:hover .mat-mdc-select-min-line,
+  .mat-mdc-form-field:hover .mdc-floating-label,
+  .mat-mdc-form-field.mat-focused .mat-mdc-select,
+  .mat-mdc-form-field.mat-focused .mat-mdc-select-trigger,
+  .mat-mdc-form-field.mat-focused .mat-mdc-select-value,
+  .mat-mdc-form-field.mat-focused .mat-mdc-select-min-line {
+    color: var(--input-text);
+    -webkit-text-fill-color: var(--input-text);
   }
 
   /* Force panel background to match the input field - same rgba as input wrapper */
@@ -867,6 +881,26 @@
   .mat-sidenav .sidenav-header,
   .mat-drawer .sidenav-header {
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .sidenav-header .logo-text,
+  .admin-sidenav .sidenav-header .logo-text {
+    color: var(--text-primary);
+  }
+
+  .sidenav-header .logo-icon,
+  .admin-sidenav .sidenav-header .logo-icon {
+    color: var(--text-primary);
+  }
+
+  .sidenav-nav .user-info .user-name,
+  .sidenav-wrapper .user-info .user-name {
+    color: var(--text-primary);
+  }
+
+  .sidenav-nav .user-info .user-role,
+  .sidenav-wrapper .user-info .user-role {
+    color: var(--text-secondary);
   }
 
   .mat-sidenav .sidenav-footer,
@@ -1438,7 +1472,7 @@ body.is-admin[data-theme='dark-glass'] .sidenav-nav .user-info .user-role,
 html[data-theme='dark-glass'] body.is-admin .sidenav-nav .user-info .user-role,
 body.is-admin[data-theme='glass'] .sidenav-nav .user-info .user-role,
 html[data-theme='glass'] body.is-admin .sidenav-nav .user-info .user-role {
-  color: var(--interactive-primary);
+  color: var(--text-secondary);
 }
 
 /* ===== Mat Menu Styles ===== */
@@ -1529,10 +1563,20 @@ html[data-theme='glass'] body.is-admin .sidenav-nav .user-info .user-role {
     color: var(--text-primary);
   }
 
-  /* Sidebar role label: primary accent, never warn/danger red */
-  .sidenav-nav .user-info .user-role,
-  .sidenav-wrapper .user-info .user-role {
+  /* Sidebar role: brand accent only on light/dark zinc. Glass chrome is already
+     blue — interactive-primary (#3b82f6) disappears into the sidenav. */
+  [data-theme='light'] .sidenav-nav .user-info .user-role,
+  [data-theme='light'] .sidenav-wrapper .user-info .user-role,
+  [data-theme='dark'] .sidenav-nav .user-info .user-role,
+  [data-theme='dark'] .sidenav-wrapper .user-info .user-role {
     color: var(--interactive-primary);
+  }
+
+  [data-theme='glass'] .sidenav-nav .user-info .user-role,
+  [data-theme='glass'] .sidenav-wrapper .user-info .user-role,
+  [data-theme='dark-glass'] .sidenav-nav .user-info .user-role,
+  [data-theme='dark-glass'] .sidenav-wrapper .user-info .user-role {
+    color: var(--text-secondary);
   }
 
   app-product-list .product-card {

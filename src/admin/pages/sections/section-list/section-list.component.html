@@ -26,6 +26,7 @@
     <div class="page-header-actions">
       <mat-form-field appearance="outline" class="page-target-filter" subscriptSizing="dynamic">
         <mat-label>{{ 'SECTION_FILTER_BY_PAGE' | translate }}</mat-label>
+        <mat-icon matPrefix fontSet="material-icons-outlined">filter_alt</mat-icon>
         <mat-select [value]="activePageTarget" (selectionChange)="onPageTargetFilterChange($event.value)">
           <mat-option *ngFor="let option of pageFilterOptions" [value]="option.value">
             {{ option.translate ? (option.label | translate) : option.label }}
