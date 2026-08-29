@@ -80,6 +80,16 @@
   --video-hero-bg: var(--hero-bg-gradient);
   --video-hero-text: var(--hero-text-color);
   --video-hero-muted: var(--text-secondary);
+  --video-hero-subtitle-color: color-mix(in srgb, var(--text-on-media) 90%, transparent);
+  --video-hero-description-color: color-mix(in srgb, var(--text-on-media) 96%, transparent);
+  --video-hero-text-shadow:
+    0 2px 16px color-mix(in srgb, var(--surface-scrim) 72%, transparent),
+    0 1px 4px color-mix(in srgb, var(--surface-scrim) 52%, transparent);
+  --video-hero-content-scrim: radial-gradient(
+    ellipse 88% 78% at 50% 50%,
+    color-mix(in srgb, var(--surface-scrim) 44%, transparent) 0%,
+    transparent 74%
+  );
   --video-hero-overlay-color: var(--surface-page);
 
   /* Global Text Colors */

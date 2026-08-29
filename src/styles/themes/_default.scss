@@ -111,6 +111,10 @@
   --video-hero-bg: var(--hero-bg-gradient);
   --video-hero-text: var(--hero-text-color);
   --video-hero-muted: var(--text-secondary);
+  --video-hero-subtitle-color: color-mix(in srgb, var(--video-hero-text) 72%, transparent);
+  --video-hero-description-color: color-mix(in srgb, var(--video-hero-text) 86%, transparent);
+  --video-hero-text-shadow: 0 1px 10px color-mix(in srgb, var(--surface-scrim) 28%, transparent);
+  --video-hero-content-scrim: none;
   --video-hero-overlay-color: var(--surface-page);
 
   /* Global Text Colors */
