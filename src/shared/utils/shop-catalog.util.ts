@@ -30,6 +30,34 @@ export function productMatchesCategorySlugs(productCategory: string, slugs: stri
   return slugs.some((slug) => normalizedProduct === normalizeCategoryRef(slug));
 }
 
+/** True when a shop query / product category matches any of the given slugs or names. */
+export function categoryQueryMatches(query: string, ...refs: string[]): boolean {
+  const needle = normalizeCategoryRef(query);
+  if (!needle || needle === 'all') {
+    return false;
+  }
+  return refs.some((ref) => normalizeCategoryRef(ref) === needle);
+}
+
+/**
+ * Sidebar checkboxes win when the user has ticked any.
+ * An empty sidebar must not wipe `?category=` during the initial load
+ * (`allowClearToAll: false`); checkbox edits pass `true` so "none" means all.
+ */
+export function selectedCategoryFromFilterState(
+  selectedIds: string[],
+  currentSelected: string,
+  allowClearToAll = false,
+): string {
+  if (selectedIds.length === 1) {
+    return selectedIds[0];
+  }
+  if (selectedIds.length === 0) {
+    return allowClearToAll ? 'all' : (currentSelected || 'all');
+  }
+  return currentSelected;
+}
+
 export function filterProductsByCategorySlugs<T extends { category?: string }>(
   products: T[],
   slugs: string[],
