@@ -25,7 +25,7 @@ Configure global site settings via **Settings > SEO**.
 - **Automatic Sitemap**: The system automatically updates the `sitemap.xml` based on active products and categories.
 
 ### Appearance (Themes)
-Switch between the 4 available themes (Light, Dark, Glass, Dark Glass) in the appearance settings. These changes apply site-wide instantly via the `ThemeService`.
+Switch between Light, Dark, Ice, and Ember in the admin appearance / theme switcher (storefront uses Light, Dark, Aurora). These changes apply instantly via `ThemeService`. CSS ids remain `light`, `dark`, `glass`, `dark-glass`.
 
 ## Order Processing
 The dashboard provides a real-time view of incoming orders.

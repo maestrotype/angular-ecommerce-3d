@@ -1006,7 +1006,7 @@
   "SECTION_TYPE_LABELS": {
     "HEADER": "Секция шапки",
     "HERO": "Hero секция",
-    "HERO_GLASS": "Hero Glass секция",
+    "HERO_GLASS": "Hero (Aurora)",
     "BEST_SELLERS": "Секция бестселлеров",
     "PRODUCT_CAROUSEL": "Карусель товаров",
     "LOOKBOOK": "Лукбук",
@@ -1126,8 +1126,11 @@
     "THEMES": {
       "LIGHT": "Светлая",
       "DARK": "Темная",
-      "GLASS": "Стекло",
-      "DARK_GLASS": "Тёмное стекло"
+      "GLASS": "Aurora",
+      "AURORA": "Aurora",
+      "ICE": "Ice",
+      "DARK_GLASS": "Ember",
+      "EMBER": "Ember"
     },
     "LANGUAGE": "Язык",
     "LOGIN_REGISTER": "Вход / Регистрация",

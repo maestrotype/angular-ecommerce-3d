@@ -77,17 +77,13 @@ git push origin v1.0.0
 ## Zip packaging (buyer deliverable)
 
 ```bash
-git archive --format=zip --prefix=angular-ecommerce-3d/ HEAD \
-  -o angular-ecommerce-3d-v1.0.0.zip
+npm run pack:marketplace
+# → dist-marketplace/angular-ecommerce-3d-v1.0.0.zip
 ```
 
-Buyer first steps inside zip:
+See [marketing-assets/LISTING_PACK.md](../marketing-assets/LISTING_PACK.md). The pack uses `git archive` (committed files only) and refuses `.env`.
 
-```bash
-npm install && cp backend/.env.example backend/.env
-npm run demo:models
-npm run backend:seed
-```
+Buyer first steps inside zip: open `START_HERE.md`.
 
 ---
 

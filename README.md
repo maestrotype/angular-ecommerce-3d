@@ -9,7 +9,9 @@
 
 **Full-stack e-commerce with interactive 3D product previews, multi-theme design system, and NestJS admin API.**
 
-[Live Demo](https://demo.angular-ecommerce3d.com) · [Documentation](docs/client/index.html) · [Walkthrough Script](marketing-assets/VIDEO_SCRIPT.md) · [Support](docs/SUPPORT.md)
+[Documentation](docs/client/index.html) · [Listing pack](marketing-assets/LISTING_PACK.md) · [Walkthrough Script](marketing-assets/VIDEO_SCRIPT.md) · [Support](docs/SUPPORT.md)
+
+Live demo URL: set `YOUR_LIVE_DEMO_URL` in [marketing-assets/CODECANYON_LISTING.md](marketing-assets/CODECANYON_LISTING.md) after you deploy the stack (GitHub Pages is not a full demo).
 
 </div>
 

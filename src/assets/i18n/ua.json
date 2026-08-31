@@ -989,7 +989,7 @@
   "SECTION_TYPE_LABELS": {
     "HEADER": "Секція шапки",
     "HERO": "Hero секція",
-    "HERO_GLASS": "Hero Glass секція",
+    "HERO_GLASS": "Hero (Aurora)",
     "BEST_SELLERS": "Секція бестселерів",
     "PRODUCT_CAROUSEL": "Карусель товарів",
     "LOOKBOOK": "Лукбук",
@@ -1094,8 +1094,11 @@
       "DEFAULT": "Світла",
       "LIGHT": "Світла",
       "DARK": "Темна",
-      "GLASS": "Скло",
-      "DARK_GLASS": "Темне скло"
+      "GLASS": "Aurora",
+      "AURORA": "Aurora",
+      "ICE": "Ice",
+      "DARK_GLASS": "Ember",
+      "EMBER": "Ember"
     },
     "LANGUAGE": "Мова",
     "LOGIN_REGISTER": "Вхід / Реєстрація",

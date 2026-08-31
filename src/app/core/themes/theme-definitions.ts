@@ -55,8 +55,9 @@ export const darkTheme: ThemeDefinition = {
 
 export const glassTheme: ThemeDefinition = {
   id: 'glass',
-  name: 'Glass',
-  description: 'Frosted glass storefront + admin chrome — _glass.scss + _admin-glass.scss',
+  name: 'Aurora',
+  names: { frontend: 'Aurora', admin: 'Ice' },
+  description: 'Indigo daylight storefront (Aurora) and cool admin chrome (Ice). CSS id remains glass.',
   areas: ['frontend', 'admin'],
   scssSource: 'src/styles/themes/_glass.scss',
   dimensions: ['appearance', 'elevation', 'motion', 'effects', 'layout'],
@@ -76,8 +77,9 @@ export const glassTheme: ThemeDefinition = {
 
 export const darkGlassTheme: ThemeDefinition = {
   id: 'dark-glass',
-  name: 'Dark Glass',
-  description: 'Admin-only warm glass — _admin-dark-glass.scss',
+  name: 'Ember',
+  names: { admin: 'Ember' },
+  description: 'Admin-only warm chrome — _admin-dark-glass.scss. CSS id remains dark-glass.',
   areas: ['admin'],
   scssSource: 'src/admin/styles/_admin-dark-glass.scss',
   dimensions: ['appearance', 'elevation', 'motion', 'effects', 'typography', 'layout'],

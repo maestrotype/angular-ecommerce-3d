@@ -128,7 +128,7 @@
                   style="display:block;width:24px;height:16px;background:var(--color-primary);"></span>
               </ng-container>
             </span>
-            <span class="theme-switcher__label">{{ theme.name }}</span>
+            <span class="theme-switcher__label">{{ 'HEADER.THEMES.' + themeI18nKey(theme.id) | translate }}</span>
             <span class="theme-switcher__check" *ngIf="currentTheme === theme.id">✔</span>
           </button>
         </div>

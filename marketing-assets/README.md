@@ -2,6 +2,8 @@
 
 This folder contains all marketing materials for the Angular 3D E-Commerce project, ready for use on marketplaces like ThemeForest, TemplateMonster, CodeCanyon, etc.
 
+**Seller first:** [LISTING_PACK.md](./LISTING_PACK.md) · [CODECANYON_LISTING.md](./CODECANYON_LISTING.md)
+
 ## 📚 Documentation (for buyers)
 
 Open the visual client hub (same palette as architecture diagrams):

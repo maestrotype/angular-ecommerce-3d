@@ -566,10 +566,10 @@ Your platform includes **4 premium themes**!
 
 1. Navigate to **Settings** → **Appearance**
 2. View theme previews:
-   - **Light Theme** - Clean, minimal design
-   - **Dark Theme** - Modern dark mode
-   - **Glass Theme** - Glassmorphism effects
-   - **Dark Glass Theme** - Liquid glass, Apple-inspired
+   - **Light** — clean, minimal
+   - **Dark** — slate dark mode
+   - **Ice** — cool blue admin chrome (`data-theme="glass"`; storefront name is **Aurora**)
+   - **Ember** — warm admin chrome (`data-theme="dark-glass"`)
 3. Click **"Activate"** on desired theme
 4. Click **"Preview"** to see before activating
 

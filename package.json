@@ -26,7 +26,8 @@
     "build:gh": "ng build --configuration production --base-href=/angular-ecommerce-3d/",
     "test": "jest",
     "e2e": "playwright test e2e/smoke.spec.ts",
-    "screenshots:capture": "playwright test e2e/capture-screenshots.spec.ts --project=chromium",
+    "screenshots:capture": "playwright test --config=playwright.screenshots.config.ts",
+    "pack:marketplace": "node scripts/pack-marketplace.cjs",
     "docs:client": "node scripts/build-client-docs.cjs",
     "demo:models": "node scripts/download-demo-models.mjs",
     "icons:generate": "node scripts/generate-favicons.mjs"

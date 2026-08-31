@@ -40,7 +40,10 @@ export interface ThemePreviewPalette {
 
 export interface ThemeDefinition {
   id: ThemeId;
+  /** Catalog / fallback label. Prefer `names` + i18n in the UI. */
   name: string;
+  /** Area-specific display names (ids stay light/dark/glass/dark-glass). */
+  names?: Partial<Record<ThemeArea, string>>;
   description: string;
   /** Where this theme is available in the UI */
   areas: ThemeArea[];

@@ -1006,7 +1006,7 @@
   "SECTION_TYPE_LABELS": {
     "HEADER": "Header Section",
     "HERO": "Hero Section",
-    "HERO_GLASS": "Hero Glass Section",
+    "HERO_GLASS": "Hero (Aurora)",
     "BEST_SELLERS": "Best Sellers Section",
     "PRODUCT_CAROUSEL": "Product Carousel",
     "LOOKBOOK": "Lookbook",
@@ -1107,8 +1107,11 @@
     "THEMES": {
       "LIGHT": "Light",
       "DARK": "Dark",
-      "GLASS": "Glass",
-      "DARK_GLASS": "Dark Glass"
+      "GLASS": "Aurora",
+      "AURORA": "Aurora",
+      "ICE": "Ice",
+      "DARK_GLASS": "Ember",
+      "EMBER": "Ember"
     },
     "LANGUAGE": "Language",
     "LOGIN_REGISTER": "Login / Register",
