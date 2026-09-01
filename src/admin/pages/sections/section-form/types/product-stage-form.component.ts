@@ -18,6 +18,7 @@ import {
 } from 'src/shared/utils/product-stage.util';
 import { filterProductsByCategorySlugs } from 'src/shared/utils/shop-catalog.util';
 import { getLocalizedString, resolveApiError, formatResolvedApiError } from 'src/shared/utils/localization.util';
+import { GLB_OPTIMIZE_HINT_BYTES, RAW_GLB_UPLOAD_MAX_BYTES } from '../../../../constants/glb-upload.constants';
 
 @Component({
   selector: 'app-section-product-stage-form',
@@ -150,13 +151,21 @@ export class SectionProductStageFormComponent implements OnInit {
       );
       return;
     }
-    if (file.size > 50 * 1024 * 1024) {
+    if (file.size > RAW_GLB_UPLOAD_MAX_BYTES) {
       this.snackBar.open(
         this.translate.instant('MODEL_3D_SIZE_LIMIT'),
         this.translate.instant('CLOSE_BTN'),
-        { duration: 3000 },
+        { duration: 4000 },
       );
       return;
+    }
+
+    if (file.size > GLB_OPTIMIZE_HINT_BYTES) {
+      this.snackBar.open(
+        this.translate.instant('MODEL_3D_OPTIMIZING'),
+        this.translate.instant('CLOSE_BTN'),
+        { duration: 5000 },
+      );
     }
 
     this.uploadingProductId = product.id;

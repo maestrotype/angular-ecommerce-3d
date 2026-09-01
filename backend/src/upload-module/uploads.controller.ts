@@ -15,7 +15,7 @@ import * as os from "os";
 import { join } from "path";
 import { v2 as cloudinary } from "cloudinary";
 import { ImageProcessingService } from "../services/image-processing.service";
-import { GlbOptimizationService, CLOUDINARY_RAW_FILE_LIMIT } from "../services/glb-optimization.service";
+import { GlbOptimizationService, CLOUDINARY_RAW_FILE_LIMIT, RAW_GLB_UPLOAD_MAX_BYTES } from "../services/glb-optimization.service";
 import { saveModelToLocalDisk, isCloudinarySizeError } from "../services/model-storage.util";
 import { CloudinaryConfigService } from "../services/cloudinary-config.service";
 import { Observable, from, throwError } from 'rxjs';
@@ -285,7 +285,7 @@ export class UploadsController {
         },
       }),
       limits: {
-        fileSize: 50 * 1024 * 1024, // 50MB
+        fileSize: RAW_GLB_UPLOAD_MAX_BYTES,
       },
     })
   )
@@ -313,7 +313,7 @@ export class UploadsController {
         },
       }),
       limits: {
-        fileSize: 100 * 1024 * 1024, // 100MB
+        fileSize: RAW_GLB_UPLOAD_MAX_BYTES,
       },
     })
   )

@@ -14,10 +14,56 @@
       </mat-card-header>
 
       <mat-card-content class="form-content">
-        <!-- Basic Information Grid -->
-        <div class="form-grid form-grid--basic">
-          <div class="form-field-block">
-            <label class="field-block-label">{{ 'PRODUCT_NAME' | translate }}</label>
+        <!-- Uniform fields: category, price, stock -->
+        <div class="form-grid form-grid--metrics">
+          <mat-form-field appearance="outline" class="form-field category-field" subscriptSizing="dynamic">
+            <mat-label>{{ 'CATEGORY' | translate }}</mat-label>
+            <mat-select
+              formControlName="category"
+              panelClass="admin-product-select-panel"
+              [compareWith]="compareCategory">
+              <mat-option *ngIf="categoriesLoaded && !categories.length" disabled>
+                {{ 'FAILED_TO_LOAD_CATEGORIES' | translate }}
+              </mat-option>
+              <mat-option *ngFor="let category of categories" [value]="getCategoryValue(category)">
+                {{ category.name | localized }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="productForm.get('category')?.hasError('required')">
+              {{ 'CATEGORY_REQUIRED' | translate }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{ 'PRICE' | translate }}</mat-label>
+            <input matInput type="number" formControlName="price" [placeholder]="'PRICE_PLACEHOLDER' | translate"
+              step="0.01" />
+            <span matPrefix>$&nbsp;</span>
+            <mat-error *ngIf="productForm.get('price')?.hasError('required')">
+              {{ 'PRICE_REQUIRED' | translate }}
+            </mat-error>
+            <mat-error *ngIf="productForm.get('price')?.hasError('min')">
+              {{ 'PRICE_MIN' | translate }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{ 'STOCK_QUANTITY' | translate }}</mat-label>
+            <input matInput type="number" formControlName="stock" [placeholder]="'STOCK_PLACEHOLDER' | translate"
+              min="0" />
+            <mat-error *ngIf="productForm.get('stock')?.hasError('required')">
+              {{ 'STOCK_REQUIRED' | translate }}
+            </mat-error>
+            <mat-error *ngIf="productForm.get('stock')?.hasError('min')">
+              {{ 'STOCK_MIN' | translate }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Localized name + description (tabs, separate from metrics row) -->
+        <section class="localized-panel">
+          <div class="localized-panel__section">
+            <h4 class="localized-panel__title">{{ 'PRODUCT_NAME' | translate }}</h4>
             <mat-tab-group class="lang-tabs" animationDuration="200ms" color="primary" dynamicHeight>
               <mat-tab>
                 <ng-template mat-tab-label>
@@ -52,48 +98,45 @@
             </mat-tab-group>
           </div>
 
-          <div class="form-field-block">
-            <label class="field-block-label">{{ 'CATEGORY' | translate }}</label>
-            <mat-form-field appearance="outline" class="form-field">
-              <mat-label>{{ 'CATEGORY' | translate }}</mat-label>
-              <mat-select formControlName="category">
-                <mat-option *ngFor="let category of categories" [value]="getCategoryValue(category)">
-                  {{ category.name | localized }}
-                </mat-option>
-              </mat-select>
-              <mat-error *ngIf="productForm.get('category')?.hasError('required')">
-                {{ 'CATEGORY_REQUIRED' | translate }}
-              </mat-error>
-            </mat-form-field>
+          <div class="localized-panel__section localized-panel__section--description">
+            <h4 class="localized-panel__title">
+              <mat-icon>description</mat-icon>
+              <span>{{ 'DESCRIPTION' | translate }}</span>
+            </h4>
+            <mat-tab-group class="lang-tabs lang-tabs--description" animationDuration="200ms" color="primary" dynamicHeight>
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <span class="lang-tab-label">{{ 'LANG_EN' | translate }}</span>
+                </ng-template>
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ 'DESCRIPTION' | translate }}</mat-label>
+                  <textarea matInput formControlName="description_en" rows="4"
+                    [placeholder]="'DESCRIPTION_PLACEHOLDER' | translate"></textarea>
+                </mat-form-field>
+              </mat-tab>
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <span class="lang-tab-label">{{ 'LANG_RU' | translate }}</span>
+                </ng-template>
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ 'DESCRIPTION' | translate }}</mat-label>
+                  <textarea matInput formControlName="description_ru" rows="4"
+                    [placeholder]="'DESCRIPTION_PLACEHOLDER' | translate"></textarea>
+                </mat-form-field>
+              </mat-tab>
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <span class="lang-tab-label">{{ 'LANG_UA' | translate }}</span>
+                </ng-template>
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ 'DESCRIPTION' | translate }}</mat-label>
+                  <textarea matInput formControlName="description_ua" rows="4"
+                    [placeholder]="'DESCRIPTION_PLACEHOLDER' | translate"></textarea>
+                </mat-form-field>
+              </mat-tab>
+            </mat-tab-group>
           </div>
-
-          <div class="form-metrics">
-            <mat-form-field appearance="outline" class="form-field">
-              <mat-label>{{ 'PRICE' | translate }}</mat-label>
-              <input matInput type="number" formControlName="price" [placeholder]="'PRICE_PLACEHOLDER' | translate"
-                step="0.01" />
-              <span matPrefix>$&nbsp;</span>
-              <mat-error *ngIf="productForm.get('price')?.hasError('required')">
-                {{ 'PRICE_REQUIRED' | translate }}
-              </mat-error>
-              <mat-error *ngIf="productForm.get('price')?.hasError('min')">
-                {{ 'PRICE_MIN' | translate }}
-              </mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="form-field">
-              <mat-label>{{ 'STOCK_QUANTITY' | translate }}</mat-label>
-              <input matInput type="number" formControlName="stock" [placeholder]="'STOCK_PLACEHOLDER' | translate"
-                min="0" />
-              <mat-error *ngIf="productForm.get('stock')?.hasError('required')">
-                {{ 'STOCK_REQUIRED' | translate }}
-              </mat-error>
-              <mat-error *ngIf="productForm.get('stock')?.hasError('min')">
-                {{ 'STOCK_MIN' | translate }}
-              </mat-error>
-            </mat-form-field>
-          </div>
-        </div>
+        </section>
 
         <!-- Image + 3D side by side on large screens -->
         <div class="product-media-grid">
@@ -345,45 +388,6 @@
         </mat-card>
         </div>
 
-        <div class="form-field-block form-field-block--description">
-          <div class="group-header">
-            <mat-icon>description</mat-icon>
-            <h3>{{ 'DESCRIPTION' | translate }}</h3>
-          </div>
-
-          <mat-tab-group class="lang-tabs lang-tabs--description" animationDuration="200ms" color="primary" dynamicHeight>
-            <mat-tab>
-              <ng-template mat-tab-label>
-                <span class="lang-tab-label">{{ 'LANG_EN' | translate }}</span>
-              </ng-template>
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>{{ 'DESCRIPTION' | translate }}</mat-label>
-                <textarea matInput formControlName="description_en" rows="4"
-                  [placeholder]="'DESCRIPTION_PLACEHOLDER' | translate"></textarea>
-              </mat-form-field>
-            </mat-tab>
-            <mat-tab>
-              <ng-template mat-tab-label>
-                <span class="lang-tab-label">{{ 'LANG_RU' | translate }}</span>
-              </ng-template>
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>{{ 'DESCRIPTION' | translate }}</mat-label>
-                <textarea matInput formControlName="description_ru" rows="4"
-                  [placeholder]="'DESCRIPTION_PLACEHOLDER' | translate"></textarea>
-              </mat-form-field>
-            </mat-tab>
-            <mat-tab>
-              <ng-template mat-tab-label>
-                <span class="lang-tab-label">{{ 'LANG_UA' | translate }}</span>
-              </ng-template>
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>{{ 'DESCRIPTION' | translate }}</mat-label>
-                <textarea matInput formControlName="description_ua" rows="4"
-                  [placeholder]="'DESCRIPTION_PLACEHOLDER' | translate"></textarea>
-              </mat-form-field>
-            </mat-tab>
-          </mat-tab-group>
-        </div>
       </mat-card-content>
     </mat-card>
 

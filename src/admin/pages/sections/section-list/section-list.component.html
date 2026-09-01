@@ -198,11 +198,20 @@
             {{ 'CHANGE_SECTION_TYPE' | translate }}
           </button>
 
-          <mat-chip-listbox class="drawer-lang-switcher" *ngIf="!showPicker">
-            <mat-chip-option [selected]="activeMenuLang === 'en'" (click)="onLangChange('en')">EN</mat-chip-option>
-            <mat-chip-option [selected]="activeMenuLang === 'ru'" (click)="onLangChange('ru')">RU</mat-chip-option>
-            <mat-chip-option [selected]="activeMenuLang === 'ua'" (click)="onLangChange('ua')">UA</mat-chip-option>
-          </mat-chip-listbox>
+          <div class="drawer-lang-switcher" role="tablist" [attr.aria-label]="'LANGUAGE' | translate" *ngIf="!showPicker">
+            <button type="button" role="tab" class="lang-segment"
+              [class.lang-segment--active]="activeMenuLang === 'en'"
+              [attr.aria-selected]="activeMenuLang === 'en'"
+              (click)="onLangChange('en')">EN</button>
+            <button type="button" role="tab" class="lang-segment"
+              [class.lang-segment--active]="activeMenuLang === 'ru'"
+              [attr.aria-selected]="activeMenuLang === 'ru'"
+              (click)="onLangChange('ru')">RU</button>
+            <button type="button" role="tab" class="lang-segment"
+              [class.lang-segment--active]="activeMenuLang === 'ua'"
+              [attr.aria-selected]="activeMenuLang === 'ua'"
+              (click)="onLangChange('ua')">UA</button>
+          </div>
 
           <button mat-icon-button class="preview-in-editor mobile-only" type="button"
             (click)="openMobileArchitect()" [attr.aria-label]="'PREVIEW' | translate">
@@ -232,7 +241,9 @@
         </div>
       </div>
 
-      <div class="resizer-handle desktop-only" (mousedown)="onMouseDown($event)"></div>
+      <div class="resizer-handle desktop-only"
+        [class.is-active]="isResizing"
+        (mousedown)="onMouseDown($event)"></div>
     </div>
 
     <!-- RIGHT SIDE / MOBILE OVERLAY: SITE ARCHITECT -->

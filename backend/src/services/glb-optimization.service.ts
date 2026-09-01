@@ -8,6 +8,9 @@ const execFileAsync = promisify(execFile);
 
 export const CLOUDINARY_RAW_FILE_LIMIT = 10 * 1024 * 1024;
 
+/** Accept large raw uploads; GlbOptimizationService compresses before Cloudinary/local storage. */
+export const RAW_GLB_UPLOAD_MAX_BYTES = 200 * 1024 * 1024;
+
 @Injectable()
 export class GlbOptimizationService {
   private resolveGltfTransformBin(): string {
