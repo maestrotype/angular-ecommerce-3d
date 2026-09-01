@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject, of, forkJoin } from 'rxjs';
+import { Observable, BehaviorSubject, of, forkJoin, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Product } from 'src/shared/models/product.model';
 import { environment } from "src/environments/environment";
@@ -18,6 +18,13 @@ export class ProductService {
 
   private cartSubject = new BehaviorSubject<Product[]>([]);
   cart$ = this.cartSubject.asObservable();
+
+  private readonly catalogChangedSubject = new Subject<void>();
+  readonly catalogChanged$ = this.catalogChangedSubject.asObservable();
+
+  notifyCatalogChanged(): void {
+    this.catalogChangedSubject.next();
+  }
 
   constructor(
     private http: HttpClient,

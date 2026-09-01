@@ -1,0 +1,65 @@
+<section
+  class="product-stage"
+  [attr.id]="data?.anchorId || 'product-stage'"
+  [attr.data-variant]="data?.variant || 'default'">
+  <div class="product-stage__atmosphere" aria-hidden="true"></div>
+
+  <div class="product-stage__copy">
+    <p class="product-stage__kicker" *ngIf="data?.subtitle">{{ data?.subtitle | localized }}</p>
+    <h2 class="product-stage__title">{{ (data?.title | localized) || ('SECTION_TYPE_LABELS.PRODUCT_STAGE' | translate) }}</h2>
+    <p class="product-stage__lede" *ngIf="data?.content">{{ data?.content | localized }}</p>
+  </div>
+
+  <div class="product-stage__canvas" *ngIf="!empty; else stageEmpty">
+    <ng-container *ngFor="let product of activeList; trackBy: trackByProductId">
+      <app-three-d-viewer
+        [modelPath]="modelPathOf(product)"
+        [hdModelPath]="product.hdModelPath"
+        [scale]="modelScale"
+        [position]="modelPosition"
+        [autoRotate]="autoRotate"
+        [previewOnly]="false"
+        loading="eager">
+      </app-three-d-viewer>
+    </ng-container>
+    <div class="product-stage__floor" aria-hidden="true"></div>
+  </div>
+
+  <div class="product-stage__meta" *ngIf="active as product">
+    <p class="product-stage__category">{{ product.category }}</p>
+    <h3 class="product-stage__name">{{ product.name | localized }}</h3>
+    <p class="product-stage__price">${{ product.price }}</p>
+    <div class="product-stage__actions">
+      <button type="button" class="product-stage__cta" (click)="addActiveToCart()">
+        {{ 'ADD_TO_CART' | translate }}
+      </button>
+      <button type="button" class="product-stage__ghost" (click)="viewActive()">
+        {{ 'VIEW_DETAILS' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div class="product-stage__rail" *ngIf="products.length > 1" role="list">
+    <button
+      type="button"
+      class="product-stage__thumb"
+      *ngFor="let product of products; let i = index; trackBy: trackByProductId"
+      role="listitem"
+      [class.is-active]="i === activeIndex"
+      (click)="select(i)">
+      <img
+        *ngIf="product.imageUrl"
+        [src]="product.imageUrl | imageUrl"
+        [alt]="product.name | localized"
+        width="72"
+        height="72" />
+      <span>{{ product.name | localized }}</span>
+    </button>
+  </div>
+</section>
+
+<ng-template #stageEmpty>
+  <div class="product-stage__empty" *ngIf="!loading">
+    <p>{{ 'PRODUCT_STAGE_EMPTY' | translate }}</p>
+  </div>
+</ng-template>

@@ -94,7 +94,7 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
   isMobile = false;
   mobileArchitectOpen = false;
   private readonly resizeListener = () => this.checkScreenSize();
-  private isResizing = false;
+  isResizing = false;
   private initialMouseX = 0;
   private initialSidebarWidth = 640;
 
@@ -171,17 +171,15 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private onMouseMove(event: MouseEvent): void {
-    if (!this.isResizing) return;
-    
-    // Smooth frame-based update
-    requestAnimationFrame(() => {
-      const deltaX = event.clientX - this.initialMouseX;
-      const newWidth = this.initialSidebarWidth + deltaX;
-      const maxWidth = Math.floor(window.innerWidth * 0.78);
-      if (newWidth > 560 && newWidth < maxWidth) {
-        this.sidebarWidth = newWidth;
-      }
-    });
+    if (!this.isResizing) {
+      return;
+    }
+
+    const deltaX = event.clientX - this.initialMouseX;
+    const newWidth = this.initialSidebarWidth + deltaX;
+    const minWidth = 360;
+    const maxWidth = Math.floor(window.innerWidth * 0.78);
+    this.sidebarWidth = Math.round(Math.min(maxWidth, Math.max(minWidth, newWidth)));
   }
 
   private onMouseUp(): void {
@@ -199,8 +197,13 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
     if (typeof window === 'undefined') {
       return 640;
     }
-    const contentWidth = window.innerWidth - 280;
-    return Math.min(860, Math.max(560, Math.floor(contentWidth * 0.52)));
+    const adminNavWidth = 280;
+    const paneGap = 24;
+    const contentWidth = window.innerWidth - adminNavWidth;
+    const halfWidth = Math.floor((contentWidth - paneGap) / 2);
+    const minWidth = 360;
+    const maxWidth = Math.floor(window.innerWidth * 0.78);
+    return Math.min(maxWidth, Math.max(minWidth, halfWidth));
   }
 
   ngAfterViewInit(): void {

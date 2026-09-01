@@ -201,6 +201,9 @@
         <app-section-product-carousel-form *ngSwitchCase="'product-carousel'" [sectionForm]="sectionForm" [activeMenuLang]="activeMenuLang" [productFilterCategories]="productFilterCategories">
           <ng-container sectionSettings *ngTemplateOutlet="sectionSettingsFields"></ng-container>
         </app-section-product-carousel-form>
+        <app-section-product-stage-form *ngSwitchCase="'product-stage'" [sectionForm]="sectionForm" [activeMenuLang]="activeMenuLang" [productFilterCategories]="productFilterCategories">
+          <ng-container sectionSettings *ngTemplateOutlet="sectionSettingsFields"></ng-container>
+        </app-section-product-stage-form>
         <app-section-hero-form *ngSwitchDefault [sectionForm]="sectionForm" [activeMenuLang]="activeMenuLang" [model3dFileName]="model3dFileName" [showComponentsTab]="showComponentsTab()">
           <app-section-components-form sectionComponents [sectionForm]="sectionForm"></app-section-components-form>
           <ng-container sectionSettings *ngTemplateOutlet="sectionSettingsFields"></ng-container>

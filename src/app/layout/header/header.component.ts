@@ -11,6 +11,7 @@ import { Product } from 'src/shared/models/product.model';
 import { ModalService } from '../../core/services/modal.service';
 import { ThemeService } from '../../core/themes/theme.service';
 import { Theme } from '../../core/themes/theme.model';
+import { themeLabelI18nKey } from '../../core/themes/theme-config';
 import { AuthService } from '../../core/services/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MobileMenuService } from '../../core/services/mobile-menu.service';
@@ -525,7 +526,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   themeI18nKey(themeId: string): string {
-    return themeId.replace(/-/g, '_').toUpperCase();
+    return themeLabelI18nKey(themeId, 'frontend');
   }
 
   prefPanel: 'theme' | 'lang' | null = null;

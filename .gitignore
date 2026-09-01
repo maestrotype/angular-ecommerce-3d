@@ -8,3 +8,7 @@ test-results/
 playwright-report/
 blob-report/
 backend/uploads/
+dist-marketplace/
+screenshots/desktop/
+screenshots/mobile/
+screenshots/admin/

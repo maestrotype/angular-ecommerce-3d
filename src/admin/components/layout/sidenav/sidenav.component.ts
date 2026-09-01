@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { AdminAuthService } from "../../../services/auth.service";
 import { AdminOrderService } from "../../../services/order.service";
 import { ThemeService } from "../../../../app/core/themes/theme.service";
+import { themeLabelI18nKey } from "../../../../app/core/themes/theme-config";
 import { TranslateService } from "@ngx-translate/core";
 import { Theme } from "../../../../app/core/themes/theme.model";
 import { Subject, Observable } from "rxjs";
@@ -56,7 +57,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   ];
 
   themeI18nKey(themeId: string): string {
-    return themeId.replace(/-/g, '_').toUpperCase();
+    return themeLabelI18nKey(themeId, 'admin');
   }
 
   prefPanel: 'theme' | 'lang' | null = null;

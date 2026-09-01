@@ -7,6 +7,7 @@ import { SectionHeaderFormComponent } from './section-form/types/header-form.com
 import { SectionFooterFormComponent } from './section-form/types/footer-form.component';
 import { SectionProductCarouselFormComponent } from './section-form/types/product-carousel-form.component';
 import { SectionHeroFormComponent } from './section-form/types/hero-form.component';
+import { SectionProductStageFormComponent } from './section-form/types/product-stage-form.component';
 import { SectionComponentsFormComponent } from './section-form/types/section-components-form.component';
 import { SectionPickerComponent } from '../../components/sections/section-picker/section-picker.component';
 import { AdminSectionPreviewComponent } from '../../components/sections/section-preview/admin-section-preview.component';
@@ -19,6 +20,7 @@ import { AdminSectionPreviewComponent } from '../../components/sections/section-
     SectionFooterFormComponent,
     SectionProductCarouselFormComponent,
     SectionHeroFormComponent,
+    SectionProductStageFormComponent,
     SectionComponentsFormComponent,
     SectionPickerComponent,
     AdminSectionPreviewComponent,

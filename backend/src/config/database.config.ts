@@ -20,6 +20,22 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
   constructor(private configService: ConfigService) {}
 
   createTypeOrmOptions(): TypeOrmModuleOptions {
+    const host = this.configService.get<string>('DATABASE_HOST') ?? '';
+    const nodeEnv = this.configService.get<string>('NODE_ENV');
+    const isPooledRemote = /pooler\.supabase\.com|\.neon\.tech|\.pooler\./i.test(host);
+    const sslExplicit = this.configService.get<string>('DATABASE_SSL');
+    const useSsl =
+      sslExplicit === 'true' ||
+      (sslExplicit !== 'false' && (nodeEnv === 'production' || isPooledRemote));
+
+    const configuredPoolMax = parseInt(this.configService.get('DATABASE_POOL_MAX') ?? '', 10);
+    const defaultPoolMax = isPooledRemote ? 4 : 10;
+    const poolMax =
+      Number.isFinite(configuredPoolMax) && configuredPoolMax > 0
+        ? configuredPoolMax
+        : defaultPoolMax;
+    const cappedPoolMax = isPooledRemote ? Math.min(poolMax, 10) : poolMax;
+
     return {
       type: 'postgres',
       host: this.configService.get('DATABASE_HOST'),
@@ -28,13 +44,15 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
       password: this.configService.get('DATABASE_PASSWORD'),
       database: this.configService.get('DATABASE_NAME'),
       entities: [Section, Message, Notification, Category, Product, Order, User, ProductRecommendation, Payment, Settings, Page, NewsletterSubscriber],
-      synchronize: this.configService.get('NODE_ENV') !== 'production',
-      logging: this.configService.get('NODE_ENV') === 'development',
-      ssl: this.configService.get('NODE_ENV') === 'production' ? { rejectUnauthorized: false } : false,
+      synchronize: nodeEnv !== 'production',
+      logging: nodeEnv === 'development',
+      ssl: useSsl ? { rejectUnauthorized: false } : false,
       extra: {
-        max: 20,
-        idleTimeoutMillis: 30_000,
+        max: cappedPoolMax,
+        min: 0,
+        idleTimeoutMillis: 10_000,
         connectionTimeoutMillis: 5_000,
+        allowExitOnIdle: true,
       },
     };
   }

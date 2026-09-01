@@ -30,14 +30,23 @@ See [VISUAL_ASSETS_GUIDE.md](../docs/VISUAL_ASSETS_GUIDE.md) for:
 
 ## Capture automatically
 
-With backend + frontend running (`npm start` + `backend npm run start:dev`):
+With backend + frontend running (`npm start` + `npm run backend:start:dev`):
 
 ```bash
 npm run screenshots:capture
 ```
 
-Output lands in `screenshots/desktop/`, `screenshots/mobile/`, and `screenshots/admin/`.
+Admin dashboard / products / sections (optional):
+
+```bash
+ADMIN_SCREENSHOT_EMAIL=... ADMIN_SCREENSHOT_PASSWORD=... npm run screenshots:capture
+```
+
+Output: `screenshots/desktop/`, `screenshots/mobile/`, `screenshots/admin/`.
+Then `npm run pack:marketplace` to put PNGs into the buyer zip if those folders exist.
+
 Set `SCREENSHOT_BASE_URL` if not using default `http://localhost:4200`.
+Full seller steps: [marketing-assets/LISTING_PACK.md](../marketing-assets/LISTING_PACK.md).
 
 ## ✅ Checklist
 
@@ -46,9 +55,9 @@ Set `SCREENSHOT_BASE_URL` if not using default `http://localhost:4200`.
 - [ ] 5 mobile screenshots  
 - [ ] 10 admin screenshots
 
-### Preview Images (7 files)
-- [ ] 6 ThemeForest preview images
-- [ ] 1 TemplateMonster preview image
+### Preview Images (listing)
+- [ ] CodeCanyon / Gumroad gallery (use `desktop/` + `admin/` first)
+- [ ] Optional TemplateMonster preview if you list there later
 
 ### Demo Video (1 file)
 - [ ] 2-3 minute demo video (1080p MP4)

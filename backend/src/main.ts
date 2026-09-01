@@ -24,6 +24,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     logger: isProduction ? ['error', 'warn'] : ['log', 'error', 'warn', 'debug', 'verbose'],
   });
+  app.enableShutdownHooks();
   
   // Increase payload limits for 3D models and images
   app.use(json({ limit: '100mb' }));

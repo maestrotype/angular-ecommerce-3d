@@ -1,10 +1,15 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Router } from '@angular/router';
 import { ChartConfiguration, ChartOptions, Chart, registerables } from 'chart.js';
 import { Subscription } from 'rxjs';
 import { DashboardService } from '../../services/dashboard.service';
 import { ErrorHandlerService } from '../../services/error-handler.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ThemeService } from '../../../app/core/themes/theme.service';
+import { ProductService } from '../../../app/core/services/product.service';
+import { Product } from 'src/shared/models/product.model';
+import { pickStageProducts, stageModelPath } from 'src/shared/utils/product-stage.util';
 
 Chart.register(...registerables);
 
@@ -16,7 +21,12 @@ Chart.register(...registerables);
 export class DashboardComponent implements OnInit, OnDestroy {
   dashboardData: any = {};
   isLoading = false;
+  stageProduct: Product | null = null;
+  stageAutoRotate = true;
+  modelScale: [number, number, number] = [6, 6, 6];
+  modelPosition: [number, number, number] = [0, -0.12, 0];
   private themeSub?: Subscription;
+  private productsSub?: Subscription;
 
   public salesChartData: ChartConfiguration<'line'>['data'] = {
     labels: [],
@@ -93,11 +103,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private dashboardService: DashboardService,
     private errorHandler: ErrorHandlerService,
     private translate: TranslateService,
-    private themeService: ThemeService
-  ) {}
+    private themeService: ThemeService,
+    private productService: ProductService,
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object,
+  ) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.stageAutoRotate = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+  }
 
   ngOnInit(): void {
     this.loadDashboardData();
+    this.loadStagePreview();
     this.initChartTranslations();
     this.applyChartAxisColors();
 
@@ -112,6 +130,29 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.themeSub?.unsubscribe();
+    this.productsSub?.unsubscribe();
+  }
+
+  stageModelPath(): string {
+    return stageModelPath(this.stageProduct);
+  }
+
+  openStageProduct(): void {
+    if (!this.stageProduct) {
+      return;
+    }
+    this.router.navigate(['/product', this.stageProduct.id]);
+  }
+
+  private loadStagePreview(): void {
+    this.productsSub = this.productService.getProducts().subscribe({
+      next: (products) => {
+        this.stageProduct = pickStageProducts(products, { limit: 1 })[0] || null;
+      },
+      error: () => {
+        this.stageProduct = null;
+      },
+    });
   }
 
   /** Glass/dark: bright ticks; light: slate for contrast on pale cards */

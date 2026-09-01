@@ -1,0 +1,13 @@
+# Omitted from `git archive` / marketplace zip (seller tooling and runtime junk)
+.cursor export-ignore
+.cursor/** export-ignore
+backend/uploads export-ignore
+backend/uploads/** export-ignore
+backend/backend.log export-ignore
+local-ai-worker/drone-route-service/outputs export-ignore
+local-ai-worker/drone-route-service/outputs/** export-ignore
+ssr_output.html export-ignore
+marketing-assets/videos export-ignore
+marketing-assets/videos/** export-ignore
+docs/seller export-ignore
+docs/seller/** export-ignore

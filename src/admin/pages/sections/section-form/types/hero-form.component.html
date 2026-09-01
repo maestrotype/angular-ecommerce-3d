@@ -1,4 +1,4 @@
-        <mat-tab-group animationDuration="250ms" color="primary">
+        <mat-tab-group animationDuration="250ms" color="primary" [formGroup]="sectionForm">
           <!-- TAB: CONTENT -->
           <mat-tab>
             <ng-template mat-tab-label>
@@ -63,25 +63,37 @@
                   <mat-slide-toggle formControlName="show3d">{{ 'SHOW_3D_MODEL' | translate }}</mat-slide-toggle>
                 </div>
 
-                <div class="media-upload-grid">
-                  <app-image-upload *ngIf="sectionForm.get('showImage')?.value"
-                    [currentImageUrl]="sectionForm.get('imageUrl')?.value"
-                    label="SECTION_IMAGE"
-                    (fileSelected)="onImageFileSelected($event)"
-                    (imageUploaded)="onImageUploaded($event)">
-                  </app-image-upload>
+                <p class="media-hint" *ngIf="!show3d">{{ 'HERO_3D_OFF_HINT' | translate }}</p>
 
-                  <div class="threed-upload-container" *ngIf="sectionForm.get('show3d')?.value" (click)="fileInput.click()">
-                    <input type="file" #fileInput (change)="on3dFileSelected($event)" accept=".glb" hidden>
-                    <div class="no-model" *ngIf="!model3dFileName">
-                      <mat-icon>3d_rotation</mat-icon>
-                      <p>{{ 'SELECT_3D_MODEL' | translate }}</p>
-                    </div>
-                    <div class="model-info" *ngIf="model3dFileName">
-                      <mat-icon color="primary">view_in_ar</mat-icon>
-                      <span class="file-name">{{ model3dFileName }}</span>
-                      <button mat-icon-button color="warn" (click)="remove3dModel($event)" type="button">
-                        <mat-icon>close</mat-icon>
+                <div class="media-stack">
+                  <div class="media-card" *ngIf="showImage">
+                    <app-image-upload
+                      [currentImageUrl]="sectionForm.get('imageUrl')?.value"
+                      [label]="'SECTION_IMAGE' | translate"
+                      (fileSelected)="onImageFileSelected($event)"
+                      (imageUploaded)="onImageUploaded($event)">
+                    </app-image-upload>
+                  </div>
+
+                  <div class="media-card" *ngIf="show3d">
+                    <span class="media-card__label">{{ 'SECTION_3D_MODEL' | translate }}</span>
+                    <p class="media-card__hint">{{ 'HERO_3D_HINT' | translate }}</p>
+                    <div class="threed-dropzone" (click)="fileInput.click()">
+                      <input type="file" #fileInput (change)="on3dFileSelected($event)" accept=".glb" hidden>
+                      <div class="threed-dropzone__empty" *ngIf="!model3dFileName">
+                        <mat-icon>view_in_ar</mat-icon>
+                        <p>{{ 'SELECT_3D_MODEL' | translate }}</p>
+                        <small>{{ 'ONLY_GLB' | translate }}</small>
+                      </div>
+                      <div class="threed-dropzone__file" *ngIf="model3dFileName">
+                        <mat-icon>view_in_ar</mat-icon>
+                        <span class="threed-dropzone__name">{{ model3dFileName }}</span>
+                        <button mat-icon-button type="button" (click)="remove3dModel($event)" [attr.aria-label]="'REMOVE' | translate">
+                          <mat-icon>close</mat-icon>
+                        </button>
+                      </div>
+                      <button type="button" mat-stroked-button class="threed-dropzone__btn" (click)="fileInput.click(); $event.stopPropagation()">
+                        {{ (model3dFileName ? 'CHANGE_3D_MODEL' : 'SELECT_3D_MODEL') | translate }}
                       </button>
                     </div>
                   </div>

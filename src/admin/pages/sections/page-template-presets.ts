@@ -12,7 +12,7 @@ export const PAGE_TEMPLATE_PRESET_IDS: PageTemplatePresetId[] = [
 ];
 
 const PAGE_TEMPLATE_BLUEPRINTS: Record<PageTemplatePresetId, string[]> = {
-  'landing-page': ['hero', 'features-grid', 'testimonials', 'stats', 'newsletter'],
+  'landing-page': ['hero', 'product-stage', 'features-grid', 'testimonials', 'stats', 'newsletter'],
   'faq-page': ['hero', 'faq'],
   'collection-page': ['hero', 'categories', 'product-carousel', 'lookbook'],
   'brand-page': ['hero', 'brands', 'special-offer']

@@ -24,4 +24,5 @@ export const sectionComponentMap: { [key: string]: () => Promise<Type<any>> } = 
   stats: () => import('../../layout/stats/stats.component').then(m => m.StatsComponent),
   'blog-posts': () => import('../../layout/blog-posts/blog-posts.component').then(m => m.BlogPostsComponent),
   'video-hero': () => import('../../layout/video-hero/video-hero.component').then(m => m.VideoHeroComponent),
+  'product-stage': () => import('../../layout/product-stage/product-stage.component').then(m => m.ProductStageComponent),
 };
