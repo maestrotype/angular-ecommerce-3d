@@ -9,6 +9,7 @@ export const NAV_EXCLUDED_SECTION_TYPES = new Set([
   'hero',
   'hero-glass',
   'video-hero',
+  'product-stage',
   'product-tabs',
   'html-content',
   'similar-products',

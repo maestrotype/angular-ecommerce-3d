@@ -78,6 +78,10 @@ export interface SectionPresetFormPatch {
   carouselMode?: 'products' | 'custom';
   carouselLimit?: number;
   carouselAutoplay?: boolean;
+  stageCategories?: string[];
+  stageLimit?: number;
+  stageAutoRotate?: boolean;
+  stageProductIds?: number[];
   carouselSlides?: Array<{
     image: string;
     title: string;
@@ -170,6 +174,24 @@ const PRODUCT_CAROUSEL_PRESET: SectionPresetFormPatch = {
   carouselSource: 'new',
   carouselLimit: 8,
   carouselAutoplay: true
+};
+
+const PRODUCT_STAGE_PRESET: SectionPresetFormPatch = {
+  title_en: 'Turn it in 3D',
+  title_ru: 'Поверни в 3D',
+  title_ua: 'Поверни в 3D',
+  subtitle_en: 'Live catalog',
+  subtitle_ru: 'Живой каталог',
+  subtitle_ua: 'Живий каталог',
+  content_en: 'Bags, clothing, and shoes from the shop — drag to orbit, then add to cart.',
+  content_ru: 'Сумки, одежда и обувь из магазина — крутите модель и добавляйте в корзину.',
+  content_ua: 'Сумки, одяг і взуття з магазину — обертайте модель і додавайте в кошик.',
+  variant: 'default',
+  anchorId: 'product-stage',
+  stageCategories: ['bags', 'clothing', 'shoes'],
+  stageLimit: 5,
+  stageAutoRotate: true,
+  stageProductIds: [],
 };
 
 const LOOKBOOK_PRESET: SectionPresetFormPatch = {
@@ -542,6 +564,7 @@ const PRESET_MAP: Record<string, SectionPresetFormPatch> = {
   'product-carousel': PRODUCT_CAROUSEL_PRESET,
   lookbook: LOOKBOOK_PRESET,
   'video-hero': VIDEO_HERO_PRESET,
+  'product-stage': PRODUCT_STAGE_PRESET,
   'blog-posts': BLOG_POSTS_PRESET,
   categories: CATEGORIES_PRESET,
   brands: BRANDS_PRESET,
@@ -679,6 +702,15 @@ function buildSettingsFromPreset(type: string, preset: SectionPresetFormPatch): 
     };
   }
 
+  if (type === 'product-stage') {
+    return {
+      categories: preset.stageCategories || ['bags', 'clothing', 'shoes'],
+      productIds: preset.stageProductIds || [],
+      limit: preset.stageLimit ?? 5,
+      autoRotate: preset.stageAutoRotate !== false,
+    };
+  }
+
   if (type === 'lookbook') {
     return {
       autoplay: true,
@@ -778,6 +810,7 @@ export interface HomepageWizardSection {
 export const HOMEPAGE_WIZARD_SECTIONS: HomepageWizardSection[] = [
   { type: 'header', pageTarget: 'global', preset: HEADER_PRESET },
   { type: 'hero', pageTarget: 'home', preset: HERO_PRESET },
+  { type: 'product-stage', pageTarget: 'home', preset: PRODUCT_STAGE_PRESET },
   { type: 'best-sellers', pageTarget: 'home', preset: BEST_SELLERS_PRESET },
   { type: 'categories', pageTarget: 'home', preset: CATEGORIES_PRESET },
   { type: 'footer', pageTarget: 'global', preset: FOOTER_PRESET }

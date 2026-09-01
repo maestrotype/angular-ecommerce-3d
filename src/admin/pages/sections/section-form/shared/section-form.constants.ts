@@ -6,6 +6,7 @@ export const SECTION_TYPES = [
   { value: 'product-carousel', label: 'SECTION_TYPE_LABELS.PRODUCT_CAROUSEL' },
   { value: 'lookbook', label: 'SECTION_TYPE_LABELS.LOOKBOOK' },
   { value: 'video-hero', label: 'SECTION_TYPE_LABELS.VIDEO_HERO' },
+  { value: 'product-stage', label: 'SECTION_TYPE_LABELS.PRODUCT_STAGE' },
   { value: 'blog-posts', label: 'SECTION_TYPE_LABELS.BLOG_POSTS' },
   { value: 'categories', label: 'SECTION_TYPE_LABELS.CATEGORIES' },
   { value: 'special-offer', label: 'SECTION_TYPE_LABELS.SPECIAL_OFFER' },

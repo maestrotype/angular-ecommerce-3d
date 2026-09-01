@@ -6,6 +6,58 @@
     <p>{{ 'LOADING_DASHBOARD_DATA' | translate }}</p>
   </div>
 
+  <section class="dashboard-wow" *ngIf="!isLoading">
+    <div class="dashboard-wow__stage">
+      <ng-container *ngIf="stageProduct; else wowEmpty">
+        <app-three-d-viewer
+          [modelPath]="stageModelPath()"
+          [hdModelPath]="stageProduct.hdModelPath"
+          [scale]="modelScale"
+          [position]="modelPosition"
+          [autoRotate]="stageAutoRotate"
+          [previewOnly]="false"
+          loading="eager">
+        </app-three-d-viewer>
+      </ng-container>
+      <ng-template #wowEmpty>
+        <p class="dashboard-wow__empty">{{ 'DASHBOARD_WOW_EMPTY' | translate }}</p>
+      </ng-template>
+    </div>
+
+    <div class="dashboard-wow__panel">
+      <p class="dashboard-wow__kicker">{{ 'DASHBOARD_WOW_KICKER' | translate }}</p>
+      <h2 class="dashboard-wow__title">{{ 'DASHBOARD_WOW_TITLE' | translate }}</h2>
+      <p class="dashboard-wow__product" *ngIf="stageProduct">{{ stageProduct.name | localized }}</p>
+      <p class="dashboard-wow__hint">{{ 'DASHBOARD_WOW_HINT' | translate }}</p>
+      <button
+        *ngIf="stageProduct"
+        type="button"
+        class="dashboard-wow__cta"
+        (click)="openStageProduct()">
+        {{ 'DASHBOARD_WOW_VIEW' | translate }}
+      </button>
+
+      <div class="dashboard-wow__kpis">
+        <div class="dashboard-wow__kpi">
+          <span>{{ 'PRODUCTS' | translate }}</span>
+          <strong>{{ formatNumber(dashboardData.products) }}</strong>
+        </div>
+        <div class="dashboard-wow__kpi">
+          <span>{{ 'ADMIN_NAV_ORDERS' | translate }}</span>
+          <strong>{{ formatNumber(dashboardData.orders || 0) }}</strong>
+        </div>
+        <div class="dashboard-wow__kpi">
+          <span>{{ 'REVENUE' | translate }}</span>
+          <strong>{{ formatCurrency(dashboardData.revenue) }}</strong>
+        </div>
+        <div class="dashboard-wow__kpi">
+          <span>{{ 'AOV' | translate }}</span>
+          <strong>{{ formatCurrency(dashboardData.aov) }}</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <div class="stats-grid" *ngIf="!isLoading">
     <mat-card class="stat-card">
       <mat-card-content>

@@ -429,7 +429,7 @@
           .header-title {
             flex: 1; min-width: 0; display: flex; flex-direction: column;
             h2 { margin: 0; font-size: 1.1rem; font-weight: 800; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-            .editing-name { font-size: 0.8rem; color: var(--interactive-primary); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+            .editing-name { font-size: 0.8rem; color: var(--text-secondary); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
           }
           .change-type-btn {
             flex-shrink: 0;

@@ -13,10 +13,10 @@ Living list. Chat replies should mirror this.
 |---|------|--------|
 | 1 | Seller playbook `docs/seller/LAUNCH_PLAYBOOK.md` + zip exclude | **done** |
 | 2 | Theme **labels** Aurora / Ice / Ember (ids unchanged) | **done** |
-| 3 | Section **Product Stage** (`product-stage`): bags, clothing, shoes from catalog, admin add/remove | next |
-| 4 | Seed: real names, GLB on those categories, stage on homepage | after 3 |
-| 5 | Admin dashboard wow (mini stage + KPI band) | after 3–4 |
-| 6 | Screenshot capture waits for 3D canvas / filled cart | after 5 |
+| 3 | Section **Product Stage**: change the duck via **Change 3D model** on each SKU in the section editor (GLB is on the product) | **done** |
+| 4 | Seed: real names, GLB on those categories, stage on homepage | **done** (`npm run backend:seed`) |
+| 5 | Admin dashboard wow (mini stage + KPI band) | **done** (code; dashboard not visually checked this pass) |
+| 6 | Screenshot capture waits for 3D canvas / filled cart | **done** (script ready; you shoot after visual lock) |
 
 ## Later (you, after visual lock)
 

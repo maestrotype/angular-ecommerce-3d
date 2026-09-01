@@ -35,8 +35,14 @@ export interface ProductCreateRequest {
   stock: number;
   imageUrl?: string;
   specifications?: { [key: string]: string };
+  model3dUrl?: string;
+  localModel3dUrl?: string;
+  model3dPublicId?: string;
 }
 
 export interface ProductUpdateRequest extends Partial<ProductCreateRequest> {
   id: number;
+  model3dUrl?: string;
+  localModel3dUrl?: string;
+  model3dPublicId?: string;
 }

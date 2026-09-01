@@ -725,10 +725,12 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.18);
     will-change: transform;
     transform: translateZ(0);
-    /* Limit panel height to viewport and allow internal scrolling (prevents page scrollbar) */
-    max-height: calc(100vh - 140px);
-    overflow: auto;
+    /* Stay inside the viewport so the first options are not clipped above the trigger. */
+    max-height: min(256px, calc(100dvh - 48px));
+    overflow-x: hidden;
+    overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
 
   /* Hide native scrollbar on overlay panels (visual only). Panels remain scrollable via wheel/trackpad/keyboard. */
@@ -774,6 +776,39 @@
   .cdk-overlay-pane *::-webkit-scrollbar {
     width: 0;
     height: 0;
+  }
+
+  /* Select panels need a visible scrollbar — hidden chrome made long lists unusable. */
+  .cdk-overlay-pane .mat-mdc-select-panel.mat-mdc-select-panel,
+  .cdk-overlay-pane .mat-select-panel.mat-select-panel {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-default) transparent;
+  }
+
+  .cdk-overlay-pane .mat-mdc-select-panel.mat-mdc-select-panel::-webkit-scrollbar,
+  .cdk-overlay-pane .mat-select-panel.mat-select-panel::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .cdk-overlay-pane .mat-mdc-select-panel.mat-mdc-select-panel::-webkit-scrollbar-thumb,
+  .cdk-overlay-pane .mat-select-panel.mat-select-panel::-webkit-scrollbar-thumb {
+    background: var(--border-default);
+    border-radius: 8px;
+  }
+
+  .cdk-overlay-pane .mat-mdc-select-panel [role="listbox"],
+  .cdk-overlay-pane .mat-select-panel [role="listbox"] {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-default) transparent;
+    max-height: inherit;
+    overflow-y: auto;
+  }
+
+  .cdk-overlay-pane .mat-mdc-select-panel [role="listbox"]::-webkit-scrollbar,
+  .cdk-overlay-pane .mat-select-panel [role="listbox"]::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
   }
 
   .mat-option,
@@ -2338,6 +2373,13 @@ body.sections-editor-open .cdk-overlay-container {
   z-index: 15000;
 }
 
+body:has(.sections-page-wrapper.editor-open) .cdk-overlay-pane:has(.mat-mdc-select-panel),
+body:has(.sections-page-wrapper.editor-open) .cdk-overlay-pane:has(.mat-select-panel),
+body.sections-editor-open .cdk-overlay-pane:has(.mat-mdc-select-panel),
+body.sections-editor-open .cdk-overlay-pane:has(.mat-select-panel) {
+  max-height: min(256px, calc(100dvh - 48px));
+}
+
 body:has(.sections-page-wrapper.editor-open) .cdk-overlay-pane .mat-mdc-select-panel,
 body:has(.sections-page-wrapper.editor-open) .cdk-overlay-pane .mat-select-panel,
 body.sections-editor-open .cdk-overlay-pane .mat-mdc-select-panel,
@@ -2346,6 +2388,9 @@ body.sections-editor-open .cdk-overlay-pane .mat-select-panel {
   color: var(--text-primary);
   border: 1px solid var(--border-default);
   box-shadow: var(--shadow-lg, 0 12px 32px rgba(15, 23, 42, 0.18));
+  max-height: min(256px, calc(100dvh - 48px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 body:has(.sections-page-wrapper.editor-open) .cdk-overlay-pane .mat-mdc-option,

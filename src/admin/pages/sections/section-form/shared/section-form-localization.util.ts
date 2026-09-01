@@ -102,6 +102,17 @@ export function packLocalizedFields(formValue: any): any {
     };
   }
 
+  if (formValue.type === 'product-stage') {
+    data.settings = {
+      categories: formValue.stageCategories || [],
+      productIds: (formValue.stageProductIds || [])
+        .map((id: unknown) => Number(id))
+        .filter((id: number) => Number.isFinite(id) && id > 0),
+      limit: Number(formValue.stageLimit) || 5,
+      autoRotate: formValue.stageAutoRotate !== false,
+    };
+  }
+
   if (formValue.type === 'video-hero') {
     data.settings = {
       videoUrl: formValue.videoUrl || '',

@@ -243,6 +243,30 @@ export function buildSectionSubmitPayload(
                 : (existingSettings as any)?.slides || []
             }
           };
+        } else if (formValue.type === 'product-stage') {
+          formData = {
+            type: 'product-stage',
+            title: formValue.title,
+            subtitle: formValue.subtitle,
+            content: formValue.content,
+            imageUrl: formValue.imageUrl || '',
+            isActive: formValue.isActive,
+            model3dUrl: '',
+            show3d: true,
+            showImage: false,
+            pageTarget: formValue.pageTarget || 'home',
+            variant: formValue.variant || 'default',
+            anchorId: formValue.anchorId || 'product-stage',
+            settings: {
+              ...existingSettings,
+              categories: formValue.stageCategories || [],
+              productIds: (formValue.stageProductIds || [])
+                .map((id: unknown) => Number(id))
+                .filter((id: number) => Number.isFinite(id) && id > 0),
+              limit: Number(formValue.stageLimit) || 5,
+              autoRotate: formValue.stageAutoRotate !== false,
+            }
+          };
         } else if (formValue.type === 'lookbook') {
           formData = {
             type: 'lookbook',

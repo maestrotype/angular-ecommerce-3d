@@ -37,14 +37,62 @@ async function setTheme(page: import('@playwright/test').Page, theme: string) {
   await page.waitForTimeout(400);
 }
 
+async function waitForCanvas(
+  page: import('@playwright/test').Page,
+  root?: import('@playwright/test').Locator,
+) {
+  const scope = root ?? page;
+  await scope
+    .locator('canvas, .three-canvas.ready')
+    .first()
+    .waitFor({ state: 'visible', timeout: 15_000 })
+    .catch(() => undefined);
+  await page.waitForTimeout(900);
+}
+
 async function waitForStorefront(page: import('@playwright/test').Page) {
   await expect(page.locator('app-root')).toBeVisible({ timeout: 15_000 });
   await page
-    .locator('app-video-hero, app-hero, app-product-card, .product-card')
+    .locator('app-product-stage, app-video-hero, app-hero, app-hero-glass, app-product-card, .product-card')
     .first()
     .waitFor({ state: 'visible', timeout: 12_000 })
     .catch(() => undefined);
-  await page.waitForTimeout(600);
+  await page.waitForTimeout(400);
+}
+
+async function showProductStage(page: import('@playwright/test').Page) {
+  const stage = page.locator('app-product-stage').first();
+  if (!(await stage.count())) {
+    return;
+  }
+  await stage.scrollIntoViewIfNeeded();
+  await waitForCanvas(page, stage);
+}
+
+async function addLineItem(page: import('@playwright/test').Page) {
+  const addBtn = page
+    .locator('.add-to-cart-btn, .product-stage__cta, button.cart-btn')
+    .first();
+  if (!(await addBtn.count())) {
+    return;
+  }
+  await addBtn.click();
+  await page.waitForTimeout(400);
+}
+
+async function openCart(page: import('@playwright/test').Page) {
+  const cart = page.locator('a.cart, [aria-label*="cart" i], [aria-label*="Cart"]').first();
+  if (!(await cart.count())) {
+    return false;
+  }
+  await cart.click();
+  await page
+    .locator('app-cart-modal, .cart-modal, .cart-items, .cart-item')
+    .first()
+    .waitFor({ state: 'visible', timeout: 8_000 })
+    .catch(() => undefined);
+  await page.waitForTimeout(400);
+  return true;
 }
 
 async function shot(
@@ -66,6 +114,7 @@ test.describe('Marketplace screenshots', () => {
       await page.goto(`${BASE}/`);
       await setTheme(page, theme);
       await waitForStorefront(page);
+      await showProductStage(page);
       await shot(page, dir, `0${THEMES.indexOf(theme) + 1}-homepage-${theme}.png`);
     }
   });
@@ -81,8 +130,13 @@ test.describe('Marketplace screenshots', () => {
     if (await productLink.count()) {
       await productLink.click();
       await page.waitForURL(/\/product\//, { timeout: 10_000 }).catch(() => undefined);
-      await page.waitForTimeout(1500);
+      await waitForCanvas(page);
       await shot(page, dir, '05-product-page.png');
+      await addLineItem(page);
+    } else {
+      await page.goto(`${BASE}/`);
+      await showProductStage(page);
+      await addLineItem(page);
     }
 
     await page.goto(`${BASE}/favorites`);
@@ -97,10 +151,8 @@ test.describe('Marketplace screenshots', () => {
 
     await page.goto(`${BASE}/`);
     await setTheme(page, 'light');
-    const cart = page.locator('a.cart, [aria-label*="cart" i], [aria-label*="Cart"]').first();
-    if (await cart.count()) {
-      await cart.click();
-      await page.waitForTimeout(600);
+    await waitForStorefront(page);
+    if (await openCart(page)) {
       await shot(page, dir, '08-cart-modal.png');
     }
   });
@@ -124,6 +176,8 @@ test.describe('Marketplace screenshots', () => {
 
     await page.goto(`${BASE}/`);
     await setTheme(page, 'light');
+    await waitForStorefront(page);
+    await showProductStage(page);
     await shot(page, dir, 'mobile-01-homepage.png');
 
     await page.goto(`${BASE}/shop`);
@@ -156,6 +210,12 @@ test.describe('Marketplace screenshots', () => {
       return;
     }
 
+    await page
+      .locator('.dashboard-wow, app-dashboard')
+      .first()
+      .waitFor({ state: 'visible', timeout: 12_000 })
+      .catch(() => undefined);
+    await waitForCanvas(page);
     await shot(page, dir, 'admin-02-dashboard.png');
 
     await page.goto(`${BASE}/admin/products`);

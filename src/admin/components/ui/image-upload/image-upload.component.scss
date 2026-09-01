@@ -27,8 +27,8 @@
     }
 
     &.has-image {
-      padding: 0;
-      background: transparent;
+      padding: 12px;
+      background: var(--surface-secondary);
       border: 1px solid var(--border-default);
       min-height: auto;
     }
@@ -111,6 +111,9 @@
       margin-top: 16px;
       z-index: 2;
       position: relative;
+      --mdc-outlined-button-label-text-color: var(--text-primary);
+      --mdc-outlined-button-outline-color: var(--border-default);
+      color: var(--text-primary);
       
       .spinning {
         animation: spin 1s linear infinite;

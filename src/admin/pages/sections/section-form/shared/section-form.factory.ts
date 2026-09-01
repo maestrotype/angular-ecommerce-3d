@@ -188,6 +188,20 @@ export function createSectionForm(fb: FormBuilder, section?: Section | null): Fo
       videoShowPlayButton: [settings?.showPlayButton !== false],
       videoOverlayOpacity: [settings?.overlayOpacity ?? 0.5, [Validators.min(0), Validators.max(1)]],
       videoAlignment: [settings?.alignment || 'center'],
+      stageCategories: [
+        Array.isArray(settings?.categories) && displayType === 'product-stage'
+          ? settings.categories.filter((slug: unknown): slug is string => typeof slug === 'string')
+          : displayType === 'product-stage'
+            ? ['bags', 'clothing', 'shoes']
+            : [],
+      ],
+      stageLimit: [settings?.limit ?? 5, [Validators.min(1), Validators.max(8)]],
+      stageAutoRotate: [settings?.autoRotate !== false],
+      stageProductIds: [
+        Array.isArray(settings?.productIds)
+          ? settings.productIds.map((id: unknown) => Number(id)).filter((id: number) => Number.isFinite(id) && id > 0)
+          : [],
+      ],
       blogDisplayMode: [settings?.displayMode || 'grid'],
       blogShowCta: [settings?.showCta ?? true],
       blogCtaText: [getLocalizedValue(settings?.ctaText, 'en') || ''],

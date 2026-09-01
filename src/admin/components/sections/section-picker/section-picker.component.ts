@@ -59,10 +59,10 @@ export class SectionPickerComponent {
       description: 'Editorial campaign slides with image, copy, and a shop CTA.'
     },
     {
-      value: 'video-hero',
-      label: 'SECTION_TYPE_LABELS.VIDEO_HERO',
-      icon: 'videocam',
-      description: 'Full-bleed video banner with poster, overlay copy, and CTAs.'
+      value: 'product-stage',
+      label: 'SECTION_TYPE_LABELS.PRODUCT_STAGE',
+      icon: 'view_in_ar',
+      description: 'Full-bleed 3D stage linked to catalog products (bags, clothing, shoes).'
     },
     {
       value: 'blog-posts',
