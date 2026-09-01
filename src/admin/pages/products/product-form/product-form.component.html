@@ -15,139 +15,191 @@
 
       <mat-card-content class="form-content">
         <!-- Basic Information Grid -->
-        <div class="form-grid">
-          <div class="localization-group">
-            <label class="group-label">{{ 'PRODUCT_NAME' | translate }}</label>
-            <div class="lang-fields">
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>{{ 'LANG_EN' | translate }}</mat-label>
-                <input matInput formControlName="name_en" [placeholder]="'PRODUCT_NAME_PLACEHOLDER' | translate" />
-                <mat-error *ngIf="productForm.get('name_en')?.hasError('required')">
-                  {{ 'PRODUCT_NAME_REQUIRED' | translate }}
-                </mat-error>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>{{ 'LANG_RU' | translate }}</mat-label>
-                <input matInput formControlName="name_ru" [placeholder]="'PRODUCT_NAME_PLACEHOLDER' | translate" />
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>{{ 'LANG_UA' | translate }}</mat-label>
-                <input matInput formControlName="name_ua" [placeholder]="'PRODUCT_NAME_PLACEHOLDER' | translate" />
-              </mat-form-field>
-            </div>
+        <div class="form-grid form-grid--basic">
+          <div class="form-field-block">
+            <label class="field-block-label">{{ 'PRODUCT_NAME' | translate }}</label>
+            <mat-tab-group class="lang-tabs" animationDuration="200ms" color="primary" dynamicHeight>
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <span class="lang-tab-label">{{ 'LANG_EN' | translate }}<span class="required-mark">*</span></span>
+                </ng-template>
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>{{ 'PRODUCT_NAME' | translate }}</mat-label>
+                  <input matInput formControlName="name_en" [placeholder]="'PRODUCT_NAME_PLACEHOLDER' | translate" />
+                  <mat-error *ngIf="productForm.get('name_en')?.hasError('required')">
+                    {{ 'PRODUCT_NAME_REQUIRED' | translate }}
+                  </mat-error>
+                </mat-form-field>
+              </mat-tab>
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <span class="lang-tab-label">{{ 'LANG_RU' | translate }}</span>
+                </ng-template>
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>{{ 'PRODUCT_NAME' | translate }}</mat-label>
+                  <input matInput formControlName="name_ru" [placeholder]="'PRODUCT_NAME_PLACEHOLDER' | translate" />
+                </mat-form-field>
+              </mat-tab>
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <span class="lang-tab-label">{{ 'LANG_UA' | translate }}</span>
+                </ng-template>
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>{{ 'PRODUCT_NAME' | translate }}</mat-label>
+                  <input matInput formControlName="name_ua" [placeholder]="'PRODUCT_NAME_PLACEHOLDER' | translate" />
+                </mat-form-field>
+              </mat-tab>
+            </mat-tab-group>
           </div>
 
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>{{ 'CATEGORY' | translate }}</mat-label>
-            <mat-select formControlName="category">
-              <mat-option *ngFor="let category of categories" [value]="getCategoryValue(category)">
-                {{ category.name | localized }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="productForm.get('category')?.hasError('required')">
-              {{ 'CATEGORY_REQUIRED' | translate }}
-            </mat-error>
-          </mat-form-field>
+          <div class="form-field-block">
+            <label class="field-block-label">{{ 'CATEGORY' | translate }}</label>
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>{{ 'CATEGORY' | translate }}</mat-label>
+              <mat-select formControlName="category">
+                <mat-option *ngFor="let category of categories" [value]="getCategoryValue(category)">
+                  {{ category.name | localized }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="productForm.get('category')?.hasError('required')">
+                {{ 'CATEGORY_REQUIRED' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
 
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>{{ 'PRICE' | translate }}</mat-label>
-            <input matInput type="number" formControlName="price" [placeholder]="'PRICE_PLACEHOLDER' | translate"
-              step="0.01" />
-            <span matPrefix>$&nbsp;</span>
-            <mat-error *ngIf="productForm.get('price')?.hasError('required')">
-              {{ 'PRICE_REQUIRED' | translate }}
-            </mat-error>
-            <mat-error *ngIf="productForm.get('price')?.hasError('min')">
-              {{ 'PRICE_MIN' | translate }}
-            </mat-error>
-          </mat-form-field>
+          <div class="form-metrics">
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>{{ 'PRICE' | translate }}</mat-label>
+              <input matInput type="number" formControlName="price" [placeholder]="'PRICE_PLACEHOLDER' | translate"
+                step="0.01" />
+              <span matPrefix>$&nbsp;</span>
+              <mat-error *ngIf="productForm.get('price')?.hasError('required')">
+                {{ 'PRICE_REQUIRED' | translate }}
+              </mat-error>
+              <mat-error *ngIf="productForm.get('price')?.hasError('min')">
+                {{ 'PRICE_MIN' | translate }}
+              </mat-error>
+            </mat-form-field>
 
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>{{ 'STOCK_QUANTITY' | translate }}</mat-label>
-            <input matInput type="number" formControlName="stock" [placeholder]="'STOCK_PLACEHOLDER' | translate"
-              min="0" />
-            <mat-error *ngIf="productForm.get('stock')?.hasError('required')">
-              {{ 'STOCK_REQUIRED' | translate }}
-            </mat-error>
-            <mat-error *ngIf="productForm.get('stock')?.hasError('min')">
-              {{ 'STOCK_MIN' | translate }}
-            </mat-error>
-          </mat-form-field>
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>{{ 'STOCK_QUANTITY' | translate }}</mat-label>
+              <input matInput type="number" formControlName="stock" [placeholder]="'STOCK_PLACEHOLDER' | translate"
+                min="0" />
+              <mat-error *ngIf="productForm.get('stock')?.hasError('required')">
+                {{ 'STOCK_REQUIRED' | translate }}
+              </mat-error>
+              <mat-error *ngIf="productForm.get('stock')?.hasError('min')">
+                {{ 'STOCK_MIN' | translate }}
+              </mat-error>
+            </mat-form-field>
+          </div>
         </div>
 
-        <!-- Image Upload Section Grid -->
-        <div class="image-upload-grid">
-          <div class="upload-section">
-            <label class="section-label">{{ 'PRODUCT_IMAGE' | translate }}</label>
+        <!-- Image + 3D side by side on large screens -->
+        <div class="product-media-grid">
+          <mat-card class="form-card media-panel media-panel--images">
+            <mat-card-header>
+              <mat-card-title>
+                <div class="title-section">
+                  <div class="title-with-icon">
+                    <mat-icon class="title-icon">photo_library</mat-icon>
+                    <span>{{ 'PRODUCT_IMAGE' | translate }}</span>
+                  </div>
+                  <div class="card-subtitle">{{ 'PRODUCT_3D.IMAGES_HINT' | translate }}</div>
+                </div>
+              </mat-card-title>
+            </mat-card-header>
 
-            <!-- Upload Area -->
-            <div class="upload-area">
-              <input type="file" #fileInput (change)="onFilesSelected($event)" accept="image/png,image/jpeg,image/jpg"
-                multiple style="display: none" />
+            <mat-card-content>
+              <input
+                type="file"
+                #fileInput
+                (change)="onFilesSelected($event)"
+                accept="image/png,image/jpeg,image/jpg"
+                multiple
+                hidden
+              />
 
-              <div class="drop-zone" (click)="fileInput.click()" (dragover)="onDragOver($event)"
+              <div
+                class="image-media-zone"
+                [class.has-images]="imageUrls.length > 0"
+                *ngIf="imageUrls.length === 0"
+                (click)="fileInput.click()"
+                (dragover)="onDragOver($event)"
                 (drop)="onDrop($event)">
-                <div class="upload-content">
-                  <mat-icon class="upload-icon">cloud_upload</mat-icon>
+                <div class="image-empty">
+                  <div class="image-empty__icon">
+                    <mat-icon>cloud_upload</mat-icon>
+                  </div>
                   <h3>{{ 'PRODUCT_3D.UPLOAD_IMAGES' | translate }}</h3>
                   <p>{{ 'PRODUCT_3D.IMAGES_HINT' | translate }}</p>
-                  <button type="button" class="upload-button" mat-stroked-button [disabled]="isUploading">
+                  <button
+                    type="button"
+                    class="model-btn model-btn--ghost"
+                    (click)="fileInput.click(); $event.stopPropagation()"
+                    [disabled]="isUploading">
                     <mat-icon>add_photo_alternate</mat-icon>
-                    {{ isUploading ? ('UPLOADING' | translate) : ('PRODUCT_3D.UPLOAD_IMAGES' | translate) }}
+                    <span>{{ isUploading ? ('UPLOADING' | translate) : ('PRODUCT_3D.UPLOAD_IMAGES' | translate) }}</span>
                   </button>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <div class="preview-section">
-            <!-- Image Preview Grid -->
-            <div class="image-preview-grid" *ngIf="imageUrls.length > 0">
-              <div class="preview-item" *ngFor="let imageUrl of imageUrls; let i = index">
-                <div class="preview-container">
-                  <img [src]="imageUrl" [alt]="'Product image ' + (i + 1)" />
-                  <div class="preview-overlay">
-                    <button
-                      type="button"
-                      class="preview-action preview-action--download"
-                      (click)="downloadImageAt(i); $event.stopPropagation()"
-                      mat-icon-button
-                      [matTooltip]="'DOWNLOAD_IMAGE' | translate"
-                      [attr.aria-label]="'DOWNLOAD_IMAGE' | translate">
-                      <mat-icon>download</mat-icon>
-                    </button>
-                    <button
-                      type="button"
-                      class="preview-action preview-action--remove"
-                      (click)="removeImageAt(i); $event.stopPropagation()"
-                      mat-icon-button
-                      [matTooltip]="'DELETE' | translate"
-                      [attr.aria-label]="'DELETE' | translate">
-                      <mat-icon>close</mat-icon>
-                    </button>
+              <div class="image-media-zone has-images" *ngIf="imageUrls.length > 0">
+                <div
+                  class="image-preview-grid"
+                  [class.image-preview-grid--single]="imageUrls.length === 1">
+                  <div class="preview-item" *ngFor="let imageUrl of imageUrls; let i = index">
+                    <div class="preview-container">
+                      <img [src]="imageUrl" [alt]="'Product image ' + (i + 1)" />
+                      <div class="preview-overlay">
+                        <button
+                          type="button"
+                          class="preview-action preview-action--download"
+                          (click)="downloadImageAt(i); $event.stopPropagation()"
+                          mat-icon-button
+                          [matTooltip]="'DOWNLOAD_IMAGE' | translate"
+                          [attr.aria-label]="'DOWNLOAD_IMAGE' | translate">
+                          <mat-icon>download</mat-icon>
+                        </button>
+                        <button
+                          type="button"
+                          class="preview-action preview-action--remove"
+                          (click)="removeImageAt(i); $event.stopPropagation()"
+                          mat-icon-button
+                          [matTooltip]="'DELETE' | translate"
+                          [attr.aria-label]="'DELETE' | translate">
+                          <mat-icon>close</mat-icon>
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <!-- Processing Options -->
-            <div class="switches-group">
-                <mat-slide-toggle [(ngModel)]="imageProcessingOptions.removeBackground"
-                  [ngModelOptions]="{standalone: true}" color="primary">
-                  {{ 'PRODUCT_3D.BKG_REMOVE' | translate }}
-                </mat-slide-toggle>
+              <div class="image-toolbar">
+                <div class="image-toolbar__switches">
+                  <mat-slide-toggle [(ngModel)]="imageProcessingOptions.removeBackground"
+                    [ngModelOptions]="{standalone: true}" color="primary">
+                    {{ 'PRODUCT_3D.BKG_REMOVE' | translate }}
+                  </mat-slide-toggle>
+                  <mat-slide-toggle [(ngModel)]="imageProcessingOptions.optimize"
+                    [ngModelOptions]="{standalone: true}" color="primary">
+                    {{ 'PRODUCT_3D.BKG_OPTIMIZE' | translate }}
+                  </mat-slide-toggle>
+                </div>
+                <button
+                  type="button"
+                  class="model-btn model-btn--ghost model-btn--compact"
+                  (click)="fileInput.click()"
+                  [disabled]="isUploading">
+                  <mat-icon>{{ isUploading ? 'hourglass_empty' : 'add_photo_alternate' }}</mat-icon>
+                  <span>{{ isUploading ? ('UPLOADING' | translate) : ('PRODUCT_3D.UPLOAD_IMAGES' | translate) }}</span>
+                </button>
+              </div>
+            </mat-card-content>
+          </mat-card>
 
-                <mat-slide-toggle [(ngModel)]="imageProcessingOptions.optimize" [ngModelOptions]="{standalone: true}"
-                  color="primary">
-                  {{ 'PRODUCT_3D.BKG_OPTIMIZE' | translate }}
-                </mat-slide-toggle>
-            </div>
-          </div>
-        </div>
-
-        <mat-card class="form-card model3d-card">
+          <mat-card class="form-card model3d-card media-panel media-panel--3d">
           <mat-card-header>
             <mat-card-title>
               <div class="title-section">
@@ -241,43 +293,45 @@
                                      (modelLoaded)="onModelLoaded()"></app-three-d-viewer>
                 </div>
 
-                <div class="model-toolbar">
-                  <div class="engine-chip" [matTooltip]="'PRODUCT_3D.ACTIVE_API' | translate">
-                    <mat-icon>auto_awesome</mat-icon>
-                    <span>{{ activeAiProviderName }}</span>
+                <div class="model-footer">
+                  <div class="model-footer__row model-footer__row--meta">
+                    <div class="engine-chip" [matTooltip]="'PRODUCT_3D.ACTIVE_API' | translate">
+                      <mat-icon>auto_awesome</mat-icon>
+                      <span>{{ activeAiProviderName }}</span>
+                    </div>
+                    <div class="model-footer__utilities">
+                      <button type="button" class="icon-btn" (click)="downloadModel()" [matTooltip]="'PRODUCT_3D.DOWNLOAD' | translate">
+                        <mat-icon>download</mat-icon>
+                      </button>
+                      <button type="button" class="icon-btn icon-btn--danger" (click)="remove3dModel()" [matTooltip]="'PRODUCT_3D.REMOVE_MODEL' | translate">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
                   </div>
 
-                  <div class="model-toolbar__actions">
-                    <button type="button" class="model-btn model-btn--ai model-btn--compact" (click)="generateAi3dModel()">
+                  <div class="model-footer__row model-footer__row--actions">
+                    <button type="button" class="model-btn model-btn--ai" (click)="generateAi3dModel()">
                       <mat-icon>autorenew</mat-icon>
                       <span>{{ 'PRODUCT_3D.GENERATE_AGAIN' | translate }}</span>
                     </button>
-                    <button type="button" class="model-btn model-btn--ghost model-btn--compact" (click)="file3dInput.click()">
+                    <button type="button" class="model-btn model-btn--ghost" (click)="file3dInput.click()">
                       <mat-icon>upload_file</mat-icon>
                       <span>{{ 'PRODUCT_3D.UPLOAD_FROM_PC' | translate }}</span>
                     </button>
                   </div>
 
-                  <div class="model-toolbar__icons">
-                    <button type="button" class="icon-btn" (click)="downloadModel()" [matTooltip]="'PRODUCT_3D.DOWNLOAD' | translate">
-                      <mat-icon>download</mat-icon>
-                    </button>
-                    <button type="button" class="icon-btn icon-btn--danger" (click)="remove3dModel()" [matTooltip]="'PRODUCT_3D.REMOVE_MODEL' | translate">
-                      <mat-icon>delete</mat-icon>
-                    </button>
+                  <div class="model-footer__row model-footer__row--alt" *ngIf="otherConfiguredAiProviders.length">
+                    <span class="model-footer__alt-label">{{ 'PRODUCT_3D.TRY_ANOTHER_ENGINE' | translate }}</span>
+                    <div class="model-footer__alt-chips">
+                      <button
+                        type="button"
+                        class="alt-engines__chip"
+                        *ngFor="let provider of otherConfiguredAiProviders"
+                        (click)="switchEngineAndGenerate(provider.id)">
+                        {{ provider.name }}
+                      </button>
+                    </div>
                   </div>
-                </div>
-
-                <div class="alt-engines" *ngIf="otherConfiguredAiProviders.length">
-                  <span>{{ 'PRODUCT_3D.TRY_ANOTHER_ENGINE' | translate }}</span>
-                  <button
-                    type="button"
-                    class="alt-engines__chip"
-                    *ngFor="let provider of otherConfiguredAiProviders"
-                    (click)="switchEngineAndGenerate(provider.id)"
-                  >
-                    {{ provider.name }}
-                  </button>
                 </div>
               </div>
 
@@ -289,32 +343,46 @@
             </div>
           </mat-card-content>
         </mat-card>
+        </div>
 
-        <div class="localization-group">
+        <div class="form-field-block form-field-block--description">
           <div class="group-header">
             <mat-icon>description</mat-icon>
             <h3>{{ 'DESCRIPTION' | translate }}</h3>
           </div>
-          
-          <div class="lang-fields">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>{{ 'LANG_EN' | translate }}</mat-label>
-              <textarea matInput formControlName="description_en" rows="4"
-                [placeholder]="'DESCRIPTION_PLACEHOLDER' | translate"></textarea>
-            </mat-form-field>
 
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>{{ 'LANG_RU' | translate }}</mat-label>
-              <textarea matInput formControlName="description_ru" rows="4"
-                [placeholder]="'DESCRIPTION_PLACEHOLDER' | translate"></textarea>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>{{ 'LANG_UA' | translate }}</mat-label>
-              <textarea matInput formControlName="description_ua" rows="4"
-                [placeholder]="'DESCRIPTION_PLACEHOLDER' | translate"></textarea>
-            </mat-form-field>
-          </div>
+          <mat-tab-group class="lang-tabs lang-tabs--description" animationDuration="200ms" color="primary" dynamicHeight>
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <span class="lang-tab-label">{{ 'LANG_EN' | translate }}</span>
+              </ng-template>
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>{{ 'DESCRIPTION' | translate }}</mat-label>
+                <textarea matInput formControlName="description_en" rows="4"
+                  [placeholder]="'DESCRIPTION_PLACEHOLDER' | translate"></textarea>
+              </mat-form-field>
+            </mat-tab>
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <span class="lang-tab-label">{{ 'LANG_RU' | translate }}</span>
+              </ng-template>
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>{{ 'DESCRIPTION' | translate }}</mat-label>
+                <textarea matInput formControlName="description_ru" rows="4"
+                  [placeholder]="'DESCRIPTION_PLACEHOLDER' | translate"></textarea>
+              </mat-form-field>
+            </mat-tab>
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <span class="lang-tab-label">{{ 'LANG_UA' | translate }}</span>
+              </ng-template>
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>{{ 'DESCRIPTION' | translate }}</mat-label>
+                <textarea matInput formControlName="description_ua" rows="4"
+                  [placeholder]="'DESCRIPTION_PLACEHOLDER' | translate"></textarea>
+              </mat-form-field>
+            </mat-tab>
+          </mat-tab-group>
         </div>
       </mat-card-content>
     </mat-card>

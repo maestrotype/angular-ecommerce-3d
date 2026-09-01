@@ -359,42 +359,7 @@
   }
 }
 
-.controls-hint {
-  position: absolute;
-  bottom: 1rem;
-  left: 50%;
-  transform: translateX(-50%);
-  pointer-events: none;
-  opacity: 0;
-  animation: fadeIn 1s ease forwards 2s;
-  max-width: calc(100% - 2rem);
-  text-align: center;
-}
-
-.hint-badge {
-  display: inline-block;
-  max-width: 100%;
-  background: var(--viewer-hint-bg);
-  backdrop-filter: var(--backdrop-blur-sm);
-  border: 1px solid var(--viewer-hint-border);
-  border-radius: 20px;
-  color: var(--viewer-hint-text);
-  font-size: 0.7rem;
-  line-height: 1.35;
-  padding: 0.45rem 0.85rem;
-  box-shadow: var(--shadow-sm);
-}
-
 @media (max-width: 768px) {
-  .controls-hint {
-    bottom: 0.75rem;
-  }
-
-  .hint-badge {
-    font-size: 0.65rem;
-    padding: 0.35rem 0.7rem;
-  }
-
   .hd-toggle-container {
     top: 0.65rem;
     right: 0.65rem;
