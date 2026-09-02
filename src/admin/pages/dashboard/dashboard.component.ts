@@ -147,7 +147,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private loadStagePreview(): void {
     this.productsSub = this.productService.getProducts().subscribe({
       next: (products) => {
-        this.stageProduct = pickStageProducts(products, { limit: 1 })[0] || null;
+        this.stageProduct = pickStageProducts(products, {
+          categories: ['bags', 'shoes'],
+          limit: 1,
+        })[0] || null;
       },
       error: () => {
         this.stageProduct = null;

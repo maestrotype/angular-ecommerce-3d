@@ -8,24 +8,27 @@ These files ship with the marketplace template so buyers can run a working store
 |------|---------|
 | `*.svg` | MIT — created for this project, free to modify and redistribute |
 
-Use paths like `assets/demo/products/headphones.svg` in seed data or admin product images.
+Use paths like `assets/demo/products/bag.svg` in seed data or admin product images.
 
-## 3D models (`models/`)
+## 3D models
 
-| File | Source | License |
-|------|--------|---------|
-| `duck.glb` | [Khronos — Duck](https://github.com/KhronosGroup/glTF-Sample-Models/tree/main/2.0/Duck) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| `avocado.glb` | Khronos — Avocado | CC0 1.0 |
-| `water-bottle.glb` | Khronos — WaterBottle | CC0 1.0 |
+Fashion demo GLB assets live under `assets/models/`:
 
-**`duck.glb` is committed** (~120 KB) so 3D works immediately after clone.
+| Path | Use |
+|------|-----|
+| `assets/demo/models/bag-demo.glb` | Bags category (~2MB, optimized) |
+| `assets/demo/models/shoes-demo.glb` | Shoes category (~3MB, optimized) |
 
-**Larger models** (`avocado.glb`, `water-bottle.glb`) are downloaded on demand — keeps the git repo lean:
+Regenerate from source meshes:
+
+```bash
+npm run demo:optimize-models
+```
+
+Optional Khronos CC0 samples (`avocado.glb`, `water-bottle.glb`) can be fetched with:
 
 ```bash
 npm run demo:models
 ```
-
-Reference in product `model3dUrl` as `assets/demo/models/duck.glb` (served by Angular).
 
 Replace with your own `.glb` assets in production. See `docs/CUSTOMIZATION.md` for upload via Admin → Products.

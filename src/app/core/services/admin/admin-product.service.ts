@@ -9,6 +9,7 @@ import {
 } from '../../../../shared/models/product.model';
 import { environment } from '../../../../environments/environment';
 import { PROD_API_URL } from '../../utils/api-url.util';
+import { ProductService } from '../product.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,14 @@ export class AdminProductService {
     return environment.apiUrl;
   }
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private storefrontProductService: ProductService,
+  ) {}
+
+  notifyCatalogChanged(): void {
+    this.storefrontProductService.notifyCatalogChanged();
+  }
 
   private getHeaders(): HttpHeaders {
     return new HttpHeaders({

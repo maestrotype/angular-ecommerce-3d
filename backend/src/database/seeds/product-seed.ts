@@ -5,15 +5,26 @@ import { Section } from '../../sections/entities/section.entity';
 
 const DEMO = {
   headphones: 'assets/demo/products/headphones.svg',
-  tshirt: 'assets/demo/products/t-shirt.svg',
+  tshirt: 'assets/demo/products/tshirt.png',
   book: 'assets/demo/products/book.svg',
   garden: 'assets/demo/products/garden-system.svg',
   yoga: 'assets/demo/products/yoga-mat.svg',
-  sneaker: 'assets/demo/products/sneaker.svg',
-  bag: 'assets/demo/products/bag.svg',
-  duck: 'assets/demo/models/duck.glb',
+  sneaker: 'assets/demo/products/sneaker.png',
+  bag: 'assets/demo/products/bag.png',
   mug: 'assets/demo/products/travel-mug.svg',
+  bagGlb: 'assets/demo/models/bag-demo.glb',
+  shoesGlb: 'assets/demo/models/shoes-demo.glb',
 } as const;
+
+function demoGlbForCategory(category: string): string | undefined {
+  if (category === 'bags') {
+    return DEMO.bagGlb;
+  }
+  if (category === 'shoes') {
+    return DEMO.shoesGlb;
+  }
+  return undefined;
+}
 
 const HERO_TYPES = new Set(['hero', 'hero-glass', 'video-hero']);
 
@@ -28,14 +39,14 @@ type FashionSeed = {
   stock: number;
   description: Localized;
   imageUrl: string;
-  model3dUrl: string;
+  model3dUrl?: string;
   specifications: Record<string, string>;
   isSpecial?: boolean;
   rating: number;
   features: string[];
 };
 
-/** Fashion SKUs always use the committed duck.glb so Product Stage works after clone. */
+/** Fashion SKUs use committed bag/shoe GLB assets for Product Stage after clone. */
 const FASHION_PRODUCTS: FashionSeed[] = [
   {
     sku: 'SEED-BAG-01',
@@ -50,7 +61,7 @@ const FASHION_PRODUCTS: FashionSeed[] = [
       ua: 'Структурована сумка через плече. Обертайте 3D-модель на вітрині головної.',
     },
     imageUrl: DEMO.bag,
-    model3dUrl: DEMO.duck,
+    model3dUrl: DEMO.bagGlb,
     specifications: { material: 'Grain leather', strap: 'Adjustable', color: 'Sand' },
     isSpecial: true,
     rating: 4.7,
@@ -69,7 +80,7 @@ const FASHION_PRODUCTS: FashionSeed[] = [
       ua: 'Відкритий шопер на щодень. Той самий SKU на вітрині та картці товару.',
     },
     imageUrl: DEMO.bag,
-    model3dUrl: DEMO.duck,
+    model3dUrl: DEMO.bagGlb,
     specifications: { material: 'Canvas + leather', volume: '18 L', color: 'Sand' },
     rating: 4.5,
     features: ['3D Product View', 'Wide Opening', 'Unlined'],
@@ -86,12 +97,11 @@ const FASHION_PRODUCTS: FashionSeed[] = [
     price: 24.99,
     stock: 100,
     description: {
-      en: 'Comfortable organic cotton t-shirt in a regular fit. Includes a demo GLB for the 3D stage.',
-      ru: 'Футболка из органического хлопка свободного кроя. С демо-GLB для 3D-витрины.',
-      ua: 'Футболка з органічної бавовни вільного крою. З демо-GLB для 3D-вітрини.',
+      en: 'Comfortable organic cotton t-shirt in a regular fit.',
+      ru: 'Футболка из органического хлопка свободного кроя.',
+      ua: 'Футболка з органічної бавовни вільного крою.',
     },
     imageUrl: DEMO.tshirt,
-    model3dUrl: DEMO.duck,
     specifications: { material: '100% Organic Cotton', fit: 'Regular', care: 'Machine Wash Cold' },
     rating: 4.2,
     features: ['Organic Material', 'Comfortable Fit', '3D Product View'],
@@ -109,7 +119,7 @@ const FASHION_PRODUCTS: FashionSeed[] = [
       ua: 'Кросівки з демо-3D-моделлю — обертайте на вітрині та картці товару.',
     },
     imageUrl: DEMO.sneaker,
-    model3dUrl: DEMO.duck,
+    model3dUrl: DEMO.shoesGlb,
     specifications: { material: 'Mesh + Rubber', sizes: 'EU 38–46', color: 'Red/White' },
     isSpecial: true,
     rating: 4.7,
@@ -128,7 +138,7 @@ const FASHION_PRODUCTS: FashionSeed[] = [
       ua: 'Лофери без шнурівки. 3D з вітрини головної пов’язаний із каталогом.',
     },
     imageUrl: DEMO.sneaker,
-    model3dUrl: DEMO.duck,
+    model3dUrl: DEMO.shoesGlb,
     specifications: { material: 'Smooth leather', sizes: 'EU 39–45', color: 'Oxblood' },
     rating: 4.4,
     features: ['3D Product View', 'Slip-on', 'Stacked Sole'],
@@ -143,7 +153,6 @@ const OTHER_PRODUCTS = [
     stock: 50,
     description: 'High-quality wireless headphones with noise cancellation and 30-hour battery life.',
     imageUrl: DEMO.headphones,
-    model3dUrl: DEMO.duck,
     specifications: {
       brand: 'TechCorp',
       model: 'WH-1000XM4',
@@ -178,7 +187,6 @@ const OTHER_PRODUCTS = [
     stock: 15,
     description: 'Automated watering system for your garden with smartphone app control.',
     imageUrl: DEMO.garden,
-    model3dUrl: DEMO.duck,
     specifications: {
       coverage: 'Up to 20 plants',
       batteryLife: '6 months',
@@ -227,7 +235,6 @@ const OTHER_PRODUCTS = [
     stock: 60,
     description: 'Double-wall insulated mug keeps drinks hot for 8 hours.',
     imageUrl: DEMO.mug,
-    model3dUrl: DEMO.duck,
     specifications: {
       capacity: '450ml',
       material: 'Stainless Steel',
@@ -292,6 +299,69 @@ function toProductPayload(seed: FashionSeed): Partial<Product> {
   };
 }
 
+async function reconcileDemoImageUrls(dataSource: DataSource): Promise<void> {
+  const repo = dataSource.getRepository(Product);
+  const products = await repo.find();
+  let updated = 0;
+
+  const legacyImageNeedles = [
+    'assets/demo/products/sneaker.svg',
+    'assets/demo/products/bag.svg',
+    'assets/demo/products/t-shirt.svg',
+  ];
+
+  for (const product of products) {
+    const currentUrl = product.imageUrl || '';
+    const isLegacy = legacyImageNeedles.some((needle) => currentUrl.includes(needle));
+    if (!isLegacy) {
+      continue;
+    }
+
+    const category = (product.category || '').trim().toLowerCase();
+    if (category === 'bags' || category === 'handbags') {
+      product.imageUrl = 'assets/demo/products/bag.png';
+    } else if (category === 'shoes') {
+      product.imageUrl = 'assets/demo/products/sneaker.png';
+    } else if (category === 'clothing') {
+      product.imageUrl = 'assets/demo/products/tshirt.png';
+    }
+
+    await repo.save(product);
+    updated += 1;
+  }
+
+  if (updated) {
+    console.log(`Reconciled ${updated} product image(s) to demo PNG photos`);
+  }
+}
+
+async function reconcileDemoModelUrls(dataSource: DataSource): Promise<void> {
+  const repo = dataSource.getRepository(Product);
+  const products = await repo.find();
+  let updated = 0;
+
+  for (const product of products) {
+    const currentUrl = product.model3dUrl || '';
+    const isLegacy =
+      currentUrl.includes('duck.glb') ||
+      currentUrl.includes('assets/models/bag/') ||
+      currentUrl.includes('assets/models/shoes/');
+
+    if (!isLegacy) {
+      continue;
+    }
+
+    const replacement = demoGlbForCategory(product.category);
+    product.model3dUrl = replacement || null;
+    await repo.save(product);
+    updated += 1;
+  }
+
+  if (updated) {
+    console.log(`Reconciled ${updated} product(s) to optimized demo GLB paths`);
+  }
+}
+
 async function seedCatalogCategories(dataSource: DataSource): Promise<void> {
   const repo = dataSource.getRepository(Category);
   let created = 0;
@@ -336,6 +406,15 @@ async function upsertFashionProducts(dataSource: DataSource): Promise<void> {
       Object.assign(match, toProductPayload(seed), {
         specifications: { ...(match.specifications || {}), sku: seed.sku, ...seed.specifications },
       });
+      if (seed.model3dUrl) {
+        match.model3dUrl = seed.model3dUrl;
+      } else if (
+        match.model3dUrl?.includes('duck.glb') ||
+        match.model3dUrl?.includes('assets/models/bag/') ||
+        match.model3dUrl?.includes('assets/models/shoes/')
+      ) {
+        match.model3dUrl = demoGlbForCategory(seed.category) || null;
+      }
       await repo.save(match);
       updated += 1;
       continue;
@@ -431,7 +510,7 @@ export async function seedProducts(dataSource: DataSource) {
       ...(OTHER_PRODUCTS as Partial<Product>[]),
     ]);
     console.log(
-      `Seeded ${FASHION_PRODUCTS.length + OTHER_PRODUCTS.length} demo products (fashion SKUs use duck.glb)`,
+      `Seeded ${FASHION_PRODUCTS.length + OTHER_PRODUCTS.length} demo products (fashion SKUs use bag/shoe GLB assets)`,
     );
   } else {
     console.log('Products already present — upserting bags / clothing / shoes with GLB');
@@ -439,4 +518,6 @@ export async function seedProducts(dataSource: DataSource) {
   }
 
   await seedProductStageSection(dataSource);
+  await reconcileDemoModelUrls(dataSource);
+  await reconcileDemoImageUrls(dataSource);
 }

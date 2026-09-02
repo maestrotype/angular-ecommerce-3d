@@ -185,7 +185,7 @@ export class SectionProductStageFormComponent implements OnInit {
           item.id === updated.id ? { ...item, ...updated } : item,
         );
         this.uploadingProductId = null;
-        this.productService.notifyCatalogChanged();
+        this.adminProductService.notifyCatalogChanged();
         this.snackBar.open(
           this.translate.instant('PRODUCT_STAGE_MODEL_UPDATED'),
           this.translate.instant('CLOSE_BTN'),

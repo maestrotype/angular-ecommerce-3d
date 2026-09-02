@@ -15,7 +15,7 @@ import * as os from "os";
 import { join } from "path";
 import { v2 as cloudinary } from "cloudinary";
 import { ImageProcessingService } from "../services/image-processing.service";
-import { GlbOptimizationService, CLOUDINARY_RAW_FILE_LIMIT, RAW_GLB_UPLOAD_MAX_BYTES } from "../services/glb-optimization.service";
+import { GlbOptimizationService, CLOUDINARY_RAW_FILE_LIMIT, RAW_GLB_UPLOAD_MAX_BYTES, MAX_STORED_GLB_BYTES } from "../services/glb-optimization.service";
 import { saveModelToLocalDisk, isCloudinarySizeError } from "../services/model-storage.util";
 import { CloudinaryConfigService } from "../services/cloudinary-config.service";
 import { Observable, from, throwError } from 'rxjs';
@@ -228,6 +228,13 @@ export class UploadsController {
 
     const finalSize = existsSync(uploadPath) ? readFileSync(uploadPath).length : file.size;
     console.log(`[UploadsController] 3D model ready for storage. Size: ${(finalSize / 1024 / 1024).toFixed(2)}MB`);
+
+    if (finalSize > MAX_STORED_GLB_BYTES) {
+      this.cleanupTempFiles(file.path, optimizedPath);
+      throw new BadRequestException(
+        'Model exceeds 50MB limit after optimization. Reduce textures or mesh complexity in Blender.',
+      );
+    }
 
     const isAi = file.originalname.toLowerCase().includes('ai-gen') || file.originalname.toLowerCase().includes('task_');
     const publicId = (isProduct && isAi) ? `ai-gen-${uuidv4()}` : undefined;

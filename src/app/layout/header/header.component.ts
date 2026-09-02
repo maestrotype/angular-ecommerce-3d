@@ -11,7 +11,7 @@ import { Product } from 'src/shared/models/product.model';
 import { ModalService } from '../../core/services/modal.service';
 import { ThemeService } from '../../core/themes/theme.service';
 import { Theme } from '../../core/themes/theme.model';
-import { themeLabelI18nKey } from '../../core/themes/theme-config';
+import { themeLabelI18nKey } from '../../core/themes/theme-label.util';
 import { AuthService } from '../../core/services/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MobileMenuService } from '../../core/services/mobile-menu.service';

@@ -82,6 +82,19 @@ html[data-theme='glass'] body.is-admin {
   --text-table-row: rgba(255, 255, 255, 0.86);
   --text-paginator: rgba(255, 255, 255, 0.9);
 
+  --viewer-host-bg: rgba(40, 85, 135, 0.35);
+  --viewer-loader-overlay: rgba(22, 52, 88, 0.55);
+  --viewer-loader-backdrop: blur(12px);
+  --viewer-loader-title: var(--text-muted);
+  --viewer-loader-percent: var(--text-primary);
+  --viewer-loader-track: var(--border-subtle);
+  --viewer-loader-ring: var(--border-default);
+  --viewer-error-overlay: rgba(22, 52, 88, 0.72);
+  --viewer-error-card-bg: var(--surface-elevated);
+  --viewer-error-card-border: var(--border-subtle);
+  --viewer-error-title: var(--text-primary);
+  --viewer-error-body: var(--text-secondary);
+
   --mdc-outlined-button-label-text-color: var(--text-primary);
   --mdc-outlined-button-outline-color: var(--border-default);
 

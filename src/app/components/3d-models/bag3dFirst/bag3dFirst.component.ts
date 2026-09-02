@@ -2,6 +2,7 @@ import { Component, AfterViewInit, ViewChild, ElementRef, Inject, PLATFORM_ID } 
 import { isPlatformBrowser } from '@angular/common';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DEMO_BAG_GLB } from 'src/shared/constants/demo-model-paths';
 import { fixBackendUrl } from '../../../core/utils/url-helper';
 import { ThreeDModelService } from '../../../core/services/three-d-model.service';
 
@@ -106,7 +107,7 @@ export class Bag3dFirstComponent implements AfterViewInit {
     const loader = new GLTFLoader();
     
     // Resolve relative path using base URI for production environments
-    let modelPath = fixBackendUrl('assets/demo/models/duck.glb');
+    let modelPath = fixBackendUrl(DEMO_BAG_GLB);
     if (isPlatformBrowser(this.platformId)) {
       const base = document.baseURI;
       if (base) {

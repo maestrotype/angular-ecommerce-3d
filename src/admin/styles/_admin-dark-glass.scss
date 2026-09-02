@@ -32,6 +32,19 @@
   --dashboard-chart-bg: rgba(90, 85, 80, 0.72);
   --dashboard-shell-border: transparent;
 
+  --viewer-host-bg: rgba(70, 65, 60, 0.55);
+  --viewer-loader-overlay: rgba(70, 65, 60, 0.72);
+  --viewer-loader-backdrop: blur(12px);
+  --viewer-loader-title: var(--text-muted);
+  --viewer-loader-percent: var(--text-primary);
+  --viewer-loader-track: var(--border-subtle);
+  --viewer-loader-ring: var(--border-default);
+  --viewer-error-overlay: rgba(70, 65, 60, 0.82);
+  --viewer-error-card-bg: var(--surface-elevated);
+  --viewer-error-card-border: var(--border-subtle);
+  --viewer-error-title: var(--text-primary);
+  --viewer-error-body: var(--text-secondary);
+
   --stat-icon-products: #81c784;
   --stat-icon-orders: #8ab4f8;
   --stat-icon-users: #ffb74d;

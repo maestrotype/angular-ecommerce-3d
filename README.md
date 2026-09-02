@@ -108,7 +108,7 @@ docker compose up -d --build
 
 | Asset | Location |
 |-------|----------|
-| Demo 3D models | `npm run demo:models` (duck bundled; others downloaded) |
+| Demo 3D models | Committed bag/shoe GLB under `assets/models/`; optional Khronos samples via `npm run demo:models` |
 | Demo product images | `src/assets/demo/products/` |
 | Screenshot capture | `npm run screenshots:capture` (requires dev servers) |
 | Listing copy | [marketing-assets/MARKETPLACE_DESCRIPTION.md](marketing-assets/MARKETPLACE_DESCRIPTION.md) |
