@@ -1,6 +1,10 @@
-/** Optimized GLB assets for fashion demo SKUs (bags / shoes). */
-export const DEMO_BAG_GLB = 'assets/demo/models/bag-demo.glb';
-export const DEMO_SHOES_GLB = 'assets/demo/models/shoes-demo.glb';
+/** Bundled catalog GLB assets for fashion demo SKUs (bags / shoes). */
+export const DEMO_BAG_GLB = 'assets/demo/models/bag-catalog.glb';
+export const DEMO_SHOES_GLB = 'assets/demo/models/shoes-catalog.glb';
+
+/** @deprecated Old optimized paths — migrated on seed; kept for SW/cache reconciliation. */
+export const LEGACY_DEMO_BAG_GLB = 'assets/demo/models/bag-demo.glb';
+export const LEGACY_DEMO_SHOES_GLB = 'assets/demo/models/shoes-demo.glb';
 
 /** Hard limit for any stored/served GLB in the app. */
 export const MAX_STORED_GLB_BYTES = 50 * 1024 * 1024;
@@ -35,5 +39,9 @@ export function isLegacyUnoptimizedDemoModelUrl(url: string | null | undefined):
   if (!url) {
     return false;
   }
-  return LEGACY_LARGE_MODEL_PREFIXES.some((prefix) => url.includes(prefix));
+  return (
+    LEGACY_LARGE_MODEL_PREFIXES.some((prefix) => url.includes(prefix)) ||
+    url.includes(LEGACY_DEMO_BAG_GLB) ||
+    url.includes(LEGACY_DEMO_SHOES_GLB)
+  );
 }

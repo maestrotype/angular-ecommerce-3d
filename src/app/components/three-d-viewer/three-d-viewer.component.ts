@@ -30,8 +30,6 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   @Input() previewOnly = false;
   @Input() autoRotate = true;
   @Input() loading: 'lazy' | 'eager' = 'lazy'; // Support for viewport lazy-loading
-  /** Strip near-white studio backdrop baked into photogrammetry GLB textures. */
-  @Input() keyOutStudioBackground: boolean | 'auto' = 'auto';
   
   @Input() set upsideDown(value: boolean) {
     this._upsideDown = value;
@@ -496,10 +494,6 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
       }
     });
 
-    if (this.shouldKeyOutStudioBackground()) {
-      this.removeStudioBackgroundFromTextures(THREE);
-    }
-
     this.scene.add(this.model);
     this.currentLoadedPath = url;
 
@@ -519,95 +513,6 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     } else {
       this.model.rotation.set(0, 0, 0);
     }
-  }
-
-  private shouldKeyOutStudioBackground(): boolean {
-    if (this.keyOutStudioBackground === false) {
-      return false;
-    }
-    if (this.keyOutStudioBackground === true) {
-      return true;
-    }
-
-    let hasPhotoScanMesh = false;
-    this.model.traverse((child: any) => {
-      if (child.isMesh && child.name?.includes('texture_pbr')) {
-        hasPhotoScanMesh = true;
-      }
-    });
-    return hasPhotoScanMesh;
-  }
-
-  /**
-   * Photogrammetry demo GLBs bake a white/grey studio plate into baseColor.
-   * Make those pixels transparent so the themed viewer background shows through.
-   */
-  private removeStudioBackgroundFromTextures(THREE: typeof import('three')): void {
-    if (!this.model) {
-      return;
-    }
-
-    const hardCutoff = 238;
-    const softCutoff = 210;
-
-    this.model.traverse((child: any) => {
-      if (!child.isMesh || !child.material) {
-        return;
-      }
-
-      const materials = Array.isArray(child.material) ? child.material : [child.material];
-      for (const material of materials) {
-        const mat = material as {
-          map?: { image?: CanvasImageSource; colorSpace?: unknown };
-          transparent?: boolean;
-          alphaTest?: number;
-          needsUpdate?: boolean;
-        };
-        const sourceImage = mat.map?.image as (HTMLImageElement & { width?: number; height?: number }) | undefined;
-        const width = sourceImage?.width ?? 0;
-        const height = sourceImage?.height ?? 0;
-        if (!sourceImage || width <= 0 || height <= 0) {
-          continue;
-        }
-
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d', { willReadFrequently: true });
-        if (!ctx) {
-          continue;
-        }
-
-        ctx.drawImage(sourceImage, 0, 0, width, height);
-        const imageData = ctx.getImageData(0, 0, width, height);
-        const pixels = imageData.data;
-
-        for (let i = 0; i < pixels.length; i += 4) {
-          const r = pixels[i];
-          const g = pixels[i + 1];
-          const b = pixels[i + 2];
-          const minChannel = Math.min(r, g, b);
-
-          if (minChannel >= hardCutoff) {
-            pixels[i + 3] = 0;
-            continue;
-          }
-
-          if (minChannel >= softCutoff) {
-            const feather = (hardCutoff - minChannel) / (hardCutoff - softCutoff);
-            pixels[i + 3] = Math.round(pixels[i + 3] * feather);
-          }
-        }
-
-        ctx.putImageData(imageData, 0, 0);
-        const keyedTexture = new THREE.CanvasTexture(canvas);
-        keyedTexture.colorSpace = THREE.SRGBColorSpace;
-        mat.map = keyedTexture;
-        mat.transparent = true;
-        mat.alphaTest = 0.04;
-        mat.needsUpdate = true;
-      }
-    });
   }
 
   private animate = () => {

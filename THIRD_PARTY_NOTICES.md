@@ -14,8 +14,9 @@ dependencies and their licenses. For the full dependency tree, run
 
 | Asset | Location | License |
 |-------|----------|---------|
-| Duck, Avocado, WaterBottle `.glb` | `src/assets/demo/models/` | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) — [Khronos glTF Sample Models](https://github.com/KhronosGroup/glTF-Sample-Models) |
-| Product thumbnail SVGs | `src/assets/demo/products/` | MIT (same as this project) |
+| Materials Variants Shoe `.glb` | `src/assets/demo/models/shoes-catalog.glb` | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — © Shopify, [Khronos glTF Sample Assets](https://github.com/KhronosGroup/glTF-Sample-Assets) |
+| Duck, Avocado, WaterBottle `.glb` | `src/assets/demo/models/` (optional) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) — [Khronos glTF Sample Models](https://github.com/KhronosGroup/glTF-Sample-Models) |
+| Product thumbnail SVGs / PNGs | `src/assets/demo/products/` | MIT (same as this project) |
 
 ## Frontend runtime dependencies (summary)
 

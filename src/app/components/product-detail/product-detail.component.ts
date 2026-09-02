@@ -58,8 +58,8 @@ export class ProductDetailComponent implements OnInit {
 
             this.product = product;
             this.loading = false;
-            // Reset view state
-            this.selectedType = 'image';
+            // Default to photo when available; otherwise 3D preview.
+            this.selectedType = this.galleryImages.length > 0 ? 'image' : '3d';
             this.selectedImageIndex = 0;
             this.carouselActiveIndex = 0;
             this.quantity = 1;
@@ -84,9 +84,22 @@ export class ProductDetailComponent implements OnInit {
     });
   }
 
+  get galleryImages(): string[] {
+    if (this.product?.images?.length) {
+      return this.product.images.filter((url) => !!url?.trim());
+    }
+    if (this.product?.imageUrl?.trim()) {
+      return [this.product.imageUrl];
+    }
+    return [];
+  }
+
+  get hasGalleryImages(): boolean {
+    return this.galleryImages.length > 0;
+  }
+
   get carouselSlideCount(): number {
-    const imageCount = this.product?.images?.length ?? 0;
-    return imageCount + (this.product?.model3dUrl ? 1 : 0);
+    return this.galleryImages.length + (this.product?.model3dUrl ? 1 : 0);
   }
 
   get carouselSlideIndices(): number[] {
@@ -125,7 +138,7 @@ export class ProductDetailComponent implements OnInit {
   }
 
   private updateCarouselSelection(index: number): void {
-    const imageCount = this.product?.images?.length ?? 0;
+    const imageCount = this.galleryImages.length;
     const clampedIndex = Math.max(0, Math.min(index, this.carouselSlideCount - 1));
 
     if (clampedIndex < imageCount) {
@@ -155,8 +168,8 @@ export class ProductDetailComponent implements OnInit {
         : (this.product.name || ''))
     };
 
-    if (this.product.images?.length) {
-      queryParams['images'] = encodeURIComponent(JSON.stringify(this.product.images));
+    if (this.galleryImages.length) {
+      queryParams['images'] = encodeURIComponent(JSON.stringify(this.galleryImages));
     }
     if (this.product.model3dUrl) {
       queryParams['model'] = encodeURIComponent(this.product.model3dUrl);

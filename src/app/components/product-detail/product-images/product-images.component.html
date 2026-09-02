@@ -1,9 +1,10 @@
 <div class="product-images">
   <div class="main-image">
-    [src]="(product.images?.[selectedImageIndex] || product.imageUrl) | imageUrl"
-    [alt]="product.name"
-    class="main-product-image"
-    (click)="onImageClick()"
+    <img
+      [src]="(product.images?.[selectedImageIndex] || product.imageUrl) | imageUrl"
+      [alt]="product.name | localized"
+      class="main-product-image"
+      (click)="onImageClick()"
     />
     <div *ngIf="product.isSpecial" class="special-badge">
       SPECIAL OFFER

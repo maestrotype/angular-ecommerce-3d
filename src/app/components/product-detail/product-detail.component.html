@@ -59,8 +59,8 @@
                 {{ 'PRODUCT.STOCK.OUT_OF_STOCK' | translate }}
               </div>
               <img
-                *ngIf="selectedType === 'image' && product?.images?.length"
-                [src]="product.images[selectedImageIndex]"
+                *ngIf="selectedType === 'image' && hasGalleryImages"
+                [src]="galleryImages[selectedImageIndex] | imageUrl"
                 alt="Product image"
                 class="main-image"
                 (click)="onImageClicked()" />
@@ -96,8 +96,8 @@
 
             <div class="thumbnails">
               <img
-                *ngFor="let img of product?.images; let i = index"
-                [src]="img"
+                *ngFor="let img of galleryImages; let i = index"
+                [src]="img | imageUrl"
                 [class.selected]="selectedType === 'image' && selectedImageIndex === i"
                 (click)="onThumbnailSelected('image', i)"
                 alt="Product thumbnail"
@@ -121,7 +121,7 @@
             </div>
           </div>
 
-          <div class="pdp-gallery-mobile" *ngIf="product?.images?.length">
+          <div class="pdp-gallery-mobile" *ngIf="hasGalleryImages || product?.model3dUrl">
             <div class="pdp-carousel">
               <div
                 class="pdp-carousel-track"
@@ -129,9 +129,9 @@
                 (scroll)="onCarouselScroll($event)">
                 <div
                   class="pdp-carousel-slide"
-                  *ngFor="let img of product.images; let i = index">
+                  *ngFor="let img of galleryImages; let i = index">
                   <img
-                    [src]="img"
+                    [src]="img | imageUrl"
                     [alt]="'Product image ' + (i + 1)"
                     class="pdp-carousel-image" />
                 </div>

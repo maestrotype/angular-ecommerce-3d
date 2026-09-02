@@ -261,14 +261,21 @@
   --bought-together-card-price: var(--text-primary);
 
   /* Product Stepper - Dark theme */
-  --product-stepper-bg: var(--surface-secondary);
+  --product-stepper-bg: var(--surface-elevated);
   --product-stepper-border: 1px solid var(--border-default);
   --product-stepper-radius: 10px;
   --product-stepper-shadow: var(--shadow-sm);
-  --product-stepper-btn-bg: var(--surface-tertiary);
+  --product-stepper-btn-bg: var(--surface-secondary);
   --product-stepper-btn-hover: var(--surface-highlight);
   --product-stepper-btn-color: var(--text-primary);
+  --product-stepper-btn-hover-color: var(--text-primary);
+  --product-stepper-value-bg: var(--surface-tertiary);
   --product-stepper-value-color: var(--text-primary);
+  --product-stepper-divider: var(--border-subtle);
+  --pdp-purchase-row-bg: var(--surface-elevated);
+  --pdp-purchase-row-border: 1px solid var(--border-subtle);
+  --pdp-purchase-row-radius: var(--radius-lg);
+  --pdp-purchase-row-padding: var(--spacing-md);
 
   /* Glass Style Buttons - Dark theme */
   --glass-btn-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
@@ -804,11 +811,11 @@
     border: 1px solid var(--surface-tertiary);
   }
 
-  /* Quantity input */
-  body .quantity-value {
-    background: var(--surface-secondary);
-    color: var(--text-primary);
-    border: 1px solid var(--surface-tertiary);
+  /* Quantity stepper on PDP only */
+  .product-detail .quantity-value {
+    background: var(--product-stepper-value-bg, transparent);
+    color: var(--product-stepper-value-color, var(--text-primary));
+    border-color: var(--product-stepper-divider, var(--border-subtle));
   }
 }
 

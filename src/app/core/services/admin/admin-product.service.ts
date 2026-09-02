@@ -9,7 +9,7 @@ import {
 } from '../../../../shared/models/product.model';
 import { environment } from '../../../../environments/environment';
 import { PROD_API_URL } from '../../utils/api-url.util';
-import { ProductService } from '../product.service';
+import { CatalogRefreshService } from '../catalog-refresh.service';
 
 @Injectable({
   providedIn: 'root',
@@ -21,11 +21,11 @@ export class AdminProductService {
 
   constructor(
     private http: HttpClient,
-    private storefrontProductService: ProductService,
+    private catalogRefresh: CatalogRefreshService,
   ) {}
 
   notifyCatalogChanged(): void {
-    this.storefrontProductService.notifyCatalogChanged();
+    this.catalogRefresh.notify();
   }
 
   private getHeaders(): HttpHeaders {

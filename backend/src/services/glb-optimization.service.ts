@@ -14,6 +14,8 @@ export const MAX_STORED_GLB_BYTES = 50 * 1024 * 1024;
 /** Accept large raw uploads; GlbOptimizationService compresses before storage. */
 export const RAW_GLB_UPLOAD_MAX_BYTES = 200 * 1024 * 1024;
 
+type OptimizeProfile = 'light' | 'aggressive';
+
 @Injectable()
 export class GlbOptimizationService {
   private resolveGltfTransformBin(): string {
@@ -33,32 +35,40 @@ export class GlbOptimizationService {
     return readFileSync(path).length;
   }
 
-  /** Optimize inputs above 512KB; caller must reject if still above 50MB. */
-  async optimize(inputPath: string): Promise<string | null> {
-    const onRender = process.env.RENDER === 'true' || process.env.NODE_ENV?.toLowerCase() === 'production';
-    if (onRender || process.env.SKIP_GLB_OPTIMIZATION === 'true') {
-      console.log('[GlbOptimization] Skipped on production Render (timeout/memory limits)');
-      return null;
-    }
-
-    const inputSize = this.readSize(inputPath);
-    if (inputSize <= 512 * 1024) {
-      console.log('[GlbOptimization] Skipped — file already small (<512KB)');
-      return null;
-    }
-
-    console.log(`[GlbOptimization] Optimizing ${(inputSize / 1024 / 1024).toFixed(2)}MB…`);
-
-    const outputPath = `${inputPath}-optimized.glb`;
-    try {
-      const bin = this.resolveGltfTransformBin();
-      const args = [
-        'optimize',
-        inputPath,
-        outputPath,
+  private profileArgs(profile: OptimizeProfile): string[] {
+    if (profile === 'light') {
+      // Preserve mesh fidelity; compress textures only.
+      return [
+        '--compress',
+        'false',
+        '--flatten',
+        'false',
+        '--join',
+        'false',
+        '--instance',
+        'false',
+        '--weld',
+        'false',
         '--texture-compress',
         'webp',
+        '--texture-size',
+        '4096',
       ];
+    }
+
+    // Large uploads only: mesh compression to reach the 50MB storage cap.
+    return ['--compress', 'meshopt', '--texture-compress', 'webp', '--texture-size', '2048'];
+  }
+
+  private async runOptimize(
+    inputPath: string,
+    profile: OptimizeProfile,
+  ): Promise<string | null> {
+    const outputPath = `${inputPath}-optimized.glb`;
+
+    try {
+      const bin = this.resolveGltfTransformBin();
+      const args = ['optimize', inputPath, outputPath, ...this.profileArgs(profile)];
 
       if (bin.endsWith('.js')) {
         await execFileAsync(process.execPath, [bin, ...args], { timeout: 300000 });
@@ -73,13 +83,40 @@ export class GlbOptimizationService {
       const originalSize = this.readSize(inputPath);
       const optimizedSize = this.readSize(outputPath);
       console.log(
-        `[GlbOptimization] Done: ${(originalSize / 1024 / 1024).toFixed(2)}MB -> ${(optimizedSize / 1024 / 1024).toFixed(2)}MB`,
+        `[GlbOptimization] ${profile}: ${(originalSize / 1024 / 1024).toFixed(2)}MB -> ${(optimizedSize / 1024 / 1024).toFixed(2)}MB`,
       );
       return outputPath;
     } catch (error: any) {
-      console.warn(`[GlbOptimization] Failed: ${error?.message || error}`);
+      console.warn(`[GlbOptimization] Failed (${profile}): ${error?.message || error}`);
       return null;
     }
+  }
+
+  /**
+   * Skip models already under 10MB (TripoSR / uploads stay untouched).
+   * Light pass for 10–50MB (textures only).
+   * Aggressive pass only when the raw file exceeds the 50MB storage cap.
+   */
+  async optimize(inputPath: string): Promise<string | null> {
+    const onRender = process.env.RENDER === 'true' || process.env.NODE_ENV?.toLowerCase() === 'production';
+    if (onRender || process.env.SKIP_GLB_OPTIMIZATION === 'true') {
+      console.log('[GlbOptimization] Skipped on production Render (timeout/memory limits)');
+      return null;
+    }
+
+    const inputSize = this.readSize(inputPath);
+    if (inputSize <= CLOUDINARY_RAW_FILE_LIMIT) {
+      console.log('[GlbOptimization] Skipped — already within 10MB limit');
+      return null;
+    }
+
+    const profile: OptimizeProfile =
+      inputSize > MAX_STORED_GLB_BYTES ? 'aggressive' : 'light';
+
+    console.log(
+      `[GlbOptimization] Running ${profile} optimize for ${(inputSize / 1024 / 1024).toFixed(2)}MB file…`,
+    );
+    return this.runOptimize(inputPath, profile);
   }
 
   isWithinStorageLimit(filePath: string): boolean {

@@ -12,8 +12,8 @@ const DEMO = {
   sneaker: 'assets/demo/products/sneaker.png',
   bag: 'assets/demo/products/bag.png',
   mug: 'assets/demo/products/travel-mug.svg',
-  bagGlb: 'assets/demo/models/bag-demo.glb',
-  shoesGlb: 'assets/demo/models/shoes-demo.glb',
+  bagGlb: 'assets/demo/models/bag-catalog.glb',
+  shoesGlb: 'assets/demo/models/shoes-catalog.glb',
 } as const;
 
 function demoGlbForCategory(category: string): string | undefined {
@@ -345,7 +345,9 @@ async function reconcileDemoModelUrls(dataSource: DataSource): Promise<void> {
     const isLegacy =
       currentUrl.includes('duck.glb') ||
       currentUrl.includes('assets/models/bag/') ||
-      currentUrl.includes('assets/models/shoes/');
+      currentUrl.includes('assets/models/shoes/') ||
+      currentUrl.includes('bag-demo.glb') ||
+      currentUrl.includes('shoes-demo.glb');
 
     if (!isLegacy) {
       continue;
