@@ -6,26 +6,30 @@ These files ship with the marketplace template so buyers can run a working store
 
 | File | License |
 |------|---------|
-| `*.svg` | MIT — created for this project, free to modify and redistribute |
+| `*.png`, `*.svg` | MIT — created for this project, free to modify and redistribute |
 
-Use paths like `assets/demo/products/headphones.svg` in seed data or admin product images.
+Use paths like `assets/demo/products/sneaker.png` in seed data or admin product images.
 
 ## 3D models (`models/`)
 
-| File | Source | License |
+| Path | Source | License |
 |------|--------|---------|
-| `duck.glb` | [Khronos — Duck](https://github.com/KhronosGroup/glTF-Sample-Models/tree/main/2.0/Duck) | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
-| `avocado.glb` | Khronos — Avocado | CC0 1.0 |
-| `water-bottle.glb` | Khronos — WaterBottle | CC0 1.0 |
+| `shoes-catalog.glb` | [Khronos Materials Variants Shoe](https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/MaterialsVariantsShoe) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — © Shopify |
+| `bag-catalog.glb` | Lossless copy of `assets/models/bag/bag3.glb` | Same as your bag source asset |
 
-**`duck.glb` is committed** (~120 KB) so 3D works immediately after clone.
+Regenerate demo catalog GLBs:
 
-**Larger models** (`avocado.glb`, `water-bottle.glb`) are downloaded on demand — keeps the git repo lean:
+```bash
+npm run demo:build-models
+cd backend && npm run seed   # migrates DB URLs from legacy *-demo.glb paths
+```
+
+Optional Khronos CC0 samples (`avocado.glb`, `water-bottle.glb`) can be fetched with:
 
 ```bash
 npm run demo:models
 ```
 
-Reference in product `model3dUrl` as `assets/demo/models/duck.glb` (served by Angular).
-
 Replace with your own `.glb` assets in production. See `docs/CUSTOMIZATION.md` for upload via Admin → Products.
+
+**Service worker note:** if a 3D preview still looks wrong after updating models, hard-refresh (`Cmd+Shift+R`) or unregister the app service worker — `.glb` files under `/assets/` are cached.
