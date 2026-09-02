@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 import { AdminAuthService } from "../../../services/auth.service";
 import { AdminOrderService } from "../../../services/order.service";
 import { ThemeService } from "../../../../app/core/themes/theme.service";
-import { themeLabelI18nKey } from "../../../../app/core/themes/theme-config";
+import { themeLabelI18nKey } from "../../../../app/core/themes/theme-label.util";
 import { TranslateService } from "@ngx-translate/core";
 import { Theme } from "../../../../app/core/themes/theme.model";
 import { Subject, Observable } from "rxjs";

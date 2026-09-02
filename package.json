@@ -30,6 +30,7 @@
     "pack:marketplace": "node scripts/pack-marketplace.cjs",
     "docs:client": "node scripts/build-client-docs.cjs",
     "demo:models": "node scripts/download-demo-models.mjs",
+    "demo:optimize-models": "node scripts/optimize-demo-models.mjs",
     "icons:generate": "node scripts/generate-favicons.mjs"
   },
   "dependencies": {

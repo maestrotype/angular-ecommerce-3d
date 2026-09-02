@@ -876,6 +876,7 @@
   .admin-header.mat-toolbar,
   mat-toolbar.admin-header {
     --mat-toolbar-container-background-color: transparent;
+    --mat-toolbar-container-text-color: var(--text-primary);
     background: var(--surface-chrome-gradient, var(--surface-chrome));
     background-color: var(--surface-chrome);
     color: var(--text-primary);
@@ -1275,6 +1276,7 @@
   .admin-header.mat-toolbar {
     background-color: var(--surface-header);
     color: var(--text-primary);
+    --mat-toolbar-container-text-color: var(--text-primary);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     border: none;
@@ -2022,6 +2024,9 @@ html[data-theme='dark'] body.is-admin {
      No !important — specificity + CSS variables only. */
   .admin-header.mat-toolbar .mat-mdc-icon-button.mat-mdc-button-base,
   mat-toolbar.admin-header .mat-mdc-icon-button.mat-mdc-button-base {
+    --mdc-icon-button-icon-color: var(--text-primary);
+    --mat-icon-button-icon-color: var(--text-primary);
+    color: var(--text-primary);
     border-radius: 50%;
     overflow: hidden;
     background-color: transparent;

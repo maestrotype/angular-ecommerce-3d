@@ -43,7 +43,18 @@
   min-height: 16rem;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  background: color-mix(in srgb, var(--surface-elevated) 55%, transparent);
+  background:
+    radial-gradient(
+      ellipse 90% 80% at 50% 45%,
+      color-mix(in srgb, var(--interactive-primary) 12%, transparent) 0%,
+      transparent 72%
+    ),
+    var(--viewer-host-bg, color-mix(in srgb, var(--surface-elevated) 55%, transparent));
+  border: 1px solid var(--border-subtle);
+
+  app-three-d-viewer {
+    --viewer-host-bg: transparent;
+  }
 }
 
 .dashboard-wow__stage app-three-d-viewer {

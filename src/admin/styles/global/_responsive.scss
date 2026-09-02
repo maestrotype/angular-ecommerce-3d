@@ -139,6 +139,15 @@
     font-size: var(--admin-shell-icon-size);
     width: var(--admin-shell-icon-size);
     height: var(--admin-shell-icon-size);
+    color: var(--text-primary);
+  }
+
+  .admin-header .menu-button.mat-mdc-icon-button,
+  .admin-header .storefront-link.mat-mdc-icon-button,
+  .admin-header .header-actions__account.mat-mdc-icon-button {
+    --mdc-icon-button-icon-color: var(--text-primary);
+    --mat-icon-button-icon-color: var(--text-primary);
+    color: var(--text-primary);
   }
 
   .filters-grid {

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Downloads Khronos CC0 demo GLB models into src/assets/demo/models/
+ * Downloads optional Khronos CC0 demo GLB models into src/assets/demo/models/
  * Run: npm run demo:models
  */
 import { mkdir, writeFile, access } from 'node:fs/promises';
@@ -11,10 +11,6 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT_DIR = join(ROOT, 'src/assets/demo/models');
 
 const MODELS = [
-  {
-    name: 'duck.glb',
-    url: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/Duck/glTF-Binary/Duck.glb',
-  },
   {
     name: 'avocado.glb',
     url: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/main/2.0/Avocado/glTF-Binary/Avocado.glb',
@@ -56,7 +52,8 @@ async function main() {
   for (const model of MODELS) {
     await download(model);
   }
-  console.log('Demo models ready → src/assets/demo/models/');
+  console.log('Optional demo models ready → src/assets/demo/models/');
+  console.log('Fashion catalog uses assets/models/bag and assets/models/shoes (committed).');
 }
 
 main().catch((err) => {
