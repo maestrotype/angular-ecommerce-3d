@@ -1,14 +1,33 @@
+# Dependencies & build outputs
 node_modules
+**/node_modules
 dist
+dist-marketplace
+backend/dist
+backend/uploads
+.angular
+coverage
+test-results
+
+# VCS / IDE
 .git
 .gitignore
-*.md
-*.log
+.cursor
+.vscode
+.idea
+
+# Secrets — never bake into images
 .env
 .env.*
 !.env.example
-.angular
-.vscode
-coverage
+!backend/.env.example
+
+# Heavy / non-runtime paths (keep src/assets for storefront GLBs)
+local-ai-worker
+demo-video
+screenshots
+marketing-assets/videos
+docs/seller
 e2e
-backend
+*.log
+ssr_output.html

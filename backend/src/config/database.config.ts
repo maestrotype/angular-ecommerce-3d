@@ -36,6 +36,11 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
         : defaultPoolMax;
     const cappedPoolMax = isPooledRemote ? Math.min(poolMax, 10) : poolMax;
 
+    const syncExplicit = this.configService.get<string>('TYPEORM_SYNCHRONIZE');
+    const synchronize =
+      syncExplicit === 'true' ||
+      (syncExplicit !== 'false' && nodeEnv !== 'production');
+
     return {
       type: 'postgres',
       host: this.configService.get('DATABASE_HOST'),
@@ -44,7 +49,7 @@ export class DatabaseConfig implements TypeOrmOptionsFactory {
       password: this.configService.get('DATABASE_PASSWORD'),
       database: this.configService.get('DATABASE_NAME'),
       entities: [Section, Message, Notification, Category, Product, Order, User, ProductRecommendation, Payment, Settings, Page, NewsletterSubscriber],
-      synchronize: nodeEnv !== 'production',
+      synchronize,
       logging: nodeEnv === 'development',
       ssl: useSsl ? { rejectUnauthorized: false } : false,
       extra: {

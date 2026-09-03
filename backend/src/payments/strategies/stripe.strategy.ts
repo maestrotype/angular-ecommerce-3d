@@ -31,7 +31,9 @@ export class StripeStrategy implements PaymentStrategy<StripeIntentData> {
     if (secret && secret.trim().length > 0 && secret !== 'sk_test_mock_key_for_testing_only') {
       try {
         console.log('[Stripe] Attempting to create Stripe instance with key:', secret.substring(0, 20) + '...' + secret.substring(secret.length - 4));
-        this.stripe = new Stripe(secret);
+        // CJS/ESM interop: compiled `import Stripe from 'stripe'` may be `{ default: Stripe }`
+        const StripeCtor = (Stripe as unknown as { default?: typeof Stripe }).default ?? Stripe;
+        this.stripe = new StripeCtor(secret);
         console.log('[Stripe] Real Stripe instance created successfully');
         console.log('[Stripe] Stripe instance methods:', Object.keys(this.stripe));
       } catch (error) {

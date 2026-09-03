@@ -12,7 +12,10 @@ RUN npm ci --include=dev
 
 COPY backend ./backend
 
-RUN npm run build --workspace=angular-ecommerce-backend
+WORKDIR /app/backend
+RUN rm -f tsconfig.tsbuildinfo \
+  && npx nest build \
+  && test -f dist/main.js
 
 FROM node:18-alpine
 

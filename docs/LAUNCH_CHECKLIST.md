@@ -64,7 +64,7 @@ git push origin v1.0.0
 |-------|------|
 | Fresh clone → GETTING_STARTED ≤30 min | ☐ |
 | `npm run demo:models` + `backend npm run seed` | ☐ |
-| `docker compose up` | ☐ |
+| `docker compose up` | ✅ A2.6 2026-09-03 — see MARKETPLACE_LAUNCH_ROADMAP §6 |
 | 3D viewer on shop / PDP | ☐ |
 | Stripe test checkout | ☐ |
 | Theme switch (light / dark / glass) | ☐ |

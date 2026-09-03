@@ -1,7 +1,4 @@
-version: '3.8'
-
 services:
-  # PostgreSQL Database
   postgres:
     image: postgres:15-alpine
     container_name: ecommerce-db
@@ -12,19 +9,20 @@ services:
       POSTGRES_DB: ${DATABASE_NAME:-ecommerce_db}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    # Override if host 5432 is taken: POSTGRES_HOST_PORT=5434 docker compose up
     ports:
-      - "5432:5432"
+      - "${POSTGRES_HOST_PORT:-5432}:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USERNAME:-postgres} -d ${DATABASE_NAME:-ecommerce_db}"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  # NestJS Backend
+  # NestJS API — build context is repo root (npm workspaces). See backend/Dockerfile.
   backend:
     build:
-      context: ./backend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: backend/Dockerfile
     container_name: ecommerce-backend
     restart: unless-stopped
     env_file:
@@ -37,16 +35,32 @@ services:
       DATABASE_USERNAME: ${DATABASE_USERNAME:-postgres}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD:-postgres}
       DATABASE_NAME: ${DATABASE_NAME:-ecommerce_db}
-      FRONTEND_URL: http://localhost:4200
+      # Compose Postgres has no TLS — must override production auto-SSL
+      DATABASE_SSL: "false"
+      # Local Compose has no migration runner — auto-create schema for the demo stack
+      TYPEORM_SYNCHRONIZE: "true"
+      FRONTEND_URL: http://localhost:${FRONTEND_HOST_PORT:-4200}
     ports:
-      - "3002:3002"
+      - "${BACKEND_HOST_PORT:-3002}:3002"
     depends_on:
       postgres:
         condition: service_healthy
     volumes:
-      - backend_uploads:/app/uploads
+      - backend_uploads:/app/backend/uploads
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3002/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 8
+      start_period: 40s
 
-  # Angular Frontend
+  # Angular CSR via nginx; /api and /uploads proxied to backend service
   frontend:
     build:
       context: .
@@ -54,9 +68,10 @@ services:
     container_name: ecommerce-frontend
     restart: unless-stopped
     ports:
-      - "4200:80"
+      - "${FRONTEND_HOST_PORT:-4200}:80"
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
 
 volumes:
   postgres_data:
