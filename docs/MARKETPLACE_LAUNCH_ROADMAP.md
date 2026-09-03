@@ -104,7 +104,7 @@ Work in priority order. Mark items `[ ]` → `[x]` as completed.
 | A2.3 | Fix README broken links (`WALKTHROUGH.md`, `SUPPORT.md`) | `README.md` | [x] |
 | A2.4 | Fix `cp .env.example` instruction (backend-only today) | `README.md`, `docs/GETTING_STARTED.md` | [x] |
 | A2.5 | Remove or fix `serve:ssr:dev` script reference | `docs/GETTING_STARTED.md`, `playwright.config.ts`, `package.json` | [x] |
-| A2.6 | Verify `docker compose up` end-to-end | manual QA log in this doc §6 | [ ] |
+| A2.6 | Verify `docker compose up` end-to-end | manual QA log in this doc §6 | [x] |
 
 **Exit gate**: new buyer follows Quick Start → sees storefront + admin without reading source.
 
@@ -261,6 +261,7 @@ Use this table verbatim in marketplace description to reduce refunds and bad rev
 
 | Date | Tester | Scenario | Result | Notes |
 |------|--------|----------|--------|-------|
+| 2026-09-03 | Agent | `docker compose up --build` (A2.6) | pass | Monorepo Dockerfiles; `DATABASE_SSL=false` + `TYPEORM_SYNCHRONIZE=true` for bundled Postgres; `/api/health`, nginx `/api` proxy, `/api/products`, `/api/docs` → 200. Host Postgres conflict: `POSTGRES_HOST_PORT=5434`. |
 | | | Fresh clone → GETTING_STARTED | | |
 | 2026-08-07 | Agent | GitHub Actions CI | pass | build + lint + smoke e2e configured |
 | 2026-08-07 | Agent | Demo 3D + seed | pass | Khronos CC0 models + local SVG seeds |

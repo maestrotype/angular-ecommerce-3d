@@ -58,7 +58,8 @@
     "rxjs": "^7.8.1",
     "sharp": "^0.34.3",
     "swagger-ui-express": "^5.0.1",
-    "typeorm": "^0.3.17"
+    "typeorm": "^0.3.17",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@gltf-transform/cli": "^4.2.0",
