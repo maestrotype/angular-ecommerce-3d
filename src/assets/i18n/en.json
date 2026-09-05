@@ -208,6 +208,13 @@
   "LOAD_DEMO_CONTENT": "Fill demo data",
   "DEMO_CONTENT_LOADED": "Demo content loaded into the form",
   "DEMO_CONTENT_NOT_AVAILABLE": "No demo preset is available for this section type",
+  "DEMO_CATALOG": {
+    "BANNER": "Demo mode — sample products while the store connects. Purchases are disabled.",
+    "ADD_TO_CART_BLOCKED": "Sample product — available after the store connects.",
+    "CHECKOUT_BLOCKED": "Checkout is unavailable in demo mode.",
+    "PREVIEW_ONLY": "Preview only",
+    "PREVIEW_HINT": "This is a sample product shown while the server wakes up."
+  },
   "QUICK_START_WIZARD": "Quick Start Homepage",
   "QUICK_START_WIZARD_CONFIRM": "Create a starter homepage with header, hero, best sellers, categories, and footer?",
   "QUICK_START_WIZARD_SUCCESS": "Homepage starter sections created successfully",

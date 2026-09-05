@@ -200,6 +200,13 @@
   "PAGE": "Страница",
   "DEMO_CONTENT_LOADED": "Демо-контент загружен в форму",
   "DEMO_CONTENT_NOT_AVAILABLE": "Для этого типа секции нет демо-пресета",
+  "DEMO_CATALOG": {
+    "BANNER": "Демо-режим — показываем образцы, пока магазин подключается. Покупка недоступна.",
+    "ADD_TO_CART_BLOCKED": "Образец товара — покупка станет доступна после подключения сервера.",
+    "CHECKOUT_BLOCKED": "Оформление заказа недоступно в демо-режиме.",
+    "PREVIEW_ONLY": "Только просмотр",
+    "PREVIEW_HINT": "Это демо-товар, пока сервер просыпается."
+  },
   "QUICK_START_WIZARD": "Быстрый старт главной",
   "QUICK_START_WIZARD_CONFIRM": "Создать стартовую главную страницу с header, hero, best sellers, categories и footer?",
   "QUICK_START_WIZARD_SUCCESS": "Стартовые секции главной страницы созданы",

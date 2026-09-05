@@ -1,13 +1,15 @@
 
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { BehaviorSubject, Observable, forkJoin, of } from 'rxjs';
+import { BehaviorSubject, Observable, forkJoin, of, throwError } from 'rxjs';
 import { map, switchMap, catchError } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Order } from 'src/shared/models/order.model';
 import { CreateOrderRequest } from 'src/shared/models/create-order-request.model';
 import { CartItem } from 'src/shared/models/cart-item.model';
 import { environment } from '../../../environments/environment';
+import { isDemoProductId } from '../../../shared/utils/demo-catalog.util';
+import { DemoCatalogStateService } from './demo-catalog-state.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,13 +22,19 @@ export class CartService {
 
   constructor(
     private http: HttpClient,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private demoCatalogState: DemoCatalogStateService,
   ) {
     // Load cart from localStorage on service initialization (browser only)
     this.loadCartFromStorage();
   }
 
-  addToCart(item: Omit<CartItem, 'quantity'>): void {
+  /** Returns false when the item is a bundled demo SKU (not purchasable). */
+  addToCart(item: Omit<CartItem, 'quantity'>): boolean {
+    if (isDemoProductId(item.productId) || this.demoCatalogState.isDemoMode()) {
+      return false;
+    }
+
     // Ensure price is a number
     const validatedItem = {
       ...item,
@@ -46,6 +54,7 @@ export class CartService {
     }
 
     this.updateCart(currentItems);
+    return true;
   }
 
   removeFromCart(itemId: number): void {
@@ -89,6 +98,9 @@ export class CartService {
   }
 
   createOrder(orderData: CreateOrderRequest): Observable<Order> {
+    if (this.demoCatalogState.isDemoMode()) {
+      return throwError(() => new Error('DEMO_CATALOG.CHECKOUT_BLOCKED'));
+    }
     return this.http.post<Order>(this.apiUrl, orderData);
   }
 
@@ -122,7 +134,9 @@ export class CartService {
         const items = JSON.parse(savedCart) as CartItem[];
 
         // Validate and convert types for loaded items
-        const validatedItems = items.map(item => ({
+        const validatedItems = items
+          .filter((item) => !isDemoProductId(item.productId))
+          .map(item => ({
           ...item,
           productId: Number(item.productId),
           price: Number(item.price),
@@ -138,13 +152,14 @@ export class CartService {
   }
 
   private validateCartItemsStock(items: CartItem[]): void {
-    if (items.length === 0) {
+    const purchasableItems = items.filter((item) => !isDemoProductId(item.productId));
+    if (purchasableItems.length === 0) {
       this.cartItemsSubject.next([]);
       return;
     }
 
     // Check stock for each item
-    const stockChecks = items.map(item =>
+    const stockChecks = purchasableItems.map(item =>
       this.http.get<any>(`${this.productsApiUrl}/${item.productId}`).pipe(
         map(product => ({ item, product, hasStock: product.stock >= item.quantity })),
         catchError(() => of({ item, product: null, hasStock: false }))
@@ -162,7 +177,7 @@ export class CartService {
       this.saveCartToStorage(validItems);
 
       // Remove invalid items from localStorage
-      if (validItems.length !== items.length) {
+      if (validItems.length !== purchasableItems.length) {
 
       }
     });

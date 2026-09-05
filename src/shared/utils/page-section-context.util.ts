@@ -1,5 +1,5 @@
 import { forkJoin, Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, take } from 'rxjs/operators';
 import { ProductService } from '../../app/core/services/product.service';
 import { PageSectionContext } from '../models/page-section-context.model';
 
@@ -16,14 +16,14 @@ export function loadPageSectionContext(
   } = {};
 
   if (types.has('best-sellers')) {
-    requests.bestSellers = productService.getBestSellers().pipe(catchError(() => of([])));
+    requests.bestSellers = productService.getBestSellers().pipe(take(1), catchError(() => of([])));
   }
 
   if (types.has('product-carousel')) {
-    requests.catalog = productService.getProducts().pipe(catchError(() => of([])));
-    requests.specialOffers = productService.getSpecialOffers().pipe(catchError(() => of([])));
+    requests.catalog = productService.getProducts().pipe(take(1), catchError(() => of([])));
+    requests.specialOffers = productService.getSpecialOffers().pipe(take(1), catchError(() => of([])));
     if (!requests.bestSellers) {
-      requests.bestSellers = productService.getBestSellers().pipe(catchError(() => of([])));
+      requests.bestSellers = productService.getBestSellers().pipe(take(1), catchError(() => of([])));
     }
   }
 

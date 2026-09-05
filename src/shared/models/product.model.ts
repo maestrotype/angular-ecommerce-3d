@@ -23,6 +23,8 @@ export interface Product {
   stock?: number;
   specifications?: { [key: string]: string };
   isFavorite?: boolean;
+  /** Bundled offline catalog row — not purchasable until live API replaces it. */
+  isDemo?: boolean;
   createdAt?: Date | string;
   updatedAt?: Date | string;
 }

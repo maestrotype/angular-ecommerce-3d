@@ -12,6 +12,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { resolveUiLanguage } from 'src/shared/utils/ui-language.util';
 import { AnalyticsService } from './core/services/analytics.service';
 import { MobileMenuService } from './core/services/mobile-menu.service';
+import { DemoCatalogStateService } from './core/services/demo-catalog-state.service';
 
 @Component({
   selector: 'app-root',
@@ -32,6 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
   isMobileMenuOpen = false;
   favoritesCount = 0;
   cartCount = 0;
+  isDemoCatalog = false;
   private cartSubscription: Subscription = new Subscription();
   private favoritesSubscription: Subscription = new Subscription();
   private mobileMenuSubscription: Subscription = new Subscription();
@@ -48,6 +50,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private analyticsService: AnalyticsService,
     private mobileMenuService: MobileMenuService,
+    private demoCatalogState: DemoCatalogStateService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     // Initialize localization
@@ -99,6 +102,11 @@ export class AppComponent implements OnInit, OnDestroy {
     );
     this.mobileMenuSubscription = this.mobileMenuService.isOpen$.subscribe(
       open => this.isMobileMenuOpen = open
+    );
+    this.cartSubscription.add(
+      this.demoCatalogState.isDemoMode$.subscribe((isDemo) => {
+        this.isDemoCatalog = isDemo;
+      }),
     );
   }
 
