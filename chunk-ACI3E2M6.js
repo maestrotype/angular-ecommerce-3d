@@ -1,1 +1,0 @@
-import{f as e,fa as c}from"./chunk-QS5WR73B.js";var i=(()=>{class t{changedSubject=new e;changed$=this.changedSubject.asObservable();notify(){this.changedSubject.next()}static \u0275fac=function(n){return new(n||t)};static \u0275prov=c({token:t,factory:t.\u0275fac,providedIn:"root"})}return t})();export{i as a};

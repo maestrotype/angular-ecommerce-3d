@@ -6,23 +6,26 @@ These files ship with the marketplace template so buyers can run a working store
 
 | File | License |
 |------|---------|
-| `*.png`, `*.svg` | MIT — created for this project, free to modify and redistribute |
+| `*.svg` | MIT — created for this project, free to modify and redistribute |
 
-Use paths like `assets/demo/products/sneaker.png` in seed data or admin product images.
+Use paths like `assets/demo/products/bag.svg` in seed data or admin product images.
 
-## 3D models (`models/`)
+## 3D models
 
-| Path | Source | License |
-|------|--------|---------|
-| `shoes-catalog.glb` | [Khronos Materials Variants Shoe](https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/MaterialsVariantsShoe) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — © Shopify |
-| `bag-catalog.glb` | Lossless copy of `assets/models/bag/bag3.glb` | Same as your bag source asset |
+Full-quality fashion GLB assets ship under `assets/models/`:
 
-Regenerate demo catalog GLBs:
+| Path | Use |
+|------|-----|
+| `assets/models/bag/bag3.glb` | Bags category (~39 MB, photogrammetry source) |
+| `assets/models/shoes/shoes1.glb` | Shoes category (~25 MB, photogrammetry source) |
+
+Optional lightweight copies for slow hosting (`assets/demo/models/*-demo.glb`, ~2 MB) can be regenerated with:
 
 ```bash
-npm run demo:build-models
-cd backend && npm run seed   # migrates DB URLs from legacy *-demo.glb paths
+npm run demo:optimize-models
 ```
+
+The storefront resolves legacy DB paths such as `bag-catalog.glb` / `bag-demo.glb` to the HQ assets automatically.
 
 Optional Khronos CC0 samples (`avocado.glb`, `water-bottle.glb`) can be fetched with:
 
@@ -31,5 +34,3 @@ npm run demo:models
 ```
 
 Replace with your own `.glb` assets in production. See `docs/CUSTOMIZATION.md` for upload via Admin → Products.
-
-**Service worker note:** if a 3D preview still looks wrong after updating models, hard-refresh (`Cmd+Shift+R`) or unregister the app service worker — `.glb` files under `/assets/` are cached.
