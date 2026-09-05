@@ -134,8 +134,7 @@ export class ShopComponent implements OnInit, OnDestroy {
   private loadShopSections(): void {
     this.sectionsLoading = true;
     this.sectionService.getActiveSections('shop').pipe(
-      take(1),
-      timeout(15000),
+      takeUntil(this.destroy$),
       catchError((err) => {
         console.error('Error loading shop sections', err);
         return of([]);
@@ -576,7 +575,10 @@ export class ShopComponent implements OnInit, OnDestroy {
       imageUrl: product.imageUrl
     };
 
-    this.cartService.addToCart(cartItem);
+    if (!this.cartService.addToCart(cartItem)) {
+      this.notificationService.showInfo(this.translate.instant('DEMO_CATALOG.ADD_TO_CART_BLOCKED'));
+      return;
+    }
     this.notificationService.showSuccess(this.translate.instant('SHOP.NOTIFICATIONS.ADDED_TO_CART', { name: getLocalizedString(product.name, this.translate.currentLang) }));
   }
 

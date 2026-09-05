@@ -10,6 +10,7 @@ import { SectionService } from '../../core/services/section.service';
 import { Section } from 'src/shared/models/section.model';
 import { getLocalizedString } from '../../../shared/utils/localization.util';
 import { ProductTabsComponent } from './product-tabs/product-tabs.component';
+import { NotificationService } from '../../core/services/notification.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -43,6 +44,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     private cartService: CartService,
     private modalService: ModalService,
     private translate: TranslateService,
+    private notificationService: NotificationService,
     private viewportScroller: ViewportScroller,
     private sectionService: SectionService
   ) { }
@@ -197,7 +199,10 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     };
 
     for (let i = 0; i < this.quantity; i++) {
-      this.cartService.addToCart(cartItem);
+      if (!this.cartService.addToCart(cartItem)) {
+        this.notificationService.showInfo(this.translate.instant('DEMO_CATALOG.ADD_TO_CART_BLOCKED'));
+        return;
+      }
     }
 
     this.modalService.openModal({

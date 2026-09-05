@@ -12,8 +12,8 @@ const DEMO = {
   sneaker: 'assets/demo/products/sneaker.png',
   bag: 'assets/demo/products/bag.png',
   mug: 'assets/demo/products/travel-mug.svg',
-  bagGlb: 'assets/demo/models/bag-demo.glb',
-  shoesGlb: 'assets/demo/models/shoes-demo.glb',
+  bagGlb: 'assets/models/bag/bag3.glb',
+  shoesGlb: 'assets/models/shoes/shoes1.glb',
 } as const;
 
 function demoGlbForCategory(category: string): string | undefined {
@@ -342,23 +342,31 @@ async function reconcileDemoModelUrls(dataSource: DataSource): Promise<void> {
 
   for (const product of products) {
     const currentUrl = product.model3dUrl || '';
-    const isLegacy =
-      currentUrl.includes('duck.glb') ||
-      currentUrl.includes('assets/models/bag/') ||
-      currentUrl.includes('assets/models/shoes/');
-
-    if (!isLegacy) {
+    const target = demoGlbForCategory(product.category);
+    if (!target) {
       continue;
     }
 
-    const replacement = demoGlbForCategory(product.category);
-    product.model3dUrl = replacement || null;
+    const needsUpdate =
+      !currentUrl ||
+      currentUrl.includes('duck.glb') ||
+      currentUrl.includes('bag-catalog.glb') ||
+      currentUrl.includes('bag-demo.glb') ||
+      currentUrl.includes('shoes-catalog.glb') ||
+      currentUrl.includes('shoes-demo.glb') ||
+      currentUrl.includes('assets/demo/models/');
+
+    if (!needsUpdate || currentUrl === target) {
+      continue;
+    }
+
+    product.model3dUrl = target;
     await repo.save(product);
     updated += 1;
   }
 
   if (updated) {
-    console.log(`Reconciled ${updated} product(s) to optimized demo GLB paths`);
+    console.log(`Reconciled ${updated} product(s) to HQ bundled GLB paths`);
   }
 }
 
@@ -409,9 +417,13 @@ async function upsertFashionProducts(dataSource: DataSource): Promise<void> {
       if (seed.model3dUrl) {
         match.model3dUrl = seed.model3dUrl;
       } else if (
-        match.model3dUrl?.includes('duck.glb') ||
-        match.model3dUrl?.includes('assets/models/bag/') ||
-        match.model3dUrl?.includes('assets/models/shoes/')
+        !match.model3dUrl ||
+        match.model3dUrl.includes('duck.glb') ||
+        match.model3dUrl.includes('bag-catalog.glb') ||
+        match.model3dUrl.includes('bag-demo.glb') ||
+        match.model3dUrl.includes('shoes-catalog.glb') ||
+        match.model3dUrl.includes('shoes-demo.glb') ||
+        match.model3dUrl.includes('assets/demo/models/')
       ) {
         match.model3dUrl = demoGlbForCategory(seed.category) || null;
       }

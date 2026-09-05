@@ -137,13 +137,16 @@ export class ProductStageComponent implements OnDestroy {
     if (!product) {
       return;
     }
-    this.cartService.addToCart({
+    if (!this.cartService.addToCart({
       productId: product.id,
       name: product.name,
       price: Number(product.price),
       imageUrl: product.imageUrl,
       discount: product.discount,
-    });
+    })) {
+      this.notificationService.showInfo(this.translate.instant('DEMO_CATALOG.ADD_TO_CART_BLOCKED'));
+      return;
+    }
     const name = getLocalizedString(product.name, this.translate.currentLang);
     this.notificationService.showSuccess(
       this.translate.instant('SHOP.NOTIFICATIONS.ADDED_TO_CART', { name }),

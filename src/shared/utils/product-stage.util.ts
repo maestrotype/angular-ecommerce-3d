@@ -1,5 +1,6 @@
 import { Product } from '../models/product.model';
 import { filterProductsByCategorySlugs } from './shop-catalog.util';
+import { resolveBundledModelPath } from '../constants/demo-model-paths';
 
 export const DEFAULT_STAGE_CATEGORIES = ['bags', 'clothing', 'shoes'];
 export const DEFAULT_STAGE_LIMIT = 5;
@@ -32,7 +33,7 @@ export function stageModelPath(product: Product | null | undefined): string {
   if (!product) {
     return '';
   }
-  return product.model3dUrl || product.localModel3dUrl || '';
+  return resolveBundledModelPath(product.model3dUrl || product.localModel3dUrl || '');
 }
 
 export function pickStageProducts(

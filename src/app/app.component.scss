@@ -2,6 +2,10 @@ main {
     padding-top: 64px;
     min-height: calc(100vh - 64px);
 
+    &.storefront-main.has-demo-banner {
+        padding-top: calc(64px + var(--demo-banner-height, 2.25rem));
+    }
+
     &.admin-main {
         padding-top: 0;
         min-height: 100vh;
@@ -22,6 +26,35 @@ main {
         padding-top: 64px;
         padding-bottom: 0;
         min-height: 0;
+    }
+}
+
+.demo-catalog-banner {
+    --demo-banner-height: 2.25rem;
+    position: sticky;
+    top: 64px;
+    z-index: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--demo-banner-height);
+    padding: 0.35rem 1rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    text-align: center;
+    color: var(--text-on-primary, #fff);
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--interactive-primary) 88%, #000),
+        color-mix(in srgb, var(--color-accent, var(--interactive-primary)) 82%, #000)
+    );
+    border-bottom: 1px solid color-mix(in srgb, var(--interactive-primary) 40%, transparent);
+}
+
+@media (max-width: 768px) {
+    main.storefront-main.has-demo-banner {
+        padding-top: calc(64px + var(--demo-banner-height, 2.25rem));
     }
 }
 

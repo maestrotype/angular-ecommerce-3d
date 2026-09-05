@@ -211,7 +211,10 @@ export class BestSellersComponent implements OnInit, OnDestroy {
             imageUrl: product.imageUrl,
             discount: product.discount
         };
-        this.cartService.addToCart(cartItem);
+        if (!this.cartService.addToCart(cartItem)) {
+            this.notificationService.showInfo(this.translate.instant('DEMO_CATALOG.ADD_TO_CART_BLOCKED'));
+            return;
+        }
         const productName = getLocalizedString(product.name, this.translate.currentLang);
         this.notificationService.showSuccess(`Added ${productName} to cart!`);
     }

@@ -2,6 +2,9 @@
 
 <div *ngIf="!isAdminRoute() && !isViewerRoute()">
   <app-header></app-header>
+  <div class="demo-catalog-banner" *ngIf="isDemoCatalog" role="status" aria-live="polite">
+    <span>{{ 'DEMO_CATALOG.BANNER' | translate }}</span>
+  </div>
 </div>
 
 <main
@@ -9,6 +12,7 @@
   tabindex="-1"
   [class.admin-main]="isAdminRoute()"
   [class.storefront-main]="!isAdminRoute() && !isViewerRoute()"
+  [class.has-demo-banner]="isDemoCatalog && !isAdminRoute() && !isViewerRoute()"
   [class.is-page-entering]="pageEntering"
 >
   <router-outlet (activate)="onRouteActivate()"></router-outlet>

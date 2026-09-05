@@ -4,6 +4,7 @@ import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { fixBackendUrl } from '../../core/utils/url-helper';
+import { resolveBundledModelPath } from '../../../shared/constants/demo-model-paths';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { ThreeDModelService } from '../../core/services/three-d-model.service';
@@ -323,7 +324,8 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
    * Subscribes to the advanced cached loading service.
    */
   private loadModel() {
-    const pathToLoad = this.isHdMode && this.hdModelPath ? this.hdModelPath : this.modelPath;
+    const rawPath = this.isHdMode && this.hdModelPath ? this.hdModelPath : this.modelPath;
+    const pathToLoad = resolveBundledModelPath(rawPath);
     
     const lowerPath = (pathToLoad || '').toLowerCase();
     this.isAiGeneration = !!pathToLoad && (

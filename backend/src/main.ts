@@ -53,6 +53,9 @@ async function bootstrap() {
     origin: [
       "http://localhost:4200",
       "http://localhost:3002",
+      "http://127.0.0.1:4200",
+      "http://127.0.0.1:3002",
+      /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/, // ng serve / Cursor on any local port
       "https://angular-ecommerce-3d-production.up.railway.app",
       "https://maestrotype.github.io", // GitHub Pages domain
       /^https:\/\/.*\.github\.io$/, // Allow any GitHub Pages subdomain
