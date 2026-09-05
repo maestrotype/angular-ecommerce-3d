@@ -46,7 +46,8 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
 
   @Output() modelLoaded = new EventEmitter<void>();
 
-  isLoading = true;
+  /** Lazy viewers stay idle until visible; avoid showing 0% on hidden 0×0 hosts. */
+  isLoading = false;
   hasError = false;
   loadingProgress = 0;
   isAiGeneration = false;
@@ -93,7 +94,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
       if (this.loading === 'lazy') {
         this.setupViewportObserver();
       } else {
-        this.initializeViewer();
+        this.tryInitializeViewer();
       }
     }
   }
@@ -112,8 +113,9 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
       this.intersectionObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            this.initializeViewer();
-            this.disconnectObserver();
+            if (this.tryInitializeViewer()) {
+              this.disconnectObserver();
+            }
           }
         });
       }, options);
@@ -133,7 +135,32 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
    * Loads heavy dependencies dynamically and configures ThreeJS.
    * Runs the main renderer loop outside Angular's zone to prevent performance overhead.
    */
+  /** Returns false when the host has no layout box yet (e.g. display:none). */
+  private tryInitializeViewer(): boolean {
+    if (this.isDestroyed || !this.container?.nativeElement || this.renderer) {
+      return !!this.renderer;
+    }
+
+    const el = this.container.nativeElement;
+    if (el.clientWidth === 0 && el.clientHeight === 0) {
+      return false;
+    }
+
+    this.initializeViewer();
+    return true;
+  }
+
   private initializeViewer() {
+    if (this.isDestroyed || !this.container?.nativeElement || this.renderer) {
+      return;
+    }
+
+    this.ngZone.run(() => {
+      this.isLoading = true;
+      this.loadingProgress = 0;
+      this.cdr.markForCheck();
+    });
+
     this.ngZone.runOutsideAngular(async () => {
       try {
         const THREE = await import('three');
