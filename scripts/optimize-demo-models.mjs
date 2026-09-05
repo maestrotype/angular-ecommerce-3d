@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /**
- * Compresses fashion demo GLBs into src/assets/demo/models/*-demo.glb (<50MB).
+ * Optional: compress fashion demo GLBs into src/assets/demo/models/*-demo.glb (~2MB).
+ * Default storefront/catalog uses full-quality assets/models/bag/bag3.glb instead.
  * Run: npm run demo:optimize-models
  */
 import { mkdir, access } from 'node:fs/promises';
