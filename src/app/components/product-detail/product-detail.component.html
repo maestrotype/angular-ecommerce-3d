@@ -114,14 +114,15 @@
                   [previewOnly]="true"
                   [scale]="[9, 9, 9]"
                   [position]="[0, 0, 0]"
-                  [autoRotate]="true">
+                  [autoRotate]="true"
+                  loading="eager">
                 </app-three-d-viewer>
                 <span class="thumb-3d-badge">3D</span>
               </div>
             </div>
           </div>
 
-          <div class="pdp-gallery-mobile" *ngIf="product?.images?.length">
+          <div class="pdp-gallery-mobile" *ngIf="showMobileGallery && product?.images?.length">
             <div class="pdp-carousel">
               <div
                 class="pdp-carousel-track"

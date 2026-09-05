@@ -114,9 +114,12 @@ export class ThreeDModelService {
           },
           (xhr) => {
             if (isCancelled) return;
-            if (xhr.lengthComputable) {
+            if (xhr.lengthComputable && xhr.total > 0) {
               const progress = Math.round((xhr.loaded / xhr.total) * 100);
               observer.next({ type: 'progress', progress });
+            } else if (xhr.loaded > 0) {
+              // Some CDNs omit Content-Length; show activity instead of a frozen 0%.
+              observer.next({ type: 'progress', progress: Math.min(95, Math.round(xhr.loaded / 200000)) });
             }
           },
           (err) => {

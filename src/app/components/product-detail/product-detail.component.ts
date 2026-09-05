@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../core/services/product.service';
 import { ModalService } from '../../core/services/modal.service';
@@ -16,7 +16,7 @@ import { ProductTabsComponent } from './product-tabs/product-tabs.component';
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.scss']
 })
-export class ProductDetailComponent implements OnInit {
+export class ProductDetailComponent implements OnInit, OnDestroy {
   product: Product | undefined;
   selectedType: 'image' | '3d' = 'image';
   selectedImageIndex: number = 0;
@@ -25,6 +25,13 @@ export class ProductDetailComponent implements OnInit {
   sections: Section[] = [];
   activeSection: 'about' | 'specs' | 'reviews' = 'about';
   carouselActiveIndex = 0;
+  showMobileGallery = false;
+  private mobileGalleryQuery = typeof window !== 'undefined'
+    ? window.matchMedia('(max-width: 768px)')
+    : null;
+  private readonly onMobileGalleryChange = () => {
+    this.showMobileGallery = this.mobileGalleryQuery?.matches ?? false;
+  };
 
   @ViewChild(ProductTabsComponent) productTabs?: ProductTabsComponent;
   @ViewChild('carouselTrack') carouselTrack?: ElementRef<HTMLElement>;
@@ -41,6 +48,9 @@ export class ProductDetailComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.onMobileGalleryChange();
+    this.mobileGalleryQuery?.addEventListener('change', this.onMobileGalleryChange);
+
     // Subscribe to route params to handle navigation between products
     this.route.paramMap.subscribe(params => {
       const id = Number(params.get('id'));
@@ -241,5 +251,9 @@ export class ProductDetailComponent implements OnInit {
     this.sectionService.getActiveSections('product').subscribe(sections => {
       this.sections = (sections || []).sort((a, b) => (a.order || 0) - (b.order || 0));
     });
+  }
+
+  ngOnDestroy(): void {
+    this.mobileGalleryQuery?.removeEventListener('change', this.onMobileGalleryChange);
   }
 }

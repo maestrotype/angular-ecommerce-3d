@@ -5,7 +5,7 @@
 .product-stage {
   position: relative;
   isolation: isolate;
-  min-height: calc(100vh - var(--header-offset, 4rem));
+  min-height: calc(calc(var(--vh, 1vh) * 100) - var(--header-offset, 4rem));
   display: grid;
   grid-template-columns: minmax(16rem, 22rem) minmax(0, 1fr) minmax(16rem, 20rem);
   grid-template-rows: auto 1fr auto;
