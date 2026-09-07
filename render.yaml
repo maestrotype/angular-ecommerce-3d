@@ -14,9 +14,10 @@ services:
   # buildCommand: npm run render:build
   # startCommand: npm run render:start
   #
-  # Legacy backend-only rootDir (backend/) — use backend/package.json build:render
+  # Legacy backend-only rootDir (backend/) — current Render setup:
   # buildCommand: npm run build:render
   # startCommand: npm run start:prod
+  # build:render installs deps locally via --no-workspaces (see backend/package.json)
 
   - type: web
     name: angular-ecommerce-3d
