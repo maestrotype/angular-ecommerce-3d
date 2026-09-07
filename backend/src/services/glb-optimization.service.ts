@@ -33,8 +33,18 @@ export class GlbOptimizationService {
     return readFileSync(path).length;
   }
 
-  /** Optimize inputs above 512KB; caller must reject if still above 50MB. */
+  /**
+   * Optional WebP compression. Off by default — it collapses photogrammetry
+   * textures to ~2MB and is not recoverable once the original is overwritten.
+   * Enable only with ENABLE_GLB_OPTIMIZATION=true.
+   */
   async optimize(inputPath: string): Promise<string | null> {
+    const enabled = process.env.ENABLE_GLB_OPTIMIZATION === 'true';
+    if (!enabled) {
+      console.log('[GlbOptimization] Skipped — keeping original GLB quality');
+      return null;
+    }
+
     const onRender = process.env.RENDER === 'true' || process.env.NODE_ENV?.toLowerCase() === 'production';
     if (onRender || process.env.SKIP_GLB_OPTIMIZATION === 'true') {
       console.log('[GlbOptimization] Skipped on production Render (timeout/memory limits)');
