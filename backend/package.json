@@ -9,10 +9,11 @@
     "node": ">=18"
   },
   "scripts": {
+    "prebuild": "node scripts/ensure-render-deps.cjs",
     "build": "nest build",
     "build:clean": "rm -f tsconfig.tsbuildinfo && nest build",
     "postbuild": "node -e \"require('fs').accessSync('dist/main.js')\"",
-    "build:render": "npm install --include=dev --no-workspaces && npx nest build && node -e \"require('fs').accessSync('dist/main.js')\"",
+    "build:render": "npm install --include=dev --no-workspaces && npm run build",
     "heroku-postbuild": "npm run build:render",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "npm run start:dev",
@@ -47,6 +48,7 @@
     "class-validator": "^0.14.0",
     "cloudinary": "^1.30.0",
     "dotenv": "^17.2.1",
+    "express": "^4.22.1",
     "form-data": "^4.0.4",
     "multer": "^1.4.5-lts.1",
     "multer-storage-cloudinary": "^4.0.0",
