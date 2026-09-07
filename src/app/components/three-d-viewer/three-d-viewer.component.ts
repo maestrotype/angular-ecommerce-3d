@@ -31,8 +31,11 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   @Input() previewOnly = false;
   @Input() autoRotate = true;
   @Input() loading: 'lazy' | 'eager' = 'lazy'; // Support for viewport lazy-loading
-  /** Strip near-white studio backdrop baked into photogrammetry GLB textures. */
-  @Input() keyOutStudioBackground: boolean | 'auto' = 'auto';
+  /**
+   * Optional chroma-key of near-white studio plates baked into photogrammetry textures.
+   * Off by default — canvas getImageData/putImageData destroys HQ texture quality.
+   */
+  @Input() keyOutStudioBackground: boolean | 'auto' = false;
   
   @Input() set upsideDown(value: boolean) {
     this._upsideDown = value;
@@ -518,10 +521,18 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
       this.controls.update();
     }
 
+    const maxAnisotropy = this.renderer.capabilities.getMaxAnisotropy();
     this.model.traverse((child: any) => {
       if (child.isMesh) {
         child.castShadow = !this.isMobile;
         child.receiveShadow = !this.isMobile;
+        const materials = Array.isArray(child.material) ? child.material : [child.material];
+        for (const material of materials) {
+          if (material?.map) {
+            material.map.anisotropy = maxAnisotropy;
+            material.map.needsUpdate = true;
+          }
+        }
       }
     });
 
