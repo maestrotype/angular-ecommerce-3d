@@ -271,6 +271,29 @@ const DEMO_HOME_SECTIONS: Section[] = [
   },
 ];
 
+const DEMO_ABOUT_SECTIONS: Section[] = [
+  {
+    id: -811,
+    type: 'about',
+    title: L('Crafted for', 'Создано для', 'Створено для'),
+    content: L('the 3D era', 'эпохи 3D', 'епохи 3D'),
+    order: 1,
+    isActive: true,
+    pageTarget: 'about',
+    anchorId: 'about',
+    imageUrl: 'assets/demo/products/sneaker.svg',
+    showImage: true,
+    show3d: false,
+    settings: {
+      subtitle: L(
+        'A 3D-first studio for modern essentials.',
+        '3D-студия современных базовых вещей.',
+        '3D-студія сучасних базових речей.',
+      ),
+    },
+  },
+];
+
 export function getDemoProducts(): Product[] {
   return DEMO_PRODUCTS.map((product) => ({ ...product }));
 }
@@ -287,6 +310,9 @@ export function getDemoCategories(): Category[] {
 export function getDemoSections(pageTarget?: string): Section[] {
   if (!pageTarget || pageTarget === 'home') {
     return DEMO_HOME_SECTIONS.map((section) => ({ ...section }));
+  }
+  if (pageTarget === 'about') {
+    return DEMO_ABOUT_SECTIONS.map((section) => ({ ...section }));
   }
   return [];
 }

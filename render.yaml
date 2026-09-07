@@ -9,6 +9,15 @@ services:
       - key: NODE_ENV
         value: production
 
+  # Node runtime alternative (if not using Docker):
+  # rootDir: .  (repository root — required for npm workspaces)
+  # buildCommand: npm run render:build
+  # startCommand: npm run render:start
+  #
+  # Legacy backend-only rootDir (backend/) — use backend/package.json build:render
+  # buildCommand: npm run build:render
+  # startCommand: npm run start:prod
+
   - type: web
     name: angular-ecommerce-3d
     env: static

@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Section } from '@shared/models/section.model';
 import { SectionService } from '../../core/services/section.service';
+import { getDemoSections } from '../../../shared/constants/demo-catalog';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 
@@ -9,6 +10,8 @@ import { ThreeDViewerComponent } from '../../components/three-d-viewer/three-d-v
 import { TranslateModule } from '@ngx-translate/core';
 import { LocalizedPipe } from '../../shared/pipes/localized.pipe';
 import { ImageUrlPipe } from '../../shared/pipes/image-url.pipe';
+
+const DEFAULT_ABOUT_SECTION = getDemoSections('about')[0];
 
 @Component({
   selector: 'app-about',
@@ -24,25 +27,19 @@ export class AboutComponent implements OnInit, OnDestroy {
   constructor(private sectionService: SectionService) { }
 
   ngOnInit(): void {
-    console.log('AboutComponent ngOnInit, data:', this.data);
-    if (!this.data) {
-      console.log('AboutComponent: No data, fetching...');
-      this.sectionService.getActiveSections().pipe(
-        map(sections => sections.find(s => s.type === 'about')),
-        takeUntil(this.destroy$)
-      ).subscribe(section => {
-        if (section) {
-          console.log('AboutComponent: Found section:', section);
-          this.data = section;
-        } else {
-          console.warn('AboutComponent: No "about" section found in active sections');
-        }
-      });
+    if (this.data) {
+      return;
     }
+
+    this.sectionService.getActiveSections('about').pipe(
+      map(sections => sections.find(s => s.type === 'about') ?? sections[0]),
+      takeUntil(this.destroy$)
+    ).subscribe(section => {
+      this.data = section ?? DEFAULT_ABOUT_SECTION;
+    });
   }
 
-  ngOnDestroy() {
-    console.log('AboutComponent ngOnDestroy');
+  ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }

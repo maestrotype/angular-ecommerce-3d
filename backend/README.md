@@ -151,11 +151,16 @@ NODE_ENV=production
 
 **Option B — Node runtime**
 
-1. **Root Directory:** `.` (repository root)
-2. **Build Command:** `npm ci --include=dev && npm run backend:build`
-3. **Start Command:** `npm run start:prod --workspace=angular-ecommerce-backend`
+1. **Root Directory:** `.` (repository root — **required** for npm workspaces)
+2. **Build Command:** `npm run render:build`
+3. **Start Command:** `npm run render:start`
 
-The repo also defines `heroku-postbuild` in `backend/package.json` — Render runs it automatically after `npm install` during the build phase.
+If your service still uses **Root Directory `backend/`** (legacy):
+
+1. **Build Command:** `npm run build:render` (uses `npm install`, not `npm ci` — there is no lockfile in `backend/`)
+2. **Start Command:** `npm run start:prod`
+
+The repo also defines `heroku-postbuild` in the **root** `package.json` (monorepo) and in `backend/package.json` (legacy) — Render runs it automatically after `npm install` during the build phase when set on the matching package.
 
 **If deploy fails with `Cannot find module '.../dist/main.js'`:** the TypeScript build did not run. Check **Build** logs (not Start) for `nest build` output.
 

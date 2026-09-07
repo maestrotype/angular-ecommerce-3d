@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Observable, from, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-// @ts-ignore - ensure types are available when stripe is installed
-import Stripe from 'stripe';
 import { PaymentStrategy, PaymentData, PaymentResult } from '../interfaces/payment-strategy.interface';
 import { PaymentMethod } from '../entities/payment.entity';
 
@@ -11,41 +9,65 @@ export interface StripeIntentData {
   clientSecret: string;
 }
 
+type StripeClient = {
+  paymentIntents: {
+    create: (params: Record<string, unknown>) => Promise<{ id: string; client_secret: string | null }>;
+  };
+  webhooks: {
+    constructEvent: (payload: string, signature: string, secret: string) => unknown;
+  };
+};
+
+type StripeConstructor = new (secret: string) => StripeClient;
+
+function loadStripeConstructor(): StripeConstructor | null {
+  try {
+    // Lazy require so mock mode works when stripe is not installed.
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const stripeModule = require('stripe') as StripeConstructor & { default?: StripeConstructor };
+    const ctor = stripeModule.default ?? stripeModule;
+    return typeof ctor === 'function' ? ctor : null;
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.warn('[Stripe] stripe package unavailable:', message);
+    return null;
+  }
+}
+
 @Injectable()
 export class StripeStrategy implements PaymentStrategy<StripeIntentData> {
-  private stripe: Stripe | null = null;
+  private stripe: StripeClient | null = null;
   private webhookSecret: string | null = null;
 
   constructor(private configService: ConfigService) {
     console.log('[Stripe] Constructor called');
-    
-    // Try ConfigService first, then fallback to process.env
+
     let secret = this.configService.get<string>('STRIPE_SECRET_KEY');
     console.log('[Stripe] ConfigService STRIPE_SECRET_KEY:', secret ? '***' + secret.slice(-4) : 'NOT SET');
-    
+
     if (!secret) {
       secret = process.env.STRIPE_SECRET_KEY;
       console.log('[Stripe] Fallback to process.env STRIPE_SECRET_KEY:', secret ? '***' + secret.slice(-4) : 'NOT SET');
     }
-    
+
     if (secret && secret.trim().length > 0 && secret !== 'sk_test_mock_key_for_testing_only') {
-      try {
-        console.log('[Stripe] Attempting to create Stripe instance with key:', secret.substring(0, 20) + '...' + secret.substring(secret.length - 4));
-        // CJS/ESM interop: compiled `import Stripe from 'stripe'` may be `{ default: Stripe }`
-        const StripeCtor = (Stripe as unknown as { default?: typeof Stripe }).default ?? Stripe;
-        this.stripe = new StripeCtor(secret);
-        console.log('[Stripe] Real Stripe instance created successfully');
-        console.log('[Stripe] Stripe instance methods:', Object.keys(this.stripe));
-      } catch (error) {
-        console.error('[Stripe] Failed to create Stripe instance:', error);
-        this.stripe = null;
+      const StripeCtor = loadStripeConstructor();
+      if (!StripeCtor) {
+        console.warn('[Stripe] Running in mock mode — stripe package not available');
+      } else {
+        try {
+          console.log('[Stripe] Attempting to create Stripe instance with key:', secret.substring(0, 20) + '...' + secret.substring(secret.length - 4));
+          this.stripe = new StripeCtor(secret);
+          console.log('[Stripe] Real Stripe instance created successfully');
+        } catch (error) {
+          console.error('[Stripe] Failed to create Stripe instance:', error);
+          this.stripe = null;
+        }
       }
     } else {
       console.log('[Stripe] Running in mock mode - no valid Stripe keys provided');
-      console.log('[Stripe] Secret key length:', secret ? secret.length : 0);
-      console.log('[Stripe] Secret key starts with:', secret ? secret.substring(0, 10) : 'N/A');
     }
-    
+
     let wh = this.configService.get<string>('STRIPE_WEBHOOK_SECRET');
     if (!wh) {
       wh = process.env.STRIPE_WEBHOOK_SECRET;
@@ -58,51 +80,44 @@ export class StripeStrategy implements PaymentStrategy<StripeIntentData> {
 
   createPayment(paymentData: PaymentData): Observable<PaymentResult<StripeIntentData>> {
     if (!this.stripe) {
-      // Mock mode - return fake client secret for testing
       console.log('[Stripe] Mock mode: Creating fake PaymentIntent for order:', paymentData.orderId);
-      console.log('[Stripe] Stripe instance is null. Check if STRIPE_SECRET_KEY is set correctly.');
       const mockClientSecret = 'pi_mock_' + Date.now() + '_secret_' + Math.random().toString(36).substr(2, 9);
-      
-      return of({ 
-        success: true, 
-        data: { clientSecret: mockClientSecret }, 
-        paymentId: 'pi_mock_' + Date.now() 
+
+      return of({
+        success: true,
+        data: { clientSecret: mockClientSecret },
+        paymentId: 'pi_mock_' + Date.now()
       });
     }
 
-    // Check minimum amount for Stripe
     const amount = Number(paymentData.amount);
     const currency = String(paymentData.currency || 'USD').toUpperCase();
-    
-    // Stripe minimum amounts (in major currency units)
+
     const minAmounts: { [key: string]: number } = {
-      'USD': 0.50,  // $0.50 minimum
-      'EUR': 0.50,  // €0.50 minimum
-      'GBP': 0.30,  // £0.30 minimum
-      'UAH': 10.00, // ₴10.00 minimum
-      'RUB': 30.00  // ₽30.00 minimum
+      'USD': 0.50,
+      'EUR': 0.50,
+      'GBP': 0.30,
+      'UAH': 10.00,
+      'RUB': 30.00
     };
-    
+
     const minAmount = minAmounts[currency] || 0.50;
     if (amount < minAmount) {
       const errorMsg = `Amount ${amount} ${currency} is below minimum ${minAmount} ${currency} required by Stripe`;
       console.error('[Stripe]', errorMsg);
-      return of({ 
-        success: false, 
-        error: errorMsg 
+      return of({
+        success: false,
+        error: errorMsg
       });
     }
 
     const amountInMinor = Math.round(amount * 100);
     console.log('[Stripe] Creating PaymentIntent:', { amount: amountInMinor, currency, orderId: paymentData.orderId });
 
-    console.log('[Stripe] About to create PaymentIntent with Stripe instance:', !!this.stripe);
-    console.log('[Stripe] Stripe instance methods:', Object.keys(this.stripe));
-    
     return from(
       this.stripe.paymentIntents.create({
         amount: amountInMinor,
-        currency: currency.toLowerCase() as any, // Stripe expects lowercase
+        currency: currency.toLowerCase(),
         description: paymentData.description || `Order #${paymentData.orderId}`,
         metadata: {
           orderId: String(paymentData.orderId),
@@ -128,7 +143,7 @@ export class StripeStrategy implements PaymentStrategy<StripeIntentData> {
       return of(false);
     }
     try {
-      const event = this.stripe.webhooks.constructEvent(data, signature, this.webhookSecret);
+      this.stripe.webhooks.constructEvent(data, signature, this.webhookSecret);
       return of(true);
     } catch (err: any) {
       console.error('[Stripe] Webhook verification failed:', err.message);
@@ -136,11 +151,11 @@ export class StripeStrategy implements PaymentStrategy<StripeIntentData> {
     }
   }
 
-  isSupported(currency: any): boolean { 
-    return true; // Stripe supports many currencies
+  isSupported(_currency: unknown): boolean {
+    return true;
   }
 
-  getPaymentMethod(): PaymentMethod { 
-    return PaymentMethod.STRIPE; 
+  getPaymentMethod(): PaymentMethod {
+    return PaymentMethod.STRIPE;
   }
-} 
+}
