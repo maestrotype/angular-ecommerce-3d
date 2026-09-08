@@ -647,13 +647,18 @@
   .mat-mdc-form-field:hover .mat-mdc-select-value,
   .mat-mdc-form-field:hover .mat-mdc-select-value-text,
   .mat-mdc-form-field:hover .mat-mdc-select-min-line,
-  .mat-mdc-form-field:hover .mdc-floating-label,
   .mat-mdc-form-field.mat-focused .mat-mdc-select,
   .mat-mdc-form-field.mat-focused .mat-mdc-select-trigger,
   .mat-mdc-form-field.mat-focused .mat-mdc-select-value,
   .mat-mdc-form-field.mat-focused .mat-mdc-select-min-line {
     color: var(--input-text);
     -webkit-text-fill-color: var(--input-text);
+  }
+
+  .mat-mdc-form-field:hover .mdc-floating-label,
+  .mat-mdc-form-field:hover .mat-mdc-floating-label {
+    color: var(--input-label);
+    -webkit-text-fill-color: var(--input-label);
   }
 
   /* Force panel background to match the input field - same rgba as input wrapper */
@@ -2427,14 +2432,15 @@ app-section-form .header-actions .mat-mdc-chip-option.mat-mdc-chip-selected .mdc
 }
 
 app-section-form .carousel-toggle-group.mat-button-toggle-group {
-  border: 1px solid var(--border-default);
+  border: none;
   border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: none;
+  background: var(--surface-secondary);
 }
 
 app-section-form .carousel-toggle-group .mat-button-toggle {
-  background: var(--surface-secondary);
+  background: transparent;
   color: var(--text-secondary);
   border: none;
 }
@@ -2444,10 +2450,19 @@ app-section-form .carousel-toggle-group .mat-button-toggle-checked {
   color: var(--interactive-primary);
 }
 
+app-section-form .carousel-toggle-group .mat-button-toggle-focus-overlay,
+app-section-form .carousel-toggle-group .mat-button-toggle-ripple,
+app-section-form .carousel-toggle-group .mat-ripple,
+app-section-form .carousel-toggle-group .mat-ripple-element {
+  background: transparent;
+  opacity: 0;
+}
+
 app-section-form .carousel-toggle-group .mat-button-toggle .mat-button-toggle-label-content {
   line-height: 38px;
   font-size: 12px;
   font-weight: 600;
+  color: inherit;
 }
 
 app-section-form .category-chip-list .mat-mdc-chip-option {

@@ -36,6 +36,31 @@ export class SectionProductCarouselFormComponent {
     return this.sectionForm.get('carouselSlides') as FormArray;
   }
 
+  get carouselSourceKey(): string {
+    const value = this.sectionForm.get('carouselSource')?.value;
+    if (value === 'new') {
+      return 'CAROUSEL_SOURCE_NEW';
+    }
+    if (value === 'best-sellers') {
+      return 'CAROUSEL_SOURCE_BEST';
+    }
+    if (value === 'special') {
+      return 'CAROUSEL_SOURCE_SPECIAL';
+    }
+    return 'CAROUSEL_SOURCE_ALL';
+  }
+
+  get carouselSortKey(): string {
+    const value = this.sectionForm.get('carouselSortOrder')?.value;
+    const match = this.carouselSortOptions.find((option) => option.value === value);
+    return match?.label || 'CATALOG_SORT_NEWEST';
+  }
+
+  get carouselCategoryCount(): number {
+    const value = this.sectionForm.get('carouselCategories')?.value;
+    return Array.isArray(value) ? value.length : 0;
+  }
+
   getProductCategorySlug(category: Category): string {
     const name =
       typeof category.name === 'string'
