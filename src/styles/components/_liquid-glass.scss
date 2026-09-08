@@ -319,12 +319,17 @@ body.is-admin[data-theme='dark'] {
 
       .mat-mdc-input-element,
       .mdc-text-field__input,
-      .mdc-floating-label,
-      .mat-mdc-floating-label,
       .mat-mdc-select-value,
       .mat-mdc-select-arrow {
         position: relative;
         z-index: 2;
+        filter: none;
+      }
+
+      .mdc-floating-label,
+      .mat-mdc-floating-label {
+        position: relative;
+        z-index: 3;
         filter: none;
       }
 
@@ -363,6 +368,12 @@ body.is-admin[data-theme='dark'] {
     .mat-mdc-text-field-wrapper input:-webkit-autofill:hover,
     .mat-mdc-text-field-wrapper input:-webkit-autofill:focus {
       -webkit-box-shadow: 0 0 0 30px var(--liquid-glass-input-bg) inset;
+    }
+
+    /* Pill filters clip the outline notch — keep a single in-field value, no floating label. */
+    &.filter-pill .mdc-floating-label,
+    &.filter-pill .mat-mdc-floating-label {
+      display: none;
     }
   }
 

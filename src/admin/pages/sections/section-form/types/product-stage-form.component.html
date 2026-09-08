@@ -45,14 +45,14 @@
         </mat-form-field>
       </div>
 
-      <div class="stage-models">
-        <span class="stage-models__label">{{ 'PRODUCT_STAGE_MODELS' | translate }}</span>
-        <p class="stage-models__hint">{{ 'PRODUCT_STAGE_MODELS_HINT' | translate }}</p>
+      <fieldset class="carousel-field-block stage-models">
+        <legend class="carousel-field-block__label">{{ 'PRODUCT_STAGE_MODELS' | translate }}</legend>
+        <p class="carousel-field-block__hint">{{ 'PRODUCT_STAGE_MODELS_HINT' | translate }}</p>
 
         <div class="stage-model-row" *ngFor="let product of liveStageProducts; trackBy: trackByProductId">
           <img
             class="stage-model-row__thumb"
-            [src]="product.imageUrl"
+            [src]="product.imageUrl | imageUrl"
             [alt]="productLabel(product)"
           />
           <div class="stage-model-row__copy">
@@ -61,31 +61,51 @@
           </div>
           <input
             type="file"
+            accept="image/*"
+            hidden
+            [attr.data-product-id]="product.id"
+            (change)="onChangeImage(product, $event)"
+            #imageInput
+          />
+          <input
+            type="file"
             accept=".glb"
             hidden
             [attr.data-product-id]="product.id"
             (change)="onChangeModel(product, $event)"
             #modelInput
           />
-          <button
-            type="button"
-            mat-stroked-button
-            class="stage-model-row__btn"
-            [disabled]="uploadingProductId === product.id"
-            (click)="modelInput.click()">
-            <mat-spinner *ngIf="uploadingProductId === product.id" diameter="18"></mat-spinner>
-            <mat-icon *ngIf="uploadingProductId !== product.id">view_in_ar</mat-icon>
-            {{ 'CHANGE_3D_MODEL' | translate }}
-          </button>
+          <div class="stage-model-row__actions">
+            <button
+              type="button"
+              mat-stroked-button
+              class="stage-model-row__btn"
+              [disabled]="uploadingProductId === product.id"
+              (click)="imageInput.click()">
+              <mat-spinner *ngIf="isUploading(product.id, 'image')" diameter="18"></mat-spinner>
+              <mat-icon *ngIf="!isUploading(product.id, 'image')">image</mat-icon>
+              {{ 'CHANGE_IMAGE' | translate }}
+            </button>
+            <button
+              type="button"
+              mat-stroked-button
+              class="stage-model-row__btn"
+              [disabled]="uploadingProductId === product.id"
+              (click)="modelInput.click()">
+              <mat-spinner *ngIf="isUploading(product.id, 'model')" diameter="18"></mat-spinner>
+              <mat-icon *ngIf="!isUploading(product.id, 'model')">view_in_ar</mat-icon>
+              {{ 'CHANGE_3D_MODEL' | translate }}
+            </button>
+          </div>
         </div>
 
-        <p class="stage-models__hint" *ngIf="!liveStageProducts.length">
+        <p class="carousel-field-block__hint" *ngIf="!liveStageProducts.length">
           {{ 'PRODUCT_STAGE_EMPTY' | translate }}
         </p>
-      </div>
+      </fieldset>
 
-      <div class="carousel-field-block">
-        <span class="carousel-field-block__label">{{ 'PRODUCT_STAGE_CATEGORIES' | translate }}</span>
+      <fieldset class="carousel-field-block">
+        <legend class="carousel-field-block__label">{{ 'PRODUCT_STAGE_CATEGORIES' | translate }}</legend>
         <mat-chip-listbox
           class="category-chip-list"
           multiple
@@ -96,11 +116,11 @@
           </mat-chip-option>
         </mat-chip-listbox>
         <p class="carousel-field-block__hint">{{ 'PRODUCT_STAGE_CATEGORIES_HINT' | translate }}</p>
-      </div>
+      </fieldset>
 
-      <div class="stage-pin-list">
-        <span class="stage-models__label">{{ 'PRODUCT_STAGE_PRODUCTS' | translate }}</span>
-        <p class="stage-models__hint">{{ 'PRODUCT_STAGE_PRODUCTS_HINT' | translate }}</p>
+      <fieldset class="carousel-field-block stage-pin-list">
+        <legend class="carousel-field-block__label">{{ 'PRODUCT_STAGE_PRODUCTS' | translate }}</legend>
+        <p class="carousel-field-block__hint">{{ 'PRODUCT_STAGE_PRODUCTS_HINT' | translate }}</p>
         <input
           type="search"
           class="stage-pin-list__search"
@@ -121,9 +141,9 @@
           </label>
         </div>
         <ng-template #noPinnable>
-          <p class="stage-models__hint">{{ 'PRODUCT_STAGE_EMPTY' | translate }}</p>
+          <p class="carousel-field-block__hint">{{ 'PRODUCT_STAGE_EMPTY' | translate }}</p>
         </ng-template>
-      </div>
+      </fieldset>
 
       <div class="form-grid carousel-limit-row">
         <mat-form-field appearance="outline">

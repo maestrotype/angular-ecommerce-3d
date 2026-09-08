@@ -9,24 +9,26 @@
 
   <div list-filters class="filter-section">
     <div class="filter-section__row filter-section__row--controls">
-      <mat-form-field appearance="outline" class="category-filter" subscriptSizing="dynamic">
-        <mat-label>{{ 'CATEGORY' | translate }}</mat-label>
+      <mat-form-field appearance="outline" class="category-filter filter-pill" subscriptSizing="dynamic">
         <mat-icon matPrefix>tune</mat-icon>
         <mat-select
           multiple
           [(ngModel)]="selectedCategorySlugs"
           (selectionChange)="filterByCategories()"
-          [placeholder]="'CATEGORIES_ALL' | translate">
+          [placeholder]="'CATEGORIES_ALL' | translate"
+          [attr.aria-label]="'CATEGORY' | translate">
           <mat-option *ngFor="let cat of categories" [value]="getCategoryValue(cat)">
             {{ cat.name | localized }}
           </mat-option>
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field appearance="outline" class="catalog-sort" subscriptSizing="dynamic">
-        <mat-label>{{ 'CATALOG_SORT' | translate }}</mat-label>
+      <mat-form-field appearance="outline" class="catalog-sort filter-pill" subscriptSizing="dynamic">
         <mat-icon matPrefix>sort</mat-icon>
-        <mat-select [(ngModel)]="catalogSort" (selectionChange)="onCatalogSortChange()">
+        <mat-select
+          [(ngModel)]="catalogSort"
+          (selectionChange)="onCatalogSortChange()"
+          [attr.aria-label]="'CATALOG_SORT' | translate">
           <mat-option value="newest">{{ 'CATALOG_SORT_NEWEST' | translate }}</mat-option>
           <mat-option value="name">{{ 'CATALOG_SORT_NAME' | translate }}</mat-option>
           <mat-option value="price">{{ 'CATALOG_SORT_PRICE' | translate }}</mat-option>

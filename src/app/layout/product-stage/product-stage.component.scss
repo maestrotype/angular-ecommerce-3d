@@ -1,5 +1,7 @@
 :host {
   display: block;
+  container-type: inline-size;
+  container-name: product-stage;
 }
 
 .product-stage {
@@ -7,17 +9,16 @@
   isolation: isolate;
   min-height: calc(calc(var(--vh, 1vh) * 100) - var(--header-offset, 4rem));
   display: grid;
-  grid-template-columns: minmax(16rem, 22rem) minmax(0, 1fr) minmax(16rem, 20rem);
-  grid-template-rows: auto 1fr auto;
-  grid-template-areas:
-    'copy canvas meta'
-    'copy canvas meta'
-    'rail rail rail';
-  gap: var(--spacing-lg, 1.5rem);
-  padding: var(--spacing-2xl, 3rem) var(--spacing-xl, 2rem) var(--spacing-xl, 2rem);
-  background: var(--product-stage-bg, var(--surface-page));
-  color: var(--text-primary);
+  grid-template-rows: 1fr;
+  color: var(--text-on-media);
+  background: var(--surface-scrim);
   overflow: hidden;
+}
+
+.product-stage.is-empty {
+  min-height: 16rem;
+  color: var(--text-primary);
+  background: var(--product-stage-bg, var(--surface-page));
 }
 
 .product-stage__atmosphere {
@@ -28,91 +29,145 @@
   background:
     radial-gradient(
       ellipse 70% 55% at 50% 42%,
-      color-mix(in srgb, var(--interactive-primary, var(--color-primary-base)) 18%, transparent) 0%,
+      color-mix(in srgb, var(--interactive-primary, var(--color-primary-base)) 22%, transparent) 0%,
       transparent 68%
     ),
     radial-gradient(
       ellipse 90% 40% at 50% 100%,
-      color-mix(in srgb, var(--surface-scrim) 28%, transparent) 0%,
+      color-mix(in srgb, var(--surface-scrim) 55%, transparent) 0%,
       transparent 70%
     );
 }
 
-.product-stage__copy {
-  grid-area: copy;
-  position: relative;
-  z-index: 2;
-  align-self: center;
-  max-width: 22rem;
-}
-
-.product-stage__kicker {
-  margin: 0 0 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--text-secondary);
-}
-
-.product-stage__title {
-  margin: 0 0 0.75rem;
-  font-size: clamp(1.75rem, 3vw, 2.75rem);
-  line-height: 1.15;
-  font-weight: 700;
-}
-
-.product-stage__lede {
-  margin: 0;
-  color: var(--text-secondary);
-  line-height: 1.55;
-}
-
 .product-stage__canvas {
-  grid-area: canvas;
-  position: relative;
+  position: absolute;
+  inset: 0;
   z-index: 1;
-  min-height: 28rem;
+  min-height: 22rem;
 }
 
 .product-stage__canvas app-three-d-viewer {
   display: block;
   width: 100%;
   height: 100%;
-  min-height: 28rem;
+  min-height: 22rem;
+  --viewer-host-bg: transparent;
+}
+
+.product-stage__veil {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--surface-scrim) 78%, transparent) 0%,
+      color-mix(in srgb, var(--surface-scrim) 28%, transparent) 38%,
+      transparent 58%
+    ),
+    linear-gradient(
+      270deg,
+      color-mix(in srgb, var(--surface-scrim) 62%, transparent) 0%,
+      transparent 42%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--surface-scrim) 42%, transparent) 0%,
+      transparent 28%,
+      color-mix(in srgb, var(--surface-scrim) 72%, transparent) 100%
+    );
 }
 
 .product-stage__floor {
   position: absolute;
-  left: 12%;
-  right: 12%;
-  bottom: 8%;
+  left: 18%;
+  right: 18%;
+  bottom: 12%;
   height: 18%;
+  z-index: 2;
   pointer-events: none;
   background: radial-gradient(
     ellipse at center,
-    color-mix(in srgb, var(--surface-scrim) 35%, transparent) 0%,
+    color-mix(in srgb, var(--surface-scrim) 45%, transparent) 0%,
     transparent 72%
   );
 }
 
+.product-stage__chrome {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: 1fr auto;
+  grid-template-areas:
+    'copy meta'
+    'rail rail';
+  gap: var(--spacing-lg, 1.5rem);
+  min-height: inherit;
+  padding: var(--spacing-2xl, 3rem) var(--spacing-xl, 2rem) var(--spacing-lg, 1.5rem);
+  pointer-events: none;
+}
+
+.product-stage__copy {
+  grid-area: copy;
+  align-self: center;
+  max-width: 22rem;
+  pointer-events: auto;
+  color: var(--text-on-media);
+}
+
+.product-stage__kicker {
+  margin: 0 0 0.5rem;
+  font-size: var(--text-xs, 0.75rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--text-on-media) 72%, transparent);
+}
+
+.product-stage__title {
+  margin: 0 0 0.75rem;
+  color: var(--text-on-media);
+  font-size: clamp(1.75rem, 3vw, 2.75rem);
+  line-height: 1.15;
+  font-weight: 700;
+  text-shadow: 0 2px 18px color-mix(in srgb, var(--surface-scrim) 55%, transparent);
+}
+
+.product-stage__lede {
+  margin: 0 0 0.75rem;
+  color: color-mix(in srgb, var(--text-on-media) 82%, transparent);
+  line-height: 1.55;
+}
+
+.product-stage__hint {
+  margin: 0;
+  font-size: var(--text-xs, 0.75rem);
+  letter-spacing: 0.04em;
+  color: color-mix(in srgb, var(--text-on-media) 58%, transparent);
+}
+
 .product-stage__meta {
   grid-area: meta;
-  position: relative;
-  z-index: 2;
+  justify-self: end;
   align-self: center;
+  max-width: 20rem;
+  pointer-events: auto;
+  color: var(--text-on-media);
 }
 
 .product-stage__category {
   margin: 0 0 0.35rem;
-  font-size: 0.75rem;
+  font-size: var(--text-xs, 0.75rem);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--text-muted, var(--text-secondary));
+  color: color-mix(in srgb, var(--text-on-media) 62%, transparent);
 }
 
 .product-stage__name {
   margin: 0 0 0.5rem;
+  color: var(--text-on-media);
   font-size: 1.5rem;
   font-weight: 650;
 }
@@ -145,19 +200,23 @@
 }
 
 .product-stage__ghost {
-  border: 1px solid var(--border-default);
-  background: color-mix(in srgb, var(--surface-elevated) 72%, transparent);
-  color: var(--text-primary);
+  border: 1px solid color-mix(in srgb, var(--text-on-media) 28%, transparent);
+  background: color-mix(in srgb, var(--surface-scrim) 42%, transparent);
+  color: var(--text-on-media);
 }
 
 .product-stage__rail {
   grid-area: rail;
-  position: relative;
-  z-index: 2;
   display: flex;
   gap: 0.75rem;
   overflow-x: auto;
   padding-bottom: 0.25rem;
+  pointer-events: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .product-stage__thumb {
@@ -167,11 +226,18 @@
   min-width: 11rem;
   padding: 0.45rem 0.75rem 0.45rem 0.45rem;
   border-radius: 0.85rem;
-  border: 1px solid var(--border-default);
-  background: color-mix(in srgb, var(--surface-elevated) 82%, transparent);
-  color: var(--text-primary);
+  border: 1px solid color-mix(in srgb, var(--text-on-media) 16%, transparent);
+  background: color-mix(in srgb, var(--surface-scrim) 48%, transparent);
+  color: var(--text-on-media);
   cursor: pointer;
   text-align: left;
+
+  span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
 .product-stage__thumb.is-active {
@@ -183,36 +249,42 @@
   height: 3.25rem;
   object-fit: contain;
   border-radius: 0.5rem;
-  background: var(--surface-tertiary, var(--surface-secondary));
+  background: color-mix(in srgb, var(--surface-elevated) 18%, transparent);
 }
 
 .product-stage__empty {
-  grid-area: canvas;
+  position: relative;
+  z-index: 1;
   display: grid;
   place-items: center;
   min-height: 16rem;
+  padding: var(--spacing-xl, 2rem);
   color: var(--text-secondary);
 }
 
-@media (max-width: 1024px) {
+@container product-stage (max-width: 768px) {
   .product-stage {
+    min-height: 32rem;
+  }
+
+  .product-stage__chrome {
     grid-template-columns: 1fr;
     grid-template-areas:
       'copy'
-      'canvas'
       'meta'
       'rail';
-    min-height: 0;
+    align-content: end;
+    padding: var(--spacing-lg, 1.5rem) var(--spacing-md, 1rem);
   }
 
   .product-stage__copy,
   .product-stage__meta {
     max-width: none;
+    justify-self: start;
   }
 
-  .product-stage__canvas,
-  .product-stage__canvas app-three-d-viewer {
-    min-height: 22rem;
+  .product-stage__title {
+    font-size: clamp(1.45rem, 6vw, 2rem);
   }
 }
 
@@ -222,4 +294,18 @@
   .product-stage__thumb {
     transition: none;
   }
+}
+
+:host-context(app-admin-section-preview) .product-stage {
+  min-height: 360px;
+  height: 420px;
+}
+
+:host-context(app-admin-section-preview) .product-stage__canvas,
+:host-context(app-admin-section-preview) .product-stage__canvas app-three-d-viewer {
+  min-height: 360px;
+}
+
+:host-context(app-admin-section-preview) .product-stage__chrome {
+  padding: var(--spacing-lg, 1.5rem);
 }

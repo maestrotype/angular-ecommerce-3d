@@ -19,6 +19,7 @@ import {
 import { filterProductsByCategorySlugs } from 'src/shared/utils/shop-catalog.util';
 import { getLocalizedString, resolveApiError, formatResolvedApiError } from 'src/shared/utils/localization.util';
 import { GLB_OPTIMIZE_HINT_BYTES, RAW_GLB_UPLOAD_MAX_BYTES } from '../../../../constants/glb-upload.constants';
+import { normalizeUploadedUrl } from '../shared/section-form-array.util';
 
 @Component({
   selector: 'app-section-product-stage-form',
@@ -32,6 +33,7 @@ export class SectionProductStageFormComponent implements OnInit {
 
   stageProducts: Product[] = [];
   uploadingProductId: number | null = null;
+  uploadingKind: 'model' | 'image' | null = null;
   pinQuery = '';
 
   constructor(
@@ -136,6 +138,42 @@ export class SectionProductStageFormComponent implements OnInit {
     this.sectionForm.get('stageCategories')?.setValue(value);
   }
 
+  isUploading(id: number, kind: 'model' | 'image'): boolean {
+    return this.uploadingProductId === id && this.uploadingKind === kind;
+  }
+
+  onChangeImage(product: Product, event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    input.value = '';
+    if (!file) {
+      return;
+    }
+    if (!file.type.startsWith('image/')) {
+      this.snackBar.open(
+        this.translate.instant('INVALID_IMAGE_FORMAT'),
+        this.translate.instant('CLOSE_BTN'),
+        { duration: 3000 },
+      );
+      return;
+    }
+
+    this.uploadingProductId = product.id;
+    this.uploadingKind = 'image';
+    this.adminProductService.uploadImage(file).pipe(
+      switchMap((res) => {
+        const payload: ProductUpdateRequest = {
+          id: product.id,
+          imageUrl: normalizeUploadedUrl(res.url),
+        };
+        return this.adminProductService.updateProduct(product.id, payload);
+      }),
+    ).subscribe({
+      next: (updated) => this.onAssetUpdated(updated, 'PRODUCT_STAGE_IMAGE_UPDATED'),
+      error: (error) => this.onAssetError(error, 'FAILED_TO_UPLOAD_IMAGE'),
+    });
+  }
+
   onChangeModel(product: Product, event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
@@ -169,6 +207,7 @@ export class SectionProductStageFormComponent implements OnInit {
     }
 
     this.uploadingProductId = product.id;
+    this.uploadingKind = 'model';
     this.adminProductService.upload3dModel(file).pipe(
       switchMap((res) => {
         const payload: ProductUpdateRequest = {
@@ -180,29 +219,33 @@ export class SectionProductStageFormComponent implements OnInit {
         return this.adminProductService.updateProduct(product.id, payload);
       }),
     ).subscribe({
-      next: (updated) => {
-        this.stageProducts = this.stageProducts.map((item) =>
-          item.id === updated.id ? { ...item, ...updated } : item,
-        );
-        this.uploadingProductId = null;
-        this.adminProductService.notifyCatalogChanged();
-        this.snackBar.open(
-          this.translate.instant('PRODUCT_STAGE_MODEL_UPDATED'),
-          this.translate.instant('CLOSE_BTN'),
-          { duration: 3000 },
-        );
-      },
-      error: (error) => {
-        this.uploadingProductId = null;
-        const resolved = resolveApiError(error, this.translate, {
-          titleKey: 'ERROR_UPLOADING_3D_MODEL',
-        });
-        this.snackBar.open(
-          formatResolvedApiError(resolved),
-          this.translate.instant('CLOSE_BTN'),
-          { duration: resolved.duration, panelClass: resolved.panelClass },
-        );
-      },
+      next: (updated) => this.onAssetUpdated(updated, 'PRODUCT_STAGE_MODEL_UPDATED'),
+      error: (error) => this.onAssetError(error, 'ERROR_UPLOADING_3D_MODEL'),
     });
+  }
+
+  private onAssetUpdated(updated: Product, successKey: string): void {
+    this.stageProducts = this.stageProducts.map((item) =>
+      item.id === updated.id ? { ...item, ...updated } : item,
+    );
+    this.uploadingProductId = null;
+    this.uploadingKind = null;
+    this.adminProductService.notifyCatalogChanged();
+    this.snackBar.open(
+      this.translate.instant(successKey),
+      this.translate.instant('CLOSE_BTN'),
+      { duration: 3000 },
+    );
+  }
+
+  private onAssetError(error: unknown, titleKey: string): void {
+    this.uploadingProductId = null;
+    this.uploadingKind = null;
+    const resolved = resolveApiError(error, this.translate, { titleKey });
+    this.snackBar.open(
+      formatResolvedApiError(resolved),
+      this.translate.instant('CLOSE_BTN'),
+      { duration: resolved.duration, panelClass: resolved.panelClass },
+    );
   }
 }
