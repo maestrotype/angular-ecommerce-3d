@@ -1,3 +1,4 @@
+import { createRequire } from 'module';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Observable, from, of } from 'rxjs';
@@ -22,9 +23,9 @@ type StripeConstructor = new (secret: string) => StripeClient;
 
 function loadStripeConstructor(): StripeConstructor | null {
   try {
-    // Lazy require so mock mode works when stripe is not installed.
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const stripeModule = require('stripe') as StripeConstructor & { default?: StripeConstructor };
+    // Lazy load so mock mode works when stripe is not installed.
+    const nodeRequire = createRequire(__filename);
+    const stripeModule = nodeRequire('stripe') as StripeConstructor & { default?: StripeConstructor };
     const ctor = stripeModule.default ?? stripeModule;
     return typeof ctor === 'function' ? ctor : null;
   } catch (error) {
