@@ -10,7 +10,7 @@ import {
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import { v4 as uuidv4 } from "uuid";
-import { readFileSync, unlinkSync, existsSync } from "fs";
+import { readFileSync, unlinkSync, existsSync, statSync } from "fs";
 import * as os from "os";
 import { join } from "path";
 import { v2 as cloudinary } from "cloudinary";
@@ -217,8 +217,13 @@ export class UploadsController {
 
     let uploadPath = file.path;
     let optimizedPath: string | null = null;
+    const originalSize = existsSync(file.path) ? statSync(file.path).size : file.size;
     try {
-      optimizedPath = await this.glbOptimizationService.optimize(file.path);
+      // Compress automatically when the raw file would miss the stored-size cap.
+      // Quality-preserving skip still applies to files already within the limit.
+      optimizedPath = await this.glbOptimizationService.optimize(file.path, {
+        force: originalSize > MAX_STORED_GLB_BYTES,
+      });
       if (optimizedPath) {
         uploadPath = optimizedPath;
       }
@@ -226,13 +231,19 @@ export class UploadsController {
       console.error("[UploadsController] Uncaught error during optimization step:", e);
     }
 
-    const finalSize = existsSync(uploadPath) ? readFileSync(uploadPath).length : file.size;
+    const finalSize = existsSync(uploadPath) ? statSync(uploadPath).size : file.size;
     console.log(`[UploadsController] 3D model ready for storage. Size: ${(finalSize / 1024 / 1024).toFixed(2)}MB`);
 
-    if (finalSize > MAX_STORED_GLB_BYTES) {
+    if (finalSize > MAX_STORED_GLB_BYTES && isProduction) {
       this.cleanupTempFiles(file.path, optimizedPath);
       throw new BadRequestException(
         'Model exceeds 50MB limit after optimization. Reduce textures or mesh complexity in Blender.',
+      );
+    }
+
+    if (finalSize > MAX_STORED_GLB_BYTES) {
+      console.warn(
+        `[UploadsController] Model is ${(finalSize / 1024 / 1024).toFixed(2)}MB after optimization — storing locally in development`,
       );
     }
 
