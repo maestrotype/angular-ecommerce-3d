@@ -270,9 +270,18 @@
   background: color-mix(in srgb, var(--surface-highlight) 75%, transparent);
 }
 
+:host ::ng-deep .lang-tabs .mat-mdc-tab-body,
+:host ::ng-deep .lang-tabs .mat-mdc-tab-body-wrapper,
+:host ::ng-deep .lang-tabs .mat-mdc-tab-body-content {
+  overflow: visible;
+}
+
 :host ::ng-deep .lang-tabs .mat-mdc-tab-body-content {
   padding: 0;
-  overflow: visible;
+}
+
+:host ::ng-deep .lang-tabs .mat-mdc-form-field {
+  padding-top: 10px;
 }
 
 :host ::ng-deep .lang-tabs.lang-tabs--description .mat-mdc-tab-body-content {
