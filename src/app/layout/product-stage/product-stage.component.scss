@@ -5,20 +5,21 @@
 }
 
 .product-stage {
+  --stage-bg: var(--product-stage-bg, var(--surface-page));
+  --stage-ink: var(--product-stage-text, var(--text-primary));
+  --stage-muted: var(--product-stage-muted, var(--text-secondary));
   position: relative;
   isolation: isolate;
   min-height: calc(calc(var(--vh, 1vh) * 100) - var(--header-offset, 4rem));
   display: grid;
   grid-template-rows: 1fr;
-  color: var(--text-on-media);
-  background: var(--surface-scrim);
+  color: var(--stage-ink);
+  background: var(--stage-bg);
   overflow: hidden;
 }
 
 .product-stage.is-empty {
   min-height: 16rem;
-  color: var(--text-primary);
-  background: var(--product-stage-bg, var(--surface-page));
 }
 
 .product-stage__atmosphere {
@@ -29,12 +30,12 @@
   background:
     radial-gradient(
       ellipse 70% 55% at 50% 42%,
-      color-mix(in srgb, var(--interactive-primary, var(--color-primary-base)) 22%, transparent) 0%,
+      color-mix(in srgb, var(--interactive-primary, var(--color-primary-base)) 16%, transparent) 0%,
       transparent 68%
     ),
     radial-gradient(
       ellipse 90% 40% at 50% 100%,
-      color-mix(in srgb, var(--surface-scrim) 55%, transparent) 0%,
+      color-mix(in srgb, var(--stage-bg) 55%, transparent) 0%,
       transparent 70%
     );
 }
@@ -62,20 +63,20 @@
   background:
     linear-gradient(
       90deg,
-      color-mix(in srgb, var(--surface-scrim) 78%, transparent) 0%,
-      color-mix(in srgb, var(--surface-scrim) 28%, transparent) 38%,
+      color-mix(in srgb, var(--stage-bg) 88%, transparent) 0%,
+      color-mix(in srgb, var(--stage-bg) 32%, transparent) 38%,
       transparent 58%
     ),
     linear-gradient(
       270deg,
-      color-mix(in srgb, var(--surface-scrim) 62%, transparent) 0%,
+      color-mix(in srgb, var(--stage-bg) 72%, transparent) 0%,
       transparent 42%
     ),
     linear-gradient(
       180deg,
-      color-mix(in srgb, var(--surface-scrim) 42%, transparent) 0%,
+      color-mix(in srgb, var(--stage-bg) 48%, transparent) 0%,
       transparent 28%,
-      color-mix(in srgb, var(--surface-scrim) 72%, transparent) 100%
+      color-mix(in srgb, var(--stage-bg) 78%, transparent) 100%
     );
 }
 
@@ -89,7 +90,7 @@
   pointer-events: none;
   background: radial-gradient(
     ellipse at center,
-    color-mix(in srgb, var(--surface-scrim) 45%, transparent) 0%,
+    color-mix(in srgb, var(--stage-bg) 45%, transparent) 0%,
     transparent 72%
   );
 }
@@ -114,7 +115,7 @@
   align-self: center;
   max-width: 22rem;
   pointer-events: auto;
-  color: var(--text-on-media);
+  color: var(--stage-ink);
 }
 
 .product-stage__kicker {
@@ -123,21 +124,20 @@
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--text-on-media) 72%, transparent);
+  color: var(--stage-muted);
 }
 
 .product-stage__title {
   margin: 0 0 0.75rem;
-  color: var(--text-on-media);
+  color: var(--stage-ink);
   font-size: clamp(1.75rem, 3vw, 2.75rem);
   line-height: 1.15;
   font-weight: 700;
-  text-shadow: 0 2px 18px color-mix(in srgb, var(--surface-scrim) 55%, transparent);
 }
 
 .product-stage__lede {
   margin: 0 0 0.75rem;
-  color: color-mix(in srgb, var(--text-on-media) 82%, transparent);
+  color: var(--stage-muted);
   line-height: 1.55;
 }
 
@@ -145,7 +145,7 @@
   margin: 0;
   font-size: var(--text-xs, 0.75rem);
   letter-spacing: 0.04em;
-  color: color-mix(in srgb, var(--text-on-media) 58%, transparent);
+  color: var(--stage-muted);
 }
 
 .product-stage__meta {
@@ -154,7 +154,7 @@
   align-self: center;
   max-width: 20rem;
   pointer-events: auto;
-  color: var(--text-on-media);
+  color: var(--stage-ink);
 }
 
 .product-stage__category {
@@ -162,12 +162,12 @@
   font-size: var(--text-xs, 0.75rem);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--text-on-media) 62%, transparent);
+  color: var(--stage-muted);
 }
 
 .product-stage__name {
   margin: 0 0 0.5rem;
-  color: var(--text-on-media);
+  color: var(--stage-ink);
   font-size: 1.5rem;
   font-weight: 650;
 }
@@ -200,9 +200,9 @@
 }
 
 .product-stage__ghost {
-  border: 1px solid color-mix(in srgb, var(--text-on-media) 28%, transparent);
-  background: color-mix(in srgb, var(--surface-scrim) 42%, transparent);
-  color: var(--text-on-media);
+  border: 1px solid var(--border-default);
+  background: color-mix(in srgb, var(--surface-elevated) 72%, transparent);
+  color: var(--stage-ink);
 }
 
 .product-stage__rail {
@@ -226,9 +226,9 @@
   min-width: 11rem;
   padding: 0.45rem 0.75rem 0.45rem 0.45rem;
   border-radius: 0.85rem;
-  border: 1px solid color-mix(in srgb, var(--text-on-media) 16%, transparent);
-  background: color-mix(in srgb, var(--surface-scrim) 48%, transparent);
-  color: var(--text-on-media);
+  border: 1px solid var(--border-default);
+  background: color-mix(in srgb, var(--surface-elevated) 78%, transparent);
+  color: var(--stage-ink);
   cursor: pointer;
   text-align: left;
 
