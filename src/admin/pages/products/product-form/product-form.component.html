@@ -353,6 +353,14 @@
                   </div>
 
                   <div class="model-footer__row model-footer__row--actions">
+                    <button
+                      *ngIf="model3dNeedsCloudinaryArchive"
+                      type="button"
+                      class="model-btn model-btn--ai"
+                      (click)="archiveLocalModel()">
+                      <mat-icon>cloud_upload</mat-icon>
+                      <span>{{ 'ARCHIVE_TO_CLOUDINARY' | translate }}</span>
+                    </button>
                     <button type="button" class="model-btn model-btn--ai" (click)="generateAi3dModel()">
                       <mat-icon>autorenew</mat-icon>
                       <span>{{ 'PRODUCT_3D.GENERATE_AGAIN' | translate }}</span>
@@ -381,7 +389,7 @@
               <!-- Loading state (if applicable) -->
               <div *ngIf="isUploading3d" class="uploading-overlay">
                 <mat-spinner diameter="40"></mat-spinner>
-                <span>{{ (isLiveSite || !isLocalApi ? 'PRODUCT_3D.WAKING_AND_UPLOADING' : 'PRODUCT_3D.UPLOADING_LOCAL') | translate }}</span>
+                <span>{{ 'PRODUCT_3D.WAKING_AND_UPLOADING' | translate }}</span>
               </div>
             </div>
           </mat-card-content>
