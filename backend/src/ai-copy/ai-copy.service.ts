@@ -61,9 +61,16 @@ export class AiCopyService {
         timeout: 12000,
         maxContentLength: 6 * 1024 * 1024,
       });
+      const rawContentType = image.headers['content-type'];
+      const contentType =
+        typeof rawContentType === 'string'
+          ? rawContentType
+          : Array.isArray(rawContentType) && typeof rawContentType[0] === 'string'
+            ? rawContentType[0]
+            : 'image/jpeg';
       const headers: Record<string, string> = {
         Accept: 'application/json',
-        'Content-Type': image.headers['content-type'] || 'image/jpeg',
+        'Content-Type': contentType,
       };
       if (token) {
         headers.Authorization = `Bearer ${token}`;
