@@ -29,7 +29,7 @@ body.is-admin {
       background: var(--glass-surface-muted, var(--form-bg));
       backdrop-filter: var(--backdrop-blur-sm);
       -webkit-backdrop-filter: var(--backdrop-blur-sm);
-      border: 1px solid var(--glass-border-soft, var(--form-border));
+      border: none;
       border-radius: var(--form-radius-pill);
       box-shadow: var(--shadow-sm);
     }
