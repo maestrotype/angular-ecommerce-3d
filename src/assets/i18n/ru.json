@@ -1043,7 +1043,7 @@
     "HTML_CONTENT": "Кастомный HTML контент",
     "FOOTER": "Секция Футера"
   },
-  "PRODUCT_STAGE_HINT": "Перетащите, чтобы вращать · pinch или скролл для зума",
+  "PRODUCT_STAGE_HINT": "Наведите на модель, чтобы вращать · в стороне — прокрутка страницы",
   "PRODUCT_STAGE_EMPTY": "Пока нет 3D-товаров в сумках, одежде или обуви. Загрузите GLB на эти SKU.",
   "PRODUCT_STAGE_CATEGORIES": "Категории каталога",
   "PRODUCT_STAGE_CATEGORIES_HINT": "По умолчанию: сумки, одежда, обувь.",

@@ -1043,7 +1043,7 @@
     "HTML_CONTENT": "Custom HTML Content",
     "FOOTER": "Footer Section"
   },
-  "PRODUCT_STAGE_HINT": "Drag to orbit · pinch or scroll to zoom",
+  "PRODUCT_STAGE_HINT": "Hover the model to rotate · scroll anywhere else",
   "PRODUCT_STAGE_EMPTY": "No 3D products in bags, clothing, or shoes yet. Upload a GLB on those SKUs.",
   "PRODUCT_STAGE_CATEGORIES": "Catalog categories",
   "PRODUCT_STAGE_CATEGORIES_HINT": "Default: bags, clothing, shoes. Leave empty to use that default.",

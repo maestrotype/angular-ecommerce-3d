@@ -6,18 +6,19 @@
   <div class="product-stage__atmosphere" aria-hidden="true"></div>
 
   <div class="product-stage__canvas" *ngIf="!empty; else stageEmpty">
-    <ng-container *ngFor="let product of activeList; trackBy: trackByProductId">
-      <app-three-d-viewer
-        [modelPath]="modelPathOf(product)"
-        [hdModelPath]="product.hdModelPath"
-        [scale]="modelScale"
-        [position]="modelPosition"
-        [autoRotate]="autoRotate"
-        [previewOnly]="false"
-        [keyOutStudioBackground]="'auto'"
-        loading="eager">
-      </app-three-d-viewer>
-    </ng-container>
+    <app-three-d-viewer
+      *ngIf="active as product"
+      [modelPath]="modelPathOf(product)"
+      [hdModelPath]="product.hdModelPath"
+      [scale]="modelScale"
+      [position]="modelPosition"
+      [autoRotate]="false"
+      [previewOnly]="false"
+      [rotateOnHover]="true"
+      [enableZoom]="false"
+      [keyOutStudioBackground]="false"
+      loading="eager">
+    </app-three-d-viewer>
     <div class="product-stage__veil" aria-hidden="true"></div>
     <div class="product-stage__floor" aria-hidden="true"></div>
   </div>
