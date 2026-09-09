@@ -36,6 +36,9 @@ import { ConfirmationService } from "../../../services/confirmation.service";
 import { ProductFormDraft, ProductFormPrefillSnapshot } from "./product-form-draft.model";
 import { sampleDraftForCategory } from "./product-form.demo-values";
 import { ProductFormPrefillService } from "./product-form-prefill.service";
+import { ProductFormAiCopyService, ProductAiCopyRequest } from "./product-form-ai-copy.service";
+import { ProductAiCopyDialogComponent } from "./product-ai-copy-dialog.component";
+import { draftFromProductPage, isProductPageReadable, ProductPageReadInput } from "./product-form-page-reader";
 
 @Component({
   selector: "app-product-form",
@@ -110,6 +113,7 @@ export class ProductFormComponent implements OnInit {
   categories: Category[] = [];
   categoriesLoaded = false;
   lastFillSnapshot: ProductFormPrefillSnapshot | null = null;
+  isAiCopying = false;
   private demoPrefillRequested = false;
   private demoPrefillApplied = false;
 
@@ -134,12 +138,21 @@ export class ProductFormComponent implements OnInit {
     private apiEnvironment: ApiEnvironmentService,
     private confirmationService: ConfirmationService,
     private productFormPrefill: ProductFormPrefillService,
+    private productFormAiCopy: ProductFormAiCopyService,
   ) {
     this.productForm = this.createForm();
   }
 
   get canUndoFill(): boolean {
     return this.lastFillSnapshot !== null;
+  }
+
+  get canFillFromPage(): boolean {
+    return isProductPageReadable(this.collectPageInput());
+  }
+
+  get canFillWithAi(): boolean {
+    return this.imageUrls.length > 0;
   }
 
   ngOnInit(): void {
@@ -313,7 +326,57 @@ export class ProductFormComponent implements OnInit {
   };
 
   fillSample(): void {
-    const draft = this.buildSampleDraft();
+    this.applyDraftWithConfirm(this.buildSampleDraft());
+  }
+
+  fillFromPage(): void {
+    const input = this.collectPageInput();
+    if (!isProductPageReadable(input)) {
+      this.snackBar.open(this.translate.instant('SMART_FILL_PAGE_EMPTY'), this.translate.instant('CLOSE_BTN'), {
+        duration: 3000,
+      });
+      return;
+    }
+    this.applyDraftWithConfirm(draftFromProductPage(input));
+  }
+
+  fillWithAi(): void {
+    if (this.isAiCopying || !this.canFillWithAi) {
+      if (!this.canFillWithAi) {
+        this.snackBar.open(this.translate.instant('SMART_FILL_AI_NO_PHOTO'), this.translate.instant('CLOSE_BTN'), {
+          duration: 4000,
+        });
+      }
+      return;
+    }
+    this.isAiCopying = true;
+    this.productFormAiCopy.describe(this.buildAiCopyRequest()).pipe(
+      finalize(() => { this.isAiCopying = false; }),
+    ).subscribe({
+      next: (response) => {
+        const dialogRef = this.dialog.open(ProductAiCopyDialogComponent, {
+          width: '720px',
+          maxWidth: '94vw',
+          data: response,
+        });
+        dialogRef.afterClosed().subscribe((draft) => {
+          if (draft) {
+            this.commitSampleDraft(draft, 'overwrite');
+          }
+        });
+      },
+      error: (error) => {
+        const rawMsg = error?.error?.message || error?.message || 'SMART_FILL_AI_FAILED';
+        this.snackBar.open(
+          this.translate.instant('SMART_FILL_AI_FAILED') + ': ' + translateErrorMessage(String(rawMsg), this.translate),
+          this.translate.instant('CLOSE_BTN'),
+          { duration: 6000 },
+        );
+      },
+    });
+  }
+
+  private applyDraftWithConfirm(draft: ProductFormDraft): void {
     const hasFieldConflicts = this.productFormPrefill.findConflicts(this.productForm, draft).length > 0;
     const hasSpecConflict = this.productFormPrefill.hasSpecificationConflict(this.productForm, draft);
     if (!hasFieldConflicts && !hasSpecConflict) {
@@ -330,6 +393,38 @@ export class ProductFormComponent implements OnInit {
     }).subscribe((overwrite) => {
       this.commitSampleDraft(draft, overwrite ? 'overwrite' : 'merge');
     });
+  }
+
+  private collectPageInput(): ProductPageReadInput {
+    const value = this.productForm.getRawValue();
+    return {
+      name_en: value.name_en,
+      name_ru: value.name_ru,
+      name_ua: value.name_ua,
+      category: value.category,
+      categoryLabel: this.categoryLabel(),
+      description_en: value.description_en,
+      description_ru: value.description_ru,
+      description_ua: value.description_ua,
+      specifications: value.specifications,
+      imageUrls: this.imageUrls,
+    };
+  }
+
+  private buildAiCopyRequest(): ProductAiCopyRequest {
+    return {
+      ...this.collectPageInput(),
+      imageUrls: this.imageUrls,
+    };
+  }
+
+  private categoryLabel(): string {
+    const slug = this.currentFormCategory();
+    const category = this.categories.find((item) => this.getCategoryValue(item) === slug);
+    if (!category) {
+      return slug;
+    }
+    return getLocalizedString(category.name, 'en') || slug;
   }
 
   undoSampleFill(): void {

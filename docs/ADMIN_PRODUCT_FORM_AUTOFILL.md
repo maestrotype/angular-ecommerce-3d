@@ -1,7 +1,7 @@
 # Admin product form: smart fill (wishlist)
 
-**Status:** L0 implemented on this branch · L1/L2 still backlog  
-**Branch:** `docs/admin-product-form-autofill`  
+**Status:** L0–L2 implemented on `feat/admin-product-form-autofill`  
+**Branch:** `feat/admin-product-form-autofill` (do not use `docs/…` — `origin/docs` already exists, GitHub rejects nested `docs/` branch names)  
 **Captured:** 2026-09-09 · **L0:** 2026-09-09  
 **Surface:** `/admin` → Add / Edit product (`ProductFormComponent`)
 
@@ -73,6 +73,8 @@ Keep L1 **deterministic and fast** (no model, works offline for the primary sour
 
 **Done when:** after images (and/or a few fields) exist, one click proposes name + short description in the active locales without calling an LLM.
 
+**L1 shipped:** Smart fill → **From page**. Reads names, category, specs, and image filenames on this admin form. Reuses `ProductFormPrefillService` merge/undo. No LLM.
+
 ### L2 — AI: rich description from page data, especially photos (free, easy)
 
 Same draft pipeline. The model receives:
@@ -101,6 +103,8 @@ UX: **Generate description** → preview (tabs per locale) → Apply / Discard. 
 New backend piece should be a small **copy/vision** module (caption + expand + translate to EN/RU/UA), called from admin, keys in existing Integrations — not a new settings app.
 
 **Done when:** with at least one product photo, admin can generate a long description in EN/RU/UA, preview it, and apply it to the form, with a documented free path (HF and/or local).
+
+**L2 shipped:** Smart fill → **AI describe**. `POST /api/ai-copy/describe` (admin JWT). Hugging Face BLIP caption + optional SmolLM chat; template fallback from the caption if chat is unavailable. Preview dialog, then apply. Token: existing `ai.hfToken` in Integrations. Not the 3D `AiGenerationProvider` pipeline.
 
 ---
 
@@ -165,5 +169,5 @@ Polish is **incremental** (spacing, hierarchy, one toolbar), not a redesign of c
 When picking this up:
 
 1. Re-read this file and the current `product-form` template (it may have changed).
-2. L0 apply/merge/undo already exists — extend `ProductFormPrefillService` + `ProductFormDraft` for L1.
-3. Do not start L2 until L1 uses the same apply path.
+2. L0/L1/L2 share `ProductFormPrefillService` apply/merge/undo.
+3. Push from `feat/admin-product-form-autofill`, not `docs/admin-product-form-autofill`.
