@@ -1,0 +1,1 @@
+import{a}from"./chunk-VA6ALGPS.js";import"./chunk-SGP3MILQ.js";import"./chunk-V3D2OUUC.js";import"./chunk-DPUYAO4D.js";import"./chunk-ZXWZBLZ6.js";import"./chunk-TMC7WMLO.js";export{a as ProductTabsComponent};

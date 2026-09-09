@@ -1,0 +1,1 @@
+import{a}from"./chunk-NQ3YM4VX.js";import"./chunk-OUTRMF3X.js";import"./chunk-U2USCXRX.js";import"./chunk-GITZRWQZ.js";import"./chunk-4MRHXDU2.js";import"./chunk-U37RDHBE.js";import"./chunk-V3D2OUUC.js";import"./chunk-DPUYAO4D.js";import"./chunk-ZXWZBLZ6.js";import"./chunk-TMC7WMLO.js";export{a as ContactsComponent};
