@@ -16,6 +16,7 @@
     color: var(--text-primary);
     font-size: var(--text-2xl);
     font-weight: var(--font-bold);
+    line-height: 1.25;
   }
 }
 
@@ -23,6 +24,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(16rem, 1fr);
   gap: var(--space-6);
+  align-items: stretch;
   margin-bottom: var(--space-8);
   padding: var(--space-5);
   border-radius: var(--radius-xl);
@@ -39,8 +41,14 @@
 }
 
 .dashboard-wow__stage {
+  --dashboard-stage-height: clamp(16rem, 34vh, 22rem);
   position: relative;
-  min-height: 16rem;
+  min-height: var(--dashboard-stage-height);
+  height: var(--dashboard-stage-height);
+  display: flex;
+  align-items: flex-end;
+  padding: var(--space-5) var(--space-4) var(--space-4);
+  box-sizing: border-box;
   border-radius: var(--radius-lg);
   overflow: hidden;
   background:
@@ -51,27 +59,143 @@
     ),
     var(--viewer-host-bg, color-mix(in srgb, var(--surface-elevated) 55%, transparent));
   border: 1px solid var(--border-subtle);
-
-  app-three-d-viewer {
-    --viewer-host-bg: transparent;
-  }
 }
 
-.dashboard-wow__stage app-three-d-viewer {
-  display: block;
+.iso-chart {
+  position: relative;
   width: 100%;
   height: 100%;
-  min-height: 16rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
-.dashboard-wow__empty {
-  margin: 0;
-  min-height: 16rem;
+.iso-chart__floor {
+  position: absolute;
+  left: 8%;
+  right: 6%;
+  bottom: 1.55rem;
+  height: 28%;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--interactive-primary) 16%, transparent) 0%,
+    transparent 74%
+  );
+}
+
+.iso-chart__bars {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: 0.5rem;
+  height: 100%;
+  padding: 1.75rem 0.75rem 0 0.35rem;
+  box-sizing: border-box;
+}
+
+.iso-bar {
+  --bar-d: 9px;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 2.4rem;
+  height: 100%;
   display: grid;
-  place-items: center;
-  padding: var(--space-6);
-  text-align: center;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  justify-items: center;
+  align-items: end;
+  gap: 0.35rem;
+}
+
+.iso-bar__value {
+  font-size: 0.68rem;
+  font-weight: var(--font-bold);
   color: var(--text-secondary);
+  line-height: 1;
+}
+
+.iso-bar.is-peak .iso-bar__value {
+  color: var(--interactive-primary);
+}
+
+.iso-bar__pillar {
+  position: relative;
+  width: 1.15rem;
+  height: var(--bar-h);
+  max-height: 100%;
+  align-self: end;
+  overflow: visible;
+}
+
+.iso-bar__face {
+  position: absolute;
+  display: block;
+}
+
+.iso-bar__face--front {
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--interactive-primary) 78%, white) 0%,
+    var(--interactive-primary) 100%
+  );
+}
+
+.iso-bar__face--side {
+  top: 0;
+  left: 100%;
+  width: var(--bar-d);
+  height: 100%;
+  background: color-mix(in srgb, var(--interactive-primary) 55%, #0b1220);
+  transform: skewY(-45deg);
+  transform-origin: 0 0;
+}
+
+.iso-bar__face--top {
+  left: 0;
+  top: calc(-1 * var(--bar-d));
+  width: 100%;
+  height: var(--bar-d);
+  background: color-mix(in srgb, var(--interactive-primary) 42%, white);
+  transform: skewX(-45deg);
+  transform-origin: 0 100%;
+}
+
+.iso-bar.is-peak .iso-bar__face--front {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--interactive-primary) 48%, white) 0%,
+    var(--interactive-primary) 100%
+  );
+}
+
+.iso-bar.is-peak .iso-bar__face--side {
+  background: color-mix(in srgb, var(--interactive-primary) 42%, #0b1220);
+}
+
+.iso-bar.is-peak .iso-bar__face--top {
+  background: color-mix(in srgb, var(--interactive-primary) 28%, white);
+}
+
+.iso-bar__label {
+  font-size: 0.68rem;
+  font-weight: var(--font-medium);
+  letter-spacing: 0.02em;
+  color: var(--text-secondary);
+  line-height: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .iso-bar__face--side,
+  .iso-bar__face--top {
+    display: none;
+  }
+
+  .iso-bar__face--front {
+    border-radius: 4px;
+  }
 }
 
 .dashboard-wow__panel {
@@ -106,6 +230,7 @@
 .dashboard-wow__hint {
   margin: 0 0 var(--space-4);
   font-size: var(--text-sm);
+  line-height: 1.5;
   color: var(--text-secondary);
 }
 
@@ -157,6 +282,10 @@
 @media (max-width: 1024px) {
   .dashboard-wow {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dashboard-wow__stage {
+    --dashboard-stage-height: clamp(14rem, 52vw, 18rem);
   }
 }
 

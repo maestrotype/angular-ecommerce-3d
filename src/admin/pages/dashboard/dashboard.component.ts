@@ -1,5 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ChartConfiguration, ChartOptions, Chart, registerables } from 'chart.js';
 import { Subscription } from 'rxjs';
@@ -7,11 +6,16 @@ import { DashboardService } from '../../services/dashboard.service';
 import { ErrorHandlerService } from '../../services/error-handler.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ThemeService } from '../../../app/core/themes/theme.service';
-import { ProductService } from '../../../app/core/services/product.service';
-import { Product } from 'src/shared/models/product.model';
-import { pickStageProducts, stageModelPath } from 'src/shared/utils/product-stage.util';
 
 Chart.register(...registerables);
+
+export interface WeekBar {
+  label: string;
+  value: number;
+  height: number;
+  isPeak: boolean;
+  short: string;
+}
 
 @Component({
   selector: 'app-dashboard',
@@ -21,12 +25,10 @@ Chart.register(...registerables);
 export class DashboardComponent implements OnInit, OnDestroy {
   dashboardData: any = {};
   isLoading = false;
-  stageProduct: Product | null = null;
-  stageAutoRotate = true;
-  modelScale: [number, number, number] = [6, 6, 6];
-  modelPosition: [number, number, number] = [0, -0.12, 0];
+  weekBars: WeekBar[] = [];
+  peakBar: WeekBar | null = null;
   private themeSub?: Subscription;
-  private productsSub?: Subscription;
+  private langSub?: Subscription;
 
   public salesChartData: ChartConfiguration<'line'>['data'] = {
     labels: [],
@@ -104,22 +106,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private errorHandler: ErrorHandlerService,
     private translate: TranslateService,
     private themeService: ThemeService,
-    private productService: ProductService,
     private router: Router,
-    @Inject(PLATFORM_ID) private platformId: Object,
-  ) {
-    if (isPlatformBrowser(this.platformId)) {
-      this.stageAutoRotate = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    }
-  }
+  ) {}
 
   ngOnInit(): void {
     this.loadDashboardData();
-    this.loadStagePreview();
     this.initChartTranslations();
     this.applyChartAxisColors();
 
-    this.translate.onLangChange.subscribe(() => {
+    this.langSub = this.translate.onLangChange.subscribe(() => {
       this.initChartTranslations();
     });
 
@@ -130,32 +125,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.themeSub?.unsubscribe();
-    this.productsSub?.unsubscribe();
+    this.langSub?.unsubscribe();
   }
 
-  stageModelPath(): string {
-    return stageModelPath(this.stageProduct);
-  }
-
-  openStageProduct(): void {
-    if (!this.stageProduct) {
-      return;
-    }
-    this.router.navigate(['/product', this.stageProduct.id]);
-  }
-
-  private loadStagePreview(): void {
-    this.productsSub = this.productService.getProducts().subscribe({
-      next: (products) => {
-        this.stageProduct = pickStageProducts(products, {
-          categories: ['bags', 'shoes'],
-          limit: 1,
-        })[0] || null;
-      },
-      error: () => {
-        this.stageProduct = null;
-      },
-    });
+  openOrders(): void {
+    this.router.navigate(['/admin/orders']);
   }
 
   /** Glass/dark: bright ticks; light: slate for contrast on pale cards */
@@ -188,6 +162,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.salesChartData.labels = days.map(day => this.translate.instant('DAYS_SHORT.' + day));
     this.salesChartData.datasets[0].label = this.translate.instant('SALES_ACTIVITY');
     this.salesChartData = { ...this.salesChartData };
+    this.refreshWeekBars();
+  }
+
+  private refreshWeekBars(): void {
+    const values = (this.salesChartData.datasets[0].data || []) as number[];
+    const labels = (this.salesChartData.labels || []) as string[];
+    const max = Math.max(...values, 1);
+    const peak = Math.max(...values, 0);
+    this.weekBars = values.map((value, index) => ({
+      label: labels[index] || '',
+      value,
+      height: Math.max(18, Math.round((value / max) * 100)),
+      isPeak: value === peak,
+      short: value >= 1000
+        ? `${(value / 1000).toFixed(1).replace(/\.0$/, '')}k`
+        : String(value),
+    }));
+    this.peakBar = this.weekBars.find((bar) => bar.isPeak) || null;
   }
 
   loadDashboardData(): void {

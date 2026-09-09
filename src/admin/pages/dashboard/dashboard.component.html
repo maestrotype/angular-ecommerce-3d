@@ -8,32 +8,37 @@
 
   <section class="dashboard-wow" *ngIf="!isLoading">
     <div class="dashboard-wow__stage">
-      <ng-container *ngIf="stageProduct; else wowEmpty">
-        <app-three-d-viewer
-          [modelPath]="stageModelPath()"
-          [hdModelPath]="stageProduct.hdModelPath"
-          [scale]="modelScale"
-          [position]="modelPosition"
-          [autoRotate]="stageAutoRotate"
-          [previewOnly]="false"
-          loading="eager">
-        </app-three-d-viewer>
-      </ng-container>
-      <ng-template #wowEmpty>
-        <p class="dashboard-wow__empty">{{ 'DASHBOARD_WOW_EMPTY' | translate }}</p>
-      </ng-template>
+      <div
+        class="iso-chart"
+        role="img"
+        [attr.aria-label]="'DASHBOARD_WOW_CHART' | translate">
+        <div class="iso-chart__floor" aria-hidden="true"></div>
+        <div class="iso-chart__bars">
+          <div
+            class="iso-bar"
+            *ngFor="let bar of weekBars"
+            [class.is-peak]="bar.isPeak"
+            [style.--bar-h]="bar.height + '%'">
+            <span class="iso-bar__value">{{ bar.short }}</span>
+            <div class="iso-bar__pillar" aria-hidden="true">
+              <span class="iso-bar__face iso-bar__face--front"></span>
+              <span class="iso-bar__face iso-bar__face--side"></span>
+              <span class="iso-bar__face iso-bar__face--top"></span>
+            </div>
+            <span class="iso-bar__label">{{ bar.label }}</span>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="dashboard-wow__panel">
       <p class="dashboard-wow__kicker">{{ 'DASHBOARD_WOW_KICKER' | translate }}</p>
       <h2 class="dashboard-wow__title">{{ 'DASHBOARD_WOW_TITLE' | translate }}</h2>
-      <p class="dashboard-wow__product" *ngIf="stageProduct">{{ stageProduct.name | localized }}</p>
+      <p class="dashboard-wow__product" *ngIf="peakBar">
+        {{ 'DASHBOARD_WOW_PEAK' | translate }}: {{ peakBar.label }} · ${{ formatNumber(peakBar.value) }}
+      </p>
       <p class="dashboard-wow__hint">{{ 'DASHBOARD_WOW_HINT' | translate }}</p>
-      <button
-        *ngIf="stageProduct"
-        type="button"
-        class="dashboard-wow__cta"
-        (click)="openStageProduct()">
+      <button type="button" class="dashboard-wow__cta" (click)="openOrders()">
         {{ 'DASHBOARD_WOW_VIEW' | translate }}
       </button>
 
