@@ -222,7 +222,7 @@ export class UploadsController {
       // Compress automatically when the raw file would miss the stored-size cap.
       // Quality-preserving skip still applies to files already within the limit.
       optimizedPath = await this.glbOptimizationService.optimize(file.path, {
-        force: originalSize > MAX_STORED_GLB_BYTES,
+        force: originalSize > CLOUDINARY_RAW_FILE_LIMIT,
       });
       if (optimizedPath) {
         uploadPath = optimizedPath;

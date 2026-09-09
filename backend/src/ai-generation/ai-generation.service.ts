@@ -223,7 +223,10 @@ export class AiGenerationService {
       const optFilePath = path.join(uploadsDir, optFilename);
 
       this.logger.log(`Optimizing model using gltf-transform...`);
-      const optimizedPath = await this.glbOptimizationService.optimize(hqFilePath);
+      const hqSize = fs.statSync(hqFilePath).size;
+      const optimizedPath = await this.glbOptimizationService.optimize(hqFilePath, {
+        force: hqSize > CLOUDINARY_RAW_FILE_LIMIT,
+      });
       const uploadPath = optimizedPath || hqFilePath;
       if (optimizedPath && optimizedPath !== optFilePath) {
         fs.copyFileSync(optimizedPath, optFilePath);

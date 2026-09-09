@@ -21,7 +21,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { AiGenerationService, AiProviderOption } from "../../../services/ai-generation.service";
 import { AiWarningDialogComponent } from "../../../components/shared/ai-warning-dialog/ai-warning-dialog.component";
 import { finalize } from "rxjs/operators";
-import { switchMap, of, EMPTY } from "rxjs";
+import { switchMap, throwError } from "rxjs";
 import { ThreeDModelService } from '../../../../app/core/services/three-d-model.service';
 
 
@@ -561,18 +561,40 @@ export class ProductFormComponent implements OnInit {
       // Standard backend-to-backend download
       this.aiService.downloadModel(modelUrl, filename).subscribe({
         next: (response: any) => {
-          this.resetAiState();
-          if (response.path) {
-            const persistOptions = this.isLiveSite || !this.isLocalApi
-              ? { forceProductionDb: true, requireCloudinary: true as const }
-              : undefined;
+          if (response.path && isCloudinaryUrl(response.path)) {
+            this.resetAiState();
             this.applyModelChangesAndSave(
               response.path,
               response.localPath || null,
               response.publicId || null,
-              persistOptions,
+              { forceProductionDb: true, requireCloudinary: true },
             );
+            return;
           }
+          if (!response.path) {
+            this.resetAiState();
+            return;
+          }
+          this.http.get(response.path, { responseType: 'blob' }).subscribe({
+            next: (blob) => {
+              const file = new File([blob], filename, { type: 'model/gltf-binary' });
+              this.isUploading3d = true;
+              this.resetAiState();
+              this.upload3dPreferringCloudinary(file, {
+                url: response.path,
+                publicId: response.publicId || null,
+                localPath: response.localPath,
+              });
+            },
+            error: () => {
+              this.resetAiState();
+              this.applyModelChangesAndSave(
+                response.path,
+                response.localPath || null,
+                response.publicId || null,
+              );
+            },
+          });
         },
         error: (err) => {
           if (modelUrl.includes('/uploads/')) {
@@ -929,71 +951,133 @@ export class ProductFormComponent implements OnInit {
       this.snackBar.open(this.translate.instant('MODEL_3D_OPTIMIZING'), this.translate.instant('CLOSE_BTN'), { duration: 5000 });
     }
 
-    // Always save locally first — to the connected backend server.
-    // Use Cloudinary archive button later if needed.
     this.isUploading3d = true;
-
-    // Determine which backend to use: local or production
-    const upload$ = this.isLocalApi
-      ? this.productService.upload3dModel(file)
-      : this.productService.upload3dModel(file, PROD_API_URL);
-
-    upload$.subscribe({
-      next: (res) => {
-        if (!res) return;
-        
-        // Save to the backend server (local disk).
-        // The backend will try Cloudinary first, then fall back to local if needed.
-        this.model3dUrl = res.url;
-        this.localModel3dUrl = res.localPath || null;
-        this.model3dPublicId = res.publicId || null;
-        this.viewerVersion++;
-        
-        const messageKey = isCloudinaryUrl(res.url)
-          ? 'MODEL_3D_UPLOADED'
-          : 'MODEL_SAVED_TEMPORARY_STORAGE';
-        
-        this.snackBar.open(this.translate.instant(messageKey), this.translate.instant('CLOSE_BTN'), {
-          duration: 10000,
-          panelClass: isCloudinaryUrl(res.url) ? [] : ['warning-snackbar'],
-        });
-        this.isUploading3d = false;
-      },
-      error: (err) => {
-        this.isUploading3d = false;
-        const resolved = resolveApiError(err, this.translate, {
-          titleKey: 'MODEL_3D_UPLOAD_FAILED',
-          isLocalApi: this.isLocalApi,
-          isDevelopment: this.isDevelopment,
-          targetsProductionApi: !this.isLocalApi,
-        });
-        this.snackBar.open(formatResolvedApiError(resolved), this.translate.instant('CLOSE_BTN'), {
-          duration: resolved.duration,
-          panelClass: resolved.panelClass,
-        });
-      },
-    });
+    this.persistGlbFile(file);
 
     if (event.target) {
       event.target.value = '';
     }
   }
 
-  onCloudinaryReuploadSelected(event: Event): void {
-    this.on3dFileSelected(event);
+  private persistGlbFile(file: File): void {
+    if (this.isLocalApi) {
+      this.productService.upload3dModel(file).subscribe({
+        next: (localRes) => {
+          if (!localRes) {
+            return;
+          }
+          if (isCloudinaryUrl(localRes.url)) {
+            this.applyCloudinaryModel(localRes);
+            return;
+          }
+          this.pushLocalResultToCloudinary(localRes, file.name);
+        },
+        error: (err) => {
+          this.isUploading3d = false;
+          this.showModelUploadError(err, false);
+        },
+      });
+      return;
+    }
+    this.upload3dPreferringCloudinary(file);
   }
 
-  private uploadToCloudinaryWithPrecheck(file: File) {
-    return this.settingsService.getProductionCloudinaryStatus().pipe(
+  private pushLocalResultToCloudinary(
+    localRes: { url: string; publicId: string; localPath?: string },
+    filename: string,
+  ): void {
+    this.http.get(localRes.url, { responseType: 'blob' }).subscribe({
+      next: (blob) => {
+        const glbName = filename.toLowerCase().endsWith('.glb') ? filename : `${filename}.glb`;
+        const file = new File([blob], glbName, { type: 'model/gltf-binary' });
+        this.upload3dPreferringCloudinary(file, localRes);
+      },
+      error: () => this.applyLocalModelUpload(localRes),
+    });
+  }
+
+  private upload3dPreferringCloudinary(
+    file: File,
+    localFallback?: { url: string; publicId: string | null; localPath?: string | null },
+  ): void {
+    this.settingsService.getProductionCloudinaryStatus().pipe(
       switchMap((status) => {
         if (!status.uploadReady) {
-          this.isUploading3d = false;
           this.showCloudinaryStatusError(status);
-          return EMPTY;
+          return throwError(() => status);
         }
         return this.productService.upload3dModelToCloudinary(file);
       }),
-    );
+    ).subscribe({
+      next: (res) => {
+        if (res && isCloudinaryUrl(res.url)) {
+          this.applyCloudinaryModel(res);
+          return;
+        }
+        if (localFallback) {
+          this.applyLocalModelUpload(localFallback);
+          return;
+        }
+        if (res) {
+          this.applyLocalModelUpload(res);
+        }
+      },
+      error: (err) => {
+        if (localFallback) {
+          this.applyLocalModelUpload(localFallback);
+          return;
+        }
+        if (this.isLocalApi) {
+          this.productService.upload3dModel(file).subscribe({
+            next: (res) => this.applyLocalModelUpload(res),
+            error: (localErr) => {
+              this.isUploading3d = false;
+              this.showModelUploadError(localErr, false);
+            },
+          });
+          return;
+        }
+        this.isUploading3d = false;
+        this.showModelUploadError(err, true);
+      },
+    });
+  }
+
+  private applyCloudinaryModel(res: { url: string; publicId: string; localPath?: string }): void {
+    this.applyModelChangesAndSave(res.url, null, res.publicId, {
+      forceProductionDb: true,
+      requireCloudinary: true,
+    });
+    this.isUploading3d = false;
+  }
+
+  private applyLocalModelUpload(res: { url: string; publicId: string | null; localPath?: string | null }): void {
+    this.model3dUrl = res.url;
+    this.localModel3dUrl = res.localPath || null;
+    this.model3dPublicId = res.publicId || null;
+    this.viewerVersion++;
+    this.snackBar.open(this.translate.instant('MODEL_SAVED_TEMPORARY_STORAGE'), this.translate.instant('CLOSE_BTN'), {
+      duration: 10000,
+      panelClass: ['warning-snackbar'],
+    });
+    this.isUploading3d = false;
+  }
+
+  private showModelUploadError(err: any, targetsProductionApi: boolean): void {
+    const resolved = resolveApiError(err, this.translate, {
+      titleKey: 'MODEL_3D_UPLOAD_FAILED',
+      isLocalApi: this.isLocalApi,
+      isDevelopment: this.isDevelopment,
+      targetsProductionApi,
+    });
+    this.snackBar.open(formatResolvedApiError(resolved), this.translate.instant('CLOSE_BTN'), {
+      duration: resolved.duration,
+      panelClass: resolved.panelClass,
+    });
+  }
+
+  onCloudinaryReuploadSelected(event: Event): void {
+    this.on3dFileSelected(event);
   }
 
   private showCloudinaryStatusError(status: CloudinaryStatus): void {
@@ -1061,36 +1145,7 @@ export class ProductFormComponent implements OnInit {
 
   private uploadFileToCloudinary(file: File): void {
     this.isUploading3d = true;
-    this.uploadToCloudinaryWithPrecheck(file).subscribe({
-      next: (res) => {
-        if (!res) return;
-        if (!isCloudinaryUrl(res.url)) {
-          this.isUploading3d = false;
-          this.snackBar.open(this.translate.instant('ARCHIVE_NOT_CLOUDINARY_ERROR'), this.translate.instant('CLOSE_BTN'), {
-            duration: 12000,
-            panelClass: ['error-snackbar'],
-          });
-          return;
-        }
-        this.applyModelChangesAndSave(res.url, null, res.publicId, {
-          forceProductionDb: true,
-          requireCloudinary: true,
-        });
-        this.isUploading3d = false;
-      },
-      error: (err) => {
-        this.isUploading3d = false;
-        const resolved = resolveApiError(err, this.translate, {
-          titleKey: 'MODEL_3D_UPLOAD_FAILED',
-          isDevelopment: this.isDevelopment,
-          targetsProductionApi: true,
-        });
-        this.snackBar.open(formatResolvedApiError(resolved), this.translate.instant('CLOSE_BTN'), {
-          duration: resolved.duration,
-          panelClass: resolved.panelClass,
-        });
-      }
-    });
+    this.persistGlbFile(file);
   }
 
   private fallbackToServerArchiving(): void {
