@@ -13,6 +13,14 @@
   background: var(--viewer-host-bg, var(--surface-secondary));
 }
 
+:host.rotate-on-hover .viewer-host {
+  cursor: grab;
+}
+
+:host.rotate-on-hover .viewer-host:active {
+  cursor: grabbing;
+}
+
 .three-canvas {
   width: 100%;
   height: 100%;
