@@ -32,6 +32,10 @@ import { GLB_OPTIMIZE_HINT_BYTES, RAW_GLB_UPLOAD_MAX_BYTES } from "../../../cons
 import { isCloudinaryUrl } from "../../../../app/core/utils/url-helper";
 import { ApiEnvironmentService } from "../../../../app/core/services/api-environment.service";
 import { TranslateService } from "@ngx-translate/core";
+import { ConfirmationService } from "../../../services/confirmation.service";
+import { ProductFormDraft, ProductFormPrefillSnapshot } from "./product-form-draft.model";
+import { sampleDraftForCategory } from "./product-form.demo-values";
+import { ProductFormPrefillService } from "./product-form-prefill.service";
 
 @Component({
   selector: "app-product-form",
@@ -105,6 +109,9 @@ export class ProductFormComponent implements OnInit {
   }
   categories: Category[] = [];
   categoriesLoaded = false;
+  lastFillSnapshot: ProductFormPrefillSnapshot | null = null;
+  private demoPrefillRequested = false;
+  private demoPrefillApplied = false;
 
   imageProcessingOptions: ProcessingOptions = {
     removeBackground: true,
@@ -125,11 +132,23 @@ export class ProductFormComponent implements OnInit {
     private threeDService: ThreeDModelService,
     private translate: TranslateService,
     private apiEnvironment: ApiEnvironmentService,
+    private confirmationService: ConfirmationService,
+    private productFormPrefill: ProductFormPrefillService,
   ) {
     this.productForm = this.createForm();
   }
 
+  get canUndoFill(): boolean {
+    return this.lastFillSnapshot !== null;
+  }
+
   ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get("id");
+    if (id) {
+      this.productId = +id;
+      this.isEditMode = true;
+    }
+    this.demoPrefillRequested = this.route.snapshot.queryParamMap.get("prefill") === "demo";
     this.loadCategories();
     this.route.params.subscribe((params) => {
       if (params["id"]) {
@@ -274,12 +293,14 @@ export class ProductFormComponent implements OnInit {
       next: (categories) => {
         this.categories = (categories || []).filter((category) => category.isActive !== false);
         this.categoriesLoaded = true;
+        this.tryApplyDemoPrefill();
       },
-      error: (error) => {
+      error: () => {
         this.categoriesLoaded = true;
         this.snackBar.open(this.translate.instant('FAILED_TO_LOAD_CATEGORIES'), this.translate.instant('CLOSE_BTN'), {
           duration: 3000
         });
+        this.tryApplyDemoPrefill();
       }
     });
   }
@@ -290,6 +311,104 @@ export class ProductFormComponent implements OnInit {
     }
     return String(current).toLowerCase() === String(option).toLowerCase();
   };
+
+  fillSample(): void {
+    const draft = this.buildSampleDraft();
+    const hasFieldConflicts = this.productFormPrefill.findConflicts(this.productForm, draft).length > 0;
+    const hasSpecConflict = this.productFormPrefill.hasSpecificationConflict(this.productForm, draft);
+    if (!hasFieldConflicts && !hasSpecConflict) {
+      this.commitSampleDraft(draft, 'merge');
+      return;
+    }
+
+    this.confirmationService.confirm({
+      title: this.translate.instant('SMART_FILL_OVERWRITE_TITLE'),
+      message: this.translate.instant('SMART_FILL_OVERWRITE_MESSAGE'),
+      confirmText: this.translate.instant('SMART_FILL_OVERWRITE'),
+      cancelText: this.translate.instant('SMART_FILL_FILL_EMPTY'),
+      type: 'warning',
+    }).subscribe((overwrite) => {
+      this.commitSampleDraft(draft, overwrite ? 'overwrite' : 'merge');
+    });
+  }
+
+  undoSampleFill(): void {
+    if (!this.lastFillSnapshot) {
+      return;
+    }
+    this.productFormPrefill.restoreSnapshot(this.productForm, this.lastFillSnapshot);
+    this.lastFillSnapshot = null;
+    this.snackBar.open(this.translate.instant('SMART_FILL_UNDONE'), this.translate.instant('CLOSE_BTN'), {
+      duration: 3000,
+    });
+  }
+
+  private tryApplyDemoPrefill(): void {
+    if (this.isEditMode || this.demoPrefillApplied || !this.demoPrefillRequested || !this.categoriesLoaded) {
+      return;
+    }
+    this.demoPrefillApplied = true;
+    this.commitSampleDraft(this.buildSampleDraft(), 'merge');
+  }
+
+  private buildSampleDraft(): ProductFormDraft {
+    const category = this.currentFormCategory() || this.resolveSampleCategory();
+    const draft: ProductFormDraft = {
+      ...sampleDraftForCategory(category),
+      category,
+    };
+    if (this.formHasProductName()) {
+      delete draft.name_en;
+      delete draft.name_ru;
+      delete draft.name_ua;
+    }
+    return draft;
+  }
+
+  private formHasProductName(): boolean {
+    return ['name_en', 'name_ru', 'name_ua'].some((key) =>
+      String(this.productForm.get(key)?.value ?? '').trim(),
+    );
+  }
+
+  private currentFormCategory(): string {
+    return String(this.productForm.get('category')?.value ?? '').trim();
+  }
+
+  private resolveSampleCategory(): string {
+    if (!this.categories.length) {
+      return '';
+    }
+    const current = this.currentFormCategory();
+    if (current && this.categories.some((category) => this.getCategoryValue(category) === current)) {
+      return current;
+    }
+    const preferred = ['shoes', 'bags', 'clothing'];
+    for (const slug of preferred) {
+      const match = this.categories.find((category) => this.getCategoryValue(category) === slug);
+      if (match) {
+        return this.getCategoryValue(match);
+      }
+    }
+    return this.getCategoryValue(this.categories[0]);
+  }
+
+  private commitSampleDraft(draft: ProductFormDraft, mode: 'merge' | 'overwrite'): void {
+    const { snapshot, changed } = this.productFormPrefill.applyDraft(this.productForm, draft, mode);
+    if (!changed) {
+      this.snackBar.open(this.translate.instant('SMART_FILL_NOTHING_TO_FILL'), this.translate.instant('CLOSE_BTN'), {
+        duration: 3000,
+      });
+      return;
+    }
+    this.lastFillSnapshot = snapshot;
+    const snack = this.snackBar.open(
+      this.translate.instant('SMART_FILL_APPLIED'),
+      this.translate.instant('SMART_FILL_UNDO'),
+      { duration: 5000 },
+    );
+    snack.onAction().subscribe(() => this.undoSampleFill());
+  }
 
   private filterProductAiProviders(providers: AiProviderOption[] | undefined): AiProviderOption[] {
     return (providers || []).filter((item) => item.implemented && item.id !== 'custom');

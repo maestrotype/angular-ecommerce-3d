@@ -1,8 +1,8 @@
 # Admin product form: smart fill (wishlist)
 
-**Status:** idea / backlog — not scheduled  
+**Status:** L0 implemented on this branch · L1/L2 still backlog  
 **Branch:** `docs/admin-product-form-autofill`  
-**Captured:** 2026-09-09  
+**Captured:** 2026-09-09 · **L0:** 2026-09-09  
 **Surface:** `/admin` → Add / Edit product (`ProductFormComponent`)
 
 This is a captured wish, not an implementation spec. Use it to resume the idea later. Do not treat anything below as a decision until a follow-up task is opened.
@@ -50,6 +50,8 @@ Prepare a static fixture and apply it as control values (not as HTML placeholder
 - Do not upload fake images in L0 unless we already have a local demo asset; copy-only is enough.
 
 **Done when:** one click fills empty name/description/metrics with coherent sample data; existing filled fields stay unless the user confirms overwrite.
+
+**L0 shipped:** `Fill sample` + Undo on the product form, `?prefill=demo` on `/admin/products/new`, merge vs overwrite dialog. Fixture follows the form category (`shoes` / `bags` / `clothing`) instead of a generic lamp. Apply path: `ProductFormPrefillService` (reuse for L1/L2).
 
 ### L1 — read the page, fill name / description / extras (no AI)
 
@@ -163,5 +165,5 @@ Polish is **incremental** (spacing, hierarchy, one toolbar), not a redesign of c
 When picking this up:
 
 1. Re-read this file and the current `product-form` template (it may have changed).
-2. Open a real task from `docs/templates/task-template.md` (next `task_012_…`) with a tight L0 or L0+UX slice.
-3. Do not start L2 until L0 apply/merge exists — otherwise three UIs will fight the same controls.
+2. L0 apply/merge/undo already exists — extend `ProductFormPrefillService` + `ProductFormDraft` for L1.
+3. Do not start L2 until L1 uses the same apply path.
