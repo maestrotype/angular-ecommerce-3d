@@ -1026,7 +1026,7 @@
     "HTML_CONTENT": "Кастомний HTML контент",
     "FOOTER": "Секція футера"
   },
-  "PRODUCT_STAGE_HINT": "Перетягніть, щоб обертати · pinch або скрол для зуму",
+  "PRODUCT_STAGE_HINT": "Наведіть на модель, щоб обертати · осторонь — прокрутка сторінки",
   "PRODUCT_STAGE_EMPTY": "Ще немає 3D-товарів у сумках, одязі чи взутті. Завантажте GLB на ці SKU.",
   "PRODUCT_STAGE_CATEGORIES": "Категорії каталогу",
   "PRODUCT_STAGE_CATEGORIES_HINT": "Типово: сумки, одяг, взуття.",

@@ -36,10 +36,11 @@ export class GlbOptimizationService {
   /**
    * Optional WebP compression. Off by default — it collapses photogrammetry
    * textures to ~2MB and is not recoverable once the original is overwritten.
-   * Enable only with ENABLE_GLB_OPTIMIZATION=true.
+   * Enable with ENABLE_GLB_OPTIMIZATION=true, or pass force when the file
+   * would otherwise be rejected for size.
    */
-  async optimize(inputPath: string): Promise<string | null> {
-    const enabled = process.env.ENABLE_GLB_OPTIMIZATION === 'true';
+  async optimize(inputPath: string, options?: { force?: boolean }): Promise<string | null> {
+    const enabled = options?.force === true || process.env.ENABLE_GLB_OPTIMIZATION === 'true';
     if (!enabled) {
       console.log('[GlbOptimization] Skipped — keeping original GLB quality');
       return null;
