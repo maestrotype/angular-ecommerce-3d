@@ -12,20 +12,38 @@
         class="iso-chart"
         role="img"
         [attr.aria-label]="'DASHBOARD_WOW_CHART' | translate">
-        <div class="iso-chart__floor" aria-hidden="true"></div>
-        <div class="iso-chart__bars">
-          <div
-            class="iso-bar"
-            *ngFor="let bar of weekBars"
-            [class.is-peak]="bar.isPeak"
-            [style.--bar-h]="bar.height + '%'">
-            <span class="iso-bar__value">{{ bar.short }}</span>
-            <div class="iso-bar__pillar" aria-hidden="true">
-              <span class="iso-bar__face iso-bar__face--front"></span>
-              <span class="iso-bar__face iso-bar__face--side"></span>
-              <span class="iso-bar__face iso-bar__face--top"></span>
+        <div class="iso-chart__scene">
+          <div class="iso-chart__grid" aria-hidden="true"></div>
+          <div class="iso-chart__glow" aria-hidden="true"></div>
+          <div class="iso-chart__bars">
+            <div
+              class="iso-bar"
+              *ngFor="let bar of weekBars; let i = index"
+              [class.is-peak]="bar.isPeak"
+              [style.--bar-h]="bar.height + '%'"
+              [style.--bar-i]="i">
+              <span class="iso-bar__value">{{ bar.short }}</span>
+              <div class="iso-bar__cube" aria-hidden="true">
+                <span class="iso-bar__face iso-bar__face--front"></span>
+                <span class="iso-bar__face iso-bar__face--right"></span>
+                <span class="iso-bar__face iso-bar__face--top"></span>
+              </div>
+              <span class="iso-bar__label">{{ bar.label }}</span>
             </div>
-            <span class="iso-bar__label">{{ bar.label }}</span>
+          </div>
+        </div>
+        <div class="iso-chart__footer">
+          <div class="iso-chart__stat">
+            <span>{{ 'DASHBOARD_WOW_TOTAL' | translate }}</span>
+            <strong>{{ formatCurrency(weekTotal) }}</strong>
+          </div>
+          <div class="iso-chart__stat">
+            <span>{{ 'DASHBOARD_WOW_AVG' | translate }}</span>
+            <strong>{{ formatCurrency(weekAverage) }}</strong>
+          </div>
+          <div class="iso-chart__stat" [class.is-up]="weekTrend >= 0" [class.is-down]="weekTrend < 0">
+            <span>{{ 'DASHBOARD_WOW_TREND' | translate }}</span>
+            <strong>{{ weekTrend >= 0 ? '+' : '' }}{{ weekTrend }}%</strong>
           </div>
         </div>
       </div>
