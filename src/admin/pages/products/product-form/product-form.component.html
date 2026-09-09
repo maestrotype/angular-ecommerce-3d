@@ -62,6 +62,51 @@
 
         <!-- Localized name + description (tabs, separate from metrics row) -->
         <section class="localized-panel">
+          <div class="smart-fill-bar">
+            <p class="smart-fill-bar__hint">{{ 'SMART_FILL_BAR_HINT' | translate }}</p>
+            <div class="smart-fill-bar__actions">
+              <button
+                type="button"
+                class="model-btn model-btn--ghost model-btn--compact"
+                [matMenuTriggerFor]="smartFillMenu">
+                <mat-icon>auto_fix_high</mat-icon>
+                <span>{{ isAiCopying ? ('SMART_FILL_AI_LOADING' | translate) : ('SMART_FILL_MENU' | translate) }}</span>
+              </button>
+              <mat-menu #smartFillMenu="matMenu">
+                <button mat-menu-item type="button" (click)="fillSample()">
+                  <mat-icon>edit_note</mat-icon>
+                  <span>{{ 'SMART_FILL_SAMPLE' | translate }}</span>
+                </button>
+                <button
+                  mat-menu-item
+                  type="button"
+                  (click)="fillFromPage()"
+                  [disabled]="!canFillFromPage"
+                  [matTooltip]="!canFillFromPage ? ('SMART_FILL_PAGE_EMPTY' | translate) : ''">
+                  <mat-icon>find_in_page</mat-icon>
+                  <span>{{ 'SMART_FILL_FROM_PAGE' | translate }}</span>
+                </button>
+                <button
+                  mat-menu-item
+                  type="button"
+                  (click)="fillWithAi()"
+                  [disabled]="!canFillWithAi || isAiCopying"
+                  [matTooltip]="!canFillWithAi ? ('SMART_FILL_AI_NO_PHOTO' | translate) : ('SMART_FILL_AI_HINT' | translate)">
+                  <mat-icon>auto_awesome</mat-icon>
+                  <span>{{ 'SMART_FILL_AI' | translate }}</span>
+                </button>
+              </mat-menu>
+              <button
+                type="button"
+                class="model-btn model-btn--ghost model-btn--compact"
+                (click)="undoSampleFill()"
+                [disabled]="!canUndoFill"
+                [matTooltip]="'SMART_FILL_UNDO' | translate">
+                <mat-icon>undo</mat-icon>
+                <span>{{ 'SMART_FILL_UNDO' | translate }}</span>
+              </button>
+            </div>
+          </div>
           <div class="localized-panel__section">
             <h4 class="localized-panel__title">{{ 'PRODUCT_NAME' | translate }}</h4>
             <mat-tab-group class="lang-tabs" animationDuration="200ms" color="primary" dynamicHeight>

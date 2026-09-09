@@ -27,6 +27,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   isLoading = false;
   weekBars: WeekBar[] = [];
   peakBar: WeekBar | null = null;
+  weekTotal = 0;
+  weekAverage = 0;
+  weekTrend = 0;
   private themeSub?: Subscription;
   private langSub?: Subscription;
 
@@ -173,13 +176,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.weekBars = values.map((value, index) => ({
       label: labels[index] || '',
       value,
-      height: Math.max(18, Math.round((value / max) * 100)),
+      height: Math.max(32, Math.round((value / max) * 100)),
       isPeak: value === peak,
       short: value >= 1000
         ? `${(value / 1000).toFixed(1).replace(/\.0$/, '')}k`
         : String(value),
     }));
     this.peakBar = this.weekBars.find((bar) => bar.isPeak) || null;
+    this.weekTotal = values.reduce((sum, value) => sum + value, 0);
+    this.weekAverage = values.length ? Math.round(this.weekTotal / values.length) : 0;
+    const early = values.slice(0, 3);
+    const late = values.slice(4);
+    const earlyAvg = early.length ? early.reduce((sum, value) => sum + value, 0) / early.length : 0;
+    const lateAvg = late.length ? late.reduce((sum, value) => sum + value, 0) / late.length : 0;
+    this.weekTrend = earlyAvg > 0 ? Math.round(((lateAvg - earlyAvg) / earlyAvg) * 100) : 0;
   }
 
   loadDashboardData(): void {

@@ -75,6 +75,14 @@ Technical reference for the Angular 17+ 3D E-commerce Platform.
 
 ---
 
+## Ideas / backlog (not scheduled)
+
+| Document | Purpose |
+|----------|---------|
+| [ADMIN_PRODUCT_FORM_AUTOFILL.md](ADMIN_PRODUCT_FORM_AUTOFILL.md) | Wish: smart-fill product form (sample values → page data → free AI from photos) + small admin UX |
+
+---
+
 ## Document Navigation Map
 
 ```
