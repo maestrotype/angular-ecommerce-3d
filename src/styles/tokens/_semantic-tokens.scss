@@ -18,6 +18,9 @@
   --product-stage-bg: var(--surface-page);
   --product-stage-text: var(--text-primary);
   --product-stage-muted: var(--text-secondary);
+  --product-carousel-bg: var(--product-stage-bg, var(--surface-page));
+  --product-carousel-text: var(--text-primary);
+  --section-content-max-width: 87.5rem;
   --surface-card: rgba(255, 255, 255, 0.85);
   --surface-elevated: var(--color-white);
   --surface-highlight: var(--color-slate-100);

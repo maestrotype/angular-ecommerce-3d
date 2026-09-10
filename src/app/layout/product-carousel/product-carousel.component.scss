@@ -4,11 +4,10 @@
 }
 
 .product-carousel {
-  /* Default = cinematic overlay (dark / dark-glass). Light + glass override via :host-context. */
-  --carousel-ink: var(--text-on-media, var(--text-inverse, #fff));
-  --carousel-veil: var(--surface-scrim, #050505);
-  --carousel-cta-bg: var(--carousel-ink);
-  --carousel-cta-fg: var(--carousel-veil);
+  --carousel-ink: var(--product-carousel-text, var(--text-primary));
+  --carousel-veil: var(--product-carousel-bg, var(--surface-page));
+  --carousel-cta-bg: var(--text-primary);
+  --carousel-cta-fg: var(--bg-page, var(--text-inverse));
   --carousel-cta-border: transparent;
   --carousel-veil-left: 72%;
   --carousel-veil-mid: 18%;
@@ -19,11 +18,15 @@
 
   position: relative;
   width: 100%;
+  padding-inline: var(--spacing-md, 1rem);
   color: var(--carousel-ink);
-  background: var(--carousel-veil);
+  background: transparent;
 
   &__stage {
     position: relative;
+    width: 100%;
+    max-width: var(--section-content-max-width, 1400px);
+    margin-inline: auto;
     height: calc(100vh - var(--header-offset, 64px));
     height: calc(100dvh - var(--header-offset, 64px));
     min-height: 240px;
@@ -220,14 +223,14 @@
     height: 40px;
     border: 1px solid color-mix(in srgb, var(--carousel-ink) 28%, transparent);
     border-radius: 50%;
-    background: color-mix(in srgb, var(--carousel-veil) 28%, transparent);
+    background: color-mix(in srgb, var(--surface-elevated) 40%, transparent);
     color: var(--carousel-ink);
     cursor: pointer;
     display: grid;
     place-items: center;
 
     &:hover {
-      background: color-mix(in srgb, var(--carousel-veil) 52%, transparent);
+      background: color-mix(in srgb, var(--surface-elevated) 64%, transparent);
       border-color: color-mix(in srgb, var(--carousel-ink) 55%, transparent);
     }
   }
@@ -277,7 +280,7 @@
     border: 1px solid transparent;
     border-radius: 8px;
     overflow: hidden;
-    background: color-mix(in srgb, var(--carousel-veil) 40%, transparent);
+    background: color-mix(in srgb, var(--surface-elevated) 40%, transparent);
     cursor: pointer;
     opacity: 0.55;
 
@@ -362,7 +365,7 @@
 :host-context([data-theme='light']) .product-carousel,
 :host-context([data-theme='default']) .product-carousel {
   --carousel-ink: var(--text-primary);
-  --carousel-veil: var(--surface-primary, #fff);
+  --carousel-veil: var(--surface-page, var(--surface-primary));
   --carousel-cta-bg: var(--text-primary);
   --carousel-cta-fg: var(--text-inverse, #fff);
   --carousel-veil-left: 88%;
@@ -371,10 +374,10 @@
   --carousel-veil-bottom: 58%;
   --carousel-grain-opacity: 0;
   --carousel-title-shadow: none;
-  background: var(--surface-page, var(--surface-primary));
+  background: transparent;
 
   .product-carousel__stage {
-    background: var(--surface-page, var(--surface-primary));
+    background: var(--carousel-veil);
   }
 
   .product-carousel__nav {
@@ -383,6 +386,25 @@
 
   .product-carousel__thumb {
     background: color-mix(in srgb, var(--surface-primary) 70%, transparent);
+  }
+}
+
+:host-context([data-theme='dark']) .product-carousel,
+:host-context([data-theme='dark-glass']) .product-carousel {
+  --carousel-ink: var(--text-primary);
+  --carousel-veil: var(--product-carousel-bg, var(--surface-page));
+  --carousel-cta-bg: var(--text-primary);
+  --carousel-cta-fg: var(--bg-page, var(--surface-inverse));
+  --carousel-veil-left: 64%;
+  --carousel-veil-mid: 16%;
+  --carousel-veil-top: 22%;
+  --carousel-veil-bottom: 58%;
+  --carousel-grain-opacity: 0;
+  --carousel-title-shadow: none;
+  background: transparent;
+
+  .product-carousel__stage {
+    background: transparent;
   }
 }
 
