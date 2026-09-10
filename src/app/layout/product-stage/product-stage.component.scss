@@ -13,6 +13,7 @@
   min-height: calc(calc(var(--vh, 1vh) * 100) - var(--header-offset, 4rem));
   display: grid;
   grid-template-rows: 1fr;
+  padding-inline: var(--spacing-md, 1rem);
   color: var(--stage-ink);
   background: var(--stage-bg);
   overflow: hidden;
@@ -42,17 +43,21 @@
 
 .product-stage__canvas {
   position: absolute;
-  inset: 0;
+  top: 0;
+  bottom: 0;
+  left: 50%;
   z-index: 1;
   display: grid;
   place-items: center;
+  width: min(100%, var(--section-content-max-width, 1400px));
+  transform: translateX(-50%);
   pointer-events: none;
   min-height: 22rem;
 }
 
 .product-stage__canvas app-three-d-viewer {
   pointer-events: auto;
-  width: min(42vw, 30rem);
+  width: min(42vw, 30rem, 100%);
   height: min(58vh, 30rem);
   min-height: 16rem;
   --viewer-host-bg: transparent;
@@ -108,6 +113,9 @@
     'copy meta'
     'rail rail';
   gap: var(--spacing-lg, 1.5rem);
+  width: 100%;
+  max-width: var(--section-content-max-width, 1400px);
+  margin-inline: auto;
   min-height: inherit;
   padding: var(--spacing-2xl, 3rem) var(--spacing-xl, 2rem) var(--spacing-lg, 1.5rem);
   pointer-events: none;
