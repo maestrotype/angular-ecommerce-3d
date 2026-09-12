@@ -6,9 +6,13 @@ main {
         padding-top: calc(64px + var(--demo-banner-height, 2.25rem));
     }
 
+    &.admin-root-main,
     &.admin-main {
-        padding-top: 0;
+        padding: 0;
+        margin: 0;
         min-height: 100vh;
+        width: 100%;
+        max-width: 100%;
     }
 
     &:focus {
@@ -22,7 +26,7 @@ main {
 }
 
 @media (max-width: 768px) {
-    main:not(.admin-main) {
+    main:not(.admin-root-main):not(.admin-main) {
         padding-top: 64px;
         padding-bottom: 0;
         min-height: 0;

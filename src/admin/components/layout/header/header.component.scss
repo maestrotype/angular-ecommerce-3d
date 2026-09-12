@@ -1,4 +1,14 @@
+:host {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
 .admin-header {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   height: 64px;
   min-height: 64px;
   background-color: var(--surface-header);

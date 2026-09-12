@@ -10,7 +10,7 @@
 <main
   id="main-content"
   tabindex="-1"
-  [class.admin-main]="isAdminRoute()"
+  [class.admin-root-main]="isAdminRoute()"
   [class.storefront-main]="!isAdminRoute() && !isViewerRoute()"
   [class.has-demo-banner]="isDemoCatalog && !isAdminRoute() && !isViewerRoute()"
   [class.is-page-entering]="pageEntering"

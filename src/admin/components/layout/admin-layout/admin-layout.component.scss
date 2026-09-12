@@ -120,8 +120,8 @@
 
   @media (max-width: 480px) {
     padding-block: var(--space-3);
-    padding-inline: max(var(--space-2), env(safe-area-inset-left, 0px))
-      max(var(--space-2), env(safe-area-inset-right, 0px));
+    padding-inline: max(var(--admin-page-padding-x), env(safe-area-inset-left, 0px))
+      max(var(--admin-page-padding-x), env(safe-area-inset-right, 0px));
   }
 
   &::-webkit-scrollbar {
@@ -148,12 +148,24 @@
 .admin-header {
   flex-shrink: 0;
   z-index: 10;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 @media (max-width: 1024px) {
+  .admin-container.mat-sidenav-container {
+    width: 100%;
+    max-width: 100%;
+  }
+
   .admin-content.mat-sidenav-content,
   .admin-content.mat-drawer-content {
-    margin: 0;
+    margin-left: 0;
+    margin-right: 0;
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 }

@@ -6,7 +6,7 @@
     "SKIP_TO_CONTENT": "Перейти к основному содержимому",
     "MOBILE_NAV": "Мобильная навигация"
   },
-  "ADMIN_PANEL": "Панель администратора",
+  "ADMIN_PANEL": "Админ-панель",
   "ADMIN_DASHBOARD": "Панель управления",
   "DASHBOARD_WOW_KICKER": "Недельный срез",
   "DASHBOARD_WOW_TITLE": "Объём продаж",
@@ -16,7 +16,7 @@
   "DASHBOARD_WOW_CHART": "Объём продаж за неделю, изометрические столбцы",
   "DASHBOARD_WOW_TOTAL": "За неделю",
   "DASHBOARD_WOW_AVG": "Среднее / день",
-  "DASHBOARD_WOW_TREND": "Тренд (конец недели)",
+  "DASHBOARD_WOW_TREND": "Тренд",
   "PROFILE": "Профиль",
   "GO_TO_STOREFRONT": "Перейти к магазину",
   "NO_NOTIFICATIONS": "Нет уведомлений",
