@@ -28,6 +28,8 @@
   --surface-overlay-full: rgba(15, 23, 42, 0.5);
   --surface-scrim: #050505;
   --header-offset: 64px;
+  --mobile-dock-height: 64px;
+  --mobile-dock-offset: calc(var(--mobile-dock-height) + env(safe-area-inset-bottom, 0px));
 
   // ===== TEXT TOKENS =====
   --text-primary: var(--color-slate-900);
