@@ -273,8 +273,7 @@
   color: var(--text-secondary);
 }
 
-@media (max-width: 768px),
-@container product-stage (max-width: 768px) {
+@mixin product-stage-stacked {
   .product-stage {
     display: grid;
     grid-template-areas:
@@ -360,6 +359,14 @@
     grid-area: rail;
     width: 100%;
   }
+}
+
+@media (max-width: 768px) {
+  @include product-stage-stacked;
+}
+
+@container product-stage (max-width: 768px) {
+  @include product-stage-stacked;
 }
 
 @media (prefers-reduced-motion: reduce) {
