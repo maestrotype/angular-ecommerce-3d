@@ -1,4 +1,32 @@
 // =============================================================================
+// M0 — Sidenav must not reserve sidebar width on tablet/phone (≤1024px)
+// Matches AdminLayoutComponent isMobile / mat-sidenav mode "over".
+// =============================================================================
+@media (max-width: 1024px) {
+  body.is-admin .admin-container.mat-sidenav-container {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  body.is-admin .admin-content.mat-sidenav-content,
+  body.is-admin mat-sidenav-content.admin-content {
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  body.is-admin .admin-content .admin-main {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+}
+
+// =============================================================================
 // M1 — Admin shell mobile contract (≤768px)
 // Shared rules for toolbar chrome; page-level layouts use filters-grid below.
 // =============================================================================
@@ -33,14 +61,25 @@
 
   .admin-header.mat-toolbar,
   mat-toolbar.admin-header {
+    width: 100%;
+    max-width: 100%;
     min-height: var(--admin-shell-mobile-toolbar-height);
     height: var(--admin-shell-mobile-toolbar-height);
-    padding-inline: var(--space-1) var(--space-2);
+    padding-inline: max(var(--space-2), env(safe-area-inset-left, 0px))
+      max(var(--space-2), env(safe-area-inset-right, 0px));
+    box-sizing: border-box;
     gap: var(--space-1);
   }
 
   .admin-header .header-title {
-    display: none;
+    display: block;
+    font-size: var(--text-base);
+    font-weight: var(--font-semibold);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+    margin-inline: var(--space-1);
   }
 
   .admin-header__leading {
@@ -186,7 +225,14 @@
     padding-bottom: var(--space-2);
   }
 
-  .admin-main {
+  body.is-admin #main-content {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .admin-content .admin-main {
     padding: var(--admin-page-padding-y) var(--admin-page-padding-x);
   }
 
@@ -207,7 +253,12 @@
     max-width: none;
     min-width: 0;
     box-sizing: border-box;
-    padding: var(--space-5) var(--space-4);
+    margin-inline: 0;
+    padding: var(--space-3) 0;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
     min-height: calc(100vh - var(--admin-shell-mobile-toolbar-height));
   }
 
@@ -725,9 +776,6 @@
   }
 
   .dashboard-container {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
     overflow-x: clip;
 
     .charts-section,

@@ -20,8 +20,8 @@
               class="iso-bar"
               *ngFor="let bar of weekBars; let i = index"
               [class.is-peak]="bar.isPeak"
-              [style.--bar-h]="bar.height + '%'"
-              [style.--bar-i]="i">
+              [style.--bar-pct]="'' + bar.height"
+              [style.--bar-i]="'' + i">
               <span class="iso-bar__value">{{ bar.short }}</span>
               <div class="iso-bar__cube" aria-hidden="true">
                 <span class="iso-bar__face iso-bar__face--front"></span>
