@@ -13,6 +13,7 @@ import { ThemeService } from '../../core/themes/theme.service';
 import { Theme } from '../../core/themes/theme.model';
 import { themeLabelI18nKey } from '../../core/themes/theme-label.util';
 import { AuthService } from '../../core/services/auth.service';
+import { getLocalizedString } from '../../../shared/utils/localization.util';
 import { TranslateService } from '@ngx-translate/core';
 import { MobileMenuService } from '../../core/services/mobile-menu.service';
 import { findSectionElement } from 'src/shared/utils/section-anchor.util';
@@ -499,6 +500,40 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     return currentPath === url || currentPath.startsWith(`${url}/`);
+  }
+
+  getMenuTitle(item: MenuItem): string {
+    const title = item.title;
+    if (title && typeof title !== 'string') {
+      return getLocalizedString(title, this.currentLang);
+    }
+
+    const url = (item.url || '').split('#')[0].split('?')[0].toLowerCase();
+    const urlKeys: Record<string, string> = {
+      '/home': 'HEADER.NAV.HOME',
+      '/': 'HEADER.NAV.HOME',
+      '/shop': 'HEADER.NAV.SHOP',
+      '/about': 'HEADER.NAV.ABOUT',
+      '/contacts': 'HEADER.NAV.CONTACTS',
+      '/admin': 'HEADER.NAV.ADMIN_PANEL',
+    };
+    if (urlKeys[url]) {
+      return this.translate.instant(urlKeys[url]);
+    }
+
+    const titleKeyByLabel: Record<string, string> = {
+      home: 'HEADER.NAV.HOME',
+      shop: 'HEADER.NAV.SHOP',
+      about: 'HEADER.NAV.ABOUT',
+      contacts: 'HEADER.NAV.CONTACTS',
+      'admin panel': 'HEADER.NAV.ADMIN_PANEL',
+    };
+    const normalized = (typeof title === 'string' ? title : '').trim().toLowerCase();
+    if (titleKeyByLabel[normalized]) {
+      return this.translate.instant(titleKeyByLabel[normalized]);
+    }
+
+    return typeof title === 'string' ? title : '';
   }
 
   menuGlyph(item: MenuItem): 'home' | 'shop' | 'about' | 'contacts' | 'admin' | 'page' {

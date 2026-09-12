@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../core/services/product.service';
+import { CategoryService } from '../../core/services/category.service';
 import { ModalService } from '../../core/services/modal.service';
 import { Product } from 'src/shared/models/product.model';
 import { CartService } from 'src/app/core/services/cart.service';
@@ -36,11 +37,13 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
   @ViewChild(ProductTabsComponent) productTabs?: ProductTabsComponent;
   @ViewChild('carouselTrack') carouselTrack?: ElementRef<HTMLElement>;
+  private categoryLabelBySlug = new Map<string, string>();
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private productService: ProductService,
+    private categoryService: CategoryService,
     private cartService: CartService,
     private modalService: ModalService,
     private translate: TranslateService,
@@ -52,6 +55,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.onMobileGalleryChange();
     this.mobileGalleryQuery?.addEventListener('change', this.onMobileGalleryChange);
+    this.loadCategoryLabels();
 
     // Subscribe to route params to handle navigation between products
     this.route.paramMap.subscribe(params => {
@@ -237,6 +241,32 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  getCategoryLabel(slug?: string | null): string {
+    if (!slug) {
+      return '';
+    }
+    const normalized = slug.toLowerCase();
+    const fromCatalog = this.categoryLabelBySlug.get(normalized);
+    if (fromCatalog) {
+      return fromCatalog;
+    }
+    const slugKeys: Record<string, string> = {
+      shoes: 'FOOTER.CAT_SHOES',
+      bags: 'FOOTER.CAT_HANDBAGS',
+      handbags: 'FOOTER.CAT_HANDBAGS',
+      clothing: 'FOOTER.CAT_CLOTHING',
+      accessories: 'FOOTER.CAT_ACCESSORIES',
+    };
+    const key = slugKeys[normalized];
+    if (key) {
+      const translated = this.translate.instant(key);
+      if (translated !== key) {
+        return translated;
+      }
+    }
+    return slug;
+  }
+
   scrollToSection(section: 'about' | 'specs' | 'reviews'): void {
     this.activeSection = section;
 
@@ -255,6 +285,22 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   private loadModularSections(): void {
     this.sectionService.getActiveSections('product').subscribe(sections => {
       this.sections = (sections || []).sort((a, b) => (a.order || 0) - (b.order || 0));
+    });
+  }
+
+  private loadCategoryLabels(): void {
+    this.categoryService.getAllCategories().subscribe((categories) => {
+      this.categoryLabelBySlug.clear();
+      categories.forEach((category) => {
+        const slug = (category.slug || '').toLowerCase();
+        if (!slug) {
+          return;
+        }
+        this.categoryLabelBySlug.set(
+          slug,
+          getLocalizedString(category.name, this.translate.currentLang),
+        );
+      });
     });
   }
 

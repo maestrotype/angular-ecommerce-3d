@@ -9,6 +9,7 @@ import { MessageDetailComponent } from '../message-detail/message-detail.compone
 import { ConfirmationService } from '../../../services/confirmation.service';
 import { take } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
+import { getMessageStatusLabel } from '../../../../shared/utils/message-status.util';
 
 @Component({
   selector: 'app-message-list',
@@ -162,5 +163,9 @@ export class MessageListComponent implements OnInit {
       case 'closed': return 'warn';
       default: return '';
     }
+  }
+
+  getStatusLabel(status: string): string {
+    return getMessageStatusLabel(status, this.translate);
   }
 }
