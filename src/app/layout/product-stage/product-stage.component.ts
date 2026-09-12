@@ -124,6 +124,25 @@ export class ProductStageComponent implements OnDestroy {
     return stageModelPath(product);
   }
 
+  categoryLabel(slug?: string | null): string {
+    if (!slug) {
+      return '';
+    }
+    const keys: Record<string, string> = {
+      shoes: 'FOOTER.CAT_SHOES',
+      bags: 'FOOTER.CAT_HANDBAGS',
+      handbags: 'FOOTER.CAT_HANDBAGS',
+      clothing: 'FOOTER.CAT_CLOTHING',
+      accessories: 'FOOTER.CAT_ACCESSORIES',
+    };
+    const key = keys[slug.toLowerCase()];
+    if (!key) {
+      return slug;
+    }
+    const translated = this.translate.instant(key);
+    return translated !== key ? translated : slug;
+  }
+
   select(index: number): void {
     if (!this.products.length) {
       return;

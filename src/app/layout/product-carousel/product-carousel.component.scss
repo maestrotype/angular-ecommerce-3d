@@ -329,27 +329,42 @@
 @media (max-width: 768px) {
   .product-carousel {
     &__stage {
-      height: calc(100svh - var(--header-offset, 64px));
-      min-height: 220px;
+      height: calc(100svh - var(--header-offset, 64px) - var(--mobile-dock-offset, 64px));
+      min-height: 22rem;
     }
 
     &__chrome {
-      padding: 16px 14px 76px;
+      padding: 16px 16px 84px;
+      gap: 0.75rem;
     }
 
     &__title {
-      max-width: 14ch;
-      font-size: clamp(1.25rem, 6vw, 1.7rem);
+      max-width: none;
+      font-size: clamp(1.35rem, 6.5vw, 1.85rem);
+      line-height: 1.15;
+    }
+
+    &__copy {
+      max-width: none;
+
+      h3 {
+        line-height: 1.2;
+      }
     }
 
     &__controls {
-      align-self: flex-start;
+      align-self: stretch;
+      justify-content: center;
     }
 
     &__progress {
       left: 16px;
       right: 16px;
-      bottom: 68px;
+      bottom: 56px;
+    }
+
+    &__thumbs {
+      padding-bottom: 10px;
     }
   }
 }

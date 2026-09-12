@@ -210,6 +210,21 @@
   to { transform: rotate(360deg); }
 }
 
+@media (max-width: 480px) {
+  .login-page {
+    align-items: flex-start;
+    padding: var(--space-6) var(--space-3);
+  }
+
+  .login-card {
+    padding: var(--space-6) var(--space-4);
+  }
+
+  .login-header {
+    margin-bottom: var(--space-6);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .background-decor .blob,
   .login-container {

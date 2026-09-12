@@ -273,34 +273,92 @@
   color: var(--text-secondary);
 }
 
+@media (max-width: 768px),
 @container product-stage (max-width: 768px) {
   .product-stage {
-    min-height: 32rem;
+    display: grid;
+    grid-template-areas:
+      'copy'
+      'canvas'
+      'meta'
+      'rail';
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto;
+    min-height: auto;
+    overflow: visible;
+    padding-inline: var(--spacing-md, 1rem);
+    padding-bottom: var(--spacing-lg, 1.5rem);
+  }
+
+  .product-stage__atmosphere {
+    grid-area: 1 / 1 / -1 / -1;
   }
 
   .product-stage__chrome {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      'copy'
-      'meta'
-      'rail';
-    align-content: end;
-    padding: var(--spacing-lg, 1.5rem) var(--spacing-md, 1rem);
+    display: contents;
+    min-height: 0;
+    padding: 0;
+    pointer-events: auto;
   }
 
-  .product-stage__copy,
-  .product-stage__meta {
+  .product-stage__copy {
+    grid-area: copy;
     max-width: none;
-    justify-self: start;
+    padding-top: var(--spacing-lg, 1.5rem);
+  }
+
+  .product-stage__lede,
+  .product-stage__hint {
+    max-width: none;
   }
 
   .product-stage__title {
     font-size: clamp(1.45rem, 6vw, 2rem);
   }
 
+  .product-stage__canvas {
+    grid-area: canvas;
+    position: relative;
+    left: auto;
+    transform: none;
+    width: 100%;
+    min-height: 16rem;
+    height: 18rem;
+    pointer-events: auto;
+  }
+
+  .product-stage__veil,
+  .product-stage__floor {
+    display: none;
+  }
+
   .product-stage__canvas app-three-d-viewer {
-    width: min(72vw, 22rem);
-    height: min(36vh, 20rem);
+    width: min(88vw, 22rem);
+    height: 18rem;
+    min-height: 16rem;
+  }
+
+  .product-stage__meta {
+    grid-area: meta;
+    max-width: none;
+    justify-self: stretch;
+    width: 100%;
+  }
+
+  .product-stage__actions {
+    flex-direction: column;
+    align-items: stretch;
+
+    .product-stage__cta,
+    .product-stage__ghost {
+      width: 100%;
+      text-align: center;
+    }
+  }
+
+  .product-stage__rail {
+    grid-area: rail;
+    width: 100%;
   }
 }
 

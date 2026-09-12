@@ -32,7 +32,7 @@
     </div>
 
     <div class="product-stage__meta" *ngIf="active as product">
-      <p class="product-stage__category">{{ product.category }}</p>
+      <p class="product-stage__category">{{ categoryLabel(product.category) }}</p>
       <h3 class="product-stage__name">{{ product.name | localized }}</h3>
       <p class="product-stage__price">${{ product.price }}</p>
       <div class="product-stage__actions">

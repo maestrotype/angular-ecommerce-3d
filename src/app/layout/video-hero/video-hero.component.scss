@@ -297,45 +297,63 @@
   .video-container,
   .video-wrapper,
   .video-error-fallback {
-    min-height: 60vh;
+    min-height: calc(100svh - var(--header-offset, 64px) - var(--mobile-dock-offset, 64px));
   }
 
   .hero-content {
-    padding: 1.5rem;
+    align-items: flex-end;
+    padding: 1.25rem 1.25rem 5.5rem;
 
     &.left,
     &.right {
       justify-content: center;
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+    }
+
+    .hero-title {
+      font-size: clamp(1.75rem, 8vw, 2.4rem);
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-description {
+      margin-bottom: 1.25rem;
+      max-width: none;
     }
 
     .hero-actions {
       flex-direction: column;
-      align-items: center;
+      align-items: stretch;
+      gap: 0.75rem;
+      width: 100%;
 
       .btn {
         width: 100%;
-        max-width: 300px;
+        max-width: none;
         justify-content: center;
       }
     }
   }
 
   .play-button {
+    top: 1.25rem;
+    left: auto;
+    right: 1.25rem;
+    transform: none;
+
     .play-btn {
-      width: 60px;
-      height: 60px;
+      width: 3rem;
+      height: 3rem;
 
       svg {
-        width: 24px;
-        height: 24px;
+        width: 20px;
+        height: 20px;
       }
     }
   }
 
   .scroll-indicator {
-    bottom: 1rem;
+    bottom: 0.85rem;
   }
 }
 
