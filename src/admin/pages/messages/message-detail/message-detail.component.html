@@ -1,8 +1,8 @@
 
 <div class="message-detail-container">
     <div class="header">
-      <h2 mat-dialog-title>Message Details</h2>
-      <button mat-icon-button (click)="onClose()">
+      <h2 mat-dialog-title>{{ 'MESSAGE_DETAILS' | translate }}</h2>
+      <button mat-icon-button (click)="onClose()" [attr.aria-label]="'CLOSE_BTN' | translate">
         <mat-icon>close</mat-icon>
       </button>
     </div>
@@ -10,58 +10,58 @@
     <div mat-dialog-content class="content">
       <div class="message-info">
         <div class="info-row">
-          <strong>From:</strong> {{ message.senderName }} ({{ message.senderEmail }})
+          <strong>{{ 'MESSAGE_FROM' | translate }}:</strong> {{ message.senderName }} ({{ message.senderEmail }})
         </div>
         <div class="info-row">
-          <strong>Subject:</strong> {{ message.subject }}
+          <strong>{{ 'SUBJECT' | translate }}:</strong> {{ message.subject }}
         </div>
         <div class="info-row">
-          <strong>Status:</strong>
+          <strong>{{ 'STATUS' | translate }}:</strong>
           <mat-chip [color]="getStatusColor(message.status)" selected>
-            {{ message.status | titlecase }}
+            {{ getStatusLabel(message.status) }}
           </mat-chip>
         </div>
         <div class="info-row">
-          <strong>Date:</strong> {{ message.createdAt | date:'full' }}
+          <strong>{{ 'DATE' | translate }}:</strong> {{ message.createdAt | date:'full' }}
         </div>
       </div>
   
       <div class="message-content">
-        <h4>Message:</h4>
+        <h4>{{ 'MESSAGE_BODY' | translate }}:</h4>
         <div class="content-text">{{ message.message }}</div>
       </div>
   
       <div *ngIf="message.adminResponse" class="admin-reply">
-        <h4>Admin Reply:</h4>
+        <h4>{{ 'ADMIN_REPLY' | translate }}:</h4>
         <div class="reply-text">{{ message.adminResponse }}</div>
         <div class="reply-date">
-          <small>Replied on: {{ message.respondedAt | date:'full' }}</small>
+          <small>{{ 'REPLIED_ON' | translate }}: {{ message.respondedAt | date:'full' }}</small>
         </div>
       </div>
   
       <div *ngIf="showReplyForm" class="reply-form">
-        <h4>Send Reply:</h4>
+        <h4>{{ 'SEND_REPLY' | translate }}:</h4>
         <form [formGroup]="replyForm" (ngSubmit)="onReplySubmit()">
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Reply Message</mat-label>
+            <mat-label>{{ 'REPLY_MESSAGE' | translate }}</mat-label>
             <textarea matInput
                       formControlName="reply"
                       rows="6"
-                      placeholder="Enter your reply here..."></textarea>
+                      [placeholder]="'REPLY_PLACEHOLDER' | translate"></textarea>
             <mat-error *ngIf="replyForm.get('reply')?.hasError('required')">
-              Reply is required
+              {{ 'REPLY_REQUIRED' | translate }}
             </mat-error>
             <mat-error *ngIf="replyForm.get('reply')?.hasError('maxlength')">
-              Reply cannot exceed 2000 characters
+              {{ 'REPLY_MAX_LENGTH' | translate }}
             </mat-error>
           </mat-form-field>
   
           <div class="reply-actions">
-            <button mat-button type="button" (click)="toggleReplyForm()">Cancel</button>
+            <button mat-button type="button" (click)="toggleReplyForm()">{{ 'CANCEL' | translate }}</button>
             <button mat-raised-button color="primary" type="submit" 
                     [disabled]="replyForm.invalid || loading">
               <mat-icon *ngIf="loading">hourglass_empty</mat-icon>
-              {{ loading ? 'Sending...' : 'Send Reply' }}
+              {{ loading ? ('SENDING_REPLY' | translate) : ('SEND_REPLY' | translate) }}
             </button>
           </div>
         </form>
@@ -69,11 +69,11 @@
     </div>
   
     <div mat-dialog-actions class="actions">
-      <button mat-button (click)="onClose()">Close</button>
+      <button mat-button (click)="onClose()">{{ 'CLOSE_BTN' | translate }}</button>
       <button mat-raised-button color="primary" (click)="toggleReplyForm()" 
               *ngIf="!showReplyForm && !message.adminResponse">
         <mat-icon>reply</mat-icon>
-        Reply
+        {{ 'SEND_REPLY' | translate }}
       </button>
     </div>
   </div>

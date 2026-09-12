@@ -15,14 +15,14 @@
           [routerLink]="item.url" class="nav-link"
           [class.active]="isMenuItemActive(item)"
           (click)="onRouteMenuClick(item)">
-          {{ item.title | localized }}
+          {{ getMenuTitle(item) }}
         </a>
         <a *ngIf="item.url?.startsWith('#') && canAccessMenuItem(item) && !isAdminMenuItem(item)"
            href="javascript:void(0)"
            (click)="handleMenuClick(item, $event)"
            class="nav-link"
            [class.active]="isMenuItemActive(item)">
-          {{ item.title | localized }}
+          {{ getMenuTitle(item) }}
         </a>
       </ng-container>
     </nav>
@@ -288,7 +288,7 @@
           <span class="mobile-nav-tile__icon" aria-hidden="true">
             <ng-container [ngTemplateOutlet]="menuGlyphTpl" [ngTemplateOutletContext]="{ $implicit: item }"></ng-container>
           </span>
-          <span class="mobile-nav-tile__label">{{ item.title | localized }}</span>
+          <span class="mobile-nav-tile__label">{{ getMenuTitle(item) }}</span>
         </a>
         <a *ngIf="canAccessMenuItem(item) && item.url?.startsWith('#')"
            href="javascript:void(0)"
@@ -298,7 +298,7 @@
           <span class="mobile-nav-tile__icon" aria-hidden="true">
             <ng-container [ngTemplateOutlet]="menuGlyphTpl" [ngTemplateOutletContext]="{ $implicit: item }"></ng-container>
           </span>
-          <span class="mobile-nav-tile__label">{{ item.title | localized }}</span>
+          <span class="mobile-nav-tile__label">{{ getMenuTitle(item) }}</span>
         </a>
       </ng-container>
     </div>

@@ -957,15 +957,22 @@
 
     .stepper {
       display: inline-flex;
-      align-items: center;
-      background: var(--product-stepper-bg, var(--surface-secondary));
-      border: var(--product-stepper-border, 1px solid var(--border-default));
+      align-items: stretch;
+      background: color-mix(
+        in srgb,
+        var(--product-stepper-bg, var(--surface-secondary)) 92%,
+        transparent
+      );
+      border: 1px solid color-mix(in srgb, var(--border-default) 72%, transparent);
       border-radius: var(--product-stepper-radius, var(--radius-md));
       overflow: hidden;
-      box-shadow: var(--product-stepper-shadow, var(--shadow-sm));
-      transition: box-shadow var(--transition-normal);
+      box-shadow: var(--product-stepper-shadow, none);
+      transition:
+        border-color var(--transition-fast),
+        box-shadow var(--transition-normal);
       flex-shrink: 0;
       min-width: 0;
+      isolation: isolate;
 
       @media (max-width: 768px) {
         width: 100%;
@@ -974,43 +981,66 @@
       }
 
       &:hover {
-        box-shadow: var(--product-stepper-hover-shadow, var(--shadow-md));
+        border-color: color-mix(in srgb, var(--interactive-primary) 28%, var(--border-default));
+        box-shadow: var(--product-stepper-hover-shadow, var(--shadow-sm));
       }
 
       .quantity-btn {
-        background: var(--product-stepper-btn-bg, var(--surface-tertiary));
+        background: transparent;
         border: 0;
         width: 2.75rem;
-        height: 2.75rem;
+        min-height: 2.75rem;
         font-size: 1.125rem;
         font-weight: var(--font-weight-bold);
+        line-height: 1;
         cursor: pointer;
-        color: var(--product-stepper-btn-color, var(--text-primary));
+        color: var(--product-stepper-btn-color, var(--text-secondary));
         transition:
           background-color var(--transition-fast),
-          transform var(--transition-fast);
+          color var(--transition-fast);
 
         @media (max-width: 768px) {
           width: 3rem;
-          height: 3rem;
+          min-height: 3rem;
         }
 
         &:hover:not(:disabled) {
-          background: var(--product-stepper-btn-hover, var(--surface-highlight));
+          background: color-mix(in srgb, var(--surface-highlight) 65%, transparent);
+          color: var(--text-primary);
+        }
+
+        &:active:not(:disabled) {
+          background: color-mix(in srgb, var(--interactive-primary) 14%, transparent);
+        }
+
+        &:focus-visible {
+          outline: 2px solid var(--interactive-primary);
+          outline-offset: -2px;
+          z-index: 1;
         }
 
         &:disabled {
-          opacity: 0.5;
+          opacity: 0.45;
           cursor: not-allowed;
         }
       }
 
       .quantity-value {
-        width: 3.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 2.75rem;
+        width: 3.25rem;
+        padding: 0 var(--space-2);
         text-align: center;
         font-weight: var(--font-weight-bold);
+        font-variant-numeric: tabular-nums;
         color: var(--product-stepper-value-color, var(--text-primary));
         font-size: var(--text-base);
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+        border-inline: 1px solid color-mix(in srgb, var(--border-subtle) 80%, transparent);
 
         @media (max-width: 768px) {
           flex: 1;
