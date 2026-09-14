@@ -697,6 +697,7 @@
   "STOCK_IN": "{{count}} in stock",
   "CATALOG_SORT": "Sort",
   "CATALOG_SORT_NEWEST": "Newest",
+  "CATALOG_SORT_NEWEST_SHORT": "Newest",
   "CATALOG_SORT_NAME": "Name",
   "CATALOG_SORT_PRICE": "Price",
   "CATALOG_SORT_STOCK": "Stock",

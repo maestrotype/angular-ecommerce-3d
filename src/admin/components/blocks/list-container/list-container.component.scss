@@ -20,6 +20,18 @@ app-list-container {
     backdrop-filter: var(--admin-list-backdrop-filter);
     -webkit-backdrop-filter: var(--admin-list-backdrop-filter);
     overflow-x: clip;
+
+    @media (max-width: 768px) {
+      padding: 0;
+      background: transparent;
+      background-color: transparent;
+      border: none;
+      box-shadow: none;
+      border-radius: 0;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      min-height: 0;
+    }
   }
 
   .list__header {

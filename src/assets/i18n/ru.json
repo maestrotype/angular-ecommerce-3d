@@ -702,6 +702,7 @@
   "STOCK_IN": "{{count}} в наличии",
   "CATALOG_SORT": "Сортировка",
   "CATALOG_SORT_NEWEST": "Сначала новые",
+  "CATALOG_SORT_NEWEST_SHORT": "Новые",
   "CATALOG_SORT_NAME": "По названию",
   "CATALOG_SORT_PRICE": "По цене",
   "CATALOG_SORT_STOCK": "По остатку",

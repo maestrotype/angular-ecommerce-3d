@@ -309,7 +309,7 @@ body.is-admin[data-theme='dark'] {
       -webkit-backdrop-filter: var(--liquid-glass-input-blur);
       border: 1px solid var(--liquid-glass-input-border);
       border-radius: var(--form-radius-pill, 9999px);
-      box-shadow: var(--shadow-sm), var(--liquid-glass-edge-shadow-dark);
+      box-shadow: none;
 
       .mdc-notched-outline__leading,
       .mdc-notched-outline__notch,

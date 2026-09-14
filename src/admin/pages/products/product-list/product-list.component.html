@@ -8,15 +8,39 @@
   </div>
 
   <div list-filters class="filter-section">
-    <div class="filter-section__row filter-section__row--controls">
+    <div class="filter-toolbar">
+      <app-search-bar
+        [label]="'SEARCH_PRODUCTS' | translate"
+        [placeholder]="'SEARCH_PRODUCTS' | translate"
+        [maxWidth]="'100%'"
+        [prefixIcon]="'search'"
+        [(searchTerm)]="searchTerm"
+        (onSearch)="onSearch()"
+        (onClear)="clearSearch()">
+      </app-search-bar>
+      <button
+        mat-icon-button
+        type="button"
+        class="filter-toolbar__btn filter-toolbar__add"
+        (click)="addProduct()"
+        [attr.aria-label]="'ADD_PRODUCT' | translate"
+        [matTooltip]="'ADD_PRODUCT' | translate">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+
+    <div class="filter-controls-grid">
       <mat-form-field appearance="outline" class="category-filter filter-pill" subscriptSizing="dynamic">
         <mat-icon matPrefix>tune</mat-icon>
         <mat-select
           multiple
           [(ngModel)]="selectedCategorySlugs"
           (selectionChange)="filterByCategories()"
-          [placeholder]="'CATEGORIES_ALL' | translate"
+          [placeholder]="'CATEGORIES' | translate"
           [attr.aria-label]="'CATEGORY' | translate">
+          <mat-select-trigger *ngIf="selectedCategorySlugs.length">
+            {{ selectedCategorySummary }}
+          </mat-select-trigger>
           <mat-option *ngFor="let cat of categories" [value]="getCategoryValue(cat)">
             {{ cat.name | localized }}
           </mat-option>
@@ -29,41 +53,18 @@
           [(ngModel)]="catalogSort"
           (selectionChange)="onCatalogSortChange()"
           [attr.aria-label]="'CATALOG_SORT' | translate">
+          <mat-select-trigger>
+            {{ currentSortLabel }}
+          </mat-select-trigger>
           <mat-option value="newest">{{ 'CATALOG_SORT_NEWEST' | translate }}</mat-option>
           <mat-option value="name">{{ 'CATALOG_SORT_NAME' | translate }}</mat-option>
           <mat-option value="price">{{ 'CATALOG_SORT_PRICE' | translate }}</mat-option>
           <mat-option value="stock">{{ 'CATALOG_SORT_STOCK' | translate }}</mat-option>
         </mat-select>
       </mat-form-field>
-
-      <div class="filter-toolbar">
-        <app-search-bar
-          [label]="'SEARCH_PRODUCTS' | translate"
-          [placeholder]="'SEARCH_PLACEHOLDER' | translate"
-          [maxWidth]="'100%'"
-          [prefixIcon]="'search'"
-          [(searchTerm)]="searchTerm"
-          (onSearch)="onSearch()"
-          (onClear)="clearSearch()">
-        </app-search-bar>
-        <button mat-icon-button type="button" class="filter-toolbar__add" (click)="addProduct()"
-          [attr.aria-label]="'ADD_PRODUCT' | translate">
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
     </div>
 
-    <section class="storefront-publish" aria-labelledby="storefront-publish-title">
-      <div class="storefront-publish__intro">
-        <mat-icon aria-hidden="true">public</mat-icon>
-        <div>
-          <h2 id="storefront-publish-title" class="storefront-publish__title">
-            {{ 'STOREFRONT_DISPLAY_TITLE' | translate }}
-          </h2>
-          <p class="storefront-publish__hint">{{ 'STOREFRONT_DISPLAY_HINT' | translate }}</p>
-        </div>
-      </div>
-
+    <section class="storefront-publish" aria-labelledby="storefront-publish-title" [class.storefront-publish--open]="storefrontExpandedMobile">
       <div class="storefront-publish__preview">
         <span class="storefront-publish__preview-label">{{ 'STOREFRONT_DISPLAY_PREVIEW' | translate }}</span>
         <span class="storefront-publish__preview-value">
@@ -149,34 +150,38 @@
           </div>
         </div>
 
-        <div class="admin-product-row__body">
-          <h3 class="admin-product-row__title">{{ product.name | localized }}</h3>
-          <p class="admin-product-row__meta">
-            <span class="admin-product-row__id">#{{ product.id }}</span>
-            <span class="admin-product-row__chip">{{ getCategoryNameBySlug(product.category) | localized }}</span>
-          </p>
-        </div>
+        <div class="admin-product-row__content">
+          <div class="admin-product-row__header">
+            <div class="admin-product-row__info">
+              <h3 class="admin-product-row__title">{{ product.name | localized }}</h3>
+              <p class="admin-product-row__meta">
+                <span class="admin-product-row__id">#{{ product.id }}</span>
+                <span class="admin-product-row__chip">{{ getCategoryNameBySlug(product.category) | localized }}</span>
+              </p>
+            </div>
+            <span class="admin-product-row__price">${{ product.price | number : "1.2-2" }}</span>
+          </div>
 
-        <div class="admin-product-row__metrics">
-          <span class="admin-product-row__price">${{ product.price | number : "1.2-2" }}</span>
-          <span class="admin-product-row__stock-pill" [attr.data-tone]="stockTone(product.stock)">
-            <ng-container [ngSwitch]="stockTone(product.stock)">
-              <ng-container *ngSwitchCase="'out'">{{ 'STOCK_OUT' | translate }}</ng-container>
-              <ng-container *ngSwitchCase="'low'">{{ 'STOCK_LOW' | translate }} · {{ product.stock }}</ng-container>
-              <ng-container *ngSwitchDefault>{{ 'STOCK_IN' | translate:{ count: product.stock } }}</ng-container>
-            </ng-container>
-          </span>
-        </div>
+          <div class="admin-product-row__footer">
+            <span class="admin-product-row__stock-pill" [attr.data-tone]="stockTone(product.stock)">
+              <ng-container [ngSwitch]="stockTone(product.stock)">
+                <ng-container *ngSwitchCase="'out'">{{ 'STOCK_OUT' | translate }}</ng-container>
+                <ng-container *ngSwitchCase="'low'">{{ 'STOCK_LOW' | translate }} · {{ product.stock }}</ng-container>
+                <ng-container *ngSwitchDefault>{{ 'STOCK_IN' | translate:{ count: product.stock } }}</ng-container>
+              </ng-container>
+            </span>
 
-        <div class="admin-product-row__actions" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
-          <button mat-icon-button type="button" (click)="editProduct(product, $event)" class="action-button action-button--edit"
-            [attr.aria-label]="'EDIT' | translate">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button type="button" (click)="deleteProduct(product, $event)" class="action-button action-button--delete"
-            [attr.aria-label]="'DELETE' | translate">
-            <mat-icon>delete</mat-icon>
-          </button>
+            <div class="admin-product-row__actions" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
+              <button mat-icon-button type="button" (click)="editProduct(product, $event)" class="action-button action-button--edit"
+                [attr.aria-label]="'EDIT' | translate">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button type="button" (click)="deleteProduct(product, $event)" class="action-button action-button--delete"
+                [attr.aria-label]="'DELETE' | translate">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
         </div>
       </article>
     </div>
