@@ -38,6 +38,11 @@ export class ProductListComponent implements OnInit {
   pageIndex = 0;
   pageSize = 10;
   pageSizeOptions = [10, 20, 50];
+  storefrontExpandedMobile = false;
+
+  toggleStorefrontMobile(): void {
+    this.storefrontExpandedMobile = !this.storefrontExpandedMobile;
+  }
 
   constructor(
     private router: Router,
@@ -121,6 +126,32 @@ export class ProductListComponent implements OnInit {
       }
       return slug;
     });
+  }
+
+  get selectedCategorySummary(): string {
+    if (!this.selectedCategorySlugs.length) {
+      return '';
+    }
+    const labels = this.selectedCategoryLabels;
+    if (labels.length === 1) {
+      return labels[0];
+    }
+    return `${labels[0]} (+${labels.length - 1})`;
+  }
+
+  get currentSortLabel(): string {
+    switch (this.catalogSort) {
+      case 'newest':
+        return this.translate.instant('CATALOG_SORT_NEWEST_SHORT');
+      case 'name':
+        return this.translate.instant('CATALOG_SORT_NAME');
+      case 'price':
+        return this.translate.instant('CATALOG_SORT_PRICE');
+      case 'stock':
+        return this.translate.instant('CATALOG_SORT_STOCK');
+      default:
+        return '';
+    }
   }
 
   loadStorefrontDisplaySettings(): void {

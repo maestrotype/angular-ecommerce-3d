@@ -698,6 +698,7 @@
   "STOCK_IN": "{{count}} в наявності",
   "CATALOG_SORT": "Сортування",
   "CATALOG_SORT_NEWEST": "Спочатку нові",
+  "CATALOG_SORT_NEWEST_SHORT": "Нові",
   "CATALOG_SORT_NAME": "За назвою",
   "CATALOG_SORT_PRICE": "За ціною",
   "CATALOG_SORT_STOCK": "За залишком",

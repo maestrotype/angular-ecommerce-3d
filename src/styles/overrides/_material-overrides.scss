@@ -257,8 +257,9 @@
   --mdc-filled-text-field-input-text-placeholder-color: var(--input-placeholder, var(--input-label));
 
   /* Floating label / placeholder contract — placeholder must stay hidden while the
-     label rests inside the field; forcing opacity: 1 globally breaks that rule. */
-  .mat-mdc-form-field:not(.mat-focused):not(.mat-form-field-should-float) {
+     label rests inside the field; forcing opacity: 1 globally breaks that rule.
+     Fields without a floating label (e.g. search fields, filter pills) must always show placeholder. */
+  .mat-mdc-form-field:has(.mdc-floating-label):not(.mat-focused):not(.mat-form-field-should-float) {
     .mdc-text-field__input::placeholder,
     .mat-mdc-input-element::placeholder {
       opacity: 0;
@@ -267,7 +268,10 @@
   }
 
   .mat-mdc-form-field.mat-focused,
-  .mat-mdc-form-field.mat-form-field-should-float {
+  .mat-mdc-form-field.mat-form-field-should-float,
+  .mat-mdc-form-field:not(:has(.mdc-floating-label)),
+  .mat-mdc-form-field.search-field,
+  app-search-bar .mat-mdc-form-field {
     .mdc-text-field__input::placeholder,
     .mat-mdc-input-element::placeholder {
       color: var(--input-placeholder, var(--input-label));

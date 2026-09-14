@@ -80,7 +80,7 @@
   .mat-mdc-form-field.mat-mdc-form-field:has(.mat-mdc-select) .mat-mdc-text-field-wrapper {
     background: var(--surface-elevated);
     border: 1px solid var(--border-subtle);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 8px 24px rgba(0, 0, 0, 0.45);
+    box-shadow: none;
     border-radius: var(--radius-lg);
   }
 
