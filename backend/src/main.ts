@@ -17,6 +17,35 @@ import { LoggingInterceptor } from "./common/interceptors/logging.interceptor";
 import { json, urlencoded } from 'express';
 import { assertProductionSecrets } from './config/production-secrets';
 
+/** Local dev + common PaaS patterns; demo/production origins from FRONTEND_URL / CORS_ORIGINS. */
+function buildCorsOrigins(): (string | RegExp)[] {
+  const origins: (string | RegExp)[] = [
+    'http://localhost:4200',
+    'http://localhost:3002',
+    'http://127.0.0.1:4200',
+    'http://127.0.0.1:3002',
+    /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/,
+    'https://maestrotype.github.io',
+    /^https:\/\/.*\.github\.io$/,
+    /^https:\/\/.*\.netlify\.app$/,
+    /^https:\/\/.*\.vercel\.app$/,
+  ];
+
+  const pushOrigin = (value: string | undefined) => {
+    const trimmed = value?.trim();
+    if (trimmed) {
+      origins.push(trimmed);
+    }
+  };
+
+  pushOrigin(process.env.FRONTEND_URL);
+  for (const part of (process.env.CORS_ORIGINS ?? '').split(',')) {
+    pushOrigin(part);
+  }
+
+  return origins;
+}
+
 async function bootstrap() {
   assertProductionSecrets();
 
@@ -48,20 +77,8 @@ async function bootstrap() {
     console.log("Created /uploads/products-3d folder");
   }
 
-  // Enable CORS for Angular frontend - including GitHub Pages
   app.enableCors({
-    origin: [
-      "http://localhost:4200",
-      "http://localhost:3002",
-      "http://127.0.0.1:4200",
-      "http://127.0.0.1:3002",
-      /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/, // ng serve / Cursor on any local port
-      "https://angular-ecommerce-3d-production.up.railway.app",
-      "https://maestrotype.github.io", // GitHub Pages domain
-      /^https:\/\/.*\.github\.io$/, // Allow any GitHub Pages subdomain
-      /^https:\/\/.*\.netlify\.app$/, // Allow Netlify if needed
-      /^https:\/\/.*\.vercel\.app$/, // Allow Vercel if needed
-    ],
+    origin: buildCorsOrigins(),
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization", "Accept"],

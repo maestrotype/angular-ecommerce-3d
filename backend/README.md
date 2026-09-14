@@ -39,7 +39,7 @@ A clean and scalable NestJS backend with PostgreSQL to support the Angular e-com
 5. **Create an admin user:**
    ```bash
    # After starting the server, make a POST request to:
-   curl -X POST http://localhost:3000/api/auth/create-admin
+   curl -X POST http://localhost:3002/api/auth/create-admin
    ```
 
 ## Running the Application

@@ -74,6 +74,8 @@ npm install   # frontend + backend (npm workspaces)
 
 cp backend/.env.example backend/.env
 # Edit backend/.env — DATABASE_*, JWT_SECRET, ADMIN_EMAIL, ADMIN_PASSWORD
+
+npm run demo:models   # optional Khronos CC0 samples; bag/shoe GLB already under src/assets/models/
 ```
 
 ### Run (development)
@@ -108,7 +110,7 @@ docker compose up -d --build
 
 | Asset | Location |
 |-------|----------|
-| Demo 3D models | Committed bag/shoe GLB under `assets/models/`; optional Khronos samples via `npm run demo:models` |
+| Demo 3D models | Bag/shoe GLB in `src/assets/models/` (served as `assets/models/…`); optional Khronos via `npm run demo:models` |
 | Demo product images | `src/assets/demo/products/` |
 | Screenshot capture | `npm run screenshots:capture` (requires dev servers) |
 | Listing copy | [marketing-assets/MARKETPLACE_DESCRIPTION.md](marketing-assets/MARKETPLACE_DESCRIPTION.md) |
