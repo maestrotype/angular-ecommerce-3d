@@ -42,8 +42,9 @@
   .back-btn {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: var(--spacing-sm);
+    line-height: 1.25;
     background: var(--pdp-back-btn-bg, var(--surface-overlay-light));
     color: var(--text-primary);
     border: var(--pdp-back-btn-border, 1px solid var(--glass-border-soft));
