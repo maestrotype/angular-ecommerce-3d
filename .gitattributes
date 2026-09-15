@@ -1,4 +1,5 @@
 # Omitted from `git archive` / marketplace zip (seller tooling and runtime junk)
+.cursorules export-ignore
 .cursor export-ignore
 .cursor/** export-ignore
 backend/uploads export-ignore

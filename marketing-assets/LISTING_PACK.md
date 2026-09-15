@@ -26,7 +26,7 @@ Replace `YOUR_LIVE_DEMO_URL` in `CODECANYON_LISTING.md` and the README when the 
 
 ## 2. Screenshots
 
-With API + `ng serve` running and catalog seeded (`http://localhost:4200` — not `127.0.0.1`, CORS only allows localhost):
+With API + `ng serve` running and catalog seeded (default capture URL `http://localhost:4200`; `127.0.0.1` is also allowed by CORS):
 
 ```bash
 npm run backend:seed
@@ -73,3 +73,26 @@ Existing listing PNGs (until you re-capture): `marketing-assets/screenshots/` (f
 6. Support email live
 
 Parallel store: same zip on Gumroad / Lemon Squeezy (Envato is non-exclusive).
+
+---
+
+## 5. Commit → pack → verify
+
+The zip is built from **git HEAD**, not your working tree.
+
+```bash
+git status
+git add -A && git commit -m "chore: marketplace pack prep"
+npm run pack:marketplace
+```
+
+Sanity checks on the zip:
+
+```bash
+ZIP=dist-marketplace/angular-ecommerce-3d-v1.0.0.zip
+unzip -l "$ZIP" | rg -i '\.env$'          # must be empty (only .env.example)
+unzip -l "$ZIP" | rg 'docs/seller|\.cursorules'  # must be empty
+unzip -p "$ZIP" angular-ecommerce-3d/START_HERE.md | head
+```
+
+Target size: **under 250 MB** (3D GLB assets dominate). Re-capture screenshots before pack if you want `screenshots/desktop/` inside the buyer zip.

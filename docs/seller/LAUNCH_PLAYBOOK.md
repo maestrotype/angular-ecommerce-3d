@@ -23,7 +23,7 @@ Hosts that fit: **Render / Fly.io / Railway / a small VPS**. One web service for
 
 ### Config that must match the public URL
 
-- `FRONTEND_URL` and CORS origins = the **exact** public origin (`https://demo.example.com`, not `http://localhost:4200`).
+- `FRONTEND_URL` = the **exact** public storefront origin (`https://demo.example.com`). Add admin or second host via `CORS_ORIGINS` (comma-separated) if needed.
 - Stripe **test** keys in Admin → Settings. Do not put live keys on the demo.
 - Empty production secrets in the repo; set them only on the host.
 
@@ -54,7 +54,7 @@ When the URL is stable, replace `YOUR_LIVE_DEMO_URL` in `marketing-assets/CODECA
 
 ## 2. Screenshots
 
-Shoot **after** Product Stage, seed, and theme labels are on the host (or local with `http://localhost:4200` — CORS does not allow `127.0.0.1`).
+Shoot **after** Product Stage, seed, and theme labels are on the host (local: `http://localhost:4200` by default for capture; CORS allows localhost and `127.0.0.1`).
 
 Envato desktop: **1920×1080**, not a scrolled full-page strip. Compress with ImageOptim / TinyPNG before upload.
 

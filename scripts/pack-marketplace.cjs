@@ -27,6 +27,7 @@ const FORBIDDEN = [
 
 /** Not applied by `git archive HEAD` until .gitattributes is committed. */
 const ARCHIVE_EXCLUDES = [
+  ':!.cursorules',
   ':!.cursor',
   ':!.cursor/**',
   ':!backend/uploads',
@@ -42,6 +43,7 @@ const ARCHIVE_EXCLUDES = [
 ];
 
 const STRIP_REL = [
+  '.cursorules',
   '.cursor',
   'backend/uploads',
   'backend/backend.log',
