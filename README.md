@@ -104,6 +104,9 @@ cp backend/.env.example backend/.env
 docker compose up -d --build
 ```
 
+Storefront: http://localhost:4200 · API health: http://localhost:3002/api/health · Swagger: http://localhost:3002/api/docs
+
+Seller live-demo notes (Render / VPS): `docs/seller/DEMO_HOST.md` (not in buyer zip).
 ---
 
 ## Marketplace assets
