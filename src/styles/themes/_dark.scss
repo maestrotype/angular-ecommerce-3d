@@ -599,7 +599,7 @@
     background: var(--similar-products-bg, transparent);
   }
 
-  /* Product info text (storefront cards — exclude PDP; G11 owns .product-detail .product-info) */
+  /* Product info text (storefront cards — PDP buy box is .product-detail-info .product-info) */
   body .product-card .product-name,
   body .product-card .product-category,
   body .product-card .product-price,
