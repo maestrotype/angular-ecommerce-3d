@@ -11,6 +11,8 @@
   --card-shadow-hover: var(--shadow-lg);
   --card-image-bg: var(--surface-secondary);
   --card-info-padding: var(--spacing-md) var(--spacing-md) var(--spacing-lg);
+  --card-badge-radius: var(--radius-sm);
+  --card-badge-inset: var(--spacing-md);
   --card-action-size: 2.75rem;
   --card-backdrop-filter: none;
   --card-star: var(--border-emphasis);
@@ -291,8 +293,8 @@
 
   .special-badge,
   .new-badge {
-    top: var(--spacing-sm);
-    left: var(--spacing-sm);
+    top: var(--card-badge-inset, var(--spacing-md));
+    left: var(--card-badge-inset, var(--spacing-md));
   }
 
   .special-badge {
@@ -301,14 +303,14 @@
   }
 
   .new-badge {
-    top: calc(var(--spacing-sm) + 1.75rem);
+    top: calc(var(--card-badge-inset, var(--spacing-md)) + 1.75rem);
     background: var(--state-success-bg);
     color: var(--state-success-text, var(--text-on-primary));
   }
 
   .discount-badge {
-    top: var(--spacing-sm);
-    left: var(--spacing-sm);
+    top: var(--card-badge-inset, var(--spacing-md));
+    left: var(--card-badge-inset, var(--spacing-md));
     right: auto;
     background: var(--state-warning-bg);
     color: var(--state-warning-text, var(--text-on-primary));
