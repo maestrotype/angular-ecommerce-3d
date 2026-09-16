@@ -2,7 +2,7 @@
 
 Goal: upload a **demo URL**, **12+ PNGs**, and a **clean zip** — then paste [CODECANYON_LISTING.md](./CODECANYON_LISTING.md).
 
-You still host the live demo and record the video. The repo now has the capture + zip commands.
+You still host the live demo and record the video. Demo runbook: [docs/seller/DEMO_HOST.md](../docs/seller/DEMO_HOST.md). The repo has the capture + zip commands.
 
 ---
 

@@ -8,18 +8,27 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      - key: PORT
+        value: "3002"
+      # Set in Render dashboard (do not commit secrets):
+      # JWT_SECRET, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_BOOTSTRAP_TOKEN
+      # DATABASE_HOST, DATABASE_PORT, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME
+      # FRONTEND_URL=https://<your-static-or-custom-domain>
+      # CORS_ORIGINS=   # optional comma-separated extra origins
+      # DATABASE_SSL=true
+      - key: TYPEORM_SYNCHRONIZE
+        value: "true"
 
   # Node runtime alternative (if not using Docker):
   # rootDir: .  (repository root — required for npm workspaces)
   # buildCommand: npm run render:build
   # startCommand: npm run render:start
-  #
-  # Legacy backend-only rootDir (backend/) — current Render setup:
-  # buildCommand: npm run build:render
-  # startCommand: npm run start:prod
-  # build:render installs deps locally via --no-workspaces (see backend/package.json)
 
   - type: web
     name: angular-ecommerce-3d
-    env: static
-    staticPublishPath: dist/angular-ecommerce-3d
+    runtime: static
+    buildCommand: npm ci && npm run build -- --configuration production
+    staticPublishPath: dist/angular-ecommerce-3d/browser
+    # Prefer a reverse proxy so the browser calls same-origin /api.
+    # Until then, github.io / bare static hosts fall back to the Render API URL
+    # in src/app/core/utils/api-url.util.ts (PROD_API_URL).

@@ -161,6 +161,8 @@ Open `backend/.env` in a text editor and configure:
 NODE_ENV=development
 PORT=3002
 FRONTEND_URL=http://localhost:4200
+# Extra allowed browser origins (comma-separated), e.g. https://demo.yourdomain.com
+# CORS_ORIGINS=https://admin.demo.yourdomain.com
 
 # DATABASE
 DATABASE_HOST=localhost
@@ -201,18 +203,13 @@ REMOVE_BG_API_KEY=your_remove_bg_api_key
 
 For development, the default configuration works out of the box.
 
-For production, edit `src/environments/environment.prod.ts`:
+For production, `environment.prod.ts` resolves the API via `resolveApiUrl()` (do not hardcode a second URL):
 
-```typescript
-export const environment = {
-  production: true,
-  apiUrl: 'https://your-backend-api.com/api',
-  stripePublishableKey: '',  // configure in Admin → Settings
-  paypalClientId: '',        // configure in Admin → Settings
-};
-```
+- localhost → `http://localhost:3002/api`
+- `*.github.io` → hosted Render fallback
+- otherwise → same-origin `/api` (Docker Compose nginx / reverse proxy)
 
-> Payment keys are loaded from the Admin Panel at runtime. Keep environment payment fields **empty** in production builds unless you intentionally inject build-time fallbacks.
+Optional override: `localStorage.setItem('use_local_api', 'true'|'false')`. Payment keys stay empty in the build and are set in Admin → Settings.
 
 ---
 

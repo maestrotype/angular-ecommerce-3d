@@ -21,6 +21,8 @@ GitHub Pages is not a demo. Buyers must click catalog, 3D, checkout, and admin. 
 
 Hosts that fit: **Render / Fly.io / Railway / a small VPS**. One web service for the API, one for the frontend (or SSR), one Postgres add-on.
 
+Step-by-step: [DEMO_HOST.md](./DEMO_HOST.md).
+
 ### Config that must match the public URL
 
 - `FRONTEND_URL` = the **exact** public storefront origin (`https://demo.example.com`). Add admin or second host via `CORS_ORIGINS` (comma-separated) if needed.

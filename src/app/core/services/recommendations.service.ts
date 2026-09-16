@@ -7,7 +7,7 @@ import { NotificationService } from './notification.service';
 
 export interface RecommendationProduct {
   id: number;
-  name: string;
+  name: string | { en?: string; ru?: string; ua?: string };
   price: number;
   imageUrl: string;
   category: string;

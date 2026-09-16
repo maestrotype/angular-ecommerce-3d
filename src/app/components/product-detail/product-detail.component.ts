@@ -25,7 +25,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   quantity: number = 1;
   loading: boolean = true;
   sections: Section[] = [];
-  activeSection: 'about' | 'specs' | 'reviews' = 'about';
+  activeSection: 'about' | 'specs' | 'reviews' | 'similar' = 'about';
   carouselActiveIndex = 0;
   showMobileGallery = false;
   private mobileGalleryQuery = typeof window !== 'undefined'
@@ -267,7 +267,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     return slug;
   }
 
-  scrollToSection(section: 'about' | 'specs' | 'reviews'): void {
+  scrollToSection(section: 'about' | 'specs' | 'reviews' | 'similar'): void {
     this.activeSection = section;
 
     if (section === 'about') {
