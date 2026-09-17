@@ -1,9 +1,11 @@
 # Demo Video Script (3–5 minutes)
 
-Use this script to record the marketplace walkthrough referenced in the listing.
-Export to `demo-video/final/demo-video-1080p.mp4` and link from README / ThemeForest.
+**Full voiceover + multi-video pack (RU, shot-by-shot):** see [VIDEO_VOICEOVER_PACK.md](./VIDEO_VOICEOVER_PACK.md).
 
-**Tools:** OBS Studio or macOS Screen Recording · optional voiceover · royalty-free music (YouTube Audio Library)
+Use this short outline *or* the pack’s **V0** for the marketplace walkthrough.
+Export to `demo-video/final/demo-video-1080p.mp4` and link from README / CodeCanyon.
+
+**Tools:** OBS Studio or macOS Screen Recording · voiceover · royalty-free music (YouTube Audio Library)
 
 ---
 
@@ -20,21 +22,21 @@ Export to `demo-video/final/demo-video-1080p.mp4` and link from README / ThemeFo
 
 ## 0:40–1:10 — 3D viewer (hero feature)
 
-- Open **Shop** — inline 3D model (bundled WaterBottle demo)
-- Open a product with 3D (e.g. *3D Showcase Sneaker* after `npm run seed`)
-- Rotate, zoom, switch image/3D tabs on PDP
+- Open **Shop** — catalog with 3D-capable products
+- Open a product with 3D (after `npm run backend:seed`)
+- Rotate, zoom, switch image/3D on PDP
 - Optional: mobile viewport (Chrome DevTools) for 15 seconds
 
 ## 1:10–1:35 — Shopping flow
 
 - Add product to cart → open cart modal
-- Navigate to checkout (Stripe test mode — explain keys configured in Admin → Settings)
+- Navigate to checkout (Stripe test mode — keys in Admin → Settings)
 
 ## 1:35–2:20 — Admin panel
 
-- `/admin/login` — no default credentials; show env bootstrap note
-- Dashboard analytics overview
-- **Products → Edit** — show image upload + **GLB upload** zone
+- `/admin/login`
+- Dashboard overview
+- **Products → Edit** — image upload + **Remove background** + **GLB upload**
 - Sections CMS or SEO settings (pick one)
 
 ## 2:20–2:45 — Stack & deploy
@@ -45,17 +47,18 @@ Export to `demo-video/final/demo-video-1080p.mp4` and link from README / ThemeFo
 
 ## 2:45–3:00 — Outro
 
-- Feature bullets: Angular 17 · NestJS · PostgreSQL · Three.js · Stripe
-- CTA: *Documentation included · MIT license · Demo assets bundled*
+- Feature bullets: Angular 17 · NestJS · PostgreSQL · Three.js · Stripe · remove.bg · i18n
+- CTA: *Documentation included · Demo assets bundled*
+- Honest: PayPal = mock
 
 ---
 
 ## Recording checklist
 
 - [ ] Hide browser extensions / use Incognito
-- [ ] Seed demo products: `cd backend && npm run seed`
+- [ ] Seed demo products: `npm run backend:seed`
 - [ ] Window size 1920×1080 for desktop segments
-- [ ] Export H.264 MP4, 1080p, ≤ 50 MB for marketplace upload
+- [ ] Export H.264 MP4, 1080p, ≤ 50–80 MB for marketplace upload
 - [ ] Upload unlisted YouTube link for listing description
 
-See also [VISUAL_ASSETS_GUIDE.md](../docs/VISUAL_ASSETS_GUIDE.md) and [WALKTHROUGH.md](./WALKTHROUGH.md).
+See also [VIDEO_VOICEOVER_PACK.md](./VIDEO_VOICEOVER_PACK.md), [VISUAL_ASSETS_GUIDE.md](../docs/VISUAL_ASSETS_GUIDE.md), and [WALKTHROUGH.md](./WALKTHROUGH.md).
