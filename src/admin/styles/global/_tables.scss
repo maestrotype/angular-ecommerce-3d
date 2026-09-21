@@ -1,28 +1,30 @@
 // ==========================================================================
 // ADMIN TABLES (Epic G6)
-// Premium data-table shell — density, zebra rows, hover, theme tokens
+// Card-row data lists — density, hover, theme tokens (no spreadsheet zebra)
 // Row/cell fills are theme-scoped so Material dark palette cannot bleed through.
 // ==========================================================================
 
 .admin-table-container {
-  --admin-table-cell-py: var(--table-cell-padding-y);
-  --admin-table-cell-px: var(--table-cell-padding-x);
-  --admin-table-header-py: var(--table-header-padding-y);
+  --admin-table-cell-py: var(--spacing-md);
+  --admin-table-cell-px: var(--spacing-lg);
+  --admin-table-header-py: var(--spacing-sm);
+  --admin-table-row-gap: var(--space-2);
   --table-shell-bg: transparent;
 
   border: none;
-  border-radius: var(--table-radius);
+  border-radius: 0;
   background: var(--table-shell-bg);
   box-shadow: none;
   width: 100%;
   max-width: 100%;
   min-width: 0;
-  overflow: hidden;
+  overflow: visible;
 
   &.admin-table--compact {
     --admin-table-cell-py: var(--spacing-xs);
     --admin-table-cell-px: var(--spacing-sm);
     --admin-table-header-py: var(--spacing-xs);
+    --admin-table-row-gap: var(--space-1);
   }
 
   &.admin-table--comfortable {
@@ -31,10 +33,14 @@
     --admin-table-header-py: var(--spacing-md);
   }
 
-  &.admin-table--flat {
+  &.admin-table--striped {
     .mat-mdc-row:nth-child(even),
     tbody tr:nth-child(even) {
-      background-color: var(--surface-table-row);
+      background-color: var(--surface-table-even);
+    }
+
+    .mat-mdc-row:nth-child(even) .mat-mdc-cell {
+      background-color: var(--surface-table-even);
     }
   }
 }
@@ -46,55 +52,79 @@
   min-width: 0;
   background: transparent;
   --mat-table-background-color: transparent;
+  --mat-table-row-item-outline-color: transparent;
+  --mat-table-row-item-outline-width: 0;
 
   .mat-mdc-table,
   table.mat-mdc-table {
     width: 100%;
     background: transparent;
     --mat-table-background-color: transparent;
+    border-collapse: separate;
+    border-spacing: 0 var(--admin-table-row-gap, var(--space-2));
   }
 
   .mat-mdc-header-row {
-    background-color: var(--surface-table-header);
+    background-color: transparent;
   }
 
   .mat-mdc-header-cell {
     padding: var(--admin-table-header-py) var(--admin-table-cell-px);
-    border-bottom: 1px solid var(--table-header-divider);
-    color: var(--text-table-header);
-    font-size: var(--table-header-size);
-    font-weight: var(--table-header-weight);
-    letter-spacing: var(--table-header-tracking);
-    text-transform: uppercase;
+    border-bottom: none;
+    color: var(--text-secondary);
+    font-size: var(--text-xs);
+    font-weight: var(--font-semibold);
+    letter-spacing: 0.02em;
+    text-transform: none;
     white-space: nowrap;
+    background-color: transparent;
   }
 
   .mat-mdc-row {
+    background-color: var(--surface-table-row);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--admin-table-row-gap, var(--space-2));
     transition: background-color var(--transition-fast);
 
-    &:hover {
+    &:hover,
+    &:hover .mat-mdc-cell {
       background-color: var(--table-row-hover);
     }
 
     &.is-selected,
-    &.mat-mdc-row-selected {
+    &.mat-mdc-row-selected,
+    &.is-selected .mat-mdc-cell,
+    &.mat-mdc-row-selected .mat-mdc-cell {
       background-color: var(--table-row-selected);
     }
   }
 
   .mat-mdc-cell {
     padding: var(--admin-table-cell-py) var(--admin-table-cell-px);
-    border-bottom: 1px solid var(--table-row-divider);
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
     color: var(--text-table-row);
     vertical-align: middle;
+    background-color: var(--surface-table-row);
+
+    &:first-of-type {
+      border-left: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md) 0 0 var(--radius-md);
+    }
+
+    &:last-of-type {
+      border-right: 1px solid var(--border-subtle);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    }
   }
 
   .mat-mdc-paginator,
   .mat-paginator {
-    background-color: var(--surface-paginator);
+    background-color: transparent;
     color: var(--text-paginator);
-    border-top: 1px solid var(--table-header-divider);
-    border-radius: 0 0 var(--table-radius) var(--table-radius);
+    border-top: none;
+    border-radius: 0;
+    margin-top: var(--space-2);
   }
 
   .mat-mdc-paginator-range-label,
@@ -110,22 +140,23 @@
   padding: var(--spacing-xl) var(--spacing-md);
 }
 
-// ── Theme: glass — frosted shell + translucent zebra rows ──
+// ── Theme: glass — frosted card rows, no spreadsheet shell ──
 [data-theme='glass'] {
-  --table-shell-bg: var(--glass-surface-strong, var(--surface-elevated));
-  --table-border: var(--glass-border-soft, var(--border-default));
+  --table-shell-bg: transparent;
+  --table-border: transparent;
   --table-row-divider: var(--glass-divider, var(--border-subtle));
-  --table-header-divider: var(--glass-divider, var(--border-default));
+  --table-header-divider: transparent;
   --mat-table-background-color: transparent;
-  --mat-paginator-container-background-color: var(--surface-paginator);
+  --mat-paginator-container-background-color: transparent;
   --mat-paginator-container-text-color: var(--text-paginator);
 
   .admin-table-container {
-    border: 1px solid var(--table-border);
-    backdrop-filter: var(--glass-blur, blur(22px) saturate(165%));
-    -webkit-backdrop-filter: var(--glass-blur, blur(22px) saturate(165%));
-    box-shadow: var(--glass-shadow, var(--shadow-md));
-    border-radius: 20px;
+    border: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+    border-radius: 0;
+    background: transparent;
   }
 
   .admin-table-wrapper {
@@ -137,12 +168,13 @@
   .admin-table-wrapper {
     .mat-mdc-header-row,
     .mat-mdc-header-row.mat-mdc-header-row {
-      background-color: var(--surface-table-header);
+      background-color: transparent;
     }
 
     .mat-mdc-header-cell {
-      color: var(--text-table-header);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-secondary);
+      border-bottom: none;
+      background-color: transparent;
     }
 
     .mat-mdc-row,
@@ -153,25 +185,14 @@
     .mat-mdc-row .mat-mdc-cell {
       color: var(--text-table-row);
       background-color: var(--surface-table-row);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .mat-mdc-row:nth-child(even),
-    .mat-mdc-row:nth-child(even).mat-mdc-row {
-      background-color: var(--surface-table-even);
-    }
-
-    .mat-mdc-row:nth-child(even) .mat-mdc-cell {
-      color: var(--text-table-even);
-      background-color: var(--surface-table-even);
     }
 
     .mat-paginator,
     .mat-mdc-paginator {
-      background-color: var(--surface-paginator);
+      background-color: transparent;
       color: var(--text-paginator);
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 0 0 20px 20px;
+      border-top: none;
+      border-radius: 0;
     }
   }
 }
@@ -186,7 +207,12 @@ html[data-theme='dark'] body.is-admin {
   .admin-table-container,
   .admin-table-wrapper {
     .mat-mdc-header-row {
-      background-color: var(--surface-table-header);
+      background-color: transparent;
+    }
+
+    .mat-mdc-header-cell {
+      background-color: transparent;
+      color: var(--text-secondary);
     }
 
     .mat-mdc-row,
@@ -198,26 +224,16 @@ html[data-theme='dark'] body.is-admin {
       background-color: var(--surface-secondary);
       color: var(--text-table-row);
     }
-
-    .mat-mdc-row:nth-child(even),
-    .mat-mdc-row:nth-child(even).mat-mdc-row {
-      background-color: var(--surface-table-even);
-    }
-
-    .mat-mdc-row:nth-child(even) .mat-mdc-cell {
-      background-color: var(--surface-table-even);
-      color: var(--text-table-even);
-    }
   }
 }
 
-// ── Theme: dark-glass (admin) — warm zebra rows (prod parity), no Material slate bleed ──
+// ── Theme: dark-glass (admin) — solid card rows, no Material slate bleed ──
 body.is-admin[data-theme='dark-glass'],
 html[data-theme='dark-glass'] body.is-admin {
   --table-shell-bg: transparent;
   --table-border: transparent;
   --table-row-divider: var(--border-subtle);
-  --table-header-divider: var(--border-subtle);
+  --table-header-divider: transparent;
   --table-row-hover: rgba(255, 255, 255, 0.06);
   --table-row-selected: rgba(var(--interactive-primary-rgb), 0.22);
 
@@ -231,7 +247,12 @@ html[data-theme='dark-glass'] body.is-admin {
   .admin-table-wrapper {
     .mat-mdc-header-row,
     .mat-mdc-header-row.mat-mdc-header-row {
-      background-color: var(--surface-table-header);
+      background-color: transparent;
+    }
+
+    .mat-mdc-header-cell {
+      background-color: transparent;
+      color: var(--text-secondary);
     }
 
     .mat-mdc-row,
@@ -243,17 +264,6 @@ html[data-theme='dark-glass'] body.is-admin {
 
     .mat-mdc-row .mat-mdc-cell {
       background-color: var(--surface-table-row);
-      border-bottom-width: 0;
-    }
-
-    .mat-mdc-row:nth-child(even),
-    .mat-mdc-row:nth-child(even).mat-mdc-row {
-      background-color: var(--surface-table-even);
-    }
-
-    .mat-mdc-row:nth-child(even) .mat-mdc-cell {
-      background-color: var(--surface-table-even);
-      color: var(--text-table-even);
     }
   }
 }

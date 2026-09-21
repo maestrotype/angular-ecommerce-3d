@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Order, OrderItem } from '../../../models/order.model';
-import { OrderService } from '../../../services/order.service';
+import { AdminOrderService } from '../../../services/order.service';
 import { TranslateService } from '@ngx-translate/core';
 import { fixBackendUrl } from '../../../../app/core/utils/url-helper';
 
@@ -29,7 +29,7 @@ export class OrderDetailComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: OrderDetailDialogData,
     private dialogRef: MatDialogRef<OrderDetailComponent>,
-    private orderService: OrderService,
+    private orderService: AdminOrderService,
     private snackBar: MatSnackBar,
     private translate: TranslateService
   ) {}

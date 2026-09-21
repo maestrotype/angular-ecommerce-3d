@@ -39,6 +39,28 @@
     width: auto;
   }
 
+  .mat-mdc-icon-button.mat-mdc-button-base {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-sizing: border-box;
+    line-height: 0;
+  }
+
+  .mat-mdc-icon-button.mat-mdc-button-base .mat-icon,
+  .mat-mdc-icon-button.mat-mdc-button-base mat-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 24px;
+    line-height: 24px;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
   .mat-datepicker-content {
     padding-bottom: 10px;
   }
@@ -77,15 +99,11 @@
 }
 
 .admin-table-wrapper .mat-mdc-header-row {
-  background-color: var(--surface-table-header);
+  background-color: transparent;
 }
 
 .admin-table-wrapper .mat-mdc-row {
   background-color: var(--surface-table-row);
-}
-
-.admin-table-container .admin-table-wrapper .mat-mdc-table .mat-mdc-row:nth-child(even) {
-  background-color: var(--surface-table-even);
 }
 
 // Dialog — Epic G9 modal tokens
@@ -240,8 +258,9 @@
   --mdc-filled-text-field-input-text-placeholder-color: var(--input-placeholder, var(--input-label));
 
   /* Floating label / placeholder contract — placeholder must stay hidden while the
-     label rests inside the field; forcing opacity: 1 globally breaks that rule. */
-  .mat-mdc-form-field:not(.mat-focused):not(.mat-form-field-should-float) {
+     label rests inside the field; forcing opacity: 1 globally breaks that rule.
+     Fields without a floating label (e.g. search fields, filter pills) must always show placeholder. */
+  .mat-mdc-form-field:has(.mdc-floating-label):not(.mat-focused):not(.mat-form-field-should-float) {
     .mdc-text-field__input::placeholder,
     .mat-mdc-input-element::placeholder {
       opacity: 0;
@@ -250,7 +269,10 @@
   }
 
   .mat-mdc-form-field.mat-focused,
-  .mat-mdc-form-field.mat-form-field-should-float {
+  .mat-mdc-form-field.mat-form-field-should-float,
+  .mat-mdc-form-field:not(:has(.mdc-floating-label)),
+  .mat-mdc-form-field.search-field,
+  app-search-bar .mat-mdc-form-field {
     .mdc-text-field__input::placeholder,
     .mat-mdc-input-element::placeholder {
       color: var(--input-placeholder, var(--input-label));
@@ -287,6 +309,23 @@
   .mat-mdc-text-field-wrapper .mdc-floating-label--float-above,
   .mat-mdc-text-field-wrapper.mat-focused .mdc-floating-label {
     color: var(--input-focus-border);
+  }
+
+  /* Outlined fields: native MDC notch is the only stroke. Wrapper has no border. */
+  .mat-mdc-form-field .mdc-floating-label,
+  .mat-mdc-form-field .mat-mdc-floating-label {
+    overflow: visible;
+  }
+
+  .mat-mdc-form-field:not(.filter-pill):not(.search-field) .mat-mdc-text-field-wrapper.mdc-text-field--outlined {
+    overflow: visible;
+    border: none;
+    background: transparent;
+  }
+
+  .mat-mdc-form-field .mdc-notched-outline--notched .mdc-notched-outline__notch {
+    border-top: none;
+    padding-inline: 4px;
   }
 
   /* outline stroke color (leading / notch / trailing) */
@@ -561,8 +600,6 @@
     backdrop-filter: blur(15px) saturate(150%);
     -webkit-backdrop-filter: blur(15px) saturate(150%);
     transition: all 0.3s ease;
-    will-change: transform;
-    transform: translateZ(0);
   }
 
   .mat-mdc-text-field-wrapper:hover,
@@ -584,15 +621,61 @@
       0 0 0 3px rgba(59, 130, 246, 0.3);
   }
 
-  /* Remove ALL borders for glass theme - high specificity */
-  .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline .mdc-notched-outline__leading,
-  .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline .mdc-notched-outline__notch,
-  .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline .mdc-notched-outline__trailing,
-  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__leading,
-  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__notch,
-  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__trailing {
+  .mat-mdc-form-field.filter-pill .mdc-notched-outline .mdc-notched-outline__leading,
+  .mat-mdc-form-field.filter-pill .mdc-notched-outline .mdc-notched-outline__notch,
+  .mat-mdc-form-field.filter-pill .mdc-notched-outline .mdc-notched-outline__trailing,
+  .mat-mdc-form-field.search-field .mdc-notched-outline .mdc-notched-outline__leading,
+  .mat-mdc-form-field.search-field .mdc-notched-outline .mdc-notched-outline__notch,
+  .mat-mdc-form-field.search-field .mdc-notched-outline .mdc-notched-outline__trailing {
     border-color: transparent;
     border-width: 0;
+  }
+
+  .mat-mdc-form-field:not(.filter-pill):not(.search-field) .mdc-notched-outline .mdc-notched-outline__leading {
+    border-color: var(--input-border);
+    border-width: 1px 0 1px 1px;
+  }
+
+  .mat-mdc-form-field:not(.filter-pill):not(.search-field) .mdc-notched-outline .mdc-notched-outline__notch {
+    border-color: var(--input-border);
+    border-width: 1px 0;
+  }
+
+  .mat-mdc-form-field:not(.filter-pill):not(.search-field) .mdc-notched-outline .mdc-notched-outline__trailing {
+    border-color: var(--input-border);
+    border-width: 1px 1px 1px 0;
+  }
+
+  .mat-mdc-form-field:not(.filter-pill):not(.search-field) .mdc-notched-outline--notched .mdc-notched-outline__notch {
+    border-top: none;
+  }
+
+  .mat-mdc-form-field:not(.filter-pill):not(.search-field) .mat-mdc-text-field-wrapper.mdc-text-field--outlined {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .mat-mdc-form-field:not(.filter-pill):not(.search-field):hover .mat-mdc-text-field-wrapper.mdc-text-field--outlined {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .mat-mdc-form-field:not(.filter-pill):not(.search-field).mat-focused .mat-mdc-text-field-wrapper.mdc-text-field--outlined {
+    background: transparent;
+    box-shadow: 0 0 0 3px rgba(var(--interactive-primary-rgb), 0.22);
+  }
+
+  .mat-mdc-form-field:not(.filter-pill):not(.search-field).mat-focused .mdc-notched-outline .mdc-notched-outline__leading,
+  .mat-mdc-form-field:not(.filter-pill):not(.search-field).mat-focused .mdc-notched-outline .mdc-notched-outline__notch,
+  .mat-mdc-form-field:not(.filter-pill):not(.search-field).mat-focused .mdc-notched-outline .mdc-notched-outline__trailing {
+    border-color: var(--input-focus-border);
+  }
+
+  .mat-mdc-form-field:not(.filter-pill):not(.search-field).mat-focused .mdc-notched-outline--notched .mdc-notched-outline__notch {
+    border-top: none;
   }
 
   /* ===== Slide Toggle Hover Cleanup ===== */
@@ -622,7 +705,26 @@
   /* ===== Select dropdowns ===== */
   .mat-mdc-select-trigger,
   .mat-mdc-select {
-    color: var(--text-primary);
+    color: var(--input-text);
+  }
+
+  .mat-mdc-form-field:hover .mat-mdc-select,
+  .mat-mdc-form-field:hover .mat-mdc-select-trigger,
+  .mat-mdc-form-field:hover .mat-mdc-select-value,
+  .mat-mdc-form-field:hover .mat-mdc-select-value-text,
+  .mat-mdc-form-field:hover .mat-mdc-select-min-line,
+  .mat-mdc-form-field.mat-focused .mat-mdc-select,
+  .mat-mdc-form-field.mat-focused .mat-mdc-select-trigger,
+  .mat-mdc-form-field.mat-focused .mat-mdc-select-value,
+  .mat-mdc-form-field.mat-focused .mat-mdc-select-min-line {
+    color: var(--input-text);
+    -webkit-text-fill-color: var(--input-text);
+  }
+
+  .mat-mdc-form-field:hover .mdc-floating-label,
+  .mat-mdc-form-field:hover .mat-mdc-floating-label {
+    color: var(--input-label);
+    -webkit-text-fill-color: var(--input-label);
   }
 
   /* Force panel background to match the input field - same rgba as input wrapper */
@@ -694,10 +796,12 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.18);
     will-change: transform;
     transform: translateZ(0);
-    /* Limit panel height to viewport and allow internal scrolling (prevents page scrollbar) */
-    max-height: calc(100vh - 140px);
-    overflow: auto;
+    /* Stay inside the viewport so the first options are not clipped above the trigger. */
+    max-height: min(256px, calc(100dvh - 48px));
+    overflow-x: hidden;
+    overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
 
   /* Hide native scrollbar on overlay panels (visual only). Panels remain scrollable via wheel/trackpad/keyboard. */
@@ -743,6 +847,39 @@
   .cdk-overlay-pane *::-webkit-scrollbar {
     width: 0;
     height: 0;
+  }
+
+  /* Select panels need a visible scrollbar — hidden chrome made long lists unusable. */
+  .cdk-overlay-pane .mat-mdc-select-panel.mat-mdc-select-panel,
+  .cdk-overlay-pane .mat-select-panel.mat-select-panel {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-default) transparent;
+  }
+
+  .cdk-overlay-pane .mat-mdc-select-panel.mat-mdc-select-panel::-webkit-scrollbar,
+  .cdk-overlay-pane .mat-select-panel.mat-select-panel::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .cdk-overlay-pane .mat-mdc-select-panel.mat-mdc-select-panel::-webkit-scrollbar-thumb,
+  .cdk-overlay-pane .mat-select-panel.mat-select-panel::-webkit-scrollbar-thumb {
+    background: var(--border-default);
+    border-radius: 8px;
+  }
+
+  .cdk-overlay-pane .mat-mdc-select-panel [role="listbox"],
+  .cdk-overlay-pane .mat-select-panel [role="listbox"] {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-default) transparent;
+    max-height: inherit;
+    overflow-y: auto;
+  }
+
+  .cdk-overlay-pane .mat-mdc-select-panel [role="listbox"]::-webkit-scrollbar,
+  .cdk-overlay-pane .mat-select-panel [role="listbox"]::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
   }
 
   .mat-option,
@@ -810,6 +947,7 @@
   .admin-header.mat-toolbar,
   mat-toolbar.admin-header {
     --mat-toolbar-container-background-color: transparent;
+    --mat-toolbar-container-text-color: var(--text-primary);
     background: var(--surface-chrome-gradient, var(--surface-chrome));
     background-color: var(--surface-chrome);
     color: var(--text-primary);
@@ -850,6 +988,26 @@
   .mat-sidenav .sidenav-header,
   .mat-drawer .sidenav-header {
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .sidenav-header .logo-text,
+  .admin-sidenav .sidenav-header .logo-text {
+    color: var(--text-primary);
+  }
+
+  .sidenav-header .logo-icon,
+  .admin-sidenav .sidenav-header .logo-icon {
+    color: var(--text-primary);
+  }
+
+  .sidenav-nav .user-info .user-name,
+  .sidenav-wrapper .user-info .user-name {
+    color: var(--text-primary);
+  }
+
+  .sidenav-nav .user-info .user-role,
+  .sidenav-wrapper .user-info .user-role {
+    color: var(--text-secondary);
   }
 
   .mat-sidenav .sidenav-footer,
@@ -926,10 +1084,10 @@
 
   .mat-paginator,
   .mat-mdc-paginator {
-    background-color: var(--surface-paginator);
+    background-color: transparent;
     color: var(--text-paginator);
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 0 0 20px 20px;
+    border-top: none;
+    border-radius: 0;
   }
 
   .mat-paginator .mat-icon-button,
@@ -953,29 +1111,19 @@
     background-color: transparent;
 
     .mat-mdc-header-cell.mat-mdc-header-cell {
-      color: var(--text-table-header);
+      color: var(--text-secondary);
       font-weight: 600;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: none;
     }
 
     .mat-mdc-cell,
     td {
       color: var(--text-table-row);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     }
 
-    tbody tr:nth-child(odd),
-    .mat-mdc-row:nth-child(odd) {
+    tbody tr,
+    .mat-mdc-row {
       background: var(--surface-table-row);
-    }
-
-    tbody tr:nth-child(even),
-    .mat-mdc-row:nth-child(even) {
-      background: var(--surface-table-even);
-    }
-
-    tbody tr:nth-child(even) td {
-      color: var(--text-table-even);
     }
   }
 }
@@ -994,7 +1142,7 @@
   .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper {
     /* Use theme variables so dark-glass can control appearance without specificity wars */
     background: var(--input-bg);
-    border: 1px solid var(--border-subtle);
+    border: none;
     box-shadow:
       /* darker inner depth for dark themes */
       inset 0 3px 8px rgba(0, 0, 0, 0.45),
@@ -1002,8 +1150,6 @@
     backdrop-filter: blur(12px) saturate(140%);
     -webkit-backdrop-filter: blur(12px) saturate(140%);
     transition: all 0.25s ease;
-    will-change: transform;
-    transform: translateZ(0);
   }
 
   .mat-mdc-text-field-wrapper:hover,
@@ -1021,17 +1167,6 @@
       inset 0 3px 10px rgba(59, 59, 59, 0.35),
       inset 0 1px 4px rgba(0, 0, 0, 0.22),
       0 0 0 3px rgba(138, 180, 248, 0.18);
-  }
-
-  /* Remove ALL borders for dark-glass theme without breaking MDC layout (no display: none or opacity: 0) */
-  .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline .mdc-notched-outline__leading,
-  .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline .mdc-notched-outline__notch,
-  .mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline .mdc-notched-outline__trailing,
-  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__leading,
-  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__notch,
-  .mat-mdc-text-field-wrapper.mat-mdc-text-field-wrapper .mdc-notched-outline__trailing {
-    border-color: transparent;
-    border-width: 0;
   }
 
   .mat-mdc-form-field .mdc-floating-label,
@@ -1199,6 +1334,7 @@
   .admin-header.mat-toolbar {
     background-color: var(--surface-header);
     color: var(--text-primary);
+    --mat-toolbar-container-text-color: var(--text-primary);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     border: none;
@@ -1242,30 +1378,26 @@
     color: rgba(255, 255, 255, 1);
   }
 
-  /* ===== Logout button - transparent, no background ===== */
-  .sidenav-footer button,
-  .sidenav-footer .mat-mdc-button {
+  /* Logout — neutral ghost, same as sidenav component */
+  .sidenav-footer .logout-btn,
+  .sidenav-footer button.mat-mdc-button {
     background: transparent;
-    color: rgba(255, 255, 255, 0.95);
-    border: none;
-    border-radius: 12px;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-subtle);
     box-shadow: none;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    padding: 12px 16px;
-    font-weight: 500;
-  }
 
-  .sidenav-footer button:hover,
-  .sidenav-footer .mat-mdc-button:hover {
-    background: transparent;
-    border: none;
-    box-shadow: none;
-  }
+    mat-icon,
+    .logout-text {
+      color: inherit;
+    }
 
-  .sidenav-footer button mat-icon,
-  .sidenav-footer .mat-mdc-button mat-icon {
-    color: rgba(255, 255, 255, 0.95);
+    &:hover {
+      background: var(--surface-highlight);
+      border-color: var(--border-default);
+      color: var(--text-primary);
+    }
   }
 
   /* ===== Button styling ===== */
@@ -1429,22 +1561,13 @@
   }
 }
 
-// Dark Glass theme - Logout button transparent
-[data-theme='dark-glass'] {
-
-  .sidenav-footer button.mat-mdc-button,
-  .sidenav-footer .logout-btn {
-    background: transparent;
-    border: none;
-    box-shadow: none;
-  }
-}
+// Dark Glass theme — logout inherits sidenav ghost styles (no override needed)
 
 body.is-admin[data-theme='dark-glass'] .sidenav-nav .user-info .user-role,
 html[data-theme='dark-glass'] body.is-admin .sidenav-nav .user-info .user-role,
 body.is-admin[data-theme='glass'] .sidenav-nav .user-info .user-role,
 html[data-theme='glass'] body.is-admin .sidenav-nav .user-info .user-role {
-  color: var(--interactive-primary);
+  color: var(--text-secondary);
 }
 
 /* ===== Mat Menu Styles ===== */
@@ -1535,10 +1658,20 @@ html[data-theme='glass'] body.is-admin .sidenav-nav .user-info .user-role {
     color: var(--text-primary);
   }
 
-  /* Sidebar role label: primary accent, never warn/danger red */
-  .sidenav-nav .user-info .user-role,
-  .sidenav-wrapper .user-info .user-role {
+  /* Sidebar role: brand accent only on light/dark zinc. Glass chrome is already
+     blue — interactive-primary (#3b82f6) disappears into the sidenav. */
+  [data-theme='light'] .sidenav-nav .user-info .user-role,
+  [data-theme='light'] .sidenav-wrapper .user-info .user-role,
+  [data-theme='dark'] .sidenav-nav .user-info .user-role,
+  [data-theme='dark'] .sidenav-wrapper .user-info .user-role {
     color: var(--interactive-primary);
+  }
+
+  [data-theme='glass'] .sidenav-nav .user-info .user-role,
+  [data-theme='glass'] .sidenav-wrapper .user-info .user-role,
+  [data-theme='dark-glass'] .sidenav-nav .user-info .user-role,
+  [data-theme='dark-glass'] .sidenav-wrapper .user-info .user-role {
+    color: var(--text-secondary);
   }
 
   app-product-list .product-card {
@@ -1716,22 +1849,6 @@ html[data-theme='dark-glass'] body.is-admin {
     --mdc-outlined-button-outline-color: color-mix(in srgb, var(--interactive-primary) 40%, var(--glass-border-soft));
     background-color: var(--surface-overlay-light);
   }
-
-  .sidenav-footer .logout-btn {
-    background: color-mix(in srgb, var(--interactive-danger) 14%, transparent);
-    color: var(--text-primary);
-    border: 1px solid color-mix(in srgb, var(--interactive-danger) 28%, var(--glass-border-soft));
-
-    mat-icon,
-    .logout-text {
-      color: var(--interactive-danger);
-    }
-
-    &:hover {
-      background: color-mix(in srgb, var(--interactive-danger) 22%, transparent);
-      border-color: color-mix(in srgb, var(--interactive-danger) 40%, var(--glass-border-soft));
-    }
-  }
 }
 
 /* ===== Admin dark — Material depth (Epic E1; moved from _admin-dark.scss) ===== */
@@ -1785,7 +1902,6 @@ html[data-theme='dark'] body.is-admin {
     }
   }
 
-  .logout-btn.logout-btn,
   .btn-danger.btn-danger,
   .mat-mdc-button.mat-warn.mat-mdc-button,
   .mat-mdc-icon-button.mat-warn.mat-mdc-icon-button {
@@ -1895,6 +2011,12 @@ html[data-theme='dark'] body.is-admin {
     -webkit-backdrop-filter: none;
   }
 
+  .mat-mdc-form-field:not(.filter-pill):not(.search-field) .mat-mdc-text-field-wrapper.mdc-text-field--outlined {
+    background: transparent;
+    box-shadow: none;
+    border: none;
+  }
+
   .mat-mdc-select-panel,
   .mat-select-panel {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
@@ -1935,9 +2057,9 @@ html[data-theme='dark'] body.is-admin {
     will-change: transform;
   }
 
-  .admin-table-container .admin-table-wrapper .mat-mdc-table .mat-mdc-row:nth-child(even),
-  .admin-table-container .admin-table-wrapper .mat-mdc-table .mat-mdc-row:nth-child(even) .mat-mdc-cell {
-    background-color: var(--surface-table-even);
+  .admin-table-container .admin-table-wrapper .mat-mdc-table .mat-mdc-row,
+  .admin-table-container .admin-table-wrapper .mat-mdc-table .mat-mdc-row .mat-mdc-cell {
+    background-color: var(--surface-table-row, var(--surface-table));
   }
 
   /* Row dividers: Material paints via --mat-table-row-item-outline-*;
@@ -1966,10 +2088,18 @@ html[data-theme='dark'] body.is-admin {
      No !important — specificity + CSS variables only. */
   .admin-header.mat-toolbar .mat-mdc-icon-button.mat-mdc-button-base,
   mat-toolbar.admin-header .mat-mdc-icon-button.mat-mdc-button-base {
+    --mdc-icon-button-icon-color: var(--text-primary);
+    --mat-icon-button-icon-color: var(--text-primary);
+    color: var(--text-primary);
     border-radius: 50%;
     overflow: hidden;
     background-color: transparent;
     background-image: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    line-height: 0;
     --mat-icon-button-state-layer-color: transparent;
     --mdc-icon-button-hover-state-layer-opacity: 0;
     --mdc-icon-button-focus-state-layer-opacity: 0;
@@ -1977,6 +2107,16 @@ html[data-theme='dark'] body.is-admin {
     -webkit-mask-image: radial-gradient(closest-side, black 99%, transparent 100%);
     mask-image: radial-gradient(closest-side, black 99%, transparent 100%);
     transform: translateZ(0);
+
+    .mat-icon {
+      width: 24px;
+      height: 24px;
+      font-size: 24px;
+      line-height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
 
     &:hover,
     &:focus,
@@ -2232,6 +2372,38 @@ app-category-list .action-button .mat-mdc-button-touch-target {
   body.is-admin .cdk-overlay-pane.mat-mdc-dialog-panel {
     max-width: calc(100vw - 16px);
   }
+
+  body.is-admin .mat-mdc-paginator,
+  [data-theme='glass'] .mat-mdc-paginator,
+  [data-theme='dark-glass'] .mat-mdc-paginator {
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    --mat-paginator-container-background-color: transparent;
+  }
+
+  body.is-admin .mat-mdc-paginator-page-size-label {
+    display: none;
+  }
+
+  body.is-admin .mat-mdc-paginator-container {
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    min-height: var(--admin-shell-touch-target, 44px);
+    padding: var(--space-3) 0;
+    gap: var(--space-2);
+    box-sizing: border-box;
+  }
+
+  body.is-admin .mat-mdc-paginator-range-label {
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  app-order-list .order-card .status-select .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+  }
 }
 
 /* —— Fold compact column widths —— */
@@ -2360,14 +2532,54 @@ app-seo-settings .settings-form mat-form-field .mat-mdc-form-field-hint {
 
 /* —— Section form drawer tabs + chips —— */
 app-section-form .form-wrapper.drawer-mode .mat-mdc-tab-header {
-  padding: 0 32px;
+  padding: 0 24px;
   border-bottom: 1px solid var(--border-default, var(--border-default));
 }
 
 app-section-form .form-wrapper.drawer-mode .mat-mdc-tab-header .mat-mdc-tab {
-  --mdc-tab-indicator-active-indicator-color: var(--text-on-primary);
-  --mat-tab-header-active-label-text-color: var(--text-on-primary);
-  --mat-tab-header-inactive-label-text-color: rgba(255, 255, 255, 0.4);
+  --mdc-tab-indicator-active-indicator-color: var(--interactive-primary);
+  --mat-tab-header-active-label-text-color: var(--text-primary);
+  --mat-tab-header-inactive-label-text-color: var(--text-secondary);
+  --mat-tab-header-active-focus-label-text-color: var(--text-primary);
+  --mat-tab-header-active-hover-label-text-color: var(--text-primary);
+  --mat-tab-header-inactive-hover-label-text-color: var(--text-primary);
+}
+
+app-section-form .section-type-tabs .mat-mdc-tab-body-content,
+app-section-form .section-type-tabs .mat-mdc-tab-body.mat-mdc-tab-body-active .mat-mdc-tab-body-content {
+  overflow: visible;
+}
+
+body:has(.sections-page-wrapper.editor-open) .cdk-overlay-container,
+body.sections-editor-open .cdk-overlay-container {
+  z-index: 15000;
+}
+
+body:has(.sections-page-wrapper.editor-open) .cdk-overlay-pane:has(.mat-mdc-select-panel),
+body:has(.sections-page-wrapper.editor-open) .cdk-overlay-pane:has(.mat-select-panel),
+body.sections-editor-open .cdk-overlay-pane:has(.mat-mdc-select-panel),
+body.sections-editor-open .cdk-overlay-pane:has(.mat-select-panel) {
+  max-height: min(256px, calc(100dvh - 48px));
+}
+
+body:has(.sections-page-wrapper.editor-open) .cdk-overlay-pane .mat-mdc-select-panel,
+body:has(.sections-page-wrapper.editor-open) .cdk-overlay-pane .mat-select-panel,
+body.sections-editor-open .cdk-overlay-pane .mat-mdc-select-panel,
+body.sections-editor-open .cdk-overlay-pane .mat-select-panel {
+  background-color: var(--surface-elevated, var(--surface-secondary));
+  color: var(--text-primary);
+  border: 1px solid var(--border-default);
+  box-shadow: var(--shadow-lg, 0 12px 32px rgba(15, 23, 42, 0.18));
+  max-height: min(256px, calc(100dvh - 48px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+body:has(.sections-page-wrapper.editor-open) .cdk-overlay-pane .mat-mdc-option,
+body:has(.sections-page-wrapper.editor-open) .cdk-overlay-pane .mat-mdc-option .mdc-list-item__primary-text,
+body.sections-editor-open .cdk-overlay-pane .mat-mdc-option,
+body.sections-editor-open .cdk-overlay-pane .mat-mdc-option .mdc-list-item__primary-text {
+  color: var(--text-primary);
 }
 
 app-section-form .header-actions mat-chip-listbox {
@@ -2391,32 +2603,59 @@ app-section-form .header-actions .mat-mdc-chip-option.mat-mdc-chip-selected .mdc
   display: none;
 }
 
+app-section-form .carousel-toggle-group.mat-button-toggle-group {
+  border: none;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: none;
+  background: var(--surface-secondary);
+}
+
+app-section-form .carousel-toggle-group .mat-button-toggle {
+  background: transparent;
+  color: var(--text-secondary);
+  border: none;
+}
+
+app-section-form .carousel-toggle-group .mat-button-toggle-checked {
+  background: color-mix(in srgb, var(--interactive-primary) 14%, var(--surface-elevated));
+  color: var(--interactive-primary);
+}
+
+app-section-form .carousel-toggle-group .mat-button-toggle-focus-overlay,
+app-section-form .carousel-toggle-group .mat-button-toggle-ripple,
+app-section-form .carousel-toggle-group .mat-ripple,
+app-section-form .carousel-toggle-group .mat-ripple-element {
+  background: transparent;
+  opacity: 0;
+}
+
+app-section-form .carousel-toggle-group .mat-button-toggle .mat-button-toggle-label-content {
+  line-height: 38px;
+  font-size: 12px;
+  font-weight: 600;
+  color: inherit;
+}
+
+app-section-form .category-chip-list .mat-mdc-chip-option {
+  --mdc-chip-elevated-container-color: var(--surface-secondary);
+  --mdc-chip-label-text-color: var(--text-primary);
+  border: 1px solid var(--border-default);
+}
+
+app-section-form .category-chip-list .mat-mdc-chip-option.mat-mdc-chip-selected {
+  --mdc-chip-elevated-container-color: color-mix(in srgb, var(--interactive-primary) 16%, var(--surface-elevated));
+  --mdc-chip-label-text-color: var(--interactive-primary);
+  border-color: color-mix(in srgb, var(--interactive-primary) 40%, var(--border-default));
+}
+
+app-section-form .carousel-limit-row {
+  max-width: 160px;
+}
+
 /* —— Section list: warn actions + lang chips + glass switch track —— */
 app-section-list .col-actions button.mat-warn {
   color: var(--interactive-danger, var(--interactive-danger));
-}
-
-app-section-list .drawer-lang-switcher .mat-mdc-chip-listbox-wrapper {
-  gap: 4px;
-}
-
-app-section-list .drawer-lang-switcher mat-chip-listbox {
-  --mdc-chip-label-text-color: rgba(255, 255, 255, 0.7);
-}
-
-app-section-list .drawer-lang-switcher .mat-mdc-standard-chip {
-  min-height: 28px;
-  padding: 0 8px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-app-section-list .drawer-lang-switcher .mat-mdc-standard-chip.mat-mdc-chip-selected {
-  --mdc-chip-label-text-color: var(--text-on-primary);
-  background: var(--interactive-primary);
-  box-shadow: 0 0 12px rgba(var(--interactive-primary-rgb), 0.4);
 }
 
 [data-theme='glass'] app-section-list .mat-mdc-slide-toggle .mdc-switch:hover .mdc-switch__track::before,
@@ -2648,11 +2887,23 @@ app-product-form .mat-mdc-form-field {
   width: 100%;
 }
 
+app-product-form .lang-tabs .mat-mdc-tab-body,
+app-product-form .lang-tabs .mat-mdc-tab-body-wrapper,
+app-product-form .lang-tabs .mat-mdc-tab-body-content {
+  overflow: visible;
+}
+
 app-product-form .mat-mdc-form-field .mdc-floating-label,
 app-product-form .mat-mdc-form-field .mat-mdc-floating-label,
 app-product-form .mat-mdc-text-field-wrapper .mdc-floating-label {
   color: var(--input-label, var(--text-secondary));
   opacity: 1;
+  overflow: visible;
+}
+
+app-product-form .mat-mdc-form-field .mdc-notched-outline,
+app-product-form .mat-mdc-form-field .mdc-notched-outline__notch {
+  overflow: visible;
 }
 
 app-product-form .mat-mdc-form-field.mat-focused .mdc-floating-label,
@@ -2679,6 +2930,33 @@ app-product-form .switches-group mat-slide-toggle .mdc-form-field {
   color: var(--text-primary);
   font-weight: 500;
   font-size: 1rem;
+}
+
+/* Product form — category select panel must stay visible above glass cards */
+body.is-admin .cdk-overlay-pane:has(.admin-product-select-panel) {
+  z-index: 1200;
+}
+
+body.is-admin .admin-product-select-panel.mat-mdc-select-panel,
+body.is-admin .admin-product-select-panel.mat-select-panel {
+  background: var(--surface-select-panel, var(--surface-elevated));
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-lg, 0 12px 32px rgba(0, 0, 0, 0.35));
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  max-height: min(280px, calc(100dvh - 96px));
+  overflow-y: auto;
+}
+
+body.is-admin .admin-product-select-panel .mat-mdc-option,
+body.is-admin .admin-product-select-panel .mat-mdc-option .mdc-list-item__primary-text {
+  color: var(--text-primary);
+}
+
+body.is-admin .admin-product-select-panel .mat-mdc-option:hover:not(.mdc-list-item--disabled),
+body.is-admin .admin-product-select-panel .mat-mdc-option.mat-mdc-option-active {
+  background: color-mix(in srgb, var(--interactive-primary) 14%, var(--surface-elevated));
 }
 
 @media (max-width: 1024px) {

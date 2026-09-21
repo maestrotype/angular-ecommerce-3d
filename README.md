@@ -9,7 +9,9 @@
 
 **Full-stack e-commerce with interactive 3D product previews, multi-theme design system, and NestJS admin API.**
 
-[Live Demo](https://demo.angular-ecommerce3d.com) · [Documentation](docs/client/index.html) · [Walkthrough Script](marketing-assets/VIDEO_SCRIPT.md) · [Support](docs/SUPPORT.md)
+[Documentation](docs/client/index.html) · [Listing pack](marketing-assets/LISTING_PACK.md) · [Walkthrough Script](marketing-assets/VIDEO_SCRIPT.md) · [Support](docs/SUPPORT.md)
+
+Live demo URL: set `YOUR_LIVE_DEMO_URL` in [marketing-assets/CODECANYON_LISTING.md](marketing-assets/CODECANYON_LISTING.md) after you deploy the stack (GitHub Pages is not a full demo).
 
 </div>
 
@@ -68,18 +70,19 @@ Architecture docs: [docs/BACKEND_ARCHITECTURE.md](docs/BACKEND_ARCHITECTURE.md) 
 git clone https://github.com/maestrotype/angular-ecommerce-3d.git
 cd angular-ecommerce-3d
 
-npm install
-cd backend && npm install && cd ..
+npm install   # frontend + backend (npm workspaces)
 
 cp backend/.env.example backend/.env
 # Edit backend/.env — DATABASE_*, JWT_SECRET, ADMIN_EMAIL, ADMIN_PASSWORD
+
+npm run demo:models   # optional Khronos CC0 samples; bag/shoe GLB already under src/assets/models/
 ```
 
 ### Run (development)
 
 ```bash
 # Terminal 1 — API
-cd backend && npm run start:dev
+npm run backend:start:dev
 
 # Terminal 2 — storefront (http://localhost:4200)
 npm start
@@ -88,7 +91,7 @@ npm start
 ### Demo data
 
 ```bash
-cd backend && npm run seed
+npm run backend:seed
 curl -X POST http://localhost:3002/api/auth/create-admin
 ```
 
@@ -107,7 +110,7 @@ docker compose up -d --build
 
 | Asset | Location |
 |-------|----------|
-| Demo 3D models | `npm run demo:models` (duck bundled; others downloaded) |
+| Demo 3D models | Bag/shoe GLB in `src/assets/models/` (served as `assets/models/…`); optional Khronos via `npm run demo:models` |
 | Demo product images | `src/assets/demo/products/` |
 | Screenshot capture | `npm run screenshots:capture` (requires dev servers) |
 | Listing copy | [marketing-assets/MARKETPLACE_DESCRIPTION.md](marketing-assets/MARKETPLACE_DESCRIPTION.md) |

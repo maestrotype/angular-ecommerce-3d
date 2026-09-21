@@ -59,7 +59,7 @@
         <th mat-header-cell *matHeaderCellDef>{{ 'STATUS' | translate }}</th>
         <td mat-cell *matCellDef="let message">
           <span class="status-badge" [attr.data-status]="message.status">
-            {{ message.status | titlecase }}
+            {{ getStatusLabel(message.status) }}
           </span>
         </td>
       </ng-container>
@@ -103,7 +103,7 @@
           </div>
           <div class="status-chip">
             <mat-chip [color]="getStatusColor(message.status)" selected>
-              {{ message.status | titlecase }}
+              {{ getStatusLabel(message.status) }}
             </mat-chip>
           </div>
         </div>

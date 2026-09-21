@@ -11,6 +11,17 @@
   }
 }
 
+.home-sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+
+  @media (max-width: 768px) {
+    gap: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+  }
+}
+
 .banner {
   text-align: center;
   padding: var(--spacing-2xl);

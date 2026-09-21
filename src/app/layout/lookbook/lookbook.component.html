@@ -1,0 +1,68 @@
+<section class="lookbook">
+  <div class="lookbook__intro" *ngIf="data?.title || data?.subtitle">
+    <span class="lookbook__kicker" *ngIf="data?.subtitle">{{ data.subtitle | localized }}</span>
+    <h2 class="lookbook__heading">{{ (data?.title | localized) || ('HOME.LOOKBOOK.TITLE' | translate) }}</h2>
+  </div>
+
+  <div
+    class="lookbook__stage"
+    *ngIf="slides.length; else emptyState"
+    (pointerenter)="pause()"
+    (pointerleave)="resume()"
+  >
+    <article class="lookbook__slide" *ngFor="let slide of slides; let i = index" [class.is-active]="i === activeIndex">
+      <img [src]="slide.image | imageUrl" [alt]="slide.title | localized" loading="lazy" />
+      <div class="lookbook__veil"></div>
+      <div class="lookbook__copy">
+        <h3>{{ slide.title | localized }}</h3>
+        <p *ngIf="slide.subtitle">{{ slide.subtitle | localized }}</p>
+        <a
+          *ngIf="slide.ctaLabel && isInternal(slide.ctaUrl)"
+          [routerLink]="slide.ctaUrl"
+          class="lookbook__cta"
+        >{{ slide.ctaLabel | localized }}</a>
+        <a
+          *ngIf="slide.ctaLabel && !isInternal(slide.ctaUrl)"
+          [href]="slide.ctaUrl"
+          class="lookbook__cta"
+          target="_blank"
+          rel="noopener"
+        >{{ slide.ctaLabel | localized }}</a>
+      </div>
+    </article>
+
+    <button
+      type="button"
+      class="lookbook__nav lookbook__nav--prev"
+      *ngIf="slides.length > 1"
+      (click)="prev()"
+      [attr.aria-label]="'HOME.LOOKBOOK.PREV' | translate"
+    >
+      <span class="material-icons" aria-hidden="true">chevron_left</span>
+    </button>
+    <button
+      type="button"
+      class="lookbook__nav lookbook__nav--next"
+      *ngIf="slides.length > 1"
+      (click)="next()"
+      [attr.aria-label]="'HOME.LOOKBOOK.NEXT' | translate"
+    >
+      <span class="material-icons" aria-hidden="true">chevron_right</span>
+    </button>
+
+    <div class="lookbook__dots" *ngIf="slides.length > 1">
+      <button
+        type="button"
+        *ngFor="let slide of slides; let i = index"
+        class="lookbook__dot"
+        [class.is-active]="i === activeIndex"
+        (click)="goTo(i)"
+        [attr.aria-label]="('HOME.LOOKBOOK.GO_TO' | translate) + ' ' + (i + 1)"
+      ></button>
+    </div>
+  </div>
+
+  <ng-template #emptyState>
+    <p class="lookbook__empty">{{ 'HOME.LOOKBOOK.EMPTY' | translate }}</p>
+  </ng-template>
+</section>

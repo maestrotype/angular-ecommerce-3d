@@ -148,6 +148,19 @@ export class ProductViewerComponent implements OnInit, OnDestroy {
     if (this.scale > 1) { this.resetZoom(); } else { this.scale = 2.5; }
   }
 
+  zoomIn(step = 0.15): void {
+    if (this.mode !== 'image') return;
+    this.scale = Math.min(5, this.scale + step);
+  }
+
+  zoomOut(step = 0.15): void {
+    if (this.mode !== 'image') return;
+    this.scale = Math.max(1, this.scale - step);
+    if (this.scale === 1) {
+      this.resetZoom();
+    }
+  }
+
   resetZoom() {
     this.scale = 1;
     this.translateX = 0;

@@ -41,14 +41,14 @@ This document describes the **implemented** theme engine. SCSS is the source of 
 
 ## 2. Available themes
 
-| id | Name | Areas | SCSS source | Dimensions overridden |
-|----|------|-------|-------------|------------------------|
-| `light` | Light | frontend, admin | `src/styles/themes/_default.scss` | appearance, typography, spacing, radius, elevation, density, motion, layout |
-| `dark` | Dark | frontend, admin | `src/styles/themes/_dark.scss` | appearance, elevation, motion, effects |
-| `glass` | Glass | frontend, admin | `src/styles/themes/_glass.scss` | appearance, elevation, motion, effects, layout |
-| `dark-glass` | Dark Glass | **admin only** | `src/admin/styles/_admin-dark-glass.scss` | appearance, elevation, motion, effects, typography, layout |
+| id | Storefront label | Admin label | Areas | SCSS source |
+|----|------------------|-------------|-------|-------------|
+| `light` | Light | Light | frontend, admin | `src/styles/themes/_default.scss` |
+| `dark` | Dark | Dark | frontend, admin | `src/styles/themes/_dark.scss` |
+| `glass` | **Aurora** | **Ice** | frontend, admin | `src/styles/themes/_glass.scss` |
+| `dark-glass` | — | **Ember** | **admin only** | `src/admin/styles/_admin-dark-glass.scss` |
 
-Frontend theme selector exposes light, dark, glass. Admin adds dark-glass.
+CSS `[data-theme]` ids are unchanged. Frontend selector: Light, Dark, Aurora. Admin adds Ice (`glass`) and Ember (`dark-glass`).
 
 ---
 

@@ -31,13 +31,8 @@ cd angular-ecommerce-3d
 ### Step 2: Install Dependencies
 
 ```bash
-# Install frontend dependencies
+# Install frontend + backend (npm workspaces)
 npm install
-
-# Install backend dependencies
-cd backend
-npm install
-cd ..
 ```
 
 > **⏱️ Expected time**: 2-3 minutes
@@ -87,8 +82,7 @@ The frontend is pre-configured for local development. For production deployment,
 Open a terminal window:
 
 ```bash
-cd backend
-npm run start:dev
+npm run backend:start:dev
 ```
 
 ✅ Backend should be running at `http://localhost:3002`
@@ -180,8 +174,7 @@ npm start -- --port 4300
 
 **Solution**: Create admin user manually:
 ```bash
-cd backend
-npm run start:dev
+npm run backend:start:dev
 # In another terminal:
 curl -X POST http://localhost:3002/api/auth/create-admin
 ```

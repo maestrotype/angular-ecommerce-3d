@@ -26,7 +26,7 @@
 | Storefront catalog & PDP | ✅ Ready | Rozetka-style product page layout |
 | Three.js GLB viewer | ✅ Ready | Bundled CC0 demo models included |
 | Admin CRUD (products, orders, users) | ✅ Ready | JWT-protected |
-| 4 themes (light / dark / glass / admin dark-glass) | ✅ Ready | CSS token architecture |
+| 4 themes (Light / Dark / Aurora storefront; Ice / Ember admin) | ✅ Ready | CSS token architecture (`glass` / `dark-glass` ids) |
 | Stripe payments | ✅ Ready | Configure keys in Admin → Settings |
 | LiqPay | ✅ Ready | Regional gateway |
 | PayPal | ⚠️ Mock (labeled in UI) | Simulated checkout without API keys |
@@ -58,7 +58,7 @@
 
 ### Design system
 - Semantic CSS tokens — no `!important` wars with Material
-- Four themes, responsive layout, glassmorphism option
+- Four themes (Light, Dark, Aurora), responsive layout
 
 ---
 
@@ -111,8 +111,8 @@ Docker: `docker compose up -d --build` (see `docs/INSTALLATION.md`)
 - ✅ Docker Compose file
 - ✅ Playwright smoke tests + screenshot capture helper
 - ✅ `CHANGELOG.md`, `THIRD_PARTY_NOTICES.md`, MIT license
-- ❌ Pre-rendered marketplace screenshots (use `npm run screenshots:capture`)
-- ❌ Pre-recorded demo video (use `marketing-assets/VIDEO_SCRIPT.md`)
+- 📦 Screenshots: run `npm run screenshots:capture` then pack (see [LISTING_PACK.md](./LISTING_PACK.md))
+- ❌ Pre-recorded demo video (use [VIDEO_SCRIPT.md](./VIDEO_SCRIPT.md))
 
 ---
 
@@ -187,6 +187,6 @@ See [CHANGELOG.md](../CHANGELOG.md) for full history.
 
 **Angular 3D E-Commerce** — *Sell products in three dimensions.*
 
-[Documentation](../docs/client/index.html) · [Live Demo](https://demo.angular-ecommerce3d.com)
+[Documentation](../docs/client/index.html) · [Listing pack](./LISTING_PACK.md) · Live demo: `YOUR_LIVE_DEMO_URL`
 
 </div>

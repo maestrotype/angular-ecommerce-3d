@@ -7,6 +7,7 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Added
+- Marketplace listing pack: `npm run pack:marketplace`, expanded screenshot capture, CodeCanyon paste-ready copy.
 - GitHub Actions CI: frontend build, backend lint/build, Playwright smoke e2e.
 - Swagger UI at `/api/docs` (OpenAPI JSON at `/api/docs-json`).
 - PayPal mock notices in Admin → Settings and checkout payment page.

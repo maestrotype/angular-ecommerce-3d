@@ -1,0 +1,50 @@
+<form [formGroup]="form">
+  <h2 mat-dialog-title>{{ 'SMART_FILL_AI_PREVIEW' | translate }}</h2>
+
+  <mat-dialog-content class="ai-copy-dialog">
+    <p class="ai-copy-dialog__caption" *ngIf="data.caption">
+      {{ 'SMART_FILL_CAPTION' | translate }}: {{ data.caption }}
+    </p>
+
+    <div class="ai-copy-dialog__names">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'LANG_EN' | translate }}</mat-label>
+        <input matInput formControlName="name_en">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'LANG_RU' | translate }}</mat-label>
+        <input matInput formControlName="name_ru">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'LANG_UA' | translate }}</mat-label>
+        <input matInput formControlName="name_ua">
+      </mat-form-field>
+    </div>
+
+    <mat-tab-group animationDuration="200ms" dynamicHeight>
+      <mat-tab [label]="'LANG_EN' | translate">
+        <mat-form-field appearance="outline" class="ai-copy-dialog__body">
+          <mat-label>{{ 'DESCRIPTION' | translate }}</mat-label>
+          <textarea matInput rows="7" formControlName="description_en"></textarea>
+        </mat-form-field>
+      </mat-tab>
+      <mat-tab [label]="'LANG_RU' | translate">
+        <mat-form-field appearance="outline" class="ai-copy-dialog__body">
+          <mat-label>{{ 'DESCRIPTION' | translate }}</mat-label>
+          <textarea matInput rows="7" formControlName="description_ru"></textarea>
+        </mat-form-field>
+      </mat-tab>
+      <mat-tab [label]="'LANG_UA' | translate">
+        <mat-form-field appearance="outline" class="ai-copy-dialog__body">
+          <mat-label>{{ 'DESCRIPTION' | translate }}</mat-label>
+          <textarea matInput rows="7" formControlName="description_ua"></textarea>
+        </mat-form-field>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="discard()">{{ 'SMART_FILL_AI_DISCARD' | translate }}</button>
+    <button mat-raised-button color="primary" type="button" (click)="apply()">{{ 'SMART_FILL_AI_APPLY' | translate }}</button>
+  </mat-dialog-actions>
+</form>

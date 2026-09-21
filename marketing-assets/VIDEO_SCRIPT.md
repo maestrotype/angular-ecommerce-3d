@@ -15,7 +15,7 @@ Export to `demo-video/final/demo-video-1080p.mp4` and link from README / ThemeFo
 
 ## 0:15–0:40 — Theme system
 
-- Toggle **light → dark → glass** on storefront (header theme control or localStorage demo)
+- Toggle **Light → Dark → Aurora** on storefront (header theme control)
 - Mention: token-based design system, four themes, no hardcoded colors in components
 
 ## 0:40–1:10 — 3D viewer (hero feature)

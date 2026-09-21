@@ -41,6 +41,16 @@
 .form-actions {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   gap: 0.75rem;
   margin-top: 1.5rem;
+
+  .form-actions-spacer {
+    flex: 1;
+  }
+
+  .demo-btn mat-icon {
+    margin-right: 4px;
+    vertical-align: middle;
+  }
 }

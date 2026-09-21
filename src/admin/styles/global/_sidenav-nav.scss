@@ -105,3 +105,23 @@
   --mdc-list-item-selected-label-text-color: var(--text-primary);
   --mdc-list-item-selected-leading-icon-color: var(--text-secondary);
 }
+
+body.is-admin[data-theme='glass'] .sidenav-nav .mat-mdc-nav-list a[mat-list-item],
+html[data-theme='glass'] body.is-admin .sidenav-nav .mat-mdc-nav-list a[mat-list-item],
+body.is-admin[data-theme='dark-glass'] .sidenav-nav .mat-mdc-nav-list a[mat-list-item],
+html[data-theme='dark-glass'] body.is-admin .sidenav-nav .mat-mdc-nav-list a[mat-list-item],
+body.is-admin[data-theme='dark'] .sidenav-nav .mat-mdc-nav-list a[mat-list-item],
+html[data-theme='dark'] body.is-admin .sidenav-nav .mat-mdc-nav-list a[mat-list-item] {
+  --mdc-list-item-hover-label-text-color: var(--text-primary);
+  --mdc-list-item-hover-leading-icon-color: var(--text-primary);
+  --mdc-list-item-focus-label-text-color: var(--text-primary);
+  --mdc-list-list-item-hover-label-text-color: var(--text-primary);
+
+  &:hover,
+  &:hover .mdc-list-item__primary-text,
+  &:hover .mdc-list-item__text,
+  &:hover .mat-mdc-list-item-title,
+  &:hover mat-icon {
+    color: var(--text-primary);
+  }
+}

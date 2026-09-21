@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Product } from 'src/shared/models/product.model';
 import { NotificationService } from '../../../core/services/notification.service';
+import { isDemoProduct } from 'src/shared/utils/demo-catalog.util';
 
 @Component({
   selector: 'app-product-info',
@@ -49,6 +50,10 @@ export class ProductInfoComponent {
   isOutOfStock(): boolean {
     const stock = this.product?.stock ?? 0;
     return stock <= 0;
+  }
+
+  isDemoPreview(): boolean {
+    return isDemoProduct(this.product);
   }
 
   /**

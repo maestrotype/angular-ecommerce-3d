@@ -3,7 +3,11 @@ import { Subject, takeUntil } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
-import { PaymentService, PaymentSearchFilters, UpdatePaymentStatusRequest } from '../../services/payment.service';
+import {
+  AdminPaymentService,
+  PaymentSearchFilters,
+  UpdatePaymentStatusRequest,
+} from '../../services/payment.service';
 import { Payment } from '../../models/payment.model';
 import { ErrorHandlerService } from '../../services/error-handler.service';
 import { PaymentDetailsDialogComponent } from './payment-details-dialog.component';
@@ -50,7 +54,7 @@ export class PaymentsComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
-    private paymentService: PaymentService,
+    private paymentService: AdminPaymentService,
     private fb: FormBuilder,
     private errorHandler: ErrorHandlerService,
     private dialog: MatDialog,

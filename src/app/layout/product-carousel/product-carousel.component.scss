@@ -1,0 +1,467 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.product-carousel {
+  --carousel-ink: var(--product-carousel-text, var(--text-primary));
+  --carousel-veil: var(--product-carousel-bg, var(--surface-page));
+  --carousel-cta-bg: var(--text-primary);
+  --carousel-cta-fg: var(--bg-page, var(--text-inverse));
+  --carousel-cta-border: transparent;
+  --carousel-veil-left: 72%;
+  --carousel-veil-mid: 18%;
+  --carousel-veil-top: 28%;
+  --carousel-veil-bottom: 78%;
+  --carousel-grain-opacity: 0;
+  --carousel-title-shadow: none;
+
+  position: relative;
+  width: 100%;
+  padding-inline: var(--spacing-md, 1rem);
+  color: var(--carousel-ink);
+  background: transparent;
+
+  &__stage {
+    position: relative;
+    width: 100%;
+    max-width: var(--section-content-max-width, 1400px);
+    margin-inline: auto;
+    height: calc(100vh - var(--header-offset, 64px));
+    height: calc(100dvh - var(--header-offset, 64px));
+    min-height: 240px;
+    overflow: hidden;
+    outline: none;
+    cursor: grab;
+    user-select: none;
+    touch-action: pan-y;
+    background: var(--carousel-veil);
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  &__slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.45s ease, visibility 0.45s ease;
+    z-index: 0;
+
+    &.is-active {
+      opacity: 1;
+      visibility: visible;
+      z-index: 1;
+    }
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+  }
+
+  &__veil {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background:
+      linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--carousel-veil) var(--carousel-veil-left), transparent) 0%,
+        color-mix(in srgb, var(--carousel-veil) var(--carousel-veil-mid), transparent) 48%,
+        transparent 100%
+      ),
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--carousel-veil) var(--carousel-veil-top), transparent) 0%,
+        transparent 32%,
+        color-mix(in srgb, var(--carousel-veil) var(--carousel-veil-bottom), transparent) 100%
+      );
+  }
+
+  &__grain {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    opacity: var(--carousel-grain-opacity);
+    mix-blend-mode: overlay;
+    background-image: repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.04) 0,
+      rgba(255, 255, 255, 0.04) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  }
+
+  &__chrome {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: clamp(16px, 3vw, 32px);
+    padding-bottom: 88px;
+    pointer-events: none;
+  }
+
+  &__header,
+  &__copy,
+  &__controls {
+    pointer-events: auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  &__kicker {
+    display: block;
+    margin-bottom: 10px;
+    color: color-mix(in srgb, var(--carousel-ink) 72%, transparent);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  &__title {
+    margin: 0;
+    max-width: 16ch;
+    color: var(--carousel-ink);
+    font-size: clamp(1.35rem, 3.2vw, 2.4rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    text-shadow: var(--carousel-title-shadow);
+  }
+
+  &__copy {
+    max-width: min(520px, 92%);
+    color: var(--carousel-ink);
+
+    h3 {
+      margin: 10px 0 8px;
+      color: var(--carousel-ink);
+      font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+      font-weight: 800;
+      line-height: 1.05;
+      text-shadow: var(--carousel-title-shadow);
+    }
+  }
+
+  &__badge {
+    display: inline-flex;
+    margin-right: 8px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: var(--interactive-primary);
+    color: var(--text-on-primary);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+
+    &--sale {
+      background: var(--interactive-danger, #ef4444);
+    }
+  }
+
+  &__price {
+    margin: 0 0 16px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: color-mix(in srgb, var(--carousel-ink) 86%, transparent);
+  }
+
+  &__cta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 18px;
+    border: 1px solid var(--carousel-cta-border);
+    border-radius: 999px;
+    background: var(--carousel-cta-bg);
+    color: var(--carousel-cta-fg);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+
+    &:hover {
+      background: color-mix(in srgb, var(--carousel-cta-bg) 88%, var(--interactive-primary));
+      color: var(--carousel-cta-fg);
+    }
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    align-self: flex-end;
+    margin-bottom: 8px;
+  }
+
+  &__counter {
+    min-width: 64px;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: color-mix(in srgb, var(--carousel-ink) 78%, transparent);
+  }
+
+  &__nav {
+    width: 40px;
+    height: 40px;
+    border: 1px solid color-mix(in srgb, var(--carousel-ink) 28%, transparent);
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--surface-elevated) 40%, transparent);
+    color: var(--carousel-ink);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+
+    &:hover {
+      background: color-mix(in srgb, var(--surface-elevated) 64%, transparent);
+      border-color: color-mix(in srgb, var(--carousel-ink) 55%, transparent);
+    }
+  }
+
+  &__progress {
+    position: absolute;
+    left: clamp(16px, 3vw, 32px);
+    right: clamp(16px, 3vw, 32px);
+    bottom: 64px;
+    z-index: 3;
+    height: 2px;
+    pointer-events: none;
+    background: color-mix(in srgb, var(--carousel-ink) 16%, transparent);
+
+    span {
+      display: block;
+      height: 100%;
+      width: 100%;
+      transform-origin: left center;
+      background: var(--interactive-primary);
+      animation: carouselProgress linear forwards;
+    }
+  }
+
+  &__thumbs {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+    display: flex;
+    gap: 8px;
+    padding: 10px clamp(16px, 3vw, 32px) 12px;
+    overflow-x: auto;
+    pointer-events: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__thumb {
+    flex: 0 0 48px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--surface-elevated) 40%, transparent);
+    cursor: pointer;
+    opacity: 0.55;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    &.is-active {
+      opacity: 1;
+      border-color: var(--carousel-ink);
+    }
+  }
+
+  &__empty {
+    min-height: 28vh;
+    display: grid;
+    place-content: center;
+    padding: 48px 24px;
+    text-align: center;
+    color: var(--text-primary);
+    background: var(--surface-section, var(--surface-page));
+
+    h2 {
+      margin: 0 0 8px;
+    }
+
+    p {
+      margin: 0;
+      color: var(--text-muted);
+    }
+  }
+}
+
+@keyframes carouselProgress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .product-carousel {
+    &__stage {
+      height: calc(100svh - var(--header-offset, 64px) - var(--mobile-dock-offset, 64px));
+      min-height: 22rem;
+    }
+
+    &__chrome {
+      padding: 16px 16px 84px;
+      gap: 0.75rem;
+    }
+
+    &__title {
+      max-width: none;
+      font-size: clamp(1.35rem, 6.5vw, 1.85rem);
+      line-height: 1.15;
+    }
+
+    &__copy {
+      max-width: none;
+
+      h3 {
+        line-height: 1.2;
+      }
+    }
+
+    &__controls {
+      align-self: stretch;
+      justify-content: center;
+    }
+
+    &__progress {
+      left: 16px;
+      right: 16px;
+      bottom: 56px;
+    }
+
+    &__thumbs {
+      padding-bottom: 10px;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-carousel__slide,
+  .product-carousel__progress span {
+    animation: none;
+    transition: opacity 0.2s ease;
+  }
+}
+
+:host-context([data-theme='light']) .product-carousel,
+:host-context([data-theme='default']) .product-carousel {
+  --carousel-ink: var(--text-primary);
+  --carousel-veil: var(--surface-page, var(--surface-primary));
+  --carousel-cta-bg: var(--text-primary);
+  --carousel-cta-fg: var(--text-inverse, #fff);
+  --carousel-veil-left: 88%;
+  --carousel-veil-mid: 28%;
+  --carousel-veil-top: 16%;
+  --carousel-veil-bottom: 58%;
+  --carousel-grain-opacity: 0;
+  --carousel-title-shadow: none;
+  background: transparent;
+
+  .product-carousel__stage {
+    background: var(--carousel-veil);
+  }
+
+  .product-carousel__nav {
+    background: color-mix(in srgb, var(--surface-primary) 78%, transparent);
+  }
+
+  .product-carousel__thumb {
+    background: color-mix(in srgb, var(--surface-primary) 70%, transparent);
+  }
+}
+
+:host-context([data-theme='dark']) .product-carousel,
+:host-context([data-theme='dark-glass']) .product-carousel {
+  --carousel-ink: var(--text-primary);
+  --carousel-veil: var(--product-carousel-bg, var(--surface-page));
+  --carousel-cta-bg: var(--text-primary);
+  --carousel-cta-fg: var(--bg-page, var(--surface-inverse));
+  --carousel-veil-left: 64%;
+  --carousel-veil-mid: 16%;
+  --carousel-veil-top: 22%;
+  --carousel-veil-bottom: 58%;
+  --carousel-grain-opacity: 0;
+  --carousel-title-shadow: none;
+  background: transparent;
+
+  .product-carousel__stage {
+    background: transparent;
+  }
+}
+
+:host-context([data-theme='glass']) .product-carousel {
+  --carousel-ink: var(--text-primary);
+  --carousel-veil: var(--glass-bg, rgba(255, 255, 255, 0.42));
+  --carousel-cta-bg: var(--glass-surface-soft, rgba(255, 255, 255, 0.48));
+  --carousel-cta-fg: var(--text-primary);
+  --carousel-cta-border: var(--glass-border-soft, rgba(255, 255, 255, 0.55));
+  --carousel-veil-left: 82%;
+  --carousel-veil-mid: 24%;
+  --carousel-veil-top: 18%;
+  --carousel-veil-bottom: 52%;
+  --carousel-grain-opacity: 0;
+  --carousel-title-shadow: none;
+  background: transparent;
+
+  .product-carousel__stage {
+    background: transparent;
+  }
+
+  .product-carousel__nav {
+    background: var(--glass-surface-soft, rgba(255, 255, 255, 0.48));
+    border-color: var(--glass-border-soft, rgba(255, 255, 255, 0.55));
+  }
+
+  .product-carousel__cta {
+    box-shadow: var(--glass-inner-shadow, inset 0 1px 0 rgba(255, 255, 255, 0.75));
+  }
+
+  .product-carousel__thumb {
+    background: var(--glass-surface-soft, rgba(255, 255, 255, 0.4));
+    border-color: color-mix(in srgb, var(--glass-border-soft, #fff) 40%, transparent);
+
+    &.is-active {
+      border-color: var(--glass-border-strong, #fff);
+    }
+  }
+}
+
+// Site Architect: 100dvh is the admin window, not the scaled device frame.
+:host-context(app-admin-section-preview) .product-carousel__stage {
+  height: 280px;
+  min-height: 200px;
+}

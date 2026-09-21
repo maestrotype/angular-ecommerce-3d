@@ -69,6 +69,10 @@ export class RecommendationsService {
   ) {}
 
   getSimilarProducts(productId: number, limit: number = 4): Observable<RecommendationProduct[]> {
+    if (!Number.isFinite(productId) || productId <= 0) {
+      return of([]);
+    }
+
     // Check cache first
     const cached = this.similarProductsCache.get(productId);
     if (cached) {
@@ -114,6 +118,10 @@ export class RecommendationsService {
   }
 
   getBoughtTogetherProducts(productId: number, limit: number = 4): Observable<RecommendationProduct[]> {
+    if (!Number.isFinite(productId) || productId <= 0) {
+      return of([]);
+    }
+
     // Check cache first
     const cached = this.boughtTogetherCache.get(productId);
     if (cached) {

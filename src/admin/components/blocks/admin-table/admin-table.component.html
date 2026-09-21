@@ -2,6 +2,7 @@
   <div class="admin-table-wrapper" *ngIf="!loading">
     <ng-content></ng-content>
     <mat-paginator
+      *ngIf="showPaginator"
       [pageSizeOptions]="pageSizeOptions"
       [showFirstLastButtons]="showFirstLastButtons"
     ></mat-paginator>

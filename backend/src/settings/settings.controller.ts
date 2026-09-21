@@ -13,7 +13,8 @@ import {
   UpdateNotificationSettingsDto,
   UpdateCloudinarySettingsDto,
   UpdateAiSettingsDto,
-  UpdateSMTPSettingsDto
+  UpdateSMTPSettingsDto,
+  UpdateShopCatalogSettingsDto
 } from './dto/update-settings.dto';
 
 @Controller('settings')
@@ -146,6 +147,46 @@ export class SettingsController {
     return this.settingsService.updateAiSettings(settings).pipe(
       map((result) => ({ success: true, data: result, message: 'AI Engine settings updated successfully' })),
       catchError((error) => of({ success: false, error: error.message }))
+    );
+  }
+
+  // Get shop catalog display settings
+  @Get('shop-catalog')
+  @HttpCode(HttpStatus.OK)
+  getShopCatalogSettings(): Observable<any> {
+    return this.settingsService.getShopCatalogSettings().pipe(
+      map((data) => ({ success: true, data })),
+      catchError((error) => of({ success: false, error: error.message })),
+    );
+  }
+
+  // Update shop catalog display settings
+  @Put('shop-catalog')
+  @HttpCode(HttpStatus.OK)
+  updateShopCatalogSettings(@Body() settings: UpdateShopCatalogSettingsDto): Observable<any> {
+    return this.settingsService.updateShopCatalogSettings(settings).pipe(
+      map((result) => ({ success: true, data: result, message: 'Shop catalog settings updated successfully' })),
+      catchError((error) => of({ success: false, error: error.message })),
+    );
+  }
+
+  // Get best sellers catalog display settings
+  @Get('best-sellers-catalog')
+  @HttpCode(HttpStatus.OK)
+  getBestSellersCatalogSettings(): Observable<any> {
+    return this.settingsService.getBestSellersCatalogSettings().pipe(
+      map((data) => ({ success: true, data })),
+      catchError((error) => of({ success: false, error: error.message })),
+    );
+  }
+
+  // Update best sellers catalog display settings
+  @Put('best-sellers-catalog')
+  @HttpCode(HttpStatus.OK)
+  updateBestSellersCatalogSettings(@Body() settings: UpdateShopCatalogSettingsDto): Observable<any> {
+    return this.settingsService.updateBestSellersCatalogSettings(settings).pipe(
+      map((result) => ({ success: true, data: result, message: 'Best sellers catalog settings updated successfully' })),
+      catchError((error) => of({ success: false, error: error.message })),
     );
   }
 

@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { Section } from 'src/shared/models/section.model';
 import { LocalizedString } from 'src/shared/models/localized-string.model';
 import { LocalizedPipe } from 'src/app/shared/pipes/localized.pipe';
+import { ImageUrlPipe } from 'src/app/shared/pipes/image-url.pipe';
 
 interface BlogPost {
   id: string;
@@ -21,15 +22,35 @@ interface BlogPost {
   templateUrl: './blog-posts.component.html',
   styleUrls: ['./blog-posts.component.scss'],
   standalone: true,
-  imports: [CommonModule, TranslateModule, LocalizedPipe]
+  imports: [CommonModule, TranslateModule, LocalizedPipe, ImageUrlPipe]
 })
-export class BlogPostsComponent implements OnInit {
+export class BlogPostsComponent implements OnInit, OnChanges {
   @Input() data!: Section;
 
   posts: BlogPost[] = [];
   displayMode: 'grid' | 'list' = 'grid';
 
   ngOnInit(): void {
+    this.applySettings();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data'] && !changes['data'].firstChange) {
+      this.applySettings();
+    }
+  }
+
+  formatDate(dateStr: string): string {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  }
+
+  private applySettings(): void {
     const items = this.data?.settings?.blogPosts ?? [];
     this.posts = items
       .filter((item: any) => item.isActive !== false)
@@ -45,15 +66,5 @@ export class BlogPostsComponent implements OnInit {
       }));
 
     this.displayMode = this.data?.settings?.displayMode === 'list' ? 'list' : 'grid';
-  }
-
-  formatDate(dateStr: string): string {
-    if (!dateStr) return '';
-    const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
   }
 }

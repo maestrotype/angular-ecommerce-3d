@@ -11,7 +11,7 @@
         <span class="breadcrumb-separator">/</span>
         <a class="breadcrumb-link" (click)="navigateToShop()">{{ 'PRODUCT.BREADCRUMBS.SHOP' | translate }}</a>
         <span class="breadcrumb-separator">/</span>
-        <a class="breadcrumb-link" (click)="navigateToCategory()">{{ product.category }}</a>
+        <a class="breadcrumb-link" (click)="navigateToCategory()">{{ getCategoryLabel(product.category) }}</a>
         <span class="breadcrumb-separator">/</span>
         <span class="current breadcrumb-current">{{ product.name | localized }}</span>
       </nav>
@@ -72,6 +72,7 @@
                 [previewOnly]="false"
                 [scale]="[9, 9, 9]"
                 [position]="[0, 0, 0]"
+                [keyOutStudioBackground]="false"
                 (click)="$event.stopPropagation()">
               </app-three-d-viewer>
               <div class="expand-overlay">
@@ -114,14 +115,16 @@
                   [previewOnly]="true"
                   [scale]="[9, 9, 9]"
                   [position]="[0, 0, 0]"
-                  [autoRotate]="true">
+                  [autoRotate]="true"
+                  [keyOutStudioBackground]="false"
+                  loading="eager">
                 </app-three-d-viewer>
                 <span class="thumb-3d-badge">3D</span>
               </div>
             </div>
           </div>
 
-          <div class="pdp-gallery-mobile" *ngIf="product?.images?.length">
+          <div class="pdp-gallery-mobile" *ngIf="showMobileGallery && product?.images?.length">
             <div class="pdp-carousel">
               <div
                 class="pdp-carousel-track"
@@ -145,6 +148,7 @@
                     [previewOnly]="false"
                     [scale]="[9, 9, 9]"
                     [position]="[0, 0, 0]"
+                    [keyOutStudioBackground]="false"
                     (click)="$event.stopPropagation()">
                   </app-three-d-viewer>
                   <span class="pdp-carousel-3d-badge">3D</span>

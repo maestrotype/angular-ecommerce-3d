@@ -78,10 +78,10 @@ export class ThreeDModelService {
   private async loadThreeDeps() {
     const [THREE, { GLTFLoader }, { DRACOLoader }, { MeshoptDecoder }, { clone }] = await Promise.all([
       import('three'),
-      import('three/examples/jsm/loaders/GLTFLoader'),
-      import('three/examples/jsm/loaders/DRACOLoader'),
+      import('three/examples/jsm/loaders/GLTFLoader.js'),
+      import('three/examples/jsm/loaders/DRACOLoader.js'),
       import('three/examples/jsm/libs/meshopt_decoder.module.js'),
-      import('three/examples/jsm/utils/SkeletonUtils')
+      import('three/examples/jsm/utils/SkeletonUtils.js')
     ]);
     return { THREE, GLTFLoader, DRACOLoader, MeshoptDecoder, clone };
   }
@@ -114,9 +114,12 @@ export class ThreeDModelService {
           },
           (xhr) => {
             if (isCancelled) return;
-            if (xhr.lengthComputable) {
+            if (xhr.lengthComputable && xhr.total > 0) {
               const progress = Math.round((xhr.loaded / xhr.total) * 100);
               observer.next({ type: 'progress', progress });
+            } else if (xhr.loaded > 0) {
+              // Some CDNs omit Content-Length; show activity instead of a frozen 0%.
+              observer.next({ type: 'progress', progress: Math.min(95, Math.round(xhr.loaded / 200000)) });
             }
           },
           (err) => {

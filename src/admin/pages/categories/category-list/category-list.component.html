@@ -16,7 +16,8 @@
   </div>
 
   <app-admin-table [loading]="isLoading" [dataSource]="dataSource" [displayedColumns]="displayedColumns"
-    class="desktop-view">
+    [showPaginator]="false">
+    <div class="desktop-view">
     <table mat-table [dataSource]="dataSource" matSort class="category-table">
       <!-- ID Column -->
       <ng-container matColumnDef="id">
@@ -52,12 +53,12 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
+    </div>
   </app-admin-table>
 
-  <!-- Mobile Card View -->
   <div class="mobile-view" *ngIf="!isLoading">
     <div class="categories-grid">
-      <div *ngFor="let category of dataSource.data" class="category-card">
+      <article *ngFor="let category of pagedCategories" class="category-card">
         <div class="card-main">
           <span class="category-id">#{{ category.id }}</span>
           <div class="card-copy">
@@ -78,12 +79,18 @@
             <mat-icon>delete</mat-icon>
           </button>
         </div>
-      </div>
+      </article>
     </div>
-
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons class="mobile-paginator">
-    </mat-paginator>
   </div>
+
+  <mat-paginator
+    *ngIf="!isLoading"
+    [pageSize]="5"
+    [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons
+    class="list-paginator"
+    (page)="onPage($event)">
+  </mat-paginator>
 
   <div *ngIf="error" class="error-container">
     <mat-icon color="warn">error</mat-icon>

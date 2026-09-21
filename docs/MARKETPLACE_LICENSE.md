@@ -79,7 +79,7 @@ Follow the refund policy of the platform where the item is sold (e.g. Envato 7-d
 | **Gumroad** | Fast launch, own pricing | Upload zip + link to docs hub; use this license doc |
 | **Own site** | Full control, higher margin | Stripe/Gumroad checkout on landing page |
 
-**Suggested first launch**: Gumroad or own site for beta (A5.4), then ThemeForest after screenshots/video complete.
+**Suggested first launch**: Gumroad or own site for beta (A5.4), then **CodeCanyon** (not ThemeForest) after screenshots + live demo. See [marketing-assets/LISTING_PACK.md](../marketing-assets/LISTING_PACK.md).
 
 ---
 

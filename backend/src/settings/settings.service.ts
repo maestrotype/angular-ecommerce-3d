@@ -13,7 +13,8 @@ import {
   UpdateNotificationSettingsDto,
   UpdateCloudinarySettingsDto,
   UpdateAiSettingsDto,
-  UpdateSMTPSettingsDto
+  UpdateSMTPSettingsDto,
+  UpdateShopCatalogSettingsDto
 } from './dto/update-settings.dto';
 
 @Injectable()
@@ -294,6 +295,116 @@ export class SettingsService {
     );
   }
 
+  // Update shop catalog display settings (admin → storefront)
+  updateShopCatalogSettings(settings: UpdateShopCatalogSettingsDto): Observable<any> {
+    return this.updateCatalogDisplaySettings('shop', settings);
+  }
+
+  getShopCatalogSettings(): Observable<{ enabled: boolean; categories: string[]; sortOrder: string }> {
+    return this.getCatalogDisplaySettings('shop');
+  }
+
+  updateBestSellersCatalogSettings(settings: UpdateShopCatalogSettingsDto): Observable<any> {
+    return this.updateCatalogDisplaySettings('bestSellers', settings);
+  }
+
+  getBestSellersCatalogSettings(): Observable<{ enabled: boolean; categories: string[]; sortOrder: string }> {
+    return this.getCatalogDisplaySettings('bestSellers');
+  }
+
+  private updateCatalogDisplaySettings(
+    category: 'shop' | 'bestSellers',
+    settings: UpdateShopCatalogSettingsDto,
+  ): Observable<any> {
+    const updates: Observable<Settings>[] = [];
+    const label = category === 'shop' ? 'shop' : 'best sellers';
+
+    if (settings.enabled !== undefined) {
+      updates.push(this.updateSetting({
+        key: `${category}.catalogEnabled`,
+        value: String(settings.enabled),
+        type: 'boolean',
+        category,
+        description: `Apply admin catalog filter and sort on ${label}`,
+      }));
+    }
+
+    if (settings.categories !== undefined) {
+      updates.push(this.updateSetting({
+        key: `${category}.catalogCategories`,
+        value: JSON.stringify(settings.categories),
+        type: 'json',
+        category,
+        description: `${label} catalog category slugs`,
+      }));
+    }
+
+    if (settings.sortOrder !== undefined) {
+      updates.push(this.updateSetting({
+        key: `${category}.catalogSortOrder`,
+        value: settings.sortOrder,
+        type: 'string',
+        category,
+        description: `${label} catalog sort order (admin keys)`,
+      }));
+    }
+
+    if (updates.length === 0) {
+      return of({ success: true, message: `No ${label} catalog settings to update` });
+    }
+
+    return from(updates).pipe(
+      mergeMap(updateObservable => updateObservable),
+      toArray(),
+      map(() => ({ success: true, message: `${label} catalog settings updated` })),
+      catchError((error) => {
+        console.error(`Error updating ${label} catalog settings:`, error);
+        return throwError(() => error);
+      }),
+    );
+  }
+
+  private getCatalogDisplaySettings(
+    category: 'shop' | 'bestSellers',
+  ): Observable<{ enabled: boolean; categories: string[]; sortOrder: string }> {
+    return this.getSettingsByCategory(category).pipe(
+      map((settings) => {
+        const result: Record<string, string> = {};
+        settings.forEach((setting) => {
+          const key = setting.key.split('.')[1] || setting.key;
+          result[key] = setting.value;
+        });
+
+        let categories: string[] = [];
+        if (result.catalogCategories) {
+          try {
+            const parsed = JSON.parse(result.catalogCategories);
+            categories = Array.isArray(parsed)
+              ? parsed.filter((slug): slug is string => typeof slug === 'string')
+              : [];
+          } catch {
+            categories = [];
+          }
+        }
+
+        const sortOrder = result.catalogSortOrder;
+        const validSort = sortOrder === 'name' || sortOrder === 'price' || sortOrder === 'stock'
+          ? sortOrder
+          : 'newest';
+
+        return {
+          enabled: result.catalogEnabled === 'true',
+          categories,
+          sortOrder: validSort,
+        };
+      }),
+      catchError((error) => {
+        console.error(`Error getting ${category} catalog settings:`, error);
+        return of({ enabled: false, categories: [], sortOrder: 'newest' });
+      }),
+    );
+  }
+
   // Get all settings as grouped object with masked secrets
   getSettingsGroupedSecure(): Observable<any> {
     return this.getSettingsGrouped().pipe(
@@ -444,7 +555,17 @@ export class SettingsService {
       { key: 'smtp.port', value: process.env.SMTP_PORT || '587', type: 'number', category: 'smtp', description: 'SMTP port' },
       { key: 'smtp.user', value: process.env.SMTP_USER || '', type: 'string', category: 'smtp', description: 'SMTP username' },
       { key: 'smtp.pass', value: process.env.SMTP_PASS || '', type: 'string', category: 'smtp', description: 'SMTP password' },
-      { key: 'smtp.fromEmail', value: process.env.SMTP_FROM || '', type: 'string', category: 'smtp', description: 'SMTP from email' }
+      { key: 'smtp.fromEmail', value: process.env.SMTP_FROM || '', type: 'string', category: 'smtp', description: 'SMTP from email' },
+
+      // Shop catalog display (admin → storefront)
+      { key: 'shop.catalogEnabled', value: 'false', type: 'boolean', category: 'shop', description: 'Apply admin catalog filter and sort on storefront shop page' },
+      { key: 'shop.catalogCategories', value: '[]', type: 'json', category: 'shop', description: 'Storefront shop page category slugs' },
+      { key: 'shop.catalogSortOrder', value: 'newest', type: 'string', category: 'shop', description: 'Storefront shop page sort order (admin keys)' },
+
+      // Best sellers catalog display (admin → home section)
+      { key: 'bestSellers.catalogEnabled', value: 'false', type: 'boolean', category: 'bestSellers', description: 'Apply admin catalog filter and sort on best sellers section' },
+      { key: 'bestSellers.catalogCategories', value: '[]', type: 'json', category: 'bestSellers', description: 'Best sellers section category slugs' },
+      { key: 'bestSellers.catalogSortOrder', value: 'newest', type: 'string', category: 'bestSellers', description: 'Best sellers section sort order (admin keys)' },
     ];
 
     // Process each setting and collect results

@@ -6,6 +6,81 @@
     <p>{{ 'LOADING_DASHBOARD_DATA' | translate }}</p>
   </div>
 
+  <section class="dashboard-wow" *ngIf="!isLoading">
+    <div class="dashboard-wow__stage">
+      <div
+        class="iso-chart"
+        role="img"
+        [attr.aria-label]="'DASHBOARD_WOW_CHART' | translate">
+        <div class="iso-chart__scene">
+          <div class="iso-chart__grid" aria-hidden="true"></div>
+          <div class="iso-chart__glow" aria-hidden="true"></div>
+          <div class="iso-chart__bars">
+            <div
+              class="iso-bar"
+              *ngFor="let bar of weekBars; let i = index"
+              [class.is-peak]="bar.isPeak"
+              [style.--bar-pct]="'' + bar.height"
+              [style.--bar-i]="'' + i">
+              <span class="iso-bar__value">{{ bar.short }}</span>
+              <div class="iso-bar__cube" aria-hidden="true">
+                <span class="iso-bar__face iso-bar__face--front"></span>
+                <span class="iso-bar__face iso-bar__face--right"></span>
+                <span class="iso-bar__face iso-bar__face--top"></span>
+              </div>
+              <span class="iso-bar__label">{{ bar.label }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="iso-chart__footer">
+          <div class="iso-chart__stat">
+            <span>{{ 'DASHBOARD_WOW_TOTAL' | translate }}</span>
+            <strong>{{ formatCurrency(weekTotal) }}</strong>
+          </div>
+          <div class="iso-chart__stat">
+            <span>{{ 'DASHBOARD_WOW_AVG' | translate }}</span>
+            <strong>{{ formatCurrency(weekAverage) }}</strong>
+          </div>
+          <div class="iso-chart__stat" [class.is-up]="weekTrend >= 0" [class.is-down]="weekTrend < 0">
+            <span>{{ 'DASHBOARD_WOW_TREND' | translate }}</span>
+            <strong>{{ weekTrend >= 0 ? '+' : '' }}{{ weekTrend }}%</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-wow__panel">
+      <p class="dashboard-wow__kicker">{{ 'DASHBOARD_WOW_KICKER' | translate }}</p>
+      <h2 class="dashboard-wow__title">{{ 'DASHBOARD_WOW_TITLE' | translate }}</h2>
+      <p class="dashboard-wow__product" *ngIf="peakBar">
+        {{ 'DASHBOARD_WOW_PEAK' | translate }}: {{ peakBar.label }} · ${{ formatNumber(peakBar.value) }}
+      </p>
+      <p class="dashboard-wow__hint">{{ 'DASHBOARD_WOW_HINT' | translate }}</p>
+      <button type="button" class="dashboard-wow__cta" (click)="openOrders()">
+        {{ 'DASHBOARD_WOW_VIEW' | translate }}
+      </button>
+
+      <div class="dashboard-wow__kpis">
+        <div class="dashboard-wow__kpi">
+          <span>{{ 'PRODUCTS' | translate }}</span>
+          <strong>{{ formatNumber(dashboardData.products) }}</strong>
+        </div>
+        <div class="dashboard-wow__kpi">
+          <span>{{ 'ADMIN_NAV_ORDERS' | translate }}</span>
+          <strong>{{ formatNumber(dashboardData.orders || 0) }}</strong>
+        </div>
+        <div class="dashboard-wow__kpi">
+          <span>{{ 'REVENUE' | translate }}</span>
+          <strong>{{ formatCurrency(dashboardData.revenue) }}</strong>
+        </div>
+        <div class="dashboard-wow__kpi">
+          <span>{{ 'AOV' | translate }}</span>
+          <strong>{{ formatCurrency(dashboardData.aov) }}</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <div class="stats-grid" *ngIf="!isLoading">
     <mat-card class="stat-card">
       <mat-card-content>
@@ -111,7 +186,7 @@
           <div class="top-products-list">
              <div class="product-item">
                <div class="product-meta">
-                 <span class="name">Premium Sneakers</span>
+                 <span class="name">Court Runner</span>
                  <span class="percent">35%</span>
                </div>
                <div class="progress-bar-minimal"><div class="fill" style="width: 35%"></div></div>
@@ -119,7 +194,7 @@
 
              <div class="product-item">
                <div class="product-meta">
-                 <span class="name">Leather Bag</span>
+                 <span class="name">Saddle Crossbody</span>
                  <span class="percent">28%</span>
                </div>
                <div class="progress-bar-minimal"><div class="fill" style="width: 28%"></div></div>
@@ -127,7 +202,7 @@
 
              <div class="product-item">
                <div class="product-meta">
-                 <span class="name">Winter Coat</span>
+                 <span class="name">Weekend Tote</span>
                  <span class="percent">22%</span>
                </div>
                <div class="progress-bar-minimal"><div class="fill" style="width: 22%"></div></div>
@@ -135,7 +210,7 @@
 
              <div class="product-item">
                <div class="product-meta">
-                 <span class="name">Luxury Watch</span>
+                 <span class="name">City Loafer</span>
                  <span class="percent">15%</span>
                </div>
                <div class="progress-bar-minimal"><div class="fill" style="width: 15%"></div></div>

@@ -15,8 +15,8 @@
   --admin-shell-touch-target: 44px;
   --admin-shell-icon-size: 24px;
   --admin-shell-mobile-toolbar-height: 56px;
-  --admin-mobile-padding-vertical: 22px;
-  --admin-mobile-padding-horizontal: 8px;
+  --admin-mobile-padding-vertical: 16px;
+  --admin-mobile-padding-horizontal: var(--space-4);
 
   // Mobile page chrome (M2 — list pages + standalone admin pages)
   --admin-page-gap: var(--space-4);

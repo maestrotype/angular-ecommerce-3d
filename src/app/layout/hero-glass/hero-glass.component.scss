@@ -426,3 +426,30 @@
     transform: translateY(-10px);
   }
 }
+
+:host-context(app-admin-section-preview) .hero {
+  min-height: min(72cqh, 560px);
+  overflow: visible;
+}
+
+:host-context(app-admin-section-preview[data-mode="mobile"]) .hero,
+:host-context(app-admin-section-preview[data-mode="tablet"]) .hero,
+:host-context(app-admin-section-preview[data-mode="fold"]) .hero {
+  padding: 48px 1rem 28px;
+  min-height: min(72cqh, 520px);
+  align-items: flex-start;
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: none;
+    text-align: center;
+    gap: 1rem;
+    max-width: 100%;
+  }
+
+  .hero-text {
+    align-items: center;
+    width: 100%;
+  }
+}

@@ -22,6 +22,18 @@
   --hero-backdrop-filter: blur(20px) saturate(180%);
   --hero-text-color: #1e293b;
   --hero-accent-color: #6366f1;
+  --video-hero-bg: var(--hero-bg-gradient);
+  --video-hero-text: var(--hero-text-color);
+  --video-hero-muted: var(--text-secondary);
+  --video-hero-subtitle-color: color-mix(in srgb, var(--video-hero-text) 72%, transparent);
+  --video-hero-description-color: color-mix(in srgb, var(--video-hero-text) 86%, transparent);
+  --video-hero-text-shadow: 0 1px 10px color-mix(in srgb, var(--text-inverse) 32%, transparent);
+  --video-hero-content-scrim: radial-gradient(
+    ellipse 88% 78% at 50% 50%,
+    color-mix(in srgb, var(--text-inverse) 18%, transparent) 0%,
+    transparent 74%
+  );
+  --video-hero-overlay-color: color-mix(in srgb, var(--text-inverse) 34%, transparent);
 
   /* Special Offer section - Light glass */
   --special-offer-bg: linear-gradient(135deg,
@@ -180,22 +192,22 @@
   --breadcrumb-current-color: #1e293b;
 
   /* Similar Products - Glass theme */
-  --similar-products-title-color: #1e293b;
-  --similar-products-subtitle-color: #475569;
-  --similar-products-bg: rgba(255, 255, 255, 0.1);
-  --similar-products-card-bg: rgba(255, 255, 255, 0.25);
-  --similar-products-card-border: 1px solid rgba(255, 255, 255, 0.5);
-  --similar-products-card-text: #1e293b;
-  --similar-products-card-price: #4f46e5;
+  --similar-products-title-color: var(--text-primary);
+  --similar-products-subtitle-color: var(--text-secondary);
+  --similar-products-bg: transparent;
+  --similar-products-card-bg: var(--card-surface);
+  --similar-products-card-border: 1px solid var(--card-border);
+  --similar-products-card-text: var(--text-primary);
+  --similar-products-card-price: var(--text-primary);
 
   /* Bought Together - Glass theme */
-  --bought-together-title-color: #1e293b;
-  --bought-together-subtitle-color: #475569;
-  --bought-together-bg: rgba(255, 255, 255, 0.1);
-  --bought-together-card-bg: rgba(255, 255, 255, 0.25);
-  --bought-together-card-border: 1px solid rgba(255, 255, 255, 0.5);
-  --bought-together-card-text: #1e293b;
-  --bought-together-card-price: #4f46e5;
+  --bought-together-title-color: var(--text-primary);
+  --bought-together-subtitle-color: var(--text-secondary);
+  --bought-together-bg: transparent;
+  --bought-together-card-bg: var(--card-surface);
+  --bought-together-card-border: 1px solid var(--card-border);
+  --bought-together-card-text: var(--text-primary);
+  --bought-together-card-price: var(--text-primary);
 
   /* Product Stepper - Glass theme */
   --product-stepper-bg: rgba(255, 255, 255, 0.3);
@@ -294,6 +306,7 @@
   --surface-overlay: rgba(148, 163, 184, 0.28);
   --surface-inverse: var(--color-white);
   --surface-page: transparent;
+  --surface-section: rgba(255, 255, 255, 0.08);
   --surface-card: rgba(255, 255, 255, 0.42);
   --surface-elevated: rgba(255, 255, 255, 0.55);
   --surface-elevated-rgb: 255, 255, 255;
@@ -1011,15 +1024,6 @@
   }
 
   body .input-group .form-control {
-    background: var(--glass-bg-hover);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-    color: var(--text-primary);
-    border: 1px solid var(--border-default);
-  }
-
-  /* Quantity input */
-  body .quantity-value {
     background: var(--glass-bg-hover);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);

@@ -42,9 +42,33 @@ export class SectionPickerComponent {
     },
     { 
       value: 'best-sellers', 
-      label: 'BEST_SELLERS_SECTION', 
+      label: 'SECTION_TYPE_LABELS.BEST_SELLERS', 
       icon: 'star', 
       description: 'Grid display of your top-selling products.' 
+    },
+    {
+      value: 'product-carousel',
+      label: 'SECTION_TYPE_LABELS.PRODUCT_CAROUSEL',
+      icon: 'view_carousel',
+      description: 'Horizontal product slider for new arrivals or featured items.'
+    },
+    {
+      value: 'lookbook',
+      label: 'SECTION_TYPE_LABELS.LOOKBOOK',
+      icon: 'photo_library',
+      description: 'Editorial campaign slides with image, copy, and a shop CTA.'
+    },
+    {
+      value: 'product-stage',
+      label: 'SECTION_TYPE_LABELS.PRODUCT_STAGE',
+      icon: 'view_in_ar',
+      description: 'Full-bleed 3D stage linked to catalog products (bags, clothing, shoes).'
+    },
+    {
+      value: 'blog-posts',
+      label: 'SECTION_TYPE_LABELS.BLOG_POSTS',
+      icon: 'auto_stories',
+      description: 'Editorial cards with image, excerpt, and a read-more link.'
     },
     { 
       value: 'categories', 

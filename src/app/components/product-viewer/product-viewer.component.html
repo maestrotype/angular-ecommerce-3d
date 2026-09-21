@@ -71,10 +71,10 @@
 
     <!-- Zoom controls -->
     <div class="zoom-controls">
-      <button (click)="zoomIn()" title="Zoom in">+</button>
+      <button type="button" (click)="zoomIn()" [attr.title]="'VIEWER.ZOOM_IN' | translate">+</button>
       <span>{{ (scale * 100).toFixed(0) }}%</span>
-      <button (click)="zoomOut()" title="Zoom out">−</button>
-      <button (click)="resetZoom()" *ngIf="scale > 1" class="reset-btn">↺</button>
+      <button type="button" (click)="zoomOut()" [attr.title]="'VIEWER.ZOOM_OUT' | translate">−</button>
+      <button type="button" (click)="resetZoom()" *ngIf="scale > 1" class="reset-btn" [attr.title]="'VIEWER.ZOOM_RESET' | translate">↺</button>
     </div>
 
     <!-- Hint -->

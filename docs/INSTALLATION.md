@@ -89,10 +89,10 @@ unzip angular-ecommerce-3d.zip
 cd angular-ecommerce-3d
 ```
 
-### Step 3: Install Frontend Dependencies
+### Step 3: Install Dependencies (frontend + backend)
 
 ```bash
-npm install
+npm install   # npm workspaces — installs Angular app and NestJS backend
 ```
 
 **Expected output:**
@@ -100,18 +100,7 @@ npm install
 added 1234 packages in 45s
 ```
 
-### Step 4: Install Backend Dependencies
-
-```bash
-cd backend
-npm install
-cd ..
-```
-
-**Expected output:**
-```
-added 567 packages in 30s
-```
+> **Note:** A separate `cd backend && npm install` is no longer required. The repo uses npm workspaces with a single root lockfile.
 
 ---
 
@@ -260,8 +249,7 @@ Requires `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and matching `ADMIN_BOOTSTRAP_TOKEN` i
 Open a terminal:
 
 ```bash
-cd backend
-npm run start:dev
+npm run backend:start:dev
 ```
 
 **Expected output:**
@@ -337,8 +325,7 @@ Output will be in `dist/angular-ecommerce-3d/` directory.
 #### Build Backend
 
 ```bash
-cd backend
-npm run build
+npm run backend:build
 ```
 
 Output will be in `backend/dist/` directory.
@@ -392,10 +379,13 @@ git push heroku main
 
 ```bash
 cp backend/.env.example backend/.env
-# Edit backend/.env — set JWT_SECRET, DATABASE_PASSWORD, ADMIN_EMAIL, ADMIN_PASSWORD
+# Edit backend/.env — set JWT_SECRET (>=32 chars), DATABASE_PASSWORD, ADMIN_EMAIL, ADMIN_PASSWORD
+# Generate JWT: openssl rand -base64 48
 ```
 
-> Docker Compose loads `backend/.env` via `env_file`. You do not need a separate root `.env` unless overriding postgres credentials (see root `.env.example`).
+> Docker Compose loads `backend/.env` via `env_file`. Compose **overrides** `DATABASE_HOST=postgres`, sets `DATABASE_SSL=false`, and `TYPEORM_SYNCHRONIZE=true` for the bundled Postgres (production auto-SSL would otherwise break local Docker).
+>
+> If host port **5432** is already taken: `POSTGRES_HOST_PORT=5434 docker compose up -d --build`
 
 ### Step 2: Start Services
 
@@ -406,14 +396,15 @@ docker compose up -d --build
 This will:
 - ✅ Start PostgreSQL container
 - ✅ Start backend container (NestJS on port 3002)
-- ✅ Start frontend container (nginx CSR on port 4200)
-- ✅ Auto-create database schema via TypeORM on backend startup
+- ✅ Start frontend container (nginx CSR on port 4200; proxies `/api` and `/uploads`)
+- ✅ Auto-create database schema via TypeORM (`TYPEORM_SYNCHRONIZE=true` in Compose)
 
 ### Step 3: Access Application
 
 - Frontend: http://localhost:4200
 - Backend API: http://localhost:3002/api
-- Database: localhost:5432
+- Swagger: http://localhost:3002/api/docs
+- Database: localhost:5432 (or `POSTGRES_HOST_PORT`)
 
 ### Step 4: Create Admin User
 

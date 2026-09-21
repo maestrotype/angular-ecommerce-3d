@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject, from, of } from 'rxjs';
 import { takeUntil, catchError } from 'rxjs/operators';
@@ -7,6 +7,13 @@ import { Product } from 'src/shared/models/product.model';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { CartService } from '../../../../core/services/cart.service';
 import { AnalyticsService } from '../../../../core/services/analytics.service';
+import { FavoritesService } from '../../../../core/services/favorites.service';
+import { TranslateService } from '@ngx-translate/core';
+import { getLocalizedString } from 'src/shared/utils/localization.util';
+import {
+  resolveProductFromSectionContext,
+  resolveRecommendationProductId,
+} from 'src/shared/utils/section-product-context.util';
 
 @Component({
   selector: 'app-similar-products',
@@ -17,51 +24,50 @@ export class SimilarProductsComponent implements OnInit, OnDestroy {
   @Input() product!: Product;
 
   @Input() set data(val: any) {
-    if (val?.context) {
-      this.product = val.context;
-      // Trigger reload if initialized
-      if (!this.similarProducts || this.similarProducts.length === 0) {
-        this.loadSimilarProducts();
-      }
-    }
     if (val?.settings) {
-       this.limit = val.settings.limit || this.limit;
-       this.showTitle = val.settings.showTitle ?? this.showTitle;
+      this.limit = val.settings.limit || this.limit;
+      this.showTitle = val.settings.showTitle ?? this.showTitle;
     }
     if (val?.title) {
-       // Handle localized title if needed
-       this.title = typeof val.title === 'string' ? val.title : val.title.en;
+      this.title = val.title;
     }
+
+    this.contextApplied = true;
+    this.applySectionContext(val?.context, val?.settings);
+    this.loadRecommendations();
   }
   @Input() limit: number = 4;
   @Input() showTitle: boolean = true;
-  @Input() title: string = 'Similar Products';
+  @Input() title: string | Record<string, string> = '';
 
   similarProducts: RecommendationProduct[] = [];
   loading: boolean = false;
   error: boolean = false;
+  private contextApplied = false;
+  private usePersonalizedFallback = false;
+  private sourceProductId: number | null = null;
+  private lastLoadedKey: string | null = null;
   private destroy$ = new Subject<void>();
-
-  // Math object for template usage
-  Math = Math;
 
   constructor(
     private recommendationsService: RecommendationsService,
     private router: Router,
     private notificationService: NotificationService,
     private cartService: CartService,
-    private analyticsService: AnalyticsService
+    private analyticsService: AnalyticsService,
+    private favoritesService: FavoritesService,
+    private translate: TranslateService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
-    
-    
-    
-    if (this.product) {
-      
-      this.loadSimilarProducts();
-    } else {
-      
+    if (this.contextApplied) {
+      return;
+    }
+
+    if (this.product?.id) {
+      this.sourceProductId = this.product.id;
+      this.loadRecommendations();
     }
   }
 
@@ -75,14 +81,29 @@ export class SimilarProductsComponent implements OnInit, OnDestroy {
     return product.id;
   }
 
-  quickView(product: RecommendationProduct): void {
-    
-    // Implement quick view functionality
+  hasRating(product: RecommendationProduct): boolean {
+    return Number(product.rating) > 0;
   }
 
-  onFavoriteToggled(event: any): void {
-    
-    // Implement favorite functionality
+  goToShop(): void {
+    this.router.navigate(['/shop']);
+  }
+
+  isFavorite(productId: number): boolean {
+    return this.favoritesService.isFavorite(productId);
+  }
+
+  toggleFavorite(product: RecommendationProduct, event?: Event): void {
+    event?.stopPropagation();
+    this.favoritesService.toggleFavorite(product as Product);
+    const name = getLocalizedString(product.name, this.translate.currentLang);
+    const messageKey = this.isFavorite(product.id)
+      ? 'SHOP.NOTIFICATIONS.ADDED_TO_FAVORITES'
+      : 'SHOP.NOTIFICATIONS.REMOVED_FROM_FAVORITES';
+
+    this.translate.get(messageKey, { name }).subscribe(msg => {
+      this.notificationService.showSuccess(msg);
+    });
   }
 
   addToCart(product: RecommendationProduct, event: Event): void {
@@ -95,14 +116,14 @@ export class SimilarProductsComponent implements OnInit, OnDestroy {
       discount: product.discount
     };
     this.cartService.addToCart(cartItem);
-    this.notificationService.showSuccess(`Added ${product.name} to cart!`);
-    
-    // Track add to cart event
+    const productName = getLocalizedString(product.name, this.translate.currentLang);
+    this.notificationService.showSuccess(`Added ${productName} to cart!`);
+
     this.analyticsService.trackEvent('recommendation_add_to_cart', {
       product_id: product.id,
       product_name: product.name,
       recommendation_type: 'similar_products',
-      source_product_id: this.product.id
+      source_product_id: this.sourceProductId ?? this.product?.id
     });
   }
 
@@ -145,17 +166,103 @@ export class SimilarProductsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private loadSimilarProducts(): void {
+  private applySectionContext(context: unknown, settings?: { productId?: number | string; limit?: number; showTitle?: boolean }): void {
+    const resolvedProduct = resolveProductFromSectionContext(context);
+    if (resolvedProduct) {
+      this.product = resolvedProduct;
+    }
+
+    this.sourceProductId = resolveRecommendationProductId(context, settings);
+    this.usePersonalizedFallback = !this.sourceProductId;
+
+    if (this.sourceProductId && !resolvedProduct) {
+      this.product = { id: this.sourceProductId } as Product;
+    }
+  }
+
+  private loadRecommendations(): void {
+    const loadKey = this.usePersonalizedFallback ? 'personalized' : `product:${this.sourceProductId}`;
+
+    if (!this.usePersonalizedFallback && !this.sourceProductId) {
+      this.loading = false;
+      this.error = false;
+      this.cdr.markForCheck();
+      return;
+    }
+
+    if (this.lastLoadedKey === loadKey && (this.loading || this.similarProducts.length > 0)) {
+      return;
+    }
+
+    this.lastLoadedKey = loadKey;
+
+    if (this.usePersonalizedFallback) {
+      this.loadPersonalizedRecommendations();
+      return;
+    }
+
+    this.loadSimilarProducts();
+  }
+
+  private loadPersonalizedRecommendations(): void {
     this.loading = true;
     this.error = false;
-    
-    this.recommendationsService.getSimilarProducts(this.product.id, this.limit)
+    this.cdr.markForCheck();
+
+    this.recommendationsService.getPersonalizedRecommendations(undefined, this.limit)
       .pipe(
         takeUntil(this.destroy$),
-        catchError(error => {
-          
+        catchError(() => {
           this.error = true;
           this.loading = false;
+          this.cdr.markForCheck();
+          this.notificationService.showError(
+            'Failed to load recommendations. Please try again.',
+            5000
+          );
+          return of([]);
+        })
+      )
+      .subscribe({
+        next: (products) => {
+          this.similarProducts = products;
+          this.loading = false;
+          this.error = false;
+          this.cdr.markForCheck();
+
+          if (products.length > 0) {
+            this.analyticsService.trackEvent('recommendation_view', {
+              recommendation_type: 'personalized',
+              product_id: undefined,
+              recommended_count: products.length,
+              recommended_ids: products.map(p => p.id)
+            });
+          }
+        },
+        error: () => {
+          this.error = true;
+          this.loading = false;
+          this.cdr.markForCheck();
+        }
+      });
+  }
+
+  private loadSimilarProducts(): void {
+    if (!this.sourceProductId) {
+      return;
+    }
+
+    this.loading = true;
+    this.error = false;
+    this.cdr.markForCheck();
+
+    this.recommendationsService.getSimilarProducts(this.sourceProductId, this.limit)
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError(() => {
+          this.error = true;
+          this.loading = false;
+          this.cdr.markForCheck();
           this.notificationService.showError(
             'Failed to load similar products. Please try again.',
             5000
@@ -168,26 +275,26 @@ export class SimilarProductsComponent implements OnInit, OnDestroy {
           this.similarProducts = products;
           this.loading = false;
           this.error = false;
-          
+          this.cdr.markForCheck();
+
           if (products.length === 0) {
             this.notificationService.showInfo(
               'No similar products found for this item.',
               3000
             );
           } else {
-            // Track recommendation view
             this.analyticsService.trackEvent('recommendation_view', {
               recommendation_type: 'similar_products',
-              product_id: this.product.id,
+              product_id: this.sourceProductId ?? undefined,
               recommended_count: products.length,
               recommended_ids: products.map(p => p.id)
             });
           }
         },
-        error: (error) => {
-          
+        error: () => {
           this.error = true;
           this.loading = false;
+          this.cdr.markForCheck();
           this.notificationService.showError(
             'An unexpected error occurred while loading similar products.',
             5000
@@ -229,7 +336,7 @@ export class SimilarProductsComponent implements OnInit, OnDestroy {
         product_id: productId,
         product_name: product.name,
         recommendation_type: 'similar_products',
-        source_product_id: this.product.id
+        source_product_id: this.sourceProductId ?? this.product?.id
       });
       
       from(this.router.navigate(['/product', productId])).subscribe({
@@ -274,6 +381,7 @@ export class SimilarProductsComponent implements OnInit, OnDestroy {
   }
 
   retryLoad(): void {
-    this.loadSimilarProducts();
+    this.lastLoadedKey = null;
+    this.loadRecommendations();
   }
 } 

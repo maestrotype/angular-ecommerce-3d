@@ -8,155 +8,194 @@
   </div>
 
   <div list-filters class="filter-section">
-    <mat-form-field appearance="outline" class="category-filter">
-      <mat-label>{{ 'CATEGORY' | translate }}</mat-label>
-      <mat-select (selectionChange)="filterByCategory($event)">
-        <mat-option value="">{{ 'CATEGORIES_ALL' | translate }}</mat-option>
-        <mat-option *ngFor="let cat of categories" [value]="getCategoryValue(cat)">
-          {{ cat.name | localized }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+    <div class="filter-toolbar">
+      <app-search-bar
+        [label]="'SEARCH_PRODUCTS' | translate"
+        [placeholder]="'SEARCH_PRODUCTS' | translate"
+        [maxWidth]="'100%'"
+        [prefixIcon]="'search'"
+        [(searchTerm)]="searchTerm"
+        (onSearch)="onSearch()"
+        (onClear)="clearSearch()">
+      </app-search-bar>
+      <button
+        mat-icon-button
+        type="button"
+        class="filter-toolbar__btn filter-toolbar__add"
+        (click)="addProduct()"
+        [attr.aria-label]="'ADD_PRODUCT' | translate"
+        [matTooltip]="'ADD_PRODUCT' | translate">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
 
-    <button mat-raised-button color="primary" (click)="addProduct()" class="add-button add-button-mobile">
-      <mat-icon>add</mat-icon>
-      <span class="button-text">{{ 'ADD_PRODUCT' | translate }}</span>
-    </button>
+    <div class="filter-controls-grid">
+      <mat-form-field appearance="outline" class="category-filter filter-pill" subscriptSizing="dynamic">
+        <mat-icon matPrefix>tune</mat-icon>
+        <mat-select
+          multiple
+          [(ngModel)]="selectedCategorySlugs"
+          (selectionChange)="filterByCategories()"
+          [placeholder]="'CATEGORIES' | translate"
+          [attr.aria-label]="'CATEGORY' | translate">
+          <mat-select-trigger *ngIf="selectedCategorySlugs.length">
+            {{ selectedCategorySummary }}
+          </mat-select-trigger>
+          <mat-option *ngFor="let cat of categories" [value]="getCategoryValue(cat)">
+            {{ cat.name | localized }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
-    <app-search-bar
-      [label]="'SEARCH_PRODUCTS' | translate"
-      [placeholder]="'SEARCH_PLACEHOLDER' | translate"
-      [(searchTerm)]="searchTerm"
-      (onSearch)="onSearch()"
-      (onClear)="clearSearch()">
-    </app-search-bar>
+      <mat-form-field appearance="outline" class="catalog-sort filter-pill" subscriptSizing="dynamic">
+        <mat-icon matPrefix>sort</mat-icon>
+        <mat-select
+          [(ngModel)]="catalogSort"
+          (selectionChange)="onCatalogSortChange()"
+          [attr.aria-label]="'CATALOG_SORT' | translate">
+          <mat-select-trigger>
+            {{ currentSortLabel }}
+          </mat-select-trigger>
+          <mat-option value="newest">{{ 'CATALOG_SORT_NEWEST' | translate }}</mat-option>
+          <mat-option value="name">{{ 'CATALOG_SORT_NAME' | translate }}</mat-option>
+          <mat-option value="price">{{ 'CATALOG_SORT_PRICE' | translate }}</mat-option>
+          <mat-option value="stock">{{ 'CATALOG_SORT_STOCK' | translate }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <section class="storefront-publish" aria-labelledby="storefront-publish-title" [class.storefront-publish--open]="storefrontExpandedMobile">
+      <div class="storefront-publish__preview">
+        <span class="storefront-publish__preview-label">{{ 'STOREFRONT_DISPLAY_PREVIEW' | translate }}</span>
+        <span class="storefront-publish__preview-value">
+          <ng-container *ngIf="selectedCategorySlugs.length; else allCategoriesPreview">
+            {{ selectedCategoryLabels.join(', ') }}
+          </ng-container>
+          <ng-template #allCategoriesPreview>{{ 'CATEGORIES_ALL' | translate }}</ng-template>
+          · {{ 'CATALOG_SORT' | translate }}:
+          <ng-container [ngSwitch]="catalogSort">
+            <ng-container *ngSwitchCase="'name'">{{ 'CATALOG_SORT_NAME' | translate }}</ng-container>
+            <ng-container *ngSwitchCase="'price'">{{ 'CATALOG_SORT_PRICE' | translate }}</ng-container>
+            <ng-container *ngSwitchCase="'stock'">{{ 'CATALOG_SORT_STOCK' | translate }}</ng-container>
+            <ng-container *ngSwitchDefault>{{ 'CATALOG_SORT_NEWEST' | translate }}</ng-container>
+          </ng-container>
+          · {{ storefrontPreviewCount }} {{ 'STOREFRONT_DISPLAY_PRODUCTS' | translate }}
+        </span>
+      </div>
+
+      <div class="storefront-publish__targets">
+        <button
+          type="button"
+          class="storefront-target"
+          [class.storefront-target--active]="shopDisplayActive"
+          (click)="saveShopDisplay()"
+          [disabled]="isSavingShopDisplay">
+          <span class="storefront-target__icon-wrap">
+            <mat-icon>storefront</mat-icon>
+          </span>
+          <span class="storefront-target__body">
+            <span class="storefront-target__name">{{ 'STOREFRONT_TARGET_SHOP' | translate }}</span>
+            <span class="storefront-target__desc">{{ 'STOREFRONT_TARGET_SHOP_DESC' | translate }}</span>
+          </span>
+          <span class="storefront-target__status" *ngIf="shopDisplayActive">
+            <mat-icon>check_circle</mat-icon>
+            {{ 'SHOP_DISPLAY_ACTIVE' | translate }}
+          </span>
+          <span class="storefront-target__action">{{ 'STOREFRONT_TARGET_APPLY' | translate }}</span>
+        </button>
+
+        <button
+          type="button"
+          class="storefront-target"
+          [class.storefront-target--active]="bestSellersDisplayActive"
+          (click)="saveBestSellersDisplay()"
+          [disabled]="isSavingBestSellersDisplay">
+          <span class="storefront-target__icon-wrap">
+            <mat-icon>star</mat-icon>
+          </span>
+          <span class="storefront-target__body">
+            <span class="storefront-target__name">{{ 'STOREFRONT_TARGET_BEST_SELLERS' | translate }}</span>
+            <span class="storefront-target__desc">{{ 'STOREFRONT_TARGET_BEST_SELLERS_DESC' | translate }}</span>
+          </span>
+          <span class="storefront-target__status" *ngIf="bestSellersDisplayActive">
+            <mat-icon>check_circle</mat-icon>
+            {{ 'BEST_SELLERS_DISPLAY_ACTIVE' | translate }}
+          </span>
+          <span class="storefront-target__action">{{ 'STOREFRONT_TARGET_APPLY' | translate }}</span>
+        </button>
+      </div>
+    </section>
   </div>
 
-  <app-admin-table [loading]="isLoading" [dataSource]="dataSource" [displayedColumns]="displayedColumns"
-    class="desktop-view">
-    <table mat-table [dataSource]="dataSource" matSort class="product-table">
-      <!-- ID Column -->
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-        <td mat-cell *matCellDef="let product">{{ product.id }}</td>
-      </ng-container>
+  <div class="admin-product-catalog" *ngIf="!error">
+    <app-skeleton-loader *ngIf="isLoading" variant="list-row" [count]="6"></app-skeleton-loader>
 
-      <!-- Image Column -->
-      <ng-container matColumnDef="image">
-        <th mat-header-cell *matHeaderCellDef>{{ 'IMAGE' | translate}}</th>
-        <td mat-cell *matCellDef="let product">
-          <div class="image-container">
-            <img *ngIf="hasValidImage(product)" [src]="getImageUrl(product)" [alt]="product.name | localized"
-              class="product-image" (error)="onImageError($event, product)" />
-            <div *ngIf="!hasValidImage(product)" class="no-image-placeholder">
-              <mat-icon>image</mat-icon>
-              <span>{{ 'NO_IMAGE' | translate}}</span>
-            </div>
-          </div>
-        </td>
-      </ng-container>
-
-      <!-- Name Column -->
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'NAME' | translate}}</th>
-        <td mat-cell *matCellDef="let product">{{ product.name | localized }}</td>
-      </ng-container>
-
-      <!-- Category Column -->
-      <ng-container matColumnDef="category">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'CATEGORY' | translate}}</th>
-        <td mat-cell *matCellDef="let product">
-          <span class="category-chip">{{ getCategoryNameBySlug(product.category) | localized }}</span>
-        </td>
-      </ng-container>
-
-      <!-- Price Column -->
-      <ng-container matColumnDef="price">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'PRICE' | translate}}</th>
-        <td mat-cell *matCellDef="let product">
-          ${{ product.price | number : "1.2-2" }}
-        </td>
-      </ng-container>
-
-      <!-- Stock Column -->
-      <ng-container matColumnDef="stock">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'STOCK' | translate}}</th>
-        <td mat-cell *matCellDef="let product">
-          <span [class]="getStockClass(product.stock)">{{
-            product.stock
-            }}</span>
-        </td>
-      </ng-container>
-
-      <!-- Actions Column -->
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>{{ 'ACTIONS' | translate}}</th>
-        <td mat-cell *matCellDef="let product">
-          <button mat-icon-button color="primary" (click)="editProduct(product)" matTooltip="Edit">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button color="warn" (click)="deleteProduct(product)" matTooltip="Delete">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-  </app-admin-table>
-
-  <!-- Mobile Card View -->
-  <div class="mobile-view" *ngIf="!isLoading">
-    <div class="products-grid">
-      <div *ngFor="let product of dataSource.data" class="product-card">
-        <!-- Left: Image -->
-        <div class="card-image-container">
-          <img *ngIf="hasValidImage(product)" [src]="getImageUrl(product)" [alt]="product.name | localized"
-            class="product-image" (error)="onImageError($event, product)" />
-          <div *ngIf="!hasValidImage(product)" class="no-image-placeholder">
-            <mat-icon>image</mat-icon>
-            <span>{{ 'NO_IMAGE' | translate}}</span>
-          </div>
-        </div>
-
-        <!-- Right: All content -->
-        <div class="card-main">
-          <div class="card-header">
-            <div class="product-id">#{{ product.id }}</div>
-          </div>
-
-          <div class="card-content">
-            <div class="product-name">
-              <h3>{{ product.name | localized }}</h3>
-            </div>
-
-            <div class="product-category">
-              <span class="category-chip">{{ getCategoryNameBySlug(product.category) | localized }}</span>
-            </div>
-
-            <div class="product-price">
-              <span class="price">${{ product.price | number : "1.2-2" }}</span>
-            </div>
-
-            <div class="product-stock">
-              <span [class]="getStockClass(product.stock)">
-                {{ 'STOCK' | translate}}: {{ product.stock }}
-              </span>
-            </div>
-          </div>
-
-          <div class="card-actions">
-            <button mat-icon-button type="button" (click)="editProduct(product)" class="action-button action-button--edit">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button type="button" (click)="deleteProduct(product)" class="action-button action-button--delete">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </div>
-        </div>
-      </div>
+    <div class="admin-product-catalog__empty" *ngIf="!isLoading && filteredCount === 0">
+      <mat-icon>inventory_2</mat-icon>
+      <p>{{ 'CATALOG_EMPTY' | translate }}</p>
+      <span>{{ 'CATALOG_EMPTY_HINT' | translate }}</span>
     </div>
+
+    <div class="products-grid" *ngIf="!isLoading && filteredCount > 0">
+      <article
+        *ngFor="let product of catalogProducts; trackBy: trackByProductId"
+        class="admin-product-row"
+        [attr.aria-label]="('OPEN_PRODUCT' | translate) + ': ' + (product.name | localized)"
+        (click)="editProduct(product)">
+        <div class="admin-product-row__thumb">
+          <img *ngIf="hasValidImage(product)" [src]="getImageUrl(product)" [alt]="product.name | localized"
+            (error)="onImageError($event, product)" />
+          <div *ngIf="!hasValidImage(product)" class="admin-product-row__placeholder">
+            <mat-icon>image</mat-icon>
+          </div>
+        </div>
+
+        <div class="admin-product-row__content">
+          <div class="admin-product-row__header">
+            <div class="admin-product-row__info">
+              <h3 class="admin-product-row__title">{{ product.name | localized }}</h3>
+              <p class="admin-product-row__meta">
+                <span class="admin-product-row__id">#{{ product.id }}</span>
+                <span class="admin-product-row__chip">{{ getCategoryNameBySlug(product.category) | localized }}</span>
+              </p>
+            </div>
+            <span class="admin-product-row__price">${{ product.price | number : "1.2-2" }}</span>
+          </div>
+
+          <div class="admin-product-row__footer">
+            <span class="admin-product-row__stock-pill" [attr.data-tone]="stockTone(product.stock)">
+              <ng-container [ngSwitch]="stockTone(product.stock)">
+                <ng-container *ngSwitchCase="'out'">{{ 'STOCK_OUT' | translate }}</ng-container>
+                <ng-container *ngSwitchCase="'low'">{{ 'STOCK_LOW' | translate }} · {{ product.stock }}</ng-container>
+                <ng-container *ngSwitchDefault>{{ 'STOCK_IN' | translate:{ count: product.stock } }}</ng-container>
+              </ng-container>
+            </span>
+
+            <div class="admin-product-row__actions" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
+              <button mat-icon-button type="button" (click)="editProduct(product, $event)" class="action-button action-button--edit"
+                [attr.aria-label]="'EDIT' | translate">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button type="button" (click)="deleteProduct(product, $event)" class="action-button action-button--delete"
+                [attr.aria-label]="'DELETE' | translate">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <mat-paginator
+      *ngIf="!isLoading && filteredCount > 0"
+      class="admin-product-catalog__pager"
+      [length]="filteredCount"
+      [pageIndex]="pageIndex"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      [showFirstLastButtons]="true"
+      (page)="onPage($event)">
+    </mat-paginator>
   </div>
 
   <div *ngIf="error" class="error-container">

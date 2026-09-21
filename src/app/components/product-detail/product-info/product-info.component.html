@@ -47,16 +47,16 @@
   </div>
 
   <!-- Purchase actions -->
-  <div class="purchase-row" [class.disabled]="isOutOfStock()">
+  <div class="purchase-row" [class.disabled]="isOutOfStock() || isDemoPreview()">
     <div class="stepper" aria-label="Quantity">
-      <button type="button" class="quantity-btn" (click)="decrementQuantity()" [disabled]="isOutOfStock()">−</button>
+      <button type="button" class="quantity-btn" (click)="decrementQuantity()" [disabled]="isOutOfStock() || isDemoPreview()">−</button>
       <span class="quantity-value" aria-live="polite">{{ quantity }}</span>
-      <button type="button" class="quantity-btn" (click)="incrementQuantity()" [disabled]="isOutOfStock()">+</button>
+      <button type="button" class="quantity-btn" (click)="incrementQuantity()" [disabled]="isOutOfStock() || isDemoPreview()">+</button>
     </div>
 
-    <button type="button" class="add-to-cart-btn" (click)="onAddToCart()" [disabled]="isOutOfStock()">
+    <button type="button" class="add-to-cart-btn" (click)="onAddToCart()" [disabled]="isOutOfStock() || isDemoPreview()">
       <app-icon name="shopping-cart" [width]="20" [height]="20"></app-icon>
-      {{ 'PRODUCT.ACTIONS.ADD_TO_CART' | translate }}
+      {{ (isDemoPreview() ? 'DEMO_CATALOG.PREVIEW_ONLY' : 'PRODUCT.ACTIONS.ADD_TO_CART') | translate }}
     </button>
 
     <div class="buy-aux">
@@ -70,4 +70,5 @@
   </div>
 
   <div *ngIf="isOutOfStock()" class="oos-note">{{ 'PRODUCT.STOCK.OUT_OF_STOCK' | translate }}</div>
+  <div *ngIf="isDemoPreview() && !isOutOfStock()" class="oos-note demo-note">{{ 'DEMO_CATALOG.PREVIEW_HINT' | translate }}</div>
 </div>

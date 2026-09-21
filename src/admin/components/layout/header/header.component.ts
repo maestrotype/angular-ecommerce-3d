@@ -3,10 +3,13 @@ import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil, switchMap } from 'rxjs/operators';
-import { AuthService } from '../../../services/auth.service';
+import { AdminAuthService } from '../../../services/auth.service';
 import { ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { NotificationService, Notification } from '../../../services/notification.service';
+import {
+  AdminNotificationService,
+  AdminNotification,
+} from '../../../services/notification.service';
 import { TranslateService } from '@ngx-translate/core';
 
 import { ThemeService } from '../../../../app/core/themes/theme.service';
@@ -22,15 +25,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @ViewChild('notificationMenuTrigger') notificationMenuTrigger!: MatMenuTrigger;
 
   private destroy$ = new Subject<void>();
-  notifications: Notification[] = [];
+  notifications: AdminNotification[] = [];
    unreadCount = 0;
   currentTheme: string = 'dark';
   isMobile: boolean = false;
 
   constructor(
     private router: Router,
-    private authService: AuthService,
-    private notificationService: NotificationService,
+    private authService: AdminAuthService,
+    private notificationService: AdminNotificationService,
     private themeService: ThemeService,
     private translate: TranslateService,
     @Inject(PLATFORM_ID) private platformId: Object
@@ -108,7 +111,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  onNotificationClick(notification: Notification): void {
+  onNotificationClick(notification: AdminNotification): void {
     // Close the menu first
     this.closeNotificationMenu();
 

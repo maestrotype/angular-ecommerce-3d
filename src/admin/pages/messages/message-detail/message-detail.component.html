@@ -20,7 +20,7 @@
         <dt>{{ 'STATUS' | translate }}</dt>
         <dd>
           <mat-chip [color]="getStatusColor(message.status)" selected>
-            {{ message.status | titlecase }}
+            {{ getStatusLabel(message.status) }}
           </mat-chip>
         </dd>
       </div>

@@ -1,8 +1,19 @@
+:host {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
 .admin-header {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   height: 64px;
   min-height: 64px;
   background-color: var(--surface-header);
   color: var(--text-primary);
+  --mat-toolbar-container-text-color: var(--text-primary);
   box-shadow: var(--shadow-sm);
   border-bottom: 1px solid var(--border-default);
   transition: background-color var(--duration-normal) var(--easing-default),
@@ -48,10 +59,17 @@
     button.mat-mdc-icon-button.mat-mdc-button-base,
     button.mat-mdc-icon-button {
       color: var(--text-primary);
+      --mdc-icon-button-icon-color: var(--text-primary);
+      --mat-icon-button-icon-color: var(--text-primary);
       border-radius: 50%;
       overflow: hidden;
       background-color: transparent;
       background-image: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      line-height: 0;
       --mdc-icon-button-hover-state-layer-opacity: 0;
       --mdc-icon-button-focus-state-layer-opacity: 0;
       --mdc-icon-button-pressed-state-layer-opacity: 0;
@@ -61,6 +79,16 @@
       mask-image: radial-gradient(closest-side, black 99%, transparent 100%);
       transform: translateZ(0);
       transition: color var(--duration-normal) var(--easing-default);
+
+      .mat-icon {
+        width: 24px;
+        height: 24px;
+        font-size: 24px;
+        line-height: 24px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
 
       &:hover,
       &:focus,
@@ -90,15 +118,41 @@
     }
   }
 
-  .menu-button.mat-mdc-icon-button {
+  .menu-button.mat-mdc-icon-button,
+  .storefront-link.mat-mdc-icon-button {
     color: var(--text-primary);
-    border-radius: 50%;
-    overflow: hidden;
+    --mdc-icon-button-icon-color: var(--text-primary);
+    --mat-icon-button-icon-color: var(--text-primary);
+    border-radius: 10px;
+    overflow: visible;
     background-color: transparent;
+    background-image: none;
     flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    -webkit-mask-image: none;
+    mask-image: none;
+    --mdc-icon-button-hover-state-layer-opacity: 0;
+    --mdc-icon-button-focus-state-layer-opacity: 0;
+    --mdc-icon-button-pressed-state-layer-opacity: 0;
+    --mat-icon-button-state-layer-color: transparent;
+    --mat-icon-button-ripple-color: transparent;
 
-    &:hover {
+    .mat-mdc-button-persistent-ripple::before {
+      opacity: 0;
       background-color: transparent;
+    }
+
+    .mat-focus-indicator::before {
+      content: none;
+      display: none;
+    }
+
+    &:hover,
+    &:focus-visible {
+      background-color: color-mix(in srgb, var(--text-primary) 8%, transparent);
     }
   }
 

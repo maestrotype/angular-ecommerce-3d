@@ -1,10 +1,18 @@
 main {
-    padding-top: 80px;
-    min-height: calc(100vh - 80px);
+    padding-top: 64px;
+    min-height: calc(100vh - 64px);
 
+    &.storefront-main.has-demo-banner {
+        padding-top: calc(64px + var(--demo-banner-height, 2.25rem));
+    }
+
+    &.admin-root-main,
     &.admin-main {
-        padding-top: 0;
+        padding: 0;
+        margin: 0;
         min-height: 100vh;
+        width: 100%;
+        max-width: 100%;
     }
 
     &:focus {
@@ -18,10 +26,39 @@ main {
 }
 
 @media (max-width: 768px) {
-    main:not(.admin-main) {
+    main:not(.admin-root-main):not(.admin-main) {
         padding-top: 64px;
-        padding-bottom: calc(56px + env(safe-area-inset-bottom) + var(--spacing-sm));
-        min-height: calc(100vh - 64px);
+        padding-bottom: 0;
+        min-height: 0;
+    }
+}
+
+.demo-catalog-banner {
+    --demo-banner-height: 2.25rem;
+    position: sticky;
+    top: 64px;
+    z-index: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--demo-banner-height);
+    padding: 0.35rem 1rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    text-align: center;
+    color: var(--text-on-primary, #fff);
+    background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--interactive-primary) 88%, #000),
+        color-mix(in srgb, var(--color-accent, var(--interactive-primary)) 82%, #000)
+    );
+    border-bottom: 1px solid color-mix(in srgb, var(--interactive-primary) 40%, transparent);
+}
+
+@media (max-width: 768px) {
+    main.storefront-main.has-demo-banner {
+        padding-top: calc(64px + var(--demo-banner-height, 2.25rem));
     }
 }
 
@@ -33,10 +70,10 @@ main {
 @media (max-width: 768px) {
     .footer-mobile {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        height: calc(56px + env(safe-area-inset-bottom));
+        grid-template-columns: repeat(4, 1fr);
+        height: calc(64px + env(safe-area-inset-bottom));
         width: 100%;
-        padding: 4px 6px env(safe-area-inset-bottom);
+        padding: 6px 8px env(safe-area-inset-bottom);
         position: fixed;
         bottom: 0;
         left: 0;
@@ -60,9 +97,9 @@ main {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 2px;
-            min-height: 44px;
-            padding: 2px 4px;
+            gap: 4px;
+            min-height: 48px;
+            padding: 4px 4px;
             margin: 0;
             border: none;
             border-radius: 10px;
@@ -71,7 +108,8 @@ main {
             cursor: pointer;
             transition: color 0.2s ease, background 0.2s ease;
 
-            &:active {
+            &:active,
+            &.active {
                 background: var(--surface-secondary, rgba(0, 0, 0, 0.04));
                 color: var(--interactive-primary);
             }
@@ -87,13 +125,13 @@ main {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 26px;
-            height: 26px;
+            width: 24px;
+            height: 24px;
 
             app-icon,
             svg {
-                width: 20px;
-                height: 20px;
+                width: 24px;
+                height: 24px;
             }
         }
 
@@ -117,7 +155,7 @@ main {
         }
 
         .nav-item__label {
-            font-size: 0.625rem;
+            font-size: 0.6875rem;
             font-weight: 600;
             letter-spacing: 0.01em;
             line-height: 1;

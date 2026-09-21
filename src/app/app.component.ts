@@ -9,8 +9,10 @@ import { CartService } from './core/services/cart.service';
 import { FavoritesService } from './core/services/favorites.service';
 import { ModalService } from './core/services/modal.service';
 import { TranslateService } from '@ngx-translate/core';
+import { resolveUiLanguage } from 'src/shared/utils/ui-language.util';
 import { AnalyticsService } from './core/services/analytics.service';
 import { MobileMenuService } from './core/services/mobile-menu.service';
+import { DemoCatalogStateService } from './core/services/demo-catalog-state.service';
 
 @Component({
   selector: 'app-root',
@@ -31,6 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
   isMobileMenuOpen = false;
   favoritesCount = 0;
   cartCount = 0;
+  isDemoCatalog = false;
   private cartSubscription: Subscription = new Subscription();
   private favoritesSubscription: Subscription = new Subscription();
   private mobileMenuSubscription: Subscription = new Subscription();
@@ -47,6 +50,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private translate: TranslateService,
     private analyticsService: AnalyticsService,
     private mobileMenuService: MobileMenuService,
+    private demoCatalogState: DemoCatalogStateService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     // Initialize localization
@@ -54,7 +58,7 @@ export class AppComponent implements OnInit, OnDestroy {
     const browserLang = isPlatformBrowser(this.platformId)
       ? localStorage.getItem('preferredLanguage') || this.translate.getBrowserLang() || 'en'
       : 'en';
-    this.translate.use(browserLang.match(/en|ru|ua/) ? browserLang : 'en');
+    this.translate.use(resolveUiLanguage(browserLang));
 
     // Debounce scroll stop logic
     this.scrollSubject.pipe(
@@ -98,6 +102,11 @@ export class AppComponent implements OnInit, OnDestroy {
     );
     this.mobileMenuSubscription = this.mobileMenuService.isOpen$.subscribe(
       open => this.isMobileMenuOpen = open
+    );
+    this.cartSubscription.add(
+      this.demoCatalogState.isDemoMode$.subscribe((isDemo) => {
+        this.isDemoCatalog = isDemo;
+      }),
     );
   }
 
@@ -168,9 +177,22 @@ export class AppComponent implements OnInit, OnDestroy {
     this.modalService.openModal({ id: 'cart', type: 'cart' });
   }
 
+  openShopPage(): void {
+    this.mobileMenuService.close();
+    this.router.navigate(['/shop']);
+  }
+
   openFavoritesPage(): void {
     this.mobileMenuService.close();
     this.router.navigate(['/favorites']);
+  }
+
+  isShopRoute(): boolean {
+    return this.router.url.startsWith('/shop');
+  }
+
+  isFavoritesRoute(): boolean {
+    return this.router.url.startsWith('/favorites');
   }
 
   isAdminRoute(): boolean {

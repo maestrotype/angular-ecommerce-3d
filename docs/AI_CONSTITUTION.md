@@ -125,6 +125,7 @@ Theme switching is performed by changing the `data-theme` attribute on `<html>`.
 8. **`main.scss` contains imports only.** Appending CSS to the style entry file is forbidden per `STYLE_REFACTOR_PLAN.md §ADR-003`. (`src/styles.scss` was removed in A5.)
 9. **Admin reuses shared tokens.** Admin-specific namespaces are reserved for layout values only per `STYLE_REFACTOR_PLAN.md §ADR-009`.
 10. **When in doubt, read STYLE_REFACTOR_PLAN.md first.** It is the single source of truth for style architecture.
+11. **Respect application layer boundaries.** Storefront (`src/app/`) must not import from `src/admin/` except the lazy admin route. Public API services belong in `src/app/core/services/` or `src/shared/`. See [ARCHITECTURE.md](ARCHITECTURE.md) and [BUILD_AND_DEV_PERFORMANCE.md](BUILD_AND_DEV_PERFORMANCE.md).
 
 **Contract Violations:** Any violation of the above rules is treated as an architectural regression and must be reverted before merge.
 
@@ -160,6 +161,18 @@ Theme switching is performed by changing the `data-theme` attribute on `<html>`.
 - Global styles (`src/styles/`) may use `@use` for token modules
 - Never import a component's SCSS into another component
 
+### 5.4 Application layer boundaries (Epic J)
+
+| Rule | Detail |
+|------|--------|
+| Storefront scope | `src/app/**` — pages, layout, core services for buyers |
+| Admin scope | `src/admin/**` — admin panel only; lazy-loaded at `/admin` |
+| Shared scope | `src/shared/**` — models, utils, pipes safe for both |
+| **Forbidden** | `import ... from 'src/admin/...'` inside `src/app/` (except routing to AdminModule) |
+| Build/DX tasks | Follow [REFACTORING_BOARD.md](REFACTORING_BOARD.md) Epic J; pick task from [tasks/](tasks/) 004–011 |
+
+Changes to `angular.json` builder (task_005) require architect review — see §5.1.
+
 ---
 
 ## 6. Workflow Rules
@@ -167,9 +180,10 @@ Theme switching is performed by changing the `data-theme` attribute on `<html>`.
 ### 6.1 Before Implementing Any UI Change
 
 1. Check `REFACTORING_BOARD.md` for the current epic, task, and its Definition of Done
-2. Read `STYLE_REFACTOR_PLAN.md` for architectural decisions and target end-state
-3. Read `STYLE_ARCHITECTURE.md` for current architecture
-4. Read `UI_AUDIT.md` for known issues in the target area
+2. For **build speed, layer boundaries, or service consolidation**: read [BUILD_AND_DEV_PERFORMANCE.md](BUILD_AND_DEV_PERFORMANCE.md) and pick a task from [tasks/](tasks/) 004–011 (Epic J)
+3. Read `STYLE_REFACTOR_PLAN.md` for architectural decisions and target end-state
+4. Read `STYLE_ARCHITECTURE.md` for current architecture
+5. Read `UI_AUDIT.md` for known issues in the target area
 
 ### 6.2 After Completing Any UI Task
 

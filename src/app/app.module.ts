@@ -9,7 +9,7 @@ import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpLoaderFactory } from './core/i18n/translate-http-loader.factory';
 import { SocialLoginModule } from '@abacritt/angularx-social-login';
 import { socialAuthConfig } from './core/configs/social-auth.config';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -17,12 +17,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { HeaderComponent } from './layout/header/header.component';
-import { HeroComponent } from './layout/hero/hero.component';
-import { HeroGlassComponent } from './layout/hero-glass/hero-glass.component';
-import { CategoriesComponent } from './layout/categories/categories.component';
-import { SpecialOfferComponent } from './layout/special-offer/special-offer.component';
-import { BestSellersComponent } from './layout/best-sellers/best-sellers.component';
-import { BrandsComponent } from './layout/brands/brands.component';
 import { FooterComponent } from './layout/footer/footer.component';
 
 import { Bag3dFirstComponent } from './components/3d-models/bag3dFirst/bag3dFirst.component';
@@ -49,7 +43,6 @@ import { PaymentErrorComponent } from './pages/payment-error/payment-error.compo
 
 // Shared Module
 import { SharedModule } from './shared/shared.module';
-import { ThreeDViewerComponent } from './components/three-d-viewer/three-d-viewer.component';
 
 // Services
 import { ThemeService } from './core/themes/theme.service';
@@ -62,9 +55,6 @@ export function initializeApp(apiConfigService: ApiConfigService) {
   return () => apiConfigService.init();
 }
 
-export function HttpLoaderFactory(http: any) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-}
 
 
 @NgModule({
@@ -96,13 +86,6 @@ export function HttpLoaderFactory(http: any) {
     MatTooltipModule,
     SharedModule,
     SocialLoginModule,
-    HeroComponent,
-    HeroGlassComponent,
-    CategoriesComponent,
-    SpecialOfferComponent,
-    BestSellersComponent,
-    BrandsComponent,
-    ThreeDViewerComponent,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

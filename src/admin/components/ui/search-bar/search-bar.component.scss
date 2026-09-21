@@ -5,6 +5,13 @@
   max-width: 400px;
 }
 
+@media (max-width: 768px) {
+  :host {
+    min-width: 0;
+    max-width: none;
+  }
+}
+
 .search-bar {
   width: 100%;
 }

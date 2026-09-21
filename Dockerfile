@@ -1,31 +1,24 @@
-# Stage 1: Build Angular app
+# Stage 1: Build Angular storefront (monorepo / npm workspaces)
 FROM node:18-alpine AS build
 
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+COPY package.json package-lock.json ./
+COPY backend/package.json ./backend/
 
-# Install dependencies
-RUN npm ci --legacy-peer-deps
+RUN npm ci
 
-# Copy source code
 COPY . .
 
-# Build production app
 RUN npm run build -- --configuration production
 
-# Stage 2: Serve with nginx
+# Stage 2: Serve with nginx (+ /api reverse proxy to backend service)
 FROM nginx:alpine
 
-# Copy custom nginx config
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copy built app from build stage
 COPY --from=build /app/dist/angular-ecommerce-3d/browser /usr/share/nginx/html
 
-# Expose port
 EXPOSE 80
 
-# Start nginx
 CMD ["nginx", "-g", "daemon off;"]

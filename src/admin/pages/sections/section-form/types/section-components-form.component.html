@@ -1,0 +1,221 @@
+            <div class="tab-content">
+              <!-- CATEGORIES -->
+              <div *ngIf="sectionForm.get('type')?.value === 'categories'" class="dynamic-list">
+                <div class="list-header">
+                  <h4>{{ 'CATEGORIES' | translate }}</h4>
+                  <button mat-button color="primary" type="button" (click)="addCategory()">
+                    <mat-icon>add</mat-icon> {{ 'ADD_CATEGORY' | translate }}
+                  </button>
+                </div>
+                <div cdkDropList (cdkDropListDropped)="dropCategory($event)" class="cdk-list">
+                  <div *ngFor="let cat of categories.controls; let i = index" cdkDrag class="cdk-item">
+                    <div [formGroup]="$any(cat)" class="item-form vertical">
+                      <div class="item-row">
+                        <mat-form-field appearance="outline"><mat-label>Name</mat-label><input matInput formControlName="name"></mat-form-field>
+                        <mat-form-field appearance="outline"><mat-label>Slug</mat-label><input matInput formControlName="slug"></mat-form-field>
+                        <button mat-icon-button color="warn" (click)="removeCategory(i)" type="button"><mat-icon>delete</mat-icon></button>
+                      </div>
+                      <app-image-upload [currentImageUrl]="cat.get('icon')?.value" label="Icon" (fileSelected)="onCategoryIconSelected($event, i)" (imageUploaded)="onCategoryIconUploaded($event, i)"></app-image-upload>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- BRANDS -->
+              <div *ngIf="sectionForm.get('type')?.value === 'brands'" class="dynamic-list">
+                <div class="list-header">
+                  <h4>{{ 'BRANDS' | translate }}</h4>
+                  <button mat-button color="primary" type="button" (click)="addBrand()">
+                    <mat-icon>add</mat-icon> {{ 'ADD_BRAND' | translate }}
+                  </button>
+                </div>
+                <div cdkDropList (cdkDropListDropped)="dropBrand($event)" class="cdk-list">
+                  <div *ngFor="let brand of brands.controls; let i = index" cdkDrag class="cdk-item">
+                    <div [formGroup]="$any(brand)" class="item-form vertical">
+                      <div class="item-row">
+                        <mat-form-field appearance="outline"><mat-label>Brand Name</mat-label><input matInput formControlName="name"></mat-form-field>
+                        <button mat-icon-button color="warn" (click)="removeBrand(i)" type="button"><mat-icon>delete</mat-icon></button>
+                      </div>
+                      <app-image-upload [currentImageUrl]="brand.get('logo')?.value" label="Logo" (fileSelected)="onBrandLogoSelected($event, i)" (imageUploaded)="onBrandLogoUploaded($event, i)"></app-image-upload>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- TESTIMONIALS -->
+              <div *ngIf="sectionForm.get('type')?.value === 'testimonials'" class="dynamic-list">
+                <div class="list-header">
+                  <h4>{{ 'TESTIMONIALS' | translate }}</h4>
+                  <button mat-button color="primary" type="button" (click)="addTestimonial()">
+                    <mat-icon>add</mat-icon> {{ 'ADD_TESTIMONIAL' | translate }}
+                  </button>
+                </div>
+                <div cdkDropList (cdkDropListDropped)="dropTestimonial($event)" class="cdk-list">
+                  <div *ngFor="let item of testimonials.controls; let i = index" cdkDrag class="cdk-item">
+                    <div [formGroup]="$any(item)" class="item-form vertical">
+                      <div class="item-row">
+                        <mat-form-field appearance="outline"><mat-label>{{ 'NAME' | translate }}</mat-label><input matInput formControlName="name"></mat-form-field>
+                        <mat-form-field appearance="outline"><mat-label>{{ 'ROLE' | translate }}</mat-label><input matInput formControlName="role"></mat-form-field>
+                        <mat-form-field appearance="outline"><mat-label>{{ 'RATING' | translate }}</mat-label><input matInput type="number" min="1" max="5" formControlName="rating"></mat-form-field>
+                        <button mat-icon-button color="warn" (click)="removeTestimonial(i)" type="button"><mat-icon>delete</mat-icon></button>
+                      </div>
+                      <mat-form-field appearance="outline" class="full-width"><mat-label>{{ 'TEXT' | translate }}</mat-label><textarea matInput rows="3" formControlName="text"></textarea></mat-form-field>
+                      <app-image-upload [currentImageUrl]="item.get('avatar')?.value" [label]="'AVATAR' | translate" (fileSelected)="onTestimonialAvatarSelected($event, i)" (imageUploaded)="onTestimonialAvatarUploaded($event, i)"></app-image-upload>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- FEATURES GRID -->
+              <div *ngIf="sectionForm.get('type')?.value === 'features-grid'" class="dynamic-list">
+                <div class="list-header">
+                  <h4>{{ 'FEATURES' | translate }}</h4>
+                  <button mat-button color="primary" type="button" (click)="addFeature()">
+                    <mat-icon>add</mat-icon> {{ 'ADD_FEATURE' | translate }}
+                  </button>
+                </div>
+                <div cdkDropList (cdkDropListDropped)="dropFeature($event)" class="cdk-list">
+                  <div *ngFor="let feature of features.controls; let i = index" cdkDrag class="cdk-item">
+                    <div [formGroup]="$any(feature)" class="item-form vertical">
+                      <div class="item-row">
+                        <mat-form-field appearance="outline"><mat-label>{{ 'ICON' | translate }}</mat-label><input matInput formControlName="icon" placeholder="star"></mat-form-field>
+                        <mat-form-field appearance="outline"><mat-label>{{ 'TITLE' | translate }}</mat-label><input matInput formControlName="title"></mat-form-field>
+                        <button mat-icon-button color="warn" (click)="removeFeature(i)" type="button"><mat-icon>delete</mat-icon></button>
+                      </div>
+                      <mat-form-field appearance="outline" class="full-width"><mat-label>{{ 'DESCRIPTION' | translate }}</mat-label><textarea matInput rows="2" formControlName="description"></textarea></mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- FAQ -->
+              <div *ngIf="sectionForm.get('type')?.value === 'faq'" class="dynamic-list">
+                <div class="list-header">
+                  <h4>{{ 'FAQ_ITEMS' | translate }}</h4>
+                  <button mat-button color="primary" type="button" (click)="addFaqItem()">
+                    <mat-icon>add</mat-icon> {{ 'ADD_FAQ_ITEM' | translate }}
+                  </button>
+                </div>
+                <div cdkDropList (cdkDropListDropped)="dropFaqItem($event)" class="cdk-list">
+                  <div *ngFor="let faq of faqItems.controls; let i = index" cdkDrag class="cdk-item">
+                    <div [formGroup]="$any(faq)" class="item-form vertical">
+                      <div class="item-row">
+                        <mat-form-field appearance="outline" class="full-width"><mat-label>{{ 'QUESTION' | translate }}</mat-label><input matInput formControlName="question"></mat-form-field>
+                        <button mat-icon-button color="warn" (click)="removeFaqItem(i)" type="button"><mat-icon>delete</mat-icon></button>
+                      </div>
+                      <mat-form-field appearance="outline" class="full-width"><mat-label>{{ 'ANSWER' | translate }}</mat-label><textarea matInput rows="3" formControlName="answer"></textarea></mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- STATS -->
+              <div *ngIf="sectionForm.get('type')?.value === 'stats'" class="dynamic-list">
+                <div class="list-header">
+                  <h4>{{ 'STATS' | translate }}</h4>
+                  <button mat-button color="primary" type="button" (click)="addStat()">
+                    <mat-icon>add</mat-icon> {{ 'ADD_STAT' | translate }}
+                  </button>
+                </div>
+                <div cdkDropList (cdkDropListDropped)="dropStat($event)" class="cdk-list">
+                  <div *ngFor="let stat of stats.controls; let i = index" cdkDrag class="cdk-item">
+                    <div [formGroup]="$any(stat)" class="item-form vertical">
+                      <div class="item-row">
+                        <mat-form-field appearance="outline"><mat-label>{{ 'VALUE' | translate }}</mat-label><input matInput formControlName="value"></mat-form-field>
+                        <mat-form-field appearance="outline"><mat-label>{{ 'LABEL' | translate }}</mat-label><input matInput formControlName="label"></mat-form-field>
+                        <mat-form-field appearance="outline"><mat-label>{{ 'SUFFIX' | translate }}</mat-label><input matInput formControlName="suffix" placeholder="+ / % / K"></mat-form-field>
+                        <button mat-icon-button color="warn" (click)="removeStat(i)" type="button"><mat-icon>delete</mat-icon></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- NEWSLETTER -->
+              <div *ngIf="sectionForm.get('type')?.value === 'newsletter'" class="dynamic-list">
+                <div class="form-grid">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'NEWSLETTER_PLACEHOLDER' | translate }}</mat-label>
+                    <input matInput formControlName="newsletterPlaceholder">
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'NEWSLETTER_BUTTON_TEXT' | translate }}</mat-label>
+                    <input matInput formControlName="newsletterButtonText">
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <!-- LOOKBOOK -->
+              <div *ngIf="sectionForm.get('type')?.value === 'lookbook'" class="dynamic-list">
+                <div class="list-header">
+                  <h4>{{ 'LOOKBOOK_SLIDES' | translate }}</h4>
+                  <button mat-button color="primary" type="button" (click)="addLookbookSlide()">
+                    <mat-icon>add</mat-icon> {{ 'ADD_LOOKBOOK_SLIDE' | translate }}
+                  </button>
+                </div>
+                <mat-slide-toggle formControlName="carouselAutoplay" color="primary">
+                  {{ 'CAROUSEL_AUTOPLAY' | translate }}
+                </mat-slide-toggle>
+                <div cdkDropList (cdkDropListDropped)="dropLookbookSlide($event)" class="cdk-list">
+                  <div *ngFor="let slide of lookbookSlides.controls; let i = index" cdkDrag class="cdk-item">
+                    <div [formGroup]="$any(slide)" class="item-form vertical">
+                      <div class="item-row">
+                        <mat-form-field appearance="outline"><mat-label>{{ 'TITLE' | translate }}</mat-label><input matInput formControlName="title"></mat-form-field>
+                        <mat-form-field appearance="outline"><mat-label>{{ 'CTA_URL' | translate }}</mat-label><input matInput formControlName="ctaUrl"></mat-form-field>
+                        <button mat-icon-button color="warn" (click)="removeLookbookSlide(i)" type="button"><mat-icon>delete</mat-icon></button>
+                      </div>
+                      <mat-form-field appearance="outline" class="full-width"><mat-label>{{ 'SUBTITLE' | translate }}</mat-label><input matInput formControlName="subtitle"></mat-form-field>
+                      <mat-form-field appearance="outline" class="full-width"><mat-label>{{ 'CTA_LABEL' | translate }}</mat-label><input matInput formControlName="ctaLabel"></mat-form-field>
+                      <app-image-upload [currentImageUrl]="slide.get('image')?.value" [label]="'IMAGE' | translate" (fileSelected)="onLookbookSlideImageSelected($event, i)" (imageUploaded)="onLookbookSlideImageUploaded($event, i)"></app-image-upload>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- BLOG POSTS -->
+              <div *ngIf="sectionForm.get('type')?.value === 'blog-posts'" class="dynamic-list">
+                <div class="form-grid">
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'BLOG_DISPLAY_MODE' | translate }}</mat-label>
+                    <mat-select formControlName="blogDisplayMode">
+                      <mat-option value="grid">{{ 'BLOG_DISPLAY_GRID' | translate }}</mat-option>
+                      <mat-option value="list">{{ 'BLOG_DISPLAY_LIST' | translate }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'CTA_LABEL' | translate }}</mat-label>
+                    <input matInput formControlName="blogCtaText">
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>{{ 'CTA_URL' | translate }}</mat-label>
+                    <input matInput formControlName="blogCtaLink">
+                  </mat-form-field>
+                </div>
+                <mat-slide-toggle formControlName="blogShowCta" color="primary">
+                  {{ 'BLOG_SHOW_CTA' | translate }}
+                </mat-slide-toggle>
+                <div class="list-header">
+                  <h4>{{ 'BLOG_POSTS' | translate }}</h4>
+                  <button mat-button color="primary" type="button" (click)="addBlogPost()">
+                    <mat-icon>add</mat-icon> {{ 'ADD_BLOG_POST' | translate }}
+                  </button>
+                </div>
+                <div cdkDropList (cdkDropListDropped)="dropBlogPost($event)" class="cdk-list">
+                  <div *ngFor="let post of blogPosts.controls; let i = index" cdkDrag class="cdk-item">
+                    <div [formGroup]="$any(post)" class="item-form vertical">
+                      <div class="item-row">
+                        <mat-form-field appearance="outline"><mat-label>{{ 'TITLE' | translate }}</mat-label><input matInput formControlName="title"></mat-form-field>
+                        <mat-form-field appearance="outline"><mat-label>{{ 'BLOG_CATEGORY' | translate }}</mat-label><input matInput formControlName="category"></mat-form-field>
+                        <button mat-icon-button color="warn" (click)="removeBlogPost(i)" type="button"><mat-icon>delete</mat-icon></button>
+                      </div>
+                      <mat-form-field appearance="outline" class="full-width"><mat-label>{{ 'BLOG_EXCERPT' | translate }}</mat-label><textarea matInput rows="2" formControlName="excerpt"></textarea></mat-form-field>
+                      <div class="item-row">
+                        <mat-form-field appearance="outline"><mat-label>{{ 'BLOG_AUTHOR' | translate }}</mat-label><input matInput formControlName="author"></mat-form-field>
+                        <mat-form-field appearance="outline"><mat-label>{{ 'BLOG_DATE' | translate }}</mat-label><input matInput type="date" formControlName="date"></mat-form-field>
+                        <mat-form-field appearance="outline"><mat-label>{{ 'BLOG_LINK' | translate }}</mat-label><input matInput formControlName="link"></mat-form-field>
+                      </div>
+                      <app-image-upload [currentImageUrl]="post.get('image')?.value" [label]="'IMAGE' | translate" (fileSelected)="onBlogPostImageSelected($event, i)" (imageUploaded)="onBlogPostImageUploaded($event, i)"></app-image-upload>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>

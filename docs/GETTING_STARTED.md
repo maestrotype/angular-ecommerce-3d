@@ -17,15 +17,16 @@ This document details the configuration and deployment steps required to initial
 ```bash
 git clone <repository-url>
 cd angular-ecommerce-3d
-npm install
+npm install   # installs frontend + backend (npm workspaces)
 ```
 
 ### 2. Configure Backend
 ```bash
 cd backend
-npm install
 cp .env.example .env # Ensure variables are correctly mapped
 ```
+
+> **Note:** A single `npm install` at the repo root installs both the Angular app and the NestJS backend. You no longer need `cd backend && npm install` for local development.
 
 ## Environment Configuration
 
@@ -54,10 +55,16 @@ The platform uses external services to enhance capabilities. Configure these in 
 Standard development mode with HMR (Hot Module Replacement) support.
 ```bash
 # Terminal 1: API Service
-cd backend && npm run start:dev
+npm run backend:start:dev
 
 # Terminal 2: UI Service
 npm start
+```
+
+Equivalent from the `backend/` folder (still works):
+
+```bash
+cd backend && npm run start:dev
 ```
 
 ### SSR Verification (Local)
@@ -111,7 +118,7 @@ curl -X POST http://localhost:3002/api/auth/create-admin
 Populate the catalog with bundled local assets (no Unsplash URLs):
 
 ```bash
-cd backend && npm run seed
+npm run backend:seed
 npm run demo:models   # optional: avocado + water-bottle GLB (~17 MB)
 ```
 

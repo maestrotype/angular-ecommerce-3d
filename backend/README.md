@@ -39,7 +39,7 @@ A clean and scalable NestJS backend with PostgreSQL to support the Angular e-com
 5. **Create an admin user:**
    ```bash
    # After starting the server, make a POST request to:
-   curl -X POST http://localhost:3000/api/auth/create-admin
+   curl -X POST http://localhost:3002/api/auth/create-admin
    ```
 
 ## Running the Application
@@ -145,17 +145,22 @@ NODE_ENV=production
 **Option A — Docker (recommended, uses `backend/Dockerfile`)**
 
 1. Create a **Web Service** → Runtime: **Docker**
-2. **Root Directory:** `backend`
-3. **Dockerfile Path:** `./Dockerfile`
+2. **Root Directory:** `.` (repository root — monorepo workspace)
+3. **Dockerfile Path:** `backend/Dockerfile`
 4. Add environment variables (DATABASE_*, JWT_*, CLOUDINARY_*, etc.)
 
 **Option B — Node runtime**
 
-1. **Root Directory:** `backend`
-2. **Build Command:** `npm ci --include=dev && npm run build`
-3. **Start Command:** `npm run start:prod`
+1. **Root Directory:** `.` (repository root — **required** for npm workspaces)
+2. **Build Command:** `npm run render:build`
+3. **Start Command:** `npm run render:start`
 
-The repo also defines `heroku-postbuild` in `backend/package.json` — Render runs it automatically after `npm install` during the build phase.
+If your service still uses **Root Directory `backend/`** (legacy):
+
+1. **Build Command:** `npm run build:render` (uses `npm install`, not `npm ci` — there is no lockfile in `backend/`)
+2. **Start Command:** `npm run start:prod`
+
+The repo also defines `heroku-postbuild` in the **root** `package.json` (monorepo) and in `backend/package.json` (legacy) — Render runs it automatically after `npm install` during the build phase when set on the matching package.
 
 **If deploy fails with `Cannot find module '.../dist/main.js'`:** the TypeScript build did not run. Check **Build** logs (not Start) for `nest build` output.
 

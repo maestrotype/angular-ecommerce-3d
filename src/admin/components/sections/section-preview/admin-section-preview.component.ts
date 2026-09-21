@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges, HostBinding, Output, EventEmitter } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, SimpleChanges, HostBinding, Output, EventEmitter } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
@@ -42,6 +42,25 @@ export class AdminSectionPreviewComponent implements OnChanges {
   
   renderKey = 0;
   computedSections: any[] = [];
+  private readonly previewFooterPlaceholder = {
+    id: -1,
+    type: 'footer',
+    isActive: true,
+    order: 999,
+    pageTarget: 'global',
+    settings: {
+      columns: [
+        { title: { en: 'Demo Links', ru: 'Ссылки' }, links: [] }
+      ],
+      copyright: '© 2026 3D Store. Architect Preview Mode.'
+    }
+  };
+
+  trackBySectionId(index: number, section: { id?: number | string; type?: string }): number | string {
+    return section?.id ?? `${section?.type || 'section'}-${index}`;
+  }
+
+  constructor(private host: ElementRef<HTMLElement>) {}
 
   toggleUnfold() {
     this.isUnfolded = !this.isUnfolded;
@@ -49,9 +68,43 @@ export class AdminSectionPreviewComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['sectionData'] || changes['sections']) {
+      const before = this.sectionListIdentity(this.computedSections);
       this.updateComputedSections();
-      this.renderKey++;
+      const after = this.sectionListIdentity(this.computedSections);
+      // Parent `previewSections` is a getter that allocates a new array every CD.
+      // Bumping renderKey on reference-only changes remounts every storefront
+      // section and leaves the device frame blank.
+      if (before !== after) {
+        this.renderKey++;
+      }
     }
+
+    if (changes['activeSectionId'] || changes['sections']) {
+      this.queuePreviewScroll();
+    }
+  }
+
+  private queuePreviewScroll(): void {
+    if (this.activeSectionId == null) {
+      return;
+    }
+    requestAnimationFrame(() => this.scrollPreviewToActiveSection());
+  }
+
+  private scrollPreviewToActiveSection(): void {
+    if (this.activeSectionId == null) {
+      return;
+    }
+    const scroller = this.host.nativeElement.querySelector('.full-page-preview') as HTMLElement | null;
+    const target = scroller?.querySelector(`[data-section-id="${this.activeSectionId}"]`) as HTMLElement | null;
+    if (!scroller || !target) {
+      return;
+    }
+    scroller.scrollTo({ top: target.offsetTop, behavior: 'smooth' });
+  }
+
+  private sectionListIdentity(sections: any[]): string {
+    return (sections || []).map(section => String(section?.id ?? section?.type ?? '')).join(',');
   }
 
   private updateComputedSections(): void {
@@ -62,28 +115,14 @@ export class AdminSectionPreviewComponent implements OnChanges {
 
     if (!this.sectionData || !this.sectionData.id) {
       this.computedSections = this.sections;
-      return;
+    } else {
+      this.computedSections = this.sections.map(s =>
+        s.id === this.sectionData.id ? { ...s, ...this.sectionData } : s
+      );
     }
 
-    this.computedSections = this.sections.map(s => 
-      s.id === this.sectionData.id ? { ...s, ...this.sectionData } : s
-    );
-
-    // If no footer exists, add a placeholder for preview purposes
     if (!this.computedSections.some(s => s.type === 'footer')) {
-      this.computedSections.push({
-        id: -1, // Special ID for placeholder
-        type: 'footer',
-        isActive: true,
-        order: 999,
-        pageTarget: 'global',
-        settings: {
-          columns: [
-            { title: { en: 'Demo Links', ru: 'Ссылки' }, links: [] }
-          ],
-          copyright: '© 2026 3D Store. Architect Preview Mode.'
-        }
-      });
+      this.computedSections = [...this.computedSections, this.previewFooterPlaceholder];
     }
   }
 

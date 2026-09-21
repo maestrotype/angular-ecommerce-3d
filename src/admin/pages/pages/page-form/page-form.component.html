@@ -61,6 +61,11 @@
     </p>
 
     <div class="form-actions">
+      <button mat-stroked-button type="button" (click)="fillDemoData()" [disabled]="isLoading" class="demo-btn">
+        <mat-icon>auto_fix_high</mat-icon>
+        {{ 'FILL_DEMO_DATA' | translate }}
+      </button>
+      <span class="form-actions-spacer"></span>
       <button mat-button type="button" (click)="cancel()">{{ 'CANCEL' | translate }}</button>
       <button mat-raised-button color="primary" type="submit" [disabled]="isLoading">
         <mat-spinner diameter="20" *ngIf="isLoading"></mat-spinner>

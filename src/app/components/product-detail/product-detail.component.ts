@@ -1,22 +1,24 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../core/services/product.service';
+import { CategoryService } from '../../core/services/category.service';
 import { ModalService } from '../../core/services/modal.service';
 import { Product } from 'src/shared/models/product.model';
 import { CartService } from 'src/app/core/services/cart.service';
 import { ViewportScroller } from '@angular/common';
 import { TranslateService } from '@ngx-translate/core';
-import { SectionService } from 'src/admin/services/section.service';
+import { SectionService } from '../../core/services/section.service';
 import { Section } from 'src/shared/models/section.model';
 import { getLocalizedString } from '../../../shared/utils/localization.util';
 import { ProductTabsComponent } from './product-tabs/product-tabs.component';
+import { NotificationService } from '../../core/services/notification.service';
 
 @Component({
   selector: 'app-product-detail',
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.scss']
 })
-export class ProductDetailComponent implements OnInit {
+export class ProductDetailComponent implements OnInit, OnDestroy {
   product: Product | undefined;
   selectedType: 'image' | '3d' = 'image';
   selectedImageIndex: number = 0;
@@ -25,22 +27,36 @@ export class ProductDetailComponent implements OnInit {
   sections: Section[] = [];
   activeSection: 'about' | 'specs' | 'reviews' = 'about';
   carouselActiveIndex = 0;
+  showMobileGallery = false;
+  private mobileGalleryQuery = typeof window !== 'undefined'
+    ? window.matchMedia('(max-width: 768px)')
+    : null;
+  private readonly onMobileGalleryChange = () => {
+    this.showMobileGallery = this.mobileGalleryQuery?.matches ?? false;
+  };
 
   @ViewChild(ProductTabsComponent) productTabs?: ProductTabsComponent;
   @ViewChild('carouselTrack') carouselTrack?: ElementRef<HTMLElement>;
+  private categoryLabelBySlug = new Map<string, string>();
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private productService: ProductService,
+    private categoryService: CategoryService,
     private cartService: CartService,
     private modalService: ModalService,
     private translate: TranslateService,
+    private notificationService: NotificationService,
     private viewportScroller: ViewportScroller,
     private sectionService: SectionService
   ) { }
 
   ngOnInit(): void {
+    this.onMobileGalleryChange();
+    this.mobileGalleryQuery?.addEventListener('change', this.onMobileGalleryChange);
+    this.loadCategoryLabels();
+
     // Subscribe to route params to handle navigation between products
     this.route.paramMap.subscribe(params => {
       const id = Number(params.get('id'));
@@ -187,7 +203,10 @@ export class ProductDetailComponent implements OnInit {
     };
 
     for (let i = 0; i < this.quantity; i++) {
-      this.cartService.addToCart(cartItem);
+      if (!this.cartService.addToCart(cartItem)) {
+        this.notificationService.showInfo(this.translate.instant('DEMO_CATALOG.ADD_TO_CART_BLOCKED'));
+        return;
+      }
     }
 
     this.modalService.openModal({
@@ -222,6 +241,32 @@ export class ProductDetailComponent implements OnInit {
     }
   }
 
+  getCategoryLabel(slug?: string | null): string {
+    if (!slug) {
+      return '';
+    }
+    const normalized = slug.toLowerCase();
+    const fromCatalog = this.categoryLabelBySlug.get(normalized);
+    if (fromCatalog) {
+      return fromCatalog;
+    }
+    const slugKeys: Record<string, string> = {
+      shoes: 'FOOTER.CAT_SHOES',
+      bags: 'FOOTER.CAT_HANDBAGS',
+      handbags: 'FOOTER.CAT_HANDBAGS',
+      clothing: 'FOOTER.CAT_CLOTHING',
+      accessories: 'FOOTER.CAT_ACCESSORIES',
+    };
+    const key = slugKeys[normalized];
+    if (key) {
+      const translated = this.translate.instant(key);
+      if (translated !== key) {
+        return translated;
+      }
+    }
+    return slug;
+  }
+
   scrollToSection(section: 'about' | 'specs' | 'reviews'): void {
     this.activeSection = section;
 
@@ -241,5 +286,25 @@ export class ProductDetailComponent implements OnInit {
     this.sectionService.getActiveSections('product').subscribe(sections => {
       this.sections = (sections || []).sort((a, b) => (a.order || 0) - (b.order || 0));
     });
+  }
+
+  private loadCategoryLabels(): void {
+    this.categoryService.getAllCategories().subscribe((categories) => {
+      this.categoryLabelBySlug.clear();
+      categories.forEach((category) => {
+        const slug = (category.slug || '').toLowerCase();
+        if (!slug) {
+          return;
+        }
+        this.categoryLabelBySlug.set(
+          slug,
+          getLocalizedString(category.name, this.translate.currentLang),
+        );
+      });
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.mobileGalleryQuery?.removeEventListener('change', this.onMobileGalleryChange);
   }
 }

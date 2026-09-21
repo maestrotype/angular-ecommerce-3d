@@ -21,8 +21,14 @@ export class ImageUploadComponent implements ControlValueAccessor {
   @Input() accept: string = 'image/svg+xml,image/png,image/jpeg,image/jpg';
   @Input() maxSize: number = 5 * 1024 * 1024; // 5MB
   @Input() disabled: boolean = false;
+  @Input() set currentImageUrl(value: string | null | undefined) {
+    if (value !== undefined && value !== null) {
+      this.writeValue(value);
+    }
+  }
   @Output() fileSelected = new EventEmitter<File>();
   @Output() fileUploaded = new EventEmitter<string>();
+  @Output() imageUploaded = new EventEmitter<string>();
 
   imageFile: File | null = null;
   imagePreview: string | ArrayBuffer | null = null;
@@ -118,6 +124,7 @@ export class ImageUploadComponent implements ControlValueAccessor {
     this.onChange(url);
     this.onTouched();
     this.fileUploaded.emit(url);
+    this.imageUploaded.emit(url);
     this.uploading = false;
   }
 

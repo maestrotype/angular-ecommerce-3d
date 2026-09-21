@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { ModalService } from '../../core/services/modal.service';
 import { CartService } from '../../core/services/cart.service';
 import { FavoritesService } from '../../core/services/favorites.service';
-import { SectionService } from '../../../admin/services/section.service';
+import { SectionService } from '../../core/services/section.service';
 import { CategoryService } from '../../core/services/category.service';
 import { Category } from 'src/shared/models/category.model';
 import { parseFooterLink } from '../../core/utils/footer-link.util';

@@ -22,4 +22,22 @@ export class PublicSettingsController {
       catchError((error) => of({ success: false, error: error.message }))
     );
   }
+
+  @Get('shop-catalog')
+  @HttpCode(HttpStatus.OK)
+  getShopCatalogSettings(): Observable<any> {
+    return this.settingsService.getShopCatalogSettings().pipe(
+      map((data) => ({ success: true, data })),
+      catchError((error) => of({ success: false, error: error.message })),
+    );
+  }
+
+  @Get('best-sellers-catalog')
+  @HttpCode(HttpStatus.OK)
+  getBestSellersCatalogSettings(): Observable<any> {
+    return this.settingsService.getBestSellersCatalogSettings().pipe(
+      map((data) => ({ success: true, data })),
+      catchError((error) => of({ success: false, error: error.message })),
+    );
+  }
 }

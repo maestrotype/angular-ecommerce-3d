@@ -17,6 +17,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService } from '../../../services/confirmation.service';
 import { PageService } from '../../../services/page.service';
 import { getLocalizedString } from 'src/shared/utils/localization.util';
+import { resolveSectionTypeLabel } from 'src/shared/utils/section-type-label.util';
 import { take } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 import { isSectionBasedPageTemplate } from 'src/shared/models/page.model';
@@ -30,6 +31,9 @@ import {
   isPageTemplatePreset,
   PageTemplatePresetId
 } from '../page-template-presets';
+import { buildStorefrontPreviewSections } from '../storefront-preview-sections.util';
+
+export { buildStorefrontPreviewSections } from '../storefront-preview-sections.util';
 
 @Component({
   selector: 'app-section-list',
@@ -51,7 +55,7 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns: string[] = ['order', 'type', 'pageTarget', 'title', 'isActive', 'actions'];
   dataSource = new MatTableDataSource<Section>();
   allSections: Section[] = [];
-  activePageTarget: string | null = null;
+  activePageTarget: string | null = 'home';
   pageFilterOptions: { value: string | null; label: string; translate?: boolean }[] = [
     { value: null, label: 'PAGE_TARGET_ALL', translate: true },
     { value: 'home', label: 'TARGET_HOME', translate: true },
@@ -90,7 +94,7 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
   isMobile = false;
   mobileArchitectOpen = false;
   private readonly resizeListener = () => this.checkScreenSize();
-  private isResizing = false;
+  isResizing = false;
   private initialMouseX = 0;
   private initialSidebarWidth = 640;
 
@@ -108,6 +112,11 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   ngOnInit(): void {
+    const uiLang = (this.translate.currentLang || localStorage.getItem('adminLang') || 'en') as 'en' | 'ru' | 'ua';
+    if (uiLang === 'en' || uiLang === 'ru' || uiLang === 'ua') {
+      this.activeMenuLang = uiLang;
+    }
+
     this.checkScreenSize();
     if (isPlatformBrowser(this.platformId)) {
       window.addEventListener('resize', this.resizeListener);
@@ -119,15 +128,15 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loadPageFilterOptions();
 
     this.route.queryParams.subscribe(params => {
-      const target = params['pageTarget'] || null;
+      const target = params['pageTarget'];
       const create = params['createIfMissing'] === 'true' || params['createIfMissing'] === true;
       const applyTemplate = params['applyTemplate'] as string | undefined;
 
-      this.activePageTarget = target;
+      this.activePageTarget = target === undefined || target === null || target === '' ? 'home' : target;
 
       const handleQueryActions = () => {
         this.applyPageTargetFilter();
-        if (target && create && this.getSectionsForTarget(target).length === 0) {
+        if (target && create && this.getStorefrontTableSections(target).length === 0) {
           this.addSectionWithTarget(target);
         }
         if (target && applyTemplate && isPageTemplatePreset(applyTemplate)) {
@@ -162,17 +171,15 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private onMouseMove(event: MouseEvent): void {
-    if (!this.isResizing) return;
-    
-    // Smooth frame-based update
-    requestAnimationFrame(() => {
-      const deltaX = event.clientX - this.initialMouseX;
-      const newWidth = this.initialSidebarWidth + deltaX;
-      const maxWidth = Math.floor(window.innerWidth * 0.78);
-      if (newWidth > 400 && newWidth < maxWidth) {
-        this.sidebarWidth = newWidth;
-      }
-    });
+    if (!this.isResizing) {
+      return;
+    }
+
+    const deltaX = event.clientX - this.initialMouseX;
+    const newWidth = this.initialSidebarWidth + deltaX;
+    const minWidth = 360;
+    const maxWidth = Math.floor(window.innerWidth * 0.78);
+    this.sidebarWidth = Math.round(Math.min(maxWidth, Math.max(minWidth, newWidth)));
   }
 
   private onMouseUp(): void {
@@ -182,17 +189,21 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  getSectionTypeLabelKey(type: string): string {
-    const key = type.replace(/-/g, '_').toUpperCase();
-    return `SECTION_TYPE_LABELS.${key}`;
+  getSectionTypeLabel(type: string): string {
+    return resolveSectionTypeLabel(type, this.translate);
   }
 
   private computeInitialSidebarWidth(): number {
     if (typeof window === 'undefined') {
       return 640;
     }
-    const contentWidth = window.innerWidth - 280;
-    return Math.min(860, Math.max(500, Math.floor(contentWidth * 0.52)));
+    const adminNavWidth = 280;
+    const paneGap = 24;
+    const contentWidth = window.innerWidth - adminNavWidth;
+    const halfWidth = Math.floor((contentWidth - paneGap) / 2);
+    const minWidth = 360;
+    const maxWidth = Math.floor(window.innerWidth * 0.78);
+    return Math.min(maxWidth, Math.max(minWidth, halfWidth));
   }
 
   ngAfterViewInit(): void {
@@ -245,6 +256,13 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
     document.body.classList.toggle('sections-architect-locked', lock);
   }
 
+  private syncEditorBodyClass(open: boolean): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    document.body.classList.toggle('sections-editor-open', open);
+  }
+
   loadSections(onLoaded?: () => void): void {
     this.loading = true;
     this.sectionService.getSections().subscribe({
@@ -285,21 +303,74 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  private getSectionsForTarget(target: string): Section[] {
-    if (target === 'global') {
-      return this.allSections.filter(section => section.pageTarget === 'global');
-    }
-    return this.allSections.filter(
-      section => section.pageTarget === target || section.pageTarget === 'global'
-    );
-  }
-
   private applyPageTargetFilter(): void {
     if (!this.activePageTarget) {
-      this.dataSource.data = [...this.allSections];
+      this.dataSource.data = [...this.allSections].sort(
+        (a, b) => (a.order || 0) - (b.order || 0)
+      );
       return;
     }
-    this.dataSource.data = this.getSectionsForTarget(this.activePageTarget);
+    if (this.activePageTarget === 'global') {
+      this.dataSource.data = this.allSections
+        .filter(section => section.pageTarget === 'global')
+        .sort((a, b) => (a.order || 0) - (b.order || 0));
+      return;
+    }
+    this.dataSource.data = this.getStorefrontTableSections(this.activePageTarget);
+  }
+
+  /** Table rows for a page — same scope as GET /sections?pageTarget=… */
+  private getStorefrontTableSections(pageTarget: string): Section[] {
+    return this.allSections
+      .filter(section => section.pageTarget === pageTarget)
+      .sort((a, b) => (a.order || 0) - (b.order || 0));
+  }
+
+  private previewSectionsCache: Section[] = [];
+  private previewSectionsCacheKey = '';
+
+  /** Sections passed to Site Architect — mirrors storefront composition. */
+  get previewSections(): Section[] {
+    const target = this.activePageTarget || 'home';
+    let sections = buildStorefrontPreviewSections(this.allSections, target);
+
+    if (this.isEditorOpen && this.previewData) {
+      if (this.previewData.id) {
+        sections = sections.map(section =>
+          section.id === this.previewData.id ? { ...section, ...this.previewData } : section
+        );
+      } else if (this.previewData.type) {
+        const draft = {
+          ...this.previewData,
+          isActive: this.previewData.isActive !== false,
+          pageTarget: this.previewData.pageTarget || target,
+          order: this.previewData.order ?? 9999
+        };
+        const header = sections.find(s => s.type === 'header');
+        const footer = sections.find(s => s.type === 'footer');
+        const body = sections.filter(s => s.type !== 'header' && s.type !== 'footer');
+        if (draft.type === 'header') {
+          sections = [draft, ...body, ...(footer ? [footer] : [])];
+        } else if (draft.type === 'footer') {
+          sections = [...(header ? [header] : []), ...body, draft];
+        } else {
+          sections = [
+            ...(header ? [header] : []),
+            ...body,
+            draft,
+            ...(footer ? [footer] : [])
+          ];
+        }
+      }
+    }
+
+    const cacheKey = `${target}|${this.isEditorOpen}|${sections.map(section => `${section.id}:${section.order}:${section.isActive}`).join(',')}|${this.isEditorOpen && this.previewData ? JSON.stringify(this.previewData) : ''}`;
+    if (cacheKey === this.previewSectionsCacheKey) {
+      return this.previewSectionsCache;
+    }
+    this.previewSectionsCacheKey = cacheKey;
+    this.previewSectionsCache = sections;
+    return sections;
   }
 
   onPageTargetFilterChange(value: string | null): void {
@@ -326,7 +397,10 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
   private addSectionWithTarget(target: string): void {
     this.editorMode = 'add';
     this.editingSection = { pageTarget: target } as any;
+    this.showPicker = true;
+    this.previewData = null;
     this.isEditorOpen = true;
+    this.syncEditorBodyClass(true);
   }
 
   private getDefaultPageTarget(): string {
@@ -379,15 +453,30 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onLangChange(lang: 'en' | 'ru' | 'ua'): void {
     this.activeMenuLang = lang;
+    this.translate.use(lang);
+    localStorage.setItem('adminLang', lang);
+    localStorage.setItem('preferredLanguage', lang);
+    localStorage.setItem('admin_menu_lang', lang);
   }
 
   onSectionTypeSelected(type: string): void {
     this.editorMode = 'add';
-    const pageTarget = (type === 'header' || type === 'footer') ? 'global' : this.getDefaultPageTarget();
+    const pageTarget = (type === 'header' || type === 'footer')
+      ? 'global'
+      : (this.editingSection?.pageTarget || this.getDefaultPageTarget());
     this.editingSection = { type, pageTarget } as any;
     this.isEditorOpen = true;
+    this.syncEditorBodyClass(true);
     this.showPicker = false;
     this.previewData = { type };
+  }
+
+  backToPicker(): void {
+    const pageTarget = this.editingSection?.pageTarget || this.getDefaultPageTarget();
+    this.editorMode = 'add';
+    this.editingSection = { pageTarget } as any;
+    this.previewData = null;
+    this.showPicker = true;
   }
 
   selectForPreview(section: Section): void {
@@ -403,6 +492,7 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.showPicker = true;
     this.previewData = null;
     this.isEditorOpen = true;
+    this.syncEditorBodyClass(true);
   }
 
   runQuickStartWizard(): void {
@@ -465,14 +555,22 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.previewData = { ...section };
     this.selectedPreviewSection = null;
     this.isEditorOpen = true;
+    this.syncEditorBodyClass(true);
     if (this.isMobile) {
       this.closeMobileArchitect();
     }
   }
 
   onFormChanged(data: any): void {
-    // Merge into existing previewData to preserve server fields like `id`
-    this.previewData = { ...this.previewData, ...data };
+    const merged = {
+      ...this.previewData,
+      ...data,
+      settings: {
+        ...(this.previewData?.settings || {}),
+        ...(data.settings || {}),
+      },
+    };
+    this.previewData = merged;
     
     // Live update the section in the main list so Architect view reflects changes
     if (this.editingSection && this.editingSection.id) {
@@ -500,8 +598,10 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   closeEditor(): void {
     this.isEditorOpen = false;
+    this.syncEditorBodyClass(false);
     this.editingSection = null;
     this.previewData = null;
+    this.showPicker = false;
   }
 
   toggleSection(section: Section): void {
@@ -583,7 +683,14 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
     };
   }
 
+  trackBySectionId(_index: number, section: Section): number | string {
+    return section.id;
+  }
+
   drop(event: CdkDragDrop<Section[]>): void {
+    if (event.previousIndex === event.currentIndex) {
+      return;
+    }
     const data = [...this.dataSource.data];
     moveItemInArray(data, event.previousIndex, event.currentIndex);
     this.updateSectionOrder(data);

@@ -5,6 +5,11 @@ import { map, catchError, retry, switchMap } from "rxjs/operators";
 import { environment } from '../../environments/environment';
 import { PROD_API_URL } from '../../app/core/utils/api-url.util';
 import { ApiResponse } from 'src/shared/models/api-response.model';
+import {
+  DEFAULT_SHOP_CATALOG_SETTINGS,
+  normalizeShopCatalogSettings,
+  ShopCatalogDisplaySettings,
+} from '../../shared/utils/shop-catalog.util';
 
 export interface GeneralSettings {
   siteName: string;
@@ -93,6 +98,11 @@ export interface AppSettings {
   cloudinary?: CloudinarySettings;
   ai?: AiGenerationSettings;
   smtp?: SMTPSettings;
+  shop?: Partial<ShopCatalogDisplaySettings> & {
+    catalogEnabled?: boolean;
+    catalogCategories?: string[];
+    catalogSortOrder?: string;
+  };
 }
 
 @Injectable({
@@ -318,6 +328,58 @@ export class SettingsService {
       catchError(error => {
         throw error;
       })
+    );
+  }
+
+  getShopCatalogSettings(): Observable<ShopCatalogDisplaySettings> {
+    return this.http
+      .get<{ success: boolean; data?: Partial<ShopCatalogDisplaySettings> }>(`${this.apiUrl}/shop-catalog`)
+      .pipe(
+        map((response) =>
+          response.success && response.data
+            ? normalizeShopCatalogSettings(response.data)
+            : DEFAULT_SHOP_CATALOG_SETTINGS,
+        ),
+        catchError(() => of(DEFAULT_SHOP_CATALOG_SETTINGS)),
+      );
+  }
+
+  updateShopCatalogSettings(settings: ShopCatalogDisplaySettings): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(`${this.apiUrl}/shop-catalog`, {
+      enabled: settings.enabled,
+      categories: settings.categories,
+      sortOrder: settings.sortOrder,
+    }).pipe(
+      map((response) => response),
+      catchError((error) => {
+        throw error;
+      }),
+    );
+  }
+
+  getBestSellersCatalogSettings(): Observable<ShopCatalogDisplaySettings> {
+    return this.http
+      .get<{ success: boolean; data?: Partial<ShopCatalogDisplaySettings> }>(`${this.apiUrl}/best-sellers-catalog`)
+      .pipe(
+        map((response) =>
+          response.success && response.data
+            ? normalizeShopCatalogSettings(response.data)
+            : DEFAULT_SHOP_CATALOG_SETTINGS,
+        ),
+        catchError(() => of(DEFAULT_SHOP_CATALOG_SETTINGS)),
+      );
+  }
+
+  updateBestSellersCatalogSettings(settings: ShopCatalogDisplaySettings): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(`${this.apiUrl}/best-sellers-catalog`, {
+      enabled: settings.enabled,
+      categories: settings.categories,
+      sortOrder: settings.sortOrder,
+    }).pipe(
+      map((response) => response),
+      catchError((error) => {
+        throw error;
+      }),
     );
   }
 }

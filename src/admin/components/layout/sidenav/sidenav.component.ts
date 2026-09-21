@@ -1,9 +1,10 @@
 import { Component, Output, EventEmitter, OnInit, OnDestroy, Inject, PLATFORM_ID } from "@angular/core";
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from "@angular/router";
-import { AuthService } from "../../../services/auth.service";
-import { OrderService } from "../../../services/order.service";
+import { AdminAuthService } from "../../../services/auth.service";
+import { AdminOrderService } from "../../../services/order.service";
 import { ThemeService } from "../../../../app/core/themes/theme.service";
+import { themeLabelI18nKey } from "../../../../app/core/themes/theme-label.util";
 import { TranslateService } from "@ngx-translate/core";
 import { Theme } from "../../../../app/core/themes/theme.model";
 import { Subject, Observable } from "rxjs";
@@ -41,29 +42,45 @@ export class SidenavComponent implements OnInit, OnDestroy {
   currentTheme = 'light';
 
   navItems: NavItem[] = [
-    { label: "DASHBOARD", route: "/admin/dashboard", icon: "dashboard" },
-    { label: "PRODUCTS", route: "/admin/products", icon: "inventory" },
+    { label: "DASHBOARD", route: "/admin/dashboard", icon: "space_dashboard" },
+    { label: "PRODUCTS", route: "/admin/products", icon: "inventory_2" },
     { label: "CATEGORIES", route: "/admin/categories", icon: "category" },
-    {
-      label: "ADMIN_NAV_ORDERS",
-      route: "/admin/orders",
-      icon: "shopping_cart",
-    },
-    { label: "USERS", route: "/admin/users", icon: "people" },
-    { label: "MESSAGES", route: "/admin/messages", icon: "email" },
-    { label: "PAGE_SECTIONS", route: "/admin/sections", icon: "view_module" },
+    { label: "ADMIN_NAV_ORDERS", route: "/admin/orders", icon: "shopping_bag" },
+    { label: "USERS", route: "/admin/users", icon: "group" },
+    { label: "MESSAGES", route: "/admin/messages", icon: "mail" },
+    { label: "PAGE_SECTIONS", route: "/admin/sections", icon: "dashboard_customize" },
     { label: "PAGES", route: "/admin/pages", icon: "article" },
-    { label: "SEO", route: "/admin/seo", icon: "search" },
-    { label: "PAYMENTS", route: "/admin/payments", icon: "payment" },
-    { label: "INTEGRATIONS", route: "/admin/integrations", icon: "extension" },
-    { label: "SETTINGS", route: "/admin/settings", icon: "settings" },
+    { label: "SEO", route: "/admin/seo", icon: "travel_explore" },
+    { label: "PAYMENTS", route: "/admin/payments", icon: "credit_card" },
+    { label: "INTEGRATIONS", route: "/admin/integrations", icon: "hub" },
+    { label: "SETTINGS", route: "/admin/settings", icon: "tune" },
   ];
+
+  themeI18nKey(themeId: string): string {
+    return themeLabelI18nKey(themeId, 'admin');
+  }
+
+  prefPanel: 'theme' | 'lang' | null = null;
+
+  togglePrefPanel(panel: 'theme' | 'lang'): void {
+    this.prefPanel = this.prefPanel === panel ? null : panel;
+  }
+
+  pickTheme(themeId: string): void {
+    this.changeTheme(themeId);
+    this.prefPanel = null;
+  }
+
+  pickLanguage(langCode: string): void {
+    this.changeLanguage(langCode);
+    this.prefPanel = null;
+  }
 
 
   constructor(
     private router: Router,
-    private authService: AuthService,
-    private orderService: OrderService,
+    private authService: AdminAuthService,
+    private orderService: AdminOrderService,
     private themeService: ThemeService,
     public translate: TranslateService,
     @Inject(PLATFORM_ID) private platformId: Object
@@ -104,6 +121,12 @@ export class SidenavComponent implements OnInit, OnDestroy {
       .subscribe(theme => {
         this.currentTheme = theme.id;
       });
+
+    this.translate.onLangChange
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(event => {
+        this.currentLang = event.lang;
+      });
   }
 
   changeTheme(themeId: string): void {
@@ -115,13 +138,19 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.translate.use(langCode);
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('preferredLanguage', langCode);
+      localStorage.setItem('adminLang', langCode);
     }
   }
 
 
+  closeMobileDrawer(): void {
+    this.prefPanel = null;
+    this.closeSidenav.emit();
+  }
+
   onNavItemClick(): void {
     if (window.innerWidth <= 768) {
-      this.closeSidenav.emit();
+      this.closeMobileDrawer();
     }
   }
 

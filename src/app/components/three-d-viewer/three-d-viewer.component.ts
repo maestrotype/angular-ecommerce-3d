@@ -1,9 +1,10 @@
-import { Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ElementRef, Inject, PLATFORM_ID, OnDestroy, ChangeDetectorRef, NgZone, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, AfterViewInit, ViewChild, ElementRef, Inject, PLATFORM_ID, OnDestroy, OnChanges, SimpleChanges, ChangeDetectorRef, NgZone, ChangeDetectionStrategy, HostBinding } from '@angular/core';
 import { isPlatformBrowser, CommonModule, Location } from '@angular/common';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { fixBackendUrl } from '../../core/utils/url-helper';
+import { resolveBundledModelPath } from '../../../shared/constants/demo-model-paths';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { ThreeDModelService } from '../../core/services/three-d-model.service';
@@ -11,7 +12,7 @@ import { Subscription } from 'rxjs';
 
 // Type-only imports to prevent bundling heavy libraries in the main chunk
 import type * as THREE from 'three';
-import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 @Component({
   selector: 'app-three-d-viewer',
@@ -21,7 +22,7 @@ import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
   styleUrls: ['./three-d-viewer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
+export class ThreeDViewerComponent implements AfterViewInit, OnChanges, OnDestroy {
   @ViewChild('container') container!: ElementRef;
   @Input() modelPath!: string;
   @Input() hdModelPath?: string;
@@ -29,7 +30,21 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   @Input() position: [number, number, number] = [0, 0, 0];
   @Input() previewOnly = false;
   @Input() autoRotate = true;
+  /** Wheel/pinch zoom. Off by default so the page can scroll over the canvas. */
+  @Input() enableZoom = false;
+  /** Rotate only while the pointer is on this viewer; the rest of the page scrolls. */
+  @Input() rotateOnHover = false;
   @Input() loading: 'lazy' | 'eager' = 'lazy'; // Support for viewport lazy-loading
+
+  @HostBinding('class.rotate-on-hover')
+  get rotateOnHoverClass(): boolean {
+    return this.rotateOnHover && !this.previewOnly;
+  }
+  /**
+   * Optional chroma-key of near-white studio plates baked into photogrammetry textures.
+   * Off by default — canvas getImageData/putImageData destroys HQ texture quality.
+   */
+  @Input() keyOutStudioBackground: boolean | 'auto' = false;
   
   @Input() set upsideDown(value: boolean) {
     this._upsideDown = value;
@@ -44,7 +59,8 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
 
   @Output() modelLoaded = new EventEmitter<void>();
 
-  isLoading = true;
+  /** Lazy viewers stay idle until visible; avoid showing 0% on hidden 0×0 hosts. */
+  isLoading = false;
   hasError = false;
   loadingProgress = 0;
   isAiGeneration = false;
@@ -66,7 +82,12 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   private animId!: number;
   private isMobile = false;
   private isDestroyed = false;
+  private isInViewport = false;
+  private isLooping = false;
+  private isInteracting = false;
   private mobileTouchCleanup: (() => void) | null = null;
+  private hoverCleanup: (() => void) | null = null;
+  private dampingStopTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -87,37 +108,85 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      if (this.loading === 'lazy') {
-        this.setupViewportObserver();
-      } else {
-        this.initializeViewer();
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    if (this.loading === 'eager') {
+      this.isInViewport = true;
+      this.tryInitializeViewer();
+    }
+    this.setupViewportObserver();
+    document.addEventListener('visibilitychange', this.onVisibility);
+    requestAnimationFrame(() => this.syncViewportNow());
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['modelPath'] && !changes['modelPath'].firstChange && this.renderer) {
+      this.loadModel();
+    }
+    if (changes['autoRotate'] && this.controls) {
+      this.controls.autoRotate = !!this.autoRotate;
+      if (this.autoRotate) {
+        this.resumeLoop();
       }
     }
   }
 
   /**
-   * Set up IntersectionObserver to lazy load the viewer when it enters the viewport.
+   * Lazy-init when first visible, and pause the render loop once the viewer leaves the screen.
    */
   private setupViewportObserver() {
     const options = {
       root: null,
-      rootMargin: '100px', // Start loading slightly before the component enters the screen
+      rootMargin: '80px',
       threshold: 0.01
     };
 
     this.ngZone.runOutsideAngular(() => {
       this.intersectionObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
+          this.isInViewport = entry.isIntersecting;
           if (entry.isIntersecting) {
-            this.initializeViewer();
-            this.disconnectObserver();
+            this.tryInitializeViewer();
+            this.resumeLoop();
+          } else {
+            this.pauseLoop();
           }
         });
       }, options);
 
       this.intersectionObserver.observe(this.container.nativeElement);
     });
+  }
+
+  private onVisibility = () => {
+    if (typeof document === 'undefined') {
+      return;
+    }
+    if (document.hidden) {
+      this.pauseLoop();
+    } else if (this.isInViewport) {
+      this.resumeLoop();
+    }
+  };
+
+  private syncViewportNow(): void {
+    if (this.isDestroyed || !this.container?.nativeElement) {
+      return;
+    }
+    const rect = this.container.nativeElement.getBoundingClientRect();
+    const inView =
+      rect.width > 0 &&
+      rect.height > 0 &&
+      rect.bottom > 0 &&
+      rect.top < (window.innerHeight || 0) + 80;
+    this.isInViewport = inView;
+    if (inView) {
+      this.tryInitializeViewer();
+      this.resumeLoop();
+    } else {
+      this.pauseLoop();
+    }
   }
 
   private disconnectObserver() {
@@ -131,11 +200,36 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
    * Loads heavy dependencies dynamically and configures ThreeJS.
    * Runs the main renderer loop outside Angular's zone to prevent performance overhead.
    */
+  /** Returns false when the host has no layout box yet (e.g. display:none). */
+  private tryInitializeViewer(): boolean {
+    if (this.isDestroyed || !this.container?.nativeElement || this.renderer) {
+      return !!this.renderer;
+    }
+
+    const el = this.container.nativeElement;
+    if (el.clientWidth === 0 && el.clientHeight === 0) {
+      return false;
+    }
+
+    this.initializeViewer();
+    return true;
+  }
+
   private initializeViewer() {
+    if (this.isDestroyed || !this.container?.nativeElement || this.renderer) {
+      return;
+    }
+
+    this.ngZone.run(() => {
+      this.isLoading = true;
+      this.loadingProgress = 0;
+      this.cdr.markForCheck();
+    });
+
     this.ngZone.runOutsideAngular(async () => {
       try {
         const THREE = await import('three');
-        const { OrbitControls } = await import('three/examples/jsm/controls/OrbitControls');
+        const { OrbitControls } = await import('three/examples/jsm/controls/OrbitControls.js');
 
         if (this.isDestroyed) return;
 
@@ -190,7 +284,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
 
     // Extract product ID from the path (e.g., "/uploads/products-3d/123-model.glb" -> 123)
     const pathParts = pathToLoad.split('/');
-    const productIdStr = pathParts.find(part => /^\\d+$/.test(part));
+    const productIdStr = pathParts.find(part => /^\d+$/.test(part));
     
     if (productIdStr) {
       const productId = parseInt(productIdStr, 10);
@@ -243,7 +337,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
       premultipliedAlpha: false,
     });
     this.renderer.setClearColor(0x000000, 0);
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     this.renderer.setSize(w, h);
     this.renderer.domElement.style.display = 'block';
     this.renderer.domElement.style.background = 'transparent';
@@ -269,15 +363,25 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.05;
-    this.controls.autoRotate = this.autoRotate;
+    this.controls.autoRotate = !!this.autoRotate;
     this.controls.autoRotateSpeed = 1.2;
-    this.controls.enableZoom = false;
+    this.controls.enableZoom = this.enableZoom && !this.previewOnly;
+    this.controls.enablePan = !this.previewOnly;
+    this.controls.enableRotate = !this.previewOnly && !this.rotateOnHover;
 
     this.controls.addEventListener('start', () => {
-      this.controls.enableZoom = true;
+      this.isInteracting = true;
+      this.resumeLoop();
+    });
+    this.controls.addEventListener('end', () => {
+      this.isInteracting = false;
+      if (this.rotateOnHover && this.controls) {
+        this.controls.enableRotate = false;
+      }
+      this.armDampingStop();
     });
 
-    if (this.isMobile && !this.previewOnly) {
+    if (this.isMobile && !this.previewOnly && !this.rotateOnHover) {
       this.controls.touches.ONE = THREE.TOUCH.ROTATE;
       this.controls.touches.TWO = THREE.TOUCH.DOLLY_PAN;
       this.setupMobileTouchGuards();
@@ -287,6 +391,8 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
       this.controls.enableZoom = false;
       this.controls.enablePan = false;
       this.controls.enableRotate = false;
+    } else if (this.rotateOnHover) {
+      this.setupHoverRotate(this.container.nativeElement);
     }
   }
 
@@ -294,7 +400,8 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
    * Subscribes to the advanced cached loading service.
    */
   private loadModel() {
-    const pathToLoad = this.isHdMode && this.hdModelPath ? this.hdModelPath : this.modelPath;
+    const rawPath = this.isHdMode && this.hdModelPath ? this.hdModelPath : this.modelPath;
+    const pathToLoad = resolveBundledModelPath(rawPath);
     
     const lowerPath = (pathToLoad || '').toLowerCase();
     this.isAiGeneration = !!pathToLoad && (
@@ -487,12 +594,24 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
       this.controls.update();
     }
 
+    const maxAnisotropy = this.renderer.capabilities.getMaxAnisotropy();
     this.model.traverse((child: any) => {
       if (child.isMesh) {
         child.castShadow = !this.isMobile;
         child.receiveShadow = !this.isMobile;
+        const materials = Array.isArray(child.material) ? child.material : [child.material];
+        for (const material of materials) {
+          if (material?.map) {
+            material.map.anisotropy = maxAnisotropy;
+            material.map.needsUpdate = true;
+          }
+        }
       }
     });
+
+    if (this.shouldKeyOutStudioBackground()) {
+      this.removeStudioBackgroundFromTextures(THREE);
+    }
 
     this.scene.add(this.model);
     this.currentLoadedPath = url;
@@ -503,7 +622,36 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
       this.modelLoaded.emit();
     });
 
-    this.ngZone.runOutsideAngular(() => this.animate());
+    this.ngZone.runOutsideAngular(() => this.resumeLoop());
+  }
+
+  private setupHoverRotate(host: HTMLElement): void {
+    const onEnter = () => {
+      if (!this.controls || this.previewOnly) {
+        return;
+      }
+      this.controls.enableRotate = true;
+    };
+    const onLeave = () => {
+      if (!this.controls || this.isInteracting) {
+        return;
+      }
+      this.controls.enableRotate = false;
+    };
+    const onDown = () => {
+      if (!this.controls || this.previewOnly) {
+        return;
+      }
+      this.controls.enableRotate = true;
+    };
+    host.addEventListener('pointerenter', onEnter);
+    host.addEventListener('pointerleave', onLeave);
+    host.addEventListener('pointerdown', onDown);
+    this.hoverCleanup = () => {
+      host.removeEventListener('pointerenter', onEnter);
+      host.removeEventListener('pointerleave', onLeave);
+      host.removeEventListener('pointerdown', onDown);
+    };
   }
 
   private applyRotation() {
@@ -515,13 +663,160 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  private animate = () => {
-    if (this.isDestroyed) return;
-    this.animId = requestAnimationFrame(this.animate);
-    if (this.controls) this.controls.update();
+  private shouldKeyOutStudioBackground(): boolean {
+    if (this.keyOutStudioBackground === false) {
+      return false;
+    }
+    if (this.keyOutStudioBackground === true) {
+      return true;
+    }
+
+    let hasPhotoScanMesh = false;
+    this.model.traverse((child: any) => {
+      if (child.isMesh && child.name?.includes('texture_pbr')) {
+        hasPhotoScanMesh = true;
+      }
+    });
+    return hasPhotoScanMesh;
+  }
+
+  /**
+   * Photogrammetry demo GLBs bake a white/grey studio plate into baseColor.
+   * Make those pixels transparent so the themed viewer background shows through.
+   */
+  private removeStudioBackgroundFromTextures(THREE: typeof import('three')): void {
+    if (!this.model) {
+      return;
+    }
+
+    const hardCutoff = 238;
+    const softCutoff = 210;
+
+    this.model.traverse((child: any) => {
+      if (!child.isMesh || !child.material) {
+        return;
+      }
+
+      const materials = Array.isArray(child.material) ? child.material : [child.material];
+      for (const material of materials) {
+        const mat = material as {
+          map?: { image?: CanvasImageSource; colorSpace?: unknown };
+          transparent?: boolean;
+          alphaTest?: number;
+          needsUpdate?: boolean;
+        };
+        const sourceImage = mat.map?.image as (HTMLImageElement & { width?: number; height?: number }) | undefined;
+        const width = sourceImage?.width ?? 0;
+        const height = sourceImage?.height ?? 0;
+        if (!sourceImage || width <= 0 || height <= 0) {
+          continue;
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        if (!ctx) {
+          continue;
+        }
+
+        ctx.drawImage(sourceImage, 0, 0, width, height);
+        const imageData = ctx.getImageData(0, 0, width, height);
+        const pixels = imageData.data;
+
+        for (let i = 0; i < pixels.length; i += 4) {
+          const r = pixels[i];
+          const g = pixels[i + 1];
+          const b = pixels[i + 2];
+          const minChannel = Math.min(r, g, b);
+
+          if (minChannel >= hardCutoff) {
+            pixels[i + 3] = 0;
+            continue;
+          }
+
+          if (minChannel >= softCutoff) {
+            const feather = (hardCutoff - minChannel) / (hardCutoff - softCutoff);
+            pixels[i + 3] = Math.round(pixels[i + 3] * feather);
+          }
+        }
+
+        ctx.putImageData(imageData, 0, 0);
+        const keyedTexture = new THREE.CanvasTexture(canvas);
+        keyedTexture.colorSpace = THREE.SRGBColorSpace;
+        mat.map = keyedTexture;
+        mat.transparent = true;
+        mat.alphaTest = 0.04;
+        mat.needsUpdate = true;
+      }
+    });
+  }
+
+  private shouldLoop(): boolean {
+    if (this.isDestroyed || !this.renderer || !this.isInViewport) {
+      return false;
+    }
+    if (typeof document !== 'undefined' && document.hidden) {
+      return false;
+    }
+    return !!this.autoRotate || this.isInteracting;
+  }
+
+  private resumeLoop(): void {
+    if (this.isDestroyed || this.isLooping || !this.renderer) {
+      return;
+    }
+    if (!this.shouldLoop()) {
+      this.renderFrame();
+      return;
+    }
+    this.isLooping = true;
+    this.ngZone.runOutsideAngular(() => this.animate());
+  }
+
+  private pauseLoop(): void {
+    this.isLooping = false;
+    if (this.animId) {
+      cancelAnimationFrame(this.animId);
+      this.animId = 0 as unknown as number;
+    }
+    if (!this.isDestroyed) {
+      this.renderFrame();
+    }
+  }
+
+  private armDampingStop(): void {
+    if (this.dampingStopTimer) {
+      clearTimeout(this.dampingStopTimer);
+    }
+    this.dampingStopTimer = setTimeout(() => {
+      this.dampingStopTimer = null;
+      if (!this.shouldLoop()) {
+        this.pauseLoop();
+      }
+    }, 450);
+  }
+
+  private renderFrame(): void {
+    if (this.controls) {
+      this.controls.update();
+    }
     if (this.renderer && this.scene && this.camera) {
       this.renderer.render(this.scene, this.camera);
     }
+  }
+
+  private animate = () => {
+    if (this.isDestroyed || !this.isLooping) {
+      return;
+    }
+    if (!this.shouldLoop()) {
+      this.renderFrame();
+      this.isLooping = false;
+      return;
+    }
+    this.animId = requestAnimationFrame(this.animate);
+    this.renderFrame();
   };
 
   private setupMobileTouchGuards(): void {
@@ -573,12 +868,19 @@ export class ThreeDViewerComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy() {
     this.isDestroyed = true;
     this.mobileTouchCleanup?.();
+    this.hoverCleanup?.();
+    if (this.dampingStopTimer) {
+      clearTimeout(this.dampingStopTimer);
+    }
+    if (isPlatformBrowser(this.platformId)) {
+      document.removeEventListener('visibilitychange', this.onVisibility);
+    }
     this.disconnectObserver();
+    this.pauseLoop();
     if (this.modelSubscription) {
       this.modelSubscription.unsubscribe();
     }
     if (this.resizeObserver) this.resizeObserver.disconnect();
-    if (this.animId) cancelAnimationFrame(this.animId);
     if (this.controls) this.controls.dispose();
     this.disposeModel();
     if (this.renderer) {

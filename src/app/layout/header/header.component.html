@@ -2,28 +2,27 @@
   <div class="header-container">
     <div class="logo" (click)="goHome()" style="cursor: pointer;">
       <app-logo
-        [height]="isMobile ? 44 : 60"
-        [width]="isMobile ? 148 : 200"
+        [height]="isMobile ? 40 : 44"
+        [width]="isMobile ? 132 : 160"
         [showText]="true">
       </app-logo>
     </div>
 
     <!-- Desktop Navigation -->
-    <nav class="nav" [class.nav-compressed]="isSearchOpen">
+    <nav class="nav">
       <ng-container *ngFor="let item of menuItems">
-        <a *ngIf="item.url.startsWith('/')" [routerLink]="item.url" class="nav-link"
+        <a *ngIf="item.url?.startsWith('/') && canAccessMenuItem(item) && !isAdminMenuItem(item)"
+          [routerLink]="item.url" class="nav-link"
           [class.active]="isMenuItemActive(item)"
-          (click)="onRouteMenuClick(item)"
-          [class.hidden]="!canAccessMenuItem(item)">
-          {{ item.title | localized }}
+          (click)="onRouteMenuClick(item)">
+          {{ getMenuTitle(item) }}
         </a>
-        <a *ngIf="item.url.startsWith('#')" 
+        <a *ngIf="item.url?.startsWith('#') && canAccessMenuItem(item) && !isAdminMenuItem(item)"
            href="javascript:void(0)"
-           (click)="handleMenuClick(item, $event)" 
+           (click)="handleMenuClick(item, $event)"
            class="nav-link"
-           [class.active]="isMenuItemActive(item)"
-           [class.hidden]="!canAccessMenuItem(item)">
-          {{ item.title | localized }}
+           [class.active]="isMenuItemActive(item)">
+          {{ getMenuTitle(item) }}
         </a>
       </ng-container>
     </nav>
@@ -66,6 +65,7 @@
     </div>
 
     <div class="user-actions">
+      <div class="user-actions__cluster user-actions__cluster--commerce" *ngIf="!isMobile">
       <span class="search-icon" (click)="toggleSearch()" *ngIf="showSearch && !isMobile">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M21 21L16.66 16.66" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -85,8 +85,11 @@
         <app-icon name="shopping-cart"></app-icon>
         <span class="cart-count" *ngIf="cartCount > 0">{{ cartCount }}</span>
       </a>
+      </div>
+
+      <div class="user-actions__cluster user-actions__cluster--prefs" *ngIf="!isMobile">
       <!-- Theme Switcher -->
-      <div class="theme-switcher" *ngIf="!isMobile">
+      <div class="theme-switcher">
         <button class="theme-toggle" (click)="toggleThemeMenu()">
           <svg width="26" height="26" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
@@ -125,14 +128,14 @@
                   style="display:block;width:24px;height:16px;background:var(--color-primary);"></span>
               </ng-container>
             </span>
-            <span class="theme-switcher__label">{{ theme.name }}</span>
+            <span class="theme-switcher__label">{{ 'HEADER.THEMES.' + themeI18nKey(theme.id) | translate }}</span>
             <span class="theme-switcher__check" *ngIf="currentTheme === theme.id">✔</span>
           </button>
         </div>
       </div>
 
       <!-- Language Switcher -->
-      <div class="lang-switcher" *ngIf="!isMobile">
+      <div class="lang-switcher">
         <button class="lang-switcher__toggle" (click)="toggleLangMenu()" aria-label="Language switcher">
           <!-- Small globe icon -->
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -154,6 +157,13 @@
           </button>
         </div>
       </div>
+      </div>
+
+      <div class="user-actions__cluster user-actions__cluster--account" *ngIf="!isMobile">
+      <a class="admin-entry" routerLink="/admin" *ngIf="hasAdminAccess && !isMobile"
+        [attr.aria-label]="'HEADER.NAV.ADMIN_PANEL' | translate">
+        {{ 'ADMIN' | translate }}
+      </a>
       <span class="profile-icon" (click)="openAuthModal()" *ngIf="showProfile && !isMobile">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -164,6 +174,7 @@
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </span>
+      </div>
 
       <!-- Mobile Hamburger Button -->
       <button class="hamburger" (click)="toggleMobileMenu()" [class.active]="isMobileMenuOpen">
@@ -188,7 +199,7 @@
         <img [src]="product.imageUrl" [alt]="product.name | localized" class="result-image">
         <div class="result-info">
           <h4 class="result-name">{{ product.name | localized }}</h4>
-          <p class="result-price">${{ product.price }}</p>
+          <p class="result-price">${{ product.price | number:'1.0-2' }}</p>
           <span class="result-category">{{ product.category }}</span>
         </div>
       </div>
@@ -206,91 +217,90 @@
 
 <!-- Mobile Menu -->
 <div class="mobile-menu" [class.active]="isMobileMenuOpen">
-  <div class="mobile-menu-header">
-    <h3 class="mobile-menu-title">{{ 'HEADER.MENU' | translate }}</h3>
-  </div>
+  <nav class="mobile-nav" [attr.aria-label]="'A11Y.MOBILE_NAV' | translate">
+    <div class="mobile-menu-section mobile-preferences">
+      <div class="pref-dock">
+        <div class="pref-dock__chips">
+          <button type="button" class="pref-chip pref-chip--icon"
+            [class.is-open]="prefPanel === 'theme'"
+            [attr.aria-expanded]="prefPanel === 'theme'"
+            [attr.aria-label]="'HEADER.THEME' | translate"
+            (click)="togglePrefPanel('theme')">
+            <span class="pref-chip__jewel" [attr.data-theme-id]="currentTheme" aria-hidden="true">
+              <ng-container [ngTemplateOutlet]="themeGlyphTpl" [ngTemplateOutletContext]="{ $implicit: currentTheme }"></ng-container>
+            </span>
+            <svg class="pref-chip__caret" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
 
-  <nav class="mobile-nav">
-    <div class="mobile-menu-section">
-      <ng-container *ngFor="let item of menuItems">
-        <!-- Regular Router Links -->
-        <a *ngIf="canAccessMenuItem(item) && item.url.startsWith('/')" 
-           [routerLink]="item.url" (click)="onRouteMenuClick(item); closeMobileMenu()" 
-           class="mobile-nav-link" [class.active]="isMenuItemActive(item)">
-          {{ item.title | localized }}
-        </a>
-        <!-- Anchor Links -->
-        <a *ngIf="canAccessMenuItem(item) && item.url.startsWith('#')" 
-           href="javascript:void(0)"
-           (click)="handleMenuClick(item, $event)" 
-           class="mobile-nav-link"
-           [class.active]="isMenuItemActive(item)">
-          {{ item.title | localized }}
-        </a>
-      </ng-container>
+          <button type="button" class="pref-chip pref-chip--icon"
+            [class.is-open]="prefPanel === 'lang'"
+            [attr.aria-expanded]="prefPanel === 'lang'"
+            [attr.aria-label]="'HEADER.LANGUAGE' | translate"
+            (click)="togglePrefPanel('lang')">
+            <span class="pref-chip__flag" aria-hidden="true">
+              <ng-container [ngTemplateOutlet]="langFlagTpl" [ngTemplateOutletContext]="{ $implicit: currentLang }"></ng-container>
+            </span>
+            <span class="pref-chip__code">{{ currentLang | uppercase }}</span>
+            <svg class="pref-chip__caret" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="pref-dock__panel" *ngIf="prefPanel === 'theme'" role="group" [attr.aria-label]="'HEADER.THEME' | translate">
+          <div class="mobile-theme-segment">
+            <button type="button" class="mobile-theme-segment__btn" *ngFor="let theme of themes"
+              [class.active]="currentTheme === theme.id" [attr.data-theme-id]="theme.id"
+              (click)="pickTheme(theme.id)">
+              <span class="mobile-theme-segment__icon" aria-hidden="true">
+                <ng-container [ngTemplateOutlet]="themeGlyphTpl" [ngTemplateOutletContext]="{ $implicit: theme.id }"></ng-container>
+              </span>
+              <span class="mobile-theme-segment__text">{{ 'HEADER.THEMES.' + themeI18nKey(theme.id) | translate }}</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="pref-dock__panel" *ngIf="prefPanel === 'lang'" role="group" [attr.aria-label]="'HEADER.LANGUAGE' | translate">
+          <div class="mobile-lang-segment">
+            <button type="button" class="mobile-lang-segment__btn" *ngFor="let lang of languages"
+              [class.active]="currentLang === lang.code" [attr.data-lang]="lang.code"
+              (click)="pickLanguage(lang.code)">
+              <span class="mobile-lang-segment__flag" aria-hidden="true">
+                <ng-container [ngTemplateOutlet]="langFlagTpl" [ngTemplateOutletContext]="{ $implicit: lang.code }"></ng-container>
+              </span>
+              <span class="mobile-lang-segment__code">{{ lang.label }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="mobile-menu-section mobile-preferences">
-      <div class="mobile-pref-row mobile-pref-row--theme">
-        <span class="mobile-pref-row__label">{{ 'HEADER.THEME' | translate }}</span>
-        <div class="mobile-theme-segment" role="group" [attr.aria-label]="'HEADER.THEME' | translate">
-          <button type="button" class="mobile-theme-segment__btn" *ngFor="let theme of themes"
-            [class.active]="currentTheme === theme.id" [attr.data-theme-id]="theme.id"
-            (click)="changeTheme(theme.id)">
-            <span class="mobile-theme-segment__icon" aria-hidden="true">
-              <!-- Light: sun -->
-              <svg *ngIf="theme.id === 'light'" width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="4" fill="currentColor" />
-                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
-                  stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
-              </svg>
-              <!-- Dark: moon -->
-              <svg *ngIf="theme.id === 'dark'" width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path d="M21 14.3A8.5 8.5 0 1 1 9.7 3 7 7 0 0 0 21 14.3Z"
-                  fill="currentColor" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round" />
-              </svg>
-              <!-- Glass: frost / crystal -->
-              <svg *ngIf="theme.id === 'glass' || (theme.id !== 'light' && theme.id !== 'dark')" width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path d="M12 3l7 4.5v9L12 21l-7-4.5v-9L12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
-                <path d="M12 3v18M5 7.5l14 9M19 7.5l-14 9" stroke="currentColor" stroke-width="1.2" opacity="0.55" />
-              </svg>
-            </span>
-            <span class="mobile-theme-segment__text">{{ 'HEADER.THEMES.' + (theme.id | uppercase) | translate }}</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="mobile-pref-row mobile-pref-row--lang">
-        <span class="mobile-pref-row__label">{{ 'HEADER.LANGUAGE' | translate }}</span>
-        <div class="mobile-lang-segment" role="group" [attr.aria-label]="'HEADER.LANGUAGE' | translate">
-          <button type="button" class="mobile-lang-segment__btn" *ngFor="let lang of languages"
-            [class.active]="currentLang === lang.code" [attr.data-lang]="lang.code"
-            (click)="changeLanguage(lang.code)">
-            <span class="mobile-lang-segment__flag" aria-hidden="true">
-              <!-- UK -->
-              <svg *ngIf="lang.code === 'en'" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg">
-                <rect width="60" height="40" fill="#012169"/>
-                <path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="8"/>
-                <path d="M0,0 L60,40 M60,0 L0,40" stroke="#C8102E" stroke-width="5"/>
-                <path d="M30,0 V40 M0,20 H60" stroke="#fff" stroke-width="12"/>
-                <path d="M30,0 V40 M0,20 H60" stroke="#C8102E" stroke-width="7"/>
-              </svg>
-              <!-- Russia -->
-              <svg *ngIf="lang.code === 'ru'" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg">
-                <rect width="60" height="13.34" y="0" fill="#fff"/>
-                <rect width="60" height="13.34" y="13.33" fill="#0039A6"/>
-                <rect width="60" height="13.34" y="26.66" fill="#D52B1E"/>
-              </svg>
-              <!-- Ukraine -->
-              <svg *ngIf="lang.code === 'ua'" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg">
-                <rect width="60" height="20" y="0" fill="#0057B7"/>
-                <rect width="60" height="20" y="20" fill="#FFD700"/>
-              </svg>
-            </span>
-            <span class="mobile-lang-segment__code">{{ lang.label }}</span>
-          </button>
-        </div>
-      </div>
+    <div class="mobile-nav-tiles">
+      <ng-container *ngFor="let item of menuItems">
+        <a *ngIf="canAccessMenuItem(item) && item.url?.startsWith('/')"
+           [routerLink]="item.url"
+           (click)="onRouteMenuClick(item); closeMobileMenu()"
+           class="mobile-nav-tile"
+           [class.mobile-nav-tile--admin]="isAdminMenuItem(item)"
+           [class.active]="isMenuItemActive(item)">
+          <span class="mobile-nav-tile__icon" aria-hidden="true">
+            <ng-container [ngTemplateOutlet]="menuGlyphTpl" [ngTemplateOutletContext]="{ $implicit: item }"></ng-container>
+          </span>
+          <span class="mobile-nav-tile__label">{{ getMenuTitle(item) }}</span>
+        </a>
+        <a *ngIf="canAccessMenuItem(item) && item.url?.startsWith('#')"
+           href="javascript:void(0)"
+           (click)="handleMenuClick(item, $event)"
+           class="mobile-nav-tile"
+           [class.active]="isMenuItemActive(item)">
+          <span class="mobile-nav-tile__icon" aria-hidden="true">
+            <ng-container [ngTemplateOutlet]="menuGlyphTpl" [ngTemplateOutletContext]="{ $implicit: item }"></ng-container>
+          </span>
+          <span class="mobile-nav-tile__label">{{ getMenuTitle(item) }}</span>
+        </a>
+      </ng-container>
     </div>
   </nav>
 
@@ -306,3 +316,70 @@
     </div>
   </div>
 </div>
+
+<ng-template #themeGlyphTpl let-themeId>
+  <svg *ngIf="themeId === 'light'" width="18" height="18" viewBox="0 0 24 24" fill="none">
+    <circle cx="12" cy="12" r="4" fill="currentColor" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+      stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+  </svg>
+  <svg *ngIf="themeId === 'dark'" width="18" height="18" viewBox="0 0 24 24" fill="none">
+    <path d="M21 14.3A8.5 8.5 0 1 1 9.7 3 7 7 0 0 0 21 14.3Z"
+      fill="currentColor" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round" />
+  </svg>
+  <svg *ngIf="themeId === 'glass' || themeId === 'dark-glass' || (themeId !== 'light' && themeId !== 'dark')"
+    width="18" height="18" viewBox="0 0 24 24" fill="none">
+    <path d="M12 3l7 4.5v9L12 21l-7-4.5v-9L12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+    <path d="M12 3v18M5 7.5l14 9M19 7.5l-14 9" stroke="currentColor" stroke-width="1.2" opacity="0.55" />
+  </svg>
+</ng-template>
+
+<ng-template #langFlagTpl let-code>
+  <svg *ngIf="code === 'en'" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg">
+    <rect width="60" height="40" fill="#012169"/>
+    <path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="8"/>
+    <path d="M0,0 L60,40 M60,0 L0,40" stroke="#C8102E" stroke-width="5"/>
+    <path d="M30,0 V40 M0,20 H60" stroke="#fff" stroke-width="12"/>
+    <path d="M30,0 V40 M0,20 H60" stroke="#C8102E" stroke-width="7"/>
+  </svg>
+  <svg *ngIf="code === 'ru'" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg">
+    <rect width="60" height="13.34" y="0" fill="#fff"/>
+    <rect width="60" height="13.34" y="13.33" fill="#0039A6"/>
+    <rect width="60" height="13.34" y="26.66" fill="#D52B1E"/>
+  </svg>
+  <svg *ngIf="code === 'ua'" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg">
+    <rect width="60" height="20" y="0" fill="#0057B7"/>
+    <rect width="60" height="20" y="20" fill="#FFD700"/>
+  </svg>
+</ng-template>
+
+<ng-template #menuGlyphTpl let-item>
+  <svg *ngIf="menuGlyph(item) === 'home'" width="22" height="22" viewBox="0 0 24 24" fill="none">
+    <path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5.2v-6.2H10.2V21H5a1 1 0 0 1-1-1v-9.5Z"
+      stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" />
+  </svg>
+  <svg *ngIf="menuGlyph(item) === 'shop'" width="22" height="22" viewBox="0 0 24 24" fill="none">
+    <path d="M6.4 8.2h11.2l-.9 11.1a1.6 1.6 0 0 1-1.6 1.5H8.9a1.6 1.6 0 0 1-1.6-1.5L6.4 8.2Z"
+      stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" />
+    <path d="M9 8.1V7a3 3 0 0 1 6 0v1.1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+  </svg>
+  <svg *ngIf="menuGlyph(item) === 'about'" width="22" height="22" viewBox="0 0 24 24" fill="none">
+    <path d="M12 4.2 13.4 8l3.8.2-3 2.4 1 3.7L12 12.4 8.8 14.3l1-3.7-3-2.4L10.6 8 12 4.2Z"
+      stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+    <path d="M18.2 15.4 19 17.6l2.2.1-1.8 1.4.6 2.1L18.2 20l-1.8 1.2.6-2.1-1.8-1.4 2.2-.1.8-2.2Z"
+      stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" />
+  </svg>
+  <svg *ngIf="menuGlyph(item) === 'contacts'" width="22" height="22" viewBox="0 0 24 24" fill="none">
+    <rect x="3.5" y="5.5" width="17" height="13" rx="2.2" stroke="currentColor" stroke-width="1.7" />
+    <path d="m5.2 8 6.8 5.2L18.8 8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+  <svg *ngIf="menuGlyph(item) === 'admin'" width="22" height="22" viewBox="0 0 24 24" fill="none">
+    <path d="M12 3.6 20 8v8l-8 4.4L4 16V8l8-4.4Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" />
+    <path d="M12 8.2v7.6M8.4 10.2 12 12.2l3.6-2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+  </svg>
+  <svg *ngIf="menuGlyph(item) === 'page'" width="22" height="22" viewBox="0 0 24 24" fill="none">
+    <path d="M7 4.5h7.2L19 9.2V19a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 6 19V6a1.5 1.5 0 0 1 1-1.5Z"
+      stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" />
+    <path d="M14 4.7V9h4.2M9 13h6M9 16.4h4.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+  </svg>
+</ng-template>

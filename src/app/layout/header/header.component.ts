@@ -11,9 +11,12 @@ import { Product } from 'src/shared/models/product.model';
 import { ModalService } from '../../core/services/modal.service';
 import { ThemeService } from '../../core/themes/theme.service';
 import { Theme } from '../../core/themes/theme.model';
+import { themeLabelI18nKey } from '../../core/themes/theme-label.util';
 import { AuthService } from '../../core/services/auth.service';
+import { getLocalizedString } from '../../../shared/utils/localization.util';
 import { TranslateService } from '@ngx-translate/core';
 import { MobileMenuService } from '../../core/services/mobile-menu.service';
+import { findSectionElement } from 'src/shared/utils/section-anchor.util';
 
 @Component({
   selector: 'app-header',
@@ -59,8 +62,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   private readonly FALLBACK_MENU_ITEMS: MenuItem[] = [
     { title: 'Home', url: '/home', access: 'all', isActive: true },
     { title: 'Shop', url: '/shop', access: 'all', isActive: true },
-    { title: 'About', url: '#about', access: 'all', isActive: true },
-    { title: 'Contacts', url: '#contacts', access: 'all', isActive: true },
+    { title: 'About', url: '/about', access: 'all', isActive: true },
+    { title: 'Contacts', url: '/contacts', access: 'all', isActive: true },
     { title: 'Admin Panel', url: '/admin', access: 'admin', isActive: true }
   ];
 
@@ -125,6 +128,9 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
     this.mobileMenuSubscription = this.mobileMenuService.isOpen$.subscribe((open) => {
       this.isMobileMenuOpen = open;
+      if (!open) {
+        this.prefPanel = null;
+      }
     });
   }
 
@@ -422,10 +428,14 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   canAccessMenuItem(menuItem: MenuItem): boolean {
     if (menuItem.url.includes('admin')) {
-      const user = this.authService.getUser();
-      return user && user.role === 'admin';
+      return this.hasAdminAccess;
     }
     return true;
+  }
+
+  get hasAdminAccess(): boolean {
+    const user = this.authService.getUser();
+    return !!(user && user.role === 'admin');
   }
 
   isLoggedIn(): boolean {
@@ -469,7 +479,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   isMenuItemActive(item: MenuItem): boolean {
-    const url = item.url;
+    const url = item.url || '';
 
     if (url.startsWith('#')) {
       return this.activeSectionId === url.substring(1);
@@ -492,6 +502,84 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     return currentPath === url || currentPath.startsWith(`${url}/`);
   }
 
+  getMenuTitle(item: MenuItem): string {
+    const title = item.title;
+    if (title && typeof title !== 'string') {
+      return getLocalizedString(title, this.currentLang);
+    }
+
+    const url = (item.url || '').split('#')[0].split('?')[0].toLowerCase();
+    const urlKeys: Record<string, string> = {
+      '/home': 'HEADER.NAV.HOME',
+      '/': 'HEADER.NAV.HOME',
+      '/shop': 'HEADER.NAV.SHOP',
+      '/about': 'HEADER.NAV.ABOUT',
+      '/contacts': 'HEADER.NAV.CONTACTS',
+      '/admin': 'HEADER.NAV.ADMIN_PANEL',
+    };
+    if (urlKeys[url]) {
+      return this.translate.instant(urlKeys[url]);
+    }
+
+    const titleKeyByLabel: Record<string, string> = {
+      home: 'HEADER.NAV.HOME',
+      shop: 'HEADER.NAV.SHOP',
+      about: 'HEADER.NAV.ABOUT',
+      contacts: 'HEADER.NAV.CONTACTS',
+      'admin panel': 'HEADER.NAV.ADMIN_PANEL',
+    };
+    const normalized = (typeof title === 'string' ? title : '').trim().toLowerCase();
+    if (titleKeyByLabel[normalized]) {
+      return this.translate.instant(titleKeyByLabel[normalized]);
+    }
+
+    return typeof title === 'string' ? title : '';
+  }
+
+  menuGlyph(item: MenuItem): 'home' | 'shop' | 'about' | 'contacts' | 'admin' | 'page' {
+    const url = (item.url || '').toLowerCase();
+    if (url.includes('admin')) {
+      return 'admin';
+    }
+    if (url.includes('shop')) {
+      return 'shop';
+    }
+    if (url.includes('contact')) {
+      return 'contacts';
+    }
+    if (url.includes('about') || url.includes('brand')) {
+      return 'about';
+    }
+    if (url.includes('home') || url === '/' || url === '') {
+      return 'home';
+    }
+    return 'page';
+  }
+
+  isAdminMenuItem(item: MenuItem): boolean {
+    return (item.url || '').toLowerCase().includes('admin');
+  }
+
+  themeI18nKey(themeId: string): string {
+    return themeLabelI18nKey(themeId, 'frontend');
+  }
+
+  prefPanel: 'theme' | 'lang' | null = null;
+
+  togglePrefPanel(panel: 'theme' | 'lang'): void {
+    this.prefPanel = this.prefPanel === panel ? null : panel;
+  }
+
+  pickTheme(themeId: string): void {
+    this.changeTheme(themeId);
+    this.prefPanel = null;
+  }
+
+  pickLanguage(langCode: string): void {
+    this.changeLanguage(langCode);
+    this.prefPanel = null;
+  }
+
   private onRouteChange(): void {
     const path = this.router.url.split('?')[0];
 
@@ -501,9 +589,23 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       return;
     }
 
-    if (!this.activeSectionId) {
-      this.setupScrollSpy();
+    this.syncActiveSectionFromHash();
+    this.setupScrollSpy();
+
+    if (isPlatformBrowser(this.platformId)) {
+      const hash = window.location.hash.replace(/^#/, '');
+      if (hash) {
+        setTimeout(() => this.scrollToElement(hash), 350);
+      }
     }
+  }
+
+  private syncActiveSectionFromHash(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    const hash = window.location.hash.replace(/^#/, '');
+    this.activeSectionId = hash || null;
   }
 
   private setupScrollSpy(): void {
@@ -514,7 +616,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.teardownScrollSpy();
 
     const sectionIds = this.menuItems
-      .filter(item => item.url.startsWith('#'))
+      .filter(item => (item.url || '').startsWith('#'))
       .map(item => item.url.substring(1));
 
     if (!sectionIds.length) {
@@ -541,7 +643,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
     const observeSections = () => {
       sectionIds.forEach(id => {
-        const element = document.getElementById(id);
+        const element = findSectionElement(id);
         if (element) {
           this.scrollSpyObserver?.observe(element);
         }
@@ -558,14 +660,19 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   scrollToSection(sectionId: string): void {
-    if (this.router.url.split('?')[0] !== '/home') {
-      this.router.navigate(['/home']).then(() => {
-        this.setupScrollSpy();
-        this.scrollToElement(sectionId);
-      });
-    } else {
+    if (this.isStorefrontHomePath()) {
       this.scrollToElement(sectionId);
+      return;
     }
+    this.router.navigate(['/home']).then(() => {
+      this.setupScrollSpy();
+      this.scrollToElement(sectionId);
+    });
+  }
+
+  private isStorefrontHomePath(): boolean {
+    const path = this.router.url.split('?')[0];
+    return path === '/' || path === '/home' || path === '';
   }
 
   private scrollToElement(elementId: string): void {
@@ -573,19 +680,20 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
     let retries = 0;
     const maxRetries = 20;
+    let followUp = false;
 
     const tryScroll = () => {
-      const element = document.getElementById(elementId);
-      console.log(`[Header] Retry ${retries}: Finding element '${elementId}'...`, element ? 'Found' : 'Not Found');
-      
+      const element = findSectionElement(elementId);
+
       if (element) {
-        // Use scrollIntoView which is more robust
-        // No manual window.scrollBy here to avoid flickering
-        // We rely on scroll-margin-top in CSS for the offset
         element.scrollIntoView({
-          behavior: 'smooth',
+          behavior: followUp ? 'auto' : 'smooth',
           block: 'start'
         });
+        if (!followUp) {
+          followUp = true;
+          setTimeout(tryScroll, 450);
+        }
       } else if (retries < maxRetries) {
         retries++;
         setTimeout(tryScroll, 150);

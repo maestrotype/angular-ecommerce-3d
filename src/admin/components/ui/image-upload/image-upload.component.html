@@ -41,7 +41,7 @@
             class="upload-btn">
       <mat-icon *ngIf="!uploading">add_photo_alternate</mat-icon>
       <mat-icon *ngIf="uploading" class="spinning">hourglass_empty</mat-icon>
-      {{ uploading ? 'Uploading...' : (imagePreview ? 'Change Image' : 'Select Image') }}
+      {{ uploading ? ('UPLOADING' | translate) : (imagePreview ? ('CHANGE_IMAGE' | translate) : ('SELECT_IMAGE' | translate)) }}
     </button>
   </div>
 </div> 

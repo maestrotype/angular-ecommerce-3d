@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from '../../services/auth.service';
+import { AdminAuthService } from '../../services/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { translateErrorMessage } from '../../../shared/utils/localization.util';
 import { environment } from '../../../environments/environment';
@@ -22,7 +22,7 @@ export class AdminLoginComponent {
     private fb: FormBuilder,
     private router: Router,
     private snackBar: MatSnackBar,
-    private authService: AuthService,
+    private authService: AdminAuthService,
     private translate: TranslateService
   ) {
     this.loginForm = this.createForm();

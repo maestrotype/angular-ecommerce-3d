@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ChartConfiguration, ChartOptions, Chart, registerables } from 'chart.js';
 import { Subscription } from 'rxjs';
 import { DashboardService } from '../../services/dashboard.service';
@@ -8,6 +9,14 @@ import { ThemeService } from '../../../app/core/themes/theme.service';
 
 Chart.register(...registerables);
 
+export interface WeekBar {
+  label: string;
+  value: number;
+  height: number;
+  isPeak: boolean;
+  short: string;
+}
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -16,7 +25,13 @@ Chart.register(...registerables);
 export class DashboardComponent implements OnInit, OnDestroy {
   dashboardData: any = {};
   isLoading = false;
+  weekBars: WeekBar[] = [];
+  peakBar: WeekBar | null = null;
+  weekTotal = 0;
+  weekAverage = 0;
+  weekTrend = 0;
   private themeSub?: Subscription;
+  private langSub?: Subscription;
 
   public salesChartData: ChartConfiguration<'line'>['data'] = {
     labels: [],
@@ -93,7 +108,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private dashboardService: DashboardService,
     private errorHandler: ErrorHandlerService,
     private translate: TranslateService,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -101,7 +117,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.initChartTranslations();
     this.applyChartAxisColors();
 
-    this.translate.onLangChange.subscribe(() => {
+    this.langSub = this.translate.onLangChange.subscribe(() => {
       this.initChartTranslations();
     });
 
@@ -112,6 +128,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.themeSub?.unsubscribe();
+    this.langSub?.unsubscribe();
+  }
+
+  openOrders(): void {
+    this.router.navigate(['/admin/orders']);
   }
 
   /** Glass/dark: bright ticks; light: slate for contrast on pale cards */
@@ -144,6 +165,31 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.salesChartData.labels = days.map(day => this.translate.instant('DAYS_SHORT.' + day));
     this.salesChartData.datasets[0].label = this.translate.instant('SALES_ACTIVITY');
     this.salesChartData = { ...this.salesChartData };
+    this.refreshWeekBars();
+  }
+
+  private refreshWeekBars(): void {
+    const values = (this.salesChartData.datasets[0].data || []) as number[];
+    const labels = (this.salesChartData.labels || []) as string[];
+    const max = Math.max(...values, 1);
+    const peak = Math.max(...values, 0);
+    this.weekBars = values.map((value, index) => ({
+      label: labels[index] || '',
+      value,
+      height: Math.max(32, Math.round((value / max) * 100)),
+      isPeak: value === peak,
+      short: value >= 1000
+        ? `${(value / 1000).toFixed(1).replace(/\.0$/, '')}k`
+        : String(value),
+    }));
+    this.peakBar = this.weekBars.find((bar) => bar.isPeak) || null;
+    this.weekTotal = values.reduce((sum, value) => sum + value, 0);
+    this.weekAverage = values.length ? Math.round(this.weekTotal / values.length) : 0;
+    const early = values.slice(0, 3);
+    const late = values.slice(4);
+    const earlyAvg = early.length ? early.reduce((sum, value) => sum + value, 0) / early.length : 0;
+    const lateAvg = late.length ? late.reduce((sum, value) => sum + value, 0) / late.length : 0;
+    this.weekTrend = earlyAvg > 0 ? Math.round(((lateAvg - earlyAvg) / earlyAvg) * 100) : 0;
   }
 
   loadDashboardData(): void {

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Studio saddle bag">
+  <rect width="400" height="400" fill="#111827"/>
+  <rect x="40" y="40" width="320" height="320" rx="24" fill="#1f2937"/>
+  <path d="M118 168h164c12 0 22 10 22 22v96c0 18-14 32-32 32H128c-18 0-32-14-32-32v-96c0-12 10-22 22-22z" fill="#d6b17a"/>
+  <path d="M150 168c0-28 22-52 50-52s50 24 50 52" fill="none" stroke="#c4a162" stroke-width="14" stroke-linecap="round"/>
+  <rect x="176" y="214" width="48" height="28" rx="6" fill="#1f2937"/>
+  <text x="200" y="360" fill="#9ca3af" font-family="system-ui,sans-serif" font-size="18" text-anchor="middle">Studio Bag Demo</text>
+</svg>

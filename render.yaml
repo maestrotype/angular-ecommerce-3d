@@ -2,12 +2,22 @@ services:
   - type: web
     name: angular-ecommerce-backend
     runtime: docker
-    rootDir: backend
-    dockerfilePath: ./Dockerfile
+    rootDir: .
+    dockerfilePath: backend/Dockerfile
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
         value: production
+
+  # Node runtime alternative (if not using Docker):
+  # rootDir: .  (repository root — required for npm workspaces)
+  # buildCommand: npm run render:build
+  # startCommand: npm run render:start
+  #
+  # Legacy backend-only rootDir (backend/) — current Render setup:
+  # buildCommand: npm run build:render
+  # startCommand: npm run start:prod
+  # build:render installs deps locally via --no-workspaces (see backend/package.json)
 
   - type: web
     name: angular-ecommerce-3d

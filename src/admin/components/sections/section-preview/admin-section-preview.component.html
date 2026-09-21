@@ -43,7 +43,7 @@
 
       <!-- Section wrappers -->
       <div class="architect-section-wrapper"
-           *ngFor="let s of renderingSections; let i = index"
+           *ngFor="let s of renderingSections; let i = index; trackBy: trackBySectionId"
            [class.active]="s.id === activeSectionId"
            [class.inspecting]="isInspectionMode"
            [attr.data-section-id]="s.id"

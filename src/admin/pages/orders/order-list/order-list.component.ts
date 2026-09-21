@@ -5,7 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
-import { OrderService } from '../../../services/order.service';
+import { AdminOrderService } from '../../../services/order.service';
 import { OrderDetailComponent } from '../order-detail/order-detail.component';
 import { Order } from '../../../models/order.model';
 import { TranslateService } from '@ngx-translate/core';
@@ -21,6 +21,7 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy {
   isLoading = false;
   error: string | null = null;
   pagedOrders: Order[] = [];
+  searchTerm = '';
 
   @ViewChildren(MatPaginator) paginators!: QueryList<MatPaginator>;
   @ViewChild(MatSort) sort!: MatSort;
@@ -29,7 +30,7 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy {
   private pageSub?: Subscription;
 
   constructor(
-    private orderService: OrderService,
+    private orderService: AdminOrderService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private translate: TranslateService
@@ -98,13 +99,9 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  applyFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+  applySearch(value: string): void {
+    this.dataSource.filter = (value || '').trim().toLowerCase();
+    this.dataSource.paginator?.firstPage();
     this.refreshPagedOrders();
   }
 

@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from "@angular/core";
 import { MatTableDataSource } from "@angular/material/table";
-import { MatPaginator } from "@angular/material/paginator";
+import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -18,7 +18,7 @@ import { getLocalizedString } from 'src/shared/utils/localization.util';
   templateUrl: "./category-list.component.html",
   styleUrls: ["./category-list.component.scss"],
 })
-export class CategoryListComponent implements OnInit {
+export class CategoryListComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ["id", "name", "description", "actions"];
   dataSource = new MatTableDataSource<Category>([]);
   isLoading = false;
@@ -35,7 +35,8 @@ export class CategoryListComponent implements OnInit {
     private categoryService: CategoryService,
     private confirmationService: ConfirmationService,
     private errorHandler: ErrorHandlerService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -43,8 +44,27 @@ export class CategoryListComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.bindPaginator();
+  }
+
+  get pagedCategories(): Category[] {
+    const data = this.dataSource.filteredData;
+    if (!this.paginator) {
+      return data;
+    }
+    const start = this.paginator.pageIndex * this.paginator.pageSize;
+    return data.slice(start, start + this.paginator.pageSize);
+  }
+
+  onPage(_event: PageEvent): void {
+    this.cdr.markForCheck();
+  }
+
+  private bindPaginator(): void {
+    if (this.paginator) {
+      this.dataSource.paginator = this.paginator;
+    }
   }
 
   loadCategories(): void {
@@ -56,6 +76,7 @@ export class CategoryListComponent implements OnInit {
         this.allCategories = categories;
         this.dataSource.data = categories;
         this.isLoading = false;
+        setTimeout(() => this.bindPaginator());
       },
       error: (err) => {
         this.error = "Failed to load categories. Please try again.";
@@ -72,6 +93,7 @@ export class CategoryListComponent implements OnInit {
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.dataSource.paginator?.firstPage();
   }
 
   addCategory(): void {

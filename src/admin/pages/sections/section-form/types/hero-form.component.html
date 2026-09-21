@@ -1,0 +1,124 @@
+        <mat-tab-group animationDuration="250ms" color="primary" [formGroup]="sectionForm">
+          <!-- TAB: CONTENT -->
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="tab-icon">text_fields</mat-icon>
+              <span class="tab-label">{{ 'CONTENT' | translate }}</span>
+            </ng-template>
+            <div class="tab-content">
+              <div class="form-grid">
+                <!-- Title (Localized) -->
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'en'">
+                  <mat-label>{{ 'TITLE_EN' | translate }}</mat-label>
+                  <input matInput formControlName="title_en" placeholder="Enter title (EN)">
+                </mat-form-field>
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ru'">
+                  <mat-label>{{ 'TITLE_RU' | translate }}</mat-label>
+                  <input matInput formControlName="title_ru" placeholder="Enter title (RU)">
+                </mat-form-field>
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ua'">
+                  <mat-label>{{ 'TITLE_UA' | translate }}</mat-label>
+                  <input matInput formControlName="title_ua" placeholder="Enter title (UA)">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'en'">
+                  <mat-label>{{ 'SUBTITLE_EN' | translate }}</mat-label>
+                  <input matInput formControlName="subtitle_en" placeholder="Enter subtitle (EN)">
+                </mat-form-field>
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ru'">
+                  <mat-label>{{ 'SUBTITLE_RU' | translate }}</mat-label>
+                  <input matInput formControlName="subtitle_ru" placeholder="Enter subtitle (RU)">
+                </mat-form-field>
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ua'">
+                  <mat-label>{{ 'SUBTITLE_UA' | translate }}</mat-label>
+                  <input matInput formControlName="subtitle_ua" placeholder="Enter subtitle (UA)">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'en'">
+                  <mat-label>{{ 'CONTENT_EN' | translate }}</mat-label>
+                  <textarea matInput formControlName="content_en" placeholder="Description (EN)" rows="4"></textarea>
+                </mat-form-field>
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ru'">
+                  <mat-label>{{ 'CONTENT_RU' | translate }}</mat-label>
+                  <textarea matInput formControlName="content_ru" placeholder="Description (RU)" rows="4"></textarea>
+                </mat-form-field>
+                <mat-form-field appearance="outline" *ngIf="activeMenuLang === 'ua'">
+                  <mat-label>{{ 'CONTENT_UA' | translate }}</mat-label>
+                  <textarea matInput formControlName="content_ua" placeholder="Description (UA)" rows="4"></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-tab>
+
+          <!-- TAB: MEDIA -->
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="tab-icon">image</mat-icon>
+              <span class="tab-label">{{ 'MEDIA' | translate }}</span>
+            </ng-template>
+            <div class="tab-content">
+              <div class="media-section">
+                <div class="toggle-group">
+                  <mat-slide-toggle formControlName="showImage">{{ 'SHOW_IMAGE' | translate }}</mat-slide-toggle>
+                  <mat-slide-toggle formControlName="show3d">{{ 'SHOW_3D_MODEL' | translate }}</mat-slide-toggle>
+                </div>
+
+                <p class="media-hint" *ngIf="!show3d">{{ 'HERO_3D_OFF_HINT' | translate }}</p>
+
+                <div class="media-stack">
+                  <div class="media-card" *ngIf="showImage">
+                    <app-image-upload
+                      [currentImageUrl]="sectionForm.get('imageUrl')?.value"
+                      [label]="'SECTION_IMAGE' | translate"
+                      (fileSelected)="onImageFileSelected($event)"
+                      (imageUploaded)="onImageUploaded($event)">
+                    </app-image-upload>
+                  </div>
+
+                  <div class="media-card" *ngIf="show3d">
+                    <span class="media-card__label">{{ 'SECTION_3D_MODEL' | translate }}</span>
+                    <p class="media-card__hint">{{ 'HERO_3D_HINT' | translate }}</p>
+                    <div class="threed-dropzone" (click)="fileInput.click()">
+                      <input type="file" #fileInput (change)="on3dFileSelected($event)" accept=".glb" hidden>
+                      <div class="threed-dropzone__empty" *ngIf="!model3dFileName">
+                        <mat-icon>view_in_ar</mat-icon>
+                        <p>{{ 'SELECT_3D_MODEL' | translate }}</p>
+                        <small>{{ 'ONLY_GLB' | translate }}</small>
+                      </div>
+                      <div class="threed-dropzone__file" *ngIf="model3dFileName">
+                        <mat-icon>view_in_ar</mat-icon>
+                        <span class="threed-dropzone__name">{{ model3dFileName }}</span>
+                        <button mat-icon-button type="button" (click)="remove3dModel($event)" [attr.aria-label]="'REMOVE' | translate">
+                          <mat-icon>close</mat-icon>
+                        </button>
+                      </div>
+                      <button type="button" mat-stroked-button class="threed-dropzone__btn" (click)="fileInput.click(); $event.stopPropagation()">
+                        {{ (model3dFileName ? 'CHANGE_3D_MODEL' : 'SELECT_3D_MODEL') | translate }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+
+          <mat-tab *ngIf="showComponentsTab">
+            <ng-template mat-tab-label>
+              <mat-icon class="tab-icon">extension</mat-icon>
+              <span class="tab-label">{{ 'COMPONENTS' | translate }}</span>
+            </ng-template>
+            <div class="tab-content">
+              <ng-content select="[sectionComponents]"></ng-content>
+            </div>
+          </mat-tab>
+
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon class="tab-icon">settings</mat-icon>
+              <span class="tab-label">{{ 'SETTINGS' | translate }}</span>
+            </ng-template>
+            <div class="tab-content">
+              <ng-content select="[sectionSettings]"></ng-content>
+            </div>
+          </mat-tab>
+        </mat-tab-group>

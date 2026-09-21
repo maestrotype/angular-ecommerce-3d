@@ -317,16 +317,26 @@
 
   .orders-grid {
     grid-template-columns: 1fr;
+    padding: 0;
+    width: 100%;
     gap: var(--space-2);
   }
 
   .order-card {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     padding: var(--space-3);
     gap: var(--space-2);
     box-shadow: none;
     background: color-mix(in srgb, var(--surface-elevated) 55%, transparent);
     border: none;
     border-radius: var(--radius-md);
+    transform: none;
+
+    &:hover {
+      transform: none;
+    }
 
     &__top {
       gap: var(--space-2);
@@ -361,5 +371,15 @@
 
   .desktop-view {
     display: block;
+  }
+}
+
+:host-context([data-theme='glass']),
+:host-context([data-theme='dark-glass']) {
+  @media (max-width: 768px) {
+    .order-card {
+      background: color-mix(in srgb, var(--surface-elevated) 55%, transparent);
+      box-shadow: none;
+    }
   }
 }

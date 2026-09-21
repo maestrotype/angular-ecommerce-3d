@@ -40,9 +40,13 @@
     </div>
 </div>
 
-<!-- Actual page sections when loaded -->
-<ng-container *ngIf="!sectionsLoading">
+<!-- Actual page sections when loaded (header/footer come from the app chrome) -->
+<div class="home-sections" *ngIf="!sectionsLoading">
     <ng-container *ngFor="let section of sections">
-        <app-section-renderer *ngIf="section.type !== 'header'" [section]="section" [contextData]="pageContext"></app-section-renderer>
+        <app-section-renderer
+            *ngIf="section.type !== 'header' && section.type !== 'footer'"
+            [section]="section"
+            [contextData]="pageContext">
+        </app-section-renderer>
     </ng-container>
-</ng-container>
+</div>

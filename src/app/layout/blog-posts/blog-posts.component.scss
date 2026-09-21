@@ -113,7 +113,7 @@
           padding: 0.25rem 0.75rem;
           border-radius: var(--radius-full, 999px);
           background: var(--interactive-primary);
-          color: var(--on-primary, #fff);
+          color: var(--text-on-primary, #fff);
           font-weight: 500;
           text-transform: uppercase;
           letter-spacing: 0.04em;
@@ -188,7 +188,7 @@
       padding: 0.875rem 2rem;
       border-radius: var(--radius-lg, 16px);
       background: var(--interactive-primary);
-      color: var(--on-primary, #fff);
+      color: var(--text-on-primary, #fff);
       font-weight: 600;
       text-decoration: none;
       transition: opacity 0.2s ease, transform 0.2s ease;

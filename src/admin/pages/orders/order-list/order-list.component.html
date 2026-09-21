@@ -10,11 +10,14 @@
   </div>
 
   <div list-filters class="filter-section">
-    <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
-      <mat-label>{{ 'SEARCH_ORDERS' | translate}}</mat-label>
-      <input matInput (keyup)="applyFilter($event)" />
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
+    <app-search-bar
+      [label]="'SEARCH_ORDERS' | translate"
+      [placeholder]="'SEARCH_ORDERS' | translate"
+      [maxWidth]="'100%'"
+      [prefixIcon]="'search'"
+      [(searchTerm)]="searchTerm"
+      (searchTermChange)="applySearch($event)">
+    </app-search-bar>
   </div>
 
   <app-admin-table

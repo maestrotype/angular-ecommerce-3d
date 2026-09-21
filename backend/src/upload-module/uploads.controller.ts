@@ -10,12 +10,12 @@ import {
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import { v4 as uuidv4 } from "uuid";
-import { readFileSync, unlinkSync, existsSync } from "fs";
+import { readFileSync, unlinkSync, existsSync, statSync } from "fs";
 import * as os from "os";
 import { join } from "path";
 import { v2 as cloudinary } from "cloudinary";
 import { ImageProcessingService } from "../services/image-processing.service";
-import { GlbOptimizationService, CLOUDINARY_RAW_FILE_LIMIT } from "../services/glb-optimization.service";
+import { GlbOptimizationService, CLOUDINARY_RAW_FILE_LIMIT, RAW_GLB_UPLOAD_MAX_BYTES, MAX_STORED_GLB_BYTES } from "../services/glb-optimization.service";
 import { saveModelToLocalDisk, isCloudinarySizeError } from "../services/model-storage.util";
 import { CloudinaryConfigService } from "../services/cloudinary-config.service";
 import { Observable, from, throwError } from 'rxjs';
@@ -97,6 +97,59 @@ export class UploadsController {
     );
   }
 
+  @Post("section-video")
+  @UseInterceptors(
+    FileInterceptor("video", {
+      storage: diskStorage({
+        destination: os.tmpdir(),
+        filename: (req, file, callback) => {
+          const uniqueSuffix = uuidv4();
+          callback(null, `section-video-${uniqueSuffix}`);
+        },
+      }),
+      limits: {
+        fileSize: 50 * 1024 * 1024, // 50MB
+      },
+    })
+  )
+  uploadSectionVideo(@UploadedFile() file: Express.Multer.File): Observable<{ url: string; publicId: string }> {
+    if (!file) {
+      return throwError(() => new BadRequestException("No file uploaded"));
+    }
+
+    const allowed = ["video/mp4", "video/webm", "video/quicktime"];
+    if (!allowed.includes(file.mimetype)) {
+      try {
+        unlinkSync(file.path);
+      } catch (unlinkError) {
+        console.error("Failed to delete temp file:", unlinkError);
+      }
+      return throwError(() => new BadRequestException("Only MP4, WebM, and MOV video files are allowed"));
+    }
+
+    const videoBuffer = readFileSync(file.path);
+
+    return createCloudinaryUpload("section-videos", "video", videoBuffer).pipe(
+      map((result: any) => {
+        unlinkSync(file.path);
+        return {
+          url: result.secure_url,
+          publicId: result.public_id,
+        };
+      }),
+      catchError(error => {
+        if (file.path) {
+          try {
+            unlinkSync(file.path);
+          } catch (unlinkError) {
+            console.error("Failed to delete temp file:", unlinkError);
+          }
+        }
+        return throwError(() => new BadRequestException("Section video upload failed"));
+      })
+    );
+  }
+
   private cleanupTempFiles(filePath: string, optimizedPath: string | null): void {
     try { unlinkSync(filePath); } catch (e) {}
     if (optimizedPath) {
@@ -164,8 +217,13 @@ export class UploadsController {
 
     let uploadPath = file.path;
     let optimizedPath: string | null = null;
+    const originalSize = existsSync(file.path) ? statSync(file.path).size : file.size;
     try {
-      optimizedPath = await this.glbOptimizationService.optimize(file.path);
+      // Compress automatically when the raw file would miss the stored-size cap.
+      // Quality-preserving skip still applies to files already within the limit.
+      optimizedPath = await this.glbOptimizationService.optimize(file.path, {
+        force: originalSize > CLOUDINARY_RAW_FILE_LIMIT,
+      });
       if (optimizedPath) {
         uploadPath = optimizedPath;
       }
@@ -173,8 +231,21 @@ export class UploadsController {
       console.error("[UploadsController] Uncaught error during optimization step:", e);
     }
 
-    const finalSize = existsSync(uploadPath) ? readFileSync(uploadPath).length : file.size;
+    const finalSize = existsSync(uploadPath) ? statSync(uploadPath).size : file.size;
     console.log(`[UploadsController] 3D model ready for storage. Size: ${(finalSize / 1024 / 1024).toFixed(2)}MB`);
+
+    if (finalSize > MAX_STORED_GLB_BYTES && isProduction) {
+      this.cleanupTempFiles(file.path, optimizedPath);
+      throw new BadRequestException(
+        'Model exceeds 50MB limit after optimization. Reduce textures or mesh complexity in Blender.',
+      );
+    }
+
+    if (finalSize > MAX_STORED_GLB_BYTES) {
+      console.warn(
+        `[UploadsController] Model is ${(finalSize / 1024 / 1024).toFixed(2)}MB after optimization — storing locally in development`,
+      );
+    }
 
     const isAi = file.originalname.toLowerCase().includes('ai-gen') || file.originalname.toLowerCase().includes('task_');
     const publicId = (isProduct && isAi) ? `ai-gen-${uuidv4()}` : undefined;
@@ -232,7 +303,7 @@ export class UploadsController {
         },
       }),
       limits: {
-        fileSize: 50 * 1024 * 1024, // 50MB
+        fileSize: RAW_GLB_UPLOAD_MAX_BYTES,
       },
     })
   )
@@ -260,7 +331,7 @@ export class UploadsController {
         },
       }),
       limits: {
-        fileSize: 100 * 1024 * 1024, // 100MB
+        fileSize: RAW_GLB_UPLOAD_MAX_BYTES,
       },
     })
   )

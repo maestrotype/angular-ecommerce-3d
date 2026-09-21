@@ -1,0 +1,27 @@
+.ai-copy-dialog {
+  min-width: min(560px, 92vw);
+  max-width: 720px;
+}
+
+.ai-copy-dialog__caption {
+  margin: 0 0 16px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.ai-copy-dialog__names {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 8px;
+
+  @media (max-width: 700px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ai-copy-dialog__body {
+  width: 100%;
+  margin-top: 12px;
+}

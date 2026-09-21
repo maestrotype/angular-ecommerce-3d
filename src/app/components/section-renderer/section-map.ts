@@ -6,6 +6,8 @@ export const sectionComponentMap: { [key: string]: () => Promise<Type<any>> } = 
   hero: () => import('../../layout/hero/hero.component').then(m => m.HeroComponent),
   'hero-glass': () => import('../../layout/hero-glass/hero-glass.component').then(m => m.HeroGlassComponent),
   'best-sellers': () => import('../../layout/best-sellers/best-sellers.component').then(m => m.BestSellersComponent),
+  'product-carousel': () => import('../../layout/product-carousel/product-carousel.component').then(m => m.ProductCarouselComponent),
+  lookbook: () => import('../../layout/lookbook/lookbook.component').then(m => m.LookbookComponent),
   categories: () => import('../../layout/categories/categories.component').then(m => m.CategoriesComponent),
   'special-offer': () => import('../../layout/special-offer/special-offer.component').then(m => m.SpecialOfferComponent),
   brands: () => import('../../layout/brands/brands.component').then(m => m.BrandsComponent),
@@ -22,4 +24,5 @@ export const sectionComponentMap: { [key: string]: () => Promise<Type<any>> } = 
   stats: () => import('../../layout/stats/stats.component').then(m => m.StatsComponent),
   'blog-posts': () => import('../../layout/blog-posts/blog-posts.component').then(m => m.BlogPostsComponent),
   'video-hero': () => import('../../layout/video-hero/video-hero.component').then(m => m.VideoHeroComponent),
+  'product-stage': () => import('../../layout/product-stage/product-stage.component').then(m => m.ProductStageComponent),
 };

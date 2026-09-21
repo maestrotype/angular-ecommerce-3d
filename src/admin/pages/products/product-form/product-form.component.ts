@@ -7,8 +7,8 @@ import {
   ProductCreateRequest,
   ProductUpdateRequest,
 } from "../../../models/product.model";
-import { ProductService } from "../../../services/product.service";
-import { CategoryService } from "../../../services/category.service";
+import { AdminProductService } from "../../../services/product.service";
+import { CategoryService } from "src/app/core/services/category.service";
 import { Category } from "../../../models/category.model";
 import { ProcessingOptions, ProcessedImageResult } from "../../../components/ui/image-processor/image-processor.component";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -21,16 +21,24 @@ import { MatDialog } from "@angular/material/dialog";
 import { AiGenerationService, AiProviderOption } from "../../../services/ai-generation.service";
 import { AiWarningDialogComponent } from "../../../components/shared/ai-warning-dialog/ai-warning-dialog.component";
 import { finalize } from "rxjs/operators";
-import { switchMap, of, EMPTY } from "rxjs";
+import { switchMap, throwError } from "rxjs";
 import { ThreeDModelService } from '../../../../app/core/services/three-d-model.service';
 
 
 
 import { LocalizedString } from "../../../../shared/models/localized-string.model";
 import { getLocalizedString, translateErrorMessage, resolveApiError, formatResolvedApiError } from "../../../../shared/utils/localization.util";
+import { GLB_OPTIMIZE_HINT_BYTES, RAW_GLB_UPLOAD_MAX_BYTES } from "../../../constants/glb-upload.constants";
 import { isCloudinaryUrl } from "../../../../app/core/utils/url-helper";
 import { ApiEnvironmentService } from "../../../../app/core/services/api-environment.service";
 import { TranslateService } from "@ngx-translate/core";
+import { ConfirmationService } from "../../../services/confirmation.service";
+import { ProductFormDraft, ProductFormPrefillSnapshot } from "./product-form-draft.model";
+import { sampleDraftForCategory } from "./product-form.demo-values";
+import { ProductFormPrefillService } from "./product-form-prefill.service";
+import { ProductFormAiCopyService, ProductAiCopyRequest } from "./product-form-ai-copy.service";
+import { ProductAiCopyDialogComponent } from "./product-ai-copy-dialog.component";
+import { draftFromProductPage, isProductPageReadable, ProductPageReadInput } from "./product-form-page-reader";
 
 @Component({
   selector: "app-product-form",
@@ -103,6 +111,11 @@ export class ProductFormComponent implements OnInit {
     return this.model3dUrlIsLocal;
   }
   categories: Category[] = [];
+  categoriesLoaded = false;
+  lastFillSnapshot: ProductFormPrefillSnapshot | null = null;
+  isAiCopying = false;
+  private demoPrefillRequested = false;
+  private demoPrefillApplied = false;
 
   imageProcessingOptions: ProcessingOptions = {
     removeBackground: true,
@@ -113,7 +126,7 @@ export class ProductFormComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private productService: ProductService,
+    private productService: AdminProductService,
     private categoryService: CategoryService,
     private snackBar: MatSnackBar,
     private http: HttpClient,
@@ -123,11 +136,32 @@ export class ProductFormComponent implements OnInit {
     private threeDService: ThreeDModelService,
     private translate: TranslateService,
     private apiEnvironment: ApiEnvironmentService,
+    private confirmationService: ConfirmationService,
+    private productFormPrefill: ProductFormPrefillService,
+    private productFormAiCopy: ProductFormAiCopyService,
   ) {
     this.productForm = this.createForm();
   }
 
+  get canUndoFill(): boolean {
+    return this.lastFillSnapshot !== null;
+  }
+
+  get canFillFromPage(): boolean {
+    return isProductPageReadable(this.collectPageInput());
+  }
+
+  get canFillWithAi(): boolean {
+    return this.imageUrls.length > 0;
+  }
+
   ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get("id");
+    if (id) {
+      this.productId = +id;
+      this.isEditMode = true;
+    }
+    this.demoPrefillRequested = this.route.snapshot.queryParamMap.get("prefill") === "demo";
     this.loadCategories();
     this.route.params.subscribe((params) => {
       if (params["id"]) {
@@ -270,14 +304,205 @@ export class ProductFormComponent implements OnInit {
   private loadCategories(): void {
     this.categoryService.getAllCategories().subscribe({
       next: (categories) => {
-        this.categories = categories;
+        this.categories = (categories || []).filter((category) => category.isActive !== false);
+        this.categoriesLoaded = true;
+        this.tryApplyDemoPrefill();
       },
-      error: (error) => {
+      error: () => {
+        this.categoriesLoaded = true;
         this.snackBar.open(this.translate.instant('FAILED_TO_LOAD_CATEGORIES'), this.translate.instant('CLOSE_BTN'), {
           duration: 3000
         });
+        this.tryApplyDemoPrefill();
       }
     });
+  }
+
+  compareCategory = (current: string | null | undefined, option: string | null | undefined): boolean => {
+    if (current == null || option == null) {
+      return current === option;
+    }
+    return String(current).toLowerCase() === String(option).toLowerCase();
+  };
+
+  fillSample(): void {
+    this.applyDraftWithConfirm(this.buildSampleDraft());
+  }
+
+  fillFromPage(): void {
+    const input = this.collectPageInput();
+    if (!isProductPageReadable(input)) {
+      this.snackBar.open(this.translate.instant('SMART_FILL_PAGE_EMPTY'), this.translate.instant('CLOSE_BTN'), {
+        duration: 3000,
+      });
+      return;
+    }
+    this.applyDraftWithConfirm(draftFromProductPage(input));
+  }
+
+  fillWithAi(): void {
+    if (this.isAiCopying || !this.canFillWithAi) {
+      if (!this.canFillWithAi) {
+        this.snackBar.open(this.translate.instant('SMART_FILL_AI_NO_PHOTO'), this.translate.instant('CLOSE_BTN'), {
+          duration: 4000,
+        });
+      }
+      return;
+    }
+    this.isAiCopying = true;
+    this.productFormAiCopy.describe(this.buildAiCopyRequest()).pipe(
+      finalize(() => { this.isAiCopying = false; }),
+    ).subscribe({
+      next: (response) => {
+        const dialogRef = this.dialog.open(ProductAiCopyDialogComponent, {
+          width: '720px',
+          maxWidth: '94vw',
+          data: response,
+        });
+        dialogRef.afterClosed().subscribe((draft) => {
+          if (draft) {
+            this.commitSampleDraft(draft, 'overwrite');
+          }
+        });
+      },
+      error: (error) => {
+        const rawMsg = error?.error?.message || error?.message || 'SMART_FILL_AI_FAILED';
+        this.snackBar.open(
+          this.translate.instant('SMART_FILL_AI_FAILED') + ': ' + translateErrorMessage(String(rawMsg), this.translate),
+          this.translate.instant('CLOSE_BTN'),
+          { duration: 6000 },
+        );
+      },
+    });
+  }
+
+  private applyDraftWithConfirm(draft: ProductFormDraft): void {
+    const hasFieldConflicts = this.productFormPrefill.findConflicts(this.productForm, draft).length > 0;
+    const hasSpecConflict = this.productFormPrefill.hasSpecificationConflict(this.productForm, draft);
+    if (!hasFieldConflicts && !hasSpecConflict) {
+      this.commitSampleDraft(draft, 'merge');
+      return;
+    }
+
+    this.confirmationService.confirm({
+      title: this.translate.instant('SMART_FILL_OVERWRITE_TITLE'),
+      message: this.translate.instant('SMART_FILL_OVERWRITE_MESSAGE'),
+      confirmText: this.translate.instant('SMART_FILL_OVERWRITE'),
+      cancelText: this.translate.instant('SMART_FILL_FILL_EMPTY'),
+      type: 'warning',
+    }).subscribe((overwrite) => {
+      this.commitSampleDraft(draft, overwrite ? 'overwrite' : 'merge');
+    });
+  }
+
+  private collectPageInput(): ProductPageReadInput {
+    const value = this.productForm.getRawValue();
+    return {
+      name_en: value.name_en,
+      name_ru: value.name_ru,
+      name_ua: value.name_ua,
+      category: value.category,
+      categoryLabel: this.categoryLabel(),
+      description_en: value.description_en,
+      description_ru: value.description_ru,
+      description_ua: value.description_ua,
+      specifications: value.specifications,
+      imageUrls: this.imageUrls,
+    };
+  }
+
+  private buildAiCopyRequest(): ProductAiCopyRequest {
+    return {
+      ...this.collectPageInput(),
+      imageUrls: this.imageUrls,
+    };
+  }
+
+  private categoryLabel(): string {
+    const slug = this.currentFormCategory();
+    const category = this.categories.find((item) => this.getCategoryValue(item) === slug);
+    if (!category) {
+      return slug;
+    }
+    return getLocalizedString(category.name, 'en') || slug;
+  }
+
+  undoSampleFill(): void {
+    if (!this.lastFillSnapshot) {
+      return;
+    }
+    this.productFormPrefill.restoreSnapshot(this.productForm, this.lastFillSnapshot);
+    this.lastFillSnapshot = null;
+    this.snackBar.open(this.translate.instant('SMART_FILL_UNDONE'), this.translate.instant('CLOSE_BTN'), {
+      duration: 3000,
+    });
+  }
+
+  private tryApplyDemoPrefill(): void {
+    if (this.isEditMode || this.demoPrefillApplied || !this.demoPrefillRequested || !this.categoriesLoaded) {
+      return;
+    }
+    this.demoPrefillApplied = true;
+    this.commitSampleDraft(this.buildSampleDraft(), 'merge');
+  }
+
+  private buildSampleDraft(): ProductFormDraft {
+    const category = this.currentFormCategory() || this.resolveSampleCategory();
+    const draft: ProductFormDraft = {
+      ...sampleDraftForCategory(category),
+      category,
+    };
+    if (this.formHasProductName()) {
+      delete draft.name_en;
+      delete draft.name_ru;
+      delete draft.name_ua;
+    }
+    return draft;
+  }
+
+  private formHasProductName(): boolean {
+    return ['name_en', 'name_ru', 'name_ua'].some((key) =>
+      String(this.productForm.get(key)?.value ?? '').trim(),
+    );
+  }
+
+  private currentFormCategory(): string {
+    return String(this.productForm.get('category')?.value ?? '').trim();
+  }
+
+  private resolveSampleCategory(): string {
+    if (!this.categories.length) {
+      return '';
+    }
+    const current = this.currentFormCategory();
+    if (current && this.categories.some((category) => this.getCategoryValue(category) === current)) {
+      return current;
+    }
+    const preferred = ['shoes', 'bags', 'clothing'];
+    for (const slug of preferred) {
+      const match = this.categories.find((category) => this.getCategoryValue(category) === slug);
+      if (match) {
+        return this.getCategoryValue(match);
+      }
+    }
+    return this.getCategoryValue(this.categories[0]);
+  }
+
+  private commitSampleDraft(draft: ProductFormDraft, mode: 'merge' | 'overwrite'): void {
+    const { snapshot, changed } = this.productFormPrefill.applyDraft(this.productForm, draft, mode);
+    if (!changed) {
+      this.snackBar.open(this.translate.instant('SMART_FILL_NOTHING_TO_FILL'), this.translate.instant('CLOSE_BTN'), {
+        duration: 3000,
+      });
+      return;
+    }
+    this.lastFillSnapshot = snapshot;
+    const snack = this.snackBar.open(
+      this.translate.instant('SMART_FILL_APPLIED'),
+      this.translate.instant('SMART_FILL_UNDO'),
+      { duration: 5000 },
+    );
+    snack.onAction().subscribe(() => this.undoSampleFill());
   }
 
   private filterProductAiProviders(providers: AiProviderOption[] | undefined): AiProviderOption[] {
@@ -550,18 +775,40 @@ export class ProductFormComponent implements OnInit {
       // Standard backend-to-backend download
       this.aiService.downloadModel(modelUrl, filename).subscribe({
         next: (response: any) => {
-          this.resetAiState();
-          if (response.path) {
-            const persistOptions = this.isLiveSite || !this.isLocalApi
-              ? { forceProductionDb: true, requireCloudinary: true as const }
-              : undefined;
+          if (response.path && isCloudinaryUrl(response.path)) {
+            this.resetAiState();
             this.applyModelChangesAndSave(
               response.path,
               response.localPath || null,
               response.publicId || null,
-              persistOptions,
+              { forceProductionDb: true, requireCloudinary: true },
             );
+            return;
           }
+          if (!response.path) {
+            this.resetAiState();
+            return;
+          }
+          this.http.get(response.path, { responseType: 'blob' }).subscribe({
+            next: (blob) => {
+              const file = new File([blob], filename, { type: 'model/gltf-binary' });
+              this.isUploading3d = true;
+              this.resetAiState();
+              this.upload3dPreferringCloudinary(file, {
+                url: response.path,
+                publicId: response.publicId || null,
+                localPath: response.localPath,
+              });
+            },
+            error: () => {
+              this.resetAiState();
+              this.applyModelChangesAndSave(
+                response.path,
+                response.localPath || null,
+                response.publicId || null,
+              );
+            },
+          });
         },
         error: (err) => {
           if (modelUrl.includes('/uploads/')) {
@@ -910,76 +1157,141 @@ export class ProductFormComponent implements OnInit {
       this.snackBar.open(this.translate.instant('ONLY_GLB_FORMAT'), this.translate.instant('CLOSE_BTN'), { duration: 5000 });
       return;
     }
-    if (file.size > 100 * 1024 * 1024) {
-      this.snackBar.open(this.translate.instant('FILE_TOO_LARGE'), this.translate.instant('CLOSE_BTN'), { duration: 5000 });
+    if (file.size > RAW_GLB_UPLOAD_MAX_BYTES) {
+      this.snackBar.open(this.translate.instant('MODEL_3D_SIZE_LIMIT'), this.translate.instant('CLOSE_BTN'), { duration: 5000 });
       return;
     }
+    if (file.size > GLB_OPTIMIZE_HINT_BYTES) {
+      this.snackBar.open(this.translate.instant('MODEL_3D_OPTIMIZING'), this.translate.instant('CLOSE_BTN'), { duration: 5000 });
+    }
 
-    // Always save locally first — to the connected backend server.
-    // Use Cloudinary archive button later if needed.
     this.isUploading3d = true;
-
-    // Determine which backend to use: local or production
-    const upload$ = this.isLocalApi
-      ? this.productService.upload3dModel(file)
-      : this.productService.upload3dModel(file, PROD_API_URL);
-
-    upload$.subscribe({
-      next: (res) => {
-        if (!res) return;
-        
-        // Save to the backend server (local disk).
-        // The backend will try Cloudinary first, then fall back to local if needed.
-        this.model3dUrl = res.url;
-        this.localModel3dUrl = res.localPath || null;
-        this.model3dPublicId = res.publicId || null;
-        this.viewerVersion++;
-        
-        const messageKey = isCloudinaryUrl(res.url)
-          ? 'MODEL_3D_UPLOADED'
-          : 'MODEL_SAVED_TEMPORARY_STORAGE';
-        
-        this.snackBar.open(this.translate.instant(messageKey), this.translate.instant('CLOSE_BTN'), {
-          duration: 10000,
-          panelClass: isCloudinaryUrl(res.url) ? [] : ['warning-snackbar'],
-        });
-        this.isUploading3d = false;
-      },
-      error: (err) => {
-        this.isUploading3d = false;
-        const resolved = resolveApiError(err, this.translate, {
-          titleKey: 'MODEL_3D_UPLOAD_FAILED',
-          isLocalApi: this.isLocalApi,
-          isDevelopment: this.isDevelopment,
-          targetsProductionApi: !this.isLocalApi,
-        });
-        this.snackBar.open(formatResolvedApiError(resolved), this.translate.instant('CLOSE_BTN'), {
-          duration: resolved.duration,
-          panelClass: resolved.panelClass,
-        });
-      },
-    });
+    this.persistGlbFile(file);
 
     if (event.target) {
       event.target.value = '';
     }
   }
 
-  onCloudinaryReuploadSelected(event: Event): void {
-    this.on3dFileSelected(event);
+  private persistGlbFile(file: File): void {
+    if (this.isLocalApi) {
+      this.productService.upload3dModel(file).subscribe({
+        next: (localRes) => {
+          if (!localRes) {
+            return;
+          }
+          if (isCloudinaryUrl(localRes.url)) {
+            this.applyCloudinaryModel(localRes);
+            return;
+          }
+          this.pushLocalResultToCloudinary(localRes, file.name);
+        },
+        error: (err) => {
+          this.isUploading3d = false;
+          this.showModelUploadError(err, false);
+        },
+      });
+      return;
+    }
+    this.upload3dPreferringCloudinary(file);
   }
 
-  private uploadToCloudinaryWithPrecheck(file: File) {
-    return this.settingsService.getProductionCloudinaryStatus().pipe(
+  private pushLocalResultToCloudinary(
+    localRes: { url: string; publicId: string; localPath?: string },
+    filename: string,
+  ): void {
+    this.http.get(localRes.url, { responseType: 'blob' }).subscribe({
+      next: (blob) => {
+        const glbName = filename.toLowerCase().endsWith('.glb') ? filename : `${filename}.glb`;
+        const file = new File([blob], glbName, { type: 'model/gltf-binary' });
+        this.upload3dPreferringCloudinary(file, localRes);
+      },
+      error: () => this.applyLocalModelUpload(localRes),
+    });
+  }
+
+  private upload3dPreferringCloudinary(
+    file: File,
+    localFallback?: { url: string; publicId: string | null; localPath?: string | null },
+  ): void {
+    this.settingsService.getProductionCloudinaryStatus().pipe(
       switchMap((status) => {
         if (!status.uploadReady) {
-          this.isUploading3d = false;
           this.showCloudinaryStatusError(status);
-          return EMPTY;
+          return throwError(() => status);
         }
         return this.productService.upload3dModelToCloudinary(file);
       }),
-    );
+    ).subscribe({
+      next: (res) => {
+        if (res && isCloudinaryUrl(res.url)) {
+          this.applyCloudinaryModel(res);
+          return;
+        }
+        if (localFallback) {
+          this.applyLocalModelUpload(localFallback);
+          return;
+        }
+        if (res) {
+          this.applyLocalModelUpload(res);
+        }
+      },
+      error: (err) => {
+        if (localFallback) {
+          this.applyLocalModelUpload(localFallback);
+          return;
+        }
+        if (this.isLocalApi) {
+          this.productService.upload3dModel(file).subscribe({
+            next: (res) => this.applyLocalModelUpload(res),
+            error: (localErr) => {
+              this.isUploading3d = false;
+              this.showModelUploadError(localErr, false);
+            },
+          });
+          return;
+        }
+        this.isUploading3d = false;
+        this.showModelUploadError(err, true);
+      },
+    });
+  }
+
+  private applyCloudinaryModel(res: { url: string; publicId: string; localPath?: string }): void {
+    this.applyModelChangesAndSave(res.url, null, res.publicId, {
+      forceProductionDb: true,
+      requireCloudinary: true,
+    });
+    this.isUploading3d = false;
+  }
+
+  private applyLocalModelUpload(res: { url: string; publicId: string | null; localPath?: string | null }): void {
+    this.model3dUrl = res.url;
+    this.localModel3dUrl = res.localPath || null;
+    this.model3dPublicId = res.publicId || null;
+    this.viewerVersion++;
+    this.snackBar.open(this.translate.instant('MODEL_SAVED_TEMPORARY_STORAGE'), this.translate.instant('CLOSE_BTN'), {
+      duration: 10000,
+      panelClass: ['warning-snackbar'],
+    });
+    this.isUploading3d = false;
+  }
+
+  private showModelUploadError(err: any, targetsProductionApi: boolean): void {
+    const resolved = resolveApiError(err, this.translate, {
+      titleKey: 'MODEL_3D_UPLOAD_FAILED',
+      isLocalApi: this.isLocalApi,
+      isDevelopment: this.isDevelopment,
+      targetsProductionApi,
+    });
+    this.snackBar.open(formatResolvedApiError(resolved), this.translate.instant('CLOSE_BTN'), {
+      duration: resolved.duration,
+      panelClass: resolved.panelClass,
+    });
+  }
+
+  onCloudinaryReuploadSelected(event: Event): void {
+    this.on3dFileSelected(event);
   }
 
   private showCloudinaryStatusError(status: CloudinaryStatus): void {
@@ -1047,36 +1359,7 @@ export class ProductFormComponent implements OnInit {
 
   private uploadFileToCloudinary(file: File): void {
     this.isUploading3d = true;
-    this.uploadToCloudinaryWithPrecheck(file).subscribe({
-      next: (res) => {
-        if (!res) return;
-        if (!isCloudinaryUrl(res.url)) {
-          this.isUploading3d = false;
-          this.snackBar.open(this.translate.instant('ARCHIVE_NOT_CLOUDINARY_ERROR'), this.translate.instant('CLOSE_BTN'), {
-            duration: 12000,
-            panelClass: ['error-snackbar'],
-          });
-          return;
-        }
-        this.applyModelChangesAndSave(res.url, null, res.publicId, {
-          forceProductionDb: true,
-          requireCloudinary: true,
-        });
-        this.isUploading3d = false;
-      },
-      error: (err) => {
-        this.isUploading3d = false;
-        const resolved = resolveApiError(err, this.translate, {
-          titleKey: 'MODEL_3D_UPLOAD_FAILED',
-          isDevelopment: this.isDevelopment,
-          targetsProductionApi: true,
-        });
-        this.snackBar.open(formatResolvedApiError(resolved), this.translate.instant('CLOSE_BTN'), {
-          duration: resolved.duration,
-          panelClass: resolved.panelClass,
-        });
-      }
-    });
+    this.persistGlbFile(file);
   }
 
   private fallbackToServerArchiving(): void {

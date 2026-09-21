@@ -1,13 +1,15 @@
-<div class="sidenav-wrapper">
-  <!-- Mobile Header -->
+<div class="sidenav-wrapper" [class.is-mobile]="isMobile">
   <div class="sidenav-header-mobile lg:hidden" *ngIf="isMobile">
-    <span class="menu-title">{{ 'ADMIN_PANEL' | translate }}</span>
+    <div class="menu-title-block">
+      <span class="menu-kicker">3D Store</span>
+      <span class="menu-title">{{ 'ADMIN_PANEL' | translate }}</span>
+    </div>
     <div class="sidenav-header-mobile__actions">
-      <a mat-icon-button class="storefront-link" routerLink="/home" (click)="onNavItemClick()"
+      <a class="header-icon-btn" routerLink="/home" (click)="onNavItemClick()"
         [attr.aria-label]="'GO_TO_STOREFRONT' | translate">
-        <mat-icon>storefront</mat-icon>
+        <mat-icon fontSet="material-icons-outlined">storefront</mat-icon>
       </a>
-      <button type="button" class="close-btn" (click)="closeSidenav.emit()">
+      <button type="button" class="close-btn" (click)="closeMobileDrawer()">
         <mat-icon>close</mat-icon>
       </button>
     </div>
@@ -20,64 +22,163 @@
     </div>
   </div>
 
-  <div class="sidenav-nav">
-    <div class="user-info" *ngIf="user$ | async as user">
-      <div class="avatar" *ngIf="!user.avatar">
-        <mat-icon>account_circle</mat-icon>
+  <div class="sidenav-extra-sections" *ngIf="isMobile">
+    <div class="pref-dock">
+      <div class="pref-dock__chips">
+        <button type="button" class="pref-chip pref-chip--icon"
+          [class.is-open]="prefPanel === 'theme'"
+          [attr.aria-expanded]="prefPanel === 'theme'"
+          [attr.aria-label]="'HEADER.THEME' | translate"
+          (click)="togglePrefPanel('theme')">
+          <span class="pref-chip__jewel" [attr.data-theme-id]="currentTheme" aria-hidden="true">
+            <ng-container [ngTemplateOutlet]="themeGlyphTpl" [ngTemplateOutletContext]="{ $implicit: currentTheme }"></ng-container>
+          </span>
+          <svg class="pref-chip__caret" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+
+        <button type="button" class="pref-chip pref-chip--icon"
+          [class.is-open]="prefPanel === 'lang'"
+          [attr.aria-expanded]="prefPanel === 'lang'"
+          [attr.aria-label]="'HEADER.LANGUAGE' | translate"
+          (click)="togglePrefPanel('lang')">
+          <span class="pref-chip__flag" aria-hidden="true">
+            <ng-container [ngTemplateOutlet]="langFlagTpl" [ngTemplateOutletContext]="{ $implicit: currentLang }"></ng-container>
+          </span>
+          <span class="pref-chip__code">{{ currentLang | uppercase }}</span>
+          <svg class="pref-chip__caret" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
       </div>
-      <div class="avatar" *ngIf="user.avatar">
-        <img [src]="user.avatar" [alt]="user.name">
+
+      <div class="pref-dock__panel" *ngIf="prefPanel === 'theme'" role="group" [attr.aria-label]="'HEADER.THEME' | translate">
+        <div class="mobile-theme-segment">
+          <button type="button" class="mobile-theme-segment__btn"
+                  *ngFor="let theme of themes"
+                  [class.active]="currentTheme === theme.id"
+                  [attr.data-theme-id]="theme.id"
+                  (click)="pickTheme(theme.id)">
+            <span class="mobile-theme-segment__icon" aria-hidden="true">
+              <ng-container [ngTemplateOutlet]="themeGlyphTpl" [ngTemplateOutletContext]="{ $implicit: theme.id }"></ng-container>
+            </span>
+            <span class="mobile-theme-segment__text">{{ 'HEADER.THEMES.' + themeI18nKey(theme.id) | translate }}</span>
+          </button>
+        </div>
       </div>
-      <div class="user-info-text">
-        <div class="user-name">{{ user.name }}</div>
-        <div class="user-role">{{ (user.role === 'admin' ? 'ROLE_ADMIN' : 'ROLE_USER') | translate }}</div>
+
+      <div class="pref-dock__panel" *ngIf="prefPanel === 'lang'" role="group" [attr.aria-label]="'HEADER.LANGUAGE' | translate">
+        <div class="mobile-lang-segment">
+          <button type="button" class="mobile-lang-segment__btn"
+                  *ngFor="let lang of languages"
+                  [class.active]="currentLang === lang.code"
+                  [attr.data-lang]="lang.code"
+                  (click)="pickLanguage(lang.code)">
+            <span class="mobile-lang-segment__flag" aria-hidden="true">
+              <ng-container [ngTemplateOutlet]="langFlagTpl" [ngTemplateOutletContext]="{ $implicit: lang.code }"></ng-container>
+            </span>
+            <span class="mobile-lang-segment__code">{{ lang.label }}</span>
+          </button>
+        </div>
       </div>
     </div>
+  </div>
 
-    <mat-nav-list>
-      <a mat-list-item 
-         *ngFor="let item of navItems" 
-         [routerLink]="item.route" 
-         routerLinkActive="active" 
+  <div class="sidenav-nav">
+    <ng-container *ngIf="!isMobile">
+      <ng-container *ngTemplateOutlet="userCard; context: { $implicit: user$ | async }"></ng-container>
+    </ng-container>
+
+    <mat-nav-list *ngIf="!isMobile">
+      <a mat-list-item
+         *ngFor="let item of navItems"
+         [routerLink]="item.route"
+         routerLinkActive="active"
          [routerLinkActiveOptions]="{exact: item.route === '/admin/dashboard'}"
          (click)="onNavItemClick()">
-        <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+        <mat-icon matListItemIcon fontSet="material-icons-outlined">{{ item.icon }}</mat-icon>
         <span matListItemTitle>{{ item.label | translate }}</span>
       </a>
     </mat-nav-list>
-  </div>
 
-  <!-- Mobile Extra Sections (Themes & Languages) -->
-  <div class="sidenav-extra-sections" *ngIf="isMobile">
-    <div class="mobile-section">
-      <span class="section-label">Language</span>
-      <div class="theme-chips">
-        <button class="chip-btn" 
-                *ngFor="let lang of languages" 
-                [class.active]="currentLang === lang.code"
-                (click)="changeLanguage(lang.code)">
-          {{ lang.label }}
-        </button>
-      </div>
-    </div>
-
-    <div class="mobile-section">
-      <span class="section-label">Theme</span>
-      <div class="theme-chips">
-        <button class="chip-btn" 
-                *ngFor="let theme of themes" 
-                [class.active]="currentTheme === theme.id"
-                (click)="changeTheme(theme.id)">
-          {{ theme.name }}
-        </button>
-      </div>
-    </div>
+    <nav class="nav-tiles" *ngIf="isMobile" [attr.aria-label]="'ADMIN_PANEL' | translate">
+      <a class="nav-tile"
+         *ngFor="let item of navItems"
+         [routerLink]="item.route"
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{exact: item.route === '/admin/dashboard'}"
+         (click)="onNavItemClick()">
+        <span class="nav-tile__icon" aria-hidden="true">
+          <mat-icon fontSet="material-icons-outlined">{{ item.icon }}</mat-icon>
+        </span>
+        <span class="nav-tile__label">{{ item.label | translate }}</span>
+      </a>
+    </nav>
   </div>
 
   <div class="sidenav-footer">
+    <ng-container *ngIf="isMobile">
+      <ng-container *ngTemplateOutlet="userCard; context: { $implicit: user$ | async }"></ng-container>
+    </ng-container>
     <button mat-button class="logout-btn" (click)="logout()">
-      <mat-icon>logout</mat-icon>
+      <mat-icon fontSet="material-icons-outlined">logout</mat-icon>
       <span class="logout-text">{{ 'LOGOUT' | translate }}</span>
     </button>
   </div>
 </div>
+
+<ng-template #themeGlyphTpl let-themeId>
+  <svg *ngIf="themeId === 'light'" width="16" height="16" viewBox="0 0 24 24" fill="none">
+    <circle cx="12" cy="12" r="4" fill="currentColor" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+      stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+  </svg>
+  <svg *ngIf="themeId === 'dark'" width="16" height="16" viewBox="0 0 24 24" fill="none">
+    <path d="M21 14.3A8.5 8.5 0 1 1 9.7 3 7 7 0 0 0 21 14.3Z"
+      fill="currentColor" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round" />
+  </svg>
+  <svg *ngIf="themeId === 'glass'" width="16" height="16" viewBox="0 0 24 24" fill="none">
+    <path d="M12 3l7 4.5v9L12 21l-7-4.5v-9L12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+    <path d="M12 3v18M5 7.5l14 9M19 7.5l-14 9" stroke="currentColor" stroke-width="1.2" opacity="0.55" />
+  </svg>
+  <svg *ngIf="themeId === 'dark-glass'" width="16" height="16" viewBox="0 0 24 24" fill="none">
+    <path d="M12 3l7 4.5v9L12 21l-7-4.5v-9L12 3Z" fill="currentColor" opacity="0.22" />
+    <path d="M12 3l7 4.5v9L12 21l-7-4.5v-9L12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+    <path d="M12 3v18M5 7.5l14 9M19 7.5l-14 9" stroke="currentColor" stroke-width="1.2" opacity="0.55" />
+  </svg>
+</ng-template>
+
+<ng-template #langFlagTpl let-code>
+  <svg *ngIf="code === 'en'" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg">
+    <rect width="60" height="40" fill="#012169"/>
+    <path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="8"/>
+    <path d="M0,0 L60,40 M60,0 L0,40" stroke="#C8102E" stroke-width="5"/>
+    <path d="M30,0 V40 M0,20 H60" stroke="#fff" stroke-width="12"/>
+    <path d="M30,0 V40 M0,20 H60" stroke="#C8102E" stroke-width="7"/>
+  </svg>
+  <svg *ngIf="code === 'ru'" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg">
+    <rect width="60" height="13.34" y="0" fill="#fff"/>
+    <rect width="60" height="13.34" y="13.33" fill="#0039A6"/>
+    <rect width="60" height="13.34" y="26.66" fill="#D52B1E"/>
+  </svg>
+  <svg *ngIf="code === 'ua'" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg">
+    <rect width="60" height="20" y="0" fill="#0057B7"/>
+    <rect width="60" height="20" y="20" fill="#FFD700"/>
+  </svg>
+</ng-template>
+
+<ng-template #userCard let-user>
+  <div class="user-info" *ngIf="user">
+    <div class="avatar" *ngIf="!user.avatar">
+      <mat-icon fontSet="material-icons-outlined">person</mat-icon>
+    </div>
+    <div class="avatar" *ngIf="user.avatar">
+      <img [src]="user.avatar" [alt]="user.name">
+    </div>
+    <div class="user-info-text">
+      <div class="user-name">{{ user.name }}</div>
+      <div class="user-role">{{ (user.role === 'admin' ? 'ROLE_ADMIN' : 'ROLE_USER') | translate }}</div>
+    </div>
+  </div>
+</ng-template>
