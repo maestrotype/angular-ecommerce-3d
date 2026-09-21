@@ -34,6 +34,11 @@
   }
 }
 
+.integrations-content.admin-card-grid {
+  --admin-card-grid-min: 380px;
+  align-items: stretch;
+}
+
 .integration-card {
   min-width: 0;
   background: var(--surface-elevated);
@@ -128,6 +133,11 @@
   flex-direction: column;
   gap: var(--space-4);
   margin-top: var(--space-4);
+
+  .mat-mdc-form-field {
+    width: 100%;
+    min-width: 0;
+  }
 }
 
 .form-row {
@@ -206,5 +216,9 @@
 @media (max-width: 768px) {
   .integrations-container {
     padding: 0;
+  }
+
+  .integrations-content.admin-card-grid {
+    --admin-card-grid-min: 100%;
   }
 }

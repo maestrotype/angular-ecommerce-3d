@@ -93,7 +93,22 @@ export class UserEditDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  getTitle(): string {
-    return this.isNewUser ? 'Create New User' : 'Edit User';
+  getFieldError(field: string): string {
+    const control = this.userForm.get(field);
+    if (!control?.errors) {
+      return '';
+    }
+    if (control.errors['required']) {
+      return field === 'email'
+        ? this.translate.instant('EMAIL_REQUIRED')
+        : this.translate.instant('NAME_REQUIRED');
+    }
+    if (control.errors['email']) {
+      return this.translate.instant('INVALID_EMAIL');
+    }
+    if (control.errors['minlength']) {
+      return this.translate.instant('NAME_MIN_LENGTH');
+    }
+    return '';
   }
 }

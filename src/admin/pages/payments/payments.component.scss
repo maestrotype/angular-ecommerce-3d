@@ -71,6 +71,16 @@
     opacity: 0.5;
   }
 }
+
+@media (max-width: 768px) {
+  .no-data {
+    padding: var(--space-8) var(--space-3);
+  }
+
+  .filters-area h2 {
+    font-size: var(--text-lg);
+  }
+}
 .payments-table-wrapper {
   background: var(--surface-secondary);
   border-radius: var(--radius-md);

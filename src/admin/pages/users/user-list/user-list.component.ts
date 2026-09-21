@@ -43,6 +43,16 @@ export class UserListComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
+  get pagedUsers(): User[] {
+    const data = this.dataSource.filteredData ?? this.dataSource.data ?? [];
+    const paginator = this.dataSource.paginator;
+    if (!paginator) {
+      return data;
+    }
+    const start = paginator.pageIndex * paginator.pageSize;
+    return data.slice(start, start + paginator.pageSize);
+  }
+
   loadUsers(): void {
     this.isLoading = true;
     this.error = null;
@@ -94,6 +104,9 @@ export class UserListComponent implements OnInit, AfterViewInit {
   editUser(user: User): void {
     const dialogRef = this.dialog.open(UserEditDialogComponent, {
       width: '500px',
+      maxWidth: '95vw',
+      autoFocus: false,
+      panelClass: 'admin-form-dialog',
       data: { user: { ...user } }
     });
 

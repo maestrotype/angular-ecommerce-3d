@@ -1,31 +1,126 @@
+:host {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.user-edit-dialog {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+h2[mat-dialog-title] {
+  margin: 0;
+  padding: 0 0 var(--space-3);
+  font-size: var(--text-xl);
+  font-weight: var(--font-semibold);
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+
 .user-form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    min-width: 400px;
-    padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+  min-width: 0;
+  padding: var(--space-1) 0;
+  box-sizing: border-box;
+}
+
+.full-width {
+  width: 100%;
+  min-width: 0;
+}
+
+mat-dialog-content {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+mat-dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) 0 0;
+  margin: 0;
+  min-height: 0;
+}
+
+.user-form .mat-mdc-form-field {
+  width: 100%;
+  min-width: 0;
+}
+
+.user-form .mat-mdc-form-field-subscript-wrapper {
+  margin-top: 2px;
+}
+
+.user-form .mat-mdc-text-field-wrapper {
+  width: 100%;
+}
+
+.user-form .mat-mdc-form-field-infix {
+  min-height: 48px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.user-form .mat-mdc-select-trigger {
+  width: 100%;
+  min-width: 0;
+}
+
+.user-form .mat-mdc-input-element,
+.user-form .mat-mdc-select-value {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+  margin-right: var(--space-2);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  h2[mat-dialog-title] {
+    font-size: var(--text-lg);
+    padding-bottom: var(--space-2);
   }
-  
-  .full-width {
-    width: 100%;
+
+  .user-form {
+    gap: var(--space-2);
   }
-  
-  .spinning {
-    animation: spin 1s linear infinite;
-    margin-right: 8px;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
-  mat-dialog-content {
-    max-height: 70vh;
-    overflow-y: auto;
-  }
-  
+
   mat-dialog-actions {
-    padding: 16px 0;
-    gap: 8px;
+    flex-direction: column-reverse;
+    align-items: stretch;
+    padding-top: var(--space-3);
+
+    button {
+      width: 100%;
+      min-height: var(--admin-page-cta-min-height, 48px);
+      margin: 0;
+    }
   }
+}
