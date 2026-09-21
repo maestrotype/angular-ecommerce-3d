@@ -75,13 +75,14 @@ export class ThreeDViewerComponent implements AfterViewInit, OnChanges, OnDestro
   private camera!: THREE.PerspectiveCamera;
   private renderer!: THREE.WebGLRenderer;
   private controls!: OrbitControls;
-  private resizeObserver!: ResizeObserver;
+  private resizeObserver: ResizeObserver | null = null;
   private intersectionObserver: IntersectionObserver | null = null;
   private modelSubscription: Subscription | null = null;
   private model!: THREE.Object3D;
   private animId!: number;
   private isMobile = false;
   private isDestroyed = false;
+  private isInitializing = false;
   private isInViewport = false;
   private isLooping = false;
   private isInteracting = false;
@@ -111,18 +112,25 @@ export class ThreeDViewerComponent implements AfterViewInit, OnChanges, OnDestro
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
+    this.setupSizeObserver();
     if (this.loading === 'eager') {
       this.isInViewport = true;
       this.tryInitializeViewer();
     }
     this.setupViewportObserver();
     document.addEventListener('visibilitychange', this.onVisibility);
-    requestAnimationFrame(() => this.syncViewportNow());
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => this.syncViewportNow());
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['modelPath'] && !changes['modelPath'].firstChange && this.renderer) {
-      this.loadModel();
+    if (changes['modelPath'] && !changes['modelPath'].firstChange) {
+      if (this.renderer) {
+        this.loadModel();
+      } else {
+        this.tryInitializeViewer();
+      }
     }
     if (changes['autoRotate'] && this.controls) {
       this.controls.autoRotate = !!this.autoRotate;
@@ -197,17 +205,37 @@ export class ThreeDViewerComponent implements AfterViewInit, OnChanges, OnDestro
   }
 
   /**
-   * Loads heavy dependencies dynamically and configures ThreeJS.
-   * Runs the main renderer loop outside Angular's zone to prevent performance overhead.
+   * Retry init when the host gets a real layout box (e.g. after *ngIf swap from
+   * the generating placeholder). Must exist before the WebGL renderer does.
    */
+  private setupSizeObserver() {
+    if (!this.container?.nativeElement || this.resizeObserver) {
+      return;
+    }
+
+    this.ngZone.runOutsideAngular(() => {
+      this.resizeObserver = new ResizeObserver(() => {
+        if (this.isDestroyed) {
+          return;
+        }
+        if (!this.renderer) {
+          this.tryInitializeViewer();
+          return;
+        }
+        this.onResize();
+      });
+      this.resizeObserver.observe(this.container.nativeElement);
+    });
+  }
+
   /** Returns false when the host has no layout box yet (e.g. display:none). */
   private tryInitializeViewer(): boolean {
-    if (this.isDestroyed || !this.container?.nativeElement || this.renderer) {
+    if (this.isDestroyed || this.isInitializing || !this.container?.nativeElement || this.renderer) {
       return !!this.renderer;
     }
 
     const el = this.container.nativeElement;
-    if (el.clientWidth === 0 && el.clientHeight === 0) {
+    if (el.clientWidth <= 0 || el.clientHeight <= 0) {
       return false;
     }
 
@@ -216,9 +244,11 @@ export class ThreeDViewerComponent implements AfterViewInit, OnChanges, OnDestro
   }
 
   private initializeViewer() {
-    if (this.isDestroyed || !this.container?.nativeElement || this.renderer) {
+    if (this.isDestroyed || this.isInitializing || !this.container?.nativeElement || this.renderer) {
       return;
     }
+
+    this.isInitializing = true;
 
     this.ngZone.run(() => {
       this.isLoading = true;
@@ -231,20 +261,26 @@ export class ThreeDViewerComponent implements AfterViewInit, OnChanges, OnDestro
         const THREE = await import('three');
         const { OrbitControls } = await import('three/examples/jsm/controls/OrbitControls.js');
 
-        if (this.isDestroyed) return;
+        if (this.isDestroyed) {
+          this.isInitializing = false;
+          return;
+        }
+        if (this.renderer) {
+          this.isInitializing = false;
+          return;
+        }
 
         this.initThreeWithDeps(THREE, OrbitControls);
-        
-        this.resizeObserver = new ResizeObserver(() => {
-          this.onResize();
-        });
-        this.resizeObserver.observe(this.container.nativeElement);
+        this.isInitializing = false;
+        this.setupSizeObserver();
+        this.onResize();
 
         // Run checkAndLoad in zone since it updates loading/quality states
         this.ngZone.run(() => {
           this.checkAndLoad();
         });
       } catch (err) {
+        this.isInitializing = false;
         console.error('Failed to initialize 3D viewer libraries:', err);
         this.ngZone.run(() => {
           this.isLoading = false;
@@ -313,11 +349,12 @@ export class ThreeDViewerComponent implements AfterViewInit, OnChanges, OnDestro
   onResize() {
     if (!isPlatformBrowser(this.platformId) || !this.renderer || !this.container) return;
     const el = this.container.nativeElement;
-    if (el.clientWidth === 0 || el.clientHeight === 0) return;
+    if (el.clientWidth <= 0 || el.clientHeight <= 0) return;
     
     this.camera.aspect = el.clientWidth / el.clientHeight;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(el.clientWidth, el.clientHeight);
+    this.renderFrame();
   }
 
   private initThreeWithDeps(THREE: any, OrbitControls: any) {
@@ -615,6 +652,8 @@ export class ThreeDViewerComponent implements AfterViewInit, OnChanges, OnDestro
 
     this.scene.add(this.model);
     this.currentLoadedPath = url;
+    this.syncViewportNow();
+    this.renderFrame();
 
     this.ngZone.run(() => {
       this.isLoading = false;
@@ -880,7 +919,10 @@ export class ThreeDViewerComponent implements AfterViewInit, OnChanges, OnDestro
     if (this.modelSubscription) {
       this.modelSubscription.unsubscribe();
     }
-    if (this.resizeObserver) this.resizeObserver.disconnect();
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+      this.resizeObserver = null;
+    }
     if (this.controls) this.controls.dispose();
     this.disposeModel();
     if (this.renderer) {
