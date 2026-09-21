@@ -22,7 +22,7 @@ Living list. Chat replies should mirror this.
 
 | # | Task | Status |
 |---|------|--------|
-| A | Host live demo (API + storefront + admin, not GH Pages) | waiting |
+| A | Host live demo (API + storefront + admin, not GH Pages) | **runbook ready** — [DEMO_HOST.md](./DEMO_HOST.md); deploy still waiting |
 | B | Screenshots per playbook §2 | waiting |
 | C | Video 3–5 min per playbook §3 | waiting |
 | D | Listing URL + $89 / $229 + PayPal mock | waiting |

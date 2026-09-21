@@ -203,7 +203,7 @@ Only start after Track A v1.0.0 is live and receiving buyer feedback.
 |---|------|
 | B2.1 | Dependency audit workflow (`npm audit`, Snyk optional) |
 | B2.2 | Rate limiting review on auth + upload endpoints |
-| B2.3 | CORS from env, not hardcoded domains |
+| B2.3 | CORS from env, not hardcoded domains | `FRONTEND_URL` + `CORS_ORIGINS` in `main.ts` (Track A done; keep regex allowlists for local/PaaS) |
 | B2.4 | Security.md + responsible disclosure |
 | B2.5 | GDPR-oriented data export/delete notes (even if minimal) |
 

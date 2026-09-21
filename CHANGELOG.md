@@ -8,6 +8,7 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 - Marketplace listing pack: `npm run pack:marketplace`, expanded screenshot capture, CodeCanyon paste-ready copy.
+- Seller live-demo runbook: `docs/seller/DEMO_HOST.md` (Docker Compose + Render).
 - GitHub Actions CI: frontend build, backend lint/build, Playwright smoke e2e.
 - Swagger UI at `/api/docs` (OpenAPI JSON at `/api/docs-json`).
 - PayPal mock notices in Admin → Settings and checkout payment page.
@@ -17,6 +18,8 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `CHANGELOG.md`, `THIRD_PARTY_NOTICES.md`, and honest marketplace listing copy.
 
 ### Changed
+- CORS origins include `FRONTEND_URL` and optional `CORS_ORIGINS` (no hardcoded Railway demo host).
+- Production API resolution: same-origin `/api` for reverse-proxied demos; Render URL only for `github.io`.
 - Product seed data uses bundled assets instead of Unsplash URLs.
 - Shop page and legacy 3D components reference bundled demo models.
 - Backend `package.json` license aligned with root MIT license.

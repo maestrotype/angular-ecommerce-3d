@@ -267,9 +267,15 @@
   font-size: var(--text-sm);
 }
 
+.product-detail .pdp-similar-section {
+  margin-top: var(--pdp-recommendations-margin-top);
+  scroll-margin-top: calc(var(--pdp-header-height) + 3.5rem);
+}
+
 .product-detail #pdp-about,
 .product-detail #pdp-specs,
-.product-detail #pdp-reviews {
+.product-detail #pdp-reviews,
+.product-detail #pdp-similar {
   scroll-margin-top: calc(var(--pdp-header-height) + 3.5rem);
 }
 
@@ -735,9 +741,9 @@
   }
 }
 
-// ── Product info (app-product-info) ──
+// ── Product info (buy box only — do not match .product-card .product-info) ──
 
-.product-detail .product-info {
+.product-detail .product-detail-info .product-info {
   background: transparent;
   border: none;
   box-shadow: none;

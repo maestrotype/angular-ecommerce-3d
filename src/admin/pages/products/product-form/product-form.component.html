@@ -373,12 +373,15 @@
               <!-- State: Model Loaded -->
               <div *ngIf="model3dUrl && !isAiGenerating" class="model-ready">
                 <div class="model-ready__viewer">
-                  <app-three-d-viewer [key]="viewerVersion"
-                                     [modelPath]="model3dUrl"
-                                     [hdModelPath]="localModel3dUrl"
-                                     [autoRotate]="true"
-                                     [previewOnly]="false"
-                                     (modelLoaded)="onModelLoaded()"></app-three-d-viewer>
+                  <app-three-d-viewer
+                    *ngFor="let v of [viewerVersion]"
+                    [modelPath]="model3dUrl"
+                    [hdModelPath]="localModel3dUrl"
+                    [autoRotate]="true"
+                    [previewOnly]="false"
+                    loading="eager"
+                    (modelLoaded)="onModelLoaded()">
+                  </app-three-d-viewer>
                 </div>
 
                 <div class="model-footer">

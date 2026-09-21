@@ -63,17 +63,9 @@ apiUrl: 'https://angular-ecommerce-backend.onrender.com/api'
 
 ### Backend (NestJS)
 
-**CORS Configuration** (`backend/src/main.ts`):
-```typescript
-app.enableCors({
-  origin: [
-    "http://localhost:4200",
-    "https://maestrotype.github.io",
-    /^https:\/\/.*\.github\.io$/
-  ],
-  credentials: true
-});
-```
+**CORS** (`backend/src/main.ts`): local origins plus `FRONTEND_URL` and optional `CORS_ORIGINS` (comma-separated). Set `FRONTEND_URL` to the exact public storefront origin for a live demo.
+
+**API URL (frontend):** `resolveApiUrl()` uses localhost Nest on local hosts, the Render fallback on `github.io`, and **same-origin `/api`** everywhere else (Docker Compose nginx / reverse-proxied demos). See [docs/seller/DEMO_HOST.md](docs/seller/DEMO_HOST.md).
 
 ---
 

@@ -542,13 +542,13 @@
   --pagination-btn-active-shadow: var(--glass-inner-shadow);
   --card-image-zoom: 1;
   --liquid-glass-edge-shadow:
-    inset 3px 3px 0.5px -3px rgba(0, 0, 0, 0.9),
-    inset -3px -3px 0.5px -3px rgba(0, 0, 0, 0.85),
-    inset 1px 1px 1px -0.5px rgba(0, 0, 0, 0.6),
-    inset -1px -1px 1px -0.5px rgba(0, 0, 0, 0.6),
-    inset 0 0 6px 6px rgba(0, 0, 0, 0.12),
-    inset 0 0 2px 2px rgba(0, 0, 0, 0.06),
-    inset 1px 1px 0 rgba(255, 255, 255, 0.55);
+    inset 3px 3px 0.5px -3px rgba(15, 23, 42, 0.16),
+    inset -3px -3px 0.5px -3px rgba(15, 23, 42, 0.12),
+    inset 1px 1px 1px -0.5px rgba(15, 23, 42, 0.1),
+    inset -1px -1px 1px -0.5px rgba(15, 23, 42, 0.08),
+    inset 0 0 5px 5px rgba(15, 23, 42, 0.035),
+    inset 0 0 2px 2px rgba(15, 23, 42, 0.025),
+    inset 1px 1px 0 rgba(255, 255, 255, 0.72);
   --liquid-glass-drop:
     0 0 6px rgba(0, 0, 0, 0.03),
     0 2px 6px rgba(0, 0, 0, 0.08),
@@ -564,6 +564,7 @@
   --card-info-bg: transparent;
   --card-overlay-bg: transparent;
   --card-radius: 1.75rem;
+  --card-badge-inset: 1.125rem;
   --card-backdrop-filter: blur(2px);
   --card-star: rgba(100, 116, 139, 0.35);
   --card-star-filled: #64748b;
@@ -815,7 +816,7 @@
     background: transparent;
   }
 
-  /* Product info text (storefront cards — exclude PDP; G11 owns .product-detail .product-info) */
+  /* Product info text (storefront cards — PDP buy box is .product-detail-info .product-info) */
   body .product-card .product-name,
   body .product-card .product-category,
   body .product-card .product-price,

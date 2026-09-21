@@ -48,6 +48,13 @@
           (click)="scrollToSection('reviews')">
           {{ 'PRODUCT.TABS.REVIEWS' | translate }}
         </button>
+        <button
+          type="button"
+          class="pdp-section-link"
+          [class.active]="activeSection === 'similar'"
+          (click)="scrollToSection('similar')">
+          {{ 'PRODUCT.SECTIONS.SIMILAR' | translate }}
+        </button>
       </nav>
 
       <!-- Main grid: gallery | buy box -->
@@ -214,8 +221,14 @@
         </div>
       </section>
 
+      <section class="pdp-similar-section" id="pdp-similar" *ngIf="product">
+        <app-similar-products [product]="product" [limit]="4"></app-similar-products>
+      </section>
+
       <ng-container *ngFor="let section of sections">
-        <div class="modular-section-wrapper" *ngIf="section.type !== 'product-tabs'">
+        <div
+          class="modular-section-wrapper"
+          *ngIf="section.type !== 'product-tabs' && section.type !== 'similar-products'">
           <app-section-renderer
             [section]="section"
             [contextData]="product">
