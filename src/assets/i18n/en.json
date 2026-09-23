@@ -458,6 +458,7 @@
   "FREE_TIER_AVAILABLE": "Free tier available",
   "CLOUD_API": "Cloud API",
   "CUSTOM_WEBHOOK_LOCAL": "Custom Webhook / Local Server",
+  "HF_TRIPOSR_SPACE_UNAVAILABLE": "The Hugging Face Space is temporarily unavailable (503). Wait 1–2 minutes and try again, add an HF token under Integrations, or switch provider.",
   "HF_TRIPOSR_FREE": "Hugging Face TripoSR (free)",
   "HF_TRIPOSR_INFO": "Free image-to-3D via the public Hugging Face Space. No paid key. A free HF token from huggingface.co/settings/tokens improves rate limits. The Space can sleep or queue.",
   "HF_SPACE_LABEL": "Hugging Face Space",
@@ -1178,7 +1179,18 @@
       "ADMIN_PANEL": "Admin Panel",
       "FAVORITES": "Saved",
       "CART": "Cart",
-      "ACCOUNT": "Account"
+      "ACCOUNT": "Account",
+      "NEW_ARRIVALS": "New in",
+      "CATEGORIES": "Categories",
+      "LOOKBOOK": "Lookbook",
+      "BEST_SELLERS": "Best sellers",
+      "BRANDS": "Brands",
+      "BLOG": "Journal",
+      "TESTIMONIALS": "Reviews",
+      "NEWSLETTER": "Newsletter",
+      "FEATURES": "Features",
+      "FAQ": "FAQ",
+      "STATS": "Stats"
     },
     "THEME": "Theme",
     "THEMES": {

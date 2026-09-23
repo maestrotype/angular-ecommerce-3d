@@ -49,14 +49,14 @@
               class="btn btn-primary"
               [href]="settings.ctaLink"
             >
-              {{ (settings.ctaText | localized) || ('HOME.VIDEO.CTA' | translate) }}
+              {{ buttonLabel(settings.ctaText, 'HOME.VIDEO.CTA') }}
             </a>
             <a
               *ngIf="settings.secondaryCtaLink"
               class="btn btn-secondary"
               [href]="settings.secondaryCtaLink"
             >
-              {{ (settings.secondaryCtaText | localized) || ('HOME.VIDEO.SECONDARY_CTA' | translate) }}
+              {{ buttonLabel(settings.secondaryCtaText, 'HOME.VIDEO.SECONDARY_CTA') }}
             </a>
           </div>
         </div>
@@ -85,7 +85,7 @@
         <p class="hero-description" *ngIf="data?.content || data?.description">{{ (data.content || data.description) | localized }}</p>
         <div class="hero-actions">
           <a *ngIf="settings.ctaLink" class="btn btn-primary" [href]="settings.ctaLink">
-            {{ (settings.ctaText | localized) || ('HOME.VIDEO.CTA' | translate) }}
+            {{ buttonLabel(settings.ctaText, 'HOME.VIDEO.CTA') }}
           </a>
         </div>
       </div>

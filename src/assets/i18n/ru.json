@@ -456,6 +456,7 @@
   "FREE_TIER_AVAILABLE": "Есть бесплатный тариф",
   "CLOUD_API": "Облачный API",
   "CUSTOM_WEBHOOK_LOCAL": "Свой вебхук / Локальный сервер",
+  "HF_TRIPOSR_SPACE_UNAVAILABLE": "Space Hugging Face временно недоступен (503). Подождите 1–2 минуты и повторите. Добавьте HF-токен в Интеграциях или выберите другой провайдер.",
   "HF_TRIPOSR_FREE": "Hugging Face TripoSR (бесплатно)",
   "HF_TRIPOSR_INFO": "Бесплатная генерация 3D через публичный Hugging Face Space. Платный ключ не нужен. Бесплатный токен с huggingface.co/settings/tokens повышает лимиты. Space может спать или стоять в очереди.",
   "HF_SPACE_LABEL": "Hugging Face Space",
@@ -1200,7 +1201,18 @@
       "ADMIN_PANEL": "Панель админа",
       "FAVORITES": "Избранное",
       "CART": "Корзина",
-      "ACCOUNT": "Профиль"
+      "ACCOUNT": "Профиль",
+      "NEW_ARRIVALS": "Новинки",
+      "CATEGORIES": "Категории",
+      "LOOKBOOK": "Лукбук",
+      "BEST_SELLERS": "Хиты",
+      "BRANDS": "Бренды",
+      "BLOG": "Журнал",
+      "TESTIMONIALS": "Отзывы",
+      "NEWSLETTER": "Рассылка",
+      "FEATURES": "Преимущества",
+      "FAQ": "FAQ",
+      "STATS": "Цифры"
     },
     "THEME": "Тема",
     "THEMES": {

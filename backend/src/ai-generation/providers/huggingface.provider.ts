@@ -15,6 +15,9 @@ interface HfJob {
 }
 
 const DEFAULT_SPACE = 'stabilityai/TripoSR';
+const TRANSIENT_HTTP = new Set([502, 503, 504]);
+const MAX_TRANSIENT_RETRIES = 4;
+const RETRY_BASE_MS = 2500;
 
 @Injectable()
 export class HuggingFaceProvider implements AiGenerationProvider {
@@ -67,12 +70,15 @@ export class HuggingFaceProvider implements AiGenerationProvider {
       const headers = await this.authHeaders();
 
       await this.wakeSpace(host, headers);
+      await this.sleep(1500);
       this.patch(taskId, { progress: 30 });
 
       const file = this.toFileData(imageUrl);
       let processed: unknown = file;
       try {
-        const pre = await this.gradioCall(host, 'preprocess', [file, true, 0.85], headers);
+        const pre = await this.withTransientRetry('TripoSR preprocess', () =>
+          this.gradioCall(host, 'preprocess', [file, true, 0.85], headers),
+        );
         const extracted = this.extractFile(pre);
         if (extracted) {
           processed = extracted;
@@ -82,7 +88,9 @@ export class HuggingFaceProvider implements AiGenerationProvider {
       }
 
       this.patch(taskId, { progress: 55 });
-      const generated = await this.gradioCall(host, 'generate', [processed, 256], headers);
+      const generated = await this.withTransientRetry('TripoSR generate', () =>
+        this.gradioCall(host, 'generate', [processed, 256], headers),
+      );
       const remoteUrl = this.extractGlbUrl(generated, host);
       if (!remoteUrl) {
         throw new Error('TripoSR Space did not return a GLB file');
@@ -94,12 +102,44 @@ export class HuggingFaceProvider implements AiGenerationProvider {
     } catch (error) {
       const message = error.response?.data?.error || error.response?.data?.message || error.message;
       this.logger.error(`Hugging Face generation failed: ${message}`);
+      const status = error.response?.status as number | undefined;
+      const userError =
+        status && TRANSIENT_HTTP.has(status)
+          ? 'HF_TRIPOSR_SPACE_UNAVAILABLE'
+          : `Hugging Face TripoSR: ${message}`;
       this.patch(taskId, {
         status: 'failed',
         progress: 0,
-        error: `Hugging Face TripoSR: ${message}`,
+        error: userError,
       });
     }
+  }
+
+  private async sleep(ms: number): Promise<void> {
+    await new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  private isTransientAxiosError(error: unknown): boolean {
+    const status = (error as { response?: { status?: number } })?.response?.status;
+    return status != null && TRANSIENT_HTTP.has(status);
+  }
+
+  private async withTransientRetry<T>(label: string, fn: () => Promise<T>): Promise<T> {
+    let lastError: unknown;
+    for (let attempt = 0; attempt < MAX_TRANSIENT_RETRIES; attempt++) {
+      try {
+        return await fn();
+      } catch (error) {
+        lastError = error;
+        if (!this.isTransientAxiosError(error) || attempt === MAX_TRANSIENT_RETRIES - 1) {
+          throw error;
+        }
+        const waitMs = RETRY_BASE_MS * (attempt + 1);
+        this.logger.warn(`${label} transient HTTP error, retry ${attempt + 1}/${MAX_TRANSIENT_RETRIES - 1} in ${waitMs}ms`);
+        await this.sleep(waitMs);
+      }
+    }
+    throw lastError;
   }
 
   private async getSpaceId(): Promise<string> {
@@ -131,10 +171,17 @@ export class HuggingFaceProvider implements AiGenerationProvider {
   }
 
   private async wakeSpace(host: string, headers: Record<string, string>): Promise<void> {
-    try {
-      await axios.get(host, { headers, timeout: 60000, validateStatus: () => true });
-    } catch (error) {
-      this.logger.warn(`Could not wake Hugging Face Space: ${error.message}`);
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        const response = await axios.get(host, { headers, timeout: 60000, validateStatus: () => true });
+        if (!TRANSIENT_HTTP.has(response.status)) {
+          return;
+        }
+        this.logger.warn(`Hugging Face Space wake returned ${response.status}, retrying…`);
+      } catch (error) {
+        this.logger.warn(`Could not wake Hugging Face Space: ${error.message}`);
+      }
+      await this.sleep(RETRY_BASE_MS * (attempt + 1));
     }
   }
 
@@ -147,7 +194,9 @@ export class HuggingFaceProvider implements AiGenerationProvider {
     let lastError: Error | null = null;
     for (const endpoint of endpoints) {
       try {
-        const started = await axios.post(endpoint, { data }, { headers, timeout: 30000 });
+        const started = await this.withTransientRetry(`Gradio ${apiName} start`, () =>
+          axios.post(endpoint, { data }, { headers, timeout: 30000 }),
+        );
         const eventId = started.data?.event_id || started.data?.eventId;
         if (!eventId) {
           if (started.data) {

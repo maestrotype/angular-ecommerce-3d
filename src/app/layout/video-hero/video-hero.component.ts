@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Section } from 'src/shared/models/section.model';
 import { LocalizedString } from 'src/shared/models/localized-string.model';
 import { LocalizedPipe } from 'src/app/shared/pipes/localized.pipe';
@@ -31,6 +31,8 @@ interface VideoHeroSettings {
 export class VideoHeroComponent implements OnInit, OnChanges {
   @Input() data!: Section;
   @ViewChild('heroVideo') videoRef?: ElementRef<HTMLVideoElement>;
+
+  constructor(private translate: TranslateService) {}
 
   settings: VideoHeroSettings = {};
   videoLoaded = false;
@@ -70,6 +72,29 @@ export class VideoHeroComponent implements OnInit, OnChanges {
   onVideoError(): void {
     this.videoError = true;
     this.isPlaying = false;
+  }
+
+  /** CMS text with i18n fallback; repairs legacy presets that copied EN into every locale. */
+  buttonLabel(value: string | LocalizedString | undefined, i18nKey: string): string {
+    const lang = this.translate.currentLang || this.translate.defaultLang || 'en';
+    if (!value) {
+      return this.translate.instant(i18nKey);
+    }
+    if (typeof value === 'string') {
+      return lang === 'en' ? value : this.translate.instant(i18nKey);
+    }
+    const localized = (value[lang as keyof LocalizedString] || '').trim();
+    const en = (value.en || '').trim();
+    if (localized) {
+      if (lang !== 'en' && en && localized === en) {
+        return this.translate.instant(i18nKey);
+      }
+      return localized;
+    }
+    if (lang === 'en' && en) {
+      return en;
+    }
+    return this.translate.instant(i18nKey);
   }
 
   private applySettings(): void {

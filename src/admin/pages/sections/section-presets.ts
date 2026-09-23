@@ -735,15 +735,15 @@ function buildSettingsFromPreset(type: string, preset: SectionPresetFormPatch): 
       alignment: preset.videoAlignment || 'center',
       showPlayButton: preset.videoShowPlayButton !== false,
       ctaText: L(
-        preset.videoCtaText || 'Shop now',
-        preset.videoCtaText || 'В магазин',
-        preset.videoCtaText || 'До магазину'
+        preset.videoCtaText || 'Shop the film',
+        'Смотреть коллекцию',
+        'Дивитися колекцію'
       ),
       ctaLink: preset.videoCtaLink || '/shop',
       secondaryCtaText: L(
-        preset.videoSecondaryCtaText || 'Learn more',
-        preset.videoSecondaryCtaText || 'Подробнее',
-        preset.videoSecondaryCtaText || 'Детальніше'
+        preset.videoSecondaryCtaText || 'Our story',
+        'Наша история',
+        'Наша історія'
       ),
       secondaryCtaLink: preset.videoSecondaryCtaLink || '/about'
     };
