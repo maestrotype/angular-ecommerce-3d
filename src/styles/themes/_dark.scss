@@ -12,6 +12,7 @@
 
 [data-theme="dark"] {
   color-scheme: dark;
+  @include theme-island-aliases;
 
   --product-grid-columns: 4;
   --product-grid-gap: var(--space-5);

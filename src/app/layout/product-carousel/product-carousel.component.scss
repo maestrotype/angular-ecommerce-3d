@@ -377,8 +377,7 @@
   }
 }
 
-:host-context([data-theme='light']) .product-carousel,
-:host-context([data-theme='default']) .product-carousel {
+@mixin product-carousel-light {
   --carousel-ink: var(--text-primary);
   --carousel-veil: var(--surface-page, var(--surface-primary));
   --carousel-cta-bg: var(--text-primary);
@@ -404,8 +403,7 @@
   }
 }
 
-:host-context([data-theme='dark']) .product-carousel,
-:host-context([data-theme='dark-glass']) .product-carousel {
+@mixin product-carousel-dark {
   --carousel-ink: var(--text-primary);
   --carousel-veil: var(--product-carousel-bg, var(--surface-page));
   --carousel-cta-bg: var(--text-primary);
@@ -423,7 +421,65 @@
   }
 }
 
+:host-context([data-theme='light']) .product-carousel,
+:host-context([data-theme='default']) .product-carousel {
+  @include product-carousel-light;
+}
+
+:host-context([data-theme='dark']) .product-carousel,
+:host-context([data-theme='dark-glass']) .product-carousel {
+  @include product-carousel-dark;
+}
+
 :host-context([data-theme='glass']) .product-carousel {
+  --carousel-ink: var(--text-primary);
+  --carousel-veil: var(--glass-bg, rgba(255, 255, 255, 0.42));
+  --carousel-cta-bg: var(--glass-surface-soft, rgba(255, 255, 255, 0.48));
+  --carousel-cta-fg: var(--text-primary);
+  --carousel-cta-border: var(--glass-border-soft, rgba(255, 255, 255, 0.55));
+  --carousel-veil-left: 82%;
+  --carousel-veil-mid: 24%;
+  --carousel-veil-top: 18%;
+  --carousel-veil-bottom: 52%;
+  --carousel-grain-opacity: 0;
+  --carousel-title-shadow: none;
+  background: transparent;
+
+  .product-carousel__stage {
+    background: transparent;
+  }
+
+  .product-carousel__nav {
+    background: var(--glass-surface-soft, rgba(255, 255, 255, 0.48));
+    border-color: var(--glass-border-soft, rgba(255, 255, 255, 0.55));
+  }
+
+  .product-carousel__cta {
+    box-shadow: var(--glass-inner-shadow, inset 0 1px 0 rgba(255, 255, 255, 0.75));
+  }
+
+  .product-carousel__thumb {
+    background: var(--glass-surface-soft, rgba(255, 255, 255, 0.4));
+    border-color: color-mix(in srgb, var(--glass-border-soft, #fff) 40%, transparent);
+
+    &.is-active {
+      border-color: var(--glass-border-strong, #fff);
+    }
+  }
+}
+
+// Architect frame theme beats the admin document theme (:host-context matches any ancestor).
+:host-context(app-admin-section-preview[data-theme='light']) .product-carousel,
+:host-context(app-admin-section-preview[data-theme='default']) .product-carousel {
+  @include product-carousel-light;
+}
+
+:host-context(app-admin-section-preview[data-theme='dark']) .product-carousel,
+:host-context(app-admin-section-preview[data-theme='dark-glass']) .product-carousel {
+  @include product-carousel-dark;
+}
+
+:host-context(app-admin-section-preview[data-theme='glass']) .product-carousel {
   --carousel-ink: var(--text-primary);
   --carousel-veil: var(--glass-bg, rgba(255, 255, 255, 0.42));
   --carousel-cta-bg: var(--glass-surface-soft, rgba(255, 255, 255, 0.48));

@@ -18,6 +18,24 @@ body.is-admin app-admin-section-preview .preview-theme-root {
     min-height: 100%;
   }
 
+  // Dark storefront page is the atmosphere gradient with transparent sections,
+  // not the solid admin zinc. The body rule does not match inside this frame.
+  &[data-theme='dark'] {
+    --surface-page: transparent;
+    --pdp-page-bg: transparent;
+    --product-detail-bg: transparent;
+    --preview-canvas-bg: var(--storefront-atmosphere-gradient, var(--bg-page));
+  }
+
+  // Glass storefront paints frost orbs on the body. Repeat them in the frame.
+  &[data-theme='glass'] .full-page-preview {
+    background:
+      var(--bg-gradient-1),
+      var(--bg-gradient-2),
+      var(--bg-gradient-3),
+      var(--storefront-atmosphere-gradient, var(--preview-canvas-bg));
+  }
+
   /* Storefront sections use 80vh/100dvh of the admin window; cap them to the device frame. */
   .hero,
   .video-hero-section,

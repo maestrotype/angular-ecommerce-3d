@@ -503,12 +503,33 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   getMenuTitle(item: MenuItem): string {
+    const urlRaw = (item.url || '').trim();
+    const hashAnchor = urlRaw.startsWith('#') ? urlRaw.slice(1).toLowerCase() : '';
+    const sectionNavKeyByAnchor: Record<string, string> = {
+      'product-carousel': 'HEADER.NAV.NEW_ARRIVALS',
+      categories: 'HEADER.NAV.CATEGORIES',
+      lookbook: 'HEADER.NAV.LOOKBOOK',
+      'best-sellers': 'HEADER.NAV.BEST_SELLERS',
+      brands: 'HEADER.NAV.BRANDS',
+      'blog-posts': 'HEADER.NAV.BLOG',
+      testimonials: 'HEADER.NAV.TESTIMONIALS',
+      newsletter: 'HEADER.NAV.NEWSLETTER',
+      'features-grid': 'HEADER.NAV.FEATURES',
+      faq: 'HEADER.NAV.FAQ',
+      stats: 'HEADER.NAV.STATS',
+      contacts: 'HEADER.NAV.CONTACTS',
+      about: 'HEADER.NAV.ABOUT',
+    };
+    if (hashAnchor && sectionNavKeyByAnchor[hashAnchor]) {
+      return this.translate.instant(sectionNavKeyByAnchor[hashAnchor]);
+    }
+
     const title = item.title;
     if (title && typeof title !== 'string') {
       return getLocalizedString(title, this.currentLang);
     }
 
-    const url = (item.url || '').split('#')[0].split('?')[0].toLowerCase();
+    const url = urlRaw.split('#')[0].split('?')[0].toLowerCase();
     const urlKeys: Record<string, string> = {
       '/home': 'HEADER.NAV.HOME',
       '/': 'HEADER.NAV.HOME',
