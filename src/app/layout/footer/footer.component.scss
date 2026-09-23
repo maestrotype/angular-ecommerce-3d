@@ -42,7 +42,7 @@
   }
 }
 
-:host-context([data-theme="glass"]) {
+@mixin footer-glass-theme {
   --footer-bg: var(--surface-chrome-gradient);
   --footer-backdrop-filter: var(--chrome-blur);
   --footer-text: var(--text-primary);
@@ -51,6 +51,63 @@
   --footer-border: var(--glass-border-soft);
   --footer-text-rgb: 30, 41, 59;
   --footer-shadow: var(--chrome-shadow);
+}
+
+:host-context([data-theme="glass"]) {
+  @include footer-glass-theme;
+}
+
+// Drop the admin document's glass chrome when the architect frame is another theme,
+// then re-apply section variants. Glass frame comes last so it still beats variants.
+:host-context(app-admin-section-preview[data-theme='light']),
+:host-context(app-admin-section-preview[data-theme='default']),
+:host-context(app-admin-section-preview[data-theme='dark']),
+:host-context(app-admin-section-preview[data-theme='dark-glass']) {
+  --footer-bg: unset;
+  --footer-backdrop-filter: unset;
+  --footer-text: unset;
+  --footer-link: unset;
+  --footer-link-hover: unset;
+  --footer-border: unset;
+  --footer-text-rgb: unset;
+  --footer-shadow: unset;
+}
+
+:host-context(app-admin-section-preview):host(.variant-light) {
+  --footer-bg: var(--surface-primary);
+  --footer-text: var(--text-primary);
+  --footer-link: var(--text-secondary);
+  --footer-link-hover: var(--text-primary);
+  --footer-border: var(--border-subtle);
+}
+
+:host-context(app-admin-section-preview):host(.variant-dark) {
+  --footer-bg: var(--surface-page);
+  --footer-text: var(--text-inverse);
+  --footer-link: var(--text-muted);
+  --footer-link-hover: var(--text-on-primary);
+  --footer-border: var(--glass-border-soft);
+}
+
+:host-context(app-admin-section-preview):host(.variant-deep-dark) {
+  --footer-bg: var(--surface-inverse);
+  --footer-text: var(--text-inverse);
+  --footer-link: var(--text-muted);
+  --footer-link-hover: var(--text-on-primary);
+  --footer-border: var(--border-subtle);
+}
+
+:host-context(app-admin-section-preview):host(.variant-glass) {
+  --footer-bg: var(--glass-surface-soft);
+  --footer-backdrop-filter: var(--backdrop-blur);
+  --footer-text: var(--text-primary);
+  --footer-link: var(--text-secondary);
+  --footer-link-hover: var(--text-primary);
+  --footer-border: var(--glass-border-soft);
+}
+
+:host-context(app-admin-section-preview[data-theme='glass']) {
+  @include footer-glass-theme;
 }
 
 .footer {

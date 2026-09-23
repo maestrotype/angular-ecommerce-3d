@@ -1,0 +1,16 @@
+// Alias tokens must be specified on the [data-theme] element itself.
+// A var() alias declared only on :root is computed against the document theme
+// and inherited as a concrete value, so a nested theme (site architect preview)
+// cannot retarget it by changing --surface-page / --text-primary alone.
+@mixin theme-island-aliases {
+  --product-stage-bg: var(--surface-page);
+  --product-stage-text: var(--text-primary);
+  --product-stage-muted: var(--text-secondary);
+  --product-carousel-bg: var(--surface-page);
+  --product-carousel-text: var(--text-primary);
+  --glass-surface-soft: var(--surface-card);
+  --glass-surface-muted: var(--surface-secondary);
+  --glass-border-soft: var(--border-subtle);
+  --glass-border-strong: var(--border-strong);
+  --glass-shadow: var(--shadow-lg);
+}

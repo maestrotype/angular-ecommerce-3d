@@ -13,6 +13,7 @@
 
 [data-theme="glass"] {
   color-scheme: light;
+  @include theme-island-aliases;
   /* Product cards — set fully in liquid ice recipe below */
   /* Glass theme variables */
   --hero-bg-gradient: linear-gradient(135deg,

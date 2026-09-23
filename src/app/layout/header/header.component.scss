@@ -1259,3 +1259,94 @@
     }
   }
 }
+
+@mixin header-glass-theme {
+  --header-bg: var(--surface-chrome-gradient);
+  --header-backdrop-filter: var(--chrome-blur);
+  --header-text: var(--text-primary);
+  --header-link: var(--text-secondary);
+  --header-link-hover: var(--text-on-primary);
+  --header-search-bg: rgba(255, 255, 255, 0.55);
+  --header-search-text: var(--text-primary);
+  --header-text-rgb: 30, 41, 59;
+  --header-border: var(--chrome-border);
+  --header-shadow: var(--chrome-shadow);
+}
+
+// Architect: admin body theme must not restyle the frame. Unset glass chrome,
+// restore section variants, then let a glass frame win again.
+:host-context(app-admin-section-preview[data-theme='light']) .header,
+:host-context(app-admin-section-preview[data-theme='default']) .header,
+:host-context(app-admin-section-preview[data-theme='dark']) .header,
+:host-context(app-admin-section-preview[data-theme='dark-glass']) .header {
+  --header-bg: unset;
+  --header-backdrop-filter: unset;
+  --header-text: unset;
+  --header-link: unset;
+  --header-link-hover: unset;
+  --header-search-bg: unset;
+  --header-search-text: unset;
+  --header-text-rgb: unset;
+  --header-border: unset;
+  --header-shadow: unset;
+}
+
+:host-context(app-admin-section-preview):host(.variant-glass) .header {
+  --header-bg: var(--glass-surface-soft);
+  --header-text: var(--text-primary);
+  --header-link: var(--text-primary);
+  backdrop-filter: var(--hero-backdrop-filter);
+}
+
+:host-context(app-admin-section-preview):host(.variant-glass-clear) .header {
+  --header-bg: var(--glass-surface-muted);
+  backdrop-filter: var(--backdrop-blur-sm);
+}
+
+:host-context(app-admin-section-preview):host(.variant-glass-deep) .header {
+  --header-bg: var(--surface-overlay-full);
+  --header-text: var(--text-inverse);
+  --header-link: var(--text-inverse);
+  backdrop-filter: var(--hero-backdrop-filter);
+}
+
+:host-context(app-admin-section-preview):host(.variant-minimal) .header {
+  --header-bg: var(--surface-primary);
+  --header-text: var(--text-primary);
+  --header-link: var(--text-primary);
+}
+
+:host-context(app-admin-section-preview):host(.variant-light-soft) .header {
+  --header-bg: var(--surface-page);
+  --header-text: var(--color-accent);
+  --header-link: var(--color-accent);
+}
+
+:host-context(app-admin-section-preview):host(.variant-dark) .header {
+  --header-bg: var(--surface-page);
+  --header-text: var(--text-inverse);
+  --header-link: var(--text-inverse);
+  --header-link-hover: var(--interactive-primary);
+
+  .hamburger span {
+    background: var(--text-inverse);
+  }
+}
+
+:host-context(app-admin-section-preview):host(.variant-dark-soft) .header {
+  --header-bg: var(--surface-secondary);
+  --header-text: var(--text-primary);
+  --header-link: var(--text-primary);
+
+  .hamburger span {
+    background: var(--text-primary);
+  }
+}
+
+:host-context(app-admin-section-preview[data-theme='glass']) .header {
+  @include header-glass-theme;
+
+  .hamburger span {
+    background: var(--text-primary);
+  }
+}
