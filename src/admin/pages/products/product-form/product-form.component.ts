@@ -270,6 +270,7 @@ export class ProductFormComponent implements OnInit {
           'meshy': 'MESHY_AI',
           'luma': 'LUMA_AI',
           'huggingface': 'HF_TRIPOSR_FREE',
+          'hunyuan-free': 'HF_HUNYUAN_FREE',
           'custom': 'CUSTOM_WEBHOOK_LOCAL'
         };
         

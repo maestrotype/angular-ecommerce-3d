@@ -89,6 +89,7 @@
       *ngIf="model3dUrl"
       [modelPath]="model3dUrl"
       [hdModelPath]="localModel3dUrl"
+      [referenceImage]="images[0]"
       [scale]="[9, 9, 9]"
       [position]="[0, 0, 0]"
       [previewOnly]="false"
@@ -117,6 +118,7 @@
           <app-three-d-viewer
             [modelPath]="model3dUrl"
             [hdModelPath]="localModel3dUrl"
+            [referenceImage]="images[0]"
             [scale]="[9, 9, 9]"
             [position]="[0, 0, 0]"
             [previewOnly]="true"

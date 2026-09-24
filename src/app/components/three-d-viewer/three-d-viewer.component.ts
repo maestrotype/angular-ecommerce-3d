@@ -45,6 +45,8 @@ export class ThreeDViewerComponent implements AfterViewInit, OnChanges, OnDestro
    * Off by default — canvas getImageData/putImageData destroys HQ texture quality.
    */
   @Input() keyOutStudioBackground: boolean | 'auto' = false;
+  /** Product photo used to tint Hunyuan shape meshes that have no texture. */
+  @Input() referenceImage: string | null = null;
   
   @Input() set upsideDown(value: boolean) {
     this._upsideDown = value;
@@ -69,6 +71,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnChanges, OnDestro
   failedUrl = '';
   showLogs = false;
   private currentLoadedPath: string | null = null;
+  private bareMaterials: any[] = [];
   private isRetryingFallback = false;
 
   private scene!: THREE.Scene;
@@ -446,7 +449,8 @@ export class ThreeDViewerComponent implements AfterViewInit, OnChanges, OnDestro
       lowerPath.includes('ai-gen') ||
       lowerPath.includes('product3d-ai') ||
       lowerPath.includes('huggingface') ||
-      lowerPath.includes('triposr')
+      lowerPath.includes('triposr') ||
+      /(?:^|\/)hy-/.test(lowerPath)
     );
 
     // Old Tripo3D GLBs were exported inverted. Hugging Face TripoSR is already Y-up.
@@ -602,7 +606,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnChanges, OnDestro
 
     this.model = modelScene;
     this.model.scale.set(this.scale[0], this.scale[1], this.scale[2]);
-    
+    this.prepareBareShapeMesh(THREE);
     this.applyRotation();
     this.model.updateMatrixWorld(true);
 
@@ -691,6 +695,202 @@ export class ThreeDViewerComponent implements AfterViewInit, OnChanges, OnDestro
       host.removeEventListener('pointerleave', onLeave);
       host.removeEventListener('pointerdown', onDown);
     };
+  }
+
+  /**
+   * Public Hunyuan Spaces return a white shape with no texture maps.
+   * Stand that mesh up and project the product photo onto its side.
+   */
+  private prepareBareShapeMesh(THREE: typeof import('three')): void {
+    if (!this.model) {
+      return;
+    }
+    this.bareMaterials = [];
+    const sourceUrl = `${this.modelPath || ''} ${this.currentLoadedPath || ''}`;
+    let hunyuanShape = /(?:^|[^a-z0-9])hy-/i.test(sourceUrl);
+    this.model.traverse((child: any) => {
+      if (!child.isMesh) {
+        return;
+      }
+      if (JSON.stringify(child.userData || {}).toLowerCase().includes('hunyuan')) {
+        hunyuanShape = true;
+      }
+      if (child.geometry && !child.geometry.getAttribute('normal')) {
+        child.geometry.computeVertexNormals();
+      }
+    });
+    if (!hunyuanShape) {
+      return;
+    }
+    // Hunyuan already stands sole-down. The extra 180° turn put the sole on top.
+    this._upsideDown = false;
+    this.model.traverse((child: any) => {
+      if (!child.isMesh || !child.geometry) {
+        return;
+      }
+      const materials = Array.isArray(child.material) ? child.material : [child.material];
+      if (materials.some((material: any) => material?.map)) {
+        return;
+      }
+      child.geometry.computeBoundingBox();
+      const box = child.geometry.boundingBox;
+      const size = new THREE.Vector3(
+        Math.max(box.max.x - box.min.x, 1e-4),
+        Math.max(box.max.y - box.min.y, 1e-4),
+        Math.max(box.max.z - box.min.z, 1e-4),
+      );
+      const uniforms = {
+        uBoxMin: { value: box.min.clone() },
+        uBoxSize: { value: size },
+        uShoeMap: { value: new THREE.Texture() },
+      };
+      const textured = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        roughness: 0.9,
+        metalness: 0,
+        side: THREE.DoubleSide,
+        envMapIntensity: 0.2,
+      });
+      textured.onBeforeCompile = (shader) => {
+        shader.uniforms.uBoxMin = uniforms.uBoxMin;
+        shader.uniforms.uBoxSize = uniforms.uBoxSize;
+        shader.uniforms.uShoeMap = uniforms.uShoeMap;
+        shader.vertexShader = shader.vertexShader
+          .replace('#include <common>', '#include <common>\nvarying vec3 vObjPos;\nvarying vec3 vObjNormal;')
+          .replace('#include <beginnormal_vertex>', '#include <beginnormal_vertex>\nvObjNormal = objectNormal;')
+          .replace('#include <begin_vertex>', '#include <begin_vertex>\nvObjPos = transformed;');
+        shader.fragmentShader = shader.fragmentShader
+          .replace(
+            '#include <common>',
+            '#include <common>\nvarying vec3 vObjPos;\nvarying vec3 vObjNormal;\nuniform vec3 uBoxMin;\nuniform vec3 uBoxSize;\nuniform sampler2D uShoeMap;',
+          )
+          .replace('#include <map_fragment>', `
+            vec3 triN = normalize(abs(vObjNormal));
+            triN = pow(triN, vec3(3.0));
+            triN /= max(triN.x + triN.y + triN.z, 0.0001);
+            vec2 uvX = vec2(vObjPos.z, vObjPos.y);
+            vec2 uvY = vec2(vObjPos.x, vObjPos.z);
+            vec2 uvZ = vec2(vObjPos.x, vObjPos.y);
+            uvX = (uvX - uBoxMin.zy) / uBoxSize.zy;
+            uvY = (uvY - uBoxMin.xz) / uBoxSize.xz;
+            uvZ = (uvZ - uBoxMin.xy) / uBoxSize.xy;
+            vec4 shoeColor = texture2D(uShoeMap, uvX) * triN.x
+              + texture2D(uShoeMap, uvY) * triN.y
+              + texture2D(uShoeMap, uvZ) * triN.z;
+            diffuseColor *= shoeColor;
+          `);
+      };
+      (textured as any).userData.shoeUniforms = uniforms;
+      // A placeholder map keeps the standard shader's texture path compiling.
+      textured.map = new THREE.Texture();
+      child.material = textured;
+      this.bareMaterials.push(textured);
+    });
+    this.applyReferenceTexture(THREE);
+  }
+
+  private applyReferenceTexture(THREE: typeof import('three')): void {
+    const src = this.referenceImage;
+    if (!src || !this.bareMaterials.length) {
+      for (const material of this.bareMaterials) {
+        material.color.set(0x3f3f46);
+      }
+      return;
+    }
+    const loader = new THREE.TextureLoader();
+    loader.setCrossOrigin('anonymous');
+    loader.load(
+      src,
+      (source) => {
+        const image = source.image as HTMLImageElement | undefined;
+        const texture = image ? this.cropShoeTexture(THREE, image) : source;
+        texture.colorSpace = THREE.SRGBColorSpace;
+        texture.wrapS = THREE.ClampToEdgeWrapping;
+        texture.wrapT = THREE.ClampToEdgeWrapping;
+        texture.needsUpdate = true;
+        for (const material of this.bareMaterials) {
+          const uniforms = material.userData?.shoeUniforms;
+          if (uniforms) {
+            uniforms.uShoeMap.value = texture;
+          }
+          material.map = texture;
+          material.color.set(0xffffff);
+          material.needsUpdate = true;
+        }
+        this.renderFrame();
+      },
+      undefined,
+      () => {
+        for (const material of this.bareMaterials) {
+          material.color.set(0x3f3f46);
+          material.needsUpdate = true;
+        }
+        this.renderFrame();
+      },
+    );
+  }
+
+  /** Drop empty margins so the shoe photo fills the mesh instead of a small patch. */
+  private cropShoeTexture(THREE: typeof import('three'), image: HTMLImageElement): import('three').Texture {
+    const source = document.createElement('canvas');
+    source.width = image.naturalWidth || image.width;
+    source.height = image.naturalHeight || image.height;
+    const sourceCtx = source.getContext('2d', { willReadFrequently: true });
+    if (!sourceCtx || !source.width || !source.height) {
+      return new THREE.CanvasTexture(image);
+    }
+    sourceCtx.drawImage(image, 0, 0, source.width, source.height);
+    let pixels: ImageData;
+    try {
+      pixels = sourceCtx.getImageData(0, 0, source.width, source.height);
+    } catch {
+      return new THREE.CanvasTexture(image);
+    }
+    let minX = source.width;
+    let minY = source.height;
+    let maxX = 0;
+    let maxY = 0;
+    const data = pixels.data;
+    for (let y = 0; y < source.height; y++) {
+      for (let x = 0; x < source.width; x++) {
+        const i = (y * source.width + x) * 4;
+        const alpha = data[i + 3];
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        const empty = alpha < 24 || (r > 242 && g > 242 && b > 242);
+        if (empty) {
+          continue;
+        }
+        minX = Math.min(minX, x);
+        minY = Math.min(minY, y);
+        maxX = Math.max(maxX, x);
+        maxY = Math.max(maxY, y);
+      }
+    }
+    if (maxX <= minX || maxY <= minY) {
+      return new THREE.CanvasTexture(image);
+    }
+    const pad = 2;
+    minX = Math.max(0, minX - pad);
+    minY = Math.max(0, minY - pad);
+    maxX = Math.min(source.width - 1, maxX + pad);
+    maxY = Math.min(source.height - 1, maxY + pad);
+    const width = maxX - minX + 1;
+    const height = maxY - minY + 1;
+    const cropped = document.createElement('canvas');
+    cropped.width = width;
+    cropped.height = height;
+    const croppedCtx = cropped.getContext('2d');
+    if (!croppedCtx) {
+      return new THREE.CanvasTexture(image);
+    }
+    croppedCtx.fillStyle = '#1c1c1c';
+    croppedCtx.fillRect(0, 0, width, height);
+    croppedCtx.drawImage(source, minX, minY, width, height, 0, 0, width, height);
+    const texture = new THREE.CanvasTexture(cropped);
+    texture.flipY = true;
+    return texture;
   }
 
   private applyRotation() {
