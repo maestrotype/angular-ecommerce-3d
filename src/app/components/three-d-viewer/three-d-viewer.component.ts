@@ -744,12 +744,9 @@ export class ThreeDViewerComponent implements AfterViewInit, OnChanges, OnDestro
         uBoxSize: { value: size },
         uShoeMap: { value: new THREE.Texture() },
       };
-      const textured = new THREE.MeshStandardMaterial({
+      const textured = new THREE.MeshBasicMaterial({
         color: 0xffffff,
-        roughness: 0.9,
-        metalness: 0,
         side: THREE.DoubleSide,
-        envMapIntensity: 0.2,
       });
       textured.onBeforeCompile = (shader) => {
         shader.uniforms.uBoxMin = uniforms.uBoxMin;
@@ -757,8 +754,7 @@ export class ThreeDViewerComponent implements AfterViewInit, OnChanges, OnDestro
         shader.uniforms.uShoeMap = uniforms.uShoeMap;
         shader.vertexShader = shader.vertexShader
           .replace('#include <common>', '#include <common>\nvarying vec3 vObjPos;\nvarying vec3 vObjNormal;')
-          .replace('#include <beginnormal_vertex>', '#include <beginnormal_vertex>\nvObjNormal = objectNormal;')
-          .replace('#include <begin_vertex>', '#include <begin_vertex>\nvObjPos = transformed;');
+          .replace('#include <begin_vertex>', '#include <begin_vertex>\nvObjPos = transformed;\nvObjNormal = normal;');
         shader.fragmentShader = shader.fragmentShader
           .replace(
             '#include <common>',
@@ -766,17 +762,19 @@ export class ThreeDViewerComponent implements AfterViewInit, OnChanges, OnDestro
           )
           .replace('#include <map_fragment>', `
             vec3 triN = normalize(abs(vObjNormal));
-            triN = pow(triN, vec3(3.0));
-            triN /= max(triN.x + triN.y + triN.z, 0.0001);
-            vec2 uvX = vec2(vObjPos.z, vObjPos.y);
-            vec2 uvY = vec2(vObjPos.x, vObjPos.z);
-            vec2 uvZ = vec2(vObjPos.x, vObjPos.y);
-            uvX = (uvX - uBoxMin.zy) / uBoxSize.zy;
-            uvY = (uvY - uBoxMin.xz) / uBoxSize.xz;
-            uvZ = (uvZ - uBoxMin.xy) / uBoxSize.xy;
-            vec4 shoeColor = texture2D(uShoeMap, uvX) * triN.x
-              + texture2D(uShoeMap, uvY) * triN.y
-              + texture2D(uShoeMap, uvZ) * triN.z;
+            triN = pow(triN, vec3(4.0));
+            vec2 uvX = (vec2(vObjPos.z, vObjPos.y) - uBoxMin.zy) / uBoxSize.zy;
+            vec2 uvY = (vec2(vObjPos.x, vObjPos.z) - uBoxMin.xz) / uBoxSize.xz;
+            vec2 uvZ = (vec2(vObjPos.x, vObjPos.y) - uBoxMin.xy) / uBoxSize.xy;
+            vec4 cx = texture2D(uShoeMap, uvX);
+            vec4 cy = texture2D(uShoeMap, uvY);
+            vec4 cz = texture2D(uShoeMap, uvZ);
+            float lx = dot(cx.rgb, vec3(0.3, 0.59, 0.11));
+            float ly = dot(cy.rgb, vec3(0.3, 0.59, 0.11));
+            float lz = dot(cz.rgb, vec3(0.3, 0.59, 0.11));
+            vec3 w = triN * vec3(max(lx, 0.35), max(ly, 0.35), max(lz, 0.35));
+            float ws = max(w.x + w.y + w.z, 0.0001);
+            vec4 shoeColor = (cx * w.x + cy * w.y + cz * w.z) / ws;
             diffuseColor *= shoeColor;
           `);
       };
@@ -885,7 +883,23 @@ export class ThreeDViewerComponent implements AfterViewInit, OnChanges, OnDestro
     if (!croppedCtx) {
       return new THREE.CanvasTexture(image);
     }
-    croppedCtx.fillStyle = '#1c1c1c';
+    let rSum = 0;
+    let gSum = 0;
+    let bSum = 0;
+    let samples = 0;
+    for (let i = 0; i < data.length; i += 16) {
+      if (data[i + 3] < 24) {
+        continue;
+      }
+      rSum += data[i];
+      gSum += data[i + 1];
+      bSum += data[i + 2];
+      samples++;
+    }
+    const fill = samples
+      ? `rgb(${Math.round(rSum / samples)}, ${Math.round(gSum / samples)}, ${Math.round(bSum / samples)})`
+      : '#d8d8d8';
+    croppedCtx.fillStyle = fill;
     croppedCtx.fillRect(0, 0, width, height);
     croppedCtx.drawImage(source, minX, minY, width, height, 0, 0, width, height);
     const texture = new THREE.CanvasTexture(cropped);
