@@ -1264,6 +1264,9 @@ export class ProductFormComponent implements OnInit {
       requireCloudinary: true,
     });
     this.isUploading3d = false;
+    const continueSave = this.pendingSaveAfterArchive;
+    this.pendingSaveAfterArchive = null;
+    continueSave?.();
   }
 
   private applyLocalModelUpload(res: { url: string; publicId: string | null; localPath?: string | null }): void {
@@ -1313,11 +1316,21 @@ export class ProductFormComponent implements OnInit {
     setTimeout(() => this.cloudinaryReuploadInput?.nativeElement?.click(), 300);
   }
 
-  archiveLocalModel(): void {
-    if (!this.model3dUrl || !this.model3dNeedsCloudinaryArchive) return;
+  private canFetchModelForCloudinary(url: string): boolean {
+    return /^https?:\/\//i.test(url) && !url.includes('localhost') && !url.includes('127.0.0.1');
+  }
 
-    // On GitHub Pages / HTTPS we cannot fetch from localhost — user must pick the file.
-    if (this.isLiveSite || window.location.protocol === 'https:') {
+  private pendingSaveAfterArchive: (() => void) | null = null;
+
+  archiveLocalModel(afterArchive?: () => void): void {
+    if (!this.model3dUrl || !this.model3dNeedsCloudinaryArchive) {
+      afterArchive?.();
+      return;
+    }
+    this.pendingSaveAfterArchive = afterArchive || null;
+
+    // GitHub Pages cannot read a file that only exists on the developer's machine.
+    if (!this.canFetchModelForCloudinary(this.model3dUrl)) {
       this.promptCloudinaryReupload();
       return;
     }
@@ -1509,6 +1522,10 @@ export class ProductFormComponent implements OnInit {
     }
 
     if (this.model3dUrl && this.model3dNeedsCloudinaryArchive && !this.isLocalApi) {
+      if (this.canFetchModelForCloudinary(this.model3dUrl)) {
+        this.archiveLocalModel(() => this.onSubmit());
+        return;
+      }
       this.snackBar.open(this.translate.instant('ARCHIVE_BEFORE_SAVE_PROD'), this.translate.instant('CLOSE_BTN'), {
         duration: 10000,
         panelClass: ['warning-snackbar'],
