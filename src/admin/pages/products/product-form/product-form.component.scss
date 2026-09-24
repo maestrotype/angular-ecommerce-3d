@@ -669,11 +669,12 @@ textarea {
         var(--surface-tertiary);
 
       img {
-        width: auto;
-        height: auto;
-        max-width: calc(100% - 24px);
-        max-height: calc(100% - 24px);
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        max-height: 100%;
         object-fit: contain;
+        object-position: center;
       }
     }
   }
@@ -751,6 +752,9 @@ textarea {
 @media (max-width: 768px) {
   .preview-container .preview-overlay {
     opacity: 1;
+    inset: auto 8px 8px auto;
+    padding: 0;
+    background: none;
   }
 }
 
@@ -856,9 +860,27 @@ textarea {
   }
 
   .image-media-zone {
-    height: min(320px, 50vh);
-    min-height: min(320px, 50vh);
-    max-height: min(320px, 50vh);
+    height: auto;
+    min-height: 0;
+    max-height: none;
+  }
+
+  .image-media-zone:not(.has-images),
+  .image-media-zone:not(.has-images) .image-empty {
+    min-height: 220px;
+  }
+
+  .image-media-zone.has-images .image-preview-grid--single,
+  .image-media-zone.has-images .image-preview-grid--single .preview-item,
+  .image-media-zone.has-images .image-preview-grid--single .preview-container {
+    width: 100%;
+    height: min(72vw, 420px);
+    min-height: 240px;
+  }
+
+  .image-preview-grid:not(.image-preview-grid--single) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    height: auto;
   }
 
   .model-footer__row--actions {
@@ -869,10 +891,6 @@ textarea {
     gap: var(--space-3);
   }
 
-  .image-preview-grid {
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  }
-
   .preview-container {
     border: none;
     box-shadow: none;
@@ -881,8 +899,28 @@ textarea {
 
   .model3d-upload-zone {
     margin: var(--space-3) 0;
-    min-height: 360px;
+    min-height: 0;
     border-radius: var(--radius-md);
+  }
+
+  .model-empty,
+  .model-generating {
+    padding: var(--space-4) var(--space-3);
+  }
+
+  .model-empty__actions {
+    flex-direction: column;
+  }
+
+  .engine-bar {
+    flex-wrap: wrap;
+    align-items: stretch;
+    border-radius: var(--radius-lg);
+    max-width: none;
+  }
+
+  .engine-bar__select {
+    width: 100%;
   }
 
   .form-actions {

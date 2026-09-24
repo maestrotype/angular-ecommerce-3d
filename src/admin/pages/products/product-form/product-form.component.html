@@ -377,6 +377,7 @@
                     *ngFor="let v of [viewerVersion]"
                     [modelPath]="model3dUrl"
                     [hdModelPath]="localModel3dUrl"
+                    [referenceImage]="imageUrls[0] || selectedImageUrl"
                     [autoRotate]="true"
                     [previewOnly]="false"
                     loading="eager"

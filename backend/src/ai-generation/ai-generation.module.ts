@@ -12,7 +12,7 @@ import { LumaAiProvider } from './providers/luma.provider';
 import { CustomProvider } from './providers/custom.provider';
 import { Unique3dProvider } from './providers/unique3d.provider';
 import { HunyuanV2Provider } from './providers/hunyuan-v2.provider';
-import { HuggingFaceProvider } from './providers/huggingface.provider';
+import { HuggingFaceProvider, HunyuanSpaceProvider } from './providers/huggingface.provider';
 
 import { GlbOptimizationService } from '../services/glb-optimization.service';
 
@@ -29,6 +29,7 @@ import { GlbOptimizationService } from '../services/glb-optimization.service';
     Unique3dProvider,
     HunyuanV2Provider,
     HuggingFaceProvider,
+    HunyuanSpaceProvider,
   ],
   controllers: [AiGenerationController],
   exports: [AiGenerationService],

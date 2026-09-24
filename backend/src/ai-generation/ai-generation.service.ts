@@ -16,7 +16,7 @@ import { LumaAiProvider } from './providers/luma.provider';
 import { CustomProvider } from './providers/custom.provider';
 import { Unique3dProvider } from './providers/unique3d.provider';
 import { HunyuanV2Provider } from './providers/hunyuan-v2.provider';
-import { HuggingFaceProvider } from './providers/huggingface.provider';
+import { HuggingFaceProvider, HunyuanSpaceProvider } from './providers/huggingface.provider';
 import {
   AI_PROVIDER_CATALOG,
   decodeProviderTaskId,
@@ -40,6 +40,7 @@ export class AiGenerationService {
     private unique3dProvider: Unique3dProvider,
     private hunyuanV2Provider: HunyuanV2Provider,
     private huggingFaceProvider: HuggingFaceProvider,
+    private hunyuanSpaceProvider: HunyuanSpaceProvider,
   ) {}
 
   private async readActiveProviderId(): Promise<string> {
@@ -65,6 +66,8 @@ export class AiGenerationService {
         return this.hunyuanV2Provider;
       case 'huggingface':
         return this.huggingFaceProvider;
+      case 'hunyuan-free':
+        return this.hunyuanSpaceProvider;
       case 'tripo3d':
       default:
         return this.tripo3dProvider;
@@ -88,7 +91,7 @@ export class AiGenerationService {
     if (providerId === 'tripo3d') {
       return !!process.env.TRIPO_API_KEY?.trim();
     }
-    if (providerId === 'huggingface') {
+    if (providerId === 'huggingface' || providerId === 'hunyuan-free') {
       return true;
     }
     return false;

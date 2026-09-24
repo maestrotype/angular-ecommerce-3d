@@ -75,6 +75,7 @@
                 *ngIf="selectedType === '3d' && product?.model3dUrl"
                 [modelPath]="product.model3dUrl"
                 [hdModelPath]="product['localModel3dUrl']"
+                [referenceImage]="product.imageUrl || product.images?.[0]"
                 class="main-3d-viewer"
                 [previewOnly]="false"
                 [scale]="[9, 9, 9]"
@@ -118,6 +119,7 @@
                 <app-three-d-viewer
                   [modelPath]="product.model3dUrl"
                   [hdModelPath]="product['localModel3dUrl']"
+                  [referenceImage]="product.imageUrl || product.images?.[0]"
                   class="thumb-3d"
                   [previewOnly]="true"
                   [scale]="[9, 9, 9]"
@@ -151,6 +153,7 @@
                   <app-three-d-viewer
                     [modelPath]="product.model3dUrl"
                     [hdModelPath]="product['localModel3dUrl']"
+                    [referenceImage]="product.imageUrl || product.images?.[0]"
                     class="pdp-carousel-3d"
                     [previewOnly]="false"
                     [scale]="[9, 9, 9]"
