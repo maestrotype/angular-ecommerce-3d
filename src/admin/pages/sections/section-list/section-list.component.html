@@ -235,7 +235,7 @@
             [isDrawerMode]="true"
             [activeMenuLang]="activeMenuLang"
             (formChanged)="onFormChanged($event)"
-            (saved)="onFormSaved()"
+            (saved)="onFormSaved($event)"
             (cancelled)="closeEditor()">
           </app-section-form>
         </div>

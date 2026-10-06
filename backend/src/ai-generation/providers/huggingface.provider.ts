@@ -1,10 +1,11 @@
 import { Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common';
 import { SettingsService } from '../../settings/settings.service';
 import { firstValueFrom } from 'rxjs';
-import axios, { AxiosRequestConfig } from 'axios';
+import axios from 'axios';
 import * as FormData from 'form-data';
 import * as fs from 'fs';
 import * as path from 'path';
+import { randomBytes } from 'crypto';
 import { AiGenerationProvider, AiTaskResult } from '../interfaces/ai-provider.interface';
 import { getProduct3dDir, getServerBaseUrl } from '../../services/model-storage.util';
 
@@ -122,9 +123,11 @@ export class HuggingFaceProvider implements AiGenerationProvider {
       const userError =
         status && TRANSIENT_HTTP.has(status)
           ? this.spaceUnavailableKey
-          : message
-            ? `${this.providerLabel}: ${message}`
-            : this.spaceUnavailableKey;
+          : message?.startsWith('HF_')
+            ? message
+            : message
+              ? `${this.providerLabel}: ${message}`
+              : this.spaceUnavailableKey;
       this.patch(taskId, {
         status: 'failed',
         progress: 0,
@@ -221,14 +224,30 @@ export class HuggingFaceProvider implements AiGenerationProvider {
     filePath: string,
     headers: Record<string, string>,
   ): Promise<string> {
-    const form = new FormData();
-    form.append('files', fs.createReadStream(filePath), path.basename(filePath));
     const auth = headers.Authorization ? { Authorization: headers.Authorization } : {};
-    const response = await axios.post(`${host}/upload`, form, {
-      headers: { ...form.getHeaders(), ...auth },
-      timeout: 60000,
-      maxBodyLength: Infinity,
-    });
+    const uploadPaths = [`${host}/upload`, `${host}/gradio_api/upload`];
+    let response: { data?: unknown } | null = null;
+    let lastError: unknown;
+    for (const uploadUrl of uploadPaths) {
+      const form = new FormData();
+      form.append('files', fs.createReadStream(filePath), path.basename(filePath));
+      try {
+        response = await axios.post(uploadUrl, form, {
+          headers: { ...form.getHeaders(), ...auth },
+          timeout: 60000,
+          maxBodyLength: Infinity,
+        });
+        break;
+      } catch (error) {
+        lastError = error;
+        if (error.response?.status !== 404) {
+          throw error;
+        }
+      }
+    }
+    if (!response) {
+      throw lastError;
+    }
     const uploaded = Array.isArray(response.data) ? response.data[0] : null;
     if (!uploaded || typeof uploaded !== 'string') {
       throw new Error('Hugging Face Space did not accept the product image');
@@ -315,9 +334,10 @@ export class HuggingFaceProvider implements AiGenerationProvider {
       } catch (error) {
         lastError = error;
         const status = error.response?.status as number | undefined;
-        // Only a missing route should try the other Gradio prefix.
-        // A started job that fails must not be replaced by that prefix's 404.
-        if (status !== 404) {
+        // A missing route is HTTP 404. Gradio 5 closes the legacy /call path
+        // with a socket reset and no status — try the other prefix in that case too.
+        // A started job that fails with a real HTTP status must not be replaced.
+        if (status != null && status !== 404) {
           throw error;
         }
       }
@@ -326,14 +346,34 @@ export class HuggingFaceProvider implements AiGenerationProvider {
   }
 
   private async readGradioResult(url: string, headers: Record<string, string>, timeoutMs = 180000): Promise<unknown> {
-    const config: AxiosRequestConfig = {
-      headers: { ...headers, Accept: 'text/event-stream' },
-      timeout: timeoutMs,
-      responseType: 'text',
-      transformResponse: [(body) => body],
-    };
-    const response = await axios.get(url, config);
-    const text = String(response.data || '');
+    const getHeaders = { ...headers, Accept: 'text/event-stream' };
+    delete getHeaders['Content-Type'];
+    const text = await new Promise<string>((resolve, reject) => {
+      let body = '';
+      const finish = () => resolve(body);
+      axios.get(url, {
+        headers: getHeaders,
+        timeout: timeoutMs,
+        responseType: 'stream',
+      }).then((response) => {
+        const stream = response.data as NodeJS.ReadableStream & { destroy?: () => void };
+        stream.on('data', (chunk: Buffer) => {
+          body += chunk.toString();
+          if (body.includes('event: complete') || body.includes('event: error')) {
+            stream.destroy?.();
+            finish();
+          }
+        });
+        stream.on('end', finish);
+        stream.on('error', () => finish());
+      }).catch((error) => {
+        if (body.includes('event: complete') || body.includes('event: error')) {
+          finish();
+          return;
+        }
+        reject(error);
+      });
+    });
     const chunks = text.split('\n\n');
 
     for (const chunk of chunks) {
@@ -364,7 +404,132 @@ export class HuggingFaceProvider implements AiGenerationProvider {
     throw new Error('Hugging Face Space timed out or returned an empty result');
   }
 
-  private extractFile(result: unknown): Record<string, unknown> | null {
+  /** Gradio queue join. State inputs (hidden from /call) must be included. Calls share one session. */
+  protected async gradioSessionCall(
+    host: string,
+    headers: Record<string, string>,
+    steps: Array<{ api: string; data: unknown[] }>,
+    resultTimeoutMs = 180000,
+  ): Promise<unknown> {
+    const config = await axios.get(`${host}/config`, { headers, timeout: 20000 });
+    const dependencies = (config.data?.dependencies || []) as Array<{ api_name?: string }>;
+    const session = randomBytes(8).toString('hex');
+    let lastResult: unknown = null;
+
+    for (const step of steps) {
+      const fnIndex = dependencies.findIndex((dep) => dep.api_name === step.api);
+      if (fnIndex < 0) {
+        throw new Error(`Gradio endpoint /${step.api} is unavailable`);
+      }
+      await axios.post(
+        `${host}/gradio_api/queue/join`,
+        { data: step.data, fn_index: fnIndex, session_hash: session },
+        { headers, timeout: 30000 },
+      );
+      lastResult = await this.readQueueResult(host, session, headers, resultTimeoutMs);
+    }
+    return lastResult;
+  }
+
+  private async readQueueResult(
+    host: string,
+    session: string,
+    headers: Record<string, string>,
+    timeoutMs: number,
+  ): Promise<unknown> {
+    const deadline = Date.now() + timeoutMs;
+    let buffer = '';
+    const getHeaders = { ...headers, Accept: 'text/event-stream' };
+    delete getHeaders['Content-Type'];
+
+    while (Date.now() < deadline) {
+      const remaining = deadline - Date.now();
+      try {
+        buffer += await this.collectQueueStream(host, session, getHeaders, remaining);
+      } catch (error) {
+        const message = String((error as { message?: string })?.message || error);
+        if (!/hang up|ECONNRESET|aborted|socket/i.test(message)) {
+          throw error;
+        }
+      }
+      const finished = this.parseQueueCompletion(buffer);
+      if (finished !== undefined) {
+        return finished;
+      }
+      await this.sleep(400);
+    }
+    throw new Error('Hugging Face Space timed out or returned an empty result');
+  }
+
+  private collectQueueStream(
+    host: string,
+    session: string,
+    headers: Record<string, string>,
+    timeoutMs: number,
+  ): Promise<string> {
+    return new Promise((resolve, reject) => {
+      let body = '';
+      axios.get(`${host}/gradio_api/queue/data?session_hash=${session}`, {
+        headers,
+        timeout: Math.max(timeoutMs, 1000),
+        responseType: 'stream',
+      }).then((response) => {
+        const stream = response.data as NodeJS.ReadableStream;
+        stream.on('data', (chunk: Buffer) => {
+          body += chunk.toString();
+          if (body.includes('process_completed')) {
+            stream.unpipe?.();
+            response.data.destroy?.();
+            resolve(body);
+          }
+        });
+        stream.on('end', () => resolve(body));
+        stream.on('error', (error) => {
+          if (body) {
+            resolve(body);
+            return;
+          }
+          reject(error);
+        });
+      }).catch((error) => {
+        if (body) {
+          resolve(body);
+          return;
+        }
+        reject(error);
+      });
+    });
+  }
+
+  /** Returns the output data, throws on a failed job, or undefined while the job is still running. */
+  private parseQueueCompletion(buffer: string): unknown | undefined {
+    for (const line of buffer.split('\n')) {
+      if (!line.startsWith('data:')) {
+        continue;
+      }
+      let msg: { msg?: string; output?: { error?: unknown; data?: unknown }; success?: boolean };
+      try {
+        msg = JSON.parse(line.slice(5).trim());
+      } catch {
+        continue;
+      }
+      if (msg.msg !== 'process_completed') {
+        continue;
+      }
+      if (msg.success === false) {
+        const detail = msg.output?.error;
+        const textDetail = detail == null ? '' : String(detail);
+        if (/zerogpu quota/i.test(textDetail)) {
+          throw new Error('HF_TRELLIS_QUOTA');
+        }
+        throw new Error(textDetail || 'Hugging Face Space job failed without details');
+      }
+      return msg.output?.data ?? msg.output;
+    }
+    return undefined;
+  }
+
+  protected extractFile(result: unknown): Record<string, unknown> | null {
     const files = this.flatten(result)
       .map((item) => this.unwrapGradioCell(item))
       .filter((item) => item && typeof item === 'object' && ((item as any).url || (item as any).path));
@@ -517,5 +682,48 @@ export class HunyuanSpaceProvider extends HuggingFaceProvider {
       300000,
     );
     return this.extractGlbUrl(generated, host, false);
+  }
+}
+
+/** Textured image-to-3D on the public TRELLIS Space. Returns a GLB with a baked texture. */
+@Injectable()
+export class TrellisSpaceProvider extends HuggingFaceProvider {
+  get providerId(): string {
+    return 'trellis-free';
+  }
+
+  protected spaceUnavailableKey = 'HF_TRELLIS_SPACE_UNAVAILABLE';
+  protected providerLabel = 'TRELLIS';
+  protected taskPrefix = 'tr';
+
+  constructor(settingsService: SettingsService) {
+    super(settingsService);
+  }
+
+  protected async resolveSpaceId(): Promise<string> {
+    return 'trellis-community/TRELLIS';
+  }
+
+  protected async createRemoteGlb(
+    host: string,
+    headers: Record<string, string>,
+    imageUrl: string,
+  ): Promise<string | null> {
+    const file = await this.imageForSpace(host, headers, imageUrl);
+    const preprocessed = await this.gradioCall(host, 'preprocess_image', [file], headers, 60000);
+    const image = this.extractFile(preprocessed) || file;
+    const generated = await this.gradioSessionCall(
+      host,
+      headers,
+      [
+        { api: 'start_session', data: [] },
+        {
+          api: 'generate_and_extract_glb',
+          data: [image, [], false, 0, 7.5, 8, 3.0, 8, 'stochastic', 0.95, 1024],
+        },
+      ],
+      180000,
+    );
+    return this.extractGlbUrl(generated, host, true);
   }
 }

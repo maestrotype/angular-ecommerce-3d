@@ -18,7 +18,17 @@ export function getLocalizedString(value: string | LocalizedString | undefined |
 export function translateErrorMessage(message: string, translate: any): string {
     if (!message) return '';
 
-    const match = message.match(/^([A-Z0-9_]+\.[A-Z0-9_]+): (.*)$/);
+    const trimmed = message.trim();
+
+    const providerKey = trimmed.match(/^[^:]+:\s*(HF_[A-Z0-9_]+)$/);
+    if (providerKey) {
+        const translated = translate.instant(providerKey[1]);
+        if (translated !== providerKey[1]) {
+            return translated;
+        }
+    }
+
+    const match = trimmed.match(/^([A-Z0-9_]+\.[A-Z0-9_]+): (.*)$/);
     if (match) {
         const key = match[1];
         const rest = match[2];
@@ -30,8 +40,15 @@ export function translateErrorMessage(message: string, translate: any): string {
         }
     }
 
-    const translated = translate.instant(message);
-    return translated !== message ? translated : message;
+    if (/^HF_[A-Z0-9_]+$/.test(trimmed)) {
+        const translated = translate.instant(trimmed);
+        if (translated !== trimmed) {
+            return translated;
+        }
+    }
+
+    const translated = translate.instant(trimmed);
+    return translated !== trimmed ? translated : trimmed;
 }
 
 function isDevelopmentHost(): boolean {

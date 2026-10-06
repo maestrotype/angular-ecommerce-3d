@@ -8,9 +8,10 @@ import {
   IsBoolean,
   Min,
   MaxLength,
-  IsUrl,
+  Validate,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
+import { IsProductMediaUrlConstraint } from '../../common/validators/is-product-media-url.decorator';
 
 export class CreateProductDto {
   @IsObject()
@@ -35,7 +36,7 @@ export class CreateProductDto {
 
   @IsOptional()
   @IsString()
-  @IsUrl()
+  @Validate(IsProductMediaUrlConstraint)
   imageUrl?: string;
 
   @IsOptional()

@@ -11,6 +11,7 @@ export const AI_PROVIDER_CATALOG: AiProviderMeta[] = [
   { id: 'hunyuan3d', name: 'Hunyuan3D', configKey: 'ai.hunyuanApiKey', implemented: true },
   { id: 'luma', name: 'Luma AI', configKey: 'ai.lumaApiKey', implemented: false },
   { id: 'hunyuan-free', name: 'Hunyuan3D 2 (free)', configKey: 'ai.hfToken', implemented: true },
+  { id: 'trellis-free', name: 'TRELLIS (free, textured)', configKey: 'ai.hfToken', implemented: true },
   { id: 'huggingface', name: 'Hugging Face TripoSR (free)', configKey: 'ai.hfToken', implemented: true },
   { id: 'custom', name: 'Custom webhook', configKey: 'ai.customUrl', implemented: true },
 ];
@@ -24,6 +25,8 @@ const PROVIDER_ALIASES: Record<string, string> = {
   hf: 'huggingface',
   triposr: 'huggingface',
   'hunyuan-free': 'hunyuan-free',
+  'trellis-free': 'trellis-free',
+  trellis: 'trellis-free',
   hunyuan2: 'hunyuan-free',
 };
 

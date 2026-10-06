@@ -263,13 +263,14 @@ export class SectionFormComponent implements AfterViewInit, OnInit {
         const existingSettings = dataSource?.section?.settings || {};
         const formData = buildSectionSubmitPayload(formValue, existingSettings as Record<string, any>, model3dUrl);
 
-        const request$ = this.isEditMode && dataSource?.section?.id
-          ? this.sectionService.updateSection(dataSource.section.id, formData)
+        const sectionId = dataSource?.section?.id;
+        const request$ = sectionId
+          ? this.sectionService.updateSection(sectionId, formData)
           : this.sectionService.createSection(formData);
 
         request$.pipe(finalize(() => { this.loading = false; })).subscribe({
           next: (result) => {
-            const msg = this.isEditMode ? 'SECTION_UPDATED_SUCCESSFULLY' : 'SECTION_CREATED_SUCCESSFULLY';
+            const msg = sectionId ? 'SECTION_UPDATED_SUCCESSFULLY' : 'SECTION_CREATED_SUCCESSFULLY';
             this.snackBar.open(this.translate.instant(msg), this.translate.instant('CLOSE_BTN'), { duration: 3000 });
             if (this.isDrawerMode) this.saved.emit(result);
             else this.dialogRef.close(result);
