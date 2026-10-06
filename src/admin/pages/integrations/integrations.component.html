@@ -101,6 +101,7 @@
                 <mat-option value="hunyuan3d">{{ 'HUNYUAN_TENCENT' | translate }} ({{ 'CLOUD_API' | translate }})</mat-option>
                 <mat-option value="luma">{{ 'LUMA_AI' | translate }}</mat-option>
                 <mat-option value="hunyuan-free">{{ 'HF_HUNYUAN_FREE' | translate }}</mat-option>
+                <mat-option value="trellis-free">{{ 'HF_TRELLIS_FREE' | translate }}</mat-option>
                 <mat-option value="huggingface">{{ 'HF_TRIPOSR_FREE' | translate }}</mat-option>
                 <mat-option value="custom">{{ 'CUSTOM_WEBHOOK_LOCAL' | translate }}</mat-option>
               </mat-select>
@@ -108,6 +109,13 @@
           </div>
 
           <p class="ai-keys-hint">{{ 'AI_KEYS_HINT' | translate }}</p>
+
+          @if (aiForm.get('activeProvider')?.value === 'trellis-free') {
+            <div class="admin-info-banner info-banner">
+              <mat-icon>info</mat-icon>
+              <p>{{ 'HF_TRELLIS_INFO' | translate }}</p>
+            </div>
+          }
 
           <!-- Tripo3D Form -->
           <ng-container>

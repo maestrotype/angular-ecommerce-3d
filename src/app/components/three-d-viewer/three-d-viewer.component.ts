@@ -450,14 +450,17 @@ export class ThreeDViewerComponent implements AfterViewInit, OnChanges, OnDestro
       lowerPath.includes('product3d-ai') ||
       lowerPath.includes('huggingface') ||
       lowerPath.includes('triposr') ||
-      /(?:^|\/)hy-/.test(lowerPath)
+      /(?:^|\/)hy-/.test(lowerPath) ||
+      /(?:^|\/)tr-/.test(lowerPath)
     );
 
-    // Old Tripo3D GLBs were exported inverted. Hugging Face TripoSR is already Y-up.
+    // Old Tripo3D GLBs were exported inverted. Hugging Face TripoSR and TRELLIS are already Y-up.
     const isHuggingFaceModel =
       lowerPath.includes('huggingface') ||
       lowerPath.includes('triposr') ||
-      /(?:^|\/)hf-/.test(lowerPath);
+      lowerPath.includes('trellis') ||
+      /(?:^|\/)hf-/.test(lowerPath) ||
+      /(?:^|\/)tr-/.test(lowerPath);
     this._upsideDown = this.isAiGeneration && !isHuggingFaceModel;
 
     if (this.currentLoadedPath === pathToLoad && this.model) return;
@@ -698,8 +701,8 @@ export class ThreeDViewerComponent implements AfterViewInit, OnChanges, OnDestro
   }
 
   /**
-   * Public Hunyuan Spaces return a white shape with no texture maps.
-   * Stand that mesh up and project the product photo onto its side.
+   * Hunyuan's public API returns a shape with no baked texture.
+   * Color the mesh from the product photo — do not stretch the photo as a map.
    */
   private prepareBareShapeMesh(THREE: typeof import('three')): void {
     if (!this.model) {
@@ -719,72 +722,38 @@ export class ThreeDViewerComponent implements AfterViewInit, OnChanges, OnDestro
         child.geometry.computeVertexNormals();
       }
     });
-    if (!hunyuanShape) {
-      return;
+    if (hunyuanShape) {
+      this._upsideDown = false;
     }
-    // Hunyuan already stands sole-down. The extra 180° turn put the sole on top.
-    this._upsideDown = false;
+
     this.model.traverse((child: any) => {
       if (!child.isMesh || !child.geometry) {
         return;
       }
       const materials = Array.isArray(child.material) ? child.material : [child.material];
-      if (materials.some((material: any) => material?.map)) {
+      if (materials.some((material: any) => this.hasPaintedTexture(material))) {
         return;
       }
-      child.geometry.computeBoundingBox();
-      const box = child.geometry.boundingBox;
-      const size = new THREE.Vector3(
-        Math.max(box.max.x - box.min.x, 1e-4),
-        Math.max(box.max.y - box.min.y, 1e-4),
-        Math.max(box.max.z - box.min.z, 1e-4),
-      );
-      const uniforms = {
-        uBoxMin: { value: box.min.clone() },
-        uBoxSize: { value: size },
-        uShoeMap: { value: new THREE.Texture() },
-      };
-      const textured = new THREE.MeshBasicMaterial({
-        color: 0xffffff,
+      const tinted = new THREE.MeshStandardMaterial({
+        color: 0x2a2a2a,
+        roughness: 0.45,
+        metalness: 0.12,
         side: THREE.DoubleSide,
       });
-      textured.onBeforeCompile = (shader) => {
-        shader.uniforms.uBoxMin = uniforms.uBoxMin;
-        shader.uniforms.uBoxSize = uniforms.uBoxSize;
-        shader.uniforms.uShoeMap = uniforms.uShoeMap;
-        shader.vertexShader = shader.vertexShader
-          .replace('#include <common>', '#include <common>\nvarying vec3 vObjPos;\nvarying vec3 vObjNormal;')
-          .replace('#include <begin_vertex>', '#include <begin_vertex>\nvObjPos = transformed;\nvObjNormal = normal;');
-        shader.fragmentShader = shader.fragmentShader
-          .replace(
-            '#include <common>',
-            '#include <common>\nvarying vec3 vObjPos;\nvarying vec3 vObjNormal;\nuniform vec3 uBoxMin;\nuniform vec3 uBoxSize;\nuniform sampler2D uShoeMap;',
-          )
-          .replace('#include <map_fragment>', `
-            vec3 triN = normalize(abs(vObjNormal));
-            triN = pow(triN, vec3(4.0));
-            vec2 uvX = (vec2(vObjPos.z, vObjPos.y) - uBoxMin.zy) / uBoxSize.zy;
-            vec2 uvY = (vec2(vObjPos.x, vObjPos.z) - uBoxMin.xz) / uBoxSize.xz;
-            vec2 uvZ = (vec2(vObjPos.x, vObjPos.y) - uBoxMin.xy) / uBoxSize.xy;
-            vec4 cx = texture2D(uShoeMap, uvX);
-            vec4 cy = texture2D(uShoeMap, uvY);
-            vec4 cz = texture2D(uShoeMap, uvZ);
-            float lx = dot(cx.rgb, vec3(0.3, 0.59, 0.11));
-            float ly = dot(cy.rgb, vec3(0.3, 0.59, 0.11));
-            float lz = dot(cz.rgb, vec3(0.3, 0.59, 0.11));
-            vec3 w = triN * vec3(max(lx, 0.35), max(ly, 0.35), max(lz, 0.35));
-            float ws = max(w.x + w.y + w.z, 0.0001);
-            vec4 shoeColor = (cx * w.x + cy * w.y + cz * w.z) / ws;
-            diffuseColor *= shoeColor;
-          `);
-      };
-      (textured as any).userData.shoeUniforms = uniforms;
-      // A placeholder map keeps the standard shader's texture path compiling.
-      textured.map = new THREE.Texture();
-      child.material = textured;
-      this.bareMaterials.push(textured);
+      child.material = tinted;
+      this.bareMaterials.push(tinted);
     });
     this.applyReferenceTexture(THREE);
+  }
+
+  private hasPaintedTexture(material: any): boolean {
+    const map = material?.map;
+    if (!map?.image) {
+      return false;
+    }
+    const width = map.image.width || map.image.naturalWidth || 0;
+    const height = map.image.height || map.image.naturalHeight || 0;
+    return width > 4 && height > 4;
   }
 
   private applyReferenceTexture(THREE: typeof import('three')): void {
@@ -801,18 +770,12 @@ export class ThreeDViewerComponent implements AfterViewInit, OnChanges, OnDestro
       src,
       (source) => {
         const image = source.image as HTMLImageElement | undefined;
-        const texture = image ? this.cropShoeTexture(THREE, image) : source;
-        texture.colorSpace = THREE.SRGBColorSpace;
-        texture.wrapS = THREE.ClampToEdgeWrapping;
-        texture.wrapT = THREE.ClampToEdgeWrapping;
-        texture.needsUpdate = true;
+        const color = image ? this.subjectColor(THREE, image) : null;
+        if (!color) {
+          return;
+        }
         for (const material of this.bareMaterials) {
-          const uniforms = material.userData?.shoeUniforms;
-          if (uniforms) {
-            uniforms.uShoeMap.value = texture;
-          }
-          material.map = texture;
-          material.color.set(0xffffff);
+          material.color.copy(color);
           material.needsUpdate = true;
         }
         this.renderFrame();
@@ -828,83 +791,45 @@ export class ThreeDViewerComponent implements AfterViewInit, OnChanges, OnDestro
     );
   }
 
-  /** Drop empty margins so the shoe photo fills the mesh instead of a small patch. */
-  private cropShoeTexture(THREE: typeof import('three'), image: HTMLImageElement): import('three').Texture {
-    const source = document.createElement('canvas');
-    source.width = image.naturalWidth || image.width;
-    source.height = image.naturalHeight || image.height;
-    const sourceCtx = source.getContext('2d', { willReadFrequently: true });
-    if (!sourceCtx || !source.width || !source.height) {
-      return new THREE.CanvasTexture(image);
+  /** Color of the product itself, ignoring the light studio background. */
+  private subjectColor(THREE: typeof import('three'), image: HTMLImageElement): import('three').Color | null {
+    const canvas = document.createElement('canvas');
+    canvas.width = 48;
+    canvas.height = 48;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    if (!ctx) {
+      return null;
     }
-    sourceCtx.drawImage(image, 0, 0, source.width, source.height);
+    ctx.drawImage(image, 0, 0, 48, 48);
     let pixels: ImageData;
     try {
-      pixels = sourceCtx.getImageData(0, 0, source.width, source.height);
+      pixels = ctx.getImageData(0, 0, 48, 48);
     } catch {
-      return new THREE.CanvasTexture(image);
+      return null;
     }
-    let minX = source.width;
-    let minY = source.height;
-    let maxX = 0;
-    let maxY = 0;
     const data = pixels.data;
-    for (let y = 0; y < source.height; y++) {
-      for (let x = 0; x < source.width; x++) {
-        const i = (y * source.width + x) * 4;
-        const alpha = data[i + 3];
-        const r = data[i];
-        const g = data[i + 1];
-        const b = data[i + 2];
-        const empty = alpha < 24 || (r > 242 && g > 242 && b > 242);
-        if (empty) {
-          continue;
-        }
-        minX = Math.min(minX, x);
-        minY = Math.min(minY, y);
-        maxX = Math.max(maxX, x);
-        maxY = Math.max(maxY, y);
-      }
-    }
-    if (maxX <= minX || maxY <= minY) {
-      return new THREE.CanvasTexture(image);
-    }
-    const pad = 2;
-    minX = Math.max(0, minX - pad);
-    minY = Math.max(0, minY - pad);
-    maxX = Math.min(source.width - 1, maxX + pad);
-    maxY = Math.min(source.height - 1, maxY + pad);
-    const width = maxX - minX + 1;
-    const height = maxY - minY + 1;
-    const cropped = document.createElement('canvas');
-    cropped.width = width;
-    cropped.height = height;
-    const croppedCtx = cropped.getContext('2d');
-    if (!croppedCtx) {
-      return new THREE.CanvasTexture(image);
-    }
     let rSum = 0;
     let gSum = 0;
     let bSum = 0;
-    let samples = 0;
-    for (let i = 0; i < data.length; i += 16) {
-      if (data[i + 3] < 24) {
+    let count = 0;
+    for (let i = 0; i < data.length; i += 4) {
+      const r = data[i];
+      const g = data[i + 1];
+      const b = data[i + 2];
+      const alpha = data[i + 3];
+      const luma = r * 0.3 + g * 0.59 + b * 0.11;
+      if (alpha < 24 || luma > 210) {
         continue;
       }
-      rSum += data[i];
-      gSum += data[i + 1];
-      bSum += data[i + 2];
-      samples++;
+      rSum += r;
+      gSum += g;
+      bSum += b;
+      count++;
     }
-    const fill = samples
-      ? `rgb(${Math.round(rSum / samples)}, ${Math.round(gSum / samples)}, ${Math.round(bSum / samples)})`
-      : '#d8d8d8';
-    croppedCtx.fillStyle = fill;
-    croppedCtx.fillRect(0, 0, width, height);
-    croppedCtx.drawImage(source, minX, minY, width, height, 0, 0, width, height);
-    const texture = new THREE.CanvasTexture(cropped);
-    texture.flipY = true;
-    return texture;
+    if (!count) {
+      return new THREE.Color(0x3a3a3a);
+    }
+    return new THREE.Color(rSum / count / 255, gSum / count / 255, bSum / count / 255);
   }
 
   private applyRotation() {

@@ -271,6 +271,7 @@ export class ProductFormComponent implements OnInit {
           'luma': 'LUMA_AI',
           'huggingface': 'HF_TRIPOSR_FREE',
           'hunyuan-free': 'HF_HUNYUAN_FREE',
+          'trellis-free': 'HF_TRELLIS_FREE',
           'custom': 'CUSTOM_WEBHOOK_LOCAL'
         };
         
@@ -715,8 +716,17 @@ export class ProductFormComponent implements OnInit {
           this.finalizeAiModel(modelUrl, taskId);
         } else if (apiStatus === 'failed') {
           this.resetAiState();
-          const errorMsg = translateErrorMessage((status as any).data?.error || status.message || 'Unknown AI error', this.translate);
-          this.snackBar.open(this.translate.instant('AI_GENERATION_FAILED_PREFIX') + errorMsg, this.translate.instant('CLOSE_BTN'), { duration: 7000 });
+          const rawError = String((status as any).data?.error || status.message || 'Unknown AI error');
+          const errorMsg = translateErrorMessage(rawError, this.translate);
+          const quotaBlocked = rawError.includes('HF_TRELLIS_QUOTA');
+          const snack = this.snackBar.open(
+            this.translate.instant('AI_GENERATION_FAILED_PREFIX') + errorMsg,
+            this.translate.instant(quotaBlocked ? 'AI_OPEN_INTEGRATIONS' : 'CLOSE_BTN'),
+            { duration: quotaBlocked ? 12000 : 7000 },
+          );
+          if (quotaBlocked) {
+            snack.onAction().subscribe(() => this.router.navigate(['/admin/integrations']));
+          }
         } else {
           // Show the actual API status like "running", "queued", etc.
           const statusText = apiStatus.charAt(0).toUpperCase() + apiStatus.slice(1);
