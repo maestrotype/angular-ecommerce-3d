@@ -78,6 +78,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   /** Active home-page section (#about, #contacts) — overrides route-based Home highlight */
   activeSectionId: string | null = null;
   private scrollSpyObserver?: IntersectionObserver;
+  private scrollSpyOnScroll?: () => void;
+  private readonly scrollSpyHeaderOffset = 96;
   private routerSubscription?: Subscription;
 
   constructor(
@@ -645,20 +647,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     this.scrollSpyObserver = new IntersectionObserver(
-      entries => {
-        const visible = entries
-          .filter(entry => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-
-        if (visible.length > 0) {
-          this.activeSectionId = visible[0].target.id;
-          return;
-        }
-
-        if (window.scrollY < 120) {
-          this.activeSectionId = null;
-        }
-      },
+      entries => this.updateScrollSpyActiveSection(entries),
       { rootMargin: '-15% 0px -55% 0px', threshold: [0, 0.2, 0.45] }
     );
 
@@ -669,15 +658,108 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
           this.scrollSpyObserver?.observe(element);
         }
       });
+      this.updateScrollSpyActiveSection();
     };
 
     observeSections();
     setTimeout(observeSections, 400);
+
+    this.scrollSpyOnScroll = () => this.updateScrollSpyActiveSection();
+    window.addEventListener('scroll', this.scrollSpyOnScroll, { passive: true });
   }
 
   private teardownScrollSpy(): void {
+    if (this.scrollSpyOnScroll && isPlatformBrowser(this.platformId)) {
+      window.removeEventListener('scroll', this.scrollSpyOnScroll);
+    }
+    this.scrollSpyOnScroll = undefined;
     this.scrollSpyObserver?.disconnect();
     this.scrollSpyObserver = undefined;
+  }
+
+  private getHashMenuSectionIds(): string[] {
+    return this.menuItems
+      .map(item => (item.url || '').trim())
+      .filter(url => url.startsWith('#'))
+      .map(url => url.substring(1));
+  }
+
+  private getFirstHashSectionTop(): number | null {
+    if (!isPlatformBrowser(this.platformId)) {
+      return null;
+    }
+    let minTop = Infinity;
+    for (const id of this.getHashMenuSectionIds()) {
+      const element = findSectionElement(id);
+      if (!element) {
+        continue;
+      }
+      const top = element.getBoundingClientRect().top + window.scrollY;
+      minTop = Math.min(minTop, top);
+    }
+    return Number.isFinite(minTop) ? minTop : null;
+  }
+
+  private isInHomeHeroZone(): boolean {
+    if (!isPlatformBrowser(this.platformId)) {
+      return false;
+    }
+    const marker = window.scrollY + this.scrollSpyHeaderOffset;
+    const firstHashTop = this.getFirstHashSectionTop();
+    if (firstHashTop == null) {
+      return window.scrollY < 120;
+    }
+    return marker < firstHashTop;
+  }
+
+  private resolveHashSectionByScrollPosition(): string | null {
+    if (!isPlatformBrowser(this.platformId)) {
+      return null;
+    }
+    const marker = window.scrollY + this.scrollSpyHeaderOffset;
+    const candidates = this.getHashMenuSectionIds()
+      .map(id => {
+        const element = findSectionElement(id);
+        if (!element) {
+          return null;
+        }
+        return {
+          id,
+          top: element.getBoundingClientRect().top + window.scrollY,
+        };
+      })
+      .filter((entry): entry is { id: string; top: number } => !!entry)
+      .sort((a, b) => a.top - b.top);
+
+    let activeId: string | null = null;
+    for (const candidate of candidates) {
+      if (candidate.top <= marker) {
+        activeId = candidate.id;
+      }
+    }
+    return activeId;
+  }
+
+  private updateScrollSpyActiveSection(entries?: IntersectionObserverEntry[]): void {
+    if (!this.isStorefrontHomePath()) {
+      return;
+    }
+
+    if (this.isInHomeHeroZone()) {
+      this.activeSectionId = null;
+      return;
+    }
+
+    const visible = (entries ?? [])
+      .filter(entry => entry.isIntersecting)
+      .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+    if (visible.length > 0) {
+      this.activeSectionId = visible[0].target.id;
+      return;
+    }
+
+    this.activeSectionId = this.resolveHashSectionByScrollPosition();
   }
 
   scrollToSection(sectionId: string): void {
