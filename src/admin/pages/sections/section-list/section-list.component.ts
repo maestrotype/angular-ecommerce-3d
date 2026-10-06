@@ -589,10 +589,22 @@ export class SectionListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  onFormSaved(): void {
-    // Reload first, THEN close editor so the preview updates with fresh data
+  onFormSaved(savedSection?: Section): void {
+    const savedId = savedSection?.id ?? this.editingSection?.id;
     this.loadSections(() => {
-      this.closeEditor();
+      if (!savedId) {
+        if (savedSection) {
+          this.editingSection = savedSection;
+          this.previewData = savedSection;
+        }
+        return;
+      }
+      const fresh = this.allSections.find((section) => section.id === savedId);
+      const next = fresh ?? savedSection;
+      if (next) {
+        this.editingSection = next;
+        this.previewData = next;
+      }
     });
   }
 
