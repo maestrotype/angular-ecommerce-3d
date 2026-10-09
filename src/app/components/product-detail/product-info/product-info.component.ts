@@ -72,14 +72,18 @@ export class ProductInfoComponent {
     }
 
     const specs = this.product.specifications;
-    const keySpecs = ['Material', 'Color', 'Size', 'Weight', 'Brand'];
+    const preferred = ['Material', 'Color', 'Size', 'Weight', 'Brand', 'Sizes', 'Fit', 'material', 'color', 'sizes', 'fit'];
+    const fromPreferred = preferred
+      .filter((key) => specs[key as keyof typeof specs])
+      .map((key) => ({ key, value: String(specs[key as keyof typeof specs]) }));
 
-    return keySpecs
-      .filter(key => specs[key as keyof typeof specs])
-      .map(key => ({
-        key,
-        value: String(specs[key as keyof typeof specs])
-      }))
-      .slice(0, 4); // Show max 4 specs
+    if (fromPreferred.length) {
+      return fromPreferred.slice(0, 4);
+    }
+
+    return Object.entries(specs)
+      .filter(([, value]) => String(value ?? '').trim())
+      .map(([key, value]) => ({ key, value: String(value) }))
+      .slice(0, 4);
   }
 }

@@ -42,4 +42,18 @@ describe('draftFromProductPage', () => {
     expect(draft.description_en).toContain('Court Runner');
     expect(draft.description_en?.toLowerCase()).not.toContain('velocity');
   });
+
+  it('fills empty specifications and stock from the category sample', () => {
+    const draft = draftFromProductPage({
+      category: 'shoes',
+      imageUrls: ['https://cdn.example.com/red-court-sneaker.jpg'],
+      price: 0,
+      stock: 0,
+      specifications: [{ key: '', value: '' }],
+    });
+    expect(draft.specifications?.length).toBeGreaterThan(0);
+    expect(draft.specifications?.[0].key).toBe('Material');
+    expect(draft.stock).toBe(24);
+    expect(draft.price).toBe(139);
+  });
 });

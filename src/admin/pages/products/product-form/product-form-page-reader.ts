@@ -1,4 +1,4 @@
-import { resolveSampleFamily } from './product-form.demo-values';
+import { resolveSampleFamily, sampleDraftForCategory } from './product-form.demo-values';
 import { ProductFormDraft, ProductFormSpecDraft } from './product-form-draft.model';
 
 const SKIP_FILENAME_TOKENS = new Set([
@@ -30,6 +30,8 @@ export interface ProductPageReadInput {
   description_ua?: string;
   specifications?: ProductFormSpecDraft[];
   imageUrls?: string[];
+  price?: number;
+  stock?: number;
 }
 
 export function titleFromImageUrl(url: string): string {
@@ -85,6 +87,38 @@ function firstFilled(...values: Array<string | undefined>): string {
   return '';
 }
 
+function hasFilledSpecifications(specs: ProductFormSpecDraft[] | undefined): boolean {
+  return (specs || []).some(
+    (row) => String(row.key ?? '').trim() && String(row.value ?? '').trim(),
+  );
+}
+
+function cloneSpecRows(rows: ProductFormSpecDraft[] | undefined): ProductFormSpecDraft[] {
+  return (rows || []).map((row) => ({
+    key: String(row.key ?? '').trim(),
+    value: String(row.value ?? '').trim(),
+  }));
+}
+
+function applySampleScalarsWhenEmpty(
+  draft: ProductFormDraft,
+  input: ProductPageReadInput,
+  categorySlug: string,
+): void {
+  const sample = sampleDraftForCategory(categorySlug);
+  if (!String(input.category ?? '').trim() && categorySlug) {
+    draft.category = categorySlug;
+  }
+  const price = Number(input.price);
+  if ((!Number.isFinite(price) || price <= 0) && sample.price != null) {
+    draft.price = sample.price;
+  }
+  const stock = Number(input.stock);
+  if ((!Number.isFinite(stock) || stock <= 0) && sample.stock != null) {
+    draft.stock = sample.stock;
+  }
+}
+
 function specSummary(specs: ProductFormSpecDraft[] | undefined): string {
   const rows = (specs || [])
     .map((row) => ({ key: String(row.key ?? '').trim(), value: String(row.value ?? '').trim() }))
@@ -102,9 +136,19 @@ export function draftFromProductPage(input: ProductPageReadInput): ProductFormDr
   const name = existingName || imageTitle;
   const category = String(input.category ?? '').trim();
   const family = resolveSampleFamily(category) || resolveSampleFamily(imageTitle) || resolveSampleFamily(name);
+  const categorySlug = category || family || '';
   const label = String(input.categoryLabel ?? '').trim() || family || category;
   const details = specSummary(input.specifications);
   const draft: ProductFormDraft = {};
+
+  applySampleScalarsWhenEmpty(draft, input, categorySlug);
+
+  if (!hasFilledSpecifications(input.specifications)) {
+    const sampleSpecs = sampleDraftForCategory(categorySlug).specifications;
+    if (sampleSpecs?.length) {
+      draft.specifications = cloneSpecRows(sampleSpecs);
+    }
+  }
 
   if (name) {
     if (!String(input.name_en ?? '').trim()) {
