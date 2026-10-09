@@ -363,7 +363,7 @@ export class ProductFormComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe((draft) => {
           if (draft) {
-            this.commitSampleDraft(draft, 'overwrite');
+            this.commitSampleDraft(this.enrichDraftWithSampleFields(draft), 'overwrite');
           }
         });
       },
@@ -410,6 +410,8 @@ export class ProductFormComponent implements OnInit {
       description_ua: value.description_ua,
       specifications: value.specifications,
       imageUrls: this.imageUrls,
+      price: value.price,
+      stock: value.stock,
     };
   }
 
@@ -446,6 +448,34 @@ export class ProductFormComponent implements OnInit {
     }
     this.demoPrefillApplied = true;
     this.commitSampleDraft(this.buildSampleDraft(), 'merge');
+  }
+
+  /** Fills empty specs / price / stock / category from the category sample (same as L0 sample fill). */
+  private enrichDraftWithSampleFields(draft: ProductFormDraft): ProductFormDraft {
+    const category =
+      String(draft.category ?? '').trim() ||
+      this.currentFormCategory() ||
+      this.resolveSampleCategory();
+    const sample = sampleDraftForCategory(category);
+    const enriched: ProductFormDraft = { ...draft };
+
+    if (!enriched.category && category) {
+      enriched.category = category;
+    }
+    if ((enriched.price == null || Number(enriched.price) <= 0) && sample.price != null) {
+      enriched.price = sample.price;
+    }
+    if ((enriched.stock == null || Number(enriched.stock) <= 0) && sample.stock != null) {
+      enriched.stock = sample.stock;
+    }
+    const specRows = enriched.specifications || [];
+    const specsFilled = specRows.some(
+      (row) => String(row.key ?? '').trim() && String(row.value ?? '').trim(),
+    );
+    if (!specsFilled && sample.specifications?.length) {
+      enriched.specifications = sample.specifications.map((row) => ({ ...row }));
+    }
+    return enriched;
   }
 
   private buildSampleDraft(): ProductFormDraft {
